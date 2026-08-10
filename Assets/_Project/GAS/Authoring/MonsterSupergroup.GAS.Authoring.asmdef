@@ -1,0 +1,16 @@
+{
+  "name": "MonsterSupergroup.GAS.Authoring",
+  "rootNamespace": "MonsterSupergroup.GAS.Authoring",
+  "references": [
+    "GUID:a7c8997642ef4acb9c3b5bb6f2af8b51"
+  ],
+  "includePlatforms": [],
+  "excludePlatforms": [],
+  "allowUnsafeCode": false,
+  "overrideReferences": false,
+  "precompiledReferences": [],
+  "autoReferenced": false,
+  "defineConstraints": [],
+  "versionDefines": [],
+  "noEngineReferences": false
+}

@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c64467a00df670d43a4a42fa875cb34d, type: 3}
+  m_Name: GASVerticalSliceEquipment
+  m_EditorClassIdentifier: MonsterSupergroup.GAS.Authoring::MonsterSupergroup.GAS.Authoring.EquipmentModifierSet
+  modifiers:
+  - modifierId: 16777217
+    parameters:
+      rid: 6481290345167454208
+  - modifierId: 33554433
+    parameters:
+      rid: 6481290345167454209
+  references:
+    version: 2
+    RefIds:
+    - rid: 6481290345167454208
+      type: {class: DamageStatModifierParameters, ns: MonsterSupergroup.GAS, asm: MonsterSupergroup.GAS.Core}
+      data:
+        multiplierIncrement: 0.5
+    - rid: 6481290345167454209
+      type: {class: OnHitBurnModifierParameters, ns: MonsterSupergroup.GAS, asm: MonsterSupergroup.GAS.Core}
+      data:
+        chance: 1
+        damageMultiplier: 0.5
+        numberOfHits: 2
+        hitIntervalDuration: 0.5

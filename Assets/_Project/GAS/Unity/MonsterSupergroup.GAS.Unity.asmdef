@@ -1,0 +1,17 @@
+{
+  "name": "MonsterSupergroup.GAS.Unity",
+  "rootNamespace": "MonsterSupergroup.GAS.Unity",
+  "references": [
+    "GUID:a7c8997642ef4acb9c3b5bb6f2af8b51",
+    "GUID:56ce3ffcd5ef4c55962a309f4c4d55f1"
+  ],
+  "includePlatforms": [],
+  "excludePlatforms": [],
+  "allowUnsafeCode": false,
+  "overrideReferences": false,
+  "precompiledReferences": [],
+  "autoReferenced": false,
+  "defineConstraints": [],
+  "versionDefines": [],
+  "noEngineReferences": false
+}

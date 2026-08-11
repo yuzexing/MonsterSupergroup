@@ -1,0 +1,22 @@
+{
+  "name": "MonsterSupergroup.Gameplay.Editor",
+  "rootNamespace": "MonsterSupergroup.Gameplay.Editor",
+  "references": [
+    "GUID:a7c8997642ef4acb9c3b5bb6f2af8b51",
+    "GUID:56ce3ffcd5ef4c55962a309f4c4d55f1",
+    "GUID:c41b2d8e9f5a4b7ea301d6c8f2741059",
+    "GUID:d52c3e9fa06b4c8fb412e7d90385216a",
+    "GUID:e63d4fa0b17c4d90a523f8ea1496327b"
+  ],
+  "includePlatforms": [
+    "Editor"
+  ],
+  "excludePlatforms": [],
+  "allowUnsafeCode": false,
+  "overrideReferences": false,
+  "precompiledReferences": [],
+  "autoReferenced": false,
+  "defineConstraints": [],
+  "versionDefines": [],
+  "noEngineReferences": false
+}

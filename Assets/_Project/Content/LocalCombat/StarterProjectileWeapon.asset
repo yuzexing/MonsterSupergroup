@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0069a805f20fb34797554d5f70e1fe5, type: 3}
+  m_Name: StarterProjectileWeapon
+  m_EditorClassIdentifier: MonsterSupergroup.Gameplay.Combat::MonsterSupergroup.Gameplay.Combat.WeaponDefinition
+  combatId: 1
+  baseStats:
+    damage: 50
+    critMultiplier: 2
+    critRate: 0
+    speed: 1
+    size: 1
+    duration: 5
+    projectileCount: 1
+    knockbackDistance: 0
+    damageType: 5
+  weaponPrefab: {fileID: 8049969440405249660, guid: 7d45d489086317e4aaad4fb0b8bb1fb9, type: 3}
+  projectilePrefab: {fileID: 5895458954207151220, guid: 0224c7ebe509d9b4f92b72ea3361522d, type: 3}
+  startingEquipment: []
+  perkModifierSet: {fileID: 0}
+  targetRange: 30
+  projectileSpeed: 10
+  projectileHitCount: 1
+  spawnRadius: 0.5
+  spawnOffset: {x: 0, y: 0, z: 0}
+  rotateToMovement: 1

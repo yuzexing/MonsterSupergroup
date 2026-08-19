@@ -13,10 +13,10 @@ GameObject:
   - component: {fileID: 8870902492925696534}
   - component: {fileID: 616103247110304630}
   - component: {fileID: -6906025437942323543}
-  - component: {fileID: 1388044022052755882}
-  - component: {fileID: -8855127171464753378}
   - component: {fileID: 8428990925816781801}
   - component: {fileID: 1511840147426336536}
+  - component: {fileID: -6701080391808091762}
+  - component: {fileID: -812999666567901585}
   m_Layer: 0
   m_Name: Enemy
   m_TagString: Untagged
@@ -163,42 +163,6 @@ MonoBehaviour:
   serverOnly: 0
   visibility: 0
   hasSpawned: 0
---- !u!114 &1388044022052755882
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2429002141382841847}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e0ff30e0aa75491b82a606127aed9c11, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Enemy
-  syncDirection: 0
-  syncMode: 0
-  syncInterval: 0
-  health: {fileID: -8855127171464753378}
-  chase: {fileID: 0}
-  bodyCollider: {fileID: 0}
-  hitPoint: {fileID: 0}
-  destroyDelay: 0.5
---- !u!114 &-8855127171464753378
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2429002141382841847}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bff85214f5a547a99505033ff7a21b38, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Health
-  syncDirection: 0
-  syncMode: 0
-  syncInterval: 0
-  maxHealth: 100
 --- !u!50 &8428990925816781801
 Rigidbody2D:
   serializedVersion: 5
@@ -262,3 +226,29 @@ CircleCollider2D:
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
   m_Radius: 0.5
+--- !u!114 &-6701080391808091762
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2429002141382841847}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1d480e141bfd5a64dbaf323404b471f6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: MonsterSupergroup.Gameplay.Combat::MonsterSupergroup.Gameplay.Combat.CombatantBehaviour
+  maxHealth: 100
+--- !u!114 &-812999666567901585
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2429002141382841847}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e5bb57180d9da934fa0a5e5e25959f0f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: MonsterSupergroup.Gameplay.Combat::MonsterSupergroup.Gameplay.Combat.StatusUpdateDriver
+  combatant: {fileID: 0}

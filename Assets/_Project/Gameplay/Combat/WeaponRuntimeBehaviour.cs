@@ -10,6 +10,7 @@ namespace MonsterSupergroup.Gameplay.Combat
     [DisallowMultipleComponent]
     public sealed class WeaponRuntimeBehaviour : MonoBehaviour, IWeaponRuntime
     {
+        [SerializeField] private bool initializeOnAwake = true;
         [SerializeField] private uint combatId = 1;
         [SerializeField] private AttackStats baseStats = new AttackStats
         {
@@ -37,9 +38,15 @@ namespace MonsterSupergroup.Gameplay.Combat
 
         public AttackStatsMultipliers GlobalMultipliers => globalMultipliers;
 
+        public bool InitializeOnAwake
+        {
+            get => initializeOnAwake;
+            set => initializeOnAwake = value;
+        }
+
         private void Awake()
         {
-            if (!IsInitialized)
+            if (initializeOnAwake && !IsInitialized)
             {
                 Initialize();
             }
@@ -118,6 +125,22 @@ namespace MonsterSupergroup.Gameplay.Combat
         {
             EnsureInitialized();
             AttackSnapshot attack = pipeline.BeginAttack(this, globalMultipliers);
+            return pipeline.ResolveHit(
+                attack,
+                target,
+                onHitChanceMultiplier,
+                onKillChanceMultiplier,
+                burnDamageMultiplier);
+        }
+
+        public DamageInfo ResolveHit(
+            AttackSnapshot attack,
+            ICombatTarget target,
+            float onHitChanceMultiplier = 1f,
+            float onKillChanceMultiplier = 1f,
+            float burnDamageMultiplier = 0f)
+        {
+            EnsureInitialized();
             return pipeline.ResolveHit(
                 attack,
                 target,

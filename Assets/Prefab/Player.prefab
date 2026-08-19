@@ -13,11 +13,11 @@ GameObject:
   - component: {fileID: 5338273768065135440}
   - component: {fileID: -6617999738117628633}
   - component: {fileID: -1205835724458637238}
-  - component: {fileID: 7149966513000263297}
-  - component: {fileID: 8900172453393971925}
-  - component: {fileID: 7535275735690160364}
   - component: {fileID: 1104818812880660692}
   - component: {fileID: -7373340255222039779}
+  - component: {fileID: 1650305150116069612}
+  - component: {fileID: -3246987326976550692}
+  - component: {fileID: -3504813720300545445}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -165,60 +165,6 @@ MonoBehaviour:
   rotationSensitivity: 0.01
   positionPrecision: 0.01
   scalePrecision: 0.01
---- !u!114 &7149966513000263297
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5428064169487216032}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bff85214f5a547a99505033ff7a21b38, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Health
-  syncDirection: 0
-  syncMode: 0
-  syncInterval: 0
-  maxHealth: 100
---- !u!114 &8900172453393971925
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5428064169487216032}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 24132f512cf84a91a5c0bafa0729c60f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Player
-  syncDirection: 0
-  syncMode: 0
-  syncInterval: 0
-  health: {fileID: 0}
-  movement: {fileID: 0}
-  shooter: {fileID: 0}
---- !u!114 &7535275735690160364
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5428064169487216032}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5e8f2dc06bf9446b8fd691fda870b66e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PlayerShooter
-  syncDirection: 0
-  syncMode: 0
-  syncInterval: 0
-  projectilePrefab: {fileID: 5852047756819073542, guid: e03f56037dcd080419d68e7cac49100d, type: 3}
-  firePoint: {fileID: 0}
-  attackInterval: 2
-  _nextAttackTime: 0
-  damage: 100
 --- !u!50 &1104818812880660692
 Rigidbody2D:
   serializedVersion: 5
@@ -282,3 +228,54 @@ CircleCollider2D:
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
   m_Radius: 0.5
+--- !u!114 &1650305150116069612
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5428064169487216032}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e5bb57180d9da934fa0a5e5e25959f0f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: MonsterSupergroup.Gameplay.Combat::MonsterSupergroup.Gameplay.Combat.StatusUpdateDriver
+  combatant: {fileID: 0}
+--- !u!114 &-3246987326976550692
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5428064169487216032}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1d480e141bfd5a64dbaf323404b471f6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: MonsterSupergroup.Gameplay.Combat::MonsterSupergroup.Gameplay.Combat.CombatantBehaviour
+  maxHealth: 100
+--- !u!114 &-3504813720300545445
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5428064169487216032}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b1a8d948002e5574991f640bb2be02e7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: MonsterSupergroup.Gameplay.Combat::MonsterSupergroup.Gameplay.Combat.WeaponRuntimeBehaviour
+  combatId: 1
+  baseStats:
+    damage: 10
+    critMultiplier: 2
+    critRate: 0
+    speed: 1
+    size: 1
+    duration: 1
+    projectileCount: 1
+    knockbackDistance: 0
+    damageType: 0
+  equipmentModifierSet: {fileID: 0}
+  perkModifierSet: {fileID: 0}

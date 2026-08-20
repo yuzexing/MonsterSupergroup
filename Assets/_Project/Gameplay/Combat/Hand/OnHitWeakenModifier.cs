@@ -1,0 +1,38 @@
+using AstralShift.HellMaiden.AI.Enemy;
+
+namespace AstralShift.HellMaiden.Combat.Hand
+{
+	[EquipmentModifierType("On Hit Weaken")]
+	public class OnHitWeakenModifier : OnHitModifier
+	{
+		[EquipmentModifierParams]
+		protected class Params : BaseParams
+		{
+			public float damageMultiplier;
+
+			public float duration;
+		}
+
+		[InjectEquipmentModifierParams]
+		protected Params parameters;
+
+		public override float GetRollChance()
+		{
+			return parameters.chance;
+		}
+
+		public override float GetRollPriority()
+		{
+			return parameters.damageMultiplier * parameters.duration;
+		}
+
+		protected override OnHitModifierArgs ApplyEffect(OnHitModifierArgs args)
+		{
+			if (args.Enemy.stats.Health > 0)
+			{
+				args.Enemy.status.Apply(EnemyStatusID.Weaken, parameters.damageMultiplier, parameters.duration);
+			}
+			return args;
+		}
+	}
+}

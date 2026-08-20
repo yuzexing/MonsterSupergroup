@@ -1,0 +1,24 @@
+namespace Assets.Scripts.AstralShift.HellMaiden.Data
+{
+	public enum MetaProgressionID
+	{
+		HP = 0,
+		MOVESPEED = 1,
+		DASHDISTANCE = 2,
+		DASHCOOLDOWN = 3,
+		DASHCHARGES = 4,
+		PULLAREA = 5,
+		XPMODIFIER = 6,
+		DMGREDUCTION = 7,
+		CARDREROLLS = 8,
+		CARDBANISHES = 9,
+		CHARMREROLLS = 10,
+		ATKDAMAGE = 11,
+		CRITRATE = 12,
+		CRITMULTIPLIER = 13,
+		ATKSPEED = 14,
+		ATKSIZE = 15,
+		ATKDURATION = 16,
+		PROJINCREMENT = 17
+	}
+}

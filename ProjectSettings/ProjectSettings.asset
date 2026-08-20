@@ -145,7 +145,10 @@ PlayerSettings:
   visionOSBundleVersion: 1.0
   tvOSBundleVersion: 1.0
   bundleVersion: 1.0
-  preloadedAssets: []
+  preloadedAssets:
+  - {fileID: 11400000, guid: dcdcebc3bf74fb3439a0929d321e2b2f, type: 2}
+  - {fileID: 11400000, guid: 9407215fd3987824ba15dee10dea257d, type: 2}
+  - {fileID: 11400000, guid: 992e0a73494237f49b2224a26abd41e0, type: 2}
   metroInputSource: 0
   wsaTransparentSwapchain: 0
   m_HolographicPauseOnTrackingLoss: 1
@@ -585,7 +588,24 @@ PlayerSettings:
   webWasm2023: 0
   webEnableSubmoduleStrippingCompatibility: 0
   scriptingDefineSymbols:
-    Standalone: MIRROR;MIRROR_89_OR_NEWER;MIRROR_90_OR_NEWER;MIRROR_93_OR_NEWER;MIRROR_96_OR_NEWER;EDGEGAP_PLUGIN_SERVERS
+    Android: DOTWEEN_UITOOLKIT;TextMeshPro
+    EmbeddedLinux: DOTWEEN_UITOOLKIT;TextMeshPro
+    GameCoreScarlett: DOTWEEN_UITOOLKIT;TextMeshPro
+    GameCoreXboxOne: DOTWEEN_UITOOLKIT;TextMeshPro
+    Kepler: DOTWEEN_UITOOLKIT;TextMeshPro
+    LinuxHeadlessSimulation: DOTWEEN_UITOOLKIT;TextMeshPro
+    Nintendo Switch: DOTWEEN_UITOOLKIT;TextMeshPro
+    Nintendo Switch 2: DOTWEEN_UITOOLKIT;TextMeshPro
+    PS4: DOTWEEN_UITOOLKIT;TextMeshPro
+    PS5: DOTWEEN_UITOOLKIT;TextMeshPro
+    QNX: DOTWEEN_UITOOLKIT;TextMeshPro
+    Standalone: MIRROR;MIRROR_89_OR_NEWER;MIRROR_90_OR_NEWER;MIRROR_93_OR_NEWER;MIRROR_96_OR_NEWER;EDGEGAP_PLUGIN_SERVERS;DOTWEEN_UITOOLKIT;ODIN_INSPECTOR;ODIN_INSPECTOR_3;ODIN_INSPECTOR_3_1;ODIN_INSPECTOR_3_2;ODIN_INSPECTOR_3_3;UNITASK_DOTWEEN_SUPPORT;USING_URP;TextMeshPro
+    VisionOS: DOTWEEN_UITOOLKIT;TextMeshPro
+    WebGL: DOTWEEN_UITOOLKIT;TextMeshPro
+    Windows Store Apps: DOTWEEN_UITOOLKIT
+    XboxOne: DOTWEEN_UITOOLKIT;TextMeshPro
+    iPhone: DOTWEEN_UITOOLKIT;TextMeshPro
+    tvOS: DOTWEEN_UITOOLKIT;TextMeshPro
   additionalCompilerArguments: {}
   platformArchitecture: {}
   scriptingBackend:

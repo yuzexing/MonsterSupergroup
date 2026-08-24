@@ -64,9 +64,9 @@ namespace AstralShift.HellMaiden.Player
 
 		protected bool blockAnimations;
 
-		private AnimancerState _idleState;
+		protected  AnimancerState _idleState;
 
-		private AnimancerState _runState;
+		protected  AnimancerState _runState;
 
 		public AnimancerComponent Animancer => animancer;
 

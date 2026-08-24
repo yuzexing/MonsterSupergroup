@@ -73,7 +73,18 @@ namespace AstralShift.Control
 			_player.controllers.maps.mapEnabler.ruleSets.Add(mapEnabler_UI);
 			_player.controllers.maps.mapEnabler.enabled = true;
 			SubscribeEvents();
-			controllerLifetime.Init();
+			// controllerLifetime.Init();
+			
+			foreach (ControllerMapEnabler.RuleSet ruleSet in _player.controllers.maps.mapEnabler.ruleSets)
+			{
+				ruleSet.enabled = false;
+			}
+			_player.controllers.maps.mapEnabler.ruleSets.Find((ControllerMapEnabler.RuleSet item) => item.tag == "Normal").enabled = true;
+			_player.controllers.maps.mapEnabler.Apply();
+			_player.controllers.maps.mapEnabler.ruleSets.ForEach(delegate(ControllerMapEnabler.RuleSet ruleset)
+			{
+				MonoBehaviour.print(ruleset.tag + " : " + ruleset.enabled);
+			});
 		}
 
 		private void SubscribeEvents()
@@ -90,7 +101,7 @@ namespace AstralShift.Control
 			_player.AddInputEventDelegate(Button4, UpdateLoopType.Update, InputActionEventType.ButtonJustPressed, 6);
 			_player.AddInputEventDelegate(Button4, UpdateLoopType.Update, InputActionEventType.ButtonPressed, 6);
 			_player.AddInputEventDelegate(Button4, UpdateLoopType.Update, InputActionEventType.ButtonJustReleased, 6);
-			_player.AddInputEventDelegate(LeftStickHorizontal, UpdateLoopType.Update, InputActionEventType.AxisActiveOrJustInactive, 2);
+			_player.AddInputEventDelegate(LeftStickHorizontal, UpdateLoopType.Update, InputActionEventType.AxisActiveOrJustInactive, 1);
 			_player.AddInputEventDelegate(LeftStickVertical, UpdateLoopType.Update, InputActionEventType.AxisActiveOrJustInactive, 3);
 			_player.AddInputEventDelegate(LeftStickButton, UpdateLoopType.Update, InputActionEventType.ButtonJustPressed, 18);
 			_player.AddInputEventDelegate(LeftStickButton, UpdateLoopType.Update, InputActionEventType.ButtonPressed, 18);

@@ -69,11 +69,16 @@ namespace AstralShift.HellMaiden
 
 		public PlayerMovement Player => player;
 
+		public void SetPlayer(PlayerMovement outPlayer)
+		{
+			player = outPlayer;
+		}
+
 		private void Awake()
 		{
 			Instance = this;
 			_destroyCts = new CancellationTokenSource();
-			// RunInitializationSequence(_destroyCts.Token).Forget();
+			RunInitializationSequence(_destroyCts.Token).Forget();
 		}
 
 		private void OnDestroy()
@@ -86,26 +91,26 @@ namespace AstralShift.HellMaiden
 		{
 			DBL.LogHardwareInfo();
 			await InitCore(token);
-			DeveloperDebug.buildDevMod = buildDevMod;
-			await RunDataInitializationStep(token);
-			await InitManagers(token);
-			sceneMaster.LoadFirstScene();
-			PlayerHand.Instance.Init();
+			// DeveloperDebug.buildDevMod = buildDevMod;
+			// await RunDataInitializationStep(token);
+			// await InitManagers(token);
+			// sceneMaster.LoadFirstScene();
+			// PlayerHand.Instance.Init();
 		}
 		
 		private async UniTask InitCore(CancellationToken token)
 		{
-			try
-			{
-				sceneMaster.Init();
-				controllerManager.Init();
-				gameDataManager.Init();
-				runtimeDB.Init();
-			}
-			catch (Exception exception)
-			{
-				Debug.LogException(exception);
-			}
+			// try
+			// {
+			// sceneMaster.Init();
+			controllerManager.Init();
+			gameDataManager.Init();
+			// runtimeDB.Init();
+			// }
+			// catch (Exception exception)
+			// {
+			// 	Debug.LogException(exception);
+			// }
 		}
 		
 		private async UniTask InitManagers(CancellationToken token)

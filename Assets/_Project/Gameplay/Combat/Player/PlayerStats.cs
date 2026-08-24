@@ -138,7 +138,7 @@ namespace AstralShift.HellMaiden.Player
 
 		public void Init()
 		{
-			_playerMetaStatsDatabase = GameDirector.Instance.runtimeDB.MetaStatsDB;
+			// _playerMetaStatsDatabase = GameDirector.Instance.runtimeDB.MetaStatsDB;
 			CalculateMetaStats();
 			currentStats = baseStats;
 			if (_playerPerkModifiers == null)

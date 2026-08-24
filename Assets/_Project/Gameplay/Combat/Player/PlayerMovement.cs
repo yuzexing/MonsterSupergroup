@@ -264,7 +264,7 @@ namespace AstralShift.HellMaiden.Player
 		protected override void Start()
 		{
 			PlayerStats.Init();
-			SubscribeSceneEvents();
+			// SubscribeSceneEvents();
 			_dashBuffer = new ActionBuffer(dashBufferTime);
 			if ((bool)_hitboxCollider)
 			{

@@ -1,4 +1,7 @@
 using System;
+using AstralShift.HellMaiden;
+using AstralShift.HellMaiden.Controllers;
+using AstralShift.Managers;
 using MonsterSupergroup.Gameplay.Combat;
 using UnityEngine;
 
@@ -45,6 +48,8 @@ namespace MonsterSupergroup.Gameplay.Local
 
             playerHand.ActivateWeapons();
             IsLoaded = true;
+            ControllerManager.Instance.OverrideGameController<PlayerController_HMD>();
+            // GameDirector.Instance.SetPlayer(playerHand);
         }
 
         public void Unload()

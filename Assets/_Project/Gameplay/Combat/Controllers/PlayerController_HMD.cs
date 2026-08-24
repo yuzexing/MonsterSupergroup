@@ -74,7 +74,7 @@ namespace AstralShift.HellMaiden.Controllers
 			_stateMachine.AddTransition(combat, dying);
 			_stateMachine.AddTransition(fadingOut, dying);
 			_stateMachine.AddTransition(levelingUp, dying);
-			_stateMachine.SetInitialStateNoCallbacks((SceneMaster.Instance.CurrentSceneEnum == SceneEnum.Hub) ? hub : combat);
+			// _stateMachine.SetInitialStateNoCallbacks((SceneMaster.Instance.CurrentSceneEnum == SceneEnum.Hub) ? hub : combat);
 			State state = dying;
 			state.onEnter = (Action)Delegate.Combine(state.onEnter, (Action)delegate
 			{
@@ -85,62 +85,62 @@ namespace AstralShift.HellMaiden.Controllers
 			{
 				PauseManager.Instance.ResumePausables();
 			});
-			GameEvents instance = GameEvents.Instance;
-			instance.OnLevelIncrease = (Action<int>)Delegate.Combine(instance.OnLevelIncrease, new Action<int>(TransitionToLevelingUp));
-			GameEvents instance2 = GameEvents.Instance;
-			instance2.OnLevelUp = (Action)Delegate.Combine(instance2.OnLevelUp, new Action(TransitionToCombat));
-			GameEvents instance3 = GameEvents.Instance;
-			instance3.OnBeforePlayerDeath = (Action)Delegate.Combine(instance3.OnBeforePlayerDeath, new Action(TransitionToDying));
-			SceneMaster.Instance.OnSceneHideStartPersist += TransitionToFadingOutState;
-			SceneMaster.Instance.OnSceneHideFinishPersist += TransitionToCombatOrHub;
+			// GameEvents instance = GameEvents.Instance;
+			// instance.OnLevelIncrease = (Action<int>)Delegate.Combine(instance.OnLevelIncrease, new Action<int>(TransitionToLevelingUp));
+			// GameEvents instance2 = GameEvents.Instance;
+			// instance2.OnLevelUp = (Action)Delegate.Combine(instance2.OnLevelUp, new Action(TransitionToCombat));
+			// GameEvents instance3 = GameEvents.Instance;
+			// instance3.OnBeforePlayerDeath = (Action)Delegate.Combine(instance3.OnBeforePlayerDeath, new Action(TransitionToDying));
+			// SceneMaster.Instance.OnSceneHideStartPersist += TransitionToFadingOutState;
+			// SceneMaster.Instance.OnSceneHideFinishPersist += TransitionToCombatOrHub;
 		}
 
 		protected void OnDestroy()
 		{
-			GameEvents instance = GameEvents.Instance;
-			instance.OnLevelIncrease = (Action<int>)Delegate.Remove(instance.OnLevelIncrease, new Action<int>(TransitionToLevelingUp));
-			GameEvents instance2 = GameEvents.Instance;
-			instance2.OnLevelUp = (Action)Delegate.Remove(instance2.OnLevelUp, new Action(TransitionToCombat));
-			GameEvents instance3 = GameEvents.Instance;
-			instance3.OnBeforePlayerDeath = (Action)Delegate.Remove(instance3.OnBeforePlayerDeath, new Action(TransitionToDying));
-			SceneMaster.Instance.OnSceneHideStartPersist -= TransitionToFadingOutState;
-			SceneMaster.Instance.OnSceneHideFinishPersist -= TransitionToCombatOrHub;
+			// GameEvents instance = GameEvents.Instance;
+			// instance.OnLevelIncrease = (Action<int>)Delegate.Remove(instance.OnLevelIncrease, new Action<int>(TransitionToLevelingUp));
+			// GameEvents instance2 = GameEvents.Instance;
+			// instance2.OnLevelUp = (Action)Delegate.Remove(instance2.OnLevelUp, new Action(TransitionToCombat));
+			// GameEvents instance3 = GameEvents.Instance;
+			// instance3.OnBeforePlayerDeath = (Action)Delegate.Remove(instance3.OnBeforePlayerDeath, new Action(TransitionToDying));
+			// SceneMaster.Instance.OnSceneHideStartPersist -= TransitionToFadingOutState;
+			// SceneMaster.Instance.OnSceneHideFinishPersist -= TransitionToCombatOrHub;
 			ControllerManager.Instance.UnSubscribe(this);
 		}
 
 		public override void Activate()
 		{
-			MusicPlayer.Instance.SetSnapShot(MusicPlayer.SnapshotID.Normal);
+			// MusicPlayer.Instance.SetSnapShot(MusicPlayer.SnapshotID.Normal);
 			base.Activate();
 			ResetInputValues();
-			GameDirector.Instance.Player.ResetInputDirection();
+			// GameDirector.Instance.Player.ResetInputDirection();
 			if (InCombatState)
 			{
-				ControllerLifetime.OnControllerChanged += PointerManager.Instance.SetBattlePointer;
-				PointerManager.Instance.SetBattlePointer();
-				if (CombatUIManager.Instance != null)
-				{
-					CombatUIManager.Instance.OpenHUD();
-				}
+				// ControllerLifetime.OnControllerChanged += PointerManager.Instance.SetBattlePointer;
+				// PointerManager.Instance.SetBattlePointer();
+				// if (CombatUIManager.Instance != null)
+				// {
+				// 	CombatUIManager.Instance.OpenHUD();
+				// }
 				_enteredInCombatState = true;
 			}
 			else
 			{
-				PointerManager.Instance.HideMouseCursor();
+				// PointerManager.Instance.HideMouseCursor();
 			}
 			BlockMovement(state: false);
-			GameDirector.Instance.Player.EnableInteractor();
+			// GameDirector.Instance.Player.EnableInteractor();
 		}
 
 		public override void Deactivate()
 		{
 			if (_enteredInCombatState)
 			{
-				ControllerLifetime.OnControllerChanged -= PointerManager.Instance.SetBattlePointer;
-				if (CombatUIManager.Instance != null)
-				{
-					CombatUIManager.Instance.CloseHUD();
-				}
+				// ControllerLifetime.OnControllerChanged -= PointerManager.Instance.SetBattlePointer;
+				// if (CombatUIManager.Instance != null)
+				// {
+				// 	CombatUIManager.Instance.CloseHUD();
+				// }
 				_enteredInCombatState = false;
 			}
 			BlockMovement(state: true);

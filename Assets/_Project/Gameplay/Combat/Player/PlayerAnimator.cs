@@ -74,27 +74,34 @@ namespace AstralShift.HellMaiden.Player
 			}
 		}
 
-		public override void Run(float x, float y)
-		{
-			if (!blockAnimations)
-			{
-				animancer.Layers[0].Play(_runMixerState, 0f);
-				float x2 = ((x > 0f) ? 1f : (-1f));
-				float y2 = ((y > 0f) ? 1f : (-1f));
-				_runMixerState.Parameter = new Vector2(x2, y2);
-			}
-		}
-
-		public override void Idle(float x, float y)
-		{
-			if (!blockAnimations)
-			{
-				animancer.Layers[0].Play(_idleMixerState, 0f);
-				float x2 = ((x > 0f) ? 1f : (-1f));
-				float y2 = ((y > 0f) ? 1f : (-1f));
-				_idleMixerState.Parameter = new Vector2(x2, y2);
-			}
-		}
+		// public override void Run(float x, float y)
+		// {
+		// 	Debug.Log(animancer.Layers.Count);
+		// 	Debug.Log(
+		// 		$"RUN {x},{y}"
+		// 	);
+		// 	if (!blockAnimations)
+		// 	{
+		// 		animancer.Layers[0].Play(_runMixerState, 0f);
+		// 		float x2 = ((x > 0f) ? 1f : (-1f));
+		// 		float y2 = ((y > 0f) ? 1f : (-1f));
+		// 		_runMixerState.Parameter = new Vector2(x2, y2);
+		// 	}
+		// }
+		//
+		// public override void Idle(float x, float y)
+		// {
+		// 	Debug.Log(
+		// 		$"IDLE {x},{y}"
+		// 	);
+		// 	if (!blockAnimations)
+		// 	{
+		// 		animancer.Layers[0].Play(_idleMixerState, 0f);
+		// 		float x2 = ((x > 0f) ? 1f : (-1f));
+		// 		float y2 = ((y > 0f) ? 1f : (-1f));
+		// 		_idleMixerState.Parameter = new Vector2(x2, y2);
+		// 	}
+		// }
 
 		public virtual void Dash(float x, float y)
 		{

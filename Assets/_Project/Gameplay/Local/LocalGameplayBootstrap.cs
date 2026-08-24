@@ -1,4 +1,6 @@
 using System;
+using AstralShift.HellMaiden;
+using AstralShift.HellMaiden.Player;
 using MonsterSupergroup.Gameplay.Combat;
 using UnityEngine;
 
@@ -38,6 +40,7 @@ namespace MonsterSupergroup.Gameplay.Local
             playerInstance = Instantiate(playerPrefab, playerSpawn.position, Quaternion.identity);
             playerInstance.Load(playerSpawn.position);
             enemySpawner.Initialize(playerInstance.transform);
+            GameDirector.Instance.SetPlayer(playerInstance.GetComponent<PlayerMovement>());
         }
 
         private void OnDestroy()

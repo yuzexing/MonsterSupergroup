@@ -3,7 +3,7 @@
   "rootNamespace": "MonsterSupergroup.Gameplay.DebugUI",
   "references": [
     "GUID:a7c8997642ef4acb9c3b5bb6f2af8b51",
-    "GUID:d52c3e9fa06b4c8fb412e7d90385216a"
+    "GUID:66dae8e95ea2432482edb8a8fae89208"
   ],
   "includePlatforms": [],
   "excludePlatforms": [],

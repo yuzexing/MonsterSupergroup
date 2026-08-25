@@ -280,8 +280,10 @@ namespace AstralShift.HellMaiden.Player
 		protected override void OnDestroy()
 		{
 			UnSubscribeSceneEvents();
-			AutoAim obj = autoAim;
-			obj.OnTargetUpdate = (Action)Delegate.Remove(obj.OnTargetUpdate, new Action(OnAutoAimUpdate));
+			if (autoAim != null)
+			{
+				autoAim.OnTargetUpdate = (Action)Delegate.Remove(autoAim.OnTargetUpdate, new Action(OnAutoAimUpdate));
+			}
 		}
 
 		public void RestartStats()

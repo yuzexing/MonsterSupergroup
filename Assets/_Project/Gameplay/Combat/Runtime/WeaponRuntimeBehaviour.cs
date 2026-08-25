@@ -8,7 +8,7 @@ using UnityEngine;
 namespace MonsterSupergroup.Gameplay.Combat
 {
     [DisallowMultipleComponent]
-    public sealed class WeaponRuntimeBehaviour : MonoBehaviour, IWeaponRuntime
+    public sealed class WeaponRuntimeBehaviour : MonoBehaviour, IWeaponRuntime, ICombatContextSource
     {
         [SerializeField] private bool initializeOnAwake = true;
         [SerializeField] private uint combatId = 1;
@@ -27,8 +27,14 @@ namespace MonsterSupergroup.Gameplay.Combat
         private RuntimeEquipmentModifiers runtimeModifiers;
         private AttackStatsMultipliers globalMultipliers;
         private CombatPipeline pipeline;
+        private uint sourcePlayerId;
+        private uint sourceEntityId;
 
         public uint CombatId => combatId;
+
+        public uint SourcePlayerId => sourcePlayerId;
+
+        public uint SourceEntityId => sourceEntityId;
 
         public WeaponBehaviourStats Stats { get; private set; }
 
@@ -44,6 +50,12 @@ namespace MonsterSupergroup.Gameplay.Combat
             set => initializeOnAwake = value;
         }
 
+        public void ConfigureCombatIdentity(uint playerId, uint entityId)
+        {
+            sourcePlayerId = playerId;
+            sourceEntityId = entityId;
+        }
+
         private void Awake()
         {
             if (initializeOnAwake && !IsInitialized)
@@ -52,7 +64,12 @@ namespace MonsterSupergroup.Gameplay.Combat
             }
         }
 
-        public void Initialize(IRandomSource randomSource = null)
+        public void Initialize(
+            IRandomSource randomSource = null,
+            ICombatEventIdSource eventIdSource = null,
+            ICombatEventSink eventSink = null,
+            CombatTriggerGuard triggerGuard = null,
+            ICombatTimeSource timeSource = null)
         {
             RuntimeModifierFactory factory = CreateFactory();
             var newModifiers = new RuntimeEquipmentModifiers();
@@ -73,7 +90,11 @@ namespace MonsterSupergroup.Gameplay.Combat
                     combatId,
                     randomSource ?? new UnityRandomSource(),
                     newModifiers,
-                    newGlobalMultipliers);
+                    newGlobalMultipliers,
+                    eventIdSource,
+                    eventSink,
+                    triggerGuard,
+                    timeSource);
             }
             catch
             {
@@ -87,7 +108,11 @@ namespace MonsterSupergroup.Gameplay.Combat
             IReadOnlyList<EquipmentDataModifier> equipment,
             IReadOnlyList<PerkDataModifier> perks,
             IRandomSource randomSource,
-            uint newCombatId)
+            uint newCombatId,
+            ICombatEventIdSource eventIdSource = null,
+            ICombatEventSink eventSink = null,
+            CombatTriggerGuard triggerGuard = null,
+            ICombatTimeSource timeSource = null)
         {
             RuntimeModifierFactory factory = CreateFactory();
             var newModifiers = new RuntimeEquipmentModifiers();
@@ -102,7 +127,11 @@ namespace MonsterSupergroup.Gameplay.Combat
                     newCombatId,
                     randomSource ?? new UnityRandomSource(),
                     newModifiers,
-                    newGlobalMultipliers);
+                    newGlobalMultipliers,
+                    eventIdSource,
+                    eventSink,
+                    triggerGuard,
+                    timeSource);
             }
             catch
             {
@@ -115,6 +144,12 @@ namespace MonsterSupergroup.Gameplay.Combat
         {
             EnsureInitialized();
             return pipeline.BeginAttack(this, globalMultipliers);
+        }
+
+        public AttackSnapshot BeginAttack(CombatContext context)
+        {
+            EnsureInitialized();
+            return pipeline.BeginAttack(this, context, globalMultipliers);
         }
 
         public DamageInfo Attack(
@@ -149,6 +184,22 @@ namespace MonsterSupergroup.Gameplay.Combat
                 burnDamageMultiplier);
         }
 
+        public CombatResolution ResolveHitDetailed(
+            AttackSnapshot attack,
+            ICombatTarget target,
+            float onHitChanceMultiplier = 1f,
+            float predictedLethalChanceMultiplier = 1f,
+            float burnDamageMultiplier = 0f)
+        {
+            EnsureInitialized();
+            return pipeline.ResolveHitDetailed(
+                attack,
+                target,
+                onHitChanceMultiplier,
+                predictedLethalChanceMultiplier,
+                burnDamageMultiplier);
+        }
+
         private static RuntimeModifierFactory CreateFactory()
         {
             return new RuntimeModifierFactory(GeneratedModifierRegistry.Create());
@@ -159,7 +210,11 @@ namespace MonsterSupergroup.Gameplay.Combat
             uint newCombatId,
             IRandomSource randomSource,
             RuntimeEquipmentModifiers newModifiers,
-            AttackStatsMultipliers newGlobalMultipliers)
+            AttackStatsMultipliers newGlobalMultipliers,
+            ICombatEventIdSource eventIdSource,
+            ICombatEventSink eventSink,
+            CombatTriggerGuard triggerGuard,
+            ICombatTimeSource timeSource)
         {
             ReleaseRuntime();
 
@@ -168,13 +223,19 @@ namespace MonsterSupergroup.Gameplay.Combat
             runtimeModifiers = newModifiers;
             globalMultipliers = newGlobalMultipliers;
             Stats = new WeaponBehaviourStats(newBaseStats, newGlobalMultipliers);
-            pipeline = new CombatPipeline(newModifiers, randomSource);
+            pipeline = new CombatPipeline(
+                newModifiers,
+                randomSource,
+                eventIdSource ?? new SequentialCombatEventIdSource(),
+                eventSink,
+                triggerGuard,
+                timeSource);
             IsInitialized = true;
 
             try
             {
-                // Prime derived stats once so consumers can read damage and speed before the first hit.
-                pipeline.BeginAttack(this, globalMultipliers);
+                // Prime derived stats without emitting a fake AttackStarted event.
+                pipeline.RefreshStats(this, globalMultipliers);
             }
             catch
             {

@@ -111,7 +111,7 @@ namespace MonsterSupergroup.Gameplay.Combat
                     : Quaternion.Euler(0f, 0f, 360f * i / projectileCount) * targetDirection.normalized;
                 Vector3 spawnPosition = transform.position + definition.SpawnOffset +
                     (Vector3)(direction * definition.SpawnRadius);
-                StraightProjectileBehaviour projectile = Instantiate(
+                StraightProjectileBehaviour projectile = StraightProjectilePool.Spawn(
                     definition.ProjectilePrefab,
                     spawnPosition,
                     Quaternion.identity);
@@ -131,6 +131,7 @@ namespace MonsterSupergroup.Gameplay.Combat
         private void HandleProjectileFinished(StraightProjectileBehaviour projectile)
         {
             activeProjectiles.Remove(projectile);
+            StraightProjectilePool.Release(projectile);
         }
 
         private void CancelProjectiles()

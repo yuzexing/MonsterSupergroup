@@ -86,7 +86,12 @@ namespace MonsterSupergroup.GAS
                 numberOfHits,
                 hitIntervalDuration,
                 priority,
-                args.DamageInfo.Id));
+                args.DamageInfo.Id,
+                sourcePlayerId: args.Context.SourcePlayerId,
+                sourceEntityId: args.Context.SourceEntityId,
+                targetEntityId: args.Context.TargetEntityId,
+                executionAuthority: StatusExecutionAuthority.SourceClient,
+                sourceContext: args.Context));
         }
 
         private static float SignedMultiplier(float value)

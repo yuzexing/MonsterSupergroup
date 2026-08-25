@@ -11,6 +11,27 @@ namespace MonsterSupergroup.GAS
         uint CombatId { get; }
     }
 
+    /// <summary>
+    /// Optional network-stable identity exposed by an attacking runtime.
+    /// Combat code remains usable when this interface is not implemented.
+    /// </summary>
+    public interface ICombatContextSource
+    {
+        uint SourcePlayerId { get; }
+
+        uint SourceEntityId { get; }
+    }
+
+    /// <summary>
+    /// Optional network-stable identity and canonical version exposed by a target.
+    /// </summary>
+    public interface ICombatStateIdentity
+    {
+        uint EntityId { get; }
+
+        uint StateVersion { get; }
+    }
+
     public interface IDamageReceiver
     {
         bool IsAlive { get; }

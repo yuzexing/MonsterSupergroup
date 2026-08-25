@@ -20,6 +20,7 @@ namespace MonsterSupergroup.GAS.Tests
             Assert.That(modifiers.DynamicModifiers.Count, Is.EqualTo(1));
             Assert.That(modifiers.DynamicOnDamageModifiers.Count, Is.EqualTo(1));
             Assert.That(modifiers.OnHitModifiers.Count, Is.EqualTo(1));
+            Assert.That(modifiers.PredictedLethalHitModifiers.Count, Is.EqualTo(1));
             Assert.That(modifiers.OnKillModifiers.Count, Is.EqualTo(1));
             Assert.That(modifiers.Count, Is.EqualTo(5));
         }

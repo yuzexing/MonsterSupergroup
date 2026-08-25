@@ -1,0 +1,23 @@
+{
+  "name": "MonsterSupergroup.NetworkCombat.Editor",
+  "rootNamespace": "MonsterSupergroup.NetworkCombat.Editor",
+  "references": [
+    "GUID:d267ec2d1d354ac7bc8fb0284fdb670c",
+    "GUID:66dae8e95ea2432482edb8a8fae89208",
+    "GUID:90e4a052d89640e49a62662ea94aab13",
+    "GUID:30817c1a0e6d646d99c048fc403f5979",
+    "GUID:72872094b21c16e48b631b2224833d49",
+    "GUID:627104647b9c04b4ebb8978a92ecac63"
+  ],
+  "includePlatforms": [
+    "Editor"
+  ],
+  "excludePlatforms": [],
+  "allowUnsafeCode": false,
+  "overrideReferences": false,
+  "precompiledReferences": [],
+  "autoReferenced": false,
+  "defineConstraints": [],
+  "versionDefines": [],
+  "noEngineReferences": false
+}

@@ -6,14 +6,87 @@ namespace MonsterSupergroup.GAS
     {
         private readonly RuntimeEquipmentModifiers modifiers;
         private readonly IRandomSource random;
+        private readonly ICombatEventIdSource eventIds;
+        private readonly ICombatEventSink eventSink;
+        private readonly CombatTriggerGuard triggerGuard;
+        private readonly ICombatTimeSource timeSource;
 
         public CombatPipeline(RuntimeEquipmentModifiers modifiers, IRandomSource random)
+            : this(
+                modifiers,
+                random,
+                new SequentialCombatEventIdSource(),
+                NullCombatEventSink.Instance)
+        {
+        }
+
+        public CombatPipeline(
+            RuntimeEquipmentModifiers modifiers,
+            IRandomSource random,
+            ICombatEventIdSource eventIds,
+            ICombatEventSink eventSink = null,
+            CombatTriggerGuard triggerGuard = null,
+            ICombatTimeSource timeSource = null)
         {
             this.modifiers = modifiers ?? throw new ArgumentNullException(nameof(modifiers));
             this.random = random ?? throw new ArgumentNullException(nameof(random));
+            this.eventIds = eventIds ?? throw new ArgumentNullException(nameof(eventIds));
+            this.eventSink = eventSink ?? NullCombatEventSink.Instance;
+            this.triggerGuard = triggerGuard ?? new CombatTriggerGuard();
+            this.timeSource = timeSource ?? MonotonicCombatTimeSource.Instance;
         }
 
         public AttackSnapshot BeginAttack(
+            IWeaponRuntime weapon,
+            AttackStatsMultipliers globalMultipliers = null)
+        {
+            if (weapon == null)
+            {
+                throw new ArgumentNullException(nameof(weapon));
+            }
+
+            uint sourcePlayerId = 0;
+            uint sourceEntityId = 0;
+            if (weapon is ICombatContextSource source)
+            {
+                sourcePlayerId = source.SourcePlayerId;
+                sourceEntityId = source.SourceEntityId;
+            }
+
+            CombatContext context = CombatContext.CreateRoot(
+                eventIds.Next(),
+                sourcePlayerId,
+                sourceEntityId,
+                weapon.CombatId,
+                CombatTags.Attack);
+            return BeginAttack(weapon, context, globalMultipliers);
+        }
+
+        public AttackSnapshot BeginAttack(
+            IWeaponRuntime weapon,
+            CombatContext context,
+            AttackStatsMultipliers globalMultipliers = null)
+        {
+            if (weapon == null)
+            {
+                throw new ArgumentNullException(nameof(weapon));
+            }
+
+            if (!context.IsValid)
+            {
+                throw new ArgumentException("Attack context must be valid.", nameof(context));
+            }
+
+            AttackStatsSnapshot stats = RefreshStats(weapon, globalMultipliers);
+            var attack = new AttackSnapshot(weapon, stats, context);
+            eventSink.Publish(new CombatEvent(CombatEventKind.AttackStarted, context));
+            return attack;
+        }
+
+        /// <summary>
+        /// Rebuilds the weapon's derived stat layers without creating a gameplay event.
+        /// </summary>
+        public AttackStatsSnapshot RefreshStats(
             IWeaponRuntime weapon,
             AttackStatsMultipliers globalMultipliers = null)
         {
@@ -43,14 +116,33 @@ namespace MonsterSupergroup.GAS
                 modifiers.DynamicModifiers[i].Apply(stats, weapon);
             }
 
-            return new AttackSnapshot(weapon, stats.CreateSnapshot());
+            return stats.CreateSnapshot();
         }
 
+        /// <summary>
+        /// Compatibility API. Returns damage accepted by the local predicted target.
+        /// Use ResolveHitDetailed when building a CombatResult for the server.
+        /// </summary>
         public DamageInfo ResolveHit(
             AttackSnapshot attack,
             ICombatTarget target,
             float onHitChanceMultiplier = 1f,
             float onKillChanceMultiplier = 1f,
+            float burnDamageMultiplier = 0f)
+        {
+            return ResolveHitDetailed(
+                attack,
+                target,
+                onHitChanceMultiplier,
+                onKillChanceMultiplier,
+                burnDamageMultiplier).PredictedAppliedDamage;
+        }
+
+        public CombatResolution ResolveHitDetailed(
+            AttackSnapshot attack,
+            ICombatTarget target,
+            float onHitChanceMultiplier = 1f,
+            float predictedLethalChanceMultiplier = 1f,
             float burnDamageMultiplier = 0f)
         {
             if (attack == null)
@@ -64,13 +156,44 @@ namespace MonsterSupergroup.GAS
             }
 
             ValidateFinite(onHitChanceMultiplier, nameof(onHitChanceMultiplier));
-            ValidateFinite(onKillChanceMultiplier, nameof(onKillChanceMultiplier));
+            ValidateFinite(
+                predictedLethalChanceMultiplier,
+                nameof(predictedLethalChanceMultiplier));
             ValidateFinite(burnDamageMultiplier, nameof(burnDamageMultiplier));
 
-            if (!target.IsAlive)
+            bool wasAlive = target.IsAlive;
+            if (!wasAlive)
             {
-                return new DamageInfo(attack.Weapon.CombatId, 0, false);
+                var zero = new DamageInfo(attack.Weapon.CombatId, 0, false);
+                return new CombatResolution(
+                    CombatContext.None,
+                    CombatContext.None,
+                    CombatContext.None,
+                    zero,
+                    zero,
+                    false,
+                    false);
             }
+
+            CombatEventId rootEventId = attack.Context.RootEventId;
+            triggerGuard.BeginRootScope(rootEventId);
+            try
+            {
+
+            uint targetEntityId = 0;
+            uint targetStateVersion = 0;
+            if (target is ICombatStateIdentity identity)
+            {
+                targetEntityId = identity.EntityId;
+                targetStateVersion = identity.StateVersion;
+            }
+
+            CombatContext hitContext = attack.Context.CreateChild(
+                eventIds.Next(),
+                CombatTags.Hit,
+                targetEntityId,
+                targetStateVersion);
+            eventSink.Publish(new CombatEvent(CombatEventKind.HitResolved, hitContext));
 
             var targetMultipliers = new AttackStatsMultipliers();
             for (int i = 0; i < modifiers.DynamicOnDamageModifiers.Count; i++)
@@ -95,43 +218,107 @@ namespace MonsterSupergroup.GAS
                 requestedValue = TruncateToNonNegativeInt(baseDamage * criticalMultiplier);
             }
 
-            bool wasAlive = target.IsAlive;
-            DamageInfo requestedDamage =
-                new DamageInfo(attack.Weapon.CombatId, requestedValue, isCritical);
-            DamageInfo appliedDamage = target.ReceiveDamage(requestedDamage);
-
-            if (appliedDamage.Value > 0)
+            CombatTags damageTags = CombatTags.Damage;
+            if (isCritical)
             {
-                var onHitArgs = new OnHitModifierArgs(
-                    target,
-                    attack.Weapon,
-                    appliedDamage,
-                    random,
-                    onHitChanceMultiplier,
-                    burnDamageMultiplier);
+                damageTags |= CombatTags.Critical;
+            }
 
+            CombatContext damageContext = hitContext.CreateChild(
+                eventIds.Next(),
+                damageTags,
+                targetEntityId,
+                targetStateVersion);
+            DamageInfo resolvedDamage =
+                new DamageInfo(attack.Weapon.CombatId, requestedValue, isCritical);
+            DamageInfo predictedAppliedDamage = target.ReceiveDamage(resolvedDamage);
+            eventSink.Publish(new CombatEvent(
+                CombatEventKind.DamageResolved,
+                damageContext,
+                resolvedDamage,
+                predictedAppliedDamage));
+
+            if (predictedAppliedDamage.Value > 0)
+            {
                 for (int i = 0; i < modifiers.OnHitModifiers.Count; i++)
                 {
-                    modifiers.OnHitModifiers[i].Apply(onHitArgs);
+                    OnHitModifier modifier = modifiers.OnHitModifiers[i];
+                    if (!triggerGuard.TryEnter(
+                            damageContext,
+                            modifier.ID,
+                            targetEntityId,
+                            modifier.GetTriggerPolicy(),
+                            timeSource.CurrentTimeSeconds))
+                    {
+                        continue;
+                    }
+
+                    var onHitArgs = new OnHitModifierArgs(
+                        damageContext.WithBuild(modifier.ID.Value),
+                        target,
+                        attack.Weapon,
+                        resolvedDamage,
+                        predictedAppliedDamage,
+                        random,
+                        onHitChanceMultiplier,
+                        burnDamageMultiplier);
+                    modifier.Apply(onHitArgs);
                 }
             }
 
+            CombatContext predictedLethalContext = CombatContext.None;
             if (wasAlive && !target.IsAlive)
             {
-                var onKillArgs = new OnKillModifierArgs(
-                    target,
-                    attack.Weapon,
-                    appliedDamage,
-                    random,
-                    onKillChanceMultiplier);
+                predictedLethalContext = damageContext.CreateChild(
+                    eventIds.Next(),
+                    CombatTags.PredictedLethalHit,
+                    targetEntityId,
+                    targetStateVersion);
+                eventSink.Publish(new CombatEvent(
+                    CombatEventKind.PredictedLethalHit,
+                    predictedLethalContext,
+                    resolvedDamage,
+                    predictedAppliedDamage));
 
-                for (int i = 0; i < modifiers.OnKillModifiers.Count; i++)
+                for (int i = 0; i < modifiers.PredictedLethalHitModifiers.Count; i++)
                 {
-                    modifiers.OnKillModifiers[i].Apply(onKillArgs);
+                    OnPredictedLethalHitModifier modifier =
+                        modifiers.PredictedLethalHitModifiers[i];
+                    if (!triggerGuard.TryEnter(
+                            predictedLethalContext,
+                            modifier.ID,
+                            targetEntityId,
+                            modifier.GetTriggerPolicy(),
+                            timeSource.CurrentTimeSeconds))
+                    {
+                        continue;
+                    }
+
+                    var args = new OnPredictedLethalHitModifierArgs(
+                        predictedLethalContext.WithBuild(modifier.ID.Value),
+                        target,
+                        attack.Weapon,
+                        resolvedDamage,
+                        predictedAppliedDamage,
+                        random,
+                        predictedLethalChanceMultiplier);
+                    modifier.Apply(args);
                 }
             }
 
-            return appliedDamage;
+            return new CombatResolution(
+                hitContext,
+                damageContext,
+                predictedLethalContext,
+                resolvedDamage,
+                predictedAppliedDamage,
+                wasAlive,
+                target.IsAlive);
+            }
+            finally
+            {
+                triggerGuard.EndRootScope(rootEventId);
+            }
         }
 
         private static float SignedMultiplier(float value)

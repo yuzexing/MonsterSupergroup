@@ -95,6 +95,9 @@ namespace MonsterSupergroup.GAS
 
         public abstract float GetRollPriority();
 
+        public virtual BuildTriggerPolicy GetTriggerPolicy() =>
+            BuildTriggerPolicy.Default;
+
         public OnHitModifierArgs Apply(OnHitModifierArgs args)
         {
             float chance = Probability.Clamp01(GetRollChance() * args.OnHitChanceMultiplier);
@@ -109,9 +112,9 @@ namespace MonsterSupergroup.GAS
         protected abstract void ApplyEffect(OnHitModifierArgs args);
     }
 
-    public abstract class OnKillModifier : RuntimeEquipmentModifier
+    public abstract class OnPredictedLethalHitModifier : RuntimeEquipmentModifier
     {
-        protected OnKillModifier(
+        protected OnPredictedLethalHitModifier(
             EquipmentModifierID id,
             EquipmentModifierParameters parameters)
             : base(id, parameters)
@@ -122,15 +125,45 @@ namespace MonsterSupergroup.GAS
 
         public abstract float GetRollPriority();
 
-        public OnKillModifierArgs Apply(OnKillModifierArgs args)
+        public virtual BuildTriggerPolicy GetTriggerPolicy() =>
+            BuildTriggerPolicy.Default;
+
+        public OnPredictedLethalHitModifierArgs Apply(OnPredictedLethalHitModifierArgs args)
         {
-            float chance = Probability.Clamp01(GetRollChance() * args.OnKillChanceMultiplier);
+            float chance = Probability.Clamp01(GetRollChance() * args.ChanceMultiplier);
             if (args.Random.Next01() < chance)
             {
                 ApplyEffect(args);
             }
 
             return args;
+        }
+
+        protected abstract void ApplyEffect(OnPredictedLethalHitModifierArgs args);
+    }
+
+    /// <summary>
+    /// Backward-compatible base class for migrated modifiers. The execution stage is
+    /// PredictedLethalHit; the canonical server is solely responsible for ConfirmedKill.
+    /// </summary>
+    public abstract class OnKillModifier : OnPredictedLethalHitModifier
+    {
+        protected OnKillModifier(
+            EquipmentModifierID id,
+            EquipmentModifierParameters parameters)
+            : base(id, parameters)
+        {
+        }
+
+        public OnKillModifierArgs Apply(OnKillModifierArgs args)
+        {
+            base.Apply(args.AsPredictedLethalHitArgs());
+            return args;
+        }
+
+        protected sealed override void ApplyEffect(OnPredictedLethalHitModifierArgs args)
+        {
+            ApplyEffect(new OnKillModifierArgs(args));
         }
 
         protected abstract void ApplyEffect(OnKillModifierArgs args);

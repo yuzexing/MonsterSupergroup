@@ -48,7 +48,7 @@ namespace MonsterSupergroup.Gameplay.Local
 
             playerHand.ActivateWeapons();
             IsLoaded = true;
-            ControllerManager.Instance.OverrideGameController<PlayerController_HMD>();
+            ControllerManager.Instance?.OverrideGameController<PlayerController_HMD>();
             // GameDirector.Instance.SetPlayer(playerHand);
         }
 

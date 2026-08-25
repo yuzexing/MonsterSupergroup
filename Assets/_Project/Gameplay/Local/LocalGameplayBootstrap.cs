@@ -40,7 +40,7 @@ namespace MonsterSupergroup.Gameplay.Local
             playerInstance = Instantiate(playerPrefab, playerSpawn.position, Quaternion.identity);
             playerInstance.Load(playerSpawn.position);
             enemySpawner.Initialize(playerInstance.transform);
-            GameDirector.Instance.SetPlayer(playerInstance.GetComponent<PlayerMovement>());
+            GameDirector.Instance?.SetPlayer(playerInstance.GetComponent<PlayerMovement>());
         }
 
         private void OnDestroy()

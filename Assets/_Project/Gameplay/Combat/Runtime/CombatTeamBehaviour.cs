@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace MonsterSupergroup.Gameplay.Combat
@@ -14,10 +15,14 @@ namespace MonsterSupergroup.Gameplay.Combat
     [RequireComponent(typeof(CombatantBehaviour))]
     public sealed class CombatTeamBehaviour : MonoBehaviour
     {
+        private static readonly List<CombatTeamBehaviour> activeTeams =
+            new List<CombatTeamBehaviour>();
         [SerializeField] private CombatTeam team = CombatTeam.Neutral;
         [SerializeField] private CombatantBehaviour combatant;
 
         public CombatTeam Team => team;
+
+        public static IReadOnlyList<CombatTeamBehaviour> ActiveTeams => activeTeams;
 
         public CombatantBehaviour Combatant
         {
@@ -41,6 +46,25 @@ namespace MonsterSupergroup.Gameplay.Combat
 
             team = newTeam;
             combatant = newCombatant ?? throw new ArgumentNullException(nameof(newCombatant));
+        }
+
+        private void OnEnable()
+        {
+            if (!activeTeams.Contains(this))
+            {
+                activeTeams.Add(this);
+            }
+        }
+
+        private void OnDisable()
+        {
+            activeTeams.Remove(this);
+        }
+
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+        private static void ResetRegistry()
+        {
+            activeTeams.Clear();
         }
     }
 }

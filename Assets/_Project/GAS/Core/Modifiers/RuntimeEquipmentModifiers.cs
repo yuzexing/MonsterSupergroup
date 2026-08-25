@@ -15,11 +15,15 @@ namespace MonsterSupergroup.GAS
         private readonly List<DynamicOnDamageModifier> dynamicOnDamageModifiers =
             new List<DynamicOnDamageModifier>();
         private readonly List<OnHitModifier> onHitModifiers = new List<OnHitModifier>();
+        private readonly List<OnPredictedLethalHitModifier> predictedLethalHitModifiers =
+            new List<OnPredictedLethalHitModifier>();
         private readonly List<OnKillModifier> onKillModifiers = new List<OnKillModifier>();
         private readonly ReadOnlyCollection<StaticStatModifier> readOnlyStaticModifiers;
         private readonly ReadOnlyCollection<DynamicStatModifier> readOnlyDynamicModifiers;
         private readonly ReadOnlyCollection<DynamicOnDamageModifier> readOnlyDynamicOnDamageModifiers;
         private readonly ReadOnlyCollection<OnHitModifier> readOnlyOnHitModifiers;
+        private readonly ReadOnlyCollection<OnPredictedLethalHitModifier>
+            readOnlyPredictedLethalHitModifiers;
         private readonly ReadOnlyCollection<OnKillModifier> readOnlyOnKillModifiers;
 
         private long nextHandle = 1;
@@ -31,6 +35,7 @@ namespace MonsterSupergroup.GAS
             readOnlyDynamicModifiers = dynamicModifiers.AsReadOnly();
             readOnlyDynamicOnDamageModifiers = dynamicOnDamageModifiers.AsReadOnly();
             readOnlyOnHitModifiers = onHitModifiers.AsReadOnly();
+            readOnlyPredictedLethalHitModifiers = predictedLethalHitModifiers.AsReadOnly();
             readOnlyOnKillModifiers = onKillModifiers.AsReadOnly();
         }
 
@@ -42,6 +47,10 @@ namespace MonsterSupergroup.GAS
 
         public IReadOnlyList<OnHitModifier> OnHitModifiers => readOnlyOnHitModifiers;
 
+        public IReadOnlyList<OnPredictedLethalHitModifier> PredictedLethalHitModifiers =>
+            readOnlyPredictedLethalHitModifiers;
+
+        /// <summary>Compatibility view containing only legacy OnKillModifier instances.</summary>
         public IReadOnlyList<OnKillModifier> OnKillModifiers => readOnlyOnKillModifiers;
 
         public bool HasModifiers => entries.Count > 0;
@@ -101,6 +110,7 @@ namespace MonsterSupergroup.GAS
             dynamicModifiers.Clear();
             dynamicOnDamageModifiers.Clear();
             onHitModifiers.Clear();
+            predictedLethalHitModifiers.Clear();
             onKillModifiers.Clear();
 
             for (int i = 0; i < ownedModifiers.Length; i++)
@@ -115,7 +125,7 @@ namespace MonsterSupergroup.GAS
                 !(modifier is DynamicStatModifier) &&
                 !(modifier is DynamicOnDamageModifier) &&
                 !(modifier is OnHitModifier) &&
-                !(modifier is OnKillModifier))
+                !(modifier is OnPredictedLethalHitModifier))
             {
                 throw new ArgumentException(
                     $"Modifier type {modifier.GetType().FullName} does not belong to a supported execution stage.",
@@ -129,13 +139,14 @@ namespace MonsterSupergroup.GAS
             dynamicModifiers.Clear();
             dynamicOnDamageModifiers.Clear();
             onHitModifiers.Clear();
+            predictedLethalHitModifiers.Clear();
             onKillModifiers.Clear();
 
             var staticEntries = new List<Entry>();
             var dynamicEntries = new List<Entry>();
             var onDamageEntries = new List<Entry>();
             var onHitEntries = new List<Entry>();
-            var onKillEntries = new List<Entry>();
+            var predictedLethalEntries = new List<Entry>();
 
             for (int i = 0; i < entries.Count; i++)
             {
@@ -154,8 +165,8 @@ namespace MonsterSupergroup.GAS
                     case OnHitModifier _:
                         onHitEntries.Add(entry);
                         break;
-                    case OnKillModifier _:
-                        onKillEntries.Add(entry);
+                    case OnPredictedLethalHitModifier _:
+                        predictedLethalEntries.Add(entry);
                         break;
                 }
             }
@@ -164,13 +175,20 @@ namespace MonsterSupergroup.GAS
             dynamicEntries.Sort(CompareStandard);
             onDamageEntries.Sort(CompareStandard);
             onHitEntries.Sort(CompareOnHit);
-            onKillEntries.Sort(CompareOnKill);
+            predictedLethalEntries.Sort(ComparePredictedLethalHit);
 
             CopyModifiers(staticEntries, staticModifiers);
             CopyModifiers(dynamicEntries, dynamicModifiers);
             CopyModifiers(onDamageEntries, dynamicOnDamageModifiers);
             CopyModifiers(onHitEntries, onHitModifiers);
-            CopyModifiers(onKillEntries, onKillModifiers);
+            CopyModifiers(predictedLethalEntries, predictedLethalHitModifiers);
+            for (int i = 0; i < predictedLethalEntries.Count; i++)
+            {
+                if (predictedLethalEntries[i].Modifier is OnKillModifier onKill)
+                {
+                    onKillModifiers.Add(onKill);
+                }
+            }
         }
 
         private static int CompareStandard(Entry left, Entry right)
@@ -193,7 +211,7 @@ namespace MonsterSupergroup.GAS
             return rollPriority != 0 ? rollPriority : left.InsertionSequence.CompareTo(right.InsertionSequence);
         }
 
-        private static int CompareOnKill(Entry left, Entry right)
+        private static int ComparePredictedLethalHit(Entry left, Entry right)
         {
             int priority = CompareStagePriority(left, right);
             if (priority != 0)
@@ -201,8 +219,10 @@ namespace MonsterSupergroup.GAS
                 return priority;
             }
 
-            float leftRollPriority = ((OnKillModifier)left.Modifier).GetRollPriority();
-            float rightRollPriority = ((OnKillModifier)right.Modifier).GetRollPriority();
+            float leftRollPriority =
+                ((OnPredictedLethalHitModifier)left.Modifier).GetRollPriority();
+            float rightRollPriority =
+                ((OnPredictedLethalHitModifier)right.Modifier).GetRollPriority();
             int rollPriority = rightRollPriority.CompareTo(leftRollPriority);
             return rollPriority != 0 ? rollPriority : left.InsertionSequence.CompareTo(right.InsertionSequence);
         }

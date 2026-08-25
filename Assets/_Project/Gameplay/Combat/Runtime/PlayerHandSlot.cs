@@ -14,6 +14,7 @@ namespace MonsterSupergroup.Gameplay.Combat
         private readonly CombatTeamBehaviour owner;
         private readonly IRandomSource randomSource;
         private readonly List<EquipmentModifierSet> equipment = new List<EquipmentModifierSet>();
+        private CombatRuntimeServices runtimeServices;
 
         private ProjectileAttackBehaviour attackBehaviour;
 
@@ -23,7 +24,8 @@ namespace MonsterSupergroup.Gameplay.Combat
             Transform parent,
             NearestEnemyTargetProvider nearestTargetProvider,
             CombatTeamBehaviour weaponOwner,
-            IRandomSource random)
+            IRandomSource random,
+            CombatRuntimeServices services = null)
         {
             hand = ownerHand ?? throw new ArgumentNullException(nameof(ownerHand));
             Index = index;
@@ -31,6 +33,7 @@ namespace MonsterSupergroup.Gameplay.Combat
             targetProvider = nearestTargetProvider ?? throw new ArgumentNullException(nameof(nearestTargetProvider));
             owner = weaponOwner ?? throw new ArgumentNullException(nameof(weaponOwner));
             randomSource = random ?? throw new ArgumentNullException(nameof(random));
+            runtimeServices = services;
         }
 
         public int Index { get; }
@@ -56,12 +59,17 @@ namespace MonsterSupergroup.Gameplay.Combat
                 candidate.gameObject.SetActive(false);
                 WeaponRuntimeBehaviour runtime = candidate.Weapon;
                 runtime.InitializeOnAwake = false;
+                runtimeServices?.Configure(runtime);
                 runtime.Initialize(
                     definition.BaseStats,
                     FlattenEquipment(candidateEquipment),
                     definition.PerkModifierSet != null ? definition.PerkModifierSet.Modifiers : null,
                     randomSource,
-                    definition.CombatId);
+                    definition.CombatId,
+                    runtimeServices?.EventIds,
+                    runtimeServices?.EventSink,
+                    runtimeServices?.TriggerGuard,
+                    runtimeServices?.TimeSource);
                 candidate.Configure(runtime, definition, targetProvider, owner);
             }
             catch
@@ -168,12 +176,26 @@ namespace MonsterSupergroup.Gameplay.Combat
 
         private void Reinitialize(IReadOnlyList<EquipmentModifierSet> candidateEquipment)
         {
+            runtimeServices?.Configure(Weapon);
             Weapon.Initialize(
                 Definition.BaseStats,
                 FlattenEquipment(candidateEquipment),
                 Definition.PerkModifierSet != null ? Definition.PerkModifierSet.Modifiers : null,
                 randomSource,
-                Definition.CombatId);
+                Definition.CombatId,
+                runtimeServices?.EventIds,
+                runtimeServices?.EventSink,
+                runtimeServices?.TriggerGuard,
+                runtimeServices?.TimeSource);
+        }
+
+        public void ConfigureCombatRuntimeServices(CombatRuntimeServices services)
+        {
+            runtimeServices = services ?? throw new ArgumentNullException(nameof(services));
+            if (HasWeapon)
+            {
+                Reinitialize(equipment);
+            }
         }
 
         private static IReadOnlyList<EquipmentDataModifier> FlattenEquipment(

@@ -31,14 +31,12 @@ namespace MonsterSupergroup.Gameplay.Combat
                 throw new ArgumentOutOfRangeException(nameof(range));
             }
 
-            CombatTeamBehaviour[] candidates = FindObjectsByType<CombatTeamBehaviour>(
-                FindObjectsInactive.Exclude,
-                FindObjectsSortMode.None);
+            var candidates = CombatTeamBehaviour.ActiveTeams;
             float bestDistanceSquared = range * range;
             int bestInstanceId = int.MaxValue;
             target = null;
 
-            for (int i = 0; i < candidates.Length; i++)
+            for (int i = 0; i < candidates.Count; i++)
             {
                 CombatTeamBehaviour candidate = candidates[i];
                 if (candidate == null || candidate == owner ||

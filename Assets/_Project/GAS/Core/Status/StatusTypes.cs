@@ -2,10 +2,17 @@ using System;
 
 namespace MonsterSupergroup.GAS
 {
+    [Flags]
     public enum EnemyStatusID : uint
     {
         None = 0,
-        Burn = 2
+        Slow = 1,
+        Burn = 2,
+        Poison = 4,
+        Bleed = 8,
+        Weaken = 16,
+        Fragile = 32,
+        Stun = 64
     }
 
     public enum StatusStackMode
@@ -80,7 +87,15 @@ namespace MonsterSupergroup.GAS
             int numberOfHits,
             float hitIntervalDuration,
             float priority,
-            uint damageSourceId = 0)
+            uint damageSourceId = 0,
+            StatusInstanceId instanceId = default,
+            int stack = 1,
+            uint sourcePlayerId = 0,
+            uint sourceEntityId = 0,
+            uint targetEntityId = 0,
+            double startTime = double.NaN,
+            StatusExecutionAuthority executionAuthority = StatusExecutionAuthority.SourceClient,
+            CombatContext sourceContext = default)
         {
             if (definition.Id == EnemyStatusID.None)
             {
@@ -107,12 +122,41 @@ namespace MonsterSupergroup.GAS
                 throw new ArgumentOutOfRangeException(nameof(priority), "Priority must be finite.");
             }
 
+            if (stack < 1 || stack > definition.MaxStacks)
+            {
+                throw new ArgumentOutOfRangeException(nameof(stack));
+            }
+
+            if (!double.IsNaN(startTime) && double.IsInfinity(startTime))
+            {
+                throw new ArgumentOutOfRangeException(nameof(startTime));
+            }
+
+            if (!Enum.IsDefined(typeof(StatusExecutionAuthority), executionAuthority))
+            {
+                throw new ArgumentOutOfRangeException(nameof(executionAuthority));
+            }
+
+            float duration = numberOfHits * hitIntervalDuration;
+            if (float.IsInfinity(duration))
+            {
+                throw new ArgumentOutOfRangeException(nameof(numberOfHits), "Status duration overflowed.");
+            }
+
             Definition = definition;
             TickDamage = tickDamage;
             NumberOfHits = numberOfHits;
             HitIntervalDuration = hitIntervalDuration;
             Priority = priority;
             DamageSourceId = damageSourceId;
+            InstanceId = instanceId;
+            Stack = stack;
+            SourcePlayerId = sourcePlayerId;
+            SourceEntityId = sourceEntityId;
+            TargetEntityId = targetEntityId;
+            StartTime = startTime;
+            ExecutionAuthority = executionAuthority;
+            SourceContext = sourceContext;
         }
 
         public StatusDefinition Definition { get; }
@@ -126,17 +170,51 @@ namespace MonsterSupergroup.GAS
         public float Priority { get; }
 
         public uint DamageSourceId { get; }
+
+        public StatusInstanceId InstanceId { get; }
+
+        public int Stack { get; }
+
+        public uint SourcePlayerId { get; }
+
+        public uint SourceEntityId { get; }
+
+        public uint TargetEntityId { get; }
+
+        public double StartTime { get; }
+
+        public bool HasExplicitStartTime => !double.IsNaN(StartTime);
+
+        public float Duration => NumberOfHits * HitIntervalDuration;
+
+        public StatusExecutionAuthority ExecutionAuthority { get; }
+
+        public CombatContext SourceContext { get; }
     }
 
     public readonly struct StatusTick
     {
         public StatusTick(EnemyStatusID statusId, DamageInfo damage, int tickIndex, bool isFinalTick)
         {
+            Instance = default;
             StatusId = statusId;
             Damage = damage;
             TickIndex = tickIndex;
             IsFinalTick = isFinalTick;
         }
+
+        public StatusTick(StatusInstance instance, DamageInfo damage, int tickIndex, bool isFinalTick)
+        {
+            Instance = instance;
+            StatusId = instance.DefinitionId;
+            Damage = damage;
+            TickIndex = tickIndex;
+            IsFinalTick = isFinalTick;
+        }
+
+        public StatusInstance Instance { get; }
+
+        public StatusInstanceId InstanceId => Instance.InstanceId;
 
         public EnemyStatusID StatusId { get; }
 

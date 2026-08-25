@@ -6,8 +6,7 @@ using UnityEngine;
 namespace MonsterSupergroup.Gameplay.Combat
 {
     [DisallowMultipleComponent]
-    [RequireComponent(typeof(Rigidbody2D))]
-    [RequireComponent(typeof(Collider2D))]
+    [RequireComponent(typeof(Rigidbody2D), typeof(CircleCollider2D))]
     public sealed class StraightProjectileBehaviour : MonoBehaviour
     {
         private readonly HashSet<int> hitTargets = new HashSet<int>();
@@ -23,8 +22,10 @@ namespace MonsterSupergroup.Gameplay.Combat
         private Action<StraightProjectileBehaviour> onFinished;
         private bool initialized;
         private bool finished;
+        private Vector3 baseScale;
 
         public Vector2 Direction => direction;
+        internal int PoolKey { get; private set; }
 
         private void Awake()
         {
@@ -34,6 +35,15 @@ namespace MonsterSupergroup.Gameplay.Combat
             body.useFullKinematicContacts = true;
             body.collisionDetectionMode = CollisionDetectionMode2D.Continuous;
             GetComponent<Collider2D>().isTrigger = true;
+            baseScale = transform.localScale;
+        }
+
+        internal void PrepareForPoolSpawn(int poolKey, Vector3 position, Quaternion rotation)
+        {
+            PoolKey = poolKey;
+            transform.SetPositionAndRotation(position, rotation);
+            transform.localScale = baseScale;
+            gameObject.SetActive(true);
         }
 
         public void Initialize(
@@ -77,7 +87,7 @@ namespace MonsterSupergroup.Gameplay.Combat
             hitTargets.Clear();
             finished = false;
             initialized = true;
-            transform.localScale *= Mathf.Max(0.01f, attack.Stats.Size);
+            transform.localScale = baseScale * Mathf.Max(0.01f, attack.Stats.Size);
 
             if (rotateToMovement)
             {
@@ -147,7 +157,10 @@ namespace MonsterSupergroup.Gameplay.Combat
             Action<StraightProjectileBehaviour> callback = onFinished;
             onFinished = null;
             callback?.Invoke(this);
-            Destroy(gameObject);
+            if (callback == null)
+            {
+                Destroy(gameObject);
+            }
         }
 
         private void OnDestroy()

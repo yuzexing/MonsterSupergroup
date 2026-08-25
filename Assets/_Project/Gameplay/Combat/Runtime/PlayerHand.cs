@@ -17,7 +17,8 @@ namespace MonsterSupergroup.Gameplay.Combat
             Transform attacksRoot,
             NearestEnemyTargetProvider targetProvider,
             CombatTeamBehaviour owner,
-            IRandomSource randomSource)
+            IRandomSource randomSource,
+            CombatRuntimeServices runtimeServices = null)
         {
             if (attacksRoot == null)
             {
@@ -47,7 +48,14 @@ namespace MonsterSupergroup.Gameplay.Combat
                 slotRoots[i] = slotObject;
                 Transform slotRoot = slotObject.transform;
                 slotRoot.SetParent(attacksRoot, false);
-                slots[i] = new PlayerHandSlot(this, i, slotRoot, targetProvider, owner, randomSource);
+                slots[i] = new PlayerHandSlot(
+                    this,
+                    i,
+                    slotRoot,
+                    targetProvider,
+                    owner,
+                    randomSource,
+                    runtimeServices);
             }
         }
 
@@ -106,6 +114,19 @@ namespace MonsterSupergroup.Gameplay.Combat
         internal void NotifySlotChanged(PlayerHandSlot slot)
         {
             SlotChanged?.Invoke(slot.Index, slot);
+        }
+
+        public void ConfigureCombatRuntimeServices(CombatRuntimeServices services)
+        {
+            if (services == null)
+            {
+                throw new ArgumentNullException(nameof(services));
+            }
+
+            for (int i = 0; i < slots.Length; i++)
+            {
+                slots[i].ConfigureCombatRuntimeServices(services);
+            }
         }
 
         public void Dispose()

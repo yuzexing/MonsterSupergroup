@@ -13,6 +13,7 @@ namespace MonsterSupergroup.Gameplay.Combat
         [SerializeField] private CombatTeamBehaviour owner;
 
         public PlayerHand Hand { get; private set; }
+        private CombatRuntimeServices runtimeServices;
 
         public void Configure(
             Transform newAttacksRoot,
@@ -37,7 +38,14 @@ namespace MonsterSupergroup.Gameplay.Combat
                 attacksRoot,
                 targetProvider,
                 owner,
-                randomSource ?? new UnityRandomSource());
+                randomSource ?? new UnityRandomSource(),
+                runtimeServices);
+        }
+
+        public void ConfigureCombatRuntimeServices(CombatRuntimeServices services)
+        {
+            runtimeServices = services ?? throw new ArgumentNullException(nameof(services));
+            Hand?.ConfigureCombatRuntimeServices(runtimeServices);
         }
 
         public bool TryEquipWeapon(int slotIndex, WeaponDefinition definition)

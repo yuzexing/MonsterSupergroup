@@ -17,7 +17,7 @@ public class SystemController : MonoBehaviour
         // 初始化音频
         // 初始化资源系统
         // ...
-        await Awaitable.WaitForSecondsAsync(0.5f);
+        await Awaitable.WaitForSecondsAsync(0.1f);
         await Awaitable.NextFrameAsync();
     }
 

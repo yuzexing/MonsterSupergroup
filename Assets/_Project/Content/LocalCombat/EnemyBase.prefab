@@ -83,15 +83,15 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_MaskInteraction: 0
-  m_Sprite: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Sprite: {fileID: -2413806693520163455, guid: a86470a33a6bf42c4b3595704624658b, type: 3}
+  m_Color: {r: 1, g: 0, b: 0, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
   m_Size: {x: 1, y: 1}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 0
+  m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
 --- !u!95 &2840024695778681754
 Animator:
@@ -253,6 +253,9 @@ GameObject:
   - component: {fileID: 52470036140071214}
   - component: {fileID: 6523683399421190522}
   - component: {fileID: 4809216034930338922}
+  - component: {fileID: 3657585698669438500}
+  - component: {fileID: 8095263965623144152}
+  - component: {fileID: 3894133510728200273}
   m_Layer: 0
   m_Name: EnemyBase
   m_TagString: Untagged
@@ -269,7 +272,7 @@ Transform:
   m_GameObject: {fileID: 5370477504739132608}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.02481, y: 0.21991, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -294,8 +297,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9e3c21e021c148f5a71dcf76b3cf5a4e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: MonsterSupergroup.Gameplay.Combat::AstralShift.HellMaiden.AI.Enemy.EnemyController
-  selectedName: 
-  status: {fileID: 0}
+  selectedName: CommonEnemy
+  status: {fileID: 6523683399421190522}
   stats:
     baseStats:
       hp: 0
@@ -318,7 +321,7 @@ MonoBehaviour:
       damageMultiplier: 1
       xpMultiplier: 1
       speedMultiplier: 1
-  spriteRenderer: {fileID: 0}
+  spriteRenderer: {fileID: 2565672489711168344}
   enemyFlyingType: 0
   movementCenter: {fileID: 0}
   isElite: 0
@@ -334,29 +337,29 @@ MonoBehaviour:
   forceWindInteraction: 0
   ultimateWindInteraction: {x: 0, y: 0}
   _target: {fileID: 0}
-  rigidBody: {fileID: 0}
+  rigidBody: {fileID: 52470036140071214}
   enemyAnimator: {fileID: 0}
-  damagePosition: {fileID: 0}
+  damagePosition: {fileID: 3991496274091878730}
   overrideGlobalLootSettings: 0
   lootSettings: {fileID: 0}
   _currentMovementScript: {fileID: 0}
   previousFacingDirection: {x: 0, y: 0}
-  attackScript: {fileID: 0}
+  attackScript: {fileID: 4809216034930338922}
   attackCooldown: 0.5
   attackPivot: {x: 0, y: 0}
-  attackDistance: 0.5
+  attackDistance: 0
   attackOnCameraBounds: 0
   cameraBoundsDistanceMultiplier: 0.8
-  hasAttackAnimation: 1
+  hasAttackAnimation: 0
   facingPlayerDuringWarning: 0
   facingPlayerDuringAttack: 0
   _cancelAttackOnKnockback: 1
-  alwaysAttacking: 0
+  alwaysAttacking: 1
   lastAttackTime: -Infinity
   attackOnDeath: 0
   stopForAttack: 1
   defaultMovement: {fileID: 0}
-  usesPathfinding: 1
+  usesPathfinding: 0
   aILerpMovement: {fileID: 0}
   obstaclesLayerMask:
     serializedVersion: 2
@@ -365,13 +368,13 @@ MonoBehaviour:
   obstacleDetectionCastOffset: {x: 0, y: 0}
   obstacleDetectionCastDistance: 2
   spawnReferenceRadius: 0.5
-  allowRubberband: 1
+  allowRubberband: 0
   rubberbandStatsReset: 1
   endTime: 0
   direction: 0
   angle: 0
-  collider: {fileID: 0}
-  hurtBox: {fileID: 0}
+  collider: {fileID: 8984551641283487495}
+  hurtBox: {fileID: 8844458363781443540}
 --- !u!50 &52470036140071214
 Rigidbody2D:
   serializedVersion: 5
@@ -426,8 +429,48 @@ MonoBehaviour:
   warningTime: 0
   attackTime: 0
   recoveryTime: 0
-  damageInteraction: {fileID: 0}
+  damageInteraction: {fileID: 8258986606157141372}
   deactivateColliderOnCancelAttack: 1
+--- !u!114 &3657585698669438500
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5370477504739132608}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1d480e141bfd5a64dbaf323404b471f6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: MonsterSupergroup.Gameplay.Combat.Runtime::MonsterSupergroup.Gameplay.Combat.CombatantBehaviour
+  maxHealth: 100
+--- !u!114 &8095263965623144152
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5370477504739132608}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e5bb57180d9da934fa0a5e5e25959f0f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: MonsterSupergroup.Gameplay.Combat.Runtime::MonsterSupergroup.Gameplay.Combat.StatusUpdateDriver
+  combatant: {fileID: 3657585698669438500}
+--- !u!114 &3894133510728200273
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5370477504739132608}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee9cbceeb8850fe46aad268cef41bcaa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: MonsterSupergroup.Gameplay.Combat.Runtime::MonsterSupergroup.Gameplay.Combat.CombatTeamBehaviour
+  team: 2
+  combatant: {fileID: 3657585698669438500}
 --- !u!1 &5813521400645410360
 GameObject:
   m_ObjectHideFlags: 0
@@ -455,7 +498,7 @@ Transform:
   m_GameObject: {fileID: 5813521400645410360}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.61664, y: 2.60295, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -590,7 +633,7 @@ Transform:
   m_GameObject: {fileID: 6122212007075914779}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 1.04, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -621,7 +664,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7680763544828961153}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -702,8 +745,8 @@ GameObject:
   m_Component:
   - component: {fileID: 8712963800305309067}
   - component: {fileID: 1858992951917381421}
+  - component: {fileID: 8258986606157141372}
   - component: {fileID: 2656033608123742287}
-  - component: {fileID: 8683991870550358118}
   - component: {fileID: 4134444907541245210}
   - component: {fileID: 6262326379108862178}
   m_Layer: 0
@@ -764,27 +807,7 @@ CircleCollider2D:
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
   m_Radius: 0.5
---- !u!114 &2656033608123742287
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8090753416125689414}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fd0aea82c6dc27d10e415b7348549e2a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: MonsterSupergroup.Gameplay.Combat::AstralShift.QTI.Triggers.Physics2D.StayOn2DTrigger
-  interaction: {fileID: 0}
-  layerMask:
-    serializedVersion: 2
-    m_Bits: 55
-  useTag: 0
-  targetTag: Untagged
-  hasCooldown: 0
-  cooldownTimer: 1
---- !u!114 &8683991870550358118
+--- !u!114 &8258986606157141372
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -798,7 +821,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: MonsterSupergroup.Gameplay.Combat::AstralShift.HellMaiden.Interactions.PlayerDamageInteraction
   onEndInteractions: []
   directDamage: 0
-  damage: 1
+  damage: 100
   stunTime: 0
   enemyStats:
     baseStats:
@@ -822,7 +845,27 @@ MonoBehaviour:
       damageMultiplier: 1
       xpMultiplier: 1
       speedMultiplier: 1
-  damageType: 0
+  damageType: 4
+--- !u!114 &2656033608123742287
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8090753416125689414}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fd0aea82c6dc27d10e415b7348549e2a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: MonsterSupergroup.Gameplay.Combat::AstralShift.QTI.Triggers.Physics2D.StayOn2DTrigger
+  interaction: {fileID: 0}
+  layerMask:
+    serializedVersion: 2
+    m_Bits: 55
+  useTag: 0
+  targetTag: Untagged
+  hasCooldown: 0
+  cooldownTimer: 1
 --- !u!114 &4134444907541245210
 MonoBehaviour:
   m_ObjectHideFlags: 0

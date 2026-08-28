@@ -389,7 +389,9 @@ namespace MonsterSupergroup.NetworkCombat
                 double.IsNaN(mutation.StartTime) ||
                 double.IsInfinity(mutation.StartTime) ||
                 float.IsNaN(mutation.Priority) ||
-                float.IsInfinity(mutation.Priority))
+                float.IsInfinity(mutation.Priority) ||
+                float.IsNaN(mutation.Magnitude) ||
+                float.IsInfinity(mutation.Magnitude))
             {
                 return CombatRejectionReason.InvalidStatus;
             }
@@ -441,7 +443,8 @@ namespace MonsterSupergroup.NetworkCombat
                 mutation.TickInterval,
                 mutation.Priority,
                 mutation.DamageSourceId,
-                sourceContext);
+                sourceContext,
+                mutation.Magnitude);
         }
 
         private static int CalculateCompletedTicks(StatusInstance instance, double serverTime)
@@ -486,7 +489,8 @@ namespace MonsterSupergroup.NetworkCombat
                 source.TickInterval,
                 source.Priority,
                 source.DamageSourceId,
-                source.SourceContext);
+                source.SourceContext,
+                source.Magnitude);
         }
     }
 }

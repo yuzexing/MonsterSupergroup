@@ -39,6 +39,7 @@ namespace MonsterSupergroup.NetworkCombat
         public int CompletedTicks;
         public float TickInterval;
         public float Priority;
+        public float Magnitude;
         public uint DamageSourceId;
 
         public static StatusMutation From(
@@ -88,6 +89,7 @@ namespace MonsterSupergroup.NetworkCombat
                 CompletedTicks = instance.CompletedTicks,
                 TickInterval = instance.TickInterval,
                 Priority = instance.Priority,
+                Magnitude = instance.Magnitude,
                 DamageSourceId = instance.DamageSourceId
             };
         }

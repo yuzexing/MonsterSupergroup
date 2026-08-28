@@ -16,6 +16,9 @@ using GasCombatTags = MonsterSupergroup.GAS.CombatTags;
 using GasConfirmedKill = MonsterSupergroup.GAS.ConfirmedKill;
 using GasNullEventSink = MonsterSupergroup.GAS.NullCombatEventSink;
 using GasPredictedLethalHit = MonsterSupergroup.GAS.PredictedLethalHit;
+using GasDamageInfo = MonsterSupergroup.GAS.DamageInfo;
+using GasEnemyStatusID = MonsterSupergroup.GAS.EnemyStatusID;
+using GasStatusTick = MonsterSupergroup.GAS.StatusTick;
 
 namespace AstralShift.HellMaiden.AI.Enemy
 {
@@ -513,8 +516,10 @@ namespace AstralShift.HellMaiden.AI.Enemy
 			CombatantBinding.InitializeFromStats(stats);
 			CombatantBinding.Combatant.PredictedLethalHitReceived -= HandlePredictedLethalHit;
 			CombatantBinding.Combatant.ConfirmedKillReceived -= HandleConfirmedKill;
+			CombatantBinding.Combatant.StatusDamageReceived -= HandleStatusDamage;
 			CombatantBinding.Combatant.PredictedLethalHitReceived += HandlePredictedLethalHit;
 			CombatantBinding.Combatant.ConfirmedKillReceived += HandleConfirmedKill;
+			CombatantBinding.Combatant.StatusDamageReceived += HandleStatusDamage;
 			_transform = base.transform;
 			_defaultRigidbodyMass = rigidBody.mass;
 			if (usesPathfinding)
@@ -573,6 +578,7 @@ namespace AstralShift.HellMaiden.AI.Enemy
 			{
 				CombatantBinding.Combatant.PredictedLethalHitReceived -= HandlePredictedLethalHit;
 				CombatantBinding.Combatant.ConfirmedKillReceived -= HandleConfirmedKill;
+				CombatantBinding.Combatant.StatusDamageReceived -= HandleStatusDamage;
 			}
 			this.OnDispose?.Invoke();
 			this.OnDispose = null;
@@ -1055,6 +1061,39 @@ namespace AstralShift.HellMaiden.AI.Enemy
 			{
 				BeginPredictedDeathPresentation();
 			}
+		}
+
+		private void HandleStatusDamage(GasStatusTick tick, GasDamageInfo damage)
+		{
+			if (damage.Value <= 0)
+			{
+				return;
+			}
+
+			DamageType damageType;
+			switch (tick.StatusId)
+			{
+			case GasEnemyStatusID.Burn:
+				damageType = DamageType.Fire;
+				break;
+			case GasEnemyStatusID.Poison:
+				damageType = DamageType.Poison;
+				break;
+			case GasEnemyStatusID.Bleed:
+				damageType = DamageType.Bleed;
+				break;
+			default:
+				damageType = DamageType.Normal;
+				break;
+			}
+
+			ShowDamageNumbers(
+				(int)damage.Id,
+				damage.Value,
+				damageType,
+				damage.IsCritical,
+				damagePosition);
+			enemyAnimator.HurtBlinkAnimation();
 		}
 
 		private void HandleConfirmedKill(GasConfirmedKill kill)

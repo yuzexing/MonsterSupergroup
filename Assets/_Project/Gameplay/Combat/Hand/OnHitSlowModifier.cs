@@ -1,4 +1,5 @@
 using AstralShift.HellMaiden.AI.Enemy;
+using EnemyStatusID = MonsterSupergroup.GAS.EnemyStatusID;
 
 namespace AstralShift.HellMaiden.Combat.Hand
 {
@@ -30,7 +31,11 @@ namespace AstralShift.HellMaiden.Combat.Hand
 		{
 			if (args.Enemy.IsAlive)
 			{
-				args.Enemy.status.Apply(EnemyStatusID.Slow, parameters.speedMultiplier, parameters.duration);
+				args.Enemy.status.Apply(
+					EnemyStatusID.Slow,
+					parameters.speedMultiplier,
+					parameters.duration,
+					source: args.Source);
 			}
 			return args;
 		}

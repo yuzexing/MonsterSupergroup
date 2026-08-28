@@ -175,6 +175,8 @@ namespace MonsterSupergroup.NetworkCombat
                 }
 
                 bridges[i].ObserveStatus(combatant.StatusController);
+                combatant.ConfigureStatusInstanceIds(
+                    new CombatEventStatusInstanceIdSource(bridges[i].EventIds));
                 if (authority == CombatEntityAuthority.ServerCanonical)
                 {
                     localStatusEventSink = bridges[i].Collector;

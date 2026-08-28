@@ -170,6 +170,20 @@ namespace MonsterSupergroup.GAS.Tests
             Assert.That(clientTicks, Is.Empty);
         }
 
+        [Test]
+        public void SharedCombatEventIdSource_ProducesUniqueStatusIdsAcrossTargets()
+        {
+            var eventIds = new SequentialCombatEventIdSource(7, 3);
+            var statusIds = new CombatEventStatusInstanceIdSource(eventIds);
+
+            StatusInstanceId firstTarget = statusIds.Next();
+            StatusInstanceId secondTarget = statusIds.Next();
+
+            Assert.That(firstTarget, Is.Not.EqualTo(secondTarget));
+            Assert.That(firstTarget.Value, Is.EqualTo(CombatEventId.Compose(7, 3, 1).Value));
+            Assert.That(secondTarget.Value, Is.EqualTo(CombatEventId.Compose(7, 3, 2).Value));
+        }
+
         private static StatusController Controller(
             ICollection<StatusTick> ticks,
             bool isServer,

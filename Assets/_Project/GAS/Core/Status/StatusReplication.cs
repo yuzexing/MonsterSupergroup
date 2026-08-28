@@ -69,6 +69,25 @@ namespace MonsterSupergroup.GAS
         }
     }
 
+    /// <summary>
+    /// Uses the owning client's combat-event sequence so status IDs stay unique
+    /// across every target StatusController observed by that client.
+    /// </summary>
+    public sealed class CombatEventStatusInstanceIdSource : IStatusInstanceIdSource
+    {
+        private readonly ICombatEventIdSource eventIds;
+
+        public CombatEventStatusInstanceIdSource(ICombatEventIdSource eventIds)
+        {
+            this.eventIds = eventIds ?? throw new ArgumentNullException(nameof(eventIds));
+        }
+
+        public StatusInstanceId Next()
+        {
+            return new StatusInstanceId(eventIds.Next().Value);
+        }
+    }
+
     public enum StatusExecutionAuthority : byte
     {
         SourceClient = 0,
@@ -151,7 +170,8 @@ namespace MonsterSupergroup.GAS
             float tickInterval,
             float priority,
             uint damageSourceId,
-            CombatContext sourceContext = default)
+            CombatContext sourceContext = default,
+            float magnitude = 0f)
         {
             if (!instanceId.IsValid)
             {
@@ -208,6 +228,11 @@ namespace MonsterSupergroup.GAS
                 throw new ArgumentOutOfRangeException(nameof(priority));
             }
 
+            if (float.IsNaN(magnitude) || float.IsInfinity(magnitude))
+            {
+                throw new ArgumentOutOfRangeException(nameof(magnitude));
+            }
+
             InstanceId = instanceId;
             Definition = definition;
             SourcePlayerId = sourcePlayerId;
@@ -225,6 +250,7 @@ namespace MonsterSupergroup.GAS
             Priority = priority;
             DamageSourceId = damageSourceId;
             SourceContext = sourceContext;
+            Magnitude = magnitude;
         }
 
         public StatusInstanceId InstanceId { get; }
@@ -247,6 +273,7 @@ namespace MonsterSupergroup.GAS
         public float Priority { get; }
         public uint DamageSourceId { get; }
         public CombatContext SourceContext { get; }
+        public float Magnitude { get; }
 
         public StatusInstance WithProgress(int completedTicks)
         {
@@ -267,7 +294,8 @@ namespace MonsterSupergroup.GAS
                 TickInterval,
                 Priority,
                 DamageSourceId,
-                SourceContext);
+                SourceContext,
+                Magnitude);
         }
 
         public StatusInstance WithStack(int stack)
@@ -289,7 +317,8 @@ namespace MonsterSupergroup.GAS
                 TickInterval,
                 Priority,
                 DamageSourceId,
-                SourceContext);
+                SourceContext,
+                Magnitude);
         }
     }
 

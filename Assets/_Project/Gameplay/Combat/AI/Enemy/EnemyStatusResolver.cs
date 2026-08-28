@@ -1,13 +1,16 @@
-using System;
 using System.Collections.Generic;
 using AstralShift.HellMaiden.Combat;
-using AstralShift.HellMaiden.Player.Attacks;
 using AstralShift.Pooling;
+using MonsterSupergroup.GAS;
 using UnityEngine;
-using CombatTags = MonsterSupergroup.GAS.CombatTags;
+using GasEnemyStatusID = MonsterSupergroup.GAS.EnemyStatusID;
 
 namespace AstralShift.HellMaiden.AI.Enemy
 {
+	/// <summary>
+	/// Legacy status VFX presenter. Gameplay state and timing are owned exclusively by
+	/// each enemy's StatusController.
+	/// </summary>
 	public class EnemyStatusResolver : MonoBehaviour
 	{
 		public enum onHitTransform
@@ -20,243 +23,70 @@ namespace AstralShift.HellMaiden.AI.Enemy
 			Bottom = 5
 		}
 
-		public enum StackMode
+		private sealed class StatusVisualHandler
 		{
-			Add = 0,
-			Replace = 1,
-			HighestPriority = 2
-		}
+			private static readonly int EffectAnimHash = Animator.StringToHash("EffectAnim");
 
-		private class StatusHandler
-		{
 			private readonly GenericPooler<GameObject> _pooler;
 
 			private readonly onHitTransform _hitTransform;
 
-			private readonly int _maxStacks;
+			private readonly Dictionary<BaseEnemyController, GameObject> _visuals =
+				new Dictionary<BaseEnemyController, GameObject>();
 
-			private readonly StackMode _strategy;
-
-			private readonly Action<BaseEnemyController, float> _onApply;
-
-			private readonly Action<BaseEnemyController> _onRemove;
-
-			private readonly Action<BaseEnemyController, EnemyStatusData> _onTick;
-
-			private readonly List<BaseEnemyController> _activeEnemies;
-
-			private readonly Dictionary<BaseEnemyController, List<EnemyStatusData>> _tracker;
-
-			private readonly Dictionary<BaseEnemyController, GameObject> _visuals;
-
-			private static readonly int EffectAnimHash = Animator.StringToHash("EffectAnim");
-
-			public StatusHandler(GameObject prefab, onHitTransform hitTransform, int maxStacks, StackMode strategy, Action<BaseEnemyController, float> onApply, Action<BaseEnemyController> onRemove, Action<BaseEnemyController, EnemyStatusData> onTick = null)
+			public StatusVisualHandler(GameObject prefab, onHitTransform hitTransform)
 			{
 				_pooler = PoolManager.Instance.GetOrCreatePooler(prefab);
 				_hitTransform = hitTransform;
-				_maxStacks = maxStacks;
-				_strategy = strategy;
-				_onApply = onApply;
-				_onRemove = onRemove;
-				_onTick = onTick;
-				_activeEnemies = new List<BaseEnemyController>();
-				_tracker = new Dictionary<BaseEnemyController, List<EnemyStatusData>>();
-				_visuals = new Dictionary<BaseEnemyController, GameObject>();
 			}
 
-			public void Register(BaseEnemyController enemy, EnemyStatusData data)
+			public void Show(BaseEnemyController enemy, float duration)
 			{
-				if (!_tracker.ContainsKey(enemy))
-				{
-					_tracker[enemy] = new List<EnemyStatusData>();
-					_activeEnemies.Add(enemy);
-					GameObject orCreate = _pooler.GetOrCreate(activate: true);
-					SetEffectPosition(orCreate, enemy, _hitTransform);
-					_visuals[enemy] = orCreate;
-					if (orCreate.TryGetComponent<Animator>(out var component))
-					{
-						component.Play(EffectAnimHash, -1, 0f);
-						if (component.runtimeAnimatorController.animationClips.Length != 0)
-						{
-							float num = ((data.totalDuration > 0f) ? data.totalDuration : 1f);
-							float length = component.runtimeAnimatorController.animationClips[0].length;
-							component.speed = length / num;
-						}
-					}
-				}
-				List<EnemyStatusData> list = _tracker[enemy];
-				switch (_strategy)
-				{
-				case StackMode.Add:
-					if (list.Count < _maxStacks)
-					{
-						list.Add(data);
-						_onApply?.Invoke(enemy, data.power);
-					}
-					break;
-				case StackMode.Replace:
-					list.Clear();
-					list.Add(data);
-					_onApply?.Invoke(enemy, data.power);
-					break;
-				case StackMode.HighestPriority:
-					if (list.Count > 0)
-					{
-						if (data.priority >= list[0].priority)
-						{
-							data.startTime = list[0].startTime;
-							list[0] = data;
-							_onApply?.Invoke(enemy, data.power);
-						}
-					}
-					else
-					{
-						list.Add(data);
-						_onApply?.Invoke(enemy, data.power);
-					}
-					break;
-				}
-			}
-
-			public void UnRegister(BaseEnemyController enemy)
-			{
-				if (_tracker.ContainsKey(enemy))
-				{
-					RemoveEffect(enemy);
-					_activeEnemies.Remove(enemy);
-				}
-			}
-
-			public void Update(float currentTime)
-			{
-				for (int num = _activeEnemies.Count - 1; num >= 0; num--)
-				{
-					BaseEnemyController baseEnemyController = _activeEnemies[num];
-					if (baseEnemyController == null || !baseEnemyController.gameObject.activeInHierarchy)
-					{
-						UnRegister(baseEnemyController);
-					}
-					else
-					{
-						List<EnemyStatusData> list = _tracker[baseEnemyController];
-						for (int num2 = list.Count - 1; num2 >= 0; num2--)
-						{
-							EnemyStatusData value = list[num2];
-							bool flag = false;
-							bool flag2 = false;
-							if (_onTick != null)
-							{
-								if (currentTime - value.startTime >= value.hitInterval)
-								{
-									_onTick(baseEnemyController, value);
-									value.currentDuration += 1f;
-									value.startTime = currentTime;
-									flag2 = true;
-									if (value.currentDuration >= value.totalDuration)
-									{
-										flag = true;
-									}
-								}
-							}
-							else if (currentTime - value.startTime >= value.totalDuration)
-							{
-								flag = true;
-							}
-							if (flag)
-							{
-								list.RemoveAt(num2);
-							}
-							else if (flag2)
-							{
-								list[num2] = value;
-							}
-						}
-						if (list.Count == 0)
-						{
-							RemoveEffect(baseEnemyController);
-							_activeEnemies.RemoveAt(num);
-						}
-					}
-				}
-			}
-
-			public void ConsumeStack(BaseEnemyController enemy)
-			{
-				if (!_tracker.TryGetValue(enemy, out var value))
+				if (enemy == null)
 				{
 					return;
 				}
-				if (_onTick != null)
+
+				if (!_visuals.TryGetValue(enemy, out GameObject effect) || effect == null)
 				{
-					for (int num = value.Count - 1; num >= 0; num--)
+					effect = _pooler.GetOrCreate(activate: true);
+					_visuals[enemy] = effect;
+					SetEffectPosition(effect, enemy, _hitTransform);
+					if (effect.TryGetComponent(out Animator animator))
 					{
-						_onTick(enemy, value[num]);
+						animator.Play(EffectAnimHash, -1, 0f);
 					}
 				}
-				value.Clear();
-				RemoveEffect(enemy);
-				_activeEnemies.Remove(enemy);
+
+				UpdateAnimationDuration(effect, duration);
 			}
 
-			private void RemoveEffect(BaseEnemyController enemy)
+			public void Hide(BaseEnemyController enemy)
 			{
-				if (_visuals.TryGetValue(enemy, out var value))
+				if (enemy == null || !_visuals.TryGetValue(enemy, out GameObject effect))
 				{
-					_pooler.Return(value);
-					_visuals.Remove(enemy);
+					return;
 				}
-				_tracker.Remove(enemy);
-				_onRemove?.Invoke(enemy);
+
+				if (effect != null)
+				{
+					_pooler.Return(effect);
+				}
+				_visuals.Remove(enemy);
 			}
 
-			public void TransferEffect(BaseEnemyController source, BaseEnemyController target)
+			private static void UpdateAnimationDuration(GameObject effect, float duration)
 			{
-				if (_tracker.TryGetValue(source, out var value))
+				if (effect == null || !effect.TryGetComponent(out Animator animator) ||
+					animator.runtimeAnimatorController == null ||
+					animator.runtimeAnimatorController.animationClips.Length == 0)
 				{
-					_tracker[target] = new List<EnemyStatusData>(value);
-					_activeEnemies.Add(target);
-					if (_visuals.TryGetValue(source, out var value2))
-					{
-						_visuals[target] = value2;
-						SetEffectPosition(value2, target, _hitTransform);
-						_visuals.Remove(source);
-					}
-					if (value.Count > 0)
-					{
-						_onApply?.Invoke(target, value[0].power);
-					}
-					_tracker.Remove(source);
-					_activeEnemies.Remove(source);
+					return;
 				}
-			}
 
-			private void SetEffectPosition(GameObject effect, BaseEnemyController enemy, onHitTransform hitTransform)
-			{
-				Transform transform = enemy.Transform;
-				switch (hitTransform)
-				{
-				case onHitTransform.Center:
-					transform = (enemy.OnHitEffectCenterPivot ? enemy.OnHitEffectCenterPivot : transform);
-					break;
-				case onHitTransform.Center1:
-					transform = (enemy.OnHitEffectCenterPivot1 ? enemy.OnHitEffectCenterPivot1 : transform);
-					break;
-				case onHitTransform.Center2:
-					transform = (enemy.OnHitEffectCenterPivot2 ? enemy.OnHitEffectCenterPivot2 : transform);
-					break;
-				case onHitTransform.Center3:
-					transform = (enemy.OnHitEffectCenterPivot3 ? enemy.OnHitEffectCenterPivot3 : transform);
-					break;
-				case onHitTransform.Top:
-					transform = (enemy.OnHitEffectTopPivot ? enemy.OnHitEffectTopPivot : transform);
-					break;
-				case onHitTransform.Bottom:
-					transform = (enemy.OnHitEffectBottomPivot ? enemy.OnHitEffectBottomPivot : transform);
-					break;
-				}
-				effect.transform.position = transform.position;
-				effect.transform.SetParent(transform);
+				float safeDuration = duration > 0f ? duration : 1f;
+				animator.speed =
+					animator.runtimeAnimatorController.animationClips[0].length / safeDuration;
 			}
 		}
 
@@ -282,15 +112,15 @@ namespace AstralShift.HellMaiden.AI.Enemy
 
 		public onHitTransform weakTransform;
 
-		private StatusHandler _slowHandler;
+		private StatusVisualHandler _slowHandler;
 
-		private StatusHandler _burnHandler;
+		private StatusVisualHandler _burnHandler;
 
-		private StatusHandler _poisonHandler;
+		private StatusVisualHandler _poisonHandler;
 
-		private StatusHandler _bleedHandler;
+		private StatusVisualHandler _bleedHandler;
 
-		private StatusHandler _weakHandler;
+		private StatusVisualHandler _weakHandler;
 
 		private bool _isInitialized;
 
@@ -306,167 +136,108 @@ namespace AstralShift.HellMaiden.AI.Enemy
 			_isInitialized = true;
 		}
 
-		private void InitializeHandlers()
-		{
-			_slowHandler = new StatusHandler(SlowEffectPrefab, slowTransform, 1, StackMode.HighestPriority, delegate(BaseEnemyController enemy, float val)
-			{
-				enemy.status.SetSlowStat(val);
-			}, delegate(BaseEnemyController enemy)
-			{
-				enemy.status.RemoveSlow();
-			});
-			_weakHandler = new StatusHandler(WeakEffectPrefab, weakTransform, 1, StackMode.HighestPriority, delegate(BaseEnemyController enemy, float val)
-			{
-				enemy.status.SetWeakStat(val);
-			}, delegate(BaseEnemyController enemy)
-			{
-				enemy.status.RemoveWeak();
-			});
-			_burnHandler = new StatusHandler(BurnEffectPrefab, burnTransform, 1, StackMode.HighestPriority, null, delegate(BaseEnemyController enemy)
-			{
-				enemy.status.RemoveBurn();
-			}, delegate(BaseEnemyController enemy, EnemyStatusData data)
-			{
-				ApplyPeriodicDamage(
-					enemy,
-					data,
-					DamageType.Fire,
-					CombatTags.Status | CombatTags.Periodic |
-					CombatTags.Burn | CombatTags.Fire);
-			});
-			_poisonHandler = new StatusHandler(PoisonEffectPrefab, poisonTransform, 1, StackMode.HighestPriority, null, delegate(BaseEnemyController enemy)
-			{
-				enemy.status.RemovePoison();
-			}, delegate(BaseEnemyController enemy, EnemyStatusData data)
-			{
-				ApplyPeriodicDamage(
-					enemy,
-					data,
-					DamageType.Poison,
-					CombatTags.Status | CombatTags.Periodic | CombatTags.Poison);
-			});
-			_bleedHandler = new StatusHandler(BleedEffectPrefab, bleedTransform, 10, StackMode.Add, null, delegate(BaseEnemyController enemy)
-			{
-				enemy.status.RemoveBleed();
-			}, delegate(BaseEnemyController enemy, EnemyStatusData data)
-			{
-				ApplyPeriodicDamage(
-					enemy,
-					data,
-					DamageType.Bleed,
-					CombatTags.Status | CombatTags.Periodic);
-			});
-		}
-
-		private static void ApplyPeriodicDamage(
+		public void ShowStatus(
 			BaseEnemyController enemy,
-			EnemyStatusData data,
-			DamageType damageType,
-			CombatTags tags)
+			GasEnemyStatusID id,
+			float duration)
 		{
-			if (enemy is EnemyController normalEnemy && data.source.IsValid)
+			if (!_isInitialized)
 			{
-				normalEnemy.Damage(
-					(int)data.power,
-					damageType,
-					data.source.WithTags(tags));
 				return;
 			}
 
-			enemy.Damage((int)data.power, damageType);
+			GetHandler(id)?.Show(enemy, duration);
 		}
 
-		private void Update()
+		public void HideStatus(BaseEnemyController enemy, GasEnemyStatusID id)
 		{
-			if (_isInitialized)
+			if (!_isInitialized)
 			{
-				float time = Time.time;
-				_slowHandler.Update(time);
-				_burnHandler.Update(time);
-				_poisonHandler.Update(time);
-				_bleedHandler.Update(time);
-				_weakHandler.Update(time);
+				return;
 			}
+
+			GetHandler(id)?.Hide(enemy);
 		}
 
-		public void TransferStatus(BaseEnemyController source, BaseEnemyController target)
+		public void HideAll(BaseEnemyController enemy)
 		{
-			_slowHandler.TransferEffect(source, target);
-			_burnHandler.TransferEffect(source, target);
-			_poisonHandler.TransferEffect(source, target);
-			_bleedHandler.TransferEffect(source, target);
-			_weakHandler.TransferEffect(source, target);
+			if (!_isInitialized)
+			{
+				return;
+			}
+
+			_slowHandler.Hide(enemy);
+			_burnHandler.Hide(enemy);
+			_poisonHandler.Hide(enemy);
+			_bleedHandler.Hide(enemy);
+			_weakHandler.Hide(enemy);
 		}
 
-		public void RegisterSlowStatus(BaseEnemyController enemy, EnemyStatusData data)
+		private void InitializeHandlers()
 		{
-			_slowHandler.Register(enemy, data);
+			_slowHandler = new StatusVisualHandler(SlowEffectPrefab, slowTransform);
+			_burnHandler = new StatusVisualHandler(BurnEffectPrefab, burnTransform);
+			_poisonHandler = new StatusVisualHandler(PoisonEffectPrefab, poisonTransform);
+			_bleedHandler = new StatusVisualHandler(BleedEffectPrefab, bleedTransform);
+			_weakHandler = new StatusVisualHandler(WeakEffectPrefab, weakTransform);
 		}
 
-		public void UnRegisterSlowStatus(BaseEnemyController enemy)
-		{
-			_slowHandler.UnRegister(enemy);
-		}
-
-		public void RegisterBurnStatus(BaseEnemyController enemy, EnemyStatusData data)
-		{
-			_burnHandler.Register(enemy, data);
-		}
-
-		public void UnRegisterBurnStatus(BaseEnemyController enemy)
-		{
-			_burnHandler.UnRegister(enemy);
-		}
-
-		public void RegisterPoisonStatus(BaseEnemyController enemy, EnemyStatusData data)
-		{
-			_poisonHandler.Register(enemy, data);
-		}
-
-		public void UnRegisterPoisonStatus(BaseEnemyController enemy)
-		{
-			_poisonHandler.UnRegister(enemy);
-		}
-
-		public void RegisterBleedStatus(BaseEnemyController enemy, EnemyStatusData data)
-		{
-			_bleedHandler.Register(enemy, data);
-		}
-
-		public void UnRegisterBleedStatus(BaseEnemyController enemy)
-		{
-			_bleedHandler.UnRegister(enemy);
-		}
-
-		public void RegisterWeakStatus(BaseEnemyController enemy, EnemyStatusData data)
-		{
-			_weakHandler.Register(enemy, data);
-		}
-
-		public void UnRegisterWeakStatus(BaseEnemyController enemy)
-		{
-			_weakHandler.UnRegister(enemy);
-		}
-
-		public void ConsumeStack(EnemyStatusID id, BaseEnemyController enemy)
+		private StatusVisualHandler GetHandler(GasEnemyStatusID id)
 		{
 			switch (id)
 			{
-			case EnemyStatusID.Slow:
-				_slowHandler.ConsumeStack(enemy);
+			case GasEnemyStatusID.Slow:
+				return _slowHandler;
+			case GasEnemyStatusID.Burn:
+				return _burnHandler;
+			case GasEnemyStatusID.Poison:
+				return _poisonHandler;
+			case GasEnemyStatusID.Bleed:
+				return _bleedHandler;
+			case GasEnemyStatusID.Weaken:
+				return _weakHandler;
+			default:
+				return null;
+			}
+		}
+
+		private static void SetEffectPosition(
+			GameObject effect,
+			BaseEnemyController enemy,
+			onHitTransform hitTransform)
+		{
+			Transform target = enemy.Transform ? enemy.Transform : enemy.transform;
+			switch (hitTransform)
+			{
+			case onHitTransform.Center:
+				target = enemy.OnHitEffectCenterPivot ? enemy.OnHitEffectCenterPivot : target;
 				break;
-			case EnemyStatusID.Burn:
-				_burnHandler.ConsumeStack(enemy);
+			case onHitTransform.Center1:
+				target = enemy.OnHitEffectCenterPivot1 ? enemy.OnHitEffectCenterPivot1 : target;
 				break;
-			case EnemyStatusID.Poison:
-				_poisonHandler.ConsumeStack(enemy);
+			case onHitTransform.Center2:
+				target = enemy.OnHitEffectCenterPivot2 ? enemy.OnHitEffectCenterPivot2 : target;
 				break;
-			case EnemyStatusID.Bleed:
-				_bleedHandler.ConsumeStack(enemy);
+			case onHitTransform.Center3:
+				target = enemy.OnHitEffectCenterPivot3 ? enemy.OnHitEffectCenterPivot3 : target;
 				break;
-			case EnemyStatusID.Weaken:
-				_weakHandler.ConsumeStack(enemy);
+			case onHitTransform.Top:
+				target = enemy.OnHitEffectTopPivot ? enemy.OnHitEffectTopPivot : target;
 				break;
+			case onHitTransform.Bottom:
+				target = enemy.OnHitEffectBottomPivot ? enemy.OnHitEffectBottomPivot : target;
+				break;
+			}
+
+			effect.transform.position = target.position;
+			effect.transform.SetParent(target);
+		}
+
+		private void OnDestroy()
+		{
+			if (Instance == this)
+			{
+				Instance = null;
 			}
 		}
 	}

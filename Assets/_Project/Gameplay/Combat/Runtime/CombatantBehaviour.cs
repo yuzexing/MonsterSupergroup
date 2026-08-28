@@ -27,6 +27,8 @@ namespace MonsterSupergroup.Gameplay.Combat
         /// <summary>The Boolean argument is true for status damage and false for direct damage.</summary>
         public event Action<DamageInfo, bool> DamageReceived;
 
+        public event Action<StatusTick, DamageInfo> StatusDamageReceived;
+
         public event Action<PredictedLethalHit> PredictedLethalHitReceived;
 
         public event Action<ConfirmedKill> ConfirmedKillReceived;
@@ -222,6 +224,12 @@ namespace MonsterSupergroup.Gameplay.Combat
             statusController.SetExecutionPolicy(executionPolicy);
         }
 
+        public void ConfigureStatusInstanceIds(IStatusInstanceIdSource instanceIds)
+        {
+            EnsureInitialized();
+            statusController.SetInstanceIdSource(instanceIds);
+        }
+
         public void ConfigureStatusCombatEvents(
             ICombatEventIdSource eventIds,
             ICombatEventSink eventSink)
@@ -288,6 +296,10 @@ namespace MonsterSupergroup.Gameplay.Combat
             bool wasAlive = IsAlive;
             StatusTickCount++;
             DamageInfo applied = ApplyDamage(tick.Damage, true);
+            if (applied.Value > 0)
+            {
+                StatusDamageReceived?.Invoke(tick, applied);
+            }
             PublishStatusDamage(tick, applied, wasAlive);
         }
 
@@ -366,6 +378,7 @@ namespace MonsterSupergroup.Gameplay.Combat
             fallbackStatusEventIds = null;
             HealthChanged = null;
             DamageReceived = null;
+            StatusDamageReceived = null;
             PredictedLethalHitReceived = null;
             ConfirmedKillReceived = null;
             isInitialized = false;

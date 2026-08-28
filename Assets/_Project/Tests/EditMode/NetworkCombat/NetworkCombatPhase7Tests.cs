@@ -50,6 +50,9 @@ namespace MonsterSupergroup.NetworkCombat.Tests
             Assert.That(entity.Health, Is.EqualTo(100));
             Assert.That(remoteStatuses.GetStackCount(EnemyStatusID.Poison), Is.EqualTo(3));
             Assert.That(remoteStatuses.HasFromSource(EnemyStatusID.Poison, 1), Is.True);
+            Assert.That(
+                remoteStatuses.GetInstances(EnemyStatusID.Poison)[0].Magnitude,
+                Is.EqualTo(0.25f));
         }
 
         [Test]
@@ -460,6 +463,7 @@ namespace MonsterSupergroup.NetworkCombat.Tests
                 TotalTicks = 3,
                 TickInterval = 1,
                 Priority = 1,
+                Magnitude = 0.25f,
                 DamageSourceId = sourceEntityId
             };
         }

@@ -52,6 +52,7 @@ namespace MonsterSupergroup.NetworkCombat
         public int CompletedTicks;
         public float TickInterval;
         public float Priority;
+        public float Magnitude;
         public uint DamageSourceId;
         public ulong SourceEventId;
         public ulong RootEventId;
@@ -105,7 +106,8 @@ namespace MonsterSupergroup.NetworkCombat
                 TickInterval,
                 Priority,
                 DamageSourceId,
-                sourceContext);
+                sourceContext,
+                Magnitude);
         }
 
         public static CanonicalStatusState From(StatusInstance instance)
@@ -130,6 +132,7 @@ namespace MonsterSupergroup.NetworkCombat
                 CompletedTicks = instance.CompletedTicks,
                 TickInterval = instance.TickInterval,
                 Priority = instance.Priority,
+                Magnitude = instance.Magnitude,
                 DamageSourceId = instance.DamageSourceId,
                 SourceEventId = instance.SourceContext.EventId.Value,
                 RootEventId = instance.SourceContext.RootEventId.Value,

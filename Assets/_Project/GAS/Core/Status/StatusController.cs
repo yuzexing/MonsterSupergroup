@@ -12,7 +12,7 @@ namespace MonsterSupergroup.GAS
         private const float TimeEpsilon = 0.000001f;
 
         private readonly Action<StatusTick> tickReceiver;
-        private readonly IStatusInstanceIdSource instanceIds;
+        private IStatusInstanceIdSource instanceIds;
         private readonly Dictionary<EnemyStatusID, List<ActiveStatus>> activeStatuses =
             new Dictionary<EnemyStatusID, List<ActiveStatus>>();
         private readonly Dictionary<StatusInstanceId, uint> removalVersions =
@@ -70,6 +70,11 @@ namespace MonsterSupergroup.GAS
         public void SetExecutionPolicy(IStatusExecutionPolicy policy)
         {
             executionPolicy = policy ?? throw new ArgumentNullException(nameof(policy));
+        }
+
+        public void SetInstanceIdSource(IStatusInstanceIdSource source)
+        {
+            instanceIds = source ?? throw new ArgumentNullException(nameof(source));
         }
 
         public bool Has(EnemyStatusID statusId)
@@ -508,6 +513,138 @@ namespace MonsterSupergroup.GAS
             return true;
         }
 
+        /// <summary>
+        /// Legacy compatibility operation: consumes every effective stack of one
+        /// definition and can execute one immediate tick per consumed stack.
+        /// Tick execution still obeys the configured execution authority.
+        /// </summary>
+        public int ConsumeAll(EnemyStatusID statusId, bool dispatchImmediateTicks)
+        {
+            if (!activeStatuses.TryGetValue(statusId, out List<ActiveStatus> statuses))
+            {
+                return 0;
+            }
+
+            var changes = new List<StatusChange>(statuses.Count);
+            var ticks = dispatchImmediateTicks
+                ? new List<StatusTick>(statuses.Count)
+                : null;
+            int consumedStacks = 0;
+            for (int i = 0; i < statuses.Count; i++)
+            {
+                ActiveStatus active = statuses[i];
+                if (active.EffectiveStack == 0)
+                {
+                    continue;
+                }
+
+                StatusInstance instance = active.EffectiveInstance;
+                consumedStacks += instance.Stack;
+                changes.Add(new StatusChange(
+                    StatusChangeKind.Removed,
+                    StatusStateOrigin.Predicted,
+                    instance,
+                    StatusRemovalReason.Consumed));
+
+                if (ticks == null || instance.TickDamage <= 0 ||
+                    instance.RemainingTicks <= 0 || !executionPolicy.CanExecute(instance))
+                {
+                    continue;
+                }
+
+                for (int stack = 0; stack < instance.Stack; stack++)
+                {
+                    ticks.Add(new StatusTick(
+                        instance,
+                        new DamageInfo(
+                            instance.DamageSourceId,
+                            instance.TickDamage,
+                            false),
+                        instance.CompletedTicks + 1,
+                        true));
+                }
+            }
+
+            activeStatuses.Remove(statusId);
+            for (int i = 0; i < changes.Count; i++)
+            {
+                Changed?.Invoke(changes[i]);
+            }
+
+            if (ticks != null)
+            {
+                for (int i = 0; i < ticks.Count; i++)
+                {
+                    tickReceiver(ticks[i]);
+                }
+            }
+
+            return consumedStacks;
+        }
+
+        /// <summary>
+        /// Moves effective status state to a fresh target runtime. This is used by
+        /// the legacy enemy-morph effect and preserves source, progress and the
+        /// fraction of the current tick without retaining a second status store.
+        /// </summary>
+        public int TransferTo(StatusController target, uint targetEntityId)
+        {
+            if (target == null)
+            {
+                throw new ArgumentNullException(nameof(target));
+            }
+
+            if (ReferenceEquals(this, target))
+            {
+                return 0;
+            }
+
+            var transfers = new List<TransferredStatus>();
+            var removals = new List<StatusChange>();
+            statusIdBuffer.Clear();
+            statusIdBuffer.AddRange(activeStatuses.Keys);
+            statusIdBuffer.Sort();
+            for (int statusIdIndex = 0; statusIdIndex < statusIdBuffer.Count; statusIdIndex++)
+            {
+                List<ActiveStatus> statuses = activeStatuses[statusIdBuffer[statusIdIndex]];
+                for (int i = 0; i < statuses.Count; i++)
+                {
+                    ActiveStatus active = statuses[i];
+                    if (active.EffectiveStack == 0)
+                    {
+                        continue;
+                    }
+
+                    StatusInstance instance = active.EffectiveInstance;
+                    transfers.Add(new TransferredStatus(instance, active.Elapsed));
+                    removals.Add(new StatusChange(
+                        StatusChangeKind.Removed,
+                        StatusStateOrigin.Predicted,
+                        instance,
+                        StatusRemovalReason.Cleared));
+                }
+            }
+
+            if (transfers.Count == 0)
+            {
+                return 0;
+            }
+
+            target.Clear();
+            activeStatuses.Clear();
+            for (int i = 0; i < removals.Count; i++)
+            {
+                Changed?.Invoke(removals[i]);
+            }
+
+            for (int i = 0; i < transfers.Count; i++)
+            {
+                target.ImportTransfer(transfers[i], targetEntityId);
+            }
+
+            return transfers.Count;
+        }
+
         public bool Clear(EnemyStatusID statusId)
         {
             if (!activeStatuses.TryGetValue(statusId, out List<ActiveStatus> statuses))
@@ -663,6 +800,54 @@ namespace MonsterSupergroup.GAS
             }
         }
 
+        private void ImportTransfer(TransferredStatus transfer, uint targetEntityId)
+        {
+            StatusInstance source = transfer.Instance;
+            if (!activeStatuses.TryGetValue(source.DefinitionId, out List<ActiveStatus> statuses))
+            {
+                statuses = new List<ActiveStatus>(source.Definition.MaxStacks);
+                activeStatuses.Add(source.DefinitionId, statuses);
+            }
+
+            ValidateCompatibleDefinition(statuses, source.Definition);
+            double startTime = currentTime -
+                source.CompletedTicks * source.TickInterval - transfer.Elapsed;
+            var instance = new StatusInstance(
+                instanceIds.Next(),
+                source.Definition,
+                source.SourcePlayerId,
+                source.SourceEntityId,
+                targetEntityId,
+                source.Stack,
+                startTime,
+                source.Duration,
+                source.ExecutionAuthority,
+                1,
+                source.TickDamage,
+                source.TotalTicks,
+                source.CompletedTicks,
+                source.TickInterval,
+                source.Priority,
+                source.DamageSourceId,
+                source.SourceContext.WithTarget(targetEntityId),
+                source.Magnitude);
+            ActiveStatus active = ActiveStatus.FromTransfer(instance, transfer.Elapsed);
+            statuses.Add(active);
+            Publish(StatusChangeKind.Added, StatusStateOrigin.Predicted, active);
+        }
+
+        private readonly struct TransferredStatus
+        {
+            public TransferredStatus(StatusInstance instance, float elapsed)
+            {
+                Instance = instance;
+                Elapsed = elapsed;
+            }
+
+            public StatusInstance Instance { get; }
+            public float Elapsed { get; }
+        }
+
         private sealed class ActiveStatus
         {
             private ActiveStatus(
@@ -727,6 +912,15 @@ namespace MonsterSupergroup.GAS
                 return new ActiveStatus(instance, instance.Stack, 0, instance.Version);
             }
 
+            public static ActiveStatus FromTransfer(StatusInstance instance, float elapsed)
+            {
+                var result = new ActiveStatus(instance, 0, instance.Stack, 0)
+                {
+                    Elapsed = elapsed
+                };
+                return result;
+            }
+
             public void RefreshPrediction(StatusApplication application, double startTime)
             {
                 int predictedStack = application.Stack - CanonicalStack;
@@ -777,7 +971,8 @@ namespace MonsterSupergroup.GAS
                     application.HitIntervalDuration,
                     application.Priority,
                     application.DamageSourceId,
-                    application.SourceContext);
+                    application.SourceContext,
+                    application.Magnitude);
             }
         }
     }

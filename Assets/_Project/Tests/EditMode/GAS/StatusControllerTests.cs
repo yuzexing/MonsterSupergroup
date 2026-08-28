@@ -160,15 +160,78 @@ namespace MonsterSupergroup.GAS.Tests
             Assert.That(controller.Count, Is.Zero);
         }
 
+        [Test]
+        public void ConsumeAll_DispatchesOneImmediateTickPerEffectiveStackAndClears()
+        {
+            var bleed = new StatusDefinition(EnemyStatusID.Bleed, StatusStackMode.Add, 10);
+            var ticks = new List<StatusTick>();
+            var controller = new StatusController(ticks.Add);
+            controller.Apply(Application(bleed, damage: 3, hits: 4, interval: 1f));
+            controller.Apply(Application(bleed, damage: 3, hits: 4, interval: 1f));
+
+            int consumed = controller.ConsumeAll(EnemyStatusID.Bleed, true);
+
+            Assert.That(consumed, Is.EqualTo(2));
+            Assert.That(ticks, Has.Count.EqualTo(2));
+            Assert.That(ticks[0].Damage.Value, Is.EqualTo(3));
+            Assert.That(ticks[1].IsFinalTick, Is.True);
+            Assert.That(controller.Has(EnemyStatusID.Bleed), Is.False);
+        }
+
+        [Test]
+        public void TransferTo_PreservesMagnitudeProgressAndChangesTarget()
+        {
+            var sourceTicks = new List<StatusTick>();
+            var targetTicks = new List<StatusTick>();
+            var source = new StatusController(
+                sourceTicks.Add,
+                new SequentialStatusInstanceIdSource(1, 1),
+                new StatusExecutionScope(true, false, 0));
+            var target = new StatusController(
+                targetTicks.Add,
+                new SequentialStatusInstanceIdSource(2, 1),
+                new StatusExecutionScope(true, false, 0));
+            source.Apply(Application(
+                Burn,
+                damage: 4,
+                hits: 2,
+                interval: 1f,
+                priority: 8f,
+                magnitude: 0.45f));
+            source.Advance(0.25f);
+
+            Assert.That(source.TransferTo(target, 99), Is.EqualTo(1));
+            Assert.That(source.Count, Is.Zero);
+            IReadOnlyList<StatusInstance> transferred =
+                target.GetInstances(EnemyStatusID.Burn);
+            Assert.That(transferred, Has.Count.EqualTo(1));
+            Assert.That(transferred[0].TargetEntityId, Is.EqualTo(99));
+            Assert.That(transferred[0].Magnitude, Is.EqualTo(0.45f));
+
+            target.Advance(0.74f);
+            Assert.That(targetTicks, Is.Empty);
+            target.Advance(0.01f);
+            Assert.That(targetTicks, Has.Count.EqualTo(1));
+            Assert.That(targetTicks[0].Damage.Value, Is.EqualTo(4));
+        }
+
         private static StatusApplication Application(
             StatusDefinition definition,
             int damage = 1,
             int hits = 2,
             float interval = 1f,
             float priority = 1f,
-            uint sourceId = 0)
+            uint sourceId = 0,
+            float magnitude = 0f)
         {
-            return new StatusApplication(definition, damage, hits, interval, priority, sourceId);
+            return new StatusApplication(
+                definition,
+                damage,
+                hits,
+                interval,
+                priority,
+                sourceId,
+                magnitude: magnitude);
         }
     }
 }

@@ -1,4 +1,5 @@
 using AstralShift.HellMaiden.AI.Enemy;
+using EnemyStatusID = MonsterSupergroup.GAS.EnemyStatusID;
 using AstralShift.HellMaiden.Player.Attacks;
 
 namespace AstralShift.HellMaiden.Combat.Hand

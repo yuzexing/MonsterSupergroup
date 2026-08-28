@@ -95,7 +95,8 @@ namespace MonsterSupergroup.GAS
             uint targetEntityId = 0,
             double startTime = double.NaN,
             StatusExecutionAuthority executionAuthority = StatusExecutionAuthority.SourceClient,
-            CombatContext sourceContext = default)
+            CombatContext sourceContext = default,
+            float magnitude = 0f)
         {
             if (definition.Id == EnemyStatusID.None)
             {
@@ -120,6 +121,11 @@ namespace MonsterSupergroup.GAS
             if (float.IsNaN(priority) || float.IsInfinity(priority))
             {
                 throw new ArgumentOutOfRangeException(nameof(priority), "Priority must be finite.");
+            }
+
+            if (float.IsNaN(magnitude) || float.IsInfinity(magnitude))
+            {
+                throw new ArgumentOutOfRangeException(nameof(magnitude), "Magnitude must be finite.");
             }
 
             if (stack < 1 || stack > definition.MaxStacks)
@@ -157,6 +163,7 @@ namespace MonsterSupergroup.GAS
             StartTime = startTime;
             ExecutionAuthority = executionAuthority;
             SourceContext = sourceContext;
+            Magnitude = magnitude;
         }
 
         public StatusDefinition Definition { get; }
@@ -190,6 +197,12 @@ namespace MonsterSupergroup.GAS
         public StatusExecutionAuthority ExecutionAuthority { get; }
 
         public CombatContext SourceContext { get; }
+
+        /// <summary>
+        /// Optional non-damage gameplay value, such as a legacy slow or weaken multiplier.
+        /// Status identity, stack and lifetime remain independent from this payload.
+        /// </summary>
+        public float Magnitude { get; }
     }
 
     public readonly struct StatusTick

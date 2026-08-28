@@ -275,5 +275,27 @@ namespace MonsterSupergroup.GAS
                 Tags | additionalTags,
                 TargetStateVersion);
         }
+
+        public CombatContext WithTarget(uint targetEntityId, uint targetStateVersion = 0)
+        {
+            if (!IsValid)
+            {
+                return this;
+            }
+
+            return new CombatContext(
+                EventId,
+                RootEventId,
+                ParentEventId,
+                Sequence,
+                ChainDepth,
+                SourcePlayerId,
+                SourceEntityId,
+                targetEntityId,
+                AbilityId,
+                BuildId,
+                Tags,
+                targetStateVersion);
+        }
     }
 }

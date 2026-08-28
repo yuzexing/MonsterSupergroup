@@ -4,6 +4,7 @@ using AstralShift.HellMaiden.Player.Attacks;
 using AstralShift.Pooling;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
+using CombatTags = MonsterSupergroup.GAS.CombatTags;
 
 namespace AstralShift.HellMaiden.Combat.Hand
 {
@@ -54,7 +55,7 @@ namespace AstralShift.HellMaiden.Combat.Hand
 			{
 				return args;
 			}
-			enemyController.OnKill += Spawn;
+			enemyController.OnDeathPresentationCompleted += Spawn;
 			return args;
 			void Spawn()
 			{
@@ -97,7 +98,12 @@ namespace AstralShift.HellMaiden.Combat.Hand
 			int damageValue = (int)((float)args.Weapon.CalculateDamage(args.Enemy).value * parameters.damageMultiplier);
 			damageable.Play(delegate(IDamageable damageable2)
 			{
-				damageable2.Damage(damageValue, DamageType.Normal);
+				LegacyDamageDispatcher.Damage(
+					damageable2,
+					damageValue,
+					DamageType.Normal,
+					args.Source,
+					CombatTags.Build);
 			}, ReturnToPool);
 			WaitAndStop(damageable, parameters.duration).Forget();
 			void ReturnToPool()

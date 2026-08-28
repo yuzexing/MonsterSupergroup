@@ -5,6 +5,7 @@ using AstralShift.HellMaiden.Player.Attacks;
 using AstralShift.Pooling;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
+using CombatTags = MonsterSupergroup.GAS.CombatTags;
 
 namespace AstralShift.HellMaiden.Combat.Hand
 {
@@ -36,6 +37,8 @@ namespace AstralShift.HellMaiden.Combat.Hand
 
 		private Action _onDestroyedHandler;
 
+		private LegacyDamageSource _activeCloneDamageSource;
+
 		public override float GetRollChance()
 		{
 			return parameters.chance;
@@ -62,6 +65,7 @@ namespace AstralShift.HellMaiden.Combat.Hand
 
 		private void Spawn(OnKillModifierArgs args)
 		{
+			_activeCloneDamageSource = args.Source;
 			Vector2 position = args.Enemy.transform.position;
 			SpawnClone(position).Forget();
 		}
@@ -133,7 +137,12 @@ namespace AstralShift.HellMaiden.Combat.Hand
 			parameters.cloneExplosion.enabled = true;
 			explosion.Play(delegate(IDamageable damageable)
 			{
-				damageable.Damage(parameters.damageValue, DamageType.Normal);
+				LegacyDamageDispatcher.Damage(
+					damageable,
+					parameters.damageValue,
+					DamageType.Normal,
+					_activeCloneDamageSource,
+					CombatTags.Build | CombatTags.Explosion);
 			}, ReturnToPool);
 			void ReturnToPool()
 			{

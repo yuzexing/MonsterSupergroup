@@ -4,7 +4,10 @@ using System.Linq;
 using AstralShift.HellMaiden.AI.Enemy;
 using AstralShift.HellMaiden.Combat.Hand;
 using FMODUnity;
+using MonsterSupergroup.Gameplay.Combat;
 using UnityEngine;
+using CombatContext = MonsterSupergroup.GAS.CombatContext;
+using CombatTags = MonsterSupergroup.GAS.CombatTags;
 
 namespace AstralShift.HellMaiden.Player.Attacks
 {
@@ -18,6 +21,12 @@ namespace AstralShift.HellMaiden.Player.Attacks
 		protected uint _id;
 
 		protected RuntimeEquipmentModifiers _equipmentModifiers;
+
+		private CombatRuntimeServiceProvider _combatServiceProvider;
+
+		private LegacyCombatExecution _combatExecution;
+
+		private CombatContext _currentAttackContext;
 
 		[Header("Sounds")]
 		[SerializeField]
@@ -93,6 +102,10 @@ namespace AstralShift.HellMaiden.Player.Attacks
 
 		public event Action<float, bool> OnWeaponDamage;
 
+		public CombatContext CurrentAttackContext => _currentAttackContext;
+
+		protected virtual CombatTags DefaultCombatTags => CombatTags.Attack;
+
 		public virtual void Init(uint id, AttackStats stats)
 		{
 			_id = id;
@@ -105,6 +118,31 @@ namespace AstralShift.HellMaiden.Player.Attacks
 		public virtual void Attack()
 		{
 			EvaluateDynamicStatModifiers();
+		}
+
+		public LegacyDamageSource GetDamageSource(CombatTags tags = CombatTags.None)
+		{
+			EnsureCombatExecution();
+			if (!_currentAttackContext.IsValid)
+			{
+				_currentAttackContext = _combatExecution.BeginAttack(
+					_id,
+					DefaultCombatTags);
+			}
+
+			return new LegacyDamageSource(
+				_combatExecution,
+				_currentAttackContext,
+				_id,
+				tags);
+		}
+
+		protected void BeginCombatAttack(CombatTags tags = CombatTags.None)
+		{
+			EnsureCombatExecution();
+			_currentAttackContext = _combatExecution.BeginAttack(
+				_id,
+				tags == CombatTags.None ? DefaultCombatTags : tags);
 		}
 
 		public virtual void Activate()
@@ -197,17 +235,18 @@ namespace AstralShift.HellMaiden.Player.Attacks
 		{
 			StatsBehaviour.DynamicStatsMultipliers.Reset();
 			List<DynamicStatModifier> dynamicModifiers = _equipmentModifiers.DynamicModifiers;
-			if (dynamicModifiers == null)
+			if (dynamicModifiers != null)
 			{
-				return;
-			}
-			for (int i = 0; i < dynamicModifiers.Count; i++)
-			{
-				if (dynamicModifiers[i] != null)
+				for (int i = 0; i < dynamicModifiers.Count; i++)
 				{
-					dynamicModifiers[i].Apply(StatsBehaviour, this);
+					if (dynamicModifiers[i] != null)
+					{
+						dynamicModifiers[i].Apply(StatsBehaviour, this);
+					}
 				}
 			}
+
+			BeginCombatAttack();
 		}
 
 		protected virtual void EvaluateDynamicOnDamageStatModifiers(BaseEnemyController enemy)
@@ -254,7 +293,7 @@ namespace AstralShift.HellMaiden.Player.Attacks
 
 		private int ApplyEnemyConditionDamageMultipliers(int damageValue, BaseEnemyController enemy)
 		{
-			if (enemy.stats.Health == enemy.stats.BaseHealth)
+			if (enemy.IsAtFullHealth)
 			{
 				damageValue = (int)((float)damageValue * (1f + StatsBehaviour.PlayerStats.StatMultipliers.attackStatsMultipliers.pristineDamageMultiplier));
 			}
@@ -282,6 +321,26 @@ namespace AstralShift.HellMaiden.Player.Attacks
 				return true;
 			}
 			return false;
+		}
+
+		private void EnsureCombatExecution()
+		{
+			if (_combatServiceProvider == null)
+			{
+				_combatServiceProvider = player.GetComponent<CombatRuntimeServiceProvider>();
+				if (_combatServiceProvider == null)
+				{
+					_combatServiceProvider = player.gameObject.AddComponent<CombatRuntimeServiceProvider>();
+				}
+			}
+
+			CombatRuntimeServices services = _combatServiceProvider.Services;
+			if (_combatExecution == null ||
+				!ReferenceEquals(_combatExecution.Services, services))
+			{
+				_combatExecution = new LegacyCombatExecution(services);
+				_currentAttackContext = CombatContext.None;
+			}
 		}
 
 		public void PlayAttackSound()

@@ -3,6 +3,7 @@
     "rootNamespace": "MonsterSupergroup.Gameplay.Combat",
     "references": [
         "GUID:a7c8997642ef4acb9c3b5bb6f2af8b51",
+        "GUID:66dae8e95ea2432482edb8a8fae89208",
         "GUID:56ce3ffcd5ef4c55962a309f4c4d55f1",
         "GUID:c41b2d8e9f5a4b7ea301d6c8f2741059",
         "GUID:4c25c05f410a3a447a75c3b0909152ef",

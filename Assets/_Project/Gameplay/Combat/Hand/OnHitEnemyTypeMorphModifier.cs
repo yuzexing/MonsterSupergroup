@@ -69,7 +69,7 @@ namespace AstralShift.HellMaiden.Combat.Hand
 			{
 				return args;
 			}
-			if (args.Enemy.stats.Health <= 0)
+			if (!args.Enemy.IsAlive)
 			{
 				return args;
 			}
@@ -124,13 +124,16 @@ namespace AstralShift.HellMaiden.Combat.Hand
 				AllowRubberBand = true,
 				RubberbandKillsEnemiesOnClipEnd = false,
 				EndTime = 0f,
-				OnKill = null
+				ConfigureStatsBeforeCombatant = delegate(EnemyStats enemyStats)
+				{
+					enemyStats.BaseHealth = Mathf.CeilToInt(
+						(float)oldEnemy.MaxHealth * parameters.healthReductionMultiplier);
+					enemyStats.BaseXP = oldEnemy.stats.BaseXP;
+					enemyStats.XP = oldEnemy.stats.XP;
+					enemyStats.XPMultiplier = oldEnemy.stats.XPMultiplier;
+				},
+				OnConfirmedKill = null
 			});
-			enemyController.stats.BaseHealth = Mathf.CeilToInt((float)oldEnemy.stats.BaseHealth * parameters.healthReductionMultiplier);
-			enemyController.stats.Health = enemyController.stats.BaseHealth;
-			enemyController.stats.BaseXP = oldEnemy.stats.BaseXP;
-			enemyController.stats.XP = oldEnemy.stats.XP;
-			enemyController.stats.XPMultiplier = oldEnemy.stats.XPMultiplier;
 			oldEnemy.status.TransferTo(enemyController);
 			return enemyController;
 		}

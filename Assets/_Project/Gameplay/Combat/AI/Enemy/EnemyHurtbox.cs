@@ -52,6 +52,21 @@ namespace AstralShift.HellMaiden.AI.Enemy
 			this.OnDamageGeneric?.Invoke(value, damageType);
 		}
 
+		public void Damage(
+			int value,
+			DamageType damageType,
+			LegacyDamageSource source)
+		{
+			EnemyController enemy = GetComponentInParent<EnemyController>();
+			if (enemy != null)
+			{
+				enemy.Damage(value, damageType, source);
+				return;
+			}
+
+			this.OnDamageGeneric?.Invoke(value, damageType);
+		}
+
 		public virtual void ActivateCollider(bool state)
 		{
 			collider.enabled = state;

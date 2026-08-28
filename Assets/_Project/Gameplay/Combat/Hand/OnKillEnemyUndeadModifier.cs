@@ -130,7 +130,7 @@ namespace AstralShift.HellMaiden.Combat.Hand
 			}
 			_markedEnemies.Add(args.Enemy);
 			Vector2 position = args.Enemy.Transform.position;
-			enemyController.OnKill += Spawn;
+			enemyController.OnDeathPresentationCompleted += Spawn;
 			enemyController.OnDispose += UnMarkEnemy;
 			return args;
 			void Spawn()
@@ -184,15 +184,17 @@ namespace AstralShift.HellMaiden.Combat.Hand
 				AllowRubberBand = false,
 				RubberbandKillsEnemiesOnClipEnd = false,
 				EndTime = 0f,
-				OnKill = null
+				ConfigureStatsBeforeCombatant = delegate(EnemyStats enemyStats)
+				{
+					enemyStats.BaseHealth = int.MaxValue;
+					enemyStats.BaseXP = 0f;
+					enemyStats.XP = 0f;
+					enemyStats.XPMultiplier = 0f;
+					enemyStats.BaseDamage = _parameters.damageValue;
+					enemyStats.Damage = _parameters.damageValue;
+				},
+				OnConfirmedKill = null
 			});
-			newUndead.stats.BaseHealth = int.MaxValue;
-			newUndead.stats.Health = int.MaxValue;
-			newUndead.stats.BaseXP = 0f;
-			newUndead.stats.XP = 0f;
-			newUndead.stats.XPMultiplier = 0f;
-			newUndead.stats.BaseDamage = _parameters.damageValue;
-			newUndead.stats.Damage = _parameters.damageValue;
 			newUndead.SetImmunity(state: true);
 			SubscribeUndead(newUndead);
 			await PlayAndWaitSpawnAnimation(newUndead, position);

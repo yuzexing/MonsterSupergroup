@@ -11,6 +11,7 @@ namespace MonsterSupergroup.NetworkCombat
         [SerializeField] private WeaponRuntimeBehaviour weapon;
         [SerializeField] private PlayerHandBehaviour playerHand;
         [SerializeField] private MirrorNetworkCombatBridge bridge;
+        [SerializeField] private CombatRuntimeServiceProvider serviceProvider;
 
         private void Awake()
         {
@@ -27,6 +28,16 @@ namespace MonsterSupergroup.NetworkCombat
             if (playerHand == null)
             {
                 playerHand = GetComponentInChildren<PlayerHandBehaviour>(true);
+            }
+
+            if (serviceProvider == null)
+            {
+                serviceProvider = GetComponent<CombatRuntimeServiceProvider>();
+            }
+
+            if (serviceProvider == null)
+            {
+                serviceProvider = gameObject.AddComponent<CombatRuntimeServiceProvider>();
             }
         }
 
@@ -59,6 +70,7 @@ namespace MonsterSupergroup.NetworkCombat
                 bridge.SourceEntityId,
                 eventIds,
                 collector);
+            serviceProvider.Configure(services);
             if (playerHand != null)
             {
                 playerHand.ConfigureCombatRuntimeServices(services);

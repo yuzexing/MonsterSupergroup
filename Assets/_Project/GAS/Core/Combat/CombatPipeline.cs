@@ -138,6 +138,54 @@ namespace MonsterSupergroup.GAS
                 burnDamageMultiplier).PredictedAppliedDamage;
         }
 
+        /// <summary>
+        /// Starts an attack whose damage was authored by a compatibility layer rather
+        /// than an <see cref="IWeaponRuntime"/>. The returned context can be shared by
+        /// every hit produced by that attack.
+        /// </summary>
+        public CombatContext BeginExternalAttack(
+            uint sourcePlayerId,
+            uint sourceEntityId,
+            uint abilityId,
+            CombatTags tags = CombatTags.Attack)
+        {
+            CombatContext context = CombatContext.CreateRoot(
+                eventIds.Next(),
+                sourcePlayerId,
+                sourceEntityId,
+                abilityId,
+                tags | CombatTags.Attack);
+            eventSink.Publish(new CombatEvent(CombatEventKind.AttackStarted, context));
+            return context;
+        }
+
+        /// <summary>
+        /// Applies damage calculated by a legacy gameplay system through the same
+        /// target mutation and combat-event path used by native GAS weapons.
+        /// Legacy modifiers remain the caller's responsibility and are not run here.
+        /// </summary>
+        public CombatResolution ResolvePrecomputedHit(
+            CombatContext attackContext,
+            ICombatTarget target,
+            DamageInfo resolvedDamage)
+        {
+            if (!attackContext.IsValid)
+            {
+                throw new ArgumentException(
+                    "Precomputed hits require a valid source context.",
+                    nameof(attackContext));
+            }
+
+            return ResolveDamageCore(
+                attackContext,
+                target,
+                resolvedDamage,
+                null,
+                1f,
+                1f,
+                0f);
+        }
+
         public CombatResolution ResolveHitDetailed(
             AttackSnapshot attack,
             ICombatTarget target,
@@ -161,8 +209,7 @@ namespace MonsterSupergroup.GAS
                 nameof(predictedLethalChanceMultiplier));
             ValidateFinite(burnDamageMultiplier, nameof(burnDamageMultiplier));
 
-            bool wasAlive = target.IsAlive;
-            if (!wasAlive)
+            if (!target.IsAlive)
             {
                 var zero = new DamageInfo(attack.Weapon.CombatId, 0, false);
                 return new CombatResolution(
@@ -174,26 +221,6 @@ namespace MonsterSupergroup.GAS
                     false,
                     false);
             }
-
-            CombatEventId rootEventId = attack.Context.RootEventId;
-            triggerGuard.BeginRootScope(rootEventId);
-            try
-            {
-
-            uint targetEntityId = 0;
-            uint targetStateVersion = 0;
-            if (target is ICombatStateIdentity identity)
-            {
-                targetEntityId = identity.EntityId;
-                targetStateVersion = identity.StateVersion;
-            }
-
-            CombatContext hitContext = attack.Context.CreateChild(
-                eventIds.Next(),
-                CombatTags.Hit,
-                targetEntityId,
-                targetStateVersion);
-            eventSink.Publish(new CombatEvent(CombatEventKind.HitResolved, hitContext));
 
             var targetMultipliers = new AttackStatsMultipliers();
             for (int i = 0; i < modifiers.DynamicOnDamageModifiers.Count; i++)
@@ -218,102 +245,177 @@ namespace MonsterSupergroup.GAS
                 requestedValue = TruncateToNonNegativeInt(baseDamage * criticalMultiplier);
             }
 
-            CombatTags damageTags = CombatTags.Damage;
-            if (isCritical)
-            {
-                damageTags |= CombatTags.Critical;
-            }
-
-            CombatContext damageContext = hitContext.CreateChild(
-                eventIds.Next(),
-                damageTags,
-                targetEntityId,
-                targetStateVersion);
-            DamageInfo resolvedDamage =
-                new DamageInfo(attack.Weapon.CombatId, requestedValue, isCritical);
-            DamageInfo predictedAppliedDamage = target.ReceiveDamage(resolvedDamage);
-            eventSink.Publish(new CombatEvent(
-                CombatEventKind.DamageResolved,
-                damageContext,
+            var resolvedDamage = new DamageInfo(
+                attack.Weapon.CombatId,
+                requestedValue,
+                isCritical);
+            return ResolveDamageCore(
+                attack.Context,
+                target,
                 resolvedDamage,
-                predictedAppliedDamage));
+                attack,
+                onHitChanceMultiplier,
+                predictedLethalChanceMultiplier,
+                burnDamageMultiplier);
+        }
 
-            if (predictedAppliedDamage.Value > 0)
+        private CombatResolution ResolveDamageCore(
+            CombatContext sourceContext,
+            ICombatTarget target,
+            DamageInfo resolvedDamage,
+            AttackSnapshot attack,
+            float onHitChanceMultiplier,
+            float predictedLethalChanceMultiplier,
+            float burnDamageMultiplier)
+        {
+            if (target == null)
             {
-                for (int i = 0; i < modifiers.OnHitModifiers.Count; i++)
-                {
-                    OnHitModifier modifier = modifiers.OnHitModifiers[i];
-                    if (!triggerGuard.TryEnter(
-                            damageContext,
-                            modifier.ID,
-                            targetEntityId,
-                            modifier.GetTriggerPolicy(),
-                            timeSource.CurrentTimeSeconds))
-                    {
-                        continue;
-                    }
-
-                    var onHitArgs = new OnHitModifierArgs(
-                        damageContext.WithBuild(modifier.ID.Value),
-                        target,
-                        attack.Weapon,
-                        resolvedDamage,
-                        predictedAppliedDamage,
-                        random,
-                        onHitChanceMultiplier,
-                        burnDamageMultiplier);
-                    modifier.Apply(onHitArgs);
-                }
+                throw new ArgumentNullException(nameof(target));
             }
 
-            CombatContext predictedLethalContext = CombatContext.None;
-            if (wasAlive && !target.IsAlive)
+            bool wasAlive = target.IsAlive;
+            if (!wasAlive)
             {
-                predictedLethalContext = damageContext.CreateChild(
+                var zero = new DamageInfo(resolvedDamage.Id, 0, false);
+                return new CombatResolution(
+                    CombatContext.None,
+                    CombatContext.None,
+                    CombatContext.None,
+                    zero,
+                    zero,
+                    false,
+                    false);
+            }
+
+            CombatEventId rootEventId = sourceContext.RootEventId;
+            triggerGuard.BeginRootScope(rootEventId);
+            try
+            {
+                uint targetEntityId = 0;
+                uint targetStateVersion = 0;
+                if (target is ICombatStateIdentity identity)
+                {
+                    targetEntityId = identity.EntityId;
+                    targetStateVersion = identity.StateVersion;
+                }
+
+                CombatContext hitContext = sourceContext.CreateChild(
                     eventIds.Next(),
-                    CombatTags.PredictedLethalHit,
+                    CombatTags.Hit,
                     targetEntityId,
                     targetStateVersion);
                 eventSink.Publish(new CombatEvent(
-                    CombatEventKind.PredictedLethalHit,
-                    predictedLethalContext,
+                    CombatEventKind.HitResolved,
+                    hitContext));
+
+                CombatTags damageTags = CombatTags.Damage;
+                if (resolvedDamage.IsCritical)
+                {
+                    damageTags |= CombatTags.Critical;
+                }
+
+                CombatContext damageContext = hitContext.CreateChild(
+                    eventIds.Next(),
+                    damageTags,
+                    targetEntityId,
+                    targetStateVersion);
+                DamageInfo predictedAppliedDamage = target.ReceiveDamage(resolvedDamage);
+                eventSink.Publish(new CombatEvent(
+                    CombatEventKind.DamageResolved,
+                    damageContext,
                     resolvedDamage,
                     predictedAppliedDamage));
 
-                for (int i = 0; i < modifiers.PredictedLethalHitModifiers.Count; i++)
+                if (attack != null && predictedAppliedDamage.Value > 0)
                 {
-                    OnPredictedLethalHitModifier modifier =
-                        modifiers.PredictedLethalHitModifiers[i];
-                    if (!triggerGuard.TryEnter(
-                            predictedLethalContext,
-                            modifier.ID,
-                            targetEntityId,
-                            modifier.GetTriggerPolicy(),
-                            timeSource.CurrentTimeSeconds))
+                    for (int i = 0; i < modifiers.OnHitModifiers.Count; i++)
                     {
-                        continue;
+                        OnHitModifier modifier = modifiers.OnHitModifiers[i];
+                        if (!triggerGuard.TryEnter(
+                                damageContext,
+                                modifier.ID,
+                                targetEntityId,
+                                modifier.GetTriggerPolicy(),
+                                timeSource.CurrentTimeSeconds))
+                        {
+                            continue;
+                        }
+
+                        var onHitArgs = new OnHitModifierArgs(
+                            damageContext.WithBuild(modifier.ID.Value),
+                            target,
+                            attack.Weapon,
+                            resolvedDamage,
+                            predictedAppliedDamage,
+                            random,
+                            onHitChanceMultiplier,
+                            burnDamageMultiplier);
+                        modifier.Apply(onHitArgs);
+                    }
+                }
+
+                CombatContext predictedLethalContext = CombatContext.None;
+                if (wasAlive && !target.IsAlive)
+                {
+                    predictedLethalContext = damageContext.CreateChild(
+                        eventIds.Next(),
+                        CombatTags.PredictedLethalHit,
+                        targetEntityId,
+                        targetStateVersion);
+                    eventSink.Publish(new CombatEvent(
+                        CombatEventKind.PredictedLethalHit,
+                        predictedLethalContext,
+                        resolvedDamage,
+                        predictedAppliedDamage));
+
+                    if (attack != null)
+                    {
+                        for (int i = 0;
+                             i < modifiers.PredictedLethalHitModifiers.Count;
+                             i++)
+                        {
+                            OnPredictedLethalHitModifier modifier =
+                                modifiers.PredictedLethalHitModifiers[i];
+                            if (!triggerGuard.TryEnter(
+                                    predictedLethalContext,
+                                    modifier.ID,
+                                    targetEntityId,
+                                    modifier.GetTriggerPolicy(),
+                                    timeSource.CurrentTimeSeconds))
+                            {
+                                continue;
+                            }
+
+                            var args = new OnPredictedLethalHitModifierArgs(
+                                predictedLethalContext.WithBuild(modifier.ID.Value),
+                                target,
+                                attack.Weapon,
+                                resolvedDamage,
+                                predictedAppliedDamage,
+                                random,
+                                predictedLethalChanceMultiplier);
+                            modifier.Apply(args);
+                        }
                     }
 
-                    var args = new OnPredictedLethalHitModifierArgs(
-                        predictedLethalContext.WithBuild(modifier.ID.Value),
-                        target,
-                        attack.Weapon,
-                        resolvedDamage,
-                        predictedAppliedDamage,
-                        random,
-                        predictedLethalChanceMultiplier);
-                    modifier.Apply(args);
+                    if (target is ICombatLifecycleTarget lifecycleTarget)
+                    {
+                        lifecycleTarget.ReceivePredictedLethalHit(
+                            new PredictedLethalHit(
+                                predictedLethalContext,
+                                resolvedDamage,
+                                predictedAppliedDamage));
+                    }
                 }
-            }
 
-            return new CombatResolution(
-                hitContext,
-                damageContext,
-                predictedLethalContext,
-                resolvedDamage,
-                predictedAppliedDamage,
-                wasAlive,
-                target.IsAlive);
+                return new CombatResolution(
+                    hitContext,
+                    damageContext,
+                    predictedLethalContext,
+                    resolvedDamage,
+                    predictedAppliedDamage,
+                    wasAlive,
+                    target.IsAlive);
             }
             finally
             {

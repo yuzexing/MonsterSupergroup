@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using AstralShift.HellMaiden.AI.Enemy;
 using AstralShift.HellMaiden.Player.Attacks;
 using UnityEngine;
+using CombatTags = MonsterSupergroup.GAS.CombatTags;
 
 namespace AstralShift.HellMaiden.Combat.Hand
 {
@@ -53,16 +54,20 @@ namespace AstralShift.HellMaiden.Combat.Hand
 			{
 				return args;
 			}
-			EquipmentEffectResolver.Instance.StartCoroutine(ChainWrapper(args.Enemy, args.Weapon));
+			EquipmentEffectResolver.Instance.StartCoroutine(
+				ChainWrapper(args.Enemy, args.Weapon, args.Source));
 			return args;
 		}
 
-		private IEnumerator ChainWrapper(BaseEnemyController enemy, WeaponBehaviour weapon)
+		private IEnumerator ChainWrapper(
+			BaseEnemyController enemy,
+			WeaponBehaviour weapon,
+			LegacyDamageSource source)
 		{
 			_guardDepth++;
 			try
 			{
-				yield return ChainVisualRoutine(enemy.transform, weapon);
+				yield return ChainVisualRoutine(enemy.transform, weapon, source);
 			}
 			finally
 			{
@@ -70,7 +75,10 @@ namespace AstralShift.HellMaiden.Combat.Hand
 			}
 		}
 
-		private IEnumerator ChainVisualRoutine(Transform origin, WeaponBehaviour weapon)
+		private IEnumerator ChainVisualRoutine(
+			Transform origin,
+			WeaponBehaviour weapon,
+			LegacyDamageSource source)
 		{
 			Transform current = origin;
 			HashSet<Transform> visited = new HashSet<Transform> { current };
@@ -98,7 +106,12 @@ namespace AstralShift.HellMaiden.Combat.Hand
 					if (hurtBox.TryGetComponent<IDamageable>(out var component2))
 					{
 						int value = Mathf.Clamp((int)((float)weapon.DamageValue * parameters.damageMultiplier), 1, int.MaxValue);
-						component2.Damage(value, DamageType.Lightning);
+						LegacyDamageDispatcher.Damage(
+							component2,
+							value,
+							DamageType.Lightning,
+							source,
+							CombatTags.Build);
 					}
 					current = transform;
 					yield return _lightningRateYield;

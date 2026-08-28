@@ -46,6 +46,8 @@ namespace MonsterSupergroup.NetworkCombat
             {
                 ownerBridge = GetComponent<MirrorNetworkCombatBridge>();
             }
+
+            combatant.ConfigureKillConfirmation(true);
         }
 
         public override void OnStartServer()
@@ -61,9 +63,13 @@ namespace MonsterSupergroup.NetworkCombat
             uint owner = authority == CombatEntityAuthority.OwnerFinal && connectionToClient != null
                 ? netId
                 : 0u;
+            combatant.ConfigureEntityId(netId);
             targetOwnerPlayerId = owner;
             combatant.ConfigureStatusExecution(
                 new StatusExecutionScope(false, true, 0, targetOwnerPlayerId));
+            combatant.ConfigureCanonicalConsequenceExecution(true);
+            world.Gateway.ConfirmedKillProduced += HandleConfirmedKill;
+            world.ServerCanonicalBatchProduced += HandleServerCanonicalBatch;
             world.RegisterEntity(netId, combatant.MaxHealth, entityKind, authority, owner);
         }
 
@@ -71,6 +77,7 @@ namespace MonsterSupergroup.NetworkCombat
         {
             base.OnStartClient();
             combatant.ConfigureEntityId(netId);
+            combatant.ConfigureCanonicalConsequenceExecution(NetworkServer.active);
             combatant.ConfigureStatusExecution(new StatusExecutionScope(
                 false,
                 NetworkServer.active,
@@ -84,6 +91,7 @@ namespace MonsterSupergroup.NetworkCombat
 
             world.Replica.RegisterStatusController(netId, combatant.StatusController);
             world.Replica.EntityChanged += HandleCanonicalEntityChanged;
+            world.Replica.KillConfirmed += HandleConfirmedKill;
             if (world.Replica.TryGetEntity(netId, out CanonicalEntityState current))
             {
                 HandleCanonicalEntityChanged(current);
@@ -132,6 +140,7 @@ namespace MonsterSupergroup.NetworkCombat
             {
                 world.Replica.UnregisterStatusController(netId, combatant.StatusController);
                 world.Replica.EntityChanged -= HandleCanonicalEntityChanged;
+                world.Replica.KillConfirmed -= HandleConfirmedKill;
             }
 
             combatant?.ClearStatusCombatEvents(localStatusEventSink);
@@ -145,6 +154,8 @@ namespace MonsterSupergroup.NetworkCombat
             NetworkCombatWorld world = NetworkCombatWorld.Instance;
             if (world != null)
             {
+                world.Gateway.ConfirmedKillProduced -= HandleConfirmedKill;
+                world.ServerCanonicalBatchProduced -= HandleServerCanonicalBatch;
                 world.Gateway.Statuses.RemoveTarget(netId);
                 world.Gateway.Ledger.UnregisterEntity(netId);
             }
@@ -239,6 +250,34 @@ namespace MonsterSupergroup.NetworkCombat
                 Alive = current > 0,
                 StateVersion = ownerReportVersion
             });
+        }
+
+        private void HandleConfirmedKill(ConfirmedKill kill)
+        {
+            if (kill.TargetEntityId == netId)
+            {
+                combatant.ReceiveConfirmedKill(kill);
+            }
+        }
+
+        private void HandleServerCanonicalBatch(CanonicalWorldBatch batch)
+        {
+            // A host receives the same state through its local ClientRpc replica.
+            // A dedicated server has no client replica, so apply its ledger output
+            // directly to the scene-side Combatant read model.
+            if (NetworkClient.active || batch.Entities == null)
+            {
+                return;
+            }
+
+            for (int i = 0; i < batch.Entities.Length; i++)
+            {
+                if (batch.Entities[i].EntityId == netId)
+                {
+                    HandleCanonicalEntityChanged(batch.Entities[i]);
+                    return;
+                }
+            }
         }
     }
 }

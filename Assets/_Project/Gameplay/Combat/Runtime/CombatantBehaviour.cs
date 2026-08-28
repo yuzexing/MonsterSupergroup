@@ -5,7 +5,8 @@ using UnityEngine;
 namespace MonsterSupergroup.Gameplay.Combat
 {
     [DisallowMultipleComponent]
-    public sealed class CombatantBehaviour : MonoBehaviour, ICombatTarget, ICombatStateIdentity
+    public sealed class CombatantBehaviour : MonoBehaviour, ICombatTarget,
+        ICombatStateIdentity, ICombatLifecycleTarget
     {
         [SerializeField, Min(1)] private int maxHealth = 100;
 
@@ -15,17 +16,31 @@ namespace MonsterSupergroup.Gameplay.Combat
         private uint stateVersion;
         private ICombatEventIdSource statusEventIds;
         private ICombatEventSink statusEventSink;
+        private ICombatEventIdSource fallbackStatusEventIds;
+        private bool requiresCanonicalKillConfirmation;
+        private bool executesCanonicalConsequences = true;
+        private bool predictedLethalRaised;
+        private bool confirmedKillRaised;
 
         public event Action<int, int> HealthChanged;
 
         /// <summary>The Boolean argument is true for status damage and false for direct damage.</summary>
         public event Action<DamageInfo, bool> DamageReceived;
 
+        public event Action<PredictedLethalHit> PredictedLethalHitReceived;
+
+        public event Action<ConfirmedKill> ConfirmedKillReceived;
+
         public int CurrentHealth { get; private set; }
 
         public int MaxHealth => maxHealth;
 
         public bool IsAlive => isInitialized && CurrentHealth > 0;
+
+        public bool RequiresCanonicalKillConfirmation =>
+            requiresCanonicalKillConfirmation;
+
+        public bool ExecutesCanonicalConsequences => executesCanonicalConsequences;
 
         public uint EntityId => entityId;
 
@@ -79,6 +94,8 @@ namespace MonsterSupergroup.Gameplay.Combat
             DirectDamageTaken = 0;
             StatusDamageTaken = 0;
             StatusTickCount = 0;
+            predictedLethalRaised = false;
+            confirmedKillRaised = false;
             isInitialized = true;
             stateVersion = 0;
             HealthChanged?.Invoke(CurrentHealth, maxHealth);
@@ -113,6 +130,10 @@ namespace MonsterSupergroup.Gameplay.Combat
             maxHealth = maximumHealth;
             CurrentHealth = health;
             stateVersion = version;
+            if (CurrentHealth > 0 && !confirmedKillRaised)
+            {
+                predictedLethalRaised = false;
+            }
             if (CurrentHealth == 0)
             {
                 statusController.Clear();
@@ -125,6 +146,54 @@ namespace MonsterSupergroup.Gameplay.Combat
         public void ResetCombatant()
         {
             Initialize(maxHealth);
+        }
+
+        public void ConfigureKillConfirmation(bool requireCanonicalConfirmation)
+        {
+            requiresCanonicalKillConfirmation = requireCanonicalConfirmation;
+        }
+
+        public void ConfigureCanonicalConsequenceExecution(bool canExecute)
+        {
+            executesCanonicalConsequences = canExecute;
+        }
+
+        public void ReceivePredictedLethalHit(PredictedLethalHit hit)
+        {
+            EnsureInitialized();
+            if (predictedLethalRaised)
+            {
+                return;
+            }
+
+            predictedLethalRaised = true;
+            PredictedLethalHitReceived?.Invoke(hit);
+            if (!requiresCanonicalKillConfirmation)
+            {
+                ReceiveConfirmedKill(new ConfirmedKill
+                {
+                    CauseEventId = hit.Context.EventId.Value,
+                    KillerPlayerId = hit.Context.SourcePlayerId,
+                    TargetEntityId = entityId != 0u
+                        ? entityId
+                        : hit.Context.TargetEntityId,
+                    TargetStateVersion = stateVersion
+                });
+            }
+        }
+
+        public void ReceiveConfirmedKill(ConfirmedKill kill)
+        {
+            EnsureInitialized();
+            if (confirmedKillRaised ||
+                (entityId != 0u && kill.TargetEntityId != 0u &&
+                 kill.TargetEntityId != entityId))
+            {
+                return;
+            }
+
+            confirmedKillRaised = true;
+            ConfirmedKillReceived?.Invoke(kill);
         }
 
         public DamageInfo ReceiveDamage(DamageInfo requestedDamage)
@@ -227,12 +296,15 @@ namespace MonsterSupergroup.Gameplay.Combat
             DamageInfo predictedApplied,
             bool targetWasAlive)
         {
-            if (statusEventIds == null || statusEventSink == null ||
-                tick.Damage.Value <= 0 || entityId == 0 ||
-                tick.Instance.SourcePlayerId == 0 || tick.Instance.SourceEntityId == 0)
+            if (tick.Damage.Value <= 0)
             {
                 return;
             }
+
+            ICombatEventIdSource activeEventIds = statusEventIds ??
+                (fallbackStatusEventIds ??= new SequentialCombatEventIdSource());
+            ICombatEventSink activeEventSink = statusEventSink ??
+                NullCombatEventSink.Instance;
 
             CombatTags tags = CombatTags.Status | CombatTags.Periodic | CombatTags.Damage;
             switch (tick.StatusId)
@@ -245,7 +317,7 @@ namespace MonsterSupergroup.Gameplay.Combat
                     break;
             }
 
-            CombatEventId eventId = statusEventIds.Next();
+            CombatEventId eventId = activeEventIds.Next();
             CombatContext source = tick.Instance.SourceContext;
             CombatContext damageContext = source.IsValid
                 ? source.CreateChild(eventId, tags, entityId, stateVersion)
@@ -262,7 +334,7 @@ namespace MonsterSupergroup.Gameplay.Combat
                     0,
                     tags,
                     stateVersion);
-            statusEventSink.Publish(new CombatEvent(
+            activeEventSink.Publish(new CombatEvent(
                 CombatEventKind.DamageResolved,
                 damageContext,
                 tick.Damage,
@@ -271,12 +343,16 @@ namespace MonsterSupergroup.Gameplay.Combat
             if (targetWasAlive && !IsAlive)
             {
                 CombatContext lethalContext = damageContext.CreateChild(
-                    statusEventIds.Next(),
+                    activeEventIds.Next(),
                     CombatTags.PredictedLethalHit,
                     entityId,
                     stateVersion);
-                statusEventSink.Publish(new CombatEvent(
+                activeEventSink.Publish(new CombatEvent(
                     CombatEventKind.PredictedLethalHit,
+                    lethalContext,
+                    tick.Damage,
+                    predictedApplied));
+                ReceivePredictedLethalHit(new PredictedLethalHit(
                     lethalContext,
                     tick.Damage,
                     predictedApplied));
@@ -287,8 +363,11 @@ namespace MonsterSupergroup.Gameplay.Combat
         {
             statusController?.Clear();
             ClearStatusCombatEvents();
+            fallbackStatusEventIds = null;
             HealthChanged = null;
             DamageReceived = null;
+            PredictedLethalHitReceived = null;
+            ConfirmedKillReceived = null;
             isInitialized = false;
         }
 

@@ -26,6 +26,12 @@ namespace AstralShift.HellMaiden.AI.Enemy
 
 		public float EndTime;
 
-		public Action OnKill;
+		/// <summary>
+		/// Optional per-spawn stat customization applied after EnemyStats.Reset and
+		/// before CombatantBehaviour receives EffectiveMaxHealth.
+		/// </summary>
+		public Action<EnemyStats> ConfigureStatsBeforeCombatant;
+
+		public Action OnConfirmedKill;
 	}
 }

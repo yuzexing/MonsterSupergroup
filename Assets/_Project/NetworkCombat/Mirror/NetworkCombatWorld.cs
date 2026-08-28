@@ -1,5 +1,6 @@
 using System;
 using Mirror;
+using MonsterSupergroup.GAS;
 using UnityEngine;
 
 namespace MonsterSupergroup.NetworkCombat

@@ -1,6 +1,7 @@
 using AstralShift.HellMaiden.AI.Enemy;
 using AstralShift.HellMaiden.Player.Attacks;
 using UnityEngine;
+using CombatTags = MonsterSupergroup.GAS.CombatTags;
 
 namespace AstralShift.HellMaiden.Combat.Hand
 {
@@ -22,7 +23,7 @@ namespace AstralShift.HellMaiden.Combat.Hand
 
 		private float GetThreshold(BaseEnemyController enemy)
 		{
-			return (float)enemy.stats.BaseHealth * parameters.enemyHealthPercentageMultiplier;
+			return (float)enemy.MaxHealth * parameters.enemyHealthPercentageMultiplier;
 		}
 
 		private DamageType GetDamageType(EnemyStatusID status)
@@ -40,9 +41,22 @@ namespace AstralShift.HellMaiden.Combat.Hand
 
 		public override void Apply(AttackStatsMultipliers multipliers, BaseEnemyController enemy)
 		{
-			if (enemy.status.HasStatus(parameters.status) && Random.Range(0f, 1f) < parameters.chance && (float)enemy.stats.Health <= GetThreshold(enemy))
+			if (enemy.status.HasStatus(parameters.status) && Random.Range(0f, 1f) < parameters.chance && (float)enemy.CurrentHealth <= GetThreshold(enemy))
 			{
-				enemy.Damage(enemy.stats.BaseHealth, GetDamageType(parameters.status));
+				DamageType damageType = GetDamageType(parameters.status);
+				WeaponBehaviour sourceWeapon = GetSourceSlot()?.WeaponBehaviour;
+				if (enemy is EnemyController normalEnemy && sourceWeapon != null)
+				{
+					normalEnemy.Damage(
+						enemy.MaxHealth,
+						damageType,
+						sourceWeapon.GetDamageSource(
+							CombatTags.Build | CombatTags.Status));
+				}
+				else
+				{
+					enemy.Damage(enemy.MaxHealth, damageType);
+				}
 			}
 		}
 	}

@@ -125,6 +125,47 @@ namespace MonsterSupergroup.GAS.Tests
         }
 
         [Test]
+        public void ResolvePrecomputedHit_UsesExistingPipelineAndPreservesSourceIdentity()
+        {
+            var sink = new RecordingSink();
+            var pipeline = new CombatPipeline(
+                new RuntimeEquipmentModifiers(),
+                new SequenceRandom(),
+                new SequentialCombatEventIdSource(7, 3),
+                sink);
+            CombatContext attack = pipeline.BeginExternalAttack(
+                sourcePlayerId: 41,
+                sourceEntityId: 51,
+                abilityId: 61,
+                CombatTags.Projectile);
+            var target = new TestTarget(8);
+
+            CombatResolution resolution = pipeline.ResolvePrecomputedHit(
+                attack,
+                target,
+                new DamageInfo(71, 12, true));
+
+            Assert.That(resolution.PredictedAppliedDamage.Value, Is.EqualTo(8));
+            Assert.That(resolution.IsPredictedLethal, Is.True);
+            Assert.That(resolution.DamageContext.SourcePlayerId, Is.EqualTo(41));
+            Assert.That(resolution.DamageContext.SourceEntityId, Is.EqualTo(51));
+            Assert.That(resolution.DamageContext.AbilityId, Is.EqualTo(61));
+            CombatTags expectedTags = CombatTags.Projectile |
+                CombatTags.Damage | CombatTags.Critical;
+            Assert.That(
+                resolution.DamageContext.Tags & expectedTags,
+                Is.EqualTo(expectedTags));
+            Assert.That(target.PredictedLethalHits, Has.Count.EqualTo(1));
+            Assert.That(sink.Events.ConvertAll(item => item.Kind), Is.EqualTo(new[]
+            {
+                CombatEventKind.AttackStarted,
+                CombatEventKind.HitResolved,
+                CombatEventKind.DamageResolved,
+                CombatEventKind.PredictedLethalHit
+            }));
+        }
+
+        [Test]
         public void ResolveHit_OnHitEffectDeathTriggersOnKill()
         {
             var onKill = new TestOnKillModifier(2);
@@ -324,6 +365,16 @@ namespace MonsterSupergroup.GAS.Tests
             public override float GetRollChance() => 1f;
             public override float GetRollPriority() => 0f;
             protected override void ApplyEffect(OnHitModifierArgs args) => calls.Add("OnHit");
+        }
+
+        private sealed class RecordingSink : ICombatEventSink
+        {
+            public List<CombatEvent> Events { get; } = new List<CombatEvent>();
+
+            public void Publish(CombatEvent combatEvent)
+            {
+                Events.Add(combatEvent);
+            }
         }
     }
 }

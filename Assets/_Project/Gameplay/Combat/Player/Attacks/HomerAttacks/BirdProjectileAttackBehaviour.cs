@@ -5,11 +5,15 @@ using AstralShift.HellMaiden.Combat.Hand;
 using AstralShift.Pooling;
 using AstralShift.QTI.Helpers.Attributes;
 using UnityEngine;
+using CombatTags = MonsterSupergroup.GAS.CombatTags;
 
 namespace AstralShift.HellMaiden.Player.Attacks.HomerAttacks
 {
 	public class BirdProjectileAttackBehaviour : WeaponBehaviour
 	{
+		protected override CombatTags DefaultCombatTags =>
+			CombatTags.Attack | CombatTags.Projectile;
+
 		private GenericPooler<ProjectileLauncherAttack> _pooler;
 
 		private Coroutine _attackCoroutine;

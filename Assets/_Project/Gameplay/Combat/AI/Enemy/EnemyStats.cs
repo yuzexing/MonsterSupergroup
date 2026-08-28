@@ -49,7 +49,7 @@ namespace AstralShift.HellMaiden.AI.Enemy
 		{
 			get
 			{
-				return (int)multipliers.Health;
+				return multipliers.Health;
 			}
 			set
 			{
@@ -58,6 +58,8 @@ namespace AstralShift.HellMaiden.AI.Enemy
 				this.OnStatsChanged?.Invoke();
 			}
 		}
+
+		public int EffectiveMaxHealth => Mathf.Max(1, Mathf.RoundToInt((float)BaseHealth * HealthMultiplier));
 
 		public int BaseDamage
 		{

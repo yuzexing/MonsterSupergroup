@@ -155,15 +155,6 @@ namespace MonsterSupergroup.NetworkCombat
     }
 
     [Serializable]
-    public struct ConfirmedKill
-    {
-        public ulong CauseEventId;
-        public uint KillerPlayerId;
-        public uint TargetEntityId;
-        public uint TargetStateVersion;
-    }
-
-    [Serializable]
     public struct CanonicalWorldBatch
     {
         public uint ServerSequence;

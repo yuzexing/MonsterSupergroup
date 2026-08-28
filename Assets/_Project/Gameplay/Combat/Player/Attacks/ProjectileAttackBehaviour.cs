@@ -1,10 +1,14 @@
 using System;
 using UnityEngine;
+using CombatTags = MonsterSupergroup.GAS.CombatTags;
 
 namespace AstralShift.HellMaiden.Player.Attacks
 {
 	public class ProjectileAttackBehaviour : WeaponBehaviour
 	{
+		protected override CombatTags DefaultCombatTags =>
+			CombatTags.Attack | CombatTags.Projectile;
+
 		[Header("Attack Settings")]
 		[SerializeField]
 		protected ProjectileAttackVariants variants;

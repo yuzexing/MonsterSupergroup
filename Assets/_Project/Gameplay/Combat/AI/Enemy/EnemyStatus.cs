@@ -1,3 +1,4 @@
+using AstralShift.HellMaiden.Player.Attacks;
 using UnityEngine;
 
 namespace AstralShift.HellMaiden.AI.Enemy
@@ -28,9 +29,20 @@ namespace AstralShift.HellMaiden.AI.Enemy
 			return false;
 		}
 
-		public void Apply(EnemyStatusID id, float power, float duration, float rate = 0f, float priority = 0f)
+		public void Apply(
+			EnemyStatusID id,
+			float power,
+			float duration,
+			float rate = 0f,
+			float priority = 0f,
+			LegacyDamageSource source = default)
 		{
-			EnemyStatusData data = new EnemyStatusData(power, duration, rate, priority);
+			EnemyStatusData data = new EnemyStatusData(
+				power,
+				duration,
+				rate,
+				priority,
+				source);
 			switch (id)
 			{
 			case EnemyStatusID.Slow:

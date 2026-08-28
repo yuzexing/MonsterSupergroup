@@ -1,3 +1,4 @@
+using AstralShift.HellMaiden.Player.Attacks;
 using UnityEngine;
 
 namespace AstralShift.HellMaiden.AI.Enemy
@@ -16,7 +17,14 @@ namespace AstralShift.HellMaiden.AI.Enemy
 
 		public float priority;
 
-		public EnemyStatusData(float power, float duration, float hitInterval = 0f, float priority = 0f)
+		public LegacyDamageSource source;
+
+		public EnemyStatusData(
+			float power,
+			float duration,
+			float hitInterval = 0f,
+			float priority = 0f,
+			LegacyDamageSource source = default)
 		{
 			this.power = power;
 			startTime = Time.time;
@@ -24,6 +32,7 @@ namespace AstralShift.HellMaiden.AI.Enemy
 			totalDuration = duration;
 			this.hitInterval = hitInterval;
 			this.priority = priority;
+			this.source = source;
 		}
 	}
 }

@@ -30,7 +30,7 @@ namespace AstralShift.HellMaiden.Combat.Hand
 		{
 			if (args.Enemy is EnemyController enemyController)
 			{
-				enemyController.OnKill += delegate
+				enemyController.OnDeathFinalized += delegate
 				{
 					FinallyApplyEffect(args.Enemy, args.Weapon);
 				};

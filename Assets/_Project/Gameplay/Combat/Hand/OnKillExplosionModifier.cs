@@ -1,5 +1,6 @@
 using AstralShift.HellMaiden.Player.Attacks;
 using UnityEngine;
+using CombatTags = MonsterSupergroup.GAS.CombatTags;
 
 namespace AstralShift.HellMaiden.Combat.Hand
 {
@@ -35,7 +36,12 @@ namespace AstralShift.HellMaiden.Combat.Hand
 			effect.Init(args.Weapon);
 			effect.Play(delegate(IDamageable damageable)
 			{
-				damageable.Damage((int)((float)args.Weapon.CalculateDamage(args.Enemy).value * parameters.damageMultiplier), DamageType.Normal);
+				LegacyDamageDispatcher.Damage(
+					damageable,
+					(int)((float)args.Weapon.CalculateDamage(args.Enemy).value * parameters.damageMultiplier),
+					DamageType.Normal,
+					args.Source,
+					CombatTags.Build | CombatTags.Explosion);
 			}, delegate
 			{
 				OnEffectEnd(effect);

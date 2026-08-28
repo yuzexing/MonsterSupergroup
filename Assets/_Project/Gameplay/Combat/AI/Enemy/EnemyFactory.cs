@@ -10,7 +10,7 @@ namespace AstralShift.HellMaiden.AI.Enemy
 		{
 			EnemyController orCreate = args.Pool.GetOrCreate();
 			EnemyDatabase.EnemyData enemyData = ProgressionManager.Instance.enemyDatabase.GetEnemyData(args.Prefab.selectedName, args.VariantIdx);
-			orCreate.stats = enemyData.Stats;
+			orCreate.stats = enemyData.Stats.Clone();
 			orCreate.lootSettings = ProgressionManager.Instance.enemyDatabase.GetLootSettings(args.Prefab.selectedName, args.VariantIdx);
 			orCreate.overrideGlobalLootSettings = orCreate.lootSettings;
 			float xPModifier = ProgressionManager.Instance.GetXPModifier();
@@ -27,19 +27,25 @@ namespace AstralShift.HellMaiden.AI.Enemy
 			{
 				id = GenerateId(args.Prefab.selectedName + args.VariantIdx);
 			}
-			orCreate.Init(id);
+			orCreate.Init(id, args.ConfigureStatsBeforeCombatant);
 			orCreate.stats.SpeedMultiplier = Random.Range(args.SpeedMultiplierRange.x, args.SpeedMultiplierRange.y);
 			if (enemyData.hueColor != Color.white)
 			{
 				orCreate.enemyAnimator.Recolor(enemyData.hueColor);
 			}
-			if (args.OnKill != null)
+			if (args.OnConfirmedKill != null)
 			{
-				orCreate.OnKill += args.OnKill;
+				orCreate.OnConfirmedKill += delegate
+				{
+					args.OnConfirmedKill();
+				};
 			}
 			if (orCreate.isElite)
 			{
-				orCreate.OnKill += RegisterEliteEnemyDeath;
+				orCreate.OnConfirmedKill += delegate
+				{
+					RegisterEliteEnemyDeath();
+				};
 			}
 			return orCreate;
 		}

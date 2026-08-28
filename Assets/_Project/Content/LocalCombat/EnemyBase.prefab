@@ -254,6 +254,7 @@ GameObject:
   - component: {fileID: 6523683399421190522}
   - component: {fileID: 4809216034930338922}
   - component: {fileID: 3657585698669438500}
+  - component: {fileID: 6172829809116244268}
   - component: {fileID: 8095263965623144152}
   - component: {fileID: 3894133510728200273}
   m_Layer: 0
@@ -337,6 +338,7 @@ MonoBehaviour:
   forceWindInteraction: 0
   ultimateWindInteraction: {x: 0, y: 0}
   _target: {fileID: 0}
+  combatantBinding: {fileID: 6172829809116244268}
   rigidBody: {fileID: 52470036140071214}
   enemyAnimator: {fileID: 0}
   damagePosition: {fileID: 3991496274091878730}
@@ -444,6 +446,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: MonsterSupergroup.Gameplay.Combat.Runtime::MonsterSupergroup.Gameplay.Combat.CombatantBehaviour
   maxHealth: 100
+--- !u!114 &6172829809116244268
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5370477504739132608}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f7659e2efdf6f4b499b64e7a33685147, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: MonsterSupergroup.Gameplay.Combat::AstralShift.HellMaiden.AI.Enemy.EnemyCombatantBinding
+  combatant: {fileID: 3657585698669438500}
 --- !u!114 &8095263965623144152
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -52,6 +52,10 @@ namespace MonsterSupergroup.Gameplay.Tests
             {
                 CombatantBehaviour combatant = gameObject.AddComponent<CombatantBehaviour>();
                 combatant.Initialize(3);
+                int predictedCount = 0;
+                int confirmedCount = 0;
+                combatant.PredictedLethalHitReceived += _ => predictedCount++;
+                combatant.ConfirmedKillReceived += _ => confirmedCount++;
                 combatant.ApplyStatus(new StatusApplication(
                     OnHitBurnModifier.BurnDefinition,
                     2,
@@ -66,10 +70,100 @@ namespace MonsterSupergroup.Gameplay.Tests
                 Assert.That(combatant.StatusDamageTaken, Is.EqualTo(3));
                 Assert.That(combatant.StatusTickCount, Is.EqualTo(2));
                 Assert.That(combatant.StatusController.Count, Is.Zero);
+                Assert.That(predictedCount, Is.EqualTo(1));
+                Assert.That(confirmedCount, Is.EqualTo(1));
             }
             finally
             {
                 UnityEngine.Object.DestroyImmediate(gameObject);
+            }
+        }
+
+        [Test]
+        public void OfflineCombatant_PredictedLethalImmediatelyProducesConfirmedKill()
+        {
+            GameObject weaponObject = null;
+            GameObject targetObject = null;
+            try
+            {
+                WeaponRuntimeBehaviour weapon = CreateWeapon(
+                    out weaponObject,
+                    damage: 10,
+                    speed: 1f,
+                    equipment: null,
+                    perks: null);
+                weapon.ConfigureCombatIdentity(12, 13);
+                CombatantBehaviour target = CreateCombatant(out targetObject, 5);
+                target.ConfigureEntityId(99);
+                int predictedCount = 0;
+                int confirmedCount = 0;
+                ConfirmedKill confirmed = default;
+                target.PredictedLethalHitReceived += _ => predictedCount++;
+                target.ConfirmedKillReceived += value =>
+                {
+                    confirmed = value;
+                    confirmedCount++;
+                };
+
+                weapon.Attack(target);
+
+                Assert.That(predictedCount, Is.EqualTo(1));
+                Assert.That(confirmedCount, Is.EqualTo(1));
+                Assert.That(confirmed.KillerPlayerId, Is.EqualTo(12));
+                Assert.That(confirmed.TargetEntityId, Is.EqualTo(99));
+            }
+            finally
+            {
+                Destroy(weaponObject, targetObject);
+            }
+        }
+
+        [Test]
+        public void NetworkedCombatant_WaitsForCanonicalConfirmedKill()
+        {
+            GameObject weaponObject = null;
+            GameObject targetObject = null;
+            try
+            {
+                WeaponRuntimeBehaviour weapon = CreateWeapon(
+                    out weaponObject,
+                    damage: 10,
+                    speed: 1f,
+                    equipment: null,
+                    perks: null);
+                weapon.ConfigureCombatIdentity(12, 13);
+                CombatantBehaviour target = CreateCombatant(out targetObject, 5);
+                target.ConfigureEntityId(99);
+                target.ConfigureKillConfirmation(true);
+                int predictedCount = 0;
+                int confirmedCount = 0;
+                target.PredictedLethalHitReceived += _ => predictedCount++;
+                target.ConfirmedKillReceived += _ => confirmedCount++;
+
+                weapon.Attack(target);
+
+                Assert.That(predictedCount, Is.EqualTo(1));
+                Assert.That(confirmedCount, Is.Zero);
+                target.ReceiveConfirmedKill(new ConfirmedKill
+                {
+                    CauseEventId = 123,
+                    KillerPlayerId = 12,
+                    TargetEntityId = 99,
+                    TargetStateVersion = 1
+                });
+                target.ReceiveConfirmedKill(new ConfirmedKill
+                {
+                    CauseEventId = 123,
+                    KillerPlayerId = 12,
+                    TargetEntityId = 99,
+                    TargetStateVersion = 1
+                });
+
+                Assert.That(confirmedCount, Is.EqualTo(1));
+            }
+            finally
+            {
+                Destroy(weaponObject, targetObject);
             }
         }
 

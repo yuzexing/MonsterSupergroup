@@ -238,6 +238,7 @@ namespace AstralShift.HellMaiden.Player.Attacks.OvidAttacks
 
 		public override void Attack()
 		{
+			BeginCombatAttack();
 			PlayAttackSound();
 			base.transform.SetParent(null);
 			player.SetInvulnerable(state: true);

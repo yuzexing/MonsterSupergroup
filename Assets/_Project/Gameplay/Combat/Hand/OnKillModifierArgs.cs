@@ -8,5 +8,7 @@ namespace AstralShift.HellMaiden.Combat.Hand
 		public BaseEnemyController Enemy;
 
 		public WeaponBehaviour Weapon;
+
+		public LegacyDamageSource Source;
 	}
 }

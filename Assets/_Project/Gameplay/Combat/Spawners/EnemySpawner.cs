@@ -110,7 +110,7 @@ namespace AstralShift.HellMaiden.Combat.Spawners
 				AllowRubberBand = AllowRubberBand,
 				RubberbandKillsEnemiesOnClipEnd = RubberbandKillsEnemiesOnClipEnd,
 				EndTime = base.endTime,
-				OnKill = UnRegisterEnemyCount
+				OnConfirmedKill = UnRegisterEnemyCount
 			});
 			RegisterEnemyCount();
 			_enemies.Add(enemyController);

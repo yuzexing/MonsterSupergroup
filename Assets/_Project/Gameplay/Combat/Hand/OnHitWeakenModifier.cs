@@ -28,7 +28,7 @@ namespace AstralShift.HellMaiden.Combat.Hand
 
 		protected override OnHitModifierArgs ApplyEffect(OnHitModifierArgs args)
 		{
-			if (args.Enemy.stats.Health > 0)
+			if (args.Enemy.IsAlive)
 			{
 				args.Enemy.status.Apply(EnemyStatusID.Weaken, parameters.damageMultiplier, parameters.duration);
 			}

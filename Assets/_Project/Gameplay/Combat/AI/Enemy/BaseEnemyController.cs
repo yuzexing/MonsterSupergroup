@@ -122,6 +122,18 @@ namespace AstralShift.HellMaiden.AI.Enemy
 
 		public bool IsImmune => _isImmune;
 
+		/// <summary>
+		/// Runtime combat health. Normal and Elite enemies override this with their
+		/// Combatant-backed state; Boss keeps the legacy EnemyStats-backed path.
+		/// </summary>
+		public virtual int CurrentHealth => stats != null ? stats.Health : 0;
+
+		public virtual int MaxHealth => stats != null ? stats.BaseHealth : 0;
+
+		public virtual bool IsAlive => CurrentHealth > 0;
+
+		public bool IsAtFullHealth => IsAlive && CurrentHealth >= MaxHealth;
+
 		public abstract bool IsDead { get; }
 
 		public abstract void Init(int id);
@@ -143,13 +155,17 @@ namespace AstralShift.HellMaiden.AI.Enemy
 			stats.Health = Mathf.Max(0, stats.Health);
 		}
 
-		protected virtual void ApplyOnHitEffects(WeaponBehaviour weapon, DamageInfo damageInfo)
+		protected virtual void ApplyOnHitEffects(
+			WeaponBehaviour weapon,
+			DamageInfo damageInfo,
+			LegacyDamageSource source = default)
 		{
 			OnHitModifierArgs args = new OnHitModifierArgs
 			{
 				Enemy = this,
 				Weapon = weapon,
-				DamageInfo = damageInfo
+				DamageInfo = damageInfo,
+				Source = source
 			};
 			for (int i = 0; i < weapon.EquipmentModifiers.OnHitModifiers.Count; i++)
 			{
@@ -157,12 +173,15 @@ namespace AstralShift.HellMaiden.AI.Enemy
 			}
 		}
 
-		protected void ApplyOnKillEffects(WeaponBehaviour weapon)
+		protected void ApplyOnKillEffects(
+			WeaponBehaviour weapon,
+			LegacyDamageSource source = default)
 		{
 			OnKillModifierArgs args = new OnKillModifierArgs
 			{
 				Enemy = this,
-				Weapon = weapon
+				Weapon = weapon,
+				Source = source
 			};
 			for (int i = 0; i < weapon.EquipmentModifiers.OnKillModifiers.Count; i++)
 			{

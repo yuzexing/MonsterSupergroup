@@ -33,11 +33,16 @@ namespace AstralShift.HellMaiden.Combat.Hand
 
 		protected override OnHitModifierArgs ApplyEffect(OnHitModifierArgs args)
 		{
-			if (args.Enemy.stats.Health > 0)
+			if (args.Enemy.IsAlive)
 			{
 				int num = 0;
-				num = ((!(args.Weapon.StatsBehaviour.PlayerStats.statMultipliers.attackStatsMultipliers.burnDamageMultiplier > 0f)) ? ((int)((float)Mathf.Min(200, args.Enemy.stats.BaseHealth) * parameters.damageMultiplier)) : ((int)((float)Mathf.Min(200, args.Enemy.stats.BaseHealth) * parameters.damageMultiplier * (1f + args.Weapon.StatsBehaviour.PlayerStats.statMultipliers.attackStatsMultipliers.poisonDamageMultiplier))));
-				args.Enemy.status.Apply(EnemyStatusID.Poison, num, parameters.numberOfHits, parameters.hitIntervalDuration);
+				num = ((!(args.Weapon.StatsBehaviour.PlayerStats.statMultipliers.attackStatsMultipliers.burnDamageMultiplier > 0f)) ? ((int)((float)Mathf.Min(200, args.Enemy.MaxHealth) * parameters.damageMultiplier)) : ((int)((float)Mathf.Min(200, args.Enemy.MaxHealth) * parameters.damageMultiplier * (1f + args.Weapon.StatsBehaviour.PlayerStats.statMultipliers.attackStatsMultipliers.poisonDamageMultiplier))));
+				args.Enemy.status.Apply(
+					EnemyStatusID.Poison,
+					num,
+					parameters.numberOfHits,
+					parameters.hitIntervalDuration,
+					source: args.Source);
 			}
 			return args;
 		}

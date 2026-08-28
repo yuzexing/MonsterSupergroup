@@ -3,6 +3,7 @@ using AstralShift.HellMaiden.Player.Attacks;
 using AstralShift.Pooling;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
+using CombatTags = MonsterSupergroup.GAS.CombatTags;
 
 namespace AstralShift.HellMaiden.Combat.Hand
 {
@@ -80,7 +81,12 @@ namespace AstralShift.HellMaiden.Combat.Hand
 			});
 			tailAttackEffect.hitbox.Init(delegate(IDamageable idmg)
 			{
-				idmg.Damage(Mathf.CeilToInt((float)args.Weapon.DamageValue * parameters.damageMultiplier), DamageType.Normal);
+				LegacyDamageDispatcher.Damage(
+					idmg,
+					Mathf.CeilToInt((float)args.Weapon.DamageValue * parameters.damageMultiplier),
+					DamageType.Normal,
+					args.Source,
+					CombatTags.Build);
 			});
 			int attackCount = UnityEngine.Random.Range(parameters.minAttackCount, parameters.maxAttackCount + 1);
 			int idleBetweenAttacks = UnityEngine.Random.Range(parameters.minIdleBetweenAttacks, parameters.maxIdleBetweenAttacks + 1);

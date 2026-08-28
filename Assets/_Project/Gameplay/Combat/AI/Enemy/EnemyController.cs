@@ -8,7 +8,14 @@ using AstralShift.HellMaiden.Player.Attacks;
 using AstralShift.Helpers;
 using AstralShift.Helpers.Attributes;
 using AstralShift.Pooling;
+using MonsterSupergroup.Gameplay.Combat;
 using UnityEngine;
+using GasCombatEventIdSource = MonsterSupergroup.GAS.SequentialCombatEventIdSource;
+using GasCombatResolution = MonsterSupergroup.GAS.CombatResolution;
+using GasCombatTags = MonsterSupergroup.GAS.CombatTags;
+using GasConfirmedKill = MonsterSupergroup.GAS.ConfirmedKill;
+using GasNullEventSink = MonsterSupergroup.GAS.NullCombatEventSink;
+using GasPredictedLethalHit = MonsterSupergroup.GAS.PredictedLethalHit;
 
 namespace AstralShift.HellMaiden.AI.Enemy
 {
@@ -16,6 +23,9 @@ namespace AstralShift.HellMaiden.AI.Enemy
 	{
 		[SerializeField]
 		protected Transform _target;
+
+		[SerializeField]
+		private EnemyCombatantBinding combatantBinding;
 
 		[Header("References")]
 		public Rigidbody2D rigidBody;
@@ -146,6 +156,26 @@ namespace AstralShift.HellMaiden.AI.Enemy
 
 		private bool _cullingOptimizationsEnabled = true;
 
+		private bool _predictedDeath;
+
+		private bool _killConfirmed;
+
+		private bool _confirmedConsequencesApplied;
+
+		private bool _deathPresentationComplete;
+
+		private bool _deathPresentationEventRaised;
+
+		private bool _combatDefeat;
+
+		private int _legacyDamageResolutionDepth;
+
+		private WeaponBehaviour _lethalWeapon;
+
+		private GasConfirmedKill _confirmedKill;
+
+		private LegacyCombatExecution _fallbackDamageExecution;
+
 		public Transform Target
 		{
 			get
@@ -174,6 +204,25 @@ namespace AstralShift.HellMaiden.AI.Enemy
 
 		public StateMachine StateMachine => _stateMachine;
 
+		public EnemyCombatantBinding CombatantBinding
+		{
+			get
+			{
+				if (combatantBinding == null)
+				{
+					combatantBinding = GetComponent<EnemyCombatantBinding>();
+				}
+
+				return combatantBinding;
+			}
+		}
+
+		public override int CurrentHealth => CombatantBinding != null ? CombatantBinding.CurrentHealth : 0;
+
+		public override int MaxHealth => CombatantBinding != null ? CombatantBinding.MaxHealth : 0;
+
+		public override bool IsAlive => CombatantBinding != null && CombatantBinding.IsAlive;
+
 		public bool WasAttacking
 		{
 			get
@@ -196,7 +245,7 @@ namespace AstralShift.HellMaiden.AI.Enemy
 			{
 				if (!IsInDeadState)
 				{
-					return stats.Health <= 0;
+					return !IsAlive;
 				}
 				return true;
 			}
@@ -227,11 +276,22 @@ namespace AstralShift.HellMaiden.AI.Enemy
 
 		public bool SpawnedLoot { get; private set; }
 
-		public event Action OnKill;
+		public event Action<GasPredictedLethalHit> OnPredictedLethalHit;
+
+		public event Action<GasConfirmedKill> OnConfirmedKill;
+
+		public event Action OnDeathPresentationCompleted;
+
+		public event Action OnDeathFinalized;
 
 		public event Action OnDispose;
 
 		public override void Init(int id)
+		{
+			Init(id, null);
+		}
+
+		public void Init(int id, Action<EnemyStats> configureStatsBeforeCombatant)
 		{
 			base.ID = id;
 			try
@@ -241,7 +301,7 @@ namespace AstralShift.HellMaiden.AI.Enemy
 			catch (Exception)
 			{
 			}
-			InitValues();
+			InitValues(configureStatsBeforeCombatant);
 			InitializeStateMachine();
 			enemyAnimator.Init(this);
 			hurtBox.ActivateCollider(state: true);
@@ -256,6 +316,7 @@ namespace AstralShift.HellMaiden.AI.Enemy
 		public void ResetEnemyCondition()
 		{
 			stats.Reset();
+			CombatantBinding.InitializeFromStats(stats);
 			status.ClearAllStatus();
 		}
 
@@ -388,7 +449,7 @@ namespace AstralShift.HellMaiden.AI.Enemy
 				Movement.FreezeRigidbody(state: true);
 				hurtBox.ActivateCollider(state: false);
 				EnemyAIManager.Instance.UnRegisterEnemy(this);
-				enemyAnimator.DeathAnimation(FacingDirection, SpawnLootAndDispose);
+				enemyAnimator.DeathAnimation(FacingDirection, CompleteDeathPresentation);
 			};
 			Dead.onExit = delegate
 			{
@@ -401,12 +462,8 @@ namespace AstralShift.HellMaiden.AI.Enemy
 				{
 					attackScript.CancelAttack();
 				}
-				if (_dropLoot)
-				{
-					SpawnLoot();
-				}
 				EnemyAIManager.Instance.UnRegisterEnemy(this);
-				Dispose();
+				CompleteDeathPresentation();
 			};
 			Deactivating.onEnter = delegate
 			{
@@ -442,22 +499,22 @@ namespace AstralShift.HellMaiden.AI.Enemy
 				base.gameObject.SetActive(value: true);
 			};
 			_stateMachine.SetInitialState(Moving);
-			void SpawnLootAndDispose()
-			{
-				if (_dropLoot)
-				{
-					SpawnLoot();
-				}
-				_dropLoot = true;
-				this.OnKill?.Invoke();
-				this.OnKill = null;
-				Dispose();
-			}
 		}
 
-		protected virtual void InitValues()
+		protected virtual void InitValues(Action<EnemyStats> configureStatsBeforeCombatant)
 		{
 			stats.Reset();
+			configureStatsBeforeCombatant?.Invoke(stats);
+			if (CombatantBinding == null)
+			{
+				throw new InvalidOperationException(
+					$"{nameof(EnemyController)} requires {nameof(EnemyCombatantBinding)}.");
+			}
+			CombatantBinding.InitializeFromStats(stats);
+			CombatantBinding.Combatant.PredictedLethalHitReceived -= HandlePredictedLethalHit;
+			CombatantBinding.Combatant.ConfirmedKillReceived -= HandleConfirmedKill;
+			CombatantBinding.Combatant.PredictedLethalHitReceived += HandlePredictedLethalHit;
+			CombatantBinding.Combatant.ConfirmedKillReceived += HandleConfirmedKill;
 			_transform = base.transform;
 			_defaultRigidbodyMass = rigidBody.mass;
 			if (usesPathfinding)
@@ -475,7 +532,20 @@ namespace AstralShift.HellMaiden.AI.Enemy
 			enemyAnimator.ResetHurtBlinkColor();
 			SpawnedLoot = false;
 			attackScript.Target = Target;
-			this.OnKill = null;
+			_predictedDeath = false;
+			_killConfirmed = false;
+			_confirmedConsequencesApplied = false;
+			_deathPresentationComplete = false;
+			_deathPresentationEventRaised = false;
+			_combatDefeat = false;
+			_legacyDamageResolutionDepth = 0;
+			_lethalWeapon = null;
+			_confirmedKill = default;
+			_fallbackDamageExecution = null;
+			this.OnPredictedLethalHit = null;
+			this.OnConfirmedKill = null;
+			this.OnDeathPresentationCompleted = null;
+			this.OnDeathFinalized = null;
 			this.OnDispose = null;
 		}
 
@@ -499,8 +569,17 @@ namespace AstralShift.HellMaiden.AI.Enemy
 			_knockbackSettingsOverride = null;
 			hurtBox.OnDamageWeapon -= Damage;
 			hurtBox.OnDamageGeneric -= Damage;
+			if (CombatantBinding != null)
+			{
+				CombatantBinding.Combatant.PredictedLethalHitReceived -= HandlePredictedLethalHit;
+				CombatantBinding.Combatant.ConfirmedKillReceived -= HandleConfirmedKill;
+			}
 			this.OnDispose?.Invoke();
 			this.OnDispose = null;
+			this.OnPredictedLethalHit = null;
+			this.OnConfirmedKill = null;
+			this.OnDeathPresentationCompleted = null;
+			this.OnDeathFinalized = null;
 			EnemyPool?.Return(this);
 		}
 
@@ -726,7 +805,7 @@ namespace AstralShift.HellMaiden.AI.Enemy
 			}
 			void OnCompleteAction()
 			{
-				if (stats.Health <= 0)
+				if (!IsAlive)
 				{
 					Kill();
 				}
@@ -758,7 +837,7 @@ namespace AstralShift.HellMaiden.AI.Enemy
 				{
 					attackScript.CancelAttack();
 				}
-				if (stats.Health <= 0)
+				if (!IsAlive)
 				{
 					ActivateColliders(activate: false);
 				}
@@ -768,7 +847,7 @@ namespace AstralShift.HellMaiden.AI.Enemy
 			}
 			void OnCompleteAction()
 			{
-				if (stats.Health <= 0)
+				if (!IsAlive)
 				{
 					Kill();
 				}
@@ -841,45 +920,110 @@ namespace AstralShift.HellMaiden.AI.Enemy
 			{
 				return;
 			}
+
 			DamageInfo damageInfo = weapon.CalculateDamage(this);
-			ApplyDamage(damageInfo);
-			ApplyOnHitEffects(weapon, damageInfo);
-			ShowDamageNumbers(damageInfo, damageType, damagePosition);
-			bool flag = stats.Health <= 0;
-			if (flag)
+			LegacyDamageSource source = weapon.GetDamageSource(
+				LegacyCombatTagUtility.FromDamageType(damageType));
+			_legacyDamageResolutionDepth++;
+			try
 			{
-				if (attackOnDeath)
+				GasCombatResolution resolution = source.Resolve(
+					CombatantBinding.Combatant,
+					damageInfo);
+				LegacyDamageSource resolvedSource = source.WithContext(
+					resolution.DamageContext);
+				ApplyOnHitEffects(weapon, damageInfo, resolvedSource);
+				if (resolution.PredictedAppliedDamage.Value > 0)
+				{
+					ShowDamageNumbers(
+						(int)resolution.PredictedAppliedDamage.Id,
+						resolution.PredictedAppliedDamage.Value,
+						damageType,
+						resolution.PredictedAppliedDamage.IsCritical,
+						damagePosition);
+				}
+
+				bool isFatal = resolution.IsPredictedLethal;
+				if (isFatal)
+				{
+					_lethalWeapon = weapon;
+					_combatDefeat = true;
+					ApplyOnKillEffects(
+						weapon,
+						source.WithContext(resolution.PredictedLethalContext));
+				}
+
+				enemyAnimator.HurtBlinkAnimation();
+				if (isFatal && attackOnDeath)
 				{
 					Attack();
-					return;
 				}
-				RunStatsTracker.Instance?.RegisterWeaponKill(weapon);
-				RunStatsTracker.Instance.PlayerStatsEntry?.RegisterDefeatedEnemy(selectedName);
-				ApplyOnKillEffects(weapon);
+				else
+				{
+					ApplyKnockBack(attackPosition, weapon, isFatal);
+				}
 			}
-			enemyAnimator.HurtBlinkAnimation();
-			ApplyKnockBack(attackPosition, weapon, flag);
+			finally
+			{
+				EndLegacyDamageResolution();
+			}
 		}
 
 		public override void Damage(int value, DamageType damageType)
 		{
-			if (!IsDead && !base.IsImmune)
+			Damage(value, damageType, default);
+		}
+
+		public void Damage(
+			int value,
+			DamageType damageType,
+			LegacyDamageSource source)
+		{
+			if (IsDead || base.IsImmune || value <= 0)
 			{
-				ApplyDamage(value);
-				ShowDamageNumbers(GetEntityId(), value, damageType, isCritical: false, damagePosition);
-				bool num = stats.Health <= 0;
-				enemyAnimator.HurtBlinkAnimation();
-				if (num)
+				return;
+			}
+
+			LegacyDamageSource effectiveSource = source.IsValid
+				? source.WithTags(LegacyCombatTagUtility.FromDamageType(damageType))
+				: CreateFallbackDamageSource(damageType);
+			_legacyDamageResolutionDepth++;
+			try
+			{
+				var damage = new DamageInfo(
+					effectiveSource.DamageSourceId,
+					value,
+					isCritical: false);
+				GasCombatResolution resolution = effectiveSource.Resolve(
+					CombatantBinding.Combatant,
+					damage);
+				if (resolution.PredictedAppliedDamage.Value > 0)
 				{
-					RunStatsTracker.Instance.PlayerStatsEntry?.RegisterDefeatedEnemy(selectedName);
+					ShowDamageNumbers(
+						(int)resolution.PredictedAppliedDamage.Id,
+						resolution.PredictedAppliedDamage.Value,
+						damageType,
+						isCritical: false,
+						damagePosition);
+				}
+
+				enemyAnimator.HurtBlinkAnimation();
+				if (resolution.IsPredictedLethal)
+				{
+					_combatDefeat = effectiveSource.ServicesArePlayerAuthored();
 					Kill();
 				}
+			}
+			finally
+			{
+				EndLegacyDamageResolution();
 			}
 		}
 
 		public virtual void Kill(bool instant, bool dropXp)
 		{
 			_dropLoot = dropXp;
+			EnsureForcedDeathLifecycle();
 			if (instant)
 			{
 				TransitionToDead(isInstant: true);
@@ -892,7 +1036,194 @@ namespace AstralShift.HellMaiden.AI.Enemy
 
 		public virtual void Kill()
 		{
+			EnsureForcedDeathLifecycle();
 			TransitionToDead();
+		}
+
+		private void HandlePredictedLethalHit(GasPredictedLethalHit hit)
+		{
+			if (_predictedDeath)
+			{
+				return;
+			}
+
+			_predictedDeath = true;
+			_combatDefeat = hit.Context.SourcePlayerId != 0u &&
+				hit.Context.SourcePlayerId != uint.MaxValue;
+			this.OnPredictedLethalHit?.Invoke(hit);
+			if (_legacyDamageResolutionDepth == 0)
+			{
+				BeginPredictedDeathPresentation();
+			}
+		}
+
+		private void HandleConfirmedKill(GasConfirmedKill kill)
+		{
+			if (_killConfirmed)
+			{
+				return;
+			}
+
+			_killConfirmed = true;
+			_confirmedKill = kill;
+			_combatDefeat |= kill.KillerPlayerId != 0u;
+			if (!_predictedDeath)
+			{
+				_predictedDeath = true;
+				BeginPredictedDeathPresentation();
+			}
+
+			if (_legacyDamageResolutionDepth == 0)
+			{
+				ApplyConfirmedConsequences();
+			}
+		}
+
+		private void BeginPredictedDeathPresentation()
+		{
+			if (IsInDeadState)
+			{
+				return;
+			}
+
+			if (attackOnDeath)
+			{
+				Attack();
+				return;
+			}
+
+			TransitionToDead();
+		}
+
+		private void EnsureForcedDeathLifecycle()
+		{
+			if (!_predictedDeath)
+			{
+				_predictedDeath = true;
+				_combatDefeat = false;
+			}
+
+			if (!_killConfirmed)
+			{
+				_killConfirmed = true;
+				_confirmedKill = new GasConfirmedKill
+				{
+					TargetEntityId = CombatantBinding.Combatant.EntityId,
+					TargetStateVersion = CombatantBinding.Combatant.StateVersion
+				};
+				ApplyConfirmedConsequences();
+			}
+		}
+
+		private void EndLegacyDamageResolution()
+		{
+			_legacyDamageResolutionDepth = Mathf.Max(0, _legacyDamageResolutionDepth - 1);
+			if (_legacyDamageResolutionDepth == 0 && _killConfirmed)
+			{
+				ApplyConfirmedConsequences();
+			}
+		}
+
+		private void ApplyConfirmedConsequences()
+		{
+			if (!_killConfirmed || _confirmedConsequencesApplied)
+			{
+				return;
+			}
+
+			_confirmedConsequencesApplied = true;
+			if (CombatantBinding.Combatant.ExecutesCanonicalConsequences && _combatDefeat)
+			{
+				if (_lethalWeapon != null)
+				{
+					RunStatsTracker.Instance?.RegisterWeaponKill(_lethalWeapon);
+				}
+
+				RunStatsTracker.Instance?.PlayerStatsEntry?.RegisterDefeatedEnemy(selectedName);
+			}
+
+			if (CombatantBinding.Combatant.ExecutesCanonicalConsequences)
+			{
+				this.OnConfirmedKill?.Invoke(_confirmedKill);
+			}
+			this.OnConfirmedKill = null;
+			TryFinalizeConfirmedDeath();
+		}
+
+		private void CompleteDeathPresentation()
+		{
+			if (_deathPresentationComplete)
+			{
+				return;
+			}
+
+			_deathPresentationComplete = true;
+			if (!_deathPresentationEventRaised)
+			{
+				_deathPresentationEventRaised = true;
+				this.OnDeathPresentationCompleted?.Invoke();
+				this.OnDeathPresentationCompleted = null;
+			}
+
+			TryFinalizeConfirmedDeath();
+		}
+
+		private void TryFinalizeConfirmedDeath()
+		{
+			if (!_deathPresentationComplete || !_confirmedConsequencesApplied)
+			{
+				return;
+			}
+
+			if (_dropLoot &&
+				CombatantBinding.Combatant.ExecutesCanonicalConsequences)
+			{
+				SpawnLoot();
+			}
+
+			_dropLoot = true;
+			this.OnDeathFinalized?.Invoke();
+			this.OnDeathFinalized = null;
+			Dispose();
+		}
+
+		private LegacyDamageSource CreateFallbackDamageSource(DamageType damageType)
+		{
+			uint sourceEntityId = unchecked((uint)GetInstanceID());
+			if (sourceEntityId == 0u)
+			{
+				sourceEntityId = 1u;
+			}
+
+			if (_fallbackDamageExecution == null)
+			{
+				ushort sourceSlot = unchecked((ushort)sourceEntityId);
+				if (sourceSlot == 0)
+				{
+					sourceSlot = 1;
+				}
+
+				_fallbackDamageExecution = new LegacyCombatExecution(
+					new CombatRuntimeServices(
+						uint.MaxValue,
+						sourceEntityId,
+						new GasCombatEventIdSource(sourceSlot),
+						GasNullEventSink.Instance));
+			}
+
+			uint damageSourceId = unchecked((uint)ID);
+			if (damageSourceId == 0u)
+			{
+				damageSourceId = uint.MaxValue;
+			}
+
+			return new LegacyDamageSource(
+				_fallbackDamageExecution,
+				_fallbackDamageExecution.BeginAttack(
+					damageSourceId,
+					GasCombatTags.Attack |
+					LegacyCombatTagUtility.FromDamageType(damageType)),
+				damageSourceId);
 		}
 
 		private void SpawnLoot()

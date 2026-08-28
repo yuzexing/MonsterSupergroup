@@ -253,7 +253,7 @@ namespace MonsterSupergroup.GAS.Tests
         public WeaponBehaviourStats Stats { get; }
     }
 
-    internal sealed class TestTarget : ICombatTarget
+    internal sealed class TestTarget : ICombatTarget, ICombatLifecycleTarget
     {
         private int health;
 
@@ -266,6 +266,9 @@ namespace MonsterSupergroup.GAS.Tests
         public int Health => health;
         public List<DamageInfo> ReceivedDamage { get; } = new List<DamageInfo>();
         public List<StatusApplication> AppliedStatuses { get; } = new List<StatusApplication>();
+        public List<PredictedLethalHit> PredictedLethalHits { get; } =
+            new List<PredictedLethalHit>();
+        public List<ConfirmedKill> ConfirmedKills { get; } = new List<ConfirmedKill>();
 
         public DamageInfo ReceiveDamage(DamageInfo requestedDamage)
         {
@@ -285,6 +288,16 @@ namespace MonsterSupergroup.GAS.Tests
         public void RestoreHealth(int value)
         {
             health = value;
+        }
+
+        public void ReceivePredictedLethalHit(PredictedLethalHit hit)
+        {
+            PredictedLethalHits.Add(hit);
+        }
+
+        public void ReceiveConfirmedKill(ConfirmedKill kill)
+        {
+            ConfirmedKills.Add(kill);
         }
     }
 }

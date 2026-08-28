@@ -4,6 +4,7 @@ using AstralShift.HellMaiden.Combat;
 using AstralShift.HellMaiden.Player.Attacks;
 using AstralShift.Pooling;
 using UnityEngine;
+using CombatTags = MonsterSupergroup.GAS.CombatTags;
 
 namespace AstralShift.HellMaiden.AI.Enemy
 {
@@ -40,7 +41,7 @@ namespace AstralShift.HellMaiden.AI.Enemy
 
 			private readonly Action<BaseEnemyController> _onRemove;
 
-			private readonly Action<BaseEnemyController, int> _onTick;
+			private readonly Action<BaseEnemyController, EnemyStatusData> _onTick;
 
 			private readonly List<BaseEnemyController> _activeEnemies;
 
@@ -50,7 +51,7 @@ namespace AstralShift.HellMaiden.AI.Enemy
 
 			private static readonly int EffectAnimHash = Animator.StringToHash("EffectAnim");
 
-			public StatusHandler(GameObject prefab, onHitTransform hitTransform, int maxStacks, StackMode strategy, Action<BaseEnemyController, float> onApply, Action<BaseEnemyController> onRemove, Action<BaseEnemyController, int> onTick = null)
+			public StatusHandler(GameObject prefab, onHitTransform hitTransform, int maxStacks, StackMode strategy, Action<BaseEnemyController, float> onApply, Action<BaseEnemyController> onRemove, Action<BaseEnemyController, EnemyStatusData> onTick = null)
 			{
 				_pooler = PoolManager.Instance.GetOrCreatePooler(prefab);
 				_hitTransform = hitTransform;
@@ -148,7 +149,7 @@ namespace AstralShift.HellMaiden.AI.Enemy
 							{
 								if (currentTime - value.startTime >= value.hitInterval)
 								{
-									_onTick(baseEnemyController, (int)value.power);
+									_onTick(baseEnemyController, value);
 									value.currentDuration += 1f;
 									value.startTime = currentTime;
 									flag2 = true;
@@ -190,7 +191,7 @@ namespace AstralShift.HellMaiden.AI.Enemy
 				{
 					for (int num = value.Count - 1; num >= 0; num--)
 					{
-						_onTick(enemy, (int)value[num].power);
+						_onTick(enemy, value[num]);
 					}
 				}
 				value.Clear();
@@ -324,24 +325,55 @@ namespace AstralShift.HellMaiden.AI.Enemy
 			_burnHandler = new StatusHandler(BurnEffectPrefab, burnTransform, 1, StackMode.HighestPriority, null, delegate(BaseEnemyController enemy)
 			{
 				enemy.status.RemoveBurn();
-			}, delegate(BaseEnemyController enemy, int damage)
+			}, delegate(BaseEnemyController enemy, EnemyStatusData data)
 			{
-				enemy.Damage(damage, DamageType.Fire);
+				ApplyPeriodicDamage(
+					enemy,
+					data,
+					DamageType.Fire,
+					CombatTags.Status | CombatTags.Periodic |
+					CombatTags.Burn | CombatTags.Fire);
 			});
 			_poisonHandler = new StatusHandler(PoisonEffectPrefab, poisonTransform, 1, StackMode.HighestPriority, null, delegate(BaseEnemyController enemy)
 			{
 				enemy.status.RemovePoison();
-			}, delegate(BaseEnemyController enemy, int damage)
+			}, delegate(BaseEnemyController enemy, EnemyStatusData data)
 			{
-				enemy.Damage(damage, DamageType.Poison);
+				ApplyPeriodicDamage(
+					enemy,
+					data,
+					DamageType.Poison,
+					CombatTags.Status | CombatTags.Periodic | CombatTags.Poison);
 			});
 			_bleedHandler = new StatusHandler(BleedEffectPrefab, bleedTransform, 10, StackMode.Add, null, delegate(BaseEnemyController enemy)
 			{
 				enemy.status.RemoveBleed();
-			}, delegate(BaseEnemyController enemy, int damage)
+			}, delegate(BaseEnemyController enemy, EnemyStatusData data)
 			{
-				enemy.Damage(damage, DamageType.Bleed);
+				ApplyPeriodicDamage(
+					enemy,
+					data,
+					DamageType.Bleed,
+					CombatTags.Status | CombatTags.Periodic);
 			});
+		}
+
+		private static void ApplyPeriodicDamage(
+			BaseEnemyController enemy,
+			EnemyStatusData data,
+			DamageType damageType,
+			CombatTags tags)
+		{
+			if (enemy is EnemyController normalEnemy && data.source.IsValid)
+			{
+				normalEnemy.Damage(
+					(int)data.power,
+					damageType,
+					data.source.WithTags(tags));
+				return;
+			}
+
+			enemy.Damage((int)data.power, damageType);
 		}
 
 		private void Update()

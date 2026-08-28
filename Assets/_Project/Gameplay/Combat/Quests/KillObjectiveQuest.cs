@@ -60,7 +60,10 @@ namespace AstralShift.HellMaiden.Quests
 			enemyController.Target = GameDirector.Instance.Player.transform;
 			enemyController.Init(EnemyFactory.GenerateId("OvidCocoon"));
 			enemyController.gameObject.SetActive(value: true);
-			enemyController.OnKill += OnObjectiveKilled;
+			enemyController.OnConfirmedKill += delegate
+			{
+				OnObjectiveKilled();
+			};
 			// IntercomManager.Instance.LaunchIntercom(questIntercomConversation, questIntercomEntryID, null, IntercomManager.MAX_PRIORITY).Forget();
 			barrier.onSpawnFinished = delegate
 			{

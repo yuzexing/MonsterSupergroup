@@ -67,12 +67,56 @@ namespace MonsterSupergroup.GAS
         public DamageInfo PredictedAppliedDamage { get; }
     }
 
+    public readonly struct PredictedLethalHit
+    {
+        public PredictedLethalHit(
+            CombatContext context,
+            DamageInfo resolvedDamage,
+            DamageInfo predictedAppliedDamage)
+        {
+            if (!context.IsValid)
+            {
+                throw new ArgumentException(
+                    "Predicted lethal hits require a valid context.",
+                    nameof(context));
+            }
+
+            Context = context;
+            ResolvedDamage = resolvedDamage;
+            PredictedAppliedDamage = predictedAppliedDamage;
+        }
+
+        public CombatContext Context { get; }
+        public DamageInfo ResolvedDamage { get; }
+        public DamageInfo PredictedAppliedDamage { get; }
+    }
+
+    [Serializable]
+    public struct ConfirmedKill
+    {
+        public ulong CauseEventId;
+        public uint KillerPlayerId;
+        public uint TargetEntityId;
+        public uint TargetStateVersion;
+    }
+
+    /// <summary>
+    /// Optional lifecycle endpoint implemented by targets which need to distinguish
+    /// immediate local lethal prediction from canonical kill confirmation.
+    /// </summary>
+    public interface ICombatLifecycleTarget
+    {
+        void ReceivePredictedLethalHit(PredictedLethalHit hit);
+
+        void ReceiveConfirmedKill(ConfirmedKill kill);
+    }
+
     public interface ICombatEventSink
     {
         void Publish(CombatEvent combatEvent);
     }
 
-    internal sealed class NullCombatEventSink : ICombatEventSink
+    public sealed class NullCombatEventSink : ICombatEventSink
     {
         public static readonly NullCombatEventSink Instance = new NullCombatEventSink();
 

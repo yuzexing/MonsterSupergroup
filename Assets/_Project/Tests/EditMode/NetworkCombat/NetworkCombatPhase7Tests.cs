@@ -1,6 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using AstralShift.HellMaiden.AI;
+using AstralShift.HellMaiden.Interactions;
+using AstralShift.HellMaiden.Player;
+using AstralShift.QTI.Triggers;
 using Mirror;
 using MonsterSupergroup.Gameplay.Combat;
 using MonsterSupergroup.Gameplay.Local;
@@ -20,6 +24,8 @@ namespace MonsterSupergroup.NetworkCombat.Tests
             "Assets/_Project/Content/NetworkCombat/NetworkPlayer.prefab";
         private const string EnemyPrefabPath =
             "Assets/_Project/Content/NetworkCombat/NetworkEnemy.prefab";
+        private const string ProductEnemyPrefabPath =
+            "Assets/_Project/Content/NetworkCombat/NetworkEnemyBase.prefab";
         private const string WorldPrefabPath =
             "Assets/_Project/Content/NetworkCombat/NetworkCombatWorld.prefab";
         private const string ProjectilePrefabPath =
@@ -348,14 +354,31 @@ namespace MonsterSupergroup.NetworkCombat.Tests
         {
             GameObject player = AssetDatabase.LoadAssetAtPath<GameObject>(PlayerPrefabPath);
             GameObject enemy = AssetDatabase.LoadAssetAtPath<GameObject>(EnemyPrefabPath);
+            GameObject productEnemy =
+                AssetDatabase.LoadAssetAtPath<GameObject>(ProductEnemyPrefabPath);
             GameObject world = AssetDatabase.LoadAssetAtPath<GameObject>(WorldPrefabPath);
             GameObject projectile = AssetDatabase.LoadAssetAtPath<GameObject>(ProjectilePrefabPath);
 
             Assert.That(player, Is.Not.Null);
+            PlayerMovement playerMovement = player.GetComponent<PlayerMovement>();
+            PlayerCombatantBinding playerBinding =
+                player.GetComponent<PlayerCombatantBinding>();
+            CombatantBehaviour playerCombatant =
+                player.GetComponent<CombatantBehaviour>();
+            PlayerHitbox playerHitbox =
+                player.GetComponentInChildren<PlayerHitbox>(true);
+            Assert.That(playerMovement, Is.Not.Null);
+            Assert.That(playerBinding, Is.Not.Null);
+            Assert.That(playerBinding.Combatant, Is.SameAs(playerCombatant));
+            Assert.That(playerMovement.CombatantBinding, Is.SameAs(playerBinding));
+            Assert.That(playerHitbox, Is.Not.Null);
+            Assert.That(playerHitbox.Owner, Is.SameAs(playerBinding));
+            Assert.That(playerHitbox.GetComponent<Collider2D>().isTrigger, Is.True);
             Assert.That(player.GetComponent<PlayerLoader>(), Is.Not.Null);
             Assert.That(player.GetComponent<PlayerHandBehaviour>(), Is.Not.Null);
             Assert.That(player.GetComponent<NetworkIdentity>(), Is.Not.Null);
             Assert.That(player.GetComponent<MirrorNetworkCombatBridge>(), Is.Not.Null);
+            Assert.That(player.GetComponent<NetworkEnemySimulationEndpoint>(), Is.Not.Null);
             Assert.That(player.GetComponent<NetworkWeaponCombatAdapter>(), Is.Not.Null);
             Assert.That(player.GetComponent<NetworkPlayerBootstrap>(), Is.Not.Null);
             Assert.That(player.GetComponent<NetworkTransformReliable>().syncDirection,
@@ -365,11 +388,31 @@ namespace MonsterSupergroup.NetworkCombat.Tests
             Assert.That(enemy.GetComponent<LocalEnemyChase>(), Is.Not.Null);
             Assert.That(enemy.GetComponent<LocalEnemyDeathBehaviour>(), Is.Null);
             Assert.That(enemy.GetComponent<NetworkEnemyServerDriver>(), Is.Not.Null);
-            Assert.That(enemy.GetComponent<NetworkTransformReliable>().syncDirection,
-                Is.EqualTo(SyncDirection.ServerToClient));
+            Assert.That(enemy.GetComponent<NetworkEnemySimulationAgent>(), Is.Not.Null);
+            Assert.That(enemy.GetComponent<EnemySimulationAuthority>(), Is.Not.Null);
+            Assert.That(enemy.GetComponent<EnemySnapshotInterpolator>(), Is.Not.Null);
+            Assert.That(enemy.GetComponent<NetworkTransformReliable>(), Is.Null,
+                "Client-simulated Enemy must have only the snapshot Transform writer.");
+
+            Assert.That(productEnemy, Is.Not.Null);
+            Assert.That(
+                productEnemy.GetComponent<NetworkEnemySimulationAgent>(),
+                Is.Not.Null);
+            Assert.That(productEnemy.GetComponent<NetworkTransformReliable>(), Is.Null);
+            PlayerDamageInteraction contactDamage =
+                productEnemy.GetComponentInChildren<PlayerDamageInteraction>(true);
+            InteractionTrigger contactTrigger =
+                contactDamage != null
+                    ? contactDamage.GetComponent<InteractionTrigger>()
+                    : null;
+            Assert.That(contactDamage, Is.Not.Null);
+            Assert.That(contactTrigger, Is.Not.Null);
+            Assert.That(contactTrigger.interaction, Is.SameAs(contactDamage),
+                "Recovered QTI contact trigger must invoke the local Player damage interaction.");
 
             Assert.That(world, Is.Not.Null);
             Assert.That(world.GetComponent<NetworkCombatWorld>(), Is.Not.Null);
+            Assert.That(world.GetComponent<NetworkEnemySimulationWorld>(), Is.Not.Null);
             Assert.That(world.GetComponent<NetworkEnemySandboxSpawner>(), Is.Not.Null);
             Assert.That(projectile, Is.Not.Null);
             Assert.That(projectile.GetComponentsInChildren<NetworkBehaviour>(true), Is.Empty,
@@ -377,8 +420,46 @@ namespace MonsterSupergroup.NetworkCombat.Tests
             Assert.That(AssetDatabase.LoadAssetAtPath<SceneAsset>(SandboxScenePath), Is.Not.Null);
             AssertNoMissingScripts(player);
             AssertNoMissingScripts(enemy);
+            AssertNoMissingScripts(productEnemy);
             AssertNoMissingScripts(world);
             AssertNoMissingScripts(projectile);
+        }
+
+        [Test]
+        public void PlayerRuntimeCombatState_IsIsolatedPerPlayerAndRejectsRemoteWrites()
+        {
+            GameObject prefab = AssetDatabase.LoadAssetAtPath<GameObject>(PlayerPrefabPath);
+            GameObject first = UnityEngine.Object.Instantiate(prefab);
+            GameObject second = UnityEngine.Object.Instantiate(prefab);
+            try
+            {
+                PlayerCombatantBinding firstBinding =
+                    first.GetComponent<PlayerCombatantBinding>();
+                PlayerCombatantBinding secondBinding =
+                    second.GetComponent<PlayerCombatantBinding>();
+                firstBinding.Configure(
+                    first.GetComponent<PlayerMovement>(),
+                    first.GetComponent<CombatantBehaviour>());
+                secondBinding.Configure(
+                    second.GetComponent<PlayerMovement>(),
+                    second.GetComponent<CombatantBehaviour>());
+                firstBinding.Combatant.Initialize(100);
+                secondBinding.Combatant.Initialize(100);
+
+                Assert.That(firstBinding.ApplyDamage(25), Is.EqualTo(25));
+                Assert.That(firstBinding.CurrentHealth, Is.EqualTo(75));
+                Assert.That(secondBinding.CurrentHealth, Is.EqualTo(100));
+
+                secondBinding.SetLocalMutationAuthority(false);
+                Assert.That(secondBinding.ApplyDamage(25), Is.Zero);
+                Assert.That(secondBinding.RestoreHealth(25), Is.Zero);
+                Assert.That(secondBinding.CurrentHealth, Is.EqualTo(100));
+            }
+            finally
+            {
+                UnityEngine.Object.DestroyImmediate(first);
+                UnityEngine.Object.DestroyImmediate(second);
+            }
         }
 
         [Test]
@@ -393,6 +474,17 @@ namespace MonsterSupergroup.NetworkCombat.Tests
                 NetworkManager manager = scene.GetRootGameObjects()
                     .SelectMany(root => root.GetComponentsInChildren<NetworkManager>(true))
                     .Single();
+                NetworkEnemySandboxSpawner spawner = scene.GetRootGameObjects()
+                    .SelectMany(root => root.GetComponentsInChildren<
+                        NetworkEnemySandboxSpawner>(true))
+                    .Single();
+                NetworkEnemyProcessValidationBootstrap processValidation =
+                    scene.GetRootGameObjects()
+                        .SelectMany(root => root.GetComponentsInChildren<
+                            NetworkEnemyProcessValidationBootstrap>(true))
+                        .Single();
+                GameObject skeleton = AssetDatabase.LoadAssetAtPath<GameObject>(
+                    "Assets/_Project/Content/NetworkCombat/NetworkEnemySkeleton.prefab");
 
                 Assert.That(simulation.latency, Is.EqualTo(100f),
                     "100 ms each direction models approximately 200 ms RTT.");
@@ -400,6 +492,16 @@ namespace MonsterSupergroup.NetworkCombat.Tests
                 Assert.That(simulation.unreliableLoss, Is.EqualTo(5f));
                 Assert.That(manager.transport, Is.SameAs(simulation));
                 Assert.That(manager.maxConnections, Is.EqualTo(4));
+                Assert.That(manager.playerPrefab, Is.Not.Null);
+                Assert.That(
+                    AssetDatabase.GetAssetPath(manager.playerPrefab),
+                    Is.EqualTo(PlayerPrefabPath));
+                Assert.That(processValidation.ConfiguredNetworkManager,
+                    Is.SameAs(manager));
+                Assert.That(processValidation.ConfiguredSandboxSpawner,
+                    Is.SameAs(spawner));
+                Assert.That(processValidation.SkeletonPrefab, Is.SameAs(skeleton));
+                Assert.That(manager.spawnPrefabs, Does.Contain(skeleton));
                 foreach (GameObject root in scene.GetRootGameObjects())
                 {
                     AssertNoMissingScripts(root);

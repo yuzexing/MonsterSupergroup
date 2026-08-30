@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 5573898854269230303}
   - component: {fileID: 1618260355983830151}
   - component: {fileID: 6267950001883975477}
+  - component: {fileID: 2096257799515299953}
   - component: {fileID: 7730215990804582599}
   m_Layer: 0
   m_Name: NetworkCombatWorld
@@ -47,7 +48,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Mirror::Mirror.NetworkIdentity
   sceneId: 0
-  _assetId: 0
+  _assetId: 3299869360
   serverOnly: 0
   visibility: 0
   hasSpawned: 0
@@ -67,6 +68,24 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0
   serverTickInterval: 0.05
+--- !u!114 &2096257799515299953
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1719529174468981120}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f8f3dc4738830764b8e7e2da1926268e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: MonsterSupergroup.NetworkCombat::MonsterSupergroup.NetworkCombat.NetworkEnemySimulationWorld
+  syncDirection: 0
+  syncMode: 0
+  syncInterval: 0
+  serverSnapshotInterval: 0.05
+  maximumSnapshotsPerBatch: 20
+  maximumAttackPresentationEdgesPerBatch: 32
 --- !u!114 &7730215990804582599
 MonoBehaviour:
   m_ObjectHideFlags: 0

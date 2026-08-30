@@ -115,7 +115,9 @@ GameObject:
   - component: {fileID: 5618015910316054541}
   - component: {fileID: 1048613907282489593}
   - component: {fileID: 1046408091481687728}
-  - component: {fileID: 1392350732324157878}
+  - component: {fileID: 2232306939478776404}
+  - component: {fileID: 7240991777461783238}
+  - component: {fileID: 8568478861008824723}
   - component: {fileID: 1224117118111440225}
   - component: {fileID: 263482685685841873}
   m_Layer: 0
@@ -295,11 +297,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Mirror::Mirror.NetworkIdentity
   sceneId: 0
-  _assetId: 0
+  _assetId: 2577927818
   serverOnly: 0
   visibility: 0
   hasSpawned: 0
---- !u!114 &1392350732324157878
+--- !u!114 &2232306939478776404
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -308,31 +310,49 @@ MonoBehaviour:
   m_GameObject: {fileID: 8611941000484548922}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8ff3ba0becae47b8b9381191598957c8, type: 3}
+  m_Script: {fileID: 11500000, guid: 3fa76d61b5afea7458127733cc3ddbdb, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Mirror.Components::Mirror.NetworkTransformReliable
+  m_EditorClassIdentifier: MonsterSupergroup.Gameplay.Combat::AstralShift.HellMaiden.AI.EnemySimulationAuthority
+  networkManaged: 1
+  simulationMode: 0
+  combatDecisionSimulationEnabled: 0
+--- !u!114 &7240991777461783238
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8611941000484548922}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0b1e78435d0c20447a86f6c2471da543, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: MonsterSupergroup.NetworkCombat::MonsterSupergroup.NetworkCombat.EnemySnapshotInterpolator
+  authority: {fileID: 0}
+  body: {fileID: 0}
+  interpolationBackTime: 0.1
+  maximumExtrapolation: 0.1
+--- !u!114 &8568478861008824723
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8611941000484548922}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f36cc2228bc95fd4c8cb1d33a3479c1c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: MonsterSupergroup.NetworkCombat::MonsterSupergroup.NetworkCombat.NetworkEnemySimulationAgent
   syncDirection: 0
   syncMode: 0
   syncInterval: 0
-  target: {fileID: 3326374556609515187}
-  syncPosition: 1
-  syncRotation: 1
-  syncScale: 0
-  onlySyncOnChange: 1
-  compressRotation: 1
-  interpolatePosition: 1
-  interpolateRotation: 1
-  interpolateScale: 1
-  coordinateSpace: 0
-  timelineOffset: 1
-  showGizmos: 0
-  showOverlay: 0
-  overlayColor: {r: 0, g: 0, b: 0, a: 0.5}
-  onlySyncOnChangeCorrectionMultiplier: 2
-  useFixedUpdate: 0
-  rotationSensitivity: 0.01
-  positionPrecision: 0.01
-  scalePrecision: 0.01
+  authority: {fileID: 0}
+  interpolator: {fileID: 0}
+  body: {fileID: 0}
+  localChase: {fileID: 0}
+  enemyController: {fileID: 0}
+  productMovementOnly: 1
 --- !u!114 &1224117118111440225
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -367,5 +387,3 @@ MonoBehaviour:
   syncDirection: 0
   syncMode: 0
   syncInterval: 0
-  chase: {fileID: 0}
-  retargetInterval: 0.25

@@ -509,6 +509,7 @@ MonoBehaviour:
   - {fileID: -8186968272690591729}
   - {fileID: -3978695733392391637}
   - {fileID: -1083910812058648046}
+  - {fileID: 368337401100313919}
 --- !u!114 &156332030701414761
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -531,6 +532,28 @@ MonoBehaviour:
   gain:
     m_OverrideState: 1
     m_Value: {x: 1, y: 1, z: 1, w: 0}
+--- !u!114 &368337401100313919
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1a29d58281364741a1593e19f7fb542c, type: 3}
+  m_Name: NegativeColorVolume
+  m_EditorClassIdentifier: MonsterSupergroup.Gameplay.Combat::NegativeColorVolume
+  active: 1
+  enabled:
+    m_OverrideState: 1
+    m_Value: 1
+  roundMask:
+    m_OverrideState: 1
+    m_Value: 0
+  progress:
+    m_OverrideState: 1
+    m_Value: 0.5
 --- !u!114 &1247868777620691934
 MonoBehaviour:
   m_ObjectHideFlags: 3

@@ -646,6 +646,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8531943276900960645}
+  - component: {fileID: 5915188933942716646}
+  - component: {fileID: 5046379684697058717}
   m_Layer: 0
   m_Name: HitBox
   m_TagString: Untagged
@@ -668,6 +670,55 @@ Transform:
   m_Children: []
   m_Father: {fileID: 4788383098060153222}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!58 &5915188933942716646
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7700418037917253041}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_CompositeOperation: 0
+  m_CompositeOrder: 0
+  m_Offset: {x: 0, y: 0}
+  m_Radius: 0.5
+--- !u!114 &5046379684697058717
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7700418037917253041}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b4d82c35ef834d5298e812afc888a5f3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: MonsterSupergroup.Gameplay.Combat::PlayerHitbox
+  owner: {fileID: 8069571323969132268}
 --- !u!1 &7868379185112094503
 GameObject:
   m_ObjectHideFlags: 0
@@ -733,6 +784,8 @@ GameObject:
   - component: {fileID: 3462075753024163134}
   - component: {fileID: 3918104544161439452}
   - component: {fileID: 3169727194006532068}
+  - component: {fileID: 8069571323969132268}
+  - component: {fileID: 5475220103536580071}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -779,19 +832,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: MonsterSupergroup.Gameplay.Combat::AstralShift.HellMaiden.Player.PlayerMovement
   body: {fileID: 1497027641810804674}
-  animator: {fileID: 0}
-  spriteRenderer: {fileID: 0}
+  animator: {fileID: 4505593127445683424}
+  spriteRenderer: {fileID: 8058320950292570585}
   moveSpeed: 0
-  _hitboxCollider: {fileID: 0}
+  _hitboxCollider: {fileID: 5915188933942716646}
   playerVFX: {fileID: 0}
-  _obstacleCollider: {fileID: 0}
+  _obstacleCollider: {fileID: 11706398589259204}
   playerAnimator: {fileID: 4505593127445683424}
   playerEffectResolver: {fileID: 0}
   AttacksParent: {fileID: 4078520268713684964}
   enemyAttackTarget: {fileID: 7605705347459592331}
   leveler: {fileID: 0}
   interactionFinder: {fileID: 0}
-  interactor: {fileID: 0}
+  interactor: {fileID: 4579229062960030356}
   autoAim: {fileID: 0}
   ultimateAttackManager: {fileID: 0}
   playerStats:
@@ -814,7 +867,7 @@ MonoBehaviour:
       reviveAmount: 0
     currentStats:
       HP: 0
-      maxHP: 0
+      maxHP: 100
       moveSpeed: 0
       dashDistance: 0
       dashSpeed: 0
@@ -885,6 +938,7 @@ MonoBehaviour:
       OnHitChanceMultiplier: 1
       OnKillChanceMultiplier: 1
     playerBaseStatsDatabase: {fileID: 11400000, guid: 96e27949d17688f47886593d1ee3893d, type: 2}
+  combatantBinding: {fileID: 8069571323969132268}
   hurtTime: 0.3
   invulnerabilityTime: 0.6
   dashAudio:
@@ -1091,6 +1145,34 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: MonsterSupergroup.Gameplay.Combat::MonsterSupergroup.Gameplay.Combat.CombatTeamBehaviour
   team: 1
+  combatant: {fileID: 2172890614505368948}
+--- !u!114 &8069571323969132268
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8357139798701873017}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c7f0a1d5e73e4a65a2b8c8b2c96fe337, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: MonsterSupergroup.Gameplay.Combat::AstralShift.HellMaiden.Player.PlayerCombatantBinding
+  combatant: {fileID: 2172890614505368948}
+  playerMovement: {fileID: 4557645620553627167}
+  acceptsLocalMutations: 1
+--- !u!114 &5475220103536580071
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8357139798701873017}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e5bb57180d9da934fa0a5e5e25959f0f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: MonsterSupergroup.Gameplay.Combat.Runtime::MonsterSupergroup.Gameplay.Combat.StatusUpdateDriver
   combatant: {fileID: 2172890614505368948}
 --- !u!1 &8519062466714873260
 GameObject:

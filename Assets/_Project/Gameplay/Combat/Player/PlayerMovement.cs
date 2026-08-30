@@ -55,6 +55,9 @@ namespace AstralShift.HellMaiden.Player
 		private PlayerStats playerStats;
 
 		[SerializeField]
+		private PlayerCombatantBinding combatantBinding;
+
+		[SerializeField]
 		private float hurtTime = 0.3f;
 
 		[SerializeField]
@@ -168,6 +171,8 @@ namespace AstralShift.HellMaiden.Player
 
 		public PlayerStats PlayerStats => playerStats;
 
+		public PlayerCombatantBinding CombatantBinding => combatantBinding;
+
 		public Vector2 attackDirection { get; private set; } = Vector2.right;
 
 		public Vector2 DashDirection => _dashDirection;
@@ -206,6 +211,15 @@ namespace AstralShift.HellMaiden.Player
 
 		public override void Awake()
 		{
+			if (combatantBinding == null)
+			{
+				combatantBinding = GetComponent<PlayerCombatantBinding>();
+				if (combatantBinding == null)
+				{
+					combatantBinding = gameObject.AddComponent<PlayerCombatantBinding>();
+				}
+			}
+
 			_stateMachine = new StateMachine("PlayerMovement");
 			Moving = new State("Moving");
 			Dashing = new State("Dashing");
@@ -264,6 +278,7 @@ namespace AstralShift.HellMaiden.Player
 		protected override void Start()
 		{
 			PlayerStats.Init();
+			combatantBinding.InitializeFromPlayerStats();
 			// SubscribeSceneEvents();
 			_dashBuffer = new ActionBuffer(dashBufferTime);
 			if ((bool)_hitboxCollider)
@@ -289,6 +304,7 @@ namespace AstralShift.HellMaiden.Player
 		public void RestartStats()
 		{
 			PlayerStats.Init();
+			combatantBinding.InitializeFromPlayerStats();
 		}
 
 		public void RestartPlayer()
@@ -717,7 +733,7 @@ namespace AstralShift.HellMaiden.Player
 			ShowDamage();
 			DecreaseHealth(_damageReceived);
 			SetTimmedInvulnerability(invulnerabilityTime);
-			if (PlayerStats.currentStats.HP <= 0)
+			if (!combatantBinding.IsAlive)
 			{
 				_stateMachine.MakeTransition(Dead);
 			}
@@ -750,7 +766,7 @@ namespace AstralShift.HellMaiden.Player
 
 		public void Damage(int damage, Enum damageType)
 		{
-			if (IsInvulnerable)
+			if (!combatantBinding.AcceptsLocalMutations || IsInvulnerable)
 			{
 				return;
 			}
@@ -779,8 +795,14 @@ namespace AstralShift.HellMaiden.Player
 			}
 			goto IL_0083;
 			IL_0083:
-			_damageReceived = (int)((float)_damageReceived - PlayerStats.currentStats.dmgReduction);
-			if (PlayerStats.currentStats.HP - _damageReceived > 0 || !TryUseMiracleOfBeatrice())
+			_damageReceived = Mathf.Max(
+				0,
+				(int)((float)_damageReceived - PlayerStats.currentStats.dmgReduction));
+			if (_damageReceived == 0)
+			{
+				return;
+			}
+			if (combatantBinding.CurrentHealth - _damageReceived > 0 || !TryUseMiracleOfBeatrice())
 			{
 				_stateMachine.MakeTransition(Hurt);
 			}
@@ -792,29 +814,28 @@ namespace AstralShift.HellMaiden.Player
 
 		public bool CheckIfMaxHealth()
 		{
-			return PlayerStats.currentStats.HP == PlayerStats.currentStats.maxHP;
+			return combatantBinding.CurrentHealth == combatantBinding.MaximumHealth;
 		}
 
 		public void DecreaseHealth(int value)
 		{
-			PlayerStats.currentStats.HP = Mathf.Clamp(PlayerStats.currentStats.HP - value, 0, PlayerStats.MaxHP);
-			GameEvents.Instance.OnHealthDecrease?.Invoke(value);
-			GameEvents.Instance.OnHealthUpdate?.Invoke(PlayerStats.currentStats.HP);
+			combatantBinding.ApplyDamage(value);
 		}
 
 		public void IncreaseHealth(int value)
 		{
-			int hP = PlayerStats.currentStats.HP;
-			PlayerStats.currentStats.HP = Mathf.Clamp(PlayerStats.currentStats.HP + value, 0, PlayerStats.MaxHP);
-			hP = PlayerStats.currentStats.HP - hP;
-			GameEvents.Instance.OnHealthIncrease?.Invoke(hP);
-			GameEvents.Instance.OnHealthUpdate?.Invoke(PlayerStats.currentStats.HP);
+			combatantBinding.RestoreHealth(value);
 		}
 
 		private void ShowDamage()
 		{
-			PoolManager.Instance.SpawnDamageNumber(GetEntityId(), base.transform, _damageReceived, DamageType.Normal, isCritical: false);
-			if (base.gameObject.activeSelf && base.enabled)
+			PoolManager.Instance?.SpawnDamageNumber(
+				GetEntityId(),
+				base.transform,
+				_damageReceived,
+				DamageType.Normal,
+				isCritical: false);
+			if (spriteRenderer != null && base.gameObject.activeSelf && base.enabled)
 			{
 				if (_damageColorAnimation != null)
 				{
@@ -897,13 +918,11 @@ namespace AstralShift.HellMaiden.Player
 				return false;
 			}
 			PlayerStats.currentStats.reviveAmount--;
-			int num = PlayerStats.currentStats.maxHP / 2;
-			int num2 = num - PlayerStats.currentStats.HP;
+			int num = combatantBinding.MaximumHealth / 2;
+			int num2 = num - combatantBinding.CurrentHealth;
 			if (num2 > 0)
 			{
-				PlayerStats.currentStats.HP = num;
-				GameEvents.Instance.OnHealthIncrease?.Invoke(num2);
-				GameEvents.Instance.OnHealthUpdate?.Invoke(PlayerStats.currentStats.HP);
+				combatantBinding.RestoreHealth(num2);
 			}
 			SetTimmedInvulnerability(1f);
 			return true;

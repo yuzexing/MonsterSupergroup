@@ -45,6 +45,63 @@ namespace MonsterSupergroup.Gameplay.Tests
         }
 
         [Test]
+        public void Combatant_RestoreHealthClampsToMaximumWithoutAdvancingCanonicalVersion()
+        {
+            var gameObject = new GameObject("Combatant Healing Test");
+            try
+            {
+                CombatantBehaviour combatant = gameObject.AddComponent<CombatantBehaviour>();
+                combatant.Initialize(20);
+                combatant.ReceiveDamage(new DamageInfo(1, 7, false));
+                uint versionBeforeHealing = combatant.StateVersion;
+
+                int firstRestore = combatant.RestoreHealth(4);
+                int secondRestore = combatant.RestoreHealth(20);
+
+                Assert.That(firstRestore, Is.EqualTo(4));
+                Assert.That(secondRestore, Is.EqualTo(3));
+                Assert.That(combatant.CurrentHealth, Is.EqualTo(20));
+                Assert.That(combatant.StateVersion, Is.EqualTo(versionBeforeHealing));
+                Assert.That(combatant.RestoreHealth(1), Is.Zero);
+            }
+            finally
+            {
+                UnityEngine.Object.DestroyImmediate(gameObject);
+            }
+        }
+
+        [Test]
+        public void Combatant_MaximumHealthChangePreservesMissingHealth()
+        {
+            var gameObject = new GameObject("Combatant Maximum Health Test");
+            try
+            {
+                CombatantBehaviour combatant = gameObject.AddComponent<CombatantBehaviour>();
+                combatant.Initialize(100);
+                combatant.ReceiveDamage(new DamageInfo(1, 30, false));
+
+                Assert.That(
+                    combatant.SetMaximumHealthPreservingMissingHealth(150),
+                    Is.True);
+                Assert.That(combatant.MaxHealth, Is.EqualTo(150));
+                Assert.That(combatant.CurrentHealth, Is.EqualTo(120));
+
+                Assert.That(
+                    combatant.SetMaximumHealthPreservingMissingHealth(80),
+                    Is.True);
+                Assert.That(combatant.MaxHealth, Is.EqualTo(80));
+                Assert.That(combatant.CurrentHealth, Is.EqualTo(50));
+                Assert.That(
+                    combatant.SetMaximumHealthPreservingMissingHealth(80),
+                    Is.False);
+            }
+            finally
+            {
+                UnityEngine.Object.DestroyImmediate(gameObject);
+            }
+        }
+
+        [Test]
         public void Combatant_LethalStatusStopsPendingTicksAndClearsStatusState()
         {
             var gameObject = new GameObject("Lethal Status Test");

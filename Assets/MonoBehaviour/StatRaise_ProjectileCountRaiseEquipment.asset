@@ -1,0 +1,97 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d6a1579f831008f222506193163b30cf, type: 3}
+  m_Name: StatRaise_ProjectileCountRaiseEquipment
+  m_EditorClassIdentifier: 
+  ID: 6
+  Title: Proliferation
+  Description: Increases total <b>number of projectiles</b> <sprite="ProjectileCount"
+    index=0> by <b>{ProjectileCountRaise}[0].</b>
+  HasQuote: 0
+  Quote: 
+  hasLocalization: 1
+  TitleKey: MOD_Name_006
+  DescriptionKey: MOD_Desc_006
+  QuoteKey: 
+  poolID: 0
+  poolWeight: 2
+  dependencies: []
+  visualDataReference:
+    m_AssetGUID: 1acc779c9dc84e04b9321ed3ec78baa0
+    m_SubObjectName: 
+    m_SubObjectType: 
+  cardType: 0
+  usedStatsModifiers: 16
+  levelModifiersData:
+  - modifiers:
+    - modifierID:
+        rid: 6481290391402315973
+      parameters:
+        rid: 6481290391402315974
+      multiSlotConfig: 0
+      multiSlot:
+        isSelfApplied: 0
+        leftSlots: 0
+        rightSlots: 0
+    overrideDescription: 0
+    descriptionKey: 
+  - modifiers:
+    - modifierID:
+        rid: 6481290391402315975
+      parameters:
+        rid: 6481290391402315976
+      multiSlotConfig: 0
+      multiSlot:
+        isSelfApplied: 0
+        leftSlots: 0
+        rightSlots: 0
+    overrideDescription: 0
+    descriptionKey: 
+  - modifiers:
+    - modifierID:
+        rid: 6481290391402315977
+      parameters:
+        rid: 6481290391402315978
+      multiSlotConfig: 0
+      multiSlot:
+        isSelfApplied: 0
+        leftSlots: 0
+        rightSlots: 0
+    overrideDescription: 0
+    descriptionKey: 
+  references:
+    version: 2
+    RefIds:
+    - rid: 6481290391402315973
+      type: {class: EquipmentModifierID, ns: AstralShift.HellMaiden.Data, asm: MonsterSupergroup.Gameplay.Combat}
+      data:
+        value: 1251233216
+    - rid: 6481290391402315974
+      type: {class: ProjectileRaiseEquipmentModifier/Params, ns: AstralShift.HellMaiden.Combat.Hand, asm: MonsterSupergroup.Gameplay.Combat}
+      data:
+        countIncrement: 1
+    - rid: 6481290391402315975
+      type: {class: EquipmentModifierID, ns: AstralShift.HellMaiden.Data, asm: MonsterSupergroup.Gameplay.Combat}
+      data:
+        value: 1251233216
+    - rid: 6481290391402315976
+      type: {class: ProjectileRaiseEquipmentModifier/Params, ns: AstralShift.HellMaiden.Combat.Hand, asm: MonsterSupergroup.Gameplay.Combat}
+      data:
+        countIncrement: 2
+    - rid: 6481290391402315977
+      type: {class: EquipmentModifierID, ns: AstralShift.HellMaiden.Data, asm: MonsterSupergroup.Gameplay.Combat}
+      data:
+        value: 1251233216
+    - rid: 6481290391402315978
+      type: {class: ProjectileRaiseEquipmentModifier/Params, ns: AstralShift.HellMaiden.Combat.Hand, asm: MonsterSupergroup.Gameplay.Combat}
+      data:
+        countIncrement: 3

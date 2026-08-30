@@ -1,4 +1,5 @@
 using System;
+using MonsterSupergroup.GAS;
 using UnityEngine;
 
 namespace AstralShift.HellMaiden.Player.Attacks
@@ -10,6 +11,11 @@ namespace AstralShift.HellMaiden.Player.Attacks
 		public BaseAttackHitBox hitbox;
 
 		public abstract void Init(WeaponBehaviour behaviour);
+
+		public virtual void Init(WeaponBehaviour behaviour, AttackSnapshot attack)
+		{
+			Init(behaviour);
+		}
 
 		public abstract void PlayOnEnable(Action onEnd);
 

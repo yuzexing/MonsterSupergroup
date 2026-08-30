@@ -16,17 +16,19 @@ namespace AstralShift.HellMaiden.Items
 
 		public override void Consume()
 		{
-			GameDirector.Instance.Player.IncreaseHealth(healthValue);
+			PullCollector?.CombatantBinding?.RestoreHealth(healthValue);
 			base.Consume();
 		}
 
-		public override bool StartPlayerPull()
+		public override bool StartPlayerPull(ILootColector collector)
 		{
-			if (GameDirector.Instance.Player.CheckIfMaxHealth())
+			if (collector?.CombatantBinding == null ||
+				collector.CombatantBinding.CurrentHealth ==
+				collector.CombatantBinding.MaximumHealth)
 			{
 				return false;
 			}
-			return base.StartPlayerPull();
+			return base.StartPlayerPull(collector);
 		}
 	}
 }

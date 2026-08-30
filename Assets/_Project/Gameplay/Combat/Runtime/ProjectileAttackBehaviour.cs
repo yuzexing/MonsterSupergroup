@@ -98,33 +98,40 @@ namespace MonsterSupergroup.Gameplay.Combat
         private void FireVolley(Vector2 targetDirection)
         {
             AttackSnapshot attack = weapon.BeginAttack();
-            int projectileCount = Mathf.Max(0, attack.Stats.ProjectileCount);
-            if (projectileCount == 0)
+            try
             {
-                return;
-            }
+                int projectileCount = Mathf.Max(0, attack.Stats.ProjectileCount);
+                if (projectileCount == 0)
+                {
+                    return;
+                }
 
-            for (int i = 0; i < projectileCount; i++)
+                for (int i = 0; i < projectileCount; i++)
+                {
+                    Vector2 direction = projectileCount == 1
+                        ? targetDirection.normalized
+                        : Quaternion.Euler(0f, 0f, 360f * i / projectileCount) * targetDirection.normalized;
+                    Vector3 spawnPosition = transform.position + definition.SpawnOffset +
+                        (Vector3)(direction * definition.SpawnRadius);
+                    StraightProjectileBehaviour projectile = StraightProjectilePool.Spawn(
+                        definition.ProjectilePrefab,
+                        spawnPosition,
+                        Quaternion.identity);
+                    activeProjectiles.Add(projectile);
+                    projectile.Initialize(
+                        weapon,
+                        attack,
+                        owner.Team,
+                        direction,
+                        definition.ProjectileSpeed,
+                        definition.ProjectileHitCount,
+                        definition.RotateToMovement,
+                        HandleProjectileFinished);
+                }
+            }
+            finally
             {
-                Vector2 direction = projectileCount == 1
-                    ? targetDirection.normalized
-                    : Quaternion.Euler(0f, 0f, 360f * i / projectileCount) * targetDirection.normalized;
-                Vector3 spawnPosition = transform.position + definition.SpawnOffset +
-                    (Vector3)(direction * definition.SpawnRadius);
-                StraightProjectileBehaviour projectile = StraightProjectilePool.Spawn(
-                    definition.ProjectilePrefab,
-                    spawnPosition,
-                    Quaternion.identity);
-                activeProjectiles.Add(projectile);
-                projectile.Initialize(
-                    weapon,
-                    attack,
-                    owner.Team,
-                    direction,
-                    definition.ProjectileSpeed,
-                    definition.ProjectileHitCount,
-                    definition.RotateToMovement,
-                    HandleProjectileFinished);
+                attack.Dispose();
             }
         }
 

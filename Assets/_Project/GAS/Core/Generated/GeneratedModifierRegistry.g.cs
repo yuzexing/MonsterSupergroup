@@ -9,6 +9,27 @@ namespace MonsterSupergroup.GAS
             builder.RegisterEquipment<global::MonsterSupergroup.GAS.DamageStatModifier, global::MonsterSupergroup.GAS.DamageStatModifierParameters>(
                 new EquipmentModifierID(0x01000001u),
                 parameters => new global::MonsterSupergroup.GAS.DamageStatModifier(parameters));
+            builder.RegisterEquipment<global::MonsterSupergroup.GAS.SpeedStatModifier, global::MonsterSupergroup.GAS.SpeedStatModifierParameters>(
+                new EquipmentModifierID(0x01000002u),
+                parameters => new global::MonsterSupergroup.GAS.SpeedStatModifier(parameters));
+            builder.RegisterEquipment<global::MonsterSupergroup.GAS.SizeStatModifier, global::MonsterSupergroup.GAS.SizeStatModifierParameters>(
+                new EquipmentModifierID(0x01000003u),
+                parameters => new global::MonsterSupergroup.GAS.SizeStatModifier(parameters));
+            builder.RegisterEquipment<global::MonsterSupergroup.GAS.DurationStatModifier, global::MonsterSupergroup.GAS.DurationStatModifierParameters>(
+                new EquipmentModifierID(0x01000004u),
+                parameters => new global::MonsterSupergroup.GAS.DurationStatModifier(parameters));
+            builder.RegisterEquipment<global::MonsterSupergroup.GAS.CritRateStatModifier, global::MonsterSupergroup.GAS.CritRateStatModifierParameters>(
+                new EquipmentModifierID(0x01000005u),
+                parameters => new global::MonsterSupergroup.GAS.CritRateStatModifier(parameters));
+            builder.RegisterEquipment<global::MonsterSupergroup.GAS.CritMultiplierStatModifier, global::MonsterSupergroup.GAS.CritMultiplierStatModifierParameters>(
+                new EquipmentModifierID(0x01000006u),
+                parameters => new global::MonsterSupergroup.GAS.CritMultiplierStatModifier(parameters));
+            builder.RegisterEquipment<global::MonsterSupergroup.GAS.ProjectileCountStatModifier, global::MonsterSupergroup.GAS.ProjectileCountStatModifierParameters>(
+                new EquipmentModifierID(0x01000007u),
+                parameters => new global::MonsterSupergroup.GAS.ProjectileCountStatModifier(parameters));
+            builder.RegisterEquipment<global::MonsterSupergroup.GAS.KnockbackStatModifier, global::MonsterSupergroup.GAS.KnockbackStatModifierParameters>(
+                new EquipmentModifierID(0x01000008u),
+                parameters => new global::MonsterSupergroup.GAS.KnockbackStatModifier(parameters));
             builder.RegisterEquipment<global::MonsterSupergroup.GAS.OnHitBurnModifier, global::MonsterSupergroup.GAS.OnHitBurnModifierParameters>(
                 new EquipmentModifierID(0x02000001u),
                 parameters => new global::MonsterSupergroup.GAS.OnHitBurnModifier(parameters));

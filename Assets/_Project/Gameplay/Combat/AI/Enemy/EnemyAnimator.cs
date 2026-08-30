@@ -444,7 +444,7 @@ namespace AstralShift.HellMaiden.AI.Enemy
 			_controller = controller;
 			animancer.Events.Clear();
 			ResetAnimancer();
-			if (shadowIdle != null)
+			if (shadowIdle != null && shadowIdle.Clip != null)
 			{
 				animancer.Layers[shadowAnimationLayer].Play(shadowIdle);
 			}
@@ -561,6 +561,55 @@ namespace AstralShift.HellMaiden.AI.Enemy
 					animancer.Layers[0].Play((y > 0f) ? recoveryLeftUp : recoveryLeftDown, 0f);
 				}
 			}
+		}
+
+		/// <summary>
+		/// Replays only the visual portion of a networked Enemy attack. The
+		/// replicated phase must never enter the local EnemyController state
+		/// machine because doing so would execute attack gameplay a second time.
+		/// </summary>
+		public virtual void ApplyReplicatedAttackPresentation(
+			EnemyAttackPresentationPhase phase,
+			Vector2 facing,
+			double elapsedNetworkTime)
+		{
+			if (animancer == null || !isActiveAndEnabled)
+			{
+				return;
+			}
+
+			switch (phase)
+			{
+			case EnemyAttackPresentationPhase.Warning:
+				AttackWarning(facing.x, facing.y);
+				break;
+			case EnemyAttackPresentationPhase.Active:
+				Attack(facing.x, facing.y);
+				break;
+			case EnemyAttackPresentationPhase.Recovery:
+				Recovery(facing.x, facing.y);
+				break;
+			case EnemyAttackPresentationPhase.Inactive:
+			case EnemyAttackPresentationPhase.Cancelled:
+				Movement(facing.x, facing.y);
+				return;
+			default:
+				return;
+			}
+
+			AnimancerState state = animancer.Layers[0].CurrentState;
+			if (state == null || elapsedNetworkTime <= 0d)
+			{
+				return;
+			}
+
+			// Setting TimeD intentionally skips animation events. Replica hit
+			// windows are driven by the reliable phase edge, never by replaying
+			// gameplay-bearing animation events after network delay.
+			double presentationTime = state.Length > 0f
+				? Math.Min(elapsedNetworkTime, state.Length)
+				: elapsedNetworkTime;
+			state.TimeD = presentationTime;
 		}
 
 		public virtual AnimancerState Dead(float x, float y)

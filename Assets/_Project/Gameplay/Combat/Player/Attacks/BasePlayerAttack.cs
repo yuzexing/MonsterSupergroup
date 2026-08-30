@@ -1,5 +1,6 @@
 using System;
 using AstralShift.DebugTools;
+using MonsterSupergroup.GAS;
 using UnityEngine;
 
 namespace AstralShift.HellMaiden.Player.Attacks
@@ -19,6 +20,11 @@ namespace AstralShift.HellMaiden.Player.Attacks
 
 		protected Action _onEnd;
 
+		private AttackSnapshotLease _nativeAttackLease;
+
+		protected AttackSnapshot NativeAttackSnapshot =>
+			_nativeAttackLease?.Snapshot;
+
 		protected DamageMode HitEffectMode
 		{
 			get
@@ -33,6 +39,47 @@ namespace AstralShift.HellMaiden.Player.Attacks
 
 		public virtual void Init(WeaponBehaviour behaviour, Action onStart = null, Action onEnd = null)
 		{
+			ReleaseNativeAttackSnapshot();
+			InitializeCommon(behaviour, onStart, onEnd);
+			if ((bool)progressionScaler)
+			{
+				progressionScaler.Apply(behaviour);
+			}
+		}
+
+		public virtual void InitNative(
+			WeaponBehaviour behaviour,
+			AttackSnapshot attack,
+			Action onStart = null,
+			Action onEnd = null)
+		{
+			if (attack == null)
+			{
+				throw new ArgumentNullException(nameof(attack));
+			}
+
+			ReleaseNativeAttackSnapshot();
+			_nativeAttackLease = attack.Retain();
+			try
+			{
+				InitializeCommon(behaviour, onStart, onEnd);
+				if ((bool)progressionScaler)
+				{
+					progressionScaler.Apply(attack.Stats);
+				}
+			}
+			catch
+			{
+				ReleaseNativeAttackSnapshot();
+				throw;
+			}
+		}
+
+		private void InitializeCommon(
+			WeaponBehaviour behaviour,
+			Action onStart,
+			Action onEnd)
+		{
 			_behaviour = behaviour;
 			_onStart = onStart;
 			_onEnd = onEnd;
@@ -44,10 +91,6 @@ namespace AstralShift.HellMaiden.Player.Attacks
 			{
 				DBL.Log(DBL.Module.PlayerAttacks, "No Hitbox found: make sure this attack doesn't need it!", 1);
 			}
-			if ((bool)progressionScaler)
-			{
-				progressionScaler.Apply(behaviour);
-			}
 		}
 
 		public abstract void Attack();
@@ -56,12 +99,40 @@ namespace AstralShift.HellMaiden.Player.Attacks
 		{
 			if ((bool)hitEffectResolver)
 			{
-				hitEffectResolver.Initialize(_behaviour);
+				if (NativeAttackSnapshot != null)
+				{
+					hitEffectResolver.Initialize(_behaviour, NativeAttackSnapshot);
+				}
+				else
+				{
+					hitEffectResolver.Initialize(_behaviour);
+				}
 			}
 			if (HitEffectMode != DamageMode.None && HitEffectMode != DamageMode.ExplosionHit)
 			{
+				ResolveDamage(damageable);
+			}
+		}
+
+		protected void ResolveDamage(IDamageable damageable)
+		{
+			if (NativeAttackSnapshot != null)
+			{
+				_behaviour.OnNativeGasHit(
+					base.transform.position,
+					damageable,
+					NativeAttackSnapshot);
+			}
+			else
+			{
 				_behaviour.OnHit(base.transform.position, damageable);
 			}
+		}
+
+		public void ReleaseNativeAttackSnapshot()
+		{
+			_nativeAttackLease?.Dispose();
+			_nativeAttackLease = null;
 		}
 
 		public abstract void Dispose();

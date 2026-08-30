@@ -1,0 +1,97 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d6a1579f831008f222506193163b30cf, type: 3}
+  m_Name: StatRaise_CritDamageEquipment
+  m_EditorClassIdentifier: 
+  ID: 17
+  Title: Reinforcement
+  Description: Increases weapon <b>critical damage</b> <sprite="CriticalDamage" index=0>
+    by <b>{CritMultiplier}[0]%</b>.
+  HasQuote: 0
+  Quote: 
+  hasLocalization: 1
+  TitleKey: MOD_Name_017
+  DescriptionKey: MOD_Desc_017
+  QuoteKey: 
+  poolID: 0
+  poolWeight: 2
+  dependencies: []
+  visualDataReference:
+    m_AssetGUID: 8a105f27fba08f14c822435cb80287ae
+    m_SubObjectName: 
+    m_SubObjectType: 
+  cardType: 0
+  usedStatsModifiers: 64
+  levelModifiersData:
+  - modifiers:
+    - modifierID:
+        rid: 6481290391402316185
+      parameters:
+        rid: 6481290391402316186
+      multiSlotConfig: 0
+      multiSlot:
+        isSelfApplied: 0
+        leftSlots: 0
+        rightSlots: 0
+    overrideDescription: 0
+    descriptionKey: 
+  - modifiers:
+    - modifierID:
+        rid: 6481290391402316187
+      parameters:
+        rid: 6481290391402316188
+      multiSlotConfig: 0
+      multiSlot:
+        isSelfApplied: 0
+        leftSlots: 0
+        rightSlots: 0
+    overrideDescription: 0
+    descriptionKey: 
+  - modifiers:
+    - modifierID:
+        rid: 6481290391402316189
+      parameters:
+        rid: 6481290391402316190
+      multiSlotConfig: 0
+      multiSlot:
+        isSelfApplied: 0
+        leftSlots: 0
+        rightSlots: 0
+    overrideDescription: 0
+    descriptionKey: 
+  references:
+    version: 2
+    RefIds:
+    - rid: 6481290391402316185
+      type: {class: EquipmentModifierID, ns: AstralShift.HellMaiden.Data, asm: MonsterSupergroup.Gameplay.Combat}
+      data:
+        value: 2717296302
+    - rid: 6481290391402316186
+      type: {class: StaticStatModifier/ParamsData, ns: AstralShift.HellMaiden.Combat.Hand, asm: MonsterSupergroup.Gameplay.Combat}
+      data:
+        multiplierIncrement: 0.6
+    - rid: 6481290391402316187
+      type: {class: EquipmentModifierID, ns: AstralShift.HellMaiden.Data, asm: MonsterSupergroup.Gameplay.Combat}
+      data:
+        value: 2717296302
+    - rid: 6481290391402316188
+      type: {class: StaticStatModifier/ParamsData, ns: AstralShift.HellMaiden.Combat.Hand, asm: MonsterSupergroup.Gameplay.Combat}
+      data:
+        multiplierIncrement: 1.2
+    - rid: 6481290391402316189
+      type: {class: EquipmentModifierID, ns: AstralShift.HellMaiden.Data, asm: MonsterSupergroup.Gameplay.Combat}
+      data:
+        value: 2717296302
+    - rid: 6481290391402316190
+      type: {class: StaticStatModifier/ParamsData, ns: AstralShift.HellMaiden.Combat.Hand, asm: MonsterSupergroup.Gameplay.Combat}
+      data:
+        multiplierIncrement: 2

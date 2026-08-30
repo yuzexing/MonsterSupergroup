@@ -55,7 +55,7 @@ namespace AstralShift.HellMaiden.Items
 		{
 			GameEvents instance = GameEvents.Instance;
 			instance.OnInstantMagnetStart = (Action<float>)Delegate.Remove(instance.OnInstantMagnetStart, new Action<float>(InstantPull));
-			GameDirector.Instance.Player.IncreaseXP(xp);
+			PullCollector?.CombatantBinding?.PlayerMovement?.IncreaseXP(xp);
 			Dispose();
 		}
 

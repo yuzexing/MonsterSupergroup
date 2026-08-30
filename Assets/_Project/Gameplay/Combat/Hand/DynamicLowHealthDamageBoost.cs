@@ -1,4 +1,5 @@
 using AstralShift.HellMaiden.AI.Enemy;
+using AstralShift.HellMaiden.Player;
 using AstralShift.HellMaiden.Player.Attacks;
 using UnityEngine;
 
@@ -22,9 +23,13 @@ namespace AstralShift.HellMaiden.Combat.Hand
 
 		public override void Apply(AttackStatsMultipliers multipliers, BaseEnemyController enemy)
 		{
-			int hP = GameDirector.Instance.Player.PlayerStats.currentStats.HP;
-			int maxHP = GameDirector.Instance.Player.PlayerStats.currentStats.maxHP;
-			float num = hP / maxHP;
+			PlayerCombatantBinding owner = GetSourceSlot()?.WeaponBehaviour?.OwnerCombatant;
+			if (owner == null || owner.MaximumHealth <= 0)
+			{
+				return;
+			}
+
+			float num = (float)owner.CurrentHealth / owner.MaximumHealth;
 			if (!(num >= _parameters.maxThreshold))
 			{
 				if (num <= _parameters.minThreshold)

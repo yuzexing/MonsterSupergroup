@@ -1,4 +1,5 @@
 using AstralShift.HellMaiden.Player.Attacks;
+using MonsterSupergroup.Gameplay.Combat;
 using UnityEngine;
 
 namespace AstralShift.HellMaiden.Data.Cards
@@ -25,6 +26,9 @@ namespace AstralShift.HellMaiden.Data.Cards
 
 		public ModifierFlags modifierFlags;
 
+		[SerializeField]
+		private NativeGasWeaponDefinition nativeGasDefinition;
+
 		public bool IsSignature => isSignature;
 
 		public UltimateData UltimateData => ultimateData;
@@ -32,6 +36,15 @@ namespace AstralShift.HellMaiden.Data.Cards
 		public AttackStats BaseStats => baseStats;
 
 		public WeaponRarity Rarity => rarity;
+
+		public NativeGasWeaponDefinition NativeGasDefinition => nativeGasDefinition;
+
+		public bool UsesNativeGasRuntime => nativeGasDefinition != null;
+
+		public void SetNativeGasDefinition(NativeGasWeaponDefinition definition)
+		{
+			nativeGasDefinition = definition;
+		}
 
 		public float GetBaseDamage()
 		{

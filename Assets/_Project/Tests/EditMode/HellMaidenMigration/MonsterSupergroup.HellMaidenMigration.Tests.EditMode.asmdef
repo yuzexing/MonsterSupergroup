@@ -1,0 +1,24 @@
+{
+  "name": "MonsterSupergroup.HellMaidenMigration.Tests.EditMode",
+  "rootNamespace": "MonsterSupergroup.HellMaidenMigration.Tests",
+  "references": [
+    "GUID:a7c8997642ef4acb9c3b5bb6f2af8b51",
+    "GUID:56ce3ffcd5ef4c55962a309f4c4d55f1",
+    "GUID:d52c3e9fa06b4c8fb412e7d90385216a",
+    "GUID:ea6d6a2b82e94894889b4ddde4117081"
+  ],
+  "includePlatforms": [
+    "Editor"
+  ],
+  "excludePlatforms": [],
+  "allowUnsafeCode": false,
+  "overrideReferences": false,
+  "precompiledReferences": [],
+  "autoReferenced": false,
+  "defineConstraints": [],
+  "versionDefines": [],
+  "noEngineReferences": false,
+  "optionalUnityReferences": [
+    "TestAssemblies"
+  ]
+}

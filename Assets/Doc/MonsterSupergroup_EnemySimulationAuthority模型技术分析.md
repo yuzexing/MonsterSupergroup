@@ -2,7 +2,7 @@
 
 > 审计项目：F:\UnityStore\MonsterSupergroup
 > 审计日期：2026-08-27
-> 文档状态：代码审计与接入设计分析；尚未实施 Enemy Simulation Authority
+> 文档状态：保留 2026-08-27 审计基线；当前实现进度与验证结果见第 10 节
 > 事实来源：当前工作树，包括尚未提交的用户修改
 > 本阶段约束：不修改 Combat Authority、Player HP、Status Tick、Knockback / Pull / Physics、Boss Simulation
 
@@ -984,3 +984,183 @@ Handoff、Disconnect、Late Join、Network Pool
 ~~~
 
 在完成 Phase 1 前，不应删除当前 Server Chase 路径；应把它保留为可回退的开发实现，但不能与 SimulationOwner 路径同时启用。每完成一层，都需要用 Authority 日志明确显示 EnemyEntityId、OwnerPlayerId、TargetPlayerId、Epoch、Role 与 last accepted Sequence，方便定位 Host 双 Tick、旧包和错误 assignment。
+
+---
+
+## 10. 实施进度（2026-08-29）
+
+### 10.1 已完成
+
+- 普通/Elite 使用 Gameplay `SimulationOwner`，Mirror `NetworkIdentity` 仍保持 Server Authority。
+- 建立 `EnemySimulationAssignment`、统一 Transform Snapshot、Epoch/Sequence 校验、20 Hz 批量上报、Server latest cache 和 Observer 插值。
+- Client Owner 断线后使用 Server latest Snapshot 临时接管；没有候选 Player 时进入 Frozen。Boss 仍走 `BossServer`。
+- `EnemyAIManager` 已分别按 `RunsNavigation`、`RunsCombatDecisions` 和 `RunsRubberBand` Gate 旧 Enemy 行为。
+- `NetworkEnemyBase.prefab` 已作为 `EnemyBase.prefab` 的联网迁移副本；当前产品基线是无攻击动画的持续接触伤害 Enemy。
+- 接触伤害只处理本机 Owner Player，并继续通过 Owner-final `PlayerHealthReport` 收敛到 Server；没有改变 Player HP 权威模型。
+- 已增加可靠 `EnemyAttackPresentationEdge`，字段包含 Enemy、Epoch、StateSequence、StateStartNetworkTime、实际 PhaseDuration、Phase 和 Facing。该通道与不可靠 Transform Snapshot 分离。
+- Server 会验证 Attack Edge 的 Owner、Epoch、Sequence、时间和值，并缓存 latest edge 供 Late Join 使用。
+- Client 会暂存先于 Enemy Spawn 到达的 latest reliable edge，并在 `RegisterClientEnemy` 后消费，避免 Late Join 永久丢失当前攻击阶段。
+- Observer 只根据可靠 Edge 重放 Warning / Active / Recovery 动画，并用 `NetworkTime` 快进到应有进度；不会进入本地 `EnemyController` FSM，也不会重放动画事件。
+- 完整 Enemy 的旧 `EnemyAttack` MonoBehaviour 只允许在 ClientOwner、ServerFallback 或 BossServer 的本地模拟角色运行。Replica 即使不被 `EnemyAIManager` Tick，也不会再通过攻击脚本自己的 `Start/Update/OnEnable` 产生第二套模拟。
+
+### 10.2 当前验证结果
+
+- Unity 6.3.17f1 编译通过，无 C# 或 Mirror Weaver 错误。
+- 完整 EditMode：115/115 通过，其中 NetworkCombat / Enemy Simulation 子集为 41/41。
+- 完整 PlayMode：45/45 通过；其中 Gameplay 程序集为 41/41，NetworkCombat Sandbox 为 6/6。
+- 覆盖 Host、Dedicated Server、ClientOwner、Replica、ServerFallback、BossServer、120 Enemy batch、乱序/重复 Snapshot、可靠 Attack Edge、Predicted Death Snapshot gate、Skeleton Warning/Active/Recovery，以及本地受击后的 `PlayerHealthReport` 收敛。
+
+### 10.3 Phase 2 首个 EnemyAttackMelee 联网切片（已完成）
+
+首个验证对象已明确并落地为 HellMaiden 的 `Enemy_Skeleton.prefab` + `Skeleton_Warning.prefab`：
+
+- 原始资源闭包放在 [Validation/HellMaiden](../_Project/Content/NetworkCombat/Validation/HellMaiden)，只迁移 Skeleton 所需 Prefab、AnimationClip、Sprite、Material、Shader 和 PhysicsMaterial；没有复制旧 Animancer、A*、FMOD、QTI 或脚本 DLL。
+- 联网副本为 [NetworkEnemySkeleton.prefab](../_Project/Content/NetworkCombat/NetworkEnemySkeleton.prefab)。它保持 Mirror `NetworkIdentity` Server Authority，并使用 `EnemySimulationAuthority`、`NetworkEnemySimulationAgent`、`EnemySnapshotInterpolator`、`NetworkCombatantAdapter`、`NetworkEnemyServerDriver` 与 `NetworkEnemyMeleeReplica`。
+- Skeleton 的旧 `EnemyAttackMelee` 在 Prefab 上默认禁用；只有角色切换为 `ClientOwner`、`ServerFallback` 或 `BossServer` 后才允许它运行完整攻击状态机。`Replica` 不进入旧 Enemy FSM，也不执行攻击决策。
+- [NetworkEnemyMeleeReplica.cs](../_Project/NetworkCombat/Mirror/NetworkEnemyMeleeReplica.cs) 只消费可靠 `EnemyAttackPresentationEdge`，按同一个 `Skeleton_Warning` Prefab 在本机恢复 Warning、Active 与 Recovery。
+- `Warning` 到达时创建/借用攻击对象、恢复方向与警告表现，但关闭伤害。
+- `Active` 到达时使用 `NetworkTime.time - StateStartNetworkTime` 计算剩余窗口。窗口仍有效才启用本机 `PlayerDamageInteraction`；窗口已过期时仍恢复/快进表现，但伤害始终关闭。
+- `Recovery`、`Inactive`、`Cancelled`、Canonical Death 或失去 Replica 角色时关闭伤害并回收到 Pool。
+- `PlayerDamageInteraction` 只处理碰撞到的本机 Owner Player，再由 `PlayerCombatantBinding` 修改该 Player 的 Combatant，最后沿用 Owner-final `PlayerHealthReport` 收敛到 Server。SimulationOwner 不替其他 Player 判定受击。
+- Sandbox 增加 `PoolManager` + `NetworkCombatPoolBootstrap`。没有 PoolManager 的场景仍可回退到普通 `Instantiate/Destroy`，便于独立验证 Prefab。
+- `Build Validation Sandbox` 的生成顺序现为：基础沙箱 → Player Runtime Combat Prefab 迁移 → Enemy Simulation/Skeleton 迁移，重建场景不会再丢失 `PlayerHitbox`、Skeleton Spawn 注册或对象池。
+
+当前确认的过期 Active 规则为：
+
+~~~text
+Observer 收到 Active
+    → 根据 NetworkTime 计算 Remaining
+    → Remaining > 0：只在剩余时间内开放本机伤害窗口
+    → Remaining <= 0：播放/快进表现，但不补发过期伤害
+~~~
+
+该规则不会产生“攻击已结束后突然补伤害”，也不增加 Observer → SimulationOwner 的命中确认 RTT。
+
+### 10.4 本切片的明确边界与后续风险
+
+- 当前 Replica Adapter 只支持使用 `PlayerDamageInteraction` 的 `EnemyAttackMelee`。`BaseAttackHitBox`、Dash、Projectile、Consecutive、Explosion、Suicide 等攻击必须逐类审计，不能直接复用此 Adapter。
+- 迁移来的 Skeleton Warning 没有完整 warning-end 动画引用，因此缺失 Clip 时采用静态 Renderer 显隐；Skeleton 本体的攻击阶段动画仍由可靠 Edge 和 `NetworkTime` 快进。
+- 验证沙箱没有扫描好的 A* Graph，所以 `NetworkEnemySkeleton` 暂用 `EnemyDefaultMovement`，`usesPathfinding=false`。原始 Validation Prefab 保留 AILerp/Seeker 结构，接入正式地图前需单独验证 Graph 生命周期。
+- 两个独立 Windows Player 的 Host + Client 自动验收已经通过，覆盖真实 KCP 传输、模拟延迟/丢包、ClientOwner 移动上报、Host Replica 表现、本地受击与 Canonical HP 收敛。尚未覆盖 Late Join、断线重连和完整 Handoff。
+- `Skeleton_Warning` 的 FMOD Event GUID 在迁移源中为空，测试会产生非阻断的“event not found”提示；正式音频接入时需配置正确 EventReference。
+- Status Tick、Knockback/Pull/Physics 收敛、动态 Aggro/Handoff、Boss Client Simulation 的权威语义没有因本切片发生改变。
+
+不要用这一成功切片推断所有旧 `EnemyAttack` 子类已经联网兼容。下一类推荐审计 `EnemyProjectileAttack`，因为它能验证“可靠发射事件 + 各 Client 本地 Projectile/命中”的目标模型；暂不优先选择 `EnemyAttackDash`，因为 Dash 会同时引入尚未确认的 Enemy Transform/Physics/Knockback 收敛问题。
+
+### 10.5 独立 Host + Client 进程验收（已完成）
+
+#### 10.5.1 验收入口
+
+新增的 [NetworkEnemyProcessValidationBootstrap.cs](../_Project/NetworkCombat/Mirror/NetworkEnemyProcessValidationBootstrap.cs) 默认完全不运行。只有 Player 命令行包含 `--enemy-sim-role=host` 或 `--enemy-sim-role=client` 时才接管验证沙箱：
+
+1. Host 启动 Mirror Host，并等待一个真正的远端 Client Player。
+2. 禁用原 120 Enemy 压力生成器，只由 Server Spawn 一个 `NetworkEnemySkeleton`。
+3. Server 把 `AggroTargetPlayerId` 和 `SimulationOwnerPlayerId` 都明确分配为远端 Client Player。
+4. 两端都关闭本机 Player 武器，避免自动 Projectile 提前击杀 Skeleton 干扰受击验证。
+5. ClientOwner 运行 Skeleton AI、Movement 和 `EnemyAttackMelee`；Host 只消费 Snapshot 和可靠 Attack Edge。
+6. 两端输出带 `[EnemySimProcessValidation]` 前缀的机器可读证据，并以进程退出码 `0/1` 表示 PASS/FAIL。
+
+构建验证 Player 有两种方式：
+
+- Unity 菜单：`Monster Supergroup/Network Combat/Build Enemy Simulation Process Validation Player`。
+- BatchMode：
+
+~~~powershell
+& 'D:\RealSoftware\6000.3.17f1\Editor\Unity.exe' `
+  -batchmode -nographics `
+  -projectPath 'F:\UnityStore\MonsterSupergroup' `
+  -executeMethod MonsterSupergroup.NetworkCombat.Editor.NetworkEnemyProcessValidationBuildUtility.BuildWindowsPlayerBatch
+~~~
+
+输出文件为：
+
+~~~text
+Builds/EnemySimulationValidation/MonsterSupergroupEnemySimulationValidation.exe
+~~~
+
+在项目根目录运行双进程：
+
+~~~powershell
+.\Tools\Run-EnemySimulationProcessValidation.ps1 `
+  -Port 7823 `
+  -ProcessTimeoutSeconds 50
+~~~
+
+脚本会隐藏启动两个独立 Player、等待 Host Mirror 启动后再启动 Client、验证两端退出码和 PASS 标志，并把日志写到：
+
+~~~text
+Logs/EnemySimulationProcessValidation/host-<timestamp>.log
+Logs/EnemySimulationProcessValidation/client-<timestamp>.log
+~~~
+
+可选参数：
+
+- `-Executable`：指定另一个验证 Player 路径。
+- `-Port`：指定本次 KCP 端口，适合并行或避免端口占用。
+- `-ProcessTimeoutSeconds`：单进程上限，范围 10～300 秒。
+
+Player 本身还支持：
+
+~~~text
+--enemy-sim-role=host|client
+--enemy-sim-address=127.0.0.1
+--enemy-sim-port=7823
+--enemy-sim-timeout=45
+~~~
+
+#### 10.5.2 PASS 条件
+
+Client 必须在当前仍连接且 Skeleton 当前仍为 `ClientOwner` 时同时满足：
+
+- 观察到 Skeleton 移动；
+- 观察到 Warning、Active、Recovery；
+- 本机 Owner Player 的 `CombatantBehaviour.CurrentHealth` 已下降。
+
+Host 必须得到带来源约束的完整证据：
+
+- Server Spawn 的 Skeleton assignment 指向远端 Player；
+- Server Registry 接受了非零 Sequence 的 Snapshot；
+- `ownerMovement=true` 必须来自 `assignment.Host == ClientPlayer` 时的 Snapshot 位置变化，断线后的 ServerFallback 移动不能补齐此项；
+- Host 当前为 Replica 时，`NetworkEnemyMeleeReplica` 实际应用过同一 Assignment Epoch 下的 Warning、Active、Recovery 三种 Phase；仅仅看到 Server Registry 中存在 Edge 不算通过；
+- 远端 Player 的 Server Canonical HP 从 Owner-Final 基线下降；
+- `PlayerHealthReport` 接收数与接受数一致，InvalidSender、InvalidSequence、WrongAuthority、StaleOwnerReport、TargetNotFound 拒绝计数均为 0。
+
+Replica 的应用身份现在使用 `AssignmentEpoch + StateSequence + Phase`，不能只比较会在新 Epoch 中重新从 1 开始的 Sequence。这避免 Authority 切换后偶然撞号造成假阳性。
+
+#### 10.5.3 2026-08-29 实际结果
+
+最终运行使用 KCP 外层的 `LatencySimulation`：100 ms 基准延迟、5% Unreliable 丢包、2% Unreliable 乱序和 0.05 jitter。Transform Snapshot 走 Unreliable；Attack Edge 和 PlayerHealthReport 走 Reliable。
+
+Host 证据：
+
+~~~text
+simulation-role current=Replica assignmentHost=ClientPlayer owner=3 target=3 epoch=2
+owner-snapshot-movement sequence=2
+replica-edge-applied epoch=2 phase=Warning
+replica-edge-applied epoch=2 phase=Active
+replica-edge-applied epoch=2 phase=Recovery
+remote-canonical-health 500 -> 495
+result=PASS peerNow=True roleNow=Replica ownerMovement=True
+replicaPhases=True/True/True reports=9/9，所有拒绝计数=0
+~~~
+
+Client 证据：
+
+~~~text
+simulation-role current=ClientOwner assignmentHost=ClientPlayer owner=3 target=3 epoch=2
+local-health-decreased 500 -> 495
+result=PASS peerNow=True roleNow=ClientOwner
+warning=True active=True recovery=True
+~~~
+
+两端日志未发现 `NullReferenceException`、`MissingReferenceException`、`InvalidOperationException`、`ArgumentException`、`StackOverflowException`、未处理异常或 KCP Error。完整回归同时通过：EditMode 115/115，PlayMode 45/45。
+
+Windows Player 构建还暴露了反编译目录的程序集边界问题：I2 Localization 和 Rewired 的 Editor 脚本原先会被父 Runtime asmdef 吞入 Player。现已分别增加 Editor-only asmdef/asmref 隔离；这不是 Enemy Authority 行为修改，但它是可重复构建验证 Player 的必要前置。
+
+#### 10.5.4 仍未覆盖
+
+- 当前双进程验证没有在连接中途执行 Late Join、断线重连或新 Owner Handoff。
+- 过期 Active 的“恢复/快进表现但不补伤害”由 PlayMode 自动测试覆盖，尚未在双进程脚本中主动注入一条过期 Edge。
+- `-nographics` 自动验收验证组件和伤害窗口状态，不替代有画面 Player 的人工视觉验收。
+- 验证地图仍未提供正式 A* Graph，Skeleton 使用 `EnemyDefaultMovement`；`EnemyAILerpMovement` 仍需在正式地图 Graph 生命周期下单独验证。
+- 当前只有一个远端 ClientOwner 和一个 Host Observer；2～4 个玩家同时存在、两个 Client 同时进入 DamageArea、Owner 切换与压力带宽仍需后续场景验证。

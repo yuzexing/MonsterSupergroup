@@ -27,7 +27,9 @@ namespace AstralShift.HellMaiden.Combat.Hand
 
 		protected override OnHitModifierArgs ApplyEffect(OnHitModifierArgs args)
 		{
-			GameDirector.Instance.Player.IncreaseHealth(Mathf.CeilToInt((float)args.DamageInfo.value * parameters.dealtDamageToHealhMultiplier));
+			args.Weapon?.OwnerCombatant?.RestoreHealth(
+				Mathf.CeilToInt(
+					(float)args.DamageInfo.value * parameters.dealtDamageToHealhMultiplier));
 			return args;
 		}
 	}

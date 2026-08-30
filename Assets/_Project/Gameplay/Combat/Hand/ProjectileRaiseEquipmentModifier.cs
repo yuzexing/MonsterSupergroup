@@ -1,3 +1,4 @@
+using System;
 using AstralShift.HellMaiden.Player.Attacks;
 
 namespace AstralShift.HellMaiden.Combat.Hand
@@ -5,6 +6,7 @@ namespace AstralShift.HellMaiden.Combat.Hand
 	[EquipmentModifierType("Projectile Count")]
 	public class ProjectileRaiseEquipmentModifier : StaticStatModifier
 	{
+		[Serializable]
 		[EquipmentModifierParams]
 		protected class Params
 		{

@@ -21,6 +21,8 @@ namespace MonsterSupergroup.NetworkCombat
         private uint targetOwnerPlayerId;
         private uint ownerReportVersion;
         private bool applyingCanonical;
+        private bool ownerReportPending;
+        private bool ownerHealthSubscribed;
         private ICombatEventSink localStatusEventSink;
 
         public void Configure(
@@ -111,7 +113,24 @@ namespace MonsterSupergroup.NetworkCombat
             ownerReportVersion = combatant.StateVersion > 0u
                 ? combatant.StateVersion
                 : 1u;
-            combatant.HealthChanged += HandleOwnerHealthChanged;
+            if (!ownerHealthSubscribed)
+            {
+                combatant.HealthChanged += HandleOwnerHealthChanged;
+                ownerHealthSubscribed = true;
+            }
+
+            if (ownerBridge == null)
+            {
+                ownerBridge = GetComponent<MirrorNetworkCombatBridge>();
+            }
+            if (ownerBridge != null)
+            {
+                ownerBridge.OwnerCollectorReady -= HandleOwnerCollectorReady;
+                ownerBridge.OwnerCollectorReady += HandleOwnerCollectorReady;
+            }
+
+            ownerReportPending = true;
+            TryEnqueueOwnerHealthReport();
         }
 
         public override void OnStopAuthority()
@@ -119,6 +138,13 @@ namespace MonsterSupergroup.NetworkCombat
             if (combatant != null)
             {
                 combatant.HealthChanged -= HandleOwnerHealthChanged;
+            }
+
+            ownerHealthSubscribed = false;
+            ownerReportPending = false;
+            if (ownerBridge != null)
+            {
+                ownerBridge.OwnerCollectorReady -= HandleOwnerCollectorReady;
             }
 
             base.OnStopAuthority();
@@ -130,6 +156,11 @@ namespace MonsterSupergroup.NetworkCombat
             if (!statusObserved)
             {
                 TryObserveWithLocalCollector();
+            }
+
+            if (ownerReportPending)
+            {
+                TryEnqueueOwnerHealthReport();
             }
         }
 
@@ -205,6 +236,12 @@ namespace MonsterSupergroup.NetworkCombat
                     NetworkServer.active,
                     localPlayerId,
                     targetOwnerPlayerId));
+                if (isOwned && authority == CombatEntityAuthority.OwnerFinal &&
+                    state.StateVersion < ownerReportVersion)
+                {
+                    return;
+                }
+
                 applyingCanonical = true;
                 try
                 {
@@ -227,8 +264,35 @@ namespace MonsterSupergroup.NetworkCombat
         private void HandleOwnerHealthChanged(int current, int maximum)
         {
             if (applyingCanonical || !isOwned ||
-                authority != CombatEntityAuthority.OwnerFinal ||
-                ownerBridge == null || ownerBridge.Collector == null ||
+                authority != CombatEntityAuthority.OwnerFinal)
+            {
+                return;
+            }
+
+            ownerReportPending = true;
+            TryEnqueueOwnerHealthReport();
+        }
+
+        private void HandleOwnerCollectorReady(
+            ClientCombatCollector collector,
+            ICombatEventIdSource eventIds)
+        {
+            TryEnqueueOwnerHealthReport();
+        }
+
+        private void TryEnqueueOwnerHealthReport()
+        {
+            if (!ownerReportPending || !isOwned ||
+                authority != CombatEntityAuthority.OwnerFinal)
+            {
+                return;
+            }
+
+            if (ownerBridge == null)
+            {
+                ownerBridge = GetComponent<MirrorNetworkCombatBridge>();
+            }
+            if (ownerBridge == null || ownerBridge.Collector == null ||
                 ownerBridge.EventIds == null)
             {
                 return;
@@ -247,11 +311,12 @@ namespace MonsterSupergroup.NetworkCombat
                 Sequence = eventId.Sequence,
                 PlayerId = ownerBridge.OwnerPlayerId,
                 EntityId = netId,
-                Health = current,
-                MaxHealth = maximum,
-                Alive = current > 0,
+                Health = combatant.CurrentHealth,
+                MaxHealth = combatant.MaxHealth,
+                Alive = combatant.IsAlive,
                 StateVersion = ownerReportVersion
             });
+            ownerReportPending = false;
         }
 
         private void HandleConfirmedKill(ConfirmedKill kill)

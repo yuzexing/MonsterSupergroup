@@ -1,0 +1,19 @@
+{
+  "name": "MonsterSupergroup.I2.Localization.Editor",
+  "rootNamespace": "I2.Loc",
+  "references": [
+    "GUID:d52c3e9fa06b4c8fb412e7d90385216a",
+    "GUID:6055be8ebefd69e48b49212b09b47b2f"
+  ],
+  "includePlatforms": [
+    "Editor"
+  ],
+  "excludePlatforms": [],
+  "allowUnsafeCode": false,
+  "overrideReferences": false,
+  "precompiledReferences": [],
+  "autoReferenced": false,
+  "defineConstraints": [],
+  "versionDefines": [],
+  "noEngineReferences": false
+}

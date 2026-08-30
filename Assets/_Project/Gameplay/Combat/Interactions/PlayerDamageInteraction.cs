@@ -28,18 +28,11 @@ namespace AstralShift.HellMaiden.Interactions
 
 		private Coroutine _collisionCheckCoroutine;
 
-		private bool _hasCollidedWithPlayer;
+		private readonly List<PlayerHitbox> _collidedPlayerHitboxes = new List<PlayerHitbox>();
 
 		private readonly List<Transform> _collidedTransforms = new List<Transform>();
 
-		private PlayerMovement _player;
-
 		public static TimedCollection<int> damageablesToIgnore = new TimedCollection<int>();
-
-		private void Awake()
-		{
-			_player = GameDirector.Instance.Player;
-		}
 
 		public override void Interact(IInteractor interactor)
 		{
@@ -51,12 +44,16 @@ namespace AstralShift.HellMaiden.Interactions
 			}
 			base.Interact(interactor);
 			EnemyDamageableObject component2;
-			if (interactor.Transform.TryGetComponent<PlayerHitbox>(out var _))
+			if (interactor.Transform.TryGetComponent<PlayerHitbox>(out var playerHitbox))
 			{
-				_hasCollidedWithPlayer = true;
-				if (_collisionCheckCoroutine == null)
+				if (playerHitbox.IsLocallyControlled &&
+					!_collidedPlayerHitboxes.Contains(playerHitbox))
 				{
-					_collisionCheckCoroutine = StartCoroutine(VerifyCollisionsRoutine());
+					_collidedPlayerHitboxes.Add(playerHitbox);
+					if (_collisionCheckCoroutine == null)
+					{
+						_collisionCheckCoroutine = StartCoroutine(VerifyCollisionsRoutine());
+					}
 				}
 			}
 			else if (interactor.Transform.TryGetComponent<EnemyDamageableObject>(out component2) && !component2.IsDead)
@@ -86,24 +83,27 @@ namespace AstralShift.HellMaiden.Interactions
 			}
 		}
 
-		public void DamagePlayer()
+		public void DamagePlayer(PlayerHitbox playerHitbox)
 		{
+			if (playerHitbox == null ||
+				!playerHitbox.TryGetOwner(out PlayerCombatantBinding binding) ||
+				!binding.AcceptsLocalMutations || binding.PlayerMovement == null)
+			{
+				return;
+			}
+
+			PlayerMovement player = binding.PlayerMovement;
 			if (directDamage)
 			{
+				int resolvedDamage = damage;
 				if (enemyStats != null)
 				{
-					int num = damage;
-					damage = (int)((float)damage * enemyStats.DamageMultiplier);
-					_player.Damage(damage, damageType);
-					damage = num;
+					resolvedDamage = (int)((float)resolvedDamage * enemyStats.DamageMultiplier);
 				}
-				else
-				{
-					_player.Damage(damage, damageType);
-				}
+				player.Damage(resolvedDamage, damageType);
 				if (stunTime != 0f)
 				{
-					_player.Stun(stunTime);
+					player.Stun(stunTime);
 				}
 			}
 			else if (enemyStats == null)
@@ -112,10 +112,10 @@ namespace AstralShift.HellMaiden.Interactions
 			}
 			else
 			{
-				_player.Damage(enemyStats.Damage, damageType);
+				player.Damage(enemyStats.Damage, damageType);
 				if (enemyStats.StunTime != 0f)
 				{
-					_player.Stun(enemyStats.StunTime);
+					player.Stun(enemyStats.StunTime);
 				}
 			}
 		}
@@ -127,42 +127,58 @@ namespace AstralShift.HellMaiden.Interactions
 
 		private IEnumerator VerifyCollisionsRoutine()
 		{
-			yield return new WaitForEndOfFrame();
+			// Defer one logic frame so all collision callbacks from the current
+			// physics step are collected before choosing the damage target. Unlike
+			// WaitForEndOfFrame, this also progresses in headless/batchmode clients.
+			yield return null;
 			VerifyCollisions();
 		}
 
 		private void VerifyCollisions()
 		{
-			float maxDot;
-			Transform closestCollidedTransform = GetClosestCollidedTransform(out maxDot);
-			EnemyDamageableObject component2;
-			if (_hasCollidedWithPlayer)
+			var damagedObjects = new HashSet<EnemyDamageableObject>();
+			bool processedLocalPlayer = false;
+			for (int i = 0; i < _collidedPlayerHitboxes.Count; i++)
 			{
-				EnemyDamageableObject component;
+				PlayerHitbox playerHitbox = _collidedPlayerHitboxes[i];
+				if (playerHitbox == null ||
+					!playerHitbox.TryGetOwner(out PlayerCombatantBinding binding) ||
+					!binding.AcceptsLocalMutations || binding.PlayerMovement == null)
+				{
+					continue;
+				}
+
+				processedLocalPlayer = true;
+				Transform closestCollidedTransform = GetClosestCollidedTransform(
+					binding.PlayerMovement.transform.position,
+					out float maxDot);
 				if (maxDot < 0f)
 				{
-					DamagePlayer();
+					DamagePlayer(playerHitbox);
 				}
-				else if ((bool)closestCollidedTransform && closestCollidedTransform.TryGetComponent<EnemyDamageableObject>(out component))
+				else if ((bool)closestCollidedTransform &&
+					closestCollidedTransform.TryGetComponent(out EnemyDamageableObject damageable) &&
+					damagedObjects.Add(damageable))
 				{
-					DamageObject(component);
+					DamageObject(damageable);
 				}
 			}
-			else if (maxDot >= 0f && (bool)closestCollidedTransform && closestCollidedTransform.TryGetComponent<EnemyDamageableObject>(out component2))
+
+			if (!processedLocalPlayer && TryGetClosestDamageable(out EnemyDamageableObject closestDamageable))
 			{
-				DamageObject(component2);
+				DamageObject(closestDamageable);
 				damageablesToIgnore.Add(GetInstanceID());
 			}
+
+			_collidedPlayerHitboxes.Clear();
 			_collidedTransforms.Clear();
 			_collisionCheckCoroutine = null;
-			_hasCollidedWithPlayer = false;
 		}
 
-		private Transform GetClosestCollidedTransform(out float maxDot)
+		private Transform GetClosestCollidedTransform(Vector2 origin, out float maxDot)
 		{
 			Transform result = null;
 			maxDot = -1f;
-			Vector2 origin = GameDirector.Instance.Player.transform.position;
 			Vector2 damagePosition = base.transform.position;
 			foreach (Transform collidedTransform in _collidedTransforms)
 			{
@@ -174,6 +190,30 @@ namespace AstralShift.HellMaiden.Interactions
 				}
 			}
 			return result;
+		}
+
+		private bool TryGetClosestDamageable(out EnemyDamageableObject result)
+		{
+			result = null;
+			float closestSqrDistance = float.MaxValue;
+			for (int i = 0; i < _collidedTransforms.Count; i++)
+			{
+				Transform candidate = _collidedTransforms[i];
+				if (candidate == null ||
+					!candidate.TryGetComponent(out EnemyDamageableObject damageable))
+				{
+					continue;
+				}
+
+				float sqrDistance = (candidate.position - transform.position).sqrMagnitude;
+				if (sqrDistance < closestSqrDistance)
+				{
+					closestSqrDistance = sqrDistance;
+					result = damageable;
+				}
+			}
+
+			return result != null;
 		}
 
 		private float DotProductDamageAndObject(Vector2 origin, Vector2 damagePosition, Vector2 objectPosition)

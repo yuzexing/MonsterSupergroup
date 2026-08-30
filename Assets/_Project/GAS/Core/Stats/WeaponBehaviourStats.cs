@@ -197,7 +197,32 @@ namespace MonsterSupergroup.GAS
                     StatFormulaMultipliers.All,
                     additionalMultipliers),
                 GetStatValue(AttackStatType.Knockback, StatFormulaMultipliers.All, additionalMultipliers),
-                _baseStats.damageType);
+                _baseStats.damageType,
+                GetRemappedMultiplierSumWithAdditional(
+                    AttackStatType.Damage,
+                    additionalMultipliers),
+                GetRemappedMultiplierSumWithAdditional(
+                    AttackStatType.Speed,
+                    additionalMultipliers),
+                GetRemappedMultiplierProductWithAdditional(
+                    AttackStatType.Speed,
+                    additionalMultipliers),
+                GetRemappedMultiplierSumWithAdditional(
+                    AttackStatType.Size,
+                    additionalMultipliers),
+                GetRemappedMultiplierSumWithAdditional(
+                    AttackStatType.Duration,
+                    additionalMultipliers),
+                GetRemappedMultiplierSumWithAdditional(
+                    AttackStatType.CritRate,
+                    additionalMultipliers),
+                GetRemappedMultiplierSumWithAdditional(
+                    AttackStatType.CritDamage,
+                    additionalMultipliers),
+                GetRemappedMultiplierSumWithAdditional(
+                    AttackStatType.Knockback,
+                    additionalMultipliers),
+                _baseStats.projectileCount);
         }
 
         public void RemapStat(AttackStatType target, AttackStatType source)
@@ -346,6 +371,33 @@ namespace MonsterSupergroup.GAS
             {
                 value *= CalculateMultiplierFormula(
                     GetMultiplierFromType(target, GlobalStatsMultipliers));
+            }
+
+            return value;
+        }
+
+        private float GetRemappedMultiplierSumWithAdditional(
+            AttackStatType target,
+            AttackStatsMultipliers additionalMultipliers)
+        {
+            float value = GetRemappedMultiplierSum(target);
+            if (additionalMultipliers != null)
+            {
+                value += GetMultiplierFromType(ResolveMappedStat(target), additionalMultipliers);
+            }
+
+            return value;
+        }
+
+        private float GetRemappedMultiplierProductWithAdditional(
+            AttackStatType target,
+            AttackStatsMultipliers additionalMultipliers)
+        {
+            float value = GetRemappedMultiplierProduct(target);
+            if (additionalMultipliers != null)
+            {
+                value *= CalculateMultiplierFormula(
+                    GetMultiplierFromType(ResolveMappedStat(target), additionalMultipliers));
             }
 
             return value;

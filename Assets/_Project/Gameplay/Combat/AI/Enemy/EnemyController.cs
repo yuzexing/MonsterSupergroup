@@ -171,7 +171,7 @@ namespace AstralShift.HellMaiden.AI.Enemy
 
 		private bool _combatDefeat;
 
-		private int _legacyDamageResolutionDepth;
+		private int _damageResolutionDepth;
 
 		private WeaponBehaviour _lethalWeapon;
 
@@ -258,6 +258,10 @@ namespace AstralShift.HellMaiden.AI.Enemy
 		{
 			get
 			{
+				if (_stateMachine == null)
+				{
+					return false;
+				}
 				if (_stateMachine.GetState() != Dead)
 				{
 					return _stateMachine.GetState() == InstantDead;
@@ -266,7 +270,8 @@ namespace AstralShift.HellMaiden.AI.Enemy
 			}
 		}
 
-		public bool IsInKnockbackState => _stateMachine.GetState() == Knockback;
+		public bool IsInKnockbackState =>
+			_stateMachine != null && _stateMachine.GetState() == Knockback;
 
 		[Header("Movement Settings")]
 		public BaseEnemyMovement Movement => _currentMovementScript;
@@ -286,6 +291,15 @@ namespace AstralShift.HellMaiden.AI.Enemy
 		public event Action OnDeathPresentationCompleted;
 
 		public event Action OnDeathFinalized;
+
+		public event Action<EnemyAttackPresentationPhase, Vector2>
+			OnAttackPresentationPhaseChanged;
+
+		public EnemyAttackPresentationPhase CurrentAttackPresentationPhase
+		{
+			get;
+			private set;
+		} = EnemyAttackPresentationPhase.Inactive;
 
 		public event Action OnDispose;
 
@@ -308,6 +322,30 @@ namespace AstralShift.HellMaiden.AI.Enemy
 			InitializeStateMachine();
 			enemyAnimator.Init(this);
 			hurtBox.ActivateCollider(state: true);
+			direction = Direction.None;
+			angle = 0f;
+			OnInit?.Invoke();
+			OnInit = null;
+			OnInitPersist?.Invoke();
+			base.gameObject.SetActive(value: true);
+		}
+
+		/// <summary>
+		/// Initializes the existing runtime Stats, Combatant, target and movement
+		/// without starting the attack/presentation FSM. Network movement uses this
+		/// until replicated attack state is introduced.
+		/// </summary>
+		public void InitNetworkMovementOnly(int id)
+		{
+			base.ID = id;
+			try
+			{
+				status.Init(this);
+			}
+			catch (Exception)
+			{
+			}
+			InitValues(null);
 			direction = Direction.None;
 			angle = 0f;
 			OnInit?.Invoke();
@@ -501,7 +539,101 @@ namespace AstralShift.HellMaiden.AI.Enemy
 			{
 				base.gameObject.SetActive(value: true);
 			};
+			BindAttackPresentationCallbacks();
 			_stateMachine.SetInitialState(Moving);
+		}
+
+		private void BindAttackPresentationCallbacks()
+		{
+			Moving.onEnter += delegate
+			{
+				PublishAttackPresentationPhase(EnemyAttackPresentationPhase.Inactive);
+			};
+			Warning.onEnter += delegate
+			{
+				PublishAttackPresentationPhase(EnemyAttackPresentationPhase.Warning);
+			};
+			Attacking.onEnter += delegate
+			{
+				PublishAttackPresentationPhase(EnemyAttackPresentationPhase.Active);
+			};
+			Recovery.onEnter += delegate
+			{
+				PublishAttackPresentationPhase(EnemyAttackPresentationPhase.Recovery);
+			};
+			Knockback.onEnter += PublishAttackPresentationCancelled;
+			Dead.onEnter += PublishAttackPresentationCancelled;
+			InstantDead.onEnter += PublishAttackPresentationCancelled;
+			Deactivating.onEnter += PublishAttackPresentationCancelled;
+			Deactivated.onEnter += PublishAttackPresentationCancelled;
+		}
+
+		private void PublishAttackPresentationCancelled()
+		{
+			PublishAttackPresentationPhase(EnemyAttackPresentationPhase.Cancelled);
+		}
+
+		private void PublishAttackPresentationPhase(
+			EnemyAttackPresentationPhase phase)
+		{
+			CurrentAttackPresentationPhase = phase;
+			Vector2 facing = Movement != null
+				? FacingDirection
+				: previousFacingDirection;
+			OnAttackPresentationPhaseChanged?.Invoke(phase, facing);
+		}
+
+		/// <summary>
+		/// Applies observer-only attack visuals without transitioning this
+		/// controller's gameplay state machine or invoking EnemyAttack methods.
+		/// </summary>
+		public void ApplyReplicatedAttackPresentation(
+			EnemyAttackPresentationPhase phase,
+			Vector2 facing,
+			double elapsedNetworkTime)
+		{
+			if (!hasAttackAnimation || enemyAnimator == null)
+			{
+				return;
+			}
+
+			if (facing.sqrMagnitude > 0.0001f)
+			{
+				facing.Normalize();
+				previousFacingDirection = facing;
+			}
+			else
+			{
+				facing = previousFacingDirection.sqrMagnitude > 0.0001f
+					? previousFacingDirection.normalized
+					: Vector2.right;
+			}
+
+			enemyAnimator.ApplyReplicatedAttackPresentation(
+				phase,
+				facing,
+				elapsedNetworkTime);
+		}
+
+		public float GetAttackPresentationPhaseDuration(
+			EnemyAttackPresentationPhase phase)
+		{
+			if (attackScript == null || !hasAttackAnimation)
+			{
+				return 0f;
+			}
+
+			switch (phase)
+			{
+			case EnemyAttackPresentationPhase.Warning:
+				return Mathf.Max(0f, attackScript.WarningTime);
+			case EnemyAttackPresentationPhase.Active:
+				return Mathf.Max(0f, attackScript.AttackTime);
+			case EnemyAttackPresentationPhase.Recovery:
+				return Mathf.Max(0f, attackScript.RecoveryTime);
+			default:
+				return 0f;
+			}
 		}
 
 		protected virtual void InitValues(Action<EnemyStats> configureStatsBeforeCombatant)
@@ -522,6 +654,19 @@ namespace AstralShift.HellMaiden.AI.Enemy
 			CombatantBinding.Combatant.StatusDamageReceived += HandleStatusDamage;
 			_transform = base.transform;
 			_defaultRigidbodyMass = rigidBody.mass;
+			if (defaultMovement == null)
+			{
+				defaultMovement = GetComponentInChildren<EnemyDefaultMovement>(true);
+			}
+			if (defaultMovement == null)
+			{
+				throw new InvalidOperationException(
+					$"{nameof(EnemyController)} requires {nameof(EnemyDefaultMovement)}.");
+			}
+			if (usesPathfinding && aILerpMovement == null)
+			{
+				aILerpMovement = GetComponentInChildren<EnemyAILerpMovement>(true);
+			}
 			if (usesPathfinding)
 			{
 				aILerpMovement.Init(this);
@@ -531,19 +676,28 @@ namespace AstralShift.HellMaiden.AI.Enemy
 			Movement.FreezeRigidbody(state: false);
 			ActivateColliders(activate: true);
 			allowRubberband = true;
+			if (EnemyAIManager.Instance == null)
+			{
+				throw new InvalidOperationException(
+					$"{nameof(EnemyController)} requires {nameof(EnemyAIManager)}.");
+			}
 			EnemyAIManager.Instance.RegisterEnemy(this);
 			hurtBox.OnDamageWeapon += Damage;
 			hurtBox.OnDamageGeneric += Damage;
-			enemyAnimator.ResetHurtBlinkColor();
+			enemyAnimator?.ResetHurtBlinkColor();
 			SpawnedLoot = false;
-			attackScript.Target = Target;
+			if (attackScript != null)
+			{
+				attackScript.controller = this;
+				attackScript.Target = Target;
+			}
 			_predictedDeath = false;
 			_killConfirmed = false;
 			_confirmedConsequencesApplied = false;
 			_deathPresentationComplete = false;
 			_deathPresentationEventRaised = false;
 			_combatDefeat = false;
-			_legacyDamageResolutionDepth = 0;
+			_damageResolutionDepth = 0;
 			_lethalWeapon = null;
 			_confirmedKill = default;
 			_fallbackDamageExecution = null;
@@ -587,6 +741,11 @@ namespace AstralShift.HellMaiden.AI.Enemy
 			this.OnDeathPresentationCompleted = null;
 			this.OnDeathFinalized = null;
 			EnemyPool?.Return(this);
+		}
+
+		private void OnDestroy()
+		{
+			EnemyAIManager.Instance?.UnRegisterEnemy(this);
 		}
 
 		public virtual void RunUpdate()
@@ -781,6 +940,24 @@ namespace AstralShift.HellMaiden.AI.Enemy
 			{
 				settings = weaponBehaviour.KnockbackSettings;
 			}
+			ApplyKnockBackCore(
+				attackPosition,
+				settings,
+				weaponBehaviour.KnockBackMultiplierSum,
+				isFatal);
+		}
+
+		private void ApplyKnockBackCore(
+			Vector2 attackPosition,
+			KnockbackSettings settings,
+			float knockbackMultiplierSum,
+			bool isFatal)
+		{
+			if (IsInKnockbackState)
+			{
+				return;
+			}
+
 			if (!settings || (!settings.HasKnockback && !settings.Staggers) || stats.KnockBackMultiplier <= 0f)
 			{
 				if (isFatal)
@@ -807,7 +984,7 @@ namespace AstralShift.HellMaiden.AI.Enemy
 				}
 				Movement.FreezeRigidbody(state: false);
 				DisableMovement();
-				Movement.KnockBack(attackDirection, settings, OnCompleteAction, weaponBehaviour.KnockBackMultiplierSum);
+				Movement.KnockBack(attackDirection, settings, OnCompleteAction, knockbackMultiplierSum);
 			}
 			void OnCompleteAction()
 			{
@@ -930,7 +1107,7 @@ namespace AstralShift.HellMaiden.AI.Enemy
 			DamageInfo damageInfo = weapon.CalculateDamage(this);
 			LegacyDamageSource source = weapon.GetDamageSource(
 				LegacyCombatTagUtility.FromDamageType(damageType));
-			_legacyDamageResolutionDepth++;
+			_damageResolutionDepth++;
 			try
 			{
 				GasCombatResolution resolution = source.Resolve(
@@ -971,7 +1148,7 @@ namespace AstralShift.HellMaiden.AI.Enemy
 			}
 			finally
 			{
-				EndLegacyDamageResolution();
+				EndDamageResolution();
 			}
 		}
 
@@ -993,7 +1170,7 @@ namespace AstralShift.HellMaiden.AI.Enemy
 			LegacyDamageSource effectiveSource = source.IsValid
 				? source.WithTags(LegacyCombatTagUtility.FromDamageType(damageType))
 				: CreateFallbackDamageSource(damageType);
-			_legacyDamageResolutionDepth++;
+			_damageResolutionDepth++;
 			try
 			{
 				var damage = new DamageInfo(
@@ -1022,7 +1199,65 @@ namespace AstralShift.HellMaiden.AI.Enemy
 			}
 			finally
 			{
-				EndLegacyDamageResolution();
+				EndDamageResolution();
+			}
+		}
+
+		public bool ResolveNativeGasHit(NativeGasHit hit)
+		{
+			if (IsDead || base.IsImmune || hit.Runtime == null || hit.Attack == null)
+			{
+				return false;
+			}
+
+			_damageResolutionDepth++;
+			try
+			{
+				GasCombatResolution resolution = hit.Runtime.ResolveHitDetailed(
+					hit.Attack,
+					CombatantBinding.Combatant);
+				hit.PresentationWeapon?.NotifyNativeDamage(
+					resolution.ResolvedDamage.Value,
+					resolution.ResolvedDamage.IsCritical);
+
+				if (resolution.PredictedAppliedDamage.Value <= 0)
+				{
+					return false;
+				}
+
+				ShowDamageNumbers(
+					(int)resolution.PredictedAppliedDamage.Id,
+					resolution.PredictedAppliedDamage.Value,
+					hit.PresentationDamageType,
+					resolution.PredictedAppliedDamage.IsCritical,
+					damagePosition);
+				enemyAnimator.HurtBlinkAnimation();
+
+				bool isFatal = resolution.IsPredictedLethal;
+				if (isFatal)
+				{
+					_lethalWeapon = hit.PresentationWeapon;
+					_combatDefeat = true;
+				}
+
+				if (isFatal && attackOnDeath)
+				{
+					Attack();
+				}
+				else
+				{
+					ApplyKnockBackCore(
+						hit.AttackPosition,
+						hit.KnockbackPresentation,
+						hit.Attack.Stats.KnockbackMultiplierSum,
+						isFatal);
+				}
+
+				return true;
+			}
+			finally
+			{
+				EndDamageResolution();
 			}
 		}
 
@@ -1057,7 +1292,7 @@ namespace AstralShift.HellMaiden.AI.Enemy
 			_combatDefeat = hit.Context.SourcePlayerId != 0u &&
 				hit.Context.SourcePlayerId != uint.MaxValue;
 			this.OnPredictedLethalHit?.Invoke(hit);
-			if (_legacyDamageResolutionDepth == 0)
+			if (_damageResolutionDepth == 0)
 			{
 				BeginPredictedDeathPresentation();
 			}
@@ -1112,7 +1347,7 @@ namespace AstralShift.HellMaiden.AI.Enemy
 				BeginPredictedDeathPresentation();
 			}
 
-			if (_legacyDamageResolutionDepth == 0)
+			if (_damageResolutionDepth == 0)
 			{
 				ApplyConfirmedConsequences();
 			}
@@ -1120,6 +1355,14 @@ namespace AstralShift.HellMaiden.AI.Enemy
 
 		private void BeginPredictedDeathPresentation()
 		{
+			if (_stateMachine == null)
+			{
+				ActivateColliders(activate: false);
+				Movement?.FreezeRigidbody(state: true);
+				EnemyAIManager.Instance?.UnRegisterEnemy(this);
+				CompleteDeathPresentation();
+				return;
+			}
 			if (IsInDeadState)
 			{
 				return;
@@ -1154,10 +1397,10 @@ namespace AstralShift.HellMaiden.AI.Enemy
 			}
 		}
 
-		private void EndLegacyDamageResolution()
+		private void EndDamageResolution()
 		{
-			_legacyDamageResolutionDepth = Mathf.Max(0, _legacyDamageResolutionDepth - 1);
-			if (_legacyDamageResolutionDepth == 0 && _killConfirmed)
+			_damageResolutionDepth = Mathf.Max(0, _damageResolutionDepth - 1);
+			if (_damageResolutionDepth == 0 && _killConfirmed)
 			{
 				ApplyConfirmedConsequences();
 			}
@@ -1267,9 +1510,15 @@ namespace AstralShift.HellMaiden.AI.Enemy
 
 		private void SpawnLoot()
 		{
+			LootManager lootManager = LootManager.Instance;
+			if (lootManager == null)
+			{
+				return;
+			}
+
 			if (overrideGlobalLootSettings)
 			{
-				List<WorldItem> overridenLoot = LootManager.Instance.GetOverridenLoot(stats.XP, lootSettings);
+				List<WorldItem> overridenLoot = lootManager.GetOverridenLoot(stats.XP, lootSettings);
 				if (overridenLoot != null && overridenLoot.Count > 0)
 				{
 					for (int i = 0; i < overridenLoot.Count; i++)
@@ -1282,12 +1531,12 @@ namespace AstralShift.HellMaiden.AI.Enemy
 				}
 				if (lootSettings.dropChest)
 				{
-					LootManager.Instance.GetChest().transform.position = base.transform.position;
+					lootManager.GetChest().transform.position = base.transform.position;
 				}
 			}
 			else
 			{
-				WorldItem globalLoot = LootManager.Instance.GetGlobalLoot(stats.XP);
+				WorldItem globalLoot = lootManager.GetGlobalLoot(stats.XP);
 				if ((bool)globalLoot)
 				{
 					globalLoot.Show();

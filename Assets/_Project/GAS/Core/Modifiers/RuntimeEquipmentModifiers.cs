@@ -9,6 +9,7 @@ namespace MonsterSupergroup.GAS
         private readonly List<Entry> entries = new List<Entry>();
         private readonly Dictionary<ModifierHandle, Entry> entriesByHandle =
             new Dictionary<ModifierHandle, Entry>();
+        private readonly List<Entry> retiredEntries = new List<Entry>();
 
         private readonly List<StaticStatModifier> staticModifiers = new List<StaticStatModifier>();
         private readonly List<DynamicStatModifier> dynamicModifiers = new List<DynamicStatModifier>();
@@ -74,6 +75,15 @@ namespace MonsterSupergroup.GAS
                 }
             }
 
+            for (int i = 0; i < retiredEntries.Count; i++)
+            {
+                if (ReferenceEquals(retiredEntries[i].Modifier, modifier))
+                {
+                    throw new InvalidOperationException(
+                        "A modifier retained by an active attack snapshot cannot be added again.");
+                }
+            }
+
             var handle = new ModifierHandle(nextHandle++);
             var entry = new Entry(handle, nextInsertionSequence++, modifier);
             entries.Add(entry);
@@ -92,16 +102,16 @@ namespace MonsterSupergroup.GAS
             entriesByHandle.Remove(handle);
             entries.Remove(entry);
             RebuildStageLists();
-            entry.Modifier.Dispose();
+            Retire(entry);
             return true;
         }
 
         public void Clear()
         {
-            var ownedModifiers = new RuntimeEquipmentModifier[entries.Count];
+            var ownedEntries = new Entry[entries.Count];
             for (int i = 0; i < entries.Count; i++)
             {
-                ownedModifiers[i] = entries[i].Modifier;
+                ownedEntries[i] = entries[i];
             }
 
             entries.Clear();
@@ -113,10 +123,91 @@ namespace MonsterSupergroup.GAS
             predictedLethalHitModifiers.Clear();
             onKillModifiers.Clear();
 
-            for (int i = 0; i < ownedModifiers.Length; i++)
+            for (int i = 0; i < ownedEntries.Length; i++)
             {
-                ownedModifiers[i].Dispose();
+                Retire(ownedEntries[i]);
             }
+        }
+
+        internal RuntimeModifierExecutionSnapshot CaptureExecutionSnapshot()
+        {
+            var leasedEntries = new List<Entry>(
+                dynamicOnDamageModifiers.Count +
+                onHitModifiers.Count +
+                predictedLethalHitModifiers.Count);
+
+            LeaseStage(dynamicOnDamageModifiers, leasedEntries);
+            LeaseStage(onHitModifiers, leasedEntries);
+            LeaseStage(predictedLethalHitModifiers, leasedEntries);
+
+            return new RuntimeModifierExecutionSnapshot(
+                this,
+                leasedEntries.ToArray(),
+                dynamicOnDamageModifiers.ToArray(),
+                onHitModifiers.ToArray(),
+                predictedLethalHitModifiers.ToArray());
+        }
+
+        internal void ReleaseExecutionSnapshot(Entry[] leasedEntries)
+        {
+            if (leasedEntries == null)
+            {
+                return;
+            }
+
+            for (int i = 0; i < leasedEntries.Length; i++)
+            {
+                Entry entry = leasedEntries[i];
+                entry.LeaseCount--;
+                if (entry.LeaseCount < 0)
+                {
+                    throw new InvalidOperationException("Modifier execution lease count became negative.");
+                }
+
+                if (entry.Retired && entry.LeaseCount == 0)
+                {
+                    retiredEntries.Remove(entry);
+                    entry.Dispose();
+                }
+            }
+        }
+
+        private void LeaseStage<TModifier>(
+            IReadOnlyList<TModifier> stage,
+            ICollection<Entry> destination)
+            where TModifier : RuntimeEquipmentModifier
+        {
+            for (int i = 0; i < stage.Count; i++)
+            {
+                Entry entry = FindActiveEntry(stage[i]);
+                entry.LeaseCount++;
+                destination.Add(entry);
+            }
+        }
+
+        private Entry FindActiveEntry(RuntimeEquipmentModifier modifier)
+        {
+            for (int i = 0; i < entries.Count; i++)
+            {
+                if (ReferenceEquals(entries[i].Modifier, modifier))
+                {
+                    return entries[i];
+                }
+            }
+
+            throw new InvalidOperationException("A staged modifier is not owned by the container.");
+        }
+
+        private void Retire(Entry entry)
+        {
+            entry.Retired = true;
+            if (entry.LeaseCount == 0)
+            {
+                entry.Dispose();
+                return;
+            }
+
+            retiredEntries.Add(entry);
         }
 
         private static void EnsureSupportedStage(RuntimeEquipmentModifier modifier)
@@ -241,7 +332,7 @@ namespace MonsterSupergroup.GAS
             }
         }
 
-        private sealed class Entry
+        internal sealed class Entry
         {
             public Entry(ModifierHandle handle, long insertionSequence, RuntimeEquipmentModifier modifier)
             {
@@ -255,6 +346,23 @@ namespace MonsterSupergroup.GAS
             public long InsertionSequence { get; }
 
             public RuntimeEquipmentModifier Modifier { get; }
+
+            public int LeaseCount { get; set; }
+
+            public bool Retired { get; set; }
+
+            public void Dispose()
+            {
+                if (ModifierDisposed)
+                {
+                    return;
+                }
+
+                ModifierDisposed = true;
+                Modifier.Dispose();
+            }
+
+            private bool ModifierDisposed { get; set; }
         }
     }
 }

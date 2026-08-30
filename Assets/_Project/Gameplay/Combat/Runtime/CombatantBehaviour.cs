@@ -5,7 +5,7 @@ using UnityEngine;
 namespace MonsterSupergroup.Gameplay.Combat
 {
     [DisallowMultipleComponent]
-    public sealed class CombatantBehaviour : MonoBehaviour, ICombatTarget,
+    public sealed class CombatantBehaviour : MonoBehaviour, ICombatTarget, IStatusQuery,
         ICombatStateIdentity, ICombatLifecycleTarget
     {
         [SerializeField, Min(1)] private int maxHealth = 100;
@@ -204,12 +204,78 @@ namespace MonsterSupergroup.Gameplay.Combat
             return ApplyDamage(requestedDamage, false);
         }
 
+        public int RestoreHealth(int requestedHealth)
+        {
+            EnsureInitialized();
+            if (requestedHealth <= 0 || !IsAlive || CurrentHealth >= maxHealth)
+            {
+                return 0;
+            }
+
+            int restoredHealth = Math.Min(requestedHealth, maxHealth - CurrentHealth);
+            CurrentHealth += restoredHealth;
+            HealthChanged?.Invoke(CurrentHealth, maxHealth);
+            return restoredHealth;
+        }
+
+        public bool SetMaximumHealthPreservingMissingHealth(int maximumHealth)
+        {
+            EnsureInitialized();
+            if (maximumHealth < 1)
+            {
+                throw new ArgumentOutOfRangeException(
+                    nameof(maximumHealth),
+                    "Maximum health must be at least one.");
+            }
+
+            if (maximumHealth == maxHealth)
+            {
+                return false;
+            }
+
+            int missingHealth = maxHealth - CurrentHealth;
+            maxHealth = maximumHealth;
+            CurrentHealth = Math.Max(0, maxHealth - missingHealth);
+            if (CurrentHealth == 0)
+            {
+                statusController.Clear();
+            }
+
+            HealthChanged?.Invoke(CurrentHealth, maxHealth);
+            return true;
+        }
+
         public StatusApplicationResult ApplyStatus(StatusApplication application)
         {
             EnsureInitialized();
             return IsAlive
                 ? statusController.Apply(application)
                 : StatusApplicationResult.Rejected;
+        }
+
+        public bool HasStatus(EnemyStatusID statusId)
+        {
+            EnsureInitialized();
+            return statusController.Has(statusId);
+        }
+
+        public bool HasStatusFromSource(EnemyStatusID statusId, uint sourcePlayerId)
+        {
+            EnsureInitialized();
+            return statusController.HasFromSource(statusId, sourcePlayerId);
+        }
+
+        public int GetStatusStackCount(EnemyStatusID statusId)
+        {
+            EnsureInitialized();
+            return statusController.GetStackCount(statusId);
+        }
+
+        public System.Collections.Generic.IReadOnlyList<StatusInstance> GetStatusInstances(
+            EnemyStatusID statusId)
+        {
+            EnsureInitialized();
+            return statusController.GetInstances(statusId);
         }
 
         public void AdvanceStatuses(float deltaSeconds)

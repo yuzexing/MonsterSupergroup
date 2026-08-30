@@ -43,6 +43,8 @@ namespace AstralShift.HellMaiden.AI
 
 		private Dictionary<int, EnemyController> _hordeEnemiesLut;
 
+		private Dictionary<int, EnemySimulationAuthority> _simulationAuthorities;
+
 		private List<int> _allEnemiesIDCache;
 
 		private List<int> _hordeEnemiesIDCache;
@@ -77,6 +79,8 @@ namespace AstralShift.HellMaiden.AI
 		private bool _pendingAsyncGPUReadback;
 
 		private AsyncGPUReadbackQueue _asyncGPUReadbackQueue;
+
+		private bool _visibilityResourcesInitialized;
 
 		private const float EnemyCullingTimeout = 5f;
 
@@ -155,6 +159,7 @@ namespace AstralShift.HellMaiden.AI
 			_allEnemiesLut = new Dictionary<int, BaseEnemyController>();
 			_allEnemiesIDCache = new List<int>();
 			_hordeEnemiesLut = new Dictionary<int, EnemyController>();
+			_simulationAuthorities = new Dictionary<int, EnemySimulationAuthority>();
 			_hordeEnemiesIDCache = new List<int>();
 			_enemiesOnScreen = new List<BaseEnemyController>();
 			_enemiesOffScreen = new List<BaseEnemyController>();
@@ -162,7 +167,12 @@ namespace AstralShift.HellMaiden.AI
 			_recentlyRegisteredEnemies = new Dictionary<int, float>();
 			_visibleIDsLUT = new Dictionary<int, bool>();
 			RunHordeEnemiesStuckCheck();
-			InitializeComputeBuffers();
+			if (!Application.isBatchMode &&
+				SystemInfo.supportsComputeShaders &&
+				_visibilityShader != null)
+			{
+				InitializeComputeBuffers();
+			}
 		}
 
 		private void InitializeComputeBuffers()
@@ -175,6 +185,7 @@ namespace AstralShift.HellMaiden.AI
 			_visibleEnemyIDsBuffer = new ComputeBuffer(1024, 4, ComputeBufferType.Append);
 			_visibleCountBuffer = new ComputeBuffer(1, 4, ComputeBufferType.Raw);
 			_dispatchArgsBuffer = new ComputeBuffer(3, 12, ComputeBufferType.IndirectArguments);
+			_visibilityResourcesInitialized = true;
 		}
 
 		private void Dispose()
@@ -188,7 +199,8 @@ namespace AstralShift.HellMaiden.AI
 			_visibleEnemyIDsBuffer?.Release();
 			_visibleCountBuffer?.Release();
 			_dispatchArgsBuffer?.Release();
-			_asyncGPUReadbackQueue.Clear();
+			_asyncGPUReadbackQueue?.Clear();
+			_visibilityResourcesInitialized = false;
 			_lastVisibleCount = 0;
 			_pendingAsyncGPUReadback = false;
 			_currentIndex = 0;
@@ -208,8 +220,15 @@ namespace AstralShift.HellMaiden.AI
 				int count = _allEnemiesIDCache.Count;
 				_idToNativeIndexLut[instanceID] = count;
 				_allEnemiesIDCache.Add(instanceID);
-				_boundsDataArrayNativeCache[count] = new BoundsData(enemy.Bounds);
+				if (_visibilityResourcesInitialized && count < ComputeMaxEnemyCount)
+				{
+					_boundsDataArrayNativeCache[count] = new BoundsData(enemy.Bounds);
+				}
 				_allEnemiesLut.TryAdd(instanceID, enemy);
+				if (enemy.TryGetComponent(out EnemySimulationAuthority authority))
+				{
+					_simulationAuthorities[instanceID] = authority;
+				}
 				if (enemy is EnemyController enemy2)
 				{
 					_recentlyRegisteredEnemies.TryAdd(instanceID, Time.time);
@@ -241,6 +260,7 @@ namespace AstralShift.HellMaiden.AI
 				_idToNativeIndexLut.Remove(instanceID);
 			}
 			_allEnemiesLut.Remove(instanceID);
+			_simulationAuthorities.Remove(instanceID);
 			if (enemy is EnemyController enemy2)
 			{
 				_recentlyRegisteredEnemies.Remove(instanceID);
@@ -311,8 +331,11 @@ namespace AstralShift.HellMaiden.AI
 				int num4 = _allEnemiesIDCache[_currentIndex];
 				if ((bool)_allEnemiesLut[num4] && _allEnemiesLut[num4].isActiveAndEnabled)
 				{
-					UpdateEnemyDestination(num4);
-					EvaluateAndTryRubberBand(num4);
+					UpdateEnemySimulation(num4);
+					if (AllowsRubberBand(num4))
+					{
+						EvaluateAndTryRubberBand(num4);
+					}
 					num2++;
 				}
 				_currentIndex++;
@@ -344,6 +367,11 @@ namespace AstralShift.HellMaiden.AI
 						UpdateEnemyBoundsInNativeCache(num2);
 						break;
 					}
+					if (!AllowsNavigation(num2))
+					{
+						UpdateEnemyBoundsInNativeCache(num2);
+						continue;
+					}
 					if (_visibleIDsLUT.TryGetValue(num2, out var value2) && value2 && value.usesPathfinding)
 					{
 						value.CheckIfStuck();
@@ -356,7 +384,9 @@ namespace AstralShift.HellMaiden.AI
 
 		private void UpdateEnemyBoundsInNativeCache(int id)
 		{
-			if (_idToNativeIndexLut.TryGetValue(id, out var value))
+			if (_visibilityResourcesInitialized &&
+				_idToNativeIndexLut.TryGetValue(id, out var value) &&
+				value < ComputeMaxEnemyCount)
 			{
 				_boundsDataArrayNativeCache[value] = new BoundsData(_allEnemiesLut[id].Bounds);
 			}
@@ -367,7 +397,7 @@ namespace AstralShift.HellMaiden.AI
 			for (int num = _hordeEnemiesIDCache.Count - 1; num >= 0; num--)
 			{
 				int key = _hordeEnemiesIDCache[num];
-				if (_hordeEnemiesLut[key].isActiveAndEnabled)
+				if (_hordeEnemiesLut[key].isActiveAndEnabled && AllowsCombatDecisions(key))
 				{
 					_hordeEnemiesLut[key].RunLateUpdate();
 				}
@@ -380,16 +410,27 @@ namespace AstralShift.HellMaiden.AI
 
 		private void UpdateEnemyDestination(int id)
 		{
-			if (_hordeEnemiesLut.ContainsKey(id))
+			if (_hordeEnemiesLut.ContainsKey(id) && AllowsNavigation(id))
 			{
 				_hordeEnemiesLut[id].UpdateDestination();
-				_hordeEnemiesLut[id].RunUpdate();
+			}
+		}
+
+		private void UpdateEnemySimulation(int id)
+		{
+			UpdateEnemyDestination(id);
+			if (_hordeEnemiesLut.TryGetValue(id, out EnemyController enemy) &&
+				AllowsCombatDecisions(id))
+			{
+				enemy.RunUpdate();
 			}
 		}
 
 		private void CheckEnemiesVisibility()
 		{
-			if (_pendingAsyncGPUReadback)
+			if (!_visibilityResourcesInitialized ||
+				_pendingAsyncGPUReadback ||
+				!ProCamera2D.Exists)
 			{
 				return;
 			}
@@ -468,6 +509,10 @@ namespace AstralShift.HellMaiden.AI
 
 		private void UpdateBoundsData()
 		{
+			if (!_visibilityResourcesInitialized)
+			{
+				return;
+			}
 			int count = _allEnemiesIDCache.Count;
 			if (count != 0)
 			{
@@ -566,7 +611,12 @@ namespace AstralShift.HellMaiden.AI
 
 		public void RubberBandHordeEnemyPosition(EnemyController enemy)
 		{
-			Vector2 linearVelocity = GameDirector.Instance.Player.body.linearVelocity;
+			Rigidbody2D targetBody = enemy.Target != null
+				? enemy.Target.GetComponentInParent<Rigidbody2D>()
+				: null;
+			Vector2 linearVelocity = targetBody != null
+				? targetBody.linearVelocity
+				: Vector2.zero;
 			Vector2 spawnPosition = default(Vector2);
 			if (enemy.direction != Direction.None)
 			{
@@ -581,7 +631,15 @@ namespace AstralShift.HellMaiden.AI
 				SpawnHelpers.GetOffScreenSpawnPositionInDirection(enemy.spawnReferenceRadius, enemy.Bounds, offscreenTimeoutDistance, obstaclesLayerMask, linearVelocity, out spawnPosition);
 			}
 			enemy.transform.position = spawnPosition;
-			if (_idToNativeIndexLut.TryGetValue(enemy.GetInstanceID(), out var value))
+			if (_simulationAuthorities.TryGetValue(
+				enemy.GetInstanceID(),
+				out EnemySimulationAuthority authority))
+			{
+				authority.MarkDiscontinuity();
+			}
+			if (_visibilityResourcesInitialized &&
+				_idToNativeIndexLut.TryGetValue(enemy.GetInstanceID(), out var value) &&
+				value < ComputeMaxEnemyCount)
 			{
 				_boundsDataArrayNativeCache[value] = new BoundsData(enemy.Bounds);
 			}
@@ -617,6 +675,12 @@ namespace AstralShift.HellMaiden.AI
 						}
 						else
 						{
+							if (!AllowsNavigation(_stuckHordeEnemies[i].GetInstanceID()))
+							{
+								UnRegisterStuckHordeEnemy(_stuckHordeEnemies[i]);
+								i--;
+								continue;
+							}
 							bool num = _stuckHordeEnemies[i].UnStuckCheck();
 							_stuckHordeEnemies[i].RefreshMovementMethod();
 							if (!num)
@@ -665,6 +729,30 @@ namespace AstralShift.HellMaiden.AI
 				RubberBandHordeEnemyPosition(deactivatedEnemy);
 				deactivatedEnemy.Activate();
 			}
+		}
+
+		private bool AllowsNavigation(int instanceID)
+		{
+			return !_simulationAuthorities.TryGetValue(
+				instanceID,
+				out EnemySimulationAuthority authority) ||
+				authority.RunsNavigation;
+		}
+
+		private bool AllowsCombatDecisions(int instanceID)
+		{
+			return !_simulationAuthorities.TryGetValue(
+				instanceID,
+				out EnemySimulationAuthority authority) ||
+				authority.RunsCombatDecisions;
+		}
+
+		private bool AllowsRubberBand(int instanceID)
+		{
+			return !_simulationAuthorities.TryGetValue(
+				instanceID,
+				out EnemySimulationAuthority authority) ||
+				authority.RunsRubberBand;
 		}
 	}
 }

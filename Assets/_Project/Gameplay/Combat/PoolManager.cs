@@ -37,7 +37,7 @@ namespace AstralShift.HellMaiden.Combat
 
 		public void SpawnDamageNumber(int damageableID, Transform targetTransform, int number, DamageType damageType, bool isCritical)
 		{
-			if (GameDirector.Instance.Settings.DamageNumbers)
+			if (CanSpawnDamageNumbers())
 			{
 				string spamGroup = $"{damageType.ToString()} : {damageableID}";
 				damageColors.GetDamageTypeColor(damageType, isCritical).Spawn(targetTransform.position, number, targetTransform).SetSpamGroup(spamGroup);
@@ -46,11 +46,18 @@ namespace AstralShift.HellMaiden.Combat
 
 		public void SpawnDamageNumber(int sourceID, int damageableID, Transform targetTransform, int number, DamageType damageType, bool isCritical)
 		{
-			if (GameDirector.Instance.Settings.DamageNumbers)
+			if (CanSpawnDamageNumbers())
 			{
 				string spamGroup = $"{damageType.ToString()} : {sourceID} : {damageableID}";
 				damageColors.GetDamageTypeColor(damageType, isCritical).Spawn(targetTransform.position, number, targetTransform).SetSpamGroup(spamGroup);
 			}
+		}
+
+		private bool CanSpawnDamageNumbers()
+		{
+			return damageColors != null && GameDirector.Instance != null &&
+				GameDirector.Instance.Settings != null &&
+				GameDirector.Instance.Settings.DamageNumbers;
 		}
 
 		public GenericPooler<T> GetOrCreatePooler<T>(T prefab, int capacity = -1) where T : UnityEngine.Object

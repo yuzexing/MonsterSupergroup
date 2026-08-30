@@ -40,6 +40,14 @@ namespace MonsterSupergroup.GAS
             IWeaponRuntime weapon,
             AttackStatsMultipliers globalMultipliers = null)
         {
+            return BeginAttack(weapon, CombatTags.Attack, globalMultipliers);
+        }
+
+        public AttackSnapshot BeginAttack(
+            IWeaponRuntime weapon,
+            CombatTags tags,
+            AttackStatsMultipliers globalMultipliers = null)
+        {
             if (weapon == null)
             {
                 throw new ArgumentNullException(nameof(weapon));
@@ -58,7 +66,7 @@ namespace MonsterSupergroup.GAS
                 sourcePlayerId,
                 sourceEntityId,
                 weapon.CombatId,
-                CombatTags.Attack);
+                tags | CombatTags.Attack);
             return BeginAttack(weapon, context, globalMultipliers);
         }
 
@@ -78,9 +86,19 @@ namespace MonsterSupergroup.GAS
             }
 
             AttackStatsSnapshot stats = RefreshStats(weapon, globalMultipliers);
-            var attack = new AttackSnapshot(weapon, stats, context);
-            eventSink.Publish(new CombatEvent(CombatEventKind.AttackStarted, context));
-            return attack;
+            RuntimeModifierExecutionSnapshot execution =
+                modifiers.CaptureExecutionSnapshot();
+            var attack = new AttackSnapshot(weapon, stats, context, execution);
+            try
+            {
+                eventSink.Publish(new CombatEvent(CombatEventKind.AttackStarted, context));
+                return attack;
+            }
+            catch
+            {
+                attack.Dispose();
+                throw;
+            }
         }
 
         /// <summary>
@@ -198,6 +216,8 @@ namespace MonsterSupergroup.GAS
                 throw new ArgumentNullException(nameof(attack));
             }
 
+            attack.EnsureAlive();
+
             if (target == null)
             {
                 throw new ArgumentNullException(nameof(target));
@@ -211,7 +231,7 @@ namespace MonsterSupergroup.GAS
 
             if (!target.IsAlive)
             {
-                var zero = new DamageInfo(attack.Weapon.CombatId, 0, false);
+                var zero = new DamageInfo(attack.CombatId, 0, false);
                 return new CombatResolution(
                     CombatContext.None,
                     CombatContext.None,
@@ -223,9 +243,11 @@ namespace MonsterSupergroup.GAS
             }
 
             var targetMultipliers = new AttackStatsMultipliers();
-            for (int i = 0; i < modifiers.DynamicOnDamageModifiers.Count; i++)
+            DynamicOnDamageModifier[] onDamageModifiers =
+                attack.Execution.DynamicOnDamageModifiers;
+            for (int i = 0; i < onDamageModifiers.Length; i++)
             {
-                modifiers.DynamicOnDamageModifiers[i].Apply(targetMultipliers, target);
+                onDamageModifiers[i].Apply(targetMultipliers, target);
             }
 
             int baseDamage = CeilingToNonNegativeInt(
@@ -246,7 +268,7 @@ namespace MonsterSupergroup.GAS
             }
 
             var resolvedDamage = new DamageInfo(
-                attack.Weapon.CombatId,
+                attack.CombatId,
                 requestedValue,
                 isCritical);
             return ResolveDamageCore(
@@ -328,9 +350,10 @@ namespace MonsterSupergroup.GAS
 
                 if (attack != null && predictedAppliedDamage.Value > 0)
                 {
-                    for (int i = 0; i < modifiers.OnHitModifiers.Count; i++)
+                    OnHitModifier[] onHitModifiers = attack.Execution.OnHitModifiers;
+                    for (int i = 0; i < onHitModifiers.Length; i++)
                     {
-                        OnHitModifier modifier = modifiers.OnHitModifiers[i];
+                        OnHitModifier modifier = onHitModifiers[i];
                         if (!triggerGuard.TryEnter(
                                 damageContext,
                                 modifier.ID,
@@ -344,7 +367,7 @@ namespace MonsterSupergroup.GAS
                         var onHitArgs = new OnHitModifierArgs(
                             damageContext.WithBuild(modifier.ID.Value),
                             target,
-                            attack.Weapon,
+                            attack,
                             resolvedDamage,
                             predictedAppliedDamage,
                             random,
@@ -370,12 +393,12 @@ namespace MonsterSupergroup.GAS
 
                     if (attack != null)
                     {
-                        for (int i = 0;
-                             i < modifiers.PredictedLethalHitModifiers.Count;
-                             i++)
+                        OnPredictedLethalHitModifier[] lethalModifiers =
+                            attack.Execution.PredictedLethalHitModifiers;
+                        for (int i = 0; i < lethalModifiers.Length; i++)
                         {
                             OnPredictedLethalHitModifier modifier =
-                                modifiers.PredictedLethalHitModifiers[i];
+                                lethalModifiers[i];
                             if (!triggerGuard.TryEnter(
                                     predictedLethalContext,
                                     modifier.ID,
@@ -389,7 +412,7 @@ namespace MonsterSupergroup.GAS
                             var args = new OnPredictedLethalHitModifierArgs(
                                 predictedLethalContext.WithBuild(modifier.ID.Value),
                                 target,
-                                attack.Weapon,
+                                attack,
                                 resolvedDamage,
                                 predictedAppliedDamage,
                                 random,

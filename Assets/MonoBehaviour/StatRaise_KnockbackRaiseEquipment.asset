@@ -1,0 +1,147 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d6a1579f831008f222506193163b30cf, type: 3}
+  m_Name: StatRaise_KnockbackRaiseEquipment
+  m_EditorClassIdentifier: 
+  ID: 304
+  Title: KNOCKBACK
+  Description: Placeholder for knocback stat raise
+  HasQuote: 0
+  Quote: 
+  hasLocalization: 1
+  TitleKey: MOD_Name_304
+  DescriptionKey: MOD_Desc_304
+  QuoteKey: 
+  poolID: 3
+  poolWeight: 1
+  dependencies: []
+  visualDataReference:
+    m_AssetGUID: a1084c990583cf54e9ded7eaa5ef678b
+    m_SubObjectName: 
+    m_SubObjectType: 
+  cardType: 1
+  usedStatsModifiers: 128
+  levelModifiersData:
+  - modifiers:
+    - modifierID:
+        rid: 6481290391402316034
+      parameters:
+        rid: 6481290391402316035
+      multiSlotConfig: 0
+      multiSlot:
+        isSelfApplied: 0
+        leftSlots: 0
+        rightSlots: 0
+    - modifierID:
+        rid: 6481290391402316036
+      parameters:
+        rid: 6481290391402316037
+      multiSlotConfig: 0
+      multiSlot:
+        isSelfApplied: 0
+        leftSlots: 0
+        rightSlots: 0
+    overrideDescription: 0
+    descriptionKey: 
+  - modifiers:
+    - modifierID:
+        rid: 6481290391402316038
+      parameters:
+        rid: 6481290391402316039
+      multiSlotConfig: 0
+      multiSlot:
+        isSelfApplied: 0
+        leftSlots: 0
+        rightSlots: 0
+    - modifierID:
+        rid: 6481290391402316040
+      parameters:
+        rid: 6481290391402316041
+      multiSlotConfig: 0
+      multiSlot:
+        isSelfApplied: 0
+        leftSlots: 0
+        rightSlots: 0
+    overrideDescription: 0
+    descriptionKey: 
+  - modifiers:
+    - modifierID:
+        rid: 6481290391402316042
+      parameters:
+        rid: 6481290391402316043
+      multiSlotConfig: 0
+      multiSlot:
+        isSelfApplied: 0
+        leftSlots: 0
+        rightSlots: 0
+    - modifierID:
+        rid: 6481290391402316044
+      parameters:
+        rid: 6481290391402316045
+      multiSlotConfig: 0
+      multiSlot:
+        isSelfApplied: 0
+        leftSlots: 0
+        rightSlots: 0
+    overrideDescription: 0
+    descriptionKey: 
+  references:
+    version: 2
+    RefIds:
+    - rid: 6481290391402316034
+      type: {class: EquipmentModifierID, ns: AstralShift.HellMaiden.Data, asm: MonsterSupergroup.Gameplay.Combat}
+      data:
+        value: 3977118250
+    - rid: 6481290391402316035
+      type: {class: StaticStatModifier/ParamsData, ns: AstralShift.HellMaiden.Combat.Hand, asm: MonsterSupergroup.Gameplay.Combat}
+      data:
+        multiplierIncrement: 1
+    - rid: 6481290391402316036
+      type: {class: EquipmentModifierID, ns: AstralShift.HellMaiden.Data, asm: MonsterSupergroup.Gameplay.Combat}
+      data:
+        value: 3809246214
+    - rid: 6481290391402316037
+      type: {class: StaticStatModifier/ParamsData, ns: AstralShift.HellMaiden.Combat.Hand, asm: MonsterSupergroup.Gameplay.Combat}
+      data:
+        multiplierIncrement: 0.2
+    - rid: 6481290391402316038
+      type: {class: EquipmentModifierID, ns: AstralShift.HellMaiden.Data, asm: MonsterSupergroup.Gameplay.Combat}
+      data:
+        value: 3977118250
+    - rid: 6481290391402316039
+      type: {class: StaticStatModifier/ParamsData, ns: AstralShift.HellMaiden.Combat.Hand, asm: MonsterSupergroup.Gameplay.Combat}
+      data:
+        multiplierIncrement: 1.6
+    - rid: 6481290391402316040
+      type: {class: EquipmentModifierID, ns: AstralShift.HellMaiden.Data, asm: MonsterSupergroup.Gameplay.Combat}
+      data:
+        value: 3809246214
+    - rid: 6481290391402316041
+      type: {class: StaticStatModifier/ParamsData, ns: AstralShift.HellMaiden.Combat.Hand, asm: MonsterSupergroup.Gameplay.Combat}
+      data:
+        multiplierIncrement: 0.3
+    - rid: 6481290391402316042
+      type: {class: EquipmentModifierID, ns: AstralShift.HellMaiden.Data, asm: MonsterSupergroup.Gameplay.Combat}
+      data:
+        value: 3977118250
+    - rid: 6481290391402316043
+      type: {class: StaticStatModifier/ParamsData, ns: AstralShift.HellMaiden.Combat.Hand, asm: MonsterSupergroup.Gameplay.Combat}
+      data:
+        multiplierIncrement: 2.2
+    - rid: 6481290391402316044
+      type: {class: EquipmentModifierID, ns: AstralShift.HellMaiden.Data, asm: MonsterSupergroup.Gameplay.Combat}
+      data:
+        value: 3809246214
+    - rid: 6481290391402316045
+      type: {class: StaticStatModifier/ParamsData, ns: AstralShift.HellMaiden.Combat.Hand, asm: MonsterSupergroup.Gameplay.Combat}
+      data:
+        multiplierIncrement: 0.5

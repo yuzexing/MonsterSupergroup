@@ -29,6 +29,7 @@ namespace MonsterSupergroup.Gameplay.Combat
         private CombatPipeline pipeline;
         private uint sourcePlayerId;
         private uint sourceEntityId;
+        private bool ownsRuntimeModifiers;
 
         public uint CombatId => combatId;
 
@@ -41,6 +42,8 @@ namespace MonsterSupergroup.Gameplay.Combat
         public bool IsInitialized { get; private set; }
 
         public int ModifierCount => runtimeModifiers?.Count ?? 0;
+
+        public RuntimeEquipmentModifiers RuntimeModifiers => runtimeModifiers;
 
         public AttackStatsMultipliers GlobalMultipliers => globalMultipliers;
 
@@ -94,7 +97,8 @@ namespace MonsterSupergroup.Gameplay.Combat
                     eventIdSource,
                     eventSink,
                     triggerGuard,
-                    timeSource);
+                    timeSource,
+                    ownsModifiers: true);
             }
             catch
             {
@@ -131,7 +135,8 @@ namespace MonsterSupergroup.Gameplay.Combat
                     eventIdSource,
                     eventSink,
                     triggerGuard,
-                    timeSource);
+                    timeSource,
+                    ownsModifiers: true);
             }
             catch
             {
@@ -144,6 +149,12 @@ namespace MonsterSupergroup.Gameplay.Combat
         {
             EnsureInitialized();
             return pipeline.BeginAttack(this, globalMultipliers);
+        }
+
+        public AttackSnapshot BeginAttack(CombatTags tags)
+        {
+            EnsureInitialized();
+            return pipeline.BeginAttack(this, tags, globalMultipliers);
         }
 
         public AttackSnapshot BeginAttack(CombatContext context)
@@ -159,13 +170,15 @@ namespace MonsterSupergroup.Gameplay.Combat
             float burnDamageMultiplier = 0f)
         {
             EnsureInitialized();
-            AttackSnapshot attack = pipeline.BeginAttack(this, globalMultipliers);
-            return pipeline.ResolveHit(
-                attack,
-                target,
-                onHitChanceMultiplier,
-                onKillChanceMultiplier,
-                burnDamageMultiplier);
+            using (AttackSnapshot attack = pipeline.BeginAttack(this, globalMultipliers))
+            {
+                return pipeline.ResolveHit(
+                    attack,
+                    target,
+                    onHitChanceMultiplier,
+                    onKillChanceMultiplier,
+                    burnDamageMultiplier);
+            }
         }
 
         public DamageInfo ResolveHit(
@@ -200,6 +213,50 @@ namespace MonsterSupergroup.Gameplay.Combat
                 burnDamageMultiplier);
         }
 
+        /// <summary>
+        /// Binds this weapon to containers owned by a per-player build runtime.
+        /// The component never clears those containers when it shuts down.
+        /// </summary>
+        public void InitializeExternal(
+            AttackStats newBaseStats,
+            uint newCombatId,
+            RuntimeEquipmentModifiers externalModifiers,
+            AttackStatsMultipliers externalGlobalMultipliers,
+            IRandomSource randomSource,
+            ICombatEventIdSource eventIdSource = null,
+            ICombatEventSink eventSink = null,
+            CombatTriggerGuard triggerGuard = null,
+            ICombatTimeSource timeSource = null)
+        {
+            if (externalModifiers == null)
+            {
+                throw new ArgumentNullException(nameof(externalModifiers));
+            }
+
+            if (externalGlobalMultipliers == null)
+            {
+                throw new ArgumentNullException(nameof(externalGlobalMultipliers));
+            }
+
+            CommitInitialization(
+                newBaseStats,
+                newCombatId,
+                randomSource ?? new UnityRandomSource(),
+                externalModifiers,
+                externalGlobalMultipliers,
+                eventIdSource,
+                eventSink,
+                triggerGuard,
+                timeSource,
+                ownsModifiers: false);
+        }
+
+        public AttackStatsSnapshot RefreshStats()
+        {
+            EnsureInitialized();
+            return pipeline.RefreshStats(this, globalMultipliers);
+        }
+
         private static RuntimeModifierFactory CreateFactory()
         {
             return new RuntimeModifierFactory(GeneratedModifierRegistry.Create());
@@ -214,13 +271,15 @@ namespace MonsterSupergroup.Gameplay.Combat
             ICombatEventIdSource eventIdSource,
             ICombatEventSink eventSink,
             CombatTriggerGuard triggerGuard,
-            ICombatTimeSource timeSource)
+            ICombatTimeSource timeSource,
+            bool ownsModifiers)
         {
             ReleaseRuntime();
 
             baseStats = newBaseStats;
             combatId = newCombatId;
             runtimeModifiers = newModifiers;
+            ownsRuntimeModifiers = ownsModifiers;
             globalMultipliers = newGlobalMultipliers;
             Stats = new WeaponBehaviourStats(newBaseStats, newGlobalMultipliers);
             pipeline = new CombatPipeline(
@@ -255,12 +314,13 @@ namespace MonsterSupergroup.Gameplay.Combat
 
         private void ReleaseRuntime()
         {
-            if (runtimeModifiers != null)
+            if (runtimeModifiers != null && ownsRuntimeModifiers)
             {
                 runtimeModifiers.Clear();
             }
 
             runtimeModifiers = null;
+            ownsRuntimeModifiers = false;
             globalMultipliers = null;
             pipeline = null;
             Stats = null;

@@ -13,7 +13,7 @@ namespace MonsterSupergroup.Gameplay.Combat
 
         private Rigidbody2D body;
         private WeaponRuntimeBehaviour weapon;
-        private AttackSnapshot attack;
+        private AttackSnapshotLease attackLease;
         private CombatTeam ownerTeam;
         private Vector2 direction;
         private float speed;
@@ -57,7 +57,13 @@ namespace MonsterSupergroup.Gameplay.Combat
             Action<StraightProjectileBehaviour> finishedCallback)
         {
             weapon = sourceWeapon ?? throw new ArgumentNullException(nameof(sourceWeapon));
-            attack = attackSnapshot ?? throw new ArgumentNullException(nameof(attackSnapshot));
+            if (attackSnapshot == null)
+            {
+                throw new ArgumentNullException(nameof(attackSnapshot));
+            }
+
+            attackLease?.Dispose();
+            attackLease = attackSnapshot.Retain();
             if (sourceTeam == CombatTeam.Neutral)
             {
                 throw new ArgumentOutOfRangeException(nameof(sourceTeam));
@@ -82,12 +88,12 @@ namespace MonsterSupergroup.Gameplay.Combat
             direction = movementDirection.normalized;
             speed = movementSpeed;
             remainingHits = hitCount;
-            remainingLifetime = Mathf.Max(0.01f, attack.Stats.Duration);
+            remainingLifetime = Mathf.Max(0.01f, attackSnapshot.Stats.Duration);
             onFinished = finishedCallback;
             hitTargets.Clear();
             finished = false;
             initialized = true;
-            transform.localScale = baseScale * Mathf.Max(0.01f, attack.Stats.Size);
+            transform.localScale = baseScale * Mathf.Max(0.01f, attackSnapshot.Stats.Size);
 
             if (rotateToMovement)
             {
@@ -132,7 +138,7 @@ namespace MonsterSupergroup.Gameplay.Combat
                 return;
             }
 
-            weapon.ResolveHit(attack, combatant);
+            weapon.ResolveHit(attackLease.Snapshot, combatant);
             remainingHits--;
             if (remainingHits <= 0)
             {
@@ -154,6 +160,8 @@ namespace MonsterSupergroup.Gameplay.Combat
 
             finished = true;
             initialized = false;
+            attackLease?.Dispose();
+            attackLease = null;
             Action<StraightProjectileBehaviour> callback = onFinished;
             onFinished = null;
             callback?.Invoke(this);
@@ -168,6 +176,8 @@ namespace MonsterSupergroup.Gameplay.Combat
             if (!finished)
             {
                 finished = true;
+                attackLease?.Dispose();
+                attackLease = null;
                 Action<StraightProjectileBehaviour> callback = onFinished;
                 onFinished = null;
                 callback?.Invoke(this);

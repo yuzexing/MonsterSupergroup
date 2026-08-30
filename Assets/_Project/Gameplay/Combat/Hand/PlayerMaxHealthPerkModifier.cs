@@ -8,7 +8,6 @@ namespace AstralShift.HellMaiden.Combat.Hand
 		public override void Apply(PlayerStats.PlayerStatsMultipliers multipliers)
 		{
 			multipliers.HPMultiplier += parameters.multiplierIncrement;
-			GameDirector.Instance.Player.PlayerStats.UpdateMaxHealth();
 		}
 	}
 }

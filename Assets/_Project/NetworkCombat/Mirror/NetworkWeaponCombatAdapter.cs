@@ -39,6 +39,7 @@ namespace MonsterSupergroup.NetworkCombat
             {
                 serviceProvider = gameObject.AddComponent<CombatRuntimeServiceProvider>();
             }
+
         }
 
         public override void OnStartAuthority()

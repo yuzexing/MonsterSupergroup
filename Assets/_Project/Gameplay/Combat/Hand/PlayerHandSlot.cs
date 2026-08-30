@@ -67,6 +67,12 @@ namespace AstralShift.HellMaiden.Combat.Hand
 
 		public void AddWeapon(RuntimeWeaponData runtimeData, bool isDeactivated = false)
 		{
+			if (runtimeData?.Data != null && runtimeData.Data.UsesNativeGasRuntime)
+			{
+				throw new InvalidOperationException(
+					"New GAS native weapons must be equipped by the owning PlayerBuildRuntime, not the legacy singleton PlayerHand.");
+			}
+
 			WeaponBehaviour weaponBehaviour = UnityEngine.Object.Instantiate(runtimeData.Data.WeaponPrefab, GameDirector.Instance.Player.AttacksParent);
 			weaponBehaviour.Init(runtimeData.Data.ID, runtimeData.Data.BaseStats);
 			WeaponBehaviour = weaponBehaviour;

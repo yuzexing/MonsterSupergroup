@@ -136,6 +136,8 @@ namespace AstralShift.HellMaiden.Player
 
 		public PlayerStatsMultipliers StatMultipliers => statMultipliers;
 
+		public event Action<int> MaximumHealthChanged;
+
 		public void Init()
 		{
 			// _playerMetaStatsDatabase = GameDirector.Instance.runtimeDB.MetaStatsDB;
@@ -234,6 +236,7 @@ namespace AstralShift.HellMaiden.Player
 			StatMultipliers.Reset();
 			equipmentStatsMultipliers.Reset();
 			EvaluatePlayerPerkModifiers();
+			UpdateMaxHealth();
 			EvaluateWeaponPerkModifiers();
 			EvaluateEquipmentPerkModifiers();
 			EvaluateOnEnemyDamagePerkModifiers();
@@ -310,13 +313,13 @@ namespace AstralShift.HellMaiden.Player
 
 		public void UpdateMaxHealth()
 		{
-			int maxHP = currentStats.maxHP;
-			currentStats.maxHP = (int)((float)baseStats.maxHP * (1f + StatMultipliers.HPMultiplier));
-			if (maxHP != MaxHP)
+			int maximumHealth = Math.Max(
+				1,
+				(int)((float)baseStats.maxHP * (1f + StatMultipliers.HPMultiplier)));
+			if (currentStats.maxHP != maximumHealth)
 			{
-				currentStats.HP += currentStats.maxHP - maxHP;
-				GameEvents.Instance.OnMaxHealthUpdate?.Invoke(MaxHP);
-				GameEvents.Instance.OnHealthUpdate?.Invoke(currentStats.HP);
+				currentStats.maxHP = maximumHealth;
+				MaximumHealthChanged?.Invoke(maximumHealth);
 			}
 		}
 

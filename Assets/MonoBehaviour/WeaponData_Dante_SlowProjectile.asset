@@ -1,0 +1,65 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d49b6f84b3b09feb740257504c5fc1f, type: 3}
+  m_Name: WeaponData_Dante_SlowProjectile
+  m_EditorClassIdentifier: 
+  ID: 2
+  Title: Will-o'-the-Wisp
+  Description: Casts a slow-moving fireball.
+  HasQuote: 0
+  Quote: 
+  hasLocalization: 1
+  TitleKey: WPN_Name_02
+  DescriptionKey: WPN_Desc_02
+  QuoteKey: WPN_Quote_02
+  poolID: 0
+  poolWeight: 1
+  dependencies: []
+  visualDataReference:
+    m_AssetGUID: 2bfa0260605aede4b9ea40f43438b10a
+    m_SubObjectName: 
+    m_SubObjectType: 
+    m_SubObjectGUID: 
+    m_EditorAssetChanged: 0
+  WeaponPrefab: {fileID: 114724804207875695, guid: f9c87de004223e040b989f924058c985, type: 3}
+  isSignature: 0
+  ultimateData: {fileID: 0}
+  baseStats:
+    damage: 15
+    critMultiplier: 1.3
+    critRate: 0.09
+    speed: 0.4
+    size: 1
+    duration: 1
+    projectileCount: 1
+    cameraShakeSettings:
+      mode: 0
+      shakePreset: {fileID: 0}
+      constantShakePreset: {fileID: 0}
+      strength: {x: 10, y: 10, z: 0}
+      duration: 0.5
+      vibrato: 10
+      randomness: 0.1
+      smoothness: 0.1
+      useRandomInitialAngle: 1
+      initialAngle: 0
+      rotation: {x: 0, y: 0, z: 0}
+      ignoreTimeScale: 0
+    cameraShakePerLevelIncrement: 0.1
+    knockbackSettings: {fileID: 11400000, guid: 833b6636331a93c4199af1d6ee7d01d1, type: 2}
+    damageType: 0
+  rarity: 0
+  modifierFlags: 247
+  nativeGasDefinition: {fileID: 11400000, guid: affd4e59a12b3d54d9cbe6572186e1fc, type: 2}
+  references:
+    version: 2
+    RefIds: []

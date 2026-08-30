@@ -1,4 +1,5 @@
 using AstralShift.HellMaiden.AI.Enemy;
+using AstralShift.HellMaiden.Player;
 using AstralShift.HellMaiden.Player.Attacks;
 
 namespace AstralShift.HellMaiden.Combat.Hand
@@ -8,7 +9,8 @@ namespace AstralShift.HellMaiden.Combat.Hand
 	{
 		public override void Apply(AttackStatsMultipliers multipliers, BaseEnemyController enemy)
 		{
-			if (GameDirector.Instance.Player.PlayerStats.currentStats.HP == GameDirector.Instance.Player.PlayerStats.currentStats.maxHP)
+			PlayerCombatantBinding owner = GetSourceSlot()?.WeaponBehaviour?.OwnerCombatant;
+			if (owner != null && owner.CurrentHealth == owner.MaximumHealth)
 			{
 				multipliers.damage += parameters.multiplierIncrement;
 			}

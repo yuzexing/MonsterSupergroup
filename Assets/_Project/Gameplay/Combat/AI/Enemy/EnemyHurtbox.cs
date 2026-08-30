@@ -1,11 +1,12 @@
 using System;
 using AstralShift.HellMaiden.Player.Attacks;
+using MonsterSupergroup.Gameplay.Combat;
 using UnityEngine;
 
 namespace AstralShift.HellMaiden.AI.Enemy
 {
 	[RequireComponent(typeof(Collider2D))]
-	public class EnemyHurtbox : MonoBehaviour, IDamageable
+	public class EnemyHurtbox : MonoBehaviour, IDamageable, INativeGasDamageable
 	{
 		[SerializeField]
 		protected Collider2D collider;
@@ -65,6 +66,12 @@ namespace AstralShift.HellMaiden.AI.Enemy
 			}
 
 			this.OnDamageGeneric?.Invoke(value, damageType);
+		}
+
+		public bool ResolveNativeGasHit(NativeGasHit hit)
+		{
+			EnemyController enemy = GetComponentInParent<EnemyController>();
+			return enemy != null && enemy.ResolveNativeGasHit(hit);
 		}
 
 		public virtual void ActivateCollider(bool state)

@@ -1,0 +1,370 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="42" result="Passed" total="42" passed="42" failed="0" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-08-30 06:04:05Z" end-time="2026-08-30 06:04:09Z" duration="3.8323448">
+  <test-suite type="TestSuite" id="1065" name="Monster Supergroup" fullname="Monster Supergroup" runstate="Runnable" testcasecount="46" result="Passed" start-time="2026-08-30 06:04:05Z" end-time="2026-08-30 06:04:09Z" duration="3.832345" total="42" passed="42" failed="0" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="PlayMode" />
+    </properties>
+    <test-suite type="Assembly" id="1049" name="MonsterSupergroup.Gameplay.Tests.PlayMode.dll" fullname="F:/UnityStore/MonsterSupergroup/Library/ScriptAssemblies/MonsterSupergroup.Gameplay.Tests.PlayMode.dll" runstate="Runnable" testcasecount="42" result="Passed" start-time="2026-08-30 06:04:05Z" end-time="2026-08-30 06:04:09Z" duration="3.826257" total="42" passed="42" failed="0" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="57420" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="PlayMode" />
+        <property name="EditorOnly" value="False" />
+      </properties>
+      <test-suite type="TestSuite" id="1050" name="MonsterSupergroup" fullname="MonsterSupergroup" runstate="Runnable" testcasecount="42" result="Passed" start-time="2026-08-30 06:04:05Z" end-time="2026-08-30 06:04:09Z" duration="3.825525" total="42" passed="42" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-suite type="TestSuite" id="1051" name="Gameplay" fullname="MonsterSupergroup.Gameplay" runstate="Runnable" testcasecount="42" result="Passed" start-time="2026-08-30 06:04:05Z" end-time="2026-08-30 06:04:09Z" duration="3.825123" total="42" passed="42" failed="0" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <test-suite type="TestSuite" id="1052" name="Tests" fullname="MonsterSupergroup.Gameplay.Tests" runstate="Runnable" testcasecount="42" result="Passed" start-time="2026-08-30 06:04:05Z" end-time="2026-08-30 06:04:09Z" duration="3.824679" total="42" passed="42" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-suite type="TestFixture" id="1001" name="DanteNativeGasRuntimeTests" fullname="MonsterSupergroup.Gameplay.Tests.DanteNativeGasRuntimeTests" classname="MonsterSupergroup.Gameplay.Tests.DanteNativeGasRuntimeTests" runstate="Runnable" testcasecount="1" result="Passed" start-time="2026-08-30 06:04:05Z" end-time="2026-08-30 06:04:05Z" duration="0.065744" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1002" name="RealDanteWeapon_UsesIndependentPlayerBuildsAndFrozenNativeDamage" fullname="MonsterSupergroup.Gameplay.Tests.DanteNativeGasRuntimeTests.RealDanteWeapon_UsesIndependentPlayerBuildsAndFrozenNativeDamage" methodname="RealDanteWeapon_UsesIndependentPlayerBuildsAndFrozenNativeDamage" classname="MonsterSupergroup.Gameplay.Tests.DanteNativeGasRuntimeTests" runstate="Runnable" seed="31752115" result="Passed" start-time="2026-08-30 06:04:05Z" end-time="2026-08-30 06:04:05Z" duration="0.056643" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+            </test-suite>
+            <test-suite type="TestFixture" id="1003" name="EnemyStatusIntegrationTests" fullname="MonsterSupergroup.Gameplay.Tests.EnemyStatusIntegrationTests" classname="MonsterSupergroup.Gameplay.Tests.EnemyStatusIntegrationTests" runstate="Runnable" testcasecount="5" result="Passed" start-time="2026-08-30 06:04:05Z" end-time="2026-08-30 06:04:05Z" duration="0.020487" total="5" passed="5" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1005" name="CanonicalReplica_DrivesLegacySlowBindingAndRemoval" fullname="MonsterSupergroup.Gameplay.Tests.EnemyStatusIntegrationTests.CanonicalReplica_DrivesLegacySlowBindingAndRemoval" methodname="CanonicalReplica_DrivesLegacySlowBindingAndRemoval" classname="MonsterSupergroup.Gameplay.Tests.EnemyStatusIntegrationTests" runstate="Runnable" seed="1538916215" result="Passed" start-time="2026-08-30 06:04:05Z" end-time="2026-08-30 06:04:05Z" duration="0.008654" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1006" name="LegacyApplication_PreservesSourceIdentityAuthorityAndMagnitude" fullname="MonsterSupergroup.Gameplay.Tests.EnemyStatusIntegrationTests.LegacyApplication_PreservesSourceIdentityAuthorityAndMagnitude" methodname="LegacyApplication_PreservesSourceIdentityAuthorityAndMagnitude" classname="MonsterSupergroup.Gameplay.Tests.EnemyStatusIntegrationTests" runstate="Runnable" seed="1206144050" result="Passed" start-time="2026-08-30 06:04:05Z" end-time="2026-08-30 06:04:05Z" duration="0.003767" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1007" name="LegacyBleed_UsesCombatantTickDamageAndConsumeSemantics" fullname="MonsterSupergroup.Gameplay.Tests.EnemyStatusIntegrationTests.LegacyBleed_UsesCombatantTickDamageAndConsumeSemantics" methodname="LegacyBleed_UsesCombatantTickDamageAndConsumeSemantics" classname="MonsterSupergroup.Gameplay.Tests.EnemyStatusIntegrationTests" runstate="Runnable" seed="2077155245" result="Passed" start-time="2026-08-30 06:04:05Z" end-time="2026-08-30 06:04:05Z" duration="0.001896" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1004" name="LegacyFacade_AndCombatantShareOneStatusController" fullname="MonsterSupergroup.Gameplay.Tests.EnemyStatusIntegrationTests.LegacyFacade_AndCombatantShareOneStatusController" methodname="LegacyFacade_AndCombatantShareOneStatusController" classname="MonsterSupergroup.Gameplay.Tests.EnemyStatusIntegrationTests" runstate="Runnable" seed="1980316398" result="Passed" start-time="2026-08-30 06:04:05Z" end-time="2026-08-30 06:04:05Z" duration="0.002715" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1008" name="LegacyTransfer_MovesStatusStateAndLegacyBindingsToTarget" fullname="MonsterSupergroup.Gameplay.Tests.EnemyStatusIntegrationTests.LegacyTransfer_MovesStatusStateAndLegacyBindingsToTarget" methodname="LegacyTransfer_MovesStatusStateAndLegacyBindingsToTarget" classname="MonsterSupergroup.Gameplay.Tests.EnemyStatusIntegrationTests" runstate="Runnable" seed="1321568858" result="Passed" start-time="2026-08-30 06:04:05Z" end-time="2026-08-30 06:04:05Z" duration="0.001489" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+            </test-suite>
+            <test-suite type="TestFixture" id="1009" name="GameplayCombatIntegrationTests" fullname="MonsterSupergroup.Gameplay.Tests.GameplayCombatIntegrationTests" classname="MonsterSupergroup.Gameplay.Tests.GameplayCombatIntegrationTests" runstate="Runnable" testcasecount="17" result="Passed" start-time="2026-08-30 06:04:05Z" end-time="2026-08-30 06:04:05Z" duration="0.054230" total="17" passed="17" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1010" name="Combatant_AppliesDirectAndStatusDamageDeterministically" fullname="MonsterSupergroup.Gameplay.Tests.GameplayCombatIntegrationTests.Combatant_AppliesDirectAndStatusDamageDeterministically" methodname="Combatant_AppliesDirectAndStatusDamageDeterministically" classname="MonsterSupergroup.Gameplay.Tests.GameplayCombatIntegrationTests" runstate="Runnable" seed="1504061056" result="Passed" start-time="2026-08-30 06:04:05Z" end-time="2026-08-30 06:04:05Z" duration="0.000808" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1013" name="Combatant_LethalStatusStopsPendingTicksAndClearsStatusState" fullname="MonsterSupergroup.Gameplay.Tests.GameplayCombatIntegrationTests.Combatant_LethalStatusStopsPendingTicksAndClearsStatusState" methodname="Combatant_LethalStatusStopsPendingTicksAndClearsStatusState" classname="MonsterSupergroup.Gameplay.Tests.GameplayCombatIntegrationTests" runstate="Runnable" seed="1111638041" result="Passed" start-time="2026-08-30 06:04:05Z" end-time="2026-08-30 06:04:05Z" duration="0.000910" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1012" name="Combatant_MaximumHealthChangePreservesMissingHealth" fullname="MonsterSupergroup.Gameplay.Tests.GameplayCombatIntegrationTests.Combatant_MaximumHealthChangePreservesMissingHealth" methodname="Combatant_MaximumHealthChangePreservesMissingHealth" classname="MonsterSupergroup.Gameplay.Tests.GameplayCombatIntegrationTests" runstate="Runnable" seed="680272709" result="Passed" start-time="2026-08-30 06:04:05Z" end-time="2026-08-30 06:04:05Z" duration="0.000423" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1011" name="Combatant_RestoreHealthClampsToMaximumWithoutAdvancingCanonicalVersion" fullname="MonsterSupergroup.Gameplay.Tests.GameplayCombatIntegrationTests.Combatant_RestoreHealthClampsToMaximumWithoutAdvancingCanonicalVersion" methodname="Combatant_RestoreHealthClampsToMaximumWithoutAdvancingCanonicalVersion" classname="MonsterSupergroup.Gameplay.Tests.GameplayCombatIntegrationTests" runstate="Runnable" seed="1046101782" result="Passed" start-time="2026-08-30 06:04:05Z" end-time="2026-08-30 06:04:05Z" duration="0.000409" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1021" name="Controller_UsesWeaponSpeedStopsAtDeathAndCanResetEncounter" fullname="MonsterSupergroup.Gameplay.Tests.GameplayCombatIntegrationTests.Controller_UsesWeaponSpeedStopsAtDeathAndCanResetEncounter" methodname="Controller_UsesWeaponSpeedStopsAtDeathAndCanResetEncounter" classname="MonsterSupergroup.Gameplay.Tests.GameplayCombatIntegrationTests" runstate="Runnable" seed="2016293652" result="Passed" start-time="2026-08-30 06:04:05Z" end-time="2026-08-30 06:04:05Z" duration="0.003572" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1022" name="ControllerConfigure_IsAtomicAndResetsEncounterReadModel" fullname="MonsterSupergroup.Gameplay.Tests.GameplayCombatIntegrationTests.ControllerConfigure_IsAtomicAndResetsEncounterReadModel" methodname="ControllerConfigure_IsAtomicAndResetsEncounterReadModel" classname="MonsterSupergroup.Gameplay.Tests.GameplayCombatIntegrationTests" runstate="Runnable" seed="710846269" result="Passed" start-time="2026-08-30 06:04:05Z" end-time="2026-08-30 06:04:05Z" duration="0.000791" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1017" name="ControllerWeaponBurnAndStatusDriver_FormOneLethalVerticalSlice" fullname="MonsterSupergroup.Gameplay.Tests.GameplayCombatIntegrationTests.ControllerWeaponBurnAndStatusDriver_FormOneLethalVerticalSlice" methodname="ControllerWeaponBurnAndStatusDriver_FormOneLethalVerticalSlice" classname="MonsterSupergroup.Gameplay.Tests.GameplayCombatIntegrationTests" runstate="Runnable" seed="1911861501" result="Passed" start-time="2026-08-30 06:04:05Z" end-time="2026-08-30 06:04:05Z" duration="0.002086" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1026" name="GameplayAssembly_HasNoUiInputAudioOrLegacyFrameworkReferences" fullname="MonsterSupergroup.Gameplay.Tests.GameplayCombatIntegrationTests.GameplayAssembly_HasNoUiInputAudioOrLegacyFrameworkReferences" methodname="GameplayAssembly_HasNoUiInputAudioOrLegacyFrameworkReferences" classname="MonsterSupergroup.Gameplay.Tests.GameplayCombatIntegrationTests" runstate="Runnable" seed="624411038" result="Passed" start-time="2026-08-30 06:04:05Z" end-time="2026-08-30 06:04:05Z" duration="0.000623" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1015" name="NetworkedCombatant_WaitsForCanonicalConfirmedKill" fullname="MonsterSupergroup.Gameplay.Tests.GameplayCombatIntegrationTests.NetworkedCombatant_WaitsForCanonicalConfirmedKill" methodname="NetworkedCombatant_WaitsForCanonicalConfirmedKill" classname="MonsterSupergroup.Gameplay.Tests.GameplayCombatIntegrationTests" runstate="Runnable" seed="1353561377" result="Passed" start-time="2026-08-30 06:04:05Z" end-time="2026-08-30 06:04:05Z" duration="0.000578" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1014" name="OfflineCombatant_PredictedLethalImmediatelyProducesConfirmedKill" fullname="MonsterSupergroup.Gameplay.Tests.GameplayCombatIntegrationTests.OfflineCombatant_PredictedLethalImmediatelyProducesConfirmedKill" methodname="OfflineCombatant_PredictedLethalImmediatelyProducesConfirmedKill" classname="MonsterSupergroup.Gameplay.Tests.GameplayCombatIntegrationTests" runstate="Runnable" seed="1651629536" result="Passed" start-time="2026-08-30 06:04:05Z" end-time="2026-08-30 06:04:05Z" duration="0.000533" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1024" name="OneHundredCreateAttackDestroyCycles_DoNotLeakRuntimeState" fullname="MonsterSupergroup.Gameplay.Tests.GameplayCombatIntegrationTests.OneHundredCreateAttackDestroyCycles_DoNotLeakRuntimeState" methodname="OneHundredCreateAttackDestroyCycles_DoNotLeakRuntimeState" classname="MonsterSupergroup.Gameplay.Tests.GameplayCombatIntegrationTests" runstate="Runnable" seed="1455475680" result="Passed" start-time="2026-08-30 06:04:05Z" end-time="2026-08-30 06:04:05Z" duration="0.031491" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1023" name="RuntimeUpdateOrder_IsAttackBeforeStatusAdvance" fullname="MonsterSupergroup.Gameplay.Tests.GameplayCombatIntegrationTests.RuntimeUpdateOrder_IsAttackBeforeStatusAdvance" methodname="RuntimeUpdateOrder_IsAttackBeforeStatusAdvance" classname="MonsterSupergroup.Gameplay.Tests.GameplayCombatIntegrationTests" runstate="Runnable" seed="1824669780" result="Passed" start-time="2026-08-30 06:04:05Z" end-time="2026-08-30 06:04:05Z" duration="0.001167" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1018" name="SameSeed_ReproducesCriticalAndProbabilisticOnHitSequence" fullname="MonsterSupergroup.Gameplay.Tests.GameplayCombatIntegrationTests.SameSeed_ReproducesCriticalAndProbabilisticOnHitSequence" methodname="SameSeed_ReproducesCriticalAndProbabilisticOnHitSequence" classname="MonsterSupergroup.Gameplay.Tests.GameplayCombatIntegrationTests" runstate="Runnable" seed="611508075" result="Passed" start-time="2026-08-30 06:04:05Z" end-time="2026-08-30 06:04:05Z" duration="0.002468" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1020" name="StatusUpdateDriver_DelegatesExplicitDeltaWithoutOwningTime" fullname="MonsterSupergroup.Gameplay.Tests.GameplayCombatIntegrationTests.StatusUpdateDriver_DelegatesExplicitDeltaWithoutOwningTime" methodname="StatusUpdateDriver_DelegatesExplicitDeltaWithoutOwningTime" classname="MonsterSupergroup.Gameplay.Tests.GameplayCombatIntegrationTests" runstate="Runnable" seed="130922322" result="Passed" start-time="2026-08-30 06:04:05Z" end-time="2026-08-30 06:04:05Z" duration="0.000640" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1025" name="StraightProjectilePool_ReusesLocalProjectileInstance" fullname="MonsterSupergroup.Gameplay.Tests.GameplayCombatIntegrationTests.StraightProjectilePool_ReusesLocalProjectileInstance" methodname="StraightProjectilePool_ReusesLocalProjectileInstance" classname="MonsterSupergroup.Gameplay.Tests.GameplayCombatIntegrationTests" runstate="Runnable" seed="578420816" result="Passed" start-time="2026-08-30 06:04:05Z" end-time="2026-08-30 06:04:05Z" duration="0.003029" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1016" name="Weapon_ExecutesDamageBurnTickAndSpeedPerkVerticalSlice" fullname="MonsterSupergroup.Gameplay.Tests.GameplayCombatIntegrationTests.Weapon_ExecutesDamageBurnTickAndSpeedPerkVerticalSlice" methodname="Weapon_ExecutesDamageBurnTickAndSpeedPerkVerticalSlice" classname="MonsterSupergroup.Gameplay.Tests.GameplayCombatIntegrationTests" runstate="Runnable" seed="323866150" result="Passed" start-time="2026-08-30 06:04:05Z" end-time="2026-08-30 06:04:05Z" duration="0.000615" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1019" name="Weapon_ReinitializeReplacesOwnedModifiersWithoutAccumulation" fullname="MonsterSupergroup.Gameplay.Tests.GameplayCombatIntegrationTests.Weapon_ReinitializeReplacesOwnedModifiersWithoutAccumulation" methodname="Weapon_ReinitializeReplacesOwnedModifiersWithoutAccumulation" classname="MonsterSupergroup.Gameplay.Tests.GameplayCombatIntegrationTests" runstate="Runnable" seed="286998358" result="Passed" start-time="2026-08-30 06:04:05Z" end-time="2026-08-30 06:04:05Z" duration="0.000541" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+            </test-suite>
+            <test-suite type="TestFixture" id="1027" name="GasUnityAdapterTests" fullname="MonsterSupergroup.Gameplay.Tests.GasUnityAdapterTests" classname="MonsterSupergroup.Gameplay.Tests.GasUnityAdapterTests" runstate="Runnable" testcasecount="7" result="Passed" start-time="2026-08-30 06:04:05Z" end-time="2026-08-30 06:04:05Z" duration="0.009620" total="7" passed="7" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1033" name="EquipmentLoadFailure_RollsBackOnlyTheCurrentBatch" fullname="MonsterSupergroup.Gameplay.Tests.GasUnityAdapterTests.EquipmentLoadFailure_RollsBackOnlyTheCurrentBatch" methodname="EquipmentLoadFailure_RollsBackOnlyTheCurrentBatch" classname="MonsterSupergroup.Gameplay.Tests.GasUnityAdapterTests" runstate="Runnable" seed="237767911" result="Passed" start-time="2026-08-30 06:04:05Z" end-time="2026-08-30 06:04:05Z" duration="0.001823" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1029" name="NullModifierSets_AreEmptyButRequiredDependenciesAreStillValidated" fullname="MonsterSupergroup.Gameplay.Tests.GasUnityAdapterTests.NullModifierSets_AreEmptyButRequiredDependenciesAreStillValidated" methodname="NullModifierSets_AreEmptyButRequiredDependenciesAreStillValidated" classname="MonsterSupergroup.Gameplay.Tests.GasUnityAdapterTests" runstate="Runnable" seed="2088617868" result="Passed" start-time="2026-08-30 06:04:05Z" end-time="2026-08-30 06:04:05Z" duration="0.000344" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1034" name="PerkLoadFailure_RestoresTheOriginalMultiplierSnapshot" fullname="MonsterSupergroup.Gameplay.Tests.GasUnityAdapterTests.PerkLoadFailure_RestoresTheOriginalMultiplierSnapshot" methodname="PerkLoadFailure_RestoresTheOriginalMultiplierSnapshot" classname="MonsterSupergroup.Gameplay.Tests.GasUnityAdapterTests" runstate="Runnable" seed="1118780614" result="Passed" start-time="2026-08-30 06:04:05Z" end-time="2026-08-30 06:04:05Z" duration="0.000387" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1028" name="ProgrammaticAuthoring_LoadsEquipmentAndAppliesWeaponPerks" fullname="MonsterSupergroup.Gameplay.Tests.GasUnityAdapterTests.ProgrammaticAuthoring_LoadsEquipmentAndAppliesWeaponPerks" methodname="ProgrammaticAuthoring_LoadsEquipmentAndAppliesWeaponPerks" classname="MonsterSupergroup.Gameplay.Tests.GasUnityAdapterTests" runstate="Runnable" seed="218938702" result="Passed" start-time="2026-08-30 06:04:05Z" end-time="2026-08-30 06:04:05Z" duration="0.000546" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1030" name="ProgrammaticAuthoring_RejectsInvalidIdentityAndParameters" fullname="MonsterSupergroup.Gameplay.Tests.GasUnityAdapterTests.ProgrammaticAuthoring_RejectsInvalidIdentityAndParameters" methodname="ProgrammaticAuthoring_RejectsInvalidIdentityAndParameters" classname="MonsterSupergroup.Gameplay.Tests.GasUnityAdapterTests" runstate="Runnable" seed="413307997" result="Passed" start-time="2026-08-30 06:04:05Z" end-time="2026-08-30 06:04:05Z" duration="0.000468" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1032" name="SeededRandomSource_ReplaysTheSameSequenceForTheSameSeed" fullname="MonsterSupergroup.Gameplay.Tests.GasUnityAdapterTests.SeededRandomSource_ReplaysTheSameSequenceForTheSameSeed" methodname="SeededRandomSource_ReplaysTheSameSequenceForTheSameSeed" classname="MonsterSupergroup.Gameplay.Tests.GasUnityAdapterTests" runstate="Runnable" seed="2030096361" result="Passed" start-time="2026-08-30 06:04:05Z" end-time="2026-08-30 06:04:05Z" duration="0.000750" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1031" name="UnityRandomSource_RespectsTheCoreHalfOpenRangeContract" fullname="MonsterSupergroup.Gameplay.Tests.GasUnityAdapterTests.UnityRandomSource_RespectsTheCoreHalfOpenRangeContract" methodname="UnityRandomSource_RespectsTheCoreHalfOpenRangeContract" classname="MonsterSupergroup.Gameplay.Tests.GasUnityAdapterTests" runstate="Runnable" seed="1822283725" result="Passed" start-time="2026-08-30 06:04:05Z" end-time="2026-08-30 06:04:05Z" duration="0.003449" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+            </test-suite>
+            <test-suite type="TestFixture" id="1035" name="NetworkCombatSandboxPlayModeTests" fullname="MonsterSupergroup.Gameplay.Tests.NetworkCombatSandboxPlayModeTests" classname="MonsterSupergroup.Gameplay.Tests.NetworkCombatSandboxPlayModeTests" runstate="Runnable" testcasecount="6" result="Passed" start-time="2026-08-30 06:04:05Z" end-time="2026-08-30 06:04:08Z" duration="2.904562" total="6" passed="6" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1041" name="DedicatedServer_BossModeNeverBecomesClientSimulation" fullname="MonsterSupergroup.Gameplay.Tests.NetworkCombatSandboxPlayModeTests.DedicatedServer_BossModeNeverBecomesClientSimulation" methodname="DedicatedServer_BossModeNeverBecomesClientSimulation" classname="MonsterSupergroup.Gameplay.Tests.NetworkCombatSandboxPlayModeTests" runstate="Runnable" seed="4542769" result="Passed" start-time="2026-08-30 06:04:05Z" end-time="2026-08-30 06:04:05Z" duration="0.138529" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[Server listening on port 7777
+]]></output>
+              </test-case>
+              <test-case id="1040" name="DedicatedServer_ClientOwnedEnemiesWaitThenFallbackRuns" fullname="MonsterSupergroup.Gameplay.Tests.NetworkCombatSandboxPlayModeTests.DedicatedServer_ClientOwnedEnemiesWaitThenFallbackRuns" methodname="DedicatedServer_ClientOwnedEnemiesWaitThenFallbackRuns" classname="MonsterSupergroup.Gameplay.Tests.NetworkCombatSandboxPlayModeTests" runstate="Runnable" seed="1175356404" result="Passed" start-time="2026-08-30 06:04:05Z" end-time="2026-08-30 06:04:06Z" duration="0.344621" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[Server listening on port 7777
+]]></output>
+              </test-case>
+              <test-case id="1039" name="Host_ObserverRelayAndServerFallbackConverge" fullname="MonsterSupergroup.Gameplay.Tests.NetworkCombatSandboxPlayModeTests.Host_ObserverRelayAndServerFallbackConverge" methodname="Host_ObserverRelayAndServerFallbackConverge" classname="MonsterSupergroup.Gameplay.Tests.NetworkCombatSandboxPlayModeTests" runstate="Runnable" seed="234344162" result="Passed" start-time="2026-08-30 06:04:06Z" end-time="2026-08-30 06:04:06Z" duration="0.371798" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[Server listening on port 7777
+OptionalWarning.AnimatorDisabled - Possible Issue Detected: The Animator is disabled so Animancer won't be able to play animations.
+
+This warning can be disabled via 'Edit/Project Settings/Animancer' or by calling Animancer.OptionalWarning.AnimatorDisabled.Disable() and it will automatically be compiled out of Runtime Builds (except for Development Builds). More information can be found at <a href="https://kybernetik.com.au/animancer/api/Animancer/OptionalWarning">https://kybernetik.com.au/animancer/api/Animancer/OptionalWarning</a>
+
+]]></output>
+              </test-case>
+              <test-case id="1036" name="Host_StartsOwnerPlayerAndOneHundredTwentyCanonicalEnemies" fullname="MonsterSupergroup.Gameplay.Tests.NetworkCombatSandboxPlayModeTests.Host_StartsOwnerPlayerAndOneHundredTwentyCanonicalEnemies" methodname="Host_StartsOwnerPlayerAndOneHundredTwentyCanonicalEnemies" classname="MonsterSupergroup.Gameplay.Tests.NetworkCombatSandboxPlayModeTests" runstate="Runnable" seed="1811678014" result="Passed" start-time="2026-08-30 06:04:06Z" end-time="2026-08-30 06:04:06Z" duration="0.293283" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[Server listening on port 7777
+OptionalWarning.AnimatorDisabled - Possible Issue Detected: The Animator is disabled so Animancer won't be able to play animations.
+
+This warning can be disabled via 'Edit/Project Settings/Animancer' or by calling Animancer.OptionalWarning.AnimatorDisabled.Disable() and it will automatically be compiled out of Runtime Builds (except for Development Builds). More information can be found at <a href="https://kybernetik.com.au/animancer/api/Animancer/OptionalWarning">https://kybernetik.com.au/animancer/api/Animancer/OptionalWarning</a>
+
+]]></output>
+              </test-case>
+              <test-case id="1037" name="ProductEnemyBase_ClientOwnerRunsNavigationWithoutServerTransform" fullname="MonsterSupergroup.Gameplay.Tests.NetworkCombatSandboxPlayModeTests.ProductEnemyBase_ClientOwnerRunsNavigationWithoutServerTransform" methodname="ProductEnemyBase_ClientOwnerRunsNavigationWithoutServerTransform" classname="MonsterSupergroup.Gameplay.Tests.NetworkCombatSandboxPlayModeTests" runstate="Runnable" seed="1362666084" result="Passed" start-time="2026-08-30 06:04:06Z" end-time="2026-08-30 06:04:07Z" duration="0.566325" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[Server listening on port 7777
+OptionalWarning.AnimatorDisabled - Possible Issue Detected: The Animator is disabled so Animancer won't be able to play animations.
+
+This warning can be disabled via 'Edit/Project Settings/Animancer' or by calling Animancer.OptionalWarning.AnimatorDisabled.Disable() and it will automatically be compiled out of Runtime Builds (except for Development Builds). More information can be found at <a href="https://kybernetik.com.au/animancer/api/Animancer/OptionalWarning">https://kybernetik.com.au/animancer/api/Animancer/OptionalWarning</a>
+
+<color=blue><b>► FSM: </b></color>PlayerMovement: Moving -> TRANSITION to: Hurt
+[FMOD] ObjectLookup::get : Lookup failed for EventModel: {00000000-0000-0000-0000-000000000000}
+
+[FMOD] Event not found: {00000000-0000-0000-0000-000000000000} ()
+PLAYER INVULNERABILITY try set : True Invulnerability count now at 1 invulnerability state now at True
+[FMOD] Please add an 'FMOD Studio Listener' component to your camera in the scene for correct 3D positioning of sounds.
+<color=blue><b>► FSM: </b></color>PlayerMovement: Hurt -> TRANSITION to: Moving
+]]></output>
+              </test-case>
+              <test-case id="1038" name="SkeletonMelee_ReplicaDamagesLocalPlayerButExpiredActiveDoesNot" fullname="MonsterSupergroup.Gameplay.Tests.NetworkCombatSandboxPlayModeTests.SkeletonMelee_ReplicaDamagesLocalPlayerButExpiredActiveDoesNot" methodname="SkeletonMelee_ReplicaDamagesLocalPlayerButExpiredActiveDoesNot" classname="MonsterSupergroup.Gameplay.Tests.NetworkCombatSandboxPlayModeTests" runstate="Runnable" seed="920362225" result="Passed" start-time="2026-08-30 06:04:07Z" end-time="2026-08-30 06:04:08Z" duration="1.187764" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[Server listening on port 7777
+OptionalWarning.AnimatorDisabled - Possible Issue Detected: The Animator is disabled so Animancer won't be able to play animations.
+
+This warning can be disabled via 'Edit/Project Settings/Animancer' or by calling Animancer.OptionalWarning.AnimatorDisabled.Disable() and it will automatically be compiled out of Runtime Builds (except for Development Builds). More information can be found at <a href="https://kybernetik.com.au/animancer/api/Animancer/OptionalWarning">https://kybernetik.com.au/animancer/api/Animancer/OptionalWarning</a>
+
+OptionalWarning.AnimatorSpeed - Possible Issue Detected: Animator.speed doesn't affect Animancer. Use AnimancerGraph.Speed instead.
+
+This warning can be disabled via 'Edit/Project Settings/Animancer' or by calling Animancer.OptionalWarning.AnimatorSpeed.Disable() and it will automatically be compiled out of Runtime Builds (except for Development Builds). More information can be found at <a href="https://kybernetik.com.au/animancer/api/Animancer/OptionalWarning">https://kybernetik.com.au/animancer/api/Animancer/OptionalWarning</a>
+
+<color=blue><b>► FSM: </b></color>PlayerMovement: Moving -> TRANSITION to: Hurt
+[FMOD] ObjectLookup::get : Lookup failed for EventModel: {00000000-0000-0000-0000-000000000000}
+
+[FMOD] Event not found: {00000000-0000-0000-0000-000000000000} ()
+PLAYER INVULNERABILITY try set : True Invulnerability count now at 1 invulnerability state now at True
+<color=blue><b>► FSM: </b></color>PlayerMovement: Hurt -> TRANSITION to: Moving
+<color=blue><b>► FSM: </b></color>EnemyAI: Moving -> TRANSITION to: Warning
+OptionalWarning.AnimatorSpeed - Possible Issue Detected: Animator.speed doesn't affect Animancer. Use AnimancerGraph.Speed instead.
+
+This warning can be disabled via 'Edit/Project Settings/Animancer' or by calling Animancer.OptionalWarning.AnimatorSpeed.Disable() and it will automatically be compiled out of Runtime Builds (except for Development Builds). More information can be found at <a href="https://kybernetik.com.au/animancer/api/Animancer/OptionalWarning">https://kybernetik.com.au/animancer/api/Animancer/OptionalWarning</a>
+
+PLAYER INVULNERABILITY try set : False Invulnerability count now at 0 invulnerability state now at False
+<color=blue><b>► FSM: </b></color>EnemyAI: Warning -> TRANSITION to: Attacking
+<color=blue><b>► FSM: </b></color>PlayerMovement: Moving -> TRANSITION to: Hurt
+[FMOD] ObjectLookup::get : Lookup failed for EventModel: {00000000-0000-0000-0000-000000000000}
+
+[FMOD] Event not found: {00000000-0000-0000-0000-000000000000} ()
+PLAYER INVULNERABILITY try set : True Invulnerability count now at 1 invulnerability state now at True
+]]></output>
+              </test-case>
+            </test-suite>
+            <test-suite type="TestFixture" id="1042" name="PlayerHandAutoCombatTests" fullname="MonsterSupergroup.Gameplay.Tests.PlayerHandAutoCombatTests" classname="MonsterSupergroup.Gameplay.Tests.PlayerHandAutoCombatTests" runstate="Runnable" testcasecount="6" result="Passed" start-time="2026-08-30 06:04:08Z" end-time="2026-08-30 06:04:09Z" duration="0.768167" total="6" passed="6" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1048" name="GameplayScene_StartsLocalAutoCombatWithoutMirrorHost" fullname="MonsterSupergroup.Gameplay.Tests.PlayerHandAutoCombatTests.GameplayScene_StartsLocalAutoCombatWithoutMirrorHost" methodname="GameplayScene_StartsLocalAutoCombatWithoutMirrorHost" classname="MonsterSupergroup.Gameplay.Tests.PlayerHandAutoCombatTests" runstate="Runnable" seed="508824939" result="Passed" start-time="2026-08-30 06:04:08Z" end-time="2026-08-30 06:04:08Z" duration="0.457154" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[OptionalWarning.AnimatorDisabled - Possible Issue Detected: The Animator is disabled so Animancer won't be able to play animations.
+
+This warning can be disabled via 'Edit/Project Settings/Animancer' or by calling Animancer.OptionalWarning.AnimatorDisabled.Disable() and it will automatically be compiled out of Runtime Builds (except for Development Builds). More information can be found at <a href="https://kybernetik.com.au/animancer/api/Animancer/OptionalWarning">https://kybernetik.com.au/animancer/api/Animancer/OptionalWarning</a>
+
+]]></output>
+              </test-case>
+              <test-case id="1045" name="NearestTargetProvider_IgnoresFriendlyDeadAndDistantCombatants" fullname="MonsterSupergroup.Gameplay.Tests.PlayerHandAutoCombatTests.NearestTargetProvider_IgnoresFriendlyDeadAndDistantCombatants" methodname="NearestTargetProvider_IgnoresFriendlyDeadAndDistantCombatants" classname="MonsterSupergroup.Gameplay.Tests.PlayerHandAutoCombatTests" runstate="Runnable" seed="67534655" result="Passed" start-time="2026-08-30 06:04:08Z" end-time="2026-08-30 06:04:08Z" duration="0.001100" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1043" name="PlayerHand_HasFourSlots_AndEnforcesThreeEquipmentLimit" fullname="MonsterSupergroup.Gameplay.Tests.PlayerHandAutoCombatTests.PlayerHand_HasFourSlots_AndEnforcesThreeEquipmentLimit" methodname="PlayerHand_HasFourSlots_AndEnforcesThreeEquipmentLimit" classname="MonsterSupergroup.Gameplay.Tests.PlayerHandAutoCombatTests" runstate="Runnable" seed="559757475" result="Passed" start-time="2026-08-30 06:04:08Z" end-time="2026-08-30 06:04:09Z" duration="0.047398" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1044" name="PlayerHand_OneHundredEquipUnequipCycles_DoNotAccumulateState" fullname="MonsterSupergroup.Gameplay.Tests.PlayerHandAutoCombatTests.PlayerHand_OneHundredEquipUnequipCycles_DoNotAccumulateState" methodname="PlayerHand_OneHundredEquipUnequipCycles_DoNotAccumulateState" classname="MonsterSupergroup.Gameplay.Tests.PlayerHandAutoCombatTests" runstate="Runnable" seed="495456956" result="Passed" start-time="2026-08-30 06:04:09Z" end-time="2026-08-30 06:04:09Z" duration="0.049706" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1047" name="Projectile_DoesNotRetargetAfterEnemyMoves" fullname="MonsterSupergroup.Gameplay.Tests.PlayerHandAutoCombatTests.Projectile_DoesNotRetargetAfterEnemyMoves" methodname="Projectile_DoesNotRetargetAfterEnemyMoves" classname="MonsterSupergroup.Gameplay.Tests.PlayerHandAutoCombatTests" runstate="Runnable" seed="561937414" result="Passed" start-time="2026-08-30 06:04:09Z" end-time="2026-08-30 06:04:09Z" duration="0.083295" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1046" name="ProjectileAttack_UsesLaunchDirection_AndDamagesEnemyThroughGas" fullname="MonsterSupergroup.Gameplay.Tests.PlayerHandAutoCombatTests.ProjectileAttack_UsesLaunchDirection_AndDamagesEnemyThroughGas" methodname="ProjectileAttack_UsesLaunchDirection_AndDamagesEnemyThroughGas" classname="MonsterSupergroup.Gameplay.Tests.PlayerHandAutoCombatTests" runstate="Runnable" seed="507683449" result="Passed" start-time="2026-08-30 06:04:09Z" end-time="2026-08-30 06:04:09Z" duration="0.116546" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[Saving results to: C:/Users/ADMIN/AppData/LocalLow/DefaultCompany/Monster Supergroup\TestResults.xml
+]]></output>
+              </test-case>
+            </test-suite>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

@@ -1,4 +1,8 @@
 using System;
+using AstralShift.HellMaiden.AI;
+using AstralShift.HellMaiden.AI.Enemy;
+using AstralShift.HellMaiden.Interactions;
+using AstralShift.QTI.Triggers;
 using kcp2k;
 using Mirror;
 using MonsterSupergroup.Gameplay.Combat;
@@ -16,6 +20,8 @@ namespace MonsterSupergroup.NetworkCombat.Editor
             "Assets/_Project/Content/NetworkCombat/NetworkPlayer.prefab";
         public const string EnemyPrefabPath =
             "Assets/_Project/Content/NetworkCombat/NetworkEnemy.prefab";
+        public const string ProductEnemyPrefabPath =
+            "Assets/_Project/Content/NetworkCombat/NetworkEnemyBase.prefab";
         public const string WorldPrefabPath =
             "Assets/_Project/Content/NetworkCombat/NetworkCombatWorld.prefab";
         public const string SandboxScenePath =
@@ -25,21 +31,18 @@ namespace MonsterSupergroup.NetworkCombat.Editor
             "Assets/_Project/Content/LocalCombat/LocalPlayer.prefab";
         private const string LocalEnemyPrefabPath =
             "Assets/_Project/Content/LocalCombat/LocalEnemy.prefab";
+        private const string ProductEnemySourcePrefabPath =
+            "Assets/_Project/Content/LocalCombat/EnemyBase.prefab";
 
         [MenuItem("Monster Supergroup/Network Combat/Build Validation Sandbox")]
         public static void BuildSandbox()
         {
             try
             {
-                EnsureFolder("Assets/_Project/Content", "NetworkCombat");
-                GameObject player = BuildPlayerPrefab();
-                GameObject enemy = BuildEnemyPrefab();
-                GameObject world = BuildWorldPrefab(enemy);
-                BuildScene(player, enemy, world);
-                AssetDatabase.SaveAssets();
-                AssetDatabase.Refresh();
+                BuildSandboxAssets();
                 Debug.Log(
                     $"Network combat sandbox built: {SandboxScenePath}. " +
+                    "Skeleton melee validation and combat pooling are included. " +
                     "Use Mirror HUD to start Host and up to three Clients.");
                 ExitBatchMode(0);
             }
@@ -56,6 +59,27 @@ namespace MonsterSupergroup.NetworkCombat.Editor
             }
         }
 
+        public static void BuildSandboxAssets()
+        {
+            EnsureFolder("Assets/_Project/Content", "NetworkCombat");
+            BuildPlayerPrefab();
+            PlayerRuntimeCombatPrefabMigrator.Run();
+            GameObject player = AssetDatabase.LoadAssetAtPath<GameObject>(
+                PlayerPrefabPath);
+            if (player == null)
+            {
+                throw new InvalidOperationException(
+                    $"Player runtime combat migration did not create {PlayerPrefabPath}.");
+            }
+            GameObject enemy = BuildEnemyPrefab();
+            GameObject productEnemy = BuildProductEnemyPrefab();
+            GameObject world = BuildWorldPrefab(enemy);
+            BuildScene(player, enemy, productEnemy, world);
+            EnemySimulationPrefabMigrator.Migrate();
+            AssetDatabase.SaveAssets();
+            AssetDatabase.Refresh();
+        }
+
         private static GameObject BuildPlayerPrefab()
         {
             GameObject root = LoadPrefabContents(LocalPlayerPrefabPath);
@@ -68,6 +92,8 @@ namespace MonsterSupergroup.NetworkCombat.Editor
                 networkTransform.syncDirection = SyncDirection.ClientToServer;
 
                 GetOrAdd<MirrorNetworkCombatBridge>(root);
+                GetOrAdd<NetworkEnemySimulationEndpoint>(root);
+                GetOrAdd<PlayerBuildRuntime>(root);
                 GetOrAdd<NetworkWeaponCombatAdapter>(root);
                 CombatantBehaviour combatant = root.GetComponent<CombatantBehaviour>();
                 GetOrAdd<NetworkCombatantAdapter>(root).Configure(
@@ -100,9 +126,20 @@ namespace MonsterSupergroup.NetworkCombat.Editor
                 }
 
                 GetOrAdd<NetworkIdentity>(root);
-                NetworkTransformReliable networkTransform =
-                    GetOrAdd<NetworkTransformReliable>(root);
-                networkTransform.syncDirection = SyncDirection.ServerToClient;
+                RemoveIfPresent<NetworkTransformReliable>(root);
+                EnemySimulationAuthority authority =
+                    GetOrAdd<EnemySimulationAuthority>(root);
+                authority.ConfigureNetworkManaged(
+                    EnemySimulationMode.NormalClient);
+                GetOrAdd<EnemySnapshotInterpolator>(root);
+                GetOrAdd<NetworkEnemySimulationAgent>(root);
+                EnemyController controller = root.GetComponent<EnemyController>();
+                if (controller != null && controller.attackScript != null)
+                {
+                    controller.attackScript.enabled = false;
+                    EditorUtility.SetDirty(controller.attackScript);
+                }
+                RepairDamageInteractionTriggers(root);
                 CombatantBehaviour combatant = root.GetComponent<CombatantBehaviour>();
                 GetOrAdd<NetworkCombatantAdapter>(root).Configure(
                     combatant,
@@ -120,6 +157,65 @@ namespace MonsterSupergroup.NetworkCombat.Editor
             return AssetDatabase.LoadAssetAtPath<GameObject>(EnemyPrefabPath);
         }
 
+        private static GameObject BuildProductEnemyPrefab()
+        {
+            GameObject root = LoadPrefabContents(ProductEnemySourcePrefabPath);
+            try
+            {
+                root.name = "NetworkEnemyBase";
+                GetOrAdd<NetworkIdentity>(root);
+                RemoveIfPresent<NetworkTransformReliable>(root);
+                EnemySimulationAuthority authority =
+                    GetOrAdd<EnemySimulationAuthority>(root);
+                authority.ConfigureNetworkManaged(
+                    EnemySimulationMode.NormalClient);
+                GetOrAdd<EnemySnapshotInterpolator>(root);
+                GetOrAdd<NetworkEnemySimulationAgent>(root);
+                EnemyController controller = root.GetComponent<EnemyController>();
+                if (controller != null && controller.attackScript != null)
+                {
+                    controller.attackScript.enabled = false;
+                    EditorUtility.SetDirty(controller.attackScript);
+                }
+                RepairDamageInteractionTriggers(root);
+                CombatantBehaviour combatant = root.GetComponent<CombatantBehaviour>();
+                GetOrAdd<NetworkCombatantAdapter>(root).Configure(
+                    combatant,
+                    CombatEntityKind.Enemy,
+                    CombatEntityAuthority.ServerCanonical);
+                GetOrAdd<NetworkEnemyServerDriver>(root);
+
+                PrefabUtility.SaveAsPrefabAsset(root, ProductEnemyPrefabPath);
+            }
+            finally
+            {
+                PrefabUtility.UnloadPrefabContents(root);
+            }
+
+            return AssetDatabase.LoadAssetAtPath<GameObject>(ProductEnemyPrefabPath);
+        }
+
+        private static void RepairDamageInteractionTriggers(GameObject root)
+        {
+            InteractionTrigger[] triggers =
+                root.GetComponentsInChildren<InteractionTrigger>(true);
+            for (int i = 0; i < triggers.Length; i++)
+            {
+                if (triggers[i].interaction != null)
+                {
+                    continue;
+                }
+
+                PlayerDamageInteraction damageInteraction =
+                    triggers[i].GetComponent<PlayerDamageInteraction>();
+                if (damageInteraction != null)
+                {
+                    triggers[i].interaction = damageInteraction;
+                    EditorUtility.SetDirty(triggers[i]);
+                }
+            }
+        }
+
         private static GameObject BuildWorldPrefab(GameObject enemyPrefab)
         {
             var root = new GameObject("NetworkCombatWorld");
@@ -127,6 +223,7 @@ namespace MonsterSupergroup.NetworkCombat.Editor
             {
                 root.AddComponent<NetworkIdentity>();
                 root.AddComponent<NetworkCombatWorld>();
+                root.AddComponent<NetworkEnemySimulationWorld>();
                 root.AddComponent<NetworkEnemySandboxSpawner>().Configure(
                     enemyPrefab,
                     count: 120,
@@ -146,6 +243,7 @@ namespace MonsterSupergroup.NetworkCombat.Editor
         private static void BuildScene(
             GameObject playerPrefab,
             GameObject enemyPrefab,
+            GameObject productEnemyPrefab,
             GameObject worldPrefab)
         {
             Scene scene = EditorSceneManager.NewScene(
@@ -173,6 +271,7 @@ namespace MonsterSupergroup.NetworkCombat.Editor
             manager.playerPrefab = playerPrefab;
             manager.autoCreatePlayer = true;
             manager.spawnPrefabs.Add(enemyPrefab);
+            manager.spawnPrefabs.Add(productEnemyPrefab);
             networkRoot.AddComponent<NetworkManagerHUD>();
             networkRoot.SetActive(true);
 
@@ -181,6 +280,8 @@ namespace MonsterSupergroup.NetworkCombat.Editor
             CreateStartPosition(new Vector2(2f, 0f));
             CreateStartPosition(new Vector2(0f, -2f));
             CreateStartPosition(new Vector2(0f, 2f));
+
+            new GameObject("Enemy AI Manager").AddComponent<EnemyAIManager>();
 
             var cameraObject = new GameObject("Main Camera");
             cameraObject.tag = "MainCamera";
@@ -219,6 +320,16 @@ namespace MonsterSupergroup.NetworkCombat.Editor
         {
             T component = gameObject.GetComponent<T>();
             return component != null ? component : gameObject.AddComponent<T>();
+        }
+
+        private static void RemoveIfPresent<T>(GameObject gameObject)
+            where T : Component
+        {
+            T component = gameObject.GetComponent<T>();
+            if (component != null)
+            {
+                UnityEngine.Object.DestroyImmediate(component);
+            }
         }
 
         private static void EnsureFolder(string parent, string child)

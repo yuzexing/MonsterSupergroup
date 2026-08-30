@@ -1,9 +1,11 @@
+using System;
 using AstralShift.HellMaiden.Player.Attacks;
 
 namespace AstralShift.HellMaiden.Combat.Hand
 {
 	public abstract class StaticStatModifier : RuntimeEquipmentModifier
 	{
+		[Serializable]
 		[EquipmentModifierParams]
 		protected class ParamsData
 		{

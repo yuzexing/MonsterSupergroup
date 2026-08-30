@@ -1,5 +1,7 @@
 namespace MonsterSupergroup.GAS
 {
+    using System.Collections.Generic;
+
     public interface IRandomSource
     {
         /// <summary>Returns a value in the half-open interval [0, 1).</summary>
@@ -43,6 +45,22 @@ namespace MonsterSupergroup.GAS
     public interface IStatusReceiver
     {
         StatusApplicationResult ApplyStatus(StatusApplication application);
+    }
+
+    /// <summary>
+    /// Optional read-only view of effective status state. It intentionally does not
+    /// grant mutation authority and can be implemented by both predicted and replica
+    /// combatants.
+    /// </summary>
+    public interface IStatusQuery
+    {
+        bool HasStatus(EnemyStatusID statusId);
+
+        bool HasStatusFromSource(EnemyStatusID statusId, uint sourcePlayerId);
+
+        int GetStatusStackCount(EnemyStatusID statusId);
+
+        IReadOnlyList<StatusInstance> GetStatusInstances(EnemyStatusID statusId);
     }
 
     public interface ICombatTarget : IDamageReceiver, IStatusReceiver

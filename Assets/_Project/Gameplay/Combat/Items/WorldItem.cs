@@ -71,12 +71,16 @@ namespace AstralShift.HellMaiden.Items
 
 		private Sequence _pullTween;
 
+		private ILootColector _pullCollector;
+
 		protected bool _isPaused;
 
 		[SerializeField]
 		private MinimapUIManager.MinimapIconType iconType;
 
 		public event Action OnStartPlayerPull;
+
+		protected ILootColector PullCollector => _pullCollector;
 
 		protected virtual void OnEnable()
 		{
@@ -94,6 +98,7 @@ namespace AstralShift.HellMaiden.Items
 				MapGenerator.OnTilesMoved -= CheckDespawn;
 			}
 			ReleaseMinimapIcon();
+			_pullCollector = null;
 		}
 
 		public virtual void Consume()
@@ -110,8 +115,14 @@ namespace AstralShift.HellMaiden.Items
 			base.gameObject.SetActive(value: true);
 		}
 
-		public virtual bool StartPlayerPull()
+		public virtual bool StartPlayerPull(ILootColector collector)
 		{
+			if (collector == null)
+			{
+				return false;
+			}
+
+			_pullCollector = collector;
 			return StartPlayerPull(baseMoveBackAmount, baseMoveBackTime, baseBackCurve, baseJumpForce, baseJumpTime, baseJumpCurve, delegate
 			{
 				LootManager.Instance.EnqueueConsume(this);
@@ -163,8 +174,8 @@ namespace AstralShift.HellMaiden.Items
 
 		private void PlayerPull(float moveBackAmmount, float moveBackDuration, AnimationCurve moveBackCurve, float jumpDuration, float jumpForce, AnimationCurve jumpCurve, Action onEnd, Action turnOffParticles)
 		{
-			Transform playerTransform = GameDirector.Instance.Player.transform;
-			Vector3 endValue = -(Vector2)(playerTransform.position - base.transform.position).normalized * moveBackAmmount;
+			Vector3 collectorPosition = _pullCollector.GetLootCollectorPosition();
+			Vector3 endValue = -(Vector2)(collectorPosition - base.transform.position).normalized * moveBackAmmount;
 			endValue += base.transform.position;
 			float progress = 0f;
 			Vector3 jumpStartPosition = Vector3.zero;
@@ -181,7 +192,10 @@ namespace AstralShift.HellMaiden.Items
 			}, 1f, jumpDuration).SetEase(jumpCurve).OnUpdate(delegate
 			{
 				float num = Mathf.Sin(progress * MathF.PI * 1f) * jumpForce;
-				base.transform.position = Vector3.Lerp(jumpStartPosition, playerTransform.position, progress) + Vector3.up * num;
+				base.transform.position = Vector3.Lerp(
+					jumpStartPosition,
+					_pullCollector.GetLootCollectorPosition(),
+					progress) + Vector3.up * num;
 			}));
 			_pullTween.OnComplete(delegate
 			{

@@ -156,7 +156,10 @@ namespace AstralShift.HellMaiden.Items
 			_toBeConsumedLoot = new List<WorldItem>();
 			_consumeQueue = new Queue<WorldItem>();
 			_lootCollectors = new List<ILootColector>();
-			RegisterLootCollector(GameDirector.Instance.Player);
+			if (GameDirector.Instance?.Player != null)
+			{
+				RegisterLootCollector(GameDirector.Instance.Player);
+			}
 			if (XPGarbageCollectionEnabled)
 			{
 				StartXPGarbageCollection();
@@ -174,7 +177,10 @@ namespace AstralShift.HellMaiden.Items
 
 		public void RegisterLootCollector(ILootColector collector)
 		{
-			_lootCollectors.Add(collector);
+			if (collector != null && !_lootCollectors.Contains(collector))
+			{
+				_lootCollectors.Add(collector);
+			}
 		}
 
 		public void UnRegisterLootCollector(ILootColector collector)
@@ -195,15 +201,46 @@ namespace AstralShift.HellMaiden.Items
 			_toBeConsumedLoot.Remove(item);
 		}
 
-		public bool TryStartConsumePull(WorldItem item)
+		public bool TryStartConsumePull(WorldItem item, ILootColector collector)
 		{
-			bool num = item.StartPlayerPull();
+			bool num = item.StartPlayerPull(collector);
 			if (num)
 			{
 				_toBeCollectedLoot.Remove(item);
 				_toBeConsumedLoot.Add(item);
 			}
 			return num;
+		}
+
+		public bool TryStartConsumePull(WorldItem item)
+		{
+			if (item == null)
+			{
+				return false;
+			}
+
+			ILootColector closestCollector = null;
+			float closestSqrDistance = float.MaxValue;
+			for (int i = 0; i < _lootCollectors.Count; i++)
+			{
+				ILootColector collector = _lootCollectors[i];
+				if (collector?.CombatantBinding == null ||
+					!collector.CombatantBinding.AcceptsLocalMutations)
+				{
+					continue;
+				}
+
+				float sqrDistance = ((Vector2)item.transform.position -
+					collector.GetLootCollectorPosition()).sqrMagnitude;
+				if (sqrDistance < closestSqrDistance)
+				{
+					closestSqrDistance = sqrDistance;
+					closestCollector = collector;
+				}
+			}
+
+			return closestCollector != null &&
+				TryStartConsumePull(item, closestCollector);
 		}
 
 		public void EnqueueConsume(WorldItem item)
@@ -221,7 +258,7 @@ namespace AstralShift.HellMaiden.Items
 			{
 				Vector2 vector = _toBeCollectedLoot[num].transform.position;
 				int num2 = _lootCollectors.Count - 1;
-				while (num2 >= 0 && ((vector - _lootCollectors[num2].GetLootCollectorPosition()).sqrMagnitude > Mathf.Pow(_lootCollectors[num2].GetLootPullArea(), 2f) || !TryStartConsumePull(_toBeCollectedLoot[num])))
+				while (num2 >= 0 && ((vector - _lootCollectors[num2].GetLootCollectorPosition()).sqrMagnitude > Mathf.Pow(_lootCollectors[num2].GetLootPullArea(), 2f) || !TryStartConsumePull(_toBeCollectedLoot[num], _lootCollectors[num2])))
 				{
 					num2--;
 				}

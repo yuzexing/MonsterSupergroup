@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using MonsterSupergroup.GAS;
 using UnityEngine;
 
 namespace AstralShift.HellMaiden.Player.Attacks
@@ -38,6 +39,14 @@ namespace AstralShift.HellMaiden.Player.Attacks
 			if ((bool)progressionScaler)
 			{
 				progressionScaler.Apply(behaviour);
+			}
+		}
+
+		public override void Init(WeaponBehaviour behaviour, AttackSnapshot attack)
+		{
+			if ((bool)progressionScaler)
+			{
+				progressionScaler.Apply(attack.Stats);
 			}
 		}
 

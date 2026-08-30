@@ -1,6 +1,7 @@
 using System;
 using AstralShift.HellMaiden.Combat;
 using AstralShift.Pooling;
+using MonsterSupergroup.GAS;
 using UnityEngine;
 
 namespace AstralShift.HellMaiden.Player.Attacks
@@ -23,11 +24,22 @@ namespace AstralShift.HellMaiden.Player.Attacks
 		public override void Initialize(WeaponBehaviour behaviour)
 		{
 			_behaviour = behaviour;
-			if ((bool)hitEffect && _hitEffectPooler == null)
+			EnsurePool();
+			SpawnHitEffect(null);
+		}
+
+		public override void Initialize(
+			WeaponBehaviour behaviour,
+			AttackSnapshot attack)
+		{
+			_behaviour = behaviour;
+			if (attack == null)
 			{
-				_hitEffectPooler = PoolManager.Instance.GetOrCreatePooler(hitEffect);
+				throw new ArgumentNullException(nameof(attack));
 			}
-			SpawnHitEffect();
+
+			EnsurePool();
+			SpawnHitEffect(attack);
 		}
 
 		private void OnDestroy()
@@ -43,10 +55,19 @@ namespace AstralShift.HellMaiden.Player.Attacks
 			}
 		}
 
-		protected virtual void SpawnHitEffect()
+		private void EnsurePool()
+		{
+			if ((bool)hitEffect && _hitEffectPooler == null)
+			{
+				_hitEffectPooler = PoolManager.Instance.GetOrCreatePooler(hitEffect);
+			}
+		}
+
+		protected virtual void SpawnHitEffect(AttackSnapshot attack)
 		{
 			if (_hitEffectPooler != null)
 			{
+				AttackSnapshotLease attackLease = attack?.Retain();
 				BaseAttackHitEffect effect = _hitEffectPooler.GetOrCreate(null, activate: true);
 				if ((bool)hitEffectSpawnPivot)
 				{
@@ -58,22 +79,58 @@ namespace AstralShift.HellMaiden.Player.Attacks
 				}
 				Action onEnd = delegate
 				{
+					attackLease?.Dispose();
 					_hitEffectPooler?.Return(effect);
 				};
+				Action<IDamageable> onHit = attackLease == null
+					? OnHit
+					: damageable =>
+					{
+						if ((bool)_behaviour && damageable != null)
+						{
+							_behaviour.OnNativeGasHit(
+								effect.transform.position,
+								damageable,
+								attackLease.Snapshot);
+						}
+					};
+				try
+				{
 				switch (damageMode)
 				{
 				case DamageMode.ExplosionHit:
 				case DamageMode.Both:
-					effect.Init(_behaviour);
-					effect.PlayOnEnable(OnHit, onEnd);
+					if (attack != null)
+					{
+						effect.Init(_behaviour, attack);
+					}
+					else
+					{
+						effect.Init(_behaviour);
+					}
+					effect.PlayOnEnable(onHit, onEnd);
 					break;
 				case DamageMode.MainHit:
-					effect.Init(_behaviour);
+					if (attack != null)
+					{
+						effect.Init(_behaviour, attack);
+					}
+					else
+					{
+						effect.Init(_behaviour);
+					}
 					effect.PlayOnEnable(onEnd);
 					break;
 				default:
 					effect.PlayOnEnable(onEnd);
 					break;
+				}
+				}
+				catch
+				{
+					attackLease?.Dispose();
+					_hitEffectPooler?.Return(effect);
+					throw;
 				}
 			}
 		}

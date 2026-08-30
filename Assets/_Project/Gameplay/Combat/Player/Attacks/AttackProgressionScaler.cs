@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using MonsterSupergroup.GAS;
 using UnityEngine;
 
 namespace AstralShift.HellMaiden.Player.Attacks
@@ -70,6 +71,15 @@ namespace AstralShift.HellMaiden.Player.Attacks
 			ApplySize(behaviour.SizeMultiplierSum);
 			ApplyDuration(behaviour.DurationMultiplierSum);
 			ApplyProjectileCount(behaviour.ProjectileCountValue, behaviour.BaseAttackStats.projectileCount);
+		}
+
+		public void Apply(AttackStatsSnapshot snapshot)
+		{
+			ApplyDamage(snapshot.DamageMultiplierSum);
+			ApplySpeed(snapshot.SpeedMultiplierSum);
+			ApplySize(snapshot.SizeMultiplierSum);
+			ApplyDuration(snapshot.DurationMultiplierSum);
+			ApplyProjectileCount(snapshot.ProjectileCount, snapshot.BaseProjectileCount);
 		}
 
 		public void ApplyDamage(float percentageMultiplier)

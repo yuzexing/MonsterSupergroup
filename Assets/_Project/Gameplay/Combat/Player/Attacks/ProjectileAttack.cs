@@ -88,16 +88,25 @@ namespace AstralShift.HellMaiden.Player.Attacks
 
 		public virtual void Attack(Vector2 direction, float speed, int hitMaxCount, bool rotateToDirection)
 		{
+			PlayerMovement owner = _behaviour.OwnerPlayer;
+			if (owner == null)
+			{
+				throw new System.InvalidOperationException(
+					"ProjectileAttack requires an owning PlayerMovement.");
+			}
+
 			_direction = direction.normalized;
-			_lastPlayerDir = GameDirector.Instance.Player.attackDirection.normalized;
+			_lastPlayerDir = owner.attackDirection.normalized;
 			this.speed = speed;
 			base.rotateToDirection = rotateToDirection;
 			this.hitMaxCount = hitMaxCount;
 			if (!fixedDuration)
 			{
-				despawnTimeout = _behaviour.DurationValue;
+				despawnTimeout = NativeAttackSnapshot != null
+					? NativeAttackSnapshot.Stats.Duration
+					: _behaviour.DurationValue;
 			}
-			projectileMovement?.Init(_direction, rotationTransform, speed, despawnTimeout, GameDirector.Instance.Player.transform);
+			projectileMovement?.Init(_direction, rotationTransform, speed, despawnTimeout, owner.transform);
 			PlayParticleSystem();
 			ResetParameters();
 			Attack(direction, base.rotateToDirection);
@@ -110,12 +119,12 @@ namespace AstralShift.HellMaiden.Player.Attacks
 				_hitCount++;
 				if (_hitCount < hitMaxCount)
 				{
-					_behaviour.OnHit(base.transform.position, damageable);
+					ResolveDamage(damageable);
 					return;
 				}
 				if (base.HitEffectMode != DamageMode.None && base.HitEffectMode != DamageMode.ExplosionHit)
 				{
-					_behaviour.OnHit(base.transform.position, damageable);
+					ResolveDamage(damageable);
 				}
 			}
 			_fired = false;
@@ -135,8 +144,13 @@ namespace AstralShift.HellMaiden.Player.Attacks
 			}
 			if (!isCharging && attackStartAnimTransitionAfterFinish && attachedToPlayerWhileStartAnimationPlays)
 			{
-				base.transform.position = GameDirector.Instance.Player.transform.position;
-				Vector2 normalized = GameDirector.Instance.Player.attackDirection.normalized;
+				PlayerMovement owner = _behaviour.OwnerPlayer;
+				if (owner == null)
+				{
+					return;
+				}
+				base.transform.position = owner.transform.position;
+				Vector2 normalized = owner.attackDirection.normalized;
 				float z = Vector2.SignedAngle(_lastPlayerDir, normalized);
 				_direction = Quaternion.Euler(0f, 0f, z) * _direction;
 				_lastPlayerDir = normalized;
@@ -196,9 +210,13 @@ namespace AstralShift.HellMaiden.Player.Attacks
 			_hitCount = 0;
 			if (!fixedDuration)
 			{
-				despawnTimeout = _behaviour.DurationValue;
+				despawnTimeout = NativeAttackSnapshot != null
+					? NativeAttackSnapshot.Stats.Duration
+					: _behaviour.DurationValue;
 			}
-			speed *= _behaviour.SpeedMultipliersProduct;
+			speed *= NativeAttackSnapshot != null
+				? NativeAttackSnapshot.Stats.SpeedMultipliersProduct
+				: _behaviour.SpeedMultipliersProduct;
 			if (attackStartAnim == null || !attackStartAnimTransitionAfterFinish)
 			{
 				if (launchSound.automatic)
@@ -239,8 +257,10 @@ namespace AstralShift.HellMaiden.Player.Attacks
 			}
 		}
 
-		private new void OnDisable()
+		protected override void OnDisable()
 		{
+			ReleaseNativeAttackSnapshot();
+			base.OnDisable();
 			StopParticleSystem();
 			if (_loopInstance.isValid())
 			{
@@ -294,7 +314,14 @@ namespace AstralShift.HellMaiden.Player.Attacks
 			}
 			if ((bool)hitEffectResolver)
 			{
-				hitEffectResolver.Initialize(_behaviour);
+				if (NativeAttackSnapshot != null)
+				{
+					hitEffectResolver.Initialize(_behaviour, NativeAttackSnapshot);
+				}
+				else
+				{
+					hitEffectResolver.Initialize(_behaviour);
+				}
 			}
 		}
 

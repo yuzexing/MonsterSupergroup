@@ -1,4 +1,5 @@
 using System;
+using MonsterSupergroup.GAS;
 using UnityEngine;
 using CombatTags = MonsterSupergroup.GAS.CombatTags;
 
@@ -46,43 +47,69 @@ namespace AstralShift.HellMaiden.Player.Attacks
 
 		public override void Attack()
 		{
-			base.Attack();
-			PlayAttackSound();
-			int projectileCountValue = base.ProjectileCountValue;
-			if (projectileCountValue == 1)
+			AttackSnapshot nativeAttack = null;
+			if (UsesNativeGasRuntime)
 			{
-				ProjectileAttack orCreateAttack = GetOrCreateAttack();
-				orCreateAttack.gameObject.SetActive(value: true);
-				orCreateAttack.transform.position = base.transform.position + positionOffset + (Vector3)player.attackDirection.normalized * spawnRadius;
-				orCreateAttack.Attack(player.attackDirection.normalized, baseSpeed, hitCount, rotateToMovement);
+				nativeAttack = BeginNativeGasAttack();
+			}
+			else
+			{
+				base.Attack();
+			}
+
+			try
+			{
+				PlayAttackSound();
+				int projectileCountValue = nativeAttack != null
+					? nativeAttack.Stats.ProjectileCount
+					: base.ProjectileCountValue;
+				if (projectileCountValue == 1)
+				{
+					ProjectileAttack orCreateAttack = GetOrCreateAttack(nativeAttack);
+					orCreateAttack.gameObject.SetActive(value: true);
+					orCreateAttack.transform.position = base.transform.position + positionOffset + (Vector3)player.attackDirection.normalized * spawnRadius;
+					orCreateAttack.Attack(player.attackDirection.normalized, baseSpeed, hitCount, rotateToMovement);
+					LastAttackElapsedTime = 0f;
+					return;
+				}
+				for (int i = 0; i < projectileCountValue; i++)
+				{
+					ProjectileAttack orCreateAttack2 = GetOrCreateAttack(nativeAttack);
+					orCreateAttack2.gameObject.SetActive(value: true);
+					Vector3 vector = Quaternion.AngleAxis(Vector2.SignedAngle(player.attackDirection, Vector2.right) + 360f / (float)projectileCountValue * (float)i, -Vector3.forward) * Vector3.right;
+					orCreateAttack2.transform.position = base.transform.position + positionOffset + vector.normalized * spawnRadius;
+					orCreateAttack2.Attack(vector.normalized, baseSpeed, hitCount, rotateToMovement);
+				}
 				LastAttackElapsedTime = 0f;
-				return;
 			}
-			for (int i = 0; i < projectileCountValue; i++)
+			finally
 			{
-				ProjectileAttack orCreateAttack2 = GetOrCreateAttack();
-				orCreateAttack2.gameObject.SetActive(value: true);
-				Vector3 vector = Quaternion.AngleAxis(Vector2.SignedAngle(player.attackDirection, Vector2.right) + 360f / (float)projectileCountValue * (float)i, -Vector3.forward) * Vector3.right;
-				orCreateAttack2.transform.position = base.transform.position + positionOffset + vector.normalized * spawnRadius;
-				orCreateAttack2.Attack(vector.normalized, baseSpeed, hitCount, rotateToMovement);
+				nativeAttack?.Dispose();
 			}
-			LastAttackElapsedTime = 0f;
 		}
 
-		protected ProjectileAttack GetOrCreateAttack()
+		protected ProjectileAttack GetOrCreateAttack(AttackSnapshot nativeAttack = null)
 		{
 			ProjectileAttack attack = variants.GetOrCreate(base.ActiveElement, null);
 			Action onEnd = delegate
 			{
+				attack.ReleaseNativeAttackSnapshot();
 				variants.Return(attack);
 			};
-			attack.Init(this, null, onEnd);
+			if (nativeAttack != null)
+			{
+				attack.InitNative(this, nativeAttack, null, onEnd);
+			}
+			else
+			{
+				attack.Init(this, null, onEnd);
+			}
 			return attack;
 		}
 
 		protected override void Dispose()
 		{
-			variants.Dispose();
+			variants.Dispose(attack => attack.ReleaseNativeAttackSnapshot());
 			LastAttackElapsedTime = 0f;
 		}
 	}

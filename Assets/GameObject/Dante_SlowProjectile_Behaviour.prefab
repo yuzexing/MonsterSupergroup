@@ -1,0 +1,219 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1709254077376921
+GameObject:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Component:
+  - component: {fileID: 4730242686860875}
+  - component: {fileID: 114724804207875695}
+  m_Layer: 0
+  m_Name: Dante_SlowProjectile_Behaviour
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4730242686860875
+Transform:
+  serializedVersion: 2
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1709254077376921}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.5, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: -0, z: -0}
+--- !u!114 &114724804207875695
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1709254077376921}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 90452dec79dafb72b038689cb53558b9, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  statsBehaviour:
+    baseStats:
+      damage: 0
+      critMultiplier: 0
+      critRate: 0
+      speed: 0
+      size: 0
+      duration: 0
+      projectileCount: 0
+      cameraShakeSettings:
+        mode: 0
+        shakePreset: {fileID: 0}
+        constantShakePreset: {fileID: 0}
+        strength: {x: 10, y: 10, z: 0}
+        duration: 0.5
+        vibrato: 10
+        randomness: 0.1
+        smoothness: 0.1
+        useRandomInitialAngle: 1
+        initialAngle: 0
+        rotation: {x: 0, y: 0, z: 0}
+        ignoreTimeScale: 0
+      cameraShakePerLevelIncrement: 0
+      knockbackSettings: {fileID: 0}
+      damageType: 0
+    baseStatsMultipliers:
+      damage: 0
+      critRate: 0
+      critDamage: 0
+      speed: 0
+      size: 0
+      duration: 0
+      projectileCountIncrement: 0
+      pristineDamageMultiplier: 0
+      contactDamageReceivedMultiplier: 0
+      projectileDamageReceivedMultiplier: 0
+      eliteDamageMultiplier: 0
+      meleeDamageMultiplier: 0
+      rangedDamageMultiplier: 0
+      burnDamageMultiplier: 0
+      poisonDamageMultiplier: 0
+      bleedDamageMultiplier: 0
+      statusGeneralMultiplier: 0
+      playerFullHealthMultiplier: 0
+      knockBackMultiplier: 0
+    dynamicStatsMultipliers:
+      damage: 0
+      critRate: 0
+      critDamage: 0
+      speed: 0
+      size: 0
+      duration: 0
+      projectileCountIncrement: 0
+      pristineDamageMultiplier: 0
+      contactDamageReceivedMultiplier: 0
+      projectileDamageReceivedMultiplier: 0
+      eliteDamageMultiplier: 0
+      meleeDamageMultiplier: 0
+      rangedDamageMultiplier: 0
+      burnDamageMultiplier: 0
+      poisonDamageMultiplier: 0
+      bleedDamageMultiplier: 0
+      statusGeneralMultiplier: 0
+      playerFullHealthMultiplier: 0
+      knockBackMultiplier: 0
+    playerStats:
+      baseStats:
+        HP: 0
+        maxHP: 0
+        moveSpeed: 0
+        dashDistance: 0
+        dashSpeed: 0
+        dashCooldown: 0
+        maxDashCharges: 0
+        dashCharges: 0
+        pullArea: 0
+        xpModifier: 0
+        dmgReduction: 0
+        cardsReRollsAmount: 0
+        cardBanishesAmount: 0
+        perksRerollsAmount: 0
+        perkBanishesAmount: 0
+        reviveAmount: 0
+      currentStats:
+        HP: 0
+        maxHP: 0
+        moveSpeed: 0
+        dashDistance: 0
+        dashSpeed: 0
+        dashCooldown: 0
+        maxDashCharges: 0
+        dashCharges: 0
+        pullArea: 0
+        xpModifier: 0
+        dmgReduction: 0
+        cardsReRollsAmount: 0
+        cardBanishesAmount: 0
+        perksRerollsAmount: 0
+        perkBanishesAmount: 0
+        reviveAmount: 0
+      statMultipliers:
+        HPMultiplier: 0
+        moveSpeedMultiplier: 0
+        dashDistanceMultiplier: 0
+        dashSpeedMultiplier: 0
+        dashCooldownMultiplier: 0
+        xpPullRadiusMultiplier: 0
+        xpAmountMultiplier: 0
+        receivedDamageMultiplier: 0
+        currencyMultiplier: 0
+        extraDashCharges: 0
+        reviveChancesAmountReceiver: 0
+        baseAttackStatsMultipliers:
+          damage: 0
+          critRate: 0
+          critDamage: 0
+          speed: 0
+          size: 0
+          duration: 0
+          projectileCountIncrement: 0
+          pristineDamageMultiplier: 0
+          contactDamageReceivedMultiplier: 0
+          projectileDamageReceivedMultiplier: 0
+          eliteDamageMultiplier: 0
+          meleeDamageMultiplier: 0
+          rangedDamageMultiplier: 0
+          burnDamageMultiplier: 0
+          poisonDamageMultiplier: 0
+          bleedDamageMultiplier: 0
+          statusGeneralMultiplier: 0
+          playerFullHealthMultiplier: 0
+          knockBackMultiplier: 0
+        attackStatsMultipliers:
+          damage: 0
+          critRate: 0
+          critDamage: 0
+          speed: 0
+          size: 0
+          duration: 0
+          projectileCountIncrement: 0
+          pristineDamageMultiplier: 0
+          contactDamageReceivedMultiplier: 0
+          projectileDamageReceivedMultiplier: 0
+          eliteDamageMultiplier: 0
+          meleeDamageMultiplier: 0
+          rangedDamageMultiplier: 0
+          burnDamageMultiplier: 0
+          poisonDamageMultiplier: 0
+          bleedDamageMultiplier: 0
+          statusGeneralMultiplier: 0
+          playerFullHealthMultiplier: 0
+          knockBackMultiplier: 0
+      equipmentStatsMultipliers:
+        OnHitChanceMultiplier: 1
+        OnKillChanceMultiplier: 1
+      playerBaseStatsDatabase: {fileID: 0}
+  attackSound:
+    Guid:
+      Data1: 0
+      Data2: 0
+      Data3: 0
+      Data4: 0
+  variants:
+    defaultPrefab: {fileID: 114336590748365959, guid: 9b3fa1ca59ab72a4aab2f15219a14a94, type: 2}
+    poisonPrefab: {fileID: 114336590748365959, guid: 8cc5289258a4d3646884f21474f67820, type: 2}
+    firePrefab: {fileID: 114336590748365959, guid: 8a734412d1b8b86449d85c84e1e4b5ce, type: 2}
+    allowPoison: 1
+    allowFire: 1
+  baseSpeed: 5
+  spawnRadius: 0.5
+  hitCount: 999
+  rotateToMovement: 1
+  positionOffset: {x: 0, y: 0, z: 0}

@@ -1,10 +1,11 @@
 using System;
+using System.Collections;
 using Mirror;
 using UnityEngine;
 
 namespace MonsterSupergroup.NetworkCombat
 {
-    /// <summary>Development/load-test spawner. Enemy simulation remains server-owned.</summary>
+    /// <summary>Development/load-test spawner for client-simulated Enemy snapshots.</summary>
     [DisallowMultipleComponent]
     [RequireComponent(typeof(NetworkIdentity))]
     public sealed class NetworkEnemySandboxSpawner : NetworkBehaviour
@@ -38,6 +39,23 @@ namespace MonsterSupergroup.NetworkCombat
             {
                 Debug.LogError("NetworkEnemySandboxSpawner requires an enemy prefab.", this);
                 return;
+            }
+
+            StartCoroutine(SpawnWhenPlayerIsReady());
+        }
+
+        private IEnumerator SpawnWhenPlayerIsReady()
+        {
+            while (NetworkServer.active &&
+                   (NetworkEnemySimulationWorld.Instance == null ||
+                    !NetworkEnemySimulationWorld.Instance.HasEligiblePlayer))
+            {
+                yield return null;
+            }
+
+            if (!NetworkServer.active)
+            {
+                yield break;
             }
 
             for (int i = 0; i < enemyCount; i++)

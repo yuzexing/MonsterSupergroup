@@ -34,11 +34,20 @@ namespace AstralShift.HellMaiden.Interactions
 			}
 			else if (interactor.Transform.TryGetComponent<PlayerHitbox>(out component2))
 			{
+				if (!component2.TryGetOwner(out var playerBinding) ||
+					!playerBinding.AcceptsLocalMutations || playerBinding.PlayerMovement == null)
+				{
+					OnEnd();
+					return;
+				}
+
 				if (alsoDamagePlayer)
 				{
-					damageInteraction.DamagePlayer();
+					damageInteraction.DamagePlayer(component2);
 				}
-				GameDirector.Instance.Player.BruteforceKnockBack(base.transform.position, knockbackSettings);
+				playerBinding.PlayerMovement.BruteforceKnockBack(
+					base.transform.position,
+					knockbackSettings);
 			}
 			OnEnd();
 		}
@@ -59,13 +68,19 @@ namespace AstralShift.HellMaiden.Interactions
 				{
 					component.BruteforceKnockBack(base.transform.position, knockbackSettings);
 				}
-				else if (!GameDirector.Instance.Player.IsInvulnerable && raycastHit2D.collider.transform.TryGetComponent<PlayerHitbox>(out component2))
+				else if (raycastHit2D.collider.transform.TryGetComponent<PlayerHitbox>(out component2) &&
+					component2.TryGetOwner(out var playerBinding) &&
+					playerBinding.AcceptsLocalMutations &&
+					playerBinding.PlayerMovement != null &&
+					!playerBinding.PlayerMovement.IsInvulnerable)
 				{
 					if (alsoDamagePlayer)
 					{
-						damageInteraction.DamagePlayer();
+						damageInteraction.DamagePlayer(component2);
 					}
-					GameDirector.Instance.Player.BruteforceKnockBack(base.transform.position, knockbackSettings);
+					playerBinding.PlayerMovement.BruteforceKnockBack(
+						base.transform.position,
+						knockbackSettings);
 				}
 			}
 		}

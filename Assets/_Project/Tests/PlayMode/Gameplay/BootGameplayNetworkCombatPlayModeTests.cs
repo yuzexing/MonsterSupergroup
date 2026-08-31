@@ -2,7 +2,9 @@ using System.Collections;
 using System.Linq;
 using System.Text.RegularExpressions;
 using AstralShift.HellMaiden.AI;
+using AstralShift.HellMaiden.Controllers;
 using AstralShift.HellMaiden.Player;
+using AstralShift.Managers;
 using Mirror;
 using MonsterSupergroup.Gameplay.Combat;
 using MonsterSupergroup.Gameplay.Local;
@@ -82,6 +84,29 @@ namespace MonsterSupergroup.Gameplay.Tests
             Assert.That(build.IsBuildActive, Is.True);
             Assert.That(build.InitialWeapon, Is.Not.Null);
             Assert.That(build.InitialWeapon.UsesNativeGasRuntime, Is.True);
+
+            PlayerMovement ownerMovement =
+                NetworkClient.localPlayer.GetComponent<PlayerMovement>();
+            Assert.That(ownerMovement, Is.Not.Null);
+            Assert.That(ownerMovement.enabled, Is.True,
+                "Only the Owner may execute PlayerMovement.");
+            Assert.That(ControllerManager.Instance, Is.Not.Null);
+            Assert.That(
+                ControllerManager.Instance.CurrentController,
+                Is.TypeOf<PlayerController_HMD>(),
+                "OnStartAuthority must activate the gameplay input controller.");
+            Assert.That(
+                ControllerManager.Instance.inputHandler.CurrentController,
+                Is.SameAs(ControllerManager.Instance.CurrentController));
+
+            Rigidbody2D ownerBody = ownerMovement.GetComponent<Rigidbody2D>();
+            Vector2 movementStart = ownerBody.position;
+            ownerMovement.SetDirection(Vector2.right);
+            yield return new WaitForFixedUpdate();
+            yield return new WaitForFixedUpdate();
+            ownerMovement.SetDirection(Vector2.zero);
+            Assert.That(ownerBody.position.x, Is.GreaterThan(movementStart.x + 0.01f),
+                "PlayerMovement must remain the active movement executor.");
 
             uint playerId = NetworkClient.localPlayer.netId;
             Assert.That(skeleton.Assignment.AggroTargetPlayerId, Is.EqualTo(playerId));
@@ -207,6 +232,12 @@ namespace MonsterSupergroup.Gameplay.Tests
                    Time.realtimeSinceStartup < deadline)
             {
                 yield return null;
+            }
+
+            if (ControllerManager.Instance != null)
+            {
+                Assert.That(ControllerManager.Instance.CurrentController, Is.Null,
+                    "Stopping Owner authority must release PlayerController_HMD.");
             }
         }
     }

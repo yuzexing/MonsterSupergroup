@@ -53,6 +53,52 @@ namespace AstralShift.Control
 			return val;
 		}
 
+		public bool Remove(T controller)
+		{
+			if (controller == null || Count == 0)
+			{
+				return false;
+			}
+
+			T[] controllers = ToArray();
+			bool found = false;
+			bool removedTop = ReferenceEquals(controllers[0], controller);
+			for (int i = 0; i < controllers.Length; i++)
+			{
+				if (ReferenceEquals(controllers[i], controller))
+				{
+					found = true;
+					break;
+				}
+			}
+
+			if (!found)
+			{
+				return false;
+			}
+
+			if (removedTop)
+			{
+				controller.Deactivate();
+			}
+
+			base.Clear();
+			for (int i = controllers.Length - 1; i >= 0; i--)
+			{
+				if (!ReferenceEquals(controllers[i], controller))
+				{
+					base.Push(controllers[i]);
+				}
+			}
+
+			if (removedTop && Count > 0)
+			{
+				Peek()?.Activate();
+			}
+
+			return true;
+		}
+
 		public new T Peek()
 		{
 			return base.Peek() as T;

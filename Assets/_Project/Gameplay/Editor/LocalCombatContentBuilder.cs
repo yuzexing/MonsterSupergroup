@@ -174,7 +174,6 @@ namespace MonsterSupergroup.Gameplay.Editor
                 attacksRoot.SetParent(root.transform, false);
                 PlayerHandBehaviour hand = root.AddComponent<PlayerHandBehaviour>();
                 hand.Configure(attacksRoot, targetProvider, team);
-                root.AddComponent<LocalPlayerMovement>();
                 PlayerLoader loader = root.AddComponent<PlayerLoader>();
                 loader.Configure(hand, combatant, weaponDefinition);
 

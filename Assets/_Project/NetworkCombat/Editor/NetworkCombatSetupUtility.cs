@@ -32,8 +32,8 @@ namespace MonsterSupergroup.NetworkCombat.Editor
         public const string BootScenePath = "Assets/Scenes/Boot.unity";
         public const string GameplayScenePath = "Assets/Scenes/Gameplay.unity";
 
-        private const string LocalPlayerPrefabPath =
-            "Assets/_Project/Content/LocalCombat/LocalPlayer.prefab";
+        private const string NetworkPlayerStartsRootName =
+            "Network Player Starts";
         private const string LocalEnemyPrefabPath =
             "Assets/_Project/Content/LocalCombat/LocalEnemy.prefab";
         private const string ProductEnemySourcePrefabPath =
@@ -100,7 +100,6 @@ namespace MonsterSupergroup.NetworkCombat.Editor
         public static void BuildSandboxAssets()
         {
             EnsureFolder("Assets/_Project/Content", "NetworkCombat");
-            BuildPlayerPrefab();
             PlayerRuntimeCombatPrefabMigrator.Run();
             GameObject player = AssetDatabase.LoadAssetAtPath<GameObject>(
                 PlayerPrefabPath);
@@ -116,42 +115,6 @@ namespace MonsterSupergroup.NetworkCombat.Editor
             EnemySimulationPrefabMigrator.Migrate();
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
-        }
-
-        private static GameObject BuildPlayerPrefab()
-        {
-            GameObject root = LoadPrefabContents(LocalPlayerPrefabPath);
-            try
-            {
-                root.name = "NetworkPlayer";
-                GetOrAdd<NetworkIdentity>(root);
-                NetworkTransformReliable networkTransform =
-                    GetOrAdd<NetworkTransformReliable>(root);
-                networkTransform.syncDirection = SyncDirection.ClientToServer;
-
-                GetOrAdd<MirrorNetworkCombatBridge>(root);
-                GetOrAdd<NetworkEnemySimulationEndpoint>(root);
-                GetOrAdd<NetworkPlayerAutoTargeting>(root);
-                RemoveIfPresent<PlayerLoader>(root);
-                RemoveIfPresent<PlayerHandBehaviour>(root);
-                PlayerBuildRuntime build = GetOrAdd<PlayerBuildRuntime>(root);
-                build.ConfigureInitialWeapon(2u);
-                GetOrAdd<NetworkWeaponCombatAdapter>(root);
-                CombatantBehaviour combatant = root.GetComponent<CombatantBehaviour>();
-                GetOrAdd<NetworkCombatantAdapter>(root).Configure(
-                    combatant,
-                    CombatEntityKind.Player,
-                    CombatEntityAuthority.OwnerFinal);
-                GetOrAdd<NetworkPlayerBootstrap>(root);
-
-                PrefabUtility.SaveAsPrefabAsset(root, PlayerPrefabPath);
-            }
-            finally
-            {
-                PrefabUtility.UnloadPrefabContents(root);
-            }
-
-            return AssetDatabase.LoadAssetAtPath<GameObject>(PlayerPrefabPath);
         }
 
         private static GameObject BuildEnemyPrefab()
@@ -548,6 +511,14 @@ namespace MonsterSupergroup.NetworkCombat.Editor
             spawner.Configure(skeletonEnemy, 5f);
             EditorUtility.SetDirty(spawner);
 
+            GameObject[] startsRoots = scene.GetRootGameObjects()
+                .Where(root => root.name == NetworkPlayerStartsRootName)
+                .ToArray();
+            for (int i = 0; i < startsRoots.Length; i++)
+            {
+                UnityEngine.Object.DestroyImmediate(startsRoots[i]);
+            }
+
             NetworkStartPosition[] starts = scene.GetRootGameObjects()
                 .SelectMany(root =>
                     root.GetComponentsInChildren<NetworkStartPosition>(true))
@@ -557,7 +528,7 @@ namespace MonsterSupergroup.NetworkCombat.Editor
                 UnityEngine.Object.DestroyImmediate(starts[i].gameObject);
             }
 
-            var startsRoot = new GameObject("Network Player Starts");
+            var startsRoot = new GameObject(NetworkPlayerStartsRootName);
             CreateStartPosition(startsRoot.transform, new Vector2(-2f, 0f));
             CreateStartPosition(startsRoot.transform, new Vector2(2f, 0f));
             CreateStartPosition(startsRoot.transform, new Vector2(0f, -2f));

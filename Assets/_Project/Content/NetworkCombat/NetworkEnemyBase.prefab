@@ -465,11 +465,11 @@ MonoBehaviour:
   status: {fileID: 3464355175358801471}
   stats:
     baseStats:
-      hp: 0
-      damage: 0
-      xp: 0
-      speed: 0
-      knockbackMultiplier: 0
+      hp: 100
+      damage: 100
+      xp: 2
+      speed: 2
+      knockbackMultiplier: 1
       stunTime: 0
       windMultiplier: 0
     currentStats:
@@ -495,7 +495,7 @@ MonoBehaviour:
   onHitEffectCenterPivot1: {fileID: 0}
   onHitEffectCenterPivot2: {fileID: 0}
   onHitEffectCenterPivot3: {fileID: 0}
-  onHitEffectTopPivot: {fileID: 0}
+  onHitEffectTopPivot: {fileID: 8652513492408536084}
   onHitEffectBottomPivot: {fileID: 0}
   windDirection: {x: 0, y: 0}
   forceWindInteraction: 0
@@ -503,7 +503,7 @@ MonoBehaviour:
   _target: {fileID: 0}
   combatantBinding: {fileID: 1182271614744417403}
   rigidBody: {fileID: 643773787611812521}
-  enemyAnimator: {fileID: 0}
+  enemyAnimator: {fileID: 81410022000739470}
   damagePosition: {fileID: 4296801462725101565}
   overrideGlobalLootSettings: 0
   lootSettings: {fileID: 0}
@@ -523,9 +523,9 @@ MonoBehaviour:
   lastAttackTime: -Infinity
   attackOnDeath: 0
   stopForAttack: 1
-  defaultMovement: {fileID: 0}
+  defaultMovement: {fileID: 344994819785530423}
   usesPathfinding: 0
-  aILerpMovement: {fileID: 0}
+  aILerpMovement: {fileID: 5876204353586269710}
   obstaclesLayerMask:
     serializedVersion: 2
     m_Bits: 0
@@ -586,7 +586,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3911887690903730936}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 70825c9b33264fa384508209ae8b1fea, type: 3}
   m_Name: 
@@ -662,7 +662,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Mirror::Mirror.NetworkIdentity
   sceneId: 0
-  _assetId: 0
+  _assetId: 2503929215
   serverOnly: 0
   visibility: 0
   hasSpawned: 0
@@ -717,7 +717,7 @@ MonoBehaviour:
   body: {fileID: 0}
   localChase: {fileID: 0}
   enemyController: {fileID: 0}
-  productMovementOnly: 1
+  productMovementOnly: 0
 --- !u!114 &4298737649338467457
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -763,6 +763,8 @@ GameObject:
   - component: {fileID: 7737456504531732710}
   - component: {fileID: 4711044852071195017}
   - component: {fileID: 6634749241475583828}
+  - component: {fileID: 3826333316387773728}
+  - component: {fileID: 81410022000739470}
   m_Layer: 0
   m_Name: Sprite
   m_TagString: Untagged
@@ -812,7 +814,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
+  - {fileID: 2100000, guid: 980561408307c4f40aa7adafa34d2429, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -855,7 +857,7 @@ Animator:
   m_GameObject: {fileID: 4919775779397899460}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 40eb2b7f7d3a51c479ab3d19da149865, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -867,6 +869,279 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &3826333316387773728
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4919775779397899460}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0ad50f81b1d25c441943c37a89ba23f6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Kybernetik.Animancer::Animancer.AnimancerComponent
+  _Animator: {fileID: 6634749241475583828}
+  _Transitions: {fileID: 0}
+  _ActionOnDisable: 0
+--- !u!114 &81410022000739470
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4919775779397899460}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e0c44f19917f4aaaaac0ddc07d646785, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: MonsterSupergroup.Gameplay.Combat::AstralShift.HellMaiden.AI.Enemy.EnemyAnimator
+  animancer: {fileID: 3826333316387773728}
+  moveLeftUp:
+    _FadeDuration: 0.25
+    _Speed: 1
+    _Events:
+      _NormalizedTimes: []
+      _Callbacks: []
+      _Names: []
+    _Clip: {fileID: 7400000, guid: b3ff059e81d96b04dbdaa60a3e69ef60, type: 2}
+    _NormalizedStartTime: NaN
+  moveLeftDown:
+    _FadeDuration: 0.25
+    _Speed: 1
+    _Events:
+      _NormalizedTimes: []
+      _Callbacks: []
+      _Names: []
+    _Clip: {fileID: 7400000, guid: b3ff059e81d96b04dbdaa60a3e69ef60, type: 2}
+    _NormalizedStartTime: NaN
+  moveRightUp:
+    _FadeDuration: 0.25
+    _Speed: 1
+    _Events:
+      _NormalizedTimes: []
+      _Callbacks: []
+      _Names: []
+    _Clip: {fileID: 7400000, guid: b3ff059e81d96b04dbdaa60a3e69ef60, type: 2}
+    _NormalizedStartTime: NaN
+  moveRightDown:
+    _FadeDuration: 0.25
+    _Speed: 1
+    _Events:
+      _NormalizedTimes: []
+      _Callbacks: []
+      _Names: []
+    _Clip: {fileID: 7400000, guid: b3ff059e81d96b04dbdaa60a3e69ef60, type: 2}
+    _NormalizedStartTime: NaN
+  attackWarningLeftUp:
+    _FadeDuration: 0.25
+    _Speed: 1
+    _Events:
+      _NormalizedTimes: []
+      _Callbacks: []
+      _Names: []
+    _Clip: {fileID: 0}
+    _NormalizedStartTime: NaN
+  attackWarningLeftDown:
+    _FadeDuration: 0.25
+    _Speed: 1
+    _Events:
+      _NormalizedTimes: []
+      _Callbacks: []
+      _Names: []
+    _Clip: {fileID: 0}
+    _NormalizedStartTime: NaN
+  attackWarningRightUp:
+    _FadeDuration: 0.25
+    _Speed: 1
+    _Events:
+      _NormalizedTimes: []
+      _Callbacks: []
+      _Names: []
+    _Clip: {fileID: 0}
+    _NormalizedStartTime: NaN
+  attackWarningRightDown:
+    _FadeDuration: 0.25
+    _Speed: 1
+    _Events:
+      _NormalizedTimes: []
+      _Callbacks: []
+      _Names: []
+    _Clip: {fileID: 0}
+    _NormalizedStartTime: NaN
+  attackLeftUp:
+    _FadeDuration: 0.25
+    _Speed: 1
+    _Events:
+      _NormalizedTimes: []
+      _Callbacks: []
+      _Names: []
+    _Clip: {fileID: 0}
+    _NormalizedStartTime: NaN
+  attackLeftDown:
+    _FadeDuration: 0.25
+    _Speed: 1
+    _Events:
+      _NormalizedTimes: []
+      _Callbacks: []
+      _Names: []
+    _Clip: {fileID: 0}
+    _NormalizedStartTime: NaN
+  attackRightUp:
+    _FadeDuration: 0.25
+    _Speed: 1
+    _Events:
+      _NormalizedTimes: []
+      _Callbacks: []
+      _Names: []
+    _Clip: {fileID: 0}
+    _NormalizedStartTime: NaN
+  attackRightDown:
+    _FadeDuration: 0.25
+    _Speed: 1
+    _Events:
+      _NormalizedTimes: []
+      _Callbacks: []
+      _Names: []
+    _Clip: {fileID: 0}
+    _NormalizedStartTime: NaN
+  recoveryLeftUp:
+    _FadeDuration: 0.25
+    _Speed: 1
+    _Events:
+      _NormalizedTimes: []
+      _Callbacks: []
+      _Names: []
+    _Clip: {fileID: 0}
+    _NormalizedStartTime: NaN
+  recoveryLeftDown:
+    _FadeDuration: 0.25
+    _Speed: 1
+    _Events:
+      _NormalizedTimes: []
+      _Callbacks: []
+      _Names: []
+    _Clip: {fileID: 0}
+    _NormalizedStartTime: NaN
+  recoveryRightUp:
+    _FadeDuration: 0.25
+    _Speed: 1
+    _Events:
+      _NormalizedTimes: []
+      _Callbacks: []
+      _Names: []
+    _Clip: {fileID: 0}
+    _NormalizedStartTime: NaN
+  recoveryRightDown:
+    _FadeDuration: 0.25
+    _Speed: 1
+    _Events:
+      _NormalizedTimes: []
+      _Callbacks: []
+      _Names: []
+    _Clip: {fileID: 0}
+    _NormalizedStartTime: NaN
+  hurtLeftUp:
+    _FadeDuration: 0.25
+    _Speed: 1
+    _Events:
+      _NormalizedTimes: []
+      _Callbacks: []
+      _Names: []
+    _Clip: {fileID: 7400000, guid: b3ff059e81d96b04dbdaa60a3e69ef60, type: 2}
+    _NormalizedStartTime: NaN
+  hurtLeftDown:
+    _FadeDuration: 0.25
+    _Speed: 1
+    _Events:
+      _NormalizedTimes: []
+      _Callbacks: []
+      _Names: []
+    _Clip: {fileID: 7400000, guid: b3ff059e81d96b04dbdaa60a3e69ef60, type: 2}
+    _NormalizedStartTime: NaN
+  hurtRightUp:
+    _FadeDuration: 0.25
+    _Speed: 1
+    _Events:
+      _NormalizedTimes: []
+      _Callbacks: []
+      _Names: []
+    _Clip: {fileID: 7400000, guid: b3ff059e81d96b04dbdaa60a3e69ef60, type: 2}
+    _NormalizedStartTime: NaN
+  hurtRightDown:
+    _FadeDuration: 0.25
+    _Speed: 1
+    _Events:
+      _NormalizedTimes: []
+      _Callbacks: []
+      _Names: []
+    _Clip: {fileID: 7400000, guid: b3ff059e81d96b04dbdaa60a3e69ef60, type: 2}
+    _NormalizedStartTime: NaN
+  deadLeftUp:
+    _FadeDuration: 0.25
+    _Speed: 1
+    _Events:
+      _NormalizedTimes: []
+      _Callbacks: []
+      _Names: []
+    _Clip: {fileID: 7400000, guid: b3ff059e81d96b04dbdaa60a3e69ef60, type: 2}
+    _NormalizedStartTime: NaN
+  deadLeftDown:
+    _FadeDuration: 0.25
+    _Speed: 1
+    _Events:
+      _NormalizedTimes: []
+      _Callbacks: []
+      _Names: []
+    _Clip: {fileID: 7400000, guid: b3ff059e81d96b04dbdaa60a3e69ef60, type: 2}
+    _NormalizedStartTime: NaN
+  deadRightUp:
+    _FadeDuration: 0.25
+    _Speed: 1
+    _Events:
+      _NormalizedTimes: []
+      _Callbacks: []
+      _Names: []
+    _Clip: {fileID: 7400000, guid: b3ff059e81d96b04dbdaa60a3e69ef60, type: 2}
+    _NormalizedStartTime: NaN
+  deadRightDown:
+    _FadeDuration: 0.25
+    _Speed: 1
+    _Events:
+      _NormalizedTimes: []
+      _Callbacks: []
+      _Names: []
+    _Clip: {fileID: 7400000, guid: b3ff059e81d96b04dbdaa60a3e69ef60, type: 2}
+    _NormalizedStartTime: NaN
+  shadowFadeout:
+    _FadeDuration: 0.25
+    _Speed: 1
+    _Events:
+      _NormalizedTimes: []
+      _Callbacks: []
+      _Names: []
+    _Clip: {fileID: 7400000, guid: b3ff059e81d96b04dbdaa60a3e69ef60, type: 2}
+    _NormalizedStartTime: NaN
+  shadowIdle:
+    _FadeDuration: 0.25
+    _Speed: 1
+    _Events:
+      _NormalizedTimes: []
+      _Callbacks: []
+      _Names: []
+    _Clip: {fileID: 7400000, guid: b3ff059e81d96b04dbdaa60a3e69ef60, type: 2}
+    _NormalizedStartTime: NaN
+  shadowAnimationLayer: 5
+  animator: {fileID: 0}
+  randomAnimatorSpeed: 0
+  animatorSpeed: 1
+  animatorSpeedBounds: {x: 1, y: 1}
+  renderers:
+  - {fileID: 4711044852071195017}
+  paletteSwapper: {fileID: 0}
+  references:
+    version: 2
+    RefIds: []
 --- !u!1 &5334731849460581870
 GameObject:
   m_ObjectHideFlags: 0

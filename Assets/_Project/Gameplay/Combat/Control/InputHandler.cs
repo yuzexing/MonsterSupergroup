@@ -1,3 +1,4 @@
+using System;
 using AstralShift.Control.Controllers;
 using Rewired;
 using UnityEngine;
@@ -89,107 +90,98 @@ namespace AstralShift.Control
 
 		private void SubscribeEvents()
 		{
-			_player.AddInputEventDelegate(Button1, UpdateLoopType.Update, InputActionEventType.ButtonJustPressed, 0);
-			_player.AddInputEventDelegate(Button1, UpdateLoopType.Update, InputActionEventType.ButtonPressed, 0);
-			_player.AddInputEventDelegate(Button1, UpdateLoopType.Update, InputActionEventType.ButtonJustReleased, 0);
-			_player.AddInputEventDelegate(Button2, UpdateLoopType.Update, InputActionEventType.ButtonJustPressed, 4);
-			_player.AddInputEventDelegate(Button2, UpdateLoopType.Update, InputActionEventType.ButtonPressed, 4);
-			_player.AddInputEventDelegate(Button2, UpdateLoopType.Update, InputActionEventType.ButtonJustReleased, 4);
-			_player.AddInputEventDelegate(Button3, UpdateLoopType.Update, InputActionEventType.ButtonJustPressed, 5);
-			_player.AddInputEventDelegate(Button3, UpdateLoopType.Update, InputActionEventType.ButtonPressed, 5);
-			_player.AddInputEventDelegate(Button3, UpdateLoopType.Update, InputActionEventType.ButtonJustReleased, 5);
-			_player.AddInputEventDelegate(Button4, UpdateLoopType.Update, InputActionEventType.ButtonJustPressed, 6);
-			_player.AddInputEventDelegate(Button4, UpdateLoopType.Update, InputActionEventType.ButtonPressed, 6);
-			_player.AddInputEventDelegate(Button4, UpdateLoopType.Update, InputActionEventType.ButtonJustReleased, 6);
-			_player.AddInputEventDelegate(LeftStickHorizontal, UpdateLoopType.Update, InputActionEventType.AxisActiveOrJustInactive, 1);
-			_player.AddInputEventDelegate(LeftStickVertical, UpdateLoopType.Update, InputActionEventType.AxisActiveOrJustInactive, 3);
-			_player.AddInputEventDelegate(LeftStickButton, UpdateLoopType.Update, InputActionEventType.ButtonJustPressed, 18);
-			_player.AddInputEventDelegate(LeftStickButton, UpdateLoopType.Update, InputActionEventType.ButtonPressed, 18);
-			_player.AddInputEventDelegate(LeftStickButton, UpdateLoopType.Update, InputActionEventType.ButtonJustReleased, 18);
-			_player.AddInputEventDelegate(RightStickHorizontal, UpdateLoopType.Update, InputActionEventType.AxisActiveOrJustInactive, 7);
-			_player.AddInputEventDelegate(RightStickVertical, UpdateLoopType.Update, InputActionEventType.AxisActiveOrJustInactive, 8);
-			_player.AddInputEventDelegate(RightStickButton, UpdateLoopType.Update, InputActionEventType.ButtonJustPressed, 17);
-			_player.AddInputEventDelegate(RightStickButton, UpdateLoopType.Update, InputActionEventType.ButtonPressed, 17);
-			_player.AddInputEventDelegate(RightStickButton, UpdateLoopType.Update, InputActionEventType.ButtonJustReleased, 17);
-			_player.AddInputEventDelegate(DirectionalUp, UpdateLoopType.Update, InputActionEventType.ButtonJustPressed, 9);
-			_player.AddInputEventDelegate(DirectionalUp, UpdateLoopType.Update, InputActionEventType.ButtonPressed, 9);
-			_player.AddInputEventDelegate(DirectionalUp, UpdateLoopType.Update, InputActionEventType.ButtonJustReleased, 9);
-			_player.AddInputEventDelegate(DirectionalDown, UpdateLoopType.Update, InputActionEventType.ButtonJustPressed, 12);
-			_player.AddInputEventDelegate(DirectionalDown, UpdateLoopType.Update, InputActionEventType.ButtonPressed, 12);
-			_player.AddInputEventDelegate(DirectionalDown, UpdateLoopType.Update, InputActionEventType.ButtonJustReleased, 12);
-			_player.AddInputEventDelegate(DirectionalLeft, UpdateLoopType.Update, InputActionEventType.ButtonJustPressed, 11);
-			_player.AddInputEventDelegate(DirectionalLeft, UpdateLoopType.Update, InputActionEventType.ButtonPressed, 11);
-			_player.AddInputEventDelegate(DirectionalLeft, UpdateLoopType.Update, InputActionEventType.ButtonJustReleased, 11);
-			_player.AddInputEventDelegate(DirectionalRight, UpdateLoopType.Update, InputActionEventType.ButtonJustPressed, 10);
-			_player.AddInputEventDelegate(DirectionalRight, UpdateLoopType.Update, InputActionEventType.ButtonPressed, 10);
-			_player.AddInputEventDelegate(DirectionalRight, UpdateLoopType.Update, InputActionEventType.ButtonJustReleased, 10);
-			_player.AddInputEventDelegate(LeftShoulder, UpdateLoopType.Update, InputActionEventType.ButtonJustPressed, 15);
-			_player.AddInputEventDelegate(LeftShoulder, UpdateLoopType.Update, InputActionEventType.ButtonPressed, 15);
-			_player.AddInputEventDelegate(LeftShoulder, UpdateLoopType.Update, InputActionEventType.ButtonJustReleased, 15);
-			_player.AddInputEventDelegate(RightShoulder, UpdateLoopType.Update, InputActionEventType.ButtonJustPressed, 13);
-			_player.AddInputEventDelegate(RightShoulder, UpdateLoopType.Update, InputActionEventType.ButtonPressed, 13);
-			_player.AddInputEventDelegate(RightShoulder, UpdateLoopType.Update, InputActionEventType.ButtonJustReleased, 13);
-			_player.AddInputEventDelegate(LeftTrigger, UpdateLoopType.Update, InputActionEventType.ButtonJustPressed, 16);
-			_player.AddInputEventDelegate(LeftTrigger, UpdateLoopType.Update, InputActionEventType.ButtonPressed, 16);
-			_player.AddInputEventDelegate(LeftTrigger, UpdateLoopType.Update, InputActionEventType.ButtonJustReleased, 16);
-			_player.AddInputEventDelegate(RightTrigger, UpdateLoopType.Update, InputActionEventType.ButtonJustPressed, 14);
-			_player.AddInputEventDelegate(RightTrigger, UpdateLoopType.Update, InputActionEventType.ButtonPressed, 14);
-			_player.AddInputEventDelegate(RightTrigger, UpdateLoopType.Update, InputActionEventType.ButtonJustReleased, 14);
-			_player.AddInputEventDelegate(UISubmit, UpdateLoopType.Update, InputActionEventType.ButtonJustPressed, 48);
-			_player.AddInputEventDelegate(UISubmit, UpdateLoopType.Update, InputActionEventType.ButtonPressed, 48);
-			_player.AddInputEventDelegate(UISubmit, UpdateLoopType.Update, InputActionEventType.ButtonJustReleased, 48);
-			_player.AddInputEventDelegate(UICancelPressed, UpdateLoopType.Update, InputActionEventType.ButtonJustPressed, 49);
-			_player.AddInputEventDelegate(UICancelHeld, UpdateLoopType.Update, InputActionEventType.ButtonPressed, 49);
-			_player.AddInputEventDelegate(UICancelReleased, UpdateLoopType.Update, InputActionEventType.ButtonJustReleased, 49);
-			_player.AddInputEventDelegate(UICancel, UpdateLoopType.Update, InputActionEventType.ButtonJustPressed, 49);
-			_player.AddInputEventDelegate(UICancel, UpdateLoopType.Update, InputActionEventType.ButtonPressed, 49);
-			_player.AddInputEventDelegate(UICancel, UpdateLoopType.Update, InputActionEventType.ButtonJustReleased, 49);
-			_player.AddInputEventDelegate(UIVertical, UpdateLoopType.Update, InputActionEventType.AxisActiveOrJustInactive, 30);
-			_player.AddInputEventDelegate(Center1, UpdateLoopType.Update, InputActionEventType.ButtonJustPressed, 55);
-			_player.AddInputEventDelegate(Center1, UpdateLoopType.Update, InputActionEventType.ButtonPressed, 55);
-			_player.AddInputEventDelegate(Center1, UpdateLoopType.Update, InputActionEventType.ButtonJustReleased, 55);
-			_player.AddInputEventDelegate(Center2, UpdateLoopType.Update, InputActionEventType.ButtonJustPressed, 52);
-			_player.AddInputEventDelegate(Center2, UpdateLoopType.Update, InputActionEventType.ButtonPressed, 52);
-			_player.AddInputEventDelegate(Center2, UpdateLoopType.Update, InputActionEventType.ButtonJustReleased, 52);
-			_player.AddInputEventDelegate(UIButton3, UpdateLoopType.Update, InputActionEventType.ButtonJustPressed, 61);
-			_player.AddInputEventDelegate(UIButton3, UpdateLoopType.Update, InputActionEventType.ButtonPressed, 61);
-			_player.AddInputEventDelegate(UIButton3, UpdateLoopType.Update, InputActionEventType.ButtonJustReleased, 61);
-			_player.AddInputEventDelegate(UIButton4, UpdateLoopType.Update, InputActionEventType.ButtonJustPressed, 62);
-			_player.AddInputEventDelegate(UIButton4, UpdateLoopType.Update, InputActionEventType.ButtonPressed, 62);
-			_player.AddInputEventDelegate(UIButton4, UpdateLoopType.Update, InputActionEventType.ButtonJustReleased, 62);
-			_player.AddInputEventDelegate(UILeftStickHorizontal, UpdateLoopType.Update, InputActionEventType.AxisActiveOrJustInactive, 29);
-			_player.AddInputEventDelegate(UILeftStickVertical, UpdateLoopType.Update, InputActionEventType.AxisActiveOrJustInactive, 30);
-			_player.AddInputEventDelegate(UIRightStickHorizontal, UpdateLoopType.Update, InputActionEventType.AxisActiveOrJustInactive, 58);
-			_player.AddInputEventDelegate(UIRightStickVertical, UpdateLoopType.Update, InputActionEventType.AxisActiveOrJustInactive, 59);
-			_player.AddInputEventDelegate(UIDirectionalUp, UpdateLoopType.Update, InputActionEventType.ButtonJustPressed, 30);
-			_player.AddInputEventDelegate(UIDirectionalUp, UpdateLoopType.Update, InputActionEventType.ButtonPressed, 30);
-			_player.AddInputEventDelegate(UIDirectionalUp, UpdateLoopType.Update, InputActionEventType.ButtonJustReleased, 30);
-			_player.AddInputEventDelegate(UIDirectionalUp, UpdateLoopType.Update, InputActionEventType.ButtonRepeating, 30);
-			_player.AddInputEventDelegate(UIDirectionalDown, UpdateLoopType.Update, InputActionEventType.NegativeButtonJustPressed, 30);
-			_player.AddInputEventDelegate(UIDirectionalDown, UpdateLoopType.Update, InputActionEventType.NegativeButtonPressed, 30);
-			_player.AddInputEventDelegate(UIDirectionalDown, UpdateLoopType.Update, InputActionEventType.NegativeButtonJustReleased, 30);
-			_player.AddInputEventDelegate(UIDirectionalDown, UpdateLoopType.Update, InputActionEventType.NegativeButtonRepeating, 30);
-			_player.AddInputEventDelegate(UIDirectionalLeft, UpdateLoopType.Update, InputActionEventType.NegativeButtonJustPressed, 29);
-			_player.AddInputEventDelegate(UIDirectionalLeft, UpdateLoopType.Update, InputActionEventType.NegativeButtonPressed, 29);
-			_player.AddInputEventDelegate(UIDirectionalLeft, UpdateLoopType.Update, InputActionEventType.NegativeButtonJustReleased, 29);
-			_player.AddInputEventDelegate(UIDirectionalRight, UpdateLoopType.Update, InputActionEventType.ButtonJustPressed, 29);
-			_player.AddInputEventDelegate(UIDirectionalRight, UpdateLoopType.Update, InputActionEventType.ButtonPressed, 29);
-			_player.AddInputEventDelegate(UIDirectionalRight, UpdateLoopType.Update, InputActionEventType.ButtonJustReleased, 29);
-			_player.AddInputEventDelegate(UILeftTrigger, UpdateLoopType.Update, InputActionEventType.ButtonJustPressed, 54);
-			_player.AddInputEventDelegate(UILeftTrigger, UpdateLoopType.Update, InputActionEventType.ButtonPressed, 54);
-			_player.AddInputEventDelegate(UILeftTrigger, UpdateLoopType.Update, InputActionEventType.ButtonJustReleased, 54);
-			_player.AddInputEventDelegate(UIRightTrigger, UpdateLoopType.Update, InputActionEventType.ButtonJustPressed, 53);
-			_player.AddInputEventDelegate(UIRightTrigger, UpdateLoopType.Update, InputActionEventType.ButtonPressed, 53);
-			_player.AddInputEventDelegate(UIRightTrigger, UpdateLoopType.Update, InputActionEventType.ButtonJustReleased, 53);
-			_player.AddInputEventDelegate(UICenter1, UpdateLoopType.Update, InputActionEventType.ButtonJustPressed, 56);
-			_player.AddInputEventDelegate(UICenter1, UpdateLoopType.Update, InputActionEventType.ButtonPressed, 56);
-			_player.AddInputEventDelegate(UICenter1, UpdateLoopType.Update, InputActionEventType.ButtonJustReleased, 56);
-			_player.AddInputEventDelegate(UICenter2, UpdateLoopType.Update, InputActionEventType.ButtonJustPressed, 57);
-			_player.AddInputEventDelegate(UICenter2, UpdateLoopType.Update, InputActionEventType.ButtonPressed, 57);
-			_player.AddInputEventDelegate(UICenter2, UpdateLoopType.Update, InputActionEventType.ButtonJustReleased, 57);
-			_player.AddInputEventDelegate(DebugAction1Pressed, UpdateLoopType.Update, InputActionEventType.ButtonJustPressed, 50);
-			_player.AddInputEventDelegate(DebugAction2Pressed, UpdateLoopType.Update, InputActionEventType.ButtonJustPressed, 51);
-			_player.AddInputEventDelegate(DebugAction3Pressed, UpdateLoopType.Update, InputActionEventType.ButtonJustPressed, 60);
+			SubscribeAction(Button1, 0, ButtonEvents);
+			SubscribeAction(Button2, 4, ButtonEvents);
+			SubscribeAction(Button3, 5, ButtonEvents);
+			SubscribeAction(Button4, 6, ButtonEvents);
+			SubscribeAction(LeftStickHorizontal, 1, AxisEvents);
+			SubscribeAction(LeftStickVertical, 3, AxisEvents);
+			SubscribeAction(LeftStickButton, 18, ButtonEvents);
+			SubscribeAction(RightStickHorizontal, 7, AxisEvents);
+			SubscribeAction(RightStickVertical, 8, AxisEvents);
+			SubscribeAction(RightStickButton, 17, ButtonEvents);
+			SubscribeAction(DirectionalUp, 9, ButtonEvents);
+			SubscribeAction(DirectionalDown, 12, ButtonEvents);
+			SubscribeAction(DirectionalLeft, 11, ButtonEvents);
+			SubscribeAction(DirectionalRight, 10, ButtonEvents);
+			SubscribeAction(LeftShoulder, 15, ButtonEvents);
+			SubscribeAction(RightShoulder, 13, ButtonEvents);
+			SubscribeAction(LeftTrigger, 16, ButtonEvents);
+			SubscribeAction(RightTrigger, 14, ButtonEvents);
+			SubscribeAction(UISubmit, 48, ButtonEvents);
+			SubscribeAction(UICancelPressed, 49,
+				InputActionEventType.ButtonJustPressed);
+			SubscribeAction(UICancelHeld, 49,
+				InputActionEventType.ButtonPressed);
+			SubscribeAction(UICancelReleased, 49,
+				InputActionEventType.ButtonJustReleased);
+			SubscribeAction(UICancel, 49, ButtonEvents);
+			SubscribeAction(UIVertical, 30, AxisEvents);
+			SubscribeAction(Center1, 55, ButtonEvents);
+			SubscribeAction(Center2, 52, ButtonEvents);
+			SubscribeAction(UIButton3, 61, ButtonEvents);
+			SubscribeAction(UIButton4, 62, ButtonEvents);
+			SubscribeAction(UILeftStickHorizontal, 29, AxisEvents);
+			SubscribeAction(UILeftStickVertical, 30, AxisEvents);
+			SubscribeAction(UIRightStickHorizontal, 58, AxisEvents);
+			SubscribeAction(UIRightStickVertical, 59, AxisEvents);
+			SubscribeAction(UIDirectionalUp, 30,
+				InputActionEventType.ButtonJustPressed,
+				InputActionEventType.ButtonPressed,
+				InputActionEventType.ButtonJustReleased,
+				InputActionEventType.ButtonRepeating);
+			SubscribeAction(UIDirectionalDown, 30,
+				InputActionEventType.NegativeButtonJustPressed,
+				InputActionEventType.NegativeButtonPressed,
+				InputActionEventType.NegativeButtonJustReleased,
+				InputActionEventType.NegativeButtonRepeating);
+			SubscribeAction(UIDirectionalLeft, 29,
+				InputActionEventType.NegativeButtonJustPressed,
+				InputActionEventType.NegativeButtonPressed,
+				InputActionEventType.NegativeButtonJustReleased);
+			SubscribeAction(UIDirectionalRight, 29, ButtonEvents);
+			SubscribeAction(UILeftTrigger, 54, ButtonEvents);
+			SubscribeAction(UIRightTrigger, 53, ButtonEvents);
+			SubscribeAction(UICenter1, 56, ButtonEvents);
+			SubscribeAction(UICenter2, 57, ButtonEvents);
+			SubscribeAction(DebugAction1Pressed, 50,
+				InputActionEventType.ButtonJustPressed);
+			SubscribeAction(DebugAction2Pressed, 51,
+				InputActionEventType.ButtonJustPressed);
+			SubscribeAction(DebugAction3Pressed, 60,
+				InputActionEventType.ButtonJustPressed);
+		}
+
+		private static readonly InputActionEventType[] ButtonEvents =
+		{
+			InputActionEventType.ButtonJustPressed,
+			InputActionEventType.ButtonPressed,
+			InputActionEventType.ButtonJustReleased
+		};
+
+		private static readonly InputActionEventType[] AxisEvents =
+		{
+			InputActionEventType.AxisActiveOrJustInactive
+		};
+
+		private static void SubscribeAction(
+			Action<InputActionEventData> callback,
+			int actionId,
+			params InputActionEventType[] eventTypes)
+		{
+			if (ReInput.mapping.GetAction(actionId) == null)
+			{
+				return;
+			}
+
+			for (int i = 0; i < eventTypes.Length; i++)
+			{
+				_player.AddInputEventDelegate(
+					callback,
+					UpdateLoopType.Update,
+					eventTypes[i],
+					actionId);
+			}
 		}
 
 		private void Update()

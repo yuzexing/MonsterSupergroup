@@ -373,6 +373,14 @@ namespace MonsterSupergroup.NetworkCombat.Tests
             PlayerHitbox playerHitbox =
                 player.GetComponentInChildren<PlayerHitbox>(true);
             Assert.That(playerMovement, Is.Not.Null);
+            Assert.That(player.GetComponents<PlayerMovement>(), Has.Length.EqualTo(1),
+                "NetworkPlayer must have exactly one movement executor.");
+            Assert.That(
+                player.GetComponentsInChildren<MonoBehaviour>(true)
+                    .Count(component => component != null &&
+                        component.GetType().Name == "LocalPlayerMovement"),
+                Is.Zero,
+                "LocalPlayerMovement must not return through generated prefabs.");
             Assert.That(playerBinding, Is.Not.Null);
             Assert.That(playerBinding.Combatant, Is.SameAs(playerCombatant));
             Assert.That(playerMovement.CombatantBinding, Is.SameAs(playerBinding));
@@ -522,11 +530,14 @@ namespace MonsterSupergroup.NetworkCombat.Tests
                             NetworkGameplayEnemySpawner>(true))
                         .Single();
                 Assert.That(spawner.EnemyPrefab, Is.SameAs(skeleton));
+                GameObject[] playerStartsRoots = gameplay.GetRootGameObjects()
+                    .Where(root => root.name == "Network Player Starts")
+                    .ToArray();
+                Assert.That(playerStartsRoots, Has.Length.EqualTo(1),
+                    "Gameplay must contain one generated Player starts root.");
                 Assert.That(
-                    gameplay.GetRootGameObjects()
-                        .SelectMany(root => root.GetComponentsInChildren<
-                            NetworkStartPosition>(true))
-                        .Count(),
+                    playerStartsRoots[0].GetComponentsInChildren<
+                        NetworkStartPosition>(true).Length,
                     Is.EqualTo(4));
                 Assert.That(
                     gameplay.GetRootGameObjects()

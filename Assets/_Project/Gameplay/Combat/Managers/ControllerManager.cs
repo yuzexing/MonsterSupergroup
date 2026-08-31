@@ -94,6 +94,23 @@ namespace AstralShift.Managers
 			}
 		}
 
+		public bool ReleaseGameController(GameController controller)
+		{
+			if (controller == null || _controllerStack == null)
+			{
+				return false;
+			}
+
+			if (!_controllerStack.Remove(controller))
+			{
+				return false;
+			}
+
+			inputHandler.CurrentController =
+				_controllerStack.Count > 0 ? _controllerStack.Peek() : null;
+			return true;
+		}
+
 		public T ReplaceController<T>() where T : GameController
 		{
 			if (!_availableControllers.TryGetValue(typeof(T), out var value))

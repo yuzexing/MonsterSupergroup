@@ -305,8 +305,11 @@ Player 至少需要：
 - `NearestEnemyTargetProvider`
 - `PlayerHandBehaviour`
 - `PlayerLoader`
-- `LocalPlayerMovement` 或未来产品移动组件
+- 本地示例 Prefab 不再自带移动脚本；产品/联网 Player 统一使用 `PlayerMovement`
 - 一个作为武器实例父节点的 Attacks Root
+
+`LocalPlayerMovement` 已删除。`NetworkPlayerBootstrap` 只允许 Owner 启用
+`PlayerMovement`，Observer 上的同一组件保持禁用。
 
 引用关系：
 

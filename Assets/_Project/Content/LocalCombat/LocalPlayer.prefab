@@ -48,7 +48,6 @@ GameObject:
   - component: {fileID: 1499602224715228358}
   - component: {fileID: 3384632745008913951}
   - component: {fileID: 7209509172702717302}
-  - component: {fileID: 8089189786870129393}
   - component: {fileID: 4146777375000798303}
   m_Layer: 0
   m_Name: LocalPlayer
@@ -263,19 +262,6 @@ MonoBehaviour:
   attacksRoot: {fileID: 2503713151258337164}
   targetProvider: {fileID: 3384632745008913951}
   owner: {fileID: 1499602224715228358}
---- !u!114 &8089189786870129393
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3872873733907363630}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 01e6c1ed45d1e894489c4366d4f3c5b7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: MonsterSupergroup.Gameplay.Local::MonsterSupergroup.Gameplay.Local.LocalPlayerMovement
-  moveSpeed: 5
 --- !u!114 &4146777375000798303
 MonoBehaviour:
   m_ObjectHideFlags: 0

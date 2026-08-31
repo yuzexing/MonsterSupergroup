@@ -1,10 +1,11 @@
 using AstralShift.HellMaiden;
 using AstralShift.HellMaiden.Combat.Hand.Data;
+using AstralShift.HellMaiden.Controllers;
 using AstralShift.HellMaiden.Items;
 using AstralShift.HellMaiden.Player;
+using AstralShift.Managers;
 using Mirror;
 using MonsterSupergroup.Gameplay.Combat;
-using MonsterSupergroup.Gameplay.Local;
 using UnityEngine;
 
 namespace MonsterSupergroup.NetworkCombat
@@ -15,20 +16,16 @@ namespace MonsterSupergroup.NetworkCombat
     {
         [SerializeField] private PlayerBuildRuntime playerBuildRuntime;
         [SerializeField] private RuntimeDB runtimeDatabase;
-        [SerializeField] private LocalPlayerMovement movement;
         [SerializeField] private PlayerMovement playerMovement;
         [SerializeField] private PlayerCombatantBinding combatantBinding;
+
+        private PlayerController_HMD ownerPlayerController;
 
         private void Awake()
         {
             if (playerBuildRuntime == null)
             {
                 playerBuildRuntime = GetComponent<PlayerBuildRuntime>();
-            }
-
-            if (movement == null)
-            {
-                movement = GetComponent<LocalPlayerMovement>();
             }
 
             if (playerMovement == null)
@@ -39,11 +36,6 @@ namespace MonsterSupergroup.NetworkCombat
             if (combatantBinding == null)
             {
                 combatantBinding = GetComponent<PlayerCombatantBinding>();
-            }
-
-            if (movement != null)
-            {
-                movement.enabled = false;
             }
 
             if (playerMovement != null)
@@ -57,11 +49,6 @@ namespace MonsterSupergroup.NetworkCombat
         public override void OnStartClient()
         {
             base.OnStartClient();
-            if (movement != null)
-            {
-                movement.enabled = isOwned;
-            }
-
             if (playerMovement != null)
             {
                 playerMovement.enabled = isOwned;
@@ -73,11 +60,6 @@ namespace MonsterSupergroup.NetworkCombat
         public override void OnStartAuthority()
         {
             base.OnStartAuthority();
-            if (movement != null)
-            {
-                movement.enabled = true;
-            }
-
             if (playerMovement != null)
             {
                 playerMovement.enabled = true;
@@ -86,6 +68,7 @@ namespace MonsterSupergroup.NetworkCombat
             combatantBinding?.SetLocalMutationAuthority(true);
             combatantBinding?.Combatant?.ResetCombatant();
             EnsureLocalPlayerRegistration();
+            ActivateOwnerPlayerController();
 
             if (playerBuildRuntime == null)
             {
@@ -116,6 +99,7 @@ namespace MonsterSupergroup.NetworkCombat
 
         public override void OnStopAuthority()
         {
+            ReleaseOwnerPlayerController();
             playerBuildRuntime?.ClearBuild();
             if (LootManager.Instance != null && playerMovement != null)
             {
@@ -128,11 +112,6 @@ namespace MonsterSupergroup.NetworkCombat
             }
 
             combatantBinding?.SetLocalMutationAuthority(false);
-            if (movement != null)
-            {
-                movement.enabled = false;
-            }
-
             if (playerMovement != null)
             {
                 playerMovement.enabled = false;
@@ -182,6 +161,45 @@ namespace MonsterSupergroup.NetworkCombat
 
             runtimeDatabase = FindFirstObjectByType<RuntimeDB>();
             return runtimeDatabase;
+        }
+
+        private void ActivateOwnerPlayerController()
+        {
+            if (ownerPlayerController != null)
+            {
+                return;
+            }
+
+            ControllerManager manager = ControllerManager.Instance;
+            if (manager == null || manager.Stack == null)
+            {
+                Debug.LogError(
+                    "NetworkPlayerBootstrap cannot activate PlayerController_HMD " +
+                    "before ControllerManager is initialized.",
+                    this);
+                return;
+            }
+
+            ownerPlayerController =
+                manager.OverrideGameController<PlayerController_HMD>();
+            if (ownerPlayerController == null)
+            {
+                Debug.LogError(
+                    "NetworkPlayerBootstrap requires a subscribed " +
+                    "PlayerController_HMD for the Owner Player.",
+                    this);
+            }
+        }
+
+        private void ReleaseOwnerPlayerController()
+        {
+            if (ownerPlayerController == null)
+            {
+                return;
+            }
+
+            ControllerManager.Instance?.ReleaseGameController(ownerPlayerController);
+            ownerPlayerController = null;
         }
     }
 }

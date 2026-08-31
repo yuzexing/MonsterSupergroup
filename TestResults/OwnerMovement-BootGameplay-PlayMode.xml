@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="1" result="Passed" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-08-31 05:00:32Z" end-time="2026-08-31 05:00:34Z" duration="2.6837848">
+  <test-suite type="TestSuite" id="1069" name="Monster Supergroup" fullname="Monster Supergroup" runstate="Runnable" testcasecount="49" result="Passed" start-time="2026-08-31 05:00:32Z" end-time="2026-08-31 05:00:34Z" duration="2.683785" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="PlayMode" />
+    </properties>
+    <test-suite type="Assembly" id="1053" name="MonsterSupergroup.Gameplay.Tests.PlayMode.dll" fullname="F:/UnityStore/MonsterSupergroup/Library/ScriptAssemblies/MonsterSupergroup.Gameplay.Tests.PlayMode.dll" runstate="Runnable" testcasecount="45" result="Passed" start-time="2026-08-31 05:00:32Z" end-time="2026-08-31 05:00:34Z" duration="2.677859" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="100164" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="PlayMode" />
+        <property name="EditorOnly" value="False" />
+      </properties>
+      <test-suite type="TestSuite" id="1054" name="MonsterSupergroup" fullname="MonsterSupergroup" runstate="Runnable" testcasecount="45" result="Passed" start-time="2026-08-31 05:00:32Z" end-time="2026-08-31 05:00:34Z" duration="2.677208" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-suite type="TestSuite" id="1055" name="Gameplay" fullname="MonsterSupergroup.Gameplay" runstate="Runnable" testcasecount="45" result="Passed" start-time="2026-08-31 05:00:32Z" end-time="2026-08-31 05:00:34Z" duration="2.676770" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <test-suite type="TestSuite" id="1056" name="Tests" fullname="MonsterSupergroup.Gameplay.Tests" runstate="Runnable" testcasecount="45" result="Passed" start-time="2026-08-31 05:00:32Z" end-time="2026-08-31 05:00:34Z" duration="2.676285" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-suite type="TestFixture" id="1001" name="BootGameplayNetworkCombatPlayModeTests" fullname="MonsterSupergroup.Gameplay.Tests.BootGameplayNetworkCombatPlayModeTests" classname="MonsterSupergroup.Gameplay.Tests.BootGameplayNetworkCombatPlayModeTests" runstate="Runnable" testcasecount="1" result="Passed" start-time="2026-08-31 05:00:32Z" end-time="2026-08-31 05:00:34Z" duration="2.674242" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1002" name="Host_CompletesPlayerAndSkeletonCanonicalCombatLoops" fullname="MonsterSupergroup.Gameplay.Tests.BootGameplayNetworkCombatPlayModeTests.Host_CompletesPlayerAndSkeletonCanonicalCombatLoops" methodname="Host_CompletesPlayerAndSkeletonCanonicalCombatLoops" classname="MonsterSupergroup.Gameplay.Tests.BootGameplayNetworkCombatPlayModeTests" runstate="Runnable" seed="457003492" result="Passed" start-time="2026-08-31 05:00:32Z" end-time="2026-08-31 05:00:34Z" duration="2.665152" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[--- Hardware Info ---
+CPU Model: 13th Gen Intel(R) Core(TM) i7-13700KF
+GPU Model: NVIDIA GeForce RTX 4080
+RAM: 65375 MB
+Install Disk Model: Get-Partition : 找不到任何“DriveLetter”属性等于“F”的 MSFT_Partition 对象。请验证属性值，然后重试。
+所在位置 行:1 字符: 12
++ (Get-Disk (Get-Partition -DriveLetter 'F').DiskNumber).Model
++            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (F:Char) [Get-Partition], CimJobException
+    + FullyQualifiedErrorId : CmdletizationQuery_NotFound_DriveLetter,Get-Partition
+ 
+Get-Disk : 无法对参数“Number”执行参数验证。参数为 Null。请为参数提供一个有效的值，然后再次尝试运行该命令。
+所在位置 行:1 字符: 11
++ (Get-Disk (Get-Partition -DriveLetter 'F').DiskNumber).Model
++           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : InvalidData: (:) [Get-Disk]，ParameterBindingValidationException
+    + FullyQualifiedErrorId : ParameterArgumentValidationError,Get-Disk
+Main Monitor Model: Unknown Monitor
+---------------------
+Normal : True
+UI : False
+AstralShift.HellMaiden.Controllers.PlayerController_HMD
+<color=yellow><b>► Controllers: </b></color>Controller type AstralShift.Control.Controllers.NoInputGameController not available
+[BootGameplay] Server starting; loading 'Assets/Scenes/Gameplay.unity'.
+[BootGameplay] Server connection 0 is ready.
+[BootGameplay] Queued Player for connection 0.
+[BootGameplay] Gameplay scene ready: 'Assets/Scenes/Gameplay.unity'.
+[BootGameplay] Spawned Player NetworkPlayer [connId=0] in 'Assets/Scenes/Gameplay.unity'.
+<color=yellow><b>► Controllers: </b></color>Overrode <color=yellow><b></b></color> with <color=yellow><b>PlayerController_HMD</b></color>.
+Normal : True
+UI : False
+OptionalWarning.AnimatorDisabled - Possible Issue Detected: The Animator is disabled so Animancer won't be able to play animations.
+
+This warning can be disabled via 'Edit/Project Settings/Animancer' or by calling Animancer.OptionalWarning.AnimatorDisabled.Disable() and it will automatically be compiled out of Runtime Builds (except for Development Builds). More information can be found at <a href="https://kybernetik.com.au/animancer/api/Animancer/OptionalWarning">https://kybernetik.com.au/animancer/api/Animancer/OptionalWarning</a>
+
+[FMOD] ObjectLookup::get : Lookup failed for EventModel: {1235e4b8-dcb5-43e8-8bb7-41a363bff4b8}
+
+EventNotFoundException: [FMOD] Event not found: {1235e4b8-dcb5-43e8-8bb7-41a363bff4b8} ()
+FMODUnity.RuntimeManager.GetEventDescription (FMODUnity.EventReference eventReference) (at Assets/Plugins/FMOD/src/RuntimeManager.cs:1314)
+FMODUnity.StudioParameterTrigger.Awake () (at Assets/Plugins/FMOD/src/StudioParameterTrigger.cs:26)
+UnityEngine.Object:Instantiate(ProjectileAttack, Transform)
+AstralShift.Pooling.GenericPooler`1:GetOrCreate(Transform, Boolean) (at Assets/_Project/Gameplay/Combat/Pooling/GenericPooler.cs:48)
+AstralShift.HellMaiden.Player.Attacks.AttackVariantSet`1:GetOrCreate(AttackElement, Transform) (at Assets/_Project/Gameplay/Combat/Player/Attacks/AttackVariantSet.cs:51)
+AstralShift.HellMaiden.Player.Attacks.ProjectileAttackBehaviour:GetOrCreateAttack(AttackSnapshot) (at Assets/_Project/Gameplay/Combat/Player/Attacks/ProjectileAttackBehaviour.cs:93)
+AstralShift.HellMaiden.Player.Attacks.ProjectileAttackBehaviour:Attack() (at Assets/_Project/Gameplay/Combat/Player/Attacks/ProjectileAttackBehaviour.cs:68)
+AstralShift.HellMaiden.Player.Attacks.ProjectileAttackBehaviour:Update() (at Assets/_Project/Gameplay/Combat/Player/Attacks/ProjectileAttackBehaviour.cs:43)
+
+[FMOD] Please add an 'FMOD Studio Listener' component to your camera in the scene for correct 3D positioning of sounds.
+<color=blue><b>► FSM: </b></color>EnemyAI: Moving -> TRANSITION to: Knockback
+OptionalWarning.AnimatorSpeed - Possible Issue Detected: Animator.speed doesn't affect Animancer. Use AnimancerGraph.Speed instead.
+
+This warning can be disabled via 'Edit/Project Settings/Animancer' or by calling Animancer.OptionalWarning.AnimatorSpeed.Disable() and it will automatically be compiled out of Runtime Builds (except for Development Builds). More information can be found at <a href="https://kybernetik.com.au/animancer/api/Animancer/OptionalWarning">https://kybernetik.com.au/animancer/api/Animancer/OptionalWarning</a>
+
+<color=blue><b>► FSM: </b></color>EnemyAI: Knockback -> TRANSITION to: Moving
+<color=blue><b>► FSM: </b></color>EnemyAI: Moving -> TRANSITION to: Warning
+OptionalWarning.AnimatorSpeed - Possible Issue Detected: Animator.speed doesn't affect Animancer. Use AnimancerGraph.Speed instead.
+
+This warning can be disabled via 'Edit/Project Settings/Animancer' or by calling Animancer.OptionalWarning.AnimatorSpeed.Disable() and it will automatically be compiled out of Runtime Builds (except for Development Builds). More information can be found at <a href="https://kybernetik.com.au/animancer/api/Animancer/OptionalWarning">https://kybernetik.com.au/animancer/api/Animancer/OptionalWarning</a>
+
+<color=blue><b>► FSM: </b></color>EnemyAI: Warning -> TRANSITION to: Attacking
+<color=blue><b>► FSM: </b></color>PlayerMovement: Moving -> TRANSITION to: Hurt
+[FMOD] ObjectLookup::get : Lookup failed for EventModel: {00000000-0000-0000-0000-000000000000}
+
+[FMOD] Event not found: {00000000-0000-0000-0000-000000000000} ()
+PLAYER INVULNERABILITY try set : True Invulnerability count now at 1 invulnerability state now at True
+[BootGameplay] Client stopping; serverActive=True.
+[BootGameplay] Server stopping.
+[BootGameplay] Gameplay unload requested.
+Saving results to: C:/Users/ADMIN/AppData/LocalLow/DefaultCompany/Monster Supergroup\TestResults.xml
+]]></output>
+              </test-case>
+            </test-suite>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

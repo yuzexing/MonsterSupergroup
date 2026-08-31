@@ -3,6 +3,7 @@ using AstralShift.HellMaiden.Player;
 using AstralShift.QTI.Interactors;
 using Mirror;
 using MonsterSupergroup.Gameplay.Combat;
+using MonsterSupergroup.Gameplay.Local;
 using UnityEditor;
 using UnityEngine;
 
@@ -97,11 +98,17 @@ namespace MonsterSupergroup.NetworkCombat.Editor
         private static void ConfigureNetworkPlayer(GameObject root)
         {
             CombatantBehaviour combatant = RequireComponent<CombatantBehaviour>(root);
+            RemoveIfPresent<PlayerLoader>(root);
+            RemoveIfPresent<PlayerHandBehaviour>(root);
             GetOrAdd<NetworkIdentity>(root);
             NetworkTransformReliable networkTransform = GetOrAdd<NetworkTransformReliable>(root);
             networkTransform.syncDirection = SyncDirection.ClientToServer;
 
             GetOrAdd<MirrorNetworkCombatBridge>(root);
+            GetOrAdd<NetworkEnemySimulationEndpoint>(root);
+            GetOrAdd<NetworkPlayerAutoTargeting>(root);
+            PlayerBuildRuntime build = GetOrAdd<PlayerBuildRuntime>(root);
+            build.ConfigureInitialWeapon(2u);
             GetOrAdd<NetworkWeaponCombatAdapter>(root);
             NetworkCombatantAdapter combatantAdapter = GetOrAdd<NetworkCombatantAdapter>(root);
             combatantAdapter.Configure(
@@ -129,6 +136,16 @@ namespace MonsterSupergroup.NetworkCombat.Editor
         {
             T component = gameObject.GetComponent<T>();
             return component != null ? component : gameObject.AddComponent<T>();
+        }
+
+        private static void RemoveIfPresent<T>(GameObject gameObject)
+            where T : Component
+        {
+            T component = gameObject.GetComponent<T>();
+            if (component != null)
+            {
+                UnityEngine.Object.DestroyImmediate(component);
+            }
         }
 
         private static Transform FindChild(Transform root, string name)

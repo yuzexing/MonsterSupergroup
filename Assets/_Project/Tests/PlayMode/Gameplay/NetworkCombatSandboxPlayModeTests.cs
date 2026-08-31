@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Linq;
 using System.Reflection;
+using System.Text.RegularExpressions;
 using AstralShift.HellMaiden.AI;
 using AstralShift.HellMaiden.AI.Enemy;
 using AstralShift.HellMaiden.Interactions;
@@ -25,6 +26,51 @@ namespace MonsterSupergroup.Gameplay.Tests
         private const string SandboxScenePath =
             "Assets/_Project/Scenes/Development/NetworkCombatSandbox.unity";
 
+        [UnitySetUp]
+        public IEnumerator SetUp()
+        {
+            yield return StopExistingNetworkRuntime();
+        }
+
+        [UnityTearDown]
+        public IEnumerator TearDown()
+        {
+            yield return StopExistingNetworkRuntime();
+        }
+
+        private static IEnumerator StopExistingNetworkRuntime()
+        {
+            NetworkManager manager = NetworkManager.singleton;
+            if (manager != null)
+            {
+                if (NetworkServer.active && NetworkClient.active)
+                {
+                    manager.StopHost();
+                }
+                else if (NetworkServer.active)
+                {
+                    manager.StopServer();
+                }
+                else if (NetworkClient.active)
+                {
+                    manager.StopClient();
+                }
+            }
+
+            float deadline = Time.realtimeSinceStartup + 5f;
+            while ((NetworkServer.active || NetworkClient.active) &&
+                   Time.realtimeSinceStartup < deadline)
+            {
+                yield return null;
+            }
+
+            if (manager != null)
+            {
+                Object.Destroy(manager.gameObject);
+                yield return null;
+            }
+        }
+
         [UnityTest]
         public IEnumerator Host_StartsOwnerPlayerAndOneHundredTwentyCanonicalEnemies()
         {
@@ -40,6 +86,7 @@ namespace MonsterSupergroup.Gameplay.Tests
 
             try
             {
+                ExpectMissingDanteFmodEvent();
                 manager.StartHost();
                 float deadline = Time.realtimeSinceStartup + 8f;
                 while ((NetworkClient.localPlayer == null ||
@@ -60,8 +107,8 @@ namespace MonsterSupergroup.Gameplay.Tests
                 NetworkEnemySimulationAgent[] simulationAgents =
                     Object.FindObjectsByType<NetworkEnemySimulationAgent>(
                         FindObjectsSortMode.None);
-                PlayerLoader ownerLoader = NetworkClient.localPlayer != null
-                    ? NetworkClient.localPlayer.GetComponent<PlayerLoader>()
+                PlayerBuildRuntime ownerBuild = NetworkClient.localPlayer != null
+                    ? NetworkClient.localPlayer.GetComponent<PlayerBuildRuntime>()
                     : null;
                 PlayerCombatantBinding ownerCombatant = NetworkClient.localPlayer != null
                     ? NetworkClient.localPlayer.GetComponent<PlayerCombatantBinding>()
@@ -76,8 +123,11 @@ namespace MonsterSupergroup.Gameplay.Tests
                 Assert.That(NetworkServer.active, Is.True);
                 Assert.That(NetworkClient.isConnected, Is.True);
                 Assert.That(NetworkClient.localPlayer, Is.Not.Null);
-                Assert.That(ownerLoader, Is.Not.Null);
-                Assert.That(ownerLoader.IsLoaded, Is.True);
+                Assert.That(ownerBuild, Is.Not.Null);
+                Assert.That(ownerBuild.IsBuildActive, Is.True);
+                Assert.That(ownerBuild.WeaponCount, Is.EqualTo(1));
+                Assert.That(ownerBuild.InitialWeapon, Is.Not.Null);
+                Assert.That(ownerBuild.InitialWeapon.UsesNativeGasRuntime, Is.True);
                 Assert.That(ownerCombatant, Is.Not.Null);
                 Assert.That(ownerPlayerMovement, Is.Not.Null);
                 Assert.That(ownerPlayerMovement.CombatantBinding, Is.SameAs(ownerCombatant));
@@ -198,18 +248,17 @@ namespace MonsterSupergroup.Gameplay.Tests
                 }
 
                 Assert.That(NetworkClient.localPlayer, Is.Not.Null);
-                PlayerLoader playerLoader =
-                    NetworkClient.localPlayer.GetComponent<PlayerLoader>();
+                PlayerBuildRuntime playerBuild =
+                    NetworkClient.localPlayer.GetComponent<PlayerBuildRuntime>();
                 float loadDeadline = Time.realtimeSinceStartup + 3f;
-                while ((playerLoader == null || !playerLoader.IsLoaded) &&
+                while ((playerBuild == null || !playerBuild.IsBuildActive) &&
                        Time.realtimeSinceStartup < loadDeadline)
                 {
                     yield return null;
                 }
-                Assert.That(playerLoader, Is.Not.Null);
-                Assert.That(playerLoader.IsLoaded, Is.True);
-                NetworkClient.localPlayer.GetComponent<PlayerHandBehaviour>()
-                    ?.DeactivateWeapons();
+                Assert.That(playerBuild, Is.Not.Null);
+                Assert.That(playerBuild.IsBuildActive, Is.True);
+                playerBuild.ClearBuild();
                 GameObject productPrefab = manager.spawnPrefabs.SingleOrDefault(
                     prefab => prefab != null && prefab.name == "NetworkEnemyBase");
                 Assert.That(productPrefab, Is.Not.Null);
@@ -449,18 +498,17 @@ namespace MonsterSupergroup.Gameplay.Tests
                 }
                 Assert.That(NetworkClient.localPlayer, Is.Not.Null);
 
-                PlayerLoader playerLoader =
-                    NetworkClient.localPlayer.GetComponent<PlayerLoader>();
+                PlayerBuildRuntime playerBuild =
+                    NetworkClient.localPlayer.GetComponent<PlayerBuildRuntime>();
                 float loadDeadline = Time.realtimeSinceStartup + 3f;
-                while ((playerLoader == null || !playerLoader.IsLoaded) &&
+                while ((playerBuild == null || !playerBuild.IsBuildActive) &&
                        Time.realtimeSinceStartup < loadDeadline)
                 {
                     yield return null;
                 }
-                Assert.That(playerLoader, Is.Not.Null);
-                Assert.That(playerLoader.IsLoaded, Is.True);
-                NetworkClient.localPlayer.GetComponent<PlayerHandBehaviour>()
-                    ?.DeactivateWeapons();
+                Assert.That(playerBuild, Is.Not.Null);
+                Assert.That(playerBuild.IsBuildActive, Is.True);
+                playerBuild.ClearBuild();
 
                 GameObject skeletonPrefab = manager.spawnPrefabs.SingleOrDefault(
                     prefab => prefab != null &&
@@ -785,6 +833,13 @@ namespace MonsterSupergroup.Gameplay.Tests
                 {
                     yield return null;
                 }
+
+                Assert.That(NetworkClient.localPlayer, Is.Not.Null);
+                PlayerBuildRuntime ownerBuild =
+                    NetworkClient.localPlayer.GetComponent<PlayerBuildRuntime>();
+                Assert.That(ownerBuild, Is.Not.Null);
+                Assert.That(ownerBuild.IsBuildActive, Is.True);
+                ownerBuild.ClearBuild();
 
                 NetworkEnemySimulationWorld world =
                     NetworkEnemySimulationWorld.Instance;
@@ -1417,6 +1472,15 @@ namespace MonsterSupergroup.Gameplay.Tests
             }
             Assert.That(NetworkServer.active, Is.False);
             Assert.That(NetworkClient.active, Is.False);
+        }
+
+        private static void ExpectMissingDanteFmodEvent()
+        {
+            // Dante keeps the original FMOD presentation IDs, but the source bank
+            // is intentionally outside this migration/test slice.
+            LogAssert.Expect(
+                LogType.Exception,
+                new Regex(@"EventNotFoundException: \[FMOD\] Event not found:.*"));
         }
     }
 }

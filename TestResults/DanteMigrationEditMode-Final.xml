@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="7" result="Passed" total="7" passed="7" failed="0" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-08-30 09:44:05Z" end-time="2026-08-30 09:44:05Z" duration="0.1035288">
+  <test-suite type="TestSuite" id="1000" name="Monster Supergroup" fullname="Monster Supergroup" runstate="Runnable" testcasecount="126" result="Passed" start-time="2026-08-30 09:44:05Z" end-time="2026-08-30 09:44:05Z" duration="0.103529" total="7" passed="7" failed="0" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="EditMode" />
+    </properties>
+    <test-suite type="Assembly" id="1101" name="MonsterSupergroup.HellMaidenMigration.Tests.EditMode.dll" fullname="F:/UnityStore/MonsterSupergroup/Library/ScriptAssemblies/MonsterSupergroup.HellMaidenMigration.Tests.EditMode.dll" runstate="Runnable" testcasecount="7" result="Passed" start-time="2026-08-30 09:44:05Z" end-time="2026-08-30 09:44:05Z" duration="0.098249" total="7" passed="7" failed="0" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="65972" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="EditMode" />
+        <property name="EditorOnly" value="True" />
+      </properties>
+      <test-suite type="TestSuite" id="1102" name="MonsterSupergroup" fullname="MonsterSupergroup" runstate="Runnable" testcasecount="7" result="Passed" start-time="2026-08-30 09:44:05Z" end-time="2026-08-30 09:44:05Z" duration="0.097938" total="7" passed="7" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-suite type="TestSuite" id="1103" name="HellMaidenMigration" fullname="MonsterSupergroup.HellMaidenMigration" runstate="Runnable" testcasecount="7" result="Passed" start-time="2026-08-30 09:44:05Z" end-time="2026-08-30 09:44:05Z" duration="0.097774" total="7" passed="7" failed="0" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <test-suite type="TestSuite" id="1104" name="Tests" fullname="MonsterSupergroup.HellMaidenMigration.Tests" runstate="Runnable" testcasecount="7" result="Passed" start-time="2026-08-30 09:44:05Z" end-time="2026-08-30 09:44:05Z" duration="0.097582" total="7" passed="7" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-suite type="TestFixture" id="1093" name="DanteNativeGasMigrationTests" fullname="MonsterSupergroup.HellMaidenMigration.Tests.DanteNativeGasMigrationTests" classname="MonsterSupergroup.HellMaidenMigration.Tests.DanteNativeGasMigrationTests" runstate="Runnable" testcasecount="7" result="Passed" start-time="2026-08-30 09:44:05Z" end-time="2026-08-30 09:44:05Z" duration="0.096743" total="7" passed="7" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1094" name="Converter_MapsEveryLegacyIdToStableIdAndTypedParameter" fullname="MonsterSupergroup.HellMaidenMigration.Tests.DanteNativeGasMigrationTests.Converter_MapsEveryLegacyIdToStableIdAndTypedParameter" methodname="Converter_MapsEveryLegacyIdToStableIdAndTypedParameter" classname="MonsterSupergroup.HellMaidenMigration.Tests.DanteNativeGasMigrationTests" runstate="Runnable" seed="1747773486" result="Passed" start-time="2026-08-30 09:44:05Z" end-time="2026-08-30 09:44:05Z" duration="0.012569" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1095" name="Converter_ReadsRecoveredLegacyManagedReferenceParameters" fullname="MonsterSupergroup.HellMaidenMigration.Tests.DanteNativeGasMigrationTests.Converter_ReadsRecoveredLegacyManagedReferenceParameters" methodname="Converter_ReadsRecoveredLegacyManagedReferenceParameters" classname="MonsterSupergroup.HellMaidenMigration.Tests.DanteNativeGasMigrationTests" runstate="Runnable" seed="2099018864" result="Passed" start-time="2026-08-30 09:44:05Z" end-time="2026-08-30 09:44:05Z" duration="0.003096" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1097" name="DanteWeapon_IsBoundToNativeDefinitionAndPreservesLegacyPresentationPrefab" fullname="MonsterSupergroup.HellMaidenMigration.Tests.DanteNativeGasMigrationTests.DanteWeapon_IsBoundToNativeDefinitionAndPreservesLegacyPresentationPrefab" methodname="DanteWeapon_IsBoundToNativeDefinitionAndPreservesLegacyPresentationPrefab" classname="MonsterSupergroup.HellMaidenMigration.Tests.DanteNativeGasMigrationTests" runstate="Runnable" seed="141627236" result="Passed" start-time="2026-08-30 09:44:05Z" end-time="2026-08-30 09:44:05Z" duration="0.016243" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1098" name="ImportedDantePrefabs_HaveNoMissingMonoBehaviours" fullname="MonsterSupergroup.HellMaidenMigration.Tests.DanteNativeGasMigrationTests.ImportedDantePrefabs_HaveNoMissingMonoBehaviours" methodname="ImportedDantePrefabs_HaveNoMissingMonoBehaviours" classname="MonsterSupergroup.HellMaidenMigration.Tests.DanteNativeGasMigrationTests" runstate="Runnable" seed="1829636162" result="Passed" start-time="2026-08-30 09:44:05Z" end-time="2026-08-30 09:44:05Z" duration="0.012408" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1099" name="ImportedDanteProjectilePrefabs_HaveRecoveredRuntimeReferences" fullname="MonsterSupergroup.HellMaidenMigration.Tests.DanteNativeGasMigrationTests.ImportedDanteProjectilePrefabs_HaveRecoveredRuntimeReferences" methodname="ImportedDanteProjectilePrefabs_HaveRecoveredRuntimeReferences" classname="MonsterSupergroup.HellMaidenMigration.Tests.DanteNativeGasMigrationTests" runstate="Runnable" seed="1241877563" result="Passed" start-time="2026-08-30 09:44:05Z" end-time="2026-08-30 09:44:05Z" duration="0.019365" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1096" name="NativeEquipmentAssets_StoreOnlyStableIdsAndTypedParameters" fullname="MonsterSupergroup.HellMaidenMigration.Tests.DanteNativeGasMigrationTests.NativeEquipmentAssets_StoreOnlyStableIdsAndTypedParameters" methodname="NativeEquipmentAssets_StoreOnlyStableIdsAndTypedParameters" classname="MonsterSupergroup.HellMaidenMigration.Tests.DanteNativeGasMigrationTests" runstate="Runnable" seed="1314826319" result="Passed" start-time="2026-08-30 09:44:05Z" end-time="2026-08-30 09:44:05Z" duration="0.005319" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1100" name="NetworkPlayerPrefab_OwnsOnePlayerBuildRuntime" fullname="MonsterSupergroup.HellMaidenMigration.Tests.DanteNativeGasMigrationTests.NetworkPlayerPrefab_OwnsOnePlayerBuildRuntime" methodname="NetworkPlayerPrefab_OwnsOnePlayerBuildRuntime" classname="MonsterSupergroup.HellMaidenMigration.Tests.DanteNativeGasMigrationTests" runstate="Runnable" seed="1606632288" result="Passed" start-time="2026-08-30 09:44:05Z" end-time="2026-08-30 09:44:05Z" duration="0.017079" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[Saving results to: C:/Users/ADMIN/AppData/LocalLow/DefaultCompany/Monster Supergroup\TestResults.xml
+]]></output>
+              </test-case>
+            </test-suite>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

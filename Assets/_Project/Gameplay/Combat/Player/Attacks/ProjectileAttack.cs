@@ -289,7 +289,7 @@ namespace AstralShift.HellMaiden.Player.Attacks
 					base.PlayAttackAnimation();
 				}
 			}
-			else if ((bool)attackAnim.Clip)
+			else if (attackAnim != null && (bool)attackAnim.Clip)
 			{
 				base._attackAnimDuration = despawnTimeout;
 				base.PlayAttackAnimation();

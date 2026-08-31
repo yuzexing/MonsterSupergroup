@@ -16,27 +16,27 @@ MonoBehaviour:
   - modifiers:
     - modifierId: 16777223
       parameters:
-        rid: 6481290777826164745
+        rid: 1001
   - modifiers:
     - modifierId: 16777223
       parameters:
-        rid: 6481290777826164746
+        rid: 2001
   - modifiers:
     - modifierId: 16777223
       parameters:
-        rid: 6481290777826164747
+        rid: 3001
   references:
     version: 2
     RefIds:
-    - rid: 6481290777826164745
+    - rid: 1001
       type: {class: ProjectileCountStatModifierParameters, ns: MonsterSupergroup.GAS, asm: MonsterSupergroup.GAS.Core}
       data:
         countIncrement: 1
-    - rid: 6481290777826164746
+    - rid: 2001
       type: {class: ProjectileCountStatModifierParameters, ns: MonsterSupergroup.GAS, asm: MonsterSupergroup.GAS.Core}
       data:
         countIncrement: 2
-    - rid: 6481290777826164747
+    - rid: 3001
       type: {class: ProjectileCountStatModifierParameters, ns: MonsterSupergroup.GAS, asm: MonsterSupergroup.GAS.Core}
       data:
         countIncrement: 3

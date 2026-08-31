@@ -667,6 +667,18 @@ namespace AstralShift.HellMaiden.Player
 			attackDirection = direction.normalized;
 		}
 
+		public bool SetRuntimeAimDirection(Vector2 direction)
+		{
+			if (!float.IsFinite(direction.x) || !float.IsFinite(direction.y) ||
+				direction.sqrMagnitude <= 0.000001f)
+			{
+				return false;
+			}
+
+			attackDirection = direction.normalized;
+			return true;
+		}
+
 		public void SetAimPosition(Vector2 position)
 		{
 			if (!_autoAim && !(ProCamera2D.Instance.GameCamera == null))

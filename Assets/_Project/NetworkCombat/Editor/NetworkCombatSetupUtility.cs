@@ -1,6 +1,9 @@
 using System;
+using System.Linq;
 using AstralShift.HellMaiden.AI;
 using AstralShift.HellMaiden.AI.Enemy;
+using AstralShift.HellMaiden.Combat.Hand.Data;
+using AstralShift.HellMaiden.Data.Cards;
 using AstralShift.HellMaiden.Interactions;
 using AstralShift.QTI.Triggers;
 using kcp2k;
@@ -26,6 +29,8 @@ namespace MonsterSupergroup.NetworkCombat.Editor
             "Assets/_Project/Content/NetworkCombat/NetworkCombatWorld.prefab";
         public const string SandboxScenePath =
             "Assets/_Project/Scenes/Development/NetworkCombatSandbox.unity";
+        public const string BootScenePath = "Assets/Scenes/Boot.unity";
+        public const string GameplayScenePath = "Assets/Scenes/Gameplay.unity";
 
         private const string LocalPlayerPrefabPath =
             "Assets/_Project/Content/LocalCombat/LocalPlayer.prefab";
@@ -33,6 +38,39 @@ namespace MonsterSupergroup.NetworkCombat.Editor
             "Assets/_Project/Content/LocalCombat/LocalEnemy.prefab";
         private const string ProductEnemySourcePrefabPath =
             "Assets/_Project/Content/LocalCombat/EnemyBase.prefab";
+        private const string WeaponDatabasePath =
+            "Assets/_Project/Content/HellMaiden/NativeGAS/NativeGasWeaponDB.asset";
+
+        [MenuItem("Monster Supergroup/Network Combat/Configure Boot Gameplay Loop")]
+        public static void ConfigureBootGameplayLoop()
+        {
+            try
+            {
+                BuildBootGameplayAssets();
+                Debug.Log(
+                    "Boot -> Gameplay network combat loop assets configured.");
+                ExitBatchMode(0);
+            }
+            catch (Exception exception)
+            {
+                Debug.LogException(exception);
+                if (Application.isBatchMode)
+                {
+                    ExitBatchMode(1);
+                    return;
+                }
+
+                throw;
+            }
+        }
+
+        public static void BuildBootGameplayAssets()
+        {
+            BuildSandboxAssets();
+            ConfigureProductScenes();
+            AssetDatabase.SaveAssets();
+            AssetDatabase.Refresh();
+        }
 
         [MenuItem("Monster Supergroup/Network Combat/Build Validation Sandbox")]
         public static void BuildSandbox()
@@ -93,7 +131,11 @@ namespace MonsterSupergroup.NetworkCombat.Editor
 
                 GetOrAdd<MirrorNetworkCombatBridge>(root);
                 GetOrAdd<NetworkEnemySimulationEndpoint>(root);
-                GetOrAdd<PlayerBuildRuntime>(root);
+                GetOrAdd<NetworkPlayerAutoTargeting>(root);
+                RemoveIfPresent<PlayerLoader>(root);
+                RemoveIfPresent<PlayerHandBehaviour>(root);
+                PlayerBuildRuntime build = GetOrAdd<PlayerBuildRuntime>(root);
+                build.ConfigureInitialWeapon(2u);
                 GetOrAdd<NetworkWeaponCombatAdapter>(root);
                 CombatantBehaviour combatant = root.GetComponent<CombatantBehaviour>();
                 GetOrAdd<NetworkCombatantAdapter>(root).Configure(
@@ -224,12 +266,6 @@ namespace MonsterSupergroup.NetworkCombat.Editor
                 root.AddComponent<NetworkIdentity>();
                 root.AddComponent<NetworkCombatWorld>();
                 root.AddComponent<NetworkEnemySimulationWorld>();
-                root.AddComponent<NetworkEnemySandboxSpawner>().Configure(
-                    enemyPrefab,
-                    count: 120,
-                    columnCount: 15,
-                    cellSpacing: 1.5f,
-                    spawnOrigin: new Vector2(-10f, -6f));
                 PrefabUtility.SaveAsPrefabAsset(root, WorldPrefabPath);
             }
             finally
@@ -275,7 +311,24 @@ namespace MonsterSupergroup.NetworkCombat.Editor
             networkRoot.AddComponent<NetworkManagerHUD>();
             networkRoot.SetActive(true);
 
-            PrefabUtility.InstantiatePrefab(worldPrefab, scene);
+            GameObject worldInstance = (GameObject)PrefabUtility.InstantiatePrefab(
+                worldPrefab,
+                scene);
+            WeaponDB weaponDatabase = AssetDatabase.LoadAssetAtPath<WeaponDB>(
+                WeaponDatabasePath);
+            if (weaponDatabase == null)
+            {
+                throw new InvalidOperationException(
+                    $"Required native weapon database is missing: {WeaponDatabasePath}");
+            }
+            worldInstance.AddComponent<RuntimeDB>()
+                .ConfigureWeaponDatabase(weaponDatabase);
+            worldInstance.AddComponent<NetworkEnemySandboxSpawner>().Configure(
+                enemyPrefab,
+                count: 120,
+                columnCount: 15,
+                cellSpacing: 1.5f,
+                spawnOrigin: new Vector2(-10f, -6f));
             CreateStartPosition(new Vector2(-2f, 0f));
             CreateStartPosition(new Vector2(2f, 0f));
             CreateStartPosition(new Vector2(0f, -2f));
@@ -302,6 +355,234 @@ namespace MonsterSupergroup.NetworkCombat.Editor
         private static void CreateStartPosition(Vector2 position)
         {
             var start = new GameObject($"Player Start {position.x},{position.y}");
+            start.transform.position = position;
+            start.AddComponent<NetworkStartPosition>();
+        }
+
+        private static void ConfigureProductScenes()
+        {
+            GameObject playerPrefab = AssetDatabase.LoadAssetAtPath<GameObject>(
+                PlayerPrefabPath);
+            GameObject lightweightEnemy = AssetDatabase.LoadAssetAtPath<GameObject>(
+                EnemyPrefabPath);
+            GameObject productEnemy = AssetDatabase.LoadAssetAtPath<GameObject>(
+                ProductEnemyPrefabPath);
+            GameObject skeletonEnemy = AssetDatabase.LoadAssetAtPath<GameObject>(
+                EnemySimulationPrefabMigrator.SkeletonNetworkPrefabPath);
+            GameObject worldPrefab = AssetDatabase.LoadAssetAtPath<GameObject>(
+                WorldPrefabPath);
+            if (playerPrefab == null || lightweightEnemy == null ||
+                productEnemy == null || skeletonEnemy == null || worldPrefab == null)
+            {
+                throw new InvalidOperationException(
+                    "Boot Gameplay configuration requires all NetworkCombat prefabs.");
+            }
+
+            ConfigureBootScene(
+                playerPrefab,
+                lightweightEnemy,
+                productEnemy,
+                skeletonEnemy,
+                worldPrefab);
+            ConfigureGameplayScene(skeletonEnemy);
+        }
+
+        private static void ConfigureBootScene(
+            GameObject playerPrefab,
+            GameObject lightweightEnemy,
+            GameObject productEnemy,
+            GameObject skeletonEnemy,
+            GameObject worldPrefab)
+        {
+            Scene scene = EditorSceneManager.OpenScene(
+                BootScenePath,
+                OpenSceneMode.Single);
+            DisableLegacyBootSceneLoader(scene);
+            NetworkManager existing = scene.GetRootGameObjects()
+                .SelectMany(root => root.GetComponentsInChildren<NetworkManager>(true))
+                .Single();
+            GameObject managerObject = existing.gameObject;
+            Transport transport = existing.transport;
+            NetworkManagerHUD existingHud =
+                managerObject.GetComponent<NetworkManagerHUD>();
+            int hudOffsetX = existingHud != null ? existingHud.offsetX : 0;
+            int hudOffsetY = existingHud != null ? existingHud.offsetY : 0;
+            if (!(existing is BootGameplayNetworkManager))
+            {
+                if (existingHud != null)
+                {
+                    UnityEngine.Object.DestroyImmediate(existingHud);
+                }
+                UnityEngine.Object.DestroyImmediate(existing);
+            }
+
+            BootGameplayNetworkManager manager =
+                managerObject.GetComponent<BootGameplayNetworkManager>();
+            if (manager == null)
+            {
+                manager = managerObject.AddComponent<BootGameplayNetworkManager>();
+            }
+            manager.transport = transport;
+            manager.sendRate = 60;
+            manager.maxConnections = 4;
+            manager.dontDestroyOnLoad = false;
+            manager.runInBackground = true;
+            manager.offlineScene = string.Empty;
+            manager.onlineScene = string.Empty;
+            manager.playerPrefab = playerPrefab;
+            manager.autoCreatePlayer = false;
+            manager.playerSpawnMethod = PlayerSpawnMethod.RoundRobin;
+            manager.spawnPrefabs.Clear();
+            manager.spawnPrefabs.Add(lightweightEnemy);
+            manager.spawnPrefabs.Add(productEnemy);
+            manager.spawnPrefabs.Add(skeletonEnemy);
+            NetworkManagerHUD hud =
+                managerObject.GetComponent<NetworkManagerHUD>();
+            if (hud == null)
+            {
+                hud = managerObject.AddComponent<NetworkManagerHUD>();
+            }
+            hud.offsetX = hudOffsetX;
+            hud.offsetY = hudOffsetY;
+
+            Camera bootCamera = scene.GetRootGameObjects()
+                .SelectMany(root => root.GetComponentsInChildren<Camera>(true))
+                .FirstOrDefault();
+            AudioListener bootAudio = bootCamera != null
+                ? bootCamera.GetComponent<AudioListener>()
+                : null;
+            manager.ConfigureGameplay(
+                GameplayScenePath,
+                bootCamera,
+                bootAudio);
+            GetOrAdd<BootGameplayProcessValidationBootstrap>(managerObject)
+                .Configure(manager);
+            EditorUtility.SetDirty(manager);
+
+            NetworkCombatWorld[] worlds = scene.GetRootGameObjects()
+                .SelectMany(root =>
+                    root.GetComponentsInChildren<NetworkCombatWorld>(true))
+                .ToArray();
+            GameObject worldObject;
+            if (worlds.Length == 0)
+            {
+                worldObject = (GameObject)PrefabUtility.InstantiatePrefab(
+                    worldPrefab,
+                    scene);
+                worldObject.name = "Network Combat World";
+            }
+            else
+            {
+                worldObject = worlds[0].gameObject;
+                for (int i = 1; i < worlds.Length; i++)
+                {
+                    UnityEngine.Object.DestroyImmediate(worlds[i].gameObject);
+                }
+            }
+
+            RemoveIfPresent<NetworkEnemySandboxSpawner>(worldObject);
+            RemoveIfPresent<RuntimeDB>(worldObject);
+            GetOrAdd<NetworkEnemySimulationWorld>(worldObject);
+            EditorSceneManager.MarkSceneDirty(scene);
+            if (!EditorSceneManager.SaveScene(scene, BootScenePath))
+            {
+                throw new InvalidOperationException("Failed to save Boot scene.");
+            }
+        }
+
+        private static void DisableLegacyBootSceneLoader(Scene scene)
+        {
+            MonoBehaviour[] behaviours = scene.GetRootGameObjects()
+                .SelectMany(root => root.GetComponentsInChildren<MonoBehaviour>(true))
+                .ToArray();
+            for (int i = 0; i < behaviours.Length; i++)
+            {
+                MonoBehaviour behaviour = behaviours[i];
+                if (behaviour == null)
+                {
+                    continue;
+                }
+
+                MonoScript script = MonoScript.FromMonoBehaviour(behaviour);
+                if (script == null || script.name != "SystemController")
+                {
+                    continue;
+                }
+
+                behaviour.enabled = false;
+                EditorUtility.SetDirty(behaviour);
+            }
+        }
+
+        private static void ConfigureGameplayScene(GameObject skeletonEnemy)
+        {
+            Scene scene = EditorSceneManager.OpenScene(
+                GameplayScenePath,
+                OpenSceneMode.Single);
+            NetworkManager[] managers = scene.GetRootGameObjects()
+                .SelectMany(root => root.GetComponentsInChildren<NetworkManager>(true))
+                .ToArray();
+            for (int i = 0; i < managers.Length; i++)
+            {
+                UnityEngine.Object.DestroyImmediate(managers[i]);
+            }
+
+            NetworkCombatWorld[] worlds = scene.GetRootGameObjects()
+                .SelectMany(root =>
+                    root.GetComponentsInChildren<NetworkCombatWorld>(true))
+                .ToArray();
+            for (int i = 0; i < worlds.Length; i++)
+            {
+                UnityEngine.Object.DestroyImmediate(worlds[i].gameObject);
+            }
+
+            NetworkGameplayEnemySpawner spawner = scene.GetRootGameObjects()
+                .SelectMany(root => root.GetComponentsInChildren<
+                    NetworkGameplayEnemySpawner>(true))
+                .FirstOrDefault();
+            if (spawner == null)
+            {
+                spawner = new GameObject("Network Gameplay Enemy Spawner")
+                    .AddComponent<NetworkGameplayEnemySpawner>();
+            }
+            spawner.Configure(skeletonEnemy, 5f);
+            EditorUtility.SetDirty(spawner);
+
+            NetworkStartPosition[] starts = scene.GetRootGameObjects()
+                .SelectMany(root =>
+                    root.GetComponentsInChildren<NetworkStartPosition>(true))
+                .ToArray();
+            for (int i = 0; i < starts.Length; i++)
+            {
+                UnityEngine.Object.DestroyImmediate(starts[i].gameObject);
+            }
+
+            var startsRoot = new GameObject("Network Player Starts");
+            CreateStartPosition(startsRoot.transform, new Vector2(-2f, 0f));
+            CreateStartPosition(startsRoot.transform, new Vector2(2f, 0f));
+            CreateStartPosition(startsRoot.transform, new Vector2(0f, -2f));
+            CreateStartPosition(startsRoot.transform, new Vector2(0f, 2f));
+
+            if (!scene.GetRootGameObjects()
+                .SelectMany(root => root.GetComponentsInChildren<EnemyAIManager>(true))
+                .Any())
+            {
+                new GameObject("Enemy AI Manager").AddComponent<EnemyAIManager>();
+            }
+
+            EditorSceneManager.MarkSceneDirty(scene);
+            if (!EditorSceneManager.SaveScene(scene, GameplayScenePath))
+            {
+                throw new InvalidOperationException("Failed to save Gameplay scene.");
+            }
+        }
+
+        private static void CreateStartPosition(
+            Transform parent,
+            Vector2 position)
+        {
+            var start = new GameObject($"Player Start {position.x},{position.y}");
+            start.transform.SetParent(parent, false);
             start.transform.position = position;
             start.AddComponent<NetworkStartPosition>();
         }

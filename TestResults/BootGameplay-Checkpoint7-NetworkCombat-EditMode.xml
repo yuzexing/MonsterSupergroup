@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="9" result="Passed" total="9" passed="9" failed="0" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-08-30 16:47:30Z" end-time="2026-08-30 16:47:30Z" duration="0.4605812">
+  <test-suite type="TestSuite" id="1000" name="Monster Supergroup" fullname="Monster Supergroup" runstate="Runnable" testcasecount="128" result="Passed" start-time="2026-08-30 16:47:30Z" end-time="2026-08-30 16:47:30Z" duration="0.460581" total="9" passed="9" failed="0" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="EditMode" />
+    </properties>
+    <test-suite type="Assembly" id="1151" name="MonsterSupergroup.NetworkCombat.Tests.EditMode.dll" fullname="F:/UnityStore/MonsterSupergroup/Library/ScriptAssemblies/MonsterSupergroup.NetworkCombat.Tests.EditMode.dll" runstate="Runnable" testcasecount="42" result="Passed" start-time="2026-08-30 16:47:30Z" end-time="2026-08-30 16:47:30Z" duration="0.453554" total="9" passed="9" failed="0" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="87736" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="EditMode" />
+        <property name="EditorOnly" value="True" />
+      </properties>
+      <test-suite type="TestSuite" id="1152" name="MonsterSupergroup" fullname="MonsterSupergroup" runstate="Runnable" testcasecount="42" result="Passed" start-time="2026-08-30 16:47:30Z" end-time="2026-08-30 16:47:30Z" duration="0.452644" total="9" passed="9" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-suite type="TestSuite" id="1153" name="NetworkCombat" fullname="MonsterSupergroup.NetworkCombat" runstate="Runnable" testcasecount="42" result="Passed" start-time="2026-08-30 16:47:30Z" end-time="2026-08-30 16:47:30Z" duration="0.451885" total="9" passed="9" failed="0" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <test-suite type="TestSuite" id="1154" name="Tests" fullname="MonsterSupergroup.NetworkCombat.Tests" runstate="Runnable" testcasecount="42" result="Passed" start-time="2026-08-30 16:47:30Z" end-time="2026-08-30 16:47:30Z" duration="0.451093" total="9" passed="9" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-suite type="TestFixture" id="1141" name="NetworkCombatPhase7Tests" fullname="MonsterSupergroup.NetworkCombat.Tests.NetworkCombatPhase7Tests" classname="MonsterSupergroup.NetworkCombat.Tests.NetworkCombatPhase7Tests" runstate="Runnable" testcasecount="9" result="Passed" start-time="2026-08-30 16:47:30Z" end-time="2026-08-30 16:47:30Z" duration="0.449573" total="9" passed="9" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1148" name="BootAndGameplay_UsePersistentWorldAndAdditiveProductTopology" fullname="MonsterSupergroup.NetworkCombat.Tests.NetworkCombatPhase7Tests.BootAndGameplay_UsePersistentWorldAndAdditiveProductTopology" methodname="BootAndGameplay_UsePersistentWorldAndAdditiveProductTopology" classname="MonsterSupergroup.NetworkCombat.Tests.NetworkCombatPhase7Tests" runstate="Runnable" seed="1731661940" result="Passed" start-time="2026-08-30 16:47:30Z" end-time="2026-08-30 16:47:30Z" duration="0.318829" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1146" name="FourClientsOneHundredFiftyEnemies_BatchesConvergeWithinBudgets" fullname="MonsterSupergroup.NetworkCombat.Tests.NetworkCombatPhase7Tests.FourClientsOneHundredFiftyEnemies_BatchesConvergeWithinBudgets" methodname="FourClientsOneHundredFiftyEnemies_BatchesConvergeWithinBudgets" classname="MonsterSupergroup.NetworkCombat.Tests.NetworkCombatPhase7Tests" runstate="Runnable" seed="997632786" result="Passed" start-time="2026-08-30 16:47:30Z" end-time="2026-08-30 16:47:30Z" duration="0.061627" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[Phase7 load: 2400 events / 8 batches, estimated payload 193928 bytes, managed heap growth 2469888 bytes, 19 ms.
+]]></output>
+              </test-case>
+              <test-case id="1147" name="GeneratedSandbox_UsesExistingGameplayPrefabsAndLocalOnlyProjectiles" fullname="MonsterSupergroup.NetworkCombat.Tests.NetworkCombatPhase7Tests.GeneratedSandbox_UsesExistingGameplayPrefabsAndLocalOnlyProjectiles" methodname="GeneratedSandbox_UsesExistingGameplayPrefabsAndLocalOnlyProjectiles" classname="MonsterSupergroup.NetworkCombat.Tests.NetworkCombatPhase7Tests" runstate="Runnable" seed="1131696911" result="Passed" start-time="2026-08-30 16:47:30Z" end-time="2026-08-30 16:47:30Z" duration="0.003616" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1142" name="LateJoinSnapshot_RehydratesEntitiesAndStatusesRegisteredAfterReceipt" fullname="MonsterSupergroup.NetworkCombat.Tests.NetworkCombatPhase7Tests.LateJoinSnapshot_RehydratesEntitiesAndStatusesRegisteredAfterReceipt" methodname="LateJoinSnapshot_RehydratesEntitiesAndStatusesRegisteredAfterReceipt" classname="MonsterSupergroup.NetworkCombat.Tests.NetworkCombatPhase7Tests" runstate="Runnable" seed="1340434635" result="Passed" start-time="2026-08-30 16:47:30Z" end-time="2026-08-30 16:47:30Z" duration="0.006640" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1149" name="PlayerRuntimeCombatState_IsIsolatedPerPlayerAndRejectsRemoteWrites" fullname="MonsterSupergroup.NetworkCombat.Tests.NetworkCombatPhase7Tests.PlayerRuntimeCombatState_IsIsolatedPerPlayerAndRejectsRemoteWrites" methodname="PlayerRuntimeCombatState_IsIsolatedPerPlayerAndRejectsRemoteWrites" classname="MonsterSupergroup.NetworkCombat.Tests.NetworkCombatPhase7Tests" runstate="Runnable" seed="131331142" result="Passed" start-time="2026-08-30 16:47:30Z" end-time="2026-08-30 16:47:30Z" duration="0.004672" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1150" name="Sandbox_UsesMirrorLatencySimulationForTwoHundredMillisecondRttProfile" fullname="MonsterSupergroup.NetworkCombat.Tests.NetworkCombatPhase7Tests.Sandbox_UsesMirrorLatencySimulationForTwoHundredMillisecondRttProfile" methodname="Sandbox_UsesMirrorLatencySimulationForTwoHundredMillisecondRttProfile" classname="MonsterSupergroup.NetworkCombat.Tests.NetworkCombatPhase7Tests" runstate="Runnable" seed="84517781" result="Passed" start-time="2026-08-30 16:47:30Z" end-time="2026-08-30 16:47:30Z" duration="0.023659" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1144" name="SimultaneousPredictedLethal_BothBuildTriggersRunButServerConfirmsOnce" fullname="MonsterSupergroup.NetworkCombat.Tests.NetworkCombatPhase7Tests.SimultaneousPredictedLethal_BothBuildTriggersRunButServerConfirmsOnce" methodname="SimultaneousPredictedLethal_BothBuildTriggersRunButServerConfirmsOnce" classname="MonsterSupergroup.NetworkCombat.Tests.NetworkCombatPhase7Tests" runstate="Runnable" seed="1037600779" result="Passed" start-time="2026-08-30 16:47:30Z" end-time="2026-08-30 16:47:30Z" duration="0.012756" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1145" name="SourceClientDotTick_UsesExistingCollectorAndChangesCanonicalHpExactlyOnce" fullname="MonsterSupergroup.NetworkCombat.Tests.NetworkCombatPhase7Tests.SourceClientDotTick_UsesExistingCollectorAndChangesCanonicalHpExactlyOnce" methodname="SourceClientDotTick_UsesExistingCollectorAndChangesCanonicalHpExactlyOnce" classname="MonsterSupergroup.NetworkCombat.Tests.NetworkCombatPhase7Tests" runstate="Runnable" seed="106441801" result="Passed" start-time="2026-08-30 16:47:30Z" end-time="2026-08-30 16:47:30Z" duration="0.006199" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1143" name="TwoHundredMillisecondRttWithJitterAndLoss_LocalFeedbackIsImmediateAndServerConverges" fullname="MonsterSupergroup.NetworkCombat.Tests.NetworkCombatPhase7Tests.TwoHundredMillisecondRttWithJitterAndLoss_LocalFeedbackIsImmediateAndServerConverges" methodname="TwoHundredMillisecondRttWithJitterAndLoss_LocalFeedbackIsImmediateAndServerConverges" classname="MonsterSupergroup.NetworkCombat.Tests.NetworkCombatPhase7Tests" runstate="Runnable" seed="288511201" result="Passed" start-time="2026-08-30 16:47:30Z" end-time="2026-08-30 16:47:30Z" duration="0.000874" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[Saving results to: C:/Users/ADMIN/AppData/LocalLow/DefaultCompany/Monster Supergroup\TestResults.xml
+]]></output>
+              </test-case>
+            </test-suite>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

@@ -148,9 +148,21 @@ namespace AstralShift.HellMaiden.AI
 		private void Awake()
 		{
 			Instance = this;
+			InitializeRuntimeCollections();
 		}
 
 		private void Start()
+		{
+			RunHordeEnemiesStuckCheck();
+			if (!Application.isBatchMode &&
+				SystemInfo.supportsComputeShaders &&
+				_visibilityShader != null)
+			{
+				InitializeComputeBuffers();
+			}
+		}
+
+		private void InitializeRuntimeCollections()
 		{
 			_perFrameBatchCount = new Dictionary<int, int>();
 			_perFrameBatchCount.Add(0, 10);
@@ -166,13 +178,6 @@ namespace AstralShift.HellMaiden.AI
 			_rubberBandTracker = new Dictionary<EnemyController, float>();
 			_recentlyRegisteredEnemies = new Dictionary<int, float>();
 			_visibleIDsLUT = new Dictionary<int, bool>();
-			RunHordeEnemiesStuckCheck();
-			if (!Application.isBatchMode &&
-				SystemInfo.supportsComputeShaders &&
-				_visibilityShader != null)
-			{
-				InitializeComputeBuffers();
-			}
 		}
 
 		private void InitializeComputeBuffers()
@@ -254,7 +259,17 @@ namespace AstralShift.HellMaiden.AI
 					int num2 = _allEnemiesIDCache[num];
 					_allEnemiesIDCache[value] = num2;
 					_idToNativeIndexLut[num2] = value;
-					_boundsDataArrayNativeCache[value] = _boundsDataArrayNativeCache[num];
+					// Batch/headless players intentionally skip GPU visibility setup,
+					// so the NativeArray is not created there. Unregistration is still
+					// required for the gameplay lookup tables, but there is no native
+					// visibility slot to compact in that configuration.
+					if (_boundsDataArrayNativeCache.IsCreated &&
+						value >= 0 && value < _boundsDataArrayNativeCache.Length &&
+						num >= 0 && num < _boundsDataArrayNativeCache.Length)
+					{
+						_boundsDataArrayNativeCache[value] =
+							_boundsDataArrayNativeCache[num];
+					}
 				}
 				_allEnemiesIDCache.RemoveAt(num);
 				_idToNativeIndexLut.Remove(instanceID);

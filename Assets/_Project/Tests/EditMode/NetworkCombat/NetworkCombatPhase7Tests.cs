@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using AstralShift.HellMaiden.AI;
 using AstralShift.HellMaiden.Interactions;
+using AstralShift.HellMaiden.Combat.Hand.Data;
 using AstralShift.HellMaiden.Player;
 using AstralShift.QTI.Triggers;
 using Mirror;
@@ -32,6 +33,10 @@ namespace MonsterSupergroup.NetworkCombat.Tests
             "Assets/_Project/Content/LocalCombat/LocalProjectile.prefab";
         private const string SandboxScenePath =
             "Assets/_Project/Scenes/Development/NetworkCombatSandbox.unity";
+        private const string BootScenePath = "Assets/Scenes/Boot.unity";
+        private const string GameplayScenePath = "Assets/Scenes/Gameplay.unity";
+        private const string SkeletonPrefabPath =
+            "Assets/_Project/Content/NetworkCombat/NetworkEnemySkeleton.prefab";
 
         [Test]
         public void LateJoinSnapshot_RehydratesEntitiesAndStatusesRegisteredAfterReceipt()
@@ -374,11 +379,15 @@ namespace MonsterSupergroup.NetworkCombat.Tests
             Assert.That(playerHitbox, Is.Not.Null);
             Assert.That(playerHitbox.Owner, Is.SameAs(playerBinding));
             Assert.That(playerHitbox.GetComponent<Collider2D>().isTrigger, Is.True);
-            Assert.That(player.GetComponent<PlayerLoader>(), Is.Not.Null);
-            Assert.That(player.GetComponent<PlayerHandBehaviour>(), Is.Not.Null);
+            Assert.That(player.GetComponent<PlayerLoader>(), Is.Null);
+            Assert.That(player.GetComponent<PlayerHandBehaviour>(), Is.Null);
+            PlayerBuildRuntime playerBuild = player.GetComponent<PlayerBuildRuntime>();
+            Assert.That(playerBuild, Is.Not.Null);
+            Assert.That(playerBuild.InitialWeaponId, Is.EqualTo(2u));
             Assert.That(player.GetComponent<NetworkIdentity>(), Is.Not.Null);
             Assert.That(player.GetComponent<MirrorNetworkCombatBridge>(), Is.Not.Null);
             Assert.That(player.GetComponent<NetworkEnemySimulationEndpoint>(), Is.Not.Null);
+            Assert.That(player.GetComponent<NetworkPlayerAutoTargeting>(), Is.Not.Null);
             Assert.That(player.GetComponent<NetworkWeaponCombatAdapter>(), Is.Not.Null);
             Assert.That(player.GetComponent<NetworkPlayerBootstrap>(), Is.Not.Null);
             Assert.That(player.GetComponent<NetworkTransformReliable>().syncDirection,
@@ -413,7 +422,10 @@ namespace MonsterSupergroup.NetworkCombat.Tests
             Assert.That(world, Is.Not.Null);
             Assert.That(world.GetComponent<NetworkCombatWorld>(), Is.Not.Null);
             Assert.That(world.GetComponent<NetworkEnemySimulationWorld>(), Is.Not.Null);
-            Assert.That(world.GetComponent<NetworkEnemySandboxSpawner>(), Is.Not.Null);
+            Assert.That(world.GetComponent<NetworkEnemySandboxSpawner>(), Is.Null,
+                "The shared World prefab must not own development spawning.");
+            Assert.That(world.GetComponent<RuntimeDB>(), Is.Null,
+                "Boot and Sandbox provide their own RuntimeDB composition.");
             Assert.That(projectile, Is.Not.Null);
             Assert.That(projectile.GetComponentsInChildren<NetworkBehaviour>(true), Is.Empty,
                 "Projectiles remain owner-local and are never NetworkSpawned.");
@@ -423,6 +435,111 @@ namespace MonsterSupergroup.NetworkCombat.Tests
             AssertNoMissingScripts(productEnemy);
             AssertNoMissingScripts(world);
             AssertNoMissingScripts(projectile);
+        }
+
+        [Test]
+        public void BootAndGameplay_UsePersistentWorldAndAdditiveProductTopology()
+        {
+            Scene boot = EditorSceneManager.OpenScene(
+                BootScenePath,
+                OpenSceneMode.Additive);
+            Scene gameplay = EditorSceneManager.OpenScene(
+                GameplayScenePath,
+                OpenSceneMode.Additive);
+            try
+            {
+                BootGameplayNetworkManager manager = boot.GetRootGameObjects()
+                    .SelectMany(root => root.GetComponentsInChildren<
+                        BootGameplayNetworkManager>(true))
+                    .Single();
+                BootGameplayProcessValidationBootstrap processValidation =
+                    boot.GetRootGameObjects()
+                        .SelectMany(root => root.GetComponentsInChildren<
+                            BootGameplayProcessValidationBootstrap>(true))
+                        .Single();
+                NetworkCombatWorld[] bootWorlds = boot.GetRootGameObjects()
+                    .SelectMany(root =>
+                        root.GetComponentsInChildren<NetworkCombatWorld>(true))
+                    .ToArray();
+                GameObject skeleton = AssetDatabase.LoadAssetAtPath<GameObject>(
+                    SkeletonPrefabPath);
+
+                Assert.That(manager.autoCreatePlayer, Is.False);
+                Assert.That(
+                    manager.playerSpawnMethod,
+                    Is.EqualTo(PlayerSpawnMethod.RoundRobin));
+                Assert.That(manager.onlineScene, Is.Empty);
+                Assert.That(manager.GameplayScene, Is.EqualTo(GameplayScenePath));
+                Assert.That(
+                    processValidation.ConfiguredNetworkManager,
+                    Is.SameAs(manager));
+                Assert.That(manager.playerPrefab, Is.Not.Null);
+                Assert.That(manager.spawnPrefabs, Does.Contain(skeleton));
+                Assert.That(
+                    boot.GetRootGameObjects()
+                        .SelectMany(root =>
+                            root.GetComponentsInChildren<MonoBehaviour>(true))
+                        .Where(behaviour => behaviour != null)
+                        .Where(behaviour =>
+                        {
+                            MonoScript script =
+                                MonoScript.FromMonoBehaviour(behaviour);
+                            return script != null &&
+                                script.name == "SystemController";
+                        })
+                        .All(behaviour => !behaviour.enabled),
+                    Is.True,
+                    "Legacy SystemController must not replace the additive " +
+                    "network Gameplay scene with MainMenu.");
+                Assert.That(bootWorlds, Has.Length.EqualTo(1));
+                Assert.That(
+                    bootWorlds[0].GetComponent<NetworkEnemySimulationWorld>(),
+                    Is.Not.Null);
+                Assert.That(
+                    bootWorlds[0].GetComponent<NetworkEnemySandboxSpawner>(),
+                    Is.Null);
+                Assert.That(bootWorlds[0].GetComponent<RuntimeDB>(), Is.Null);
+                Assert.That(
+                    boot.GetRootGameObjects()
+                        .SelectMany(root =>
+                            root.GetComponentsInChildren<RuntimeDB>(true))
+                        .Count(),
+                    Is.EqualTo(1));
+
+                Assert.That(
+                    gameplay.GetRootGameObjects()
+                        .SelectMany(root =>
+                            root.GetComponentsInChildren<NetworkManager>(true)),
+                    Is.Empty);
+                Assert.That(
+                    gameplay.GetRootGameObjects()
+                        .SelectMany(root =>
+                            root.GetComponentsInChildren<NetworkCombatWorld>(true)),
+                    Is.Empty);
+                NetworkGameplayEnemySpawner spawner =
+                    gameplay.GetRootGameObjects()
+                        .SelectMany(root => root.GetComponentsInChildren<
+                            NetworkGameplayEnemySpawner>(true))
+                        .Single();
+                Assert.That(spawner.EnemyPrefab, Is.SameAs(skeleton));
+                Assert.That(
+                    gameplay.GetRootGameObjects()
+                        .SelectMany(root => root.GetComponentsInChildren<
+                            NetworkStartPosition>(true))
+                        .Count(),
+                    Is.EqualTo(4));
+                Assert.That(
+                    gameplay.GetRootGameObjects()
+                        .SelectMany(root =>
+                            root.GetComponentsInChildren<EnemyAIManager>(true))
+                        .Count(),
+                    Is.EqualTo(1));
+            }
+            finally
+            {
+                EditorSceneManager.CloseScene(gameplay, true);
+                EditorSceneManager.CloseScene(boot, true);
+            }
         }
 
         [Test]
@@ -478,6 +595,7 @@ namespace MonsterSupergroup.NetworkCombat.Tests
                     .SelectMany(root => root.GetComponentsInChildren<
                         NetworkEnemySandboxSpawner>(true))
                     .Single();
+                RuntimeDB runtimeDatabase = spawner.GetComponent<RuntimeDB>();
                 NetworkEnemyProcessValidationBootstrap processValidation =
                     scene.GetRootGameObjects()
                         .SelectMany(root => root.GetComponentsInChildren<
@@ -502,6 +620,11 @@ namespace MonsterSupergroup.NetworkCombat.Tests
                     Is.SameAs(spawner));
                 Assert.That(processValidation.SkeletonPrefab, Is.SameAs(skeleton));
                 Assert.That(manager.spawnPrefabs, Does.Contain(skeleton));
+                Assert.That(runtimeDatabase, Is.Not.Null);
+                Assert.That(
+                    runtimeDatabase.TryGetWeaponData(2u, out var initialWeapon),
+                    Is.True);
+                Assert.That(initialWeapon.UsesNativeGasRuntime, Is.True);
                 foreach (GameObject root in scene.GetRootGameObjects())
                 {
                     AssertNoMissingScripts(root);

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using AstralShift.HellMaiden.Data.Cards;
+using AstralShift.HellMaiden.Combat.Hand.Data;
 using AstralShift.HellMaiden.Player;
 using AstralShift.HellMaiden.Player.Attacks;
 using MonsterSupergroup.GAS;
@@ -24,6 +25,7 @@ namespace MonsterSupergroup.Gameplay.Combat
 
         [SerializeField] private PlayerMovement owner;
         [SerializeField] private CombatRuntimeServiceProvider serviceProvider;
+        [SerializeField] private uint initialWeaponId = 2u;
 
         private readonly GasAttackStatsMultipliers perkMultipliers =
             new GasAttackStatsMultipliers();
@@ -38,6 +40,11 @@ namespace MonsterSupergroup.Gameplay.Combat
         public int EquipmentCount => equipmentByHandle.Count;
         public int PerkCount => perksByHandle.Count;
         public GasAttackStatsMultipliers PerkMultipliers => perkMultipliers;
+        public uint InitialWeaponId => initialWeaponId;
+        public RuntimeDB BuildDatabase { get; private set; }
+        public WeaponBehaviour InitialWeapon { get; private set; }
+        public bool IsBuildActive => InitialWeapon != null &&
+            weapons.ContainsKey(InitialWeapon);
 
         private void Awake()
         {
@@ -143,6 +150,17 @@ namespace MonsterSupergroup.Gameplay.Combat
             }
         }
 
+        public WeaponBehaviour EquipWeapon(uint weaponId, Transform parent = null)
+        {
+            if (BuildDatabase == null)
+            {
+                throw new InvalidOperationException(
+                    "PlayerBuildRuntime requires an active RuntimeDB before equipping by ID.");
+            }
+
+            return EquipWeapon(BuildDatabase.GetWeaponData(weaponId), parent);
+        }
+
         public bool UnequipWeapon(WeaponBehaviour weapon)
         {
             EnsureInitialized();
@@ -153,11 +171,72 @@ namespace MonsterSupergroup.Gameplay.Combat
 
             RemoveEquipmentFor(entry);
             weapons.Remove(weapon);
+            if (ReferenceEquals(InitialWeapon, weapon))
+            {
+                InitialWeapon = null;
+            }
             entry.Behaviour.Deactivate();
             entry.Runtime.Shutdown();
             entry.Modifiers.Clear();
             Destroy(entry.Behaviour.gameObject);
             return true;
+        }
+
+        public void ConfigureInitialWeapon(uint weaponId)
+        {
+            if (IsBuildActive)
+            {
+                throw new InvalidOperationException(
+                    "The initial weapon cannot change while the build is active.");
+            }
+
+            initialWeaponId = weaponId;
+        }
+
+        public WeaponBehaviour StartInitialBuild(RuntimeDB database)
+        {
+            EnsureInitialized();
+            if (database == null)
+            {
+                throw new ArgumentNullException(nameof(database));
+            }
+
+            ClearBuild();
+            BuildDatabase = database;
+            try
+            {
+                InitialWeapon = EquipWeapon(initialWeaponId);
+                return InitialWeapon;
+            }
+            catch
+            {
+                BuildDatabase = null;
+                InitialWeapon = null;
+                throw;
+            }
+        }
+
+        public void ClearBuild()
+        {
+            if (!initialized)
+            {
+                BuildDatabase = null;
+                InitialWeapon = null;
+                return;
+            }
+
+            WeaponBehaviour[] equippedWeapons = new WeaponBehaviour[weapons.Count];
+            weapons.Keys.CopyTo(equippedWeapons, 0);
+            for (int i = 0; i < equippedWeapons.Length; i++)
+            {
+                UnequipWeapon(equippedWeapons[i]);
+            }
+
+            equipmentByHandle.Clear();
+            perksByHandle.Clear();
+            perkMultipliers.Reset();
+            BuildDatabase = null;
+            InitialWeapon = null;
         }
 
         public PlayerBuildEquipmentHandle AddEquipment(
@@ -379,16 +458,7 @@ namespace MonsterSupergroup.Gameplay.Combat
             }
 
             serviceProvider.ServicesChanged -= ConfigureCombatRuntimeServices;
-            WeaponBehaviour[] equippedWeapons = new WeaponBehaviour[weapons.Count];
-            weapons.Keys.CopyTo(equippedWeapons, 0);
-            for (int i = 0; i < equippedWeapons.Length; i++)
-            {
-                UnequipWeapon(equippedWeapons[i]);
-            }
-
-            equipmentByHandle.Clear();
-            perksByHandle.Clear();
-            perkMultipliers.Reset();
+            ClearBuild();
             initialized = false;
         }
 

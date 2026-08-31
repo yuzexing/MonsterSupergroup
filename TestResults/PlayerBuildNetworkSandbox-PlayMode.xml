@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="6" result="Passed" total="6" passed="6" failed="0" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-08-30 11:51:34Z" end-time="2026-08-30 11:51:38Z" duration="3.0872622">
+  <test-suite type="TestSuite" id="1067" name="Monster Supergroup" fullname="Monster Supergroup" runstate="Runnable" testcasecount="48" result="Passed" start-time="2026-08-30 11:51:34Z" end-time="2026-08-30 11:51:38Z" duration="3.087262" total="6" passed="6" failed="0" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="PlayMode" />
+    </properties>
+    <test-suite type="Assembly" id="1051" name="MonsterSupergroup.Gameplay.Tests.PlayMode.dll" fullname="F:/UnityStore/MonsterSupergroup/Library/ScriptAssemblies/MonsterSupergroup.Gameplay.Tests.PlayMode.dll" runstate="Runnable" testcasecount="44" result="Passed" start-time="2026-08-30 11:51:34Z" end-time="2026-08-30 11:51:38Z" duration="3.075451" total="6" passed="6" failed="0" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="64596" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="PlayMode" />
+        <property name="EditorOnly" value="False" />
+      </properties>
+      <test-suite type="TestSuite" id="1052" name="MonsterSupergroup" fullname="MonsterSupergroup" runstate="Runnable" testcasecount="44" result="Passed" start-time="2026-08-30 11:51:34Z" end-time="2026-08-30 11:51:38Z" duration="3.074107" total="6" passed="6" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-suite type="TestSuite" id="1053" name="Gameplay" fullname="MonsterSupergroup.Gameplay" runstate="Runnable" testcasecount="44" result="Passed" start-time="2026-08-30 11:51:34Z" end-time="2026-08-30 11:51:38Z" duration="3.072753" total="6" passed="6" failed="0" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <test-suite type="TestSuite" id="1054" name="Tests" fullname="MonsterSupergroup.Gameplay.Tests" runstate="Runnable" testcasecount="44" result="Passed" start-time="2026-08-30 11:51:34Z" end-time="2026-08-30 11:51:38Z" duration="3.071318" total="6" passed="6" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-suite type="TestFixture" id="1037" name="NetworkCombatSandboxPlayModeTests" fullname="MonsterSupergroup.Gameplay.Tests.NetworkCombatSandboxPlayModeTests" classname="MonsterSupergroup.Gameplay.Tests.NetworkCombatSandboxPlayModeTests" runstate="Runnable" testcasecount="6" result="Passed" start-time="2026-08-30 11:51:34Z" end-time="2026-08-30 11:51:38Z" duration="3.069070" total="6" passed="6" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1043" name="DedicatedServer_BossModeNeverBecomesClientSimulation" fullname="MonsterSupergroup.Gameplay.Tests.NetworkCombatSandboxPlayModeTests.DedicatedServer_BossModeNeverBecomesClientSimulation" methodname="DedicatedServer_BossModeNeverBecomesClientSimulation" classname="MonsterSupergroup.Gameplay.Tests.NetworkCombatSandboxPlayModeTests" runstate="Runnable" seed="548685496" result="Passed" start-time="2026-08-30 11:51:34Z" end-time="2026-08-30 11:51:35Z" duration="0.185080" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[Server listening on port 7777
+]]></output>
+              </test-case>
+              <test-case id="1042" name="DedicatedServer_ClientOwnedEnemiesWaitThenFallbackRuns" fullname="MonsterSupergroup.Gameplay.Tests.NetworkCombatSandboxPlayModeTests.DedicatedServer_ClientOwnedEnemiesWaitThenFallbackRuns" methodname="DedicatedServer_ClientOwnedEnemiesWaitThenFallbackRuns" classname="MonsterSupergroup.Gameplay.Tests.NetworkCombatSandboxPlayModeTests" runstate="Runnable" seed="154627866" result="Passed" start-time="2026-08-30 11:51:35Z" end-time="2026-08-30 11:51:35Z" duration="0.329759" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[Server listening on port 7777
+]]></output>
+              </test-case>
+              <test-case id="1041" name="Host_ObserverRelayAndServerFallbackConverge" fullname="MonsterSupergroup.Gameplay.Tests.NetworkCombatSandboxPlayModeTests.Host_ObserverRelayAndServerFallbackConverge" methodname="Host_ObserverRelayAndServerFallbackConverge" classname="MonsterSupergroup.Gameplay.Tests.NetworkCombatSandboxPlayModeTests" runstate="Runnable" seed="982583222" result="Passed" start-time="2026-08-30 11:51:35Z" end-time="2026-08-30 11:51:35Z" duration="0.392532" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[Server listening on port 7777
+OptionalWarning.AnimatorDisabled - Possible Issue Detected: The Animator is disabled so Animancer won't be able to play animations.
+
+This warning can be disabled via 'Edit/Project Settings/Animancer' or by calling Animancer.OptionalWarning.AnimatorDisabled.Disable() and it will automatically be compiled out of Runtime Builds (except for Development Builds). More information can be found at <a href="https://kybernetik.com.au/animancer/api/Animancer/OptionalWarning">https://kybernetik.com.au/animancer/api/Animancer/OptionalWarning</a>
+
+]]></output>
+              </test-case>
+              <test-case id="1038" name="Host_StartsOwnerPlayerAndOneHundredTwentyCanonicalEnemies" fullname="MonsterSupergroup.Gameplay.Tests.NetworkCombatSandboxPlayModeTests.Host_StartsOwnerPlayerAndOneHundredTwentyCanonicalEnemies" methodname="Host_StartsOwnerPlayerAndOneHundredTwentyCanonicalEnemies" classname="MonsterSupergroup.Gameplay.Tests.NetworkCombatSandboxPlayModeTests" runstate="Runnable" seed="2021933654" result="Passed" start-time="2026-08-30 11:51:35Z" end-time="2026-08-30 11:51:36Z" duration="0.442433" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[Server listening on port 7777
+OptionalWarning.AnimatorDisabled - Possible Issue Detected: The Animator is disabled so Animancer won't be able to play animations.
+
+This warning can be disabled via 'Edit/Project Settings/Animancer' or by calling Animancer.OptionalWarning.AnimatorDisabled.Disable() and it will automatically be compiled out of Runtime Builds (except for Development Builds). More information can be found at <a href="https://kybernetik.com.au/animancer/api/Animancer/OptionalWarning">https://kybernetik.com.au/animancer/api/Animancer/OptionalWarning</a>
+
+[FMOD] ObjectLookup::get : Lookup failed for EventModel: {1235e4b8-dcb5-43e8-8bb7-41a363bff4b8}
+
+EventNotFoundException: [FMOD] Event not found: {1235e4b8-dcb5-43e8-8bb7-41a363bff4b8} ()
+FMODUnity.RuntimeManager.GetEventDescription (FMODUnity.EventReference eventReference) (at Assets/Plugins/FMOD/src/RuntimeManager.cs:1314)
+FMODUnity.StudioParameterTrigger.Awake () (at Assets/Plugins/FMOD/src/StudioParameterTrigger.cs:26)
+UnityEngine.Object:Instantiate(ProjectileAttack, Transform)
+AstralShift.Pooling.GenericPooler`1:GetOrCreate(Transform, Boolean) (at Assets/_Project/Gameplay/Combat/Pooling/GenericPooler.cs:48)
+AstralShift.HellMaiden.Player.Attacks.AttackVariantSet`1:GetOrCreate(AttackElement, Transform) (at Assets/_Project/Gameplay/Combat/Player/Attacks/AttackVariantSet.cs:51)
+AstralShift.HellMaiden.Player.Attacks.ProjectileAttackBehaviour:GetOrCreateAttack(AttackSnapshot) (at Assets/_Project/Gameplay/Combat/Player/Attacks/ProjectileAttackBehaviour.cs:93)
+AstralShift.HellMaiden.Player.Attacks.ProjectileAttackBehaviour:Attack() (at Assets/_Project/Gameplay/Combat/Player/Attacks/ProjectileAttackBehaviour.cs:68)
+AstralShift.HellMaiden.Player.Attacks.ProjectileAttackBehaviour:Update() (at Assets/_Project/Gameplay/Combat/Player/Attacks/ProjectileAttackBehaviour.cs:43)
+
+[FMOD] Please add an 'FMOD Studio Listener' component to your camera in the scene for correct 3D positioning of sounds.
+]]></output>
+              </test-case>
+              <test-case id="1039" name="ProductEnemyBase_ClientOwnerRunsNavigationWithoutServerTransform" fullname="MonsterSupergroup.Gameplay.Tests.NetworkCombatSandboxPlayModeTests.ProductEnemyBase_ClientOwnerRunsNavigationWithoutServerTransform" methodname="ProductEnemyBase_ClientOwnerRunsNavigationWithoutServerTransform" classname="MonsterSupergroup.Gameplay.Tests.NetworkCombatSandboxPlayModeTests" runstate="Runnable" seed="1993720231" result="Passed" start-time="2026-08-30 11:51:36Z" end-time="2026-08-30 11:51:36Z" duration="0.536164" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[Server listening on port 7777
+OptionalWarning.AnimatorDisabled - Possible Issue Detected: The Animator is disabled so Animancer won't be able to play animations.
+
+This warning can be disabled via 'Edit/Project Settings/Animancer' or by calling Animancer.OptionalWarning.AnimatorDisabled.Disable() and it will automatically be compiled out of Runtime Builds (except for Development Builds). More information can be found at <a href="https://kybernetik.com.au/animancer/api/Animancer/OptionalWarning">https://kybernetik.com.au/animancer/api/Animancer/OptionalWarning</a>
+
+<color=blue><b>► FSM: </b></color>PlayerMovement: Moving -> TRANSITION to: Hurt
+[FMOD] ObjectLookup::get : Lookup failed for EventModel: {00000000-0000-0000-0000-000000000000}
+
+[FMOD] Event not found: {00000000-0000-0000-0000-000000000000} ()
+PLAYER INVULNERABILITY try set : True Invulnerability count now at 1 invulnerability state now at True
+<color=blue><b>► FSM: </b></color>PlayerMovement: Hurt -> TRANSITION to: Moving
+]]></output>
+              </test-case>
+              <test-case id="1040" name="SkeletonMelee_ReplicaDamagesLocalPlayerButExpiredActiveDoesNot" fullname="MonsterSupergroup.Gameplay.Tests.NetworkCombatSandboxPlayModeTests.SkeletonMelee_ReplicaDamagesLocalPlayerButExpiredActiveDoesNot" methodname="SkeletonMelee_ReplicaDamagesLocalPlayerButExpiredActiveDoesNot" classname="MonsterSupergroup.Gameplay.Tests.NetworkCombatSandboxPlayModeTests" runstate="Runnable" seed="1391400309" result="Passed" start-time="2026-08-30 11:51:36Z" end-time="2026-08-30 11:51:38Z" duration="1.172373" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[Server listening on port 7777
+OptionalWarning.AnimatorDisabled - Possible Issue Detected: The Animator is disabled so Animancer won't be able to play animations.
+
+This warning can be disabled via 'Edit/Project Settings/Animancer' or by calling Animancer.OptionalWarning.AnimatorDisabled.Disable() and it will automatically be compiled out of Runtime Builds (except for Development Builds). More information can be found at <a href="https://kybernetik.com.au/animancer/api/Animancer/OptionalWarning">https://kybernetik.com.au/animancer/api/Animancer/OptionalWarning</a>
+
+OptionalWarning.AnimatorSpeed - Possible Issue Detected: Animator.speed doesn't affect Animancer. Use AnimancerGraph.Speed instead.
+
+This warning can be disabled via 'Edit/Project Settings/Animancer' or by calling Animancer.OptionalWarning.AnimatorSpeed.Disable() and it will automatically be compiled out of Runtime Builds (except for Development Builds). More information can be found at <a href="https://kybernetik.com.au/animancer/api/Animancer/OptionalWarning">https://kybernetik.com.au/animancer/api/Animancer/OptionalWarning</a>
+
+<color=blue><b>► FSM: </b></color>PlayerMovement: Moving -> TRANSITION to: Hurt
+[FMOD] ObjectLookup::get : Lookup failed for EventModel: {00000000-0000-0000-0000-000000000000}
+
+[FMOD] Event not found: {00000000-0000-0000-0000-000000000000} ()
+PLAYER INVULNERABILITY try set : True Invulnerability count now at 1 invulnerability state now at True
+<color=blue><b>► FSM: </b></color>PlayerMovement: Hurt -> TRANSITION to: Moving
+<color=blue><b>► FSM: </b></color>EnemyAI: Moving -> TRANSITION to: Warning
+OptionalWarning.AnimatorSpeed - Possible Issue Detected: Animator.speed doesn't affect Animancer. Use AnimancerGraph.Speed instead.
+
+This warning can be disabled via 'Edit/Project Settings/Animancer' or by calling Animancer.OptionalWarning.AnimatorSpeed.Disable() and it will automatically be compiled out of Runtime Builds (except for Development Builds). More information can be found at <a href="https://kybernetik.com.au/animancer/api/Animancer/OptionalWarning">https://kybernetik.com.au/animancer/api/Animancer/OptionalWarning</a>
+
+PLAYER INVULNERABILITY try set : False Invulnerability count now at 0 invulnerability state now at False
+<color=blue><b>► FSM: </b></color>EnemyAI: Warning -> TRANSITION to: Attacking
+<color=blue><b>► FSM: </b></color>PlayerMovement: Moving -> TRANSITION to: Hurt
+[FMOD] ObjectLookup::get : Lookup failed for EventModel: {00000000-0000-0000-0000-000000000000}
+
+[FMOD] Event not found: {00000000-0000-0000-0000-000000000000} ()
+PLAYER INVULNERABILITY try set : True Invulnerability count now at 1 invulnerability state now at True
+Saving results to: C:/Users/ADMIN/AppData/LocalLow/DefaultCompany/Monster Supergroup\TestResults.xml
+]]></output>
+              </test-case>
+            </test-suite>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

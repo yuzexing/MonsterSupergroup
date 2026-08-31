@@ -16,48 +16,48 @@ MonoBehaviour:
   - modifiers:
     - modifierId: 16777224
       parameters:
-        rid: 6481290777826164757
+        rid: 1001
     - modifierId: 16777218
       parameters:
-        rid: 6481290777826164758
+        rid: 1002
   - modifiers:
     - modifierId: 16777224
       parameters:
-        rid: 6481290777826164759
+        rid: 2001
     - modifierId: 16777218
       parameters:
-        rid: 6481290777826164760
+        rid: 2002
   - modifiers:
     - modifierId: 16777224
       parameters:
-        rid: 6481290777826164761
+        rid: 3001
     - modifierId: 16777218
       parameters:
-        rid: 6481290777826164762
+        rid: 3002
   references:
     version: 2
     RefIds:
-    - rid: 6481290777826164757
+    - rid: 1001
       type: {class: KnockbackStatModifierParameters, ns: MonsterSupergroup.GAS, asm: MonsterSupergroup.GAS.Core}
       data:
         multiplierIncrement: 1
-    - rid: 6481290777826164758
+    - rid: 1002
       type: {class: SpeedStatModifierParameters, ns: MonsterSupergroup.GAS, asm: MonsterSupergroup.GAS.Core}
       data:
         multiplierIncrement: 0.2
-    - rid: 6481290777826164759
+    - rid: 2001
       type: {class: KnockbackStatModifierParameters, ns: MonsterSupergroup.GAS, asm: MonsterSupergroup.GAS.Core}
       data:
         multiplierIncrement: 1.6
-    - rid: 6481290777826164760
+    - rid: 2002
       type: {class: SpeedStatModifierParameters, ns: MonsterSupergroup.GAS, asm: MonsterSupergroup.GAS.Core}
       data:
         multiplierIncrement: 0.3
-    - rid: 6481290777826164761
+    - rid: 3001
       type: {class: KnockbackStatModifierParameters, ns: MonsterSupergroup.GAS, asm: MonsterSupergroup.GAS.Core}
       data:
         multiplierIncrement: 2.2
-    - rid: 6481290777826164762
+    - rid: 3002
       type: {class: SpeedStatModifierParameters, ns: MonsterSupergroup.GAS, asm: MonsterSupergroup.GAS.Core}
       data:
         multiplierIncrement: 0.5

@@ -18,12 +18,12 @@ namespace AstralShift.Helpers
 
 		public static bool IsWithinCameraBounds(Vector2 position, float extentsMultiplier = 1f)
 		{
-			Vector2 cameraExtents = GetCameraExtents();
-			cameraExtents *= extentsMultiplier;
-			if (ProCamera2D.Instance == null)
+			if (!ProCamera2D.Exists)
 			{
 				return false;
 			}
+			Vector2 cameraExtents = GetCameraExtents();
+			cameraExtents *= extentsMultiplier;
 			Vector2 vector = ProCamera2D.Instance.GameCamera.transform.position;
 			return new Bounds(size: new Vector2(cameraExtents.x * 2f, cameraExtents.y * 2f), center: vector).Contains(position);
 		}

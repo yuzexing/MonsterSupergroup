@@ -40,6 +40,12 @@ namespace MonsterSupergroup.NetworkCombat
         public int PendingClientAttackPresentationCount =>
             pendingClientAttackPresentations.Count;
 
+        public event Action<NetworkEnemySimulationEndpoint>
+            ServerPlayerRegistered;
+
+        public event Action<NetworkEnemySimulationEndpoint>
+            ServerPlayerUnregistered;
+
         public bool HasEligiblePlayer
         {
             get
@@ -82,9 +88,18 @@ namespace MonsterSupergroup.NetworkCombat
                 throw new ArgumentException("A spawned Player endpoint is required.", nameof(endpoint));
             }
 
-            players[endpoint.PlayerEntityId] = endpoint;
+            uint playerId = endpoint.PlayerEntityId;
+            bool changed = !players.TryGetValue(
+                playerId,
+                out NetworkEnemySimulationEndpoint current) ||
+                current != endpoint;
+            players[playerId] = endpoint;
             ResumeFrozenEnemies();
             SendCachedAttackPresentations(endpoint);
+            if (changed)
+            {
+                ServerPlayerRegistered?.Invoke(endpoint);
+            }
         }
 
         [Server]
@@ -96,7 +111,14 @@ namespace MonsterSupergroup.NetworkCombat
             }
 
             uint playerId = endpoint.PlayerEntityId;
+            if (!players.TryGetValue(playerId, out NetworkEnemySimulationEndpoint current) ||
+                current != endpoint)
+            {
+                return;
+            }
+
             players.Remove(playerId);
+            ServerPlayerUnregistered?.Invoke(endpoint);
             Registry.GetEnemiesDependingOnPlayer(playerId, enemyIdBuffer);
             for (int i = 0; i < enemyIdBuffer.Count; i++)
             {
@@ -142,6 +164,14 @@ namespace MonsterSupergroup.NetworkCombat
         [Server]
         public void RegisterEnemy(NetworkEnemySimulationAgent enemy)
         {
+            RegisterEnemy(enemy, 0u);
+        }
+
+        [Server]
+        public void RegisterEnemy(
+            NetworkEnemySimulationAgent enemy,
+            uint preferredTargetPlayerId)
+        {
             if (enemy == null || enemy.netId == 0u)
             {
                 throw new ArgumentException("A spawned Enemy is required.", nameof(enemy));
@@ -150,8 +180,12 @@ namespace MonsterSupergroup.NetworkCombat
             uint enemyId = enemy.netId;
             enemies[enemyId] = enemy;
             Registry.RegisterEnemy(enemyId, enemy.transform.position, NetworkTime.time);
-            NetworkEnemySimulationEndpoint target =
-                FindNearestEligiblePlayer(enemy.transform.position);
+            NetworkEnemySimulationEndpoint target = preferredTargetPlayerId != 0u &&
+                TryGetEligiblePlayer(
+                    preferredTargetPlayerId,
+                    out NetworkEnemySimulationEndpoint preferred)
+                ? preferred
+                : FindNearestEligiblePlayer(enemy.transform.position);
             EnemySimulationAssignment assignment;
             if (target == null)
             {
@@ -164,6 +198,34 @@ namespace MonsterSupergroup.NetworkCombat
             }
 
             enemy.SetServerAssignment(assignment);
+        }
+
+        [Server]
+        public bool TryGetEligiblePlayer(
+            uint playerEntityId,
+            out NetworkEnemySimulationEndpoint endpoint)
+        {
+            return players.TryGetValue(playerEntityId, out endpoint) &&
+                endpoint != null && endpoint.IsEligibleSimulationOwner;
+        }
+
+        [Server]
+        public void GetEligiblePlayers(
+            List<NetworkEnemySimulationEndpoint> results)
+        {
+            if (results == null)
+            {
+                throw new ArgumentNullException(nameof(results));
+            }
+
+            results.Clear();
+            foreach (NetworkEnemySimulationEndpoint endpoint in players.Values)
+            {
+                if (endpoint != null && endpoint.IsEligibleSimulationOwner)
+                {
+                    results.Add(endpoint);
+                }
+            }
         }
 
         [Server]
@@ -679,6 +741,8 @@ namespace MonsterSupergroup.NetworkCombat
             enemies.Clear();
             neverAssignedEnemies.Clear();
             pendingClientAttackPresentations.Clear();
+            ServerPlayerRegistered = null;
+            ServerPlayerUnregistered = null;
             if (Instance == this)
             {
                 Instance = null;

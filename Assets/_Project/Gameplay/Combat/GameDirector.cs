@@ -77,6 +77,11 @@ namespace AstralShift.HellMaiden
 		private void Awake()
 		{
 			Instance = this;
+			if (runtimeDB == null)
+			{
+				runtimeDB = GetComponentInChildren<RuntimeDB>(true);
+			}
+			runtimeDB?.InitWeaponDatabase();
 			_destroyCts = new CancellationTokenSource();
 			RunInitializationSequence(_destroyCts.Token).Forget();
 		}
@@ -104,7 +109,7 @@ namespace AstralShift.HellMaiden
 			// {
 			// sceneMaster.Init();
 			controllerManager.Init();
-			gameDataManager.Init();
+			// gameDataManager.Init();
 			// runtimeDB.Init();
 			// }
 			// catch (Exception exception)

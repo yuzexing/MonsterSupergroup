@@ -1,0 +1,284 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="41" result="Passed" total="41" passed="41" failed="0" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-08-30 16:13:47Z" end-time="2026-08-30 16:13:47Z" duration="0.2093672">
+  <test-suite type="TestSuite" id="1000" name="Monster Supergroup" fullname="Monster Supergroup" runstate="Runnable" testcasecount="127" result="Passed" start-time="2026-08-30 16:13:47Z" end-time="2026-08-30 16:13:47Z" duration="0.209367" total="41" passed="41" failed="0" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="EditMode" />
+    </properties>
+    <test-suite type="Assembly" id="1150" name="MonsterSupergroup.NetworkCombat.Tests.EditMode.dll" fullname="F:/UnityStore/MonsterSupergroup/Library/ScriptAssemblies/MonsterSupergroup.NetworkCombat.Tests.EditMode.dll" runstate="Runnable" testcasecount="41" result="Passed" start-time="2026-08-30 16:13:47Z" end-time="2026-08-30 16:13:47Z" duration="0.204206" total="41" passed="41" failed="0" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="73468" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="EditMode" />
+        <property name="EditorOnly" value="True" />
+      </properties>
+      <test-suite type="TestSuite" id="1151" name="MonsterSupergroup" fullname="MonsterSupergroup" runstate="Runnable" testcasecount="41" result="Passed" start-time="2026-08-30 16:13:47Z" end-time="2026-08-30 16:13:47Z" duration="0.203891" total="41" passed="41" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-suite type="TestSuite" id="1152" name="NetworkCombat" fullname="MonsterSupergroup.NetworkCombat" runstate="Runnable" testcasecount="41" result="Passed" start-time="2026-08-30 16:13:47Z" end-time="2026-08-30 16:13:47Z" duration="0.203726" total="41" passed="41" failed="0" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <test-suite type="TestSuite" id="1153" name="Tests" fullname="MonsterSupergroup.NetworkCombat.Tests" runstate="Runnable" testcasecount="41" result="Passed" start-time="2026-08-30 16:13:47Z" end-time="2026-08-30 16:13:47Z" duration="0.203519" total="41" passed="41" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-suite type="TestFixture" id="1106" name="EnemySimulationTests" fullname="MonsterSupergroup.NetworkCombat.Tests.EnemySimulationTests" classname="MonsterSupergroup.NetworkCombat.Tests.EnemySimulationTests" runstate="Runnable" testcasecount="22" result="Passed" start-time="2026-08-30 16:13:47Z" end-time="2026-08-30 16:13:47Z" duration="0.061122" total="22" passed="22" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1120" name="AttackPresentationEdge_ReconstructsElapsedTimeFromNetworkClock" fullname="MonsterSupergroup.NetworkCombat.Tests.EnemySimulationTests.AttackPresentationEdge_ReconstructsElapsedTimeFromNetworkClock" methodname="AttackPresentationEdge_ReconstructsElapsedTimeFromNetworkClock" classname="MonsterSupergroup.NetworkCombat.Tests.EnemySimulationTests" runstate="Runnable" seed="339315860" result="Passed" start-time="2026-08-30 16:13:47Z" end-time="2026-08-30 16:13:47Z" duration="0.009002" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1108" name="Authority_BossModeRunsOnlyInServerAuthoritativeRole" fullname="MonsterSupergroup.NetworkCombat.Tests.EnemySimulationTests.Authority_BossModeRunsOnlyInServerAuthoritativeRole" methodname="Authority_BossModeRunsOnlyInServerAuthoritativeRole" classname="MonsterSupergroup.NetworkCombat.Tests.EnemySimulationTests" runstate="Runnable" seed="2050975306" result="Passed" start-time="2026-08-30 16:13:47Z" end-time="2026-08-30 16:13:47Z" duration="0.001198" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1107" name="Authority_NetworkManagedEnemyStartsFrozenAndExposesRoleCapabilities" fullname="MonsterSupergroup.NetworkCombat.Tests.EnemySimulationTests.Authority_NetworkManagedEnemyStartsFrozenAndExposesRoleCapabilities" methodname="Authority_NetworkManagedEnemyStartsFrozenAndExposesRoleCapabilities" classname="MonsterSupergroup.NetworkCombat.Tests.EnemySimulationTests" runstate="Runnable" seed="632640868" result="Passed" start-time="2026-08-30 16:13:47Z" end-time="2026-08-30 16:13:47Z" duration="0.000509" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1126" name="ProcessValidationOptions_ParseExplicitHostAndDefaults" fullname="MonsterSupergroup.NetworkCombat.Tests.EnemySimulationTests.ProcessValidationOptions_ParseExplicitHostAndDefaults" methodname="ProcessValidationOptions_ParseExplicitHostAndDefaults" classname="MonsterSupergroup.NetworkCombat.Tests.EnemySimulationTests" runstate="Runnable" seed="608171112" result="Passed" start-time="2026-08-30 16:13:47Z" end-time="2026-08-30 16:13:47Z" duration="0.001418" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1127" name="ProcessValidationOptions_RejectInvalidRoleAndStayInertWithoutRole" fullname="MonsterSupergroup.NetworkCombat.Tests.EnemySimulationTests.ProcessValidationOptions_RejectInvalidRoleAndStayInertWithoutRole" methodname="ProcessValidationOptions_RejectInvalidRoleAndStayInertWithoutRole" classname="MonsterSupergroup.NetworkCombat.Tests.EnemySimulationTests" runstate="Runnable" seed="1551203906" result="Passed" start-time="2026-08-30 16:13:47Z" end-time="2026-08-30 16:13:47Z" duration="0.000448" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1117" name="Registry_AcceptsAttackPresentationOnlyFromCurrentOwnerAndEpoch" fullname="MonsterSupergroup.NetworkCombat.Tests.EnemySimulationTests.Registry_AcceptsAttackPresentationOnlyFromCurrentOwnerAndEpoch" methodname="Registry_AcceptsAttackPresentationOnlyFromCurrentOwnerAndEpoch" classname="MonsterSupergroup.NetworkCombat.Tests.EnemySimulationTests" runstate="Runnable" seed="1363678305" result="Passed" start-time="2026-08-30 16:13:47Z" end-time="2026-08-30 16:13:47Z" duration="0.001516" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1109" name="Registry_AcceptsOnlyCurrentOwnerEpochAndIncreasingSequence" fullname="MonsterSupergroup.NetworkCombat.Tests.EnemySimulationTests.Registry_AcceptsOnlyCurrentOwnerEpochAndIncreasingSequence" methodname="Registry_AcceptsOnlyCurrentOwnerEpochAndIncreasingSequence" classname="MonsterSupergroup.NetworkCombat.Tests.EnemySimulationTests" runstate="Runnable" seed="1545065985" result="Passed" start-time="2026-08-30 16:13:47Z" end-time="2026-08-30 16:13:47Z" duration="0.000607" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1110" name="Registry_AssignmentChangeInvalidatesOldOwnerSnapshots" fullname="MonsterSupergroup.NetworkCombat.Tests.EnemySimulationTests.Registry_AssignmentChangeInvalidatesOldOwnerSnapshots" methodname="Registry_AssignmentChangeInvalidatesOldOwnerSnapshots" classname="MonsterSupergroup.NetworkCombat.Tests.EnemySimulationTests" runstate="Runnable" seed="1051242319" result="Passed" start-time="2026-08-30 16:13:47Z" end-time="2026-08-30 16:13:47Z" duration="0.002015" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1118" name="Registry_CachesLatestReliableAttackEdgeAndClearsItOnAssignmentChange" fullname="MonsterSupergroup.NetworkCombat.Tests.EnemySimulationTests.Registry_CachesLatestReliableAttackEdgeAndClearsItOnAssignmentChange" methodname="Registry_CachesLatestReliableAttackEdgeAndClearsItOnAssignmentChange" classname="MonsterSupergroup.NetworkCombat.Tests.EnemySimulationTests" runstate="Runnable" seed="179071754" result="Passed" start-time="2026-08-30 16:13:47Z" end-time="2026-08-30 16:13:47Z" duration="0.000431" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1116" name="Registry_OrdersSnapshotsPerEnemyInsteadOfAcrossBatches" fullname="MonsterSupergroup.NetworkCombat.Tests.EnemySimulationTests.Registry_OrdersSnapshotsPerEnemyInsteadOfAcrossBatches" methodname="Registry_OrdersSnapshotsPerEnemyInsteadOfAcrossBatches" classname="MonsterSupergroup.NetworkCombat.Tests.EnemySimulationTests" runstate="Runnable" seed="2037423744" result="Passed" start-time="2026-08-30 16:13:47Z" end-time="2026-08-30 16:13:47Z" duration="0.000210" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1119" name="Registry_RejectsInvalidAttackPresentationAndAcceptsServerFallbackEdge" fullname="MonsterSupergroup.NetworkCombat.Tests.EnemySimulationTests.Registry_RejectsInvalidAttackPresentationAndAcceptsServerFallbackEdge" methodname="Registry_RejectsInvalidAttackPresentationAndAcceptsServerFallbackEdge" classname="MonsterSupergroup.NetworkCombat.Tests.EnemySimulationTests" runstate="Runnable" seed="278409229" result="Passed" start-time="2026-08-30 16:13:47Z" end-time="2026-08-30 16:13:47Z" duration="0.000843" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1114" name="Registry_RejectsNonFiniteSnapshots" fullname="MonsterSupergroup.NetworkCombat.Tests.EnemySimulationTests.Registry_RejectsNonFiniteSnapshots" methodname="Registry_RejectsNonFiniteSnapshots" classname="MonsterSupergroup.NetworkCombat.Tests.EnemySimulationTests" runstate="Runnable" seed="324096847" result="Passed" start-time="2026-08-30 16:13:47Z" end-time="2026-08-30 16:13:47Z" duration="0.000189" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1115" name="Registry_RejectsRegressedSampleTimeEvenWhenSequenceIncreases" fullname="MonsterSupergroup.NetworkCombat.Tests.EnemySimulationTests.Registry_RejectsRegressedSampleTimeEvenWhenSequenceIncreases" methodname="Registry_RejectsRegressedSampleTimeEvenWhenSequenceIncreases" classname="MonsterSupergroup.NetworkCombat.Tests.EnemySimulationTests" runstate="Runnable" seed="661034469" result="Passed" start-time="2026-08-30 16:13:47Z" end-time="2026-08-30 16:13:47Z" duration="0.000202" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1112" name="Registry_ReportsAllEnemiesOwnedByDisconnectedPlayer" fullname="MonsterSupergroup.NetworkCombat.Tests.EnemySimulationTests.Registry_ReportsAllEnemiesOwnedByDisconnectedPlayer" methodname="Registry_ReportsAllEnemiesOwnedByDisconnectedPlayer" classname="MonsterSupergroup.NetworkCombat.Tests.EnemySimulationTests" runstate="Runnable" seed="755809972" result="Passed" start-time="2026-08-30 16:13:47Z" end-time="2026-08-30 16:13:47Z" duration="0.001528" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1113" name="Registry_ReportsClientOwnedAndFallbackEnemiesDependingOnPlayer" fullname="MonsterSupergroup.NetworkCombat.Tests.EnemySimulationTests.Registry_ReportsClientOwnedAndFallbackEnemiesDependingOnPlayer" methodname="Registry_ReportsClientOwnedAndFallbackEnemiesDependingOnPlayer" classname="MonsterSupergroup.NetworkCombat.Tests.EnemySimulationTests" runstate="Runnable" seed="1557908924" result="Passed" start-time="2026-08-30 16:13:47Z" end-time="2026-08-30 16:13:47Z" duration="0.000329" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1111" name="Registry_ServerAuthoritativeEnemyRejectsClientAndAcceptsServerSnapshot" fullname="MonsterSupergroup.NetworkCombat.Tests.EnemySimulationTests.Registry_ServerAuthoritativeEnemyRejectsClientAndAcceptsServerSnapshot" methodname="Registry_ServerAuthoritativeEnemyRejectsClientAndAcceptsServerSnapshot" classname="MonsterSupergroup.NetworkCombat.Tests.EnemySimulationTests" runstate="Runnable" seed="383817311" result="Passed" start-time="2026-08-30 16:13:47Z" end-time="2026-08-30 16:13:47Z" duration="0.000546" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1125" name="SequenceComparison_AcceptsUnsignedWrapAndRejectsOldValues" fullname="MonsterSupergroup.NetworkCombat.Tests.EnemySimulationTests.SequenceComparison_AcceptsUnsignedWrapAndRejectsOldValues" methodname="SequenceComparison_AcceptsUnsignedWrapAndRejectsOldValues" classname="MonsterSupergroup.NetworkCombat.Tests.EnemySimulationTests" runstate="Runnable" seed="1538223477" result="Passed" start-time="2026-08-30 16:13:47Z" end-time="2026-08-30 16:13:47Z" duration="0.000145" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1128" name="SkeletonNetworkPrefab_RestoresMeleeAndAnimationReferences" fullname="MonsterSupergroup.NetworkCombat.Tests.EnemySimulationTests.SkeletonNetworkPrefab_RestoresMeleeAndAnimationReferences" methodname="SkeletonNetworkPrefab_RestoresMeleeAndAnimationReferences" classname="MonsterSupergroup.NetworkCombat.Tests.EnemySimulationTests" runstate="Runnable" seed="828917988" result="Passed" start-time="2026-08-30 16:13:47Z" end-time="2026-08-30 16:13:47Z" duration="0.025792" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1124" name="SnapshotBuffer_BoundsExtrapolationThenFreezesAtLastEstimate" fullname="MonsterSupergroup.NetworkCombat.Tests.EnemySimulationTests.SnapshotBuffer_BoundsExtrapolationThenFreezesAtLastEstimate" methodname="SnapshotBuffer_BoundsExtrapolationThenFreezesAtLastEstimate" classname="MonsterSupergroup.NetworkCombat.Tests.EnemySimulationTests" runstate="Runnable" seed="1827384910" result="Passed" start-time="2026-08-30 16:13:47Z" end-time="2026-08-30 16:13:47Z" duration="0.000942" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1122" name="SnapshotBuffer_DiscontinuityClearsOldInterpolationHistory" fullname="MonsterSupergroup.NetworkCombat.Tests.EnemySimulationTests.SnapshotBuffer_DiscontinuityClearsOldInterpolationHistory" methodname="SnapshotBuffer_DiscontinuityClearsOldInterpolationHistory" classname="MonsterSupergroup.NetworkCombat.Tests.EnemySimulationTests" runstate="Runnable" seed="1648877034" result="Passed" start-time="2026-08-30 16:13:47Z" end-time="2026-08-30 16:13:47Z" duration="0.000438" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1121" name="SnapshotBuffer_InterpolatesAndRejectsStalePackets" fullname="MonsterSupergroup.NetworkCombat.Tests.EnemySimulationTests.SnapshotBuffer_InterpolatesAndRejectsStalePackets" methodname="SnapshotBuffer_InterpolatesAndRejectsStalePackets" classname="MonsterSupergroup.NetworkCombat.Tests.EnemySimulationTests" runstate="Runnable" seed="1812257122" result="Passed" start-time="2026-08-30 16:13:47Z" end-time="2026-08-30 16:13:47Z" duration="0.000413" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1123" name="SnapshotBuffer_NewEpochClearsOldHistoryAndAllowsSequenceRestart" fullname="MonsterSupergroup.NetworkCombat.Tests.EnemySimulationTests.SnapshotBuffer_NewEpochClearsOldHistoryAndAllowsSequenceRestart" methodname="SnapshotBuffer_NewEpochClearsOldHistoryAndAllowsSequenceRestart" classname="MonsterSupergroup.NetworkCombat.Tests.EnemySimulationTests" runstate="Runnable" seed="824654233" result="Passed" start-time="2026-08-30 16:13:47Z" end-time="2026-08-30 16:13:47Z" duration="0.000259" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+            </test-suite>
+            <test-suite type="TestFixture" id="1129" name="NetworkCombatGatewayTests" fullname="MonsterSupergroup.NetworkCombat.Tests.NetworkCombatGatewayTests" classname="MonsterSupergroup.NetworkCombat.Tests.NetworkCombatGatewayTests" runstate="Runnable" testcasecount="11" result="Passed" start-time="2026-08-30 16:13:47Z" end-time="2026-08-30 16:13:47Z" duration="0.037007" total="11" passed="11" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1138" name="Batch_PreservesEveryEventOrderAndTraceInsteadOfMergingDamage" fullname="MonsterSupergroup.NetworkCombat.Tests.NetworkCombatGatewayTests.Batch_PreservesEveryEventOrderAndTraceInsteadOfMergingDamage" methodname="Batch_PreservesEveryEventOrderAndTraceInsteadOfMergingDamage" classname="MonsterSupergroup.NetworkCombat.Tests.NetworkCombatGatewayTests" runstate="Runnable" seed="566715906" result="Passed" start-time="2026-08-30 16:13:47Z" end-time="2026-08-30 16:13:47Z" duration="0.008933" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1140" name="CombatTraceRing_KeepsLatestEntriesInChronologicalOrder" fullname="MonsterSupergroup.NetworkCombat.Tests.NetworkCombatGatewayTests.CombatTraceRing_KeepsLatestEntriesInChronologicalOrder" methodname="CombatTraceRing_KeepsLatestEntriesInChronologicalOrder" classname="MonsterSupergroup.NetworkCombat.Tests.NetworkCombatGatewayTests" runstate="Runnable" seed="846290190" result="Passed" start-time="2026-08-30 16:13:47Z" end-time="2026-08-30 16:13:47Z" duration="0.000539" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1136" name="DuplicateEvent_IsSettledExactlyOnceEvenWhenBatchIsRetransmitted" fullname="MonsterSupergroup.NetworkCombat.Tests.NetworkCombatGatewayTests.DuplicateEvent_IsSettledExactlyOnceEvenWhenBatchIsRetransmitted" methodname="DuplicateEvent_IsSettledExactlyOnceEvenWhenBatchIsRetransmitted" classname="MonsterSupergroup.NetworkCombat.Tests.NetworkCombatGatewayTests" runstate="Runnable" seed="67005757" result="Passed" start-time="2026-08-30 16:13:47Z" end-time="2026-08-30 16:13:47Z" duration="0.001425" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1130" name="OwnerPipeline_SubmitsRawOverkillAndServerConvergesCanonicalHp" fullname="MonsterSupergroup.NetworkCombat.Tests.NetworkCombatGatewayTests.OwnerPipeline_SubmitsRawOverkillAndServerConvergesCanonicalHp" methodname="OwnerPipeline_SubmitsRawOverkillAndServerConvergesCanonicalHp" classname="MonsterSupergroup.NetworkCombat.Tests.NetworkCombatGatewayTests" runstate="Runnable" seed="959537717" result="Passed" start-time="2026-08-30 16:13:47Z" end-time="2026-08-30 16:13:47Z" duration="0.008995" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1135" name="PlayerHealth_IsOwnerFinalAndCannotBeWrittenByAnotherClient" fullname="MonsterSupergroup.NetworkCombat.Tests.NetworkCombatGatewayTests.PlayerHealth_IsOwnerFinalAndCannotBeWrittenByAnotherClient" methodname="PlayerHealth_IsOwnerFinalAndCannotBeWrittenByAnotherClient" classname="MonsterSupergroup.NetworkCombat.Tests.NetworkCombatGatewayTests" runstate="Runnable" seed="796386421" result="Passed" start-time="2026-08-30 16:13:47Z" end-time="2026-08-30 16:13:47Z" duration="0.000646" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1139" name="ProcessedEventCache_IsBoundedAndExpiresOldIds" fullname="MonsterSupergroup.NetworkCombat.Tests.NetworkCombatGatewayTests.ProcessedEventCache_IsBoundedAndExpiresOldIds" methodname="ProcessedEventCache_IsBoundedAndExpiresOldIds" classname="MonsterSupergroup.NetworkCombat.Tests.NetworkCombatGatewayTests" runstate="Runnable" seed="635421717" result="Passed" start-time="2026-08-30 16:13:47Z" end-time="2026-08-30 16:13:47Z" duration="0.000469" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1137" name="RegisteredConnectionIdentity_RejectsWrongEpochButAllowsReorderedBatches" fullname="MonsterSupergroup.NetworkCombat.Tests.NetworkCombatGatewayTests.RegisteredConnectionIdentity_RejectsWrongEpochButAllowsReorderedBatches" methodname="RegisteredConnectionIdentity_RejectsWrongEpochButAllowsReorderedBatches" classname="MonsterSupergroup.NetworkCombat.Tests.NetworkCombatGatewayTests" runstate="Runnable" seed="535583163" result="Passed" start-time="2026-08-30 16:13:47Z" end-time="2026-08-30 16:13:47Z" duration="0.000795" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1132" name="Server_UsesSubmittedDamageAndTagsWithoutRecomputingClientBuild" fullname="MonsterSupergroup.NetworkCombat.Tests.NetworkCombatGatewayTests.Server_UsesSubmittedDamageAndTagsWithoutRecomputingClientBuild" methodname="Server_UsesSubmittedDamageAndTagsWithoutRecomputingClientBuild" classname="MonsterSupergroup.NetworkCombat.Tests.NetworkCombatGatewayTests" runstate="Runnable" seed="2071627429" result="Passed" start-time="2026-08-30 16:13:47Z" end-time="2026-08-30 16:13:47Z" duration="0.000207" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1134" name="SourceDisconnect_ServerContinuesRemainingDotWithoutBuildRerun" fullname="MonsterSupergroup.NetworkCombat.Tests.NetworkCombatGatewayTests.SourceDisconnect_ServerContinuesRemainingDotWithoutBuildRerun" methodname="SourceDisconnect_ServerContinuesRemainingDotWithoutBuildRerun" classname="MonsterSupergroup.NetworkCombat.Tests.NetworkCombatGatewayTests" runstate="Runnable" seed="1081748978" result="Passed" start-time="2026-08-30 16:13:47Z" end-time="2026-08-30 16:13:47Z" duration="0.005626" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1133" name="StatusMutation_BecomesGlobalReplicaAndOnlySourceClientExecutes" fullname="MonsterSupergroup.NetworkCombat.Tests.NetworkCombatGatewayTests.StatusMutation_BecomesGlobalReplicaAndOnlySourceClientExecutes" methodname="StatusMutation_BecomesGlobalReplicaAndOnlySourceClientExecutes" classname="MonsterSupergroup.NetworkCombat.Tests.NetworkCombatGatewayTests" runstate="Runnable" seed="1430181574" result="Passed" start-time="2026-08-30 16:13:47Z" end-time="2026-08-30 16:13:47Z" duration="0.006143" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1131" name="TwoClients_StaleObservedVersionIsAcceptedButConfirmedKillOccursOnce" fullname="MonsterSupergroup.NetworkCombat.Tests.NetworkCombatGatewayTests.TwoClients_StaleObservedVersionIsAcceptedButConfirmedKillOccursOnce" methodname="TwoClients_StaleObservedVersionIsAcceptedButConfirmedKillOccursOnce" classname="MonsterSupergroup.NetworkCombat.Tests.NetworkCombatGatewayTests" runstate="Runnable" seed="707438573" result="Passed" start-time="2026-08-30 16:13:47Z" end-time="2026-08-30 16:13:47Z" duration="0.000363" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+            </test-suite>
+            <test-suite type="TestFixture" id="1141" name="NetworkCombatPhase7Tests" fullname="MonsterSupergroup.NetworkCombat.Tests.NetworkCombatPhase7Tests" classname="MonsterSupergroup.NetworkCombat.Tests.NetworkCombatPhase7Tests" runstate="Runnable" testcasecount="8" result="Passed" start-time="2026-08-30 16:13:47Z" end-time="2026-08-30 16:13:47Z" duration="0.104054" total="8" passed="8" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1146" name="FourClientsOneHundredFiftyEnemies_BatchesConvergeWithinBudgets" fullname="MonsterSupergroup.NetworkCombat.Tests.NetworkCombatPhase7Tests.FourClientsOneHundredFiftyEnemies_BatchesConvergeWithinBudgets" methodname="FourClientsOneHundredFiftyEnemies_BatchesConvergeWithinBudgets" classname="MonsterSupergroup.NetworkCombat.Tests.NetworkCombatPhase7Tests" runstate="Runnable" seed="1413286713" result="Passed" start-time="2026-08-30 16:13:47Z" end-time="2026-08-30 16:13:47Z" duration="0.047585" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[Phase7 load: 2400 events / 8 batches, estimated payload 193928 bytes, managed heap growth 2363392 bytes, 11 ms.
+]]></output>
+              </test-case>
+              <test-case id="1147" name="GeneratedSandbox_UsesExistingGameplayPrefabsAndLocalOnlyProjectiles" fullname="MonsterSupergroup.NetworkCombat.Tests.NetworkCombatPhase7Tests.GeneratedSandbox_UsesExistingGameplayPrefabsAndLocalOnlyProjectiles" methodname="GeneratedSandbox_UsesExistingGameplayPrefabsAndLocalOnlyProjectiles" classname="MonsterSupergroup.NetworkCombat.Tests.NetworkCombatPhase7Tests" runstate="Runnable" seed="1481364171" result="Passed" start-time="2026-08-30 16:13:47Z" end-time="2026-08-30 16:13:47Z" duration="0.030732" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1142" name="LateJoinSnapshot_RehydratesEntitiesAndStatusesRegisteredAfterReceipt" fullname="MonsterSupergroup.NetworkCombat.Tests.NetworkCombatPhase7Tests.LateJoinSnapshot_RehydratesEntitiesAndStatusesRegisteredAfterReceipt" methodname="LateJoinSnapshot_RehydratesEntitiesAndStatusesRegisteredAfterReceipt" classname="MonsterSupergroup.NetworkCombat.Tests.NetworkCombatPhase7Tests" runstate="Runnable" seed="2073803660" result="Passed" start-time="2026-08-30 16:13:47Z" end-time="2026-08-30 16:13:47Z" duration="0.002090" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1148" name="PlayerRuntimeCombatState_IsIsolatedPerPlayerAndRejectsRemoteWrites" fullname="MonsterSupergroup.NetworkCombat.Tests.NetworkCombatPhase7Tests.PlayerRuntimeCombatState_IsIsolatedPerPlayerAndRejectsRemoteWrites" methodname="PlayerRuntimeCombatState_IsIsolatedPerPlayerAndRejectsRemoteWrites" classname="MonsterSupergroup.NetworkCombat.Tests.NetworkCombatPhase7Tests" runstate="Runnable" seed="421623759" result="Passed" start-time="2026-08-30 16:13:47Z" end-time="2026-08-30 16:13:47Z" duration="0.004302" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1149" name="Sandbox_UsesMirrorLatencySimulationForTwoHundredMillisecondRttProfile" fullname="MonsterSupergroup.NetworkCombat.Tests.NetworkCombatPhase7Tests.Sandbox_UsesMirrorLatencySimulationForTwoHundredMillisecondRttProfile" methodname="Sandbox_UsesMirrorLatencySimulationForTwoHundredMillisecondRttProfile" classname="MonsterSupergroup.NetworkCombat.Tests.NetworkCombatPhase7Tests" runstate="Runnable" seed="158668894" result="Passed" start-time="2026-08-30 16:13:47Z" end-time="2026-08-30 16:13:47Z" duration="0.008717" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1144" name="SimultaneousPredictedLethal_BothBuildTriggersRunButServerConfirmsOnce" fullname="MonsterSupergroup.NetworkCombat.Tests.NetworkCombatPhase7Tests.SimultaneousPredictedLethal_BothBuildTriggersRunButServerConfirmsOnce" methodname="SimultaneousPredictedLethal_BothBuildTriggersRunButServerConfirmsOnce" classname="MonsterSupergroup.NetworkCombat.Tests.NetworkCombatPhase7Tests" runstate="Runnable" seed="1454886745" result="Passed" start-time="2026-08-30 16:13:47Z" end-time="2026-08-30 16:13:47Z" duration="0.003035" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1145" name="SourceClientDotTick_UsesExistingCollectorAndChangesCanonicalHpExactlyOnce" fullname="MonsterSupergroup.NetworkCombat.Tests.NetworkCombatPhase7Tests.SourceClientDotTick_UsesExistingCollectorAndChangesCanonicalHpExactlyOnce" methodname="SourceClientDotTick_UsesExistingCollectorAndChangesCanonicalHpExactlyOnce" classname="MonsterSupergroup.NetworkCombat.Tests.NetworkCombatPhase7Tests" runstate="Runnable" seed="666430296" result="Passed" start-time="2026-08-30 16:13:47Z" end-time="2026-08-30 16:13:47Z" duration="0.004893" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1143" name="TwoHundredMillisecondRttWithJitterAndLoss_LocalFeedbackIsImmediateAndServerConverges" fullname="MonsterSupergroup.NetworkCombat.Tests.NetworkCombatPhase7Tests.TwoHundredMillisecondRttWithJitterAndLoss_LocalFeedbackIsImmediateAndServerConverges" methodname="TwoHundredMillisecondRttWithJitterAndLoss_LocalFeedbackIsImmediateAndServerConverges" classname="MonsterSupergroup.NetworkCombat.Tests.NetworkCombatPhase7Tests" runstate="Runnable" seed="831310764" result="Passed" start-time="2026-08-30 16:13:47Z" end-time="2026-08-30 16:13:47Z" duration="0.000763" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[Saving results to: C:/Users/ADMIN/AppData/LocalLow/DefaultCompany/Monster Supergroup\TestResults.xml
+]]></output>
+              </test-case>
+            </test-suite>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

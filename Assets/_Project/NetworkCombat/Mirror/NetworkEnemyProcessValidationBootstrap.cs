@@ -350,7 +350,7 @@ namespace MonsterSupergroup.NetworkCombat
             }
             if (preparedLocalPlayerId != localPlayer.netId)
             {
-                localPlayer.GetComponent<PlayerHandBehaviour>()?.DeactivateWeapons();
+                localPlayer.GetComponent<PlayerBuildRuntime>()?.ClearBuild();
                 preparedLocalPlayerId = localPlayer.netId;
                 Debug.Log(
                     $"{LogPrefix} event=local-weapons-disabled " +

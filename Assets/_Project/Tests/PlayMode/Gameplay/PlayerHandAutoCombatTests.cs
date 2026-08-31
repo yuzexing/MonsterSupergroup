@@ -1,10 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
+using Mirror;
 using MonsterSupergroup.GAS;
 using MonsterSupergroup.GAS.Authoring;
 using MonsterSupergroup.GAS.Unity;
 using MonsterSupergroup.Gameplay.Combat;
+using MonsterSupergroup.NetworkCombat;
 using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -175,37 +177,24 @@ namespace MonsterSupergroup.Gameplay.Tests
         }
 
         [UnityTest]
-        public IEnumerator GameplayScene_StartsLocalAutoCombatWithoutMirrorHost()
+        public IEnumerator GameplayScene_IsAdditiveContentWithoutStandaloneRuntime()
         {
             yield return SceneManager.LoadSceneAsync("Gameplay", LoadSceneMode.Single);
             yield return null;
 
             Assert.That(Object.FindFirstObjectByType<MonsterSupergroup.Gameplay.Local.LocalGameplayBootstrap>(),
-                Is.Not.Null);
+                Is.Null,
+                "Gameplay is additive content; Boot owns runtime startup.");
             Assert.That(GameObject.Find("NetworkManager"), Is.Null);
-
-            float timeout = Time.time + 5f;
-            bool damageObserved = false;
-            while (Time.time < timeout && !damageObserved)
-            {
-                CombatTeamBehaviour[] combatants = Object.FindObjectsByType<CombatTeamBehaviour>(
-                    FindObjectsInactive.Exclude,
-                    FindObjectsSortMode.None);
-                for (int i = 0; i < combatants.Length; i++)
-                {
-                    if (combatants[i].Team == CombatTeam.Enemy &&
-                        combatants[i].Combatant.DirectDamageTaken > 0)
-                    {
-                        damageObserved = true;
-                        break;
-                    }
-                }
-
-                yield return null;
-            }
-
-            Assert.That(damageObserved, Is.True,
-                "The local player did not automatically damage an enemy within five seconds.");
+            Assert.That(
+                Object.FindFirstObjectByType<NetworkGameplayEnemySpawner>(),
+                Is.Not.Null);
+            Assert.That(NetworkClient.localPlayer, Is.Null);
+            Assert.That(
+                Object.FindObjectsByType<NetworkEnemySimulationAgent>(
+                    FindObjectsSortMode.None),
+                Is.Empty,
+                "The content scene must wait for the Boot network lifecycle.");
         }
 
         private CombatTeamBehaviour CreateCombatant(string objectName, CombatTeam team, Vector2 position)

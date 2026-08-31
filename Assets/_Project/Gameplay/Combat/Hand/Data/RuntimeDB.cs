@@ -42,6 +42,8 @@ namespace AstralShift.HellMaiden.Combat.Hand.Data
 
 		private Dictionary<uint, WeaponData> _weaponsData;
 
+		private bool _weaponDatabaseInitialized;
+
 		private Dictionary<uint, EquipmentData> _equipmentsData;
 
 		private Dictionary<uint, PerkData> _perksData;
@@ -76,12 +78,13 @@ namespace AstralShift.HellMaiden.Combat.Hand.Data
 
 		public List<PoetPoolID> UnlockedPoetPools => _unlockedPoetPools;
 
+		public bool IsWeaponDatabaseInitialized => _weaponDatabaseInitialized;
+
 		public void Init()
 		{
-			_weaponCardPools = new Dictionary<PoetPoolID, List<WeaponData>>();
 			_equipmentCardPools = new Dictionary<PoetPoolID, List<EquipmentData>>();
 			_perkPools = new Dictionary<PerkPoolID, List<PerkData>>();
-			InitRuntimeWeaponDB();
+			InitWeaponDatabase();
 			InitRuntimeEquipmentDB();
 			InitRuntimePerkDB();
 			InitPoetPools();
@@ -92,14 +95,55 @@ namespace AstralShift.HellMaiden.Combat.Hand.Data
 			instance.OnRefresh = (Action)Delegate.Combine(instance.OnRefresh, new Action(OnSaveDataLoad));
 		}
 
-		private void InitRuntimeWeaponDB()
+		public void ConfigureWeaponDatabase(WeaponDB weaponDatabase)
 		{
-			_weaponsData = new Dictionary<uint, WeaponData>();
-			for (int i = 0; i < WeaponDB.Weapons.Length; i++)
+			_weaponDB = weaponDatabase != null
+				? weaponDatabase
+				: throw new ArgumentNullException(nameof(weaponDatabase));
+			_weaponsData = null;
+			_weaponCardPools = null;
+			_weaponDatabaseInitialized = false;
+		}
+
+		public void InitWeaponDatabase()
+		{
+			if (_weaponDatabaseInitialized)
 			{
-				_weaponsData.Add(WeaponDB.Weapons[i].ID, WeaponDB.Weapons[i]);
-				AddWeaponCardToPool(WeaponDB.Weapons[i]);
+				return;
 			}
+			if (WeaponDB == null)
+			{
+				throw new InvalidOperationException(
+					"RuntimeDB requires a WeaponDB before initializing weapons.");
+			}
+
+			WeaponData[] weapons = WeaponDB.Weapons;
+			if (weapons == null)
+			{
+				throw new InvalidOperationException(
+					$"WeaponDB '{WeaponDB.name}' has no weapon array.");
+			}
+
+			_weaponsData = new Dictionary<uint, WeaponData>();
+			_weaponCardPools = new Dictionary<PoetPoolID, List<WeaponData>>();
+			for (int i = 0; i < weapons.Length; i++)
+			{
+				WeaponData weapon = weapons[i];
+				if (weapon == null)
+				{
+					throw new InvalidOperationException(
+						$"WeaponDB '{WeaponDB.name}' contains a null entry at index {i}.");
+				}
+				if (!_weaponsData.TryAdd(weapon.ID, weapon))
+				{
+					throw new InvalidOperationException(
+						$"WeaponDB '{WeaponDB.name}' contains duplicate weapon ID {weapon.ID}.");
+				}
+
+				AddWeaponCardToPool(weapon);
+			}
+
+			_weaponDatabaseInitialized = true;
 		}
 
 		private void InitRuntimeEquipmentDB()
@@ -201,7 +245,20 @@ namespace AstralShift.HellMaiden.Combat.Hand.Data
 
 		public WeaponData GetWeaponData(uint id)
 		{
-			return _weaponsData[id];
+			InitWeaponDatabase();
+			if (!_weaponsData.TryGetValue(id, out WeaponData weapon))
+			{
+				throw new KeyNotFoundException(
+					$"RuntimeDB contains no WeaponData with ID {id}.");
+			}
+
+			return weapon;
+		}
+
+		public bool TryGetWeaponData(uint id, out WeaponData weapon)
+		{
+			InitWeaponDatabase();
+			return _weaponsData.TryGetValue(id, out weapon);
 		}
 
 		public Dictionary<PoetPoolID, List<EquipmentData>> GetEquipmentCardPoolData()
@@ -211,6 +268,7 @@ namespace AstralShift.HellMaiden.Combat.Hand.Data
 
 		public Dictionary<PoetPoolID, List<WeaponData>> GetWeaponCardPoolData()
 		{
+			InitWeaponDatabase();
 			return _weaponCardPools;
 		}
 

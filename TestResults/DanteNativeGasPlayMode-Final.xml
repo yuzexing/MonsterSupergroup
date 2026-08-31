@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="2" result="Passed" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-08-30 09:33:47Z" end-time="2026-08-30 09:33:47Z" duration="0.2318583">
+  <test-suite type="TestSuite" id="1066" name="Monster Supergroup" fullname="Monster Supergroup" runstate="Runnable" testcasecount="47" result="Passed" start-time="2026-08-30 09:33:47Z" end-time="2026-08-30 09:33:47Z" duration="0.231858" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="PlayMode" />
+    </properties>
+    <test-suite type="Assembly" id="1050" name="MonsterSupergroup.Gameplay.Tests.PlayMode.dll" fullname="F:/UnityStore/MonsterSupergroup/Library/ScriptAssemblies/MonsterSupergroup.Gameplay.Tests.PlayMode.dll" runstate="Runnable" testcasecount="43" result="Passed" start-time="2026-08-30 09:33:47Z" end-time="2026-08-30 09:33:47Z" duration="0.219646" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="80512" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="PlayMode" />
+        <property name="EditorOnly" value="False" />
+      </properties>
+      <test-suite type="TestSuite" id="1051" name="MonsterSupergroup" fullname="MonsterSupergroup" runstate="Runnable" testcasecount="43" result="Passed" start-time="2026-08-30 09:33:47Z" end-time="2026-08-30 09:33:47Z" duration="0.218894" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-suite type="TestSuite" id="1052" name="Gameplay" fullname="MonsterSupergroup.Gameplay" runstate="Runnable" testcasecount="43" result="Passed" start-time="2026-08-30 09:33:47Z" end-time="2026-08-30 09:33:47Z" duration="0.218439" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <test-suite type="TestSuite" id="1053" name="Tests" fullname="MonsterSupergroup.Gameplay.Tests" runstate="Runnable" testcasecount="43" result="Passed" start-time="2026-08-30 09:33:47Z" end-time="2026-08-30 09:33:47Z" duration="0.217943" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-suite type="TestFixture" id="1001" name="DanteNativeGasRuntimeTests" fullname="MonsterSupergroup.Gameplay.Tests.DanteNativeGasRuntimeTests" classname="MonsterSupergroup.Gameplay.Tests.DanteNativeGasRuntimeTests" runstate="Runnable" testcasecount="2" result="Passed" start-time="2026-08-30 09:33:47Z" end-time="2026-08-30 09:33:47Z" duration="0.215820" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1003" name="RealDanteWeapon_AttackSpawnsProjectileAndResolvesOnlyThroughNativeGas" fullname="MonsterSupergroup.Gameplay.Tests.DanteNativeGasRuntimeTests.RealDanteWeapon_AttackSpawnsProjectileAndResolvesOnlyThroughNativeGas" methodname="RealDanteWeapon_AttackSpawnsProjectileAndResolvesOnlyThroughNativeGas" classname="MonsterSupergroup.Gameplay.Tests.DanteNativeGasRuntimeTests" runstate="Runnable" seed="134258765" result="Passed" start-time="2026-08-30 09:33:47Z" end-time="2026-08-30 09:33:47Z" duration="0.201670" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[
+IgnoreFailingMessages:true
+[FMOD] ObjectLookup::get : Lookup failed for EventModel: {1235e4b8-dcb5-43e8-8bb7-41a363bff4b8}
+
+EventNotFoundException: [FMOD] Event not found: {1235e4b8-dcb5-43e8-8bb7-41a363bff4b8} ()
+FMODUnity.RuntimeManager.GetEventDescription (FMODUnity.EventReference eventReference) (at Assets/Plugins/FMOD/src/RuntimeManager.cs:1314)
+FMODUnity.StudioParameterTrigger.Awake () (at Assets/Plugins/FMOD/src/StudioParameterTrigger.cs:26)
+UnityEngine.Object:Instantiate(ProjectileAttack, Transform)
+AstralShift.Pooling.GenericPooler`1:GetOrCreate(Transform, Boolean) (at Assets/_Project/Gameplay/Combat/Pooling/GenericPooler.cs:48)
+AstralShift.HellMaiden.Player.Attacks.AttackVariantSet`1:GetOrCreate(AttackElement, Transform) (at Assets/_Project/Gameplay/Combat/Player/Attacks/AttackVariantSet.cs:51)
+AstralShift.HellMaiden.Player.Attacks.ProjectileAttackBehaviour:GetOrCreateAttack(AttackSnapshot) (at Assets/_Project/Gameplay/Combat/Player/Attacks/ProjectileAttackBehaviour.cs:93)
+AstralShift.HellMaiden.Player.Attacks.ProjectileAttackBehaviour:Attack() (at Assets/_Project/Gameplay/Combat/Player/Attacks/ProjectileAttackBehaviour.cs:68)
+MonsterSupergroup.Gameplay.Tests.<RealDanteWeapon_AttackSpawnsProjectileAndResolvesOnlyThroughNativeGas>d__3:MoveNext() (at Assets/_Project/Tests/PlayMode/Gameplay/DanteNativeGasRuntimeTests.cs:161)
+UnityEngine.SetupCoroutine:InvokeMoveNext(IEnumerator, IntPtr)
+
+
+IgnoreFailingMessages:false
+[FMOD] Please add an 'FMOD Studio Listener' component to your camera in the scene for correct 3D positioning of sounds.
+]]></output>
+              </test-case>
+              <test-case id="1002" name="RealDanteWeapon_UsesIndependentPlayerBuildsAndFrozenNativeDamage" fullname="MonsterSupergroup.Gameplay.Tests.DanteNativeGasRuntimeTests.RealDanteWeapon_UsesIndependentPlayerBuildsAndFrozenNativeDamage" methodname="RealDanteWeapon_UsesIndependentPlayerBuildsAndFrozenNativeDamage" classname="MonsterSupergroup.Gameplay.Tests.DanteNativeGasRuntimeTests" runstate="Runnable" seed="1224863183" result="Passed" start-time="2026-08-30 09:33:47Z" end-time="2026-08-30 09:33:47Z" duration="0.004585" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[Saving results to: C:/Users/ADMIN/AppData/LocalLow/DefaultCompany/Monster Supergroup\TestResults.xml
+]]></output>
+              </test-case>
+            </test-suite>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

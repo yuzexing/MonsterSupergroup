@@ -29,6 +29,9 @@ namespace MonsterSupergroup.NetworkCombat
         [SyncVar(hook = nameof(HandleAssignmentChanged))]
         private EnemySimulationAssignment assignment;
 
+        [SyncVar]
+        private int runtimeMinimumHealthOverride;
+
         private uint snapshotSequence;
         private uint sequenceEpoch;
         private uint attackStateSequence;
@@ -45,6 +48,7 @@ namespace MonsterSupergroup.NetworkCombat
         private bool hasLatestAttackPresentation;
         private PlayerDamageInteraction[] localDamageInteractions =
             System.Array.Empty<PlayerDamageInteraction>();
+        private uint initialServerTargetPlayerId;
 
         public EnemySimulationAssignment Assignment => assignment;
 
@@ -72,6 +76,8 @@ namespace MonsterSupergroup.NetworkCombat
                 return combatant == null || combatant.IsAlive;
             }
         }
+
+        public uint InitialServerTargetPlayerId => initialServerTargetPlayerId;
 
         private void Awake()
         {
@@ -127,7 +133,7 @@ namespace MonsterSupergroup.NetworkCombat
                 return;
             }
 
-            world.RegisterEnemy(this);
+            world.RegisterEnemy(this, initialServerTargetPlayerId);
             TryInitializeProductEnemy();
         }
 
@@ -148,6 +154,35 @@ namespace MonsterSupergroup.NetworkCombat
         public void ConfigureProductSimulation(bool movementOnly)
         {
             productMovementOnly = movementOnly;
+        }
+
+        [Server]
+        public void ConfigureInitialServerTarget(uint playerEntityId)
+        {
+            if (netId != 0u)
+            {
+                throw new InvalidOperationException(
+                    "Initial Enemy target must be configured before NetworkServer.Spawn.");
+            }
+            if (playerEntityId == 0u)
+            {
+                throw new ArgumentOutOfRangeException(nameof(playerEntityId));
+            }
+
+            initialServerTargetPlayerId = playerEntityId;
+        }
+
+        [Server]
+        public void ConfigureRuntimeMinimumHealthOverride(int minimumHealth)
+        {
+            if (netId != 0u)
+            {
+                throw new InvalidOperationException(
+                    "Runtime Enemy health override must be configured before " +
+                    "NetworkServer.Spawn.");
+            }
+
+            runtimeMinimumHealthOverride = Mathf.Max(0, minimumHealth);
         }
 
         public override void OnStopClient()
@@ -316,11 +351,33 @@ namespace MonsterSupergroup.NetworkCombat
 
         private void Update()
         {
-            if (assignment.AggroTargetPlayerId != 0u && resolvedTarget == null)
+            if (AssignmentNeedsLocalRefresh())
             {
                 ApplyAssignment(assignment);
             }
             TryInitializeProductEnemy();
+        }
+
+        private bool AssignmentNeedsLocalRefresh()
+        {
+            if (assignment.AggroTargetPlayerId == 0u)
+            {
+                return false;
+            }
+            if (resolvedTarget == null)
+            {
+                return true;
+            }
+            if (assignment.Host != EnemySimulationHost.ClientPlayer)
+            {
+                return false;
+            }
+
+            bool locallyOwned =
+                IsLocallyOwnedPlayer(assignment.SimulationOwnerPlayerId);
+            return locallyOwned
+                ? authority.Role != EnemySimulationRole.ClientOwner
+                : authority.Role == EnemySimulationRole.ClientOwner;
         }
 
         private void HandleAssignmentChanged(
@@ -716,6 +773,12 @@ namespace MonsterSupergroup.NetworkCombat
             else
             {
                 enemyController.Init(unchecked((int)netId));
+            }
+            if (combatant != null &&
+                combatant.MaxHealth < runtimeMinimumHealthOverride)
+            {
+                combatant.SetMaximumHealthPreservingMissingHealth(
+                    runtimeMinimumHealthOverride);
             }
             ConfigureLocalDamageInteractions();
             productEnemyInitialized = true;

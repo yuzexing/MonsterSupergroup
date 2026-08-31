@@ -1,0 +1,272 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="1" result="Failed(Child)" total="1" passed="0" failed="1" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-08-30 16:47:59Z" end-time="2026-08-30 16:48:12Z" duration="13.3582446">
+  <test-suite type="TestSuite" id="1069" name="Monster Supergroup" fullname="Monster Supergroup" runstate="Runnable" testcasecount="49" result="Failed" site="Child" start-time="2026-08-30 16:47:59Z" end-time="2026-08-30 16:48:12Z" duration="13.358245" total="1" passed="0" failed="1" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="PlayMode" />
+    </properties>
+    <failure>
+      <message><![CDATA[One or more child tests had errors]]></message>
+    </failure>
+    <test-suite type="Assembly" id="1053" name="MonsterSupergroup.Gameplay.Tests.PlayMode.dll" fullname="F:/UnityStore/MonsterSupergroup/Library/ScriptAssemblies/MonsterSupergroup.Gameplay.Tests.PlayMode.dll" runstate="Runnable" testcasecount="45" result="Failed" site="Child" start-time="2026-08-30 16:47:59Z" end-time="2026-08-30 16:48:12Z" duration="13.346045" total="1" passed="0" failed="1" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="56588" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="PlayMode" />
+        <property name="EditorOnly" value="False" />
+      </properties>
+      <failure>
+        <message><![CDATA[One or more child tests had errors]]></message>
+      </failure>
+      <test-suite type="TestSuite" id="1054" name="MonsterSupergroup" fullname="MonsterSupergroup" runstate="Runnable" testcasecount="45" result="Failed" site="Child" start-time="2026-08-30 16:47:59Z" end-time="2026-08-30 16:48:12Z" duration="13.345215" total="1" passed="0" failed="1" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <failure>
+          <message><![CDATA[One or more child tests had errors]]></message>
+        </failure>
+        <test-suite type="TestSuite" id="1055" name="Gameplay" fullname="MonsterSupergroup.Gameplay" runstate="Runnable" testcasecount="45" result="Failed" site="Child" start-time="2026-08-30 16:47:59Z" end-time="2026-08-30 16:48:12Z" duration="13.344719" total="1" passed="0" failed="1" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <failure>
+            <message><![CDATA[One or more child tests had errors]]></message>
+          </failure>
+          <test-suite type="TestSuite" id="1056" name="Tests" fullname="MonsterSupergroup.Gameplay.Tests" runstate="Runnable" testcasecount="45" result="Failed" site="Child" start-time="2026-08-30 16:47:59Z" end-time="2026-08-30 16:48:12Z" duration="13.344191" total="1" passed="0" failed="1" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <failure>
+              <message><![CDATA[One or more child tests had errors]]></message>
+            </failure>
+            <test-suite type="TestFixture" id="1001" name="BootGameplayNetworkCombatPlayModeTests" fullname="MonsterSupergroup.Gameplay.Tests.BootGameplayNetworkCombatPlayModeTests" classname="MonsterSupergroup.Gameplay.Tests.BootGameplayNetworkCombatPlayModeTests" runstate="Runnable" testcasecount="1" result="Failed" site="Child" start-time="2026-08-30 16:47:59Z" end-time="2026-08-30 16:48:12Z" duration="13.341735" total="1" passed="0" failed="1" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <failure>
+                <message><![CDATA[One or more child tests had errors]]></message>
+              </failure>
+              <test-case id="1002" name="Host_CompletesPlayerAndSkeletonCanonicalCombatLoops" fullname="MonsterSupergroup.Gameplay.Tests.BootGameplayNetworkCombatPlayModeTests.Host_CompletesPlayerAndSkeletonCanonicalCombatLoops" methodname="Host_CompletesPlayerAndSkeletonCanonicalCombatLoops" classname="MonsterSupergroup.Gameplay.Tests.BootGameplayNetworkCombatPlayModeTests" runstate="Runnable" seed="1053183563" result="Failed" start-time="2026-08-30 16:47:59Z" end-time="2026-08-30 16:48:12Z" duration="13.332320" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <failure>
+                  <message><![CDATA[  Expected: not null
+  But was:  null
+]]></message>
+                  <stack-trace><![CDATA[at MonsterSupergroup.Gameplay.Tests.BootGameplayNetworkCombatPlayModeTests+<Host_CompletesPlayerAndSkeletonCanonicalCombatLoops>d__2.MoveNext () [0x001fb] in F:\UnityStore\MonsterSupergroup\Assets\_Project\Tests\PlayMode\Gameplay\BootGameplayNetworkCombatPlayModeTests.cs:67
+at UnityEngine.TestTools.TestEnumerator+<Execute>d__7.MoveNext () [0x0004e] in .\Library\PackageCache\com.unity.test-framework@ecf40a72f8c1\UnityEngine.TestRunner\NUnitExtensions\Attributes\TestEnumerator.cs:44
+]]></stack-trace>
+                </failure>
+                <output><![CDATA[--- Hardware Info ---
+CPU Model: 13th Gen Intel(R) Core(TM) i7-13700KF
+GPU Model: NVIDIA GeForce RTX 4080
+RAM: 65375 MB
+Install Disk Model: JZ-SSD4T-XW
+Main Monitor Model: Unknown Monitor
+---------------------
+Rewired: Failed to add Input Event delegate. Reason: Specified argument was out of the range of valid values.
+Parameter name: Invalid Action Id 4
+Rewired: Failed to add Input Event delegate. Reason: Specified argument was out of the range of valid values.
+Parameter name: Invalid Action Id 4
+Rewired: Failed to add Input Event delegate. Reason: Specified argument was out of the range of valid values.
+Parameter name: Invalid Action Id 4
+Rewired: Failed to add Input Event delegate. Reason: Specified argument was out of the range of valid values.
+Parameter name: Invalid Action Id 5
+Rewired: Failed to add Input Event delegate. Reason: Specified argument was out of the range of valid values.
+Parameter name: Invalid Action Id 5
+Rewired: Failed to add Input Event delegate. Reason: Specified argument was out of the range of valid values.
+Parameter name: Invalid Action Id 5
+Rewired: Failed to add Input Event delegate. Reason: Specified argument was out of the range of valid values.
+Parameter name: Invalid Action Id 6
+Rewired: Failed to add Input Event delegate. Reason: Specified argument was out of the range of valid values.
+Parameter name: Invalid Action Id 6
+Rewired: Failed to add Input Event delegate. Reason: Specified argument was out of the range of valid values.
+Parameter name: Invalid Action Id 6
+Rewired: Failed to add Input Event delegate. Reason: Specified argument was out of the range of valid values.
+Parameter name: Invalid Action Id 18
+Rewired: Failed to add Input Event delegate. Reason: Specified argument was out of the range of valid values.
+Parameter name: Invalid Action Id 18
+Rewired: Failed to add Input Event delegate. Reason: Specified argument was out of the range of valid values.
+Parameter name: Invalid Action Id 18
+Rewired: Failed to add Input Event delegate. Reason: Specified argument was out of the range of valid values.
+Parameter name: Invalid Action Id 7
+Rewired: Failed to add Input Event delegate. Reason: Specified argument was out of the range of valid values.
+Parameter name: Invalid Action Id 8
+Rewired: Failed to add Input Event delegate. Reason: Specified argument was out of the range of valid values.
+Parameter name: Invalid Action Id 17
+Rewired: Failed to add Input Event delegate. Reason: Specified argument was out of the range of valid values.
+Parameter name: Invalid Action Id 17
+Rewired: Failed to add Input Event delegate. Reason: Specified argument was out of the range of valid values.
+Parameter name: Invalid Action Id 17
+Rewired: Failed to add Input Event delegate. Reason: Specified argument was out of the range of valid values.
+Parameter name: Invalid Action Id 9
+Rewired: Failed to add Input Event delegate. Reason: Specified argument was out of the range of valid values.
+Parameter name: Invalid Action Id 9
+Rewired: Failed to add Input Event delegate. Reason: Specified argument was out of the range of valid values.
+Parameter name: Invalid Action Id 9
+Rewired: Failed to add Input Event delegate. Reason: Specified argument was out of the range of valid values.
+Parameter name: Invalid Action Id 12
+Rewired: Failed to add Input Event delegate. Reason: Specified argument was out of the range of valid values.
+Parameter name: Invalid Action Id 12
+Rewired: Failed to add Input Event delegate. Reason: Specified argument was out of the range of valid values.
+Parameter name: Invalid Action Id 12
+Rewired: Failed to add Input Event delegate. Reason: Specified argument was out of the range of valid values.
+Parameter name: Invalid Action Id 11
+Rewired: Failed to add Input Event delegate. Reason: Specified argument was out of the range of valid values.
+Parameter name: Invalid Action Id 11
+Rewired: Failed to add Input Event delegate. Reason: Specified argument was out of the range of valid values.
+Parameter name: Invalid Action Id 11
+Rewired: Failed to add Input Event delegate. Reason: Specified argument was out of the range of valid values.
+Parameter name: Invalid Action Id 10
+Rewired: Failed to add Input Event delegate. Reason: Specified argument was out of the range of valid values.
+Parameter name: Invalid Action Id 10
+Rewired: Failed to add Input Event delegate. Reason: Specified argument was out of the range of valid values.
+Parameter name: Invalid Action Id 10
+Rewired: Failed to add Input Event delegate. Reason: Specified argument was out of the range of valid values.
+Parameter name: Invalid Action Id 15
+Rewired: Failed to add Input Event delegate. Reason: Specified argument was out of the range of valid values.
+Parameter name: Invalid Action Id 15
+Rewired: Failed to add Input Event delegate. Reason: Specified argument was out of the range of valid values.
+Parameter name: Invalid Action Id 15
+Rewired: Failed to add Input Event delegate. Reason: Specified argument was out of the range of valid values.
+Parameter name: Invalid Action Id 13
+Rewired: Failed to add Input Event delegate. Reason: Specified argument was out of the range of valid values.
+Parameter name: Invalid Action Id 13
+Rewired: Failed to add Input Event delegate. Reason: Specified argument was out of the range of valid values.
+Parameter name: Invalid Action Id 13
+Rewired: Failed to add Input Event delegate. Reason: Specified argument was out of the range of valid values.
+Parameter name: Invalid Action Id 16
+Rewired: Failed to add Input Event delegate. Reason: Specified argument was out of the range of valid values.
+Parameter name: Invalid Action Id 16
+Rewired: Failed to add Input Event delegate. Reason: Specified argument was out of the range of valid values.
+Parameter name: Invalid Action Id 16
+Rewired: Failed to add Input Event delegate. Reason: Specified argument was out of the range of valid values.
+Parameter name: Invalid Action Id 14
+Rewired: Failed to add Input Event delegate. Reason: Specified argument was out of the range of valid values.
+Parameter name: Invalid Action Id 14
+Rewired: Failed to add Input Event delegate. Reason: Specified argument was out of the range of valid values.
+Parameter name: Invalid Action Id 14
+Rewired: Failed to add Input Event delegate. Reason: Specified argument was out of the range of valid values.
+Parameter name: Invalid Action Id 48
+Rewired: Failed to add Input Event delegate. Reason: Specified argument was out of the range of valid values.
+Parameter name: Invalid Action Id 48
+Rewired: Failed to add Input Event delegate. Reason: Specified argument was out of the range of valid values.
+Parameter name: Invalid Action Id 48
+Rewired: Failed to add Input Event delegate. Reason: Specified argument was out of the range of valid values.
+Parameter name: Invalid Action Id 49
+Rewired: Failed to add Input Event delegate. Reason: Specified argument was out of the range of valid values.
+Parameter name: Invalid Action Id 49
+Rewired: Failed to add Input Event delegate. Reason: Specified argument was out of the range of valid values.
+Parameter name: Invalid Action Id 49
+Rewired: Failed to add Input Event delegate. Reason: Specified argument was out of the range of valid values.
+Parameter name: Invalid Action Id 49
+Rewired: Failed to add Input Event delegate. Reason: Specified argument was out of the range of valid values.
+Parameter name: Invalid Action Id 49
+Rewired: Failed to add Input Event delegate. Reason: Specified argument was out of the range of valid values.
+Parameter name: Invalid Action Id 49
+Rewired: Failed to add Input Event delegate. Reason: Specified argument was out of the range of valid values.
+Parameter name: Invalid Action Id 30
+Rewired: Failed to add Input Event delegate. Reason: Specified argument was out of the range of valid values.
+Parameter name: Invalid Action Id 55
+Rewired: Failed to add Input Event delegate. Reason: Specified argument was out of the range of valid values.
+Parameter name: Invalid Action Id 55
+Rewired: Failed to add Input Event delegate. Reason: Specified argument was out of the range of valid values.
+Parameter name: Invalid Action Id 55
+Rewired: Failed to add Input Event delegate. Reason: Specified argument was out of the range of valid values.
+Parameter name: Invalid Action Id 52
+Rewired: Failed to add Input Event delegate. Reason: Specified argument was out of the range of valid values.
+Parameter name: Invalid Action Id 52
+Rewired: Failed to add Input Event delegate. Reason: Specified argument was out of the range of valid values.
+Parameter name: Invalid Action Id 52
+Rewired: Failed to add Input Event delegate. Reason: Specified argument was out of the range of valid values.
+Parameter name: Invalid Action Id 61
+Rewired: Failed to add Input Event delegate. Reason: Specified argument was out of the range of valid values.
+Parameter name: Invalid Action Id 61
+Rewired: Failed to add Input Event delegate. Reason: Specified argument was out of the range of valid values.
+Parameter name: Invalid Action Id 61
+Rewired: Failed to add Input Event delegate. Reason: Specified argument was out of the range of valid values.
+Parameter name: Invalid Action Id 62
+Rewired: Failed to add Input Event delegate. Reason: Specified argument was out of the range of valid values.
+Parameter name: Invalid Action Id 62
+Rewired: Failed to add Input Event delegate. Reason: Specified argument was out of the range of valid values.
+Parameter name: Invalid Action Id 62
+Rewired: Failed to add Input Event delegate. Reason: Specified argument was out of the range of valid values.
+Parameter name: Invalid Action Id 29
+Rewired: Failed to add Input Event delegate. Reason: Specified argument was out of the range of valid values.
+Parameter name: Invalid Action Id 30
+Rewired: Failed to add Input Event delegate. Reason: Specified argument was out of the range of valid values.
+Parameter name: Invalid Action Id 58
+Rewired: Failed to add Input Event delegate. Reason: Specified argument was out of the range of valid values.
+Parameter name: Invalid Action Id 59
+Rewired: Failed to add Input Event delegate. Reason: Specified argument was out of the range of valid values.
+Parameter name: Invalid Action Id 30
+Rewired: Failed to add Input Event delegate. Reason: Specified argument was out of the range of valid values.
+Parameter name: Invalid Action Id 30
+Rewired: Failed to add Input Event delegate. Reason: Specified argument was out of the range of valid values.
+Parameter name: Invalid Action Id 30
+Rewired: Failed to add Input Event delegate. Reason: Specified argument was out of the range of valid values.
+Parameter name: Invalid Action Id 30
+Rewired: Failed to add Input Event delegate. Reason: Specified argument was out of the range of valid values.
+Parameter name: Invalid Action Id 30
+Rewired: Failed to add Input Event delegate. Reason: Specified argument was out of the range of valid values.
+Parameter name: Invalid Action Id 30
+Rewired: Failed to add Input Event delegate. Reason: Specified argument was out of the range of valid values.
+Parameter name: Invalid Action Id 30
+Rewired: Failed to add Input Event delegate. Reason: Specified argument was out of the range of valid values.
+Parameter name: Invalid Action Id 30
+Rewired: Failed to add Input Event delegate. Reason: Specified argument was out of the range of valid values.
+Parameter name: Invalid Action Id 29
+Rewired: Failed to add Input Event delegate. Reason: Specified argument was out of the range of valid values.
+Parameter name: Invalid Action Id 29
+Rewired: Failed to add Input Event delegate. Reason: Specified argument was out of the range of valid values.
+Parameter name: Invalid Action Id 29
+Rewired: Failed to add Input Event delegate. Reason: Specified argument was out of the range of valid values.
+Parameter name: Invalid Action Id 29
+Rewired: Failed to add Input Event delegate. Reason: Specified argument was out of the range of valid values.
+Parameter name: Invalid Action Id 29
+Rewired: Failed to add Input Event delegate. Reason: Specified argument was out of the range of valid values.
+Parameter name: Invalid Action Id 29
+Rewired: Failed to add Input Event delegate. Reason: Specified argument was out of the range of valid values.
+Parameter name: Invalid Action Id 54
+Rewired: Failed to add Input Event delegate. Reason: Specified argument was out of the range of valid values.
+Parameter name: Invalid Action Id 54
+Rewired: Failed to add Input Event delegate. Reason: Specified argument was out of the range of valid values.
+Parameter name: Invalid Action Id 54
+Rewired: Failed to add Input Event delegate. Reason: Specified argument was out of the range of valid values.
+Parameter name: Invalid Action Id 53
+Rewired: Failed to add Input Event delegate. Reason: Specified argument was out of the range of valid values.
+Parameter name: Invalid Action Id 53
+Rewired: Failed to add Input Event delegate. Reason: Specified argument was out of the range of valid values.
+Parameter name: Invalid Action Id 53
+Rewired: Failed to add Input Event delegate. Reason: Specified argument was out of the range of valid values.
+Parameter name: Invalid Action Id 56
+Rewired: Failed to add Input Event delegate. Reason: Specified argument was out of the range of valid values.
+Parameter name: Invalid Action Id 56
+Rewired: Failed to add Input Event delegate. Reason: Specified argument was out of the range of valid values.
+Parameter name: Invalid Action Id 56
+Rewired: Failed to add Input Event delegate. Reason: Specified argument was out of the range of valid values.
+Parameter name: Invalid Action Id 57
+Rewired: Failed to add Input Event delegate. Reason: Specified argument was out of the range of valid values.
+Parameter name: Invalid Action Id 57
+Rewired: Failed to add Input Event delegate. Reason: Specified argument was out of the range of valid values.
+Parameter name: Invalid Action Id 57
+Rewired: Failed to add Input Event delegate. Reason: Specified argument was out of the range of valid values.
+Parameter name: Invalid Action Id 50
+Rewired: Failed to add Input Event delegate. Reason: Specified argument was out of the range of valid values.
+Parameter name: Invalid Action Id 51
+Rewired: Failed to add Input Event delegate. Reason: Specified argument was out of the range of valid values.
+Parameter name: Invalid Action Id 60
+Normal : True
+UI : False
+AstralShift.HellMaiden.Controllers.PlayerController_HMD
+<color=yellow><b>► Controllers: </b></color>Controller type AstralShift.Control.Controllers.NoInputGameController not available
+[BootGameplay] Server starting; loading 'Assets/Scenes/Gameplay.unity'.
+[BootGameplay] Server connection 0 is ready.
+[BootGameplay] Gameplay scene ready: 'Assets/Scenes/Gameplay.unity'.
+[BootGameplay] Client stopping; serverActive=True.
+[BootGameplay] Server stopping.
+[BootGameplay] Gameplay unload requested.
+Saving results to: C:/Users/ADMIN/AppData/LocalLow/DefaultCompany/Monster Supergroup\TestResults.xml
+]]></output>
+              </test-case>
+            </test-suite>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

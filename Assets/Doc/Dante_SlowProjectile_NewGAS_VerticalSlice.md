@@ -4,11 +4,12 @@
 
 `Assets/MonoBehaviour/WeaponData_Dante_SlowProjectile.asset` 已完成第一条真实 HellMaiden Weapon Vertical Slice：
 
-- 原 `Dante_SlowProjectile_Behaviour.prefab`、Projectile、Impact、Particle、Material、Shader、FMOD 字段和动画组件继续负责表现、生成几何与碰撞。
+- 原 `Dante_SlowProjectile_Behaviour.prefab`、Projectile、Impact、Particle、Material、Shader、FMOD 字段及可恢复的动画组件继续负责表现、生成几何与碰撞。
 - Attack Stats、8 类纯数值 Modifier、Crit、Attack Snapshot、Damage、OnHit 与 PredictedLethalHit 统一由 New GAS 执行。
 - Dante 的 Native 路径不会调用 Legacy `CalculateDamage`、Legacy Static/Dynamic Modifier、Legacy OnHit/OnKill 或 `LegacyCombatExecution.ResolvePrecomputedHit`。
 - Legacy Modifier 的哈希 ID 只存在于 Editor 迁移程序集；生成后的 Runtime 资产只保存 New GAS stable ID 与 typed parameters。
 - `NetworkPlayer.prefab` 上已有一个 `PlayerBuildRuntime`；每个 Player 实例拥有自己的 Weapon/Modifier 容器，不共享玩家级状态。
+- 真实资产测试已从 `WeaponBehaviour.Attack()` 发起攻击，经过旧 Projectile prefab、2D Hitbox 与 `NativeGasHit` 后进入 New GAS；同一次命中没有调用 Legacy Damage。
 
 这条实现可作为后续 34 个 Equipment Modifier、29 个 Perk Modifier 和其他 Weapon 的迁移模板。
 
@@ -33,7 +34,8 @@
                └─ PredictedLethalHit once
 
 Legacy ProjectileAttackBehaviour / ProjectileAttack
-├─ 读取 frozen Snapshot 决定 projectile count、size、speed、duration
+├─ WeaponBehaviour.Attack() 创建 frozen Snapshot
+├─ 读取 Snapshot 决定 projectile count、size、speed、duration
 ├─ 继续生成旧 Projectile、播放动画/VFX/FMOD
 └─ 碰撞后构造 NativeGasHit
    └─ EnemyHurtbox → EnemyController.ResolveNativeGasHit
@@ -139,6 +141,9 @@ Runtime registry 由 `ModifierRegistryGenerator` 生成，不使用 `Assembly.Ge
 - Dante 源 `modifierFlags = 247`，不包含 `Duration` bit。因此 Duration Modifier 已被完整迁移为 New GAS Native Modifier，但 Dante 会按旧规则拒绝装备它。此项不是迁移遗漏。
 - 本 Slice 未迁移 Chain Lightning、Explosion Build、Clone/Summon、复杂 Status Proc、Reward/XP/Gold 或跨 Slot 行为。
 - 本 Slice 没有把旧 Equipment 的 multi-slot runtime 带入 New GAS；Editor 转换器遇到 multi-slot 会明确拒绝，而不会静默丢失语义。
+- AssetRipper 没有恢复 Dante 三个 Projectile prefab 上 `ProjectileAttack` 的继承字段。迁移工具会确定性重连同一 prefab 内仍存在的 `AttackProgressionScaler`、Hitbox、HitEffectResolver、`Root` 旋转节点、Animancer 与根 ParticleSystem。
+- 反编译输入中没有可用于证明原值的 Attack Clip 引用。当前实现保留 Animator/Animancer 组件，并在 Clip 为空时安全跳过对应动画，不再产生空引用；若后续取得原始 Clip 数据，应只补回 prefab 引用，不需要修改 New GAS Runtime。
+- FMOD EventReference 仍保留在 Projectile prefab 中，但当前迁移包没有原游戏 `.bank` 文件，因此测试环境无法实际解析该事件。恢复声音需要导入匹配 GUID 的原始或重新构建的 FMOD Banks；这不是改回 Legacy Combat Runtime 的理由。
 
 ## 7. Editor 迁移流程
 
@@ -171,8 +176,9 @@ Tools/HellMaiden Migration/Rebuild Dante Native GAS Assets
 
 - 把旧 managed-reference assembly 名从 `Assembly-CSharp` 规范化到恢复后的 `MonsterSupergroup.Gameplay.Combat`，仅用于读取迁移输入。
 - 把旧 Animancer DLL 内的 `AnimancerComponent` 序列化引用迁移到官方 package 脚本，同时保留 `_Animator`、`_Transitions`、`_ActionOnDisable` 数据。
+- 恢复三个 Dante Projectile prefab 上反编译丢失的运行时组件引用；该步骤可重复执行，不需要手工拖拽 Inspector。
 - 读取 Legacy ID、参数与 level。
-- 生成只含 stable ID/typed parameters 的 Native 资产。
+- 生成只含 stable ID/typed parameters 的 Native 资产，并为序列化参数分配确定性的 managed-reference ID；相同输入重复执行不会产生资产 diff。
 - 绑定 `WeaponData.nativeGasDefinition`。
 - 确保 `NetworkPlayer.prefab` 上只有一个 `PlayerBuildRuntime`。
 
@@ -183,11 +189,13 @@ Tools/HellMaiden Migration/Rebuild Dante Native GAS Assets
 | 验收 | 结果 |
 |---|---:|
 | Unity 6 编译 | 通过，0 个 C# error |
-| Dante/New GAS 专项 EditMode | `10 / 10` |
-| 真实 Dante 双 Player PlayMode | `1 / 1` |
+| Dante/New GAS 专项 EditMode | `11 / 11` |
+| 真实 Dante PlayMode（双 Player 隔离 + 真实 Projectile 命中） | `2 / 2` |
 | 全部 GAS EditMode 回归 | `77 / 77` |
-| 全部 Gameplay PlayMode 回归 | `42 / 42` |
+| 全部 Gameplay PlayMode 回归 | `42 / 43`，见下方说明 |
 | NetworkCombat EditMode 回归 | `41 / 41` |
+
+Gameplay 的唯一失败是既有测试 `GameplayScene_StartsLocalAutoCombatWithoutMirrorHost`：当前工作区中的 `Assets/Scenes/Gameplay.unity` 已移除旧 NetworkManager，但尚未包含该测试要求的 `LocalGameplayBootstrap`。这是本次任务开始前已存在且仍在编辑中的场景改动；本迁移没有覆盖或回退该场景。Dante 的两条真实资产 PlayMode 测试均通过。
 
 专项测试覆盖：
 
@@ -200,6 +208,10 @@ Tools/HellMaiden Migration/Rebuild Dante Native GAS Assets
 - 两个 PlayerBuildRuntime 的 Modifier state 隔离。
 - 真实 Dante WeaponData、旧 Weapon Prefab 与 Native Definition 绑定。
 - Dante/Projectile/Impact Prefab 无 Missing MonoBehaviour。
+- 三个 Dante Projectile prefab 的 ProgressionScaler、Hitbox、HitEffect、旋转节点、Animancer 与 ParticleSystem 引用均已恢复。
+- `WeaponBehaviour.Attack()` 真正生成 Projectile，并通过物理 Hitbox 命中测试目标。
+- Projectile 发射后移除 Equipment，命中仍使用冻结的 20 点 Snapshot；当前 Weapon 已回到 15 点。
+- 该命中只调用一次 Native GAS，Legacy `Damage(...)` 调用次数为 0。
 - Native 资产中无 Legacy hash ID。
 - Native Weapon 调用 Legacy `CalculateDamage` 会被拒绝。
 

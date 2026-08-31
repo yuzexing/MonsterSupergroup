@@ -1,0 +1,522 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="77" result="Passed" total="77" passed="77" failed="0" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-08-30 09:31:20Z" end-time="2026-08-30 09:31:20Z" duration="0.1364786">
+  <test-suite type="TestSuite" id="1000" name="Monster Supergroup" fullname="Monster Supergroup" runstate="Runnable" testcasecount="126" result="Passed" start-time="2026-08-30 09:31:20Z" end-time="2026-08-30 09:31:20Z" duration="0.136479" total="77" passed="77" failed="0" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="EditMode" />
+    </properties>
+    <test-suite type="Assembly" id="1089" name="MonsterSupergroup.GAS.Tests.EditMode.dll" fullname="F:/UnityStore/MonsterSupergroup/Library/ScriptAssemblies/MonsterSupergroup.GAS.Tests.EditMode.dll" runstate="Runnable" testcasecount="77" result="Passed" start-time="2026-08-30 09:31:20Z" end-time="2026-08-30 09:31:20Z" duration="0.131409" total="77" passed="77" failed="0" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="65776" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="EditMode" />
+        <property name="EditorOnly" value="True" />
+      </properties>
+      <test-suite type="TestSuite" id="1090" name="MonsterSupergroup" fullname="MonsterSupergroup" runstate="Runnable" testcasecount="77" result="Passed" start-time="2026-08-30 09:31:20Z" end-time="2026-08-30 09:31:20Z" duration="0.131074" total="77" passed="77" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-suite type="TestSuite" id="1091" name="GAS" fullname="MonsterSupergroup.GAS" runstate="Runnable" testcasecount="77" result="Passed" start-time="2026-08-30 09:31:20Z" end-time="2026-08-30 09:31:20Z" duration="0.130916" total="77" passed="77" failed="0" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <test-suite type="TestSuite" id="1092" name="Tests" fullname="MonsterSupergroup.GAS.Tests" runstate="Runnable" testcasecount="77" result="Passed" start-time="2026-08-30 09:31:20Z" end-time="2026-08-30 09:31:20Z" duration="0.130653" total="77" passed="77" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-suite type="TestFixture" id="1001" name="AssemblyFenceTests" fullname="MonsterSupergroup.GAS.Tests.AssemblyFenceTests" classname="MonsterSupergroup.GAS.Tests.AssemblyFenceTests" runstate="Runnable" testcasecount="3" result="Passed" start-time="2026-08-30 09:31:20Z" end-time="2026-08-30 09:31:20Z" duration="0.019107" total="3" passed="3" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1003" name="CoreAssembly_ContainsNoLegacyGlobalServiceTypes" fullname="MonsterSupergroup.GAS.Tests.AssemblyFenceTests.CoreAssembly_ContainsNoLegacyGlobalServiceTypes" methodname="CoreAssembly_ContainsNoLegacyGlobalServiceTypes" classname="MonsterSupergroup.GAS.Tests.AssemblyFenceTests" runstate="Runnable" seed="764726147" result="Passed" start-time="2026-08-30 09:31:20Z" end-time="2026-08-30 09:31:20Z" duration="0.009365" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1002" name="CoreAssembly_HasNoUnityUiInputAudioOrRewiredReferences" fullname="MonsterSupergroup.GAS.Tests.AssemblyFenceTests.CoreAssembly_HasNoUnityUiInputAudioOrRewiredReferences" methodname="CoreAssembly_HasNoUnityUiInputAudioOrRewiredReferences" classname="MonsterSupergroup.GAS.Tests.AssemblyFenceTests" runstate="Runnable" seed="340891544" result="Passed" start-time="2026-08-30 09:31:20Z" end-time="2026-08-30 09:31:20Z" duration="0.000516" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1004" name="GameplayCombatRuntime_DoesNotReferenceLegacyPluginsOrMirror" fullname="MonsterSupergroup.GAS.Tests.AssemblyFenceTests.GameplayCombatRuntime_DoesNotReferenceLegacyPluginsOrMirror" methodname="GameplayCombatRuntime_DoesNotReferenceLegacyPluginsOrMirror" classname="MonsterSupergroup.GAS.Tests.AssemblyFenceTests" runstate="Runnable" seed="1611027858" result="Passed" start-time="2026-08-30 09:31:20Z" end-time="2026-08-30 09:31:20Z" duration="0.000376" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+            </test-suite>
+            <test-suite type="TestFixture" id="1005" name="AuthoringEditorTests" fullname="MonsterSupergroup.GAS.Tests.AuthoringEditorTests" classname="MonsterSupergroup.GAS.Tests.AuthoringEditorTests" runstate="Runnable" testcasecount="9" result="Passed" start-time="2026-08-30 09:31:20Z" end-time="2026-08-30 09:31:20Z" duration="0.037161" total="9" passed="9" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1006" name="Catalog_DiscoversFirstSliceTypesInStableIdOrder" fullname="MonsterSupergroup.GAS.Tests.AuthoringEditorTests.Catalog_DiscoversFirstSliceTypesInStableIdOrder" methodname="Catalog_DiscoversFirstSliceTypesInStableIdOrder" classname="MonsterSupergroup.GAS.Tests.AuthoringEditorTests" runstate="Runnable" seed="445750174" result="Passed" start-time="2026-08-30 09:31:20Z" end-time="2026-08-30 09:31:20Z" duration="0.007357" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1009" name="PerkAuthoring_CreatesRegisteredRuntimePerk" fullname="MonsterSupergroup.GAS.Tests.AuthoringEditorTests.PerkAuthoring_CreatesRegisteredRuntimePerk" methodname="PerkAuthoring_CreatesRegisteredRuntimePerk" classname="MonsterSupergroup.GAS.Tests.AuthoringEditorTests" runstate="Runnable" seed="2098652178" result="Passed" start-time="2026-08-30 09:31:20Z" end-time="2026-08-30 09:31:20Z" duration="0.012806" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1014" name="RegistryGenerator_IsDeterministicCurrentAndContainsNoRuntimeReflection" fullname="MonsterSupergroup.GAS.Tests.AuthoringEditorTests.RegistryGenerator_IsDeterministicCurrentAndContainsNoRuntimeReflection" methodname="RegistryGenerator_IsDeterministicCurrentAndContainsNoRuntimeReflection" classname="MonsterSupergroup.GAS.Tests.AuthoringEditorTests" runstate="Runnable" seed="2147038396" result="Passed" start-time="2026-08-30 09:31:20Z" end-time="2026-08-30 09:31:20Z" duration="0.004287" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1008" name="SelectionService_ReportsWhenChangingTypeWouldReplaceParameters" fullname="MonsterSupergroup.GAS.Tests.AuthoringEditorTests.SelectionService_ReportsWhenChangingTypeWouldReplaceParameters" methodname="SelectionService_ReportsWhenChangingTypeWouldReplaceParameters" classname="MonsterSupergroup.GAS.Tests.AuthoringEditorTests" runstate="Runnable" seed="9826884" result="Passed" start-time="2026-08-30 09:31:20Z" end-time="2026-08-30 09:31:20Z" duration="0.001089" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1007" name="SelectionService_SetsStableIdAndCreatesExactParametersType" fullname="MonsterSupergroup.GAS.Tests.AuthoringEditorTests.SelectionService_SetsStableIdAndCreatesExactParametersType" methodname="SelectionService_SetsStableIdAndCreatesExactParametersType" classname="MonsterSupergroup.GAS.Tests.AuthoringEditorTests" runstate="Runnable" seed="1642973123" result="Passed" start-time="2026-08-30 09:31:20Z" end-time="2026-08-30 09:31:20Z" duration="0.001766" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1010" name="SerializeReference_RoundTripsConcreteParameters" fullname="MonsterSupergroup.GAS.Tests.AuthoringEditorTests.SerializeReference_RoundTripsConcreteParameters" methodname="SerializeReference_RoundTripsConcreteParameters" classname="MonsterSupergroup.GAS.Tests.AuthoringEditorTests" runstate="Runnable" seed="186882820" result="Passed" start-time="2026-08-30 09:31:20Z" end-time="2026-08-30 09:31:20Z" duration="0.001186" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1013" name="Validator_AllowsRepeatedModifierIdsWithinOneAsset" fullname="MonsterSupergroup.GAS.Tests.AuthoringEditorTests.Validator_AllowsRepeatedModifierIdsWithinOneAsset" methodname="Validator_AllowsRepeatedModifierIdsWithinOneAsset" classname="MonsterSupergroup.GAS.Tests.AuthoringEditorTests" runstate="Runnable" seed="1754564982" result="Passed" start-time="2026-08-30 09:31:20Z" end-time="2026-08-30 09:31:20Z" duration="0.002462" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1011" name="Validator_CatchesZeroUnknownNullMismatchAndBurnBounds" fullname="MonsterSupergroup.GAS.Tests.AuthoringEditorTests.Validator_CatchesZeroUnknownNullMismatchAndBurnBounds" methodname="Validator_CatchesZeroUnknownNullMismatchAndBurnBounds" classname="MonsterSupergroup.GAS.Tests.AuthoringEditorTests" runstate="Runnable" seed="1719218659" result="Passed" start-time="2026-08-30 09:31:20Z" end-time="2026-08-30 09:31:20Z" duration="0.002798" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1012" name="Validator_RejectsNonFiniteConcreteMultiplierParameters" fullname="MonsterSupergroup.GAS.Tests.AuthoringEditorTests.Validator_RejectsNonFiniteConcreteMultiplierParameters" methodname="Validator_RejectsNonFiniteConcreteMultiplierParameters" classname="MonsterSupergroup.GAS.Tests.AuthoringEditorTests" runstate="Runnable" seed="1094599155" result="Passed" start-time="2026-08-30 09:31:20Z" end-time="2026-08-30 09:31:20Z" duration="0.000892" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+            </test-suite>
+            <test-suite type="TestFixture" id="1015" name="CombatContextTests" fullname="MonsterSupergroup.GAS.Tests.CombatContextTests" classname="MonsterSupergroup.GAS.Tests.CombatContextTests" runstate="Runnable" testcasecount="4" result="Passed" start-time="2026-08-30 09:31:20Z" end-time="2026-08-30 09:31:20Z" duration="0.019409" total="4" passed="4" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1016" name="CombatEventId_PacksSourceEpochAndSequenceWithoutLosingIdentity" fullname="MonsterSupergroup.GAS.Tests.CombatContextTests.CombatEventId_PacksSourceEpochAndSequenceWithoutLosingIdentity" methodname="CombatEventId_PacksSourceEpochAndSequenceWithoutLosingIdentity" classname="MonsterSupergroup.GAS.Tests.CombatContextTests" runstate="Runnable" seed="457837650" result="Passed" start-time="2026-08-30 09:31:20Z" end-time="2026-08-30 09:31:20Z" duration="0.000838" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1019" name="CombatPipeline_ActuallyAppliesDepthAndSelfTriggerGuardToModifiers" fullname="MonsterSupergroup.GAS.Tests.CombatContextTests.CombatPipeline_ActuallyAppliesDepthAndSelfTriggerGuardToModifiers" methodname="CombatPipeline_ActuallyAppliesDepthAndSelfTriggerGuardToModifiers" classname="MonsterSupergroup.GAS.Tests.CombatContextTests" runstate="Runnable" seed="287967097" result="Passed" start-time="2026-08-30 09:31:20Z" end-time="2026-08-30 09:31:20Z" duration="0.011023" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1017" name="ResolveHitDetailed_PreservesRawOverkillAndExplicitEventLineage" fullname="MonsterSupergroup.GAS.Tests.CombatContextTests.ResolveHitDetailed_PreservesRawOverkillAndExplicitEventLineage" methodname="ResolveHitDetailed_PreservesRawOverkillAndExplicitEventLineage" classname="MonsterSupergroup.GAS.Tests.CombatContextTests" runstate="Runnable" seed="762319981" result="Passed" start-time="2026-08-30 09:31:20Z" end-time="2026-08-30 09:31:20Z" duration="0.004035" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1018" name="TriggerGuard_EnforcesSelfRootTargetDepthCountAndCooldownPolicies" fullname="MonsterSupergroup.GAS.Tests.CombatContextTests.TriggerGuard_EnforcesSelfRootTargetDepthCountAndCooldownPolicies" methodname="TriggerGuard_EnforcesSelfRootTargetDepthCountAndCooldownPolicies" classname="MonsterSupergroup.GAS.Tests.CombatContextTests" runstate="Runnable" seed="604952133" result="Passed" start-time="2026-08-30 09:31:20Z" end-time="2026-08-30 09:31:20Z" duration="0.001854" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+            </test-suite>
+            <test-suite type="TestFixture" id="1020" name="CombatPipelineTests" fullname="MonsterSupergroup.GAS.Tests.CombatPipelineTests" classname="MonsterSupergroup.GAS.Tests.CombatPipelineTests" runstate="Runnable" testcasecount="15" result="Passed" start-time="2026-08-30 09:31:20Z" end-time="2026-08-30 09:31:20Z" duration="0.019326" total="15" passed="15" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1021" name="BeginAttack_RebuildsStaticGlobalAndDynamicLayersWithoutAccumulation" fullname="MonsterSupergroup.GAS.Tests.CombatPipelineTests.BeginAttack_RebuildsStaticGlobalAndDynamicLayersWithoutAccumulation" methodname="BeginAttack_RebuildsStaticGlobalAndDynamicLayersWithoutAccumulation" classname="MonsterSupergroup.GAS.Tests.CombatPipelineTests" runstate="Runnable" seed="504439805" result="Passed" start-time="2026-08-30 09:31:20Z" end-time="2026-08-30 09:31:20Z" duration="0.001285" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1032" name="OnHitBurn_CreatesExpectedHighestPriorityStatusOnLivingTarget" fullname="MonsterSupergroup.GAS.Tests.CombatPipelineTests.OnHitBurn_CreatesExpectedHighestPriorityStatusOnLivingTarget" methodname="OnHitBurn_CreatesExpectedHighestPriorityStatusOnLivingTarget" classname="MonsterSupergroup.GAS.Tests.CombatPipelineTests" runstate="Runnable" seed="843683766" result="Passed" start-time="2026-08-30 09:31:20Z" end-time="2026-08-30 09:31:20Z" duration="0.002275" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1033" name="OnHitBurn_UsesSignedFormulaForNegativeGlobalMultiplier" fullname="MonsterSupergroup.GAS.Tests.CombatPipelineTests.OnHitBurn_UsesSignedFormulaForNegativeGlobalMultiplier" methodname="OnHitBurn_UsesSignedFormulaForNegativeGlobalMultiplier" classname="MonsterSupergroup.GAS.Tests.CombatPipelineTests" runstate="Runnable" seed="1256291075" result="Passed" start-time="2026-08-30 09:31:20Z" end-time="2026-08-30 09:31:20Z" duration="0.000443" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1035" name="Pipeline_ExecutesStagesInDeclaredOrder" fullname="MonsterSupergroup.GAS.Tests.CombatPipelineTests.Pipeline_ExecutesStagesInDeclaredOrder" methodname="Pipeline_ExecutesStagesInDeclaredOrder" classname="MonsterSupergroup.GAS.Tests.CombatPipelineTests" runstate="Runnable" seed="912104905" result="Passed" start-time="2026-08-30 09:31:20Z" end-time="2026-08-30 09:31:20Z" duration="0.000983" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1022" name="RemovingStaticModifier_RecomputesFromBaseInsteadOfInvertingPriorResult" fullname="MonsterSupergroup.GAS.Tests.CombatPipelineTests.RemovingStaticModifier_RecomputesFromBaseInsteadOfInvertingPriorResult" methodname="RemovingStaticModifier_RecomputesFromBaseInsteadOfInvertingPriorResult" classname="MonsterSupergroup.GAS.Tests.CombatPipelineTests" runstate="Runnable" seed="1529561192" result="Passed" start-time="2026-08-30 09:31:20Z" end-time="2026-08-30 09:31:20Z" duration="0.001029" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1023" name="ResolveHit_AppliesOnDamageToIndependentPerTargetAccumulator" fullname="MonsterSupergroup.GAS.Tests.CombatPipelineTests.ResolveHit_AppliesOnDamageToIndependentPerTargetAccumulator" methodname="ResolveHit_AppliesOnDamageToIndependentPerTargetAccumulator" classname="MonsterSupergroup.GAS.Tests.CombatPipelineTests" runstate="Runnable" seed="243942916" result="Passed" start-time="2026-08-30 09:31:20Z" end-time="2026-08-30 09:31:20Z" duration="0.000378" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1025" name="ResolveHit_ChanceZeroNeverTriggersAndChanceOneAlwaysTriggers" fullname="MonsterSupergroup.GAS.Tests.CombatPipelineTests.ResolveHit_ChanceZeroNeverTriggersAndChanceOneAlwaysTriggers" methodname="ResolveHit_ChanceZeroNeverTriggersAndChanceOneAlwaysTriggers" classname="MonsterSupergroup.GAS.Tests.CombatPipelineTests" runstate="Runnable" seed="1854072992" result="Passed" start-time="2026-08-30 09:31:20Z" end-time="2026-08-30 09:31:20Z" duration="0.000619" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1026" name="ResolveHit_ClampsGlobalChanceMultiplierBeforeRolling" fullname="MonsterSupergroup.GAS.Tests.CombatPipelineTests.ResolveHit_ClampsGlobalChanceMultiplierBeforeRolling" methodname="ResolveHit_ClampsGlobalChanceMultiplierBeforeRolling" classname="MonsterSupergroup.GAS.Tests.CombatPipelineTests" runstate="Runnable" seed="331375172" result="Passed" start-time="2026-08-30 09:31:20Z" end-time="2026-08-30 09:31:20Z" duration="0.000265" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1031" name="ResolveHit_CriticalDamageUsesTruncation" fullname="MonsterSupergroup.GAS.Tests.CombatPipelineTests.ResolveHit_CriticalDamageUsesTruncation" methodname="ResolveHit_CriticalDamageUsesTruncation" classname="MonsterSupergroup.GAS.Tests.CombatPipelineTests" runstate="Runnable" seed="2010892066" result="Passed" start-time="2026-08-30 09:31:20Z" end-time="2026-08-30 09:31:20Z" duration="0.000311" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1027" name="ResolveHit_InvokesOnKillOnlyForTheAliveToDeadTransition" fullname="MonsterSupergroup.GAS.Tests.CombatPipelineTests.ResolveHit_InvokesOnKillOnlyForTheAliveToDeadTransition" methodname="ResolveHit_InvokesOnKillOnlyForTheAliveToDeadTransition" classname="MonsterSupergroup.GAS.Tests.CombatPipelineTests" runstate="Runnable" seed="1270751055" result="Passed" start-time="2026-08-30 09:31:20Z" end-time="2026-08-30 09:31:20Z" duration="0.000651" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1029" name="ResolveHit_OnHitEffectDeathTriggersOnKill" fullname="MonsterSupergroup.GAS.Tests.CombatPipelineTests.ResolveHit_OnHitEffectDeathTriggersOnKill" methodname="ResolveHit_OnHitEffectDeathTriggersOnKill" classname="MonsterSupergroup.GAS.Tests.CombatPipelineTests" runstate="Runnable" seed="1664727493" result="Passed" start-time="2026-08-30 09:31:20Z" end-time="2026-08-30 09:31:20Z" duration="0.000544" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1030" name="ResolveHit_OnHitRevivalSuppressesOnKill" fullname="MonsterSupergroup.GAS.Tests.CombatPipelineTests.ResolveHit_OnHitRevivalSuppressesOnKill" methodname="ResolveHit_OnHitRevivalSuppressesOnKill" classname="MonsterSupergroup.GAS.Tests.CombatPipelineTests" runstate="Runnable" seed="221481060" result="Passed" start-time="2026-08-30 09:31:20Z" end-time="2026-08-30 09:31:20Z" duration="0.000325" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1024" name="ResolveHit_RoundsDamageOnlyAfterPerTargetMultipliersAreApplied" fullname="MonsterSupergroup.GAS.Tests.CombatPipelineTests.ResolveHit_RoundsDamageOnlyAfterPerTargetMultipliersAreApplied" methodname="ResolveHit_RoundsDamageOnlyAfterPerTargetMultipliersAreApplied" classname="MonsterSupergroup.GAS.Tests.CombatPipelineTests" runstate="Runnable" seed="764781054" result="Passed" start-time="2026-08-30 09:31:20Z" end-time="2026-08-30 09:31:20Z" duration="0.000293" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1028" name="ResolvePrecomputedHit_UsesExistingPipelineAndPreservesSourceIdentity" fullname="MonsterSupergroup.GAS.Tests.CombatPipelineTests.ResolvePrecomputedHit_UsesExistingPipelineAndPreservesSourceIdentity" methodname="ResolvePrecomputedHit_UsesExistingPipelineAndPreservesSourceIdentity" classname="MonsterSupergroup.GAS.Tests.CombatPipelineTests" runstate="Runnable" seed="881231052" result="Passed" start-time="2026-08-30 09:31:20Z" end-time="2026-08-30 09:31:20Z" duration="0.001167" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1034" name="StatusTicks_DoNotReenterAttackOnHitOrOnKillPipeline" fullname="MonsterSupergroup.GAS.Tests.CombatPipelineTests.StatusTicks_DoNotReenterAttackOnHitOrOnKillPipeline" methodname="StatusTicks_DoNotReenterAttackOnHitOrOnKillPipeline" classname="MonsterSupergroup.GAS.Tests.CombatPipelineTests" runstate="Runnable" seed="1218502466" result="Passed" start-time="2026-08-30 09:31:20Z" end-time="2026-08-30 09:31:20Z" duration="0.005938" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+            </test-suite>
+            <test-suite type="TestFixture" id="1036" name="DanteNativeGasCoreTests" fullname="MonsterSupergroup.GAS.Tests.DanteNativeGasCoreTests" classname="MonsterSupergroup.GAS.Tests.DanteNativeGasCoreTests" runstate="Runnable" testcasecount="4" result="Passed" start-time="2026-08-30 09:31:20Z" end-time="2026-08-30 09:31:20Z" duration="0.004121" total="4" passed="4" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1039" name="AttackSnapshot_FreezesStatsAcrossHandleRemovalAndLaterAttacks" fullname="MonsterSupergroup.GAS.Tests.DanteNativeGasCoreTests.AttackSnapshot_FreezesStatsAcrossHandleRemovalAndLaterAttacks" methodname="AttackSnapshot_FreezesStatsAcrossHandleRemovalAndLaterAttacks" classname="MonsterSupergroup.GAS.Tests.DanteNativeGasCoreTests" runstate="Runnable" seed="633003323" result="Passed" start-time="2026-08-30 09:31:20Z" end-time="2026-08-30 09:31:20Z" duration="0.000647" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1040" name="AttackSnapshot_RetainsHitStageModifierUntilFinalLeaseEnds" fullname="MonsterSupergroup.GAS.Tests.DanteNativeGasCoreTests.AttackSnapshot_RetainsHitStageModifierUntilFinalLeaseEnds" methodname="AttackSnapshot_RetainsHitStageModifierUntilFinalLeaseEnds" classname="MonsterSupergroup.GAS.Tests.DanteNativeGasCoreTests" runstate="Runnable" seed="1766618924" result="Passed" start-time="2026-08-30 09:31:20Z" end-time="2026-08-30 09:31:20Z" duration="0.000570" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1037" name="GeneratedRegistry_CreatesAllEightNativeNumericModifiers" fullname="MonsterSupergroup.GAS.Tests.DanteNativeGasCoreTests.GeneratedRegistry_CreatesAllEightNativeNumericModifiers" methodname="GeneratedRegistry_CreatesAllEightNativeNumericModifiers" classname="MonsterSupergroup.GAS.Tests.DanteNativeGasCoreTests" runstate="Runnable" seed="1626898274" result="Passed" start-time="2026-08-30 09:31:20Z" end-time="2026-08-30 09:31:20Z" duration="0.000984" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1038" name="NumericModifiers_ReproduceLegacyFormulasAndStackAdditively" fullname="MonsterSupergroup.GAS.Tests.DanteNativeGasCoreTests.NumericModifiers_ReproduceLegacyFormulasAndStackAdditively" methodname="NumericModifiers_ReproduceLegacyFormulasAndStackAdditively" classname="MonsterSupergroup.GAS.Tests.DanteNativeGasCoreTests" runstate="Runnable" seed="106178335" result="Passed" start-time="2026-08-30 09:31:20Z" end-time="2026-08-30 09:31:20Z" duration="0.000791" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+            </test-suite>
+            <test-suite type="TestFixture" id="1041" name="ModifierRegistryTests" fullname="MonsterSupergroup.GAS.Tests.ModifierRegistryTests" classname="MonsterSupergroup.GAS.Tests.ModifierRegistryTests" runstate="Runnable" testcasecount="5" result="Passed" start-time="2026-08-30 09:31:20Z" end-time="2026-08-30 09:31:20Z" duration="0.003970" total="5" passed="5" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1044" name="Build_OrdersRegistrationsByStableId" fullname="MonsterSupergroup.GAS.Tests.ModifierRegistryTests.Build_OrdersRegistrationsByStableId" methodname="Build_OrdersRegistrationsByStableId" classname="MonsterSupergroup.GAS.Tests.ModifierRegistryTests" runstate="Runnable" seed="1970271415" result="Passed" start-time="2026-08-30 09:31:20Z" end-time="2026-08-30 09:31:20Z" duration="0.000651" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1043" name="Builder_RejectsInvalidDuplicateIdAndDuplicateType" fullname="MonsterSupergroup.GAS.Tests.ModifierRegistryTests.Builder_RejectsInvalidDuplicateIdAndDuplicateType" methodname="Builder_RejectsInvalidDuplicateIdAndDuplicateType" classname="MonsterSupergroup.GAS.Tests.ModifierRegistryTests" runstate="Runnable" seed="2127255221" result="Passed" start-time="2026-08-30 09:31:20Z" end-time="2026-08-30 09:31:20Z" duration="0.000901" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1045" name="Factory_CreatesRegisteredTypesAndRejectsUnknownOrWrongParameters" fullname="MonsterSupergroup.GAS.Tests.ModifierRegistryTests.Factory_CreatesRegisteredTypesAndRejectsUnknownOrWrongParameters" methodname="Factory_CreatesRegisteredTypesAndRejectsUnknownOrWrongParameters" classname="MonsterSupergroup.GAS.Tests.ModifierRegistryTests" runstate="Runnable" seed="459821348" result="Passed" start-time="2026-08-30 09:31:20Z" end-time="2026-08-30 09:31:20Z" duration="0.000714" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1046" name="GeneratedRegistry_CreatesAllFirstSliceModifiers" fullname="MonsterSupergroup.GAS.Tests.ModifierRegistryTests.GeneratedRegistry_CreatesAllFirstSliceModifiers" methodname="GeneratedRegistry_CreatesAllFirstSliceModifiers" classname="MonsterSupergroup.GAS.Tests.ModifierRegistryTests" runstate="Runnable" seed="916077343" result="Passed" start-time="2026-08-30 09:31:20Z" end-time="2026-08-30 09:31:20Z" duration="0.000310" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1042" name="StableIds_AreNonZeroAndPreserveTheirValue" fullname="MonsterSupergroup.GAS.Tests.ModifierRegistryTests.StableIds_AreNonZeroAndPreserveTheirValue" methodname="StableIds_AreNonZeroAndPreserveTheirValue" classname="MonsterSupergroup.GAS.Tests.ModifierRegistryTests" runstate="Runnable" seed="748107935" result="Passed" start-time="2026-08-30 09:31:20Z" end-time="2026-08-30 09:31:20Z" duration="0.000254" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+            </test-suite>
+            <test-suite type="TestFixture" id="1047" name="PerkModifierTests" fullname="MonsterSupergroup.GAS.Tests.PerkModifierTests" classname="MonsterSupergroup.GAS.Tests.PerkModifierTests" runstate="Runnable" testcasecount="2" result="Passed" start-time="2026-08-30 09:31:20Z" end-time="2026-08-30 09:31:20Z" duration="0.001348" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1048" name="TryStack_RequiresMatchingIdAndParametersType" fullname="MonsterSupergroup.GAS.Tests.PerkModifierTests.TryStack_RequiresMatchingIdAndParametersType" methodname="TryStack_RequiresMatchingIdAndParametersType" classname="MonsterSupergroup.GAS.Tests.PerkModifierTests" runstate="Runnable" seed="1536349804" result="Passed" start-time="2026-08-30 09:31:20Z" end-time="2026-08-30 09:31:20Z" duration="0.000407" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1049" name="WeaponSpeedPerk_StacksAndAppliesToGlobalMultiplier" fullname="MonsterSupergroup.GAS.Tests.PerkModifierTests.WeaponSpeedPerk_StacksAndAppliesToGlobalMultiplier" methodname="WeaponSpeedPerk_StacksAndAppliesToGlobalMultiplier" classname="MonsterSupergroup.GAS.Tests.PerkModifierTests" runstate="Runnable" seed="1065224580" result="Passed" start-time="2026-08-30 09:31:20Z" end-time="2026-08-30 09:31:20Z" duration="0.000274" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+            </test-suite>
+            <test-suite type="TestFixture" id="1050" name="RuntimeEquipmentModifiersTests" fullname="MonsterSupergroup.GAS.Tests.RuntimeEquipmentModifiersTests" classname="MonsterSupergroup.GAS.Tests.RuntimeEquipmentModifiersTests" runstate="Runnable" testcasecount="10" result="Passed" start-time="2026-08-30 09:31:20Z" end-time="2026-08-30 09:31:20Z" duration="0.005169" total="10" passed="10" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1051" name="Add_ClassifiesEveryExecutionStage" fullname="MonsterSupergroup.GAS.Tests.RuntimeEquipmentModifiersTests.Add_ClassifiesEveryExecutionStage" methodname="Add_ClassifiesEveryExecutionStage" classname="MonsterSupergroup.GAS.Tests.RuntimeEquipmentModifiersTests" runstate="Runnable" seed="1647825966" result="Passed" start-time="2026-08-30 09:31:20Z" end-time="2026-08-30 09:31:20Z" duration="0.000420" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1060" name="Add_RejectsNullAndUnsupportedStages" fullname="MonsterSupergroup.GAS.Tests.RuntimeEquipmentModifiersTests.Add_RejectsNullAndUnsupportedStages" methodname="Add_RejectsNullAndUnsupportedStages" classname="MonsterSupergroup.GAS.Tests.RuntimeEquipmentModifiersTests" runstate="Runnable" seed="517339186" result="Passed" start-time="2026-08-30 09:31:20Z" end-time="2026-08-30 09:31:20Z" duration="0.000331" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1058" name="Add_RejectsTheSameOwnedInstanceTwice" fullname="MonsterSupergroup.GAS.Tests.RuntimeEquipmentModifiersTests.Add_RejectsTheSameOwnedInstanceTwice" methodname="Add_RejectsTheSameOwnedInstanceTwice" classname="MonsterSupergroup.GAS.Tests.RuntimeEquipmentModifiersTests" runstate="Runnable" seed="562099928" result="Passed" start-time="2026-08-30 09:31:20Z" end-time="2026-08-30 09:31:20Z" duration="0.000453" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1052" name="Add_SortsByStageThenRollPriorityThenInsertionOrder" fullname="MonsterSupergroup.GAS.Tests.RuntimeEquipmentModifiersTests.Add_SortsByStageThenRollPriorityThenInsertionOrder" methodname="Add_SortsByStageThenRollPriorityThenInsertionOrder" classname="MonsterSupergroup.GAS.Tests.RuntimeEquipmentModifiersTests" runstate="Runnable" seed="315552799" result="Passed" start-time="2026-08-30 09:31:20Z" end-time="2026-08-30 09:31:20Z" duration="0.000343" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1053" name="Add_SortsOnKillByStageThenRollPriorityThenInsertionOrder" fullname="MonsterSupergroup.GAS.Tests.RuntimeEquipmentModifiersTests.Add_SortsOnKillByStageThenRollPriorityThenInsertionOrder" methodname="Add_SortsOnKillByStageThenRollPriorityThenInsertionOrder" classname="MonsterSupergroup.GAS.Tests.RuntimeEquipmentModifiersTests" runstate="Runnable" seed="1602704625" result="Passed" start-time="2026-08-30 09:31:20Z" end-time="2026-08-30 09:31:20Z" duration="0.000349" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1056" name="Clear_RemovesAllStagesAndHandles" fullname="MonsterSupergroup.GAS.Tests.RuntimeEquipmentModifiersTests.Clear_RemovesAllStagesAndHandles" methodname="Clear_RemovesAllStagesAndHandles" classname="MonsterSupergroup.GAS.Tests.RuntimeEquipmentModifiersTests" runstate="Runnable" seed="653221974" result="Passed" start-time="2026-08-30 09:31:20Z" end-time="2026-08-30 09:31:20Z" duration="0.000252" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1057" name="Container_DisposesOwnedInstancesExactlyOnceOnRemoveOrClear" fullname="MonsterSupergroup.GAS.Tests.RuntimeEquipmentModifiersTests.Container_DisposesOwnedInstancesExactlyOnceOnRemoveOrClear" methodname="Container_DisposesOwnedInstancesExactlyOnceOnRemoveOrClear" classname="MonsterSupergroup.GAS.Tests.RuntimeEquipmentModifiersTests" runstate="Runnable" seed="554821998" result="Passed" start-time="2026-08-30 09:31:20Z" end-time="2026-08-30 09:31:20Z" duration="0.000202" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1055" name="Remove_UsesHandleToDistinguishInstancesWithSameId" fullname="MonsterSupergroup.GAS.Tests.RuntimeEquipmentModifiersTests.Remove_UsesHandleToDistinguishInstancesWithSameId" methodname="Remove_UsesHandleToDistinguishInstancesWithSameId" classname="MonsterSupergroup.GAS.Tests.RuntimeEquipmentModifiersTests" runstate="Runnable" seed="1750638137" result="Passed" start-time="2026-08-30 09:31:20Z" end-time="2026-08-30 09:31:20Z" duration="0.000672" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1059" name="StageLists_AreReadOnlyViews" fullname="MonsterSupergroup.GAS.Tests.RuntimeEquipmentModifiersTests.StageLists_AreReadOnlyViews" methodname="StageLists_AreReadOnlyViews" classname="MonsterSupergroup.GAS.Tests.RuntimeEquipmentModifiersTests" runstate="Runnable" seed="497120473" result="Passed" start-time="2026-08-30 09:31:20Z" end-time="2026-08-30 09:31:20Z" duration="0.000179" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1054" name="StandardStages_SortByPriorityThenInsertionOrder" fullname="MonsterSupergroup.GAS.Tests.RuntimeEquipmentModifiersTests.StandardStages_SortByPriorityThenInsertionOrder" methodname="StandardStages_SortByPriorityThenInsertionOrder" classname="MonsterSupergroup.GAS.Tests.RuntimeEquipmentModifiersTests" runstate="Runnable" seed="455080937" result="Passed" start-time="2026-08-30 09:31:20Z" end-time="2026-08-30 09:31:20Z" duration="0.000186" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+            </test-suite>
+            <test-suite type="TestFixture" id="1061" name="StatusControllerTests" fullname="MonsterSupergroup.GAS.Tests.StatusControllerTests" classname="MonsterSupergroup.GAS.Tests.StatusControllerTests" runstate="Runnable" testcasecount="12" result="Passed" start-time="2026-08-30 09:31:20Z" end-time="2026-08-30 09:31:20Z" duration="0.010295" total="12" passed="12" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1067" name="Add_StopsAtMaximumStackCount" fullname="MonsterSupergroup.GAS.Tests.StatusControllerTests.Add_StopsAtMaximumStackCount" methodname="Add_StopsAtMaximumStackCount" classname="MonsterSupergroup.GAS.Tests.StatusControllerTests" runstate="Runnable" seed="713331423" result="Passed" start-time="2026-08-30 09:31:20Z" end-time="2026-08-30 09:31:20Z" duration="0.001060" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1069" name="Advance_LargeDeltaDispatchesEveryTickAndExpires" fullname="MonsterSupergroup.GAS.Tests.StatusControllerTests.Advance_LargeDeltaDispatchesEveryTickAndExpires" methodname="Advance_LargeDeltaDispatchesEveryTickAndExpires" classname="MonsterSupergroup.GAS.Tests.StatusControllerTests" runstate="Runnable" seed="1576039131" result="Passed" start-time="2026-08-30 09:31:20Z" end-time="2026-08-30 09:31:20Z" duration="0.000640" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1070" name="Advance_ManySmallStepsMatchesOneLargeStep" fullname="MonsterSupergroup.GAS.Tests.StatusControllerTests.Advance_ManySmallStepsMatchesOneLargeStep" methodname="Advance_ManySmallStepsMatchesOneLargeStep" classname="MonsterSupergroup.GAS.Tests.StatusControllerTests" runstate="Runnable" seed="944884376" result="Passed" start-time="2026-08-30 09:31:20Z" end-time="2026-08-30 09:31:20Z" duration="0.000843" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1062" name="Apply_RejectsDefaultApplicationWithoutMutatingState" fullname="MonsterSupergroup.GAS.Tests.StatusControllerTests.Apply_RejectsDefaultApplicationWithoutMutatingState" methodname="Apply_RejectsDefaultApplicationWithoutMutatingState" classname="MonsterSupergroup.GAS.Tests.StatusControllerTests" runstate="Runnable" seed="1666583371" result="Passed" start-time="2026-08-30 09:31:20Z" end-time="2026-08-30 09:31:20Z" duration="0.000274" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1072" name="ConsumeAll_DispatchesOneImmediateTickPerEffectiveStackAndClears" fullname="MonsterSupergroup.GAS.Tests.StatusControllerTests.ConsumeAll_DispatchesOneImmediateTickPerEffectiveStackAndClears" methodname="ConsumeAll_DispatchesOneImmediateTickPerEffectiveStackAndClears" classname="MonsterSupergroup.GAS.Tests.StatusControllerTests" runstate="Runnable" seed="770939287" result="Passed" start-time="2026-08-30 09:31:20Z" end-time="2026-08-30 09:31:20Z" duration="0.000863" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1071" name="ConsumeAndClear_RemoveOnlyRequestedStatuses" fullname="MonsterSupergroup.GAS.Tests.StatusControllerTests.ConsumeAndClear_RemoveOnlyRequestedStatuses" methodname="ConsumeAndClear_RemoveOnlyRequestedStatuses" classname="MonsterSupergroup.GAS.Tests.StatusControllerTests" runstate="Runnable" seed="1810789119" result="Passed" start-time="2026-08-30 09:31:20Z" end-time="2026-08-30 09:31:20Z" duration="0.000908" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1063" name="Definition_RejectsUnknownStackMode" fullname="MonsterSupergroup.GAS.Tests.StatusControllerTests.Definition_RejectsUnknownStackMode" methodname="Definition_RejectsUnknownStackMode" classname="MonsterSupergroup.GAS.Tests.StatusControllerTests" runstate="Runnable" seed="363741355" result="Passed" start-time="2026-08-30 09:31:20Z" end-time="2026-08-30 09:31:20Z" duration="0.000241" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1065" name="HighestPriority_EqualPriorityRefreshRestartsLifecycle" fullname="MonsterSupergroup.GAS.Tests.StatusControllerTests.HighestPriority_EqualPriorityRefreshRestartsLifecycle" methodname="HighestPriority_EqualPriorityRefreshRestartsLifecycle" classname="MonsterSupergroup.GAS.Tests.StatusControllerTests" runstate="Runnable" seed="401337843" result="Passed" start-time="2026-08-30 09:31:20Z" end-time="2026-08-30 09:31:20Z" duration="0.000452" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1066" name="HighestPriority_HigherPriorityReplacementRestartsLifecycle" fullname="MonsterSupergroup.GAS.Tests.StatusControllerTests.HighestPriority_HigherPriorityReplacementRestartsLifecycle" methodname="HighestPriority_HigherPriorityReplacementRestartsLifecycle" classname="MonsterSupergroup.GAS.Tests.StatusControllerTests" runstate="Runnable" seed="736108095" result="Passed" start-time="2026-08-30 09:31:20Z" end-time="2026-08-30 09:31:20Z" duration="0.000307" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1064" name="HighestPriority_RejectsLowerRefreshesEqualAndReplacesHigher" fullname="MonsterSupergroup.GAS.Tests.StatusControllerTests.HighestPriority_RejectsLowerRefreshesEqualAndReplacesHigher" methodname="HighestPriority_RejectsLowerRefreshesEqualAndReplacesHigher" classname="MonsterSupergroup.GAS.Tests.StatusControllerTests" runstate="Runnable" seed="1992157079" result="Passed" start-time="2026-08-30 09:31:20Z" end-time="2026-08-30 09:31:20Z" duration="0.000280" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1068" name="Replace_RestartsStatusWithOneStack" fullname="MonsterSupergroup.GAS.Tests.StatusControllerTests.Replace_RestartsStatusWithOneStack" methodname="Replace_RestartsStatusWithOneStack" classname="MonsterSupergroup.GAS.Tests.StatusControllerTests" runstate="Runnable" seed="507254259" result="Passed" start-time="2026-08-30 09:31:20Z" end-time="2026-08-30 09:31:20Z" duration="0.000269" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1073" name="TransferTo_PreservesMagnitudeProgressAndChangesTarget" fullname="MonsterSupergroup.GAS.Tests.StatusControllerTests.TransferTo_PreservesMagnitudeProgressAndChangesTarget" methodname="TransferTo_PreservesMagnitudeProgressAndChangesTarget" classname="MonsterSupergroup.GAS.Tests.StatusControllerTests" runstate="Runnable" seed="1011076747" result="Passed" start-time="2026-08-30 09:31:20Z" end-time="2026-08-30 09:31:20Z" duration="0.001976" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+            </test-suite>
+            <test-suite type="TestFixture" id="1074" name="StatusReplicationTests" fullname="MonsterSupergroup.GAS.Tests.StatusReplicationTests" classname="MonsterSupergroup.GAS.Tests.StatusReplicationTests" runstate="Runnable" testcasecount="6" result="Passed" start-time="2026-08-30 09:31:20Z" end-time="2026-08-30 09:31:20Z" duration="0.005197" total="6" passed="6" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1076" name="CanonicalAndPredictedStacks_ReconcileWithoutWaitingToQueryThreshold" fullname="MonsterSupergroup.GAS.Tests.StatusReplicationTests.CanonicalAndPredictedStacks_ReconcileWithoutWaitingToQueryThreshold" methodname="CanonicalAndPredictedStacks_ReconcileWithoutWaitingToQueryThreshold" classname="MonsterSupergroup.GAS.Tests.StatusReplicationTests" runstate="Runnable" seed="1042087478" result="Passed" start-time="2026-08-30 09:31:20Z" end-time="2026-08-30 09:31:20Z" duration="0.001343" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1075" name="EffectiveRegistry_DistinguishesSameDefinitionFromDifferentPlayers" fullname="MonsterSupergroup.GAS.Tests.StatusReplicationTests.EffectiveRegistry_DistinguishesSameDefinitionFromDifferentPlayers" methodname="EffectiveRegistry_DistinguishesSameDefinitionFromDifferentPlayers" classname="MonsterSupergroup.GAS.Tests.StatusReplicationTests" runstate="Runnable" seed="1142560536" result="Passed" start-time="2026-08-30 09:31:20Z" end-time="2026-08-30 09:31:20Z" duration="0.000665" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1079" name="ServerAuthorityStatus_DoesNotExecuteOnObservingClients" fullname="MonsterSupergroup.GAS.Tests.StatusReplicationTests.ServerAuthorityStatus_DoesNotExecuteOnObservingClients" methodname="ServerAuthorityStatus_DoesNotExecuteOnObservingClients" classname="MonsterSupergroup.GAS.Tests.StatusReplicationTests" runstate="Runnable" seed="2136969080" result="Passed" start-time="2026-08-30 09:31:20Z" end-time="2026-08-30 09:31:20Z" duration="0.000411" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1080" name="SharedCombatEventIdSource_ProducesUniqueStatusIdsAcrossTargets" fullname="MonsterSupergroup.GAS.Tests.StatusReplicationTests.SharedCombatEventIdSource_ProducesUniqueStatusIdsAcrossTargets" methodname="SharedCombatEventIdSource_ProducesUniqueStatusIdsAcrossTargets" classname="MonsterSupergroup.GAS.Tests.StatusReplicationTests" runstate="Runnable" seed="1041816992" result="Passed" start-time="2026-08-30 09:31:20Z" end-time="2026-08-30 09:31:20Z" duration="0.000647" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1077" name="SourceClientStatus_IsQueryableEverywhereButTicksOnOneExecutor" fullname="MonsterSupergroup.GAS.Tests.StatusReplicationTests.SourceClientStatus_IsQueryableEverywhereButTicksOnOneExecutor" methodname="SourceClientStatus_IsQueryableEverywhereButTicksOnOneExecutor" classname="MonsterSupergroup.GAS.Tests.StatusReplicationTests" runstate="Runnable" seed="2047943288" result="Passed" start-time="2026-08-30 09:31:20Z" end-time="2026-08-30 09:31:20Z" duration="0.000401" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1078" name="SourceDisconnect_ServerAuthorityContinuesOnlyRemainingTicks" fullname="MonsterSupergroup.GAS.Tests.StatusReplicationTests.SourceDisconnect_ServerAuthorityContinuesOnlyRemainingTicks" methodname="SourceDisconnect_ServerAuthorityContinuesOnlyRemainingTicks" classname="MonsterSupergroup.GAS.Tests.StatusReplicationTests" runstate="Runnable" seed="1137752462" result="Passed" start-time="2026-08-30 09:31:20Z" end-time="2026-08-30 09:31:20Z" duration="0.000368" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+            </test-suite>
+            <test-suite type="TestFixture" id="1081" name="WeaponBehaviourStatsTests" fullname="MonsterSupergroup.GAS.Tests.WeaponBehaviourStatsTests" classname="MonsterSupergroup.GAS.Tests.WeaponBehaviourStatsTests" runstate="Runnable" testcasecount="7" result="Passed" start-time="2026-08-30 09:31:20Z" end-time="2026-08-30 09:31:20Z" duration="0.003259" total="7" passed="7" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1085" name="AdditionalMultipliers_AreIncludedOnlyByAllFormula" fullname="MonsterSupergroup.GAS.Tests.WeaponBehaviourStatsTests.AdditionalMultipliers_AreIncludedOnlyByAllFormula" methodname="AdditionalMultipliers_AreIncludedOnlyByAllFormula" classname="MonsterSupergroup.GAS.Tests.WeaponBehaviourStatsTests" runstate="Runnable" seed="1892750035" result="Passed" start-time="2026-08-30 09:31:20Z" end-time="2026-08-30 09:31:20Z" duration="0.000226" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1083" name="AdditiveStats_ClampCritRateAndProjectileCountAtTheirMinimums" fullname="MonsterSupergroup.GAS.Tests.WeaponBehaviourStatsTests.AdditiveStats_ClampCritRateAndProjectileCountAtTheirMinimums" methodname="AdditiveStats_ClampCritRateAndProjectileCountAtTheirMinimums" classname="MonsterSupergroup.GAS.Tests.WeaponBehaviourStatsTests" runstate="Runnable" seed="2057353799" result="Passed" start-time="2026-08-30 09:31:20Z" end-time="2026-08-30 09:31:20Z" duration="0.000404" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1084" name="DamageRoundsUpAndCriticalDamageTruncates" fullname="MonsterSupergroup.GAS.Tests.WeaponBehaviourStatsTests.DamageRoundsUpAndCriticalDamageTruncates" methodname="DamageRoundsUpAndCriticalDamageTruncates" classname="MonsterSupergroup.GAS.Tests.WeaponBehaviourStatsTests" runstate="Runnable" seed="189664931" result="Passed" start-time="2026-08-30 09:31:20Z" end-time="2026-08-30 09:31:20Z" duration="0.000264" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1082" name="MultiplicativeStats_ApplyBaseDynamicAndGlobalAsSeparateFactors" fullname="MonsterSupergroup.GAS.Tests.WeaponBehaviourStatsTests.MultiplicativeStats_ApplyBaseDynamicAndGlobalAsSeparateFactors" methodname="MultiplicativeStats_ApplyBaseDynamicAndGlobalAsSeparateFactors" classname="MonsterSupergroup.GAS.Tests.WeaponBehaviourStatsTests" runstate="Runnable" seed="795472822" result="Passed" start-time="2026-08-30 09:31:20Z" end-time="2026-08-30 09:31:20Z" duration="0.000199" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1087" name="MultiplierCopyCloneAndAdd_DoNotMutateTheirInputs" fullname="MonsterSupergroup.GAS.Tests.WeaponBehaviourStatsTests.MultiplierCopyCloneAndAdd_DoNotMutateTheirInputs" methodname="MultiplierCopyCloneAndAdd_DoNotMutateTheirInputs" classname="MonsterSupergroup.GAS.Tests.WeaponBehaviourStatsTests" runstate="Runnable" seed="670350549" result="Passed" start-time="2026-08-30 09:31:20Z" end-time="2026-08-30 09:31:20Z" duration="0.000266" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1088" name="RemapStat_UsesSourceMultipliersAndRejectsCycles" fullname="MonsterSupergroup.GAS.Tests.WeaponBehaviourStatsTests.RemapStat_UsesSourceMultipliersAndRejectsCycles" methodname="RemapStat_UsesSourceMultipliersAndRejectsCycles" classname="MonsterSupergroup.GAS.Tests.WeaponBehaviourStatsTests" runstate="Runnable" seed="369014890" result="Passed" start-time="2026-08-30 09:31:20Z" end-time="2026-08-30 09:31:20Z" duration="0.000358" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1086" name="ResetMethods_ClearOnlyTheirOwnLayer" fullname="MonsterSupergroup.GAS.Tests.WeaponBehaviourStatsTests.ResetMethods_ClearOnlyTheirOwnLayer" methodname="ResetMethods_ClearOnlyTheirOwnLayer" classname="MonsterSupergroup.GAS.Tests.WeaponBehaviourStatsTests" runstate="Runnable" seed="1347111695" result="Passed" start-time="2026-08-30 09:31:20Z" end-time="2026-08-30 09:31:20Z" duration="0.000210" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[Saving results to: C:/Users/ADMIN/AppData/LocalLow/DefaultCompany/Monster Supergroup\TestResults.xml
+]]></output>
+              </test-case>
+            </test-suite>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

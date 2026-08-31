@@ -180,7 +180,7 @@ namespace AstralShift.HellMaiden.Player.Attacks
 		{
 			_endSoundPlayed = false;
 			PlayOneShot(startSound);
-			if (!attackStartAnim.Clip)
+			if (attackStartAnim == null || !attackStartAnim.Clip || animancer == null)
 			{
 				PlayAttackAnimation();
 				return;
@@ -200,7 +200,7 @@ namespace AstralShift.HellMaiden.Player.Attacks
 		{
 			_endSoundPlayed = false;
 			PlayOneShot(startSound);
-			if (!attackStartAnim.Clip)
+			if (attackStartAnim == null || !attackStartAnim.Clip || animancer == null)
 			{
 				PlayAttackAnimation();
 				return new AnimancerHelpers.WaitForAnimationEnd((object)this, (AnimancerState)null);
@@ -216,7 +216,7 @@ namespace AstralShift.HellMaiden.Player.Attacks
 
 		public virtual void PlayAttackAnimation()
 		{
-			if (!attackAnim.Clip)
+			if (attackAnim == null || !attackAnim.Clip || animancer == null)
 			{
 				PlayEndAnimation();
 				return;
@@ -229,7 +229,7 @@ namespace AstralShift.HellMaiden.Player.Attacks
 			{
 				animancerState.Events(this).OnEnd = CheckEndOfAnimations;
 			}
-			for (int i = 0; i < additionalAttackAnims.Length; i++)
+			for (int i = 0; i < (additionalAttackAnims?.Length ?? 0); i++)
 			{
 				ClipTransition clipTransition = additionalAttackAnims[i];
 				if (clipTransition != null && (bool)clipTransition.Clip)
@@ -254,7 +254,7 @@ namespace AstralShift.HellMaiden.Player.Attacks
 
 		public AnimancerHelpers.WaitForAnimationEnd PlayAttackAnimationYield()
 		{
-			if (!attackAnim.Clip)
+			if (attackAnim == null || !attackAnim.Clip || animancer == null)
 			{
 				PlayEndAnimation();
 				return new AnimancerHelpers.WaitForAnimationEnd((object)this, (AnimancerState)null);
@@ -270,7 +270,7 @@ namespace AstralShift.HellMaiden.Player.Attacks
 					animancerState.Events(this).OnEnd = PlayEndAnimation;
 				}
 			}
-			for (int i = 0; i < additionalAttackAnims.Length; i++)
+			for (int i = 0; i < (additionalAttackAnims?.Length ?? 0); i++)
 			{
 				ClipTransition clipTransition = additionalAttackAnims[i];
 				if (clipTransition != null && (bool)clipTransition.Clip)
@@ -330,7 +330,7 @@ namespace AstralShift.HellMaiden.Player.Attacks
 				PlayOneShot(endSound);
 			}
 			BeforeEndCallback();
-			if (!attackEndAnim.Clip)
+			if (attackEndAnim == null || !attackEndAnim.Clip || animancer == null)
 			{
 				EndCallback();
 			}
@@ -342,7 +342,7 @@ namespace AstralShift.HellMaiden.Player.Attacks
 
 		public void PlayHitAnimation()
 		{
-			if ((bool)attackHitAnim.Clip)
+			if (attackHitAnim != null && (bool)attackHitAnim.Clip && animancer != null)
 			{
 				PlayOneShot(hitSound);
 				animancer.Layers[hitAnimLayer].Play(attackHitAnim, attackHitAnim.FadeDuration).MoveTime(0f, normalized: true);
@@ -351,7 +351,7 @@ namespace AstralShift.HellMaiden.Player.Attacks
 
 		public AnimancerHelpers.WaitForAnimationEnd PlayHitAnimationYield()
 		{
-			if (!attackHitAnim.Clip)
+			if (attackHitAnim == null || !attackHitAnim.Clip || animancer == null)
 			{
 				return new AnimancerHelpers.WaitForAnimationEnd((object)this, (AnimancerState)null);
 			}

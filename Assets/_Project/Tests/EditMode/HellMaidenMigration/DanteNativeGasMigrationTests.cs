@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using AstralShift.HellMaiden.Data.Cards;
+using AstralShift.HellMaiden.Player.Attacks;
 using MonsterSupergroup.GAS;
 using MonsterSupergroup.GAS.Authoring;
 using MonsterSupergroup.Gameplay.Combat;
@@ -22,6 +23,13 @@ namespace MonsterSupergroup.HellMaidenMigration.Tests
             DanteNativeGasMigration.OutputFolder + "/NativeGasEquipment_CritMultiplier.asset",
             DanteNativeGasMigration.OutputFolder + "/NativeGasEquipment_ProjectileCount.asset",
             DanteNativeGasMigration.OutputFolder + "/NativeGasEquipment_Knockback.asset"
+        };
+
+        private static readonly string[] DanteProjectilePrefabPaths =
+        {
+            "Assets/GameObject/PlayerAttack_Dante_Projectile.prefab",
+            "Assets/GameObject/PlayerAttack_Dante_Projectile_Fire Variant.prefab",
+            "Assets/GameObject/PlayerAttack_Dante_Projectile_Poison Variant.prefab"
         };
 
         [Test]
@@ -183,6 +191,42 @@ namespace MonsterSupergroup.HellMaidenMigration.Tests
         }
 
         [Test]
+        public void ImportedDanteProjectilePrefabs_HaveRecoveredRuntimeReferences()
+        {
+            for (int i = 0; i < DanteProjectilePrefabPaths.Length; i++)
+            {
+                string path = DanteProjectilePrefabPaths[i];
+                GameObject root = PrefabUtility.LoadPrefabContents(path);
+                try
+                {
+                    ProjectileAttack projectile = root.GetComponent<ProjectileAttack>();
+                    Assert.That(projectile, Is.Not.Null, path);
+                    Assert.That(projectile.progressionScaler, Is.Not.Null, path);
+                    Assert.That(projectile.hitbox, Is.Not.Null, path);
+                    Assert.That(projectile.hitEffectResolver, Is.Not.Null, path);
+                    Assert.That(projectile.RotationTransform, Is.Not.Null, path);
+
+                    var serializedProjectile = new SerializedObject(projectile);
+                    SerializedProperty animancer =
+                        serializedProjectile.FindProperty("animancer");
+                    Assert.That(animancer, Is.Not.Null, path);
+                    Assert.That(animancer.objectReferenceValue, Is.Not.Null, path);
+                    SerializedProperty particleSystem =
+                        serializedProjectile.FindProperty("particleSystem");
+                    Assert.That(particleSystem, Is.Not.Null, path);
+                    Assert.That(
+                        particleSystem.objectReferenceValue,
+                        Is.Not.Null,
+                        path);
+                }
+                finally
+                {
+                    PrefabUtility.UnloadPrefabContents(root);
+                }
+            }
+        }
+
+        [Test]
         public void NetworkPlayerPrefab_OwnsOnePlayerBuildRuntime()
         {
             GameObject root = PrefabUtility.LoadPrefabContents(
@@ -192,11 +236,27 @@ namespace MonsterSupergroup.HellMaidenMigration.Tests
                 PlayerBuildRuntime[] runtimes =
                     root.GetComponentsInChildren<PlayerBuildRuntime>(true);
                 Assert.That(runtimes, Has.Length.EqualTo(1));
+                Assert.That(runtimes[0].InitialWeaponId, Is.EqualTo(2u));
+                Assert.That(root.GetComponent("PlayerHandBehaviour"), Is.Null);
+                Assert.That(root.GetComponent("PlayerLoader"), Is.Null);
             }
             finally
             {
                 PrefabUtility.UnloadPrefabContents(root);
             }
+        }
+
+        [Test]
+        public void NativeWeaponDatabase_ContainsMigratedDanteWeapon()
+        {
+            WeaponDB database = AssetDatabase.LoadAssetAtPath<WeaponDB>(
+                DanteNativeGasMigration.NativeWeaponDatabasePath);
+            WeaponData weapon = AssetDatabase.LoadAssetAtPath<WeaponData>(
+                DanteNativeGasMigration.WeaponPath);
+
+            Assert.That(database, Is.Not.Null);
+            Assert.That(database.Weapons, Does.Contain(weapon));
+            Assert.That(weapon.NativeGasDefinition, Is.Not.Null);
         }
 
         private static void AssertFloatConversion<TParameters>(

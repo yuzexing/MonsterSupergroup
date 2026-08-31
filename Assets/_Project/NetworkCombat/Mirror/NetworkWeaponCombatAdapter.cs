@@ -8,8 +8,6 @@ namespace MonsterSupergroup.NetworkCombat
     [RequireComponent(typeof(MirrorNetworkCombatBridge))]
     public sealed class NetworkWeaponCombatAdapter : NetworkBehaviour
     {
-        [SerializeField] private WeaponRuntimeBehaviour weapon;
-        [SerializeField] private PlayerHandBehaviour playerHand;
         [SerializeField] private MirrorNetworkCombatBridge bridge;
         [SerializeField] private CombatRuntimeServiceProvider serviceProvider;
 
@@ -18,16 +16,6 @@ namespace MonsterSupergroup.NetworkCombat
             if (bridge == null)
             {
                 bridge = GetComponent<MirrorNetworkCombatBridge>();
-            }
-
-            if (weapon == null)
-            {
-                weapon = GetComponentInChildren<WeaponRuntimeBehaviour>(true);
-            }
-
-            if (playerHand == null)
-            {
-                playerHand = GetComponentInChildren<PlayerHandBehaviour>(true);
             }
 
             if (serviceProvider == null)
@@ -72,30 +60,6 @@ namespace MonsterSupergroup.NetworkCombat
                 eventIds,
                 collector);
             serviceProvider.Configure(services);
-            if (playerHand != null)
-            {
-                playerHand.ConfigureCombatRuntimeServices(services);
-            }
-
-            if (weapon == null)
-            {
-                if (playerHand == null)
-                {
-                    Debug.LogError(
-                        "NetworkWeaponCombatAdapter requires a WeaponRuntimeBehaviour or PlayerHandBehaviour.",
-                        this);
-                }
-
-                return;
-            }
-
-            services.Configure(weapon);
-            weapon.Initialize(
-                randomSource: null,
-                eventIdSource: eventIds,
-                eventSink: collector,
-                triggerGuard: services.TriggerGuard,
-                timeSource: services.TimeSource);
         }
     }
 }

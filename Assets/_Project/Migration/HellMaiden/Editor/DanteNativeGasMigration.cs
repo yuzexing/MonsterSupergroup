@@ -8,8 +8,10 @@ using AstralShift.HellMaiden.Player.Attacks;
 using MonsterSupergroup.GAS;
 using MonsterSupergroup.GAS.Authoring;
 using MonsterSupergroup.Gameplay.Combat;
+using MonsterSupergroup.Gameplay.Local;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.Serialization;
 using LegacyAttackStats = AstralShift.HellMaiden.Player.Attacks.AttackStats;
 using NativeAttackStats = MonsterSupergroup.GAS.AttackStats;
 
@@ -25,6 +27,15 @@ namespace MonsterSupergroup.HellMaidenMigration.Editor
             OutputFolder + "/NativeGasWeapon_Dante_SlowProjectile.asset";
         public const string NetworkPlayerPrefabPath =
             "Assets/_Project/Content/NetworkCombat/NetworkPlayer.prefab";
+        public const string NativeWeaponDatabasePath =
+            "Assets/_Project/Content/HellMaiden/NativeGAS/NativeGasWeaponDB.asset";
+
+        private static readonly string[] DanteProjectilePrefabPaths =
+        {
+            "Assets/GameObject/PlayerAttack_Dante_Projectile.prefab",
+            "Assets/GameObject/PlayerAttack_Dante_Projectile_Fire Variant.prefab",
+            "Assets/GameObject/PlayerAttack_Dante_Projectile_Poison Variant.prefab"
+        };
 
         private static readonly EquipmentMigration[] EquipmentMigrations =
         {
@@ -59,6 +70,7 @@ namespace MonsterSupergroup.HellMaidenMigration.Editor
         {
             NormalizeLegacyManagedReferenceAssemblies();
             NormalizeAnimancerComponentReferences();
+            RepairDanteProjectilePrefabReferences();
             EnsureFolder(OutputFolder);
 
             WeaponData weapon = RequireAsset<WeaponData>(WeaponPath);
@@ -73,6 +85,7 @@ namespace MonsterSupergroup.HellMaidenMigration.Editor
 
             weapon.SetNativeGasDefinition(nativeWeapon);
             EditorUtility.SetDirty(weapon);
+            EnsureNativeWeaponDatabase(weapon);
             EnsurePlayerBuildRuntime(NetworkPlayerPrefabPath);
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
@@ -165,8 +178,87 @@ namespace MonsterSupergroup.HellMaidenMigration.Editor
             string destinationPath = OutputFolder + "/" + migration.OutputName;
             NativeGasEquipmentDefinition destination =
                 LoadOrCreate<NativeGasEquipmentDefinition>(destinationPath);
-            destination.Configure(levels);
+            if (HasSameEquipmentData(destination, levels))
+            {
+                return;
+            }
+
+            // Flush the old managed-reference table before assigning deterministic
+            // IDs to replacement parameter objects. Unity otherwise keeps the old
+            // objects registered until the host asset is serialized.
+            destination.Configure(Array.Empty<NativeGasEquipmentLevel>());
             EditorUtility.SetDirty(destination);
+            AssetDatabase.SaveAssetIfDirty(destination);
+
+            destination.Configure(levels);
+            AssignDeterministicManagedReferenceIds(destination, levels);
+            EditorUtility.SetDirty(destination);
+        }
+
+        private static bool HasSameEquipmentData(
+            NativeGasEquipmentDefinition destination,
+            IReadOnlyList<NativeGasEquipmentLevel> expectedLevels)
+        {
+            if (destination.LevelCount != expectedLevels.Count)
+            {
+                return false;
+            }
+
+            for (int levelIndex = 0; levelIndex < expectedLevels.Count; levelIndex++)
+            {
+                IReadOnlyList<MonsterSupergroup.GAS.Authoring.EquipmentDataModifier>
+                    actual = destination.GetModifiers(levelIndex);
+                IReadOnlyList<MonsterSupergroup.GAS.Authoring.EquipmentDataModifier>
+                    expected = expectedLevels[levelIndex].Modifiers;
+                if (actual.Count != expected.Count)
+                {
+                    return false;
+                }
+
+                for (int modifierIndex = 0; modifierIndex < expected.Count; modifierIndex++)
+                {
+                    MonsterSupergroup.GAS.Authoring.EquipmentDataModifier actualModifier =
+                        actual[modifierIndex];
+                    MonsterSupergroup.GAS.Authoring.EquipmentDataModifier expectedModifier =
+                        expected[modifierIndex];
+                    if (actualModifier.ModifierIdValue != expectedModifier.ModifierIdValue ||
+                        actualModifier.Parameters == null ||
+                        expectedModifier.Parameters == null ||
+                        actualModifier.Parameters.GetType() !=
+                            expectedModifier.Parameters.GetType() ||
+                        JsonUtility.ToJson(actualModifier.Parameters) !=
+                            JsonUtility.ToJson(expectedModifier.Parameters))
+                    {
+                        return false;
+                    }
+                }
+            }
+
+            return true;
+        }
+
+        private static void AssignDeterministicManagedReferenceIds(
+            NativeGasEquipmentDefinition destination,
+            IReadOnlyList<NativeGasEquipmentLevel> levels)
+        {
+            for (int levelIndex = 0; levelIndex < levels.Count; levelIndex++)
+            {
+                IReadOnlyList<MonsterSupergroup.GAS.Authoring.EquipmentDataModifier>
+                    modifiers = levels[levelIndex].Modifiers;
+                for (int modifierIndex = 0; modifierIndex < modifiers.Count; modifierIndex++)
+                {
+                    long referenceId = (levelIndex + 1L) * 1000L + modifierIndex + 1L;
+                    if (!ManagedReferenceUtility.SetManagedReferenceIdForObject(
+                        destination,
+                        modifiers[modifierIndex].Parameters,
+                        referenceId))
+                    {
+                        throw new InvalidOperationException(
+                            $"Could not assign deterministic managed-reference ID " +
+                            $"{referenceId} in '{destination.name}'.");
+                    }
+                }
+            }
         }
 
         private static void NormalizeLegacyManagedReferenceAssemblies()
@@ -207,18 +299,13 @@ namespace MonsterSupergroup.HellMaidenMigration.Editor
                 "{fileID: -536417829, guid: a764a8f1aa53ec5f484d2a941db13b66, type: 3}";
             const string officialPackageReference =
                 "{fileID: 11500000, guid: 0ad50f81b1d25c441943c37a89ba23f6, type: 3}";
-            string[] prefabPaths =
-            {
-                "Assets/GameObject/PlayerAttack_Dante_Projectile.prefab",
-                "Assets/GameObject/PlayerAttack_Dante_Projectile_Fire Variant.prefab",
-                "Assets/GameObject/PlayerAttack_Dante_Projectile_Poison Variant.prefab"
-            };
             string projectRoot = Directory.GetParent(Application.dataPath)?.FullName
                 ?? throw new InvalidOperationException("Could not resolve the Unity project root.");
 
-            for (int i = 0; i < prefabPaths.Length; i++)
+            for (int i = 0; i < DanteProjectilePrefabPaths.Length; i++)
             {
-                string fullPath = Path.GetFullPath(Path.Combine(projectRoot, prefabPaths[i]));
+                string prefabPath = DanteProjectilePrefabPaths[i];
+                string fullPath = Path.GetFullPath(Path.Combine(projectRoot, prefabPath));
                 if (!File.Exists(fullPath))
                 {
                     throw new FileNotFoundException(
@@ -232,11 +319,105 @@ namespace MonsterSupergroup.HellMaidenMigration.Editor
                 {
                     File.WriteAllText(fullPath, normalized);
                     AssetDatabase.ImportAsset(
-                        prefabPaths[i],
+                        prefabPath,
                         ImportAssetOptions.ForceSynchronousImport |
                         ImportAssetOptions.ForceUpdate);
                 }
             }
+        }
+
+        private static void RepairDanteProjectilePrefabReferences()
+        {
+            for (int i = 0; i < DanteProjectilePrefabPaths.Length; i++)
+            {
+                string prefabPath = DanteProjectilePrefabPaths[i];
+                if (AssetDatabase.LoadAssetAtPath<GameObject>(prefabPath) == null)
+                {
+                    throw new InvalidOperationException(
+                        $"Required Dante presentation prefab is missing: {prefabPath}");
+                }
+
+                GameObject root = PrefabUtility.LoadPrefabContents(prefabPath);
+                try
+                {
+                    ProjectileAttack projectile = root.GetComponent<ProjectileAttack>()
+                        ?? throw new InvalidOperationException(
+                            $"'{prefabPath}' contains no ProjectileAttack component.");
+                    AttackProgressionScaler progressionScaler =
+                        root.GetComponent<AttackProgressionScaler>()
+                        ?? throw new InvalidOperationException(
+                            $"'{prefabPath}' contains no AttackProgressionScaler component.");
+                    PlayerAttackHitBox hitbox =
+                        root.GetComponentInChildren<PlayerAttackHitBox>(true)
+                        ?? throw new InvalidOperationException(
+                            $"'{prefabPath}' contains no PlayerAttackHitBox component.");
+                    SpawnableHitEffectResolver hitEffectResolver =
+                        root.GetComponentInChildren<SpawnableHitEffectResolver>(true)
+                        ?? throw new InvalidOperationException(
+                            $"'{prefabPath}' contains no SpawnableHitEffectResolver component.");
+                    Component animancer = root.GetComponent("AnimancerComponent")
+                        ?? throw new InvalidOperationException(
+                            $"'{prefabPath}' contains no AnimancerComponent.");
+                    ParticleSystem particleSystem = root.GetComponent<ParticleSystem>()
+                        ?? throw new InvalidOperationException(
+                            $"'{prefabPath}' contains no root ParticleSystem component.");
+                    Transform rotationPivot = root.transform.Find("Root")
+                        ?? throw new InvalidOperationException(
+                            $"'{prefabPath}' contains no 'Root' visual pivot.");
+
+                    var serializedProjectile = new SerializedObject(projectile);
+                    SetRequiredReference(
+                        serializedProjectile,
+                        "progressionScaler",
+                        progressionScaler,
+                        prefabPath);
+                    SetRequiredReference(
+                        serializedProjectile,
+                        "hitbox",
+                        hitbox,
+                        prefabPath);
+                    SetRequiredReference(
+                        serializedProjectile,
+                        "hitEffectResolver",
+                        hitEffectResolver,
+                        prefabPath);
+                    SetRequiredReference(
+                        serializedProjectile,
+                        "rotationTransform",
+                        rotationPivot,
+                        prefabPath);
+                    SetRequiredReference(
+                        serializedProjectile,
+                        "animancer",
+                        animancer,
+                        prefabPath);
+                    SetRequiredReference(
+                        serializedProjectile,
+                        "particleSystem",
+                        particleSystem,
+                        prefabPath);
+                    serializedProjectile.ApplyModifiedPropertiesWithoutUndo();
+
+                    PrefabUtility.SaveAsPrefabAsset(root, prefabPath);
+                }
+                finally
+                {
+                    PrefabUtility.UnloadPrefabContents(root);
+                }
+            }
+        }
+
+        private static void SetRequiredReference(
+            SerializedObject target,
+            string propertyName,
+            UnityEngine.Object value,
+            string assetPath)
+        {
+            SerializedProperty property = target.FindProperty(propertyName)
+                ?? throw new InvalidOperationException(
+                    $"'{assetPath}' has no serialized ProjectileAttack property " +
+                    $"'{propertyName}'.");
+            property.objectReferenceValue = value;
         }
 
         private static void EnsurePlayerBuildRuntime(string prefabPath)
@@ -253,16 +434,71 @@ namespace MonsterSupergroup.HellMaidenMigration.Editor
                 PlayerMovement player = root.GetComponentInChildren<PlayerMovement>(true)
                     ?? throw new InvalidOperationException(
                         $"'{prefabPath}' contains no PlayerMovement.");
-                if (player.GetComponent<PlayerBuildRuntime>() == null)
+                PlayerLoader loader = player.GetComponent<PlayerLoader>();
+                if (loader != null)
                 {
-                    player.gameObject.AddComponent<PlayerBuildRuntime>();
-                    PrefabUtility.SaveAsPrefabAsset(root, prefabPath);
+                    UnityEngine.Object.DestroyImmediate(loader);
                 }
+
+                Component hand = player.GetComponent("PlayerHandBehaviour");
+                if (hand != null)
+                {
+                    UnityEngine.Object.DestroyImmediate(hand);
+                }
+
+                PlayerBuildRuntime build = player.GetComponent<PlayerBuildRuntime>();
+                if (build == null)
+                {
+                    build = player.gameObject.AddComponent<PlayerBuildRuntime>();
+                }
+
+                build.ConfigureInitialWeapon(2u);
+                PrefabUtility.SaveAsPrefabAsset(root, prefabPath);
             }
             finally
             {
                 PrefabUtility.UnloadPrefabContents(root);
             }
+        }
+
+        private static void EnsureNativeWeaponDatabase(WeaponData weapon)
+        {
+            WeaponDB database = LoadOrCreate<WeaponDB>(NativeWeaponDatabasePath);
+            var weapons = new List<WeaponData>();
+            WeaponData[] existing = database.Weapons;
+            bool replaced = false;
+            if (existing != null)
+            {
+                for (int i = 0; i < existing.Length; i++)
+                {
+                    WeaponData entry = existing[i];
+                    if (entry == null)
+                    {
+                        continue;
+                    }
+
+                    if (entry.ID == weapon.ID)
+                    {
+                        if (!replaced)
+                        {
+                            weapons.Add(weapon);
+                            replaced = true;
+                        }
+
+                        continue;
+                    }
+
+                    weapons.Add(entry);
+                }
+            }
+
+            if (!replaced)
+            {
+                weapons.Add(weapon);
+            }
+
+            database.Configure(weapons.ToArray());
+            EditorUtility.SetDirty(database);
         }
 
         private static T RequireAsset<T>(string path)

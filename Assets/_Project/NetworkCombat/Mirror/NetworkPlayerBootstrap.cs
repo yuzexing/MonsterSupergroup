@@ -1,8 +1,10 @@
 using AstralShift.HellMaiden;
+using AstralShift.HellMaiden.Combat.Hand.Data;
 using AstralShift.HellMaiden.Items;
 using AstralShift.HellMaiden.Player;
-using MonsterSupergroup.Gameplay.Local;
 using Mirror;
+using MonsterSupergroup.Gameplay.Combat;
+using MonsterSupergroup.Gameplay.Local;
 using UnityEngine;
 
 namespace MonsterSupergroup.NetworkCombat
@@ -11,16 +13,17 @@ namespace MonsterSupergroup.NetworkCombat
     [RequireComponent(typeof(NetworkIdentity))]
     public sealed class NetworkPlayerBootstrap : NetworkBehaviour
     {
-        [SerializeField] private PlayerLoader playerLoader;
+        [SerializeField] private PlayerBuildRuntime playerBuildRuntime;
+        [SerializeField] private RuntimeDB runtimeDatabase;
         [SerializeField] private LocalPlayerMovement movement;
         [SerializeField] private PlayerMovement playerMovement;
         [SerializeField] private PlayerCombatantBinding combatantBinding;
 
         private void Awake()
         {
-            if (playerLoader == null)
+            if (playerBuildRuntime == null)
             {
-                playerLoader = GetComponent<PlayerLoader>();
+                playerBuildRuntime = GetComponent<PlayerBuildRuntime>();
             }
 
             if (movement == null)
@@ -81,20 +84,39 @@ namespace MonsterSupergroup.NetworkCombat
             }
 
             combatantBinding?.SetLocalMutationAuthority(true);
+            combatantBinding?.Combatant?.ResetCombatant();
             EnsureLocalPlayerRegistration();
 
-            if (playerLoader == null)
+            if (playerBuildRuntime == null)
             {
-                Debug.LogError("NetworkPlayerBootstrap requires PlayerLoader.", this);
+                Debug.LogError(
+                    "NetworkPlayerBootstrap requires PlayerBuildRuntime.",
+                    this);
                 return;
             }
 
-            playerLoader.Load(transform.position);
+            RuntimeDB database = ResolveRuntimeDatabase();
+            if (database == null)
+            {
+                Debug.LogError(
+                    "NetworkPlayerBootstrap could not find the shared RuntimeDB.",
+                    this);
+                return;
+            }
+
+            try
+            {
+                playerBuildRuntime.StartInitialBuild(database);
+            }
+            catch (System.Exception exception)
+            {
+                Debug.LogException(exception, this);
+            }
         }
 
         public override void OnStopAuthority()
         {
-            playerLoader?.Unload();
+            playerBuildRuntime?.ClearBuild();
             if (LootManager.Instance != null && playerMovement != null)
             {
                 LootManager.Instance.UnRegisterLootCollector(playerMovement);
@@ -142,6 +164,24 @@ namespace MonsterSupergroup.NetworkCombat
             }
 
             LootManager.Instance?.RegisterLootCollector(playerMovement);
+        }
+
+        private RuntimeDB ResolveRuntimeDatabase()
+        {
+            if (runtimeDatabase != null)
+            {
+                return runtimeDatabase;
+            }
+
+            if (GameDirector.Instance != null &&
+                GameDirector.Instance.runtimeDB != null)
+            {
+                runtimeDatabase = GameDirector.Instance.runtimeDB;
+                return runtimeDatabase;
+            }
+
+            runtimeDatabase = FindFirstObjectByType<RuntimeDB>();
+            return runtimeDatabase;
         }
     }
 }

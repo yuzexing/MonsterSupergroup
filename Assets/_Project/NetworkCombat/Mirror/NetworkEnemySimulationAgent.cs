@@ -59,6 +59,10 @@ namespace MonsterSupergroup.NetworkCombat
         public bool ProductEnemyInitialized =>
             enemyController == null || productEnemyInitialized;
 
+        /// <summary>
+        /// Controls how much of the product Enemy simulation runs on the
+        /// SimulationOwner. It never grants or removes local hit detection.
+        /// </summary>
         public bool ProductMovementOnly => productMovementOnly;
 
         public bool HasLatestAttackPresentation => hasLatestAttackPresentation;
@@ -112,13 +116,10 @@ namespace MonsterSupergroup.NetworkCombat
                     enemyController.attackScript.enabled = false;
                 }
             }
-            if (productMovementOnly && enemyController != null)
-            {
-                for (int i = 0; i < localDamageInteractions.Length; i++)
-                {
-                    localDamageInteractions[i].gameObject.SetActive(false);
-                }
-            }
+            // Local contact geometry must not become active until its product
+            // Stats and replicated simulation role are initialized. This is
+            // independent of whether the owner runs movement-only or full AI.
+            SetContinuousContactDamageInteractionsActive(false);
         }
 
         public override void OnStartServer()
@@ -148,7 +149,7 @@ namespace MonsterSupergroup.NetworkCombat
             NetworkEnemySimulationWorld.Instance?.RegisterClientEnemy(this);
             NetworkEnemySimulationWorld.Instance?
                 .TryApplyPendingAttackPresentation(this);
-            RefreshLocalDamageInteractions();
+            RefreshContinuousContactDamageInteractions();
         }
 
         public void ConfigureProductSimulation(bool movementOnly)
@@ -187,7 +188,7 @@ namespace MonsterSupergroup.NetworkCombat
 
         public override void OnStopClient()
         {
-            SetLocalDamageInteractionsActive(false);
+            SetContinuousContactDamageInteractionsActive(false);
             SetAttackScriptExecutionActive(false);
             pendingAttackPresentationEdges.Clear();
             NetworkEnemySimulationWorld.Instance?.UnregisterClientEnemy(this);
@@ -438,6 +439,8 @@ namespace MonsterSupergroup.NetworkCombat
             {
                 QueueCurrentAttackPresentation();
             }
+
+            RefreshContinuousContactDamageInteractions();
         }
 
         private EnemySimulationRole ResolveRole(
@@ -543,11 +546,11 @@ namespace MonsterSupergroup.NetworkCombat
                     NetworkEnemySimulationWorld.Instance?
                         .TryApplyPendingAttackPresentation(this);
                 }
-                RefreshLocalDamageInteractions();
+                RefreshContinuousContactDamageInteractions();
                 return;
             }
 
-            SetLocalDamageInteractionsActive(false);
+            SetContinuousContactDamageInteractionsActive(false);
             SetAttackScriptExecutionActive(false);
             pendingAttackPresentationEdges.Clear();
             hasLatestAttackPresentation = false;
@@ -701,17 +704,20 @@ namespace MonsterSupergroup.NetworkCombat
             }
         }
 
-        private void RefreshLocalDamageInteractions()
+        private void RefreshContinuousContactDamageInteractions()
         {
-            bool continuousContactDamage = productMovementOnly &&
-                productEnemyInitialized && enemyController != null &&
+            bool continuousContactDamage = productEnemyInitialized &&
+                enemyController != null &&
                 enemyController.alwaysAttacking &&
                 !enemyController.hasAttackAnimation;
-            SetLocalDamageInteractionsActive(
-                NetworkClient.active && IsCanonicalAlive && continuousContactDamage);
+            bool hasActiveSimulationAssignment = authority != null &&
+                authority.Role != EnemySimulationRole.Frozen;
+            SetContinuousContactDamageInteractionsActive(
+                NetworkClient.active && IsCanonicalAlive &&
+                hasActiveSimulationAssignment && continuousContactDamage);
         }
 
-        private void SetLocalDamageInteractionsActive(bool active)
+        private void SetContinuousContactDamageInteractionsActive(bool active)
         {
             for (int i = 0; i < localDamageInteractions.Length; i++)
             {
@@ -787,7 +793,7 @@ namespace MonsterSupergroup.NetworkCombat
             {
                 ApplyReplicaAttackPresentation(latestAttackPresentation);
             }
-            RefreshLocalDamageInteractions();
+            RefreshContinuousContactDamageInteractions();
         }
     }
 }

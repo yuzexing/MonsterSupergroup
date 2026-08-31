@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using AstralShift.HellMaiden.AI;
 using AstralShift.HellMaiden.AI.Enemy;
 using AstralShift.HellMaiden.Interactions;
+using AstralShift.QTI.Triggers;
 using NUnit.Framework;
 using UnityEditor;
 using UnityEngine;
@@ -505,6 +506,41 @@ namespace MonsterSupergroup.NetworkCombat.Tests
         }
 
         [Test]
+        public void ProductNetworkPrefab_UsesMovementOnlyWithLocalContactDamage()
+        {
+            const string path =
+                "Assets/_Project/Content/NetworkCombat/NetworkEnemyBase.prefab";
+            GameObject prefab = AssetDatabase.LoadAssetAtPath<GameObject>(path);
+
+            Assert.That(prefab, Is.Not.Null);
+            EnemyController controller = prefab.GetComponent<EnemyController>();
+            NetworkEnemySimulationAgent agent =
+                prefab.GetComponent<NetworkEnemySimulationAgent>();
+            PlayerDamageInteraction contactDamage =
+                prefab.GetComponentInChildren<PlayerDamageInteraction>(true);
+            InteractionTrigger contactTrigger = contactDamage != null
+                ? contactDamage.GetComponent<InteractionTrigger>()
+                : null;
+            Collider2D contactCollider = contactDamage != null
+                ? contactDamage.GetComponent<Collider2D>()
+                : null;
+
+            Assert.That(controller, Is.Not.Null);
+            Assert.That(agent, Is.Not.Null);
+            Assert.That(agent.ProductMovementOnly, Is.True,
+                "NetworkEnemyBase must not run the unsynchronized product attack FSM.");
+            Assert.That(controller.alwaysAttacking, Is.True);
+            Assert.That(controller.hasAttackAnimation, Is.False);
+            Assert.That(contactDamage, Is.Not.Null);
+            Assert.That(contactTrigger, Is.Not.Null);
+            Assert.That(contactTrigger.interaction, Is.SameAs(contactDamage));
+            Assert.That(contactCollider, Is.Not.Null);
+            Assert.That(contactCollider.isTrigger, Is.True);
+            Assert.That(contactDamage.gameObject.layer,
+                Is.EqualTo(LayerMask.NameToLayer("EnemyAttack")));
+        }
+
+        [Test]
         public void SkeletonNetworkPrefab_RestoresMeleeAndAnimationReferences()
         {
             const string path =
@@ -527,6 +563,12 @@ namespace MonsterSupergroup.NetworkCombat.Tests
             Assert.That(melee.attackPrefab.damageInteraction,
                 Is.TypeOf<PlayerDamageInteraction>());
             Assert.That(melee.attackPrefab.attackWarning, Is.Not.Null);
+            var damageTrigger = melee.attackPrefab.damageInteraction.GetComponent<
+                AstralShift.QTI.Triggers.Physics2D.StepOn2DTrigger>();
+            Assert.That(damageTrigger, Is.Not.Null);
+            Assert.That(damageTrigger.layerMask.value,
+                Is.EqualTo(1 << LayerMask.NameToLayer("PlayerHitbox")),
+                "Replica melee collision filtering must target the local PlayerHitbox layer.");
             Assert.That(agent, Is.Not.Null);
             Assert.That(agent.ProductMovementOnly, Is.False);
             Assert.That(replica, Is.Not.Null);

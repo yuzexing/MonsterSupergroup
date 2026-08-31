@@ -82,7 +82,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -1937444793
-  m_SortingLayer: 0
+  m_SortingLayer: 4
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: b52a908cd3be74b47b4dd4670b2a98ae, type: 2}
@@ -173,7 +173,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -1937444793
-  m_SortingLayer: 0
+  m_SortingLayer: 4
   m_SortingOrder: 2
   m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: cb2ee61fec722ca4981828754cb11e93, type: 2}
@@ -359,7 +359,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -1937444793
-  m_SortingLayer: 0
+  m_SortingLayer: 4
   m_SortingOrder: 1
   m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: b52a908cd3be74b47b4dd4670b2a98ae, type: 2}
@@ -582,7 +582,7 @@ MonoBehaviour:
   interaction: {fileID: 114002669891404536}
   layerMask:
     serializedVersion: 2
-    m_Bits: 1
+    m_Bits: 65536
   useTag: 0
   targetTag: Untagged
 --- !u!114 &114002669891404536
@@ -599,7 +599,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   onEndInteractions: []
   directDamage: 0
-  damage: 1
+  damage: 100
   stunTime: 0
   enemyStats:
     baseStats:

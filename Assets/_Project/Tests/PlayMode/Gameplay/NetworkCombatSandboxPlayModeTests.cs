@@ -239,6 +239,7 @@ namespace MonsterSupergroup.Gameplay.Tests
 
             try
             {
+                ExpectMissingSandboxControllerManager();
                 manager.StartHost();
                 float playerDeadline = Time.realtimeSinceStartup + 5f;
                 while (NetworkClient.localPlayer == null &&
@@ -402,6 +403,8 @@ namespace MonsterSupergroup.Gameplay.Tests
 
                 Assert.That(agent.Authority.Role, Is.EqualTo(EnemySimulationRole.Replica));
                 Assert.That(agent.Authority.RunsNavigation, Is.False);
+                Assert.That(contactDamage.gameObject.activeInHierarchy, Is.True,
+                    "A Replica must retain local contact geometry for its local Player.");
                 Assert.That(
                     spawnedEnemy.GetComponent<Rigidbody2D>().bodyType,
                     Is.EqualTo(RigidbodyType2D.Kinematic));
@@ -413,7 +416,15 @@ namespace MonsterSupergroup.Gameplay.Tests
                     Is.LessThan(0.0001f),
                     "The product EnemyController must stop writing Transform as a Replica.");
 
-                Vector2 relayedPosition = replicaWaitingPosition + Vector2.right * 3f;
+                int healthBeforeReplicaContact = ownerBinding.CurrentHealth;
+                int minimumReplicaContactHealth = healthBeforeReplicaContact;
+                void CaptureReplicaContactHealth(int current, int maximum)
+                {
+                    minimumReplicaContactHealth =
+                        Mathf.Min(minimumReplicaContactHealth, current);
+                }
+                ownerBinding.Combatant.HealthChanged += CaptureReplicaContactHealth;
+                Vector2 replicaContactPosition = ownerHitbox.transform.position;
                 simulationWorld.SubmitClientSnapshots(
                     remoteEndpoint,
                     new EnemySimulationSnapshotBatch
@@ -427,12 +438,49 @@ namespace MonsterSupergroup.Gameplay.Tests
                                 AssignmentEpoch = replicaAssignment.Epoch,
                                 Sequence = 1u,
                                 SampleNetworkTime = NetworkTime.time,
+                                Position = replicaContactPosition,
+                                Facing = Vector2.right,
+                                Flags = EnemySimulationSnapshotFlags.Discontinuity
+                            }
+                        }
+                    });
+                float replicaDamageDeadline = Time.realtimeSinceStartup + 2f;
+                while (ownerBinding.CurrentHealth == healthBeforeReplicaContact &&
+                       Time.realtimeSinceStartup < replicaDamageDeadline)
+                {
+                    yield return null;
+                }
+
+                Vector2 relayedPosition = replicaWaitingPosition + Vector2.right * 3f;
+                simulationWorld.SubmitClientSnapshots(
+                    remoteEndpoint,
+                    new EnemySimulationSnapshotBatch
+                    {
+                        BatchSequence = 2u,
+                        Snapshots = new[]
+                        {
+                            new EnemySimulationSnapshot
+                            {
+                                EnemyEntityId = agent.netId,
+                                AssignmentEpoch = replicaAssignment.Epoch,
+                                Sequence = 2u,
+                                SampleNetworkTime = NetworkTime.time,
                                 Position = relayedPosition,
                                 Facing = Vector2.right,
                                 Flags = EnemySimulationSnapshotFlags.Discontinuity
                             }
                         }
                     });
+                enemyBody.position = relayedPosition;
+                spawnedEnemy.transform.position = relayedPosition;
+                Physics2D.SyncTransforms();
+                ownerBinding.Combatant.HealthChanged -= CaptureReplicaContactHealth;
+                int expectedReplicaContactHealth = healthBeforeReplicaContact - 5;
+                Assert.That(minimumReplicaContactHealth,
+                    Is.EqualTo(expectedReplicaContactHealth),
+                    "A non-authoritative Enemy replica must judge contact against " +
+                    "the local owning Player.");
+
                 float relayDeadline = Time.realtimeSinceStartup + 1f;
                 while (((Vector2)spawnedEnemy.transform.position - relayedPosition)
                            .sqrMagnitude >= 0.0001f &&
@@ -444,6 +492,27 @@ namespace MonsterSupergroup.Gameplay.Tests
                     ((Vector2)spawnedEnemy.transform.position - relayedPosition)
                         .sqrMagnitude,
                     Is.LessThan(0.0001f));
+
+                float replicaReportDeadline = Time.realtimeSinceStartup + 2f;
+                while ((!combatWorld.Gateway.Ledger.TryGetState(
+                            NetworkClient.localPlayer.netId,
+                            out ownerState) ||
+                        ownerState.Health != expectedReplicaContactHealth) &&
+                       Time.realtimeSinceStartup < replicaReportDeadline)
+                {
+                    yield return null;
+                }
+                Assert.That(ownerState.Health,
+                    Is.EqualTo(expectedReplicaContactHealth),
+                    "Replica-local contact damage must converge through PlayerHealthReport.");
+
+                EnemySimulationAssignment frozenAssignment =
+                    simulationWorld.Registry.Freeze(agent.netId);
+                agent.SetServerAssignment(frozenAssignment);
+                yield return null;
+                Assert.That(agent.Authority.Role, Is.EqualTo(EnemySimulationRole.Frozen));
+                Assert.That(contactDamage.gameObject.activeInHierarchy, Is.False,
+                    "Frozen Enemies must not retain active local damage geometry.");
             }
             finally
             {
@@ -489,6 +558,7 @@ namespace MonsterSupergroup.Gameplay.Tests
 
             try
             {
+                ExpectMissingSandboxControllerManager();
                 manager.StartHost();
                 float playerDeadline = Time.realtimeSinceStartup + 6f;
                 while (NetworkClient.localPlayer == null &&
@@ -626,6 +696,25 @@ namespace MonsterSupergroup.Gameplay.Tests
                         BatchSequence = 1u,
                         Edges = new[] { warning, active }
                     });
+
+                yield return null;
+                Assert.That(replica.DamageWindowActive, Is.True);
+                PlayerDamageInteraction replicaDamage = spawnedEnemy
+                    .GetComponentsInChildren<PlayerDamageInteraction>(true)
+                    .FirstOrDefault(interaction =>
+                        interaction.gameObject.activeInHierarchy);
+                Collider2D replicaDamageCollider = replicaDamage != null
+                    ? replicaDamage.GetComponent<Collider2D>()
+                    : null;
+                Collider2D localPlayerCollider = localHitbox.GetComponent<Collider2D>();
+                Assert.That(replicaDamageCollider, Is.Not.Null);
+                Assert.That(localPlayerCollider, Is.Not.Null);
+                Vector2 alignmentDelta =
+                    (Vector2)localPlayerCollider.bounds.center -
+                    (Vector2)replicaDamageCollider.bounds.center;
+                enemyBody.position += alignmentDelta;
+                spawnedEnemy.transform.position = enemyBody.position;
+                Physics2D.SyncTransforms();
 
                 float damageDeadline = Time.realtimeSinceStartup + 2f;
                 while (minimumReplicaHealth == healthBeforeReplicaHit &&
@@ -1481,6 +1570,20 @@ namespace MonsterSupergroup.Gameplay.Tests
             LogAssert.Expect(
                 LogType.Exception,
                 new Regex(@"EventNotFoundException: \[FMOD\] Event not found:.*"));
+        }
+
+        private static void ExpectMissingSandboxControllerManager()
+        {
+            if (AstralShift.Managers.ControllerManager.Instance != null &&
+                AstralShift.Managers.ControllerManager.Instance.Stack != null)
+            {
+                return;
+            }
+
+            LogAssert.Expect(
+                LogType.Error,
+                "NetworkPlayerBootstrap cannot activate PlayerController_HMD " +
+                "before ControllerManager is initialized.");
         }
     }
 }

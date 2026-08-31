@@ -52,6 +52,7 @@ namespace MonsterSupergroup.NetworkCombat
         private const int ValidationEnemyMinimumHealth = 1000;
 
         [SerializeField] private BootGameplayNetworkManager networkManager;
+        [SerializeField] private Transport validationTransport;
         [SerializeField, Min(0f)] private float minimumConnectedSeconds = 5f;
         [SerializeField, Min(0f)] private float quitGraceSeconds = 2f;
 
@@ -88,13 +89,49 @@ namespace MonsterSupergroup.NetworkCombat
         public BootGameplayNetworkManager ConfiguredNetworkManager =>
             networkManager;
 
+        public Transport ConfiguredValidationTransport => validationTransport;
+
         public void Configure(BootGameplayNetworkManager manager)
+        {
+            Transport fallback = manager != null &&
+                manager.transport is PortTransport
+                    ? manager.transport
+                    : FindPortTransport(manager);
+            Configure(manager, fallback);
+        }
+
+        public void Configure(
+            BootGameplayNetworkManager manager,
+            Transport fallbackTransport)
         {
             networkManager = manager != null
                 ? manager
                 : throw new ArgumentNullException(nameof(manager));
+            validationTransport = fallbackTransport != null
+                ? fallbackTransport
+                : throw new ArgumentNullException(nameof(fallbackTransport));
             minimumConnectedSeconds = 5f;
             quitGraceSeconds = 2f;
+        }
+
+        private static Transport FindPortTransport(
+            BootGameplayNetworkManager manager)
+        {
+            if (manager == null)
+            {
+                return null;
+            }
+
+            Transport[] transports = manager.GetComponents<Transport>();
+            for (int i = 0; i < transports.Length; i++)
+            {
+                if (transports[i] is PortTransport)
+                {
+                    return transports[i];
+                }
+            }
+
+            return null;
         }
 
         private IEnumerator Start()
@@ -116,13 +153,16 @@ namespace MonsterSupergroup.NetworkCombat
                 Finish(false, "Boot validation NetworkManager is missing.");
                 yield break;
             }
-            if (!(networkManager.transport is PortTransport portTransport))
+            if (!(validationTransport is PortTransport portTransport))
             {
-                Finish(false, "Configured Mirror transport does not expose a port.");
+                Finish(false, "Configured validation transport does not expose a port.");
                 yield break;
             }
 
             Application.runInBackground = true;
+            validationTransport.enabled = true;
+            networkManager.transport = validationTransport;
+            Transport.active = validationTransport;
             networkManager.networkAddress = options.Address;
             portTransport.Port = options.Port;
             validationStartedAt = Time.realtimeSinceStartup;

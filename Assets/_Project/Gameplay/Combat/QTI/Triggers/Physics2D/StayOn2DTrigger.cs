@@ -16,12 +16,6 @@ namespace AstralShift.QTI.Triggers.Physics2D
 
 		private bool _canInteract = true;
 
-		
-		private void OnTriggerEnter2D(Collider2D other)
-		{
-			Debug.Log($"ENTER: {name} <- {other.name}", this);
-		}
-
 		private void OnTriggerStay2D(Collider2D otherCollider)
 		{
 			if (_elapsedTime < cooldownTimer)

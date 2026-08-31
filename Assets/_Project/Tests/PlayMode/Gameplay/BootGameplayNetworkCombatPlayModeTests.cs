@@ -40,6 +40,26 @@ namespace MonsterSupergroup.Gameplay.Tests
             Assert.That(NetworkCombatWorld.Instance, Is.Not.Null,
                 "The canonical World must exist in Boot before Player spawn.");
 
+            SteamLobbyService lobbyService =
+                manager.GetComponent<SteamLobbyService>();
+            Assert.That(lobbyService, Is.Not.Null);
+            Assert.That(lobbyService.IsValidationBypass, Is.True);
+            Assert.That(lobbyService.IsSteamInitialized, Is.False);
+            Assert.That(lobbyService.State, Is.EqualTo(SteamLobbyState.Disabled));
+            Assert.That(manager.transport.enabled, Is.False,
+                "The default Fizzy transport stays disabled in test runs.");
+
+            BootGameplayProcessValidationBootstrap validationBootstrap =
+                manager.GetComponent<BootGameplayProcessValidationBootstrap>();
+            Assert.That(validationBootstrap, Is.Not.Null);
+            Transport validationTransport =
+                validationBootstrap.ConfiguredValidationTransport;
+            Assert.That(validationTransport, Is.Not.Null,
+                "Boot must retain the KCP/Latency validation fallback.");
+            Assert.That(validationTransport, Is.InstanceOf<PortTransport>());
+            validationTransport.enabled = true;
+            manager.transport = validationTransport;
+            Transport.active = validationTransport;
             manager.StartHost();
             // The recovered Dante projectile intentionally retains its original
             // FMOD event GUID, while that source bank is not present in this

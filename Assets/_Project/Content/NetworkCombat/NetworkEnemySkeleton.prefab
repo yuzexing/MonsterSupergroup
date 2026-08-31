@@ -162,7 +162,7 @@ MonoBehaviour:
   stats:
     baseStats:
       hp: 2000
-      damage: 5
+      damage: 10
       xp: 6
       speed: 6
       knockbackMultiplier: 1
@@ -713,7 +713,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -2050434577
-  m_SortingLayer: 0
+  m_SortingLayer: 5
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: 2cd71a63d455f784b9eac5a8577ed68b, type: 2}
@@ -1045,7 +1045,7 @@ SortingGroup:
   m_GameObject: {fileID: 3095378689082228203}
   m_Enabled: 1
   m_SortingLayerID: -2050434577
-  m_SortingLayer: 0
+  m_SortingLayer: 5
   m_SortingOrder: 0
   m_SortAtRoot: 0
   m_Sort3DAs2D: 0
@@ -1512,7 +1512,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 842383085
-  m_SortingLayer: 0
+  m_SortingLayer: 3
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: 74f8b6844092a0c45b05f3c6962d76e1, type: 2}
@@ -1561,7 +1561,7 @@ SortingGroup:
   m_GameObject: {fileID: 6075494382138773407}
   m_Enabled: 1
   m_SortingLayerID: 842383085
-  m_SortingLayer: 0
+  m_SortingLayer: 3
   m_SortingOrder: 0
   m_SortAtRoot: 1
   m_Sort3DAs2D: 0

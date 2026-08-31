@@ -7,6 +7,7 @@ using AstralShift.HellMaiden.Combat.Hand.Data;
 using AstralShift.HellMaiden.Player;
 using AstralShift.QTI.Triggers;
 using Mirror;
+using Mirror.FizzySteam;
 using MonsterSupergroup.Gameplay.Combat;
 using MonsterSupergroup.Gameplay.Local;
 using MonsterSupergroup.GAS;
@@ -465,6 +466,12 @@ namespace MonsterSupergroup.NetworkCombat.Tests
                         .SelectMany(root => root.GetComponentsInChildren<
                             BootGameplayProcessValidationBootstrap>(true))
                         .Single();
+                FizzySteamworks fizzy = manager.GetComponent<FizzySteamworks>();
+                LatencySimulation validationTransport =
+                    manager.GetComponent<LatencySimulation>();
+                SteamLobbyService lobbyService =
+                    manager.GetComponent<SteamLobbyService>();
+                SteamLobbyHud lobbyHud = manager.GetComponent<SteamLobbyHud>();
                 NetworkCombatWorld[] bootWorlds = boot.GetRootGameObjects()
                     .SelectMany(root =>
                         root.GetComponentsInChildren<NetworkCombatWorld>(true))
@@ -481,6 +488,20 @@ namespace MonsterSupergroup.NetworkCombat.Tests
                 Assert.That(
                     processValidation.ConfiguredNetworkManager,
                     Is.SameAs(manager));
+                Assert.That(fizzy, Is.Not.Null);
+                Assert.That(fizzy.enabled, Is.False,
+                    "Fizzy remains disabled until Steam initialization succeeds.");
+                Assert.That(manager.transport, Is.SameAs(fizzy));
+                Assert.That(validationTransport, Is.Not.Null);
+                Assert.That(
+                    processValidation.ConfiguredValidationTransport,
+                    Is.SameAs(validationTransport));
+                Assert.That(manager.GetComponent<NetworkManagerHUD>(), Is.Null);
+                Assert.That(lobbyService, Is.Not.Null);
+                Assert.That(lobbyService.ConfiguredNetworkManager, Is.SameAs(manager));
+                Assert.That(lobbyService.ConfiguredFizzyTransport, Is.SameAs(fizzy));
+                Assert.That(lobbyHud, Is.Not.Null);
+                Assert.That(lobbyHud.ConfiguredService, Is.SameAs(lobbyService));
                 Assert.That(manager.playerPrefab, Is.Not.Null);
                 Assert.That(manager.spawnPrefabs, Does.Contain(skeleton));
                 Assert.That(

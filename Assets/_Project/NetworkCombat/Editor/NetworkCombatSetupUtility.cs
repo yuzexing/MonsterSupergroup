@@ -8,6 +8,7 @@ using AstralShift.HellMaiden.Interactions;
 using AstralShift.QTI.Triggers;
 using kcp2k;
 using Mirror;
+using Mirror.FizzySteam;
 using MonsterSupergroup.Gameplay.Combat;
 using MonsterSupergroup.Gameplay.Local;
 using UnityEditor;
@@ -365,11 +366,8 @@ namespace MonsterSupergroup.NetworkCombat.Editor
                 .SelectMany(root => root.GetComponentsInChildren<NetworkManager>(true))
                 .Single();
             GameObject managerObject = existing.gameObject;
-            Transport transport = existing.transport;
             NetworkManagerHUD existingHud =
                 managerObject.GetComponent<NetworkManagerHUD>();
-            int hudOffsetX = existingHud != null ? existingHud.offsetX : 0;
-            int hudOffsetY = existingHud != null ? existingHud.offsetY : 0;
             if (!(existing is BootGameplayNetworkManager))
             {
                 if (existingHud != null)
@@ -385,7 +383,26 @@ namespace MonsterSupergroup.NetworkCombat.Editor
             {
                 manager = managerObject.AddComponent<BootGameplayNetworkManager>();
             }
-            manager.transport = transport;
+
+            KcpTransport kcp = GetOrAdd<KcpTransport>(managerObject);
+            kcp.NoDelay = true;
+            kcp.Interval = 10;
+            LatencySimulation validationTransport =
+                GetOrAdd<LatencySimulation>(managerObject);
+            validationTransport.wrap = kcp;
+            validationTransport.latency = 100f;
+            validationTransport.jitter = 0.05f;
+            validationTransport.jitterSpeed = 2f;
+            validationTransport.unreliableLoss = 5f;
+            validationTransport.unreliableScramble = 2f;
+
+            FizzySteamworks fizzy = GetOrAdd<FizzySteamworks>(managerObject);
+            fizzy.Timeout = 25;
+            fizzy.AllowSteamRelay = true;
+            fizzy.UseNextGenSteamNetworking = true;
+            fizzy.enabled = false;
+
+            manager.transport = fizzy;
             manager.sendRate = 60;
             manager.maxConnections = 4;
             manager.dontDestroyOnLoad = false;
@@ -399,14 +416,18 @@ namespace MonsterSupergroup.NetworkCombat.Editor
             manager.spawnPrefabs.Add(lightweightEnemy);
             manager.spawnPrefabs.Add(productEnemy);
             manager.spawnPrefabs.Add(skeletonEnemy);
-            NetworkManagerHUD hud =
-                managerObject.GetComponent<NetworkManagerHUD>();
-            if (hud == null)
+            NetworkManagerHUD[] networkManagerHuds =
+                managerObject.GetComponents<NetworkManagerHUD>();
+            for (int i = 0; i < networkManagerHuds.Length; i++)
             {
-                hud = managerObject.AddComponent<NetworkManagerHUD>();
+                UnityEngine.Object.DestroyImmediate(networkManagerHuds[i]);
             }
-            hud.offsetX = hudOffsetX;
-            hud.offsetY = hudOffsetY;
+
+            SteamLobbyService lobbyService =
+                GetOrAdd<SteamLobbyService>(managerObject);
+            lobbyService.Configure(manager, fizzy);
+            SteamLobbyHud lobbyHud = GetOrAdd<SteamLobbyHud>(managerObject);
+            lobbyHud.Configure(lobbyService);
 
             Camera bootCamera = scene.GetRootGameObjects()
                 .SelectMany(root => root.GetComponentsInChildren<Camera>(true))
@@ -419,8 +440,13 @@ namespace MonsterSupergroup.NetworkCombat.Editor
                 bootCamera,
                 bootAudio);
             GetOrAdd<BootGameplayProcessValidationBootstrap>(managerObject)
-                .Configure(manager);
+                .Configure(manager, validationTransport);
             EditorUtility.SetDirty(manager);
+            EditorUtility.SetDirty(kcp);
+            EditorUtility.SetDirty(validationTransport);
+            EditorUtility.SetDirty(fizzy);
+            EditorUtility.SetDirty(lobbyService);
+            EditorUtility.SetDirty(lobbyHud);
 
             NetworkCombatWorld[] worlds = scene.GetRootGameObjects()
                 .SelectMany(root =>

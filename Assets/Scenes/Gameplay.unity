@@ -491,7 +491,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 19c99119c02145879f24ca9436f1e0d4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: MonsterSupergroup.NetworkCombat::MonsterSupergroup.NetworkCombat.NetworkGameplayEnemySpawner
-  enemyPrefab: {fileID: 3911887690903730936, guid: 55ff35e83fff4c74ea6f8f2e82883aa2, type: 3}
+  enemyPrefab: {fileID: 642612462740718118, guid: e9b6d6b03e4b1e341a17dcc0618c749f, type: 3}
   spawnDistance: 5
 --- !u!4 &529519221
 Transform:

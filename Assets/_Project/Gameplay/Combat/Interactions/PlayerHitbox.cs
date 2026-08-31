@@ -15,13 +15,6 @@ public class PlayerHitbox : Interactor
 			return owner;
 		}
 	}
-	
-	
-	private void OnTriggerEnter2D(Collider2D other)
-	{
-		Debug.Log($"ENTER22: {name} <- {other.name}", this);
-	}
-
 
 	public bool IsLocallyControlled => Owner != null && Owner.AcceptsLocalMutations;
 

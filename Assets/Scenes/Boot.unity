@@ -1287,7 +1287,9 @@ GameObject:
   - component: {fileID: 1601722133}
   - component: {fileID: 1601722137}
   - component: {fileID: 1601722136}
+  - component: {fileID: 1601722141}
   - component: {fileID: 1601722139}
+  - component: {fileID: 1601722142}
   - component: {fileID: 1601722138}
   - component: {fileID: 1601722140}
   m_Layer: 0
@@ -1359,20 +1361,24 @@ MonoBehaviour:
   debugLog: 0
   statisticsGUI: 0
   statisticsLog: 0
---- !u!114 &1601722138
+--- !u!114 &1601722141
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1601722132}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6442dc8070ceb41f094e44de0bf87274, type: 3}
+  m_Script: {fileID: 11500000, guid: e6e55fca1f4e4844593a3dd65a3ecb39, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Mirror::Mirror.NetworkManagerHUD
-  offsetX: 0
-  offsetY: 0
+  m_EditorClassIdentifier: FizzySteamworks::Mirror.FizzySteam.FizzySteamworks
+  Channels:
+  - 2
+  - 1
+  Timeout: 25
+  AllowSteamRelay: 1
+  UseNextGenSteamNetworking: 1
 --- !u!114 &1601722139
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1393,8 +1399,8 @@ MonoBehaviour:
   offlineScene: 
   onlineScene: 
   offlineSceneLoadDelay: 0
-  transport: {fileID: 1601722136}
-  networkAddress: localhost
+  transport: {fileID: 1601722141}
+  networkAddress:
   maxConnections: 4
   disconnectInactiveConnections: 0
   disconnectInactiveTimeout: 60
@@ -1424,6 +1430,33 @@ MonoBehaviour:
   gameplayScene: Assets/Scenes/Gameplay.unity
   bootCamera: {fileID: 61111575}
   bootAudioListener: {fileID: 61111574}
+--- !u!114 &1601722142
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1601722132}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 01624919198a43d8ab78f42b56b7f267, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: MonsterSupergroup.NetworkCombat::MonsterSupergroup.NetworkCombat.SteamLobbyService
+  networkManager: {fileID: 1601722139}
+  fizzyTransport: {fileID: 1601722141}
+--- !u!114 &1601722138
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1601722132}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c088f74708e645968201a1a855198037, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: MonsterSupergroup.NetworkCombat::MonsterSupergroup.NetworkCombat.SteamLobbyHud
+  service: {fileID: 1601722142}
 --- !u!114 &1601722140
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1437,6 +1470,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: MonsterSupergroup.NetworkCombat::MonsterSupergroup.NetworkCombat.BootGameplayProcessValidationBootstrap
   networkManager: {fileID: 1601722139}
+  validationTransport: {fileID: 1601722136}
   minimumConnectedSeconds: 5
   quitGraceSeconds: 2
 --- !u!1 &1700453218

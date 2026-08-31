@@ -2,15 +2,40 @@
 %TAG !u! tag:unity3d.com,2011:
 --- !u!78 &1
 TagManager:
-  serializedVersion: 2
-  tags: []
+  serializedVersion: 3
+  tags:
+  - SceneFader
+  - particles
+  - Bullet
+  - Enemy
+  - Missile
+  - Target
+  - Boss_1
+  - Boss_2
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - NotRendered
   - Water
   - UI
+  - EnemyCollision
+  - EnemyHitbox
+  - EnemyAttack
+  - PlayerAttack
+  - Player
+  - Obstacles
+  - Edges
+  - Background
+  - Props
+  - BoundingBoxOnly
+  - PlayerHitbox
+  - Minimap
+  - ShrineDetection
+  - BreakableProps
+  - Wind
+  - AttackSpawn
+  - TrapEdges
   - 
   - 
   - 
@@ -18,26 +43,32 @@ TagManager:
   - 
   - 
   - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
+  - Perks
+  - Cards
   m_SortingLayers:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: BackgroundBack
+    uniqueID: 2959143469
+    locked: 0
+  - name: Background
+    uniqueID: 522776913
+    locked: 0
+  - name: BackgroundFront
+    uniqueID: 842383085
+    locked: 0
+  - name: EnemyAttack
+    uniqueID: 2357522503
+    locked: 0
+  - name: Props
+    uniqueID: 2244532719
+    locked: 0
+  - name: Foreground
+    uniqueID: 2479733881
+    locked: 0
+  - name: UI
+    uniqueID: 2276253615
+    locked: 0
+  m_RenderingLayers:
+  - Default

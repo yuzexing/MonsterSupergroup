@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3864809553097239058}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: BuffEffects
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -85,7 +85,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3144152867422726312}
   - component: {fileID: 153197441959149501}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Sort_Hit
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -130,7 +130,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1018193299779058022}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Effects
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -161,7 +161,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1816439326827735832}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: EnemyTarget
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -212,7 +212,7 @@ GameObject:
   - component: {fileID: 8302459270084936770}
   - component: {fileID: 228745087267642754}
   - component: {fileID: 6316533882040137082}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: NetworkPlayer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -583,7 +583,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Mirror::Mirror.NetworkIdentity
   sceneId: 0
-  _assetId: 0
+  _assetId: 311956799
   serverOnly: 0
   visibility: 0
   hasSpawned: 0
@@ -767,7 +767,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5227398737968327398}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Interactor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -798,7 +798,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7820494115624101644}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Impack_Spark
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -831,7 +831,7 @@ GameObject:
   - component: {fileID: 9078767342194044360}
   - component: {fileID: 1472118260340366696}
   - component: {fileID: 1843077700804254064}
-  m_Layer: 0
+  m_Layer: 16
   m_Name: HitBox
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -911,7 +911,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 9074827973373562454}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Lights
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -946,7 +946,7 @@ GameObject:
   - component: {fileID: 8822183133739073585}
   - component: {fileID: 3325746373872525394}
   - component: {fileID: 6075615163283623230}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Sprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1318,7 +1318,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2413859007128819174}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: ShadowCircle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1349,7 +1349,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 421429004790769889}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Audio
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1380,7 +1380,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4444513618411482210}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Footsteps
   m_TagString: Untagged
   m_Icon: {fileID: 0}

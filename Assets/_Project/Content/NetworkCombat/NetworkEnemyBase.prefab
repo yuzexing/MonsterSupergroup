@@ -42,11 +42,11 @@ GameObject:
   m_Component:
   - component: {fileID: 3292430086216594833}
   - component: {fileID: 3822233150085973115}
-  - component: {fileID: 2518031161041091853}
   - component: {fileID: 1744478602458502762}
+  - component: {fileID: 2518031161041091853}
   - component: {fileID: 8443524187321673918}
   - component: {fileID: 624576449129991105}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: AttackCollider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -104,6 +104,26 @@ CircleCollider2D:
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
   m_Radius: 0.5
+--- !u!114 &1744478602458502762
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1207436525128411065}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fd0aea82c6dc27d10e415b7348549e2a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: MonsterSupergroup.Gameplay.Combat::AstralShift.QTI.Triggers.Physics2D.StayOn2DTrigger
+  interaction: {fileID: 2518031161041091853}
+  layerMask:
+    serializedVersion: 2
+    m_Bits: 3229614079
+  useTag: 0
+  targetTag: Untagged
+  hasCooldown: 0
+  cooldownTimer: 1
 --- !u!114 &2518031161041091853
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -143,26 +163,6 @@ MonoBehaviour:
       xpMultiplier: 1
       speedMultiplier: 1
   damageType: 4
---- !u!114 &1744478602458502762
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1207436525128411065}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fd0aea82c6dc27d10e415b7348549e2a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: MonsterSupergroup.Gameplay.Combat::AstralShift.QTI.Triggers.Physics2D.StayOn2DTrigger
-  interaction: {fileID: 2518031161041091853}
-  layerMask:
-    serializedVersion: 2
-    m_Bits: 55
-  useTag: 0
-  targetTag: Untagged
-  hasCooldown: 0
-  cooldownTimer: 1
 --- !u!114 &8443524187321673918
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -420,7 +420,7 @@ GameObject:
   - component: {fileID: 8610229519361375326}
   - component: {fileID: 4298737649338467457}
   - component: {fileID: 5871699316676795926}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: NetworkEnemyBase
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1247,7 +1247,7 @@ GameObject:
   - component: {fileID: 2512810427719439436}
   - component: {fileID: 716701613289867486}
   - component: {fileID: 3949225564415453723}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: HurtBox
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1338,7 +1338,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4485256093527228432}
   - component: {fileID: 721894178300467092}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Collider
   m_TagString: Untagged
   m_Icon: {fileID: 0}

@@ -29,11 +29,10 @@ namespace MonsterSupergroup.NetworkCombat
         public const uint DevelopmentAppId = 480u;
 
         private const int SearchResultLimit = 50;
-        private const string ValidationRolePrefix = "--boot-gameplay-role=";
-
         private static SteamLobbyService instance;
         private static bool everInitialized;
 
+        [SerializeField] private NetworkBackendBootstrap backendBootstrap;
         [SerializeField] private BootGameplayNetworkManager networkManager;
         [SerializeField] private FizzySteamworks fizzyTransport;
 
@@ -71,6 +70,13 @@ namespace MonsterSupergroup.NetworkCombat
         public IReadOnlyList<SteamLobbySummary> Lobbies => lobbies;
         public bool IsHostSession => isHostSession;
         public bool IsValidationBypass => validationBypass;
+        public bool IsSteamBackendSelected => backendBootstrap != null &&
+            backendBootstrap.IsInitialized &&
+            backendBootstrap.Selection.Backend == NetworkBackendKind.Steam &&
+            backendBootstrap.Selection.Purpose ==
+                NetworkRuntimePurpose.Interactive;
+        public NetworkBackendBootstrap ConfiguredBackendBootstrap =>
+            backendBootstrap;
         public BootGameplayNetworkManager ConfiguredNetworkManager => networkManager;
         public FizzySteamworks ConfiguredFizzyTransport => fizzyTransport;
 
@@ -93,9 +99,29 @@ namespace MonsterSupergroup.NetworkCombat
         }
 
         public void Configure(
+            NetworkBackendBootstrap bootstrap,
             BootGameplayNetworkManager manager,
             FizzySteamworks transport)
         {
+            backendBootstrap = bootstrap != null
+                ? bootstrap
+                : throw new ArgumentNullException(nameof(bootstrap));
+            networkManager = manager != null
+                ? manager
+                : throw new ArgumentNullException(nameof(manager));
+            fizzyTransport = transport != null
+                ? transport
+                : throw new ArgumentNullException(nameof(transport));
+            fizzyTransport.enabled = false;
+        }
+
+        public void Configure(
+            BootGameplayNetworkManager manager,
+            FizzySteamworks transport)
+        {
+            backendBootstrap = manager != null
+                ? manager.GetComponent<NetworkBackendBootstrap>()
+                : null;
             networkManager = manager != null
                 ? manager
                 : throw new ArgumentNullException(nameof(manager));
@@ -120,13 +146,32 @@ namespace MonsterSupergroup.NetworkCombat
                 fizzyTransport.enabled = false;
             }
 
-            string[] arguments = Environment.GetCommandLineArgs();
-            validationBypass = HasValidationRoleArgument(arguments) ||
-                HasArgument(arguments, "-runTests");
-            if (validationBypass)
+            if (backendBootstrap == null || !backendBootstrap.IsInitialized)
+            {
+                string[] arguments = Environment.GetCommandLineArgs();
+                validationBypass = HasValidationRoleArgument(arguments) ||
+                    HasArgument(arguments, "-runTests");
+                if (validationBypass)
+                {
+                    State = SteamLobbyState.Disabled;
+                    LastError =
+                        "Steam Lobby is disabled for automated validation/tests.";
+                    NotifyChanged();
+                    return;
+                }
+
+                SetError("NetworkBackendBootstrap is not configured.");
+                return;
+            }
+
+            validationBypass = backendBootstrap.Selection.Purpose !=
+                NetworkRuntimePurpose.Interactive;
+            if (!IsSteamBackendSelected)
             {
                 State = SteamLobbyState.Disabled;
-                LastError = "Steam Lobby is disabled for automated KCP validation.";
+                LastError = validationBypass
+                    ? "Steam Lobby is disabled for automated validation/tests."
+                    : "Steam Lobby is disabled while the KCP backend is selected.";
                 NotifyChanged();
                 return;
             }
@@ -170,7 +215,7 @@ namespace MonsterSupergroup.NetworkCombat
 
         public bool TryInitializeSteam()
         {
-            if (validationBypass)
+            if (validationBypass || !IsSteamBackendSelected)
             {
                 return false;
             }
@@ -755,23 +800,14 @@ namespace MonsterSupergroup.NetworkCombat
                 return false;
             }
 
-            try
+            if (backendBootstrap == null ||
+                backendBootstrap.ConfiguredSteamTransport != fizzyTransport)
             {
-                fizzyTransport.Shutdown();
-            }
-            catch (Exception exception)
-            {
-                error = $"Unable to reset FizzySteamworks: {exception.Message}";
+                error = "Steam/Fizzy backend wiring is inconsistent.";
                 return false;
             }
-
-            networkManager.transport = fizzyTransport;
-            Transport.active = fizzyTransport;
-            fizzyTransport.enabled = true;
-            if (!fizzyTransport.Available())
+            if (!backendBootstrap.TryPrepareSteam(out error))
             {
-                fizzyTransport.enabled = false;
-                error = "FizzySteamworks is unavailable.";
                 return false;
             }
 
@@ -895,10 +931,9 @@ namespace MonsterSupergroup.NetworkCombat
             if (networkManager != null)
             {
                 networkManager.networkAddress = string.Empty;
-                if (fizzyTransport != null)
+                if (backendBootstrap != null)
                 {
-                    networkManager.transport = fizzyTransport;
-                    Transport.active = fizzyTransport;
+                    backendBootstrap.RestoreIdleTransport();
                 }
             }
 
@@ -951,6 +986,7 @@ namespace MonsterSupergroup.NetworkCombat
 
         private void CompleteCleanupState()
         {
+            backendBootstrap?.RestoreIdleTransport();
             string error = cleanupCompletionError;
             cleanupCompletionError = string.Empty;
             waitingForClientDisconnect = false;
@@ -1024,6 +1060,10 @@ namespace MonsterSupergroup.NetworkCombat
 
         private bool ResolveReferences()
         {
+            if (backendBootstrap == null)
+            {
+                backendBootstrap = GetComponent<NetworkBackendBootstrap>();
+            }
             if (networkManager == null)
             {
                 networkManager = GetComponent<BootGameplayNetworkManager>();
@@ -1033,7 +1073,8 @@ namespace MonsterSupergroup.NetworkCombat
                 fizzyTransport = GetComponent<FizzySteamworks>();
             }
 
-            return networkManager != null && fizzyTransport != null;
+            return backendBootstrap != null && networkManager != null &&
+                fizzyTransport != null;
         }
 
         private void SetError(string message)
@@ -1071,7 +1112,7 @@ namespace MonsterSupergroup.NetworkCombat
             for (int i = 0; i < arguments.Length; i++)
             {
                 if (arguments[i].StartsWith(
-                        ValidationRolePrefix,
+                        NetworkBackendBootstrap.ValidationRolePrefix,
                         StringComparison.OrdinalIgnoreCase))
                 {
                     return true;

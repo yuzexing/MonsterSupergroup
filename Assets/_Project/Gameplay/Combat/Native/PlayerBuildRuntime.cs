@@ -9,6 +9,8 @@ using MonsterSupergroup.GAS.Authoring;
 using MonsterSupergroup.GAS.Unity;
 using UnityEngine;
 using GasAttackStatsMultipliers = MonsterSupergroup.GAS.AttackStatsMultipliers;
+using HellMaidenProjectileAttackBehaviour =
+    AstralShift.HellMaiden.Player.Attacks.ProjectileAttackBehaviour;
 
 namespace MonsterSupergroup.Gameplay.Combat
 {
@@ -45,6 +47,12 @@ namespace MonsterSupergroup.Gameplay.Combat
         public WeaponBehaviour InitialWeapon { get; private set; }
         public bool IsBuildActive => InitialWeapon != null &&
             weapons.ContainsKey(InitialWeapon);
+
+		public event Action<ProjectilePresentationSpawn>
+			ProjectilePresentationSpawned;
+
+		public event Action<ProjectilePresentationTermination>
+			ProjectilePresentationTerminated;
 
         private void Awake()
         {
@@ -135,6 +143,7 @@ namespace MonsterSupergroup.Gameplay.Combat
                 weapons.Add(
                     behaviour,
                     new WeaponEntry(behaviour, runtime, definition, modifiers));
+				SubscribeToPresentation(behaviour);
                 behaviour.gameObject.SetActive(true);
                 return behaviour;
             }
@@ -176,6 +185,7 @@ namespace MonsterSupergroup.Gameplay.Combat
                 InitialWeapon = null;
             }
             entry.Behaviour.Deactivate();
+			UnsubscribeFromPresentation(entry.Behaviour);
             entry.Runtime.Shutdown();
             entry.Modifiers.Clear();
             Destroy(entry.Behaviour.gameObject);
@@ -441,6 +451,40 @@ namespace MonsterSupergroup.Gameplay.Combat
                 RemoveEquipment(new PlayerBuildEquipmentHandle(handles[i]));
             }
         }
+
+		private void SubscribeToPresentation(WeaponBehaviour weapon)
+		{
+			if (!(weapon is HellMaidenProjectileAttackBehaviour projectile))
+			{
+				return;
+			}
+
+			projectile.PresentationSpawned += HandlePresentationSpawned;
+			projectile.PresentationTerminated += HandlePresentationTerminated;
+		}
+
+		private void UnsubscribeFromPresentation(WeaponBehaviour weapon)
+		{
+			if (!(weapon is HellMaidenProjectileAttackBehaviour projectile))
+			{
+				return;
+			}
+
+			projectile.PresentationSpawned -= HandlePresentationSpawned;
+			projectile.PresentationTerminated -= HandlePresentationTerminated;
+		}
+
+		private void HandlePresentationSpawned(
+			ProjectilePresentationSpawn spawn)
+		{
+			ProjectilePresentationSpawned?.Invoke(spawn);
+		}
+
+		private void HandlePresentationTerminated(
+			ProjectilePresentationTermination termination)
+		{
+			ProjectilePresentationTerminated?.Invoke(termination);
+		}
 
         private void EnsureInitialized()
         {

@@ -56,7 +56,13 @@ namespace MonsterSupergroup.NetworkCombat.Editor
             CircleCollider2D obstacleCollider = RequireComponent<CircleCollider2D>(root);
             Transform hitboxTransform = FindChild(root.transform, "HitBox") ??
                 CreateChild(root.transform, "HitBox");
-            hitboxTransform.gameObject.layer = root.layer;
+            int playerHitboxLayer = LayerMask.NameToLayer("PlayerHitbox");
+            if (playerHitboxLayer < 0)
+            {
+                throw new InvalidOperationException(
+                    "The PlayerHitbox layer is required for player damage collision.");
+            }
+            hitboxTransform.gameObject.layer = playerHitboxLayer;
             CircleCollider2D hitboxCollider =
                 GetOrAdd<CircleCollider2D>(hitboxTransform.gameObject);
             hitboxCollider.isTrigger = true;

@@ -78,7 +78,7 @@ namespace MonsterSupergroup.NetworkCombat
                 return;
             }
 
-            RuntimeDB database = ResolveRuntimeDatabase();
+            RuntimeDB database = ResolveSharedRuntimeDatabase();
             if (database == null)
             {
                 Debug.LogError(
@@ -145,7 +145,7 @@ namespace MonsterSupergroup.NetworkCombat
             LootManager.Instance?.RegisterLootCollector(playerMovement);
         }
 
-        private RuntimeDB ResolveRuntimeDatabase()
+        public RuntimeDB ResolveSharedRuntimeDatabase()
         {
             if (runtimeDatabase != null)
             {

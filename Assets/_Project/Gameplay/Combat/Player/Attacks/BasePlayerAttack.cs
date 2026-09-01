@@ -22,6 +22,8 @@ namespace AstralShift.HellMaiden.Player.Attacks
 
 		private AttackSnapshotLease _nativeAttackLease;
 
+		protected bool IsPresentationOnly { get; private set; }
+
 		protected AttackSnapshot NativeAttackSnapshot =>
 			_nativeAttackLease?.Snapshot;
 
@@ -40,6 +42,7 @@ namespace AstralShift.HellMaiden.Player.Attacks
 		public virtual void Init(WeaponBehaviour behaviour, Action onStart = null, Action onEnd = null)
 		{
 			ReleaseNativeAttackSnapshot();
+			IsPresentationOnly = false;
 			InitializeCommon(behaviour, onStart, onEnd);
 			if ((bool)progressionScaler)
 			{
@@ -59,6 +62,7 @@ namespace AstralShift.HellMaiden.Player.Attacks
 			}
 
 			ReleaseNativeAttackSnapshot();
+			IsPresentationOnly = false;
 			_nativeAttackLease = attack.Retain();
 			try
 			{
@@ -75,6 +79,21 @@ namespace AstralShift.HellMaiden.Player.Attacks
 			}
 		}
 
+		public virtual void InitPresentation(
+			WeaponBehaviour behaviour,
+			ProjectilePresentationStats stats,
+			Action onStart = null,
+			Action onEnd = null)
+		{
+			ReleaseNativeAttackSnapshot();
+			IsPresentationOnly = true;
+			InitializeCommon(behaviour, onStart, onEnd);
+			if ((bool)progressionScaler)
+			{
+				progressionScaler.Apply(stats);
+			}
+		}
+
 		private void InitializeCommon(
 			WeaponBehaviour behaviour,
 			Action onStart,
@@ -85,7 +104,7 @@ namespace AstralShift.HellMaiden.Player.Attacks
 			_onEnd = onEnd;
 			if ((bool)hitbox)
 			{
-				hitbox.Init(OnHit);
+				hitbox.Init(IsPresentationOnly ? null : OnHit);
 			}
 			else
 			{
@@ -97,6 +116,11 @@ namespace AstralShift.HellMaiden.Player.Attacks
 
 		protected virtual void OnHit(IDamageable damageable)
 		{
+			if (IsPresentationOnly)
+			{
+				return;
+			}
+
 			if ((bool)hitEffectResolver)
 			{
 				if (NativeAttackSnapshot != null)
@@ -116,6 +140,11 @@ namespace AstralShift.HellMaiden.Player.Attacks
 
 		protected void ResolveDamage(IDamageable damageable)
 		{
+			if (IsPresentationOnly)
+			{
+				return;
+			}
+
 			if (NativeAttackSnapshot != null)
 			{
 				_behaviour.OnNativeGasHit(

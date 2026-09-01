@@ -720,6 +720,11 @@ MonoBehaviour:
   syncInterval: 0
   bridge: {fileID: 0}
   serviceProvider: {fileID: 0}
+  playerBuildRuntime: {fileID: 0}
+  playerBootstrap: {fileID: 0}
+  playerMovement: {fileID: 0}
+  maximumPresentationEdgesPerBatch: 32
+  maximumReplayDelay: 2
 --- !u!114 &228745087267642754
 MonoBehaviour:
   m_ObjectHideFlags: 0

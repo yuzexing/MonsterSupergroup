@@ -387,6 +387,7 @@ namespace MonsterSupergroup.NetworkCombat.Editor
             KcpTransport kcp = GetOrAdd<KcpTransport>(managerObject);
             kcp.NoDelay = true;
             kcp.Interval = 10;
+            kcp.enabled = false;
             LatencySimulation validationTransport =
                 GetOrAdd<LatencySimulation>(managerObject);
             validationTransport.wrap = kcp;
@@ -395,6 +396,7 @@ namespace MonsterSupergroup.NetworkCombat.Editor
             validationTransport.jitterSpeed = 2f;
             validationTransport.unreliableLoss = 5f;
             validationTransport.unreliableScramble = 2f;
+            validationTransport.enabled = false;
 
             FizzySteamworks fizzy = GetOrAdd<FizzySteamworks>(managerObject);
             fizzy.Timeout = 25;
@@ -423,9 +425,24 @@ namespace MonsterSupergroup.NetworkCombat.Editor
                 UnityEngine.Object.DestroyImmediate(networkManagerHuds[i]);
             }
 
+            NetworkBackendBootstrap backendBootstrap =
+                GetOrAdd<NetworkBackendBootstrap>(managerObject);
+            backendBootstrap.Configure(
+                manager,
+                fizzy,
+                kcp,
+                validationTransport);
+
+            KcpLocalNetworkService kcpService =
+                GetOrAdd<KcpLocalNetworkService>(managerObject);
+            kcpService.Configure(backendBootstrap, manager);
+            KcpLocalNetworkHud kcpHud =
+                GetOrAdd<KcpLocalNetworkHud>(managerObject);
+            kcpHud.Configure(kcpService);
+
             SteamLobbyService lobbyService =
                 GetOrAdd<SteamLobbyService>(managerObject);
-            lobbyService.Configure(manager, fizzy);
+            lobbyService.Configure(backendBootstrap, manager, fizzy);
             SteamLobbyHud lobbyHud = GetOrAdd<SteamLobbyHud>(managerObject);
             lobbyHud.Configure(lobbyService);
 
@@ -439,14 +456,22 @@ namespace MonsterSupergroup.NetworkCombat.Editor
                 GameplayScenePath,
                 bootCamera,
                 bootAudio);
-            GetOrAdd<BootGameplayProcessValidationBootstrap>(managerObject)
-                .Configure(manager, validationTransport);
+            BootGameplayProcessValidationBootstrap processValidation =
+                GetOrAdd<BootGameplayProcessValidationBootstrap>(managerObject);
+            processValidation.Configure(
+                manager,
+                validationTransport,
+                backendBootstrap);
             EditorUtility.SetDirty(manager);
             EditorUtility.SetDirty(kcp);
             EditorUtility.SetDirty(validationTransport);
             EditorUtility.SetDirty(fizzy);
+            EditorUtility.SetDirty(backendBootstrap);
+            EditorUtility.SetDirty(kcpService);
+            EditorUtility.SetDirty(kcpHud);
             EditorUtility.SetDirty(lobbyService);
             EditorUtility.SetDirty(lobbyHud);
+            EditorUtility.SetDirty(processValidation);
 
             NetworkCombatWorld[] worlds = scene.GetRootGameObjects()
                 .SelectMany(root =>

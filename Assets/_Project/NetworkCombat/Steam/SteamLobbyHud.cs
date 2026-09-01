@@ -29,7 +29,8 @@ namespace MonsterSupergroup.NetworkCombat
 
         private void OnGUI()
         {
-            if (Application.isBatchMode || service == null)
+            if (Application.isBatchMode || service == null ||
+                !service.IsSteamBackendSelected)
             {
                 return;
             }

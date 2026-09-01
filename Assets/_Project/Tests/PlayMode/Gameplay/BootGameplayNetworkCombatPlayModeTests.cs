@@ -42,12 +42,31 @@ namespace MonsterSupergroup.Gameplay.Tests
 
             SteamLobbyService lobbyService =
                 manager.GetComponent<SteamLobbyService>();
+            KcpLocalNetworkService kcpService =
+                manager.GetComponent<KcpLocalNetworkService>();
+            NetworkBackendBootstrap backendBootstrap =
+                manager.GetComponent<NetworkBackendBootstrap>();
+            Assert.That(backendBootstrap, Is.Not.Null);
+            Assert.That(backendBootstrap.IsInitialized, Is.True);
+            Assert.That(
+                backendBootstrap.Selection.Backend,
+                Is.EqualTo(NetworkBackendKind.Kcp));
+            Assert.That(
+                backendBootstrap.Selection.Purpose,
+                Is.EqualTo(NetworkRuntimePurpose.Test));
             Assert.That(lobbyService, Is.Not.Null);
+            Assert.That(kcpService, Is.Not.Null);
+            Assert.That(kcpService.IsKcpBackendSelected, Is.True);
+            Assert.That(kcpService.IsInteractiveKcp, Is.False);
             Assert.That(lobbyService.IsValidationBypass, Is.True);
             Assert.That(lobbyService.IsSteamInitialized, Is.False);
             Assert.That(lobbyService.State, Is.EqualTo(SteamLobbyState.Disabled));
+            Assert.That(
+                backendBootstrap.ConfiguredSteamTransport.enabled,
+                Is.False,
+                "Fizzy stays disabled in test runs.");
             Assert.That(manager.transport.enabled, Is.False,
-                "The default Fizzy transport stays disabled in test runs.");
+                "KCP stays idle until the test explicitly starts Mirror.");
 
             BootGameplayProcessValidationBootstrap validationBootstrap =
                 manager.GetComponent<BootGameplayProcessValidationBootstrap>();
@@ -57,9 +76,14 @@ namespace MonsterSupergroup.Gameplay.Tests
             Assert.That(validationTransport, Is.Not.Null,
                 "Boot must retain the KCP/Latency validation fallback.");
             Assert.That(validationTransport, Is.InstanceOf<PortTransport>());
-            validationTransport.enabled = true;
-            manager.transport = validationTransport;
-            Transport.active = validationTransport;
+            bool prepared = backendBootstrap.TryPrepareKcp(
+                NetworkBackendBootstrap.DefaultKcpAddress,
+                NetworkBackendBootstrap.DefaultKcpPort,
+                true,
+                out string prepareError);
+            Assert.That(prepared, Is.True, prepareError);
+            Assert.That(manager.transport, Is.SameAs(validationTransport));
+            Assert.That(Transport.active, Is.SameAs(validationTransport));
             manager.StartHost();
             // The recovered Dante projectile intentionally retains its original
             // FMOD event GUID, while that source bank is not present in this
@@ -224,6 +248,30 @@ namespace MonsterSupergroup.Gameplay.Tests
             Assert.That(playerBinding.CurrentHealth, Is.EqualTo(minimumPlayerHealth));
             Assert.That(world.Gateway.Metrics.AcceptedPlayerReports,
                 Is.GreaterThan(0));
+
+            kcpService.Stop();
+            float cleanupDeadline = Time.realtimeSinceStartup + 5f;
+            while ((NetworkServer.active || NetworkClient.active ||
+                    manager.IsGameplayLoaded ||
+                    manager.mode != NetworkManagerMode.Offline ||
+                    kcpService.State == KcpLocalNetworkState.Stopping) &&
+                   Time.realtimeSinceStartup < cleanupDeadline)
+            {
+                yield return null;
+            }
+
+            Assert.That(NetworkServer.active, Is.False);
+            Assert.That(NetworkClient.active, Is.False);
+            Assert.That(manager.mode, Is.EqualTo(NetworkManagerMode.Offline));
+            Assert.That(manager.IsGameplayLoaded, Is.False);
+            Assert.That(kcpService.State,
+                Is.EqualTo(KcpLocalNetworkState.Idle));
+            Assert.That(
+                backendBootstrap.ConfiguredKcpTransport.enabled,
+                Is.False);
+            Assert.That(
+                backendBootstrap.ConfiguredLatencySimulation.enabled,
+                Is.False);
         }
 
         [UnityTearDown]

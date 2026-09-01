@@ -29,6 +29,13 @@ namespace AstralShift.HellMaiden.Player.Attacks
 		[SerializeField]
 		protected Vector3 positionOffset = Vector3.zero;
 
+		private bool _presentationReplicaInitialized;
+
+		public event Action<ProjectilePresentationSpawn> PresentationSpawned;
+
+		public event Action<ProjectilePresentationTermination>
+			PresentationTerminated;
+
 		public override void Init(uint id, AttackStats stats)
 		{
 			base.Init(id, stats);
@@ -65,20 +72,17 @@ namespace AstralShift.HellMaiden.Player.Attacks
 					: base.ProjectileCountValue;
 				if (projectileCountValue == 1)
 				{
-					ProjectileAttack orCreateAttack = GetOrCreateAttack(nativeAttack);
-					orCreateAttack.gameObject.SetActive(value: true);
-					orCreateAttack.transform.position = base.transform.position + positionOffset + (Vector3)player.attackDirection.normalized * spawnRadius;
-					orCreateAttack.Attack(player.attackDirection.normalized, baseSpeed, hitCount, rotateToMovement);
+					SpawnOwnedProjectile(
+						nativeAttack,
+						0,
+						player.attackDirection.normalized);
 					LastAttackElapsedTime = 0f;
 					return;
 				}
 				for (int i = 0; i < projectileCountValue; i++)
 				{
-					ProjectileAttack orCreateAttack2 = GetOrCreateAttack(nativeAttack);
-					orCreateAttack2.gameObject.SetActive(value: true);
 					Vector3 vector = Quaternion.AngleAxis(Vector2.SignedAngle(player.attackDirection, Vector2.right) + 360f / (float)projectileCountValue * (float)i, -Vector3.forward) * Vector3.right;
-					orCreateAttack2.transform.position = base.transform.position + positionOffset + vector.normalized * spawnRadius;
-					orCreateAttack2.Attack(vector.normalized, baseSpeed, hitCount, rotateToMovement);
+					SpawnOwnedProjectile(nativeAttack, i, vector.normalized);
 				}
 				LastAttackElapsedTime = 0f;
 			}
@@ -88,9 +92,77 @@ namespace AstralShift.HellMaiden.Player.Attacks
 			}
 		}
 
+		private void SpawnOwnedProjectile(
+			AttackSnapshot nativeAttack,
+			int projectileIndex,
+			Vector2 direction)
+		{
+			AttackElement element = variants.ResolveElement(base.ActiveElement);
+			ProjectileAttack attack = GetOrCreateAttack(nativeAttack, element);
+			ProjectilePresentationKey key = default;
+			if (nativeAttack != null)
+			{
+				if (projectileIndex < 0 || projectileIndex > ushort.MaxValue)
+				{
+					throw new InvalidOperationException(
+						"Projectile index cannot be represented by the presentation protocol.");
+				}
+
+				key = new ProjectilePresentationKey(
+					nativeAttack.Context.EventId.Value,
+					(ushort)projectileIndex);
+				attack.ConfigurePresentationLifecycle(
+					key,
+					HandleProjectileTermination);
+			}
+
+			attack.gameObject.SetActive(value: true);
+			attack.transform.position = base.transform.position + positionOffset +
+				(Vector3)direction.normalized * spawnRadius;
+			attack.Attack(
+				direction.normalized,
+				baseSpeed,
+				hitCount,
+				rotateToMovement);
+
+			if (nativeAttack != null)
+			{
+				PresentationSpawned?.Invoke(new ProjectilePresentationSpawn(
+					base.ID,
+					key,
+					attack.transform.position,
+					direction,
+					element,
+					rotateToMovement,
+					ProjectilePresentationStats.From(
+						nativeAttack.Stats,
+						baseSpeed)));
+			}
+		}
+
+		private void HandleProjectileTermination(
+			ProjectilePresentationKey key,
+			Vector3 position,
+			ProjectilePresentationPhase phase)
+		{
+			PresentationTerminated?.Invoke(
+				new ProjectilePresentationTermination(
+					base.ID,
+					key,
+					position,
+					phase));
+		}
+
 		protected ProjectileAttack GetOrCreateAttack(AttackSnapshot nativeAttack = null)
 		{
-			ProjectileAttack attack = variants.GetOrCreate(base.ActiveElement, null);
+			return GetOrCreateAttack(nativeAttack, base.ActiveElement);
+		}
+
+		private ProjectileAttack GetOrCreateAttack(
+			AttackSnapshot nativeAttack,
+			AttackElement element)
+		{
+			ProjectileAttack attack = variants.GetOrCreate(element, null);
 			Action onEnd = delegate
 			{
 				attack.ReleaseNativeAttackSnapshot();
@@ -105,6 +177,57 @@ namespace AstralShift.HellMaiden.Player.Attacks
 				attack.Init(this, null, onEnd);
 			}
 			return attack;
+		}
+
+		public void InitializePresentationReplica(
+			uint weaponId,
+			PlayerMovement owner)
+		{
+			if (_presentationReplicaInitialized)
+			{
+				return;
+			}
+
+			ConfigureOwner(owner);
+			_id = weaponId;
+			variants.Init();
+			_presentationReplicaInitialized = true;
+			enabled = false;
+		}
+
+		public ProjectileAttack PlayPresentation(
+			ProjectilePresentationSpawn spawn,
+			float elapsedSeconds,
+			Action<ProjectileAttack> onReturned = null)
+		{
+			if (!_presentationReplicaInitialized || spawn.WeaponId != base.ID)
+			{
+				throw new InvalidOperationException(
+					"Projectile presentation replica is not initialized for this weapon.");
+			}
+
+			ProjectileAttack attack = variants.GetOrCreate(spawn.Element, null);
+			Action onEnd = delegate
+			{
+				variants.Return(attack);
+				onReturned?.Invoke(attack);
+			};
+			attack.InitPresentation(this, spawn.Stats, null, onEnd);
+			attack.gameObject.SetActive(value: true);
+			attack.transform.position = spawn.Position;
+			attack.PlayPresentation(spawn, elapsedSeconds);
+			return attack;
+		}
+
+		public void DisposePresentationReplica()
+		{
+			if (!_presentationReplicaInitialized)
+			{
+				return;
+			}
+
+			variants.Dispose(attack => attack.ReleaseNativeAttackSnapshot());
+			_presentationReplicaInitialized = false;
 		}
 
 		protected override void Dispose()

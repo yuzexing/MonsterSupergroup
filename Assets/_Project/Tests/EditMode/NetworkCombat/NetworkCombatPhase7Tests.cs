@@ -466,9 +466,15 @@ namespace MonsterSupergroup.NetworkCombat.Tests
                         .SelectMany(root => root.GetComponentsInChildren<
                             BootGameplayProcessValidationBootstrap>(true))
                         .Single();
+                NetworkBackendBootstrap backendBootstrap =
+                    manager.GetComponent<NetworkBackendBootstrap>();
                 FizzySteamworks fizzy = manager.GetComponent<FizzySteamworks>();
                 LatencySimulation validationTransport =
                     manager.GetComponent<LatencySimulation>();
+                KcpLocalNetworkService kcpService =
+                    manager.GetComponent<KcpLocalNetworkService>();
+                KcpLocalNetworkHud kcpHud =
+                    manager.GetComponent<KcpLocalNetworkHud>();
                 SteamLobbyService lobbyService =
                     manager.GetComponent<SteamLobbyService>();
                 SteamLobbyHud lobbyHud = manager.GetComponent<SteamLobbyHud>();
@@ -488,16 +494,48 @@ namespace MonsterSupergroup.NetworkCombat.Tests
                 Assert.That(
                     processValidation.ConfiguredNetworkManager,
                     Is.SameAs(manager));
+                Assert.That(backendBootstrap, Is.Not.Null);
+                Assert.That(
+                    backendBootstrap.ConfiguredNetworkManager,
+                    Is.SameAs(manager));
                 Assert.That(fizzy, Is.Not.Null);
                 Assert.That(fizzy.enabled, Is.False,
                     "Fizzy remains disabled until Steam initialization succeeds.");
                 Assert.That(manager.transport, Is.SameAs(fizzy));
                 Assert.That(validationTransport, Is.Not.Null);
+                Assert.That(validationTransport.enabled, Is.False);
+                Assert.That(
+                    backendBootstrap.ConfiguredSteamTransport,
+                    Is.SameAs(fizzy));
+                Assert.That(
+                    backendBootstrap.ConfiguredKcpTransport,
+                    Is.Not.Null.And.Not.SameAs(fizzy));
+                Assert.That(
+                    backendBootstrap.ConfiguredKcpTransport.enabled,
+                    Is.False);
+                Assert.That(
+                    backendBootstrap.ConfiguredLatencySimulation,
+                    Is.SameAs(validationTransport));
+                Assert.That(
+                    processValidation.ConfiguredBackendBootstrap,
+                    Is.SameAs(backendBootstrap));
                 Assert.That(
                     processValidation.ConfiguredValidationTransport,
                     Is.SameAs(validationTransport));
                 Assert.That(manager.GetComponent<NetworkManagerHUD>(), Is.Null);
+                Assert.That(kcpService, Is.Not.Null);
+                Assert.That(
+                    kcpService.ConfiguredBackendBootstrap,
+                    Is.SameAs(backendBootstrap));
+                Assert.That(
+                    kcpService.ConfiguredNetworkManager,
+                    Is.SameAs(manager));
+                Assert.That(kcpHud, Is.Not.Null);
+                Assert.That(kcpHud.ConfiguredService, Is.SameAs(kcpService));
                 Assert.That(lobbyService, Is.Not.Null);
+                Assert.That(
+                    lobbyService.ConfiguredBackendBootstrap,
+                    Is.SameAs(backendBootstrap));
                 Assert.That(lobbyService.ConfiguredNetworkManager, Is.SameAs(manager));
                 Assert.That(lobbyService.ConfiguredFizzyTransport, Is.SameAs(fizzy));
                 Assert.That(lobbyHud, Is.Not.Null);

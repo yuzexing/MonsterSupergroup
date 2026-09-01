@@ -82,6 +82,15 @@ namespace AstralShift.HellMaiden.Player.Attacks
 			ApplyProjectileCount(snapshot.ProjectileCount, snapshot.BaseProjectileCount);
 		}
 
+		public void Apply(ProjectilePresentationStats stats)
+		{
+			ApplyDamage(stats.DamageMultiplierSum);
+			ApplySpeed(stats.SpeedMultiplierSum);
+			ApplySize(stats.SizeMultiplierSum);
+			ApplyDuration(stats.DurationMultiplierSum);
+			ApplyProjectileCount(stats.ProjectileCount, stats.BaseProjectileCount);
+		}
+
 		public void ApplyDamage(float percentageMultiplier)
 		{
 			if (!allowNegativeDamageMultiplier)

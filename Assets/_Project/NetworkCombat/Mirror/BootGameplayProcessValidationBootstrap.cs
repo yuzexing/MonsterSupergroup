@@ -3,6 +3,7 @@ using System.Collections;
 using System.Globalization;
 using System.Linq;
 using AstralShift.HellMaiden.AI;
+using AstralShift.HellMaiden.Player.Attacks;
 using Mirror;
 using MonsterSupergroup.Gameplay.Combat;
 using MonsterSupergroup.GAS;
@@ -51,6 +52,7 @@ namespace MonsterSupergroup.NetworkCombat
         private const float DefaultTimeoutSeconds = 50f;
         private const int ValidationEnemyMinimumHealth = 1000;
 
+        [SerializeField] private NetworkBackendBootstrap backendBootstrap;
         [SerializeField] private BootGameplayNetworkManager networkManager;
         [SerializeField] private Transport validationTransport;
         [SerializeField, Min(0f)] private float minimumConnectedSeconds = 5f;
@@ -79,6 +81,14 @@ namespace MonsterSupergroup.NetworkCombat
         private bool replicaRoleObserved;
         private bool serverCanonicalEnemyDamageObserved;
         private bool serverCanonicalPlayersDamaged;
+        private bool localProjectilePresentationSent;
+        private bool remoteProjectilePresentationObserved;
+        private bool ownerProjectileReplicaDuplicateObserved;
+        private int localPresentationSentCount;
+        private int localReplicaSpawnCount;
+        private int remoteReplicaSpawnCount;
+        private bool localPresentationProbeIssued;
+        private int localPresentationProbeSentBaseline;
         private bool preDisconnectObserved;
         private bool disconnectRequested;
         private bool finished;
@@ -89,6 +99,9 @@ namespace MonsterSupergroup.NetworkCombat
         public BootGameplayNetworkManager ConfiguredNetworkManager =>
             networkManager;
 
+        public NetworkBackendBootstrap ConfiguredBackendBootstrap =>
+            backendBootstrap;
+
         public Transport ConfiguredValidationTransport => validationTransport;
 
         public void Configure(BootGameplayNetworkManager manager)
@@ -97,13 +110,34 @@ namespace MonsterSupergroup.NetworkCombat
                 manager.transport is PortTransport
                     ? manager.transport
                     : FindPortTransport(manager);
-            Configure(manager, fallback);
+            Configure(
+                manager,
+                fallback,
+                manager != null
+                    ? manager.GetComponent<NetworkBackendBootstrap>()
+                    : null);
         }
 
         public void Configure(
             BootGameplayNetworkManager manager,
             Transport fallbackTransport)
         {
+            Configure(
+                manager,
+                fallbackTransport,
+                manager != null
+                    ? manager.GetComponent<NetworkBackendBootstrap>()
+                    : null);
+        }
+
+        public void Configure(
+            BootGameplayNetworkManager manager,
+            Transport fallbackTransport,
+            NetworkBackendBootstrap bootstrap)
+        {
+            backendBootstrap = bootstrap != null
+                ? bootstrap
+                : throw new ArgumentNullException(nameof(bootstrap));
             networkManager = manager != null
                 ? manager
                 : throw new ArgumentNullException(nameof(manager));
@@ -153,18 +187,37 @@ namespace MonsterSupergroup.NetworkCombat
                 Finish(false, "Boot validation NetworkManager is missing.");
                 yield break;
             }
-            if (!(validationTransport is PortTransport portTransport))
+            if (backendBootstrap == null ||
+                !backendBootstrap.IsInitialized ||
+                backendBootstrap.Selection.Backend != NetworkBackendKind.Kcp ||
+                backendBootstrap.Selection.Purpose !=
+                    NetworkRuntimePurpose.AutomatedValidation)
             {
-                Finish(false, "Configured validation transport does not expose a port.");
+                Finish(
+                    false,
+                    "Boot validation did not select the automated KCP backend.");
+                yield break;
+            }
+            if (validationTransport !=
+                backendBootstrap.ConfiguredLatencySimulation)
+            {
+                Finish(
+                    false,
+                    "Configured validation transport does not match the " +
+                    "backend simulation transport.");
                 yield break;
             }
 
             Application.runInBackground = true;
-            validationTransport.enabled = true;
-            networkManager.transport = validationTransport;
-            Transport.active = validationTransport;
-            networkManager.networkAddress = options.Address;
-            portTransport.Port = options.Port;
+            if (!backendBootstrap.TryPrepareKcp(
+                    options.Address,
+                    options.Port,
+                    true,
+                    out error))
+            {
+                Finish(false, $"Unable to prepare KCP validation: {error}");
+                yield break;
+            }
             validationStartedAt = Time.realtimeSinceStartup;
 
             if (options.Role == BootGameplayValidationRole.Host)
@@ -292,6 +345,22 @@ namespace MonsterSupergroup.NetworkCombat
                         entry.Damage > 0);
                 }
 
+                NetworkWeaponCombatAdapter localWeaponAdapter =
+                    localPlayer.GetComponent<NetworkWeaponCombatAdapter>();
+                if (localWeaponAdapter != null)
+                {
+                    localPresentationSentCount = Math.Max(
+                        localPresentationSentCount,
+                        localWeaponAdapter.SentPresentationCount);
+                    localReplicaSpawnCount = Math.Max(
+                        localReplicaSpawnCount,
+                        localWeaponAdapter.ReplicaSpawnCount);
+                    localProjectilePresentationSent |=
+                        localWeaponAdapter.SentPresentationCount > 0;
+                    ownerProjectileReplicaDuplicateObserved |=
+                        localWeaponAdapter.ReplicaSpawnCount > 0;
+                }
+
                 if (localDamageTraceObserved &&
                     !localBuildStoppedAfterDamage && build != null &&
                     build.IsBuildActive)
@@ -315,6 +384,25 @@ namespace MonsterSupergroup.NetworkCombat
             currentEnemiesAlive = enemies.Length > 0 &&
                 enemies.All(enemy => enemy.IsCanonicalAlive);
 
+            NetworkWeaponCombatAdapter[] weaponAdapters =
+                FindObjectsByType<NetworkWeaponCombatAdapter>(
+                    FindObjectsSortMode.None);
+            for (int i = 0; i < weaponAdapters.Length; i++)
+            {
+                NetworkWeaponCombatAdapter adapter = weaponAdapters[i];
+                if (adapter == null || adapter.netId == 0u ||
+                    adapter.netId == localPlayerId)
+                {
+                    continue;
+                }
+
+                remoteReplicaSpawnCount = Math.Max(
+                    remoteReplicaSpawnCount,
+                    adapter.ReplicaSpawnCount);
+                remoteProjectilePresentationObserved |=
+                    adapter.ReplicaSpawnCount > 0;
+            }
+
             if (players.Length == 2 && enemies.Length == 2)
             {
                 if (!twoPlayerTopologyObserved)
@@ -323,6 +411,8 @@ namespace MonsterSupergroup.NetworkCombat
                 }
                 twoPlayerTopologyObserved = true;
             }
+
+            MaintainLocalPresentationProbe(localPlayer);
 
             if (localPlayerId != 0u && players.Length == 2 && enemies.Length == 2)
             {
@@ -361,6 +451,60 @@ namespace MonsterSupergroup.NetworkCombat
                 {
                     replicatedEnemyDamageObserved = true;
                 }
+            }
+        }
+
+        private void MaintainLocalPresentationProbe(NetworkIdentity localPlayer)
+        {
+            if (localPlayer == null || !twoPlayerTopologyObserved ||
+                !localBuildStoppedAfterDamage)
+            {
+                return;
+            }
+
+            PlayerBuildRuntime build =
+                localPlayer.GetComponent<PlayerBuildRuntime>();
+            NetworkWeaponCombatAdapter adapter =
+                localPlayer.GetComponent<NetworkWeaponCombatAdapter>();
+            if (build == null || adapter == null)
+            {
+                return;
+            }
+
+            if (!localPresentationProbeIssued &&
+                !remoteProjectilePresentationObserved &&
+                !build.IsBuildActive)
+            {
+                NetworkPlayerBootstrap bootstrap =
+                    localPlayer.GetComponent<NetworkPlayerBootstrap>();
+                var database = bootstrap != null
+                    ? bootstrap.ResolveSharedRuntimeDatabase()
+                    : null;
+                if (database == null)
+                {
+                    return;
+                }
+
+                localPresentationProbeSentBaseline =
+                    adapter.SentPresentationCount;
+                WeaponBehaviour weapon = build.StartInitialBuild(database);
+                weapon.enabled = false;
+                weapon.Attack();
+                localPresentationProbeIssued = true;
+                Debug.Log(
+                    $"{LogPrefix} event=local-projectile-probe-issued " +
+                    $"role={options.Role} player={localPlayerId}");
+                return;
+            }
+
+            if (localPresentationProbeIssued && build.IsBuildActive &&
+                adapter.SentPresentationCount >
+                    localPresentationProbeSentBaseline)
+            {
+                build.ClearBuild();
+                Debug.Log(
+                    $"{LogPrefix} event=local-projectile-probe-cleared " +
+                    $"role={options.Role} player={localPlayerId}");
             }
         }
 
@@ -451,7 +595,10 @@ namespace MonsterSupergroup.NetworkCombat
                 localAutoTargetObserved && localAssignedEnemyTargetObserved &&
                 localDamageTraceObserved &&
                 replicatedEnemyDamageObserved && localPlayerHealthDecreased &&
-                localOwnerRoleObserved && replicaRoleObserved;
+                localOwnerRoleObserved && replicaRoleObserved &&
+                localProjectilePresentationSent &&
+                remoteProjectilePresentationObserved &&
+                !ownerProjectileReplicaDuplicateObserved;
             if (options.Role != BootGameplayValidationRole.Host)
             {
                 return common;
@@ -607,6 +754,8 @@ namespace MonsterSupergroup.NetworkCombat
                 $"roles={localOwnerRoleObserved}/{replicaRoleObserved} " +
                 $"canonicalEnemy={serverCanonicalEnemyDamageObserved} " +
                 $"canonicalPlayers={serverCanonicalPlayersDamaged} " +
+                $"projectiles={localPresentationSentCount}/" +
+                    $"{remoteReplicaSpawnCount}/ownerReplica:{localReplicaSpawnCount} " +
                 $"disconnect={disconnectRequested}";
             if (options.Role != BootGameplayValidationRole.Host ||
                 NetworkCombatWorld.Instance == null)

@@ -717,7 +717,7 @@ MonoBehaviour:
   body: {fileID: 0}
   localChase: {fileID: 0}
   enemyController: {fileID: 0}
-  productMovementOnly: 0
+  productMovementOnly: 1
 --- !u!114 &4298737649338467457
 MonoBehaviour:
   m_ObjectHideFlags: 0

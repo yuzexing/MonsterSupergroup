@@ -1,0 +1,51 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d86708921b60a16aa63e5895753f56e8, type: 3}
+  m_Name: ExtraCriteRatePerk
+  m_EditorClassIdentifier: MonsterSupergroup.Gameplay.Combat::AstralShift.HellMaiden.Data.Perks.PerkData
+  ID: 18
+  Title: Extra Crit Rate
+  Description: Adds {CritRate}[0]% raises crit Rate.
+  hasLocalization: 1
+  TitleKey: PRK_Name_018
+  DescriptionKey: PRK_Desc_018
+  icon: {fileID: 0}
+  poolWeight: 1
+  Dependencies: []
+  perRarityModifiers:
+  - rarity: 1
+    modifiers:
+    - modifier:
+        modifierId: 83886085
+        parameters:
+          rid: 8799243180379734031
+      domain: 0
+      descriptionToken: CritRate
+  - rarity: 2
+    modifiers:
+    - modifier:
+        modifierId: 83886085
+        parameters:
+          rid: 8799243180379734032
+      domain: 0
+      descriptionToken: CritRate
+  references:
+    version: 2
+    RefIds:
+    - rid: 8799243180379734031
+      type: {class: WeaponCritRatePerkModifierParameters, ns: MonsterSupergroup.GAS, asm: MonsterSupergroup.GAS.Core}
+      data:
+        multiplierIncrement: 0.03
+    - rid: 8799243180379734032
+      type: {class: WeaponCritRatePerkModifierParameters, ns: MonsterSupergroup.GAS, asm: MonsterSupergroup.GAS.Core}
+      data:
+        multiplierIncrement: 0.06

@@ -6,13 +6,9 @@ using AstralShift.HellMaiden.Data.Cards;
 using AstralShift.HellMaiden.Player;
 using AstralShift.HellMaiden.Player.Attacks;
 using MonsterSupergroup.GAS;
-using MonsterSupergroup.GAS.Authoring;
 using MonsterSupergroup.Gameplay.Combat;
 using UnityEditor;
 using UnityEngine;
-using UnityEngine.Serialization;
-using LegacyAttackStats = AstralShift.HellMaiden.Player.Attacks.AttackStats;
-using NativeAttackStats = MonsterSupergroup.GAS.AttackStats;
 
 namespace MonsterSupergroup.HellMaidenMigration.Editor
 {
@@ -22,8 +18,6 @@ namespace MonsterSupergroup.HellMaidenMigration.Editor
             "Assets/MonoBehaviour/WeaponData_Dante_SlowProjectile.asset";
         public const string OutputFolder =
             "Assets/_Project/Content/HellMaiden/NativeGAS/Dante";
-        public const string NativeWeaponPath =
-            OutputFolder + "/NativeGasWeapon_Dante_SlowProjectile.asset";
         public const string NetworkPlayerPrefabPath =
             "Assets/_Project/Content/NetworkCombat/NetworkPlayer.prefab";
         public const string NativeWeaponDatabasePath =
@@ -67,22 +61,18 @@ namespace MonsterSupergroup.HellMaidenMigration.Editor
         [MenuItem("Tools/HellMaiden Migration/Rebuild Dante Native GAS Assets")]
         public static void Rebuild()
         {
-            NormalizeLegacyManagedReferenceAssemblies();
             NormalizeAnimancerComponentReferences();
             RepairDanteProjectilePrefabReferences();
             EnsureFolder(OutputFolder);
 
             WeaponData weapon = RequireAsset<WeaponData>(WeaponPath);
-            NativeGasWeaponDefinition nativeWeapon =
-                LoadOrCreate<NativeGasWeaponDefinition>(NativeWeaponPath);
-            ConfigureWeapon(weapon, nativeWeapon);
+            ConfigureWeapon(weapon);
 
             for (int i = 0; i < EquipmentMigrations.Length; i++)
             {
                 ConvertEquipment(EquipmentMigrations[i]);
             }
 
-            weapon.SetNativeGasDefinition(nativeWeapon);
             EditorUtility.SetDirty(weapon);
             EnsureNativeWeaponDatabase(weapon);
             EnsurePlayerBuildRuntime(NetworkPlayerPrefabPath);
@@ -94,47 +84,30 @@ namespace MonsterSupergroup.HellMaidenMigration.Editor
                 "by the Editor converter; runtime definitions contain stable IDs.");
         }
 
-        private static void ConfigureWeapon(
-            WeaponData source,
-            NativeGasWeaponDefinition destination)
+        [MenuItem("Tools/HellMaiden Migration/Reserialize Canonical Equipment Assets")]
+        public static void ReserializeCanonicalEquipmentAssets()
         {
-            LegacyAttackStats legacy = source.BaseStats;
-            var stats = new NativeAttackStats
+            var paths = new List<string>(EquipmentMigrations.Length);
+            for (int i = 0; i < EquipmentMigrations.Length; i++)
             {
-                damage = legacy.damage,
-                critMultiplier = legacy.critMultiplier,
-                critRate = legacy.critRate,
-                speed = legacy.speed,
-                size = legacy.size,
-                duration = legacy.duration,
-                projectileCount = legacy.projectileCount,
-                knockbackDistance = legacy.knockbackSettings != null
-                    ? legacy.knockbackSettings.distance
-                    : 0f,
-                damageType = (MonsterSupergroup.GAS.DamageType)(int)legacy.damageType
-            };
+                paths.Add(EquipmentMigrations[i].SourcePath);
+            }
 
-            destination.Configure(
-                source.ID,
-                stats,
-                BuildTags(legacy.damageType),
-                source.modifierFlags,
-                legacy.knockbackSettings);
-            EditorUtility.SetDirty(destination);
+            AssetDatabase.ForceReserializeAssets(
+                paths,
+                ForceReserializeAssetsOptions.ReserializeAssetsAndMetadata);
+            AssetDatabase.SaveAssets();
+            AssetDatabase.Refresh();
+            Debug.Log("Canonical EquipmentData assets reserialized without legacy fields.");
         }
 
-        private static CombatTags BuildTags(
-            AstralShift.HellMaiden.Player.Attacks.DamageType damageType)
+        private static void ConfigureWeapon(WeaponData weapon)
         {
-            CombatTags tags = CombatTags.Attack | CombatTags.Projectile;
-            switch (damageType)
+            weapon.ValidateNativeGas();
+            if ((weapon.AttackTags & CombatTags.Projectile) == 0)
             {
-                case AstralShift.HellMaiden.Player.Attacks.DamageType.Fire:
-                    return tags | CombatTags.Fire;
-                case AstralShift.HellMaiden.Player.Attacks.DamageType.Poison:
-                    return tags | CombatTags.Poison;
-                default:
-                    return tags;
+                throw new InvalidOperationException(
+                    $"Canonical Dante weapon '{weapon.name}' is missing the Projectile tag.");
             }
         }
 
@@ -144,151 +117,45 @@ namespace MonsterSupergroup.HellMaidenMigration.Editor
             if (source.Levels == null || source.Levels.Length == 0)
             {
                 throw new InvalidOperationException(
-                    $"Legacy equipment '{source.name}' contains no levels.");
+                    $"Canonical equipment '{source.name}' contains no levels.");
             }
 
-            var levels = new List<NativeGasEquipmentLevel>(source.Levels.Length);
             for (int levelIndex = 0; levelIndex < source.Levels.Length; levelIndex++)
             {
                 EquipmentLevelModifiersData sourceLevel = source.Levels[levelIndex]
                     ?? throw new InvalidOperationException(
-                        $"Legacy equipment '{source.name}' has a null level {levelIndex}.");
-                if (sourceLevel.Modifiers == null)
+                        $"Canonical equipment '{source.name}' has a null level {levelIndex}.");
+                EquipmentModifierApplication[] applications = sourceLevel.Modifiers;
+                if (applications.Length == 0)
                 {
                     throw new InvalidOperationException(
-                        $"Legacy equipment '{source.name}' level {levelIndex} has null modifiers.");
+                        $"Canonical equipment '{source.name}' level {levelIndex} has no modifiers.");
                 }
 
-                var modifiers = new List<MonsterSupergroup.GAS.Authoring.EquipmentDataModifier>(
-                    sourceLevel.Modifiers.Length);
                 for (int modifierIndex = 0;
-                    modifierIndex < sourceLevel.Modifiers.Length;
+                    modifierIndex < applications.Length;
                     modifierIndex++)
                 {
-                    modifiers.Add(LegacyEquipmentModifierConverter.Convert(
-                        sourceLevel.Modifiers[modifierIndex]));
-                }
-
-                var level = new NativeGasEquipmentLevel();
-                level.Configure(modifiers);
-                levels.Add(level);
-            }
-
-            string destinationPath = OutputFolder + "/" + migration.OutputName;
-            NativeGasEquipmentDefinition destination =
-                LoadOrCreate<NativeGasEquipmentDefinition>(destinationPath);
-            if (HasSameEquipmentData(destination, levels))
-            {
-                return;
-            }
-
-            // Flush the old managed-reference table before assigning deterministic
-            // IDs to replacement parameter objects. Unity otherwise keeps the old
-            // objects registered until the host asset is serialized.
-            destination.Configure(Array.Empty<NativeGasEquipmentLevel>());
-            EditorUtility.SetDirty(destination);
-            AssetDatabase.SaveAssetIfDirty(destination);
-
-            destination.Configure(levels);
-            AssignDeterministicManagedReferenceIds(destination, levels);
-            EditorUtility.SetDirty(destination);
-        }
-
-        private static bool HasSameEquipmentData(
-            NativeGasEquipmentDefinition destination,
-            IReadOnlyList<NativeGasEquipmentLevel> expectedLevels)
-        {
-            if (destination.LevelCount != expectedLevels.Count)
-            {
-                return false;
-            }
-
-            for (int levelIndex = 0; levelIndex < expectedLevels.Count; levelIndex++)
-            {
-                IReadOnlyList<MonsterSupergroup.GAS.Authoring.EquipmentDataModifier>
-                    actual = destination.GetModifiers(levelIndex);
-                IReadOnlyList<MonsterSupergroup.GAS.Authoring.EquipmentDataModifier>
-                    expected = expectedLevels[levelIndex].Modifiers;
-                if (actual.Count != expected.Count)
-                {
-                    return false;
-                }
-
-                for (int modifierIndex = 0; modifierIndex < expected.Count; modifierIndex++)
-                {
-                    MonsterSupergroup.GAS.Authoring.EquipmentDataModifier actualModifier =
-                        actual[modifierIndex];
-                    MonsterSupergroup.GAS.Authoring.EquipmentDataModifier expectedModifier =
-                        expected[modifierIndex];
-                    if (actualModifier.ModifierIdValue != expectedModifier.ModifierIdValue ||
-                        actualModifier.Parameters == null ||
-                        expectedModifier.Parameters == null ||
-                        actualModifier.Parameters.GetType() !=
-                            expectedModifier.Parameters.GetType() ||
-                        JsonUtility.ToJson(actualModifier.Parameters) !=
-                            JsonUtility.ToJson(expectedModifier.Parameters))
-                    {
-                        return false;
-                    }
-                }
-            }
-
-            return true;
-        }
-
-        private static void AssignDeterministicManagedReferenceIds(
-            NativeGasEquipmentDefinition destination,
-            IReadOnlyList<NativeGasEquipmentLevel> levels)
-        {
-            for (int levelIndex = 0; levelIndex < levels.Count; levelIndex++)
-            {
-                IReadOnlyList<MonsterSupergroup.GAS.Authoring.EquipmentDataModifier>
-                    modifiers = levels[levelIndex].Modifiers;
-                for (int modifierIndex = 0; modifierIndex < modifiers.Count; modifierIndex++)
-                {
-                    long referenceId = (levelIndex + 1L) * 1000L + modifierIndex + 1L;
-                    if (!ManagedReferenceUtility.SetManagedReferenceIdForObject(
-                        destination,
-                        modifiers[modifierIndex].Parameters,
-                        referenceId))
+                    EquipmentModifierApplication application =
+                        applications[modifierIndex]
+                        ?? throw new InvalidOperationException(
+                            $"Canonical equipment '{source.name}' level {levelIndex} " +
+                            $"has a null modifier at index {modifierIndex}.");
+                    if (application.Modifier == null ||
+                        !application.ModifierId.IsValid ||
+                        application.Parameters == null)
                     {
                         throw new InvalidOperationException(
-                            $"Could not assign deterministic managed-reference ID " +
-                            $"{referenceId} in '{destination.name}'.");
+                            $"Canonical equipment '{source.name}' level {levelIndex}, " +
+                            $"modifier {modifierIndex} is incomplete.");
                     }
                 }
             }
-        }
 
-        private static void NormalizeLegacyManagedReferenceAssemblies()
-        {
-            const string oldAssembly = ", asm: Assembly-CSharp}";
-            const string recoveredAssembly =
-                ", asm: MonsterSupergroup.Gameplay.Combat}";
-            string projectRoot = Directory.GetParent(Application.dataPath)?.FullName
-                ?? throw new InvalidOperationException("Could not resolve the Unity project root.");
-
-            for (int i = 0; i < EquipmentMigrations.Length; i++)
+            string duplicatePath = OutputFolder + "/" + migration.OutputName;
+            if (AssetDatabase.LoadMainAssetAtPath(duplicatePath) != null)
             {
-                string assetPath = EquipmentMigrations[i].SourcePath;
-                string fullPath = Path.GetFullPath(Path.Combine(projectRoot, assetPath));
-                if (!File.Exists(fullPath))
-                {
-                    throw new FileNotFoundException(
-                        "Required legacy equipment source is missing.",
-                        fullPath);
-                }
-
-                string yaml = File.ReadAllText(fullPath);
-                string normalized = yaml.Replace(oldAssembly, recoveredAssembly);
-                if (yaml != normalized)
-                {
-                    File.WriteAllText(fullPath, normalized);
-                    AssetDatabase.ImportAsset(
-                        assetPath,
-                        ImportAssetOptions.ForceSynchronousImport |
-                        ImportAssetOptions.ForceUpdate);
-                }
+                AssetDatabase.DeleteAsset(duplicatePath);
             }
         }
 

@@ -29,14 +29,17 @@ MonoBehaviour:
     m_AssetGUID: 8a105f27fba08f14c822435cb80287ae
     m_SubObjectName: 
     m_SubObjectType: 
+    m_SubObjectGUID:
+    m_EditorAssetChanged: 0
   cardType: 0
   usedStatsModifiers: 64
   levelModifiersData:
-  - modifiers:
-    - modifierID:
-        rid: 6481290391402316185
-      parameters:
-        rid: 6481290391402316186
+  - nativeModifiers:
+    - modifier:
+        modifierId: 16777222
+        parameters:
+          rid: 1001
+      descriptionToken: CritMultiplier
       multiSlotConfig: 0
       multiSlot:
         isSelfApplied: 0
@@ -44,11 +47,12 @@ MonoBehaviour:
         rightSlots: 0
     overrideDescription: 0
     descriptionKey: 
-  - modifiers:
-    - modifierID:
-        rid: 6481290391402316187
-      parameters:
-        rid: 6481290391402316188
+  - nativeModifiers:
+    - modifier:
+        modifierId: 16777222
+        parameters:
+          rid: 2001
+      descriptionToken: CritMultiplier
       multiSlotConfig: 0
       multiSlot:
         isSelfApplied: 0
@@ -56,11 +60,12 @@ MonoBehaviour:
         rightSlots: 0
     overrideDescription: 0
     descriptionKey: 
-  - modifiers:
-    - modifierID:
-        rid: 6481290391402316189
-      parameters:
-        rid: 6481290391402316190
+  - nativeModifiers:
+    - modifier:
+        modifierId: 16777222
+        parameters:
+          rid: 3001
+      descriptionToken: CritMultiplier
       multiSlotConfig: 0
       multiSlot:
         isSelfApplied: 0
@@ -71,27 +76,15 @@ MonoBehaviour:
   references:
     version: 2
     RefIds:
-    - rid: 6481290391402316185
-      type: {class: EquipmentModifierID, ns: AstralShift.HellMaiden.Data, asm: MonsterSupergroup.Gameplay.Combat}
-      data:
-        value: 2717296302
-    - rid: 6481290391402316186
-      type: {class: StaticStatModifier/ParamsData, ns: AstralShift.HellMaiden.Combat.Hand, asm: MonsterSupergroup.Gameplay.Combat}
+    - rid: 1001
+      type: {class: CritMultiplierStatModifierParameters, ns: MonsterSupergroup.GAS, asm: MonsterSupergroup.GAS.Core}
       data:
         multiplierIncrement: 0.6
-    - rid: 6481290391402316187
-      type: {class: EquipmentModifierID, ns: AstralShift.HellMaiden.Data, asm: MonsterSupergroup.Gameplay.Combat}
-      data:
-        value: 2717296302
-    - rid: 6481290391402316188
-      type: {class: StaticStatModifier/ParamsData, ns: AstralShift.HellMaiden.Combat.Hand, asm: MonsterSupergroup.Gameplay.Combat}
+    - rid: 2001
+      type: {class: CritMultiplierStatModifierParameters, ns: MonsterSupergroup.GAS, asm: MonsterSupergroup.GAS.Core}
       data:
         multiplierIncrement: 1.2
-    - rid: 6481290391402316189
-      type: {class: EquipmentModifierID, ns: AstralShift.HellMaiden.Data, asm: MonsterSupergroup.Gameplay.Combat}
-      data:
-        value: 2717296302
-    - rid: 6481290391402316190
-      type: {class: StaticStatModifier/ParamsData, ns: AstralShift.HellMaiden.Combat.Hand, asm: MonsterSupergroup.Gameplay.Combat}
+    - rid: 3001
+      type: {class: CritMultiplierStatModifierParameters, ns: MonsterSupergroup.GAS, asm: MonsterSupergroup.GAS.Core}
       data:
         multiplierIncrement: 2

@@ -67,24 +67,13 @@ namespace AstralShift.HellMaiden.Combat.Hand
 
 		public void AddWeapon(RuntimeWeaponData runtimeData, bool isDeactivated = false)
 		{
-			if (runtimeData?.Data != null && runtimeData.Data.UsesNativeGasRuntime)
+			if (runtimeData?.Data == null)
 			{
-				throw new InvalidOperationException(
-					"New GAS native weapons must be equipped by the owning PlayerBuildRuntime, not the legacy singleton PlayerHand.");
+				throw new ArgumentNullException(nameof(runtimeData));
 			}
 
-			WeaponBehaviour weaponBehaviour = UnityEngine.Object.Instantiate(runtimeData.Data.WeaponPrefab, GameDirector.Instance.Player.AttacksParent);
-			weaponBehaviour.Init(runtimeData.Data.ID, runtimeData.Data.BaseStats);
-			WeaponBehaviour = weaponBehaviour;
-			RuntimeWeaponData = runtimeData;
-			_hand.RegisterWeaponChanges();
-			UpdateWeaponBehaviour();
-			if (isDeactivated)
-			{
-				DeactivateWeapon();
-			}
-			GameEvents.Instance.OnWeaponAdded?.Invoke(weaponBehaviour);
-			_hand.DebugLogHand();
+			throw new InvalidOperationException(
+				"WeaponData is Native GAS-only and must be equipped by the owning PlayerBuildRuntime, not the legacy singleton PlayerHand.");
 		}
 
 		public void ActivateWeapon()
@@ -92,7 +81,6 @@ namespace AstralShift.HellMaiden.Combat.Hand
 			if ((bool)WeaponBehaviour)
 			{
 				WeaponBehaviour.Activate();
-				WeaponBehaviour.Init(RuntimeWeaponData.Data.ID, RuntimeWeaponData.Data.BaseStats);
 				_hand.RegisterWeaponChanges();
 				UpdateWeaponBehaviour();
 			}
@@ -155,17 +143,14 @@ namespace AstralShift.HellMaiden.Combat.Hand
 
 		public void AddEquipment(RuntimeEquipmentData equipment)
 		{
-			if (equipment == null)
+			if (equipment?.Data == null)
 			{
-				return;
+				throw new ArgumentNullException(nameof(equipment));
 			}
-			_equipments.Add(equipment);
-			foreach (RuntimeEquipmentModifier runtimeModifier in equipment.RuntimeModifiers)
-			{
-				AddModifier(runtimeModifier);
-			}
-			this.OnEquipmentsChanged?.Invoke(this);
-			_hand.DebugLogHand();
+
+			throw new InvalidOperationException(
+				"EquipmentData is Native GAS-only and must be equipped by the owning " +
+				"PlayerBuildRuntime, not the legacy singleton PlayerHand.");
 		}
 
 		public void AddModifier(RuntimeEquipmentModifier runtimeModifier)

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using AstralShift.HellMaiden.Data.Cards;
+using AstralShift.HellMaiden.Data.Perks;
 using AstralShift.HellMaiden.Combat.Hand.Data;
 using AstralShift.HellMaiden.Player;
 using AstralShift.HellMaiden.Player.Attacks;
@@ -11,6 +12,10 @@ using UnityEngine;
 using GasAttackStatsMultipliers = MonsterSupergroup.GAS.AttackStatsMultipliers;
 using HellMaidenProjectileAttackBehaviour =
     AstralShift.HellMaiden.Player.Attacks.ProjectileAttackBehaviour;
+using EquipmentModifierSlots =
+    AstralShift.HellMaiden.Data.EquipmentModifierSlots;
+using EquipmentMultiSlotConfig =
+    AstralShift.HellMaiden.Data.EquipmentMultiSlotConfig;
 
 namespace MonsterSupergroup.Gameplay.Combat
 {
@@ -18,12 +23,17 @@ namespace MonsterSupergroup.Gameplay.Combat
     [RequireComponent(typeof(CombatRuntimeServiceProvider))]
     public sealed class PlayerBuildRuntime : MonoBehaviour
     {
+        public const int HandSlotCount = 4;
+        public const int MaxEquipmentPerSlot = 3;
+
         private readonly Dictionary<WeaponBehaviour, WeaponEntry> weapons =
             new Dictionary<WeaponBehaviour, WeaponEntry>();
-        private readonly Dictionary<long, EquippedModifierGroup> equipmentByHandle =
-            new Dictionary<long, EquippedModifierGroup>();
-        private readonly Dictionary<long, PerkDataModifier> perksByHandle =
-            new Dictionary<long, PerkDataModifier>();
+        private readonly WeaponEntry[] weaponSlots = new WeaponEntry[HandSlotCount];
+        private readonly int[] equipmentCountsBySlot = new int[HandSlotCount];
+        private readonly Dictionary<long, EquippedEquipment> equipmentByHandle =
+            new Dictionary<long, EquippedEquipment>();
+        private readonly Dictionary<long, EquippedPerk> perksByHandle =
+            new Dictionary<long, EquippedPerk>();
 
         [SerializeField] private PlayerMovement owner;
         [SerializeField] private CombatRuntimeServiceProvider serviceProvider;
@@ -93,17 +103,25 @@ namespace MonsterSupergroup.Gameplay.Combat
 
         public WeaponBehaviour EquipWeapon(WeaponData weaponData, Transform parent = null)
         {
+            return EquipWeaponAtSlot(FindFirstAvailableWeaponSlot(), weaponData, parent);
+        }
+
+        public WeaponBehaviour EquipWeaponAtSlot(
+            int slotIndex,
+            WeaponData weaponData,
+            Transform parent = null)
+        {
             EnsureInitialized();
+            ValidateSlotIndex(slotIndex);
+            if (weaponSlots[slotIndex] != null)
+            {
+                throw new InvalidOperationException(
+                    $"Player build slot {slotIndex} already contains a weapon.");
+            }
+
             if (weaponData == null)
             {
                 throw new ArgumentNullException(nameof(weaponData));
-            }
-
-            NativeGasWeaponDefinition definition = weaponData.NativeGasDefinition;
-            if (definition == null)
-            {
-                throw new InvalidOperationException(
-                    $"WeaponData '{weaponData.name}' has no NativeGasWeaponDefinition.");
             }
 
             if (weaponData.WeaponPrefab == null)
@@ -112,7 +130,7 @@ namespace MonsterSupergroup.Gameplay.Combat
                     $"WeaponData '{weaponData.name}' has no WeaponPrefab.");
             }
 
-            definition.Validate();
+            weaponData.ValidateNativeGas();
             Transform weaponParent = parent != null ? parent : owner.AttacksParent;
             if (weaponParent == null)
             {
@@ -136,19 +154,35 @@ namespace MonsterSupergroup.Gameplay.Combat
                 }
 
                 runtime.InitializeOnAwake = false;
-                ConfigureRuntime(runtime, definition, modifiers);
-                behaviour.ConfigureNativeRuntime(runtime, definition);
-                behaviour.Init(weaponData.ID, weaponData.BaseStats);
+                ConfigureRuntime(runtime, weaponData, modifiers);
+                behaviour.ConfigureNativeRuntime(runtime, weaponData);
+                behaviour.InitNative(weaponData.ID);
 
-                weapons.Add(
-                    behaviour,
-                    new WeaponEntry(behaviour, runtime, definition, modifiers));
+				var entry = new WeaponEntry(
+					behaviour,
+					runtime,
+					weaponData,
+					modifiers,
+					slotIndex);
+                weapons.Add(behaviour, entry);
+				weaponSlots[slotIndex] = entry;
+				AttachExistingEquipmentTo(entry);
 				SubscribeToPresentation(behaviour);
                 behaviour.gameObject.SetActive(true);
                 return behaviour;
             }
             catch
             {
+                if (behaviour != null &&
+                    weapons.TryGetValue(behaviour, out WeaponEntry failedEntry))
+                {
+                    DetachEquipmentFrom(failedEntry);
+                    weapons.Remove(behaviour);
+                    if (weaponSlots[slotIndex] == failedEntry)
+                    {
+                        weaponSlots[slotIndex] = null;
+                    }
+                }
                 modifiers.Clear();
                 if (behaviour != null)
                 {
@@ -170,6 +204,23 @@ namespace MonsterSupergroup.Gameplay.Combat
             return EquipWeapon(BuildDatabase.GetWeaponData(weaponId), parent);
         }
 
+        public WeaponBehaviour EquipWeaponAtSlot(
+            int slotIndex,
+            uint weaponId,
+            Transform parent = null)
+        {
+            if (BuildDatabase == null)
+            {
+                throw new InvalidOperationException(
+                    "PlayerBuildRuntime requires an active RuntimeDB before equipping by ID.");
+            }
+
+            return EquipWeaponAtSlot(
+                slotIndex,
+                BuildDatabase.GetWeaponData(weaponId),
+                parent);
+        }
+
         public bool UnequipWeapon(WeaponBehaviour weapon)
         {
             EnsureInitialized();
@@ -178,8 +229,12 @@ namespace MonsterSupergroup.Gameplay.Combat
                 return false;
             }
 
-            RemoveEquipmentFor(entry);
+            DetachEquipmentFrom(entry);
             weapons.Remove(weapon);
+            if (weaponSlots[entry.SlotIndex] == entry)
+            {
+                weaponSlots[entry.SlotIndex] = null;
+            }
             if (ReferenceEquals(InitialWeapon, weapon))
             {
                 InitialWeapon = null;
@@ -243,6 +298,10 @@ namespace MonsterSupergroup.Gameplay.Combat
             }
 
             equipmentByHandle.Clear();
+            Array.Clear(
+                equipmentCountsBySlot,
+                0,
+                equipmentCountsBySlot.Length);
             perksByHandle.Clear();
             perkMultipliers.Reset();
             BuildDatabase = null;
@@ -251,7 +310,7 @@ namespace MonsterSupergroup.Gameplay.Combat
 
         public PlayerBuildEquipmentHandle AddEquipment(
             WeaponBehaviour weapon,
-            NativeGasEquipmentDefinition equipment,
+            EquipmentData equipment,
             int levelIndex)
         {
             EnsureInitialized();
@@ -262,55 +321,52 @@ namespace MonsterSupergroup.Gameplay.Combat
                     nameof(weapon));
             }
 
+            return AddEquipment(entry.SlotIndex, equipment, levelIndex);
+        }
+
+        public PlayerBuildEquipmentHandle AddEquipment(
+            int sourceSlotIndex,
+            EquipmentData equipment,
+            int levelIndex)
+        {
+            EnsureInitialized();
+            ValidateSlotIndex(sourceSlotIndex);
             if (equipment == null)
             {
                 throw new ArgumentNullException(nameof(equipment));
             }
 
-            IReadOnlyList<EquipmentDataModifier> definitions =
-                equipment.GetModifiers(levelIndex);
-            var modifierHandles = new List<ModifierHandle>(definitions.Count);
+            if (equipmentCountsBySlot[sourceSlotIndex] >= MaxEquipmentPerSlot)
+            {
+                throw new InvalidOperationException(
+                    $"Player build slot {sourceSlotIndex} already contains the maximum " +
+                    $"of {MaxEquipmentPerSlot} equipment cards.");
+            }
+
+            if (equipment.Levels == null ||
+                (uint)levelIndex >= equipment.Levels.Length ||
+                equipment.Levels[levelIndex] == null)
+            {
+                throw new ArgumentOutOfRangeException(
+                    nameof(levelIndex),
+                    $"Equipment '{equipment.name}' has no level {levelIndex}.");
+            }
+
+            var group = new EquippedEquipment(
+                equipment,
+                levelIndex,
+                sourceSlotIndex);
             try
             {
-                for (int i = 0; i < definitions.Count; i++)
-                {
-                    EquipmentDataModifier data = definitions[i] ??
-                        throw new InvalidOperationException(
-                            $"{equipment.name} has a null modifier at level {levelIndex}, index {i}.");
-                    if (!entry.Definition.Supports(data.ModifierId))
-                    {
-                        throw new InvalidOperationException(
-                            $"Weapon '{entry.Definition.name}' does not support modifier " +
-                            $"0x{data.ModifierIdValue:X8} from '{equipment.name}'.");
-                    }
-
-                    RuntimeEquipmentModifier runtimeModifier = data.CreateRuntime(factory);
-                    try
-                    {
-                        modifierHandles.Add(entry.Modifiers.Add(runtimeModifier));
-                    }
-                    catch
-                    {
-                        runtimeModifier.Dispose();
-                        throw;
-                    }
-                }
-
+                ApplyEquipment(group);
                 var handle = new PlayerBuildEquipmentHandle(nextEquipmentHandle++);
-                equipmentByHandle.Add(
-                    handle.Value,
-                    new EquippedModifierGroup(entry, modifierHandles));
-                entry.Runtime.RefreshStats();
+                equipmentByHandle.Add(handle.Value, group);
+                equipmentCountsBySlot[sourceSlotIndex]++;
                 return handle;
             }
             catch
             {
-                for (int i = modifierHandles.Count - 1; i >= 0; i--)
-                {
-                    entry.Modifiers.Remove(modifierHandles[i]);
-                }
-
-                entry.Runtime.RefreshStats();
+                DetachEquipment(group);
                 throw;
             }
         }
@@ -319,26 +375,21 @@ namespace MonsterSupergroup.Gameplay.Combat
         {
             EnsureInitialized();
             if (!handle.IsValid ||
-                !equipmentByHandle.TryGetValue(handle.Value, out EquippedModifierGroup group))
+                !equipmentByHandle.TryGetValue(handle.Value, out EquippedEquipment group))
             {
                 return false;
             }
 
             equipmentByHandle.Remove(handle.Value);
-            for (int i = group.ModifierHandles.Count - 1; i >= 0; i--)
-            {
-                group.Weapon.Modifiers.Remove(group.ModifierHandles[i]);
-            }
-
-            if (group.Weapon.Runtime != null && group.Weapon.Runtime.IsInitialized)
-            {
-                group.Weapon.Runtime.RefreshStats();
-            }
+            equipmentCountsBySlot[group.SourceSlotIndex]--;
+            DetachEquipment(group);
 
             return true;
         }
 
-        public PlayerBuildPerkHandle AddPerk(PerkDataModifier perk)
+        public PlayerBuildPerkHandle AddPerk(
+            PerkData perk,
+            PerkRarity rarity)
         {
             EnsureInitialized();
             if (perk == null)
@@ -346,8 +397,15 @@ namespace MonsterSupergroup.Gameplay.Combat
                 throw new ArgumentNullException(nameof(perk));
             }
 
+            if (!perk.HasRarity(rarity))
+            {
+                throw new ArgumentOutOfRangeException(
+                    nameof(rarity),
+                    $"Perk '{perk.name}' has no {rarity} definition.");
+            }
+
             var handle = new PlayerBuildPerkHandle(nextPerkHandle++);
-            perksByHandle.Add(handle.Value, perk);
+            perksByHandle.Add(handle.Value, new EquippedPerk(perk, rarity));
             try
             {
                 RebuildPerks();
@@ -387,21 +445,21 @@ namespace MonsterSupergroup.Gameplay.Combat
 
             foreach (WeaponEntry entry in weapons.Values)
             {
-                ConfigureRuntime(entry.Runtime, entry.Definition, entry.Modifiers, services);
+                ConfigureRuntime(entry.Runtime, entry.Data, entry.Modifiers, services);
             }
         }
 
         private void ConfigureRuntime(
             WeaponRuntimeBehaviour runtime,
-            NativeGasWeaponDefinition definition,
+            WeaponData weaponData,
             RuntimeEquipmentModifiers modifiers,
             CombatRuntimeServices services = null)
         {
             CombatRuntimeServices effectiveServices = services ?? serviceProvider.Services;
             effectiveServices.Configure(runtime);
             runtime.InitializeExternal(
-                definition.BaseStats,
-                definition.CombatId,
+                weaponData.BaseStats,
+                weaponData.ID,
                 modifiers,
                 perkMultipliers,
                 randomSource,
@@ -418,15 +476,39 @@ namespace MonsterSupergroup.Gameplay.Combat
             orderedHandles.Sort();
             for (int i = 0; i < orderedHandles.Count; i++)
             {
-                RuntimePerkModifier runtime =
-                    perksByHandle[orderedHandles[i]].CreateRuntime(factory);
-                if (!(runtime is WeaponStatsPerkModifier weaponStats))
+                EquippedPerk perk = perksByHandle[orderedHandles[i]];
+                PerkModifierApplication[] applications =
+                    perk.Data.GetRarity(perk.Rarity).Modifiers;
+                for (int applicationIndex = 0;
+                    applicationIndex < applications.Length;
+                    applicationIndex++)
                 {
-                    throw new NotSupportedException(
-                        $"Perk modifier {runtime.GetType().FullName} does not modify weapon stats.");
-                }
+                    PerkModifierApplication application =
+                        applications[applicationIndex]
+                        ?? throw new InvalidOperationException(
+                            $"Perk '{perk.Data.name}' has a null modifier in " +
+                            $"{perk.Rarity} at index {applicationIndex}.");
+                    if (application.Domain != PerkApplicationDomain.WeaponStats)
+                    {
+                        throw new NotSupportedException(
+                            $"Perk '{perk.Data.name}' uses the {application.Domain} " +
+                            "domain, which has not been connected to PlayerBuildRuntime yet.");
+                    }
 
-                weaponStats.Apply(perkMultipliers);
+                    PerkDataModifier data = application.Modifier
+                        ?? throw new InvalidOperationException(
+                            $"Perk '{perk.Data.name}' has no native modifier definition " +
+                            $"in {perk.Rarity} at index {applicationIndex}.");
+                    RuntimePerkModifier runtime = data.CreateRuntime(factory);
+                    if (!(runtime is WeaponStatsPerkModifier weaponStats))
+                    {
+                        throw new InvalidOperationException(
+                            $"Perk modifier {runtime.GetType().FullName} is authored as " +
+                            "WeaponStats but does not implement WeaponStatsPerkModifier.");
+                    }
+
+                    weaponStats.Apply(perkMultipliers);
+                }
             }
 
             foreach (WeaponEntry entry in weapons.Values)
@@ -435,20 +517,184 @@ namespace MonsterSupergroup.Gameplay.Combat
             }
         }
 
-        private void RemoveEquipmentFor(WeaponEntry entry)
+        private void ApplyEquipment(EquippedEquipment equipment)
         {
-            var handles = new List<long>();
-            foreach (KeyValuePair<long, EquippedModifierGroup> pair in equipmentByHandle)
+            for (int slotIndex = 0; slotIndex < weaponSlots.Length; slotIndex++)
             {
-                if (ReferenceEquals(pair.Value.Weapon, entry))
+                WeaponEntry entry = weaponSlots[slotIndex];
+                if (entry != null)
                 {
-                    handles.Add(pair.Key);
+                    ApplyEquipmentToWeapon(equipment, entry);
+                }
+            }
+        }
+
+        private void AttachExistingEquipmentTo(WeaponEntry entry)
+        {
+            var orderedHandles = new List<long>(equipmentByHandle.Keys);
+            orderedHandles.Sort();
+            for (int i = 0; i < orderedHandles.Count; i++)
+            {
+                ApplyEquipmentToWeapon(
+                    equipmentByHandle[orderedHandles[i]],
+                    entry);
+            }
+        }
+
+        private void ApplyEquipmentToWeapon(
+            EquippedEquipment equipment,
+            WeaponEntry entry)
+        {
+            if (equipment.AppliedModifiers.ContainsKey(entry))
+            {
+                return;
+            }
+
+            EquipmentModifierApplication[] definitions =
+                equipment.Data.Levels[equipment.LevelIndex].Modifiers;
+            var modifierHandles = new List<ModifierHandle>(definitions.Length);
+            try
+            {
+                for (int i = 0; i < definitions.Length; i++)
+                {
+                    EquipmentModifierApplication application = definitions[i]
+                        ?? throw new InvalidOperationException(
+                            $"{equipment.Data.name} has a null modifier at level " +
+                            $"{equipment.LevelIndex}, index {i}.");
+                    if (!TargetsSlot(
+                        application,
+                        equipment.SourceSlotIndex,
+                        entry.SlotIndex))
+                    {
+                        continue;
+                    }
+
+                    EquipmentDataModifier data = application.Modifier
+                        ?? throw new InvalidOperationException(
+                            $"{equipment.Data.name} has no native modifier definition " +
+                            $"at level {equipment.LevelIndex}, index {i}.");
+                    if (!entry.Data.Supports(data.ModifierId))
+                    {
+                        throw new InvalidOperationException(
+                            $"Weapon '{entry.Data.name}' does not support modifier " +
+                            $"0x{data.ModifierIdValue:X8} from " +
+                            $"'{equipment.Data.name}'.");
+                    }
+
+                    RuntimeEquipmentModifier runtimeModifier =
+                        data.CreateRuntime(factory);
+                    try
+                    {
+                        modifierHandles.Add(entry.Modifiers.Add(runtimeModifier));
+                    }
+                    catch
+                    {
+                        runtimeModifier.Dispose();
+                        throw;
+                    }
+                }
+
+                equipment.AppliedModifiers.Add(entry, modifierHandles);
+                if (entry.Runtime.IsInitialized)
+                {
+                    entry.Runtime.RefreshStats();
+                }
+            }
+            catch
+            {
+                RemoveModifierHandles(entry, modifierHandles);
+                throw;
+            }
+        }
+
+        private void DetachEquipmentFrom(WeaponEntry entry)
+        {
+            foreach (EquippedEquipment equipment in equipmentByHandle.Values)
+            {
+                if (equipment.AppliedModifiers.TryGetValue(
+                    entry,
+                    out List<ModifierHandle> handles))
+                {
+                    equipment.AppliedModifiers.Remove(entry);
+                    RemoveModifierHandles(entry, handles);
+                }
+            }
+        }
+
+        private static void DetachEquipment(EquippedEquipment equipment)
+        {
+            var applied = new List<KeyValuePair<WeaponEntry, List<ModifierHandle>>>(
+                equipment.AppliedModifiers);
+            equipment.AppliedModifiers.Clear();
+            for (int i = 0; i < applied.Count; i++)
+            {
+                RemoveModifierHandles(applied[i].Key, applied[i].Value);
+            }
+        }
+
+        private static void RemoveModifierHandles(
+            WeaponEntry entry,
+            IReadOnlyList<ModifierHandle> handles)
+        {
+            for (int i = handles.Count - 1; i >= 0; i--)
+            {
+                entry.Modifiers.Remove(handles[i]);
+            }
+
+            if (entry.Runtime != null && entry.Runtime.IsInitialized)
+            {
+                entry.Runtime.RefreshStats();
+            }
+        }
+
+        private static bool TargetsSlot(
+            EquipmentModifierApplication application,
+            int sourceSlotIndex,
+            int targetSlotIndex)
+        {
+            if (!application.HasMultiSlotConfig)
+            {
+                return sourceSlotIndex == targetSlotIndex;
+            }
+
+            EquipmentMultiSlotConfig multiSlot = application.MultiSlot;
+            if (sourceSlotIndex == targetSlotIndex)
+            {
+                return multiSlot != null && multiSlot.IsSelfApplied;
+            }
+
+            int distance = Math.Abs(targetSlotIndex - sourceSlotIndex);
+            if (distance < 1 || distance > 3 || multiSlot == null)
+            {
+                return false;
+            }
+
+            EquipmentModifierSlots flag =
+                (EquipmentModifierSlots)(1 << (distance - 1));
+            return targetSlotIndex < sourceSlotIndex
+                ? (multiSlot.LeftSlots & flag) != EquipmentModifierSlots.None
+                : (multiSlot.RightSlots & flag) != EquipmentModifierSlots.None;
+        }
+
+        private int FindFirstAvailableWeaponSlot()
+        {
+            for (int i = 0; i < weaponSlots.Length; i++)
+            {
+                if (weaponSlots[i] == null)
+                {
+                    return i;
                 }
             }
 
-            for (int i = 0; i < handles.Count; i++)
+            throw new InvalidOperationException(
+                $"All {HandSlotCount} PlayerBuildRuntime weapon slots are occupied.");
+        }
+
+        private static void ValidateSlotIndex(int slotIndex)
+        {
+            if ((uint)slotIndex >= HandSlotCount)
             {
-                RemoveEquipment(new PlayerBuildEquipmentHandle(handles[i]));
+                throw new ArgumentOutOfRangeException(nameof(slotIndex));
             }
         }
 
@@ -516,33 +762,53 @@ namespace MonsterSupergroup.Gameplay.Combat
             public WeaponEntry(
                 WeaponBehaviour behaviour,
                 WeaponRuntimeBehaviour runtime,
-                NativeGasWeaponDefinition definition,
-                RuntimeEquipmentModifiers modifiers)
+                WeaponData data,
+                RuntimeEquipmentModifiers modifiers,
+                int slotIndex)
             {
                 Behaviour = behaviour;
                 Runtime = runtime;
-                Definition = definition;
+                Data = data;
                 Modifiers = modifiers;
+                SlotIndex = slotIndex;
             }
 
             public WeaponBehaviour Behaviour { get; }
             public WeaponRuntimeBehaviour Runtime { get; }
-            public NativeGasWeaponDefinition Definition { get; }
+            public WeaponData Data { get; }
             public RuntimeEquipmentModifiers Modifiers { get; }
+            public int SlotIndex { get; }
         }
 
-        private sealed class EquippedModifierGroup
+        private sealed class EquippedEquipment
         {
-            public EquippedModifierGroup(
-                WeaponEntry weapon,
-                IReadOnlyList<ModifierHandle> modifierHandles)
+            public EquippedEquipment(
+                EquipmentData data,
+                int levelIndex,
+                int sourceSlotIndex)
             {
-                Weapon = weapon;
-                ModifierHandles = modifierHandles;
+                Data = data;
+                LevelIndex = levelIndex;
+                SourceSlotIndex = sourceSlotIndex;
             }
 
-            public WeaponEntry Weapon { get; }
-            public IReadOnlyList<ModifierHandle> ModifierHandles { get; }
+            public EquipmentData Data { get; }
+            public int LevelIndex { get; }
+            public int SourceSlotIndex { get; }
+            public Dictionary<WeaponEntry, List<ModifierHandle>> AppliedModifiers
+                { get; } = new Dictionary<WeaponEntry, List<ModifierHandle>>();
+        }
+
+        private sealed class EquippedPerk
+        {
+            public EquippedPerk(PerkData data, PerkRarity rarity)
+            {
+                Data = data;
+                Rarity = rarity;
+            }
+
+            public PerkData Data { get; }
+            public PerkRarity Rarity { get; }
         }
     }
 

@@ -241,18 +241,22 @@ namespace AstralShift.HellMaiden.UI.Menus.PauseMenu
 			cardNameTxt.text = data.GetTitle();
 			cardDescriptionTxt.text = data.GetDescription(equipment.LevelIndex);
 			EquipmentLevelModifiersData equipmentLevelModifiersData = data.Levels[equipment.LevelIndex];
-			EquipmentDataModifier[] staticStatModifiers = equipmentLevelModifiersData.GetStaticStatModifiers();
-			staticStatModifiers = staticStatModifiers.Where((EquipmentDataModifier modifier) => !modifier.HasMultiSlotConfig || (modifier.HasMultiSlotConfig && modifier.MultiSlot.IsSelfApplied)).ToArray();
+			EquipmentModifierApplication[] staticStatModifiers =
+				equipmentLevelModifiersData.GetStaticStatModifiers();
+			staticStatModifiers = staticStatModifiers.Where(
+				(EquipmentModifierApplication modifier) =>
+					!modifier.HasMultiSlotConfig ||
+					modifier.MultiSlot.IsSelfApplied).ToArray();
 			WeaponStatDisplayContext displayContext = WeaponStatDisplayContext.OtherSource;
 			ShowEmptyText();
 			WeaponBehaviourStats.StatFormulaMultipliers formulaMultipliers = WeaponBehaviourStats.StatFormulaMultipliers.BaseAndPlayer;
-			float statValue = weapon.StatsBehaviour.GetStatValue(AttackStatType.Damage, formulaMultipliers);
-			float statValue2 = weapon.StatsBehaviour.GetStatValue(AttackStatType.Speed, formulaMultipliers);
-			float statValue3 = weapon.StatsBehaviour.GetStatValue(AttackStatType.CritDamage, formulaMultipliers);
-			float statValue4 = weapon.StatsBehaviour.GetStatValue(AttackStatType.CritRate, formulaMultipliers);
-			float statValue5 = weapon.StatsBehaviour.GetStatValue(AttackStatType.Size, formulaMultipliers);
-			float statValue6 = weapon.StatsBehaviour.GetStatValue(AttackStatType.Duration, formulaMultipliers);
-			float statValue7 = weapon.StatsBehaviour.GetStatValue(AttackStatType.ProjectileCount, formulaMultipliers);
+			float statValue = weapon.DamageValue;
+			float statValue2 = weapon.SpeedValue;
+			float statValue3 = weapon.CritMultiplier;
+			float statValue4 = weapon.CritRate;
+			float statValue5 = weapon.SizeValue;
+			float statValue6 = weapon.DurationValue;
+			float statValue7 = weapon.ProjectileCountValue;
 			SetWeaponStat(ref damageStat, weaponData.GetBaseDamage(), statValue, AttackStatType.Damage, displayContext);
 			SetWeaponStat(ref speedStat, weaponData.GetBaseSpeed(), weapon.GetAttacksPerSecond(statValue2), AttackStatType.Speed, displayContext);
 			SetWeaponStat(ref critDamageStat, weaponData.GetBaseCritMultiplier(), statValue3, AttackStatType.CritDamage, displayContext);
@@ -264,47 +268,46 @@ namespace AstralShift.HellMaiden.UI.Menus.PauseMenu
 			WeaponStatDisplayContext displayContext2 = WeaponStatDisplayContext.OwnSource;
 			for (int num = 0; num < staticStatModifiers.Length; num++)
 			{
-				DataModifierResolver.TryGetEquipmentModifierClassTypeByID(staticStatModifiers[num].ModifierID, out var type);
 				float parameterByIndex = staticStatModifiers[num].GetParameterByIndex(idx);
 				if (parameterByIndex == 0f)
 				{
 					continue;
 				}
-				Type type2 = type;
-				if ((object)type2 != null)
+				switch (staticStatModifiers[num].ModifierIdValue)
 				{
-					if (type2 == typeof(DamageStatModifier))
+					case MonsterSupergroup.GAS.DamageStatModifier.ModifierIdValue:
 					{
 						float value = weaponData.GetBaseDamage() * parameterByIndex;
 						SetWeaponStat(ref damageStat, value, statValue, AttackStatType.Damage, displayContext2);
+						break;
 					}
-					else if (type2 == typeof(SpeedStatModifier))
+					case MonsterSupergroup.GAS.SpeedStatModifier.ModifierIdValue:
 					{
 						float value2 = weaponData.GetBaseSpeed() * parameterByIndex;
 						SetWeaponStat(ref speedStat, value2, weapon.GetAttacksPerSecond(statValue2), AttackStatType.Speed, displayContext2);
+						break;
 					}
-					else if (type2 == typeof(CritMultiplierStatModifier))
-					{
+					case MonsterSupergroup.GAS.CritMultiplierStatModifier.ModifierIdValue:
 						SetWeaponStat(ref critDamageStat, parameterByIndex, statValue3, AttackStatType.CritDamage, displayContext2);
-					}
-					else if (type2 == typeof(CritRateStatModifier))
-					{
+						break;
+					case MonsterSupergroup.GAS.CritRateStatModifier.ModifierIdValue:
 						SetWeaponStat(ref critRateStat, parameterByIndex, statValue4, AttackStatType.CritRate, displayContext2);
-					}
-					else if (type2 == typeof(SizeStatModifier))
+						break;
+					case MonsterSupergroup.GAS.SizeStatModifier.ModifierIdValue:
 					{
 						float value3 = weaponData.GetBaseSize() * parameterByIndex;
 						SetWeaponStat(ref sizeStat, value3, statValue5, AttackStatType.Size, displayContext2);
+						break;
 					}
-					else if (type2 == typeof(DurationStatModifier))
+					case MonsterSupergroup.GAS.DurationStatModifier.ModifierIdValue:
 					{
 						float value4 = weaponData.GetBaseDuration() * parameterByIndex;
 						SetWeaponStat(ref durationStat, value4, statValue6, AttackStatType.Duration, displayContext2);
+						break;
 					}
-					else if (type2 == typeof(ProjectileRaiseEquipmentModifier))
-					{
+					case MonsterSupergroup.GAS.ProjectileCountStatModifier.ModifierIdValue:
 						SetWeaponStat(ref projectileCountStat, parameterByIndex, statValue7, AttackStatType.ProjectileCount, displayContext2);
-					}
+						break;
 				}
 			}
 			SetShrineStats(weapon, weaponData);
@@ -663,16 +666,18 @@ namespace AstralShift.HellMaiden.UI.Menus.PauseMenu
 			translation += ": {0} {1} {2 }%";
 			translation2 += ": {0} {1} {2} %";
 			StringBuilder stringBuilder = new StringBuilder();
-			EquipmentDataModifier[] onHitModifiers = levelModifiersData.GetOnHitModifiers();
-			EquipmentDataModifier[] onKillModifiers = levelModifiersData.GetOnKillModifiers();
+			EquipmentModifierApplication[] onHitModifiers =
+				levelModifiersData.GetOnHitModifiers();
+			EquipmentModifierApplication[] onKillModifiers =
+				levelModifiersData.GetOnKillModifiers();
 			int num = 0;
 			for (int i = 0; i < onHitModifiers.Length; i++)
 			{
 				num++;
-				EquipmentDataModifier equipmentDataModifier = onHitModifiers[i];
-				string translation3 = LocalizationMediator.GetTranslation("STT_" + ModifiersStringHelpers.GetEquipmentModifierNameLocKey(equipmentDataModifier.ModifierID));
+				EquipmentModifierApplication equipmentDataModifier = onHitModifiers[i];
+				string translation3 = LocalizationMediator.GetTranslation("STT_" + ModifiersStringHelpers.GetEquipmentModifierNameLocKey(equipmentDataModifier.ModifierIdValue));
 				string arg = DataModifierUtils.FormatMultiplierToPercentage(equipmentDataModifier.GetParameterByIndex(0));
-				stringBuilder.AppendFormat(translation, ModifiersStringHelpers.GetEquipmentModifierStringIcon(equipmentDataModifier.ModifierID), translation3, arg);
+				stringBuilder.AppendFormat(translation, ModifiersStringHelpers.GetEquipmentModifierStringIcon(equipmentDataModifier.ModifierIdValue), translation3, arg);
 				if (num == 3)
 				{
 					stringBuilder.AppendFormat("\n");
@@ -690,10 +695,10 @@ namespace AstralShift.HellMaiden.UI.Menus.PauseMenu
 			for (int j = 0; j < onKillModifiers.Length; j++)
 			{
 				num++;
-				EquipmentDataModifier equipmentDataModifier2 = onKillModifiers[j];
-				string translation4 = LocalizationMediator.GetTranslation("STT_" + ModifiersStringHelpers.GetEquipmentModifierNameLocKey(equipmentDataModifier2.ModifierID));
+				EquipmentModifierApplication equipmentDataModifier2 = onKillModifiers[j];
+				string translation4 = LocalizationMediator.GetTranslation("STT_" + ModifiersStringHelpers.GetEquipmentModifierNameLocKey(equipmentDataModifier2.ModifierIdValue));
 				string arg2 = DataModifierUtils.FormatMultiplierToPercentage(equipmentDataModifier2.GetParameterByIndex(0));
-				stringBuilder.AppendFormat(translation2, ModifiersStringHelpers.GetEquipmentModifierStringIcon(equipmentDataModifier2.ModifierID), translation4, arg2);
+				stringBuilder.AppendFormat(translation2, ModifiersStringHelpers.GetEquipmentModifierStringIcon(equipmentDataModifier2.ModifierIdValue), translation4, arg2);
 				if (num == 3)
 				{
 					stringBuilder.AppendFormat("\n");

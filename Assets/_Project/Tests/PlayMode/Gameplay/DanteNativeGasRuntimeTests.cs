@@ -4,6 +4,7 @@ using AstralShift.HellMaiden.AI.Enemy;
 using AstralShift.HellMaiden.Combat;
 using AstralShift.HellMaiden.Combat.Hand.Data;
 using AstralShift.HellMaiden.Data.Cards;
+using AstralShift.HellMaiden.Data.Perks;
 using AstralShift.HellMaiden.Player;
 using AstralShift.HellMaiden.Player.Attacks;
 using MonsterSupergroup.GAS;
@@ -22,11 +23,11 @@ namespace MonsterSupergroup.Gameplay.Tests
         private const string WeaponPath =
             "Assets/MonoBehaviour/WeaponData_Dante_SlowProjectile.asset";
         private const string DamageEquipmentPath =
-            "Assets/_Project/Content/HellMaiden/NativeGAS/Dante/" +
-            "NativeGasEquipment_Damage.asset";
+            "Assets/MonoBehaviour/StatRaise_DamageRaiseEquipment.asset";
         private const string SpeedEquipmentPath =
-            "Assets/_Project/Content/HellMaiden/NativeGAS/Dante/" +
-            "NativeGasEquipment_Speed.asset";
+            "Assets/MonoBehaviour/StatRaise_SpeedRaiseEquipment.asset";
+        private const string AttackSpeedPerkPath =
+            "Assets/MonoBehaviour/AttackSpeedPerk.asset";
         private const string WeaponDatabasePath =
             "Assets/_Project/Content/HellMaiden/NativeGAS/NativeGasWeaponDB.asset";
 
@@ -47,9 +48,8 @@ namespace MonsterSupergroup.Gameplay.Tests
                     out playerObject);
                 WeaponDB weaponDatabase = ResourcesLoadAsset<WeaponDB>(
                     WeaponDatabasePath);
-                NativeGasEquipmentDefinition damageEquipment =
-                    ResourcesLoadAsset<NativeGasEquipmentDefinition>(
-                        DamageEquipmentPath);
+                EquipmentData damageEquipment =
+                    ResourcesLoadAsset<EquipmentData>(DamageEquipmentPath);
                 databaseObject = new GameObject("Runtime DB");
                 RuntimeDB runtimeDatabase = databaseObject.AddComponent<RuntimeDB>();
                 runtimeDatabase.ConfigureWeaponDatabase(weaponDatabase);
@@ -61,7 +61,8 @@ namespace MonsterSupergroup.Gameplay.Tests
                 Assert.That(build.BuildDatabase, Is.SameAs(runtimeDatabase));
                 Assert.That(build.InitialWeapon, Is.SameAs(weapon));
                 Assert.That(weapon.ID, Is.EqualTo(2u));
-                Assert.That(weapon.UsesNativeGasRuntime, Is.True);
+                Assert.That(weapon.NativeRuntime, Is.Not.Null);
+                Assert.That(weapon.NativeRuntime.IsInitialized, Is.True);
                 PlayerBuildEquipmentHandle damageHandle =
                     build.AddEquipment(weapon, damageEquipment, 0);
                 Assert.That(weapon.DamageValue, Is.EqualTo(20));
@@ -117,8 +118,8 @@ namespace MonsterSupergroup.Gameplay.Tests
                     out playerObjectB);
 
                 WeaponData weaponData = ResourcesLoadAsset<WeaponData>(WeaponPath);
-                NativeGasEquipmentDefinition damageEquipment =
-                    ResourcesLoadAsset<NativeGasEquipmentDefinition>(DamageEquipmentPath);
+                EquipmentData damageEquipment =
+                    ResourcesLoadAsset<EquipmentData>(DamageEquipmentPath);
 
                 WeaponBehaviour weaponA = buildA.EquipWeapon(weaponData);
                 WeaponBehaviour weaponB = buildB.EquipWeapon(weaponData);
@@ -126,8 +127,10 @@ namespace MonsterSupergroup.Gameplay.Tests
                 Assert.That(
                     weaponA,
                     Is.TypeOf<AstralShift.HellMaiden.Player.Attacks.ProjectileAttackBehaviour>());
-                Assert.That(weaponA.UsesNativeGasRuntime, Is.True);
-                Assert.That(weaponB.UsesNativeGasRuntime, Is.True);
+                Assert.That(weaponA.NativeRuntime, Is.Not.Null);
+                Assert.That(weaponA.NativeRuntime.IsInitialized, Is.True);
+                Assert.That(weaponB.NativeRuntime, Is.Not.Null);
+                Assert.That(weaponB.NativeRuntime.IsInitialized, Is.True);
                 Assert.That(weaponA.NativeRuntime.RuntimeModifiers,
                     Is.Not.SameAs(weaponB.NativeRuntime.RuntimeModifiers));
                 Assert.That(weaponA.DamageValue, Is.EqualTo(15));
@@ -139,7 +142,7 @@ namespace MonsterSupergroup.Gameplay.Tests
                 Assert.That(weaponB.DamageValue, Is.EqualTo(15));
 
                 using (AttackSnapshot frozen = weaponA.NativeRuntime.BeginAttack(
-                    weaponA.NativeDefinition.AttackTags))
+                    weaponA.WeaponData.AttackTags))
                 {
                     Assert.That(frozen.Stats.Damage, Is.EqualTo(20));
                     Assert.That(buildA.RemoveEquipment(damageHandle), Is.True);
@@ -180,6 +183,146 @@ namespace MonsterSupergroup.Gameplay.Tests
             }
         }
 
+        [Test]
+        public void CanonicalPerkData_AppliesOnlyToItsOwningPlayerBuild()
+        {
+            GameObject poolObject = null;
+            GameObject playerObjectA = null;
+            GameObject playerObjectB = null;
+            try
+            {
+                poolObject = new GameObject("Test Pool Manager");
+                PoolManager pool = poolObject.AddComponent<PoolManager>();
+                pool.Init();
+
+                PlayerBuildRuntime buildA = CreateInactivePlayer(
+                    "Perk Player A",
+                    out playerObjectA);
+                PlayerBuildRuntime buildB = CreateInactivePlayer(
+                    "Perk Player B",
+                    out playerObjectB);
+                WeaponData weaponData = ResourcesLoadAsset<WeaponData>(WeaponPath);
+                WeaponBehaviour weaponA = buildA.EquipWeapon(weaponData);
+                WeaponBehaviour weaponB = buildB.EquipWeapon(weaponData);
+
+                PerkData perk = ResourcesLoadAsset<PerkData>(AttackSpeedPerkPath);
+
+                PlayerBuildPerkHandle handle = buildA.AddPerk(
+                    perk,
+                    PerkRarity.Bronze);
+
+                Assert.That(weaponA.SpeedMultiplierSum, Is.EqualTo(0.05f));
+                Assert.That(weaponA.SpeedValue, Is.EqualTo(0.42f).Within(0.0001f));
+                Assert.That(weaponB.SpeedMultiplierSum, Is.Zero);
+                Assert.That(weaponB.SpeedValue, Is.EqualTo(0.4f).Within(0.0001f));
+                Assert.That(buildA.PerkCount, Is.EqualTo(1));
+                Assert.That(buildB.PerkCount, Is.Zero);
+
+                Assert.That(buildA.RemovePerk(handle), Is.True);
+                Assert.That(weaponA.SpeedMultiplierSum, Is.Zero);
+                Assert.That(weaponA.SpeedValue, Is.EqualTo(0.4f).Within(0.0001f));
+            }
+            finally
+            {
+                if (playerObjectA != null)
+                {
+                    UnityEngine.Object.DestroyImmediate(playerObjectA);
+                }
+                if (playerObjectB != null)
+                {
+                    UnityEngine.Object.DestroyImmediate(playerObjectB);
+                }
+                if (poolObject != null)
+                {
+                    UnityEngine.Object.DestroyImmediate(poolObject);
+                }
+
+                PoolManager.Instance = null;
+            }
+        }
+
+        [Test]
+        public void PlayerBuildSlots_PreserveLegacyMultiSlotTargetingWithoutPlayerHand()
+        {
+            GameObject poolObject = null;
+            GameObject playerObject = null;
+            EquipmentData equipment = null;
+            try
+            {
+                poolObject = new GameObject("Test Pool Manager");
+                PoolManager pool = poolObject.AddComponent<PoolManager>();
+                pool.Init();
+
+                PlayerBuildRuntime build = CreateInactivePlayer(
+                    "Multi Slot Player",
+                    out playerObject);
+                WeaponData weaponData = ResourcesLoadAsset<WeaponData>(WeaponPath);
+                WeaponBehaviour sourceWeapon = build.EquipWeaponAtSlot(
+                    0,
+                    weaponData);
+                WeaponBehaviour rightWeapon = build.EquipWeaponAtSlot(
+                    1,
+                    weaponData);
+
+                var modifier = new MonsterSupergroup.GAS.Authoring.EquipmentDataModifier(
+                    new EquipmentModifierID(DamageStatModifier.ModifierIdValue),
+                    new DamageStatModifierParameters(0.3f));
+                var multiSlot = new AstralShift.HellMaiden.Data.EquipmentMultiSlotConfig
+                {
+                    isSelfApplied = false,
+                    leftSlots = AstralShift.HellMaiden.Data.EquipmentModifierSlots.None,
+                    rightSlots = AstralShift.HellMaiden.Data.EquipmentModifierSlots.One
+                };
+                var application = new EquipmentModifierApplication();
+                application.Configure(
+                    modifier,
+                    "DamageRaise",
+                    true,
+                    multiSlot);
+                var level = new EquipmentLevelModifiersData();
+                level.ConfigureNative(new[] { application });
+                equipment = ScriptableObject.CreateInstance<EquipmentData>();
+                equipment.ID = 9001u;
+                SetInstanceField(
+                    equipment,
+                    "levelModifiersData",
+                    new[] { level });
+
+                PlayerBuildEquipmentHandle handle =
+                    build.AddEquipment(0, equipment, 0);
+
+                Assert.That(sourceWeapon.DamageValue, Is.EqualTo(15));
+                Assert.That(rightWeapon.DamageValue, Is.EqualTo(20));
+
+                Assert.That(build.UnequipWeapon(rightWeapon), Is.True);
+                WeaponBehaviour replacement = build.EquipWeaponAtSlot(1, weaponData);
+                Assert.That(
+                    replacement.DamageValue,
+                    Is.EqualTo(20),
+                    "Equipment must remain in its source slot and reapply to a replacement weapon.");
+
+                Assert.That(build.RemoveEquipment(handle), Is.True);
+                Assert.That(replacement.DamageValue, Is.EqualTo(15));
+            }
+            finally
+            {
+                if (equipment != null)
+                {
+                    UnityEngine.Object.DestroyImmediate(equipment);
+                }
+                if (playerObject != null)
+                {
+                    UnityEngine.Object.DestroyImmediate(playerObject);
+                }
+                if (poolObject != null)
+                {
+                    UnityEngine.Object.DestroyImmediate(poolObject);
+                }
+
+                PoolManager.Instance = null;
+            }
+        }
+
         [UnityTest]
         public IEnumerator RealDanteWeapon_AttackSpawnsProjectileAndResolvesOnlyThroughNativeGas()
         {
@@ -207,8 +350,8 @@ namespace MonsterSupergroup.Gameplay.Tests
                 player.SetAimDirection(Vector2.right);
 
                 WeaponData weaponData = ResourcesLoadAsset<WeaponData>(WeaponPath);
-                NativeGasEquipmentDefinition damageEquipment =
-                    ResourcesLoadAsset<NativeGasEquipmentDefinition>(DamageEquipmentPath);
+                EquipmentData damageEquipment =
+                    ResourcesLoadAsset<EquipmentData>(DamageEquipmentPath);
                 WeaponBehaviour weapon = build.EquipWeapon(weaponData);
                 SetInstanceField(weapon, "hitCount", 1);
                 PlayerBuildEquipmentHandle damageHandle =
@@ -393,9 +536,8 @@ namespace MonsterSupergroup.Gameplay.Tests
                 player.SetAimDirection(Vector2.right);
 
                 WeaponData weaponData = ResourcesLoadAsset<WeaponData>(WeaponPath);
-                NativeGasEquipmentDefinition speedEquipment =
-                    ResourcesLoadAsset<NativeGasEquipmentDefinition>(
-                        SpeedEquipmentPath);
+                EquipmentData speedEquipment =
+                    ResourcesLoadAsset<EquipmentData>(SpeedEquipmentPath);
                 WeaponBehaviour weapon = build.EquipWeapon(weaponData);
                 PlayerBuildEquipmentHandle speedHandle =
                     build.AddEquipment(weapon, speedEquipment, 0);

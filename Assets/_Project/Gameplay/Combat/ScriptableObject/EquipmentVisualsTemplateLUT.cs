@@ -85,7 +85,8 @@ public class EquipmentVisualsTemplateLUT : ScriptableObject
 		{
 			return defaultAssets.sprite;
 		}
-		return GetModifierIconSprite(perLevelModifiers.Modifiers[0].ModifierID);
+		return GetModifierIconSprite(
+			perLevelModifiers.Modifiers[0].ModifierIdValue);
 	}
 
 	private Sprite GetModifierIconSprite(uint id)

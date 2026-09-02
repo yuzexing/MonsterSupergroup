@@ -1,0 +1,63 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d86708921b60a16aa63e5895753f56e8, type: 3}
+  m_Name: AttackSpeedPerk
+  m_EditorClassIdentifier: MonsterSupergroup.Gameplay.Combat::AstralShift.HellMaiden.Data.Perks.PerkData
+  ID: 3
+  Title: Attack Speed
+  Description: Raises Attack Speed by {PlayerAttackSpeed}[0]%.
+  hasLocalization: 1
+  TitleKey: PRK_Name_003
+  DescriptionKey: PRK_Desc_003
+  icon: {fileID: 0}
+  poolWeight: 1
+  Dependencies: []
+  perRarityModifiers:
+  - rarity: 0
+    modifiers:
+    - modifier:
+        modifierId: 83886081
+        parameters:
+          rid: 8799243180379734028
+      domain: 0
+      descriptionToken: PlayerAttackSpeed
+  - rarity: 1
+    modifiers:
+    - modifier:
+        modifierId: 83886081
+        parameters:
+          rid: 8799243180379734029
+      domain: 0
+      descriptionToken: PlayerAttackSpeed
+  - rarity: 2
+    modifiers:
+    - modifier:
+        modifierId: 83886081
+        parameters:
+          rid: 8799243180379734030
+      domain: 0
+      descriptionToken: PlayerAttackSpeed
+  references:
+    version: 2
+    RefIds:
+    - rid: 8799243180379734028
+      type: {class: WeaponSpeedPerkModifierParameters, ns: MonsterSupergroup.GAS, asm: MonsterSupergroup.GAS.Core}
+      data:
+        multiplierIncrement: 0.05
+    - rid: 8799243180379734029
+      type: {class: WeaponSpeedPerkModifierParameters, ns: MonsterSupergroup.GAS, asm: MonsterSupergroup.GAS.Core}
+      data:
+        multiplierIncrement: 0.07
+    - rid: 8799243180379734030
+      type: {class: WeaponSpeedPerkModifierParameters, ns: MonsterSupergroup.GAS, asm: MonsterSupergroup.GAS.Core}
+      data:
+        multiplierIncrement: 0.1

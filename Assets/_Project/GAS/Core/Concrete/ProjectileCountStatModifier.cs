@@ -16,6 +16,12 @@ namespace MonsterSupergroup.GAS
 
         public int countIncrement;
         public int CountIncrement => countIncrement;
+
+        public override bool TryGetNumericParameter(int index, out float value)
+        {
+            value = countIncrement;
+            return index == 0;
+        }
     }
 
     [EquipmentModifierType(

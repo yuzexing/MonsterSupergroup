@@ -184,16 +184,16 @@ namespace AstralShift.HellMaiden.UI.Menus
 			perkVisuals.SetPerkVisuals(_currentPerk.RuntimeData);
 			perkTitleText.SetText(_currentPerk.RuntimeData.Data.GetTitle());
 			perkUpgradeCountText.SetText(_currentPerk.Level.ToString());
-			PerkDataModifier[] modifiers = _currentPerk.RuntimeData.Data.GetRarity(currentRarity).Modifiers;
+			PerkModifierApplication[] modifiers = _currentPerk.RuntimeData.Data.GetRarity(currentRarity).Modifiers;
 			perkDescriptionText.SetText(_currentPerk.RuntimeData.Data.GetDescription(currentRarity));
 			StringBuilder stringBuilder = new StringBuilder();
 			for (int i = 0; i < modifiers.Length; i++)
 			{
-				PerkDataModifier perkDataModifier = modifiers[i];
+				PerkModifierApplication perkDataModifier = modifiers[i];
 				float atIndexModifierParameterValue = _currentPerk.GetAtIndexModifierParameterValue(i);
-				string term = "STP_" + ModifiersStringHelpers.GetPerkModifierNameLocKey(perkDataModifier.ModifierID);
+				string term = "STP_" + ModifiersStringHelpers.GetPerkModifierNameLocKey(perkDataModifier.ModifierIdValue);
 				LocalizationMediator.GetTranslation(ref term);
-				stringBuilder.AppendFormat("{0} {1} : {2}%", ModifiersStringHelpers.GetPerkModifierStringIcon(perkDataModifier.ModifierID), term, $"{atIndexModifierParameterValue * 100f:0.##}");
+				stringBuilder.AppendFormat("{0} {1} : {2}%", ModifiersStringHelpers.GetPerkModifierStringIcon(perkDataModifier.ModifierIdValue), term, $"{atIndexModifierParameterValue * 100f:0.##}");
 				if (i + 1 < modifiers.Length)
 				{
 					stringBuilder.Append("\n");

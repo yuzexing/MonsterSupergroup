@@ -1,6 +1,5 @@
 using System;
 using System.Linq;
-using AstralShift.HellMaiden.Combat.Hand;
 using UnityEngine;
 
 namespace AstralShift.HellMaiden.Data.Cards
@@ -9,7 +8,7 @@ namespace AstralShift.HellMaiden.Data.Cards
 	public class EquipmentLevelModifiersData
 	{
 		[SerializeField]
-		protected EquipmentDataModifier[] modifiers;
+		private EquipmentModifierApplication[] nativeModifiers;
 
 		[SerializeField]
 		private bool overrideDescription;
@@ -17,35 +16,50 @@ namespace AstralShift.HellMaiden.Data.Cards
 		[SerializeField]
 		protected string descriptionKey;
 
-		public EquipmentDataModifier[] Modifiers => modifiers;
+		public EquipmentModifierApplication[] Modifiers =>
+			nativeModifiers ?? Array.Empty<EquipmentModifierApplication>();
 
 		public bool OverrideDescription => overrideDescription;
 
 		public ref string DescriptionKey => ref descriptionKey;
 
-		public EquipmentDataModifier[] GetStaticStatModifiers()
+		public void ConfigureNative(EquipmentModifierApplication[] applications)
 		{
-			return modifiers.Where((EquipmentDataModifier modifier) => DataModifierResolver.TryGetEquipmentBaseTypeByID(modifier.ModifierID, out var baseType) && baseType == typeof(StaticStatModifier)).ToArray();
+			nativeModifiers = applications ??
+				Array.Empty<EquipmentModifierApplication>();
 		}
 
-		public EquipmentDataModifier[] GetDynamicStatModifiers()
+		public EquipmentModifierApplication[] GetStaticStatModifiers()
 		{
-			return modifiers.Where((EquipmentDataModifier modifier) => DataModifierResolver.TryGetEquipmentBaseTypeByID(modifier.ModifierID, out var baseType) && baseType == typeof(DynamicStatModifier)).ToArray();
+			return Modifiers.Where(modifier =>
+				GetFamily(modifier.ModifierIdValue) == 0x01u).ToArray();
 		}
 
-		public EquipmentDataModifier[] GetDynamicOnDamageModifiers()
+		public EquipmentModifierApplication[] GetDynamicStatModifiers()
 		{
-			return modifiers.Where((EquipmentDataModifier modifier) => DataModifierResolver.TryGetEquipmentBaseTypeByID(modifier.ModifierID, out var baseType) && baseType == typeof(DynamicOnDamageModifier)).ToArray();
+			return Modifiers.Where(modifier =>
+				GetFamily(modifier.ModifierIdValue) == 0x04u).ToArray();
 		}
 
-		public EquipmentDataModifier[] GetOnHitModifiers()
+		public EquipmentModifierApplication[] GetDynamicOnDamageModifiers()
 		{
-			return modifiers.Where((EquipmentDataModifier modifier) => DataModifierResolver.TryGetEquipmentBaseTypeByID(modifier.ModifierID, out var baseType) && baseType == typeof(OnHitModifier)).ToArray();
+			return Modifiers.Where(modifier =>
+				GetFamily(modifier.ModifierIdValue) == 0x05u).ToArray();
 		}
 
-		public EquipmentDataModifier[] GetOnKillModifiers()
+		public EquipmentModifierApplication[] GetOnHitModifiers()
 		{
-			return modifiers.Where((EquipmentDataModifier modifier) => DataModifierResolver.TryGetEquipmentBaseTypeByID(modifier.ModifierID, out var baseType) && baseType == typeof(OnKillModifier)).ToArray();
+			return Modifiers.Where(modifier =>
+				GetFamily(modifier.ModifierIdValue) == 0x02u).ToArray();
 		}
+
+		public EquipmentModifierApplication[] GetOnKillModifiers()
+		{
+			return Modifiers.Where(modifier =>
+				GetFamily(modifier.ModifierIdValue) == 0x03u).ToArray();
+		}
+
+		private static uint GetFamily(uint modifierId) =>
+			(modifierId >> 24) & 0xFFu;
 	}
 }

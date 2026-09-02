@@ -89,7 +89,8 @@ namespace AstralShift.HellMaiden.Data.Perks
 			{
 				return defaultAssets.sprite;
 			}
-			return GetModifierIconSprite(perRarityModifiers.Modifiers[0].ModifierID);
+			return GetModifierIconSprite(
+				perRarityModifiers.Modifiers[0].ModifierIdValue);
 		}
 
 		public Sprite GetModifierIconSprite(uint id)

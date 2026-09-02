@@ -36,6 +36,24 @@ namespace MonsterSupergroup.GAS
             builder.RegisterPerk<global::MonsterSupergroup.GAS.WeaponSpeedPerkModifier, global::MonsterSupergroup.GAS.WeaponSpeedPerkModifierParameters>(
                 new PerkModifierID(0x05000001u),
                 parameters => new global::MonsterSupergroup.GAS.WeaponSpeedPerkModifier(parameters));
+            builder.RegisterPerk<global::MonsterSupergroup.GAS.WeaponDamagePerkModifier, global::MonsterSupergroup.GAS.WeaponDamagePerkModifierParameters>(
+                new PerkModifierID(0x05000002u),
+                parameters => new global::MonsterSupergroup.GAS.WeaponDamagePerkModifier(parameters));
+            builder.RegisterPerk<global::MonsterSupergroup.GAS.WeaponSizePerkModifier, global::MonsterSupergroup.GAS.WeaponSizePerkModifierParameters>(
+                new PerkModifierID(0x05000003u),
+                parameters => new global::MonsterSupergroup.GAS.WeaponSizePerkModifier(parameters));
+            builder.RegisterPerk<global::MonsterSupergroup.GAS.WeaponDurationPerkModifier, global::MonsterSupergroup.GAS.WeaponDurationPerkModifierParameters>(
+                new PerkModifierID(0x05000004u),
+                parameters => new global::MonsterSupergroup.GAS.WeaponDurationPerkModifier(parameters));
+            builder.RegisterPerk<global::MonsterSupergroup.GAS.WeaponCritRatePerkModifier, global::MonsterSupergroup.GAS.WeaponCritRatePerkModifierParameters>(
+                new PerkModifierID(0x05000005u),
+                parameters => new global::MonsterSupergroup.GAS.WeaponCritRatePerkModifier(parameters));
+            builder.RegisterPerk<global::MonsterSupergroup.GAS.WeaponCritMultiplierPerkModifier, global::MonsterSupergroup.GAS.WeaponCritMultiplierPerkModifierParameters>(
+                new PerkModifierID(0x05000006u),
+                parameters => new global::MonsterSupergroup.GAS.WeaponCritMultiplierPerkModifier(parameters));
+            builder.RegisterPerk<global::MonsterSupergroup.GAS.WeaponProjectileCountPerkModifier, global::MonsterSupergroup.GAS.WeaponProjectileCountPerkModifierParameters>(
+                new PerkModifierID(0x05000007u),
+                parameters => new global::MonsterSupergroup.GAS.WeaponProjectileCountPerkModifier(parameters));
             return builder.Build();
         }
     }

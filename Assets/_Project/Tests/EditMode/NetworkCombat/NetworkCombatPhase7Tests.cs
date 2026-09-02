@@ -697,7 +697,7 @@ namespace MonsterSupergroup.NetworkCombat.Tests
                 Assert.That(
                     runtimeDatabase.TryGetWeaponData(2u, out var initialWeapon),
                     Is.True);
-                Assert.That(initialWeapon.UsesNativeGasRuntime, Is.True);
+                Assert.DoesNotThrow(initialWeapon.ValidateNativeGas);
                 foreach (GameObject root in scene.GetRootGameObjects())
                 {
                     AssertNoMissingScripts(root);

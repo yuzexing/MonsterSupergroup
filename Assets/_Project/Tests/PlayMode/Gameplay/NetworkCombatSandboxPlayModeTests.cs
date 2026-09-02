@@ -127,7 +127,8 @@ namespace MonsterSupergroup.Gameplay.Tests
                 Assert.That(ownerBuild.IsBuildActive, Is.True);
                 Assert.That(ownerBuild.WeaponCount, Is.EqualTo(1));
                 Assert.That(ownerBuild.InitialWeapon, Is.Not.Null);
-                Assert.That(ownerBuild.InitialWeapon.UsesNativeGasRuntime, Is.True);
+                Assert.That(ownerBuild.InitialWeapon.NativeRuntime, Is.Not.Null);
+                Assert.That(ownerBuild.InitialWeapon.NativeRuntime.IsInitialized, Is.True);
                 Assert.That(ownerCombatant, Is.Not.Null);
                 Assert.That(ownerPlayerMovement, Is.Not.Null);
                 Assert.That(ownerPlayerMovement.CombatantBinding, Is.SameAs(ownerCombatant));

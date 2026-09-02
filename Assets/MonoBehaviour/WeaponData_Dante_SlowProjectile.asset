@@ -41,7 +41,11 @@ MonoBehaviour:
     size: 1
     duration: 1
     projectileCount: 1
-    cameraShakeSettings:
+    knockbackDistance: 1
+    damageType: 0
+  attackTagsValue: 3
+  presentation:
+    cameraShake:
       mode: 0
       shakePreset: {fileID: 0}
       constantShakePreset: {fileID: 0}
@@ -55,11 +59,9 @@ MonoBehaviour:
       rotation: {x: 0, y: 0, z: 0}
       ignoreTimeScale: 0
     cameraShakePerLevelIncrement: 0.1
-    knockbackSettings: {fileID: 11400000, guid: 833b6636331a93c4199af1d6ee7d01d1, type: 2}
-    damageType: 0
+    knockback: {fileID: 11400000, guid: 833b6636331a93c4199af1d6ee7d01d1, type: 2}
   rarity: 0
   modifierFlags: 247
-  nativeGasDefinition: {fileID: 11400000, guid: affd4e59a12b3d54d9cbe6572186e1fc, type: 2}
   references:
     version: 2
     RefIds: []

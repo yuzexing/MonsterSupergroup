@@ -1,6 +1,9 @@
+using System;
 using AstralShift.HellMaiden.Player.Attacks;
 using MonsterSupergroup.Gameplay.Combat;
+using MonsterSupergroup.GAS;
 using UnityEngine;
+using GasAttackStats = MonsterSupergroup.GAS.AttackStats;
 
 namespace AstralShift.HellMaiden.Data.Cards
 {
@@ -19,31 +22,109 @@ namespace AstralShift.HellMaiden.Data.Cards
 		protected UltimateData ultimateData;
 
 		[SerializeField]
-		protected AttackStats baseStats;
+		protected GasAttackStats baseStats;
+
+		[SerializeField]
+		private long attackTagsValue = (long)CombatTags.Attack;
+
+		[SerializeField]
+		private WeaponPresentationSettings presentation = new WeaponPresentationSettings();
 
 		[SerializeField]
 		protected WeaponRarity rarity;
 
 		public ModifierFlags modifierFlags;
 
-		[SerializeField]
-		private NativeGasWeaponDefinition nativeGasDefinition;
-
 		public bool IsSignature => isSignature;
 
 		public UltimateData UltimateData => ultimateData;
 
-		public AttackStats BaseStats => baseStats;
+		public GasAttackStats BaseStats => baseStats;
+
+		public CombatTags AttackTags =>
+			(CombatTags)(ulong)attackTagsValue | CombatTags.Attack;
+
+		public WeaponPresentationSettings Presentation => presentation;
 
 		public WeaponRarity Rarity => rarity;
 
-		public NativeGasWeaponDefinition NativeGasDefinition => nativeGasDefinition;
-
-		public bool UsesNativeGasRuntime => nativeGasDefinition != null;
-
-		public void SetNativeGasDefinition(NativeGasWeaponDefinition definition)
+		public bool Supports(MonsterSupergroup.GAS.EquipmentModifierID modifierId)
 		{
-			nativeGasDefinition = definition;
+			ModifierFlags requiredFlag;
+			switch (modifierId.Value)
+			{
+			case DamageStatModifier.ModifierIdValue:
+				requiredFlag = ModifierFlags.Damage;
+				break;
+			case SpeedStatModifier.ModifierIdValue:
+				requiredFlag = ModifierFlags.Speed;
+				break;
+			case SizeStatModifier.ModifierIdValue:
+				requiredFlag = ModifierFlags.Size;
+				break;
+			case DurationStatModifier.ModifierIdValue:
+				requiredFlag = ModifierFlags.Duration;
+				break;
+			case CritRateStatModifier.ModifierIdValue:
+				requiredFlag = ModifierFlags.CritRate;
+				break;
+			case CritMultiplierStatModifier.ModifierIdValue:
+				requiredFlag = ModifierFlags.CritDamage;
+				break;
+			case ProjectileCountStatModifier.ModifierIdValue:
+				requiredFlag = ModifierFlags.ProjectileCount;
+				break;
+			case KnockbackStatModifier.ModifierIdValue:
+				requiredFlag = ModifierFlags.KnockBack;
+				break;
+			default:
+				return true;
+			}
+
+			return (modifierFlags & requiredFlag) != 0;
+		}
+
+		public void ConfigureNativeGas(
+			GasAttackStats newBaseStats,
+			CombatTags newAttackTags,
+			WeaponPresentationSettings newPresentation)
+		{
+			baseStats = newBaseStats;
+			CombatTags normalizedTags = newAttackTags | CombatTags.Attack;
+			if (((ulong)normalizedTags & 0x8000000000000000UL) != 0UL)
+			{
+				throw new ArgumentOutOfRangeException(
+					nameof(newAttackTags),
+					"Serialized combat tags must fit in a signed 64-bit value.");
+			}
+
+			attackTagsValue = (long)(ulong)normalizedTags;
+			presentation = newPresentation ?? throw new ArgumentNullException(nameof(newPresentation));
+			ValidateNativeGas();
+		}
+
+		public void ValidateNativeGas()
+		{
+			if (ID == 0u)
+			{
+				throw new InvalidOperationException($"{name} has a zero weapon ID.");
+			}
+
+			if (baseStats.damage < 0 || baseStats.projectileCount < 1 ||
+				!FiniteNonNegative(baseStats.critMultiplier) ||
+				!FiniteNonNegative(baseStats.critRate) ||
+				!FinitePositive(baseStats.speed) ||
+				!FiniteNonNegative(baseStats.size) ||
+				!FiniteNonNegative(baseStats.duration) ||
+				!FiniteNonNegative(baseStats.knockbackDistance))
+			{
+				throw new InvalidOperationException($"{name} contains invalid base attack stats.");
+			}
+
+			if (presentation == null)
+			{
+				throw new InvalidOperationException($"{name} has no presentation settings.");
+			}
 		}
 
 		public float GetBaseDamage()
@@ -63,7 +144,7 @@ namespace AstralShift.HellMaiden.Data.Cards
 
 		public float GetBaseSpeed()
 		{
-			return WeaponPrefab.GetAttacksPerSecond(BaseStats);
+			return WeaponPrefab.GetAttacksPerSecond(BaseStats.speed);
 		}
 
 		public float GetBaseCritMultiplier()
@@ -83,11 +164,13 @@ namespace AstralShift.HellMaiden.Data.Cards
 
 		public float GetBaseKnockbackDistance()
 		{
-			if (BaseStats.knockbackSettings != null)
-			{
-				return BaseStats.knockbackSettings.distance;
-			}
-			return 0f;
+			return BaseStats.knockbackDistance;
 		}
+
+		private static bool FinitePositive(float value) =>
+			value > 0f && !float.IsNaN(value) && !float.IsInfinity(value);
+
+		private static bool FiniteNonNegative(float value) =>
+			value >= 0f && !float.IsNaN(value) && !float.IsInfinity(value);
 	}
 }

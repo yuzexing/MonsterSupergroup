@@ -127,7 +127,8 @@ namespace MonsterSupergroup.Gameplay.Tests
             Assert.That(build, Is.Not.Null);
             Assert.That(build.IsBuildActive, Is.True);
             Assert.That(build.InitialWeapon, Is.Not.Null);
-            Assert.That(build.InitialWeapon.UsesNativeGasRuntime, Is.True);
+            Assert.That(build.InitialWeapon.NativeRuntime, Is.Not.Null);
+            Assert.That(build.InitialWeapon.NativeRuntime.IsInitialized, Is.True);
 
             PlayerMovement ownerMovement =
                 NetworkClient.localPlayer.GetComponent<PlayerMovement>();

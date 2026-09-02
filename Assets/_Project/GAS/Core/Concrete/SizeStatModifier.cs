@@ -18,6 +18,12 @@ namespace MonsterSupergroup.GAS
 
         public float multiplierIncrement;
         public float MultiplierIncrement => multiplierIncrement;
+
+        public override bool TryGetNumericParameter(int index, out float value)
+        {
+            value = multiplierIncrement;
+            return index == 0;
+        }
     }
 
     [EquipmentModifierType(ModifierIdValue, "Size", typeof(SizeStatModifierParameters))]

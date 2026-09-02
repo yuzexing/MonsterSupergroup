@@ -38,11 +38,8 @@ namespace AstralShift.HellMaiden.Data.Cards
 			{
 				_runtimeModifiers.Clear();
 			}
-			RuntimeEquipmentModifier[] runtimeModifiersFromEquipmentData = RuntimeModifierFactory.Instance.GetRuntimeModifiersFromEquipmentData(_data, _levelIndex);
-			if (runtimeModifiersFromEquipmentData != null && runtimeModifiersFromEquipmentData.Length != 0)
-			{
-				_runtimeModifiers.AddRange(runtimeModifiersFromEquipmentData);
-			}
+			// Card/UI state only. Combat modifiers are instantiated by the owning
+			// PlayerBuildRuntime from EquipmentData's stable-ID definitions.
 		}
 
 		public override void ApplyLevel(uint levelIndex)

@@ -43,16 +43,81 @@ namespace AstralShift.HellMaiden.Data.Perks
 
 		private HashSet<PerkRarity> _cachedRarities;
 
-		public int RaritiesCount => perRarityModifiers.Length;
+		public int RaritiesCount => perRarityModifiers?.Length ?? 0;
 
 		public PerkRarityModifiersData[] GetAllRarities()
 		{
-			return perRarityModifiers;
+			return perRarityModifiers ?? Array.Empty<PerkRarityModifiersData>();
 		}
 
 		public PerkRarityModifiersData GetRarity(PerkRarity rarity)
 		{
-			return perRarityModifiers.First((PerkRarityModifiersData element) => element.Rarity == rarity);
+			return GetAllRarities().First(
+				(PerkRarityModifiersData element) =>
+					element != null && element.Rarity == rarity);
+		}
+
+		public void ConfigureNativeModifiers(
+			PerkRarityModifiersData[] rarityModifiers)
+		{
+			perRarityModifiers = rarityModifiers ??
+				throw new ArgumentNullException(nameof(rarityModifiers));
+			_cachedRarities = null;
+			ValidateNativeGas();
+		}
+
+		public void ValidateNativeGas()
+		{
+			if (ID == 0u)
+			{
+				throw new InvalidOperationException(
+					$"Perk '{name}' has a zero content ID.");
+			}
+
+			var foundRarities = new HashSet<PerkRarity>();
+			PerkRarityModifiersData[] rarities = GetAllRarities();
+			if (rarities.Length == 0)
+			{
+				throw new InvalidOperationException(
+					$"Perk '{name}' has no rarity definitions.");
+			}
+
+			for (int rarityIndex = 0; rarityIndex < rarities.Length; rarityIndex++)
+			{
+				PerkRarityModifiersData rarity = rarities[rarityIndex]
+					?? throw new InvalidOperationException(
+						$"Perk '{name}' has a null rarity at index {rarityIndex}.");
+				if (!foundRarities.Add(rarity.Rarity))
+				{
+					throw new InvalidOperationException(
+						$"Perk '{name}' defines {rarity.Rarity} more than once.");
+				}
+
+				PerkModifierApplication[] modifiers = rarity.Modifiers;
+				if (modifiers.Length == 0)
+				{
+					throw new InvalidOperationException(
+						$"Perk '{name}' has no modifiers for {rarity.Rarity}.");
+				}
+
+				for (int modifierIndex = 0;
+					modifierIndex < modifiers.Length;
+					modifierIndex++)
+				{
+					PerkModifierApplication modifier = modifiers[modifierIndex]
+						?? throw new InvalidOperationException(
+							$"Perk '{name}' has a null modifier in " +
+							$"{rarity.Rarity} at index {modifierIndex}.");
+					if (modifier.Modifier == null ||
+						!modifier.ModifierId.IsValid ||
+						modifier.Parameters == null)
+					{
+						throw new InvalidOperationException(
+							$"Perk '{name}' has an incomplete native modifier in " +
+							$"{rarity.Rarity} at index {modifierIndex}.");
+					}
+				}
+			}
 		}
 
 		public string GetTitle()
@@ -77,16 +142,17 @@ namespace AstralShift.HellMaiden.Data.Perks
 			{
 				term = Description;
 			}
-			Dictionary<string, PerkDataModifier> modifiersMap = new Dictionary<string, PerkDataModifier>();
-			PerkDataModifier[] modifiers = GetRarity(rarity).Modifiers;
-			foreach (PerkDataModifier perkDataModifier in modifiers)
+			Dictionary<string, PerkModifierApplication> modifiersMap =
+				new Dictionary<string, PerkModifierApplication>();
+			PerkModifierApplication[] modifiers = GetRarity(rarity).Modifiers;
+			foreach (PerkModifierApplication perkDataModifier in modifiers)
 			{
-				modifiersMap.Add(perkDataModifier.Name, perkDataModifier);
+				modifiersMap[perkDataModifier.DescriptionToken] = perkDataModifier;
 			}
 			if (string.IsNullOrEmpty(_descriptionRegexPattern))
 			{
-				string[] perkModifierNames = DataModifierResolver.PerkModifierNames;
-				_descriptionRegexPattern = "\\{\\b(" + string.Join("|", perkModifierNames) + ")\\b\\}\\[(\\d+)\\](?:\\[([^\\]]*)\\])?";
+				_descriptionRegexPattern =
+					"\\{([^}]+)\\}\\[(\\d+)\\](?:\\[([^\\]]*)\\])?";
 			}
 			try
 			{

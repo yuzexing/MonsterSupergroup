@@ -44,7 +44,8 @@ namespace AstralShift.HellMaiden.Data.Shrines
 			{
 				if (modifier != null)
 				{
-					RuntimePerkModifier runtimeModifierFromPerkData = RuntimeModifierFactory.Instance.GetRuntimeModifierFromPerkData(modifier);
+					RuntimePerkModifier runtimeModifierFromPerkData =
+						LegacyShrineModifierFactory.Instance.Create(modifier);
 					StackAndApplyModifier(runtimeModifierFromPerkData);
 				}
 			}
@@ -60,7 +61,8 @@ namespace AstralShift.HellMaiden.Data.Shrines
 			{
 				if (modifier != null)
 				{
-					RuntimePerkModifier runtimeModifierFromPerkData = RuntimeModifierFactory.Instance.GetRuntimeModifierFromPerkData(modifier);
+					RuntimePerkModifier runtimeModifierFromPerkData =
+						LegacyShrineModifierFactory.Instance.Create(modifier);
 					ApplyTemporaryModifier(runtimeModifierFromPerkData, onRemoveAction);
 				}
 			}

@@ -33,6 +33,28 @@ namespace MonsterSupergroup.GAS
         public int NumberOfHits => numberOfHits;
 
         public float HitIntervalDuration => hitIntervalDuration;
+
+        public override bool TryGetNumericParameter(int index, out float value)
+        {
+            switch (index)
+            {
+                case 0:
+                    value = chance;
+                    return true;
+                case 1:
+                    value = damageMultiplier;
+                    return true;
+                case 2:
+                    value = numberOfHits;
+                    return true;
+                case 3:
+                    value = hitIntervalDuration;
+                    return true;
+                default:
+                    value = 0f;
+                    return false;
+            }
+        }
     }
 
     [EquipmentModifierType(

@@ -316,7 +316,8 @@ namespace MonsterSupergroup.NetworkCombat
                     localPlayer.GetComponent<PlayerBuildRuntime>();
                 localBuildObserved |= build != null && build.IsBuildActive &&
                     build.InitialWeapon != null &&
-                    build.InitialWeapon.UsesNativeGasRuntime;
+                    build.InitialWeapon.NativeRuntime != null &&
+                    build.InitialWeapon.NativeRuntime.IsInitialized;
 
                 NetworkPlayerAutoTargeting autoTargeting =
                     localPlayer.GetComponent<NetworkPlayerAutoTargeting>();

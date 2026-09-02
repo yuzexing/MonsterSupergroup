@@ -166,14 +166,14 @@ Assets/_Project/Scenes/Development/NetworkCombatSandbox.unity
 
 ```text
 RuntimeDB / WeaponData
+  -> BaseStats / AttackTags / Presentation / Supported Modifiers
   -> WeaponPrefab (HellMaiden WeaponBehaviour，负责几何与表现)
-  -> NativeGasWeaponDefinition (New GAS 数值与规则)
   -> PlayerBuildRuntime
   -> WeaponRuntimeBehaviour
   -> immutable AttackSnapshot
 ```
 
-`WeaponData` 必须同时配置 `WeaponPrefab` 和 `NativeGasDefinition`。`PlayerBuildRuntime` 实例化 Prefab，为它创建/配置 `WeaponRuntimeBehaviour`，并禁止该武器再执行 Legacy Modifier Runtime。
+`WeaponData` 是唯一正式武器资产，直接保存 New GAS BaseStats、AttackTags、表现配置和支持的 Modifier。`PlayerBuildRuntime` 实例化 Prefab，为它创建/配置 `WeaponRuntimeBehaviour`，并禁止该武器再执行 Legacy Modifier Runtime。原 `NativeGasWeaponDefinition` 已删除。
 
 ### 5.2 Projectile 几何与表现
 
@@ -181,19 +181,19 @@ Projectile 继续由 HellMaiden `ProjectileAttackBehaviour` / `ProjectileAttack`
 
 普通 Projectile 不添加 `NetworkIdentity` 或 `NetworkTransform`。Owner 的 `PlayerBuildRuntime` 发布 Spawn/Termination 表现事件，`NetworkWeaponCombatAdapter` 将它们批量广播，Observer 只重放表现，不执行伤害。
 
-### 5.3 创建 Native GAS Weapon Definition
+### 5.3 创建或迁移 WeaponData
 
 在 Project 窗口执行：
 
 ```text
-Create > Monster Supergroup > GAS > Native HellMaiden Weapon
+Create > HellMaiden > Data > Cards > Weapon Data
 ```
 
 关键字段：
 
 | 字段 | 要求 |
 | --- | --- |
-| Combat ID | 非 0；与对应 `WeaponData.ID` 保持稳定映射。 |
+| WeaponData.ID | 非 0；同时作为稳定 Combat/Ability 内容 ID。 |
 | Base Stats | Damage、Crit、Speed、Size、Duration、Projectile Count 等 New GAS 基础值。 |
 | Attack Tags | 攻击、Projectile、元素等语义。 |
 | Supported Modifiers | 明确允许该武器接收的 Modifier 类型。 |
@@ -207,13 +207,16 @@ Tools > HellMaiden Migration > Rebuild Dante Native GAS Assets
 
 ### 5.4 创建 Equipment 和 Perk
 
-真实 HellMaiden 武器的 Equipment 使用 `NativeGasEquipmentDefinition`：
+真实 HellMaiden Equipment 直接使用唯一的 `EquipmentData`；每个 Level 保存 `EquipmentModifierApplication`，其中包含 stable Modifier ID、typed Parameters 和原有多 Slot 目标语义。运行时通过 `PlayerBuildRuntime.AddEquipment(weapon, equipment, levelIndex)` 得到 Handle，并通过 `RemoveEquipment(handle)` 移除。
 
-```text
-Create > Monster Supergroup > GAS > Native HellMaiden Equipment
+Perk 直接使用唯一的 `PerkData`；每个 rarity 保存带显式 Domain 的 `PerkModifierApplication`：
+
+```csharp
+PlayerBuildPerkHandle handle = build.AddPerk(perkData, PerkRarity.Bronze);
+build.RemovePerk(handle);
 ```
 
-每个 Level 保存带 stable Modifier ID 和 typed Parameters 的 `EquipmentDataModifier`。运行时通过 `PlayerBuildRuntime.AddEquipment(weapon, equipment, levelIndex)` 得到 Handle，并通过 `RemoveEquipment(handle)` 移除。Perk 使用 `AddPerk(PerkDataModifier)` / `RemovePerk(handle)`。
+当前已迁移的七个纯 Weapon Stat Perk 属于 `WeaponStats` Domain。尚未迁移的 PlayerAttribute、ConditionalCombat、Reward 等 Domain 会明确拒绝，不会回退到 Legacy Perk Runtime。
 
 `EquipmentModifierSet` / `PerkModifierSet` 仍可用于纯 GAS Authoring 与测试，但不再是真实 HellMaiden Weapon 的第二运行时入口。正式 Runtime 不得使用 Legacy Hash ID 或 Legacy Modifier Factory。
 
@@ -293,7 +296,6 @@ Player 至少需要：
 PlayerBuildRuntime
   -> PlayerMovement / Attacks Root
   -> RuntimeDB / WeaponData
-  -> NativeGasWeaponDefinition
   -> HellMaiden WeaponBehaviour instance
   -> WeaponRuntimeBehaviour / RuntimeEquipmentModifiers
 ```

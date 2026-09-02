@@ -7,7 +7,7 @@
 >
 > 当前事实来源请依次阅读：[GAS 与联机模块总览](MonsterSupergroup_GAS与联机模块总览.md)、[联机模块详细使用指南](MonsterSupergroup_联机模块详细使用指南.md)、[HellMaiden GAS 合并方案](MonsterSupergroup_HellMaiden_GAS合并方案.md)。当前目标是“Owner Client 即时战斗推演 + Server Canonical World State + Loose Reconciliation”，并继续以现有 `MonsterSupergroup.GAS` 为唯一 Combat Core。
 >
-> **2026-09-02 补充**：文中后续章节出现的 `WeaponDefinition` / `PlayerHand` 是已删除的中间原型名称，只作为历史迁移思路。正式 Runtime 使用 `WeaponData + NativeGasWeaponDefinition + PlayerBuildRuntime`。
+> **2026-09-02 补充**：文中后续章节出现的 `WeaponDefinition`、`NativeGasWeaponDefinition`、`NativeGasEquipmentDefinition` 与 Runtime `PlayerHand` 都是已删除或停用的中间方案，只作为历史迁移思路。正式 Runtime 使用唯一的 `WeaponData / EquipmentData / PerkData + PlayerBuildRuntime`；这些 canonical 资产直接保存 stable ID 与 typed parameters。
 
 > 审阅日期：2026-08-12
 > 审阅方式：对反编译 C#、可读 YAML 资产以及 MonsterSupergroup 当前源码进行静态追踪；未运行 HellMaiden 导出工程。

@@ -1,0 +1,39 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d86708921b60a16aa63e5895753f56e8, type: 3}
+  m_Name: ExtraProjectilePerk
+  m_EditorClassIdentifier: MonsterSupergroup.Gameplay.Combat::AstralShift.HellMaiden.Data.Perks.PerkData
+  ID: 28
+  Title: Extra Projectile
+  Description: +1 Projectile to everything
+  hasLocalization: 1
+  TitleKey: PRK_Name_028
+  DescriptionKey: PRK_Desc_028
+  icon: {fileID: 0}
+  poolWeight: 1
+  Dependencies: []
+  perRarityModifiers:
+  - rarity: 3
+    modifiers:
+    - modifier:
+        modifierId: 83886087
+        parameters:
+          rid: 8799243180379734033
+      domain: 0
+      descriptionToken: 
+  references:
+    version: 2
+    RefIds:
+    - rid: 8799243180379734033
+      type: {class: WeaponProjectileCountPerkModifierParameters, ns: MonsterSupergroup.GAS, asm: MonsterSupergroup.GAS.Core}
+      data:
+        countIncrement: 1

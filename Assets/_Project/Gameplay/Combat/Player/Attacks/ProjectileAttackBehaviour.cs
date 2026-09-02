@@ -43,6 +43,13 @@ namespace AstralShift.HellMaiden.Player.Attacks
 			LastAttackElapsedTime = GetCooldown() - Time.deltaTime;
 		}
 
+		public override void InitNative(uint id)
+		{
+			base.InitNative(id);
+			variants.Init();
+			LastAttackElapsedTime = GetCooldown() - Time.deltaTime;
+		}
+
 		protected void Update()
 		{
 			if (CheckCooldown())
@@ -54,22 +61,12 @@ namespace AstralShift.HellMaiden.Player.Attacks
 
 		public override void Attack()
 		{
-			AttackSnapshot nativeAttack = null;
-			if (UsesNativeGasRuntime)
-			{
-				nativeAttack = BeginNativeGasAttack();
-			}
-			else
-			{
-				base.Attack();
-			}
+			AttackSnapshot nativeAttack = BeginNativeGasAttack();
 
 			try
 			{
 				PlayAttackSound();
-				int projectileCountValue = nativeAttack != null
-					? nativeAttack.Stats.ProjectileCount
-					: base.ProjectileCountValue;
+				int projectileCountValue = nativeAttack.Stats.ProjectileCount;
 				if (projectileCountValue == 1)
 				{
 					SpawnOwnedProjectile(
@@ -88,7 +85,7 @@ namespace AstralShift.HellMaiden.Player.Attacks
 			}
 			finally
 			{
-				nativeAttack?.Dispose();
+				nativeAttack.Dispose();
 			}
 		}
 
@@ -99,22 +96,24 @@ namespace AstralShift.HellMaiden.Player.Attacks
 		{
 			AttackElement element = variants.ResolveElement(base.ActiveElement);
 			ProjectileAttack attack = GetOrCreateAttack(nativeAttack, element);
-			ProjectilePresentationKey key = default;
-			if (nativeAttack != null)
+			if (nativeAttack == null)
 			{
-				if (projectileIndex < 0 || projectileIndex > ushort.MaxValue)
-				{
-					throw new InvalidOperationException(
-						"Projectile index cannot be represented by the presentation protocol.");
-				}
-
-				key = new ProjectilePresentationKey(
-					nativeAttack.Context.EventId.Value,
-					(ushort)projectileIndex);
-				attack.ConfigurePresentationLifecycle(
-					key,
-					HandleProjectileTermination);
+				throw new ArgumentNullException(nameof(nativeAttack));
 			}
+
+			ProjectilePresentationKey key;
+			if (projectileIndex < 0 || projectileIndex > ushort.MaxValue)
+			{
+				throw new InvalidOperationException(
+					"Projectile index cannot be represented by the presentation protocol.");
+			}
+
+			key = new ProjectilePresentationKey(
+				nativeAttack.Context.EventId.Value,
+				(ushort)projectileIndex);
+			attack.ConfigurePresentationLifecycle(
+				key,
+				HandleProjectileTermination);
 
 			attack.gameObject.SetActive(value: true);
 			attack.transform.position = base.transform.position + positionOffset +
@@ -125,19 +124,16 @@ namespace AstralShift.HellMaiden.Player.Attacks
 				hitCount,
 				rotateToMovement);
 
-			if (nativeAttack != null)
-			{
-				PresentationSpawned?.Invoke(new ProjectilePresentationSpawn(
-					base.ID,
-					key,
-					attack.transform.position,
-					direction,
-					element,
-					rotateToMovement,
-					ProjectilePresentationStats.From(
-						nativeAttack.Stats,
-						baseSpeed)));
-			}
+			PresentationSpawned?.Invoke(new ProjectilePresentationSpawn(
+				base.ID,
+				key,
+				attack.transform.position,
+				direction,
+				element,
+				rotateToMovement,
+				ProjectilePresentationStats.From(
+					nativeAttack.Stats,
+					baseSpeed)));
 		}
 
 		private void HandleProjectileTermination(
@@ -162,20 +158,19 @@ namespace AstralShift.HellMaiden.Player.Attacks
 			AttackSnapshot nativeAttack,
 			AttackElement element)
 		{
+			if (nativeAttack == null)
+			{
+				throw new InvalidOperationException(
+					"Owned projectiles require an immutable New GAS AttackSnapshot.");
+			}
+
 			ProjectileAttack attack = variants.GetOrCreate(element, null);
 			Action onEnd = delegate
 			{
 				attack.ReleaseNativeAttackSnapshot();
 				variants.Return(attack);
 			};
-			if (nativeAttack != null)
-			{
-				attack.InitNative(this, nativeAttack, null, onEnd);
-			}
-			else
-			{
-				attack.Init(this, null, onEnd);
-			}
+			attack.InitNative(this, nativeAttack, null, onEnd);
 			return attack;
 		}
 

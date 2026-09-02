@@ -10,6 +10,8 @@
 - Legacy Modifier 的哈希 ID 只存在于 Editor 迁移程序集；生成后的 Runtime 资产只保存 New GAS stable ID 与 typed parameters。
 - `NetworkPlayer.prefab` 上已有一个 `PlayerBuildRuntime`；每个 Player 实例拥有自己的 Weapon/Modifier 容器，不共享玩家级状态。
 - 真实资产测试已从 `WeaponBehaviour.Attack()` 发起攻击，经过旧 Projectile prefab、2D Hitbox 与 `NativeGasHit` 后进入 New GAS；同一次命中没有调用 Legacy Damage。
+- `WeaponData` 是武器唯一资产；原 `NativeGasWeaponDefinition` 已删除。`EquipmentData` 同样直接保存 stable ID/typed parameters；原 `NativeGasEquipmentDefinition` 与重复资产已删除。
+- `WeaponBehaviour.UsesNativeGasRuntime` 与可运行的 Legacy 分支已删除。Owner Weapon 必须由 `PlayerBuildRuntime` 初始化，Legacy `Init/CalculateDamage/OnHit/UpdateModifiers` 只会显式拒绝。
 
 这条实现可作为后续 34 个 Equipment Modifier、29 个 Perk Modifier 和其他 Weapon 的迁移模板。
 
@@ -60,7 +62,7 @@ WeaponBehaviour runtimeWeapon = build.EquipWeapon(dante);
 ### 3.2 添加/移除 Equipment
 
 ```csharp
-NativeGasEquipmentDefinition damage = /* NativeGasEquipment_Damage.asset */;
+EquipmentData damage = /* StatRaise_DamageRaiseEquipment.asset */;
 
 PlayerBuildEquipmentHandle handle = build.AddEquipment(
     runtimeWeapon,
@@ -75,7 +77,10 @@ Handle 属于创建它的 `PlayerBuildRuntime`。不要跨 Player 使用 Handle�
 ### 3.3 添加/移除 Perk
 
 ```csharp
-PlayerBuildPerkHandle handle = build.AddPerk(perkDataModifier);
+PerkData attackSpeed = /* AttackSpeedPerk.asset */;
+PlayerBuildPerkHandle handle = build.AddPerk(
+    attackSpeed,
+    PerkRarity.Bronze);
 build.RemovePerk(handle);
 ```
 
@@ -87,7 +92,7 @@ Perk multiplier 容器是 per-player；该 Player 已装备的每把 Native Weap
 
 ```csharp
 AttackSnapshot attack = weapon.NativeRuntime.BeginAttack(
-    weapon.NativeDefinition.AttackTags);
+    weapon.WeaponData.AttackTags);
 ```
 
 每个 Projectile 通过 `AttackSnapshot.Retain()` 持有自己的 lease；发射者释放 owner reference 后，Snapshot 仍存活，直到最后一个 Projectile/Impact 释放 lease。命中时禁止重新读取共享 mutable Weapon Stats。
@@ -105,23 +110,27 @@ AttackSnapshot attack = weapon.NativeRuntime.BeginAttack(
 | Projectile Count | `1251233216` | `0x01000007` | `ProjectileCountStatModifierParameters` |
 | Knockback | `3977118250` | `0x01000008` | `KnockbackStatModifierParameters` |
 
+已迁移的纯 Weapon Stat Perk：
+
+| Gameplay intent | Legacy hash ID（仅 Editor） | New GAS stable ID | Typed parameters |
+|---|---:|---:|---|
+| Weapon Speed | `3372100348` | `0x05000001` | `WeaponSpeedPerkModifierParameters` |
+| Weapon Damage | `2165472666` | `0x05000002` | `WeaponDamagePerkModifierParameters` |
+| Weapon Size | `2550586810` | `0x05000003` | `WeaponSizePerkModifierParameters` |
+| Weapon Duration | `3102792455` | `0x05000004` | `WeaponDurationPerkModifierParameters` |
+| Weapon Crit Rate | `1898389605` | `0x05000005` | `WeaponCritRatePerkModifierParameters` |
+| Weapon Crit Multiplier | `1154401916` | `0x05000006` | `WeaponCritMultiplierPerkModifierParameters` |
+| Projectile Count | `2441468182` | `0x05000007` | `WeaponProjectileCountPerkModifierParameters` |
+
 Runtime registry 由 `ModifierRegistryGenerator` 生成，不使用 `Assembly.GetTypes()`、`Activator.CreateInstance()` 或 Legacy reflective factory。
 
-## 5. 已生成的正式资产
+## 5. 正式 Canonical 资产
 
-目录：`Assets/_Project/Content/HellMaiden/NativeGAS/Dante`
+- Weapon：`Assets/MonoBehaviour/WeaponData_Dante_SlowProjectile.asset`
+- Equipment：原 `Assets/MonoBehaviour/StatRaise_*.asset` 八个资产本身就是正式资产，内部已转换为 stable ID + typed parameters。
+- Perk：`AllDamagePerk`、`AttackSpeedPerk`、`ExtraWeaponSizePerk`、`ExtraWeaponDurationPerk`、`ExtraCriteRatePerk`、`ExtraCritMultiplierPerk`、`ExtraProjectilePerk` 已转换为正式资产，并由 `NativeGasPerkDB.asset` 收录。
 
-- `NativeGasWeapon_Dante_SlowProjectile.asset`
-- `NativeGasEquipment_Damage.asset`
-- `NativeGasEquipment_Speed.asset`
-- `NativeGasEquipment_Size.asset`
-- `NativeGasEquipment_Duration.asset`
-- `NativeGasEquipment_CritRate.asset`
-- `NativeGasEquipment_CritMultiplier.asset`
-- `NativeGasEquipment_ProjectileCount.asset`
-- `NativeGasEquipment_Knockback.asset`
-
-旧 `Assets/MonoBehaviour/StatRaise_*.asset` 仍保留在工程内，作用仅是迁移输入、数值依据和行为对照。正式 Build/Loadout 应引用上述 Native 资产。
+不再存在一份 HellMaiden 卡牌资产和另一份 `NativeGas*Definition` 资产。Legacy 数据只在 Editor converter 的输入/行为对照中出现。
 
 ## 6. Legacy 行为对照结果
 
@@ -139,8 +148,12 @@ Runtime registry 由 `ModifierRegistryGenerator` 生成，不使用 `Assembly.Ge
 ### 明确保留的限制
 
 - Dante 源 `modifierFlags = 247`，不包含 `Duration` bit。因此 Duration Modifier 已被完整迁移为 New GAS Native Modifier，但 Dante 会按旧规则拒绝装备它。此项不是迁移遗漏。
-- 本 Slice 未迁移 Chain Lightning、Explosion Build、Clone/Summon、复杂 Status Proc、Reward/XP/Gold 或跨 Slot 行为。
-- 本 Slice 没有把旧 Equipment 的 multi-slot runtime 带入 New GAS；Editor 转换器遇到 multi-slot 会明确拒绝，而不会静默丢失语义。
+- 本 Slice 未迁移 Chain Lightning、Explosion Build、Clone/Summon、复杂 Status Proc 或 Reward/XP/Gold。
+- 当前正式可运行内容是 Dante、8 个线性 Equipment 和 7 个纯 Weapon Stat Perk；其余 Weapon/Equipment/Perk 不能因为代码仍能编译就视为已迁移。
+- 旧 `PlayerHand` 目前只保留卡牌/UI/统计查询结构，`GameDirector` 不再初始化它；其 Weapon/Equipment 执行入口会明确拒绝。旧 Perk 选择 UI 尚未绑定到每个 Owner 的 `PlayerBuildRuntime`，在完成该多玩家 UI 绑定前，不应作为正式加点入口。
+- `PlayerAttributes`、`ConditionalCombat`、`EquipmentTriggers`、`Reward`、`RunState` Perk Domain 尚未接通；`PlayerBuildRuntime` 会明确拒绝，而不是退回 Legacy Runtime。
+- Shrine/Ultimate 尚未纳入本阶段。Shrine 的旧反射创建已隔离在 `LegacyShrineModifierFactory`，不得被 Weapon/Equipment/Perk 正式路径调用。
+- Equipment 的 4 Slot、每 Slot 3 张 Equipment、自身/左右相对 Slot 规则已由 `PlayerBuildRuntime` 原生保存和执行，不依赖旧 `PlayerHandSlot` Runtime。
 - AssetRipper 没有恢复 Dante 三个 Projectile prefab 上 `ProjectileAttack` 的继承字段。迁移工具会确定性重连同一 prefab 内仍存在的 `AttackProgressionScaler`、Hitbox、HitEffectResolver、`Root` 旋转节点、Animancer 与根 ParticleSystem。
 - 反编译输入中没有可用于证明原值的 Attack Clip 引用。当前实现保留 Animator/Animancer 组件，并在 Clip 为空时安全跳过对应动画，不再产生空引用；若后续取得原始 Clip 数据，应只补回 prefab 引用，不需要修改 New GAS Runtime。
 - FMOD EventReference 仍保留在 Projectile prefab 中，但当前迁移包没有原游戏 `.bank` 文件，因此测试环境无法实际解析该事件。恢复声音需要导入匹配 GUID 的原始或重新构建的 FMOD Banks；这不是改回 Legacy Combat Runtime 的理由。
@@ -177,25 +190,30 @@ Tools/HellMaiden Migration/Rebuild Dante Native GAS Assets
 - 把旧 managed-reference assembly 名从 `Assembly-CSharp` 规范化到恢复后的 `MonsterSupergroup.Gameplay.Combat`，仅用于读取迁移输入。
 - 把旧 Animancer DLL 内的 `AnimancerComponent` 序列化引用迁移到官方 package 脚本，同时保留 `_Animator`、`_Transitions`、`_ActionOnDisable` 数据。
 - 恢复三个 Dante Projectile prefab 上反编译丢失的运行时组件引用；该步骤可重复执行，不需要手工拖拽 Inspector。
-- 读取 Legacy ID、参数与 level。
-- 生成只含 stable ID/typed parameters 的 Native 资产，并为序列化参数分配确定性的 managed-reference ID；相同输入重复执行不会产生资产 diff。
-- 绑定 `WeaponData.nativeGasDefinition`。
+- 读取 Legacy ID、参数与 level，并就地转换原 `WeaponData` / `EquipmentData`。
+- 原卡牌资产只保留 stable ID/typed parameters；相同输入重复执行不会建立第二份 Runtime 定义资产。
 - 确保 `NetworkPlayer.prefab` 上只有一个 `PlayerBuildRuntime`。
+
+纯 Weapon Stat Perk 使用菜单：
+
+```text
+Tools/HellMaiden Migration/Rebuild Pure Weapon Perks
+```
+
+该工具生成七个 canonical `PerkData` 与一个 `NativeGasPerkDB`，同时保留原 HellMaiden 资产 GUID。
 
 这两个 Assembly/GUID 规范化步骤只属于 Editor conversion boundary，不进入正式 Combat Runtime。
 
-## 8. 验收结果（2026-08-30）
+## 8. 当前验收结果（2026-09-02）
 
 | 验收 | 结果 |
 |---|---:|
 | Unity 6 编译 | 通过，0 个 C# error |
-| Dante/New GAS 专项 EditMode | `11 / 11` |
-| 真实 Dante PlayMode（双 Player 隔离 + 真实 Projectile 命中） | `2 / 2` |
-| 全部 GAS EditMode 回归 | `77 / 77` |
-| 全部 Gameplay PlayMode 回归 | `42 / 43`，见下方说明 |
-| NetworkCombat EditMode 回归 | `41 / 41` |
-
-Gameplay 的唯一失败当时是既有测试 `GameplayScene_StartsLocalAutoCombatWithoutMirrorHost`：它要求旧 `LocalGameplayBootstrap`，而场景正在转向联机启动链。Dante 的两条真实资产 PlayMode 测试均通过。2026-09-02 该 Local Bootstrap 与对应旧测试已作为平行原型正式删除，不再是当前回归集的失败项。
+| Canonical Migration EditMode | `10 / 10` |
+| Dante/PlayerBuild 专项 PlayMode | `8 / 8` |
+| GAS EditMode | `79 / 79` |
+| Gameplay PlayMode 全量回归 | `44 / 44` |
+| NetworkCombat EditMode 全量回归 | `63 / 63` |
 
 专项测试覆盖：
 
@@ -206,7 +224,7 @@ Gameplay 的唯一失败当时是既有测试 `GameplayScene_StartsLocalAutoComb
 - Snapshot/Projectile lease 生命周期。
 - Equipment Handle add/remove。
 - 两个 PlayerBuildRuntime 的 Modifier state 隔离。
-- 真实 Dante WeaponData、旧 Weapon Prefab 与 Native Definition 绑定。
+- 真实 Dante WeaponData 与旧 Weapon Prefab 绑定，且不存在第二份 Native Weapon Definition。
 - Dante/Projectile/Impact Prefab 无 Missing MonoBehaviour。
 - 三个 Dante Projectile prefab 的 ProgressionScaler、Hitbox、HitEffect、旋转节点、Animancer 与 ParticleSystem 引用均已恢复。
 - `WeaponBehaviour.Attack()` 真正生成 Projectile，并通过物理 Hitbox 命中测试目标。
@@ -214,8 +232,9 @@ Gameplay 的唯一失败当时是既有测试 `GameplayScene_StartsLocalAutoComb
 - 该命中只调用一次 Native GAS，Legacy `Damage(...)` 调用次数为 0。
 - Native 资产中无 Legacy hash ID。
 - Native Weapon 调用 Legacy `CalculateDamage` 会被拒绝。
+- 七个真实 PerkData 保留原 GUID，只存 stable ID/typed parameters；实际 `AttackSpeedPerk.asset` 能修改单个 Owner 的 PlayerBuild，且不污染另一个 Player。
 
-测试结果文件位于项目根目录 `TestResults`，日志位于 `Logs`。
+批处理测试 XML 仅用于本次核验，未纳入工作树；Unity 日志位于项目根目录 `Logs`。
 
 ## 9. 后续 Weapon/Modifier 的标准迁移步骤
 

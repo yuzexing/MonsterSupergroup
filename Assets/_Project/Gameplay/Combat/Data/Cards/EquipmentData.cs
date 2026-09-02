@@ -33,16 +33,20 @@ namespace AstralShift.HellMaiden.Data.Cards
 				term = (Levels[levelIndex].OverrideDescription ? Levels[levelIndex].DescriptionKey : DescriptionKey);
 				LocalizationMediator.GetTranslation(ref term);
 			}
-			Dictionary<string, EquipmentDataModifier> foundModifiersMap = new Dictionary<string, EquipmentDataModifier>();
-			EquipmentDataModifier[] modifiers = levelModifiersData[levelIndex].Modifiers;
-			foreach (EquipmentDataModifier equipmentDataModifier in modifiers)
+			Dictionary<string, EquipmentModifierApplication> foundModifiersMap =
+				new Dictionary<string, EquipmentModifierApplication>();
+			EquipmentModifierApplication[] modifiers =
+				levelModifiersData[levelIndex].Modifiers;
+			foreach (EquipmentModifierApplication equipmentDataModifier in modifiers)
 			{
-				foundModifiersMap.TryAdd(equipmentDataModifier.Name, equipmentDataModifier);
+				foundModifiersMap.TryAdd(
+					equipmentDataModifier.DescriptionToken,
+					equipmentDataModifier);
 			}
 			if (string.IsNullOrEmpty(_descriptionRegexPattern))
 			{
-				string[] equipmentModifierNames = DataModifierResolver.EquipmentModifierNames;
-				_descriptionRegexPattern = "\\{\\b(" + string.Join("|", equipmentModifierNames) + ")\\b\\}\\[(\\d+)\\](?:\\[([^\\]]*)\\])?";
+				_descriptionRegexPattern =
+					"\\{([^}]+)\\}\\[(\\d+)\\](?:\\[([^\\]]*)\\])?";
 			}
 			try
 			{

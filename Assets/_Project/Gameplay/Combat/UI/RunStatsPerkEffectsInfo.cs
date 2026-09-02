@@ -26,7 +26,10 @@ public class RunStatsPerkEffectsInfo : MonoBehaviour
 			_perksTemplateLUT = GameDirector.Instance.runtimeDB.PerkDB.VisualsTemplateLUT;
 		}
 		StringBuilder stringBuilder = new StringBuilder();
-		PerkModifierID modifierID = runtimePerk.RuntimeData.Data.GetRarity(runtimePerk.CurrentRarity).Modifiers[modifierIndex].ModifierID;
+		uint modifierID = runtimePerk.RuntimeData.Data
+			.GetRarity(runtimePerk.CurrentRarity)
+			.Modifiers[modifierIndex]
+			.ModifierIdValue;
 		float atIndexModifierParameterValue = runtimePerk.GetAtIndexModifierParameterValue(modifierIndex);
 		string term = SttPrefix + ModifiersStringHelpers.GetPerkModifierNameLocKey(modifierID);
 		LocalizationMediator.GetTranslation(ref term);

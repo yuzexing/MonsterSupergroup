@@ -1,0 +1,63 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d86708921b60a16aa63e5895753f56e8, type: 3}
+  m_Name: ExtraWeaponDurationPerk
+  m_EditorClassIdentifier: MonsterSupergroup.Gameplay.Combat::AstralShift.HellMaiden.Data.Perks.PerkData
+  ID: 19
+  Title: Extra Weapon Duration
+  Description: Adds {WeaponDuration}[0]%  Weapon Duration.
+  hasLocalization: 1
+  TitleKey: PRK_Name_019
+  DescriptionKey: PRK_Desc_019
+  icon: {fileID: 0}
+  poolWeight: 1
+  Dependencies: []
+  perRarityModifiers:
+  - rarity: 0
+    modifiers:
+    - modifier:
+        modifierId: 83886084
+        parameters:
+          rid: 8799243180379734022
+      domain: 0
+      descriptionToken: WeaponDuration
+  - rarity: 1
+    modifiers:
+    - modifier:
+        modifierId: 83886084
+        parameters:
+          rid: 8799243180379734023
+      domain: 0
+      descriptionToken: WeaponDuration
+  - rarity: 2
+    modifiers:
+    - modifier:
+        modifierId: 83886084
+        parameters:
+          rid: 8799243180379734024
+      domain: 0
+      descriptionToken: WeaponDuration
+  references:
+    version: 2
+    RefIds:
+    - rid: 8799243180379734022
+      type: {class: WeaponDurationPerkModifierParameters, ns: MonsterSupergroup.GAS, asm: MonsterSupergroup.GAS.Core}
+      data:
+        multiplierIncrement: 0.1
+    - rid: 8799243180379734023
+      type: {class: WeaponDurationPerkModifierParameters, ns: MonsterSupergroup.GAS, asm: MonsterSupergroup.GAS.Core}
+      data:
+        multiplierIncrement: 0.14
+    - rid: 8799243180379734024
+      type: {class: WeaponDurationPerkModifierParameters, ns: MonsterSupergroup.GAS, asm: MonsterSupergroup.GAS.Core}
+      data:
+        multiplierIncrement: 0.2

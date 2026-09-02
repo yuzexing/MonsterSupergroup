@@ -1,6 +1,4 @@
 using System;
-using System.Linq;
-using AstralShift.HellMaiden.Combat.Hand;
 using UnityEngine;
 
 namespace AstralShift.HellMaiden.Data.Perks
@@ -12,30 +10,43 @@ namespace AstralShift.HellMaiden.Data.Perks
 		protected PerkRarity rarity;
 
 		[SerializeField]
-		protected PerkDataModifier[] modifiers;
+		protected PerkModifierApplication[] modifiers;
 
 		public PerkRarity Rarity => rarity;
 
-		public PerkDataModifier[] Modifiers => modifiers;
+		public PerkModifierApplication[] Modifiers =>
+			modifiers ?? Array.Empty<PerkModifierApplication>();
 
-		public PerkDataModifier[] GetPlayerModifiers()
+		public PerkModifierApplication[] GetPlayerModifiers()
 		{
-			return modifiers.Where((PerkDataModifier modifier) => DataModifierResolver.TryGetPerkBaseTypeByID(modifier.ModifierID, out var baseType) && baseType == typeof(PlayerPerkModifier)).ToArray();
+			return Array.FindAll(Modifiers, modifier =>
+				modifier.Domain == PerkApplicationDomain.PlayerAttributes);
 		}
 
-		public PerkDataModifier[] GetWeaponModifiers()
+		public PerkModifierApplication[] GetWeaponModifiers()
 		{
-			return modifiers.Where((PerkDataModifier modifier) => DataModifierResolver.TryGetPerkBaseTypeByID(modifier.ModifierID, out var baseType) && baseType == typeof(WeaponStatsPerkModifier)).ToArray();
+			return Array.FindAll(Modifiers, modifier =>
+				modifier.Domain == PerkApplicationDomain.WeaponStats);
 		}
 
-		public PerkDataModifier[] GetPlayerConditionModifiers()
+		public PerkModifierApplication[] GetPlayerConditionModifiers()
 		{
-			return modifiers.Where((PerkDataModifier modifier) => DataModifierResolver.TryGetPerkBaseTypeByID(modifier.ModifierID, out var baseType) && baseType == typeof(PlayerConditionPerkModifier)).ToArray();
+			return Array.FindAll(Modifiers, modifier =>
+				modifier.Domain == PerkApplicationDomain.ConditionalCombat);
 		}
 
-		public PerkDataModifier[] GetEnemyConditionModifiers()
+		public PerkModifierApplication[] GetEnemyConditionModifiers()
 		{
-			return modifiers.Where((PerkDataModifier modifier) => DataModifierResolver.TryGetPerkBaseTypeByID(modifier.ModifierID, out var baseType) && baseType == typeof(EnemyConditionPerkModifier)).ToArray();
+			return Array.FindAll(Modifiers, modifier =>
+				modifier.Domain == PerkApplicationDomain.ConditionalCombat);
+		}
+
+		public void Configure(
+			PerkRarity newRarity,
+			PerkModifierApplication[] newModifiers)
+		{
+			rarity = newRarity;
+			modifiers = newModifiers ?? Array.Empty<PerkModifierApplication>();
 		}
 	}
 }

@@ -29,5 +29,49 @@ namespace MonsterSupergroup.GAS.Tests
             Assert.That(first.MultiplierIncrement, Is.EqualTo(0.35f).Within(0.0001f));
             Assert.That(multipliers.speed, Is.EqualTo(0.35f).Within(0.0001f));
         }
+
+        [Test]
+        public void PureWeaponStatPerks_ApplyToTheExpectedGlobalStatOnly()
+        {
+            var multipliers = new AttackStatsMultipliers();
+
+            new WeaponDamagePerkModifier(
+                new WeaponDamagePerkModifierParameters(0.11f)).Apply(multipliers);
+            new WeaponSizePerkModifier(
+                new WeaponSizePerkModifierParameters(0.12f)).Apply(multipliers);
+            new WeaponDurationPerkModifier(
+                new WeaponDurationPerkModifierParameters(0.13f)).Apply(multipliers);
+            new WeaponCritRatePerkModifier(
+                new WeaponCritRatePerkModifierParameters(0.14f)).Apply(multipliers);
+            new WeaponCritMultiplierPerkModifier(
+                new WeaponCritMultiplierPerkModifierParameters(0.15f)).Apply(multipliers);
+            new WeaponProjectileCountPerkModifier(
+                new WeaponProjectileCountPerkModifierParameters(2)).Apply(multipliers);
+
+            Assert.That(multipliers.damage, Is.EqualTo(0.11f).Within(0.0001f));
+            Assert.That(multipliers.size, Is.EqualTo(0.12f).Within(0.0001f));
+            Assert.That(multipliers.duration, Is.EqualTo(0.13f).Within(0.0001f));
+            Assert.That(multipliers.critRate, Is.EqualTo(0.14f).Within(0.0001f));
+            Assert.That(multipliers.critDamage, Is.EqualTo(0.15f).Within(0.0001f));
+            Assert.That(multipliers.projectileCountIncrement, Is.EqualTo(2));
+            Assert.That(multipliers.speed, Is.Zero);
+            Assert.That(multipliers.knockBackMultiplier, Is.Zero);
+        }
+
+        [Test]
+        public void ProjectileCountPerk_StacksAsAnIntegerIncrement()
+        {
+            var first = new WeaponProjectileCountPerkModifier(
+                new WeaponProjectileCountPerkModifierParameters(1));
+            var second = new WeaponProjectileCountPerkModifier(
+                new WeaponProjectileCountPerkModifierParameters(2));
+            var multipliers = new AttackStatsMultipliers();
+
+            Assert.That(first.TryStack(second), Is.True);
+            first.Apply(multipliers);
+
+            Assert.That(first.CountIncrement, Is.EqualTo(3));
+            Assert.That(multipliers.projectileCountIncrement, Is.EqualTo(3));
+        }
     }
 }

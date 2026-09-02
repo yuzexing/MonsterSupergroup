@@ -171,7 +171,6 @@ namespace AstralShift.HellMaiden.Combat.Hand
 				Dictionary<PerkPoolID, List<RuntimePerk>> dictionary = (Perks = new Dictionary<PerkPoolID, List<RuntimePerk>>());
 			}
 			Perks.Clear();
-			GameDirector.Instance.Player.PlayerStats.RemoveAllModifiers();
 		}
 
 		public void ClearAllShrines()
@@ -353,10 +352,6 @@ namespace AstralShift.HellMaiden.Combat.Hand
 				Perks[perkPoolID].Add(foundPerk);
 			}
 			this.OnPerkAdded?.Invoke(foundPerk);
-			foreach (PlayerHandSlot slot in Slots)
-			{
-				slot.UpdateWeaponBehaviour();
-			}
 		}
 
 		public bool TryGetAllPerks(out List<RuntimePerk> perks)
@@ -409,7 +404,11 @@ namespace AstralShift.HellMaiden.Combat.Hand
 
 		public bool TryGetPerkByModifierID(PerkModifierID perModifierID, out RuntimePerk resultPerk)
 		{
-			resultPerk = PerksList.FirstOrDefault((RuntimePerk runtimePerk) => runtimePerk.RuntimeData.Data.GetAllRarities().Any((PerkRarityModifiersData element) => element.Modifiers.Any((PerkDataModifier modifier) => modifier.ModifierID.Equals(perModifierID))));
+			resultPerk = PerksList.FirstOrDefault((RuntimePerk runtimePerk) =>
+				runtimePerk.RuntimeData.Data.GetAllRarities().Any(
+					(PerkRarityModifiersData element) => element.Modifiers.Any(
+						(PerkModifierApplication modifier) =>
+							modifier.ModifierIdValue == perModifierID.Value)));
 			return resultPerk != null;
 		}
 

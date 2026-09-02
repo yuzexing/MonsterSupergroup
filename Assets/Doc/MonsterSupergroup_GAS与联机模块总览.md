@@ -142,11 +142,12 @@ GAS Core -> GameDirector / ControllerManager / FMOD / Rewired / UI
 | `CombatantBehaviour` | 实现战斗目标、预测 HP、Canonical HP 应用、StatusController 和伤害事件。 |
 | `CombatTeamBehaviour` | 标记 Player/Enemy Team，避免友军和死亡目标被选中。 |
 | `NearestEnemyTargetProvider` | 在范围内选择最近的有效敌方 Combatant。 |
-| `PlayerBuildRuntime` | 每个 Player 独立管理 HellMaiden Weapon、Native Equipment/Perk Handle 和初始 Build；是真实武器唯一入口。 |
-| `NativeGasWeaponDefinition` | 保存 Combat ID、New GAS Base Stats、Tags、Supported Modifiers 和 Knockback 表现配置。 |
-| `NativeGasEquipmentDefinition` | 按 Level 保存 stable ID + typed Parameters，由 `PlayerBuildRuntime` 创建 New GAS Runtime Modifier。 |
+| `PlayerBuildRuntime` | 每个 Player 独立管理 HellMaiden Weapon、Equipment/Perk Handle 和初始 Build；是真实武器唯一 Runtime 入口。 |
+| `WeaponData` | 唯一武器资产；直接保存 ID、New GAS Base Stats、Tags、Supported Modifiers、WeaponPrefab 和表现配置。 |
+| `EquipmentData` | 唯一 Equipment 资产；按 Level 保存 stable ID + typed Parameters + 多 Slot 目标语义。 |
+| `PerkData` | 唯一 Perk 资产；按 Rarity 保存 stable ID + typed Parameters + Application Domain。 |
 | `WeaponRuntimeBehaviour` | 把 Authoring 数据加载为 Runtime Modifier，调用 CombatPipeline。 |
-| HellMaiden `WeaponBehaviour` / `ProjectileAttackBehaviour` | 保留几何、动画、VFX、FMOD、Projectile 池和碰撞；Native Weapon 不再执行 Legacy 数值/Modifier。 |
+| HellMaiden `WeaponBehaviour` / `ProjectileAttackBehaviour` | 保留几何、动画、VFX、FMOD、Projectile 池和碰撞；Owner Weapon 必须由 PlayerBuildRuntime 初始化，不存在可运行的 Legacy/Native 二选一分支。 |
 | `StatusUpdateDriver` | 用显式 delta time 推进 Combatant 的 StatusController。 |
 | `CombatRuntimeServices` | 向武器注入 Source IDs、Event IDs、Event Sink、Trigger Guard 和 Time Source。 |
 

@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fa0431c13b71b33668134263db773a8b, type: 3}
+  m_Name: NativeGasPerkDB
+  m_EditorClassIdentifier: MonsterSupergroup.Gameplay.Combat::AstralShift.HellMaiden.Data.Perks.PerkDB
+  Perks:
+  - {fileID: 11400000, guid: 76fa5ea1218be2a438ce7f47501f02b0, type: 2}
+  - {fileID: 11400000, guid: 7f2deebf37c7862418b2165ea331a3af, type: 2}
+  - {fileID: 11400000, guid: 88c4f782fea6f734b9cf2d426adf1544, type: 2}
+  - {fileID: 11400000, guid: 36d51e4b34f9c67498f4ed664339ef32, type: 2}
+  - {fileID: 11400000, guid: 444dd71615735a94fabde1c29d4047bc, type: 2}
+  - {fileID: 11400000, guid: 7fb8c340e2637844981ab950c5a53d2c, type: 2}
+  - {fileID: 11400000, guid: 6cc353e437573ad4ba9c894a2a47c1f4, type: 2}
+  visualsTemplateLut: {fileID: 0}

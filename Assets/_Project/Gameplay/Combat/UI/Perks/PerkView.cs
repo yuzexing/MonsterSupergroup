@@ -322,7 +322,7 @@ namespace AstralShift.HellMaiden.UI.Perks
 			PerkRarityModifiersData rarity = runtimePerkData.Data.GetRarity(runtimePerkData.Rarity);
 			for (int i = 0; i < rarity.Modifiers.Length; i++)
 			{
-				PerkDataModifier perkDataModifier = rarity.Modifiers[i];
+				PerkModifierApplication perkDataModifier = rarity.Modifiers[i];
 				float parameterByIndex = perkDataModifier.GetParameterByIndex(0);
 				float num = 0f;
 				if (currentPerk != null)
@@ -334,9 +334,9 @@ namespace AstralShift.HellMaiden.UI.Perks
 				{
 					color = Color.red;
 				}
-				string term = "STP_" + ModifiersStringHelpers.GetEquipmentModifierNameLocKey(perkDataModifier.ModifierID);
+				string term = "STP_" + ModifiersStringHelpers.GetPerkModifierNameLocKey(perkDataModifier.ModifierIdValue);
 				LocalizationMediator.GetTranslation(ref term);
-				stringBuilder.AppendFormat("{0}{1}: {2}% ▶ <color=#{3}>{4}%</color>", ModifiersStringHelpers.GetPerkModifierStringIcon(perkDataModifier.ModifierID), term, DataModifierUtils.FormatMultiplierToPercentage(num) ?? "", ColorUtility.ToHtmlStringRGBA(color), " " + DataModifierUtils.FormatMultiplierToPercentage(num + parameterByIndex));
+				stringBuilder.AppendFormat("{0}{1}: {2}% ▶ <color=#{3}>{4}%</color>", ModifiersStringHelpers.GetPerkModifierStringIcon(perkDataModifier.ModifierIdValue), term, DataModifierUtils.FormatMultiplierToPercentage(num) ?? "", ColorUtility.ToHtmlStringRGBA(color), " " + DataModifierUtils.FormatMultiplierToPercentage(num + parameterByIndex));
 				if (i + 1 < rarity.Modifiers.Length)
 				{
 					stringBuilder.Append("\n");

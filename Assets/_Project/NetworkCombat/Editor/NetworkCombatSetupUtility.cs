@@ -1,16 +1,11 @@
 using System;
 using System.Linq;
 using AstralShift.HellMaiden.AI;
-using AstralShift.HellMaiden.AI.Enemy;
 using AstralShift.HellMaiden.Combat.Hand.Data;
 using AstralShift.HellMaiden.Data.Cards;
-using AstralShift.HellMaiden.Interactions;
-using AstralShift.QTI.Triggers;
 using kcp2k;
 using Mirror;
 using Mirror.FizzySteam;
-using MonsterSupergroup.Gameplay.Combat;
-using MonsterSupergroup.Gameplay.Local;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
@@ -35,10 +30,6 @@ namespace MonsterSupergroup.NetworkCombat.Editor
 
         private const string NetworkPlayerStartsRootName =
             "Network Player Starts";
-        private const string LocalEnemyPrefabPath =
-            "Assets/_Project/Content/LocalCombat/LocalEnemy.prefab";
-        private const string ProductEnemySourcePrefabPath =
-            "Assets/_Project/Content/LocalCombat/EnemyBase.prefab";
         private const string WeaponDatabasePath =
             "Assets/_Project/Content/HellMaiden/NativeGAS/NativeGasWeaponDB.asset";
 
@@ -107,137 +98,15 @@ namespace MonsterSupergroup.NetworkCombat.Editor
             if (player == null)
             {
                 throw new InvalidOperationException(
-                    $"Player runtime combat migration did not create {PlayerPrefabPath}.");
+                    $"Player runtime combat repair could not load {PlayerPrefabPath}.");
             }
-            GameObject enemy = BuildEnemyPrefab();
-            GameObject productEnemy = BuildProductEnemyPrefab();
-            GameObject world = BuildWorldPrefab(enemy);
+            GameObject enemy = LoadPrefabAsset(EnemyPrefabPath);
+            GameObject productEnemy = LoadPrefabAsset(ProductEnemyPrefabPath);
+            GameObject world = LoadPrefabAsset(WorldPrefabPath);
             BuildScene(player, enemy, productEnemy, world);
             EnemySimulationPrefabMigrator.Migrate();
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
-        }
-
-        private static GameObject BuildEnemyPrefab()
-        {
-            GameObject root = LoadPrefabContents(LocalEnemyPrefabPath);
-            try
-            {
-                root.name = "NetworkEnemy";
-                LocalEnemyDeathBehaviour localDeath =
-                    root.GetComponent<LocalEnemyDeathBehaviour>();
-                if (localDeath != null)
-                {
-                    UnityEngine.Object.DestroyImmediate(localDeath);
-                }
-
-                GetOrAdd<NetworkIdentity>(root);
-                RemoveIfPresent<NetworkTransformReliable>(root);
-                EnemySimulationAuthority authority =
-                    GetOrAdd<EnemySimulationAuthority>(root);
-                authority.ConfigureNetworkManaged(
-                    EnemySimulationMode.NormalClient);
-                GetOrAdd<EnemySnapshotInterpolator>(root);
-                GetOrAdd<NetworkEnemySimulationAgent>(root);
-                EnemyController controller = root.GetComponent<EnemyController>();
-                if (controller != null && controller.attackScript != null)
-                {
-                    controller.attackScript.enabled = false;
-                    EditorUtility.SetDirty(controller.attackScript);
-                }
-                RepairDamageInteractionTriggers(root);
-                CombatantBehaviour combatant = root.GetComponent<CombatantBehaviour>();
-                GetOrAdd<NetworkCombatantAdapter>(root).Configure(
-                    combatant,
-                    CombatEntityKind.Enemy,
-                    CombatEntityAuthority.ServerCanonical);
-                GetOrAdd<NetworkEnemyServerDriver>(root);
-
-                PrefabUtility.SaveAsPrefabAsset(root, EnemyPrefabPath);
-            }
-            finally
-            {
-                PrefabUtility.UnloadPrefabContents(root);
-            }
-
-            return AssetDatabase.LoadAssetAtPath<GameObject>(EnemyPrefabPath);
-        }
-
-        private static GameObject BuildProductEnemyPrefab()
-        {
-            GameObject root = LoadPrefabContents(ProductEnemySourcePrefabPath);
-            try
-            {
-                root.name = "NetworkEnemyBase";
-                GetOrAdd<NetworkIdentity>(root);
-                RemoveIfPresent<NetworkTransformReliable>(root);
-                EnemySimulationAuthority authority =
-                    GetOrAdd<EnemySimulationAuthority>(root);
-                authority.ConfigureNetworkManaged(
-                    EnemySimulationMode.NormalClient);
-                GetOrAdd<EnemySnapshotInterpolator>(root);
-                GetOrAdd<NetworkEnemySimulationAgent>(root);
-                EnemyController controller = root.GetComponent<EnemyController>();
-                if (controller != null && controller.attackScript != null)
-                {
-                    controller.attackScript.enabled = false;
-                    EditorUtility.SetDirty(controller.attackScript);
-                }
-                RepairDamageInteractionTriggers(root);
-                CombatantBehaviour combatant = root.GetComponent<CombatantBehaviour>();
-                GetOrAdd<NetworkCombatantAdapter>(root).Configure(
-                    combatant,
-                    CombatEntityKind.Enemy,
-                    CombatEntityAuthority.ServerCanonical);
-                GetOrAdd<NetworkEnemyServerDriver>(root);
-
-                PrefabUtility.SaveAsPrefabAsset(root, ProductEnemyPrefabPath);
-            }
-            finally
-            {
-                PrefabUtility.UnloadPrefabContents(root);
-            }
-
-            return AssetDatabase.LoadAssetAtPath<GameObject>(ProductEnemyPrefabPath);
-        }
-
-        private static void RepairDamageInteractionTriggers(GameObject root)
-        {
-            InteractionTrigger[] triggers =
-                root.GetComponentsInChildren<InteractionTrigger>(true);
-            for (int i = 0; i < triggers.Length; i++)
-            {
-                if (triggers[i].interaction != null)
-                {
-                    continue;
-                }
-
-                PlayerDamageInteraction damageInteraction =
-                    triggers[i].GetComponent<PlayerDamageInteraction>();
-                if (damageInteraction != null)
-                {
-                    triggers[i].interaction = damageInteraction;
-                    EditorUtility.SetDirty(triggers[i]);
-                }
-            }
-        }
-
-        private static GameObject BuildWorldPrefab(GameObject enemyPrefab)
-        {
-            var root = new GameObject("NetworkCombatWorld");
-            try
-            {
-                root.AddComponent<NetworkIdentity>();
-                root.AddComponent<NetworkCombatWorld>();
-                root.AddComponent<NetworkEnemySimulationWorld>();
-                PrefabUtility.SaveAsPrefabAsset(root, WorldPrefabPath);
-            }
-            finally
-            {
-                UnityEngine.Object.DestroyImmediate(root);
-            }
-
-            return AssetDatabase.LoadAssetAtPath<GameObject>(WorldPrefabPath);
         }
 
         private static void BuildScene(
@@ -609,14 +478,15 @@ namespace MonsterSupergroup.NetworkCombat.Editor
             start.AddComponent<NetworkStartPosition>();
         }
 
-        private static GameObject LoadPrefabContents(string path)
+        private static GameObject LoadPrefabAsset(string path)
         {
-            if (AssetDatabase.LoadAssetAtPath<GameObject>(path) == null)
+            GameObject prefab = AssetDatabase.LoadAssetAtPath<GameObject>(path);
+            if (prefab == null)
             {
                 throw new InvalidOperationException($"Required prefab is missing: {path}");
             }
 
-            return PrefabUtility.LoadPrefabContents(path);
+            return prefab;
         }
 
         private static T GetOrAdd<T>(GameObject gameObject) where T : Component

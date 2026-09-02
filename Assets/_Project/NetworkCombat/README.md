@@ -9,7 +9,9 @@ Mirror. It is not a second GAS implementation.
   do not reference Mirror.
 - `MonsterSupergroup.NetworkCombat` owns Commands, RPCs, canonical ledgers,
   status replication and reconciliation.
-- Projectiles remain local pooled GameObjects. They are never NetworkSpawned.
+- Projectiles remain local pooled GameObjects. They are never NetworkSpawned;
+  Spawn/Termination presentation edges are replicated so observers can replay
+  the same trajectory without running hit or damage logic.
 
 ## Authority
 
@@ -22,18 +24,20 @@ Mirror. It is not a second GAS implementation.
 | Gameplay status Add/Remove/Stack/Duration/Version | Server StatusRegistry |
 | SourceClient status gameplay and DOT | Source owner client |
 | Stun/shared AI control | Server |
-| Enemy spawn, chase and network destroy | Server |
+| Normal/Elite Enemy AI, movement and attack progression | Assigned SimulationOwner client |
+| Boss simulation | Server |
+| Enemy target assignment, spawn and canonical network destroy | Server |
 
 The server accepts the resolved `Damage` and tags submitted by the owner. It
 does not rerun attack stats, crit, projectile collision or player builds.
 
 ## Runtime flow
 
-1. Existing `PlayerLoader -> PlayerHand -> WeaponRuntimeBehaviour ->
-   ProjectileAttackBehaviour` simulates immediately on the owner.
+1. `PlayerBuildRuntime -> WeaponRuntimeBehaviour -> HellMaiden WeaponBehaviour`
+   simulates immediately on the owner from the Native GAS weapon database.
 2. `CombatPipeline` emits a raw `DamageResolved` plus local predicted damage and
    `PredictedLethalHit` when appropriate.
-   OnHit/PredictedLethal modifiers use the PlayerHand-shared `CombatTriggerGuard`
+   OnHit/PredictedLethal modifiers use the player-build `CombatTriggerGuard`
    (depth 32, 256 triggers per root by default, self-trigger/once/cooldown rules).
 3. `ClientCombatCollector` batches damage, status mutations and owner-final
    player health reports.
@@ -63,9 +67,11 @@ the production Build Profile. It contains:
 - 120 server-spawned `NetworkEnemy.prefab` instances;
 - local-only pooled projectiles.
 
-Use `Monster Supergroup/Network Combat/Build Validation Sandbox` after changing
-the local Player/Enemy source prefabs to regenerate the three network prefabs
-and scene.
+`NetworkPlayer.prefab`, `NetworkEnemy.prefab`, `NetworkEnemyBase.prefab` and
+`NetworkEnemySkeleton.prefab` are the canonical assets. Use `Monster
+Supergroup/Network Combat/Build Validation Sandbox` to repair those prefabs in
+place and regenerate only the validation scene; no LocalCombat source prefab is
+copied over a production network prefab.
 
 ## Production scene hookup
 

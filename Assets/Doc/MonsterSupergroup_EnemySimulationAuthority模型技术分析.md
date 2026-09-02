@@ -3,6 +3,7 @@
 > 审计项目：F:\UnityStore\MonsterSupergroup
 > 审计日期：2026-08-27
 > 文档状态：保留 2026-08-27 审计基线；当前实现进度与验证结果见第 10 节
+> 2026-09-02 更新：`LocalCombat/EnemyBase` 和迁移用 `Enemy_Skeleton` 源 Prefab 已删除；`NetworkEnemyBase` / `NetworkEnemySkeleton` 是当前 Canonical Prefab。第 1～9 节中的 Local 路径只代表当时审计事实。
 > 事实来源：当前工作树，包括尚未提交的用户修改
 > 本阶段约束：不修改 Combat Authority、Player HP、Status Tick、Knockback / Pull / Physics、Boss Simulation
 
@@ -62,9 +63,9 @@ Combat 继续保持：
 | Prefab | 当前用途 | 网络能力 | AI / Attack 能力 |
 | --- | --- | --- | --- |
 | [NetworkEnemy.prefab](../_Project/Content/NetworkCombat/NetworkEnemy.prefab) | 联机开发沙箱 | NetworkIdentity、ServerToClient NetworkTransform、NetworkCombatantAdapter | 仅 LocalEnemyChase，无完整攻击 |
-| [EnemyBase.prefab](../_Project/Content/LocalCombat/EnemyBase.prefab) | HellMaiden 产品 Enemy 恢复基线 | 无 NetworkIdentity、无网络快照组件 | 完整 EnemyController、两种 Movement、Attack、Animancer、旧 Status |
+| [NetworkEnemyBase.prefab](../_Project/Content/NetworkCombat/NetworkEnemyBase.prefab) | HellMaiden 产品 Enemy Canonical Prefab | NetworkIdentity、SimulationOwner、Snapshot、NetworkCombatantAdapter | 完整 EnemyController、Movement、Attack、Animancer，Combatant 为唯一运行时 HP |
 
-EnemyBase 当前同时存在 EnemyController / EnemyStats 与 CombatantBehaviour。这表示“旧 HellMaiden HP”和“新 GAS/网络 HP”是两个独立状态，尚未建立单向绑定。
+2026-08-27 审计时 EnemyBase 同时存在旧 `EnemyStats.Health` 和 `CombatantBehaviour`。2026-09-02 该问题已通过 Enemy Combatant Binding 收敛：`EnemyStats` 只提供初始 MaxHealth，运行时 HP/Damage/Death 以 `CombatantBehaviour` 为唯一事实。
 
 ### 2.2 当前沙箱 Enemy 调用链
 
@@ -1006,15 +1007,16 @@ Handoff、Disconnect、Late Join、Network Pool
 ### 10.2 当前验证结果
 
 - Unity 6.3.17f1 编译通过，无 C# 或 Mirror Weaver 错误。
-- 完整 EditMode：115/115 通过，其中 NetworkCombat / Enemy Simulation 子集为 41/41。
-- 完整 PlayMode：45/45 通过；其中 Gameplay 程序集为 41/41，NetworkCombat Sandbox 为 6/6。
+- 当时完整 EditMode：115/115 通过，其中 NetworkCombat / Enemy Simulation 子集为 41/41。
+- 当时完整 PlayMode：45/45 通过；其中 Gameplay 程序集为 41/41，NetworkCombat Sandbox 为 6/6。
+- 2026-09-02 删除 LocalCombat/旧 PlayerHand 平行原型后的最新完整回归：EditMode 149/149，PlayMode 46/46；记录见 `Logs/LegacyCleanup-EditMode.xml` 和 `Logs/LegacyCleanup-PlayMode.xml`。
 - 覆盖 Host、Dedicated Server、ClientOwner、Replica、ServerFallback、BossServer、120 Enemy batch、乱序/重复 Snapshot、可靠 Attack Edge、Predicted Death Snapshot gate、Skeleton Warning/Active/Recovery，以及本地受击后的 `PlayerHealthReport` 收敛。
 
 ### 10.3 Phase 2 首个 EnemyAttackMelee 联网切片（已完成）
 
-首个验证对象已明确并落地为 HellMaiden 的 `Enemy_Skeleton.prefab` + `Skeleton_Warning.prefab`：
+首个验证对象已落地为 [NetworkEnemySkeleton.prefab](../_Project/Content/NetworkCombat/NetworkEnemySkeleton.prefab) + `Skeleton_Warning.prefab`：
 
-- 原始资源闭包放在 [Validation/HellMaiden](../_Project/Content/NetworkCombat/Validation/HellMaiden)，只迁移 Skeleton 所需 Prefab、AnimationClip、Sprite、Material、Shader 和 PhysicsMaterial；没有复制旧 Animancer、A*、FMOD、QTI 或脚本 DLL。
+- 原始资源闭包仍在 [Validation/HellMaiden](../_Project/Content/NetworkCombat/Validation/HellMaiden) 保留被实际引用的 AnimationClip、Sprite、Material、Shader、PhysicsMaterial 和 `Skeleton_Warning`；无引用的 `Enemy_Skeleton.prefab` 迁移源已在 Canonical Prefab 稳定后删除。
 - 联网副本为 [NetworkEnemySkeleton.prefab](../_Project/Content/NetworkCombat/NetworkEnemySkeleton.prefab)。它保持 Mirror `NetworkIdentity` Server Authority，并使用 `EnemySimulationAuthority`、`NetworkEnemySimulationAgent`、`EnemySnapshotInterpolator`、`NetworkCombatantAdapter`、`NetworkEnemyServerDriver` 与 `NetworkEnemyMeleeReplica`。
 - Skeleton 的旧 `EnemyAttackMelee` 在 Prefab 上默认禁用；只有角色切换为 `ClientOwner`、`ServerFallback` 或 `BossServer` 后才允许它运行完整攻击状态机。`Replica` 不进入旧 Enemy FSM，也不执行攻击决策。
 - [NetworkEnemyMeleeReplica.cs](../_Project/NetworkCombat/Mirror/NetworkEnemyMeleeReplica.cs) 只消费可靠 `EnemyAttackPresentationEdge`，按同一个 `Skeleton_Warning` Prefab 在本机恢复 Warning、Active 与 Recovery。

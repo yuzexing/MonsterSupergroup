@@ -195,7 +195,7 @@ Tools/HellMaiden Migration/Rebuild Dante Native GAS Assets
 | 全部 Gameplay PlayMode 回归 | `42 / 43`，见下方说明 |
 | NetworkCombat EditMode 回归 | `41 / 41` |
 
-Gameplay 的唯一失败是既有测试 `GameplayScene_StartsLocalAutoCombatWithoutMirrorHost`：当前工作区中的 `Assets/Scenes/Gameplay.unity` 已移除旧 NetworkManager，但尚未包含该测试要求的 `LocalGameplayBootstrap`。这是本次任务开始前已存在且仍在编辑中的场景改动；本迁移没有覆盖或回退该场景。Dante 的两条真实资产 PlayMode 测试均通过。
+Gameplay 的唯一失败当时是既有测试 `GameplayScene_StartsLocalAutoCombatWithoutMirrorHost`：它要求旧 `LocalGameplayBootstrap`，而场景正在转向联机启动链。Dante 的两条真实资产 PlayMode 测试均通过。2026-09-02 该 Local Bootstrap 与对应旧测试已作为平行原型正式删除，不再是当前回归集的失败项。
 
 专项测试覆盖：
 

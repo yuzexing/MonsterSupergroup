@@ -1,12 +1,12 @@
 # MonsterSupergroup 联机模块详细使用指南
 
-> 适用快照：2026-08-25 当前工作树
+> 适用快照：2026-09-02 当前工作树
 >
 > Unity：6000.3.17f1
 >
 > Mirror：96.0.1
 >
-> 当前范围：开发沙盒和接入规范；项目尚无正式联机 Gameplay Scene。
+> 当前范围：`Boot -> Gameplay` 联机闭环与开发沙盒。旧 `LocalCombat` 原型已删除，不再是数据源。
 
 ## 1. 先记住六条规则
 
@@ -25,21 +25,21 @@
 
 | 用途 | 路径 |
 | --- | --- |
-| 本地自动攻击 Gameplay | `Assets/Scenes/Gameplay.unity` |
+| 联机启动场景 | `Assets/Scenes/Boot.unity` |
+| 联机 Gameplay | `Assets/Scenes/Gameplay.unity` |
 | 纯 GAS 开发垂直切片 | `Assets/_Project/Scenes/Development/GASVerticalSlice.unity` |
 | 联机验证沙盒 | `Assets/_Project/Scenes/Development/NetworkCombatSandbox.unity` |
-| 本地战斗资产 | `Assets/_Project/Content/LocalCombat` |
-| 联机验证资产 | `Assets/_Project/Content/NetworkCombat` |
+| 正式联机战斗资产 | `Assets/_Project/Content/NetworkCombat` |
 
 ### 2.2 三类入口的区别
 
 | 入口 | 用于验证 | 不用于验证 |
 | --- | --- | --- |
 | `GASVerticalSlice` | Core Stats、Modifier、Status、手动/自动攻击和 Debug UI | Mirror Authority、网络收敛 |
-| `Gameplay` | `PlayerLoader → PlayerHand → Projectile` 本地自动战斗 | Host/Client、Canonical World |
+| `Boot -> Gameplay` | 联机 Player/Enemy 生成、`PlayerBuildRuntime` 攻击、Enemy 受击/攻击 Player | 完整 Roguelite Wave/Loot/卡牌流程 |
 | `NetworkCombatSandbox` | Mirror Host/Client、批处理、Canonical HP/Status、120 Enemy | 正式 Wave、Loot、卡牌和关卡流程 |
 
-不要因为 `Gameplay.unity` 能自动攻击，就认为它已经是联网场景；也不要把 Sandbox Spawner 搬进产品场景后就称为正式波次系统。
+`Gameplay.unity` 已使用联机 Player Runtime，但 Sandbox Spawner 仍只是验证工具，不等于正式波次系统。
 
 ## 3. 第一次运行 NetworkCombatSandbox
 
@@ -58,8 +58,8 @@
 
 1. 在 Mirror HUD 点击 **Host (Server + Client)**。
 2. Server 应生成一个 Owner Player 和 120 个 Enemy。
-3. Owner Player 的 `NetworkPlayerBootstrap.OnStartAuthority()` 会调用 `PlayerLoader.Load()`。
-4. `PlayerLoader` 在 Slot 0 装备初始 Weapon，PlayerHand 随即自动寻找最近 Enemy 并攻击。
+3. Owner Player 的 `NetworkPlayerBootstrap.OnStartAuthority()` 会启用 `PlayerMovement`，注册本地 Controller，并调用 `PlayerBuildRuntime.StartInitialBuild()`。
+4. `PlayerBuildRuntime` 从共享 `RuntimeDB` 按 `initialWeaponId` 装备 HellMaiden Weapon，武器使用 New GAS Runtime 创建攻击快照。
 5. 你应看到 Enemy 被本地 Projectile 命中，并最终由 Canonical State 收敛 HP/Death。
 
 Host 模式同时包含 Server 和一个 Client，适合验证完整调用链，但不能替代真正的 Remote Client 测试。
@@ -103,24 +103,24 @@ Combat Batch 使用可靠 Command，因此 Unreliable Loss 主要用于模拟其
 2. 确认 `MirrorNetworkCombatBridge.OnStopAuthority()` 已 Dispose Collector。
 3. Source 断线时，Server 会把其尚未结束的 SourceClient DOT 切换为仅剩余 Tick 的 Server 接管；不会重跑原玩家 Build。
 
-## 4. 重新生成开发资产
+## 4. 修复开发资产
 
-### 4.1 本地战斗资产
+### 4.1 Canonical Network Prefab
 
-菜单：
+以下资产本身就是唯一数据源，不再由 `LocalCombat` Prefab 覆盖生成：
+
+- `NetworkPlayer.prefab`
+- `NetworkEnemy.prefab`
+- `NetworkEnemyBase.prefab`
+- `NetworkEnemySkeleton.prefab`
+- `NetworkCombatWorld.prefab`
+
+对 Player 或 Enemy 结构做长期修改时，直接修改对应 Network Prefab，然后使用下列修复菜单补齐程序化组件：
 
 ```text
-Tools > MonsterSupergroup > Gameplay > Rebuild Local Auto Combat
+Tools > Monster Supergroup > Repair Network Player Runtime Combat Prefab
+Monster Supergroup > Network Combat > Migrate Enemy Simulation Prefabs
 ```
-
-该命令会重建并验证：
-
-- `LocalProjectile.prefab`
-- `StarterProjectileWeapon.prefab`
-- `StarterProjectileWeapon.asset`
-- `LocalPlayer.prefab`
-- `LocalEnemy.prefab`
-- `Assets/Scenes/Gameplay.unity`
 
 ### 4.2 GAS 垂直切片
 
@@ -132,7 +132,7 @@ Tools > MonsterSupergroup > Gameplay > Rebuild GAS Vertical Slice
 
 该命令用于重建纯 GAS 开发 Scene、Equipment Set 和 Perk Set。
 
-### 4.3 联机验证资产
+### 4.3 联机验证场景
 
 菜单：
 
@@ -140,107 +140,82 @@ Tools > MonsterSupergroup > Gameplay > Rebuild GAS Vertical Slice
 Monster Supergroup > Network Combat > Build Validation Sandbox
 ```
 
-输入：
+该命令使用上述 Canonical Network Prefab，并输出/更新：
 
 ```text
-Assets/_Project/Content/LocalCombat/LocalPlayer.prefab
-Assets/_Project/Content/LocalCombat/LocalEnemy.prefab
-```
-
-输出：
-
-```text
-Assets/_Project/Content/NetworkCombat/NetworkPlayer.prefab
-Assets/_Project/Content/NetworkCombat/NetworkEnemy.prefab
-Assets/_Project/Content/NetworkCombat/NetworkCombatWorld.prefab
 Assets/_Project/Scenes/Development/NetworkCombatSandbox.unity
 ```
 
 ### 4.4 生成工具的重要警告
 
-`Build Validation Sandbox` 不是普通“补组件”命令，而是开发内容生成器。它会按代码重新保存上述三个 Prefab 和 Scene。
+`Build Validation Sandbox` 会先对 Canonical Network Prefab 做幂等修复，再重建开发 Scene。它不会从另一套 Local Prefab 复制产品数据。
 
 正确流程：
 
 1. 先保存或提交你希望保留的手工修改。
-2. 修改作为来源的 LocalPlayer/LocalEnemy 或 Builder 代码。
+2. 修改 Canonical Network Prefab 或对应的修复器代码。
 3. 执行生成菜单。
 4. 检查 Git Diff，确认没有覆盖产品资产。
 5. 运行 EditMode 和 PlayMode 测试。
 
-不要把只存在于生成出来的 Network Prefab 上的手工修改当作长期数据源；下次生成会丢失它。
+修复器应保持幂等；不得再添加一个可以覆盖 Canonical Prefab 的隐藏源资产。
 
-## 5. GAS Authoring：创建可装备的 Projectile Weapon
+## 5. GAS Authoring：创建可装备的 HellMaiden Weapon
 
-### 5.1 创建 Projectile Prefab
+### 5.1 唯一正式武器数据链
 
-最低组件建议：
+```text
+RuntimeDB / WeaponData
+  -> WeaponPrefab (HellMaiden WeaponBehaviour，负责几何与表现)
+  -> NativeGasWeaponDefinition (New GAS 数值与规则)
+  -> PlayerBuildRuntime
+  -> WeaponRuntimeBehaviour
+  -> immutable AttackSnapshot
+```
 
-- `Rigidbody2D`：Kinematic、Gravity Scale 0、Continuous Collision。
-- Trigger `Collider2D`。
-- `StraightProjectileBehaviour`。
-- 可选 Sprite/VFX；这些只负责表现。
+`WeaponData` 必须同时配置 `WeaponPrefab` 和 `NativeGasDefinition`。`PlayerBuildRuntime` 实例化 Prefab，为它创建/配置 `WeaponRuntimeBehaviour`，并禁止该武器再执行 Legacy Modifier Runtime。
 
-禁止添加：
+### 5.2 Projectile 几何与表现
 
-- `NetworkIdentity`
-- `NetworkTransform`
-- 每颗 Projectile 的 NetworkBehaviour
+Projectile 继续由 HellMaiden `ProjectileAttackBehaviour` / `ProjectileAttack` 负责生成、移动、动画、VFX 和碰撞。每个攻击实例持有发射时冻结的 `AttackSnapshot`，命中时不重读共享 Weapon Stats。
 
-`StraightProjectileBehaviour` 会携带发射时的 `AttackSnapshot`。即使玩家之后换装或下一次攻击刷新 Stats，这颗在途 Projectile 仍使用自己的快照。
+普通 Projectile 不添加 `NetworkIdentity` 或 `NetworkTransform`。Owner 的 `PlayerBuildRuntime` 发布 Spawn/Termination 表现事件，`NetworkWeaponCombatAdapter` 将它们批量广播，Observer 只重放表现，不执行伤害。
 
-### 5.2 创建 Weapon Prefab
-
-Weapon Prefab 当前需要：
-
-- `WeaponRuntimeBehaviour`
-- `ProjectileAttackBehaviour`
-
-`ProjectileAttackBehaviour` 有 `[RequireComponent(typeof(WeaponRuntimeBehaviour))]`。由 PlayerHand 动态创建时，Slot 会把 `InitializeOnAwake` 关闭并显式初始化，避免 Awake 使用错误配置。
-
-### 5.3 创建 WeaponDefinition
+### 5.3 创建 Native GAS Weapon Definition
 
 在 Project 窗口执行：
 
 ```text
-Create > Monster Supergroup > Gameplay > Projectile Weapon
+Create > Monster Supergroup > GAS > Native HellMaiden Weapon
 ```
 
-逐项配置：
+关键字段：
 
 | 字段 | 要求 |
 | --- | --- |
-| Combat ID | 非 0；用于 Ability/Weapon 身份，不要随意复用。 |
-| Base Stats | Damage、Crit、Speed、Size、Duration、Projectile Count 等基础值。 |
-| Weapon Prefab | 上一步的 `ProjectileAttackBehaviour` Prefab。 |
-| Projectile Prefab | 带 `StraightProjectileBehaviour` 的本地 Prefab。 |
-| Starting Equipment | 0～3 个 Equipment Modifier Set。 |
-| Perk Modifier Set | 可空；当前用于武器全局 Perk 数值。 |
-| Target Range | 必须为有限正数。 |
-| Projectile Speed | 必须为有限正数。 |
-| Projectile Hit Count | 至少 1。 |
-| Spawn Radius | 不能为负。 |
-| Spawn Offset | 发射点本地偏移。 |
-| Rotate To Movement | Projectile 是否朝移动方向旋转。 |
+| Combat ID | 非 0；与对应 `WeaponData.ID` 保持稳定映射。 |
+| Base Stats | Damage、Crit、Speed、Size、Duration、Projectile Count 等 New GAS 基础值。 |
+| Attack Tags | 攻击、Projectile、元素等语义。 |
+| Supported Modifiers | 明确允许该武器接收的 Modifier 类型。 |
+| Knockback Presentation | 命中表现用击退配置；不作为第二 HP/伤害来源。 |
 
-`WeaponDefinition.Validate()` 会拒绝 0 Combat ID、缺 Prefab、超过三个 Starting Equipment、空 Equipment、非法范围/速度等配置。
+`_Dante_SlowProjectile` 的标准迁移入口是：
+
+```text
+Tools > HellMaiden Migration > Rebuild Dante Native GAS Assets
+```
 
 ### 5.4 创建 Equipment 和 Perk
 
-菜单：
+真实 HellMaiden 武器的 Equipment 使用 `NativeGasEquipmentDefinition`：
 
 ```text
-Create > Monster Supergroup > GAS > Equipment Modifier Set
-Create > Monster Supergroup > GAS > Perk Modifier Set
+Create > Monster Supergroup > GAS > Native HellMaiden Equipment
 ```
 
-在 Inspector 的 Modifier 列表中选择已注册类型并设置参数。当前第一批可用类型包括：
+每个 Level 保存带 stable Modifier ID 和 typed Parameters 的 `EquipmentDataModifier`。运行时通过 `PlayerBuildRuntime.AddEquipment(weapon, equipment, levelIndex)` 得到 Handle，并通过 `RemoveEquipment(handle)` 移除。Perk 使用 `AddPerk(PerkDataModifier)` / `RemovePerk(handle)`。
 
-- Damage Stat Modifier
-- On Hit Burn
-- Weapon Speed Perk
-
-同一个 Modifier ID 可以在一个资产中出现多次；Runtime 使用 `ModifierHandle` 区分实例。不要用运行时类型名或反射哈希充当持久 ID。
+`EquipmentModifierSet` / `PerkModifierSet` 仍可用于纯 GAS Authoring 与测试，但不再是真实 HellMaiden Weapon 的第二运行时入口。正式 Runtime 不得使用 Legacy Hash ID 或 Legacy Modifier Factory。
 
 ### 5.5 新增一种 Modifier 类型
 
@@ -296,16 +271,17 @@ args.Target.ApplyStatus(new StatusApplication(
 
 ## 6. Player Prefab 的配置与生命周期
 
-### 6.1 本地 Gameplay 组件
+### 6.1 Player Runtime 组件
 
 Player 至少需要：
 
 - `CombatantBehaviour`
 - `CombatTeamBehaviour`，Team 为 Player
+- `PlayerCombatantBinding`，把旧 Player 受击/治疗桥接到当前 Player 自己的 Combatant
 - `NearestEnemyTargetProvider`
-- `PlayerHandBehaviour`
-- `PlayerLoader`
-- 本地示例 Prefab 不再自带移动脚本；产品/联网 Player 统一使用 `PlayerMovement`
+- `PlayerMovement`
+- `CombatRuntimeServiceProvider`
+- `PlayerBuildRuntime`
 - 一个作为武器实例父节点的 Attacks Root
 
 `LocalPlayerMovement` 已删除。`NetworkPlayerBootstrap` 只允许 Owner 启用
@@ -314,15 +290,12 @@ Player 至少需要：
 引用关系：
 
 ```text
-PlayerLoader
-  -> PlayerHandBehaviour
-  -> CombatantBehaviour
-  -> Initial WeaponDefinition
-
-PlayerHandBehaviour
-  -> Attacks Root
-  -> NearestEnemyTargetProvider
-  -> Owner CombatTeamBehaviour
+PlayerBuildRuntime
+  -> PlayerMovement / Attacks Root
+  -> RuntimeDB / WeaponData
+  -> NativeGasWeaponDefinition
+  -> HellMaiden WeaponBehaviour instance
+  -> WeaponRuntimeBehaviour / RuntimeEquipmentModifiers
 ```
 
 ### 6.2 Network Player 组件
@@ -334,9 +307,9 @@ PlayerHandBehaviour
 | `NetworkIdentity` | Player 的 Mirror 身份。 |
 | `NetworkTransformReliable` | `syncDirection = ClientToServer`。 |
 | `MirrorNetworkCombatBridge` | 默认 0.05s Flush；开发 Trace 可开启。 |
-| `NetworkWeaponCombatAdapter` | 引用 Bridge 和 PlayerHand；动态武器无需逐个手工设置网络字段。 |
+| `NetworkWeaponCombatAdapter` | 引用 Bridge、ServiceProvider 和 PlayerBuildRuntime；注入 Runtime Services 并同步 Projectile 表现。 |
 | `NetworkCombatantAdapter` | `EntityKind = Player`，`Authority = OwnerFinal`。 |
-| `NetworkPlayerBootstrap` | 引用 PlayerLoader 和 Owner-only Movement。 |
+| `NetworkPlayerBootstrap` | 引用 PlayerBuildRuntime、RuntimeDB、PlayerMovement 和 PlayerCombatantBinding。 |
 
 ### 6.3 Authority 启动顺序
 
@@ -347,50 +320,47 @@ NetworkIdentity gains authority
      -> request late-join Canonical snapshot
   -> NetworkWeaponCombatAdapter.OnStartAuthority
      -> create CombatRuntimeServices
-     -> inject source IDs, Event Sink, Guard and Time Source into PlayerHand/Weapon
+     -> configure CombatRuntimeServiceProvider
+     -> subscribe PlayerBuildRuntime projectile presentation events
   -> NetworkPlayerBootstrap.OnStartAuthority
      -> enable owner movement
-     -> PlayerLoader.Load(spawnPosition)
-     -> initialize PlayerHand
-     -> equip initial weapon in slot 0
-     -> activate weapons
+     -> activate PlayerController_HMD
+     -> reset the owner's Combatant
+     -> resolve shared RuntimeDB
+     -> PlayerBuildRuntime.StartInitialBuild(database)
 ```
 
-Mirror 不保证不同组件回调以 Inspector 顺序执行，因此 `NetworkWeaponCombatAdapter` 同时处理两种情况：订阅 `OwnerCollectorReady`，以及发现 Collector 已存在时立即绑定。已有 Weapon 也会在注入 Runtime Services 后重新初始化。
+Mirror 不保证不同组件回调以 Inspector 顺序执行，因此 `NetworkWeaponCombatAdapter` 同时订阅 `OwnerCollectorReady` 并检查现有 Collector。`CombatRuntimeServiceProvider` 使后创建的 Weapon 也获得同一 Owner 的 Source IDs、Event Sink、Guard 和 Time Source。
 
 ### 6.4 装备和卸下武器
 
-PlayerHand 必须先初始化：
+`PlayerBuildRuntime` 必须已经由 `StartInitialBuild(RuntimeDB)` 绑定数据库：
 
 ```csharp
-PlayerHandBehaviour hand = playerLoader.PlayerHand;
-
-bool equipped = hand.TryEquipWeapon(1, secondWeaponDefinition);
-PlayerHandSlot slot = hand.Hand.GetSlot(1);
-bool equipmentAdded = slot.TryAddEquipment(equipmentModifierSet);
-bool equipmentRemoved = slot.TryRemoveEquipment(equipmentModifierSet);
-bool weaponRemoved = hand.Hand.TryUnequipWeapon(1);
+WeaponBehaviour weapon = playerBuildRuntime.EquipWeapon(weaponId);
+PlayerBuildEquipmentHandle equipmentHandle =
+    playerBuildRuntime.AddEquipment(weapon, nativeEquipment, levelIndex);
+bool equipmentRemoved = playerBuildRuntime.RemoveEquipment(equipmentHandle);
+bool weaponRemoved = playerBuildRuntime.UnequipWeapon(weapon);
 ```
 
 约束：
 
-- Slot 索引范围是 0～3。
-- 每个 Slot 最多三个 Equipment Set。
-- 重复加入同一个 Set 返回 `false`。
-- 装备过程先完整创建 Candidate，成功后才替换旧 Weapon；初始化异常不会留下半配置武器。
-- 卸下时会 Deactivate、Shutdown、Destroy 实例并清空 Equipment。
-- `PlayerHand.Shutdown()` 会释放四个 Slot 和所有动态 Weapon。
+- Weapon 必须属于该 Player 自己的 `PlayerBuildRuntime`。
+- Equipment 使用 Handle 区分实例，移除时只移除对应 Handle 的 Modifier。
+- Weapon 创建失败时会释放已创建的 Runtime Modifier 和 Prefab 实例。
+- `UnequipWeapon` 会 Deactivate、Shutdown、Destroy 武器；`ClearBuild()` 会释放该 Player 的全部 Weapon/Equipment/Perk。
 
 ### 6.5 自动攻击流程
 
 ```text
-ProjectileAttackBehaviour.Update
-  -> interval = 1 / resolved Weapon Speed
-  -> NearestEnemyTargetProvider.TryGetNearest
-  -> WeaponRuntimeBehaviour.BeginAttack
-  -> freeze AttackSnapshot
-  -> spawn one or more local pooled projectiles
-  -> StraightProjectileBehaviour trigger hit
+HellMaiden ProjectileAttackBehaviour.Update
+  -> CheckCooldown from New GAS resolved Speed
+  -> BeginNativeGasAttack
+  -> WeaponRuntimeBehaviour.BeginAttack / freeze AttackSnapshot
+  -> spawn one or more owner-local ProjectileAttack instances
+  -> Projectile carries its own AttackSnapshot lease
+  -> INativeGasDamageable.ResolveNativeGasHit
   -> WeaponRuntimeBehaviour.ResolveHitDetailed(snapshot, target)
 ```
 
@@ -414,7 +384,7 @@ ProjectileAttackBehaviour.Update
 | `NetworkCombatantAdapter` | `EntityKind = Enemy`，`Authority = ServerCanonical`。 |
 | `NetworkEnemyServerDriver` | 只在 Server 启用追踪；Canonical Dead 后 `NetworkServer.Destroy`。 |
 
-不要保留 `LocalEnemyDeathBehaviour`，否则本地预测死亡可能抢先销毁 Network Object，破坏 Server Canonical 生命周期。
+Enemy 不得挂接另一个“本地 HP 归零即 Destroy”组件；预测死亡只做表现和取消选中，Network Object 的最终销毁由 Server Canonical Death 驱动。
 
 ### 7.3 由 Server 生成
 
@@ -458,7 +428,7 @@ NetworkServer.Spawn(enemy);
 1. 停止生成新的本地攻击。
 2. 对 Owner Bridge 调用一次 `Flush()`，把已排队的共享结果发出。
 3. 由 Server 结束当前 Wave/Scene Canonical 生命周期。
-4. 释放 PlayerHand Projectile、Status 订阅和临时表现。
+4. 调用 `PlayerBuildRuntime.ClearBuild()`，释放 Weapon/Projectile、Status 订阅和临时表现。
 5. 确保新场景只有一个 `NetworkCombatWorld`；若设计为跨场景常驻，则禁止新场景再创建第二个。
 
 当前项目尚未实现完整产品切场流程，本节是接入约束，不代表已有自动场景迁移。
@@ -751,7 +721,7 @@ AttackStarted
 | `NetworkCombatWorld is required...` | World 缺失或 Player 先于 World 创建 | 场景放置且激活唯一 World，确保 Spawn 前完成 Awake。 |
 | `Only one NetworkCombatWorld may be active` | 场景和常驻对象各有一个 | 选择 Scene-owned 或 Persistent-owned 生命周期，只保留一个。 |
 | Owner Player 不移动 | Movement 没交给 Owner 或 Bootstrap 引用丢失 | 检查 `NetworkPlayerBootstrap`、`isOwned` 和 Movement 字段。 |
-| Owner 不自动攻击 | PlayerLoader/Hand/Initial Weapon/Target Provider 引用缺失 | 从 `PlayerLoader.Load()` 开始逐项检查，确认 Enemy Team/Range。 |
+| Owner 不自动攻击 | RuntimeDB、Initial Weapon ID、NativeGasDefinition 或 Attacks Root 缺失 | 从 `NetworkPlayerBootstrap.OnStartAuthority()` 和 `PlayerBuildRuntime.StartInitialBuild()` 开始检查，再确认 Enemy Team/Range。 |
 | 本地掉血但 Canonical HP 不变 | Weapon 未注入 Collector、Target 没有 netId 或 Result 被拒绝 | 检查 `NetworkWeaponCombatAdapter`、CombatContext IDs、Gateway Metrics。 |
 | Result 被 `InvalidSequence` 拒绝 | 手工伪造 Event ID、Epoch 不匹配或 Batch 超限 | 使用 Bridge 提供的 Event ID Source，不要自行拼 Sequence。 |
 | 同一伤害结算两次 | 绕过 Gateway 或复用了不同 Event ID | 所有共享结果只走 Gateway；同一逻辑事件必须保持同一 Event ID。 |
@@ -762,7 +732,7 @@ AttackStarted
 | 奖励发了两次 | 奖励监听 Predicted Lethal 或每个 Client 都发放 | 奖励只在 Server 消费 ConfirmedKill，并自行幂等。 |
 | Projectile 数量导致网络爆炸 | 给 Projectile 添加了 NetworkIdentity/Spawn | 改回本地池化，只提交最终 CombatResult。 |
 | Collector buffer full | 单次链超过 4096 且未及时 Flush | 检查无限 Chain，降低 Batch 延迟或在安全边界 Flush；不要静默扩成无限列表。 |
-| 反复生成后 Prefab 修改消失 | 修改的是生成物 | 把修改移到 Local 来源 Prefab 或 Setup Utility。 |
+| 运行修复菜单后 Prefab 修改消失 | Migrator 仍在强制写入该字段 | 修改 Canonical Network Prefab 和 Migrator 的职责边界；不要恢复 Local 源 Prefab。 |
 
 ## 15. 测试方法
 
@@ -791,7 +761,7 @@ Assets/_Project/Tests/PlayMode/Gameplay
 | --- | --- |
 | Stats/Modifier/Status Core | 全部 GAS EditMode |
 | Event Identity/Trigger Guard | `CombatContextTests` + Gateway Tests |
-| Weapon/PlayerHand/Projectile | Gameplay PlayMode + PlayerHand Auto Combat |
+| PlayerBuildRuntime/Weapon/Projectile | Gameplay PlayMode + Dante Native GAS + Network Projectile Presentation |
 | Gateway/Ledger/Status Registry | 全部 NetworkCombat EditMode |
 | Mirror Prefab/Scene | NetworkCombat Sandbox PlayMode + 手工 Host |
 | Authority 或断线行为 | Host + Remote Client，多进程验证 |
@@ -800,15 +770,15 @@ Assets/_Project/Tests/PlayMode/Gameplay
 ### 15.3 当前已记录基线
 
 ```text
-EditMode: 88 / 88 Passed
-PlayMode: 31 / 31 Passed
+EditMode: 149 / 149 Passed
+PlayMode: 46 / 46 Passed
 ```
 
 日志位于：
 
 ```text
-Logs/codex-resume-editmode.xml
-Logs/codex-resume-playmode.xml
+Logs/LegacyCleanup-EditMode.xml
+Logs/LegacyCleanup-PlayMode.xml
 ```
 
 新增正式场景或迁入 HellMaiden 逻辑后，必须生成新的测试记录；不要永久引用这份旧快照当作新版本通过证明。

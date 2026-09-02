@@ -1,14 +1,12 @@
 # MonsterSupergroup GAS 与联机模块总览
 
-> 状态快照：2026-08-25
+> 状态快照：2026-09-02
 >
 > Unity：6000.3.17f1
 >
 > Mirror：96.0.1
 >
-> Git HEAD：`083662f`
->
-> 重要说明：本文以当日**包含未提交修改的工作树**为事实来源，而不是只描述 HEAD 提交中的内容。
+> 重要说明：旧 `LocalCombat -> PlayerLoader/PlayerHand` 原型已删除。真实武器的唯一入口是 `PlayerBuildRuntime`，Canonical Prefab 位于 `Content/NetworkCombat`。
 
 ## 1. 这份文档解决什么问题
 
@@ -53,8 +51,8 @@ MonsterSupergroup 当前已经拥有一套可运行、可测试的 GAS Core、�
 
 ### 3.2 当前还没有成立的部分
 
-- `Assets/Scenes/Gameplay.unity` 仍通过 `LocalGameplayBootstrap` 启动本地自动战斗，不是正式联机场景。
-- 当前联网只在 `Assets/_Project/Scenes/Development/NetworkCombatSandbox.unity` 中验证。
+- `Boot -> Gameplay` 已接入联机 Player/Enemy 和 Native GAS 战斗闭环，但仍不等于完整 Roguelite 产品流程。
+- `Assets/_Project/Scenes/Development/NetworkCombatSandbox.unity` 继续用于延迟、批处理和高数量 Enemy 专项验证。
 - 沙盒中的 120 个 Enemy 由 `NetworkEnemySandboxSpawner` 生成，它不是正式波次系统。
 - 正式 Roguelite 的 Wave、Loot、EXP、Gold、卡牌选择、关卡切换和复活尚未接入 Canonical Combat 事件。
 - 尚未完成四个独立进程、Dedicated Server、长时间 Soak、100+ Enemy 真实美术/AI/Build 的完整压力测试。
@@ -70,10 +68,11 @@ MonsterSupergroup 当前已经拥有一套可运行、可测试的 GAS Core、�
 | `Assets/_Project/GAS/Authoring` | 已实现并测试 | Equipment/Perk ScriptableObject 数据和 `[SerializeReference]` 参数。 |
 | `Assets/_Project/GAS/Unity` | 已实现并测试 | Unity 随机源和 Authoring 到 Runtime 的加载适配。 |
 | `Assets/_Project/GAS/Editor` | 已实现并测试 | Modifier 选择、验证、生成稳定 Registry、Build 前校验。 |
-| `Assets/_Project/Gameplay/Combat/Runtime` | 已实现并测试 | Combatant、PlayerHand、Weapon、自动攻击、本地 Projectile 和状态推进。 |
-| `Assets/_Project/Gameplay/Local` | 已实现并测试 | 离线/本地 Player、Enemy、移动和启动适配。 |
+| `Assets/_Project/Gameplay/Combat/Runtime` | 已实现并测试 | Combatant、WeaponRuntime、Runtime Services、目标搜索和 New GAS 命中结算。 |
+| `Assets/_Project/Gameplay/Combat/Native` | 已实现并测试 | `PlayerBuildRuntime`、Native Weapon/Equipment Definition 和 HellMaiden Weapon 原生 New GAS 运行时。 |
+| `Assets/_Project/Gameplay/Local` | 最小保留 | 只保留轻量 Enemy Chase 辅助；不再包含 Player/武器/生成器数据源。 |
 | `Assets/_Project/NetworkCombat` | 已实现并测试 | 传输无关契约、客户端收集、服务端账本、Mirror 桥和 Replica。 |
-| `Assets/_Project/Content/NetworkCombat` | 仅开发沙盒验证 | 由工具生成的 NetworkPlayer、NetworkEnemy、NetworkCombatWorld Prefab。 |
+| `Assets/_Project/Content/NetworkCombat` | Canonical 产品数据 | NetworkPlayer、NetworkEnemy、NetworkCombatWorld 等唯一正式 Prefab；工具只幂等修复，不再从 Local 源覆盖。 |
 | `Assets/_Project/Scenes/Development/NetworkCombatSandbox.unity` | 仅开发沙盒验证 | Host/Client、延迟、批处理、120 Enemy 验证场景。 |
 | `Assets/_Project/Gameplay/Combat`（不含 `Runtime`） | 待渐进迁移 | 从 HellMaiden 移植的旧 Gameplay 大程序集和插件耦合代码。 |
 
@@ -143,13 +142,11 @@ GAS Core -> GameDirector / ControllerManager / FMOD / Rewired / UI
 | `CombatantBehaviour` | 实现战斗目标、预测 HP、Canonical HP 应用、StatusController 和伤害事件。 |
 | `CombatTeamBehaviour` | 标记 Player/Enemy Team，避免友军和死亡目标被选中。 |
 | `NearestEnemyTargetProvider` | 在范围内选择最近的有效敌方 Combatant。 |
-| `PlayerLoader` | 重置玩家、初始化 PlayerHand、在 Slot 0 装备初始武器并激活自动攻击。 |
-| `PlayerHandBehaviour` / `PlayerHand` | 管理四个 Weapon Slot、生命周期和 Runtime Services。 |
-| `PlayerHandSlot` | 原子地装备/卸下武器，管理每槽最多三个 Equipment Set。 |
-| `WeaponDefinition` | 保存 Combat ID、基础 Stats、武器/Projectile Prefab、初始 Equipment/Perk 和发射参数。 |
+| `PlayerBuildRuntime` | 每个 Player 独立管理 HellMaiden Weapon、Native Equipment/Perk Handle 和初始 Build；是真实武器唯一入口。 |
+| `NativeGasWeaponDefinition` | 保存 Combat ID、New GAS Base Stats、Tags、Supported Modifiers 和 Knockback 表现配置。 |
+| `NativeGasEquipmentDefinition` | 按 Level 保存 stable ID + typed Parameters，由 `PlayerBuildRuntime` 创建 New GAS Runtime Modifier。 |
 | `WeaponRuntimeBehaviour` | 把 Authoring 数据加载为 Runtime Modifier，调用 CombatPipeline。 |
-| `ProjectileAttackBehaviour` | 根据武器速度自动攻击，创建一次 AttackSnapshot 并发射本地 Projectile。 |
-| `StraightProjectileBehaviour` / Pool | 本地运动、碰撞、HitCount、命中后 `ResolveHitDetailed`、池化复用。 |
+| HellMaiden `WeaponBehaviour` / `ProjectileAttackBehaviour` | 保留几何、动画、VFX、FMOD、Projectile 池和碰撞；Native Weapon 不再执行 Legacy 数值/Modifier。 |
 | `StatusUpdateDriver` | 用显式 delta time 推进 Combatant 的 StatusController。 |
 | `CombatRuntimeServices` | 向武器注入 Source IDs、Event IDs、Event Sink、Trigger Guard 和 Time Source。 |
 
@@ -188,10 +185,11 @@ Server 明确**不做**以下事情：
 | --- | --- | --- |
 | `NetworkCombatWorld` | 场景唯一 World 对象 | 持有 Gateway/Replica、Server Tick、Canonical 广播和晚加入快照。 |
 | `MirrorNetworkCombatBridge` | Owner Player | 分配事件 Epoch/Slot、创建 Collector、每 50ms 可靠提交 Batch。 |
-| `NetworkWeaponCombatAdapter` | Owner Player | 把 Collector、Event IDs 和 Source IDs 注入现有 PlayerHand/Weapon。 |
+| `NetworkWeaponCombatAdapter` | Owner Player | 通过 `CombatRuntimeServiceProvider` 把 Collector/Event IDs/Source IDs 注入 `PlayerBuildRuntime` 的 Weapon，并广播 Projectile 表现。 |
 | `NetworkCombatantAdapter` | Player 和 Enemy | 注册 Entity、绑定 StatusController、应用 Canonical State、提交 Owner-final Player HP。 |
-| `NetworkPlayerBootstrap` | Player | 只在 Owner 上启用移动并调用 `PlayerLoader.Load()`。 |
-| `NetworkEnemyServerDriver` | Enemy | 只在 Server 上执行追踪和 Canonical Death 后的网络销毁。 |
+| `NetworkPlayerBootstrap` | Player | 只在 Owner 上启用移动/Controller，重置自己的 Combatant，并调用 `PlayerBuildRuntime.StartInitialBuild()`。 |
+| Enemy Simulation 组件 | Normal/Elite Enemy | Server 分配 Target/SimulationOwner，SimulationOwner Client 执行 AI/移动/攻击推进并上报 Snapshot，Observer 插值表现。 |
+| `NetworkEnemyServerDriver` | Enemy | 管理 Server Canonical 生命周期与 Death 后网络销毁；不是普通 Enemy 的唯一完整 AI 执行者。 |
 | `NetworkEnemySandboxSpawner` | Sandbox World | 仅开发用，Server 启动时生成 120 个 Enemy。 |
 
 ## 6. Authority Map
@@ -200,7 +198,7 @@ Server 明确**不做**以下事情：
 | --- | --- | --- | --- |
 | Player Movement | Owner Client | 当前由 Client→Server Transform 同步 | 强调即时响应；尚未实现严格移动校验。 |
 | Attack Scheduling | Owner Client | Owner Client | Server 不重新调度普攻。 |
-| Projectile Spawn/Movement | Owner Client | 无 Network Spawn | 其他客户端不需要同步每个 Projectile。 |
+| Projectile Spawn/Movement | Owner Client | 无 Network Spawn | Observer 通过 Spawn/Termination Presentation Edge 重放相同弹道表现，不执行命中与伤害。 |
 | Hit Detection | Owner Client | Owner Client | 命中结果通过 CombatResult 提交。 |
 | Damage/Crit/Build | Owner Client | Damage 数值由 Server Ledger 合并 | Server 接受合法的已解析 Damage。 |
 | Enemy Predicted HP | 发起攻击的 Owner Client | 无 | 只用于即时反馈和 Build Chain。 |
@@ -210,7 +208,9 @@ Server 明确**不做**以下事情：
 | Player HP | Owner Client | Server 保存 Owner-final Report | 其他客户端不能写该玩家 HP。 |
 | SourceClient Status Gameplay/DOT | Status Source Owner | Server Registry 保存状态；Ledger 合并 Tick Damage | Observer 只查询/表现，不重复 Tick。 |
 | Server Status Gameplay（如 Stun AI） | Client 可预测表现 | Server | AI 停止只能由 Server 执行。 |
-| Enemy AI/Spawn/Destroy | Server | Server | Sandbox 已验证基础追踪和死亡销毁。 |
+| Normal/Elite Enemy AI/Movement | SimulationOwner Client | Server 分配 Owner/Target，Snapshot 收敛 Transform/AIState | Mirror Identity 仍保持 Server Authority。 |
+| Boss AI/Movement | Server | Server | Boss 不切换到 Client Simulation。 |
+| Enemy Spawn/Canonical Destroy | Server | Server | Spawn/Despawn 和 Canonical Death 仍是 Server 事实。 |
 | Loot/EXP/Gold/Kill Credit | 尚未接入 | 必须由 Server | 未来只消费 ConfirmedKill。 |
 
 ## 7. 运行调用链
@@ -220,7 +220,7 @@ Server 明确**不做**以下事情：
 ```mermaid
 sequenceDiagram
     participant B as NetworkPlayerBootstrap
-    participant H as PlayerLoader / PlayerHand
+    participant H as PlayerBuildRuntime
     participant W as Weapon + CombatPipeline
     participant C as ClientCombatCollector
     participant M as MirrorNetworkCombatBridge
@@ -228,8 +228,8 @@ sequenceDiagram
     participant L as CombatLedger
     participant R as CanonicalWorldReplica
 
-    B->>H: OnStartAuthority -> Load
-    H->>W: Equip slot 0 + Activate
+    B->>H: OnStartAuthority -> StartInitialBuild(RuntimeDB)
+    H->>W: Equip WeaponData + NativeGasDefinition
     W->>W: Attack / Projectile / Hit / Crit
     W->>W: Apply predicted HP
     W->>C: Publish DamageResolved
@@ -275,9 +275,9 @@ Server Ledger applies one or more submitted results
 
 ## 8. 当前场景与 Prefab
 
-### 8.1 本地 Gameplay
+### 8.1 Boot -> Gameplay
 
-`Assets/Scenes/Gameplay.unity` 当前验证本地自动攻击，不依赖启动 Mirror Host。它仍然适合验证 GAS/PlayerHand/Projectile 的离线行为，但不能证明联机 Authority 正确。
+`Assets/Scenes/Boot.unity` 负责建立 Mirror 会话并进入 `Assets/Scenes/Gameplay.unity`。Gameplay 使用 Canonical `NetworkPlayer` / Network Enemy Prefab 和 `PlayerBuildRuntime`，不再依赖已删除的 Local Auto Combat 启动器。
 
 ### 8.2 NetworkCombatSandbox
 
@@ -304,8 +304,8 @@ Server Ledger applies one or more submitted results
 
 | 套件 | 结果 | 日志 |
 | --- | ---: | --- |
-| EditMode | 88 / 88 Passed | `Logs/codex-resume-editmode.xml` |
-| PlayMode | 31 / 31 Passed | `Logs/codex-resume-playmode.xml` |
+| EditMode | 149 / 149 Passed | `Logs/LegacyCleanup-EditMode.xml` |
+| PlayMode | 46 / 46 Passed | `Logs/LegacyCleanup-PlayMode.xml` |
 
 覆盖重点：
 

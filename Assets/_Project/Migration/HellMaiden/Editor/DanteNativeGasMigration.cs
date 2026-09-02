@@ -8,7 +8,6 @@ using AstralShift.HellMaiden.Player.Attacks;
 using MonsterSupergroup.GAS;
 using MonsterSupergroup.GAS.Authoring;
 using MonsterSupergroup.Gameplay.Combat;
-using MonsterSupergroup.Gameplay.Local;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -434,18 +433,6 @@ namespace MonsterSupergroup.HellMaidenMigration.Editor
                 PlayerMovement player = root.GetComponentInChildren<PlayerMovement>(true)
                     ?? throw new InvalidOperationException(
                         $"'{prefabPath}' contains no PlayerMovement.");
-                PlayerLoader loader = player.GetComponent<PlayerLoader>();
-                if (loader != null)
-                {
-                    UnityEngine.Object.DestroyImmediate(loader);
-                }
-
-                Component hand = player.GetComponent("PlayerHandBehaviour");
-                if (hand != null)
-                {
-                    UnityEngine.Object.DestroyImmediate(hand);
-                }
-
                 PlayerBuildRuntime build = player.GetComponent<PlayerBuildRuntime>();
                 if (build == null)
                 {

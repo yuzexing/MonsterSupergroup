@@ -30,8 +30,11 @@ namespace MonsterSupergroup.NetworkCombat.Tests
             "Assets/_Project/Content/NetworkCombat/NetworkEnemyBase.prefab";
         private const string WorldPrefabPath =
             "Assets/_Project/Content/NetworkCombat/NetworkCombatWorld.prefab";
-        private const string ProjectilePrefabPath =
-            "Assets/_Project/Content/LocalCombat/LocalProjectile.prefab";
+        private const string LegacyLocalCombatFolder =
+            "Assets/_Project/Content/LocalCombat";
+        private const string LegacySkeletonSourcePrefabPath =
+            "Assets/_Project/Content/NetworkCombat/Validation/HellMaiden/" +
+            "GameObject/Enemy_Skeleton.prefab";
         private const string SandboxScenePath =
             "Assets/_Project/Scenes/Development/NetworkCombatSandbox.unity";
         private const string BootScenePath = "Assets/Scenes/Boot.unity";
@@ -356,14 +359,21 @@ namespace MonsterSupergroup.NetworkCombat.Tests
         }
 
         [Test]
-        public void GeneratedSandbox_UsesExistingGameplayPrefabsAndLocalOnlyProjectiles()
+        public void CanonicalPrefabs_AreNetworkReadyAndHaveNoLegacySources()
         {
+            Assert.That(AssetDatabase.IsValidFolder(LegacyLocalCombatFolder), Is.False,
+                "LocalCombat must not return as a second Player/Enemy/Weapon data source.");
+            Assert.That(
+                AssetDatabase.LoadAssetAtPath<GameObject>(
+                    LegacySkeletonSourcePrefabPath),
+                Is.Null,
+                "NetworkEnemySkeleton is canonical; its one-time migration source must stay removed.");
+
             GameObject player = AssetDatabase.LoadAssetAtPath<GameObject>(PlayerPrefabPath);
             GameObject enemy = AssetDatabase.LoadAssetAtPath<GameObject>(EnemyPrefabPath);
             GameObject productEnemy =
                 AssetDatabase.LoadAssetAtPath<GameObject>(ProductEnemyPrefabPath);
             GameObject world = AssetDatabase.LoadAssetAtPath<GameObject>(WorldPrefabPath);
-            GameObject projectile = AssetDatabase.LoadAssetAtPath<GameObject>(ProjectilePrefabPath);
 
             Assert.That(player, Is.Not.Null);
             PlayerMovement playerMovement = player.GetComponent<PlayerMovement>();
@@ -381,15 +391,13 @@ namespace MonsterSupergroup.NetworkCombat.Tests
                     .Count(component => component != null &&
                         component.GetType().Name == "LocalPlayerMovement"),
                 Is.Zero,
-                "LocalPlayerMovement must not return through generated prefabs.");
+                "LocalPlayerMovement must not return through canonical prefabs.");
             Assert.That(playerBinding, Is.Not.Null);
             Assert.That(playerBinding.Combatant, Is.SameAs(playerCombatant));
             Assert.That(playerMovement.CombatantBinding, Is.SameAs(playerBinding));
             Assert.That(playerHitbox, Is.Not.Null);
             Assert.That(playerHitbox.Owner, Is.SameAs(playerBinding));
             Assert.That(playerHitbox.GetComponent<Collider2D>().isTrigger, Is.True);
-            Assert.That(player.GetComponent<PlayerLoader>(), Is.Null);
-            Assert.That(player.GetComponent<PlayerHandBehaviour>(), Is.Null);
             PlayerBuildRuntime playerBuild = player.GetComponent<PlayerBuildRuntime>();
             Assert.That(playerBuild, Is.Not.Null);
             Assert.That(playerBuild.InitialWeaponId, Is.EqualTo(2u));
@@ -404,7 +412,6 @@ namespace MonsterSupergroup.NetworkCombat.Tests
 
             Assert.That(enemy, Is.Not.Null);
             Assert.That(enemy.GetComponent<LocalEnemyChase>(), Is.Not.Null);
-            Assert.That(enemy.GetComponent<LocalEnemyDeathBehaviour>(), Is.Null);
             Assert.That(enemy.GetComponent<NetworkEnemyServerDriver>(), Is.Not.Null);
             Assert.That(enemy.GetComponent<NetworkEnemySimulationAgent>(), Is.Not.Null);
             Assert.That(enemy.GetComponent<EnemySimulationAuthority>(), Is.Not.Null);
@@ -435,15 +442,11 @@ namespace MonsterSupergroup.NetworkCombat.Tests
                 "The shared World prefab must not own development spawning.");
             Assert.That(world.GetComponent<RuntimeDB>(), Is.Null,
                 "Boot and Sandbox provide their own RuntimeDB composition.");
-            Assert.That(projectile, Is.Not.Null);
-            Assert.That(projectile.GetComponentsInChildren<NetworkBehaviour>(true), Is.Empty,
-                "Projectiles remain owner-local and are never NetworkSpawned.");
             Assert.That(AssetDatabase.LoadAssetAtPath<SceneAsset>(SandboxScenePath), Is.Not.Null);
             AssertNoMissingScripts(player);
             AssertNoMissingScripts(enemy);
             AssertNoMissingScripts(productEnemy);
             AssertNoMissingScripts(world);
-            AssertNoMissingScripts(projectile);
         }
 
         [Test]

@@ -3,7 +3,6 @@ using AstralShift.HellMaiden.Player;
 using AstralShift.QTI.Interactors;
 using Mirror;
 using MonsterSupergroup.Gameplay.Combat;
-using MonsterSupergroup.Gameplay.Local;
 using UnityEditor;
 using UnityEngine;
 
@@ -11,20 +10,22 @@ namespace MonsterSupergroup.NetworkCombat.Editor
 {
     public static class PlayerRuntimeCombatPrefabMigrator
     {
-        public const string ProductPlayerPath =
-            "Assets/_Project/Content/LocalCombat/Player.prefab";
         public const string NetworkPlayerPath =
             "Assets/_Project/Content/NetworkCombat/NetworkPlayer.prefab";
 
-        [MenuItem("Tools/Monster Supergroup/Migrate Player Runtime Combat Prefabs")]
+        [MenuItem("Tools/Monster Supergroup/Repair Network Player Runtime Combat Prefab")]
         public static void Run()
         {
-            GameObject root = PrefabUtility.LoadPrefabContents(ProductPlayerPath);
+            if (AssetDatabase.LoadAssetAtPath<GameObject>(NetworkPlayerPath) == null)
+            {
+                throw new InvalidOperationException(
+                    $"Required network Player prefab is missing: {NetworkPlayerPath}");
+            }
+
+            GameObject root = PrefabUtility.LoadPrefabContents(NetworkPlayerPath);
             try
             {
-                ConfigureProductPlayer(root);
-                PrefabUtility.SaveAsPrefabAsset(root, ProductPlayerPath);
-
+                ConfigureRuntimePlayer(root);
                 ConfigureNetworkPlayer(root);
                 PrefabUtility.SaveAsPrefabAsset(root, NetworkPlayerPath);
             }
@@ -35,7 +36,7 @@ namespace MonsterSupergroup.NetworkCombat.Editor
 
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
-            Debug.Log("Player runtime combat prefabs migrated successfully.");
+            Debug.Log("Network Player runtime combat prefab repaired successfully.");
         }
 
         public static void RunBatch()
@@ -43,7 +44,7 @@ namespace MonsterSupergroup.NetworkCombat.Editor
             Run();
         }
 
-        private static void ConfigureProductPlayer(GameObject root)
+        private static void ConfigureRuntimePlayer(GameObject root)
         {
             PlayerMovement movement = RequireComponent<PlayerMovement>(root);
             CombatantBehaviour combatant = RequireComponent<CombatantBehaviour>(root);
@@ -104,8 +105,6 @@ namespace MonsterSupergroup.NetworkCombat.Editor
         private static void ConfigureNetworkPlayer(GameObject root)
         {
             CombatantBehaviour combatant = RequireComponent<CombatantBehaviour>(root);
-            RemoveIfPresent<PlayerLoader>(root);
-            RemoveIfPresent<PlayerHandBehaviour>(root);
             GetOrAdd<NetworkIdentity>(root);
             NetworkTransformReliable networkTransform = GetOrAdd<NetworkTransformReliable>(root);
             networkTransform.syncDirection = SyncDirection.ClientToServer;
@@ -132,7 +131,7 @@ namespace MonsterSupergroup.NetworkCombat.Editor
             if (component == null)
             {
                 throw new InvalidOperationException(
-                    $"{ProductPlayerPath} requires {typeof(T).Name} on its root.");
+                    $"{NetworkPlayerPath} requires {typeof(T).Name} on its root.");
             }
 
             return component;
@@ -142,16 +141,6 @@ namespace MonsterSupergroup.NetworkCombat.Editor
         {
             T component = gameObject.GetComponent<T>();
             return component != null ? component : gameObject.AddComponent<T>();
-        }
-
-        private static void RemoveIfPresent<T>(GameObject gameObject)
-            where T : Component
-        {
-            T component = gameObject.GetComponent<T>();
-            if (component != null)
-            {
-                UnityEngine.Object.DestroyImmediate(component);
-            }
         }
 
         private static Transform FindChild(Transform root, string name)

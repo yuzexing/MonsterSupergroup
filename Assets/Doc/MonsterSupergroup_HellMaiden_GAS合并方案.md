@@ -1,5 +1,8 @@
 # MonsterSupergroup 与 HellMaiden GAS 渐进合并方案
 
+> [!WARNING]
+> **2026-09-02 实施状态更新**：本文保留为方案决策记录。其中 `PlayerHand` / `PlayerHandSlot` / `WeaponDefinition` / `StraightProjectileBehaviour` 指向一套已删除的中间原型，不再是可实施入口。当前真实链路是 `PlayerBuildRuntime -> HellMaiden WeaponBehaviour -> WeaponRuntimeBehaviour -> New GAS`；请以 [GAS 与联机模块总览](MonsterSupergroup_GAS与联机模块总览.md) 和 [联机模块详细使用指南](MonsterSupergroup_联机模块详细使用指南.md) 为当前事实来源。
+
 > 方案日期：2026-08-25
 >
 > 本文是后续代码实施路线，不表示这些迁移已经完成。

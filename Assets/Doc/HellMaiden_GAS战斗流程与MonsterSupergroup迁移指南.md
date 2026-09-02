@@ -6,6 +6,8 @@
 > 本文对 HellMaiden 原始战斗流程、PlayerStats、Weapon、Modifier、Status 和 Dash 的静态分析仍可作为迁移来源；但其中关于“MonsterSupergroup 当前完成度”和传统 Server-authoritative Mirror 接入的描述，已经被后续实现取代。尤其不要再按本文第 11～15、20.4、22～24 节中的旧 Authority 建议，让 Server 重跑玩家 Attack/Crit/Build 或同步每个 Projectile。
 >
 > 当前事实来源请依次阅读：[GAS 与联机模块总览](MonsterSupergroup_GAS与联机模块总览.md)、[联机模块详细使用指南](MonsterSupergroup_联机模块详细使用指南.md)、[HellMaiden GAS 合并方案](MonsterSupergroup_HellMaiden_GAS合并方案.md)。当前目标是“Owner Client 即时战斗推演 + Server Canonical World State + Loose Reconciliation”，并继续以现有 `MonsterSupergroup.GAS` 为唯一 Combat Core。
+>
+> **2026-09-02 补充**：文中后续章节出现的 `WeaponDefinition` / `PlayerHand` 是已删除的中间原型名称，只作为历史迁移思路。正式 Runtime 使用 `WeaponData + NativeGasWeaponDefinition + PlayerBuildRuntime`。
 
 > 审阅日期：2026-08-12
 > 审阅方式：对反编译 C#、可读 YAML 资产以及 MonsterSupergroup 当前源码进行静态追踪；未运行 HellMaiden 导出工程。

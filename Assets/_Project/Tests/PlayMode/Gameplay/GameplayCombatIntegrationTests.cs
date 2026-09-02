@@ -566,42 +566,6 @@ namespace MonsterSupergroup.Gameplay.Tests
         }
 
         [Test]
-        public void StraightProjectilePool_ReusesLocalProjectileInstance()
-        {
-            var prefabObject = new GameObject("Projectile Pool Prefab");
-            StraightProjectileBehaviour first = null;
-            StraightProjectileBehaviour second = null;
-            try
-            {
-                StraightProjectileBehaviour prefab =
-                    prefabObject.AddComponent<StraightProjectileBehaviour>();
-                first = StraightProjectilePool.Spawn(
-                    prefab,
-                    Vector3.zero,
-                    Quaternion.identity);
-                StraightProjectilePool.Release(first);
-                second = StraightProjectilePool.Spawn(
-                    prefab,
-                    Vector3.one,
-                    Quaternion.identity);
-
-                Assert.That(second, Is.SameAs(first));
-                Assert.That(second.transform.position, Is.EqualTo(Vector3.one));
-                Assert.That(StraightProjectilePool.ReusedCount, Is.GreaterThan(0));
-            }
-            finally
-            {
-                if (second != null)
-                {
-                    StraightProjectilePool.Release(second);
-                    UnityEngine.Object.DestroyImmediate(second.gameObject);
-                }
-
-                UnityEngine.Object.DestroyImmediate(prefabObject);
-            }
-        }
-
-        [Test]
         public void GameplayAssembly_HasNoUiInputAudioOrLegacyFrameworkReferences()
         {
             string[] references = typeof(CombatantBehaviour).Assembly

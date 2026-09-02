@@ -17,11 +17,6 @@ namespace MonsterSupergroup.NetworkCombat.Editor
 {
     public static class EnemySimulationPrefabMigrator
     {
-        private const string ProductEnemySourcePrefabPath =
-            "Assets/_Project/Content/LocalCombat/EnemyBase.prefab";
-        private const string SkeletonSourcePrefabPath =
-            "Assets/_Project/Content/NetworkCombat/Validation/HellMaiden/" +
-            "GameObject/Enemy_Skeleton.prefab";
         private const string SkeletonWarningPrefabPath =
             "Assets/_Project/Content/NetworkCombat/Validation/HellMaiden/" +
             "GameObject/Skeleton_Warning.prefab";
@@ -36,8 +31,8 @@ namespace MonsterSupergroup.NetworkCombat.Editor
         {
             MigratePlayerPrefab();
             MigrateLightweightEnemyPrefab();
-            GameObject productEnemy = BuildProductEnemyPrefab();
-            GameObject skeletonEnemy = BuildSkeletonEnemyPrefab();
+            GameObject productEnemy = MigrateProductEnemyPrefab();
+            GameObject skeletonEnemy = MigrateSkeletonEnemyPrefab();
             MigrateWorldPrefab();
             MigrateSandboxScene(productEnemy, skeletonEnemy);
             AssetDatabase.SaveAssets();
@@ -99,12 +94,12 @@ namespace MonsterSupergroup.NetworkCombat.Editor
             }
         }
 
-        private static GameObject BuildProductEnemyPrefab()
+        private static GameObject MigrateProductEnemyPrefab()
         {
-            GameObject root = LoadPrefab(ProductEnemySourcePrefabPath);
+            GameObject root = LoadPrefab(
+                NetworkCombatSetupUtility.ProductEnemyPrefabPath);
             try
             {
-                root.name = "NetworkEnemyBase";
                 ConfigureNetworkEnemy(root);
                 PrefabUtility.SaveAsPrefabAsset(
                     root,
@@ -119,20 +114,20 @@ namespace MonsterSupergroup.NetworkCombat.Editor
                 NetworkCombatSetupUtility.ProductEnemyPrefabPath);
         }
 
-        private static GameObject BuildSkeletonEnemyPrefab()
+        private static GameObject MigrateSkeletonEnemyPrefab()
         {
             RepairSkeletonWarningPrefab();
-            GameObject root = LoadPrefab(SkeletonSourcePrefabPath);
+            GameObject root = LoadPrefab(SkeletonNetworkPrefabPath);
             try
             {
-                root.name = "NetworkEnemySkeleton";
                 RestoreSkeletonAnimator(root);
                 EnemyController controller = root.GetComponent<EnemyController>();
                 EnemyAttackMelee melee = root.GetComponent<EnemyAttackMelee>();
                 if (controller == null || melee == null)
                 {
                     throw new InvalidOperationException(
-                        "Enemy_Skeleton must contain EnemyController and EnemyAttackMelee.");
+                        "NetworkEnemySkeleton must contain EnemyController and " +
+                        "EnemyAttackMelee.");
                 }
 
                 melee.attackPrefab = AssetDatabase.LoadAssetAtPath<EnemyAttackPrefab>(
@@ -143,9 +138,8 @@ namespace MonsterSupergroup.NetworkCombat.Editor
                         "Skeleton_Warning could not be resolved as EnemyAttackPrefab.");
                 }
 
-                // The validation sandbox has no scanned A* graph. Keep the source
-                // prefab untouched, but use its EnemyDefaultMovement for this first
-                // attack-authority vertical slice.
+                // The validation sandbox has no scanned A* graph, so this first
+                // attack-authority vertical slice uses EnemyDefaultMovement.
                 controller.usesPathfinding = false;
 
                 CombatantBehaviour combatant = GetOrAdd<CombatantBehaviour>(root);

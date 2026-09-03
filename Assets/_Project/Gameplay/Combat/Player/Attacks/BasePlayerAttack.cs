@@ -41,13 +41,9 @@ namespace AstralShift.HellMaiden.Player.Attacks
 
 		public virtual void Init(WeaponBehaviour behaviour, Action onStart = null, Action onEnd = null)
 		{
-			ReleaseNativeAttackSnapshot();
-			IsPresentationOnly = false;
-			InitializeCommon(behaviour, onStart, onEnd);
-			if ((bool)progressionScaler)
-			{
-				progressionScaler.Apply(behaviour);
-			}
+			throw new InvalidOperationException(
+				"Legacy attack initialization is disabled. Owned attacks require " +
+				"InitNative with an immutable AttackSnapshot.");
 		}
 
 		public virtual void InitNative(
@@ -123,14 +119,8 @@ namespace AstralShift.HellMaiden.Player.Attacks
 
 			if ((bool)hitEffectResolver)
 			{
-				if (NativeAttackSnapshot != null)
-				{
-					hitEffectResolver.Initialize(_behaviour, NativeAttackSnapshot);
-				}
-				else
-				{
-					hitEffectResolver.Initialize(_behaviour);
-				}
+				AttackSnapshot attack = RequireNativeAttackSnapshot();
+				hitEffectResolver.Initialize(_behaviour, attack);
 			}
 			if (HitEffectMode != DamageMode.None && HitEffectMode != DamageMode.ExplosionHit)
 			{
@@ -145,17 +135,16 @@ namespace AstralShift.HellMaiden.Player.Attacks
 				return;
 			}
 
-			if (NativeAttackSnapshot != null)
-			{
-				_behaviour.OnNativeGasHit(
-					base.transform.position,
-					damageable,
-					NativeAttackSnapshot);
-			}
-			else
-			{
-				_behaviour.OnHit(base.transform.position, damageable);
-			}
+			_behaviour.OnNativeGasHit(
+				base.transform.position,
+				damageable,
+				RequireNativeAttackSnapshot());
+		}
+
+		private AttackSnapshot RequireNativeAttackSnapshot()
+		{
+			return NativeAttackSnapshot ?? throw new InvalidOperationException(
+				"Owned attack has no New GAS AttackSnapshot.");
 		}
 
 		public void ReleaseNativeAttackSnapshot()

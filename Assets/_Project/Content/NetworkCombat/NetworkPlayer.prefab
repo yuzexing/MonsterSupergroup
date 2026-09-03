@@ -198,7 +198,6 @@ GameObject:
   - component: {fileID: 7488029198314713821}
   - component: {fileID: 3210001594430937958}
   - component: {fileID: 1677223115000529953}
-  - component: {fileID: 3739634376623189323}
   - component: {fileID: 3602155867299296671}
   - component: {fileID: 6621116428540044340}
   - component: {fileID: 8321500475971599091}
@@ -515,19 +514,6 @@ MonoBehaviour:
   spriteRenderers: []
   lightsParent: {fileID: 9074827973373562454}
   visibleObjects: []
---- !u!114 &3739634376623189323
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3415738789270495989}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 77f9b1d4abb3f2e4f918e3ddf70d523b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: MonsterSupergroup.Gameplay.Combat::MonsterSupergroup.Gameplay.Combat.NearestEnemyTargetProvider
-  owner: {fileID: 3602155867299296671}
 --- !u!114 &3602155867299296671
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -673,7 +659,7 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0
   playerMovement: {fileID: 0}
-  targetProvider: {fileID: 0}
+  ownerTeam: {fileID: 3602155867299296671}
   targetRange: 30
 --- !u!114 &7378337969921645140
 MonoBehaviour:

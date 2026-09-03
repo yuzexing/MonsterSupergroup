@@ -137,9 +137,9 @@ namespace AstralShift.HellMaiden.Player.Attacks
 			this.hitMaxCount = hitMaxCount;
 			if (!fixedDuration)
 			{
-				despawnTimeout = NativeAttackSnapshot != null
-					? NativeAttackSnapshot.Stats.Duration
-					: _behaviour.DurationValue;
+				despawnTimeout = NativeAttackSnapshot?.Stats.Duration ??
+					throw new System.InvalidOperationException(
+						"Owned projectile has no New GAS AttackSnapshot.");
 			}
 			projectileMovement?.Init(_direction, rotationTransform, speed, despawnTimeout, owner.transform);
 			PlayParticleSystem();

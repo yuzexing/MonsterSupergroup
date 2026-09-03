@@ -359,6 +359,35 @@ namespace MonsterSupergroup.NetworkCombat.Tests
         }
 
         [Test]
+        public void NetworkPlayer_UsesIntegratedAutoTargetingWithoutProviderComponent()
+        {
+            GameObject player =
+                AssetDatabase.LoadAssetAtPath<GameObject>(PlayerPrefabPath);
+
+            Assert.That(player, Is.Not.Null);
+            NetworkPlayerAutoTargeting autoTargeting =
+                player.GetComponent<NetworkPlayerAutoTargeting>();
+            CombatTeamBehaviour ownerTeam =
+                player.GetComponent<CombatTeamBehaviour>();
+
+            Assert.That(
+                player.GetComponents<NetworkPlayerAutoTargeting>(),
+                Has.Length.EqualTo(1));
+            Assert.That(ownerTeam, Is.Not.Null);
+            var serializedTargeting = new SerializedObject(autoTargeting);
+            Assert.That(
+                serializedTargeting.FindProperty("ownerTeam").objectReferenceValue,
+                Is.SameAs(ownerTeam));
+            Assert.That(
+                player.GetComponents<MonoBehaviour>().Count(component =>
+                    component != null &&
+                    component.GetType().Name == "NearestEnemyTargetProvider"),
+                Is.Zero,
+                "NetworkPlayerAutoTargeting owns nearest-target selection directly.");
+            AssertNoMissingScripts(player);
+        }
+
+        [Test]
         public void CanonicalPrefabs_AreNetworkReadyAndHaveNoLegacySources()
         {
             Assert.That(AssetDatabase.IsValidFolder(LegacyLocalCombatFolder), Is.False,

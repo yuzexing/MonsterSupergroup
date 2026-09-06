@@ -178,9 +178,54 @@ public class StatusBar : MonoBehaviour
 		}
 	}
 
-	private void OnDestroy()
+	protected virtual void OnDestroy()
+	{
+		ClearPresentation();
+	}
+
+	/// <summary>Discard display transitions when a HUD changes its data source.</summary>
+	public virtual void ClearPresentation()
 	{
 		BarTween?.Kill();
+		BarTween = null;
+		StopAllCoroutines();
+		blinkingCoroutine = null;
+		blinkDeacreaseCoroutine = null;
+		blinkRiseCoroutine = null;
+		if (isLowPercentBlinking && topBar != null)
+		{
+			topBar.color = originalColor;
+		}
+		isLowPercentBlinking = false;
+		animancerComponent?.Stop();
+		maxValue = 1f;
+		currentValue = 0f;
+		currentPercentage = 0f;
+		if (topBar != null)
+		{
+			topBar.fillAmount = 0f;
+		}
+		if (bottomBar != null)
+		{
+			bottomBar.fillAmount = 0f;
+		}
+		if (blinkBar != null)
+		{
+			blinkBar.gameObject.SetActive(false);
+			ResetHurtBlinkColor();
+		}
+	}
+
+	/// <summary>Initialize a display snapshot without a full-bar flash or tween.</summary>
+	public virtual void SetValueImmediate(float newValue, float maximumValue)
+	{
+		ClearPresentation();
+		maxValue = Mathf.Max(1f, maximumValue);
+		currentValue = Mathf.Max(0f, newValue);
+		currentPercentage = Mathf.Clamp01(currentValue / maxValue);
+		float fill = ToVisualFill(currentPercentage);
+		topBar.fillAmount = fill;
+		bottomBar.fillAmount = fill;
 	}
 
 	public virtual void InitializeBar(float maxValue)

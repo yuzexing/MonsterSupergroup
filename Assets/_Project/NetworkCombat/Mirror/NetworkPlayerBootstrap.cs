@@ -20,9 +20,11 @@ namespace MonsterSupergroup.NetworkCombat
         [SerializeField] private PlayerCombatantBinding combatantBinding;
 
         private PlayerController_HMD ownerPlayerController;
+        private ModifierSelectionController modifierSelection;
 
         private void Awake()
         {
+            modifierSelection = GetComponent<ModifierSelectionController>();
             if (playerBuildRuntime == null)
             {
                 playerBuildRuntime = GetComponent<PlayerBuildRuntime>();
@@ -90,6 +92,7 @@ namespace MonsterSupergroup.NetworkCombat
             try
             {
                 playerBuildRuntime.StartInitialBuild(database);
+                modifierSelection?.Bind(playerBuildRuntime);
             }
             catch (System.Exception exception)
             {
@@ -99,6 +102,20 @@ namespace MonsterSupergroup.NetworkCombat
 
         public override void OnStopAuthority()
         {
+            ReleaseLocalBuild();
+            base.OnStopAuthority();
+        }
+
+        public override void OnStopClient()
+        {
+            // Mirror's client shutdown does not call OnStopAuthority first.
+            ReleaseLocalBuild();
+            base.OnStopClient();
+        }
+
+        private void ReleaseLocalBuild()
+        {
+            modifierSelection?.Unbind();
             ReleaseOwnerPlayerController();
             playerBuildRuntime?.ClearBuild();
             if (LootManager.Instance != null && playerMovement != null)
@@ -117,7 +134,6 @@ namespace MonsterSupergroup.NetworkCombat
                 playerMovement.enabled = false;
             }
 
-            base.OnStopAuthority();
         }
 
         [ClientCallback]

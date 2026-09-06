@@ -9,6 +9,16 @@ namespace MonsterSupergroup.NetworkCombat
     {
         [SerializeField] private KcpLocalNetworkService service;
 
+        [SerializeField]
+        private bool showHud = true;
+        
+        [SerializeField]
+        private KeyCode toggleHudKey = KeyCode.F4;
+        
+        [Header("HUD")]
+        [SerializeField] private Vector2 hudPosition = new Vector2(10f, 10f);
+        [SerializeField] private Vector2 hudSize = new Vector2(440f, 300f);
+        
         private string addressText;
         private string portText;
         private bool useSimulation;
@@ -36,6 +46,14 @@ namespace MonsterSupergroup.NetworkCombat
                 useSimulation = service.UseSimulation;
             }
         }
+        
+        private void Update()
+        {
+            if (Input.GetKeyDown(toggleHudKey))
+            {
+                showHud = !showHud;
+            }
+        }
 
         private void OnGUI()
         {
@@ -44,11 +62,37 @@ namespace MonsterSupergroup.NetworkCombat
             {
                 return;
             }
+            // HUD 隐藏时，只留下一个小按钮。
+            if (!showHud)
+            {
+                if (GUI.Button(
+                        new Rect(
+                            hudPosition.x,
+                            hudPosition.y,
+                            100f,
+                            30f),
+                        "Show HUD"))
+                {
+                    showHud = true;
+                }
+
+                return;
+            }
 
             GUILayout.BeginArea(
-                new Rect(10f, 10f, 440f, 300f),
+                new Rect(
+                    hudPosition.x,
+                    hudPosition.y,
+                    hudSize.x,
+                    hudSize.y),
                 GUI.skin.box);
+            GUILayout.BeginHorizontal();
             GUILayout.Label("KCP Local / Boot -> Gameplay");
+            if (GUILayout.Button("Hide", GUILayout.Width(60f)))
+            {
+                showHud = false;
+            }
+            GUILayout.EndHorizontal();
             GUILayout.Label($"State: {service.State}");
             GUILayout.Label(
                 $"Mirror: Server={NetworkServer.active}, " +

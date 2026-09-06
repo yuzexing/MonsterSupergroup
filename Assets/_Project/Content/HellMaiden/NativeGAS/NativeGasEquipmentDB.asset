@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a026a23716704794b88220445985a58a, type: 3}
+  m_Name: NativeGasEquipmentDB
+  m_EditorClassIdentifier: MonsterSupergroup.Gameplay.Combat::AstralShift.HellMaiden.Data.Cards.EquipmentDB
+  Equipments:
+  - {fileID: 11400000, guid: 8a55bf329e5da2e49b5d3232426135da, type: 2}
+  - {fileID: 11400000, guid: e2dd583f17dfb8343a3f7205952dd834, type: 2}
+  - {fileID: 11400000, guid: 02bc69987554c5646be65b80cb847c25, type: 2}
+  - {fileID: 11400000, guid: 4400307159197a6469c94702a3945ad6, type: 2}
+  - {fileID: 11400000, guid: 7b65efa98074803498b10837f1c67a99, type: 2}
+  - {fileID: 11400000, guid: 2788f0fe403bbcf4881eab02b1cffe63, type: 2}
+  - {fileID: 11400000, guid: a605040ecf079554db801671d23c7fec, type: 2}
+  - {fileID: 11400000, guid: a93c4ad42b3f0054fbec7ecb9fabe6a9, type: 2}
+  visualsTemplatesLUT: {fileID: 0}

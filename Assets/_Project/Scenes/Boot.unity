@@ -328,7 +328,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: MonsterSupergroup.Gameplay.Combat::AstralShift.HellMaiden.Combat.Hand.Data.RuntimeDB
   _weaponDB: {fileID: 11400000, guid: 7b4a3d91e8c24f1cb6a0d5e7298f4031, type: 2}
-  _equipmentDB: {fileID: 0}
+  _equipmentDB: {fileID: 11400000, guid: 802e45a6d1e2479db18f92cfd397d61f, type: 2}
   _perkDB: {fileID: 0}
   _metaStatsDB: {fileID: 0}
   _cardPoolWeightsData: {fileID: 0}
@@ -1364,24 +1364,19 @@ MonoBehaviour:
   debugLog: 0
   statisticsGUI: 0
   statisticsLog: 0
---- !u!114 &1601722141
+--- !u!114 &1601722138
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1601722132}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e6e55fca1f4e4844593a3dd65a3ecb39, type: 3}
+  m_Script: {fileID: 11500000, guid: c088f74708e645968201a1a855198037, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: FizzySteamworks::Mirror.FizzySteam.FizzySteamworks
-  Channels:
-  - 2
-  - 1
-  Timeout: 25
-  AllowSteamRelay: 1
-  UseNextGenSteamNetworking: 1
+  m_EditorClassIdentifier: MonsterSupergroup.NetworkCombat::MonsterSupergroup.NetworkCombat.SteamLobbyHud
+  service: {fileID: 1601722142}
 --- !u!114 &1601722139
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1403,7 +1398,7 @@ MonoBehaviour:
   onlineScene: 
   offlineSceneLoadDelay: 0
   transport: {fileID: 1601722141}
-  networkAddress:
+  networkAddress: 
   maxConnections: 4
   disconnectInactiveConnections: 0
   disconnectInactiveTimeout: 60
@@ -1430,80 +1425,9 @@ MonoBehaviour:
   evaluationMethod: 0
   evaluationInterval: 3
   timeInterpolationGui: 0
-  gameplayScene: Assets/Scenes/Gameplay.unity
+  gameplayScene: Assets/_Project/Scenes/Gameplay.unity
   bootCamera: {fileID: 61111575}
   bootAudioListener: {fileID: 61111574}
---- !u!114 &1601722143
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1601722132}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0ecc3cd76f154abbba6b4d717ecccb65, type: 3}
-  m_Name:
-  m_EditorClassIdentifier: MonsterSupergroup.NetworkCombat::MonsterSupergroup.NetworkCombat.NetworkBackendBootstrap
-  networkManager: {fileID: 1601722139}
-  steamTransport: {fileID: 1601722141}
-  kcpTransport: {fileID: 1601722137}
-  latencySimulation: {fileID: 1601722136}
---- !u!114 &1601722144
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1601722132}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 028d0fa66ef54000b3e2cea9afd0e284, type: 3}
-  m_Name:
-  m_EditorClassIdentifier: MonsterSupergroup.NetworkCombat::MonsterSupergroup.NetworkCombat.KcpLocalNetworkService
-  backendBootstrap: {fileID: 1601722143}
-  networkManager: {fileID: 1601722139}
---- !u!114 &1601722145
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1601722132}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a2c3048064144b99ace7c48519c65ada, type: 3}
-  m_Name:
-  m_EditorClassIdentifier: MonsterSupergroup.NetworkCombat::MonsterSupergroup.NetworkCombat.KcpLocalNetworkHud
-  service: {fileID: 1601722144}
---- !u!114 &1601722142
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1601722132}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 01624919198a43d8ab78f42b56b7f267, type: 3}
-  m_Name:
-  m_EditorClassIdentifier: MonsterSupergroup.NetworkCombat::MonsterSupergroup.NetworkCombat.SteamLobbyService
-  backendBootstrap: {fileID: 1601722143}
-  networkManager: {fileID: 1601722139}
-  fizzyTransport: {fileID: 1601722141}
---- !u!114 &1601722138
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1601722132}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c088f74708e645968201a1a855198037, type: 3}
-  m_Name:
-  m_EditorClassIdentifier: MonsterSupergroup.NetworkCombat::MonsterSupergroup.NetworkCombat.SteamLobbyHud
-  service: {fileID: 1601722142}
 --- !u!114 &1601722140
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1521,6 +1445,80 @@ MonoBehaviour:
   validationTransport: {fileID: 1601722136}
   minimumConnectedSeconds: 5
   quitGraceSeconds: 2
+--- !u!114 &1601722141
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1601722132}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e6e55fca1f4e4844593a3dd65a3ecb39, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: FizzySteamworks::Mirror.FizzySteam.FizzySteamworks
+  Channels: 0200000001000000
+  Timeout: 25
+  AllowSteamRelay: 1
+  UseNextGenSteamNetworking: 1
+--- !u!114 &1601722142
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1601722132}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 01624919198a43d8ab78f42b56b7f267, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: MonsterSupergroup.NetworkCombat::MonsterSupergroup.NetworkCombat.SteamLobbyService
+  backendBootstrap: {fileID: 1601722143}
+  networkManager: {fileID: 1601722139}
+  fizzyTransport: {fileID: 1601722141}
+--- !u!114 &1601722143
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1601722132}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0ecc3cd76f154abbba6b4d717ecccb65, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: MonsterSupergroup.NetworkCombat::MonsterSupergroup.NetworkCombat.NetworkBackendBootstrap
+  networkManager: {fileID: 1601722139}
+  steamTransport: {fileID: 1601722141}
+  kcpTransport: {fileID: 1601722137}
+  latencySimulation: {fileID: 1601722136}
+--- !u!114 &1601722144
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1601722132}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 028d0fa66ef54000b3e2cea9afd0e284, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: MonsterSupergroup.NetworkCombat::MonsterSupergroup.NetworkCombat.KcpLocalNetworkService
+  backendBootstrap: {fileID: 1601722143}
+  networkManager: {fileID: 1601722139}
+--- !u!114 &1601722145
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1601722132}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a2c3048064144b99ace7c48519c65ada, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: MonsterSupergroup.NetworkCombat::MonsterSupergroup.NetworkCombat.KcpLocalNetworkHud
+  service: {fileID: 1601722144}
 --- !u!1 &1700453218
 GameObject:
   m_ObjectHideFlags: 0

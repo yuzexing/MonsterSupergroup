@@ -12,6 +12,8 @@ GameObject:
   - component: {fileID: 66464958325710799}
   - component: {fileID: 754973781849112302}
   - component: {fileID: 2149846828525672997}
+  - component: {fileID: 912340000000000002}
+  - component: {fileID: 912340000000000003}
   m_Layer: 5
   m_Name: CombatHUD
   m_TagString: Untagged
@@ -36,7 +38,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -1.0005493, y: 0.9992676}
+  m_AnchoredPosition: {x: -1.0004883, y: 0.9992676}
   m_SizeDelta: {x: 2, y: 2}
   m_Pivot: {x: 0, y: 1}
 --- !u!222 &66464958325710799
@@ -93,6 +95,32 @@ MonoBehaviour:
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
   m_PresetInfoIsWorld: 0
+--- !u!114 &912340000000000002
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 867952697190894565}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c312cd6a2b3c407c9b121283e6f30bb2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: MonsterSupergroup.Gameplay.Combat::MonsterSupergroup.Gameplay.UI.CombatHUDController
+  hudGroup: {fileID: 912340000000000003}
+  healthHUD: {fileID: 7869970719629628022}
+--- !u!225 &912340000000000003
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 867952697190894565}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 0
+  m_BlocksRaycasts: 0
+  m_IgnoreParentGroups: 0
 --- !u!1 &883008403062202910
 GameObject:
   m_ObjectHideFlags: 0
@@ -237,7 +265,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -313,7 +341,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -542,7 +570,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -643,7 +671,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5205119867833428296}
-  - component: {fileID: 7869970719629628022}
+  - component: {fileID: 912340000000000004}
   m_Layer: 5
   m_Name: HealthBar
   m_TagString: Untagged
@@ -674,7 +702,7 @@ RectTransform:
   m_AnchoredPosition: {x: 0.48693848, y: -0.3249817}
   m_SizeDelta: {x: 0.966191, y: 0.65}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &7869970719629628022
+--- !u!114 &912340000000000004
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -694,8 +722,8 @@ MonoBehaviour:
   topBarMask: {fileID: 0}
   startFromZero: 0
   selfStartBar: 0
-  animateRise: 0
-  animateFall: 0
+  animateRise: 1
+  animateFall: 1
   mantainPercentage: 0
   animationCurve:
     serializedVersion: 2
@@ -705,9 +733,9 @@ MonoBehaviour:
     m_RotationOrder: 4
   haveMinimum: 0
   unscaledTime: 0
-  onValueDeacreaseBlink: 0
-  onValueRiseBlink: 0
-  useBlinkAnimation: 0
+  onValueDeacreaseBlink: 1
+  onValueRiseBlink: 1
+  useBlinkAnimation: 1
   animancerComponent: {fileID: 0}
   blinkDeacreaseAnimation:
     _FadeDuration: 0.25
@@ -748,11 +776,11 @@ MonoBehaviour:
   blinkBar: {fileID: 446418863325203953}
   blinkColor: {r: 1, g: 0, b: 0, a: 1}
   blinkDuration: 0.5
-  animateLowPercentageBlinking: 0
-  timeBetweenBlinks: 0
+  animateLowPercentageBlinking: 1
+  timeBetweenBlinks: 0.18
   lowBlinkColor: {r: 1, g: 1, b: 1, a: 1}
-  minPercentageForBlinking: 0
-  minPercentageThatsShown: 0
+  minPercentageForBlinking: 0.26
+  minPercentageThatsShown: 0.18
   blinkWhenAtMin: 0
   remapFill: 0
   emptyFill: 0
@@ -826,7 +854,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -1051,6 +1079,7 @@ GameObject:
   - component: {fileID: 4915309007742697189}
   - component: {fileID: 7619476907839285516}
   - component: {fileID: 3690300095640527927}
+  - component: {fileID: 912340000000000001}
   m_Layer: 5
   m_Name: CombatUI
   m_TagString: Untagged
@@ -1133,62 +1162,22 @@ MonoBehaviour:
   m_GameObject: {fileID: 8069339087975136152}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b3a3c42ab7b0c6a708c61e5284cd614e, type: 3}
+  m_Script: {fileID: 11500000, guid: c312cd6a2b3c407c9b121283e6f30bb1, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: MonsterSupergroup.Gameplay.Combat::AstralShift.HellMaiden.UI.CombatUIManager
-  hudCanvas: {fileID: 0}
-  playerBarElement: {fileID: 0}
-  xpBar: {fileID: 0}
-  hpBar: {fileID: 0}
-  levelText: {fileID: 0}
-  currentHealthText: {fileID: 0}
-  maxHealthText: {fileID: 0}
-  ultimateIconElement: {fileID: 0}
-  ultimateIcon: {fileID: 0}
-  dashChargesElement: {fileID: 0}
-  uiDashCounter: {fileID: 0}
-  playerDashCounterPrefab: {fileID: 0}
-  minimapElement: {fileID: 0}
-  minimap: {fileID: 0}
-  mainClockElement: {fileID: 0}
-  mainClock: {fileID: 0}
-  secondaryClockElement: {fileID: 0}
-  secondaryClock: {fileID: 0}
-  isCountdownMode: 1
-  cardHolderElement: {fileID: 0}
-  cardHolder: {fileID: 0}
-  perksHolderElement: {fileID: 0}
-  perksHolder: {fileID: 0}
-  cardPickView: {fileID: 0}
-  perkMenu: {fileID: 0}
-  bestowalMenu: {fileID: 0}
-  endView: {fileID: 0}
-  statsMenuController: {fileID: 0}
-  animancer: {fileID: 0}
-  openAnimation:
-    _FadeDuration: 0.25
-    _Speed: 1
-    _Events:
-      _NormalizedTimes: []
-      _Callbacks: []
-      _Names: []
-    _Clip: {fileID: 0}
-    _NormalizedStartTime: NaN
-  closeAnimation:
-    _FadeDuration: 0.25
-    _Speed: 1
-    _Events:
-      _NormalizedTimes: []
-      _Callbacks: []
-      _Names: []
-    _Clip: {fileID: 0}
-    _NormalizedStartTime: NaN
-  circleTimeoutOverlay: {fileID: 0}
-  frameAnimator: {fileID: 0}
-  textAnimator: {fileID: 0}
-  references:
-    version: 2
-    RefIds: []
+  m_EditorClassIdentifier: MonsterSupergroup.Gameplay.Combat::MonsterSupergroup.Gameplay.UI.GameplayUIRoot
+--- !u!114 &912340000000000001
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8069339087975136152}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c312cd6a2b3c407c9b121283e6f30bb4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: MonsterSupergroup.NetworkCombat::MonsterSupergroup.NetworkCombat.LocalPlayerUIBinder
+  combatHUD: {fileID: 912340000000000002}
 --- !u!1 &8420024568142290496
 GameObject:
   m_ObjectHideFlags: 0
@@ -1493,8 +1482,9 @@ GameObject:
   - component: {fileID: 4241722542675121536}
   - component: {fileID: 197697237153257714}
   - component: {fileID: 3356187933224469923}
+  - component: {fileID: 7869970719629628022}
   m_Layer: 5
-  m_Name: PlayerBars
+  m_Name: PlayerHealthHUD
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1567,3 +1557,18 @@ MonoBehaviour:
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
   m_PresetInfoIsWorld: 0
+--- !u!114 &7869970719629628022
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9031434562694301994}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c312cd6a2b3c407c9b121283e6f30bb3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: MonsterSupergroup.Gameplay.Combat::MonsterSupergroup.Gameplay.UI.PlayerHealthHUD
+  healthBar: {fileID: 912340000000000004}
+  currentHealthText: {fileID: 2628182518398085530}
+  maxHealthText: {fileID: 4626615093702885544}

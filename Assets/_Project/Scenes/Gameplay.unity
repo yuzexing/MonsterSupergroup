@@ -740,11 +740,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 1208797873}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 90442c79af147d14c6f7f83feff3679a, type: 3}
+  m_Script: {fileID: 11500000, guid: c312cd6a2b3c407c9b121283e6f30bb6, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: MonsterSupergroup.Gameplay.Combat::AstralShift.HellMaiden.Scenes.SceneLoaders.SceneUILoader
-  UIPrefab: {fileID: 0}
-  releaseCardVisualFactoryCache: 1
+  m_EditorClassIdentifier: MonsterSupergroup.Gameplay.Combat::MonsterSupergroup.Gameplay.UI.GameplayUILoader
+  uiPrefab: {fileID: 3690300095640527927, guid: b96a8c44644062f479c257ffbb92509c, type: 3}
 --- !u!1 &1311617257
 GameObject:
   m_ObjectHideFlags: 0

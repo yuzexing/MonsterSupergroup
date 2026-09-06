@@ -47,6 +47,41 @@ public class OverflowBar : StatusBar
 
 	private Coroutine fireCoroutine;
 
+	public override void ClearPresentation()
+	{
+		overflowTween?.Kill();
+		fireTween?.Kill();
+		overflowTween = null;
+		fireTween = null;
+		fireCoroutine = null;
+		fireAnimancerComponent?.Stop();
+		base.ClearPresentation();
+		currentOverflowIndex = 0;
+		if (overflowImage != null)
+		{
+			overflowImage.fillAmount = 0f;
+			overflowImage.color = alpha0;
+			overflowImage.gameObject.SetActive(false);
+		}
+	}
+
+	public override void SetValueImmediate(float newValue, float maximumValue)
+	{
+		base.SetValueImmediate(newValue, maximumValue);
+		OrderTresholds();
+		for (int i = 0; i < overflowBars.Count; i++)
+		{
+			if (currentValue >= overflowBars[i].overflowTreshold)
+			{
+				currentOverflowIndex = i;
+			}
+		}
+		if (overflowBars.Count > 0)
+		{
+			topBar.sprite = overflowBars[currentOverflowIndex].bar;
+		}
+	}
+
 	public override void InitializeBar(float maxValue)
 	{
 		base.InitializeBar(maxValue);
@@ -86,6 +121,7 @@ public class OverflowBar : StatusBar
 		{
 			return;
 		}
+		overflowTween?.Kill();
 		if (num > currentOverflowIndex)
 		{
 			overflowImage.sprite = overflowBars[num].bar;

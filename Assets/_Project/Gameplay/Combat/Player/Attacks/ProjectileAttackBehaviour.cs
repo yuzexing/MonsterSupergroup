@@ -61,6 +61,7 @@ namespace AstralShift.HellMaiden.Player.Attacks
 
 		public override void Attack()
 		{
+			if (!CanAttack) return;
 			AttackSnapshot nativeAttack = BeginNativeGasAttack();
 
 			try

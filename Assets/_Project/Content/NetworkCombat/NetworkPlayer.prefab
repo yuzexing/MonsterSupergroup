@@ -213,6 +213,8 @@ GameObject:
   - component: {fileID: 6316533882040137082}
   - component: {fileID: 871410000000000001}
   - component: {fileID: 871410000000000002}
+  - component: {fileID: 871410000000000003}
+  - component: {fileID: 871410000000000004}
   m_Layer: 10
   m_Name: NetworkPlayer
   m_TagString: Untagged
@@ -584,9 +586,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 3415738789270495989}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8ff3ba0becae47b8b9381191598957c8, type: 3}
+  m_Script: {fileID: 11500000, guid: 773fd417b2ee4cdaa8dc00eff28a9082, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Mirror.Components::Mirror.NetworkTransformReliable
+  m_EditorClassIdentifier: MonsterSupergroup.NetworkCombat::MonsterSupergroup.NetworkCombat.NetworkPlayerTransformReliable
   syncDirection: 1
   syncMode: 0
   syncInterval: 0
@@ -1420,3 +1422,35 @@ MonoBehaviour:
   m_Name:
   m_EditorClassIdentifier: MonsterSupergroup.Gameplay.Combat::MonsterSupergroup.Gameplay.Combat.DebugModifierSelectionInput
   selection: {fileID: 871410000000000001}
+
+--- !u!114 &871410000000000003
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3415738789270495989}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 66ca712a39cc4a98a2f47a722458800c, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  syncDirection: 0
+  syncMode: 0
+  syncInterval: 0
+  experiencePerLevel: 2
+--- !u!114 &871410000000000004
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3415738789270495989}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8546674d1495415fa4d07be3b6d0f212, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  syncDirection: 0
+  syncMode: 0
+  syncInterval: 0

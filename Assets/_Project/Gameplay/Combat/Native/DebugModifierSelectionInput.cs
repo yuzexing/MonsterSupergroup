@@ -37,7 +37,7 @@ namespace MonsterSupergroup.Gameplay.Combat
 
             ModifierSelectionResult result = selection.Select(index);
             if (result.Succeeded)
-                Debug.Log($"[ModifierSelection] selected={index + 1} equipmentHandle={result.EquipmentHandle.Value}", this);
+                Debug.Log($"[ModifierSelection] request submitted for option {index + 1}", this);
             else
                 Debug.LogWarning($"[ModifierSelection] selection failed: {result.Error}", this);
         }

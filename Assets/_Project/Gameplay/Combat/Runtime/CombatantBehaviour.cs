@@ -21,6 +21,15 @@ namespace MonsterSupergroup.Gameplay.Combat
         private bool executesCanonicalConsequences = true;
         private bool predictedLethalRaised;
         private bool confirmedKillRaised;
+        private bool upgradeSelectionInvulnerable;
+        private bool canonicalInvulnerable;
+
+        public bool IsInvulnerable => upgradeSelectionInvulnerable || canonicalInvulnerable;
+
+        public void SetUpgradeSelectionInvulnerable(bool value) =>
+            upgradeSelectionInvulnerable = value;
+
+        public void SetCanonicalInvulnerable(bool value) => canonicalInvulnerable = value;
 
         public event Action<int, int> HealthChanged;
 
@@ -317,7 +326,7 @@ namespace MonsterSupergroup.Gameplay.Combat
 
         private DamageInfo ApplyDamage(DamageInfo requestedDamage, bool isStatusDamage)
         {
-            int appliedValue = IsAlive
+            int appliedValue = IsAlive && !IsInvulnerable
                 ? Math.Min(CurrentHealth, requestedDamage.Value)
                 : 0;
             var appliedDamage = new DamageInfo(

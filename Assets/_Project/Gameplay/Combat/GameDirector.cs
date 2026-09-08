@@ -15,6 +15,7 @@ using AstralShift.Helpers.Steam;
 using AstralShift.Managers;
 using AstralShift.ProfileData;
 using Cysharp.Threading.Tasks;
+using MonsterSupergroup.Gameplay.Combat;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 
@@ -71,6 +72,9 @@ namespace AstralShift.HellMaiden
 
 		public void SetPlayer(PlayerMovement outPlayer)
 		{
+			// Temporary local-only compatibility for unmigrated presentation.
+			// Network player runtimes are created through NetworkPlayerBootstrap.
+			if (GameplayRuntimeEnvironment.IsDedicatedServer && outPlayer != null) return;
 			player = outPlayer;
 		}
 
@@ -90,6 +94,7 @@ namespace AstralShift.HellMaiden
 		{
 			_destroyCts?.Cancel();
 			_destroyCts?.Dispose();
+			if (Instance == this) Instance = null;
 		}
 
 		private async UniTaskVoid RunInitializationSequence(CancellationToken token)
@@ -108,7 +113,8 @@ namespace AstralShift.HellMaiden
 			// try
 			// {
 			// sceneMaster.Init();
-			controllerManager.Init();
+			if (!GameplayRuntimeEnvironment.IsDedicatedServer)
+				controllerManager?.Init();
 			// gameDataManager.Init();
 			// runtimeDB.Init();
 			// }

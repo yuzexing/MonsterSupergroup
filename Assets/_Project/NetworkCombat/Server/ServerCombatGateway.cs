@@ -135,6 +135,8 @@ namespace MonsterSupergroup.NetworkCombat
                 if (!applied.Accepted)
                 {
                     Metrics.Reject(applied.Rejection);
+                    if (applied.Rejection == CombatRejectionReason.SourceSelectingUpgrade)
+                        ProcessedEvents.MarkProcessed(results[i].EventId, serverTime);
                     continue;
                 }
 
@@ -173,6 +175,8 @@ namespace MonsterSupergroup.NetworkCombat
                 if (!applied.Accepted)
                 {
                     Metrics.Reject(applied.Rejection);
+                    if (applied.Rejection == CombatRejectionReason.SourceSelectingUpgrade)
+                        ProcessedEvents.MarkProcessed(mutations[i].EventId, serverTime);
                     continue;
                 }
 
@@ -205,6 +209,12 @@ namespace MonsterSupergroup.NetworkCombat
                 if (!applied.Accepted)
                 {
                     Metrics.Reject(applied.Rejection);
+                    if (applied.Rejection == CombatRejectionReason.AbsoluteInvulnerable &&
+                        applied.State.EntityId != 0u)
+                    {
+                        ProcessedEvents.MarkProcessed(playerReports[i].EventId, serverTime);
+                        entities[applied.State.EntityId] = applied.State;
+                    }
                     continue;
                 }
 
@@ -270,6 +280,13 @@ namespace MonsterSupergroup.NetworkCombat
         }
 
         /// <summary>Returns all current canonical facts for a newly ready client.</summary>
+        public CanonicalWorldBatch UnregisterEntity(uint entityId)
+        {
+            IReadOnlyList<CanonicalStatusState> removed = Statuses.RemoveTarget(entityId);
+            Ledger.UnregisterEntity(entityId);
+            return CreateBatch(Array.Empty<CanonicalEntityState>(), removed, Array.Empty<ConfirmedKill>());
+        }
+
         public CanonicalWorldBatch CreateSnapshot()
         {
             return CreateBatch(

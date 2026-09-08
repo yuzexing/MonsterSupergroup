@@ -24,6 +24,16 @@ namespace MonsterSupergroup.NetworkCombat
         private bool ownerReportPending;
         private bool ownerHealthSubscribed;
         private ICombatEventSink localStatusEventSink;
+        private PlayerRuntimeCheckpoint serverRestore;
+        [SyncVar] private bool hasRestoredHealth;
+        [SyncVar] private CanonicalEntityState restoredHealth;
+        private bool restorationApplied;
+
+        public void PrepareServerRestore(PlayerRuntimeCheckpoint checkpoint)
+        {
+            if (netId != 0) throw new System.InvalidOperationException("Prepare restoration before spawning the avatar.");
+            serverRestore = checkpoint ?? throw new System.ArgumentNullException(nameof(checkpoint));
+        }
 
         public void Configure(
             CombatantBehaviour targetCombatant,
@@ -55,6 +65,7 @@ namespace MonsterSupergroup.NetworkCombat
         public override void OnStartServer()
         {
             base.OnStartServer();
+            GetComponent<NetworkPlayerBootstrap>()?.EnsurePlayerRuntimeInitialized();
             NetworkCombatWorld world = NetworkCombatWorld.Instance;
             if (world == null)
             {
@@ -73,6 +84,13 @@ namespace MonsterSupergroup.NetworkCombat
             world.Gateway.ConfirmedKillProduced += HandleConfirmedKill;
             world.ServerCanonicalBatchProduced += HandleServerCanonicalBatch;
             world.RegisterEntity(netId, combatant.MaxHealth, entityKind, authority, owner);
+            if (serverRestore != null)
+            {
+                restoredHealth = world.RestorePlayerState(netId, serverRestore);
+                hasRestoredHealth = true;
+                HandleCanonicalEntityChanged(restoredHealth);
+                serverRestore = null;
+            }
         }
 
         public override void OnStartClient()
@@ -108,6 +126,12 @@ namespace MonsterSupergroup.NetworkCombat
             if (authority != CombatEntityAuthority.OwnerFinal)
             {
                 return;
+            }
+
+            if (hasRestoredHealth && !restorationApplied)
+            {
+                HandleCanonicalEntityChanged(restoredHealth);
+                restorationApplied = true;
             }
 
             ownerReportVersion = combatant.StateVersion > 0u
@@ -166,16 +190,20 @@ namespace MonsterSupergroup.NetworkCombat
 
         public override void OnStopClient()
         {
+            OnStopAuthority();
+            combatant?.SetCanonicalInvulnerable(false);
             NetworkCombatWorld world = NetworkCombatWorld.Instance;
             if (world != null && combatant != null)
             {
                 world.Replica.UnregisterStatusController(netId, combatant.StatusController);
+                world.Replica.ForgetEntity(netId);
                 world.Replica.EntityChanged -= HandleCanonicalEntityChanged;
                 world.Replica.KillConfirmed -= HandleConfirmedKill;
             }
 
             combatant?.ClearStatusCombatEvents(localStatusEventSink);
             localStatusEventSink = null;
+            statusObserved = false;
 
             base.OnStopClient();
         }
@@ -187,8 +215,7 @@ namespace MonsterSupergroup.NetworkCombat
             {
                 world.Gateway.ConfirmedKillProduced -= HandleConfirmedKill;
                 world.ServerCanonicalBatchProduced -= HandleServerCanonicalBatch;
-                world.Gateway.Statuses.RemoveTarget(netId);
-                world.Gateway.Ledger.UnregisterEntity(netId);
+                world.UnregisterEntity(netId);
             }
 
             base.OnStopServer();
@@ -230,6 +257,7 @@ namespace MonsterSupergroup.NetworkCombat
         {
             if (state.EntityId == netId)
             {
+                combatant.SetCanonicalInvulnerable(state.AbsoluteInvulnerable);
                 targetOwnerPlayerId = state.OwnerPlayerId;
                 combatant.ConfigureStatusExecution(new StatusExecutionScope(
                     false,

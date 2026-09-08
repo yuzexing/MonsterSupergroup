@@ -122,6 +122,129 @@ namespace MonsterSupergroup.NetworkCombat
             return result;
         }
 
+        /// <summary>
+        /// Captures only this avatar's live canonical statuses. Absolute server
+        /// timing is retained; taking a checkpoint never advances the live runtime.
+        /// </summary>
+        public CanonicalStatusState[] CaptureTarget(uint targetEntityId, double serverTime)
+        {
+            ValidateServerTime(serverTime);
+            if (targetEntityId == 0)
+            {
+                throw new ArgumentOutOfRangeException(nameof(targetEntityId));
+            }
+
+            var result = new List<CanonicalStatusState>();
+            foreach (StatusInstance current in instances.Values)
+            {
+                if (current.TargetEntityId != targetEntityId)
+                    continue;
+
+                int completed = CalculateCompletedTicks(current, serverTime);
+                if (completed < current.TotalTicks)
+                    result.Add(CanonicalStatusState.From(current.WithProgress(completed)));
+            }
+
+            result.Sort((left, right) => left.InstanceId.CompareTo(right.InstanceId));
+            return result.ToArray();
+        }
+
+        /// <summary>
+        /// Restores a server-retained avatar checkpoint into the existing status
+        /// registry. The caller must detach the previous target before restoration.
+        /// Time spent without an avatar consumes duration and tick opportunities;
+        /// overdue damage is never replayed against the restored avatar.
+        /// </summary>
+        public IReadOnlyList<CanonicalStatusState> RestoreTarget(
+            uint previousTargetEntityId,
+            uint targetEntityId,
+            IReadOnlyList<CanonicalStatusState> checkpoint,
+            double serverTime)
+        {
+            ValidateServerTime(serverTime);
+            if (previousTargetEntityId == 0 || targetEntityId == 0)
+            {
+                throw new ArgumentOutOfRangeException(nameof(targetEntityId));
+            }
+
+            if (checkpoint == null)
+            {
+                throw new ArgumentNullException(nameof(checkpoint));
+            }
+
+            if (!ledger.TryGetState(targetEntityId, out CanonicalEntityState target))
+            {
+                throw new InvalidOperationException("Register the avatar before restoring statuses.");
+            }
+
+            var restored = new List<StatusInstance>();
+            var changes = new List<CanonicalStatusState>();
+            var seen = new HashSet<StatusInstanceId>();
+            for (int i = 0; i < checkpoint.Count; i++)
+            {
+                CanonicalStatusState saved = checkpoint[i];
+                if (saved.Removed || saved.TargetEntityId != previousTargetEntityId)
+                {
+                    throw new ArgumentException("The status checkpoint belongs to another avatar.",
+                        nameof(checkpoint));
+                }
+
+                StatusInstance original = saved.ToStatusInstance();
+                if (!seen.Add(original.InstanceId))
+                {
+                    throw new ArgumentException("The status checkpoint contains duplicate instances.",
+                        nameof(checkpoint));
+                }
+
+                int completed = CalculateCompletedTicks(original, serverTime);
+                if (completed >= original.TotalTicks)
+                    continue;
+
+                if (instances.TryGetValue(original.InstanceId, out StatusInstance current))
+                {
+                    if (current.TargetEntityId != targetEntityId)
+                    {
+                        throw new InvalidOperationException(
+                            "Detach the previous avatar before restoring its status instances.");
+                    }
+
+                    // Repeating an already-applied binding must not rewind ticks.
+                    changes.Add(CanonicalStatusState.From(current));
+                    continue;
+                }
+
+                bool selfSource = saved.SourcePlayerId == previousTargetEntityId;
+                if (saved.ExecutionAuthority == (byte)StatusExecutionAuthority.SourceClient &&
+                    (selfSource || !ledger.IsSourceOwnedBy(saved.SourceEntityId, saved.SourcePlayerId)))
+                {
+                    // Preserve the established disconnect takeover policy. Old
+                    // attacks do not regain source execution on a new connection.
+                    saved.ExecutionAuthority = (byte)StatusExecutionAuthority.Server;
+                }
+
+                if (selfSource)
+                    saved.SourcePlayerId = target.OwnerPlayerId != 0 ? target.OwnerPlayerId : targetEntityId;
+                if (saved.SourceEntityId == previousTargetEntityId)
+                    saved.SourceEntityId = targetEntityId;
+                if (saved.DamageSourceId == previousTargetEntityId)
+                    saved.DamageSourceId = targetEntityId;
+                saved.TargetEntityId = targetEntityId;
+                saved.CompletedTicks = completed;
+                removalVersions.TryGetValue(original.InstanceId, out uint removalVersion);
+                saved.Version = checked(Math.Max(saved.Version, removalVersion) + 1u);
+
+                StatusInstance instance = saved.ToStatusInstance();
+                restored.Add(instance);
+                changes.Add(CanonicalStatusState.From(instance));
+            }
+
+            // Validate the whole checkpoint before mutating this player's runtime.
+            for (int i = 0; i < restored.Count; i++)
+                instances.Add(restored[i].InstanceId, restored[i]);
+
+            return changes;
+        }
+
         public StatusMutationResult Apply(
             uint senderPlayerId,
             StatusMutation mutation,
@@ -366,6 +489,11 @@ namespace MonsterSupergroup.NetworkCombat
                 return CombatRejectionReason.SourceNotOwned;
             }
 
+            if (ledger.IsPlayerSelectingUpgrade(senderPlayerId))
+            {
+                return CombatRejectionReason.SourceSelectingUpgrade;
+            }
+
             if (!ledger.IsAlive(mutation.TargetEntityId))
             {
                 return CombatRejectionReason.TargetCanonicalDead;
@@ -464,6 +592,12 @@ namespace MonsterSupergroup.NetworkCombat
             }
 
             return Math.Min(byTime, instance.TotalTicks);
+        }
+
+        private static void ValidateServerTime(double serverTime)
+        {
+            if (double.IsNaN(serverTime) || double.IsInfinity(serverTime))
+                throw new ArgumentOutOfRangeException(nameof(serverTime));
         }
 
         private static StatusInstance Copy(

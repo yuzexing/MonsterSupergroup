@@ -101,6 +101,8 @@ namespace AstralShift.HellMaiden.Player
 
 		private bool _autoAim;
 
+		private Camera _inputCamera;
+
 		private Vector2 _dashDirection = Vector2.zero;
 
 		private float _dashElapsedTime;
@@ -189,13 +191,43 @@ namespace AstralShift.HellMaiden.Player
 
 		private bool _isInvulnerable => _invulnerabilityCount > 0;
 
+		private RigidbodyConstraints2D _constraintsBeforeUpgradeSelection;
+
+		public bool IsUpgradeSelectionLocked { get; private set; }
+
+		public void SetUpgradeSelectionLocked(bool value)
+		{
+			combatantBinding?.Combatant?.SetUpgradeSelectionInvulnerable(value);
+			if (IsUpgradeSelectionLocked == value)
+			{
+				return;
+			}
+
+			IsUpgradeSelectionLocked = value;
+			_currentInputDirection = Vector2.zero;
+			if (body != null)
+			{
+				body.linearVelocity = Vector2.zero;
+				body.angularVelocity = 0f;
+				if (value)
+				{
+					_constraintsBeforeUpgradeSelection = body.constraints;
+					body.constraints |= RigidbodyConstraints2D.FreezePosition;
+				}
+				else
+				{
+					body.constraints = _constraintsBeforeUpgradeSelection;
+				}
+			}
+		}
+
 		public bool IsInvulnerable
 		{
 			get
 			{
 				if (!DebugIsInvulnerable)
 				{
-					return _isInvulnerable;
+					return _isInvulnerable || IsUpgradeSelectionLocked;
 				}
 				return true;
 			}
@@ -208,6 +240,46 @@ namespace AstralShift.HellMaiden.Player
 		public event Action OnDashStart;
 
 		public event Action OnDashEnd;
+
+		public bool IsRuntimeInitialized { get; private set; }
+
+		public bool UsesNetworkLifecycle { get; private set; }
+
+		public bool IsLocalOwnerBound { get; private set; }
+
+		public event Action Died;
+
+		public event Action DeathPresentationCompleted;
+
+		public void ConfigureNetworkLifecycle() => UsesNetworkLifecycle = true;
+
+		public void SetLocalOwnerBound(bool value)
+		{
+			IsLocalOwnerBound = value;
+			if (!value)
+			{
+				ResetInputDirection();
+				DisableInteractor();
+			}
+		}
+
+		/// <summary>Explicit per-avatar initialization. Safe before Start and on repeated callbacks.</summary>
+		public void EnsureRuntimeInitialized()
+		{
+			if (IsRuntimeInitialized) return;
+			if (playerStats == null)
+				throw new InvalidOperationException("PlayerMovement requires PlayerStats.");
+			PlayerStats.Init();
+			if (combatantBinding == null)
+				combatantBinding = GetComponent<PlayerCombatantBinding>();
+			if (combatantBinding == null)
+				throw new InvalidOperationException("PlayerMovement requires PlayerCombatantBinding.");
+			combatantBinding.InitializeFromPlayerStats();
+			_dashBuffer = new ActionBuffer(dashBufferTime);
+			if (_hitboxCollider != null) _defaultHitboxLayerMask = _hitboxCollider.excludeLayers;
+			if (_obstacleCollider != null) _defaultObstacleLayerMask = _obstacleCollider.excludeLayers;
+			IsRuntimeInitialized = true;
+		}
 
 		public override void Awake()
 		{
@@ -277,23 +349,12 @@ namespace AstralShift.HellMaiden.Player
 
 		protected override void Start()
 		{
-			PlayerStats.Init();
-			combatantBinding.InitializeFromPlayerStats();
-			// SubscribeSceneEvents();
-			_dashBuffer = new ActionBuffer(dashBufferTime);
-			if ((bool)_hitboxCollider)
-			{
-				_defaultHitboxLayerMask = _hitboxCollider.excludeLayers;
-				_defaultObstacleLayerMask = _obstacleCollider.excludeLayers;
-			}
-			if ((bool)playerEffectResolver)
-			{
-				playerEffectResolver.Init();
-			}
+			// Runtime creation belongs to the spawn/load boundary, never to Start.
 		}
 
 		protected override void OnDestroy()
 		{
+			SetUpgradeSelectionLocked(false);
 			UnSubscribeSceneEvents();
 			if (autoAim != null)
 			{
@@ -303,8 +364,11 @@ namespace AstralShift.HellMaiden.Player
 
 		public void RestartStats()
 		{
+			if (UsesNetworkLifecycle)
+				throw new InvalidOperationException("Network player stats must be restored through the player runtime lifecycle.");
 			PlayerStats.Init();
 			combatantBinding.InitializeFromPlayerStats();
+			IsRuntimeInitialized = true;
 		}
 
 		public void RestartPlayer()
@@ -386,21 +450,30 @@ namespace AstralShift.HellMaiden.Player
 
 		private void Update()
 		{
+			if (!IsRuntimeInitialized || IsUpgradeSelectionLocked) return;
 			_stateMachine.UpdateTick();
 		}
 
 		private void FixedUpdate()
 		{
+			if (!IsRuntimeInitialized) return;
+			if (IsUpgradeSelectionLocked)
+			{
+				if (body != null) StopMovement();
+				return;
+			}
 			_stateMachine.FixedUpdateTick();
 		}
 
 		private void LateUpdate()
 		{
+			if (!IsRuntimeInitialized || IsUpgradeSelectionLocked) return;
 			_stateMachine.LateUpdateTick();
 		}
 
 		public override void SetDirection(Vector2 value)
 		{
+			if (IsUpgradeSelectionLocked) return;
 			if (value.sqrMagnitude > 0f)
 			{
 				_previousInputDirection = _currentInputDirection;
@@ -412,6 +485,7 @@ namespace AstralShift.HellMaiden.Player
 
 		public override void SetDirectionImmediate(Vector2 value)
 		{
+			if (IsUpgradeSelectionLocked) return;
 			Debug.Log("SetDirectionImmediate");
 			if (value.sqrMagnitude > 0f)
 			{
@@ -440,6 +514,7 @@ namespace AstralShift.HellMaiden.Player
 
 		public void Dash()
 		{
+			if (IsUpgradeSelectionLocked) return;
 			if (PlayerStats.currentStats.dashCharges > 0 && _allowDash)
 			{
 				_stateMachine.MakeTransition(Dashing);
@@ -612,6 +687,7 @@ namespace AstralShift.HellMaiden.Player
 
 		public void BruteforceKnockBack(Vector2 attackPosition, KnockbackSettings settings)
 		{
+			if (IsUpgradeSelectionLocked) return;
 			Vector2 attackDirection;
 			if (!(settings == null) && (settings.HasKnockback || settings.Staggers))
 			{
@@ -681,14 +757,16 @@ namespace AstralShift.HellMaiden.Player
 
 		public void SetAimPosition(Vector2 position)
 		{
-			if (!_autoAim && !(ProCamera2D.Instance.GameCamera == null))
+			if (!_autoAim && _inputCamera != null)
 			{
 				Vector2 vector = position;
-				vector = ProCamera2D.Instance.GameCamera.ScreenToWorldPoint(vector);
+				vector = _inputCamera.ScreenToWorldPoint(vector);
 				attackDirection = vector - (Vector2)base.transform.position;
 				attackDirection.Normalize();
 			}
 		}
+
+		public void SetInputCamera(Camera camera) => _inputCamera = camera;
 
 		private void OnAutoAimUpdate()
 		{
@@ -895,7 +973,8 @@ namespace AstralShift.HellMaiden.Player
 
 		private void OnEnterDead()
 		{
-			GameEvents.Instance.OnBeforePlayerDeath?.Invoke();
+			Died?.Invoke();
+			if (!UsesNetworkLifecycle) GameEvents.Instance?.OnBeforePlayerDeath?.Invoke();
 			RuntimeManager.PlayOneShot(deadSound);
 			body.bodyType = RigidbodyType2D.Static;
 			playerAnimator.Dead(base.FacingDirection.x, base.FacingDirection.y);
@@ -908,8 +987,10 @@ namespace AstralShift.HellMaiden.Player
 
 		public void DeadAnimationFinished()
 		{
+			DeathPresentationCompleted?.Invoke();
+			if (UsesNetworkLifecycle) return;
 			base.gameObject.SetActive(value: false);
-			GameEvents.Instance.OnAfterPlayerDeath?.Invoke();
+			GameEvents.Instance?.OnAfterPlayerDeath?.Invoke();
 		}
 
 		public void GiveUp()
@@ -953,6 +1034,7 @@ namespace AstralShift.HellMaiden.Player
 
 		public void UltimateAction()
 		{
+			if (IsUpgradeSelectionLocked) return;
 			if (_ultimateCharge)
 			{
 				_ultimateCharge = false;
@@ -974,17 +1056,18 @@ namespace AstralShift.HellMaiden.Player
 
 		public void Interact()
 		{
+			if (IsUpgradeSelectionLocked) return;
 			interactionFinder.TryInteract();
 		}
 
 		public void DisableInteractor()
 		{
-			interactor.enabled = false;
+			if (interactor != null) interactor.enabled = false;
 		}
 
 		public void EnableInteractor()
 		{
-			interactor.enabled = true;
+			if (interactor != null) interactor.enabled = true;
 		}
 
 		public override void OnPausePausables()
@@ -1001,6 +1084,8 @@ namespace AstralShift.HellMaiden.Player
 
 		public void IncreaseXP(float xp)
 		{
+			if (UsesNetworkLifecycle)
+				throw new InvalidOperationException("Network XP is awarded by NetworkModifierSelection; the legacy Leveler is disabled.");
 			float num = (GameEvents.Instance.IsMagnetOn ? 0.5f : 1f);
 			leveler.IncreaseXP(xp * PlayerStats.currentStats.xpModifier * num);
 		}

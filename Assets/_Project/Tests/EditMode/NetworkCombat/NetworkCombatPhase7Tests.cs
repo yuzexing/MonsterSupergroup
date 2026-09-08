@@ -37,8 +37,8 @@ namespace MonsterSupergroup.NetworkCombat.Tests
             "GameObject/Enemy_Skeleton.prefab";
         private const string SandboxScenePath =
             "Assets/_Project/Scenes/Development/NetworkCombatSandbox.unity";
-        private const string BootScenePath = "Assets/Scenes/Boot.unity";
-        private const string GameplayScenePath = "Assets/Scenes/Gameplay.unity";
+        private const string BootScenePath = "Assets/_Project/Scenes/Boot.unity";
+        private const string GameplayScenePath = "Assets/_Project/Scenes/Gameplay.unity";
         private const string SkeletonPrefabPath =
             "Assets/_Project/Content/NetworkCombat/NetworkEnemySkeleton.prefab";
 
@@ -620,12 +620,15 @@ namespace MonsterSupergroup.NetworkCombat.Tests
                         .SelectMany(root => root.GetComponentsInChildren<
                             NetworkGameplayEnemySpawner>(true))
                         .Single();
-                Assert.That(spawner.EnemyPrefab, Is.SameAs(skeleton));
+                Assert.That(spawner.EnemyPrefab, Is.SameAs(
+                    AssetDatabase.LoadAssetAtPath<GameObject>(ProductEnemyPrefabPath)));
                 GameObject[] playerStartsRoots = gameplay.GetRootGameObjects()
-                    .Where(root => root.name == "Network Player Starts")
+                    .SelectMany(root => root.GetComponentsInChildren<Transform>(true))
+                    .Where(child => child.name == "Network Player Starts")
+                    .Select(child => child.gameObject)
                     .ToArray();
                 Assert.That(playerStartsRoots, Has.Length.EqualTo(1),
-                    "Gameplay must contain one generated Player starts root.");
+                    "Gameplay must contain one Player starts group.");
                 Assert.That(
                     playerStartsRoots[0].GetComponentsInChildren<
                         NetworkStartPosition>(true).Length,

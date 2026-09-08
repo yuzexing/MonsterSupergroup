@@ -49,6 +49,19 @@ namespace MonsterSupergroup.NetworkCombat
                 statusControllers.Remove(entityId);
         }
 
+        public void ForgetEntity(uint entityId)
+        {
+            entities.Remove(entityId);
+            var removed = new List<StatusInstanceId>();
+            foreach (var entry in statusTargets)
+                if (entry.Value == entityId) removed.Add(entry.Key);
+            foreach (var id in removed)
+            {
+                statusTargets.Remove(id);
+                canonicalStatuses.Remove(id);
+            }
+        }
+
         public bool TryGetEntity(uint entityId, out CanonicalEntityState state)
         {
             return entities.TryGetValue(entityId, out state);

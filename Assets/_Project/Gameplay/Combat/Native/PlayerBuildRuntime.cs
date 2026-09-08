@@ -46,6 +46,7 @@ namespace MonsterSupergroup.Gameplay.Combat
         private long nextEquipmentHandle = 1;
         private long nextPerkHandle = 1;
         private bool initialized;
+        private bool weaponExecutionEnabled = true;
 
         public PlayerMovement Owner => owner;
         public int WeaponCount => weapons.Count;
@@ -57,6 +58,190 @@ namespace MonsterSupergroup.Gameplay.Combat
         public WeaponBehaviour InitialWeapon { get; private set; }
         public bool IsBuildActive => InitialWeapon != null &&
             weapons.ContainsKey(InitialWeapon);
+
+        public WeaponBehaviour GetWeaponAtSlot(int slotIndex)
+        {
+            ValidateSlotIndex(slotIndex);
+            return weaponSlots[slotIndex]?.Behaviour;
+        }
+
+        public IReadOnlyList<PlayerBuildEquipmentState> GetEquipmentStates()
+        {
+            var handles = new List<long>(equipmentByHandle.Keys);
+            handles.Sort();
+            var states = new PlayerBuildEquipmentState[handles.Count];
+            for (int i = 0; i < handles.Count; i++)
+            {
+                EquippedEquipment equipment = equipmentByHandle[handles[i]];
+                states[i] = new PlayerBuildEquipmentState(
+                    new PlayerBuildEquipmentHandle(handles[i]), equipment.Data,
+                    equipment.LevelIndex, equipment.SourceSlotIndex);
+            }
+            return Array.AsReadOnly(states);
+        }
+
+        public void SetWeaponExecutionEnabled(bool value)
+        {
+            weaponExecutionEnabled = value;
+            foreach (WeaponEntry entry in weapons.Values)
+                entry.Behaviour.enabled = value;
+        }
+
+        public PlayerBuildSnapshot CaptureState()
+        {
+            var snapshot = new PlayerBuildSnapshot { InitialWeaponId = initialWeaponId };
+            var weaponStates = new List<PlayerBuildWeaponSnapshot>();
+            for (int slot = 0; slot < HandSlotCount; slot++)
+            {
+                WeaponEntry entry = weaponSlots[slot];
+                if (entry == null) continue;
+                weaponStates.Add(new PlayerBuildWeaponSnapshot { SlotIndex = slot, WeaponId = entry.Data.ID });
+                if (entry.Behaviour == InitialWeapon) snapshot.InitialWeaponSlot = slot;
+            }
+            snapshot.Weapons = weaponStates.ToArray();
+            IReadOnlyList<PlayerBuildEquipmentState> equipment = GetEquipmentStates();
+            snapshot.Equipment = new PlayerBuildEquipmentSnapshot[equipment.Count];
+            for (int i = 0; i < equipment.Count; i++)
+                snapshot.Equipment[i] = new PlayerBuildEquipmentSnapshot
+                {
+                    SlotIndex = equipment[i].SourceSlotIndex,
+                    EquipmentId = equipment[i].EquipmentId,
+                    LevelIndex = equipment[i].LevelIndex
+                };
+            var perkHandles = new List<long>(perksByHandle.Keys);
+            perkHandles.Sort();
+            snapshot.Perks = new PlayerBuildPerkSnapshot[perkHandles.Count];
+            for (int i = 0; i < perkHandles.Count; i++)
+            {
+                EquippedPerk perk = perksByHandle[perkHandles[i]];
+                snapshot.Perks[i] = new PlayerBuildPerkSnapshot { PerkId = perk.Data.ID, Rarity = perk.Rarity };
+            }
+            return snapshot;
+        }
+
+        /// <summary>Restore a detached participant through the same equip/add APIs as a live build.</summary>
+        public void RestoreState(RuntimeDB database, PlayerBuildSnapshot snapshot)
+        {
+            ValidateSnapshot(database, snapshot);
+            EnsureInitialized();
+            ClearBuild();
+            try { ReconcileState(database, snapshot); }
+            catch
+            {
+                ClearBuild();
+                throw;
+            }
+        }
+
+        /// <summary>Apply an owner baseline without restarting unchanged weapons or their active attacks.</summary>
+        public void ReconcileState(RuntimeDB database, PlayerBuildSnapshot snapshot)
+        {
+            ValidateSnapshot(database, snapshot);
+            EnsureInitialized();
+            BuildDatabase = database;
+            initialWeaponId = snapshot.InitialWeaponId;
+            for (int slot = 0; slot < HandSlotCount; slot++)
+            {
+                uint desiredId = 0;
+                foreach (PlayerBuildWeaponSnapshot weapon in snapshot.Weapons)
+                    if (weapon.SlotIndex == slot) desiredId = weapon.WeaponId;
+                WeaponBehaviour current = GetWeaponAtSlot(slot);
+                if (current != null && current.WeaponData.ID == desiredId) continue;
+                if (current != null) UnequipWeapon(current);
+                if (desiredId != 0) EquipWeaponAtSlot(slot, database.GetWeaponData(desiredId));
+            }
+            InitialWeapon = snapshot.InitialWeaponSlot < 0 ? null : GetWeaponAtSlot(snapshot.InitialWeaponSlot);
+
+            // Match each occurrence once: two identical cards remain two cards, never one or three.
+            var retainedEquipment = new bool[snapshot.Equipment.Length];
+            foreach (PlayerBuildEquipmentState current in GetEquipmentStates())
+            {
+                int match = -1;
+                for (int i = 0; i < snapshot.Equipment.Length; i++)
+                {
+                    PlayerBuildEquipmentSnapshot desired = snapshot.Equipment[i];
+                    if (!retainedEquipment[i] && current.SourceSlotIndex == desired.SlotIndex &&
+                        current.EquipmentId == desired.EquipmentId && current.LevelIndex == desired.LevelIndex)
+                    { match = i; break; }
+                }
+                if (match < 0) RemoveEquipment(current.Handle);
+                else retainedEquipment[match] = true;
+            }
+            for (int i = 0; i < snapshot.Equipment.Length; i++)
+                if (!retainedEquipment[i])
+                {
+                    PlayerBuildEquipmentSnapshot desired = snapshot.Equipment[i];
+                    AddEquipment(desired.SlotIndex, ResolveEquipment(database, desired.EquipmentId), desired.LevelIndex);
+                }
+
+            var retainedPerks = new bool[snapshot.Perks.Length];
+            foreach (long handle in new List<long>(perksByHandle.Keys))
+            {
+                EquippedPerk current = perksByHandle[handle];
+                int match = -1;
+                for (int i = 0; i < snapshot.Perks.Length; i++)
+                    if (!retainedPerks[i] && current.Data.ID == snapshot.Perks[i].PerkId &&
+                        current.Rarity == snapshot.Perks[i].Rarity) { match = i; break; }
+                if (match < 0) RemovePerk(new PlayerBuildPerkHandle(handle));
+                else retainedPerks[match] = true;
+            }
+            for (int i = 0; i < snapshot.Perks.Length; i++)
+                if (!retainedPerks[i]) AddPerk(ResolvePerk(database, snapshot.Perks[i].PerkId), snapshot.Perks[i].Rarity);
+        }
+
+        private static void ValidateSnapshot(RuntimeDB database, PlayerBuildSnapshot snapshot)
+        {
+            if (database == null) throw new ArgumentNullException(nameof(database));
+            if (snapshot == null) throw new ArgumentNullException(nameof(snapshot));
+            if (snapshot.Weapons == null || snapshot.Equipment == null || snapshot.Perks == null)
+                throw new ArgumentException("Build snapshot collections cannot be null.", nameof(snapshot));
+            var slots = new HashSet<int>();
+            foreach (PlayerBuildWeaponSnapshot weapon in snapshot.Weapons)
+            {
+                ValidateSlotIndex(weapon.SlotIndex);
+                if (!slots.Add(weapon.SlotIndex)) throw new ArgumentException("Build snapshot repeats a weapon slot.");
+                database.GetWeaponData(weapon.WeaponId).ValidateNativeGas();
+            }
+            if (snapshot.InitialWeaponSlot != -1 && !slots.Contains(snapshot.InitialWeaponSlot))
+                throw new ArgumentException("The initial weapon slot is missing from the build snapshot.");
+            var counts = new int[HandSlotCount];
+            foreach (PlayerBuildEquipmentSnapshot equipment in snapshot.Equipment)
+            {
+                ValidateSlotIndex(equipment.SlotIndex);
+                if (++counts[equipment.SlotIndex] > MaxEquipmentPerSlot)
+                    throw new ArgumentException("Build snapshot exceeds equipment slot capacity.");
+                EquipmentData data = ResolveEquipment(database, equipment.EquipmentId);
+                if (data.Levels == null || (uint)equipment.LevelIndex >= data.Levels.Length ||
+                    data.Levels[equipment.LevelIndex] == null)
+                    throw new ArgumentException($"Equipment {equipment.EquipmentId} has no level {equipment.LevelIndex}.");
+            }
+            foreach (PlayerBuildPerkSnapshot perk in snapshot.Perks)
+            {
+                PerkData data = ResolvePerk(database, perk.PerkId);
+                data.ValidateNativeGas();
+                if (!data.HasRarity(perk.Rarity))
+                    throw new ArgumentException($"Perk {perk.PerkId} has no {perk.Rarity} definition.");
+                foreach (PerkModifierApplication application in data.GetRarity(perk.Rarity).Modifiers)
+                    if (application.Domain != PerkApplicationDomain.WeaponStats)
+                        throw new NotSupportedException($"Perk {perk.PerkId} uses an unsupported runtime domain.");
+            }
+        }
+
+        private static EquipmentData ResolveEquipment(RuntimeDB database, uint id)
+        {
+            if (database.EquipmentDB?.Equipments != null)
+                foreach (EquipmentData equipment in database.EquipmentDB.Equipments)
+                    if (equipment != null && equipment.ID == id) return equipment;
+            throw new InvalidOperationException($"EquipmentDB cannot resolve card {id}.");
+        }
+
+        private static PerkData ResolvePerk(RuntimeDB database, uint id)
+        {
+            if (database.PerkDB?.Perks != null)
+                foreach (PerkData perk in database.PerkDB.Perks)
+                    if (perk != null && perk.ID == id) return perk;
+            throw new InvalidOperationException($"PerkDB cannot resolve perk {id}.");
+        }
 
 		public event Action<ProjectilePresentationSpawn>
 			ProjectilePresentationSpawned;
@@ -144,6 +329,7 @@ namespace MonsterSupergroup.Gameplay.Combat
             {
                 behaviour = Instantiate(weaponData.WeaponPrefab, weaponParent);
                 behaviour.gameObject.SetActive(false);
+                behaviour.enabled = weaponExecutionEnabled;
                 behaviour.ConfigureOwner(owner);
 
                 WeaponRuntimeBehaviour runtime =
@@ -385,6 +571,38 @@ namespace MonsterSupergroup.Gameplay.Combat
             DetachEquipment(group);
 
             return true;
+        }
+
+        public PlayerBuildEquipmentHandle UpgradeEquipment(
+            PlayerBuildEquipmentHandle handle, int nextLevel)
+        {
+            EnsureInitialized();
+            if (!handle.IsValid ||
+                !equipmentByHandle.TryGetValue(handle.Value, out EquippedEquipment previous))
+                throw new ArgumentException("Equipment is not owned by this build.", nameof(handle));
+            if (nextLevel != previous.LevelIndex + 1 || previous.Data.Levels == null ||
+                (uint)nextLevel >= previous.Data.Levels.Length || previous.Data.Levels[nextLevel] == null)
+                throw new ArgumentOutOfRangeException(nameof(nextLevel),
+                    "An equipment upgrade must select the next authored level.");
+
+            var replacement = new EquippedEquipment(
+                previous.Data, nextLevel, previous.SourceSlotIndex);
+            try
+            {
+                // Stage the replacement before consuming the original. A factory or
+                // targeting failure leaves its handle, level and effects intact.
+                ApplyEquipment(replacement);
+            }
+            catch
+            {
+                DetachEquipment(replacement);
+                throw;
+            }
+            DetachEquipment(previous);
+            equipmentByHandle.Remove(handle.Value);
+            var newHandle = new PlayerBuildEquipmentHandle(nextEquipmentHandle++);
+            equipmentByHandle.Add(newHandle.Value, replacement);
+            return newHandle;
         }
 
         public PlayerBuildPerkHandle AddPerk(
@@ -810,6 +1028,24 @@ namespace MonsterSupergroup.Gameplay.Combat
             public PerkData Data { get; }
             public PerkRarity Rarity { get; }
         }
+    }
+
+    public readonly struct PlayerBuildEquipmentState
+    {
+        internal PlayerBuildEquipmentState(PlayerBuildEquipmentHandle handle,
+            EquipmentData equipment, int levelIndex, int sourceSlotIndex)
+        {
+            Handle = handle;
+            Equipment = equipment;
+            LevelIndex = levelIndex;
+            SourceSlotIndex = sourceSlotIndex;
+        }
+
+        public PlayerBuildEquipmentHandle Handle { get; }
+        public EquipmentData Equipment { get; }
+        public uint EquipmentId => Equipment.ID;
+        public int LevelIndex { get; }
+        public int SourceSlotIndex { get; }
     }
 
     public readonly struct PlayerBuildEquipmentHandle

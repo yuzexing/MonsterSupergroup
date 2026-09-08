@@ -38,6 +38,10 @@ try {
     Write-Output "Validation logs: $logDirectory; Host PID: $($hostProcess.Id); Client PID: $($clientProcess.Id)"
     $deadline = (Get-Date).AddSeconds($(if ($Keyboard) { 310 } else { 90 }))
     while ((-not $clientProcess.HasExited -or -not $hostProcess.HasExited) -and (Get-Date) -lt $deadline) {
+        if (($hostProcess.HasExited -and $hostProcess.ExitCode -ne 0) -or
+            ($clientProcess.HasExited -and $clientProcess.ExitCode -ne 0)) {
+            throw "A validation player failed; inspect $logDirectory"
+        }
         Start-Sleep -Milliseconds 500
     }
     if (-not $clientProcess.HasExited -or -not $hostProcess.HasExited) { throw 'Selection validation timed out.' }

@@ -7,11 +7,20 @@ namespace MonsterSupergroup.Gameplay.Combat
     /// <summary>A selectable card level, not an instantiated gameplay modifier.</summary>
     public sealed class ModifierOffer
     {
-        internal ModifierOffer(ulong offerId, EquipmentData equipment, int levelIndex)
+        public ModifierOffer(ulong offerId, EquipmentData equipment, int levelIndex,
+            int targetSlotIndex = 0, PlayerBuildEquipmentHandle existingEquipmentHandle = default)
         {
+            if (equipment == null) throw new ArgumentNullException(nameof(equipment));
+            if (equipment.Levels == null || (uint)levelIndex >= equipment.Levels.Length ||
+                equipment.Levels[levelIndex] == null)
+                throw new ArgumentOutOfRangeException(nameof(levelIndex));
+            if ((uint)targetSlotIndex >= PlayerBuildRuntime.HandSlotCount)
+                throw new ArgumentOutOfRangeException(nameof(targetSlotIndex));
             OfferId = offerId;
             Equipment = equipment;
             LevelIndex = levelIndex;
+            TargetSlotIndex = targetSlotIndex;
+            ExistingEquipmentHandle = existingEquipmentHandle;
             Modifiers = Array.AsReadOnly(equipment.Levels[levelIndex].Modifiers);
         }
 
@@ -19,9 +28,19 @@ namespace MonsterSupergroup.Gameplay.Combat
         public EquipmentData Equipment { get; }
         public uint EquipmentId => Equipment.ID;
         public int LevelIndex { get; }
+        public int TargetSlotIndex { get; }
+        // Local authoritative handle only; transport carries card/level/slot IDs.
+        public PlayerBuildEquipmentHandle ExistingEquipmentHandle { get; }
         public IReadOnlyList<EquipmentModifierApplication> Modifiers { get; }
         // Equipment also supplies GetDescription(level) and VisualDataReference.
-        public string DisplayName => Equipment.GetTitle();
+        public string DisplayName
+        {
+            get
+            {
+                string localized = Equipment.GetTitle();
+                return string.IsNullOrWhiteSpace(localized) ? Equipment.Title : localized;
+            }
+        }
     }
 
     public readonly struct ModifierSelectionResult

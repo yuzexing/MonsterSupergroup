@@ -10,18 +10,23 @@ namespace AstralShift.HellMaiden.Player
 {
 	public static class PlayerState
 	{
+		public static bool IsBusy(PlayerMovement player) => player == null ||
+			!player.IsRuntimeInitialized || player.IsUpgradeSelectionLocked ||
+			(player.CombatantBinding != null && !player.CombatantBinding.IsAlive);
+
+		public static bool IsLevelingUp(PlayerMovement player) =>
+			player != null && player.IsUpgradeSelectionLocked;
+
+		// Compatibility for unmigrated local-only menus/items. Gameplay callers
+		// must supply their player explicitly and must never query the input stack.
 		public static bool IsBusy()
 		{
-			return !(ControllerManager.Instance.CurrentController is PlayerController_HMD playerController_HMD) || playerController_HMD.InBusyState;
+			return IsBusy(GameDirector.Instance != null ? GameDirector.Instance.Player : null);
 		}
 
 		public static bool IsLevelingUp()
 		{
-			if (ControllerManager.Instance.CurrentController is PlayerController_HMD playerController_HMD)
-			{
-				return playerController_HMD.InLevelingUpState;
-			}
-			return false;
+			return IsLevelingUp(GameDirector.Instance != null ? GameDirector.Instance.Player : null);
 		}
 
 		public static bool IsInQuest()
@@ -40,6 +45,7 @@ namespace AstralShift.HellMaiden.Player
 
 		public static bool IsInControllerBasedUltimateAttackController()
 		{
+			if (ControllerManager.Instance == null || ControllerManager.Instance.Stack == null) return false;
 			if (!(ControllerManager.Instance.CurrentController is HoraceUltimateController))
 			{
 				return ControllerManager.Instance.CurrentController is NoMovementPlayerController;

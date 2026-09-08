@@ -17,7 +17,8 @@ namespace MonsterSupergroup.NetworkCombat
         AbsoluteInvulnerable = 8,
         WrongAuthority = 9,
         StaleOwnerReport = 10,
-        InvalidStatus = 11
+        InvalidStatus = 11,
+        SourceSelectingUpgrade = 12
     }
 
     public readonly struct CombatApplyResult
@@ -150,6 +151,66 @@ namespace MonsterSupergroup.NetworkCombat
             return false;
         }
 
+        public bool TryCaptureEntityState(uint entityId, out ServerEntityCheckpoint checkpoint)
+        {
+            if (entities.TryGetValue(entityId, out EntityEntry entry))
+            {
+                checkpoint = new ServerEntityCheckpoint(
+                    entry.ToState(), entry.AbsoluteInvulnerable);
+                return true;
+            }
+
+            checkpoint = default;
+            return false;
+        }
+
+        public ServerEntityCheckpoint CaptureEntityState(uint entityId)
+        {
+            if (!TryCaptureEntityState(entityId, out ServerEntityCheckpoint checkpoint))
+            {
+                throw new InvalidOperationException("The avatar is not registered in the combat ledger.");
+            }
+
+            return checkpoint;
+        }
+
+        /// <summary>
+        /// Restores trusted server checkpoint facts into an already registered
+        /// avatar. Identity and authority come from the new registration. Call
+        /// before publishing its baseline or accepting owner health reports.
+        /// </summary>
+        public CanonicalEntityState RestoreEntityState(
+            uint entityId,
+            ServerEntityCheckpoint checkpoint)
+        {
+            if (!entities.TryGetValue(entityId, out EntityEntry entry))
+            {
+                throw new InvalidOperationException("Register the avatar before restoring health.");
+            }
+
+            CanonicalEntityState saved = checkpoint.State;
+            if (saved.EntityId == 0 || saved.StateVersion == 0 ||
+                saved.MaxHealth < 1 || saved.Health < 0 || saved.Health > saved.MaxHealth ||
+                saved.Alive != (saved.Health > 0) ||
+                saved.Kind != (byte)entry.Kind || saved.Authority != (byte)entry.Authority)
+            {
+                throw new ArgumentException("The health checkpoint does not match this avatar.",
+                    nameof(checkpoint));
+            }
+
+            // An old report cannot overwrite the restored baseline, even if a
+            // same-process authority rebind retained the previous owner version.
+            uint version = checked(Math.Max(entry.Version, saved.StateVersion) + 1u);
+            entry.MaxHealth = saved.MaxHealth;
+            entry.Health = saved.Health;
+            entry.Alive = saved.Alive;
+            entry.AbsoluteInvulnerable = checkpoint.AbsoluteInvulnerable;
+            entry.UpgradeSelectionActive = false;
+            entry.KillerPlayerId = saved.KillerPlayerId;
+            entry.Version = version;
+            return entry.ToState();
+        }
+
         /// <summary>Creates a point-in-time copy for late-join synchronization.</summary>
         public IReadOnlyList<CanonicalEntityState> GetAllStates()
         {
@@ -180,6 +241,25 @@ namespace MonsterSupergroup.NetworkCombat
                 entry.Version++;
             }
 
+            return true;
+        }
+
+        public bool IsPlayerSelectingUpgrade(uint playerId)
+        {
+            return entities.TryGetValue(playerId, out EntityEntry entry) &&
+                entry.UpgradeSelectionActive;
+        }
+
+        public bool SetPlayerUpgradeSelectionState(uint playerId, bool value)
+        {
+            if (!entities.TryGetValue(playerId, out EntityEntry entry) ||
+                entry.Kind != CombatEntityKind.Player)
+                return false;
+            if (entry.UpgradeSelectionActive != value)
+            {
+                entry.UpgradeSelectionActive = value;
+                entry.Version++;
+            }
             return true;
         }
 
@@ -224,7 +304,7 @@ namespace MonsterSupergroup.NetworkCombat
                 return CombatApplyResult.Reject(CombatRejectionReason.TargetCanonicalDead);
             }
 
-            if (target.AbsoluteInvulnerable)
+            if (target.IsInvulnerable)
             {
                 return CombatApplyResult.Reject(CombatRejectionReason.AbsoluteInvulnerable);
             }
@@ -265,6 +345,18 @@ namespace MonsterSupergroup.NetworkCombat
                 return CombatApplyResult.Reject(CombatRejectionReason.InvalidDamage);
             }
 
+            if (entry.IsInvulnerable && report.Health < entry.Health)
+            {
+                // A newer correction prevents owner prediction from retaining
+                // damage incurred while the server protects this player.
+                entry.Version = report.StateVersion == uint.MaxValue
+                    ? uint.MaxValue
+                    : report.StateVersion + 1u;
+                return new CombatApplyResult(
+                    false, CombatRejectionReason.AbsoluteInvulnerable,
+                    entry.ToState(), 0, false, default);
+            }
+
             entry.MaxHealth = report.MaxHealth;
             entry.Health = report.Health;
             entry.Alive = report.Alive;
@@ -295,6 +387,11 @@ namespace MonsterSupergroup.NetworkCombat
                 return CombatRejectionReason.SourceNotOwned;
             }
 
+            if (IsPlayerSelectingUpgrade(senderPlayerId))
+            {
+                return CombatRejectionReason.SourceSelectingUpgrade;
+            }
+
             if (result.Damage < 0 || result.Damage > MaximumDamagePerResult)
             {
                 return CombatRejectionReason.InvalidDamage;
@@ -315,7 +412,7 @@ namespace MonsterSupergroup.NetworkCombat
                 return CombatRejectionReason.TargetCanonicalDead;
             }
 
-            return target.AbsoluteInvulnerable
+            return target.IsInvulnerable
                 ? CombatRejectionReason.AbsoluteInvulnerable
                 : CombatRejectionReason.None;
         }
@@ -365,6 +462,8 @@ namespace MonsterSupergroup.NetworkCombat
             public int MaxHealth;
             public bool Alive;
             public bool AbsoluteInvulnerable;
+            public bool UpgradeSelectionActive;
+            public bool IsInvulnerable => AbsoluteInvulnerable || UpgradeSelectionActive;
             public uint Version;
             public uint KillerPlayerId;
 
@@ -379,7 +478,7 @@ namespace MonsterSupergroup.NetworkCombat
                     Health = Health,
                     MaxHealth = MaxHealth,
                     Alive = Alive,
-                    AbsoluteInvulnerable = AbsoluteInvulnerable,
+                    AbsoluteInvulnerable = IsInvulnerable,
                     StateVersion = Version,
                     KillerPlayerId = KillerPlayerId
                 };

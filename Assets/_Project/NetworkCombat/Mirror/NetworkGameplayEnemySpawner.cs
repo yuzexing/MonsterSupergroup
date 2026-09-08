@@ -12,7 +12,7 @@ namespace MonsterSupergroup.NetworkCombat
         [SerializeField] private GameObject enemyPrefab;
         [SerializeField, Min(0.1f)] private float spawnDistance = 5f;
 
-        private readonly HashSet<uint> spawnedForPlayers = new HashSet<uint>();
+        private readonly HashSet<ulong> spawnedForPlayers = new HashSet<ulong>();
         private readonly List<NetworkEnemySimulationEndpoint> playerBuffer =
             new List<NetworkEnemySimulationEndpoint>(4);
         private NetworkEnemySimulationWorld world;
@@ -88,11 +88,15 @@ namespace MonsterSupergroup.NetworkCombat
         private void SpawnForPlayer(NetworkEnemySimulationEndpoint endpoint)
         {
             if (!NetworkServer.active || endpoint == null ||
-                !endpoint.IsEligibleSimulationOwner || enemyPrefab == null ||
-                !spawnedForPlayers.Add(endpoint.PlayerEntityId))
+                !endpoint.IsEligibleSimulationOwner || enemyPrefab == null)
             {
                 return;
             }
+
+            var participant = endpoint.GetComponent<NetworkRunParticipant>();
+            ulong spawnKey = participant != null && participant.ParticipantId != 0
+                ? participant.ParticipantId : ((ulong)1 << 32) | endpoint.PlayerEntityId;
+            if (!spawnedForPlayers.Add(spawnKey)) return;
 
             Vector2 direction = DirectionFor(endpoint.PlayerEntityId);
             Vector3 position = endpoint.transform.position +

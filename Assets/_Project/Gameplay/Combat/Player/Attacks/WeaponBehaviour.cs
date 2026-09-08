@@ -35,6 +35,8 @@ namespace AstralShift.HellMaiden.Player.Attacks
 
 		public PlayerMovement OwnerPlayer => player;
 
+		public bool CanAttack => player == null || !player.IsUpgradeSelectionLocked;
+
 		public PlayerCombatantBinding OwnerCombatant => player != null
 			? player.CombatantBinding
 			: null;
@@ -206,6 +208,7 @@ namespace AstralShift.HellMaiden.Player.Attacks
 
 		protected virtual bool CheckCooldown()
 		{
+			if (!CanAttack) return false;
 			if (LastAttackElapsedTime >= GetCooldown())
 			{
 				return true;
@@ -248,6 +251,7 @@ namespace AstralShift.HellMaiden.Player.Attacks
 			IDamageable damageable,
 			GasAttackSnapshot attack)
 		{
+			if (!CanAttack) return;
 			if (attack == null)
 			{
 				throw new ArgumentNullException(nameof(attack));

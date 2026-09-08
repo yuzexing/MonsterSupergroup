@@ -17,7 +17,8 @@ Mirror. It is not a second GAS implementation.
 
 | State or operation | Executor/final authority |
 | --- | --- |
-| Player movement, attack, projectile, hit, crit and build trigger | Owner client |
+| Player movement, attack, projectile, hit and crit | Owner client (server rejects movement/combat during upgrade selection) |
+| Upgrade offers, validation and Build mutation | Server; Owner receives IDs and reconciles its execution Build |
 | Enemy predicted HP and PredictedLethalHit | Each attacking owner client |
 | Enemy canonical HP, Alive/Dead and ConfirmedKill | Server CombatLedger |
 | Player HP | Owner-final report, stored by Server CombatLedger |

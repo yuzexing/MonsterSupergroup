@@ -5,11 +5,12 @@ using UnityEngine;
 
 namespace MonsterSupergroup.NetworkCombat
 {
-    /// <summary>The only HUD binding component that knows about Mirror.</summary>
+    /// <summary>Resolves local player ownership for HUD and menu presentation.</summary>
     [DisallowMultipleComponent]
     public sealed class LocalPlayerUIBinder : MonoBehaviour
     {
         [SerializeField] private CombatHUDController combatHUD;
+        [SerializeField] private CardPickMenu cardPickMenu;
 
         private void OnEnable()
         {
@@ -17,6 +18,7 @@ namespace MonsterSupergroup.NetworkCombat
             {
                 combatHUD.Unbind();
             }
+            if (cardPickMenu != null) cardPickMenu.Unbind();
             // Bind in LateUpdate, after all child presentation components have
             // finished Awake/Start. StatusBar.Awake initializes its images.
         }
@@ -30,14 +32,21 @@ namespace MonsterSupergroup.NetworkCombat
 
         private void RefreshBinding()
         {
-            if (combatHUD == null || !combatHUD.isActiveAndEnabled)
-            {
-                return;
-            }
-
             NetworkIdentity player = NetworkClient.active
+                && !GameplayRuntimeEnvironment.IsDedicatedServer
                 ? NetworkClient.localPlayer
                 : null;
+            if (player != null && (!player.isOwned || !player.gameObject.activeInHierarchy))
+                player = null;
+            if (cardPickMenu != null && cardPickMenu.isActiveAndEnabled)
+            {
+                ModifierSelectionController selection = player != null
+                    ? player.GetComponent<ModifierSelectionController>() : null;
+                if (selection != null && !selection.isActiveAndEnabled) selection = null;
+                cardPickMenu.Bind(selection);
+            }
+
+            if (combatHUD == null || !combatHUD.isActiveAndEnabled) return;
             CombatantBehaviour combatant = player != null && player.isOwned &&
                 player.gameObject.activeInHierarchy
                 ? player.GetComponent<CombatantBehaviour>()
@@ -57,6 +66,7 @@ namespace MonsterSupergroup.NetworkCombat
 
         private void OnDisable()
         {
+            if (cardPickMenu != null) cardPickMenu.Unbind();
             if (combatHUD != null)
             {
                 combatHUD.Unbind();

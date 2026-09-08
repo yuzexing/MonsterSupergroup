@@ -24,6 +24,7 @@ namespace MonsterSupergroup.NetworkCombat
 
         public uint OwnerPlayerId => ownerPlayerId;
         public uint SourceEntityId => netId;
+        public ushort ConnectionEpoch => connectionEpoch;
         public ICombatEventIdSource EventIds => eventIds;
         public ClientCombatCollector Collector => collector;
         public CombatTraceRecorder Trace { get; private set; }
@@ -55,7 +56,9 @@ namespace MonsterSupergroup.NetworkCombat
         public override void OnStartAuthority()
         {
             base.OnStartAuthority();
-            eventIds = new SequentialCombatEventIdSource(sourceSlot, connectionEpoch);
+            if (collector != null) return;
+            // Rebinding the same avatar must not reuse event sequences in its existing epoch.
+            if (eventIds == null) eventIds = new SequentialCombatEventIdSource(sourceSlot, connectionEpoch);
             Trace = enableCombatTrace
                 ? new CombatTraceRecorder(combatTraceCapacity)
                 : null;
@@ -164,9 +167,14 @@ namespace MonsterSupergroup.NetworkCombat
 
             collector?.Dispose();
             collector = null;
-            eventIds = null;
             Trace = null;
             base.OnStopAuthority();
+        }
+
+        public override void OnStopClient()
+        {
+            OnStopAuthority();
+            base.OnStopClient();
         }
 
         public override void OnStopServer()

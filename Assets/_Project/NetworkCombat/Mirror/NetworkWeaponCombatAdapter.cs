@@ -185,6 +185,20 @@ namespace MonsterSupergroup.NetworkCombat
             }
 
             lastServerBatchSequence = batch.BatchSequence;
+            if (NetworkCombatWorld.Instance != null &&
+                NetworkCombatWorld.Instance.Gateway.Ledger.IsPlayerSelectingUpgrade(netId))
+            {
+                var terminations = new List<NetworkProjectilePresentationEdge>();
+                foreach (NetworkProjectilePresentationEdge edge in batch.Edges)
+                {
+                    if (edge.Phase == ProjectilePresentationPhase.Spawn)
+                        RejectedPresentationCount++;
+                    else
+                        terminations.Add(edge);
+                }
+                if (terminations.Count == 0) return;
+                batch.Edges = terminations.ToArray();
+            }
             RpcApplyProjectilePresentations(batch);
         }
 

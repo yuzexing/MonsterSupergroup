@@ -52,6 +52,10 @@ namespace MonsterSupergroup.Gameplay.Tests
             currentText = GetField<TMP_Text>(healthHUD, "currentHealthText");
             maximumText = GetField<TMP_Text>(healthHUD, "maxHealthText");
             binder.enabled = false;
+            // State/subscription assertions are immediate; animation timing is
+            // exercised independently below with both display layers enabled.
+            SetField(bar, "animateFall", false);
+            SetField(bar, "animateRise", false);
         }
 
         [TearDown]
@@ -169,6 +173,25 @@ namespace MonsterSupergroup.Gameplay.Tests
             Assert.That(SubscriberCount(player), Is.Zero);
             player.ReceiveDamage(new DamageInfo(1, 20, false));
             LogAssert.NoUnexpectedReceived();
+        }
+
+        [UnityTest]
+        public IEnumerator HealthAnimation_TopAndBottomConvergeAfterDamageAndHealing()
+        {
+            SetField(bar, "animateFall", true);
+            SetField(bar, "animateRise", true);
+            CombatantBehaviour player = Player(100);
+            controller.Bind(player);
+            player.ReceiveDamage(new DamageInfo(1, 40, false));
+            Assert.That(currentText.text, Is.EqualTo("60"));
+            Assert.That(fill.fillAmount, Is.EqualTo(0.6f).Within(0.0001f));
+            Assert.That(bottomFill.fillAmount, Is.GreaterThan(fill.fillAmount));
+            yield return new WaitForSeconds(0.6f);
+            AssertDisplay(60, 100);
+            player.RestoreHealth(20);
+            Assert.That(currentText.text, Is.EqualTo("80"));
+            yield return new WaitForSeconds(0.6f);
+            AssertDisplay(80, 100);
         }
 
         [UnityTest]

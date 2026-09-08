@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Mirror;
+using MonsterSupergroup.Gameplay.Combat;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -27,6 +28,24 @@ namespace MonsterSupergroup.NetworkCombat
 
         public bool IsGameplayLoaded => TryGetGameplayScene(out _);
 
+        public RunSession Session { get; private set; } = new RunSession();
+
+        public override void Awake()
+        {
+            // Install before Mirror registers authentication callbacks. The same boundary
+            // is used by Boot, test scenes and programmatic server startup.
+            if (authenticator == null)
+                authenticator = GetComponent<RunSessionAuthenticator>() ?? gameObject.AddComponent<RunSessionAuthenticator>();
+            base.Awake();
+        }
+
+        /// <summary>Called by the server's start-run flow after the intended party has joined.</summary>
+        public void BeginRun()
+        {
+            if (!NetworkServer.active) throw new System.InvalidOperationException("Only the server can start a run.");
+            Session.BeginRun();
+        }
+
         public void ConfigureGameplay(
             string scenePath,
             Camera sourceBootCamera,
@@ -44,6 +63,9 @@ namespace MonsterSupergroup.NetworkCombat
         public override void OnStartServer()
         {
             base.OnStartServer();
+            Session = new RunSession();
+            if (NetworkCombatWorld.Instance != null)
+                NetworkCombatWorld.Instance.ServerCanonicalBatchProduced += UpdateParticipantLife;
             CaptureBootScene();
             gameplayUnloadStarted = false;
             Debug.Log($"[BootGameplay] Server starting; loading '{gameplayScene}'.", this);
@@ -84,11 +106,44 @@ namespace MonsterSupergroup.NetworkCombat
         {
             if (connection != null)
             {
+                // Capture before Mirror destroys the avatar and clears its Build/status registries.
+                PlayerRuntimeCheckpoint checkpoint = CapturePlayer(connection.identity);
+                Session.Disconnect(connection.connectionId, checkpoint);
                 pendingPlayerConnections.Remove(connection.connectionId);
                 remoteGameplayLoadRequests.Remove(connection.connectionId);
             }
 
             base.OnServerDisconnect(connection);
+        }
+
+        private static PlayerRuntimeCheckpoint CapturePlayer(NetworkIdentity identity)
+        {
+            if (identity == null) return null;
+            var build = identity.GetComponent<PlayerBuildRuntime>();
+            var selection = identity.GetComponent<NetworkModifierSelection>();
+            NetworkCombatWorld world = NetworkCombatWorld.Instance;
+            if (build == null || !build.IsBuildActive || selection == null || world == null ||
+                !world.Gateway.Ledger.TryCaptureEntityState(identity.netId, out ServerEntityCheckpoint health))
+                return null;
+            return new PlayerRuntimeCheckpoint
+            {
+                PreviousAvatarId = identity.netId,
+                CapturedAt = NetworkTime.time,
+                Build = build.CaptureState(),
+                Progression = selection.CaptureProgression(),
+                Health = health,
+                Statuses = world.Gateway.Statuses.CaptureTarget(identity.netId, NetworkTime.time),
+                LifeState = health.State.Alive ? RunPlayerLifeState.Active : RunPlayerLifeState.Downed
+            };
+        }
+
+        private void UpdateParticipantLife(CanonicalWorldBatch batch)
+        {
+            if (batch.Entities == null) return;
+            foreach (var state in batch.Entities)
+                foreach (RunParticipant participant in Session.Participants)
+                    if (participant.AvatarId == state.EntityId)
+                        participant.LifeState = state.Alive ? RunPlayerLifeState.Active : RunPlayerLifeState.Downed;
         }
 
         public override void OnClientSceneChanged()
@@ -106,6 +161,8 @@ namespace MonsterSupergroup.NetworkCombat
 
         public override void OnStopServer()
         {
+            if (NetworkCombatWorld.Instance != null)
+                NetworkCombatWorld.Instance.ServerCanonicalBatchProduced -= UpdateParticipantLife;
             Debug.Log("[BootGameplay] Server stopping.", this);
             if (NetworkServer.active && TryGetGameplayScene(out _))
             {
@@ -279,13 +336,41 @@ namespace MonsterSupergroup.NetworkCombat
                 yield break;
             }
 
+            if (!Session.TryGetConnection(connectionId, out RunParticipant participant))
+            {
+                // A configured custom authenticator must admit a transport-verified identity;
+                // there is intentionally no fallback to netId, address or GameDirector.Player.
+                Debug.LogError("[RunSession] Player spawn requires an admitted participant.", this);
+                pendingPlayerConnections.Remove(connectionId);
+                connection.Disconnect();
+                yield break;
+            }
+
             Transform start = GetStartPosition();
             GameObject player = start != null
                 ? Instantiate(playerPrefab, start.position, start.rotation)
                 : Instantiate(playerPrefab);
             player.name = $"{playerPrefab.name} [connId={connectionId}]";
             SceneManager.MoveGameObjectToScene(player, serverGameplayScene);
+            NetworkRunParticipant runtimeParticipant = player.GetComponent<NetworkRunParticipant>();
+            if (runtimeParticipant == null)
+            {
+                Debug.LogError("NetworkPlayer prefab requires NetworkRunParticipant.", player);
+                Destroy(player);
+                connection.Disconnect();
+                pendingPlayerConnections.Remove(connectionId);
+                yield break;
+            }
+            runtimeParticipant.Prepare(Session.RunId, participant);
+            if (participant.Checkpoint != null)
+            {
+                player.GetComponent<NetworkModifierSelection>().PrepareServerRestore(
+                    participant.Checkpoint.Build, participant.Checkpoint.Progression);
+                player.GetComponent<NetworkCombatantAdapter>().PrepareServerRestore(participant.Checkpoint);
+            }
             NetworkServer.AddPlayerForConnection(connection, player);
+            Session.AttachAvatar(connectionId, player.GetComponent<NetworkIdentity>().netId,
+                player.GetComponent<MirrorNetworkCombatBridge>().ConnectionEpoch);
             pendingPlayerConnections.Remove(connectionId);
             Debug.Log(
                 $"[BootGameplay] Spawned Player {player.name} in '{player.scene.path}'.",

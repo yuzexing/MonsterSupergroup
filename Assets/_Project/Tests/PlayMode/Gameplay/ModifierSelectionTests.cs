@@ -7,9 +7,7 @@ using AstralShift.HellMaiden.Combat.Hand.Data;
 using AstralShift.HellMaiden.Data.Cards;
 using AstralShift.HellMaiden.Player;
 using MonsterSupergroup.GAS;
-using MonsterSupergroup.GAS.Authoring;
 using MonsterSupergroup.Gameplay.Combat;
-using MonsterSupergroup.NetworkCombat;
 using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.TestTools;
@@ -21,10 +19,11 @@ namespace MonsterSupergroup.Gameplay.Tests
         private const string Content = "Assets/_Project/Content/HellMaiden/NativeGAS/";
         private GameObject poolObject, playerObject, databaseObject, selectionObject;
         private PlayerBuildRuntime build;
-        private RuntimeDB runtimeDB;
+        private RuntimeDB database;
         private EquipmentDB equipmentDB;
-        private WeaponData weaponData;
         private ModifierSelectionController selection;
+        private ulong submitted;
+        private int requests;
 
         [SetUp]
         public void SetUp()
@@ -38,20 +37,18 @@ namespace MonsterSupergroup.Gameplay.Tests
             attacks.transform.SetParent(playerObject.transform, false);
             player.AttacksParent = attacks.transform;
             build = playerObject.AddComponent<PlayerBuildRuntime>();
-            build.Initialize(player, new FixedRandom(0.99f));
-
-            equipmentDB = UnityEngine.Object.Instantiate(Asset<EquipmentDB>(Content + "NativeGasEquipmentDB.asset"));
-            WeaponDB weaponDB = Asset<WeaponDB>(Content + "NativeGasWeaponDB.asset");
-            weaponData = weaponDB.Weapons[0];
-            databaseObject = new GameObject("Selection Test RuntimeDB");
-            runtimeDB = databaseObject.AddComponent<RuntimeDB>();
-            runtimeDB.ConfigureWeaponDatabase(weaponDB);
+            build.Initialize(player, new FixedRandom());
+            equipmentDB = Asset<EquipmentDB>(Content + "NativeGasEquipmentDB.asset");
+            databaseObject = new GameObject("Selection Test Database");
+            database = databaseObject.AddComponent<RuntimeDB>();
+            database.ConfigureWeaponDatabase(Asset<WeaponDB>(Content + "NativeGasWeaponDB.asset"));
             typeof(RuntimeDB).GetField("_equipmentDB", BindingFlags.Instance | BindingFlags.NonPublic)
-                .SetValue(runtimeDB, equipmentDB);
-            build.StartInitialBuild(runtimeDB);
+                .SetValue(database, equipmentDB);
+            build.StartInitialBuild(database);
             selectionObject = new GameObject("Selection Test Controller");
             selection = selectionObject.AddComponent<ModifierSelectionController>();
-            selection.Initialize(new FixedRandom(0f));
+            submitted = 0;
+            requests = 0;
         }
 
         [TearDown]
@@ -60,197 +57,102 @@ namespace MonsterSupergroup.Gameplay.Tests
             UnityEngine.Object.DestroyImmediate(selectionObject);
             UnityEngine.Object.DestroyImmediate(playerObject);
             UnityEngine.Object.DestroyImmediate(databaseObject);
-            UnityEngine.Object.DestroyImmediate(equipmentDB);
             UnityEngine.Object.DestroyImmediate(poolObject);
             PoolManager.Instance = null;
         }
 
-        [Test]
-        public void Provider_UsesNativeDefinitionsAndDeterministicDistinctEligibleCards()
+        private void Present(ulong firstId = 100)
         {
-            var a = new EquipmentModifierOfferProvider(new SeededRandom(71));
-            var b = new EquipmentModifierOfferProvider(new SeededRandom(71));
-            var first = a.Generate(equipmentDB, weaponData);
-            var second = b.Generate(equipmentDB, weaponData);
-            Assert.That(first.Select(offer => offer.EquipmentId),
-                Is.EqualTo(second.Select(offer => offer.EquipmentId)));
-            Assert.That(first.Select(offer => offer.EquipmentId).Distinct().Count(), Is.EqualTo(3));
-            foreach (ModifierOffer offer in first)
-            {
-                Assert.That(offer.LevelIndex, Is.Zero);
-                Assert.That(equipmentDB.Equipments, Does.Contain(offer.Equipment));
-                foreach (EquipmentModifierApplication application in offer.Modifiers)
-                {
-                    Assert.That(application.ModifierIdValue, Is.InRange(0x01000001u, 0x01000008u));
-                    Assert.That(application.Parameters, Is.Not.Null);
-                    Assert.That(weaponData.Supports(application.ModifierId), Is.True);
-                }
-            }
-            Assert.That(build.EquipmentCount, Is.Zero);
-            Assert.That(build.InitialWeapon.NativeRuntime.ModifierCount, Is.Zero);
+            selection.Bind(build);
+            var offers = equipmentDB.Equipments.Take(3).Select((card, i) =>
+                new ModifierOffer(firstId + (ulong)i, card, 0)).ToArray();
+            selection.ReceiveOffers(offers, id => { submitted = id; requests++; return true; });
         }
 
         [Test]
-        public void Provider_RejectsIncompleteUnknownAndWrongParameterDefinitionsWithoutInstantiation()
+        public void BindingAloneNeverGeneratesOffersOrMutatesBuild()
         {
-            EquipmentData invalid = UnityEngine.Object.Instantiate(equipmentDB.Equipments[0]);
-            try
-            {
-                equipmentDB.Equipments = new[] { invalid, equipmentDB.Equipments[1], equipmentDB.Equipments[2] };
-                var provider = new EquipmentModifierOfferProvider(new FixedRandom(0f));
-                EquipmentModifierApplication application = invalid.Levels[0].Modifiers[0];
-                foreach (EquipmentDataModifier definition in new[] {
-                    new EquipmentDataModifier(),
-                    new EquipmentDataModifier(new EquipmentModifierID(0x0100FFFFu), new DamageStatModifierParameters(0.3f)),
-                    new EquipmentDataModifier(new EquipmentModifierID(DamageStatModifier.ModifierIdValue), new SpeedStatModifierParameters(0.3f)) })
-                {
-                    application.Configure(definition, "test", false, null);
-                    Assert.Throws<InvalidOperationException>(() => provider.Generate(equipmentDB, weaponData));
-                }
-                Assert.That(build.InitialWeapon.NativeRuntime.ModifierCount, Is.Zero);
-            }
-            finally { UnityEngine.Object.DestroyImmediate(invalid); }
+            selection.Bind(build);
+            Assert.That(selection.Offers, Is.Empty);
+            Assert.That(build.EquipmentCount, Is.Zero);
         }
 
         [TestCase(0)]
         [TestCase(1)]
         [TestCase(2)]
-        public void SelectIndex_AppliesExactlyTheChosenCardOnce(int index)
+        public void SelectIndex_SubmitsIntentWithoutApplyingAndWaitsForAcknowledgement(int index)
         {
-            selection.Bind(build);
-            ModifierOffer offer = selection.Offers[index];
-            var result = selection.Select(index);
-            Assert.That(result.Succeeded, Is.True, result.Error);
-            Assert.That(result.EquipmentHandle.IsValid, Is.True);
-            Assert.That(build.EquipmentCount, Is.EqualTo(1));
-            Assert.That(build.InitialWeapon.NativeRuntime.RuntimeModifiers.StaticModifiers
-                .Select(modifier => modifier.ID.Value),
-                Is.EqualTo(offer.Modifiers.Select(application => application.ModifierIdValue)));
-            Assert.That(selection.Offers, Is.Empty);
+            Present();
+            Assert.That(selection.Select(index).Succeeded, Is.True);
+            Assert.That(submitted, Is.EqualTo(100ul + (ulong)index));
+            Assert.That(selection.IsRequestPending, Is.True);
+            Assert.That(selection.Offers.Count, Is.EqualTo(3));
+            Assert.That(build.EquipmentCount, Is.Zero);
             Assert.That(selection.Select(index).Succeeded, Is.False);
-            Assert.That(selection.SelectOffer(offer.OfferId).Succeeded, Is.False);
-            Assert.That(build.EquipmentCount, Is.EqualTo(1));
+            Assert.That(requests, Is.EqualTo(1));
+            selection.ClearOffers();
+            Assert.That(selection.IsRequestPending, Is.False);
+            Assert.That(selection.Offers, Is.Empty);
         }
 
         [Test]
-        public void SelectOfferId_ChangesActualPipelineDamageAndHandleRemovesIt()
+        public void StaleInvalidAndForeignOptionIdsNeverSubmit()
         {
-            selection.Bind(build);
-            ModifierOffer damage = selection.Offers.Single(offer => offer.EquipmentId == 2u);
-            Assert.That(build.InitialWeapon.DamageValue, Is.EqualTo(15));
-            ModifierSelectionResult result = selection.SelectOffer(damage.OfferId);
-            Assert.That(result.Succeeded, Is.True, result.Error);
-            Assert.That(build.InitialWeapon.DamageValue, Is.EqualTo(20));
-            using (AttackSnapshot attack = build.InitialWeapon.NativeRuntime.BeginAttack(weaponData.AttackTags))
-            {
-                var target = new Target();
-                CombatResolution resolution = build.InitialWeapon.NativeRuntime.ResolveHitDetailed(attack, target);
-                Assert.That(resolution.ResolvedDamage.Value, Is.EqualTo(20));
-                Assert.That(target.Health, Is.EqualTo(80));
-            }
-            selection.Unbind();
-            Assert.That(build.EquipmentCount, Is.EqualTo(1), "Unbind must not remove applied equipment.");
-            Assert.That(build.RemoveEquipment(result.EquipmentHandle), Is.True);
-            Assert.That(build.InitialWeapon.DamageValue, Is.EqualTo(15));
-        }
-
-        [Test]
-        public void CompositeKnockbackCard_AppliesBothNativeModifiers()
-        {
-            equipmentDB.Equipments = new[] { equipmentDB.Equipments.Last(), equipmentDB.Equipments[0], equipmentDB.Equipments[1] };
-            selection.Bind(build);
-            var offer = selection.Offers[0];
-            float beforeSpeed = build.InitialWeapon.SpeedValue;
-            Assert.That(offer.Modifiers.Count, Is.EqualTo(2));
-            Assert.That(selection.SelectOffer(offer.OfferId).Succeeded, Is.True);
-            Assert.That(build.InitialWeapon.NativeRuntime.ModifierCount, Is.EqualTo(2));
-            Assert.That(build.InitialWeapon.NativeRuntime.RuntimeModifiers.StaticModifiers
-                .Select(modifier => modifier.ID.Value), Is.EquivalentTo(new[] {
-                    KnockbackStatModifier.ModifierIdValue, SpeedStatModifier.ModifierIdValue }));
-            Assert.That(build.InitialWeapon.SpeedValue, Is.GreaterThan(beforeSpeed));
-            using (AttackSnapshot attack = build.InitialWeapon.NativeRuntime.BeginAttack())
-                Assert.That(attack.Stats.KnockbackDistance, Is.EqualTo(2f));
-        }
-
-        [Test]
-        public void InvalidIndexAndFullSlot_DoNotConsumeOffersOrLeakModifiers()
-        {
-            selection.Bind(build);
-            var offers = selection.Offers;
+            Present();
             Assert.That(selection.Select(-1).Succeeded, Is.False);
             Assert.That(selection.Select(3).Succeeded, Is.False);
-            for (int i = 0; i < PlayerBuildRuntime.MaxEquipmentPerSlot; i++)
-                build.AddEquipment(build.InitialWeapon, equipmentDB.Equipments[0], 0);
-            Assert.That(selection.Select(0).Succeeded, Is.False);
-            Assert.That(selection.Offers, Is.SameAs(offers));
-            Assert.That(build.EquipmentCount, Is.EqualTo(3));
-            Assert.That(build.InitialWeapon.NativeRuntime.ModifierCount, Is.EqualTo(3));
+            Assert.That(selection.SelectOffer(999999).Succeeded, Is.False);
+            Present(200);
+            Assert.That(selection.SelectOffer(100).Succeeded, Is.False);
+            Assert.That(requests, Is.Zero);
+            Assert.That(selection.SelectOffer(201).Succeeded, Is.True);
+            Assert.That(submitted, Is.EqualTo(201));
+        }
+
+        [Test]
+        public void RejectionRetainsOfferAndAllowsRetry()
+        {
+            Present();
+            selection.Select(0);
+            selection.CompleteRequest("Rejected by server");
+            Assert.That(selection.Offers.Count, Is.EqualTo(3));
+            Assert.That(selection.IsRequestPending, Is.False);
+            Assert.That(selection.LastError, Is.EqualTo("Rejected by server"));
+            Assert.That(selection.Select(1).Succeeded, Is.True);
+            Assert.That(requests, Is.EqualTo(2));
+        }
+
+        [Test]
+        public void PresentationRejectsEmptyOrOversizedOffers()
+        {
+            selection.Bind(build);
+            Assert.Throws<ArgumentException>(() => selection.ReceiveOffers(Array.Empty<ModifierOffer>(), _ => true));
+            var oversized = equipmentDB.Equipments.Take(4).Select((card, i) =>
+                new ModifierOffer((ulong)i + 1, card, 0)).ToArray();
+            Assert.Throws<ArgumentException>(() => selection.ReceiveOffers(oversized, _ => true));
         }
 
         [UnityTest]
-        public IEnumerator RebuildUnbindDisableAndDestroy_ExpireOldOffers()
+        public IEnumerator RebuildUnbindDisableAndDestroyExpireOffers()
         {
-            selection.Bind(build);
-            ulong oldId = selection.Offers[0].OfferId;
-            build.StartInitialBuild(runtimeDB);
-            Assert.That(selection.SelectOffer(oldId).Succeeded, Is.False);
-            Assert.That(build.EquipmentCount, Is.Zero);
-            Assert.That(selection.Offers.Count, Is.EqualTo(3));
-            Assert.That(selection.Offers.Any(offer => offer.OfferId == oldId), Is.False);
-
-            var result = selection.Select(0);
-            Assert.That(result.Succeeded, Is.True);
+            Present();
+            build.StartInitialBuild(database);
+            Assert.That(selection.SelectOffer(100).Succeeded, Is.False);
             yield return null;
-            Assert.That(selection.Offers, Is.Empty, "A consumed build must not regenerate.");
-            selection.Unbind();
-            selection.Bind(build);
-            Assert.That(selection.Offers, Is.Empty, "Rebinding the same build must not grant a second round.");
-            build.ClearBuild();
-            yield return null;
-            build.StartInitialBuild(runtimeDB);
-            yield return null;
-            Assert.That(selection.Offers.Count, Is.EqualTo(3));
-
-            selection.enabled = false;
-            Assert.That(selection.BoundBuild, Is.Null);
             Assert.That(selection.Offers, Is.Empty);
-            Assert.That(selection.Select(0).Succeeded, Is.False);
+            Present(200);
+            selection.Unbind();
+            Assert.That(selection.Offers, Is.Empty);
+            Assert.That(selection.BoundBuild, Is.Null);
+            Present(300);
+            selection.enabled = false;
+            Assert.That(selection.Offers, Is.Empty);
             selection.enabled = true;
-            selection.Bind(build);
+            Present(400);
             UnityEngine.Object.DestroyImmediate(playerObject);
             yield return null;
-            Assert.That(selection.Offers, Is.Empty);
-        }
-
-        [Test]
-        public void StopClient_WithoutStopAuthority_UnbindsAndClearsTheBuild()
-        {
-            var bootstrap = playerObject.AddComponent<NetworkPlayerBootstrap>();
-            typeof(NetworkPlayerBootstrap).GetField("playerBuildRuntime", BindingFlags.Instance | BindingFlags.NonPublic)
-                .SetValue(bootstrap, build);
-            typeof(NetworkPlayerBootstrap).GetField("modifierSelection", BindingFlags.Instance | BindingFlags.NonPublic)
-                .SetValue(bootstrap, selection);
-            selection.Bind(build);
-            Assert.That(selection.Select(0).Succeeded, Is.True);
-            bootstrap.OnStopClient();
-            Assert.That(selection.BoundBuild, Is.Null);
-            Assert.That(selection.Offers, Is.Empty);
-            Assert.That(build.IsBuildActive, Is.False);
-            Assert.That(build.EquipmentCount, Is.Zero);
-            // Both callbacks can arrive; cleanup must remain idempotent.
-            Assert.DoesNotThrow(() => bootstrap.OnStopAuthority());
-        }
-
-        [Test]
-        public void TooFewOffers_ReportsOnceAndKeepsSelectionEmpty()
-        {
-            equipmentDB.Equipments = equipmentDB.Equipments.Take(2).ToArray();
-            LogAssert.Expect(LogType.Error, new System.Text.RegularExpressions.Regex("Modifier selection:.*2 eligible cards"));
-            selection.Bind(build);
-            Assert.That(selection.Offers, Is.Empty);
-            selection.Bind(build);
             Assert.That(selection.Select(0).Succeeded, Is.False);
-            Assert.That(build.EquipmentCount, Is.Zero);
+            Assert.That(requests, Is.Zero);
         }
 
         private static T Asset<T>(string path) where T : UnityEngine.Object
@@ -266,24 +168,7 @@ namespace MonsterSupergroup.Gameplay.Tests
 
         private sealed class FixedRandom : IRandomSource
         {
-            private readonly float value;
-            public FixedRandom(float value) => this.value = value;
-            public float Next01() => value;
-        }
-
-        private sealed class SeededRandom : IRandomSource
-        {
-            private readonly System.Random random;
-            public SeededRandom(int seed) => random = new System.Random(seed);
-            public float Next01() => (float)random.NextDouble();
-        }
-
-        private sealed class Target : ICombatTarget
-        {
-            public int Health { get; private set; } = 100;
-            public bool IsAlive => Health > 0;
-            public DamageInfo ReceiveDamage(DamageInfo damage) { Health -= damage.Value; return damage; }
-            public StatusApplicationResult ApplyStatus(StatusApplication application) => StatusApplicationResult.Rejected;
+            public float Next01() => 0.99f;
         }
     }
 }

@@ -1,4 +1,5 @@
 using Cysharp.Threading.Tasks;
+using MonsterSupergroup.Gameplay.Combat;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -14,6 +15,7 @@ namespace MonsterSupergroup.Gameplay.UI
 
         private void Start()
         {
+            if (GameplayRuntimeEnvironment.IsDedicatedServer || Instance != null) return;
             if (uiPrefab == null)
             {
                 Debug.LogError("GameplayUILoader requires a GameplayUIRoot prefab.", this);

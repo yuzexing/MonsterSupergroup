@@ -84,6 +84,18 @@ namespace MonsterSupergroup.NetworkCombat
         }
 
         [Server]
+        public bool SetPlayerUpgradeSelectionState(uint playerId, bool value)
+        {
+            bool previous = Gateway.Ledger.IsPlayerSelectingUpgrade(playerId);
+            if (!Gateway.Ledger.SetPlayerUpgradeSelectionState(playerId, value))
+                return false;
+            if (previous != value &&
+                Gateway.Ledger.TryGetState(playerId, out CanonicalEntityState state))
+                Broadcast(Gateway.CreateEntityUpdate(state));
+            return true;
+        }
+
+        [Server]
         public void ProcessSubmission(uint senderPlayerId, CombatSubmissionBatch batch)
         {
             Broadcast(Gateway.ProcessBatch(senderPlayerId, batch, NetworkTime.time));
@@ -94,6 +106,18 @@ namespace MonsterSupergroup.NetworkCombat
         {
             Broadcast(Gateway.HandleSourceDisconnected(sourcePlayerId, NetworkTime.time));
         }
+
+        [Server]
+        public CanonicalEntityState RestorePlayerState(uint entityId, PlayerRuntimeCheckpoint checkpoint)
+        {
+            CanonicalEntityState state = Gateway.Ledger.RestoreEntityState(entityId, checkpoint.Health);
+            Gateway.Statuses.RestoreTarget(checkpoint.PreviousAvatarId, entityId, checkpoint.Statuses, NetworkTime.time);
+            Broadcast(Gateway.CreateSnapshot());
+            return state;
+        }
+
+        [Server]
+        public void UnregisterEntity(uint entityId) => Broadcast(Gateway.UnregisterEntity(entityId));
 
         [ServerCallback]
         private void Update()

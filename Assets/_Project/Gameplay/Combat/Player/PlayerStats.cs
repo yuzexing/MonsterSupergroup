@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using Assets.Scripts.AstralShift.HellMaiden.Data;
 using AstralShift.HellMaiden.Combat;
 using AstralShift.HellMaiden.Combat.Hand;
-using AstralShift.HellMaiden.Data;
 using AstralShift.HellMaiden.Player.Attacks;
 
 namespace AstralShift.HellMaiden.Player
@@ -130,8 +129,6 @@ namespace AstralShift.HellMaiden.Player
 
 		public PlayerBaseStatsDatabase playerBaseStatsDatabase;
 
-		private PlayerMetaStatsDatabase _playerMetaStatsDatabase;
-
 		public int MaxHP => currentStats.maxHP;
 
 		public PlayerStatsMultipliers StatMultipliers => statMultipliers;
@@ -140,8 +137,24 @@ namespace AstralShift.HellMaiden.Player
 
 		public void Init()
 		{
-			// _playerMetaStatsDatabase = GameDirector.Instance.runtimeDB.MetaStatsDB;
-			CalculateMetaStats();
+			if (playerBaseStatsDatabase == null)
+				throw new InvalidOperationException("PlayerStats requires a base stats definition.");
+			Initialize(playerBaseStatsDatabase.values);
+		}
+
+		/// <summary>Initializes this player's accepted values without reading an account save.</summary>
+		public void Initialize(PlayerStatsValues values)
+		{
+			if (values.maxHP < 1)
+				throw new ArgumentOutOfRangeException(nameof(values), "Player MaxHP must be positive.");
+			baseStats = values;
+			baseStats.HP = baseStats.maxHP;
+			baseStats.maxDashCharges = baseStats.dashCharges;
+			statMultipliers ??= new PlayerStatsMultipliers();
+			statMultipliers.baseAttackStatsMultipliers ??= new AttackStatsMultipliers();
+			statMultipliers.attackStatsMultipliers ??= new AttackStatsMultipliers();
+			equipmentStatsMultipliers ??= new EquipmentStatsMultipliers();
+			statMultipliers.baseAttackStatsMultipliers.Reset();
 			currentStats = baseStats;
 			if (_playerPerkModifiers == null)
 			{
@@ -326,48 +339,15 @@ namespace AstralShift.HellMaiden.Player
 		public void UpdateMaxDashes()
 		{
 			currentStats.dashCharges = baseStats.dashCharges + StatMultipliers.extraDashCharges;
-			GameEvents.Instance.OnMaxDashesUpdate?.Invoke();
+			MaximumDashesChanged?.Invoke(currentStats.dashCharges);
 		}
+
+		public event Action<int> MaximumDashesChanged;
 
 		public float GetHealthPercentage()
 		{
 			return (float)currentStats.HP / (float)MaxHP;
 		}
 
-		private void CalculateMetaStats()
-		{
-			baseStats.maxHP = playerBaseStatsDatabase.values.maxHP + (int)GetMetaIncrementValue(MetaProgressionID.HP, 0f);
-			baseStats.HP = baseStats.maxHP;
-			baseStats.moveSpeed = playerBaseStatsDatabase.values.moveSpeed * (1f + GetMetaIncrementValue(MetaProgressionID.MOVESPEED, 0f));
-			baseStats.dashDistance = playerBaseStatsDatabase.values.dashDistance * (1f + GetMetaIncrementValue(MetaProgressionID.DASHDISTANCE, 0f));
-			baseStats.dashCooldown = playerBaseStatsDatabase.values.dashCooldown * (1f - GetMetaIncrementValue(MetaProgressionID.DASHCOOLDOWN, 0f));
-			baseStats.dashCharges = playerBaseStatsDatabase.values.dashCharges + (int)GetMetaIncrementValue(MetaProgressionID.DASHCHARGES, 0f);
-			baseStats.maxDashCharges = baseStats.dashCharges;
-			baseStats.pullArea = playerBaseStatsDatabase.values.pullArea * (1f + GetMetaIncrementValue(MetaProgressionID.PULLAREA, 0f));
-			baseStats.xpModifier = playerBaseStatsDatabase.values.xpModifier * (1f + GetMetaIncrementValue(MetaProgressionID.XPMODIFIER, 0f));
-			baseStats.dmgReduction = playerBaseStatsDatabase.values.dmgReduction * (1f + GetMetaIncrementValue(MetaProgressionID.DMGREDUCTION, 0f));
-			baseStats.cardsReRollsAmount = playerBaseStatsDatabase.values.cardsReRollsAmount + (int)GetMetaIncrementValue(MetaProgressionID.CARDREROLLS, 0f);
-			baseStats.cardBanishesAmount = playerBaseStatsDatabase.values.cardBanishesAmount + (int)GetMetaIncrementValue(MetaProgressionID.CARDBANISHES, 0f);
-			baseStats.perksRerollsAmount = playerBaseStatsDatabase.values.perksRerollsAmount + (int)GetMetaIncrementValue(MetaProgressionID.CHARMREROLLS, 0f);
-			StatMultipliers.baseAttackStatsMultipliers.Reset();
-			StatMultipliers.baseAttackStatsMultipliers.damage += GetMetaIncrementValue(MetaProgressionID.ATKDAMAGE, 0f);
-			StatMultipliers.baseAttackStatsMultipliers.critRate += GetMetaIncrementValue(MetaProgressionID.CRITRATE, 0f);
-			StatMultipliers.baseAttackStatsMultipliers.critDamage += GetMetaIncrementValue(MetaProgressionID.CRITMULTIPLIER, 0f);
-			StatMultipliers.baseAttackStatsMultipliers.speed += GetMetaIncrementValue(MetaProgressionID.ATKSPEED, 0f);
-			StatMultipliers.baseAttackStatsMultipliers.size += GetMetaIncrementValue(MetaProgressionID.ATKSIZE, 0f);
-			StatMultipliers.baseAttackStatsMultipliers.duration += GetMetaIncrementValue(MetaProgressionID.ATKDURATION, 0f);
-			StatMultipliers.baseAttackStatsMultipliers.projectileCountIncrement += (int)GetMetaIncrementValue(MetaProgressionID.PROJINCREMENT, 0f);
-			StatMultipliers.Reset();
-		}
-
-		private float GetMetaIncrementValue(MetaProgressionID metaProgressionID, float defaultValue)
-		{
-			int metaProgressionLevel = GameDataManager.GetMetaProgressionLevel(metaProgressionID);
-			if (metaProgressionLevel > 0)
-			{
-				return _playerMetaStatsDatabase.entries[metaProgressionID].levels[metaProgressionLevel - 1].increaseAmmount;
-			}
-			return defaultValue;
-		}
 	}
 }

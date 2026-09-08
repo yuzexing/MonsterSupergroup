@@ -1,9 +1,7 @@
 using AstralShift.HellMaiden;
 using AstralShift.HellMaiden.Combat.Hand.Data;
-using AstralShift.HellMaiden.Controllers;
 using AstralShift.HellMaiden.Items;
 using AstralShift.HellMaiden.Player;
-using AstralShift.Managers;
 using Mirror;
 using MonsterSupergroup.Gameplay.Combat;
 using UnityEngine;
@@ -19,8 +17,10 @@ namespace MonsterSupergroup.NetworkCombat
         [SerializeField] private PlayerMovement playerMovement;
         [SerializeField] private PlayerCombatantBinding combatantBinding;
 
-        private PlayerController_HMD ownerPlayerController;
+        private readonly LocalPlayerInputBinding ownerInput = new LocalPlayerInputBinding();
         private ModifierSelectionController modifierSelection;
+
+        public bool IsLocalOwnerBound => ownerInput.BoundPlayer != null;
 
         private void Awake()
         {
@@ -42,35 +42,53 @@ namespace MonsterSupergroup.NetworkCombat
 
             if (playerMovement != null)
             {
+                playerMovement.ConfigureNetworkLifecycle();
                 playerMovement.enabled = false;
             }
 
             combatantBinding?.SetLocalMutationAuthority(false);
         }
 
+        public void EnsurePlayerRuntimeInitialized()
+        {
+            if (playerMovement == null) playerMovement = GetComponent<PlayerMovement>();
+            if (playerMovement == null)
+                throw new System.InvalidOperationException("NetworkPlayerBootstrap requires PlayerMovement.");
+            playerMovement.ConfigureNetworkLifecycle();
+            playerMovement.EnsureRuntimeInitialized();
+        }
+
+        public override void OnStartServer()
+        {
+            base.OnStartServer();
+            EnsurePlayerRuntimeInitialized();
+        }
+
         public override void OnStartClient()
         {
             base.OnStartClient();
+            EnsurePlayerRuntimeInitialized();
             if (playerMovement != null)
             {
-                playerMovement.enabled = isOwned;
+                playerMovement.enabled = isOwned && !GameplayRuntimeEnvironment.IsDedicatedServer;
             }
 
-            combatantBinding?.SetLocalMutationAuthority(isOwned);
+            combatantBinding?.SetLocalMutationAuthority(isOwned && !GameplayRuntimeEnvironment.IsDedicatedServer);
         }
 
         public override void OnStartAuthority()
         {
             base.OnStartAuthority();
+            EnsurePlayerRuntimeInitialized();
+            if (GameplayRuntimeEnvironment.IsDedicatedServer) return;
             if (playerMovement != null)
             {
                 playerMovement.enabled = true;
             }
 
             combatantBinding?.SetLocalMutationAuthority(true);
-            combatantBinding?.Combatant?.ResetCombatant();
             EnsureLocalPlayerRegistration();
-            ActivateOwnerPlayerController();
+            ownerInput.Bind(playerMovement);
 
             if (playerBuildRuntime == null)
             {
@@ -91,7 +109,11 @@ namespace MonsterSupergroup.NetworkCombat
 
             try
             {
-                playerBuildRuntime.StartInitialBuild(database);
+                // The server already owns the host's canonical Build. A remote Owner
+                // creates the execution replica, populated by NetworkModifierSelection.
+                if (!playerBuildRuntime.IsBuildActive)
+                    playerBuildRuntime.StartInitialBuild(database);
+                playerBuildRuntime.SetWeaponExecutionEnabled(true);
                 modifierSelection?.Bind(playerBuildRuntime);
             }
             catch (System.Exception exception)
@@ -116,8 +138,8 @@ namespace MonsterSupergroup.NetworkCombat
         private void ReleaseLocalBuild()
         {
             modifierSelection?.Unbind();
-            ReleaseOwnerPlayerController();
-            playerBuildRuntime?.ClearBuild();
+            ownerInput.Dispose();
+            if (!isServer) playerBuildRuntime?.ClearBuild();
             if (LootManager.Instance != null && playerMovement != null)
             {
                 LootManager.Instance.UnRegisterLootCollector(playerMovement);
@@ -139,9 +161,10 @@ namespace MonsterSupergroup.NetworkCombat
         [ClientCallback]
         private void Update()
         {
-            if (isOwned)
+            if (isOwned && !GameplayRuntimeEnvironment.IsDedicatedServer)
             {
                 EnsureLocalPlayerRegistration();
+                ownerInput.Refresh();
             }
         }
 
@@ -168,54 +191,10 @@ namespace MonsterSupergroup.NetworkCombat
                 return runtimeDatabase;
             }
 
-            if (GameDirector.Instance != null &&
-                GameDirector.Instance.runtimeDB != null)
-            {
-                runtimeDatabase = GameDirector.Instance.runtimeDB;
-                return runtimeDatabase;
-            }
-
             runtimeDatabase = FindFirstObjectByType<RuntimeDB>();
             return runtimeDatabase;
         }
 
-        private void ActivateOwnerPlayerController()
-        {
-            if (ownerPlayerController != null)
-            {
-                return;
-            }
-
-            ControllerManager manager = ControllerManager.Instance;
-            if (manager == null || manager.Stack == null)
-            {
-                Debug.LogError(
-                    "NetworkPlayerBootstrap cannot activate PlayerController_HMD " +
-                    "before ControllerManager is initialized.",
-                    this);
-                return;
-            }
-
-            ownerPlayerController =
-                manager.OverrideGameController<PlayerController_HMD>();
-            if (ownerPlayerController == null)
-            {
-                Debug.LogError(
-                    "NetworkPlayerBootstrap requires a subscribed " +
-                    "PlayerController_HMD for the Owner Player.",
-                    this);
-            }
-        }
-
-        private void ReleaseOwnerPlayerController()
-        {
-            if (ownerPlayerController == null)
-            {
-                return;
-            }
-
-            ControllerManager.Instance?.ReleaseGameController(ownerPlayerController);
-            ownerPlayerController = null;
-        }
+        private void OnDestroy() => ownerInput.Dispose();
     }
 }

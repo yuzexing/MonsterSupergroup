@@ -5,6 +5,7 @@ using AstralShift.FSM;
 using AstralShift.HellMaiden.Audio;
 using AstralShift.HellMaiden.Combat;
 using AstralShift.HellMaiden.DevDebug;
+using AstralShift.HellMaiden.Player;
 using AstralShift.HellMaiden.Scenes;
 using AstralShift.HellMaiden.UI;
 using AstralShift.Managers;
@@ -15,6 +16,26 @@ namespace AstralShift.HellMaiden.Controllers
 {
 	public class PlayerController_HMD : GameController
 	{
+		public PlayerMovement BoundPlayer { get; private set; }
+
+		public void Bind(PlayerMovement player)
+		{
+			if (player == null) throw new ArgumentNullException(nameof(player));
+			EnsureInitialized();
+			if (BoundPlayer == player) return;
+			BoundPlayer?.ResetInputDirection();
+			BoundPlayer = player;
+			ResetInputValues();
+		}
+
+		public void Unbind(PlayerMovement player)
+		{
+			if (BoundPlayer != player) return;
+			BoundPlayer?.ResetInputDirection();
+			BoundPlayer?.DisableInteractor();
+			BoundPlayer = null;
+			ResetInputValues();
+		}
 		private Vector2 MovementDirection;
 
 		private bool blockMovement;
@@ -41,6 +62,7 @@ namespace AstralShift.HellMaiden.Controllers
 		{
 			get
 			{
+				if (BoundPlayer == null || PlayerState.IsBusy(BoundPlayer)) return true;
 				if (_stateMachine.GetState() != levelingUp)
 				{
 					return _stateMachine.GetState() == dying;
@@ -49,14 +71,20 @@ namespace AstralShift.HellMaiden.Controllers
 			}
 		}
 
-		private bool InHubState => _stateMachine.GetState() == hub;
+		private bool InHubState => _stateMachine != null && _stateMachine.GetState() == hub;
 
-		private bool InCombatState => _stateMachine.GetState() == combat;
+		private bool InCombatState => _stateMachine != null && _stateMachine.GetState() == combat;
 
-		public bool InLevelingUpState => _stateMachine.GetState() == levelingUp;
+		public bool InLevelingUpState => BoundPlayer != null && BoundPlayer.IsUpgradeSelectionLocked;
 
 		protected void Start()
 		{
+			EnsureInitialized();
+		}
+
+		private void EnsureInitialized()
+		{
+			if (_stateMachine != null) return;
 			_stateMachine = new StateMachine("[PlayerController]");
 			combat = new State("combat");
 			hub = new State("hub");
@@ -74,16 +102,18 @@ namespace AstralShift.HellMaiden.Controllers
 			_stateMachine.AddTransition(combat, dying);
 			_stateMachine.AddTransition(fadingOut, dying);
 			_stateMachine.AddTransition(levelingUp, dying);
-			// _stateMachine.SetInitialStateNoCallbacks((SceneMaster.Instance.CurrentSceneEnum == SceneEnum.Hub) ? hub : combat);
+			_stateMachine.SetInitialStateNoCallbacks(combat);
 			State state = dying;
 			state.onEnter = (Action)Delegate.Combine(state.onEnter, (Action)delegate
 			{
-				PauseManager.Instance.PausePausables();
+				if (BoundPlayer != null && !BoundPlayer.UsesNetworkLifecycle)
+					PauseManager.Instance?.PausePausables();
 			});
 			State state2 = dying;
 			state2.onExit = (Action)Delegate.Combine(state2.onExit, (Action)delegate
 			{
-				PauseManager.Instance.ResumePausables();
+				if (BoundPlayer != null && !BoundPlayer.UsesNetworkLifecycle)
+					PauseManager.Instance?.ResumePausables();
 			});
 			// GameEvents instance = GameEvents.Instance;
 			// instance.OnLevelIncrease = (Action<int>)Delegate.Combine(instance.OnLevelIncrease, new Action<int>(TransitionToLevelingUp));
@@ -105,15 +135,16 @@ namespace AstralShift.HellMaiden.Controllers
 			// instance3.OnBeforePlayerDeath = (Action)Delegate.Remove(instance3.OnBeforePlayerDeath, new Action(TransitionToDying));
 			// SceneMaster.Instance.OnSceneHideStartPersist -= TransitionToFadingOutState;
 			// SceneMaster.Instance.OnSceneHideFinishPersist -= TransitionToCombatOrHub;
-			ControllerManager.Instance.UnSubscribe(this);
+			ControllerManager.Instance?.UnSubscribe(this);
 		}
 
 		public override void Activate()
 		{
+			EnsureInitialized();
 			// MusicPlayer.Instance.SetSnapShot(MusicPlayer.SnapshotID.Normal);
 			base.Activate();
 			ResetInputValues();
-			// GameDirector.Instance.Player.ResetInputDirection();
+			// BoundPlayer?.ResetInputDirection();
 			if (InCombatState)
 			{
 				// ControllerLifetime.OnControllerChanged += PointerManager.Instance.SetBattlePointer;
@@ -129,7 +160,7 @@ namespace AstralShift.HellMaiden.Controllers
 				// PointerManager.Instance.HideMouseCursor();
 			}
 			BlockMovement(state: false);
-			// GameDirector.Instance.Player.EnableInteractor();
+			// BoundPlayer?.EnableInteractor();
 		}
 
 		public override void Deactivate()
@@ -144,7 +175,7 @@ namespace AstralShift.HellMaiden.Controllers
 				_enteredInCombatState = false;
 			}
 			BlockMovement(state: true);
-			GameDirector.Instance.Player.DisableInteractor();
+			BoundPlayer?.DisableInteractor();
 		}
 
 		private void BlockMovement(bool state)
@@ -162,26 +193,26 @@ namespace AstralShift.HellMaiden.Controllers
 		public override void RightStickHorizontal(InputActionEventData data)
 		{
 			AimDirection = new Vector2(data.GetAxis(), AimDirection.y);
-			GameDirector.Instance.Player.SetAimDirection(AimDirection);
+			BoundPlayer?.SetAimDirection(AimDirection);
 		}
 
 		public override void RightStickVertical(InputActionEventData data)
 		{
 			AimDirection = new Vector2(AimDirection.x, data.GetAxis());
-			GameDirector.Instance.Player.SetAimDirection(AimDirection);
+			BoundPlayer?.SetAimDirection(AimDirection);
 		}
 
 		public override void MousePosition(Vector2 value)
 		{
 			AimPosition = value;
-			GameDirector.Instance.Player.SetAimPosition(AimPosition);
+			BoundPlayer?.SetAimPosition(AimPosition);
 		}
 
 		public override void RightTrigger(InputActionEventData data)
 		{
 			if (!InBusyState && data.GetButton())
 			{
-				GameDirector.Instance.Player.Dash();
+				BoundPlayer?.Dash();
 			}
 		}
 
@@ -205,7 +236,7 @@ namespace AstralShift.HellMaiden.Controllers
 		{
 			if (data.eventType == InputActionEventType.ButtonJustPressed)
 			{
-				GameDirector.Instance.Player.Interact();
+				BoundPlayer?.Interact();
 			}
 		}
 
@@ -213,7 +244,7 @@ namespace AstralShift.HellMaiden.Controllers
 		{
 			if (!InBusyState && !InHubState && data.eventType == InputActionEventType.ButtonJustPressed)
 			{
-				GameDirector.Instance.Player.UltimateAction();
+				BoundPlayer?.UltimateAction();
 			}
 		}
 
@@ -226,7 +257,7 @@ namespace AstralShift.HellMaiden.Controllers
 			if (blockMovement)
 			{
 				MovementDirection = new Vector2(0f, 0f);
-				GameDirector.Instance.Player.SetDirection(MovementDirection);
+				BoundPlayer?.SetDirection(MovementDirection);
 				return;
 			}
 			if (data.IsCurrentInputSource(ControllerType.Joystick))
@@ -239,7 +270,7 @@ namespace AstralShift.HellMaiden.Controllers
 				MovementDirection = new Vector2(data.GetAxisRaw(), MovementDirection.y);
 				MovementDirection.Normalize();
 			}
-			GameDirector.Instance.Player.SetDirection(MovementDirection);
+			BoundPlayer?.SetDirection(MovementDirection);
 		}
 
 		public override void LeftStickVertical(InputActionEventData data)
@@ -247,7 +278,7 @@ namespace AstralShift.HellMaiden.Controllers
 			if (blockMovement)
 			{
 				MovementDirection = new Vector2(0f, 0f);
-				GameDirector.Instance.Player.SetDirection(MovementDirection);
+				BoundPlayer?.SetDirection(MovementDirection);
 				return;
 			}
 			if (data.IsCurrentInputSource(ControllerType.Joystick))
@@ -260,7 +291,7 @@ namespace AstralShift.HellMaiden.Controllers
 				MovementDirection = new Vector2(MovementDirection.x, data.GetAxisRaw() * 0.5f);
 				MovementDirection.Normalize();
 			}
-			GameDirector.Instance.Player.SetDirection(MovementDirection);
+			BoundPlayer?.SetDirection(MovementDirection);
 		}
 
 		private void TransitionToCombat()

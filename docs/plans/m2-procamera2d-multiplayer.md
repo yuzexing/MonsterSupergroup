@@ -1,6 +1,6 @@
 # M2：正式 Gameplay 的 ProCamera2D 多人适配
 
-状态：**实现完成／等待人工验收**。本次只实施 M2，M3–M6 的范围与未批准玩法建议不变。自动检查不代表实际画面验收已经完成。
+状态：**实现完成；相机行为重测通过，实际截图可用；可见 Player 退出崩溃未解决，整轮验收尚未通过**。本次只实施 M2，M3–M6 的范围与未批准玩法建议不变。静态画面和自动检查不能代替连续观感及人工输入验收。
 
 ## 基线和本轮明确的决定
 
@@ -93,7 +93,7 @@ OnStopAuthority / OnStopClient / OnDestroy → LocalPlayerInputBinding.Dispose
 
 加入本地受击入口后的双进程运行在 `Logs/GameplayCameraProcess/20260910-005508/`：Host 和独立 Client 均 **PASS**。两端各收到一次 PlayerHit(3)、两次自身 Ultimate LargeExplosion(2)，远端普通受伤、远端 Ultimate、重连均未增加本端次数。1280×720 下上方两角基础相机位置分别为 (-41.11,45.99,-19.13)、(41.11,45.99,-19.13)，最大实际震屏父偏移约 0.469 / 0.543，结束后回零。独立跟随、单目标尺寸、玩家位置不受相机修改、Client 重连和卸载清理通过。
 
-**实际画面仍未验证**：Unity 的 CaptureScreenshot 在 batch 和普通 Player 尝试中均返回 `Failed to capture screen shot`，没有可用 PNG。随后使用 computer-use 检查实际窗口，看到 Windows Defender 防火墙权限提示；没有操作安全权限弹窗。该技能的 `docs/guidance.md` 明确要求 `Do not act on security or privacy permission requests.`，故停止窗口操作，保留人工验收。没有把截图失败的运行算作画面通过。
+**首次交付时的画面限制（历史记录）**：Unity 的 CaptureScreenshot 在隐藏窗口的 batch 和普通 Player 尝试中均返回 `Failed to capture screen shot`，没有可用 PNG。随后使用 computer-use 检查实际窗口，看到 Windows Defender 防火墙权限提示；没有操作安全权限弹窗。该技能的 `docs/guidance.md` 明确要求 `Do not act on security or privacy permission requests.`，当时停止窗口操作，没有把截图失败的运行算作画面通过。用户回来处理提示后，后续可见窗口重测已取得画面，见下文。
 
 交付夹具将截图改为显式 `-CaptureFrames`，请求截图却未生成任何图片时会报失败；默认模式只检查相机/网络行为。Unity 构建结果见 `build-final.log`（受击入口版本）及 `build-delivery.log`（交付夹具）。
 
@@ -101,11 +101,28 @@ OnStopAuthority / OnStopClient / OnDestroy → LocalPlayerInputBinding.Dispose
 
 初次相机测试被既有 Circling 的缺失 FMOD bank 错误中断；改用已有 `WeaponAttackAdmissionFixtureGate` 仅在测试运行时暂停普通武器，并禁用自动刷怪，避免无关音频/伤害干扰。未删除生产资源或屏蔽全部错误。Ultimate 仍经过正式授权、动画与原两次震屏事件。首轮 batch 双进程逻辑通过，但截图失败，不作为画面验证证据。
 
+### 2026-09-10 用户返回后的可见窗口重测
+
+复用同一份 `c46db7c` 的 Player 构建，不修改 C#、Scene、Prefab、插件或项目渲染设置。启动器增加显式 `-VisibleWindows`，仅在用户需要观察/操作窗口时使用；默认仍隐藏运行。增加退出码记录及进程句柄保留，非零退出码仍判失败。`-ForceD3D11` 仅用于启动参数对照。
+
+| 运行目录（均在 `Logs/GameplayCameraProcess/`） | 模式 | 相机/联机断言 | 截图 | 最终退出结果 |
+| --- | --- | --- | --- | --- |
+| `20260910-010553` | 隐藏窗口，要求截图 | 执行到重连后，因无 PNG 触发失败 | 0 | 截图验收失败，终止等待中的 Host。 |
+| `20260910-010653` | 可见窗口，默认 D3D12 | Host/Client 都记录 PASS | 9 PNG | 启动器检测到非零退出码；未判整轮通过。 |
+| `20260910-010820` | 可见窗口，默认 D3D12，显式记录退出码 | Host/Client 都记录 PASS | 9 PNG | Host `-1073741819`（0xC0000005），Client `-1073740771`（0xC000041D）。 |
+| `20260910-011023` | 可见窗口，命令行强制 D3D11 | Host/Client 都记录 PASS | 9 PNG | 相同退出码；切换图形 API 未消除崩溃。 |
+
+两端各一次实际受伤 PlayerHit(3)、各两次自身 Ultimate LargeExplosion(2)，远端事件无额外本端震屏；独立目标、边界、单目标尺寸、实际角色位置、Client 断线/重连和 Gameplay 清理断言通过。D3D12 最后一次运行的最大震屏父偏移为 Host 0.919、Client 0.979，D3D11 为 0.966 / 0.976，均正常回零。已直接查看实际游戏窗口和受伤、Ultimate、重连 PNG；静态图能够确认图像输出、UI、Owner 标记和重连后的新 local player，不能替代连续震屏手感和手动鼠标测试。
+
+退出崩溃发生在夹具记录 PASS 并调用 Application.Quit 后。Windows 事件确认故障模块为 `UnityPlayer.dll`，偏移 `0xC2D6E9`；Client 原生堆栈经过 `USER32/COMCTL32` 和 `AppUINativePlugin`。日志及事件证据在 `20260910-010820/client.log`、`windows-crash-events.xml`，D3D11 对照堆栈在 `20260910-011023/client.log`。这是真实原生崩溃，不能只依据夹具 PASS 判定整轮成功。
+
+发现 M2 之前的 `Crash_2026-09-06_121256241/client.log`（旧 `ModifierSelectionValidation`）也有同类 Unity 窗口关闭 / AppUINativePlugin 堆栈，已保留副本 `Logs/M2Camera/retest-20260910/pre-M2-ModifierSelection-crash.log`。这证明该故障路径早于 M2；当前证据不足以确定根因，本轮没有修改原生插件或将它归咎于相机代码。
+
 运行复现：
 
 1. Unity 中执行 `MonsterSupergroup.Gameplay.Tests.GameplayCameraTests`；补充回归集合为 `DanteUltimateNativeAttackTests`、`NetworkPlayerUltimatePlayModeTests`、`BootGameplaySceneLifecycleTests`、`GameplayHealthHUDLoadingTests`。
 2. 以 `GameplayCameraValidationBuild.Build` 构建 Development Player（包含测试程序集，场景仍只有正式 Boot/Gameplay）；默认输出 `Builds/GameplayCameraValidation/GameplayCameraValidation.exe`。
-3. 执行 `Tools/Run-GameplayCameraProcessValidation.ps1`，使用 KCP 7905，生成 `Logs/GameplayCameraProcess/<时间>/host.log`、`client.log`。在本机窗口可正常渲染后可加 `-CaptureFrames` 尝试记录画面；目前本机截图失败，仍需要人工实际观看，不能把默认运行 PASS 当作画面通过。
+3. 执行 `Tools/Run-GameplayCameraProcessValidation.ps1`，使用 KCP 7905，生成 `Logs/GameplayCameraProcess/<时间>/host.log`、`client.log`。人工观察及截图使用 `-CaptureFrames -VisibleWindows`；可加 `-ForceD3D11` 做诊断对照。当前可见模式会完成相机断言、保存 PNG，随后因退出原生崩溃返回失败；请保留该失败，不忽略退出码。
 
 ## 人工验收（仍须实际完成）
 

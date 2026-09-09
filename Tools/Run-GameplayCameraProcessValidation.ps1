@@ -1,6 +1,8 @@
 param(
     [string]$Executable = 'Builds/GameplayCameraValidation/GameplayCameraValidation.exe',
-    [switch]$CaptureFrames
+    [switch]$CaptureFrames,
+    [switch]$VisibleWindows,
+    [switch]$ForceD3D11
 )
 $ErrorActionPreference = 'Stop'
 $projectRoot = Split-Path -Parent $PSScriptRoot
@@ -26,13 +28,20 @@ try {
         )
         if ($CaptureFrames) { $playerArguments += '--camera-capture-frames' }
         else { $playerArguments += '-batchmode' }
-        $processes += Start-Process -FilePath $Executable -WindowStyle Hidden -PassThru -ArgumentList $playerArguments
+        if ($ForceD3D11) { $playerArguments += '-force-d3d11' }
+        $windowStyle = if ($VisibleWindows) { 'Normal' } else { 'Hidden' }
+        $process = Start-Process -FilePath $Executable -WindowStyle $windowStyle -PassThru -ArgumentList $playerArguments
+        # Retain the handle before a short-lived player exits; otherwise ExitCode can be unavailable.
+        $null = $process.Handle
+        $processes += $process
     }
     $deadline = (Get-Date).AddSeconds(140)
     while (@($processes | Where-Object { -not $_.HasExited }).Count -gt 0) {
         if ((Get-Date) -gt $deadline) { throw 'Camera validation timed out.' }
         Start-Sleep -Milliseconds 250
     }
+    foreach ($process in $processes) { $process.WaitForExit() }
+    Write-Output ('Camera process exit codes: ' + (($processes | ForEach-Object { "PID=$($_.Id):$($_.ExitCode)" }) -join ', '))
     foreach ($role in @('host', 'client')) {
         if (-not (Select-String -LiteralPath (Join-Path $logDirectory ($role + '.log')) -SimpleMatch "[GameplayCameraProcess] role=$role result=PASS" -Quiet)) {
             throw "Camera validation failed for $role. See $logDirectory"

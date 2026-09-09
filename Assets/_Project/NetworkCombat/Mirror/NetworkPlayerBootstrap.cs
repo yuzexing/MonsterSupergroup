@@ -22,6 +22,11 @@ namespace MonsterSupergroup.NetworkCombat
 
         public bool IsLocalOwnerBound => ownerInput.BoundPlayer != null;
 
+        public void PlayLocalCameraShake(int presetIndex)
+        {
+            if (isOwned && isActiveAndEnabled) ownerInput.PlayCameraShake(presetIndex);
+        }
+
         private void Awake()
         {
             modifierSelection = GetComponent<ModifierSelectionController>();

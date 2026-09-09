@@ -1,5 +1,9 @@
 # Boot to Gameplay Multiplayer Combat Loop
 
+## 2026-09-10：M2 ProCamera2D 多人适配
+
+M2 在正式 Gameplay 原相机上接入 ProCamera2D、Shake、Numeric Boundaries 和 Zoom To Fit Targets，沿既有 Owner 输入绑定生命周期清理与重绑。用户确认 Ground=100×100 为地图范围，并批准本地实际受伤触发 PlayerHit。配置映射、源场景路径差异、验证证据及人工步骤见 [M2 移植记录](m2-procamera2d-multiplayer.md)。下方 M1 和其他切片保留为历史记录；M3–M6 不变。
+
 ## 2026-09-09～10：M1 怪物 Debug 列表
 
 当前状态：**实现完成／等待人工验收**。仅实施 M1，未推进镜头、击退、升级、选卡玩法或波次。以下自动验证通过不代表人工验收已完成。

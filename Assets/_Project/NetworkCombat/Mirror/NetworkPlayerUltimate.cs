@@ -264,7 +264,8 @@ namespace MonsterSupergroup.NetworkCombat
                 ownedRuntime.InitializeExternal(UltimateNativeDefinitionAdapter.ToNativeBaseStats(ultimateData),
                     UltimateNativeDefinitionAdapter.EncodeAbilityId(ultimateData.Id), intrinsicModifiers, build.PerkMultipliers,
                     null, services.EventIds, services.EventSink, services.TriggerGuard, services.TimeSource);
-                ownedAttack.ConfigureNativeUltimate(player, ownedRuntime, ultimateData);
+                ownedAttack.ConfigureNativeUltimate(player, ownedRuntime, ultimateData,
+                    GetComponent<NetworkPlayerBootstrap>().PlayLocalCameraShake);
                 ownedAttack.PresentationSpawned += HandleSpawn;
                 ownedAttack.PresentationTerminated += HandleTermination;
                 ownedAttack.NativeAttackCompleted += HandleCompleted;

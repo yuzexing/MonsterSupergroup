@@ -1,7 +1,7 @@
 using System;
 using AstralShift.HellMaiden.Controllers;
+using AstralShift.HellMaiden.CameraFX;
 using AstralShift.Managers;
-using Com.LuisPedroFonseca.ProCamera2D;
 using MonsterSupergroup.Gameplay.Combat;
 using UnityEngine;
 
@@ -13,7 +13,7 @@ namespace AstralShift.HellMaiden.Player
         private PlayerMovement player;
         private PlayerController_HMD controller;
         private ControllerManager controllerManager;
-        private ProCamera2D cameraRig;
+        private GameplayCameraRig cameraRig;
 
         public PlayerMovement BoundPlayer => player;
 
@@ -32,7 +32,8 @@ namespace AstralShift.HellMaiden.Player
 
         public void Refresh()
         {
-            if (player == null || GameplayRuntimeEnvironment.IsDedicatedServer) return;
+            if (player == null) { Dispose(); return; }
+            if (GameplayRuntimeEnvironment.IsDedicatedServer) return;
             if (controller == null)
             {
                 ControllerManager manager = ControllerManager.Instance;
@@ -51,16 +52,21 @@ namespace AstralShift.HellMaiden.Player
                     }
                 }
             }
-            // The current Gameplay scene uses a plain Camera. ProCamera's singleton
-            // getter throws when its optional rig is absent.
-            var availableRig = UnityEngine.Object.FindFirstObjectByType<ProCamera2D>();
+            var availableRig = UnityEngine.Object.FindFirstObjectByType<GameplayCameraRig>();
+            if (availableRig != null && !availableRig.isActiveAndEnabled) availableRig = null;
             if (cameraRig != availableRig)
             {
-                if (cameraRig != null) cameraRig.RemoveCameraTarget(player.transform);
+                if (cameraRig != null) cameraRig.ReleaseOwner(player);
                 cameraRig = availableRig;
-                if (cameraRig != null) cameraRig.AddCameraTarget(player.transform);
             }
+            // Refresh also repairs a camera enabled after its Owner, or replaced during scene loading.
+            if (cameraRig != null) cameraRig.BindOwner(player);
             player.SetInputCamera(cameraRig != null ? cameraRig.GameCamera : Camera.main);
+        }
+
+        public void PlayCameraShake(int presetIndex)
+        {
+            if (cameraRig != null) cameraRig.PlayShake(player, presetIndex);
         }
 
         public void Dispose()
@@ -70,9 +76,9 @@ namespace AstralShift.HellMaiden.Player
                 controllerManager?.ReleaseGameController(controller);
                 controller.Unbind(player);
             }
+            if (cameraRig != null) cameraRig.ReleaseOwner(player);
             if (player != null)
             {
-                if (cameraRig != null) cameraRig.RemoveCameraTarget(player.transform);
                 player.SetInputCamera(null);
                 player.SetLocalOwnerBound(false);
             }

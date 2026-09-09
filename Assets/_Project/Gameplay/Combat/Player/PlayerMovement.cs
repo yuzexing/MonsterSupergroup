@@ -13,8 +13,8 @@ using AstralShift.Helpers;
 using AstralShift.Managers;
 using AstralShift.QTI.Interactors;
 using Com.LuisPedroFonseca.ProCamera2D;
-using Cysharp.Threading.Tasks;
 using FMODUnity;
+using MonsterSupergroup.Gameplay.Combat;
 using UnityEngine;
 
 namespace AstralShift.HellMaiden.Player
@@ -111,13 +111,19 @@ namespace AstralShift.HellMaiden.Player
 
 		private float _currentDashDistance;
 
-		private bool _allowDash = true;
-
 		private bool _isDashInitialized;
 
 		private ActionBuffer _dashBuffer;
 
-		private const int ConsecutiveDashCooldownInMS = 150;
+		private PlayerDashRuntime _dashRuntime;
+		private Func<double> _dashClock;
+		private Func<DashMotionParameters, ulong> _tryCommitDashUse;
+		private PlayerStats _dashSubscribedStats;
+		private CombatantBehaviour _dashSubscribedCombatant;
+		private float _dashPeakSpeed;
+		private bool _dashUseStarted;
+		private bool _cancellingDash;
+		private uint _dashGeneration;
 
 		private List<Coroutine> _invulnerabilityCoroutines = new List<Coroutine>();
 
@@ -166,6 +172,8 @@ namespace AstralShift.HellMaiden.Player
 		private MaterialPropertyBlock _damagePropertyBlock;
 
 		private bool _ultimateCharge;
+		private Func<bool> _tryUseNativeUltimate;
+		private Func<bool> _hasNativeUltimateCharge;
 
 		public PlayerEffectResolver EffectVisualsResolver => playerEffectResolver;
 
@@ -182,6 +190,10 @@ namespace AstralShift.HellMaiden.Player
 		public float TotalDashTime => _totalDashTime;
 
 		public float DashDistance => _currentDashDistance;
+
+		public PlayerDashRuntime OwnerDashRuntime => _dashRuntime;
+
+		public ulong CurrentDashUseId { get; private set; }
 
 		public override float MoveSpeed => PlayerStats.currentStats.moveSpeed;
 
@@ -204,6 +216,7 @@ namespace AstralShift.HellMaiden.Player
 			}
 
 			IsUpgradeSelectionLocked = value;
+			if (value) CancelDash();
 			_currentInputDirection = Vector2.zero;
 			if (body != null)
 			{
@@ -227,7 +240,7 @@ namespace AstralShift.HellMaiden.Player
 			{
 				if (!DebugIsInvulnerable)
 				{
-					return _isInvulnerable || IsUpgradeSelectionLocked;
+					return _isInvulnerable || IsUpgradeSelectionLocked || (combatantBinding?.Combatant?.IsInvulnerable ?? false);
 				}
 				return true;
 			}
@@ -235,7 +248,19 @@ namespace AstralShift.HellMaiden.Player
 
 		public bool DebugIsInvulnerable { get; private set; }
 
-		public bool HasUltimateCharge => _ultimateCharge;
+		public bool HasUltimateCharge => _hasNativeUltimateCharge?.Invoke() ?? (!UsesNetworkLifecycle && _ultimateCharge);
+
+		public void BindUltimateInput(Func<bool> tryUse, Func<bool> hasCharge)
+		{
+			_tryUseNativeUltimate = tryUse ?? throw new System.ArgumentNullException(nameof(tryUse));
+			_hasNativeUltimateCharge = hasCharge ?? throw new System.ArgumentNullException(nameof(hasCharge));
+		}
+
+		public void UnbindUltimateInput()
+		{
+			_tryUseNativeUltimate = null;
+			_hasNativeUltimateCharge = null;
+		}
 
 		public event Action OnDashStart;
 
@@ -258,6 +283,7 @@ namespace AstralShift.HellMaiden.Player
 			IsLocalOwnerBound = value;
 			if (!value)
 			{
+				CancelDash();
 				ResetInputDirection();
 				DisableInteractor();
 			}
@@ -279,6 +305,114 @@ namespace AstralShift.HellMaiden.Player
 			if (_hitboxCollider != null) _defaultHitboxLayerMask = _hitboxCollider.excludeLayers;
 			if (_obstacleCollider != null) _defaultObstacleLayerMask = _obstacleCollider.excludeLayers;
 			IsRuntimeInitialized = true;
+			SubscribeDashSources();
+		}
+
+		public void BindDashRuntime(PlayerDashRuntime runtime, Func<double> now,
+			Func<DashMotionParameters, ulong> tryCommitUse)
+		{
+			if (runtime == null) throw new System.ArgumentNullException(nameof(runtime));
+			if (now == null) throw new System.ArgumentNullException(nameof(now));
+			if (tryCommitUse == null) throw new System.ArgumentNullException(nameof(tryCommitUse));
+			if (!ReferenceEquals(_dashRuntime, runtime)) UnbindDashRuntime();
+			_dashRuntime = runtime;
+			_dashClock = now;
+			_tryCommitDashUse = tryCommitUse;
+			SubscribeDashSources();
+			RefreshDashRuntime(out _);
+		}
+
+		public void UnbindDashRuntime()
+		{
+			CancelDash();
+			UnsubscribeDashSources();
+			_dashRuntime = null;
+			_dashClock = null;
+			_tryCommitDashUse = null;
+		}
+
+		private void SubscribeDashSources()
+		{
+			UnsubscribeDashSources();
+			if (_dashRuntime == null || !IsRuntimeInitialized) return;
+			_dashSubscribedStats = playerStats;
+			if (_dashSubscribedStats != null)
+			{
+				_dashSubscribedStats.MaximumDashesChanged += HandleMaximumDashesChanged;
+				HandleMaximumDashesChanged(_dashSubscribedStats.currentStats.maxDashCharges);
+			}
+			_dashSubscribedCombatant = combatantBinding != null ? combatantBinding.Combatant : null;
+			if (_dashSubscribedCombatant != null) _dashSubscribedCombatant.HealthChanged += HandleDashHealthChanged;
+		}
+
+		private void UnsubscribeDashSources()
+		{
+			if (_dashSubscribedStats != null) _dashSubscribedStats.MaximumDashesChanged -= HandleMaximumDashesChanged;
+			if (_dashSubscribedCombatant != null) _dashSubscribedCombatant.HealthChanged -= HandleDashHealthChanged;
+			_dashSubscribedStats = null;
+			_dashSubscribedCombatant = null;
+		}
+
+		private void HandleMaximumDashesChanged(int maximum)
+		{
+			_dashRuntime?.ConfigureCapacity(Math.Max(0, maximum));
+			SyncDashChargeMirror();
+		}
+
+		private void HandleDashHealthChanged(int current, int maximum)
+		{
+			if (current <= 0) CancelDash();
+		}
+
+		private bool RefreshDashRuntime(out double now)
+		{
+			now = 0d;
+			if (_dashRuntime == null || _dashClock == null) return false;
+			now = _dashClock();
+			if (double.IsNaN(now) || double.IsInfinity(now) || now < 0d) return false;
+			_dashRuntime.Refresh(now);
+			SyncDashChargeMirror();
+			return true;
+		}
+
+		private void SyncDashChargeMirror()
+		{
+			if (_dashRuntime != null && playerStats != null)
+				playerStats.currentStats.dashCharges = _dashRuntime.AvailableCharges;
+		}
+
+		private bool CanExecuteDash => isActiveAndEnabled && IsRuntimeInitialized && !_cancellingDash &&
+			_dashRuntime != null && _tryCommitDashUse != null && !IsUpgradeSelectionLocked &&
+			combatantBinding != null && combatantBinding.IsAlive && (!UsesNetworkLifecycle || IsLocalOwnerBound);
+
+		private bool CanCommitDash => CanExecuteDash && RefreshDashRuntime(out double now) &&
+			_dashRuntime.AvailableCharges > 0 && now >= _dashRuntime.NextUseAt;
+
+		public void CancelDash(ulong expectedUseId = 0)
+		{
+			if (_cancellingDash || (expectedUseId != 0 && expectedUseId != CurrentDashUseId)) return;
+			_cancellingDash = true;
+			try
+			{
+				_dashGeneration++;
+				_dashBuffer.Consume();
+				if (_stateMachine != null && _stateMachine.GetState() == Dashing)
+					_stateMachine.MakeTransition(Moving);
+				else FinishDashUse();
+				_isDashInitialized = false;
+				_dashElapsedTime = 0f;
+				if (body != null) body.linearVelocity = Vector2.zero;
+			}
+			finally { _cancellingDash = false; }
+		}
+
+		private void FinishDashUse()
+		{
+			SetDefaultLayerMask();
+			bool started = _dashUseStarted;
+			_dashUseStarted = false;
+			try { if (started) OnDashEnd?.Invoke(); }
+			finally { CurrentDashUseId = 0; }
 		}
 
 		public override void Awake()
@@ -354,6 +488,8 @@ namespace AstralShift.HellMaiden.Player
 
 		protected override void OnDestroy()
 		{
+			UnbindDashRuntime();
+			UnbindUltimateInput();
 			SetUpgradeSelectionLocked(false);
 			UnSubscribeSceneEvents();
 			if (autoAim != null)
@@ -450,12 +586,15 @@ namespace AstralShift.HellMaiden.Player
 
 		private void Update()
 		{
+			RefreshDashRuntime(out _);
+			if (_stateMachine != null && _stateMachine.GetState() == Dashing && !CanExecuteDash) CancelDash();
 			if (!IsRuntimeInitialized || IsUpgradeSelectionLocked) return;
 			_stateMachine.UpdateTick();
 		}
 
 		private void FixedUpdate()
 		{
+			if (_stateMachine != null && _stateMachine.GetState() == Dashing && !CanExecuteDash) CancelDash();
 			if (!IsRuntimeInitialized) return;
 			if (IsUpgradeSelectionLocked)
 			{
@@ -514,11 +653,9 @@ namespace AstralShift.HellMaiden.Player
 
 		public void Dash()
 		{
-			if (IsUpgradeSelectionLocked) return;
-			if (PlayerStats.currentStats.dashCharges > 0 && _allowDash)
-			{
-				_stateMachine.MakeTransition(Dashing);
-			}
+			if (!CanCommitDash || _stateMachine == null) return;
+			State current = _stateMachine.GetState();
+			if (current == Moving || current == Hurt) _stateMachine.MakeTransition(Dashing);
 		}
 
 		private void OnFixedUpdateMoving()
@@ -539,35 +676,46 @@ namespace AstralShift.HellMaiden.Player
 
 		private void OnEnterDashing()
 		{
-			PlayerStats.currentStats.dashCharges--;
+			_dashGeneration++;
+			CurrentDashUseId = 0;
+			_dashUseStarted = false;
 			_isDashInitialized = false;
 			_dashBuffer.Record();
 		}
 
-		private void InitializeDash()
+		private bool InitializeDash()
 		{
+			if (!CanCommitDash) return false;
+			Vector2 direction = _currentInputDirection != Vector2.zero ? _currentInputDirection : _previousInputDirection;
+			return TryGetDashMotionParameters(direction, transform.position, out DashMotionParameters motion) && SetDashParameters(motion);
+		}
+
+		/// <summary>Resolve this avatar's authored dash geometry without ownership, charge, or FSM mutations.</summary>
+		public bool TryGetDashMotionParameters(Vector2 direction, Vector2 startPosition, out DashMotionParameters parameters)
+		{
+			parameters = default;
+			if (!IsRuntimeInitialized || playerStats == null) return false;
 			float dashDistance = PlayerStats.currentStats.dashDistance;
-			_dashDirection = ((_currentInputDirection != Vector2.zero) ? _currentInputDirection : _previousInputDirection);
-			Vector2 normalized = _dashDirection.normalized;
-			Vector2 vector = base.transform.position;
+			Vector2 normalized = direction.normalized;
+			Vector2 vector = startPosition;
+			if (!IsFiniteDashValue(dashDistance) || dashDistance < 0f || !IsFiniteDashValue(vector.x) ||
+				!IsFiniteDashValue(vector.y) || !IsFiniteDashValue(normalized.x) || !IsFiniteDashValue(normalized.y) ||
+				normalized.sqrMagnitude <= 0f) return false;
 			RaycastHit2D[] array = Physics2D.RaycastAll(vector, normalized, dashDistance, obstacleLayerMask);
 			if (array.Length == 0)
 			{
-				SetDashLayerMask();
-				SetDashParameters(dashDistance);
-				return;
+				return TryCreateDashMotion(vector, normalized, dashDistance, out parameters);
 			}
 			for (int i = 0; i < array.Length; i++)
 			{
 				if ((bool)array[i].collider && ((1 << array[i].collider.gameObject.layer) & (int)edgeLayerMask) != 0)
 				{
 					int num = Mathf.Max(i - 1, 0);
-					SetDashParameters(Vector2.Distance(vector, array[num].point));
-					return;
+					return TryCreateDashMotion(vector, normalized, Vector2.Distance(vector, array[num].point), out parameters);
 				}
 			}
-			float num2 = Mathf.Max(_obstacleCollider.transform.lossyScale.x, _obstacleCollider.transform.lossyScale.y);
-			float num3 = _obstacleCollider.radius * num2;
+			float num2 = _obstacleCollider != null ? Mathf.Max(_obstacleCollider.transform.lossyScale.x, _obstacleCollider.transform.lossyScale.y) : 1f;
+			float num3 = _obstacleCollider != null ? _obstacleCollider.radius * num2 : 0f;
 			float num4 = dashDistance;
 			for (int j = 0; j <= array.Length; j++)
 			{
@@ -588,26 +736,56 @@ namespace AstralShift.HellMaiden.Player
 				}
 				num4 = Mathf.Max(num5 - num3 - dashObstacleMargin, 0f);
 			}
-			SetDashLayerMask();
-			SetDashParameters(num4);
+			return TryCreateDashMotion(vector, normalized, num4, out parameters);
 		}
 
-		private void SetDashParameters(float distance)
+		private bool TryCreateDashMotion(Vector2 start, Vector2 direction, float distance, out DashMotionParameters motion)
 		{
-			if (!Mathf.Approximately(_currentDashDistance, distance))
-			{
-				_currentDashDistance = distance;
-				_totalDashTime = GetDashTotalTime(distance, PlayerStats.currentStats.dashSpeed, dashCurve);
-			}
+			motion = default;
+			float speed = PlayerStats.currentStats.dashSpeed;
+			float duration = GetDashTotalTime(distance, speed, dashCurve);
+			if (!IsFiniteDashValue(duration) || duration < 0f) return false;
+			motion = new DashMotionParameters(start, direction, distance, duration, speed);
+			return true;
+		}
+
+		private bool SetDashParameters(DashMotionParameters motion)
+		{
+			if (!CanCommitDash) return false;
+			uint generation = _dashGeneration;
+			ulong useId;
+			try { useId = _tryCommitDashUse(motion); }
+			catch { CancelDash(); throw; }
+			SyncDashChargeMirror();
+			if (useId == 0 || generation != _dashGeneration || !CanExecuteDash || _stateMachine.GetState() != Dashing) return false;
+			CurrentDashUseId = useId;
+			_currentDashDistance = motion.Distance;
+			_totalDashTime = motion.Duration;
+			_dashPeakSpeed = motion.PeakSpeed;
+			_dashDirection = motion.Direction;
 			_dashElapsedTime = 0f;
-			RuntimeManager.PlayOneShotAttached(dashAudio, base.gameObject);
-			GameEvents.Instance.DashUsed?.Invoke(PlayerStats.currentStats.dashCharges);
-			this.OnDashStart?.Invoke();
-			ApplyDashChargeCooldown();
+			_dashUseStarted = true;
+			SetDashLayerMask();
+			try
+			{
+				if (!dashAudio.IsNull) RuntimeManager.PlayOneShotAttached(dashAudio, base.gameObject);
+				Action onStart = OnDashStart;
+				if (onStart != null)
+					foreach (Action callback in onStart.GetInvocationList())
+					{
+						if (generation != _dashGeneration || CurrentDashUseId != useId || !CanExecuteDash) break;
+						callback();
+					}
+			}
+			catch { CancelDash(); throw; }
+			return generation == _dashGeneration && CurrentDashUseId == useId && CanExecuteDash && _stateMachine.GetState() == Dashing;
 		}
 
 		private float GetDashTotalTime(float distance, float peakSpeed, AnimationCurve curve, int samples = 100)
 		{
+			if (!IsFiniteDashValue(distance) || distance < 0f || !IsFiniteDashValue(peakSpeed) || peakSpeed <= 0f || curve == null || samples < 1)
+				return float.NaN;
+			if (distance == 0f) return 0f;
 			float num = 0f;
 			float num2 = 1f / (float)samples;
 			for (int i = 0; i < samples; i++)
@@ -620,19 +798,22 @@ namespace AstralShift.HellMaiden.Player
 				value = Mathf.Clamp01(value);
 				num += (value + value2) * 0.5f * num2;
 			}
-			return distance / (peakSpeed * num);
+			return num > 0f && IsFiniteDashValue(num) ? distance / (peakSpeed * num) : float.NaN;
 		}
+
+		private static bool IsFiniteDashValue(float value) => !float.IsNaN(value) && !float.IsInfinity(value);
 
 		private void SetDashLayerMask()
 		{
-			_hitboxCollider.excludeLayers = dashExclusionLayerMask;
-			_obstacleCollider.excludeLayers = dashExclusionLayerMask;
+			if (_hitboxCollider != null) _hitboxCollider.excludeLayers = dashExclusionLayerMask;
+			if (_obstacleCollider != null) _obstacleCollider.excludeLayers = dashExclusionLayerMask;
 		}
 
 		private void SetDefaultLayerMask()
 		{
-			_hitboxCollider.excludeLayers = _defaultHitboxLayerMask;
-			_obstacleCollider.excludeLayers = _defaultObstacleLayerMask;
+			if (!IsRuntimeInitialized) return;
+			if (_hitboxCollider != null) _hitboxCollider.excludeLayers = _defaultHitboxLayerMask;
+			if (_obstacleCollider != null) _obstacleCollider.excludeLayers = _defaultObstacleLayerMask;
 		}
 
 		private void OnFixedUpdateDashing()
@@ -643,14 +824,16 @@ namespace AstralShift.HellMaiden.Player
 				{
 					_dashBuffer.Consume();
 					_isDashInitialized = true;
-					InitializeDash();
+					if (!InitializeDash()) { CancelDash(); return; }
 				}
+				if (!CanExecuteDash || CurrentDashUseId == 0 || _stateMachine.GetState() != Dashing) return;
+				if (_totalDashTime <= 0f) { _stateMachine.MakeTransition(Moving); return; }
 				_dashElapsedTime += Time.fixedDeltaTime;
 				float value = _dashElapsedTime / _totalDashTime;
 				value = Mathf.Clamp01(value);
 				float value2 = dashCurve.Evaluate(value);
 				value2 = Mathf.Clamp01(value2);
-				body.linearVelocity = _dashDirection.normalized * (PlayerStats.currentStats.dashSpeed * value2);
+				body.linearVelocity = _dashDirection * (_dashPeakSpeed * value2);
 				if (value >= 1f)
 				{
 					_stateMachine.MakeTransition(Moving);
@@ -660,30 +843,20 @@ namespace AstralShift.HellMaiden.Player
 
 		private void OnLateUpdateDashing()
 		{
-			playerAnimator.Dash(base.FacingDirection.x, base.FacingDirection.y);
+			if (playerAnimator != null) playerAnimator.Dash(base.FacingDirection.x, base.FacingDirection.y);
 		}
 
 		private void OnExitDashing()
 		{
-			SetDefaultLayerMask();
-			body.linearVelocity = _currentInputDirection.normalized * PlayerStats.currentStats.moveSpeed;
-			this.OnDashEnd?.Invoke();
-			ApplyConsecutiveDashCooldown();
+			_dashGeneration++;
+			_dashBuffer.Consume();
+			_isDashInitialized = false;
+			if (body != null)
+				body.linearVelocity = CanExecuteDash ? _currentInputDirection.normalized * PlayerStats.currentStats.moveSpeed : Vector2.zero;
+			FinishDashUse();
 		}
 
-		private async void ApplyDashChargeCooldown()
-		{
-			await UniTask.Delay((int)(PlayerStats.currentStats.dashCooldown * 1000f));
-			PlayerStats.currentStats.dashCharges++;
-			GameEvents.Instance?.DashRestored?.Invoke(PlayerStats.currentStats.dashCharges);
-		}
-
-		private async void ApplyConsecutiveDashCooldown()
-		{
-			_allowDash = false;
-			await UniTask.Delay(150);
-			_allowDash = true;
-		}
+		private void OnDisable() => CancelDash();
 
 		public void BruteforceKnockBack(Vector2 attackPosition, KnockbackSettings settings)
 		{
@@ -973,6 +1146,7 @@ namespace AstralShift.HellMaiden.Player
 
 		private void OnEnterDead()
 		{
+			CancelDash();
 			Died?.Invoke();
 			if (!UsesNetworkLifecycle) GameEvents.Instance?.OnBeforePlayerDeath?.Invoke();
 			RuntimeManager.PlayOneShot(deadSound);
@@ -995,6 +1169,7 @@ namespace AstralShift.HellMaiden.Player
 
 		public void GiveUp()
 		{
+			CancelDash();
 			_stateMachine.MakeTransition(GivingUp);
 		}
 
@@ -1023,18 +1198,29 @@ namespace AstralShift.HellMaiden.Player
 
 		public void GainUltimateCharge()
 		{
+			if (UsesNetworkLifecycle)
+				throw new InvalidOperationException("Network Ultimate charge must be granted by the server reward entry.");
 			_ultimateCharge = true;
 			GameEvents.Instance.UltimateGained?.Invoke();
 		}
 
 		public void ResetUltimateCharge()
 		{
+			if (UsesNetworkLifecycle)
+				throw new InvalidOperationException("Network Ultimate charge belongs to the player runtime checkpoint.");
 			_ultimateCharge = false;
 		}
 
 		public void UltimateAction()
 		{
 			if (IsUpgradeSelectionLocked) return;
+			if (_tryUseNativeUltimate != null)
+			{
+				if (isActiveAndEnabled && IsRuntimeInitialized && (!UsesNetworkLifecycle || IsLocalOwnerBound) &&
+					combatantBinding.Combatant.IsAlive) _tryUseNativeUltimate();
+				return;
+			}
+			if (UsesNetworkLifecycle) return;
 			if (_ultimateCharge)
 			{
 				_ultimateCharge = false;

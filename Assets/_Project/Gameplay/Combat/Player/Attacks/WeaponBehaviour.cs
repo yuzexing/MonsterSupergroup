@@ -35,7 +35,8 @@ namespace AstralShift.HellMaiden.Player.Attacks
 
 		public PlayerMovement OwnerPlayer => player;
 
-		public bool CanAttack => player == null || !player.IsUpgradeSelectionLocked;
+		public bool CanAttack => player == null || (!player.IsUpgradeSelectionLocked &&
+			(!player.UsesNetworkLifecycle || (player.IsLocalOwnerBound && player.CombatantBinding.IsAlive)));
 
 		public PlayerCombatantBinding OwnerCombatant => player != null
 			? player.CombatantBinding
@@ -123,6 +124,10 @@ namespace AstralShift.HellMaiden.Player.Attacks
 
 		public event Action<float, bool> OnWeaponDamage;
 
+		public event Action<WeaponBehaviour, MonsterSupergroup.GAS.CombatEventId> NativeAttackStarted;
+
+		internal event Action<WeaponBehaviour, GasAttackSnapshot> NativeAttackCreated;
+
 		protected virtual CombatTags DefaultCombatTags => CombatTags.Attack;
 
 		public virtual void Init(uint id, AttackStats stats)
@@ -171,8 +176,28 @@ namespace AstralShift.HellMaiden.Player.Attacks
 
 		protected GasAttackSnapshot BeginNativeGasAttack()
 		{
-			return RequireNativeRuntime().BeginAttack(
+			GasAttackSnapshot attack = RequireNativeRuntime().BeginAttack(
 				RequireWeaponData().AttackTags);
+			try
+			{
+				NativeAttackCreated?.Invoke(this, attack);
+				NativeAttackStarted?.Invoke(this, attack.Context.EventId);
+				return attack;
+			}
+			catch
+			{
+				attack.Dispose();
+				throw;
+			}
+		}
+
+		/// <summary>Apply a restored deadline after native stats/modifiers have been rebuilt.</summary>
+		public virtual void RestoreCooldownRemaining(float remainingSeconds)
+		{
+			if (float.IsNaN(remainingSeconds) || float.IsInfinity(remainingSeconds) || remainingSeconds < 0f)
+				throw new ArgumentOutOfRangeException(nameof(remainingSeconds));
+			float cooldown = GetCooldown();
+			LastAttackElapsedTime = Mathf.Max(0f, cooldown - Mathf.Min(cooldown, remainingSeconds));
 		}
 
 		public LegacyDamageSource GetDamageSource(CombatTags tags = CombatTags.None)
@@ -220,6 +245,9 @@ namespace AstralShift.HellMaiden.Player.Attacks
 		{
 			return 1f / SpeedValue;
 		}
+
+		/// <summary>Time spent launching a root's sequence before its ordinary cooldown begins.</summary>
+		public virtual float GetAttackSequenceDuration() => 0f;
 
 		public virtual float GetAttacksPerSecond(AttackStats stats)
 		{

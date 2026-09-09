@@ -45,6 +45,11 @@ namespace AstralShift.HellMaiden.Player.Attacks
 
 		public UltimateData ultimateData;
 
+		public float InvulnerabilityDuration => invulnerabilitySafetyDelay;
+		public float SlowMotionPresentationDuration => slowMoSafetyDelay;
+		public float KnockbackRadius => knockbackRadius;
+		public KnockbackSettings InitialKnockbackSettings => knockbackSettings;
+
 		public bool CanZoom { get; set; }
 
 		protected override void EvaluateDynamicOnDamageStatModifiers(BaseEnemyController enemy)

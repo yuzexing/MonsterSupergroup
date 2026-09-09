@@ -36,6 +36,7 @@ namespace MonsterSupergroup.NetworkCombat
         private uint sequence;
         private uint buildRevision;
         private uint receivedRevision;
+        private uint ownerAttackBuildRevision;
         private ulong localEventId;
         private bool ownerReady;
         private bool ownerCanSelect;
@@ -59,6 +60,8 @@ namespace MonsterSupergroup.NetworkCombat
         public ulong PendingEventId { get; private set; }
         public ulong LocalEventId => localEventId;
         public uint BuildRevision => buildRevision;
+        public uint OwnerBuildRevision => ownerAttackBuildRevision;
+        public bool HasOwnerBaseline => receivedRevision != 0;
         public IReadOnlyList<ModifierOffer> ServerOffers => serverOffers;
 
         /// <summary>Called by the server spawn coordinator before AddPlayerForConnection invokes callbacks.</summary>
@@ -178,12 +181,13 @@ namespace MonsterSupergroup.NetworkCombat
                 buildRevision++;
             }
             serverWeapon = build.InitialWeapon;
+            GetComponent<NetworkWeaponCombatAdapter>()?.CaptureSummonMaturities();
         }
 
         public override void OnStartAuthority()
         {
             ownerReady = true;
-            build.SetWeaponExecutionEnabled(true);
+            build.SetWeaponExecutionEnabled(isServer || HasOwnerBaseline);
             presentation.Bind(build);
             player.SetUpgradeSelectionLocked(selecting);
             CmdRequestCurrentState(presentation.IsPresentationReady && presentation.isActiveAndEnabled);
@@ -377,12 +381,16 @@ namespace MonsterSupergroup.NetworkCombat
                 options[i] = new UpgradeOptionMessage { OptionId = serverOffers[i].OfferId,
                     EquipmentId = serverOffers[i].EquipmentId, LevelIndex = serverOffers[i].LevelIndex,
                     SlotIndex = serverOffers[i].TargetSlotIndex };
-            TargetReceiveState(connectionToClient, buildRevision, build.CaptureState(), PendingEventId, options);
+            TargetReceiveState(connectionToClient, buildRevision, build.CaptureState(),
+                GetComponent<NetworkWeaponCombatAdapter>()?.CaptureCooldowns() ?? Array.Empty<PlayerWeaponCooldownSnapshot>(),
+                GetComponent<NetworkWeaponCombatAdapter>()?.CaptureSummonMaturities() ?? Array.Empty<PlayerSummonMaturitySnapshot>(),
+                PendingEventId, options);
         }
 
         [TargetRpc]
         private void TargetReceiveState(NetworkConnectionToClient target, uint revision,
-            PlayerBuildSnapshot snapshot, ulong eventId, UpgradeOptionMessage[] options)
+            PlayerBuildSnapshot snapshot, PlayerWeaponCooldownSnapshot[] cooldowns,
+            PlayerSummonMaturitySnapshot[] summonMaturities, ulong eventId, UpgradeOptionMessage[] options)
         {
             if (!isOwned || !ownerReady) return;
             try
@@ -392,8 +400,12 @@ namespace MonsterSupergroup.NetworkCombat
                 {
                     build.SetWeaponExecutionEnabled(false);
                     build.ReconcileState(database, snapshot);
-                    build.SetWeaponExecutionEnabled(true);
                 }
+                var attacks = GetComponent<NetworkWeaponCombatAdapter>();
+                attacks?.ApplyOwnerSummonBaseline(summonMaturities);
+                attacks?.ApplyOwnerCooldownBaseline(cooldowns, NetworkTime.time);
+                ownerAttackBuildRevision = revision;
+                build.SetWeaponExecutionEnabled(true);
                 receivedRevision = revision;
                 presentation.Bind(build);
                 localEventId = eventId;
@@ -541,8 +553,16 @@ namespace MonsterSupergroup.NetworkCombat
             TryOpenNextOffer();
         }
 
-        public override void OnStopAuthority() => ReleaseOwner();
-        public override void OnStopClient() => ReleaseOwner();
+        public override void OnStopAuthority()
+        {
+            ownerAttackBuildRevision = 0;
+            ReleaseOwner();
+        }
+        public override void OnStopClient()
+        {
+            ownerAttackBuildRevision = 0;
+            ReleaseOwner();
+        }
 
         private void ReleaseOwner()
         {

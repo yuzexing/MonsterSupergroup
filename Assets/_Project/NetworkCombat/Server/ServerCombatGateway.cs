@@ -56,6 +56,8 @@ namespace MonsterSupergroup.NetworkCombat
 
         public CombatLedger Ledger { get; }
         public ServerStatusRegistry Statuses { get; }
+        public ServerAttackRegistry Attacks { get; } = new ServerAttackRegistry();
+        public ServerStatusDamageAdmissions StatusDamageAdmissions { get; } = new ServerStatusDamageAdmissions();
         public CombatGatewayMetrics Metrics { get; } = new CombatGatewayMetrics();
         public ProcessedEventCache ProcessedEvents { get; } = new ProcessedEventCache();
         public ClientEventIdentityRegistry ClientIdentities { get; } =
@@ -80,6 +82,8 @@ namespace MonsterSupergroup.NetworkCombat
 
         public void UnregisterClientIdentity(uint playerId)
         {
+            Attacks.UnregisterPlayer(playerId);
+            StatusDamageAdmissions.RemovePlayer(playerId);
             ClientIdentities.Unregister(playerId);
             BatchSequences.Remove(playerId);
         }
@@ -116,34 +120,50 @@ namespace MonsterSupergroup.NetworkCombat
 
             for (int i = 0; i < results.Length; i++)
             {
+                if (Attacks.RequiresAdmission(senderPlayerId) && ServerStatusDamageAdmissions.IsPeriodic(results[i]))
+                    continue;
+                ApplyResult(results[i]);
+            }
+
+            void ApplyResult(CombatResult result)
+            {
                 if (!ClientIdentities.Validate(
                         senderPlayerId,
-                        results[i].EventId,
-                        results[i].Sequence))
+                        result.EventId,
+                        result.Sequence))
                 {
                     Metrics.Reject(CombatRejectionReason.InvalidSequence);
-                    continue;
+                    return;
                 }
 
-                if (ProcessedEvents.IsProcessed(results[i].EventId, serverTime))
+                if (ProcessedEvents.IsProcessed(result.EventId, serverTime))
                 {
                     Metrics.Reject(CombatRejectionReason.DuplicateEvent);
-                    continue;
+                    return;
                 }
 
-                CombatApplyResult applied = Ledger.Apply(senderPlayerId, results[i]);
+                bool periodic = Attacks.RequiresAdmission(senderPlayerId) && ServerStatusDamageAdmissions.IsPeriodic(result);
+                CombatRejectionReason admission = periodic
+                    ? StatusDamageAdmissions.Validate(result, serverTime) : Attacks.Validate(result);
+                if (admission != CombatRejectionReason.None)
+                {
+                    Metrics.Reject(admission);
+                    return;
+                }
+                CombatApplyResult applied = Ledger.Apply(senderPlayerId, result);
                 if (!applied.Accepted)
                 {
                     Metrics.Reject(applied.Rejection);
                     if (applied.Rejection == CombatRejectionReason.SourceSelectingUpgrade)
-                        ProcessedEvents.MarkProcessed(results[i].EventId, serverTime);
-                    continue;
+                        ProcessedEvents.MarkProcessed(result.EventId, serverTime);
+                    return;
                 }
 
+                if (periodic) StatusDamageAdmissions.Commit(result);
                 Metrics.AcceptedCombatResults++;
-                ProcessedEvents.MarkProcessed(results[i].EventId, serverTime);
+                ProcessedEvents.MarkProcessed(result.EventId, serverTime);
                 entities[applied.State.EntityId] = applied.State;
-                RecordDamage(results[i]);
+                RecordDamage(result);
                 if (applied.IsConfirmedKill)
                 {
                     AddConfirmedKill(applied.Kill, kills);
@@ -168,6 +188,12 @@ namespace MonsterSupergroup.NetworkCombat
                     continue;
                 }
 
+                CombatRejectionReason admission = Attacks.Validate(mutations[i]);
+                if (admission != CombatRejectionReason.None)
+                {
+                    Metrics.Reject(admission);
+                    continue;
+                }
                 StatusMutationResult applied = Statuses.Apply(
                     senderPlayerId,
                     mutations[i],
@@ -181,10 +207,18 @@ namespace MonsterSupergroup.NetworkCombat
                 }
 
                 Metrics.AcceptedStatusMutations++;
+                if (Attacks.RequiresAdmission(senderPlayerId))
+                    StatusDamageAdmissions.Observe(mutations[i], applied.State, serverTime);
                 ProcessedEvents.MarkProcessed(mutations[i].EventId, serverTime);
                 statuses.Add(applied.State);
                 RecordStatus(mutations[i], applied.State);
             }
+
+            // A source tick can share a batch with the application that authorizes it.
+            // Ordinary hit/kill ordering remains unchanged; only periodic results wait here.
+            for (int i = 0; i < results.Length; i++)
+                if (Attacks.RequiresAdmission(senderPlayerId) && ServerStatusDamageAdmissions.IsPeriodic(results[i]))
+                    ApplyResult(results[i]);
 
             for (int i = 0; i < playerReports.Length; i++)
             {
@@ -232,6 +266,7 @@ namespace MonsterSupergroup.NetworkCombat
 
         public CanonicalWorldBatch Advance(double serverTime)
         {
+            StatusDamageAdmissions.Prune(serverTime);
             var entities = new Dictionary<uint, CanonicalEntityState>();
             var kills = new List<ConfirmedKill>();
             StatusAdvanceResult statusAdvance = Statuses.Advance(serverTime);
@@ -271,6 +306,7 @@ namespace MonsterSupergroup.NetworkCombat
             uint sourcePlayerId,
             double serverTime)
         {
+            StatusDamageAdmissions.RemovePlayer(sourcePlayerId);
             IReadOnlyList<CanonicalStatusState> changes =
                 Statuses.HandleSourceDisconnected(sourcePlayerId, serverTime);
             return CreateBatch(

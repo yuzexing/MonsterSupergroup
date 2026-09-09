@@ -33,31 +33,38 @@ namespace AstralShift.HellMaiden.Player.Attacks
 
 		private const int ChecksPerSecond = 30;
 
-		private Dictionary<int, CollisionEntry> _collisionEntriesMap;
+		private readonly Dictionary<int, CollisionEntry> _collisionEntriesMap = new Dictionary<int, CollisionEntry>();
 
-		private List<CollisionEntry> _collisionEntries;
+		private readonly List<CollisionEntry> _collisionEntries = new List<CollisionEntry>();
+
+		private uint _enableVersion;
+		private uint _entriesVersion;
 
 		public float HitInterval => hitInterval;
 
-		protected override void Awake()
+		public override void Init(Action<IDamageable> onHit)
 		{
-			base.Awake();
-			_collisionEntriesMap = new Dictionary<int, CollisionEntry>();
-			_collisionEntries = new List<CollisionEntry>();
+			_entriesVersion++;
+			CancelPendingRemovals();
+			_collisionEntriesMap.Clear();
+			_collisionEntries.Clear();
+			base.Init(onHit);
 		}
 
 		protected override void OnEnable()
 		{
+			_enableVersion++;
 			base.OnEnable();
 			_collisionEntriesMap.Clear();
 			_collisionEntries.Clear();
-			CancelAllRemovalTokens();
-			HitOvertimeRoutine(_enableCts.Token).Forget();
+			CancelPendingRemovals();
+			HitOvertimeRoutine(_enableCts.Token, _enableVersion).Forget();
 		}
 
 		protected override void OnDisable()
 		{
-			CancelAllRemovalTokens();
+			_enableVersion++;
+			CancelPendingRemovals();
 			_collisionEntriesMap.Clear();
 			_collisionEntries.Clear();
 			base.OnDisable();
@@ -70,6 +77,7 @@ namespace AstralShift.HellMaiden.Player.Attacks
 
 		protected virtual void OnTriggerEnter2D(Collider2D other)
 		{
+			if (!CanProcessHits) return;
 			if (other.TryGetComponent<IDamageable>(out var component))
 			{
 				int iD = component.GetID();
@@ -85,6 +93,7 @@ namespace AstralShift.HellMaiden.Player.Attacks
 
 		protected virtual void OnTriggerExit2D(Collider2D other)
 		{
+			if (!CanProcessHits) return;
 			if (other.TryGetComponent<IDamageable>(out var component))
 			{
 				RemoveEntryAsync(component.GetID(), timeoutAfterExit).Forget();
@@ -95,6 +104,7 @@ namespace AstralShift.HellMaiden.Player.Attacks
 		{
 			if (_removalCTS.TryGetValue(id, out var value))
 			{
+				_removalCTS.Remove(id);
 				value.Cancel();
 				value.Dispose();
 			}
@@ -121,7 +131,7 @@ namespace AstralShift.HellMaiden.Player.Attacks
 			catch (ObjectDisposedException)
 			{
 				localCts.Dispose();
-				_removalCTS.Remove(id);
+				RemoveOwnedToken(id, localCts);
 				return;
 			}
 			try
@@ -133,34 +143,65 @@ namespace AstralShift.HellMaiden.Player.Attacks
 			}
 			finally
 			{
-				_removalCTS.Remove(id);
+				RemoveOwnedToken(id, localCts);
 				localCts.Dispose();
 				linkedCts.Dispose();
 			}
 		}
 
-		private async UniTaskVoid HitOvertimeRoutine(CancellationToken token)
+		private bool CanProcessHits => isActiveAndEnabled && _onHit != null &&
+			_enableCts != null && !_enableCts.IsCancellationRequested;
+
+		private void RemoveOwnedToken(int id, CancellationTokenSource token)
 		{
-			while (!token.IsCancellationRequested)
+			if (_removalCTS.TryGetValue(id, out var current) && ReferenceEquals(current, token))
+				_removalCTS.Remove(id);
+		}
+
+		private void CancelPendingRemovals()
+		{
+			var pending = new List<CancellationTokenSource>(_removalCTS.Values);
+			_removalCTS.Clear();
+			foreach (CancellationTokenSource token in pending) { token.Cancel(); token.Dispose(); }
+		}
+
+		public override void ClearCallbacks()
+		{
+			_entriesVersion++;
+			base.ClearCallbacks();
+			CancelPendingRemovals();
+			_collisionEntriesMap.Clear();
+			_collisionEntries.Clear();
+		}
+
+		private async UniTaskVoid HitOvertimeRoutine(CancellationToken token, uint enableVersion)
+		{
+			while (!token.IsCancellationRequested && enableVersion == _enableVersion)
 			{
 				for (int num = _collisionEntries.Count - 1; num >= 0; num--)
 				{
 					CollisionEntry collisionEntry = _collisionEntries[num];
 					if (!(collisionEntry.Damageable as UnityEngine.Object) || !collisionEntry.Damageable.IsActive())
 					{
-						if (_removalCTS.TryGetValue(collisionEntry.Id, out var value))
-						{
-							value.Cancel();
-							value.Dispose();
-							_removalCTS.Remove(collisionEntry.Id);
+							if (_removalCTS.TryGetValue(collisionEntry.Id, out var value))
+							{
+								_removalCTS.Remove(collisionEntry.Id);
+								value.Cancel();
+								value.Dispose();
 						}
 						_collisionEntriesMap.Remove(collisionEntry.Id);
 						_collisionEntries.RemoveAt(num);
 					}
 					else if (Time.time - collisionEntry.Timestamp >= HitInterval)
 					{
-						_onHit?.Invoke(collisionEntry.Damageable);
 						collisionEntry.Timestamp = Time.time;
+						uint entriesVersion = _entriesVersion;
+						_onHit?.Invoke(collisionEntry.Damageable);
+						// Damage may synchronously clear a build, return this beam, and even reuse it.
+						if (token.IsCancellationRequested || enableVersion != _enableVersion)
+							return;
+						// Init can also replace callbacks and entries without disabling the object.
+						if (entriesVersion != _entriesVersion) break;
 					}
 				}
 				if (await UniTask.Delay(TimeSpan.FromSeconds(0.03333333507180214), ignoreTimeScale: false, PlayerLoopTiming.Update, token).SuppressCancellationThrow())

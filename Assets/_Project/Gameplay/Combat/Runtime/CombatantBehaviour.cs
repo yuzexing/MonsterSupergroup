@@ -23,8 +23,11 @@ namespace MonsterSupergroup.Gameplay.Combat
         private bool confirmedKillRaised;
         private bool upgradeSelectionInvulnerable;
         private bool canonicalInvulnerable;
+        private bool ultimateInvulnerable;
 
-        public bool IsInvulnerable => upgradeSelectionInvulnerable || canonicalInvulnerable;
+        public bool IsInvulnerable => upgradeSelectionInvulnerable || canonicalInvulnerable || ultimateInvulnerable;
+
+        public void SetUltimateInvulnerable(bool value) => ultimateInvulnerable = value;
 
         public void SetUpgradeSelectionInvulnerable(bool value) =>
             upgradeSelectionInvulnerable = value;

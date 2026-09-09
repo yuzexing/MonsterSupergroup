@@ -113,7 +113,9 @@ namespace MonsterSupergroup.NetworkCombat
                 // creates the execution replica, populated by NetworkModifierSelection.
                 if (!playerBuildRuntime.IsBuildActive)
                     playerBuildRuntime.StartInitialBuild(database);
-                playerBuildRuntime.SetWeaponExecutionEnabled(true);
+                var selectionAuthority = GetComponent<NetworkModifierSelection>();
+                playerBuildRuntime.SetWeaponExecutionEnabled(isServer || selectionAuthority == null ||
+                    selectionAuthority.HasOwnerBaseline);
                 modifierSelection?.Bind(playerBuildRuntime);
             }
             catch (System.Exception exception)

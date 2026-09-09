@@ -102,6 +102,15 @@ namespace MonsterSupergroup.NetworkCombat
         }
 
         [Server]
+        public void SetPlayerUltimateInvulnerable(uint playerId, bool value)
+        {
+            if (!Gateway.Ledger.TryGetState(playerId, out var previous) ||
+                !Gateway.Ledger.SetPlayerUltimateInvulnerable(playerId, value)) return;
+            if (Gateway.Ledger.TryGetState(playerId, out var current) && current.StateVersion != previous.StateVersion)
+                Broadcast(Gateway.CreateEntityUpdate(current));
+        }
+
+        [Server]
         public void HandleSourceDisconnected(uint sourcePlayerId)
         {
             Broadcast(Gateway.HandleSourceDisconnected(sourcePlayerId, NetworkTime.time));

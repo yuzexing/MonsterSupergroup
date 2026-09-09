@@ -249,6 +249,7 @@ namespace AstralShift.HellMaiden.Player
 			StatMultipliers.Reset();
 			equipmentStatsMultipliers.Reset();
 			EvaluatePlayerPerkModifiers();
+			UpdateMaxDashes();
 			UpdateMaxHealth();
 			EvaluateWeaponPerkModifiers();
 			EvaluateEquipmentPerkModifiers();
@@ -272,7 +273,6 @@ namespace AstralShift.HellMaiden.Player
 			currentStats.dashDistance = baseStats.dashDistance * (1f + StatMultipliers.dashDistanceMultiplier);
 			currentStats.dashSpeed = baseStats.dashSpeed * (1f + StatMultipliers.dashSpeedMultiplier);
 			currentStats.dashCooldown = baseStats.dashCooldown * (1f + StatMultipliers.dashCooldownMultiplier);
-			currentStats.maxDashCharges = baseStats.maxDashCharges + StatMultipliers.extraDashCharges;
 			currentStats.pullArea = baseStats.pullArea * (1f + StatMultipliers.xpPullRadiusMultiplier);
 			currentStats.xpModifier = baseStats.xpModifier * (1f + StatMultipliers.xpAmountMultiplier);
 			currentStats.dmgReduction = baseStats.dmgReduction + StatMultipliers.receivedDamageMultiplier;
@@ -338,8 +338,10 @@ namespace AstralShift.HellMaiden.Player
 
 		public void UpdateMaxDashes()
 		{
-			currentStats.dashCharges = baseStats.dashCharges + StatMultipliers.extraDashCharges;
-			MaximumDashesChanged?.Invoke(currentStats.dashCharges);
+			int maximum = Math.Max(0, baseStats.maxDashCharges + StatMultipliers.extraDashCharges);
+			if (currentStats.maxDashCharges == maximum) return;
+			currentStats.maxDashCharges = maximum;
+			MaximumDashesChanged?.Invoke(maximum);
 		}
 
 		public event Action<int> MaximumDashesChanged;

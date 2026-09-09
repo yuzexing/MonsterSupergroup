@@ -1,0 +1,47 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c732e61a0dd2970a7803dc3c14cf9415, type: 3}
+  m_Name: UltimateData_Dante
+  m_EditorClassIdentifier: 
+  id: 0
+  title: Dante's Inferno
+  description: Unleashes a fiery inferno upon surrounding enemies, incinerating them
+    instantly.
+  hasLocalization: 1
+  titleKey: ULT_Dante_Name
+  descriptionKey: ULT_Dante_Desc
+  ultimateAttackEvents: {fileID: 0}
+  ultimateAttackWeaponBehaviour: {fileID: 114470112387431263, guid: 3f72cb7200910214c8f59bd4f24f105a, type: 3}
+  baseStats:
+    damage: 100
+    critMultiplier: 1
+    critRate: 0
+    speed: 1
+    size: 1
+    duration: 1
+    projectileCount: 1
+    cameraShakeSettings:
+      mode: 0
+      shakePreset: {fileID: 0}
+      constantShakePreset: {fileID: 0}
+      strength: {x: 10, y: 10, z: 0}
+      duration: 0.5
+      vibrato: 10
+      randomness: 0.1
+      smoothness: 0.1
+      useRandomInitialAngle: 1
+      initialAngle: 0
+      rotation: {x: 0, y: 0, z: 0}
+      ignoreTimeScale: 0
+    cameraShakePerLevelIncrement: 0.1
+    knockbackSettings: {fileID: 11400000, guid: fa1ccdc3a358d964ba88355c94961878, type: 2}
+    damageType: 0

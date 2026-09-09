@@ -47,6 +47,8 @@ namespace MonsterSupergroup.Gameplay.Combat
         private long nextPerkHandle = 1;
         private bool initialized;
         private bool weaponExecutionEnabled = true;
+        private readonly List<PendingNativeAttack> pendingNativeAttacks =
+            new List<PendingNativeAttack>();
 
         public PlayerMovement Owner => owner;
         public int WeaponCount => weapons.Count;
@@ -249,6 +251,23 @@ namespace MonsterSupergroup.Gameplay.Combat
 		public event Action<ProjectilePresentationTermination>
 			ProjectilePresentationTerminated;
 
+        public event Action<MeleePresentationSpawn> MeleePresentationSpawned;
+        public event Action<MeleePresentationTermination> MeleePresentationTerminated;
+        public event Action<BeamPresentationSpawn> BeamPresentationSpawned;
+        public event Action<BeamPresentationAim> BeamPresentationAimChanged;
+        public event Action<BeamPresentationTermination> BeamPresentationTerminated;
+        public event Action<OrbitPresentationSpawn> OrbitPresentationSpawned;
+        public event Action<OrbitPresentationHiding> OrbitPresentationHiding;
+        public event Action<OrbitPresentationTermination> OrbitPresentationTerminated;
+        public event Action<TrailPresentationSpawn> TrailPresentationSpawned;
+        public event Action<TrailPresentationPoint> TrailPresentationPointAdded;
+        public event Action<TrailPresentationSamplingEnded> TrailPresentationSamplingEnded;
+        public event Action<TrailPresentationTermination> TrailPresentationTerminated;
+
+        public event Action<int, uint, CombatEventId> NativeAttackStarted;
+
+        public event Action<int, uint, CombatEventId> NativeAttackCompleted;
+
         private void Awake()
         {
             EnsureInitialized();
@@ -354,6 +373,8 @@ namespace MonsterSupergroup.Gameplay.Combat
 				weaponSlots[slotIndex] = entry;
 				AttachExistingEquipmentTo(entry);
 				SubscribeToPresentation(behaviour);
+                behaviour.NativeAttackStarted += HandleNativeAttackStarted;
+                behaviour.NativeAttackCreated += HandleNativeAttackCreated;
                 behaviour.gameObject.SetActive(true);
                 return behaviour;
             }
@@ -372,6 +393,8 @@ namespace MonsterSupergroup.Gameplay.Combat
                 modifiers.Clear();
                 if (behaviour != null)
                 {
+                    behaviour.NativeAttackStarted -= HandleNativeAttackStarted;
+                    behaviour.NativeAttackCreated -= HandleNativeAttackCreated;
                     Destroy(behaviour.gameObject);
                 }
 
@@ -426,10 +449,13 @@ namespace MonsterSupergroup.Gameplay.Combat
                 InitialWeapon = null;
             }
             entry.Behaviour.Deactivate();
+			entry.Behaviour.NativeAttackStarted -= HandleNativeAttackStarted;
+            entry.Behaviour.NativeAttackCreated -= HandleNativeAttackCreated;
 			UnsubscribeFromPresentation(entry.Behaviour);
             entry.Runtime.Shutdown();
             entry.Modifiers.Clear();
             Destroy(entry.Behaviour.gameObject);
+            PollNativeAttackCompletions();
             return true;
         }
 
@@ -918,31 +944,125 @@ namespace MonsterSupergroup.Gameplay.Combat
 
 		private void SubscribeToPresentation(WeaponBehaviour weapon)
 		{
-			if (!(weapon is HellMaidenProjectileAttackBehaviour projectile))
+			if (weapon is HellMaidenProjectileAttackBehaviour projectile)
 			{
-				return;
+				projectile.PresentationSpawned += HandlePresentationSpawned;
+				projectile.PresentationTerminated += HandlePresentationTerminated;
 			}
-
-			projectile.PresentationSpawned += HandlePresentationSpawned;
-			projectile.PresentationTerminated += HandlePresentationTerminated;
+            if (weapon is MeleeAttackBehaviour melee)
+            {
+                melee.PresentationSpawned += HandleMeleePresentationSpawned;
+                melee.PresentationTerminated += HandleMeleePresentationTerminated;
+            }
+            if (weapon is PlayerBeamAttackBehaviour beam)
+            {
+                beam.PresentationSpawned += HandleBeamPresentationSpawned;
+                beam.PresentationAimChanged += HandleBeamPresentationAimChanged;
+                beam.PresentationTerminated += HandleBeamPresentationTerminated;
+            }
+            if (weapon is CirclingAttackBehaviour circling)
+            {
+                circling.PresentationSpawned += HandleOrbitPresentationSpawned;
+                circling.PresentationHiding += HandleOrbitPresentationHiding;
+                circling.PresentationTerminated += HandleOrbitPresentationTerminated;
+            }
+            if (weapon is DashAttackBehaviour dash)
+            {
+                dash.PresentationSpawned += HandleTrailPresentationSpawned;
+                dash.PresentationPointAdded += HandleTrailPresentationPointAdded;
+                dash.PresentationSamplingEnded += HandleTrailPresentationSamplingEnded;
+                dash.PresentationTerminated += HandleTrailPresentationTerminated;
+            }
 		}
 
 		private void UnsubscribeFromPresentation(WeaponBehaviour weapon)
 		{
-			if (!(weapon is HellMaidenProjectileAttackBehaviour projectile))
+			if (weapon is HellMaidenProjectileAttackBehaviour projectile)
 			{
-				return;
+				projectile.PresentationSpawned -= HandlePresentationSpawned;
+				projectile.PresentationTerminated -= HandlePresentationTerminated;
 			}
-
-			projectile.PresentationSpawned -= HandlePresentationSpawned;
-			projectile.PresentationTerminated -= HandlePresentationTerminated;
+            if (weapon is MeleeAttackBehaviour melee)
+            {
+                melee.PresentationSpawned -= HandleMeleePresentationSpawned;
+                melee.PresentationTerminated -= HandleMeleePresentationTerminated;
+            }
+            if (weapon is PlayerBeamAttackBehaviour beam)
+            {
+                beam.PresentationSpawned -= HandleBeamPresentationSpawned;
+                beam.PresentationAimChanged -= HandleBeamPresentationAimChanged;
+                beam.PresentationTerminated -= HandleBeamPresentationTerminated;
+            }
+            if (weapon is CirclingAttackBehaviour circling)
+            {
+                circling.PresentationSpawned -= HandleOrbitPresentationSpawned;
+                circling.PresentationHiding -= HandleOrbitPresentationHiding;
+                circling.PresentationTerminated -= HandleOrbitPresentationTerminated;
+            }
+            if (weapon is DashAttackBehaviour dash)
+            {
+                dash.PresentationSpawned -= HandleTrailPresentationSpawned;
+                dash.PresentationPointAdded -= HandleTrailPresentationPointAdded;
+                dash.PresentationSamplingEnded -= HandleTrailPresentationSamplingEnded;
+                dash.PresentationTerminated -= HandleTrailPresentationTerminated;
+            }
 		}
+
+        private void HandleMeleePresentationSpawned(MeleePresentationSpawn spawn) =>
+            MeleePresentationSpawned?.Invoke(spawn);
+
+        private void HandleBeamPresentationSpawned(BeamPresentationSpawn spawn) => BeamPresentationSpawned?.Invoke(spawn);
+        private void HandleBeamPresentationAimChanged(BeamPresentationAim aim) => BeamPresentationAimChanged?.Invoke(aim);
+        private void HandleBeamPresentationTerminated(BeamPresentationTermination termination) => BeamPresentationTerminated?.Invoke(termination);
+        private void HandleOrbitPresentationSpawned(OrbitPresentationSpawn spawn) => OrbitPresentationSpawned?.Invoke(spawn);
+        private void HandleOrbitPresentationHiding(OrbitPresentationHiding hiding) => OrbitPresentationHiding?.Invoke(hiding);
+        private void HandleOrbitPresentationTerminated(OrbitPresentationTermination termination) => OrbitPresentationTerminated?.Invoke(termination);
+        private void HandleTrailPresentationSpawned(TrailPresentationSpawn spawn) => TrailPresentationSpawned?.Invoke(spawn);
+        private void HandleTrailPresentationPointAdded(TrailPresentationPoint point) => TrailPresentationPointAdded?.Invoke(point);
+        private void HandleTrailPresentationSamplingEnded(TrailPresentationSamplingEnded end) => TrailPresentationSamplingEnded?.Invoke(end);
+        private void HandleTrailPresentationTerminated(TrailPresentationTermination end) => TrailPresentationTerminated?.Invoke(end);
+
+        private void HandleMeleePresentationTerminated(MeleePresentationTermination termination) =>
+            MeleePresentationTerminated?.Invoke(termination);
 
 		private void HandlePresentationSpawned(
 			ProjectilePresentationSpawn spawn)
 		{
 			ProjectilePresentationSpawned?.Invoke(spawn);
 		}
+
+        private void HandleNativeAttackStarted(WeaponBehaviour weapon, CombatEventId eventId)
+        {
+            if (weapons.TryGetValue(weapon, out WeaponEntry entry))
+                NativeAttackStarted?.Invoke(entry.SlotIndex, entry.Data.ID, eventId);
+        }
+
+        private void HandleNativeAttackCreated(WeaponBehaviour weapon, AttackSnapshot attack)
+        {
+            if (weapons.TryGetValue(weapon, out WeaponEntry entry))
+                pendingNativeAttacks.Add(new PendingNativeAttack(
+                    entry.SlotIndex, entry.Data.ID, attack));
+        }
+
+        private void LateUpdate()
+        {
+            PollNativeAttackCompletions();
+        }
+
+        private void PollNativeAttackCompletions()
+        {
+            // The build outlives removed/disabled weapons. Observe without retaining a lease:
+            // delayed explosions may still use a snapshot after its projectile has returned.
+            for (int i = pendingNativeAttacks.Count - 1;
+                i >= 0 && i < pendingNativeAttacks.Count; i--)
+            {
+                PendingNativeAttack pending = pendingNativeAttacks[i];
+                if (!pending.Snapshot.IsDisposed) continue;
+                pendingNativeAttacks.RemoveAt(i);
+                NativeAttackCompleted?.Invoke(pending.SlotIndex, pending.WeaponId,
+                    pending.Snapshot.Context.EventId);
+            }
+        }
 
 		private void HandlePresentationTerminated(
 			ProjectilePresentationTermination termination)
@@ -967,6 +1087,7 @@ namespace MonsterSupergroup.Gameplay.Combat
 
             serviceProvider.ServicesChanged -= ConfigureCombatRuntimeServices;
             ClearBuild();
+            pendingNativeAttacks.Clear();
             initialized = false;
         }
 
@@ -996,6 +1117,20 @@ namespace MonsterSupergroup.Gameplay.Combat
             public WeaponData Data { get; }
             public RuntimeEquipmentModifiers Modifiers { get; }
             public int SlotIndex { get; }
+        }
+
+        private readonly struct PendingNativeAttack
+        {
+            public PendingNativeAttack(int slotIndex, uint weaponId, AttackSnapshot snapshot)
+            {
+                SlotIndex = slotIndex;
+                WeaponId = weaponId;
+                Snapshot = snapshot;
+            }
+
+            public int SlotIndex { get; }
+            public uint WeaponId { get; }
+            public AttackSnapshot Snapshot { get; }
         }
 
         private sealed class EquippedEquipment

@@ -17,6 +17,7 @@ namespace MonsterSupergroup.NetworkCombat
             CombatEntityAuthority.ServerCanonical;
 
         private bool statusObserved;
+        private ClientCombatCollector observedCollector;
         private uint localPlayerId;
         private uint targetOwnerPlayerId;
         private uint ownerReportVersion;
@@ -96,6 +97,7 @@ namespace MonsterSupergroup.NetworkCombat
         public override void OnStartClient()
         {
             base.OnStartClient();
+            GetComponent<NetworkPlayerBootstrap>()?.EnsurePlayerRuntimeInitialized();
             combatant.ConfigureEntityId(netId);
             combatant.ConfigureCanonicalConsequenceExecution(NetworkServer.active);
             combatant.ConfigureStatusExecution(new StatusExecutionScope(
@@ -123,6 +125,7 @@ namespace MonsterSupergroup.NetworkCombat
         public override void OnStartAuthority()
         {
             base.OnStartAuthority();
+            GetComponent<NetworkPlayerBootstrap>()?.EnsurePlayerRuntimeInitialized();
             if (authority != CombatEntityAuthority.OwnerFinal)
             {
                 return;
@@ -177,10 +180,7 @@ namespace MonsterSupergroup.NetworkCombat
         [ClientCallback]
         private void Update()
         {
-            if (!statusObserved)
-            {
-                TryObserveWithLocalCollector();
-            }
+            TryObserveWithLocalCollector();
 
             if (ownerReportPending)
             {
@@ -202,8 +202,10 @@ namespace MonsterSupergroup.NetworkCombat
             }
 
             combatant?.ClearStatusCombatEvents(localStatusEventSink);
+            if (combatant != null) observedCollector?.StopObserving(combatant.StatusController);
             localStatusEventSink = null;
             statusObserved = false;
+            observedCollector = null;
 
             base.OnStopClient();
         }
@@ -223,34 +225,30 @@ namespace MonsterSupergroup.NetworkCombat
 
         private void TryObserveWithLocalCollector()
         {
-            MirrorNetworkCombatBridge[] bridges =
-                FindObjectsByType<MirrorNetworkCombatBridge>(FindObjectsSortMode.None);
-            for (int i = 0; i < bridges.Length; i++)
+            MirrorNetworkCombatBridge bridge = NetworkClient.localPlayer != null
+                ? NetworkClient.localPlayer.GetComponent<MirrorNetworkCombatBridge>() : null;
+            if (bridge == null || !bridge.isOwned || bridge.Collector == null ||
+                (statusObserved && ReferenceEquals(observedCollector, bridge.Collector))) return;
+            observedCollector?.StopObserving(combatant.StatusController);
+            bridge.ObserveStatus(combatant.StatusController);
+            combatant.ConfigureStatusInstanceIds(
+                new CombatEventStatusInstanceIdSource(bridge.EventIds));
+            if (authority == CombatEntityAuthority.ServerCanonical)
             {
-                if (!bridges[i].isOwned || bridges[i].Collector == null)
-                {
-                    continue;
-                }
-
-                bridges[i].ObserveStatus(combatant.StatusController);
-                combatant.ConfigureStatusInstanceIds(
-                    new CombatEventStatusInstanceIdSource(bridges[i].EventIds));
-                if (authority == CombatEntityAuthority.ServerCanonical)
-                {
-                    localStatusEventSink = bridges[i].Collector;
-                    combatant.ConfigureStatusCombatEvents(
-                        bridges[i].EventIds,
-                        localStatusEventSink);
-                }
-                localPlayerId = bridges[i].OwnerPlayerId;
-                combatant.ConfigureStatusExecution(new StatusExecutionScope(
-                    false,
-                    NetworkServer.active,
-                    localPlayerId,
-                    targetOwnerPlayerId));
-                statusObserved = true;
-                return;
+                combatant.ClearStatusCombatEvents(localStatusEventSink);
+                localStatusEventSink = bridge.Collector;
+                combatant.ConfigureStatusCombatEvents(
+                    bridge.EventIds,
+                    localStatusEventSink);
             }
+            localPlayerId = bridge.OwnerPlayerId;
+            combatant.ConfigureStatusExecution(new StatusExecutionScope(
+                false,
+                NetworkServer.active,
+                localPlayerId,
+                targetOwnerPlayerId));
+            statusObserved = true;
+            observedCollector = bridge.Collector;
         }
 
         private void HandleCanonicalEntityChanged(CanonicalEntityState state)

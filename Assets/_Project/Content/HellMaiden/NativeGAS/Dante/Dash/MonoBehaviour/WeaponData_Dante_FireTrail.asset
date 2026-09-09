@@ -1,0 +1,67 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d49b6f84b3b09feb740257504c5fc1f, type: 3}
+  m_Name: WeaponData_Dante_FireTrail
+  m_EditorClassIdentifier: 
+  ID: 8
+  Title: Blistering Wake
+  Description: Leaves a scorching path of fire in Dante's wake.
+  HasQuote: 0
+  Quote: 
+  hasLocalization: 1
+  TitleKey: WPN_Name_08
+  DescriptionKey: WPN_Desc_08
+  QuoteKey: 
+  poolID: 0
+  poolWeight: 1
+  dependencies: []
+  visualDataReference:
+    m_AssetGUID: 47ed346cd25b76445b1c6897e48403e8
+    m_SubObjectName: 
+    m_SubObjectType: 
+    m_SubObjectGUID: 
+    m_EditorAssetChanged: 0
+  WeaponPrefab: {fileID: 114724804207875695, guid: 575cc0a11c047694a87b8b48c46f08cb, type: 3}
+  isSignature: 0
+  ultimateData: {fileID: 0}
+  baseStats:
+    damage: 9
+    critMultiplier: 1.3
+    critRate: 0.04
+    speed: 1
+    size: 1
+    duration: 1.25
+    projectileCount: 1
+    knockbackDistance: 0
+    damageType: 0
+  attackTagsValue: 1
+  presentation:
+    cameraShake:
+      mode: 0
+      shakePreset: {fileID: 0}
+      constantShakePreset: {fileID: 0}
+      strength: {x: 10, y: 10, z: 0}
+      duration: 0.5
+      vibrato: 10
+      randomness: 0.1
+      smoothness: 0.1
+      useRandomInitialAngle: 1
+      initialAngle: 0
+      rotation: {x: 0, y: 0, z: 0}
+      ignoreTimeScale: 0
+    cameraShakePerLevelIncrement: 0.1
+    knockback: {fileID: 11400000, guid: fa1ccdc3a358d964ba88355c94961878, type: 2}
+  rarity: 0
+  modifierFlags: 109
+  references:
+    version: 2
+    RefIds: []

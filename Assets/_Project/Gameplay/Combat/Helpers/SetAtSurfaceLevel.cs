@@ -1,26 +1,29 @@
-using AstralShift.HellMaiden;
 using UnityEngine;
 
 namespace AstralShift.Helpers
 {
-	public class SetAtSurfaceLevel : MonoBehaviour
-	{
-		[SerializeField]
-		private bool updateOnTick;
+    public class SetAtSurfaceLevel : MonoBehaviour
+    {
+        [SerializeField] private bool updateOnTick;
+        private Transform owner;
 
-		private void Start()
-		{
-			float z = GameDirector.Instance.Player.CurrentPosition.z;
-			base.gameObject.transform.position = new Vector3(base.gameObject.transform.position.x, base.gameObject.transform.position.y, z);
-		}
+        public void BindOwner(Transform value)
+        {
+            owner = value;
+            Apply(false);
+        }
 
-		private void LateUpdate()
-		{
-			if (updateOnTick)
-			{
-				float z = GameDirector.Instance.Player.CurrentPosition.z;
-				base.gameObject.transform.position = new Vector3(base.transform.parent.position.x, base.transform.parent.position.y, z);
-			}
-		}
-	}
+        public void UnbindOwner() => owner = null;
+        public void RefreshSurface() => Apply(false);
+        private void Start() => Apply(false);
+        private void LateUpdate() { if (updateOnTick) Apply(true); }
+
+        private void Apply(bool followParent)
+        {
+            if (owner == null) return;
+            Vector3 position = followParent && transform.parent != null ? transform.parent.position : transform.position;
+            position.z = owner.position.z;
+            transform.position = position;
+        }
+    }
 }

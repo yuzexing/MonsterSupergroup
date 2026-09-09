@@ -17,6 +17,10 @@ namespace MonsterSupergroup.NetworkCombat
         public PlayerProgressionSnapshot Progression;
         public ServerEntityCheckpoint Health;
         public CanonicalStatusState[] Statuses = Array.Empty<CanonicalStatusState>();
+        public PlayerWeaponCooldownSnapshot[] WeaponCooldowns = Array.Empty<PlayerWeaponCooldownSnapshot>();
+        public PlayerDashSnapshot? Dash;
+        public PlayerUltimateSnapshot? Ultimate;
+        public PlayerSummonMaturitySnapshot[] SummonMaturities = Array.Empty<PlayerSummonMaturitySnapshot>();
         public RunPlayerLifeState LifeState;
     }
 

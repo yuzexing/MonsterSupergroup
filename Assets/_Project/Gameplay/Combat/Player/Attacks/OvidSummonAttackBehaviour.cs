@@ -1,58 +1,25 @@
+using System;
 using UnityEngine;
 
 namespace AstralShift.HellMaiden.Player.Attacks
 {
-	public class OvidSummonAttackBehaviour : SummonAttackBehaviour
-	{
-		[SerializeField]
-		private float cacoonStateTime = 10f;
+    public class OvidSummonAttackBehaviour : SummonAttackBehaviour
+    {
+        // Source prefab overrides this source-code default to 60 seconds.
+        [SerializeField] private float cacoonStateTime = 10f;
+        public override float InitialMaturityDelay => cacoonStateTime;
 
-		private float _cacoonTimer;
-
-		private bool _isCacoonState = true;
-
-		private OvidSummonIdleModule _idleModule;
-
-		protected override void ConfigureSummon(SummonAIBehaviour summon, bool isInitialSpawn)
-		{
-			_idleModule = summon.IdleModule as OvidSummonIdleModule;
-			_idleModule.IsCacoon = _isCacoonState;
-			if (isInitialSpawn)
-			{
-				SetInitialPosition(summon);
-				SetLastAttackTime();
-			}
-		}
-
-		private void SetInitialPosition(SummonAIBehaviour summon)
-		{
-			Vector3 currentPosition = GameDirector.Instance.Player.CurrentPosition;
-			summon.Transform.position = new Vector3(currentPosition.x, currentPosition.y, summon.Transform.position.z);
-			summon.Transform.rotation = Quaternion.identity;
-		}
-
-		public override float GetCooldown()
-		{
-			float cooldown = base.GetCooldown();
-			if (!_isCacoonState)
-			{
-				return cooldown;
-			}
-			return cacoonStateTime;
-		}
-
-		public override void Update()
-		{
-			base.Update();
-			if (_isCacoonState)
-			{
-				_cacoonTimer += Time.deltaTime;
-				if (_cacoonTimer >= GetCooldown())
-				{
-					_isCacoonState = false;
-					_idleModule.Exit();
-				}
-			}
-		}
-	}
+        public override SummonPhase GetMaturityPhase(out float elapsed)
+        {
+            double now = ClockNow;
+            if (now < MaturityAt)
+            {
+                elapsed = (float)Math.Max(0d, now - (MaturityAt - InitialMaturityDelay));
+                return SummonPhase.Cocoon;
+            }
+            double birthAge = now - MaturityAt;
+            elapsed = (float)birthAge;
+            return birthAge < BirthPresentationDuration ? SummonPhase.Birth : SummonPhase.Positioning;
+        }
+    }
 }

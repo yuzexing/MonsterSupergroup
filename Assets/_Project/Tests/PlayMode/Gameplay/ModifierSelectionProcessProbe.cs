@@ -2,7 +2,9 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using AstralShift.HellMaiden.Player;
+using WeaponBehaviour = AstralShift.HellMaiden.Player.Attacks.WeaponBehaviour;
 using Mirror;
 using MonsterSupergroup.Gameplay.Combat;
 using MonsterSupergroup.Gameplay.UI;
@@ -27,6 +29,7 @@ namespace MonsterSupergroup.Gameplay.Tests
         private float deadline;
         private BootGameplayNetworkManager manager;
         private string instruction;
+        private int expectedEquipmentOnBind;
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
         private static void Install()
@@ -100,6 +103,15 @@ namespace MonsterSupergroup.Gameplay.Tests
             foreach (var identity in players)
             {
                 var authority = identity.GetComponent<NetworkModifierSelection>();
+                // After its two selection rounds the Client waits among live enemies
+                // while Host tests menu interruptions. Reconnect now correctly keeps
+                // a downed player downed; do not rely on the old full-health reset.
+                if (identity.connectionToClient is not LocalConnectionToClient &&
+                    authority.BuildRevision >= 3 && authority.PendingUpgradeCount == 0)
+                {
+                    NetworkCombatWorld.Instance.Gateway.Ledger.SetAbsoluteInvulnerable(identity.netId, true);
+                    identity.GetComponent<CombatantBehaviour>().SetCanonicalInvulnerable(true);
+                }
                 if (granted.Add(identity.netId))
                 {
                     NetworkCombatWorld.Instance.Gateway.Ledger.SetAbsoluteInvulnerable(identity.netId, false);
@@ -123,7 +135,8 @@ namespace MonsterSupergroup.Gameplay.Tests
                     Require(identity.GetComponent<PlayerBuildRuntime>().EquipmentCount == before,
                         "Invalid selections mutated the canonical build.");
                 }
-                if (firstEvents.ContainsKey(identity.netId) && authority.BuildRevision > 1 &&
+                if (firstEvents.TryGetValue(identity.netId, out ulong firstEvent) &&
+                    authority.BuildRevision > 1 && authority.PendingEventId != firstEvent &&
                     duplicateChecked.Add(identity.netId))
                 {
                     int before = identity.GetComponent<PlayerBuildRuntime>().EquipmentCount;
@@ -180,6 +193,7 @@ namespace MonsterSupergroup.Gameplay.Tests
                 var oldSelection = OwnerSelection();
                 var oldBuild = oldSelection.BoundBuild;
                 uint oldPlayer = NetworkClient.localPlayer.netId;
+                expectedEquipmentOnBind = oldBuild.EquipmentCount;
                 manager.StopClient();
                 while (!gameplayUnloaded || NetworkClient.active) yield return null;
                 Require(oldSelection == null || oldSelection.Offers.Count == 0, "Disconnect retained an offer.");
@@ -205,8 +219,10 @@ namespace MonsterSupergroup.Gameplay.Tests
             instruction = "Waiting for owned Build";
             while (NetworkClient.localPlayer == null || OwnerSelection() == null ||
                 OwnerSelection().BoundBuild == null || !OwnerSelection().BoundBuild.IsBuildActive ||
+                !NetworkClient.localPlayer.GetComponent<NetworkModifierSelection>().HasOwnerBaseline ||
                 NetworkClient.localPlayer.GetComponent<MirrorNetworkCombatBridge>().Collector == null) yield return null;
-            Require(OwnerSelection().BoundBuild.EquipmentCount == 0, "New owner inherited previous equipment.");
+            Require(OwnerSelection().BoundBuild.EquipmentCount == expectedEquipmentOnBind,
+                "Owner Build does not match its initial or retained participant state.");
         }
 
         private IEnumerator PickRound(int round)
@@ -271,41 +287,99 @@ namespace MonsterSupergroup.Gameplay.Tests
             var build = OwnerSelection().BoundBuild;
             var world = NetworkCombatWorld.Instance;
             while (!world.Replica.TryGetEntity(targetId, out _)) yield return null;
-            var targetObject = new GameObject("Selection Network Damage Target");
-            var target = targetObject.AddComponent<CombatantBehaviour>();
-            target.Initialize(1000);
-            target.ConfigureEntityId(targetId);
-            int damage;
-            using (AttackSnapshot attack = build.InitialWeapon.NativeRuntime.BeginAttack())
-                damage = build.InitialWeapon.NativeRuntime.ResolveHitDetailed(attack, target).ResolvedDamage.Value;
-            Require(damage > 0 && target.CurrentHealth == 1000 - damage, "Native hit failed.");
-            Destroy(targetObject);
-            while (!world.Replica.TryGetEntity(targetId, out CanonicalEntityState state) || state.Health != 1000 - damage)
-                yield return null;
-            Debug.Log($"{Prefix} event=network-hit-verified damage={damage}");
+            var weapon = build.InitialWeapon;
+            bool wasEnabled = weapon.enabled;
+            GameObject targetObject = null;
+            weapon.enabled = false;
+            try
+            {
+                instruction = "Waiting for legal controlled network hit";
+                // Allow the last automatic root to finish its interval before submitting
+                // a new one through the same production admission path.
+                yield return WaitForAttackInterval(weapon);
+                targetObject = new GameObject("Selection Network Damage Target");
+                var target = targetObject.AddComponent<CombatantBehaviour>();
+                target.Initialize(1000);
+                target.ConfigureEntityId(targetId);
+                int damage;
+                using (AttackSnapshot attack = BeginControlledAttack(weapon))
+                    damage = weapon.NativeRuntime.ResolveHitDetailed(attack, target).ResolvedDamage.Value;
+                Require(damage > 0 && target.CurrentHealth == 1000 - damage, "Native hit failed.");
+                while (!world.Replica.TryGetEntity(targetId, out CanonicalEntityState state) || state.Health != 1000 - damage)
+                    yield return null;
+                Debug.Log($"{Prefix} event=network-hit-verified damage={damage}");
+            }
+            finally
+            {
+                if (targetObject != null) Destroy(targetObject);
+                if (weapon != null) weapon.enabled = wasEnabled && weapon.CanAttack;
+            }
         }
 
         private IEnumerator VerifyConfirmedKillProgression()
         {
+            // This controlled-hit fixture now waits real attack intervals. Keep its idle
+            // owner alive among product enemies; player damage is covered in combat tests.
+            var localPlayer = NetworkClient.localPlayer;
+            NetworkCombatWorld.Instance.Gateway.Ledger.SetAbsoluteInvulnerable(localPlayer.netId, true);
+            localPlayer.GetComponent<CombatantBehaviour>().SetCanonicalInvulnerable(true);
             var spawner = FindFirstObjectByType<NetworkGameplayEnemySpawner>();
             Require(spawner != null && spawner.EnemyPrefab != null, "Production enemy prefab is required.");
-            var enemy = Instantiate(spawner.EnemyPrefab, NetworkClient.localPlayer.transform.position + Vector3.right * 2,
-                Quaternion.identity);
-            enemy.GetComponent<NetworkEnemySimulationAgent>().ConfigureInitialServerTarget(NetworkClient.localPlayer.netId);
-            NetworkServer.Spawn(enemy);
-            yield return null;
-            var authority = NetworkClient.localPlayer.GetComponent<NetworkModifierSelection>();
-            int before = authority.Level;
-            var combatant = enemy.GetComponent<CombatantBehaviour>();
-            var weapon = OwnerSelection().BoundBuild.InitialWeapon.NativeRuntime;
-            int hits = 0;
-            while (combatant.IsAlive && hits++ < 100)
-                using (AttackSnapshot attack = weapon.BeginAttack()) weapon.ResolveHitDetailed(attack, combatant);
-            Require(!combatant.IsAlive, "Native attacks did not defeat the production enemy.");
-            while (authority.Level == before) yield return null;
-            Require(authority.Level == before + 1, "Confirmed kill XP must advance exactly one configured level.");
-            Require(authority.PendingUpgradeCount == 1, "Confirmed kill failed to queue its upgrade.");
-            Debug.Log($"{Prefix} event=production-enemy-kill-xp-verified hits={hits}");
+            var weapon = OwnerSelection().BoundBuild.InitialWeapon;
+            bool wasEnabled = weapon.enabled;
+            weapon.enabled = false;
+            try
+            {
+                instruction = "Defeating production enemy with admitted native attacks";
+                yield return WaitForAttackInterval(weapon);
+                // Keep other players' automatic projectiles away from this controlled target.
+                // AI/collision play is covered separately; this fixture checks native result -> kill XP.
+                var enemy = Instantiate(spawner.EnemyPrefab, new Vector3(20000, 20000, 0),
+                    Quaternion.identity);
+                enemy.GetComponent<NetworkEnemySimulationAgent>().ConfigureInitialServerTarget(NetworkClient.localPlayer.netId);
+                NetworkServer.Spawn(enemy);
+                yield return null;
+                var authority = NetworkClient.localPlayer.GetComponent<NetworkModifierSelection>();
+                int before = authority.Level;
+                var combatant = enemy.GetComponent<CombatantBehaviour>();
+                uint targetId = enemy.GetComponent<NetworkIdentity>().netId;
+                int hits = 0;
+                while (combatant != null && combatant.IsAlive && hits < 100)
+                {
+                    if (hits > 0) yield return WaitForAttackInterval(weapon);
+                    if (combatant == null || !combatant.IsAlive) break;
+                    using (AttackSnapshot attack = BeginControlledAttack(weapon))
+                        weapon.NativeRuntime.ResolveHitDetailed(attack, combatant);
+                    hits++;
+                    // Flush the result and root completion before inspecting canonical death.
+                    yield return null;
+                    var admission = localPlayer.GetComponent<NetworkWeaponCombatAdapter>();
+                    bool hasCanonical = NetworkCombatWorld.Instance.Gateway.Ledger.TryGetState(targetId, out var targetState);
+                    Debug.Log($"{Prefix} event=controlled-hit count={hits} admitted={admission.AcceptedCooldownReportCount} rejected={admission.RejectedAttackCount} lastRejection={admission.LastAttackRejection} canonicalHP={(hasCanonical ? targetState.Health : -1)} predictedHP={(combatant != null ? combatant.CurrentHealth : -1)} invalidRoots={NetworkCombatWorld.Instance.Gateway.Metrics.GetRejected(CombatRejectionReason.InvalidAttackRoot)} level={authority.Level}");
+                }
+                Require(combatant == null || !combatant.IsAlive, "Native attacks did not defeat the production enemy.");
+                while (authority.Level == before) yield return null;
+                Require(authority.Level == before + 1, "Confirmed kill XP must advance exactly one configured level.");
+                Require(authority.PendingUpgradeCount == 1, "Confirmed kill failed to queue its upgrade.");
+                Debug.Log($"{Prefix} event=production-enemy-kill-xp-verified hits={hits}");
+            }
+            finally
+            {
+                if (weapon != null) weapon.enabled = wasEnabled && weapon.CanAttack;
+            }
+        }
+
+        private static WaitForSecondsRealtime WaitForAttackInterval(WeaponBehaviour weapon) =>
+            new WaitForSecondsRealtime(weapon.GetCooldown() + 0.15f);
+
+        private static AttackSnapshot BeginControlledAttack(WeaponBehaviour weapon)
+        {
+            var attack = (AttackSnapshot)typeof(WeaponBehaviour)
+                .GetMethod("BeginNativeGasAttack", BindingFlags.Instance | BindingFlags.NonPublic)
+                .Invoke(weapon, null);
+            // The ordinary Attack implementation resets this timer after creating its root.
+            weapon.RestoreCooldownRemaining(weapon.GetCooldown());
+            return attack;
         }
 
         private IEnumerator VerifyInterruptedSelectionCleanup()

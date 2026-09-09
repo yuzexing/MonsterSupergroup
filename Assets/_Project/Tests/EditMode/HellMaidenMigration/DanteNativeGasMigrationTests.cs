@@ -28,9 +28,9 @@ namespace MonsterSupergroup.HellMaidenMigration.Tests
 
         private static readonly string[] DanteProjectilePrefabPaths =
         {
-            "Assets/GameObject/PlayerAttack_Dante_Projectile.prefab",
-            "Assets/GameObject/PlayerAttack_Dante_Projectile_Fire Variant.prefab",
-            "Assets/GameObject/PlayerAttack_Dante_Projectile_Poison Variant.prefab"
+            "Assets/_Project/GameObject/PlayerAttack_Dante_Projectile.prefab",
+            "Assets/_Project/GameObject/PlayerAttack_Dante_Projectile_Fire Variant.prefab",
+            "Assets/_Project/GameObject/PlayerAttack_Dante_Projectile_Poison Variant.prefab"
         };
 
         [Test]
@@ -294,7 +294,7 @@ namespace MonsterSupergroup.HellMaidenMigration.Tests
             Assert.That(weapon.WeaponPrefab, Is.Not.Null);
             Assert.That(
                 AssetDatabase.GetAssetPath(weapon.WeaponPrefab),
-                Is.EqualTo("Assets/GameObject/Dante_SlowProjectile_Behaviour.prefab"));
+                Is.EqualTo("Assets/_Project/GameObject/Dante_SlowProjectile_Behaviour.prefab"));
             Assert.That(weapon.ID, Is.EqualTo(2u));
             Assert.That(weapon.BaseStats.damage, Is.EqualTo(15));
             Assert.That(weapon.BaseStats.speed, Is.EqualTo(0.4f).Within(0.0001f));
@@ -310,11 +310,11 @@ namespace MonsterSupergroup.HellMaidenMigration.Tests
         public void ImportedDantePrefabs_HaveNoMissingMonoBehaviours()
         {
             AssertPrefabHasNoMissingScripts(
-                "Assets/GameObject/Dante_SlowProjectile_Behaviour.prefab");
+                "Assets/_Project/GameObject/Dante_SlowProjectile_Behaviour.prefab");
             AssertPrefabHasNoMissingScripts(
-                "Assets/GameObject/PlayerAttack_Dante_Projectile.prefab");
+                "Assets/_Project/GameObject/PlayerAttack_Dante_Projectile.prefab");
             AssertPrefabHasNoMissingScripts(
-                "Assets/GameObject/PlayerAttack_Dante_Projectile_Impact.prefab");
+                "Assets/_Project/GameObject/PlayerAttack_Dante_Projectile_Impact.prefab");
         }
 
         [Test]

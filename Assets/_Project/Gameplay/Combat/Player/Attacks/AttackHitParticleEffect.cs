@@ -14,6 +14,7 @@ namespace AstralShift.HellMaiden.Player.Attacks
 		private Action _playOnEnableAction;
 
 		private Coroutine _checkDeathCoroutine;
+		private bool _stopping;
 
 		private const float CheckTimeStep = 0.33f;
 
@@ -25,14 +26,17 @@ namespace AstralShift.HellMaiden.Player.Attacks
 
 		protected virtual void OnEnable()
 		{
-			_playOnEnableAction?.Invoke();
+			Action play = _playOnEnableAction;
+			_playOnEnableAction = null;
+			play?.Invoke();
 		}
 
 		protected virtual void OnDisable()
 		{
-			Cleanup(killSystems: true);
-			hitbox?.Toggle(state: false);
+			Complete();
 		}
+
+		protected virtual void OnDestroy() => Complete();
 
 		public override void Init(WeaponBehaviour behaviour)
 		{
@@ -76,6 +80,7 @@ namespace AstralShift.HellMaiden.Player.Attacks
 
 		private void PrepareToPlay(Action onEnd, Action<IDamageable> onHit = null)
 		{
+			_onEnd = onEnd;
 			if ((bool)hitbox)
 			{
 				hitbox.Init(onHit);
@@ -83,15 +88,16 @@ namespace AstralShift.HellMaiden.Player.Attacks
 			_playOnEnableAction = delegate
 			{
 				Play(onEnd);
-				_playOnEnableAction = null;
 			};
 		}
 
 		public override void Play(Action onEnd)
 		{
 			_onEnd = onEnd;
+			_stopping = false;
 			if (system == null)
 			{
+				Complete();
 				return;
 			}
 			system.Play(withChildren: true);
@@ -104,7 +110,7 @@ namespace AstralShift.HellMaiden.Player.Attacks
 				}
 				if (base.gameObject.activeSelf)
 				{
-					_checkDeathCoroutine = StartCoroutine(RunTimerDeathCheck(_onEnd));
+					_checkDeathCoroutine = StartCoroutine(RunTimerDeathCheck());
 				}
 				else
 				{
@@ -126,7 +132,7 @@ namespace AstralShift.HellMaiden.Player.Attacks
 			Play(onEnd);
 		}
 
-		private IEnumerator RunTimerDeathCheck(Action onEnd)
+		private IEnumerator RunTimerDeathCheck()
 		{
 			timer = 0f;
 			while (timer < timeToLive)
@@ -135,7 +141,7 @@ namespace AstralShift.HellMaiden.Player.Attacks
 				yield return null;
 			}
 			_checkDeathCoroutine = null;
-			onEnd?.Invoke();
+			Complete();
 		}
 
 		private void RunParticleSystemDeathCheck()
@@ -146,7 +152,7 @@ namespace AstralShift.HellMaiden.Player.Attacks
 			}
 			if (base.gameObject.activeSelf)
 			{
-				_checkDeathCoroutine = StartCoroutine(CheckParticleSystemDeath(_onEnd));
+				_checkDeathCoroutine = StartCoroutine(CheckParticleSystemDeath());
 			}
 			else
 			{
@@ -154,42 +160,49 @@ namespace AstralShift.HellMaiden.Player.Attacks
 			}
 		}
 
-		private IEnumerator CheckParticleSystemDeath(Action onEnd)
+		private IEnumerator CheckParticleSystemDeath()
 		{
 			WaitForSeconds timeStepYield = new WaitForSeconds(0.33f);
 			yield return timeStepYield;
-			while (system.IsAlive(withChildren: true))
+			while (system != null && system.IsAlive(withChildren: true))
 			{
 				yield return timeStepYield;
 			}
 			_checkDeathCoroutine = null;
-			onEnd?.Invoke();
+			Complete();
 		}
 
 		public override void Stop()
 		{
+			if (_stopping || _onEnd == null) return;
+			_stopping = true;
+			if (system == null || !isActiveAndEnabled)
+			{
+				Complete();
+				return;
+			}
 			system.Stop(withChildren: true);
 			RunParticleSystemDeathCheck();
 		}
 
-		private void Cleanup(bool killSystems)
+		private void Complete()
 		{
+			// Clear before invoking: the callback can return this object to a pool,
+			// recursively disable it, or spawn a new effect on the same owner.
+			Action onEnd = _onEnd;
+			_onEnd = null;
+			_playOnEnableAction = null;
+			_stopping = true;
 			if (_checkDeathCoroutine != null)
 			{
 				StopCoroutine(_checkDeathCoroutine);
 				_checkDeathCoroutine = null;
-				_onEnd?.Invoke();
-				_onEnd = null;
 			}
-			if (killSystems)
-			{
+			if (system != null)
 				system.Stop(withChildren: true, ParticleSystemStopBehavior.StopEmittingAndClear);
-			}
-			else
-			{
-				system.Stop(withChildren: true);
-			}
 			hitbox?.ClearCallbacks();
+			hitbox?.Toggle(state: false);
+			onEnd?.Invoke();
 		}
 	}
 }

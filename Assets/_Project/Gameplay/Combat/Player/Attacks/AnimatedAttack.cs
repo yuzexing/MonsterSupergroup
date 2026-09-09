@@ -6,6 +6,7 @@ using AstralShift.Helpers;
 using AstralShift.QTI.Helpers.Attributes;
 using FMOD.Studio;
 using FMODUnity;
+using MonsterSupergroup.GAS;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -87,6 +88,8 @@ namespace AstralShift.HellMaiden.Player.Attacks
 
 		private int _animationsToFinish;
 
+		private readonly List<AnimancerState> _ownedAnimationStates = new List<AnimancerState>();
+
 		protected Coroutine _timeoutAnimationCoroutine;
 
 		[Header("Sound")]
@@ -113,6 +116,23 @@ namespace AstralShift.HellMaiden.Player.Attacks
 
 		public Action OnBeforeEnd { get; set; }
 
+		/// <summary>External deactivation must close presentation tracking before releasing the attack's final lease.</summary>
+		public event Action<AnimatedAttack> Deactivated;
+
+		public override void InitNative(WeaponBehaviour behaviour, AttackSnapshot attack,
+			Action onStart = null, Action onEnd = null)
+		{
+			Dispose();
+			base.InitNative(behaviour, attack, onStart, onEnd);
+		}
+
+		public override void InitPresentation(WeaponBehaviour behaviour, ProjectilePresentationStats stats,
+			Action onStart = null, Action onEnd = null)
+		{
+			Dispose();
+			base.InitPresentation(behaviour, stats, onStart, onEnd);
+		}
+
 		public override void Attack()
 		{
 			_onStart?.Invoke();
@@ -122,12 +142,155 @@ namespace AstralShift.HellMaiden.Player.Attacks
 
 		public override void Dispose()
 		{
+			Deactivated = null;
+			if (_timeoutAnimationCoroutine != null)
+			{
+				StopCoroutine(_timeoutAnimationCoroutine);
+				_timeoutAnimationCoroutine = null;
+			}
+			foreach (AnimancerState state in _ownedAnimationStates)
+				if (state.IsValid()) state.Events(this).OnEnd = null;
+			_ownedAnimationStates.Clear();
+			if (animancer != null) animancer.Stop();
+			_startAnimState = _mainAnimState = _endAnimState = null;
+			_animationsToFinish = 0;
+			_onStart = null;
+			_onEnd = null;
+			OnBeforeEnd = null;
+			if (hitbox != null) hitbox.ClearCallbacks();
+			ReleaseNativeAttackSnapshot();
+			_behaviour = null;
 			StopLoopSound(immediate: true);
 		}
 
 		protected virtual void OnDisable()
 		{
-			StopLoopSound(immediate: true);
+			Action<AnimatedAttack> deactivated = Deactivated;
+			Deactivated = null;
+			try { deactivated?.Invoke(this); }
+			finally { Dispose(); }
+		}
+
+		private void OnDestroy() => Dispose();
+
+		private AnimancerState TrackAnimation(AnimancerState state)
+		{
+			if (!_ownedAnimationStates.Contains(state)) _ownedAnimationStates.Add(state);
+			return state;
+		}
+
+		public float GetPresentationDuration(float duration)
+		{
+			return ClipDuration(attackStartAnim) + MainPresentationDuration(duration) + ClipDuration(attackEndAnim);
+		}
+
+		private float MainPresentationDuration(float duration)
+		{
+			float natural = ClipDuration(attackAnim);
+			foreach (ClipTransition additional in additionalAttackAnims ?? Array.Empty<ClipTransition>())
+				natural = Mathf.Max(natural, ClipDuration(additional));
+			if (duration >= 0f && attackAnim != null && attackAnim.Clip != null)
+				return attackAnimTransitionAfterFinish ? Mathf.Min(natural, duration) : duration;
+			return natural;
+		}
+
+		private static float ClipDuration(ClipTransition transition)
+		{
+			if (transition == null || transition.Clip == null) return 0f;
+			float speed = Mathf.Abs(transition.Speed);
+			return Mathf.Abs(transition.Length) / (float.IsNaN(speed) ? 1f : Mathf.Max(0.0001f, speed));
+		}
+
+		public float GetEndPresentationDuration() => ClipDuration(attackEndAnim);
+
+		/// <summary>Play an externally timed sequence without changing the authored root rotation.</summary>
+		public void PlayExternallyTimedAnimation(float elapsedSeconds = 0f)
+		{
+			ValidateAnimationAge(elapsedSeconds);
+			_attackAnimDuration = -1f;
+			Attack();
+			if (elapsedSeconds <= 0f || !gameObject.activeInHierarchy) return;
+			float startDuration = ClipDuration(attackStartAnim);
+			if (elapsedSeconds < startDuration)
+			{
+				SeekStateFromStart(_startAnimState, elapsedSeconds);
+				return;
+			}
+			if (startDuration > 0f)
+			{
+				if (_startAnimState.IsValid()) _startAnimState.Events(this).OnEnd = null;
+				PlayAttackAnimation();
+			}
+			foreach (AnimancerState state in _ownedAnimationStates)
+				if (state != _startAnimState && state != _endAnimState)
+					SeekStateFromStart(state, elapsedSeconds - startDuration);
+		}
+
+		/// <summary>Start or correct an externally timed ending, without adding its time to gameplay cooldown.</summary>
+		public void PlayExternallyTimedEnd(float elapsedSeconds = 0f)
+		{
+			ValidateAnimationAge(elapsedSeconds);
+			PlayEndAnimation();
+			if (!gameObject.activeInHierarchy || !_endAnimState.IsValid()) return;
+			SeekStateFromStart(_endAnimState, elapsedSeconds);
+			if (elapsedSeconds >= GetEndPresentationDuration())
+			{
+				_endAnimState.Events(this).OnEnd = null;
+				EndCallback();
+			}
+		}
+
+		private static void ValidateAnimationAge(float elapsedSeconds)
+		{
+			if (float.IsNaN(elapsedSeconds) || float.IsInfinity(elapsedSeconds) || elapsedSeconds < 0f)
+				throw new ArgumentOutOfRangeException(nameof(elapsedSeconds));
+		}
+
+		private static void SeekStateFromStart(AnimancerState state, float elapsedSeconds)
+		{
+			if (state.IsValid()) state.Time = elapsedSeconds * state.Speed;
+		}
+
+		/// <summary>Seek an already aged visual without creating or retaining a gameplay attack.</summary>
+		public void PlayPresentation(Vector2 direction, float duration, float elapsedSeconds)
+		{
+			if (!IsPresentationOnly)
+				throw new InvalidOperationException("Melee presentation requires InitPresentation first.");
+			if (duration >= 0f) Attack(direction, duration);
+			else Attack(direction);
+			if (elapsedSeconds <= 0f || !gameObject.activeInHierarchy) return;
+
+			float startDuration = ClipDuration(attackStartAnim);
+			float mainDuration = MainPresentationDuration(duration);
+			if (elapsedSeconds < startDuration)
+			{
+				SeekState(_startAnimState, elapsedSeconds);
+				return;
+			}
+			if (elapsedSeconds >= startDuration + mainDuration)
+			{
+				PlayEndAnimation();
+				SeekState(_endAnimState, elapsedSeconds - startDuration - mainDuration);
+				return;
+			}
+			if (startDuration > 0f)
+			{
+				if (_startAnimState.IsValid()) _startAnimState.Events(this).OnEnd = null;
+				PlayAttackAnimation();
+			}
+			foreach (AnimancerState state in _ownedAnimationStates)
+				if (state != _startAnimState) SeekState(state, elapsedSeconds - startDuration);
+			if (_timeoutAnimationCoroutine != null)
+			{
+				StopCoroutine(_timeoutAnimationCoroutine);
+				_timeoutAnimationCoroutine = StartCoroutine(TimeoutAnimation(
+					Mathf.Max(0f, duration - elapsedSeconds + startDuration)));
+			}
+		}
+
+		private static void SeekState(AnimancerState state, float elapsedSeconds)
+		{
+			if (state != null && state.IsValid()) state.Time += elapsedSeconds * state.Speed;
 		}
 
 		public void Attack(Vector2 direction, bool rotateToDirection = true)
@@ -185,13 +348,13 @@ namespace AstralShift.HellMaiden.Player.Attacks
 				PlayAttackAnimation();
 				return;
 			}
-			AnimancerState currentState = animancer.Layers[startAnimLayer].Play(attackStartAnim, attackStartAnim.FadeDuration);
+			AnimancerState currentState = _startAnimState = TrackAnimation(animancer.Layers[startAnimLayer].Play(attackStartAnim, attackStartAnim.FadeDuration));
 			if (attackStartAnimTransitionAfterFinish)
 			{
 				currentState.Events(this).OnEnd = delegate
 				{
-					PlayAttackAnimation();
 					currentState.Events(this).OnEnd = null;
+					PlayAttackAnimation();
 				};
 			}
 		}
@@ -205,11 +368,11 @@ namespace AstralShift.HellMaiden.Player.Attacks
 				PlayAttackAnimation();
 				return new AnimancerHelpers.WaitForAnimationEnd((object)this, (AnimancerState)null);
 			}
-			AnimancerState currentState = animancer.Layers[startAnimLayer].Play(attackStartAnim, attackStartAnim.FadeDuration);
+			AnimancerState currentState = _startAnimState = TrackAnimation(animancer.Layers[startAnimLayer].Play(attackStartAnim, attackStartAnim.FadeDuration));
 			currentState.Events(this).OnEnd = delegate
 			{
-				PlayAttackAnimation();
 				currentState.Events(this).OnEnd = null;
+				PlayAttackAnimation();
 			};
 			return new AnimancerHelpers.WaitForAnimationEnd(this, new List<AnimancerState> { currentState });
 		}
@@ -223,7 +386,7 @@ namespace AstralShift.HellMaiden.Player.Attacks
 			}
 			StartLoopSound();
 			List<AnimancerState> list = new List<AnimancerState>();
-			AnimancerState animancerState = animancer.Layers[attackAnimLayer].Play(attackAnim, attackAnim.FadeDuration);
+			AnimancerState animancerState = _mainAnimState = TrackAnimation(animancer.Layers[attackAnimLayer].Play(attackAnim, attackAnim.FadeDuration));
 			list.Add(animancerState);
 			if (attackAnimTransitionAfterFinish)
 			{
@@ -234,7 +397,7 @@ namespace AstralShift.HellMaiden.Player.Attacks
 				ClipTransition clipTransition = additionalAttackAnims[i];
 				if (clipTransition != null && (bool)clipTransition.Clip)
 				{
-					AnimancerState animancerState2 = animancer.Layers[attackAnimLayer + i + 1].Play(clipTransition, clipTransition.FadeDuration);
+					AnimancerState animancerState2 = TrackAnimation(animancer.Layers[attackAnimLayer + i + 1].Play(clipTransition, clipTransition.FadeDuration));
 					list.Add(animancerState2);
 					animancerState2.Events(this).OnEnd = CheckEndOfAnimations;
 				}
@@ -263,7 +426,7 @@ namespace AstralShift.HellMaiden.Player.Attacks
 			List<AnimancerState> list = new List<AnimancerState>();
 			if ((bool)attackAnim.Clip)
 			{
-				AnimancerState animancerState = animancer.Layers[attackAnimLayer].Play(attackAnim, attackAnim.FadeDuration);
+				AnimancerState animancerState = _mainAnimState = TrackAnimation(animancer.Layers[attackAnimLayer].Play(attackAnim, attackAnim.FadeDuration));
 				list.Add(animancerState);
 				if (attackAnimTransitionAfterFinish)
 				{
@@ -275,7 +438,7 @@ namespace AstralShift.HellMaiden.Player.Attacks
 				ClipTransition clipTransition = additionalAttackAnims[i];
 				if (clipTransition != null && (bool)clipTransition.Clip)
 				{
-					AnimancerState item = animancer.Layers[attackAnimLayer + i + 1].Play(clipTransition, clipTransition.FadeDuration);
+					AnimancerState item = TrackAnimation(animancer.Layers[attackAnimLayer + i + 1].Play(clipTransition, clipTransition.FadeDuration));
 					list.Add(item);
 				}
 			}
@@ -323,6 +486,13 @@ namespace AstralShift.HellMaiden.Player.Attacks
 
 		public void PlayEndAnimation()
 		{
+			if (_timeoutAnimationCoroutine != null)
+			{
+				StopCoroutine(_timeoutAnimationCoroutine);
+				_timeoutAnimationCoroutine = null;
+			}
+			foreach (AnimancerState state in _ownedAnimationStates)
+				if (state.IsValid()) state.Events(this).OnEnd = null;
 			StopLoopSound();
 			if (!_endSoundPlayed)
 			{
@@ -336,7 +506,8 @@ namespace AstralShift.HellMaiden.Player.Attacks
 			}
 			else
 			{
-				animancer.Layers[attackEndAnimLayer].Play(attackEndAnim, attackEndAnim.FadeDuration).Events(this).OnEnd = EndCallback;
+				_endAnimState = TrackAnimation(animancer.Layers[attackEndAnimLayer].Play(attackEndAnim, attackEndAnim.FadeDuration));
+				_endAnimState.Events(this).OnEnd = EndCallback;
 			}
 		}
 
@@ -345,7 +516,7 @@ namespace AstralShift.HellMaiden.Player.Attacks
 			if (attackHitAnim != null && (bool)attackHitAnim.Clip && animancer != null)
 			{
 				PlayOneShot(hitSound);
-				animancer.Layers[hitAnimLayer].Play(attackHitAnim, attackHitAnim.FadeDuration).MoveTime(0f, normalized: true);
+				TrackAnimation(animancer.Layers[hitAnimLayer].Play(attackHitAnim, attackHitAnim.FadeDuration)).MoveTime(0f, normalized: true);
 			}
 		}
 
@@ -356,15 +527,16 @@ namespace AstralShift.HellMaiden.Player.Attacks
 				return new AnimancerHelpers.WaitForAnimationEnd((object)this, (AnimancerState)null);
 			}
 			PlayOneShot(hitSound);
-			AnimancerState animancerState = animancer.Layers[hitAnimLayer].Play(attackHitAnim, attackHitAnim.FadeDuration);
+			AnimancerState animancerState = TrackAnimation(animancer.Layers[hitAnimLayer].Play(attackHitAnim, attackHitAnim.FadeDuration));
 			animancerState.MoveTime(0f, normalized: true);
 			return new AnimancerHelpers.WaitForAnimationEnd(this, animancerState);
 		}
 
 		protected virtual void EndCallback()
 		{
-			_onEnd?.Invoke();
+			Action onEnd = _onEnd;
 			_onEnd = null;
+			onEnd?.Invoke();
 		}
 
 		protected virtual void BeforeEndCallback()

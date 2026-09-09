@@ -39,6 +39,8 @@ namespace AstralShift.HellMaiden.AI.Enemy
 
 		public bool CanMove => _canMove;
 
+		public bool IsKnockbackActive => _knockBackCoroutine != null;
+
 		public virtual Vector3 Destination
 		{
 			get
@@ -173,6 +175,13 @@ namespace AstralShift.HellMaiden.AI.Enemy
 				StopCoroutine(_knockBackCoroutine);
 				_knockBackCoroutine = null;
 			}
+		}
+
+		// A network simulation lease can end without disabling the Enemy GameObject.
+		public void CancelKnockback()
+		{
+			StopKnockBack();
+			if (_rigidbody != null) _rigidbody.linearVelocity = Vector2.zero;
 		}
 	}
 }

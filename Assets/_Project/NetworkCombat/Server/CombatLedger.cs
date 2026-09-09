@@ -18,7 +18,11 @@ namespace MonsterSupergroup.NetworkCombat
         WrongAuthority = 9,
         StaleOwnerReport = 10,
         InvalidStatus = 11,
-        SourceSelectingUpgrade = 12
+        SourceSelectingUpgrade = 12,
+        InvalidAttackRoot = 13,
+        InvalidAttackRate = 14,
+        StaleAttackBuild = 15,
+        AttackCapacityExceeded = 16
     }
 
     public readonly struct CombatApplyResult
@@ -206,6 +210,7 @@ namespace MonsterSupergroup.NetworkCombat
             entry.Alive = saved.Alive;
             entry.AbsoluteInvulnerable = checkpoint.AbsoluteInvulnerable;
             entry.UpgradeSelectionActive = false;
+            entry.UltimateInvulnerable = false; // Reconstructed from the independent ability deadline.
             entry.KillerPlayerId = saved.KillerPlayerId;
             entry.Version = version;
             return entry.ToState();
@@ -248,6 +253,13 @@ namespace MonsterSupergroup.NetworkCombat
         {
             return entities.TryGetValue(playerId, out EntityEntry entry) &&
                 entry.UpgradeSelectionActive;
+        }
+
+        public bool SetPlayerUltimateInvulnerable(uint playerId, bool value)
+        {
+            if (!entities.TryGetValue(playerId, out EntityEntry entry) || entry.Kind != CombatEntityKind.Player) return false;
+            if (entry.UltimateInvulnerable != value) { entry.UltimateInvulnerable = value; entry.Version++; }
+            return true;
         }
 
         public bool SetPlayerUpgradeSelectionState(uint playerId, bool value)
@@ -462,8 +474,9 @@ namespace MonsterSupergroup.NetworkCombat
             public int MaxHealth;
             public bool Alive;
             public bool AbsoluteInvulnerable;
+            public bool UltimateInvulnerable;
             public bool UpgradeSelectionActive;
-            public bool IsInvulnerable => AbsoluteInvulnerable || UpgradeSelectionActive;
+            public bool IsInvulnerable => AbsoluteInvulnerable || UpgradeSelectionActive || UltimateInvulnerable;
             public uint Version;
             public uint KillerPlayerId;
 

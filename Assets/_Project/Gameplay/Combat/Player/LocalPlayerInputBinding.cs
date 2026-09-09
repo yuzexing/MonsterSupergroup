@@ -51,10 +51,13 @@ namespace AstralShift.HellMaiden.Player
                     }
                 }
             }
-            if (cameraRig != ProCamera2D.Instance)
+            // The current Gameplay scene uses a plain Camera. ProCamera's singleton
+            // getter throws when its optional rig is absent.
+            var availableRig = UnityEngine.Object.FindFirstObjectByType<ProCamera2D>();
+            if (cameraRig != availableRig)
             {
                 if (cameraRig != null) cameraRig.RemoveCameraTarget(player.transform);
-                cameraRig = ProCamera2D.Instance;
+                cameraRig = availableRig;
                 if (cameraRig != null) cameraRig.AddCameraTarget(player.transform);
             }
             player.SetInputCamera(cameraRig != null ? cameraRig.GameCamera : Camera.main);

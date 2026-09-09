@@ -21,12 +21,20 @@ namespace MonsterSupergroup.NetworkCombat
             new HashSet<int>();
         private bool serverGameplayLoaded;
         private bool gameplayUnloadStarted;
+        private AsyncOperation gameplayLoadOperation;
+        private AsyncOperation stoppedClientSceneOperation;
+        private uint serverSceneGeneration;
+        private uint clientSceneGeneration;
+        private bool completingClientScene;
         private Scene bootScene;
         private Scene serverGameplayScene;
 
         public string GameplayScene => gameplayScene;
 
         public bool IsGameplayLoaded => TryGetGameplayScene(out _);
+
+        public bool IsGameplayTransitioning => gameplayLoadOperation != null || gameplayUnloadStarted ||
+            stoppedClientSceneOperation != null || (!NetworkServer.active && loadingSceneAsync != null);
 
         public RunSession Session { get; private set; } = new RunSession();
 
@@ -63,19 +71,43 @@ namespace MonsterSupergroup.NetworkCombat
         public override void OnStartServer()
         {
             base.OnStartServer();
+            uint generation = ++serverSceneGeneration;
             Session = new RunSession();
             if (NetworkCombatWorld.Instance != null)
                 NetworkCombatWorld.Instance.ServerCanonicalBatchProduced += UpdateParticipantLife;
             CaptureBootScene();
-            gameplayUnloadStarted = false;
+            serverGameplayLoaded = false;
+            serverGameplayScene = default;
             Debug.Log($"[BootGameplay] Server starting; loading '{gameplayScene}'.", this);
-            StartCoroutine(ServerLoadGameplay());
+            StartCoroutine(ServerLoadGameplay(generation));
         }
 
         public override void OnStartClient()
         {
+            ++clientSceneGeneration;
             base.OnStartClient();
             CaptureBootScene();
+        }
+
+        public override void OnClientConnect()
+        {
+            if (!NetworkServer.active && gameplayUnloadStarted)
+                StartCoroutine(ReadyClientAfterCleanup(NetworkClient.connection, clientSceneGeneration));
+            else
+                base.OnClientConnect();
+        }
+
+        private IEnumerator ReadyClientAfterCleanup(NetworkConnectionToServer connection, uint generation)
+        {
+            while (gameplayUnloadStarted)
+            {
+                if (generation != clientSceneGeneration || !ReferenceEquals(connection, NetworkClient.connection))
+                    yield break;
+                yield return null;
+            }
+            if (generation == clientSceneGeneration && ReferenceEquals(connection, NetworkClient.connection) &&
+                NetworkClient.isConnected)
+                base.OnClientConnect();
         }
 
         public override void OnServerReady(NetworkConnectionToClient connection)
@@ -132,6 +164,10 @@ namespace MonsterSupergroup.NetworkCombat
                 Build = build.CaptureState(),
                 Progression = selection.CaptureProgression(),
                 Health = health,
+                WeaponCooldowns = identity.GetComponent<NetworkWeaponCombatAdapter>().CaptureCooldowns(),
+                Dash = identity.GetComponent<NetworkPlayerDash>()?.CaptureServerState(),
+                Ultimate = identity.GetComponent<NetworkPlayerUltimate>()?.CaptureServerState(),
+                SummonMaturities = identity.GetComponent<NetworkWeaponCombatAdapter>().CaptureSummonMaturities(),
                 Statuses = world.Gateway.Statuses.CaptureTarget(identity.netId, NetworkTime.time),
                 LifeState = health.State.Alive ? RunPlayerLifeState.Active : RunPlayerLifeState.Downed
             };
@@ -148,19 +184,23 @@ namespace MonsterSupergroup.NetworkCombat
 
         public override void OnClientSceneChanged()
         {
-            base.OnClientSceneChanged();
-            if (TryGetGameplayScene(out Scene scene))
+            if (!NetworkClient.isConnected || gameplayUnloadStarted) return;
+            completingClientScene = true;
+            try
             {
-                ActivateGameplay(scene);
+                base.OnClientSceneChanged();
+                if (TryGetGameplayScene(out Scene scene)) ActivateGameplay(scene);
+                else RestoreBootPresentation();
             }
-            else
+            finally
             {
-                RestoreBootPresentation();
+                completingClientScene = false;
             }
         }
 
         public override void OnStopServer()
         {
+            ++serverSceneGeneration;
             if (NetworkCombatWorld.Instance != null)
                 NetworkCombatWorld.Instance.ServerCanonicalBatchProduced -= UpdateParticipantLife;
             Debug.Log("[BootGameplay] Server stopping.", this);
@@ -189,19 +229,35 @@ namespace MonsterSupergroup.NetworkCombat
 
         public override void OnStopClient()
         {
+            ++clientSceneGeneration;
             Debug.Log(
                 $"[BootGameplay] Client stopping; serverActive={NetworkServer.active}.",
                 this);
             if (!NetworkServer.active)
             {
+                // Mirror owns remote SceneMessage operations. Retain the handle
+                // for cleanup, but prevent its completion from readying a new connection.
+                if (loadingSceneAsync != null) stoppedClientSceneOperation = loadingSceneAsync;
+                // During Mirror's completion callback its finally still uses
+                // loadingSceneAsync. In that case Mirror will clear it itself.
+                if (!completingClientScene) loadingSceneAsync = null;
                 BeginGameplayUnload();
             }
 
             base.OnStopClient();
         }
 
-        private IEnumerator ServerLoadGameplay()
+        private IEnumerator ServerLoadGameplay(uint generation)
         {
+            // Unity scene operations cannot be cancelled. A new run waits until
+            // the previous run has finished loading and unloading its scene.
+            while (IsGameplayTransitioning)
+            {
+                if (!IsCurrentServerGeneration(generation)) yield break;
+                yield return null;
+            }
+            if (!IsCurrentServerGeneration(generation)) yield break;
+
             if (TryGetGameplayScene(out Scene loadedScene))
             {
                 serverGameplayScene = loadedScene;
@@ -221,10 +277,10 @@ namespace MonsterSupergroup.NetworkCombat
                 yield break;
             }
 
-            AsyncOperation operation = SceneManager.LoadSceneAsync(
+            gameplayLoadOperation = SceneManager.LoadSceneAsync(
                 gameplayScene,
                 LoadSceneMode.Additive);
-            if (operation == null)
+            if (gameplayLoadOperation == null)
             {
                 Debug.LogError(
                     $"Unable to load Gameplay scene '{gameplayScene}'.",
@@ -232,7 +288,15 @@ namespace MonsterSupergroup.NetworkCombat
                 yield break;
             }
 
-            yield return operation;
+            yield return gameplayLoadOperation;
+            gameplayLoadOperation = null;
+            if (!IsCurrentServerGeneration(generation))
+            {
+                // Loading cannot be cancelled by Unity. A stop received while it
+                // was in flight still owns cleanup when the scene becomes available.
+                BeginGameplayUnload();
+                yield break;
+            }
             if (!TryGetGameplayScene(out loadedScene))
             {
                 Debug.LogError(
@@ -285,12 +349,14 @@ namespace MonsterSupergroup.NetworkCombat
         private IEnumerator SendGameplaySceneWhenReady(
             NetworkConnectionToClient connection)
         {
-            while (NetworkServer.active && !serverGameplayLoaded)
+            uint generation = serverSceneGeneration;
+            while (IsCurrentServerGeneration(generation) && !serverGameplayLoaded)
             {
                 yield return null;
             }
 
-            if (!IsCurrentConnection(connection) || connection.identity != null)
+            if (!IsCurrentServerGeneration(generation) ||
+                !IsCurrentConnection(connection) || connection.identity != null)
             {
                 yield break;
             }
@@ -310,12 +376,17 @@ namespace MonsterSupergroup.NetworkCombat
             NetworkConnectionToClient connection)
         {
             int connectionId = connection.connectionId;
-            while (NetworkServer.active && !serverGameplayLoaded)
+            uint generation = serverSceneGeneration;
+            while (IsCurrentServerGeneration(generation) && !serverGameplayLoaded)
             {
                 yield return null;
             }
 
-            if (!IsCurrentConnection(connection) || connection.identity != null ||
+            // Disconnect already removes this request. Never remove a new
+            // connection's pending entry when Mirror has reused its numeric ID.
+            if (!IsCurrentServerGeneration(generation) || !IsCurrentConnection(connection)) yield break;
+
+            if (connection.identity != null ||
                 !serverGameplayScene.IsValid() || !serverGameplayScene.isLoaded)
             {
                 Debug.LogWarning(
@@ -330,7 +401,8 @@ namespace MonsterSupergroup.NetworkCombat
             }
 
             yield return null;
-            if (!IsCurrentConnection(connection) || connection.identity != null)
+            if (!IsCurrentServerGeneration(generation) || !IsCurrentConnection(connection)) yield break;
+            if (connection.identity != null)
             {
                 pendingPlayerConnections.Remove(connectionId);
                 yield break;
@@ -367,6 +439,12 @@ namespace MonsterSupergroup.NetworkCombat
                 player.GetComponent<NetworkModifierSelection>().PrepareServerRestore(
                     participant.Checkpoint.Build, participant.Checkpoint.Progression);
                 player.GetComponent<NetworkCombatantAdapter>().PrepareServerRestore(participant.Checkpoint);
+                player.GetComponent<NetworkWeaponCombatAdapter>().PrepareServerRestore(participant.Checkpoint.WeaponCooldowns);
+                player.GetComponent<NetworkWeaponCombatAdapter>().PrepareServerSummonRestore(participant.Checkpoint.SummonMaturities);
+                if (participant.Checkpoint.Dash.HasValue)
+                    player.GetComponent<NetworkPlayerDash>().PrepareServerRestore(participant.Checkpoint.Dash.Value);
+                if (participant.Checkpoint.Ultimate.HasValue)
+                    player.GetComponent<NetworkPlayerUltimate>().PrepareServerRestore(participant.Checkpoint.Ultimate.Value);
             }
             NetworkServer.AddPlayerForConnection(connection, player);
             Session.AttachAvatar(connectionId, player.GetComponent<NetworkIdentity>().netId,
@@ -386,6 +464,9 @@ namespace MonsterSupergroup.NetworkCombat
                     out NetworkConnectionToClient current) &&
                 ReferenceEquals(current, connection);
         }
+
+        private bool IsCurrentServerGeneration(uint generation) =>
+            generation == serverSceneGeneration && NetworkServer.active;
 
         private void ActivateGameplay(Scene scene)
         {
@@ -413,11 +494,11 @@ namespace MonsterSupergroup.NetworkCombat
 
             if (bootCamera != null)
             {
-                bootCamera.enabled = true;
+                bootCamera.enabled = !GameplayRuntimeEnvironment.IsDedicatedServer;
             }
             if (bootAudioListener != null)
             {
-                bootAudioListener.enabled = true;
+                bootAudioListener.enabled = !GameplayRuntimeEnvironment.IsDedicatedServer;
             }
         }
 
@@ -447,26 +528,30 @@ namespace MonsterSupergroup.NetworkCombat
             }
 
             gameplayUnloadStarted = true;
+            serverGameplayLoaded = false;
             Debug.Log("[BootGameplay] Gameplay unload requested.", this);
             RestoreBootPresentation();
-            if (TryGetGameplayScene(out Scene scene))
-            {
-                StartCoroutine(UnloadGameplay(scene));
-            }
-            else
-            {
-                ResetGameplayState();
-            }
+            StartCoroutine(UnloadGameplay());
         }
 
-        private IEnumerator UnloadGameplay(Scene scene)
+        private IEnumerator UnloadGameplay()
         {
-            AsyncOperation operation = SceneManager.UnloadSceneAsync(scene);
-            if (operation != null)
+            // Keep the cleanup gate closed even when Stop arrives before the
+            // additive load has made a Scene available to GetSceneByPath.
+            while (gameplayLoadOperation != null) yield return null;
+            if (stoppedClientSceneOperation != null)
             {
-                yield return operation;
+                yield return stoppedClientSceneOperation;
+                stoppedClientSceneOperation = null;
+            }
+            if (TryGetGameplayScene(out Scene scene))
+            {
+                AsyncOperation operation = SceneManager.UnloadSceneAsync(scene);
+                if (operation != null) yield return operation;
             }
 
+            // New server loads are waiting on gameplayUnloadStarted, so this
+            // completion cannot reset a scene belonging to the new generation.
             ResetGameplayState();
         }
 

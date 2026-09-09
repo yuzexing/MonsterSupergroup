@@ -1,128 +1,54 @@
 using System;
-using System.Threading;
 using Animancer;
-using AstralShift.Helpers;
-using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 namespace AstralShift.HellMaiden.Player.Attacks
 {
-	public class OvidSummonIdleModule : IdleStateModule
-	{
-		[SerializeField]
-		private OvidSummonMover mover;
+    public class OvidSummonIdleModule : IdleStateModule
+    {
+        [SerializeField] private OvidSummonMover mover;
+        [SerializeField] private float stopDistance = 2f;
+        [SerializeField] private ClipTransition idleAnimation;
+        [SerializeField] private ClipTransition birthAnimation;
+        public bool IsCacoon { get; set; } = true;
+        public OvidSummonMover Mover => mover;
+        public float BirthDuration => SummonAIBehaviour.ClipDuration(birthAnimation);
+        public ClipTransition CocoonAnimation => idleAnimation;
+        public ClipTransition BirthAnimation => birthAnimation;
 
-		[SerializeField]
-		private float stopDistance = 2f;
+        public override void Init(SummonAIBehaviour behaviour, Action onComplete)
+        {
+            base.Init(behaviour, onComplete);
+            mover.Init(behaviour);
+        }
 
-		[SerializeField]
-		private ClipTransition idleAnimation;
+        public override void Enter() { isComplete = false; OnUpdate(); }
 
-		[SerializeField]
-		private ClipTransition birthAnimation;
+        public override void OnUpdate()
+        {
+            if (_aiBehaviour == null || isComplete) return;
+            SummonAttackBehaviour weapon = _aiBehaviour.WeaponBehaviour;
+            SummonPhase phase = weapon.GetMaturityPhase(out float elapsed);
+            IsCacoon = phase == SummonPhase.Cocoon;
+            if (phase == SummonPhase.Positioning) { Exit(); return; }
+            _aiBehaviour.SetPhase(phase, elapsed);
+            if (_aiBehaviour == null) return;
+            if (!IsCacoon) { mover.StopCacoon(); return; }
+            Transform owner = weapon.OwnerPlayer != null ? weapon.OwnerPlayer.transform : null;
+            if (owner == null) return;
+            Vector2 delta = owner.position - _aiBehaviour.Transform.position;
+            mover.MoveCacoon(delta.normalized, delta.magnitude, weapon.SizeValue * stopDistance);
+        }
 
-		private bool _isCacoon = true;
+        public override void Exit()
+        {
+            if (_aiBehaviour == null || isComplete) return;
+            mover.StopCacoon();
+            IsCacoon = false;
+            base.Exit();
+        }
 
-		private CancellationTokenSource _cts;
-
-		private Transform _playerTransform;
-
-		public bool IsCacoon
-		{
-			get
-			{
-				return _isCacoon;
-			}
-			set
-			{
-				_isCacoon = value;
-			}
-		}
-
-		protected float StopDistance => _aiBehaviour.WeaponBehaviour.SizeValue * stopDistance;
-
-		public override void Init(SummonAIBehaviour behaviour, Action onComplete)
-		{
-			base.Init(behaviour, onComplete);
-			if (_cts == null)
-			{
-				_cts = new CancellationTokenSource();
-			}
-			_playerTransform = GameDirector.Instance.Player.transform;
-			mover.Init(behaviour);
-		}
-
-		public override void Enter()
-		{
-			if (_isCacoon)
-			{
-				PlayIdleAnimation();
-			}
-			else
-			{
-				Exit();
-			}
-		}
-
-		public override async void Exit()
-		{
-			if (_isCacoon)
-			{
-				try
-				{
-					_isCacoon = false;
-					await PlayBirthSequence();
-				}
-				catch (OperationCanceledException)
-				{
-				}
-				catch (Exception exception)
-				{
-					Debug.LogException(exception);
-				}
-			}
-			ExitInstant();
-		}
-
-		public void ExitInstant()
-		{
-			base.Exit();
-		}
-
-		private async UniTask PlayBirthSequence()
-		{
-			mover.StopCacoon();
-			await PlayBirthAnimation();
-			_aiBehaviour.WeaponBehaviour.SetLastAttackTime();
-		}
-
-		private void OnDestroy()
-		{
-			_cts?.Cancel();
-			_cts?.Dispose();
-			_cts = null;
-		}
-
-		public override void OnUpdate()
-		{
-			if (!(_playerTransform == null) && _isCacoon)
-			{
-				Vector2 vector = _aiBehaviour.Transform.position;
-				Vector2 vector2 = _playerTransform.position;
-				float distance = Vector2.Distance(vector, vector2);
-				Vector2 normalized = (vector2 - vector).normalized;
-				mover.MoveCacoon(normalized, distance, StopDistance);
-			}
-		}
-
-		private void PlayIdleAnimation()
-		{
-			_aiBehaviour.Animancer.Play(idleAnimation);
-		}
-
-		private UniTask PlayBirthAnimation()
-		{
-			return AnimancerHelpers.AnimationTask(_aiBehaviour.Animancer, birthAnimation, 0, _cts.Token);
-		}
-	}
+        public void ExitInstant() => Exit();
+        public override void Dispose() { mover.StopCacoon(); base.Dispose(); }
+    }
 }

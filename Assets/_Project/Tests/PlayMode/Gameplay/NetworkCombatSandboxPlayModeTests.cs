@@ -240,7 +240,6 @@ namespace MonsterSupergroup.Gameplay.Tests
 
             try
             {
-                ExpectMissingSandboxControllerManager();
                 manager.StartHost();
                 float playerDeadline = Time.realtimeSinceStartup + 5f;
                 while (NetworkClient.localPlayer == null &&
@@ -559,7 +558,6 @@ namespace MonsterSupergroup.Gameplay.Tests
 
             try
             {
-                ExpectMissingSandboxControllerManager();
                 manager.StartHost();
                 float playerDeadline = Time.realtimeSinceStartup + 6f;
                 while (NetworkClient.localPlayer == null &&
@@ -1573,18 +1571,5 @@ namespace MonsterSupergroup.Gameplay.Tests
                 new Regex(@"EventNotFoundException: \[FMOD\] Event not found:.*"));
         }
 
-        private static void ExpectMissingSandboxControllerManager()
-        {
-            if (AstralShift.Managers.ControllerManager.Instance != null &&
-                AstralShift.Managers.ControllerManager.Instance.Stack != null)
-            {
-                return;
-            }
-
-            LogAssert.Expect(
-                LogType.Error,
-                "NetworkPlayerBootstrap cannot activate PlayerController_HMD " +
-                "before ControllerManager is initialized.");
-        }
     }
 }

@@ -90,6 +90,13 @@ namespace AstralShift.HellMaiden.AI.Enemy
 		[SerializeField]
 		private bool _cancelAttackOnKnockback = true;
 
+		private BaseEnemyMovement _networkKnockbackMovement;
+		private bool _networkMovementOnlyKnockback;
+		private bool _networkRestoreDefaultMovement, _networkRestorePathMovement, _networkRestoreCanBeStuck;
+
+		public bool IsNetworkKnockbackActive => _networkKnockbackMovement != null &&
+			_networkKnockbackMovement.IsKnockbackActive;
+
 		public bool alwaysAttacking;
 
 		public float lastAttackTime = float.NegativeInfinity;
@@ -953,6 +960,10 @@ namespace AstralShift.HellMaiden.AI.Enemy
 			float knockbackMultiplierSum,
 			bool isFatal)
 		{
+			// Network movement-only enemies have no legacy combat FSM. Their
+			// damage is already resolved by GAS; do not start a second simulator
+			// just to replay the old knockback state.
+			if (_stateMachine == null) return;
 			if (IsInKnockbackState)
 			{
 				return;
@@ -1003,10 +1014,69 @@ namespace AstralShift.HellMaiden.AI.Enemy
 			}
 		}
 
+		// Uses the existing displacement coroutine even when the network actor intentionally
+		// has no combat FSM. The caller must hold the current network simulation assignment.
+		public bool TryApplyNetworkKnockback(Vector2 attackPosition, KnockbackSettings settings)
+		{
+			if (!IsAlive || IsImmune || IsInKnockbackState || IsNetworkKnockbackActive || Movement == null ||
+				settings == null || (!settings.HasKnockback && !settings.Staggers) ||
+				(attackScript != null && attackScript.OverrideKnockback)) return false;
+			_networkKnockbackMovement = Movement;
+			_networkMovementOnlyKnockback = _stateMachine == null;
+			if (rigidBody != null) rigidBody.simulated = true;
+			if (!_networkMovementOnlyKnockback)
+			{
+				BruteforceKnockBack(attackPosition, settings);
+				if (!IsNetworkKnockbackActive) _networkKnockbackMovement = null;
+				return IsNetworkKnockbackActive;
+			}
+			_networkRestoreDefaultMovement = defaultMovement != null && defaultMovement.CanMove;
+			_networkRestorePathMovement = usesPathfinding && aILerpMovement != null && aILerpMovement.CanMove;
+			_networkRestoreCanBeStuck = _canBeStuck;
+			_canBeStuck = false;
+			defaultMovement?.StopMovement();
+			// ResetMovementMethod only initializes the optional path movement when it is used.
+			if (usesPathfinding) aILerpMovement?.StopMovement();
+			Movement.StopMovement();
+			Movement.FreezeRigidbody(false);
+			if (rigidBody != null) rigidBody.simulated = true;
+			Vector2 position = hurtBox != null ? hurtBox.GetPosition() : (Vector2)transform.position;
+			// Source BruteforceKnockBack passes 1f: distance * (1 + 1) * Enemy multiplier.
+			Movement.KnockBack((position - attackPosition).normalized, settings, CompleteNetworkMovementKnockback, 1f);
+			return true;
+		}
+
+		private void CompleteNetworkMovementKnockback()
+		{
+			if (!_networkMovementOnlyKnockback) return;
+			_networkMovementOnlyKnockback = false;
+			_networkKnockbackMovement = null;
+			_canBeStuck = _networkRestoreCanBeStuck;
+			if (_networkRestoreDefaultMovement) defaultMovement?.ResumeMovement();
+			if (_networkRestorePathMovement) aILerpMovement?.ResumeMovement();
+		}
+
+		public void CancelNetworkKnockback()
+		{
+			if (_networkKnockbackMovement == null) return;
+			if (!IsNetworkKnockbackActive && !_networkMovementOnlyKnockback)
+			{
+				_networkKnockbackMovement = null;
+				return;
+			}
+			_networkKnockbackMovement.CancelKnockback();
+			if (_networkMovementOnlyKnockback) CompleteNetworkMovementKnockback();
+			else
+			{
+				_networkKnockbackMovement = null;
+				if (IsAlive && IsInKnockbackState) TransitionToMoving();
+			}
+		}
+
 		public override void BruteforceKnockBack(Vector2 attackPosition, KnockbackSettings settings)
 		{
 			Vector2 attackDirection;
-			if (!IsDead && !base.IsImmune && !IsInKnockbackState && !(settings == null) && (settings.HasKnockback || settings.Staggers) && !attackScript.OverrideKnockback)
+			if (!IsDead && !base.IsImmune && !IsInKnockbackState && !(settings == null) && (settings.HasKnockback || settings.Staggers) && (attackScript == null || !attackScript.OverrideKnockback))
 			{
 				Vector2 vector = (hurtBox ? hurtBox.GetPosition() : ((Vector2)base.Transform.position));
 				attackDirection = vector - attackPosition;

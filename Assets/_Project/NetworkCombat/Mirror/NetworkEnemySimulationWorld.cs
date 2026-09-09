@@ -9,7 +9,7 @@ namespace MonsterSupergroup.NetworkCombat
     [DefaultExecutionOrder(-9900)]
     [DisallowMultipleComponent]
     [RequireComponent(typeof(NetworkIdentity))]
-    public sealed class NetworkEnemySimulationWorld : NetworkBehaviour
+    public sealed partial class NetworkEnemySimulationWorld : NetworkBehaviour
     {
         [SerializeField, Min(0.01f)] private float serverSnapshotInterval = 0.05f;
         [SerializeField, Range(1, 32)] private int maximumSnapshotsPerBatch = 20;
@@ -118,6 +118,7 @@ namespace MonsterSupergroup.NetworkCombat
             }
 
             players.Remove(playerId);
+            ForgetPlayerKnockbackPulses(playerId);
             ServerPlayerUnregistered?.Invoke(endpoint);
             Registry.GetEnemiesDependingOnPlayer(playerId, enemyIdBuffer);
             for (int i = 0; i < enemyIdBuffer.Count; i++)
@@ -237,6 +238,7 @@ namespace MonsterSupergroup.NetworkCombat
             }
 
             enemies.Remove(enemy.netId);
+            pendingClientKnockbacks.Remove(enemy.netId);
             neverAssignedEnemies.Remove(enemy.netId);
             Registry.UnregisterEnemy(enemy.netId);
         }
@@ -258,6 +260,7 @@ namespace MonsterSupergroup.NetworkCombat
             {
                 enemies.Remove(enemy.netId);
                 pendingClientAttackPresentations.Remove(enemy.netId);
+                pendingClientKnockbacks.Remove(enemy.netId);
             }
         }
 
@@ -737,6 +740,7 @@ namespace MonsterSupergroup.NetworkCombat
 
         private void OnDestroy()
         {
+            ClearUltimateKnockbackState();
             players.Clear();
             enemies.Clear();
             neverAssignedEnemies.Clear();

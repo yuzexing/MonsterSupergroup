@@ -21,8 +21,9 @@ namespace MonsterSupergroup.Gameplay.Tests
 {
     public sealed class BootGameplayNetworkCombatPlayModeTests
     {
-        private const string BootScenePath = "Assets/Scenes/Boot.unity";
-        private const string GameplayScenePath = "Assets/Scenes/Gameplay.unity";
+        private const string BootScenePath = "Assets/_Project/Scenes/Boot.unity";
+        private const string GameplayScenePath = "Assets/_Project/Scenes/Gameplay.unity";
+        private GameObject[] bootRoots;
 
         [UnityTest]
         public IEnumerator Host_CompletesPlayerAndSkeletonCanonicalCombatLoops()
@@ -34,6 +35,7 @@ namespace MonsterSupergroup.Gameplay.Tests
 #else
             yield return SceneManager.LoadSceneAsync(BootScenePath, LoadSceneMode.Single);
 #endif
+            bootRoots = BootSceneFixtureObjects.Capture(BootScenePath);
             BootGameplayNetworkManager manager =
                 Object.FindFirstObjectByType<BootGameplayNetworkManager>();
             Assert.That(manager, Is.Not.Null);
@@ -84,6 +86,7 @@ namespace MonsterSupergroup.Gameplay.Tests
             Assert.That(prepared, Is.True, prepareError);
             Assert.That(manager.transport, Is.SameAs(validationTransport));
             Assert.That(Transport.active, Is.SameAs(validationTransport));
+            SceneManager.sceneLoaded += ConfigureSkeletonFixture;
             manager.StartHost();
             // The recovered Dante projectile intentionally retains its original
             // FMOD event GUID, while that source bank is not present in this
@@ -278,6 +281,7 @@ namespace MonsterSupergroup.Gameplay.Tests
         [UnityTearDown]
         public IEnumerator TearDown()
         {
+            SceneManager.sceneLoaded -= ConfigureSkeletonFixture;
             NetworkManager manager = NetworkManager.singleton;
             if (manager != null)
             {
@@ -297,7 +301,8 @@ namespace MonsterSupergroup.Gameplay.Tests
 
             float deadline = Time.realtimeSinceStartup + 5f;
             while ((NetworkServer.active || NetworkClient.active ||
-                    SceneManager.GetSceneByPath(GameplayScenePath).isLoaded) &&
+                    SceneManager.GetSceneByPath(GameplayScenePath).isLoaded ||
+                    (manager is BootGameplayNetworkManager boot && boot.IsGameplayTransitioning)) &&
                    Time.realtimeSinceStartup < deadline)
             {
                 yield return null;
@@ -308,6 +313,23 @@ namespace MonsterSupergroup.Gameplay.Tests
                 Assert.That(ControllerManager.Instance.CurrentController, Is.Null,
                     "Stopping Owner authority must release PlayerController_HMD.");
             }
+            BootSceneFixtureObjects.Destroy(bootRoots);
+            yield return null;
+            NetworkManager.ResetStatics();
+        }
+
+        private static void ConfigureSkeletonFixture(Scene scene, LoadSceneMode mode)
+        {
+            if (scene.path != GameplayScenePath) return;
+#if UNITY_EDITOR
+            // Product Gameplay currently selects NetworkEnemyBase. This fixture
+            // specifically verifies the existing Skeleton melee combat loop.
+            var skeletonPrefab = UnityEditor.AssetDatabase.LoadAssetAtPath<GameObject>(
+                "Assets/_Project/Content/NetworkCombat/NetworkEnemySkeleton.prefab");
+            foreach (GameObject root in scene.GetRootGameObjects())
+                foreach (var spawner in root.GetComponentsInChildren<NetworkGameplayEnemySpawner>(true))
+                    spawner.Configure(skeletonPrefab, 5f);
+#endif
         }
     }
 }

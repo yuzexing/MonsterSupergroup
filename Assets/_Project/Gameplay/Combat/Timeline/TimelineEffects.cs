@@ -19,10 +19,21 @@ namespace AstralShift.HellMaiden.Timeline
 
 		private bool _playerRender = true;
 
-		public void ShakeCamera(int index)
-		{
-			CameraEffects.Instance.Shake(index);
-		}
+        private bool hasLocalCameraBinding;
+        private System.Action<int> localCameraShake;
+
+        // Native attacks explicitly bind their Owner camera; a null callback suppresses remote/server camera work.
+        public void BindLocalCameraShake(System.Action<int> handler)
+        {
+            hasLocalCameraBinding = true;
+            localCameraShake = handler;
+        }
+
+        public void ShakeCamera(int index)
+        {
+            if (hasLocalCameraBinding) { localCameraShake?.Invoke(index); return; }
+            CameraEffects.Instance.Shake(index);
+        }
 
 		public void ConstantShakeCamera(int index)
 		{

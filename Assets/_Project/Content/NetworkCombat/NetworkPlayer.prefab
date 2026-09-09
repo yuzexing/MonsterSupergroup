@@ -215,6 +215,8 @@ GameObject:
   - component: {fileID: 871410000000000002}
   - component: {fileID: 871410000000000003}
   - component: {fileID: 871410000000000004}
+  - component: {fileID: 871410000000000005}
+  - component: {fileID: 871410000000000006}
   m_Layer: 10
   m_Name: NetworkPlayer
   m_TagString: Untagged
@@ -400,20 +402,38 @@ MonoBehaviour:
     Path: 
   dashExclusionLayerMask:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 4087
   dashCurve:
     serializedVersion: 2
-    m_Curve: []
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0.3
+      inSlope: 2
+      outSlope: 2
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 0.9929199
+      value: 0.75
+      inSlope: -1.4645969
+      outSlope: -1.4645969
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.04819073
+      outWeight: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  dashObstacleMargin: 2.5
+  dashObstacleMargin: 0.3
   obstacleLayerMask:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 2048
   edgeLayerMask:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 4198400
   dashBufferTime: 0.1
 --- !u!50 &7846858798589903725
 Rigidbody2D:
@@ -692,7 +712,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: MonsterSupergroup.Gameplay.Combat::MonsterSupergroup.Gameplay.Combat.PlayerBuildRuntime
   owner: {fileID: 0}
   serviceProvider: {fileID: 0}
-  initialWeaponId: 2
+  initialWeaponId: 6
 --- !u!114 &8302459270084936770
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -753,6 +773,93 @@ MonoBehaviour:
   runtimeDatabase: {fileID: 0}
   playerMovement: {fileID: 0}
   combatantBinding: {fileID: 0}
+--- !u!114 &871410000000000001
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3415738789270495989}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7956e1fcf3bc45719564a88ab1448c1f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: MonsterSupergroup.Gameplay.Combat::MonsterSupergroup.Gameplay.Combat.ModifierSelectionController
+--- !u!114 &871410000000000002
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3415738789270495989}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 29890c46d146492cb60cb03040e21555, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: MonsterSupergroup.Gameplay.Combat::MonsterSupergroup.Gameplay.Combat.DebugModifierSelectionInput
+  selection: {fileID: 871410000000000001}
+--- !u!114 &871410000000000003
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3415738789270495989}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 66ca712a39cc4a98a2f47a722458800c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncDirection: 0
+  syncMode: 0
+  syncInterval: 0
+  experiencePerLevel: 2
+--- !u!114 &871410000000000004
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3415738789270495989}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8546674d1495415fa4d07be3b6d0f212, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncDirection: 0
+  syncMode: 0
+  syncInterval: 0
+--- !u!114 &871410000000000005
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3415738789270495989}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 09f54749144e4f37ae93239e722bd9c4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: MonsterSupergroup.NetworkCombat::MonsterSupergroup.NetworkCombat.NetworkPlayerDash
+  syncDirection: 0
+  syncMode: 0
+  syncInterval: 0
+--- !u!114 &871410000000000006
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3415738789270495989}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4c898b2a2e6d79e4fa2ce6fdad95bb26, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: MonsterSupergroup.NetworkCombat::MonsterSupergroup.NetworkCombat.NetworkPlayerUltimate
+  syncDirection: 0
+  syncMode: 0
+  syncInterval: 0
+  ultimateData: {fileID: 11400000, guid: 40383fcceec222a4994743bf342be02f, type: 2}
 --- !u!1 &3960754033959345787
 GameObject:
   m_ObjectHideFlags: 0
@@ -1397,60 +1504,3 @@ Transform:
   m_Children: []
   m_Father: {fileID: 8878785505183612663}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &871410000000000001
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3415738789270495989}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7956e1fcf3bc45719564a88ab1448c1f, type: 3}
-  m_Name:
-  m_EditorClassIdentifier: MonsterSupergroup.Gameplay.Combat::MonsterSupergroup.Gameplay.Combat.ModifierSelectionController
---- !u!114 &871410000000000002
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3415738789270495989}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 29890c46d146492cb60cb03040e21555, type: 3}
-  m_Name:
-  m_EditorClassIdentifier: MonsterSupergroup.Gameplay.Combat::MonsterSupergroup.Gameplay.Combat.DebugModifierSelectionInput
-  selection: {fileID: 871410000000000001}
-
---- !u!114 &871410000000000003
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3415738789270495989}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 66ca712a39cc4a98a2f47a722458800c, type: 3}
-  m_Name:
-  m_EditorClassIdentifier:
-  syncDirection: 0
-  syncMode: 0
-  syncInterval: 0
-  experiencePerLevel: 2
---- !u!114 &871410000000000004
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3415738789270495989}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8546674d1495415fa4d07be3b6d0f212, type: 3}
-  m_Name:
-  m_EditorClassIdentifier:
-  syncDirection: 0
-  syncMode: 0
-  syncInterval: 0

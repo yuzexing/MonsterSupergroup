@@ -32,5 +32,12 @@ namespace AstralShift.HellMaiden.Player.Attacks
 			isComplete = true;
 			_onComplete?.Invoke();
 		}
+
+		public virtual void Dispose()
+		{
+			_onComplete = null;
+			_aiBehaviour = null;
+			isComplete = false;
+		}
 	}
 }

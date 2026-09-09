@@ -1,0 +1,67 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d49b6f84b3b09feb740257504c5fc1f, type: 3}
+  m_Name: WeaponData_Ovid_Summon
+  m_EditorClassIdentifier: 
+  ID: 402
+  Title: Summon
+  Description: 
+  HasQuote: 0
+  Quote: 
+  hasLocalization: 1
+  TitleKey: WPN_Name_402
+  DescriptionKey: WPN_Desc_402
+  QuoteKey: 
+  poolID: 4
+  poolWeight: 1
+  dependencies: []
+  visualDataReference:
+    m_AssetGUID: 7bff86cdfe20649409d290d6bec92b97
+    m_SubObjectName: 
+    m_SubObjectType: 
+    m_SubObjectGUID: 
+    m_EditorAssetChanged: 0
+  WeaponPrefab: {fileID: 114724804207875695, guid: 7223175399bd57a41bb458eba71d925f, type: 3}
+  isSignature: 0
+  ultimateData: {fileID: 0}
+  baseStats:
+    damage: 24
+    critMultiplier: 1
+    critRate: 0
+    speed: 0.2
+    size: 1
+    duration: 1
+    projectileCount: 1
+    knockbackDistance: 0.5
+    damageType: 0
+  attackTagsValue: 1
+  presentation:
+    cameraShake:
+      mode: 0
+      shakePreset: {fileID: 0}
+      constantShakePreset: {fileID: 0}
+      strength: {x: 10, y: 10, z: 0}
+      duration: 0.5
+      vibrato: 10
+      randomness: 0.1
+      smoothness: 0.1
+      useRandomInitialAngle: 1
+      initialAngle: 0
+      rotation: {x: 0, y: 0, z: 0}
+      ignoreTimeScale: 0
+    cameraShakePerLevelIncrement: 0
+    knockback: {fileID: 11400000, guid: 75da00b77c9efb247ba641b508fa9e9f, type: 2}
+  rarity: 1
+  modifierFlags: 239
+  references:
+    version: 2
+    RefIds: []

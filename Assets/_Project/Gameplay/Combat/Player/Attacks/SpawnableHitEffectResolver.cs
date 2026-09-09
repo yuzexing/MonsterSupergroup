@@ -18,6 +18,7 @@ namespace AstralShift.HellMaiden.Player.Attacks
 		protected GenericPooler<BaseAttackHitEffect> _hitEffectPooler;
 
 		private WeaponBehaviour _behaviour;
+		private Transform _checkoutRoot;
 
 		public BaseAttackHitEffect HitEffect => hitEffect;
 
@@ -65,73 +66,75 @@ namespace AstralShift.HellMaiden.Player.Attacks
 
 		protected virtual void SpawnHitEffect(AttackSnapshot attack)
 		{
-			if (_hitEffectPooler != null)
+			if (_hitEffectPooler == null) return;
+
+			// The resolver can be reused while a previous impact is still alive.
+			// Its callbacks must own that spawn's source, snapshot and pool.
+			WeaponBehaviour source = _behaviour;
+			GenericPooler<BaseAttackHitEffect> pool = _hitEffectPooler;
+			AttackSnapshotLease attackLease = attack?.Retain();
+			BaseAttackHitEffect effect = null;
+			bool completed = false;
+			Action onEnd = () =>
 			{
-				AttackSnapshotLease attackLease = attack?.Retain();
-				BaseAttackHitEffect effect = _hitEffectPooler.GetOrCreate(null, activate: true);
-				if ((bool)hitEffectSpawnPivot)
+				if (completed) return;
+				completed = true;
+				attackLease?.Dispose();
+				if (!effect) return;
+				// Unity forbids reparenting from an external OnDisable/OnDestroy stack.
+				// Retire cancelled instances; normal completion still returns to the pool.
+				if (effect.isActiveAndEnabled) pool.Return(effect);
+				else Destroy(effect.gameObject);
+			};
+			Action<IDamageable> onHit = damageable =>
+			{
+				if (completed || !source || !effect || damageable == null) return;
+				if (attackLease != null)
 				{
-					effect.transform.position = new Vector3(hitEffectSpawnPivot.position.x, hitEffectSpawnPivot.position.y, 0f);
+					if (source.NativeRuntime != null && source.NativeRuntime.IsInitialized)
+						source.OnNativeGasHit(effect.transform.position, damageable, attackLease.Snapshot);
 				}
-				else
+				else source.OnHit(effect.transform.position, damageable);
+			};
+			try
+			{
+				if (_checkoutRoot == null)
 				{
-					effect.transform.position = base.transform.position;
+					var staging = new GameObject("Impact Initialization");
+					staging.SetActive(false);
+					staging.transform.SetParent(transform, false);
+					_checkoutRoot = staging.transform;
 				}
-				Action onEnd = delegate
+				effect = pool.GetOrCreate(_checkoutRoot, activate: false);
+				effect.gameObject.SetActive(false);
+				effect.transform.SetParent(null, false);
+				effect.transform.position = hitEffectSpawnPivot
+					? new Vector3(hitEffectSpawnPivot.position.x, hitEffectSpawnPivot.position.y, 0f)
+					: transform.position;
+				effect.transform.rotation = hitEffect.transform.rotation;
+				effect.transform.localScale = hitEffect.transform.localScale;
+				if (damageMode == DamageMode.ExplosionHit || damageMode == DamageMode.Both || damageMode == DamageMode.MainHit)
 				{
-					attackLease?.Dispose();
-					_hitEffectPooler?.Return(effect);
-				};
-				Action<IDamageable> onHit = attackLease == null
-					? OnHit
-					: damageable =>
-					{
-						if ((bool)_behaviour && damageable != null)
-						{
-							_behaviour.OnNativeGasHit(
-								effect.transform.position,
-								damageable,
-								attackLease.Snapshot);
-						}
-					};
-				try
-				{
+					if (attack != null) effect.Init(source, attack);
+					else effect.Init(source);
+				}
+				// Init precedes OnEnable even when Instantiate receives an active prefab.
+				effect.gameObject.SetActive(true);
 				switch (damageMode)
 				{
 				case DamageMode.ExplosionHit:
 				case DamageMode.Both:
-					if (attack != null)
-					{
-						effect.Init(_behaviour, attack);
-					}
-					else
-					{
-						effect.Init(_behaviour);
-					}
 					effect.PlayOnEnable(onHit, onEnd);
-					break;
-				case DamageMode.MainHit:
-					if (attack != null)
-					{
-						effect.Init(_behaviour, attack);
-					}
-					else
-					{
-						effect.Init(_behaviour);
-					}
-					effect.PlayOnEnable(onEnd);
 					break;
 				default:
 					effect.PlayOnEnable(onEnd);
 					break;
 				}
-				}
-				catch
-				{
-					attackLease?.Dispose();
-					_hitEffectPooler?.Return(effect);
-					throw;
-				}
+			}
+			catch
+			{
+				onEnd();
+				throw;
 			}
 		}
 	}

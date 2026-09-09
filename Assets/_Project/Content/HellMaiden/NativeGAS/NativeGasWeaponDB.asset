@@ -14,4 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: MonsterSupergroup.Gameplay.Combat::AstralShift.HellMaiden.Data.Cards.WeaponDB
   weapons:
   - {fileID: 11400000, guid: 8cb561745fe92724f9455c7f2d966309, type: 2}
+  - {fileID: 11400000, guid: 19a1f908d6ece0f4ab14b32b1e4fb7df, type: 2}
+  - {fileID: 11400000, guid: 5b7f188c355304243a43a393d9847208, type: 2}
+  - {fileID: 11400000, guid: 74398ecb43560604ea3616595afc64fe, type: 2}
+  - {fileID: 11400000, guid: 29e525d71e073734f89b2f0e9d7da016, type: 2}
+  - {fileID: 11400000, guid: e073fc236953b434da458962f6e19ba8, type: 2}
   visualDataTemplatesLUT: {fileID: 0}

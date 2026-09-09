@@ -1,110 +1,70 @@
 using System;
 using System.Collections.Generic;
-using AstralShift.HellMaiden.AI.Enemy;
-using AstralShift.HellMaiden.Helpers;
 using UnityEngine;
 
 namespace AstralShift.HellMaiden.Player.Attacks
 {
-	public class OvidSummonPositioningModule : PositioningStateModule
-	{
-		[SerializeField]
-		private OvidSummonMover mover;
+    public class OvidSummonPositioningModule : PositioningStateModule
+    {
+        [SerializeField] private OvidSummonMover mover;
+        [SerializeField] private float stopDistance = 4f;
+        [Tooltip("The distance Ovid wants to be from the target before firing.")]
+        [SerializeField] private float optimalAttackDistance = 6f;
+        [SerializeField] private float minDetectionRadius = 5f;
+        [SerializeField] private float maxDetectionRadius = 15f;
+        private readonly List<SummonTarget> targets = new List<SummonTarget>();
 
-		[SerializeField]
-		private float stopDistance = 4f;
+        public override void Init(SummonAIBehaviour behaviour, Action onComplete)
+        {
+            base.Init(behaviour, onComplete);
+            mover.Init(behaviour);
+        }
 
-		[Tooltip("The distance Ovid wants to be from the target before firing.")]
-		[SerializeField]
-		private float optimalAttackDistance = 6f;
+        public override void Enter()
+        {
+            isComplete = false;
+            _aiBehaviour.SetPhase(SummonPhase.Positioning);
+        }
 
-		[SerializeField]
-		private float minDetectionRadius = 5f;
+        public override void Exit()
+        {
+            if (_aiBehaviour == null || isComplete) return;
+            mover.Stop(true);
+            base.Exit();
+        }
 
-		[SerializeField]
-		private float maxDetectionRadius = 15f;
+        public override void OnUpdate()
+        {
+            if (_aiBehaviour == null || isComplete) return;
+            SummonAttackBehaviour weapon = _aiBehaviour.WeaponBehaviour;
+            if (weapon.OwnerPlayer == null) return;
+            Vector2 position = _aiBehaviour.Transform.position;
+            weapon.QueryTargets(position, weapon.SizeValue * minDetectionRadius, weapon.SizeValue * maxDetectionRadius, targets);
+            SummonTarget closest = default;
+            float closestSquared = float.PositiveInfinity;
+            foreach (SummonTarget target in targets)
+            {
+                if (!target.IsAvailable) continue;
+                float squared = (target.Position - position).sqrMagnitude;
+                if (squared < closestSquared) { closestSquared = squared; closest = target; }
+            }
+            if (closest.IsAvailable && weapon.IsAttackReady)
+            {
+                float desired = weapon.SizeValue * optimalAttackDistance;
+                float distance = Mathf.Sqrt(closestSquared);
+                if (distance <= desired + 0.5f) { Exit(); return; }
+                mover.Move((closest.Position - position).normalized, distance, desired);
+            }
+            else
+            {
+                Vector2 delta = (Vector2)weapon.OwnerPlayer.transform.position - position;
+                float desired = weapon.SizeValue * stopDistance;
+                if (delta.magnitude > desired) mover.Move(delta.normalized, delta.magnitude, desired);
+                else mover.Stop();
+            }
+            mover.UpdateAnimation();
+        }
 
-		private Transform _playerTransform;
-
-		private BaseEnemyController _potentialTarget;
-
-		private List<BaseEnemyController> _tempTargetsList;
-
-		private const float OptimalAttackDistanceReferenceTolerance = 0.5f;
-
-		private float StopDistance => _aiBehaviour.WeaponBehaviour.SizeValue * stopDistance;
-
-		private float OptimalAttackDistance => _aiBehaviour.WeaponBehaviour.SizeValue * optimalAttackDistance;
-
-		private float MinDetectionRadius => _aiBehaviour.WeaponBehaviour.SizeValue * minDetectionRadius;
-
-		private float MaxDetectionRadius => _aiBehaviour.WeaponBehaviour.SizeValue * maxDetectionRadius;
-
-		public override void Init(SummonAIBehaviour behaviour, Action onComplete)
-		{
-			base.Init(behaviour, onComplete);
-			mover.Init(behaviour);
-			_playerTransform = GameDirector.Instance.Player.transform;
-		}
-
-		public override void Enter()
-		{
-			_potentialTarget = null;
-		}
-
-		public override void Exit()
-		{
-			mover.Stop(immediately: true);
-			mover.UpdateAnimation();
-			base.Exit();
-		}
-
-		public override void OnUpdate()
-		{
-			if (!(_playerTransform == null))
-			{
-				Vector2 vector = _aiBehaviour.Transform.position;
-				_potentialTarget = AIHelpers.FindClosestEnemyInCircleRange(vector, MinDetectionRadius, MaxDetectionRadius);
-				if (_potentialTarget != null && _aiBehaviour.WeaponBehaviour.CheckCooldown())
-				{
-					HandleOptimalCombatPositioning(vector);
-				}
-				else
-				{
-					HandlePlayerFollowing(vector);
-				}
-			}
-		}
-
-		private void HandleOptimalCombatPositioning(Vector2 currentPos)
-		{
-			Vector2 hurtBoxPosition = _potentialTarget.GetHurtBoxPosition();
-			float num = Vector2.Distance(currentPos, hurtBoxPosition);
-			if (num <= OptimalAttackDistance + 0.5f)
-			{
-				Exit();
-				return;
-			}
-			Vector2 normalized = (hurtBoxPosition - currentPos).normalized;
-			mover.Move(normalized, num, OptimalAttackDistance);
-			mover.UpdateAnimation();
-		}
-
-		private void HandlePlayerFollowing(Vector2 currentPos)
-		{
-			Vector2 vector = _playerTransform.position;
-			float num = Vector2.Distance(currentPos, vector);
-			if (num > StopDistance)
-			{
-				Vector2 normalized = (vector - currentPos).normalized;
-				mover.Move(normalized, num, StopDistance);
-				mover.UpdateAnimation();
-			}
-			else
-			{
-				mover.Stop();
-				mover.UpdateAnimation();
-			}
-		}
-	}
+        public override void Dispose() { targets.Clear(); mover.Stop(true); base.Dispose(); }
+    }
 }

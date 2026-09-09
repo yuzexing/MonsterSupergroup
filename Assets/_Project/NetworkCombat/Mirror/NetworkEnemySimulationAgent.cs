@@ -17,7 +17,7 @@ namespace MonsterSupergroup.NetworkCombat
     [RequireComponent(typeof(Rigidbody2D))]
     [RequireComponent(typeof(EnemySimulationAuthority))]
     [RequireComponent(typeof(EnemySnapshotInterpolator))]
-    public sealed class NetworkEnemySimulationAgent : NetworkBehaviour
+    public sealed partial class NetworkEnemySimulationAgent : NetworkBehaviour
     {
         [SerializeField] private EnemySimulationAuthority authority;
         [SerializeField] private EnemySnapshotInterpolator interpolator;
@@ -188,6 +188,7 @@ namespace MonsterSupergroup.NetworkCombat
 
         public override void OnStopClient()
         {
+            CancelNetworkKnockbackState(true);
             SetContinuousContactDamageInteractionsActive(false);
             SetAttackScriptExecutionActive(false);
             pendingAttackPresentationEdges.Clear();
@@ -197,6 +198,7 @@ namespace MonsterSupergroup.NetworkCombat
 
         public override void OnStopServer()
         {
+            CancelNetworkKnockbackState(true);
             NetworkEnemySimulationWorld.Instance?.UnregisterEnemy(this);
             base.OnStopServer();
         }
@@ -357,6 +359,7 @@ namespace MonsterSupergroup.NetworkCombat
                 ApplyAssignment(assignment);
             }
             TryInitializeProductEnemy();
+            UpdateNetworkKnockbackState();
         }
 
         private bool AssignmentNeedsLocalRefresh()
@@ -412,6 +415,10 @@ namespace MonsterSupergroup.NetworkCombat
                 current.SimulationOwnerPlayerId,
                 current.AggroTargetPlayerId,
                 current.Epoch);
+
+            if (activeKnockbackEpoch != 0 &&
+                (activeKnockbackEpoch != current.Epoch || !authority.RunsNavigation))
+                CancelNetworkKnockbackState();
 
             if (enemyController != null)
             {
@@ -550,6 +557,7 @@ namespace MonsterSupergroup.NetworkCombat
                 return;
             }
 
+            CancelNetworkKnockbackState();
             SetContinuousContactDamageInteractionsActive(false);
             SetAttackScriptExecutionActive(false);
             pendingAttackPresentationEdges.Clear();
@@ -568,6 +576,7 @@ namespace MonsterSupergroup.NetworkCombat
 
         private void OnDestroy()
         {
+            CancelNetworkKnockbackState(true);
             if (combatant != null)
             {
                 combatant.HealthChanged -= HandleHealthChanged;

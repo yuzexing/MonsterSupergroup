@@ -67,6 +67,13 @@ namespace AstralShift.HellMaiden.Player.Attacks
 
 		protected SummonAIBehaviour _behaviour;
 
+		public ClipTransition MoveAnimation => moveAnimation;
+		public float AnimationSpeed => _moveState != null && _moveState.IsValid() ? _moveState.Speed : minAnimSpeed;
+		private bool _authoredStateCaptured;
+		private Vector3 _authoredIsoPosition;
+		private Quaternion _authoredRotation;
+		private float Delta => _behaviour != null ? _behaviour.SmoothDeltaTime : 0f;
+
 		public Transform GetRotationPivot()
 		{
 			return rotationPivot;
@@ -75,12 +82,48 @@ namespace AstralShift.HellMaiden.Player.Attacks
 		public virtual void Init(SummonAIBehaviour behaviour)
 		{
 			_behaviour = behaviour;
+			if (!_authoredStateCaptured)
+			{
+				_authoredStateCaptured = true;
+				_authoredIsoPosition = isoPivot.localPosition;
+				_authoredRotation = rotationPivot.localRotation;
+			}
+			rb.simulated = !behaviour.IsPresentation;
+		}
+
+		public SummonPose CapturePose() => new SummonPose
+		{
+			Position = rb.transform.position,
+			RotationPivotEuler = rotationPivot.localEulerAngles,
+			IsoLocalPosition = isoPivot.localPosition,
+			MoveAnimationSpeed = AnimationSpeed
+		};
+
+		public void ApplyPose(SummonPose pose)
+		{
+			rb.transform.position = pose.Position;
+			rotationPivot.localEulerAngles = pose.RotationPivotEuler;
+			isoPivot.localPosition = pose.IsoLocalPosition;
+			if (_moveState != null && _moveState.IsValid()) _moveState.Speed = pose.MoveAnimationSpeed;
+		}
+
+		public void Dispose()
+		{
+			if (rb != null) rb.linearVelocity = Vector2.zero;
+			_behaviour = null;
+			_moveState = null;
+			_hoverTimer = 0f;
+			if (_authoredStateCaptured)
+			{
+				isoPivot.localPosition = _authoredIsoPosition;
+				rotationPivot.localRotation = _authoredRotation;
+			}
 		}
 
 		public void Move(Vector2 direction, float distance, float stopDistance)
 		{
 			float t = Mathf.Clamp01((distance - stopDistance) / (maxSpeedDistance - stopDistance));
-			float num = accelerationCurve.EasePercentage(t);
+			float num = accelerationCurve != null ? accelerationCurve.EasePercentage(t) : t;
 			float num2 = maxMoveSpeed * num;
 			if (distance > stopDistance)
 			{
@@ -94,13 +137,14 @@ namespace AstralShift.HellMaiden.Player.Attacks
 
 		public void Stop(bool immediately = false)
 		{
+			if (rb == null) return;
 			if (immediately)
 			{
-				rb.linearVelocity = Vector2.zero;
+				 rb.linearVelocity = Vector2.zero;
 			}
 			else
 			{
-				rb.linearVelocity = Vector2.MoveTowards(rb.linearVelocity, Vector2.zero, Time.smoothDeltaTime * maxMoveSpeed * decelerationMultiplier);
+				rb.linearVelocity = Vector2.MoveTowards(rb.linearVelocity, Vector2.zero, Delta * maxMoveSpeed * decelerationMultiplier);
 			}
 			UpdateTilt();
 			UpdateHover();
@@ -109,7 +153,7 @@ namespace AstralShift.HellMaiden.Player.Attacks
 		public void MoveCacoon(Vector2 direction, float distance, float stopDistance)
 		{
 			float t = Mathf.Clamp01((distance - stopDistance) / (maxSpeedDistance - stopDistance));
-			float num = accelerationCurve.EasePercentage(t);
+			float num = accelerationCurve != null ? accelerationCurve.EasePercentage(t) : t;
 			float num2 = maxMoveSpeed * num * cacoonSpeedMultiplier;
 			if (distance > stopDistance)
 			{
@@ -120,7 +164,7 @@ namespace AstralShift.HellMaiden.Player.Attacks
 
 		public void StopCacoon()
 		{
-			rb.linearVelocity = Vector2.zero;
+			if (rb != null) rb.linearVelocity = Vector2.zero;
 		}
 
 		private void Rotate(Vector2 direction)
@@ -128,7 +172,7 @@ namespace AstralShift.HellMaiden.Player.Attacks
 			if (!(direction.sqrMagnitude <= 0.01f))
 			{
 				float b = Mathf.Atan2(direction.x, direction.y) * 57.29578f + angleOffset;
-				float y = Mathf.LerpAngle(rotationPivot.localEulerAngles.y, b, Time.smoothDeltaTime * rotationSmoothing);
+				float y = Mathf.LerpAngle(rotationPivot.localEulerAngles.y, b, Delta * rotationSmoothing);
 				rotationPivot.localRotation = Quaternion.Euler(rotationPivot.localEulerAngles.x, y, 0f);
 			}
 		}
@@ -142,7 +186,7 @@ namespace AstralShift.HellMaiden.Player.Attacks
 
 		private void UpdateHover()
 		{
-			_hoverTimer += Time.smoothDeltaTime * hoverFrequency;
+			_hoverTimer += Delta * hoverFrequency;
 			float x = Mathf.Cos(_hoverTimer) * hoverAmplitude;
 			float y = Mathf.Sin(_hoverTimer) * hoverAmplitude * hoverYAxisFactor;
 			isoPivot.localPosition = new Vector3(x, y, 0f);

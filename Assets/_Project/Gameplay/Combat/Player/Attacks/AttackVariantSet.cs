@@ -53,6 +53,14 @@ namespace AstralShift.HellMaiden.Player.Attacks
 			return orCreate;
 		}
 
+		/// <summary>Resolve authored presentation data without instantiating a pooled attack.</summary>
+		public T GetPrefab(AttackElement element)
+		{
+			if (element == AttackElement.Fire && allowFire && firePrefab != null) return firePrefab;
+			if (element == AttackElement.Poison && allowPoison && poisonPrefab != null) return poisonPrefab;
+			return defaultPrefab;
+		}
+
 		public T GetOrCreate(AttackElement element, Transform parent, bool worldPositionStays)
 		{
 			List<T> instances;
@@ -95,6 +103,14 @@ namespace AstralShift.HellMaiden.Player.Attacks
 			{
 				TryReturn(_defaultInstances, _defaultPooler, attack);
 			}
+		}
+
+		/// <summary>Forget an externally deactivated instance without reparenting it during OnDisable.</summary>
+		public void Discard(T attack)
+		{
+			_defaultInstances.Remove(attack);
+			_poisonInstances.Remove(attack);
+			_fireInstances.Remove(attack);
 		}
 
 		public void Dispose()

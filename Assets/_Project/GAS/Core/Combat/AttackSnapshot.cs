@@ -31,6 +31,9 @@ namespace MonsterSupergroup.GAS
 
         public CombatContext Context { get; }
 
+        /// <summary>True only after the owner and every projectile/effect lease have released.</summary>
+        public bool IsDisposed => referenceCount == 0;
+
         internal RuntimeModifierExecutionSnapshot Execution
         {
             get

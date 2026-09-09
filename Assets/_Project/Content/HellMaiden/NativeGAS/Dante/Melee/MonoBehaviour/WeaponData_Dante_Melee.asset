@@ -1,0 +1,67 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d49b6f84b3b09feb740257504c5fc1f, type: 3}
+  m_Name: WeaponData_Dante_Melee
+  m_EditorClassIdentifier: 
+  ID: 1
+  Title: Blazing Quill
+  Description: Releases a close-ranged searing slash.
+  HasQuote: 1
+  Quote: "\u201CThis love blazes like fire, \nfrom a small to a great flame.\u201D"
+  hasLocalization: 1
+  TitleKey: WPN_Name_01
+  DescriptionKey: WPN_Desc_01
+  QuoteKey: WPN_Quote_01
+  poolID: 0
+  poolWeight: 1
+  dependencies: []
+  visualDataReference:
+    m_AssetGUID: 9d52d9b8bafa101439d34efc3973c18b
+    m_SubObjectName: 
+    m_SubObjectType: 
+    m_SubObjectGUID: 
+    m_EditorAssetChanged: 0
+  WeaponPrefab: {fileID: 114724804207875695, guid: 190e3296a8f05504594b069e64e75621, type: 3}
+  isSignature: 1
+  ultimateData: {fileID: 0}
+  baseStats:
+    damage: 19
+    critMultiplier: 1.3
+    critRate: 0.07
+    speed: 1
+    size: 1
+    duration: 1
+    projectileCount: 1
+    knockbackDistance: 0.6
+    damageType: 0
+  attackTagsValue: 1
+  presentation:
+    cameraShake:
+      mode: 0
+      shakePreset: {fileID: 0}
+      constantShakePreset: {fileID: 0}
+      strength: {x: 10, y: 10, z: 0}
+      duration: 0.5
+      vibrato: 10
+      randomness: 0.1
+      smoothness: 0.1
+      useRandomInitialAngle: 1
+      initialAngle: 0
+      rotation: {x: 0, y: 0, z: 0}
+      ignoreTimeScale: 0
+    cameraShakePerLevelIncrement: 0.1
+    knockback: {fileID: 11400000, guid: 70e4ba1436937b74b898ee24dd7c3fb2, type: 2}
+  rarity: 1
+  modifierFlags: 247
+  references:
+    version: 2
+    RefIds: []

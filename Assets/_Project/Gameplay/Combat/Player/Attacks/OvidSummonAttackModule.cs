@@ -1,302 +1,257 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
 using Animancer;
-using AstralShift.HellMaiden.AI.Enemy;
-using AstralShift.HellMaiden.Helpers;
-using AstralShift.Helpers;
-using Cysharp.Threading.Tasks;
 using FMOD.Studio;
 using FMODUnity;
 using UnityEngine;
 
 namespace AstralShift.HellMaiden.Player.Attacks
 {
-	public class OvidSummonAttackModule : AttackStateModule
-	{
-		[SerializeField]
-		private OvidSummonMover mover;
+    public class OvidSummonAttackModule : AttackStateModule
+    {
+        [SerializeField] private OvidSummonMover mover;
+        [SerializeField] private BaseAttackHitBox hitBox;
+        [SerializeField] private float minDetectionRadius = 5f;
+        [SerializeField] private float maxDetectionRadius = 10f;
+        [SerializeField] private float clusterSearchRadius = 4f;
+        [SerializeField] private int framePartitioningCount = 4;
+        [SerializeField] private int maxEnemiesToProcess = 100;
+        [SerializeField] private float angleOffset = 180f;
+        [SerializeField] private float aimSmoothing = 15f;
+        [SerializeField] private float sweepAngle = 30f;
+        [SerializeField] private CustomAnimationCurve sweepAccelerationCurve;
+        [SerializeField] private float predictionLeadTime = 0.2f;
+        [SerializeField] private float velocitySmoothing = 10f;
+        [SerializeField] private ClipTransition attackEnterAnimation;
+        [SerializeField] private ClipTransition attackLoopAnimation;
+        [SerializeField] private ClipTransition attackExitAnimation;
+        [SerializeField] private EventReference beamSound;
 
-		[SerializeField]
-		private BaseAttackHitBox hitBox;
+        private readonly List<SummonTarget> targets = new List<SummonTarget>();
+        private SummonTarget target;
+        private EventInstance attackSoundInstance;
+        private Transform rotationPivot;
+        private Vector2 lastTargetPosition;
+        private Vector2 smoothedVelocity;
+        private bool searching;
+        private bool started;
+        private int searchIndex;
+        private int chunkSize;
+        private int bestScore;
+        private float elapsed;
+        private float mainDuration;
+        private float enterDuration;
+        private float exitDuration;
+        private float startAngle;
+        private float targetAngle;
 
-		[SerializeField]
-		private float minDetectionRadius = 5f;
+        public float MinDetectionRadius => _aiBehaviour.WeaponBehaviour.SizeValue * minDetectionRadius;
+        public float MaxDetectionRadius => _aiBehaviour.WeaponBehaviour.SizeValue * maxDetectionRadius;
+        public ClipTransition EnterAnimation => attackEnterAnimation;
+        public ClipTransition MainAnimation => attackLoopAnimation;
+        public ClipTransition ExitAnimation => attackExitAnimation;
+        public float EnterDuration => SummonAIBehaviour.ClipDuration(attackEnterAnimation);
+        public float ExitDuration => SummonAIBehaviour.ClipDuration(attackExitAnimation);
+        public BaseAttackHitBox HitBox => hitBox;
 
-		[SerializeField]
-		private float maxDetectionRadius = 10f;
+        public override void Init(SummonAIBehaviour behaviour, Action onComplete)
+        {
+            base.Init(behaviour, onComplete);
+            rotationPivot = mover.GetRotationPivot();
+        }
 
-		[SerializeField]
-		private float clusterSearchRadius = 4f;
+        public override void Enter()
+        {
+            isComplete = false;
+            started = false;
+            target = default;
+            smoothedVelocity = Vector2.zero;
+            _aiBehaviour.WeaponBehaviour.QueryTargets(_aiBehaviour.transform.position,
+                MinDetectionRadius, MaxDetectionRadius, targets);
+            if (targets.Count == 0) { Exit(); return; }
+            if (targets.Count == 1) { target = targets[0]; StartAttack(); return; }
+            Vector2 position = _aiBehaviour.transform.position;
+            if (targets.Count > maxEnemiesToProcess)
+            {
+                targets.Sort((left, right) => (left.Position - position).sqrMagnitude.CompareTo((right.Position - position).sqrMagnitude));
+                targets.RemoveRange(Mathf.Max(1, maxEnemiesToProcess), targets.Count - Mathf.Max(1, maxEnemiesToProcess));
+            }
+            searching = true;
+            searchIndex = 0;
+            bestScore = -1;
+            chunkSize = Mathf.Max(1, Mathf.CeilToInt((float)targets.Count / Mathf.Max(1, framePartitioningCount)));
+            SearchChunk();
+        }
 
-		[SerializeField]
-		private int framePartitioningCount = 4;
+        private void SearchChunk()
+        {
+            int end = Mathf.Min(targets.Count, searchIndex + chunkSize);
+            for (; searchIndex < end; searchIndex++)
+            {
+                SummonTarget candidate = targets[searchIndex];
+                if (!candidate.IsAvailable) continue;
+                int score = 0;
+                for (int other = 0; other < targets.Count; other++)
+                    if (other != searchIndex && targets[other].IsAvailable &&
+                        (targets[other].Position - candidate.Position).sqrMagnitude <= clusterSearchRadius * clusterSearchRadius) score++;
+                if (score > bestScore) { bestScore = score; target = candidate; }
+            }
+            if (searchIndex < targets.Count) return;
+            searching = false;
+            if (target.IsAvailable) StartAttack();
+            else Exit();
+        }
 
-		[SerializeField]
-		private int maxEnemiesToProcess = 100;
+        private void StartAttack()
+        {
+            if (_aiBehaviour == null || !target.IsAvailable || !_aiBehaviour.WeaponBehaviour.TryBeginNativeAttack())
+            {
+                if (_aiBehaviour != null) Exit();
+                return;
+            }
+            if (_aiBehaviour == null) return;
+            started = true;
+            elapsed = 0f;
+            mainDuration = _aiBehaviour.WeaponBehaviour.CurrentSnapshot.Stats.Duration;
+            enterDuration = EnterDuration;
+            exitDuration = ExitDuration;
+            lastTargetPosition = target.Position;
+            hitBox.enabled = true;
+            hitBox.Init(OnHit);
+            _aiBehaviour.SetPhase(SummonPhase.AttackEnter);
+            if (_aiBehaviour == null) return;
+            if (!beamSound.IsNull)
+            {
+                attackSoundInstance = RuntimeManager.CreateInstance(beamSound);
+                Vector3 position = _aiBehaviour.transform.position;
+                position.z = 0f;
+                attackSoundInstance.set3DAttributes(position.To3DAttributes());
+                attackSoundInstance.start();
+            }
+            if (enterDuration <= 0f) BeginMain();
+        }
 
-		[SerializeField]
-		private float angleOffset = 180f;
+        public override void OnUpdate()
+        {
+            if (_aiBehaviour == null || isComplete) return;
+            if (searching) { SearchChunk(); return; }
+            if (!started) return;
+            SummonPhase phase = _aiBehaviour.Phase;
+            if (phase == SummonPhase.AttackEnter)
+            {
+                elapsed += _aiBehaviour.DeltaTime;
+                AimAtTarget();
+                _aiBehaviour.SetPhase(phase, elapsed);
+                if (elapsed >= enterDuration) BeginMain();
+            }
+            else if (phase == SummonPhase.AttackMain)
+            {
+                elapsed += _aiBehaviour.SmoothDeltaTime;
+                if (target.IsBoss)
+                    SetYAngle(Mathf.LerpAngle(rotationPivot.localEulerAngles.y, targetAngle, _aiBehaviour.SmoothDeltaTime * aimSmoothing));
+                else if (target.IsAvailable)
+                {
+                    float fraction = mainDuration <= 0f ? 1f : Mathf.Clamp01(elapsed / mainDuration);
+                    float eased = sweepAccelerationCurve != null ? sweepAccelerationCurve.EasePercentage(fraction) : fraction;
+                    SetYAngle(Mathf.LerpAngle(startAngle, startAngle + sweepAngle, eased));
+                }
+                _aiBehaviour.SetPhase(phase, elapsed);
+                if (elapsed >= mainDuration || (!target.IsBoss && !target.IsAvailable)) BeginExit();
+            }
+            else if (phase == SummonPhase.AttackExit)
+            {
+                elapsed += _aiBehaviour.DeltaTime;
+                _aiBehaviour.SetPhase(phase, elapsed);
+                if (elapsed >= exitDuration) Exit();
+            }
+        }
 
-		[SerializeField]
-		private float aimSmoothing = 15f;
+        private void AimAtTarget()
+        {
+            if (!target.IsAvailable) return;
+            float delta = _aiBehaviour.SmoothDeltaTime;
+            Vector2 position = target.Position;
+            if (delta > 0f)
+                smoothedVelocity = Vector2.Lerp(smoothedVelocity, (position - lastTargetPosition) / delta, delta * velocitySmoothing);
+            lastTargetPosition = position;
+            Vector2 direction = position + smoothedVelocity * predictionLeadTime - (Vector2)_aiBehaviour.transform.position;
+            float desired = Mathf.Atan2(direction.x, direction.y) * Mathf.Rad2Deg + angleOffset;
+            if (!target.IsBoss) desired -= sweepAngle / 2f;
+            SetYAngle(Mathf.LerpAngle(rotationPivot.localEulerAngles.y, desired, delta * aimSmoothing));
+        }
 
-		[SerializeField]
-		private float sweepAngle = 30f;
+        private void BeginMain()
+        {
+            if (_aiBehaviour == null) return;
+            elapsed = 0f;
+            startAngle = rotationPivot.localEulerAngles.y;
+            if (target.IsAvailable)
+            {
+                // The source boss path freezes its predicted heading once at the start of Main.
+                Vector2 direction = target.Position + smoothedVelocity * predictionLeadTime - (Vector2)_aiBehaviour.transform.position;
+                targetAngle = Mathf.Atan2(direction.x, direction.y) * Mathf.Rad2Deg + angleOffset;
+            }
+            else targetAngle = startAngle;
+            _aiBehaviour.SetPhase(SummonPhase.AttackMain);
+            if (_aiBehaviour != null && (mainDuration <= 0f || !target.IsAvailable)) BeginExit();
+        }
 
-		[SerializeField]
-		private CustomAnimationCurve sweepAccelerationCurve;
+        private void BeginExit()
+        {
+            if (_aiBehaviour == null) return;
+            elapsed = 0f;
+            _aiBehaviour.SetPhase(SummonPhase.AttackExit);
+            if (_aiBehaviour != null && exitDuration <= 0f) Exit();
+        }
 
-		[SerializeField]
-		private float predictionLeadTime = 0.2f;
+        private void SetYAngle(float angle)
+        {
+            if (SummonPose.Finite(angle))
+                rotationPivot.localRotation = Quaternion.Euler(rotationPivot.localEulerAngles.x, angle, 0f);
+        }
 
-		[SerializeField]
-		private float velocitySmoothing = 10f;
+        public override void Exit()
+        {
+            if (_aiBehaviour == null || isComplete) return;
+            searching = started = false;
+            hitBox.ClearCallbacks();
+            hitBox.Toggle(false);
+            hitBox.enabled = false;
+            StopSound();
+            _aiBehaviour.WeaponBehaviour.SetLastAttackTime();
+            base.Exit();
+        }
 
-		[SerializeField]
-		private ClipTransition attackEnterAnimation;
+        private void OnHit(IDamageable damageable)
+        {
+            if (_aiBehaviour == null || !started || _aiBehaviour.IsPresentation) return;
+            SummonAttackBehaviour weapon = _aiBehaviour.WeaponBehaviour;
+            if (weapon.CurrentSnapshot != null && !weapon.CurrentSnapshot.IsDisposed)
+                weapon.OnNativeGasHit(hitBox.transform.position, damageable, weapon.CurrentSnapshot);
+        }
 
-		[SerializeField]
-		private ClipTransition attackLoopAnimation;
+        private void StopSound()
+        {
+            if (!attackSoundInstance.isValid()) return;
+            attackSoundInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+            attackSoundInstance.release();
+            attackSoundInstance = default;
+        }
 
-		[SerializeField]
-		private ClipTransition attackExitAnimation;
-
-		[SerializeField]
-		private EventReference beamSound;
-
-		private EventInstance attackSoundInstance;
-
-		private List<BaseEnemyController> _tempTargetsList;
-
-		private BaseEnemyController _currentTarget;
-
-		private bool _targetIsBoss;
-
-		private CancellationTokenSource _cts;
-
-		private Transform _rotationPivot;
-
-		private Vector2 _lastTargetPosition;
-
-		private Vector2 _smoothedVelocity;
-
-		public float MinDetectionRadius => _aiBehaviour.WeaponBehaviour.SizeValue * minDetectionRadius;
-
-		public float MaxDetectionRadius => _aiBehaviour.WeaponBehaviour.SizeValue * maxDetectionRadius;
-
-		public override void Init(SummonAIBehaviour behaviour, Action onComplete)
-		{
-			if (_cts == null)
-			{
-				_cts = new CancellationTokenSource();
-			}
-			base.Init(behaviour, onComplete);
-			_rotationPivot = mover.GetRotationPivot();
-		}
-
-		public override void Enter()
-		{
-			_currentTarget = null;
-			_smoothedVelocity = Vector2.zero;
-			StartSequence(_cts.Token).Forget();
-		}
-
-		public override void Exit()
-		{
-			_cts?.Cancel();
-			_cts?.Dispose();
-			_cts = new CancellationTokenSource();
-			_aiBehaviour.WeaponBehaviour.SetLastAttackTime();
-			base.Exit();
-		}
-
-		public override void OnUpdate()
-		{
-		}
-
-		private async UniTaskVoid StartSequence(CancellationToken token)
-		{
-			try
-			{
-				bool flag = await TryFindEnemyAsync(token);
-				if (!token.IsCancellationRequested)
-				{
-					if (!flag)
-					{
-						Exit();
-					}
-					else
-					{
-						ExecuteSequence(token).Forget();
-					}
-				}
-			}
-			catch (OperationCanceledException)
-			{
-			}
-			catch (Exception exception)
-			{
-				Debug.LogException(exception);
-			}
-		}
-
-		private async UniTaskVoid ExecuteSequence(CancellationToken token)
-		{
-			_ = 3;
-			try
-			{
-				_aiBehaviour.WeaponBehaviour.Attack();
-				hitBox.Init(OnHit);
-				if (_currentTarget != null)
-				{
-					_lastTargetPosition = _currentTarget.GetHurtBoxPosition();
-				}
-				attackSoundInstance = RuntimeManager.CreateInstance(beamSound);
-				Vector3 position = base.transform.parent.position;
-				position.z = 0f;
-				attackSoundInstance.set3DAttributes(position.To3DAttributes());
-				attackSoundInstance.start();
-				bool isAnimating = true;
-				await UniTask.WhenAll(PlayAnimation(attackEnterAnimation, token).ContinueWith(() => isAnimating = false), RotateTowardsTarget(aimSmoothing, token, () => isAnimating, !_targetIsBoss));
-				_aiBehaviour.Animancer.Play(attackLoopAnimation);
-				float durationValue = _aiBehaviour.WeaponBehaviour.DurationValue;
-				if (_targetIsBoss)
-				{
-					await UpdateBeamTrack(durationValue, token);
-				}
-				else
-				{
-					float y = _rotationPivot.localEulerAngles.y;
-					await UpdateBeamSweep(durationValue, y, token);
-				}
-				await PlayAnimation(attackExitAnimation, token);
-				Exit();
-			}
-			catch (OperationCanceledException)
-			{
-			}
-			catch (Exception exception)
-			{
-				Debug.LogException(exception);
-			}
-			finally
-			{
-				if (attackSoundInstance.isValid())
-				{
-					attackSoundInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
-					attackSoundInstance.release();
-				}
-			}
-		}
-
-		private async UniTask RotateTowardsTarget(float smoothing, CancellationToken token, Func<bool> condition, bool applySweepOffset)
-		{
-			while (condition() && !token.IsCancellationRequested && (bool)_currentTarget && _currentTarget.gameObject.activeInHierarchy)
-			{
-				Vector2 hurtBoxPosition = _currentTarget.GetHurtBoxPosition();
-				float smoothDeltaTime = Time.smoothDeltaTime;
-				Vector2 b = (hurtBoxPosition - _lastTargetPosition) / smoothDeltaTime;
-				_smoothedVelocity = Vector2.Lerp(_smoothedVelocity, b, smoothDeltaTime * velocitySmoothing);
-				_lastTargetPosition = hurtBoxPosition;
-				Vector2 vector = hurtBoxPosition + _smoothedVelocity * predictionLeadTime - (Vector2)_aiBehaviour.Transform.position;
-				float num = Mathf.Atan2(vector.x, vector.y) * 57.29578f + angleOffset;
-				if (applySweepOffset)
-				{
-					num -= sweepAngle / 2f;
-				}
-				float y = Mathf.LerpAngle(_rotationPivot.localEulerAngles.y, num, Time.smoothDeltaTime * smoothing);
-				_rotationPivot.localRotation = Quaternion.Euler(_rotationPivot.localEulerAngles.x, y, 0f);
-				await UniTask.Yield(PlayerLoopTiming.Update, token);
-			}
-		}
-
-		private async UniTask UpdateBeamSweep(float duration, float startYAngle, CancellationToken token)
-		{
-			float endYAngle = startYAngle + sweepAngle;
-			float elapsed = 0f;
-			while (elapsed < duration && !token.IsCancellationRequested && !(_currentTarget == null) && _currentTarget.gameObject.activeInHierarchy)
-			{
-				elapsed += Time.smoothDeltaTime;
-				float t = Mathf.Clamp01(elapsed / duration);
-				float t2 = sweepAccelerationCurve.EasePercentage(t);
-				float y = Mathf.LerpAngle(startYAngle, endYAngle, t2);
-				_rotationPivot.localRotation = Quaternion.Euler(_rotationPivot.localEulerAngles.x, y, 0f);
-				await UniTask.Yield(PlayerLoopTiming.Update, token);
-			}
-		}
-
-		private async UniTask UpdateBeamTrack(float duration, CancellationToken token)
-		{
-			if ((bool)_currentTarget)
-			{
-				Vector2 vector = _currentTarget.GetHurtBoxPosition() + _smoothedVelocity * predictionLeadTime - (Vector2)_aiBehaviour.Transform.position;
-				float targetYAngle = Mathf.Atan2(vector.x, vector.y) * 57.29578f + angleOffset;
-				float elapsed = 0f;
-				while (elapsed < duration && !token.IsCancellationRequested)
-				{
-					elapsed += Time.smoothDeltaTime;
-					float y = Mathf.LerpAngle(_rotationPivot.localEulerAngles.y, targetYAngle, Time.smoothDeltaTime * aimSmoothing);
-					_rotationPivot.localRotation = Quaternion.Euler(_rotationPivot.localEulerAngles.x, y, 0f);
-					await UniTask.Yield(PlayerLoopTiming.Update, token);
-				}
-			}
-		}
-
-		private async UniTask<bool> TryFindEnemyAsync(CancellationToken token)
-		{
-			if (_tempTargetsList == null)
-			{
-				_tempTargetsList = new List<BaseEnemyController>();
-			}
-			AIHelpers.FindEnemiesInCircleRangeNonAlloc(_aiBehaviour.Transform.position, MinDetectionRadius, MaxDetectionRadius, _tempTargetsList);
-			if (_tempTargetsList.Count == 0)
-			{
-				_targetIsBoss = false;
-				return false;
-			}
-			if (_tempTargetsList.Count == 1)
-			{
-				_currentTarget = _tempTargetsList[0];
-				_targetIsBoss = _tempTargetsList[0].ID == -1;
-				return true;
-			}
-			if (_tempTargetsList.Count > maxEnemiesToProcess)
-			{
-				_tempTargetsList = _tempTargetsList.OrderBy((BaseEnemyController element) => (element.GetHurtBoxPosition() - (Vector2)_aiBehaviour.Transform.position).sqrMagnitude).Take(maxEnemiesToProcess).ToList();
-			}
-			int totalEnemies = _tempTargetsList.Count;
-			List<(BaseEnemyController enemy, int score)> enemyDensityScores = new List<(BaseEnemyController, int)>();
-			int chunkSize = Mathf.Max(1, Mathf.CeilToInt((float)totalEnemies / (float)framePartitioningCount));
-			for (int i = 0; i < totalEnemies; i++)
-			{
-				BaseEnemyController enemy = _tempTargetsList[i];
-				int item = _tempTargetsList.Count((BaseEnemyController element) => element != enemy && Vector2.Distance(enemy.GetHurtBoxPosition(), element.GetHurtBoxPosition()) <= clusterSearchRadius);
-				enemyDensityScores.Add((enemy, item));
-				if ((i + 1) % chunkSize == 0 && i < totalEnemies - 1)
-				{
-					await UniTask.Yield(PlayerLoopTiming.Update, token);
-				}
-			}
-			if (enemyDensityScores.Count == 0)
-			{
-				_targetIsBoss = false;
-				return false;
-			}
-			_currentTarget = enemyDensityScores.OrderByDescending(((BaseEnemyController enemy, int score) x) => x.score).First().enemy;
-			_targetIsBoss = _currentTarget.ID == -1;
-			return true;
-		}
-
-		private void OnHit(IDamageable damageable)
-		{
-			_aiBehaviour.WeaponBehaviour.Damage(hitBox.transform.position, damageable);
-		}
-
-		private UniTask PlayAnimation(ClipTransition clip, CancellationToken token)
-		{
-			return AnimancerHelpers.AnimationTask(_aiBehaviour.Animancer, clip, 0, token);
-		}
-	}
+        public override void Dispose()
+        {
+            searching = started = false;
+            targets.Clear();
+            target = default;
+            if (hitBox != null)
+            {
+                hitBox.ClearCallbacks();
+                hitBox.Toggle(false);
+                hitBox.enabled = false;
+            }
+            StopSound();
+            rotationPivot = null;
+            base.Dispose();
+        }
+    }
 }

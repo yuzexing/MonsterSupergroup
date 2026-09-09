@@ -212,6 +212,9 @@ namespace MonsterSupergroup.Gameplay.Tests
             yield return null;
             Require(FindObjectsByType<ModifierSelectionController>(FindObjectsSortMode.None).Length == 0,
                 "Selection leaked after Gameplay unload.");
+            Require(FindObjectsByType<NetworkEnemyDebugPanel>(FindObjectsSortMode.None).Length == 0,
+                "Enemy Debug leaked after Gameplay unload.");
+            Debug.Log($"{Prefix} event=enemy-debug-unloaded");
         }
 
         private IEnumerator WaitForOwnerBuild()
@@ -223,6 +226,31 @@ namespace MonsterSupergroup.Gameplay.Tests
                 NetworkClient.localPlayer.GetComponent<MirrorNetworkCombatBridge>().Collector == null) yield return null;
             Require(OwnerSelection().BoundBuild.EquipmentCount == expectedEquipmentOnBind,
                 "Owner Build does not match its initial or retained participant state.");
+            yield return VerifyEnemyDebug();
+        }
+
+        private IEnumerator VerifyEnemyDebug()
+        {
+            instruction = "Waiting for production Enemy Debug rows";
+            var panel = FindFirstObjectByType<NetworkEnemyDebugPanel>();
+            Require(panel != null && panel.gameObject.scene.path == manager.GameplayScene,
+                "Enemy Debug must be loaded by the production Gameplay UI.");
+            Require(FindObjectsByType<NetworkEnemyDebugPanel>(FindObjectsSortMode.None).Length == 1,
+                "Gameplay created duplicate Enemy Debug panels.");
+            while (panel.Rows.Count == 0 || panel.Rows.Any(row => !row.Canonical.HasValue)) yield return null;
+            foreach (var row in panel.Rows)
+            {
+                Require(NetworkClient.spawned.TryGetValue(row.EntityId, out var identity) &&
+                    identity.GetComponent<NetworkEnemySimulationAgent>() != null,
+                    "Enemy Debug listed a synthetic ledger-only target or stale object.");
+                Require(NetworkCombatWorld.Instance.Replica.TryGetEntity(row.EntityId, out var latest) &&
+                    row.Canonical.Value.StateVersion <= latest.StateVersion,
+                    "Enemy Debug did not read a received canonical state.");
+                Require(row.Text.Contains("MovementOnly") && row.Text.Contains("Local HP (may include prediction)"),
+                    "Enemy Debug did not distinguish production EnemyBase runtime and predicted HP.");
+                Debug.Log($"{Prefix} event=enemy-debug-row localPlayer={NetworkClient.localPlayer.netId} " +
+                    $"enemy={row.EntityId} hp={row.Canonical.Value.Health}/{row.Canonical.Value.MaxHealth} simulation={row.Simulation.Replace('\n', ' ')}");
+            }
         }
 
         private IEnumerator PickRound(int round)
@@ -239,6 +267,16 @@ namespace MonsterSupergroup.Gameplay.Tests
             while (menu == null || !menu.IsOpen)
             { menu = FindFirstObjectByType<CardPickMenu>(); yield return null; }
             Require(menu.BoundSelection == selection, "Menu is bound to a different player.");
+            var debugPanel = FindFirstObjectByType<NetworkEnemyDebugPanel>();
+            Require(debugPanel != null && !debugPanel.IsContentVisible, "Enemy Debug overlaps the selection menu.");
+            ulong[] offersBeforeToggle = selection.Offers.Select(offer => offer.OfferId).ToArray();
+            bool lockedBeforeToggle = player.IsUpgradeSelectionLocked;
+            debugPanel.SetExpanded(false);
+            debugPanel.SetExpanded(true);
+            Require(selection.Offers.Select(offer => offer.OfferId).SequenceEqual(offersBeforeToggle) &&
+                player.IsUpgradeSelectionLocked == lockedBeforeToggle && menu.IsOpen,
+                "Enemy Debug visibility changed selection state.");
+            Debug.Log($"{Prefix} event=enemy-debug-selection-isolated round={round}");
             Require(FindObjectsByType<CardPickMenu>(FindObjectsSortMode.None).Length == 1,
                 "Gameplay created duplicate menus.");
             Require(selection.Offers.Select(o => o.EquipmentId).Distinct().Count() == 3, "Duplicate candidates.");
@@ -297,6 +335,7 @@ namespace MonsterSupergroup.Gameplay.Tests
                 // Allow the last automatic root to finish its interval before submitting
                 // a new one through the same production admission path.
                 yield return WaitForAttackInterval(weapon);
+                Require(!weapon.enabled, "Pending owner baseline re-enabled the controlled weapon.");
                 targetObject = new GameObject("Selection Network Damage Target");
                 var target = targetObject.AddComponent<CombatantBehaviour>();
                 target.Initialize(1000);
@@ -305,6 +344,9 @@ namespace MonsterSupergroup.Gameplay.Tests
                 using (AttackSnapshot attack = BeginControlledAttack(weapon))
                     damage = weapon.NativeRuntime.ResolveHitDetailed(attack, target).ResolvedDamage.Value;
                 Require(damage > 0 && target.CurrentHealth == 1000 - damage, "Native hit failed.");
+                yield return new WaitForSecondsRealtime(0.25f);
+                var admission = NetworkClient.localPlayer.GetComponent<NetworkWeaponCombatAdapter>();
+                Debug.Log($"{Prefix} event=controlled-hit-admission target={targetId} rejected={admission.RejectedAttackCount} lastRejection={admission.LastAttackRejection}");
                 while (!world.Replica.TryGetEntity(targetId, out CanonicalEntityState state) || state.Health != 1000 - damage)
                     yield return null;
                 Debug.Log($"{Prefix} event=network-hit-verified damage={damage}");
@@ -360,6 +402,10 @@ namespace MonsterSupergroup.Gameplay.Tests
                 Require(combatant == null || !combatant.IsAlive, "Native attacks did not defeat the production enemy.");
                 while (authority.Level == before) yield return null;
                 Require(authority.Level == before + 1, "Confirmed kill XP must advance exactly one configured level.");
+                var debugPanel = FindFirstObjectByType<NetworkEnemyDebugPanel>();
+                while (!debugPanel.Rows.Any(row => row.EntityId == targetId && row.Canonical.HasValue && !row.Canonical.Value.Alive))
+                    yield return null;
+                Debug.Log($"{Prefix} event=enemy-debug-canonical-death enemy={targetId}");
                 Require(authority.PendingUpgradeCount == 1, "Confirmed kill failed to queue its upgrade.");
                 Debug.Log($"{Prefix} event=production-enemy-kill-xp-verified hits={hits}");
             }
@@ -369,16 +415,27 @@ namespace MonsterSupergroup.Gameplay.Tests
             }
         }
 
-        private static WaitForSecondsRealtime WaitForAttackInterval(WeaponBehaviour weapon) =>
-            new WaitForSecondsRealtime(weapon.GetCooldown() + 0.15f);
+        private static WaitForSecondsRealtime WaitForAttackInterval(WeaponBehaviour weapon)
+        {
+            float seconds = weapon.GetAttackSequenceDuration() + weapon.GetCooldown();
+            var admission = NetworkClient.localPlayer.GetComponent<NetworkWeaponCombatAdapter>();
+            // The reduced-pool fixture can shorten duration. Its previous server deadline
+            // still contains the sequence frozen before the equipment change.
+            if (admission.isServer)
+                foreach (var snapshot in admission.CaptureCooldowns())
+                    if (snapshot.WeaponId == weapon.ID)
+                        seconds = Mathf.Max(seconds, (float)snapshot.WithCooldown(weapon.GetCooldown()).RemainingAt(NetworkTime.time));
+            Debug.Log($"{Prefix} event=controlled-hit-wait seconds={seconds + 0.15f}");
+            return new WaitForSecondsRealtime(seconds + 0.15f);
+        }
 
         private static AttackSnapshot BeginControlledAttack(WeaponBehaviour weapon)
         {
             var attack = (AttackSnapshot)typeof(WeaponBehaviour)
                 .GetMethod("BeginNativeGasAttack", BindingFlags.Instance | BindingFlags.NonPublic)
                 .Invoke(weapon, null);
-            // The ordinary Attack implementation resets this timer after creating its root.
-            weapon.RestoreCooldownRemaining(weapon.GetCooldown());
+            // Mirror admission charges the sequence plus cooldown, including the current Circling weapon.
+            weapon.RestoreCooldownRemaining(weapon.GetAttackSequenceDuration() + weapon.GetCooldown());
             return attack;
         }
 
@@ -488,8 +545,11 @@ namespace MonsterSupergroup.Gameplay.Tests
             Require(authority.PendingUpgradeCount == 1 && authority.PendingEventId == 0 &&
                 !menu.IsOpen && !player.IsUpgradeSelectionLocked, "Exhausted pool must remain pending and unlocked.");
             authority.ServerCancelPending();
-            NetworkCombatWorld.Instance.Gateway.Ledger.SetAbsoluteInvulnerable(authority.netId, false);
-            authority.GetComponent<CombatantBehaviour>().SetCanonicalInvulnerable(false);
+            // Deliver TargetReceiveState before VerifyHit disables automatic weapon execution.
+            // The production owner baseline intentionally enables it again, including on Host.
+            yield return null;
+            // Keep fixture protection while the next controlled hit waits a full weapon
+            // sequence plus cooldown among live enemies. Damage is covered separately.
             Debug.Log($"{Prefix} event=reduced-pool-2-1-0-verified");
         }
         private static ModifierSelectionController OwnerSelection() => NetworkClient.localPlayer != null

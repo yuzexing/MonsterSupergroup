@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using MonsterSupergroup.Gameplay.Combat;
 using MonsterSupergroup.Gameplay.UI;
+using MonsterSupergroup.NetworkCombat;
 using NUnit.Framework;
 using UnityEditor.SceneManagement;
 using UnityEngine;
@@ -37,6 +38,13 @@ namespace MonsterSupergroup.Gameplay.Tests
                 ui = loaders[0].Instance;
                 Assert.That(ui, Is.Not.Null);
                 Assert.That(ui.gameObject.scene, Is.EqualTo(gameplay));
+                var debugPanels = ui.GetComponentsInChildren<NetworkEnemyDebugPanel>(true);
+                Assert.That(debugPanels.Length, Is.EqualTo(1), "Production Gameplay must load the Enemy Debug panel.");
+                var debugPanel = debugPanels[0];
+                Assert.That(debugPanel.isActiveAndEnabled, Is.True);
+                Assert.That(debugPanel.transform, Is.EqualTo(ui.transform), "Debug lives outside the HP and selection subtrees.");
+                Assert.That(debugPanel.Expanded, Is.True);
+                Assert.That(debugPanel.Rows, Is.Empty);
                 Assert.That(SceneManager.GetActiveScene(), Is.EqualTo(originalScene),
                     "The loader must not depend on the newly loaded scene being active.");
                 Assert.That(gameplay.GetRootGameObjects().SelectMany(root =>
@@ -49,6 +57,7 @@ namespace MonsterSupergroup.Gameplay.Tests
                 Assert.That(HealthSubscribers(combatant), Is.EqualTo(1));
                 yield return SceneManager.UnloadSceneAsync(gameplay);
                 Assert.That(ui == null, Is.True);
+                Assert.That(debugPanel == null, Is.True);
                 Assert.That(HealthSubscribers(combatant), Is.Zero);
             }
             finally

@@ -45,6 +45,21 @@ NetworkClient.localPlayer (active client, isOwned)
   is hidden, its fill is zero, and both numeric fields are empty. This is a runtime
   state only: the saved prefab has alpha 1, full fill and `100 / 100` for editing.
 
+## Enemy Debug list (M1)
+
+`NetworkEnemyDebugPanel` is attached once to the same production UI root. Editor and
+Development clients show it in the upper right; F3/the header toggles it. It reads
+Mirror's spawned enemy agents and the existing canonical replica at 5 Hz, labels
+local predicted HP separately, and displays canonical GAS stack counts and simulation
+assignment/role/epoch. Missing data is explicitly unavailable. A destroyed enemy's
+canonical death snapshot is retained for two seconds without retaining its GameObject.
+Selection temporarily hides the list body, preserving the user's expanded preference;
+the panel never changes selection, movement locks, health, Build or network state.
+Disable, disconnect, world replacement and scene unload release subscriptions and caches.
+Dedicated servers and non-Development players do not run the panel.
+
+M1 acceptance evidence and manual steps: `docs/plans/boot-gameplay-network-combat.md`.
+
 ## Next migrations
 
 Add XP/Level, Dash and Ultimate as separate presentation modules under the HUD,

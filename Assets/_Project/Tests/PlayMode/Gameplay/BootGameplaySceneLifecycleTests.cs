@@ -1,7 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
+using AstralShift.Control;
 using AstralShift.HellMaiden;
+using AstralShift.HellMaiden.Controllers;
+using AstralShift.HellMaiden.Player;
 using AstralShift.Managers;
 using Mirror;
 using MonsterSupergroup.NetworkCombat;
@@ -35,6 +38,44 @@ namespace MonsterSupergroup.Gameplay.Tests
             Assert.That(manager, Is.Not.Null);
             Assert.That(manager.GetComponent<NetworkBackendBootstrap>().TryPrepareKcp(
                 "127.0.0.1", 7898, false, out string error), Is.True, error);
+        }
+
+        [UnityTest]
+        public IEnumerator Host_InteractionButtonWithoutOptionalFinderDoesNotThrow()
+        {
+            manager.StartHost();
+            float deadline = Time.realtimeSinceStartup + 15f;
+            while ((NetworkClient.localPlayer == null ||
+                    !NetworkClient.localPlayer.GetComponent<NetworkModifierSelection>().HasOwnerBaseline ||
+                    !NetworkClient.localPlayer.GetComponent<PlayerMovement>().IsLocalOwnerBound) &&
+                   Time.realtimeSinceStartup < deadline) yield return null;
+            Assert.That(NetworkClient.localPlayer, Is.Not.Null);
+            var owner = NetworkClient.localPlayer.GetComponent<PlayerMovement>();
+            Assert.That(owner.IsRuntimeInitialized && owner.IsLocalOwnerBound, Is.True);
+            Assert.That(owner.interactionFinder, Is.Null, "Exercise the real formal prefab's missing optional finder, without modifying it.");
+            Assert.That(owner.IsUpgradeSelectionLocked, Is.False);
+            var handler = ControllerManager.Instance.inputHandler;
+            Assert.That(((PlayerController_HMD)handler.CurrentController).BoundPlayer, Is.SameAs(owner));
+            var input = global::Rewired.ReInput.players.GetPlayer(0);
+            foreach (var joystick in input.controllers.Joysticks)
+                foreach (var map in input.controllers.maps.GetMaps<global::Rewired.JoystickMap>(joystick.id))
+                    foreach (int actionId in new[] { 0, 1, 3, 4, 14, 51 })
+                    {
+                        var entries = new List<global::Rewired.ActionElementMap>();
+                        map.GetElementMapsWithAction(actionId, entries);
+                        foreach (var entry in entries)
+                            Debug.Log($"[InteractionInput] joystick={joystick.name} action={actionId} element={entry.elementIdentifierName} range={entry.axisRange} contribution={entry.axisContribution} enabled={map.enabled}");
+                    }
+            object data = default(global::Rewired.InputActionEventData);
+            typeof(global::Rewired.InputActionEventData).GetProperty("eventType").SetValue(data,
+                global::Rewired.InputActionEventType.ButtonJustPressed);
+            // Supply the event to the actual Rewired callback; do not pretend this is a physical gamepad test.
+            var callback = (System.Action<global::Rewired.InputActionEventData>)System.Delegate.CreateDelegate(
+                typeof(System.Action<global::Rewired.InputActionEventData>), handler,
+                typeof(InputHandler).GetMethod("Button1", BindingFlags.Instance | BindingFlags.NonPublic));
+            for (int i = 0; i < 3; i++)
+                Assert.DoesNotThrow(() => callback((global::Rewired.InputActionEventData)data),
+                    "Repeated Interact (keyboard E or gamepad Button1) must tolerate the optional finder.");
         }
 
         [UnityTest]

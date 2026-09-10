@@ -1,6 +1,8 @@
 using System;
 using System.Reflection;
 using AstralShift.HellMaiden.Player;
+using AstralShift.QTI.Interactors;
+using AstralShift.QTI.Triggers.Physics2D;
 using MonsterSupergroup.Gameplay.Combat;
 using MonsterSupergroup.NetworkCombat;
 using NUnit.Framework;
@@ -85,6 +87,38 @@ namespace MonsterSupergroup.Gameplay.Tests
             int baseline = ((Delegate)eventField.GetValue(health)).GetInvocationList().Length;
             for (int i = 0; i < 5; i++) player.CombatantBinding.Configure(player, health);
             Assert.That(((Delegate)eventField.GetValue(health)).GetInvocationList().Length, Is.EqualTo(baseline));
+        }
+
+        [Test]
+        public void InteractionKeepsConfiguredFinderAndSelectionLockButIgnoresDestroyedFinder()
+        {
+            var player = first.GetComponent<PlayerMovement>();
+            player.EnsureRuntimeInitialized();
+            var targetObject = new GameObject("Interaction target");
+            targetObject.transform.SetParent(first.transform);
+            var target = targetObject.AddComponent<CountingInteractionTrigger>();
+            var finder = first.AddComponent<Interaction2DFinder>();
+            typeof(Interaction2DFinder).GetField("_nearestInteraction", BindingFlags.Instance | BindingFlags.NonPublic)
+                .SetValue(finder, target);
+            player.interactionFinder = finder;
+            player.Interact();
+            Assert.That(target.Calls, Is.EqualTo(1));
+            player.SetUpgradeSelectionLocked(true);
+            player.Interact();
+            Assert.That(target.Calls, Is.EqualTo(1));
+            player.SetUpgradeSelectionLocked(false);
+            player.Interact();
+            Assert.That(target.Calls, Is.EqualTo(2));
+            UnityEngine.Object.DestroyImmediate(finder);
+            Assert.That(ReferenceEquals(player.interactionFinder, null), Is.False, "Unity retains the managed reference after destruction.");
+            Assert.DoesNotThrow(player.Interact);
+            Assert.That(target.Calls, Is.EqualTo(2), "A destroyed finder must not invoke its old target.");
+        }
+
+        private sealed class CountingInteractionTrigger : Input2DTrigger
+        {
+            public int Calls { get; private set; }
+            public override void Interact(IInteractor interactor) => Calls++;
         }
 
         [Test]

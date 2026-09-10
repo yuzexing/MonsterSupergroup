@@ -1249,7 +1249,7 @@ namespace AstralShift.HellMaiden.Player
 
 		public void Interact()
 		{
-			if (IsUpgradeSelectionLocked) return;
+			if (IsUpgradeSelectionLocked || interactionFinder == null) return;
 			interactionFinder.TryInteract();
 		}
 

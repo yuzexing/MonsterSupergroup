@@ -11,10 +11,12 @@ namespace MonsterSupergroup.Gameplay.UI
     public sealed class CardPickMenu : MonoBehaviour
     {
         [SerializeField] private CanvasGroup menuGroup;
-        [SerializeField] private Button[] optionButtons = new Button[3];
-        [SerializeField] private TMP_Text[] optionTitles = new TMP_Text[3];
+        [SerializeField] private Button[] optionButtons = new Button[4];
+        [SerializeField] private TMP_Text[] optionTitles = new TMP_Text[4];
+        [SerializeField] private Button backButton;
+        [SerializeField] private TMP_Text heading;
 
-        private readonly ulong[] displayedOfferIds = new ulong[3];
+        private readonly ulong[] displayedOfferIds = new ulong[4];
 
         public ModifierSelectionController BoundSelection { get; private set; }
         public bool IsOpen { get; private set; }
@@ -24,6 +26,8 @@ namespace MonsterSupergroup.Gameplay.UI
             optionButtons[0].onClick.AddListener(SelectFirst);
             optionButtons[1].onClick.AddListener(SelectSecond);
             optionButtons[2].onClick.AddListener(SelectThird);
+            if (optionButtons.Length > 3) optionButtons[3].onClick.AddListener(SelectFourth);
+            if (backButton != null) backButton.onClick.AddListener(Back);
             Hide();
         }
 
@@ -58,10 +62,23 @@ namespace MonsterSupergroup.Gameplay.UI
             }
 
             bool wasOpen = IsOpen;
-            for (int i = 0; i < 3; i++)
+            bool targets = BoundSelection.Stage == UpgradeSelectionStage.EquipmentTarget;
+            if (heading != null) heading.text = $"Level {BoundSelection.EarnedLevel} · " +
+                (targets ? $"{BoundSelection.Offers[0].DisplayName} — Choose a weapon" : BoundSelection.Offers[0].Kind.ToString());
+            if (backButton != null)
+            {
+                backButton.gameObject.SetActive(BoundSelection.CanGoBack);
+                backButton.interactable = !BoundSelection.IsRequestPending;
+            }
+            for (int i = 0; i < optionButtons.Length; i++)
             {
                 bool visible = i < BoundSelection.Offers.Count;
                 optionButtons[i].gameObject.SetActive(visible);
+                // Center only the issued choices; the fourth button belongs exclusively to target selection.
+                var rectangle = (RectTransform)optionButtons[i].transform;
+                float width = BoundSelection.Offers.Count == 4 ? 270f : 320f;
+                rectangle.sizeDelta = new Vector2(width, 180f);
+                rectangle.anchoredPosition = new Vector2((i - (BoundSelection.Offers.Count - 1) * 0.5f) * (width + 24f), 0);
                 if (!visible)
                 {
                     displayedOfferIds[i] = 0;
@@ -71,7 +88,18 @@ namespace MonsterSupergroup.Gameplay.UI
                 }
                 ModifierOffer offer = BoundSelection.Offers[i];
                 displayedOfferIds[i] = offer.OfferId;
-                optionTitles[i].text = offer.DisplayName;
+                string description = offer.DisplayName;
+                if (targets)
+                {
+                    var weapon = BoundSelection.BoundBuild.GetWeaponAtSlot(offer.TargetSlotIndex);
+                    description = $"{weapon.WeaponData.Title}\n" +
+                        (offer.LevelIndex == 0 ? "Add Equipment" : $"Upgrade to level {offer.LevelIndex + 1}");
+                }
+                else if (offer.Kind == UpgradeRewardKind.Perk)
+                    description += $"\n{offer.Rarity} · Growth {offer.PerkLevel}";
+                else if (offer.Kind == UpgradeRewardKind.Equipment)
+                    description += "\nChoose target next";
+                optionTitles[i].text = $"{i + 1}. {description}";
                 optionButtons[i].interactable = !BoundSelection.IsRequestPending;
             }
             IsOpen = true;
@@ -85,6 +113,8 @@ namespace MonsterSupergroup.Gameplay.UI
         private void SelectFirst() => Submit(0);
         private void SelectSecond() => Submit(1);
         private void SelectThird() => Submit(2);
+        private void SelectFourth() => Submit(3);
+        private void Back() => BoundSelection?.Back();
 
         private void Submit(int index)
         {
@@ -104,7 +134,9 @@ namespace MonsterSupergroup.Gameplay.UI
                 menuGroup.interactable = false;
                 menuGroup.blocksRaycasts = false;
             }
-            for (int i = 0; i < 3; i++)
+            if (backButton != null) backButton.gameObject.SetActive(false);
+            if (heading != null) heading.text = string.Empty;
+            for (int i = 0; i < optionButtons.Length; i++)
             {
                 displayedOfferIds[i] = 0;
                 if (optionButtons[i] != null) optionButtons[i].interactable = false;
@@ -124,6 +156,8 @@ namespace MonsterSupergroup.Gameplay.UI
             optionButtons[0].onClick.RemoveListener(SelectFirst);
             optionButtons[1].onClick.RemoveListener(SelectSecond);
             optionButtons[2].onClick.RemoveListener(SelectThird);
+            if (optionButtons.Length > 3) optionButtons[3].onClick.RemoveListener(SelectFourth);
+            if (backButton != null) backButton.onClick.RemoveListener(Back);
         }
     }
 }

@@ -329,7 +329,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: MonsterSupergroup.Gameplay.Combat::AstralShift.HellMaiden.Combat.Hand.Data.RuntimeDB
   _weaponDB: {fileID: 11400000, guid: 7b4a3d91e8c24f1cb6a0d5e7298f4031, type: 2}
   _equipmentDB: {fileID: 11400000, guid: 802e45a6d1e2479db18f92cfd397d61f, type: 2}
-  _perkDB: {fileID: 0}
+  _perkDB: {fileID: 11400000, guid: dc1fb1e3d62540846a648ebb4ab4f177, type: 2}
   _metaStatsDB: {fileID: 0}
   _cardPoolWeightsData: {fileID: 0}
   _cardLevelWeightsData: {fileID: 0}

@@ -1,5 +1,10 @@
 # Server-authoritative upgrade selection
 
+> M4 extends the formal flow to weapons, two-stage Equipment targets and Perks.
+> The current configuration, authority/checkpoint contract and validation steps are in
+> [M4 upgrade selection](../../../../../docs/plans/m4-upgrade-selection.md).
+> The Equipment-only description below records the earlier implementation and its original validation.
+
 The Gameplay `CombatUI.prefab` has a local `CardPickMenu` with up to three choices.
 It uses the existing Equipment definitions and the existing native GAS Build. No source artwork,
 card definitions, runtime modifier mapping, global menu controller or pause flow was imported.

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using AstralShift.HellMaiden.Combat.Hand.Data;
 using AstralShift.HellMaiden.Data.Cards;
+using AstralShift.HellMaiden.Data.Perks;
 using AstralShift.HellMaiden.Player;
 using AstralShift.HellMaiden.Player.Attacks;
 using AstralShift.HellMaiden.AI.Enemy;
@@ -16,7 +17,10 @@ namespace MonsterSupergroup.NetworkCombat
     public struct UpgradeOptionMessage
     {
         public ulong OptionId;
-        public uint EquipmentId;
+        public UpgradeRewardKind Kind;
+        public uint ContentId;
+        public PerkRarity Rarity;
+        public int PerkLevel;
         public int LevelIndex;
         public int SlotIndex;
     }
@@ -30,7 +34,11 @@ namespace MonsterSupergroup.NetworkCombat
         private ModifierSelectionController presentation;
         private PlayerMovement player;
         private NetworkCombatWorld world;
-        private EquipmentModifierOfferProvider provider;
+        private UpgradeOfferProvider provider;
+        private readonly List<PendingUpgradeReward> rewards = new List<PendingUpgradeReward>();
+        private PlayerUpgradeOfferSnapshot[] originalOffers = Array.Empty<PlayerUpgradeOfferSnapshot>();
+        private uint selectedEquipmentId;
+        private UpgradeSelectionStage stage;
         private IReadOnlyList<ModifierOffer> serverOffers = Array.Empty<ModifierOffer>();
         private WeaponBehaviour serverWeapon;
         private uint sequence;
@@ -51,12 +59,15 @@ namespace MonsterSupergroup.NetworkCombat
         [SyncVar] private int level = 1;
         [SyncVar] private float experience;
         [SerializeField, Min(1)] private int experiencePerLevel = 2;
+        [SerializeField] private UpgradeSelectionRules selectionRules;
 
         public bool IsSelecting => selecting;
         public int Level => level;
         public float Experience => experience;
         public int ExperiencePerLevel => Mathf.Max(1, experiencePerLevel);
-        public int PendingUpgradeCount { get; private set; }
+        public int PendingUpgradeCount => rewards.Count;
+        public UpgradeSelectionStage Stage => stage;
+        public int OfferedLevel => rewards.Count == 0 ? 0 : rewards[0].EarnedLevel;
         public ulong PendingEventId { get; private set; }
         public ulong LocalEventId => localEventId;
         public uint BuildRevision => buildRevision;
@@ -77,25 +88,39 @@ namespace MonsterSupergroup.NetworkCombat
 
         public PlayerProgressionSnapshot CaptureProgression()
         {
-            var offers = new PlayerUpgradeOfferSnapshot[serverOffers.Count];
-            for (int i = 0; i < offers.Length; i++)
-                offers[i] = new PlayerUpgradeOfferSnapshot
-                {
-                    PreviousOfferId = serverOffers[i].OfferId,
-                    EquipmentId = serverOffers[i].EquipmentId,
-                    LevelIndex = serverOffers[i].LevelIndex,
-                    SlotIndex = serverOffers[i].TargetSlotIndex,
-                    UpgradesExistingEquipment = serverOffers[i].ExistingEquipmentHandle.IsValid
-                };
+            var offers = CaptureOffers(serverOffers);
             return new PlayerProgressionSnapshot
             {
                 Level = level,
                 Experience = experience,
                 PendingUpgradeCount = PendingUpgradeCount,
+                Rewards = rewards.ToArray(),
+                Stage = stage,
+                SelectedEquipmentId = selectedEquipmentId,
+                OriginalOffers = (PlayerUpgradeOfferSnapshot[])originalOffers.Clone(),
                 BuildRevision = buildRevision,
                 OfferSequence = sequence,
                 Offers = offers.Length == 0 ? (PlayerUpgradeOfferSnapshot[])restoredOffers.Clone() : offers
             };
+        }
+
+        private static PlayerUpgradeOfferSnapshot[] CaptureOffers(IReadOnlyList<ModifierOffer> source)
+        {
+            var offers = new PlayerUpgradeOfferSnapshot[source.Count];
+            for (int i = 0; i < offers.Length; i++)
+                offers[i] = new PlayerUpgradeOfferSnapshot
+                {
+                    PreviousOfferId = source[i].OfferId,
+                    Kind = source[i].Kind,
+                    ContentId = source[i].ContentId,
+                    EquipmentId = source[i].EquipmentId,
+                    Rarity = source[i].Rarity,
+                    PerkLevel = source[i].PerkLevel,
+                    LevelIndex = source[i].LevelIndex,
+                    SlotIndex = source[i].TargetSlotIndex,
+                    UpgradesExistingEquipment = source[i].ExistingEquipmentHandle.IsValid
+                };
+            return offers;
         }
 
         [Server]
@@ -104,7 +129,11 @@ namespace MonsterSupergroup.NetworkCombat
             ValidateProgression(state);
             level = state.Level;
             experience = state.Experience;
-            PendingUpgradeCount = state.PendingUpgradeCount;
+            rewards.Clear();
+            rewards.AddRange(state.Rewards);
+            stage = state.Stage;
+            selectedEquipmentId = state.SelectedEquipmentId;
+            originalOffers = (PlayerUpgradeOfferSnapshot[])state.OriginalOffers.Clone();
             buildRevision = Math.Max(1u, state.BuildRevision);
             sequence = state.OfferSequence;
             restoredOffers = (PlayerUpgradeOfferSnapshot[])state.Offers.Clone();
@@ -118,10 +147,38 @@ namespace MonsterSupergroup.NetworkCombat
         {
             if (state == null) throw new ArgumentNullException(nameof(state));
             if (state.Level < 1 || float.IsNaN(state.Experience) || float.IsInfinity(state.Experience) ||
-                state.Experience < 0 || state.PendingUpgradeCount < 0 || state.Offers == null ||
-                state.Offers.Length > 3 || (state.Offers.Length > 0 && state.PendingUpgradeCount == 0) ||
+                state.Experience < 0 || state.Rewards == null || state.PendingUpgradeCount != state.Rewards.Length ||
+                state.Offers == null || state.OriginalOffers == null || state.OriginalOffers.Length > 3 ||
+                !Enum.IsDefined(typeof(UpgradeSelectionStage), state.Stage) ||
+                state.Offers.Length > (state.Stage == UpgradeSelectionStage.EquipmentTarget ? 4 : 3) ||
+                (state.Offers.Length > 0 && state.PendingUpgradeCount == 0) ||
+                (state.Stage == UpgradeSelectionStage.EquipmentTarget &&
+                    (state.OriginalOffers.Length == 0 || state.Offers.Length == 0)) ||
                 state.OfferSequence >= 0x3ffffffeu)
                 throw new ArgumentException("Invalid saved player progression.", nameof(state));
+            foreach (var reward in state.Rewards)
+                if (reward.EarnedLevel < 1 || !Enum.IsDefined(typeof(UpgradeRewardKind), reward.Kind))
+                    throw new ArgumentException("Invalid saved reward queue.", nameof(state));
+            if (state.Stage == UpgradeSelectionStage.Reward &&
+                (state.OriginalOffers.Length != 0 || state.SelectedEquipmentId != 0))
+                throw new ArgumentException("Reward stage cannot retain a target decision.", nameof(state));
+            var identities = new HashSet<uint>();
+            var slots = new HashSet<int>();
+            foreach (var offer in state.Offers)
+            {
+                if (offer.ContentId == 0 || offer.Kind != state.Rewards[0].Kind ||
+                    (state.Stage == UpgradeSelectionStage.Reward && !identities.Add(offer.ContentId)) ||
+                    (state.Stage == UpgradeSelectionStage.EquipmentTarget &&
+                        (offer.Kind != UpgradeRewardKind.Equipment || offer.ContentId != state.SelectedEquipmentId ||
+                        (uint)offer.SlotIndex >= PlayerBuildRuntime.HandSlotCount || !slots.Add(offer.SlotIndex))))
+                    throw new ArgumentException("Saved options do not match their reward/stage.", nameof(state));
+            }
+            identities.Clear();
+            foreach (var offer in state.OriginalOffers)
+                if (offer.Kind != UpgradeRewardKind.Equipment || offer.SlotIndex != -1 || !identities.Add(offer.ContentId))
+                    throw new ArgumentException("Invalid original Equipment cards.", nameof(state));
+            if (state.Stage == UpgradeSelectionStage.EquipmentTarget && !identities.Contains(state.SelectedEquipmentId))
+                throw new ArgumentException("Selected Equipment is absent from original cards.", nameof(state));
         }
 
         private void Awake()
@@ -155,7 +212,7 @@ namespace MonsterSupergroup.NetworkCombat
 
         public override void OnStartServer()
         {
-            provider = new EquipmentModifierOfferProvider(new ServerRandom());
+            provider = new UpgradeOfferProvider(new ServerRandom());
             EnsureServerBuild();
             world = NetworkCombatWorld.Instance;
             if (world != null) world.Gateway.ConfirmedKillProduced += OnConfirmedKill;
@@ -223,13 +280,20 @@ namespace MonsterSupergroup.NetworkCombat
         {
             if (float.IsNaN(amount) || float.IsInfinity(amount) || amount <= 0 ||
                 !build.IsBuildActive) return;
+            if (world != null && !world.Gateway.Ledger.IsAlive(netId)) return;
+            if (selectionRules == null) throw new InvalidOperationException("Upgrade selection rules are missing.");
+            selectionRules.Validate();
             experience += amount;
             int threshold = ExperiencePerLevel;
             int gained = Mathf.FloorToInt(experience / threshold);
             if (gained <= 0) return;
             experience -= gained * threshold;
-            level += gained;
-            ServerQueueUpgrades(gained);
+            for (int i = 0; i < gained; i++)
+            {
+                level++;
+                rewards.Add(new PendingUpgradeReward { EarnedLevel = level, Kind = selectionRules.RewardAtLevel(level) });
+            }
+            TryOpenNextOffer();
         }
 
         [Server]
@@ -237,7 +301,8 @@ namespace MonsterSupergroup.NetworkCombat
         {
             if (count <= 0 || !build.IsBuildActive) return;
             if (world != null && !world.Gateway.Ledger.IsAlive(netId)) return;
-            PendingUpgradeCount = checked(PendingUpgradeCount + count);
+            for (int i = 0; i < count; i++)
+                rewards.Add(new PendingUpgradeReward { EarnedLevel = level, Kind = UpgradeRewardKind.Equipment });
             TryOpenNextOffer();
         }
 
@@ -247,7 +312,16 @@ namespace MonsterSupergroup.NetworkCombat
             if (!isActiveAndEnabled || !ownerCanSelect || PendingEventId != 0 || PendingUpgradeCount == 0 ||
                 !build.IsBuildActive || connectionToClient == null) return;
             IReadOnlyList<ModifierOffer> generated;
-            try { generated = restoredOffers.Length > 0 ? ResolveRestoredOffers() : provider.Generate(build); }
+            try
+            {
+                if (restoredOffers.Length > 0) generated = ResolveRestoredOffers();
+                else
+                {
+                    var reward = rewards[0];
+                    try { generated = provider.Generate(build, ref reward, selectionRules); }
+                    finally { rewards[0] = reward; } // Retain even an empty weapon-to-Equipment conversion.
+                }
+            }
             catch (Exception exception)
             {
                 if (!diagnosedUnavailable)
@@ -258,11 +332,18 @@ namespace MonsterSupergroup.NetworkCombat
             if (generated.Count == 0)
             {
                 if (!diagnosedUnavailable)
-                    Debug.LogWarning($"[UpgradeSelection] player={netId}: {provider.Diagnostic}", this);
+                    Debug.LogWarning($"[UpgradeSelection] player={netId} level={OfferedLevel} kind={rewards[0].Kind}: no legal candidates; reward retained and player unlocked.", this);
                 diagnosedUnavailable = true;
                 return;
             }
             diagnosedUnavailable = false;
+            PublishOffers(generated);
+            restoredOffers = Array.Empty<PlayerUpgradeOfferSnapshot>();
+        }
+
+        [Server]
+        private void PublishOffers(IReadOnlyList<ModifierOffer> generated)
+        {
             if (++sequence >= 0x3fffffffu) throw new InvalidOperationException("Upgrade sequence exhausted.");
             PendingEventId = ((ulong)netId << 32) | sequence;
             var offers = new ModifierOffer[generated.Count];
@@ -270,29 +351,30 @@ namespace MonsterSupergroup.NetworkCombat
             {
                 ModifierOffer candidate = generated[i];
                 ulong optionId = ((ulong)netId << 32) | (sequence * 4u + (uint)i);
-                offers[i] = new ModifierOffer(optionId, candidate.Equipment, candidate.LevelIndex,
-                    candidate.TargetSlotIndex, candidate.ExistingEquipmentHandle);
+                offers[i] = candidate.WithId(optionId);
             }
             serverOffers = Array.AsReadOnly(offers);
-            restoredOffers = Array.Empty<PlayerUpgradeOfferSnapshot>();
             SetSelecting(true);
             SendOwnerState();
         }
 
-        private IReadOnlyList<ModifierOffer> ResolveRestoredOffers()
+        private IReadOnlyList<ModifierOffer> ResolveRestoredOffers() => ResolveSavedOffers(restoredOffers);
+
+        private IReadOnlyList<ModifierOffer> ResolveSavedOffers(PlayerUpgradeOfferSnapshot[] savedOffers)
         {
-            var offers = new ModifierOffer[restoredOffers.Length];
+            var offers = new ModifierOffer[savedOffers.Length];
             IReadOnlyList<PlayerBuildEquipmentState> equipment = build.GetEquipmentStates();
             for (int i = 0; i < offers.Length; i++)
             {
-                PlayerUpgradeOfferSnapshot saved = restoredOffers[i];
+                PlayerUpgradeOfferSnapshot saved = savedOffers[i];
                 PlayerBuildEquipmentHandle handle = default;
                 if (saved.UpgradesExistingEquipment)
                     foreach (PlayerBuildEquipmentState item in equipment)
                         if (item.EquipmentId == saved.EquipmentId && item.SourceSlotIndex == saved.SlotIndex &&
                             item.LevelIndex + 1 == saved.LevelIndex) { handle = item.Handle; break; }
-                var offer = new ModifierOffer(0, ResolveEquipment(build.BuildDatabase, saved.EquipmentId),
-                    saved.LevelIndex, saved.SlotIndex, handle);
+                var offer = ResolveOffer(build.BuildDatabase, new UpgradeOptionMessage {
+                    Kind = saved.Kind, ContentId = saved.ContentId, Rarity = saved.Rarity, PerkLevel = saved.PerkLevel,
+                    LevelIndex = saved.LevelIndex, SlotIndex = saved.SlotIndex }, handle);
                 if (!provider.IsEligible(build, offer))
                     throw new InvalidOperationException($"Saved upgrade {saved.EquipmentId} cannot be restored; content/build mismatch.");
                 offers[i] = offer;
@@ -318,19 +400,62 @@ namespace MonsterSupergroup.NetworkCombat
                 TargetSelectionRejected(sender, eventId, error);
         }
 
+        private bool SubmitLocalBack()
+        {
+            if (!isOwned || !ownerReady || !NetworkClient.active || localEventId == 0) return false;
+            CmdBack(localEventId);
+            return true;
+        }
+
+        [Command]
+        private void CmdBack(ulong eventId, NetworkConnectionToClient sender = null)
+        {
+            if (!ServerBack(sender, eventId, out string error)) TargetSelectionRejected(sender, eventId, error);
+        }
+
+        [Server]
+        public bool ServerBack(NetworkConnectionToClient sender, ulong eventId, out string error)
+        {
+            error = null;
+            if (!ValidRequest(sender, eventId) || stage != UpgradeSelectionStage.EquipmentTarget)
+            {
+                error = "The target selection expired or belongs to another player.";
+                return false;
+            }
+            try
+            {
+                var cards = ResolveSavedOffers(originalOffers);
+                stage = UpgradeSelectionStage.Reward;
+                selectedEquipmentId = 0;
+                originalOffers = Array.Empty<PlayerUpgradeOfferSnapshot>();
+                PublishOffers(cards);
+                return true;
+            }
+            catch (Exception exception) { error = exception.Message; return false; }
+        }
+
+        private bool ValidRequest(NetworkConnectionToClient sender, ulong eventId) =>
+            isActiveAndEnabled && ownerCanSelect && sender != null && sender == connectionToClient &&
+            sender.identity == netIdentity && eventId != 0 && eventId == PendingEventId &&
+            build.IsBuildActive && build.InitialWeapon == serverWeapon &&
+            (world == null || world.Gateway.Ledger.IsAlive(netId));
+
         [Server]
         public bool ServerSelect(NetworkConnectionToClient sender, ulong eventId, int index, out string error)
         {
             error = null;
-            if (!isActiveAndEnabled || !ownerCanSelect || sender == null || sender != connectionToClient || sender.identity != netIdentity ||
-                eventId == 0 || eventId != PendingEventId || (uint)index >= serverOffers.Count ||
-                !build.IsBuildActive || build.InitialWeapon != serverWeapon ||
-                (world != null && !world.Gateway.Ledger.IsAlive(netId)))
+            if (!ValidRequest(sender, eventId) || (uint)index >= serverOffers.Count)
             {
                 error = "The selection is invalid, expired, or belongs to another player.";
                 return false;
             }
             ModifierOffer offer = serverOffers[index];
+            if (stage == UpgradeSelectionStage.EquipmentTarget &&
+                (offer.Kind != UpgradeRewardKind.Equipment || offer.EquipmentId != selectedEquipmentId))
+            {
+                error = "The Equipment target no longer matches the selected card.";
+                return false;
+            }
             if (!provider.IsEligible(build, offer))
             {
                 error = "The build changed and this option is no longer eligible.";
@@ -339,7 +464,21 @@ namespace MonsterSupergroup.NetworkCombat
             }
             try
             {
-                if (offer.ExistingEquipmentHandle.IsValid)
+                if (offer.Kind == UpgradeRewardKind.Equipment && stage == UpgradeSelectionStage.Reward)
+                {
+                    var targets = provider.GetEquipmentTargets(build, offer.Equipment);
+                    if (targets.Count == 0) throw new InvalidOperationException("No legal Equipment target.");
+                    originalOffers = CaptureOffers(serverOffers);
+                    selectedEquipmentId = offer.EquipmentId;
+                    stage = UpgradeSelectionStage.EquipmentTarget;
+                    PublishOffers(targets);
+                    return true;
+                }
+                if (offer.Kind == UpgradeRewardKind.Weapon)
+                    build.EquipWeapon(offer.Weapon);
+                else if (offer.Kind == UpgradeRewardKind.Perk)
+                    build.AddPerk(offer.Perk, offer.Rarity);
+                else if (offer.ExistingEquipmentHandle.IsValid)
                     build.UpgradeEquipment(offer.ExistingEquipmentHandle, offer.LevelIndex);
                 else
                     build.AddEquipment(offer.TargetSlotIndex, offer.Equipment, offer.LevelIndex);
@@ -353,7 +492,10 @@ namespace MonsterSupergroup.NetworkCombat
             // Consume before any acknowledgement or next offer, including the host's local RPC.
             PendingEventId = 0;
             serverOffers = Array.Empty<ModifierOffer>();
-            PendingUpgradeCount--;
+            originalOffers = Array.Empty<PlayerUpgradeOfferSnapshot>();
+            selectedEquipmentId = 0;
+            stage = UpgradeSelectionStage.Reward;
+            rewards.RemoveAt(0);
             buildRevision++;
             SetSelecting(false);
             SendOwnerState();
@@ -379,18 +521,21 @@ namespace MonsterSupergroup.NetworkCombat
             var options = new UpgradeOptionMessage[serverOffers.Count];
             for (int i = 0; i < options.Length; i++)
                 options[i] = new UpgradeOptionMessage { OptionId = serverOffers[i].OfferId,
-                    EquipmentId = serverOffers[i].EquipmentId, LevelIndex = serverOffers[i].LevelIndex,
+                    Kind = serverOffers[i].Kind, ContentId = serverOffers[i].ContentId,
+                    Rarity = serverOffers[i].Rarity, PerkLevel = serverOffers[i].PerkLevel,
+                    LevelIndex = serverOffers[i].LevelIndex,
                     SlotIndex = serverOffers[i].TargetSlotIndex };
             TargetReceiveState(connectionToClient, buildRevision, build.CaptureState(),
                 GetComponent<NetworkWeaponCombatAdapter>()?.CaptureCooldowns() ?? Array.Empty<PlayerWeaponCooldownSnapshot>(),
                 GetComponent<NetworkWeaponCombatAdapter>()?.CaptureSummonMaturities() ?? Array.Empty<PlayerSummonMaturitySnapshot>(),
-                PendingEventId, options);
+                PendingEventId, stage, OfferedLevel, options);
         }
 
         [TargetRpc]
         private void TargetReceiveState(NetworkConnectionToClient target, uint revision,
             PlayerBuildSnapshot snapshot, PlayerWeaponCooldownSnapshot[] cooldowns,
-            PlayerSummonMaturitySnapshot[] summonMaturities, ulong eventId, UpgradeOptionMessage[] options)
+            PlayerSummonMaturitySnapshot[] summonMaturities, ulong eventId, UpgradeSelectionStage offerStage,
+            int earnedLevel, UpgradeOptionMessage[] options)
         {
             if (!isOwned || !ownerReady) return;
             try
@@ -415,14 +560,14 @@ namespace MonsterSupergroup.NetworkCombat
                     player.SetUpgradeSelectionLocked(false);
                     return;
                 }
-                if (options.Length < 1 || options.Length > 3)
+                if (options.Length < 1 || options.Length > (offerStage == UpgradeSelectionStage.EquipmentTarget ? 4 : 3))
                     throw new InvalidOperationException("Server sent an invalid offer size.");
                 var localOffers = new ModifierOffer[options.Length];
                 for (int i = 0; i < options.Length; i++)
-                    localOffers[i] = new ModifierOffer(options[i].OptionId,
-                        ResolveEquipment(database, options[i].EquipmentId), options[i].LevelIndex, options[i].SlotIndex);
+                    localOffers[i] = ResolveOffer(database, options[i]);
                 player.SetUpgradeSelectionLocked(true);
-                presentation.ReceiveOffers(localOffers, SubmitLocalSelection);
+                presentation.ReceiveOffers(localOffers, SubmitLocalSelection, offerStage, earnedLevel,
+                    offerStage == UpgradeSelectionStage.EquipmentTarget ? SubmitLocalBack : null);
             }
             catch (Exception exception)
             {
@@ -440,6 +585,28 @@ namespace MonsterSupergroup.NetworkCombat
             foreach (EquipmentData item in database.EquipmentDB.Equipments)
                 if (item != null && item.ID == id) return item;
             throw new InvalidOperationException($"Local EquipmentDB cannot resolve card {id}.");
+        }
+
+        private static ModifierOffer ResolveOffer(RuntimeDB database, UpgradeOptionMessage option,
+            PlayerBuildEquipmentHandle handle = default)
+        {
+            switch (option.Kind)
+            {
+                case UpgradeRewardKind.Equipment:
+                    var equipment = ResolveEquipment(database, option.ContentId);
+                    return option.SlotIndex < 0 ? ModifierOffer.EquipmentCard(option.OptionId, equipment) :
+                        new ModifierOffer(option.OptionId, equipment, option.LevelIndex, option.SlotIndex, handle);
+                case UpgradeRewardKind.Weapon:
+                    foreach (var weapon in database.WeaponDB.Weapons)
+                        if (weapon != null && weapon.ID == option.ContentId) return ModifierOffer.WeaponCard(option.OptionId, weapon);
+                    break;
+                case UpgradeRewardKind.Perk:
+                    foreach (var perk in database.PerkDB.Perks)
+                        if (perk != null && perk.ID == option.ContentId)
+                            return ModifierOffer.PerkCard(option.OptionId, perk, option.Rarity, option.PerkLevel);
+                    break;
+            }
+            throw new InvalidOperationException($"Local database cannot resolve {option.Kind} {option.ContentId}.");
         }
 
         [Command]
@@ -462,7 +629,10 @@ namespace MonsterSupergroup.NetworkCombat
         public void ServerCancelPending()
         {
             PendingEventId = 0;
-            PendingUpgradeCount = 0;
+            rewards.Clear();
+            originalOffers = Array.Empty<PlayerUpgradeOfferSnapshot>();
+            selectedEquipmentId = 0;
+            stage = UpgradeSelectionStage.Reward;
             serverOffers = Array.Empty<ModifierOffer>();
             restoredOffers = Array.Empty<PlayerUpgradeOfferSnapshot>();
             SetSelecting(false);
@@ -546,6 +716,8 @@ namespace MonsterSupergroup.NetworkCombat
         [Server]
         private void RefreshInvalidOffer()
         {
+            // Issued cards are frozen. Keep the unresolved decision for diagnosis/retry, never reroll it.
+            restoredOffers = CaptureOffers(serverOffers);
             PendingEventId = 0;
             serverOffers = Array.Empty<ModifierOffer>();
             SetSelecting(false);
@@ -582,7 +754,10 @@ namespace MonsterSupergroup.NetworkCombat
                 world.SetPlayerUpgradeSelectionState(netId, false);
             }
             PendingEventId = 0;
-            PendingUpgradeCount = 0;
+            rewards.Clear();
+            originalOffers = Array.Empty<PlayerUpgradeOfferSnapshot>();
+            selectedEquipmentId = 0;
+            stage = UpgradeSelectionStage.Reward;
             serverOffers = Array.Empty<ModifierOffer>();
             restoredOffers = Array.Empty<PlayerUpgradeOfferSnapshot>();
             selecting = false;

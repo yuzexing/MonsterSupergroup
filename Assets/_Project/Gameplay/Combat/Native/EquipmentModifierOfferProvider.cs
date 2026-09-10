@@ -14,6 +14,48 @@ namespace MonsterSupergroup.Gameplay.Combat
 
         public string Diagnostic { get; private set; }
 
+        public IReadOnlyList<ModifierOffer> GenerateCards(PlayerBuildRuntime build)
+        {
+            var eligible = new List<EquipmentData>();
+            var ids = new HashSet<uint>();
+            EquipmentDB database = build?.BuildDatabase?.EquipmentDB;
+            if (database?.Equipments == null) throw new InvalidOperationException("EquipmentDB is missing.");
+            foreach (EquipmentData card in database.Equipments)
+            {
+                if (card == null) continue;
+                if (!ids.Add(card.ID)) throw new InvalidOperationException($"Duplicate Equipment ID {card.ID}.");
+                if (GetTargets(build, card).Count > 0) eligible.Add(card);
+            }
+            var offers = new ModifierOffer[Math.Min(OfferCount, eligible.Count)];
+            for (int i = 0; i < offers.Length; i++)
+            {
+                int selected = SampleIndex(i, eligible.Count);
+                EquipmentData card = eligible[selected];
+                eligible[selected] = eligible[i];
+                eligible[i] = card;
+                offers[i] = ModifierOffer.EquipmentCard(nextOfferId++, card);
+            }
+            return Array.AsReadOnly(offers);
+        }
+
+        public IReadOnlyList<ModifierOffer> GetTargets(PlayerBuildRuntime build, EquipmentData card)
+        {
+            var targets = new List<ModifierOffer>();
+            if (build == null || !build.IsBuildActive || card == null) return targets;
+            var states = build.GetEquipmentStates();
+            for (int slot = 0; slot < PlayerBuildRuntime.HandSlotCount; slot++)
+            {
+                var weapon = build.GetWeaponAtSlot(slot);
+                if (weapon == null) continue;
+                var owned = FindEquipment(states, slot, card.ID);
+                int next = owned.Handle.IsValid ? owned.LevelIndex + 1 : 0;
+                if (!CanOffer(card, weapon.WeaponData, next)) continue;
+                var offer = new ModifierOffer(0, card, next, slot, owned.Handle);
+                if (IsEligible(build, offer)) targets.Add(offer);
+            }
+            return targets.AsReadOnly();
+        }
+
         public EquipmentModifierOfferProvider(IRandomSource random)
         {
             this.random = random ?? throw new ArgumentNullException(nameof(random));
@@ -66,14 +108,16 @@ namespace MonsterSupergroup.Gameplay.Combat
 
         public bool IsEligible(PlayerBuildRuntime build, ModifierOffer offer)
         {
+            if (offer == null || offer.Kind != UpgradeRewardKind.Equipment) return false;
+            if (offer.TargetSlotIndex < 0) return GetTargets(build, offer.Equipment).Count > 0;
             if (build == null || !build.IsBuildActive || offer == null ||
                 (uint)offer.TargetSlotIndex >= PlayerBuildRuntime.HandSlotCount ||
-                build.GetWeaponAtSlot(offer.TargetSlotIndex) != build.InitialWeapon)
+                build.GetWeaponAtSlot(offer.TargetSlotIndex) == null)
                 return false;
             EquipmentDB database = build.BuildDatabase?.EquipmentDB;
             if (database?.Equipments == null ||
                 Array.IndexOf(database.Equipments, offer.Equipment) < 0 ||
-                !CanOffer(offer.Equipment, build.InitialWeapon.WeaponData, offer.LevelIndex))
+                !CanOffer(offer.Equipment, build.GetWeaponAtSlot(offer.TargetSlotIndex).WeaponData, offer.LevelIndex))
                 return false;
 
             IReadOnlyList<PlayerBuildEquipmentState> states = build.GetEquipmentStates();

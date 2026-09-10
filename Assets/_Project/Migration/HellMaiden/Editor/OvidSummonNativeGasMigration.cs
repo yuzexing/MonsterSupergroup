@@ -39,7 +39,7 @@ namespace MonsterSupergroup.HellMaidenMigration.Editor
             "Source Idle/Attack/Mover component fields are absent. References follow the original hierarchy and clip bindings; " +
             "numeric overrides use the source C# defaults, CustomAnimationCurve uses its default Ease.Linear, and " +
             "ClipTransition speed=1/fade=0/start=0 are explicit reconstruction decisions, not recovered prefab values. " +
-            "The source cacoonStateTime=60 and all six clip curves/loop flags are retained, including Attack_Loop's " +
+            "Gameplay uses cacoonStateTime=3 (approved M4 tuning; source=60). All six clip curves/loop flags are retained, including Attack_Loop's " +
             "non-looping flag. Source ProjectileCount=0 is normalized to one summon for the Native GAS definition. " +
             "Source beamSound is unrecoverable and remains empty; the two FMOD references/None triggers and original " +
             "Unity AudioSource clip/play-on-awake are preserved. No animation audio events are invented. " +
@@ -403,6 +403,15 @@ namespace MonsterSupergroup.HellMaidenMigration.Editor
 
         private static void ConfigureWeaponAndDatabase()
         {
+            var emitterRoot = PrefabUtility.LoadPrefabContents(BehaviourPath);
+            try
+            {
+                var emitter = new SerializedObject(emitterRoot.GetComponent<OvidSummonAttackBehaviour>());
+                Float(emitter, "cacoonStateTime", 3f);
+                emitter.ApplyModifiedPropertiesWithoutUndo();
+                PrefabUtility.SaveAsPrefabAsset(emitterRoot, BehaviourPath);
+            }
+            finally { PrefabUtility.UnloadPrefabContents(emitterRoot); }
             WeaponData weapon = RequireAsset<WeaponData>(WeaponPath);
             KnockbackSettings knockback = RequireAsset<KnockbackSettings>(AssetDatabase.GUIDToAssetPath(KnockbackGuid));
             Require(weapon.ID == 402 && knockback.distance == 0.5f, "Source summon identity/knockback changed.");
@@ -432,7 +441,7 @@ namespace MonsterSupergroup.HellMaidenMigration.Editor
             Require(weapon.ID == 402 && weapon.BaseStats.damage == 24 && weapon.BaseStats.projectileCount == 1 &&
                 weapon.AttackTags == CombatTags.Attack, "Summon Native identity/count normalization changed.");
             var emitter = new SerializedObject(weapon.WeaponPrefab);
-            Require(Required(emitter, "cacoonStateTime").floatValue == 60f, "Source cocoon duration changed.");
+            Require(Required(emitter, "cacoonStateTime").floatValue == 3f, "Gameplay cocoon duration must be three seconds.");
             string[] variantFields = { "variants.defaultPrefab", "variants.firePrefab", "variants.poisonPrefab" };
             string[] paths = VariantPaths();
             for (int i = 0; i < paths.Length; i++)

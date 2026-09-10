@@ -61,7 +61,7 @@ namespace MonsterSupergroup.Gameplay.Tests
             menu = ui.GetComponentInChildren<CardPickMenu>();
             binder = ui.GetComponent<LocalPlayerUIBinder>();
             binder.enabled = false;
-            buttons = menu.GetComponentsInChildren<Button>();
+            buttons = menu.GetComponentsInChildren<Button>(true).Where(b => b.name.StartsWith("Option")).ToArray();
             submitted = 0;
             requests = 0;
         }
@@ -115,15 +115,15 @@ namespace MonsterSupergroup.Gameplay.Tests
             buttons[count - 1].onClick.Invoke();
             Assert.That(submitted, Is.EqualTo(100ul + (ulong)count - 1));
             Present(200);
-            Assert.That(buttons.All(button => button.gameObject.activeSelf && button.interactable), Is.True,
+            Assert.That(buttons.Take(3).All(button => button.gameObject.activeSelf && button.interactable), Is.True,
                 "A later full offer must restore all three options.");
         }
 
         [Test]
-        public void Prefab_HasThreeBasicOptionsAndPreservesHealthPresentation()
+        public void Prefab_HasFourTargetOptionsAndBackAndPreservesHealthPresentation()
         {
-            Assert.That(buttons.Length, Is.EqualTo(3));
-            Assert.That(menu.GetComponentsInChildren<TMP_Text>().Length, Is.EqualTo(3));
+            Assert.That(buttons.Length, Is.EqualTo(4));
+            Assert.That(menu.GetComponentsInChildren<TMP_Text>(true).Length, Is.EqualTo(6));
             Assert.That(ui.GetComponent<GraphicRaycaster>(), Is.Not.Null);
             foreach (Button button in buttons)
             {
@@ -150,7 +150,7 @@ namespace MonsterSupergroup.Gameplay.Tests
                 "The minimal scene must display authored titles even when localization is not loaded.");
             for (int i = 0; i < 3; i++)
                 Assert.That(buttons[i].GetComponentInChildren<TMP_Text>().text,
-                    Is.EqualTo(selection.Offers[i].DisplayName));
+                    Does.Contain(selection.Offers[i].DisplayName));
             buttons[index].onClick.Invoke();
             Assert.That(submitted, Is.EqualTo(100ul + (ulong)index));
             Assert.That(menu.IsOpen, Is.True, "A request must not optimistically close the menu.");
@@ -161,7 +161,7 @@ namespace MonsterSupergroup.Gameplay.Tests
 
             selection.CompleteRequest("Server rejected the request");
             Assert.That(menu.IsOpen, Is.True);
-            Assert.That(buttons.All(button => button.interactable), Is.True);
+            Assert.That(buttons.Take(3).All(button => button.interactable), Is.True);
             buttons[index].onClick.Invoke();
             Assert.That(requests, Is.EqualTo(2));
             selection.ClearOffers();

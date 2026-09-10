@@ -148,7 +148,7 @@ namespace MonsterSupergroup.Gameplay.Tests
                         copy.BaseStats.speed == .2f && copy.BaseStats.projectileCount == 1 && copy.BaseStats.critRate == 0,
                     "Validation requires authored Ovid damage/duration/speed/count/crit.");
                 var source = copy.WeaponPrefab as OvidSummonAttackBehaviour;
-                Require(source != null && source.InitialMaturityDelay == 60f, "Source Ovid must retain its sixty-second cocoon.");
+                Require(source != null && source.InitialMaturityDelay == 3f, "Gameplay Ovid must use its three-second cocoon.");
                 var emitter = Instantiate(source, staging.transform);
                 typeof(OvidSummonAttackBehaviour).GetField("cacoonStateTime", BindingFlags.Instance | BindingFlags.NonPublic)
                     .SetValue(emitter, FixtureCocoonSeconds);
@@ -158,7 +158,7 @@ namespace MonsterSupergroup.Gameplay.Tests
             database.ConfigureWeaponDatabase(weapons);
             manager.playerPrefab.GetComponent<PlayerBuildRuntime>().ConfigureInitialWeapon(WeaponId);
             Require(manager.GetComponent<NetworkBackendBootstrap>().TryPrepareKcp("127.0.0.1", port, false, out var error), error);
-            Debug.Log($"[SummonProcess] fixtureCocoon={FixtureCocoonSeconds} sourceCocoon=60 sourceAttackUnchanged=true timeScale={Time.timeScale}");
+            Debug.Log($"[SummonProcess] fixtureCocoon={FixtureCocoonSeconds} gameplayCocoon=3 sourceAttackUnchanged=true timeScale={Time.timeScale}");
             if (role == "host") manager.StartHost();
             else if (role == "server") manager.StartServer();
             else manager.StartClient();

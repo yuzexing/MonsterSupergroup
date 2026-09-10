@@ -64,11 +64,11 @@ namespace MonsterSupergroup.HellMaidenMigration.Tests
         }
 
         [Test]
-        public void SourceSixtySecondCocoonAndThreeVariantsArePreserved()
+        public void GameplayThreeSecondCocoonAndThreeSourceVariantsAreConfigured()
         {
             Assert.That(Weapon().WeaponPrefab, Is.TypeOf<OvidSummonAttackBehaviour>());
             var emitter = new SerializedObject(Weapon().WeaponPrefab);
-            Assert.That(emitter.FindProperty("cacoonStateTime").floatValue, Is.EqualTo(60f));
+            Assert.That(emitter.FindProperty("cacoonStateTime").floatValue, Is.EqualTo(3f));
             string[] fields = { "variants.defaultPrefab", "variants.firePrefab", "variants.poisonPrefab" };
             string[] paths = Variants();
             for (int index = 0; index < fields.Length; index++)
@@ -320,7 +320,8 @@ namespace MonsterSupergroup.HellMaidenMigration.Tests
             Assert.That(database.Weapons.Count(weapon => weapon.ID == 402), Is.EqualTo(1));
             Assert.That(database.Weapons.Single(weapon => weapon.ID == 402), Is.EqualTo(Weapon()));
             GameObject player = AssetDatabase.LoadAssetAtPath<GameObject>(DanteNativeGasMigration.NetworkPlayerPrefabPath);
-            Assert.That(new SerializedObject(player.GetComponent("PlayerBuildRuntime")).FindProperty("initialWeaponId").intValue, Is.EqualTo(2));
+            Assert.That(new SerializedObject(player.GetComponent("PlayerBuildRuntime")).FindProperty("initialWeaponId").intValue, Is.EqualTo(6),
+                "Gameplay keeps Circling as the initial weapon while adding Ovid to the candidate pool.");
             Assert.DoesNotThrow(OvidSummonNativeGasMigration.ValidateImportedAssets);
         }
 

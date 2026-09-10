@@ -1,0 +1,126 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1f3f31c2788aa39183e9c91c24fce070, type: 3}
+  m_Name: GameplayPerkDropWeights
+  m_EditorClassIdentifier:
+  serializationData:
+    SerializedFormat: 0
+    SerializedBytes:
+    ReferencedUnityObjects: []
+    SerializedBytesString:
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes: []
+  dropWeightsLevelThresholds:
+  - level: 0
+    dropWeights:
+    - tier: 0
+      weight: 80
+      rarityWeights:
+      - rarity: 0
+        weight: 85
+      - rarity: 1
+        weight: 14
+      - rarity: 2
+        weight: 0.99
+      - rarity: 3
+        weight: 0.01
+    - tier: 1
+      weight: 19
+      rarityWeights:
+      - rarity: 1
+        weight: 98
+      - rarity: 2
+        weight: 1.99
+      - rarity: 3
+        weight: 0.01
+    - tier: 2
+      weight: 0.99
+      rarityWeights:
+      - rarity: 2
+        weight: 99.99
+      - rarity: 3
+        weight: 0.01
+    - tier: 3
+      weight: 0.01
+      rarityWeights:
+      - rarity: 3
+        weight: 100
+  - level: 20
+    dropWeights:
+    - tier: 0
+      weight: 80
+      rarityWeights:
+      - rarity: 0
+        weight: 85
+      - rarity: 1
+        weight: 14
+      - rarity: 2
+        weight: 0.99
+      - rarity: 3
+        weight: 0.01
+    - tier: 1
+      weight: 19
+      rarityWeights:
+      - rarity: 1
+        weight: 98
+      - rarity: 2
+        weight: 1.99
+      - rarity: 3
+        weight: 0.01
+    - tier: 2
+      weight: 0.99
+      rarityWeights:
+      - rarity: 2
+        weight: 98
+      - rarity: 3
+        weight: 2
+    - tier: 3
+      weight: 0.01
+      rarityWeights:
+      - rarity: 3
+        weight: 100
+  - level: 50
+    dropWeights:
+    - tier: 0
+      weight: 47
+      rarityWeights:
+      - rarity: 0
+        weight: 85
+      - rarity: 1
+        weight: 14.4
+      - rarity: 2
+        weight: 0.5
+      - rarity: 3
+        weight: 0.1
+    - tier: 1
+      weight: 35
+      rarityWeights:
+      - rarity: 1
+        weight: 93.5
+      - rarity: 2
+        weight: 6
+      - rarity: 3
+        weight: 0.5
+    - tier: 2
+      weight: 15
+      rarityWeights:
+      - rarity: 2
+        weight: 95
+      - rarity: 3
+        weight: 5
+    - tier: 3
+      weight: 3
+      rarityWeights:
+      - rarity: 3
+        weight: 100

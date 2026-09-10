@@ -212,4 +212,4 @@ MonoBehaviour:
     firePrefab: {fileID: 114045458335737618, guid: 85912ef16aa56a342b3a0aee18fc5b7a, type: 2}
     allowPoison: 1
     allowFire: 1
-  cacoonStateTime: 60
+  cacoonStateTime: 3

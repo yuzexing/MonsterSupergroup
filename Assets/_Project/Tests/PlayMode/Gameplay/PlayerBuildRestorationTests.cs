@@ -151,7 +151,10 @@ namespace MonsterSupergroup.Gameplay.Tests
             SetField(authority, "build", source);
             SetField(authority, "level", 4);
             SetField(authority, "experience", 1f);
-            SetField(authority, "<PendingUpgradeCount>k__BackingField", 2);
+            var queue = (List<PendingUpgradeReward>)typeof(NetworkModifierSelection)
+                .GetField("rewards", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(authority);
+            queue.Add(new PendingUpgradeReward { EarnedLevel = 3, Kind = UpgradeRewardKind.Equipment });
+            queue.Add(new PendingUpgradeReward { EarnedLevel = 4, Kind = UpgradeRewardKind.Weapon });
             SetField(authority, "buildRevision", 8u);
             SetField(authority, "serverOffers", Array.AsReadOnly(new[]
             {
@@ -162,7 +165,7 @@ namespace MonsterSupergroup.Gameplay.Tests
             restored.RestoreState(database, snapshot);
             var replacement = restored.gameObject.AddComponent<NetworkModifierSelection>();
             SetField(replacement, "build", restored);
-            SetField(replacement, "provider", new EquipmentModifierOfferProvider(new NoDrawRandom()));
+            SetField(replacement, "provider", new UpgradeOfferProvider(new NoDrawRandom()));
             SetField(replacement, "restoredOffers", progression.Offers);
 
             var offers = (IReadOnlyList<ModifierOffer>)typeof(NetworkModifierSelection)

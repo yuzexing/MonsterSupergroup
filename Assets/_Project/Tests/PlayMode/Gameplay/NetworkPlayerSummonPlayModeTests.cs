@@ -40,7 +40,7 @@ namespace MonsterSupergroup.Gameplay.Tests
             double equippedAt = NetworkTime.time;
             SummonAttackBehaviour weapon = Equip(1);
             var saved = Adapter.CaptureSummonMaturities().Single();
-            Assert.That(saved.MaturityAt, Is.EqualTo(equippedAt + 60d).Within(0.15d));
+            Assert.That(saved.MaturityAt, Is.EqualTo(equippedAt + weapon.InitialMaturityDelay).Within(0.15d));
             SendBaseline();
             yield return WaitFor(() => weapon.HasSimulationBinding, "The real Build TargetRpc must configure the owned pet clock.");
             Assert.That(weapon.MaturityAt, Is.EqualTo(saved.MaturityAt));

@@ -114,6 +114,12 @@ namespace MonsterSupergroup.Gameplay.Tests
                 }
                 if (granted.Add(identity.netId))
                 {
+                    // Legacy Equipment regression scenario. The M4 fixture separately uses the formal mixed schedule.
+                    var rulesField = typeof(NetworkModifierSelection).GetField("selectionRules", BindingFlags.Instance | BindingFlags.NonPublic);
+                    var rules = Instantiate((UpgradeSelectionRules)rulesField.GetValue(authority));
+                    typeof(UpgradeSelectionRules).GetField("weaponLevels", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(rules, Array.Empty<int>());
+                    typeof(UpgradeSelectionRules).GetField("firstPerkLevel", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(rules, int.MaxValue);
+                    rulesField.SetValue(authority, rules);
                     NetworkCombatWorld.Instance.Gateway.Ledger.SetAbsoluteInvulnerable(identity.netId, false);
                     identity.GetComponent<CombatantBehaviour>().SetCanonicalInvulnerable(false);
                     authority.ServerGrantExperience(authority.ExperiencePerLevel * (simultaneous ? 2 : 1));
@@ -293,8 +299,8 @@ namespace MonsterSupergroup.Gameplay.Tests
 
             int index = round % 3;
             ModifierOffer expected = selection.Offers[index];
-            var buttons = menu.GetComponentsInChildren<Button>(true);
-            Require(buttons.Length == 3, "Menu must contain exactly three Buttons.");
+            var buttons = menu.GetComponentsInChildren<Button>(true).Where(b => b.name.StartsWith("Option")).ToArray();
+            Require(buttons.Length == 4, "Menu must provide four target Buttons.");
             if (keyboard)
             {
                 keyboardArmed = false;
@@ -306,6 +312,20 @@ namespace MonsterSupergroup.Gameplay.Tests
                 input.enabled = true;
             }
             else buttons[index].onClick.Invoke();
+            while (authority.LocalEventId == currentEvent) yield return null;
+            Require(selection.Stage == UpgradeSelectionStage.EquipmentTarget, "Equipment did not enter target confirmation.");
+            currentEvent = authority.LocalEventId;
+            expected = selection.Offers[0];
+            if (keyboard)
+            {
+                keyboardArmed = false;
+                var input = selection.GetComponent<DebugModifierSelectionInput>();
+                input.enabled = false;
+                instruction = $"{(host ? "HOST" : "CLIENT")} - confirm target with 1";
+                while (!keyboardArmed) yield return null;
+                input.enabled = true;
+            }
+            else buttons[0].onClick.Invoke();
             while (authority.LocalEventId == currentEvent) yield return null;
             Require(build.GetEquipmentStates().Any(s => s.EquipmentId == expected.EquipmentId &&
                 s.LevelIndex == expected.LevelIndex), "Acknowledged upgrade not present in Owner Build.");
@@ -535,6 +555,11 @@ namespace MonsterSupergroup.Gameplay.Tests
                     eventId, expectedCount, out _), "Unused option index was accepted.");
                 ModifierOffer selected = selection.Offers[0];
                 buttons[0].onClick.Invoke();
+                while (authority.LocalEventId == eventId) yield return null;
+                Require(selection.Stage == UpgradeSelectionStage.EquipmentTarget, "Reduced card did not request a target.");
+                eventId = authority.LocalEventId;
+                selected = selection.Offers[0];
+                selection.Select(0);
                 while (authority.LocalEventId == eventId) yield return null;
                 Require(build.GetEquipmentStates().Any(state => state.EquipmentId == selected.EquipmentId &&
                     state.LevelIndex == selected.LevelIndex), "Reduced offer did not update the existing Build.");

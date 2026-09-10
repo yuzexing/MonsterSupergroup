@@ -5,8 +5,8 @@ namespace AstralShift.HellMaiden.Player.Attacks
 {
     public class OvidSummonAttackBehaviour : SummonAttackBehaviour
     {
-        // Source prefab overrides this source-code default to 60 seconds.
-        [SerializeField] private float cacoonStateTime = 10f;
+        // Gameplay's configured cocoon duration; the source game used sixty seconds.
+        [SerializeField] private float cacoonStateTime = 3f;
         public override float InitialMaturityDelay => cacoonStateTime;
 
         public override SummonPhase GetMaturityPhase(out float elapsed)

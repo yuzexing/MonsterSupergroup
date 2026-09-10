@@ -814,6 +814,7 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0
   experiencePerLevel: 2
+  selectionRules: {fileID: 11400000, guid: c566d2c168204cb992455eedcb1ae2fa, type: 2}
 --- !u!114 &871410000000000004
 MonoBehaviour:
   m_ObjectHideFlags: 0

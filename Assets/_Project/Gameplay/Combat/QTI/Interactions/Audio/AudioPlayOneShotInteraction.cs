@@ -34,13 +34,18 @@ namespace AstralShift.QTI.Interactions.Audio
 			if (mode == AudioPlayOneShotInteractionMode.Position2D)
 			{
 				_audioListener = Object.FindFirstObjectByType<AudioListener>();
-				clipPosition = _audioListener.transform;
+				if (_audioListener != null) clipPosition = _audioListener.transform;
 			}
 		}
 
 		public override void Interact(IInteractor interactor)
 		{
 			base.Interact(interactor);
+			if (audioClip == null)
+			{
+				OnEnd();
+				return;
+			}
 			switch (mode)
 			{
 			case AudioPlayOneShotInteractionMode.AudioSource:

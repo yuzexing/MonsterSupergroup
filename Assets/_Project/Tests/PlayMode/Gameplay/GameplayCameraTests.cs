@@ -55,6 +55,8 @@ namespace MonsterSupergroup.Gameplay.Tests
             Assert.That(view.transform.parent.gameObject.scene, Is.EqualTo(view.gameObject.scene), "Shake container must unload with Gameplay.");
             Assert.That(Object.FindObjectsByType<Camera>(FindObjectsSortMode.None).Count(c => c.enabled && c.CompareTag("MainCamera")), Is.EqualTo(1));
             Assert.That(Object.FindObjectsByType<AudioListener>(FindObjectsSortMode.None).Count(c => c.enabled), Is.EqualTo(1));
+            Assert.That(FMODUnity.StudioListener.ListenerCount, Is.EqualTo(1));
+            Assert.That(player.GetComponent<FMODUnity.StudioListener>().isActiveAndEnabled, Is.True);
             Assert.That(rig.HorizontalFollowSmoothness, Is.EqualTo(.15f));
             Assert.That(rig.VerticalFollowSmoothness, Is.EqualTo(.15f));
             Assert.That(view.GetComponent<ProCamera2DShake>().ShakePresets.Select(p => p.name),
@@ -104,6 +106,7 @@ namespace MonsterSupergroup.Gameplay.Tests
             Assert.That(calls, Is.EqualTo(1));
             yield return null;
             binding.Dispose();
+            Assert.That(FMODUnity.StudioListener.ListenerCount, Is.Zero);
             Assert.That(rig.CameraTargets, Is.Empty);
             Assert.That(view.BoundPlayer, Is.Null);
             Assert.That(view.transform.parent.localPosition, Is.EqualTo(Vector3.zero));
@@ -111,6 +114,8 @@ namespace MonsterSupergroup.Gameplay.Tests
             Assert.That(calls, Is.EqualTo(1));
             view.enabled = false;
             binding.Bind(player); // Owner before an available camera.
+            Assert.That(FMODUnity.StudioListener.ListenerCount, Is.EqualTo(1));
+            Assert.That(player.GetComponents<FMODUnity.StudioListener>().Length, Is.EqualTo(1));
             Assert.That(rig.CameraTargets, Is.Empty);
             view.enabled = true;
             binding.Refresh();

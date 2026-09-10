@@ -64,7 +64,7 @@ namespace AstralShift.HellMaiden.AI.Enemy
 				elapsedTime = 0f;
 				if (playSoundEachConsecutiveAttack)
 				{
-					RuntimeManager.PlayOneShot(attackSound);
+					OptionalAudio.PlayOneShot(attackSound);
 				}
 			}
 		}

@@ -225,7 +225,7 @@ namespace AstralShift.HellMaiden.UI.Perks
 				EventReference perkSelectedSound = GetPerkSelectedSound(_perkData.Rarity);
 				if (!perkSelectedSound.IsNull)
 				{
-					RuntimeManager.PlayOneShot(perkSelectedSound);
+					OptionalAudio.PlayOneShot(perkSelectedSound);
 				}
 				base.interactable = false;
 				await PerkSelectedTween();

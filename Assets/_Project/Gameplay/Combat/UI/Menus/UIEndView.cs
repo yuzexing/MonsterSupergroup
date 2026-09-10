@@ -165,7 +165,7 @@ namespace AstralShift.HellMaiden.UI.Menus
 			}
 			if (!winLoopSound.IsNull)
 			{
-				_winLoopSoundInstance = RuntimeManager.CreateInstance(winLoopSound.Guid);
+				_winLoopSoundInstance = OptionalAudio.CreateInstance(winLoopSound.Guid);
 				_winLoopSoundInstance.start();
 			}
 			confettiLoopCoroutine = StartCoroutine(ConfettiLoop());
@@ -244,7 +244,7 @@ namespace AstralShift.HellMaiden.UI.Menus
 		{
 			if (!defeatEnterSound.IsNull)
 			{
-				RuntimeManager.PlayOneShot(defeatEnterSound.Guid);
+				OptionalAudio.PlayOneShot(defeatEnterSound.Guid);
 			}
 		}
 
@@ -252,7 +252,7 @@ namespace AstralShift.HellMaiden.UI.Menus
 		{
 			if (!defeatExitSound.IsNull)
 			{
-				RuntimeManager.PlayOneShot(defeatExitSound.Guid);
+				OptionalAudio.PlayOneShot(defeatExitSound.Guid);
 			}
 		}
 
@@ -260,7 +260,7 @@ namespace AstralShift.HellMaiden.UI.Menus
 		{
 			if (!winConfettiSound.IsNull)
 			{
-				RuntimeManager.PlayOneShot(winConfettiSound.Guid);
+				OptionalAudio.PlayOneShot(winConfettiSound.Guid);
 			}
 		}
 

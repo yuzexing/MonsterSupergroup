@@ -172,17 +172,17 @@ namespace AstralShift.UI.PopupWindows
 			{
 				if (!pageMoveFailedSound.IsNull)
 				{
-					RuntimeManager.PlayOneShot(pageMoveFailedSound);
+					OptionalAudio.PlayOneShot(pageMoveFailedSound);
 				}
 				return;
 			}
 			if (!pageMoveSuccesfullSound.IsNull)
 			{
-				RuntimeManager.PlayOneShot(pageMoveSuccesfullSound);
+				OptionalAudio.PlayOneShot(pageMoveSuccesfullSound);
 			}
 			if (!pageMoveSound.IsNull)
 			{
-				RuntimeManager.PlayOneShot(pageMoveSound);
+				OptionalAudio.PlayOneShot(pageMoveSound);
 			}
 			_content.Pages[_pageIndex].Close();
 			_pageIndex++;
@@ -205,17 +205,17 @@ namespace AstralShift.UI.PopupWindows
 			{
 				if (!pageMoveFailedSound.IsNull)
 				{
-					RuntimeManager.PlayOneShot(pageMoveFailedSound);
+					OptionalAudio.PlayOneShot(pageMoveFailedSound);
 				}
 				return;
 			}
 			if (!pageMoveSuccesfullSound.IsNull)
 			{
-				RuntimeManager.PlayOneShot(pageMoveSuccesfullSound);
+				OptionalAudio.PlayOneShot(pageMoveSuccesfullSound);
 			}
 			if (!pageMoveSound.IsNull)
 			{
-				RuntimeManager.PlayOneShot(pageMoveSound);
+				OptionalAudio.PlayOneShot(pageMoveSound);
 			}
 			if (_pageIndex < TotalPages - 1)
 			{

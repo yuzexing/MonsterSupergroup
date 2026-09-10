@@ -675,7 +675,7 @@ namespace AstralShift.HellMaiden.UI.Menus
 			float spawnRotationDelay = animationSettings.SpawnRotationDelay;
 			_cardSpawnSequence?.Kill();
 			_cardSpawnSequence = DOTween.Sequence(this);
-			RuntimeManager.PlayOneShot(cardOfferingsEnterSound);
+			OptionalAudio.PlayOneShot(cardOfferingsEnterSound);
 			for (int i = 0; i < _offeringsCards.Count; i++)
 			{
 				UICardViewHandler cardViewHandler = _offeringsCards[i];
@@ -1336,7 +1336,7 @@ namespace AstralShift.HellMaiden.UI.Menus
 
 		public void HandEnterSound()
 		{
-			RuntimeManager.PlayOneShot(cardHandEnterSound);
+			OptionalAudio.PlayOneShot(cardHandEnterSound);
 		}
 
 		private void StartHoldSound(ref EventInstance instance, EventReference soundRef)
@@ -1344,7 +1344,7 @@ namespace AstralShift.HellMaiden.UI.Menus
 			if (!soundRef.IsNull)
 			{
 				StopHoldSound(ref instance);
-				instance = RuntimeManager.CreateInstance(soundRef);
+				instance = OptionalAudio.CreateInstance(soundRef);
 				instance.start();
 			}
 		}

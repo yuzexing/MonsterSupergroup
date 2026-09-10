@@ -39,11 +39,11 @@ public class ShrineSFX : MonoBehaviour
 
 	private void Start()
 	{
-		chargingSoundInstance = RuntimeManager.CreateInstance(chargingSoundReference);
+		chargingSoundInstance = OptionalAudio.CreateInstance(chargingSoundReference);
 		chargingSoundInstance.getDescription(out chargingSoundDescription);
 		chargingSoundInstance.set3DAttributes(shrineSoundPosition.To3DAttributes());
 		chargingSoundDescription.getLength(out chargingSoundLength);
-		dechargingSoundInstance = RuntimeManager.CreateInstance(dechargingSoundReference);
+		dechargingSoundInstance = OptionalAudio.CreateInstance(dechargingSoundReference);
 		dechargingSoundInstance.getDescription(out dechargingSoundDescription);
 		dechargingSoundInstance.set3DAttributes(shrineSoundPosition.To3DAttributes());
 		dechargingSoundDescription.getLength(out dechargingSoundLength);
@@ -68,7 +68,7 @@ public class ShrineSFX : MonoBehaviour
 	public void PoweredShrineSound()
 	{
 		StopSoundInstance();
-		RuntimeManager.PlayOneShotAttached(poweredSoundReference, shrineSoundPosition);
+		OptionalAudio.PlayOneShotAttached(poweredSoundReference, shrineSoundPosition);
 	}
 
 	public void StopSoundInstance()
@@ -80,7 +80,7 @@ public class ShrineSFX : MonoBehaviour
 
 	public void SlamShrineSound()
 	{
-		RuntimeManager.PlayOneShotAttached(slamSoundReference, shrineSoundPosition);
+		OptionalAudio.PlayOneShotAttached(slamSoundReference, shrineSoundPosition);
 	}
 
 	private void OnDestroy()

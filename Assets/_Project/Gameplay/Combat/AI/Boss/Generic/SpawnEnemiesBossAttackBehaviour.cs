@@ -51,7 +51,7 @@ namespace AstralShift.HellMaiden.AI.Boss.Generic
 			AttackBossAnimation(onAttackEnd);
 			if (!spawnSound.IsNull)
 			{
-				RuntimeManager.PlayOneShot(spawnSound, base.transform.position);
+				OptionalAudio.PlayOneShot(spawnSound, base.transform.position);
 			}
 			for (int i = 0; i < spawners.Count; i++)
 			{

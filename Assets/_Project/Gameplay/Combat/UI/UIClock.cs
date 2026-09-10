@@ -82,7 +82,7 @@ namespace AstralShift.HellMaiden.UI
 			minutesTextFirstDigit.ChangeNumber(0, animate: false);
 			secondsTextSecondDigit.ChangeNumber(0, animate: false);
 			secondsTextFirstDigit.ChangeNumber(0, animate: false);
-			RuntimeManager.PlayOneShot(startSound);
+			OptionalAudio.PlayOneShot(startSound);
 		}
 
 		public void SetValue(float totalSeconds)
@@ -109,7 +109,7 @@ namespace AstralShift.HellMaiden.UI
 				}
 				else if (!tickSound.IsNull)
 				{
-					RuntimeManager.PlayOneShot(tickSound);
+					OptionalAudio.PlayOneShot(tickSound);
 				}
 			}
 			if (totalSeconds <= timeoutWarning && sideQuestFlag)
@@ -123,13 +123,13 @@ namespace AstralShift.HellMaiden.UI
 				if (!alertPlayed)
 				{
 					alertPlayed = true;
-					RuntimeManager.PlayOneShot(alertSound);
+					OptionalAudio.PlayOneShot(alertSound);
 				}
 			}
 			if (seconds <= 0f && !timeoutPlayed)
 			{
 				timeoutPlayed = true;
-				RuntimeManager.PlayOneShot(timeoutSound);
+				OptionalAudio.PlayOneShot(timeoutSound);
 			}
 			skipWarningNextCall = false;
 		}
@@ -151,7 +151,7 @@ namespace AstralShift.HellMaiden.UI
 		{
 			if (!lastSecTickSound.IsNull)
 			{
-				EventInstance eventInstance = RuntimeManager.CreateInstance(lastSecTickSound);
+				EventInstance eventInstance = OptionalAudio.CreateInstance(lastSecTickSound);
 				eventInstance.setParameterByName("quest_timer_frenzy", secondsLeft);
 				eventInstance.start();
 				eventInstance.release();

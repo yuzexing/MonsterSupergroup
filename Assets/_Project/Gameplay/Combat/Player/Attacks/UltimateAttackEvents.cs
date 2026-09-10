@@ -100,11 +100,11 @@ namespace AstralShift.HellMaiden.Player.Attacks
 			};
 			if (!ultimateSoundReference.IsNull)
 			{
-				ultimateSoundInstance = RuntimeManager.CreateInstance(ultimateSoundReference);
+				ultimateSoundInstance = OptionalAudio.CreateInstance(ultimateSoundReference);
 			}
 			if (!ultimateBGMReference.IsNull)
 			{
-				ultimateBGMInstance = RuntimeManager.CreateInstance(ultimateBGMReference);
+				ultimateBGMInstance = OptionalAudio.CreateInstance(ultimateBGMReference);
 			}
 		}
 

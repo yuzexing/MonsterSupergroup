@@ -29,7 +29,7 @@ namespace MonsterSupergroup.Gameplay.Tests
                     body.gravityScale = 0f;
                     var target = targetObject.AddComponent<PresentationTarget>();
                     MeleePresentationSpawn spawn = Spawn(301UL, 0, 1f);
-                    ExpectRecoveredSlashAudio();
+                    AssertRecoveredSlashAudio();
                     Assert.That(fixture.Replica.TrySpawn(spawn, 0f), Is.True);
                     Assert.That(fixture.Replica.TrySpawn(spawn, 0f), Is.False);
                     var emitter = fixture.Attacks.GetComponentInChildren<MeleeAttackBehaviour>();
@@ -67,14 +67,14 @@ namespace MonsterSupergroup.Gameplay.Tests
             {
                 Assert.That(fixture.Replica.TrySpawn(Spawn(401UL, 0, -1f), 10f), Is.False);
                 Assert.That(fixture.Replica.ActiveSlashCount, Is.Zero);
-                ExpectRecoveredSlashAudio();
+                AssertRecoveredSlashAudio();
                 Assert.That(fixture.Replica.TrySpawn(Spawn(402UL, 0, -1f), 0f), Is.True);
                 float deadline = Time.realtimeSinceStartup + 2f;
                 while (fixture.Replica.ActiveSlashCount > 0 && Time.realtimeSinceStartup < deadline)
                     yield return null;
                 Assert.That(fixture.Replica.ActiveSlashCount, Is.Zero,
                     "Authored clip completion must remove the replica's active entry.");
-                ExpectRecoveredSlashAudio();
+                AssertRecoveredSlashAudio();
                 Assert.That(fixture.Replica.TrySpawn(Spawn(403UL, 0, 0.1f), 0.08f), Is.True);
                 deadline = Time.realtimeSinceStartup + 1f;
                 while (fixture.Replica.ActiveSlashCount > 0 && Time.realtimeSinceStartup < deadline)
@@ -91,7 +91,7 @@ namespace MonsterSupergroup.Gameplay.Tests
             {
                 for (ushort index = 0; index < 3; index++)
                 {
-                    ExpectRecoveredSlashAudio();
+                    AssertRecoveredSlashAudio();
                     Assert.That(fixture.Replica.TrySpawn(Spawn(501UL, index, 1f), 0f), Is.True);
                 }
                 Assert.That(fixture.Replica.ActiveSlashCount, Is.EqualTo(3));
@@ -106,12 +106,9 @@ namespace MonsterSupergroup.Gameplay.Tests
             }
         }
 
-        private static void ExpectRecoveredSlashAudio()
+        private static void AssertRecoveredSlashAudio()
         {
-            // The source event reference is preserved; its bank is not in this migration.
-            // Expect exactly one activation per slash, including a returned pooled instance.
-            LogAssert.Expect(LogType.Exception,
-                "EventNotFoundException: [FMOD] Event not found: {d34df8fa-1ca2-43a3-b073-e782b614760a} ()");
+            Assert.That(FMODUnity.RuntimeManager.GetEventDescription(FMOD.GUID.Parse("d34df8fa-1ca2-43a3-b073-e782b614760a")).isValid(), Is.True);
         }
 
         private static MeleePresentationSpawn Spawn(ulong root, ushort index, float duration) =>

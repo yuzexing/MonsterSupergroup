@@ -81,7 +81,7 @@ public class InteractableOptions : MonoBehaviour
 	{
 		if (!optionSelectSound.IsNull)
 		{
-			RuntimeManager.PlayOneShot(optionSelectSound);
+			OptionalAudio.PlayOneShot(optionSelectSound);
 		}
 		OnOptionChanged?.Invoke(_currentIndex);
 	}

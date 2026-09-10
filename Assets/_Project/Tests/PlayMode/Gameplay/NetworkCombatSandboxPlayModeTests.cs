@@ -86,7 +86,7 @@ namespace MonsterSupergroup.Gameplay.Tests
 
             try
             {
-                ExpectMissingDanteFmodEvent();
+                AssertDanteFmodEventAvailable();
                 manager.StartHost();
                 float deadline = Time.realtimeSinceStartup + 8f;
                 while ((NetworkClient.localPlayer == null ||
@@ -1562,13 +1562,9 @@ namespace MonsterSupergroup.Gameplay.Tests
             Assert.That(NetworkClient.active, Is.False);
         }
 
-        private static void ExpectMissingDanteFmodEvent()
+        private static void AssertDanteFmodEventAvailable()
         {
-            // Dante keeps the original FMOD presentation IDs, but the source bank
-            // is intentionally outside this migration/test slice.
-            LogAssert.Expect(
-                LogType.Exception,
-                new Regex(@"EventNotFoundException: \[FMOD\] Event not found:.*"));
+            Assert.That(FMODUnity.RuntimeManager.GetEventDescription(FMOD.GUID.Parse("1235e4b8-dcb5-43e8-8bb7-41a363bff4b8")).isValid(), Is.True);
         }
 
     }

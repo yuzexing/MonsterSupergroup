@@ -2,7 +2,9 @@
   "name": "MonsterSupergroup.Gameplay.Tests.PlayMode",
   "rootNamespace": "MonsterSupergroup.Gameplay.Tests",
   "references": [
+    "GUID:9e24947de15b9834991c9d8411ea37cf",
     "GUID:da0319847955a4a36b91883508290fe8",
+    "GUID:0c752da273b17c547ae705acf0f2adf2",
     "GUID:a7c8997642ef4acb9c3b5bb6f2af8b51",
     "GUID:56ce3ffcd5ef4c55962a309f4c4d55f1",
     "GUID:c41b2d8e9f5a4b7ea301d6c8f2741059",

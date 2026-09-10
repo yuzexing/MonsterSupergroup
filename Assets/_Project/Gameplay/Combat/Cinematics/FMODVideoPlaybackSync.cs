@@ -67,7 +67,7 @@ namespace AstralShift.Cinematics
 		public override void Play()
 		{
 			MusicPlayer.Instance.PauseMusic(pauseState: true);
-			_audioEvent = RuntimeManager.CreateInstance(videoSound);
+			_audioEvent = OptionalAudio.CreateInstance(videoSound);
 			_audioTimeInSeconds = 0.0;
 			_setVideoFrame = 0L;
 			_timer = 0.0;
@@ -96,7 +96,7 @@ namespace AstralShift.Cinematics
 			{
 				return;
 			}
-			if (!Application.isFocused)
+			if (_audioEvent.isValid() && !Application.isFocused)
 			{
 				_audioEvent.setPaused(paused: true);
 				videoPlayer.frame = _audioFrame;
@@ -104,9 +104,17 @@ namespace AstralShift.Cinematics
 				_frameDifference = 0L;
 				return;
 			}
-			_audioEvent.setPaused(paused: false);
-			_audioEvent.getTimelinePosition(out var position);
-			_audioTimeInSeconds = (float)position / 1000f;
+			if (_audioEvent.isValid())
+			{
+				_audioEvent.setPaused(paused: false);
+				_audioEvent.getTimelinePosition(out var position);
+				_audioTimeInSeconds = (float)position / 1000f;
+			}
+			else
+			{
+				// A missing soundtrack must not freeze the video or its timeline events.
+				_audioTimeInSeconds = videoPlayer.time;
+			}
 			_timer = _audioTimeInSeconds;
 			if (videoPlayer.frame > _setVideoFrame)
 			{
@@ -150,6 +158,7 @@ namespace AstralShift.Cinematics
 			}
 			else
 			{
+				if (!_audioEvent.isValid()) { videoPlayer.time = seconds; return; }
 				int timelinePosition = (int)(seconds * 1000.0);
 				_audioEvent.setTimelinePosition(timelinePosition);
 				RuntimeManager.StudioSystem.flushCommands();

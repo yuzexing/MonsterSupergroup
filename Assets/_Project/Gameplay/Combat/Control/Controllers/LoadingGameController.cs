@@ -44,7 +44,7 @@ namespace AstralShift.Control.Controllers
 		{
 			if (!_snapshotInstance.isValid())
 			{
-				_snapshotInstance = RuntimeManager.CreateInstance(loadingSnapshot);
+				_snapshotInstance = OptionalAudio.CreateInstance(loadingSnapshot);
 				_snapshotInstance.start();
 			}
 		}

@@ -336,7 +336,7 @@ namespace AstralShift.HellMaiden.Timeline
 				_playableDirector.playableGraph.GetRootPlayable(0).SetSpeed(1.0);
 				_playableDirector.time = time;
 			}
-			RuntimeManager.PlayOneShot(cutsceneSkip);
+			OptionalAudio.PlayOneShot(cutsceneSkip);
 		}
 
 		private void SetCharacterPanels()

@@ -26,8 +26,8 @@ namespace AstralShift.HellMaiden.Audio
 			{
 				if (!footstepsEvent.IsNull)
 				{
-					_footstepsFirstInstance = RuntimeManager.CreateInstance(footstepsEvent);
-					_footstepsSecondInstance = RuntimeManager.CreateInstance(footstepsEvent);
+					_footstepsFirstInstance = OptionalAudio.CreateInstance(footstepsEvent);
+					_footstepsSecondInstance = OptionalAudio.CreateInstance(footstepsEvent);
 				}
 			}
 			catch (EventNotFoundException ex)

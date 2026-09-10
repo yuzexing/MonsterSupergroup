@@ -157,7 +157,7 @@ namespace AstralShift.HellMaiden.Characters.Effects
 				{
 					if (!EmojiSounds[i].sound.IsNull)
 					{
-						RuntimeManager.PlayOneShotAttached(EmojiSounds[i].sound, base.gameObject);
+						OptionalAudio.PlayOneShotAttached(EmojiSounds[i].sound, base.gameObject);
 					}
 					break;
 				}

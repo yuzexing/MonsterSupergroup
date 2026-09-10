@@ -88,13 +88,11 @@ namespace MonsterSupergroup.Gameplay.Tests
             Assert.That(Transport.active, Is.SameAs(validationTransport));
             SceneManager.sceneLoaded += ConfigureSkeletonFixture;
             manager.StartHost();
-            // The recovered Dante projectile intentionally retains its original
-            // FMOD event GUID, while that source bank is not present in this
-            // repository. This is a known presentation-content gap and is not
-            // part of the combat/network authority loop under test.
-            LogAssert.Expect(
-                LogType.Exception,
-                new Regex(@"EventNotFoundException: \[FMOD\] Event not found:.*"));
+
+
+
+
+            Assert.That(FMODUnity.RuntimeManager.GetEventDescription(FMOD.GUID.Parse("1235e4b8-dcb5-43e8-8bb7-41a363bff4b8")).isValid(), Is.True);
 
             float startupDeadline = Time.realtimeSinceStartup + 12f;
             NetworkEnemySimulationAgent skeleton = null;

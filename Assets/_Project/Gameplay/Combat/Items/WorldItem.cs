@@ -105,7 +105,7 @@ namespace AstralShift.HellMaiden.Items
 		{
 			if (!soundEventConsume.IsNull)
 			{
-				RuntimeManager.PlayOneShotAttached(soundEventConsume, base.gameObject);
+				OptionalAudio.PlayOneShotAttached(soundEventConsume, base.gameObject);
 			}
 			Dispose();
 		}
@@ -137,7 +137,7 @@ namespace AstralShift.HellMaiden.Items
 			}
 			if (!soundEventPull.IsNull)
 			{
-				RuntimeManager.PlayOneShotAttached(soundEventPull, base.gameObject);
+				OptionalAudio.PlayOneShotAttached(soundEventPull, base.gameObject);
 			}
 			this.OnStartPlayerPull?.Invoke();
 			StopPlayerPull();

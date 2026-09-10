@@ -104,8 +104,8 @@ public class EnemyTrailController : MonoBehaviour
 		{
 			_soundEventInstance.stop(FMOD.Studio.STOP_MODE.IMMEDIATE);
 			_soundEventInstance.release();
-			_soundEventInstance = RuntimeManager.CreateInstance(soundEvent);
-			RuntimeManager.AttachInstanceToGameObject(_soundEventInstance, _controller.transform);
+			_soundEventInstance = OptionalAudio.CreateInstance(soundEvent);
+			OptionalAudio.AttachInstanceToGameObject(_soundEventInstance, _controller.transform);
 			_soundEventInstance.start();
 		}
 		_attackStartTime = Time.time;

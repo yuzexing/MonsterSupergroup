@@ -24,7 +24,13 @@ namespace AstralShift.Helpers
 
 		public void PlayDialogue(string key)
 		{
-			EventInstance eventInstance = RuntimeManager.CreateInstance(EventName);
+			PlayDialogue(OptionalAudio.CreateInstance(EventName), key);
+		}
+
+		private void PlayDialogue(EventInstance eventInstance, string key)
+		{
+			if (!eventInstance.isValid()) return;
+			if (string.IsNullOrEmpty(key)) { eventInstance.release(); return; }
 			GCHandle value = GCHandle.Alloc(key);
 			eventInstance.setUserData(GCHandle.ToIntPtr(value));
 			eventInstance.setCallback(dialogueCallback);
@@ -34,8 +40,12 @@ namespace AstralShift.Helpers
 
 		public void PlayDialogue(string eventName, string key)
 		{
-			EventName = RuntimeManager.PathToEventReference(eventName);
-			PlayDialogue(key);
+			var instance = OptionalAudio.CreateInstance(eventName);
+			if (!instance.isValid()) return;
+			instance.getDescription(out var description);
+			description.getID(out var guid);
+			EventName = new EventReference { Guid = guid };
+			PlayDialogue(instance, key);
 		}
 
 		public void PlayRandomDialogueFromList(string eventName, List<string> keys, float playChance = 0f, float delay = 0.5f)
@@ -50,8 +60,7 @@ namespace AstralShift.Helpers
 		{
 			yield return new WaitForSecondsRealtime(delay);
 			string key = keys[UnityEngine.Random.Range(0, keys.Count)];
-			EventName = RuntimeManager.PathToEventReference(eventName);
-			PlayDialogue(key);
+			PlayDialogue(eventName, key);
 		}
 
 		[MonoPInvokeCallback(typeof(EVENT_CALLBACK))]

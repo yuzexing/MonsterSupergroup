@@ -113,7 +113,7 @@ namespace AstralShift.HellMaiden.Combat.Spawners
 			StartCoroutine(SpawnEnemiesCoroutine());
 			if (spawnSound)
 			{
-				RuntimeManager.PlayOneShot(spawnSoundEvent);
+				OptionalAudio.PlayOneShot(spawnSoundEvent);
 			}
 		}
 

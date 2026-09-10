@@ -68,7 +68,7 @@ namespace FMODUnity
 
                 if (!eventDescription.isValid())
                 {
-                    Lookup();
+                    if (!Lookup()) return 0f;
                 }
 
                 float minDistance, maxDistance;
@@ -119,9 +119,8 @@ namespace FMODUnity
         protected override void Start()
         {
             RuntimeUtils.EnforceLibraryOrder();
-            if (Preload)
+            if (Preload && Lookup())
             {
-                Lookup();
                 eventDescription.loadSampleData();
             }
 
@@ -186,9 +185,9 @@ namespace FMODUnity
             }
         }
 
-        private void Lookup()
+        private bool Lookup()
         {
-            eventDescription = RuntimeManager.GetEventDescription(EventReference);
+            if (!OptionalAudio.TryGetEventDescription(EventReference, out eventDescription)) return false;
 
             if (eventDescription.isValid())
             {
@@ -199,6 +198,7 @@ namespace FMODUnity
                     Params[i].ID = param.id;
                 }
             }
+            return eventDescription.isValid();
         }
 
         public void Play()
@@ -217,7 +217,7 @@ namespace FMODUnity
 
             if (!eventDescription.isValid())
             {
-                Lookup();
+                if (!Lookup()) return;
             }
 
             bool isSnapshot;

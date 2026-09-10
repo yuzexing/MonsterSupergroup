@@ -136,10 +136,10 @@ namespace AstralShift.HellMaiden.Player.Attacks
             {
                 try
                 {
-                    _soundInstance = RuntimeManager.CreateInstance(soundEvent);
+                    _soundInstance = OptionalAudio.CreateInstance(soundEvent);
                     if (_soundInstance.isValid())
                     {
-                        RuntimeManager.AttachInstanceToGameObject(_soundInstance, _player.transform);
+                        OptionalAudio.AttachInstanceToGameObject(_soundInstance, _player.transform);
                         _soundInstance.start();
                     }
                 }

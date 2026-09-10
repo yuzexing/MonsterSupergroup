@@ -526,7 +526,7 @@ namespace AstralShift.HellMaiden.Player.Attacks
 		{
 			if (!chargeSound.eventRef.IsNull)
 			{
-				RuntimeManager.PlayOneShotAttached(chargeSound.eventRef, base.gameObject);
+				OptionalAudio.PlayOneShotAttached(chargeSound.eventRef, base.gameObject);
 			}
 		}
 
@@ -534,7 +534,7 @@ namespace AstralShift.HellMaiden.Player.Attacks
 		{
 			if (!launchSound.eventRef.IsNull)
 			{
-				RuntimeManager.PlayOneShot(launchSound.eventRef, base.transform.position);
+				OptionalAudio.PlayOneShot(launchSound.eventRef, base.transform.position);
 			}
 		}
 
@@ -544,9 +544,9 @@ namespace AstralShift.HellMaiden.Player.Attacks
 			{
 				if (!_loopInstance.isValid())
 				{
-					_loopInstance = RuntimeManager.CreateInstance(projectileLoopSound.eventRef);
+					_loopInstance = OptionalAudio.CreateInstance(projectileLoopSound.eventRef);
 				}
-				RuntimeManager.AttachInstanceToGameObject(_loopInstance, base.gameObject);
+				OptionalAudio.AttachInstanceToGameObject(_loopInstance, base.gameObject);
 				_loopInstance.start();
 			}
 		}
@@ -555,7 +555,7 @@ namespace AstralShift.HellMaiden.Player.Attacks
 		{
 			if (!projectileHitSound.eventRef.IsNull)
 			{
-				RuntimeManager.PlayOneShot(projectileHitSound.eventRef, base.transform.position);
+				OptionalAudio.PlayOneShot(projectileHitSound.eventRef, base.transform.position);
 			}
 		}
 
@@ -563,7 +563,7 @@ namespace AstralShift.HellMaiden.Player.Attacks
 		{
 			if (!expireSound.eventRef.IsNull)
 			{
-				RuntimeManager.PlayOneShot(expireSound.eventRef, base.transform.position);
+				OptionalAudio.PlayOneShot(expireSound.eventRef, base.transform.position);
 			}
 		}
 	}

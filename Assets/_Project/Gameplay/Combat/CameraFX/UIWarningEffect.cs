@@ -29,7 +29,7 @@ namespace AstralShift.HellMaiden.CameraFX
 		public override void Enable()
 		{
 			animator.SetBool(warningAnimHash, value: true);
-			warningInstance = RuntimeManager.CreateInstance(warningEvent);
+			warningInstance = OptionalAudio.CreateInstance(warningEvent);
 			warningInstance.start();
 		}
 

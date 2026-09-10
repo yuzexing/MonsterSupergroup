@@ -453,7 +453,7 @@ namespace AstralShift.HellMaiden.UI.Menus.Hand
 			viewHandler.InputHandler.ClearNavigation();
 			viewHandler.Equip(weaponSlotView);
 			viewHandler.AllowInteraction(value: false);
-			RuntimeManager.PlayOneShot(equipSound);
+			OptionalAudio.PlayOneShot(equipSound);
 			await viewHandler.CardView.EquipEffect();
 			viewHandler.CardView.EnableMovement();
 			HideAllCompatVFX += viewHandler.HideCompatVFX;
@@ -524,7 +524,7 @@ namespace AstralShift.HellMaiden.UI.Menus.Hand
 				{
 					DropEquipmentOnSlot(toDropEquipmentViewHandler, toDropSlotView);
 					toDropEquipmentViewHandler.AllowInteraction(value: false);
-					RuntimeManager.PlayOneShot(equipSound);
+					OptionalAudio.PlayOneShot(equipSound);
 					await toDropEquipmentViewHandler.CardView.EquipEffect();
 					toDropEquipmentViewHandler.AllowInteraction(value: true);
 					toDropEquipmentViewHandler.CardView.EnableMovement();
@@ -1084,7 +1084,7 @@ namespace AstralShift.HellMaiden.UI.Menus.Hand
 				await UniTask.NextFrame(base.destroyCancellationToken);
 				Vector3 defaultScale = Vector3.one;
 				await UniTask.NextFrame(base.destroyCancellationToken);
-				RuntimeManager.PlayOneShot(mergeSound);
+				OptionalAudio.PlayOneShot(mergeSound);
 				Vector3 mergePivotPosition = new Vector3((float)Screen.width / 2f, (float)Screen.height / 2f, 0f);
 				Vector3 endValue = mergePivotPosition + new Vector3(Mathf.Cos(0f), Mathf.Sin(0f)) * spiralRadius;
 				Vector3 endValue2 = mergePivotPosition + new Vector3(Mathf.Cos(MathF.PI), Mathf.Sin(MathF.PI)) * spiralRadius;

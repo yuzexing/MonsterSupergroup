@@ -173,7 +173,7 @@ public class PauseMenuController : GameMenuController
 		if (base.IsActive)
 		{
 			CloseAnimation();
-			RuntimeManager.PlayOneShot(pauseOut);
+			OptionalAudio.PlayOneShot(pauseOut);
 			SettingsMenuController settingsMenuController = ControllerManager.Instance.OverrideGameController<SettingsMenuController>();
 			settingsMenuController.Open();
 			if (_resetToFirstTabOnClose)
@@ -189,7 +189,7 @@ public class PauseMenuController : GameMenuController
 		if (base.IsActive)
 		{
 			CloseAnimation();
-			RuntimeManager.PlayOneShot(pauseOut);
+			OptionalAudio.PlayOneShot(pauseOut);
 			SettingsMenuController settingsMenuController = ControllerManager.Instance.OverrideGameController<SettingsMenuController>();
 			settingsMenuController.Open();
 			settingsMenuController.GoToControls();
@@ -279,7 +279,7 @@ public class PauseMenuController : GameMenuController
 	public override void Open()
 	{
 		SetCanvasGroupState(state: false);
-		RuntimeManager.PlayOneShot(pauseIn);
+		OptionalAudio.PlayOneShot(pauseIn);
 		base.Open();
 	}
 
@@ -310,7 +310,7 @@ public class PauseMenuController : GameMenuController
 	public override void Close()
 	{
 		blockOpenAction = true;
-		RuntimeManager.PlayOneShot(pauseOut);
+		OptionalAudio.PlayOneShot(pauseOut);
 		currentSelectable = null;
 		EventSystem.current.SetSelectedGameObject(null);
 		base.Close();

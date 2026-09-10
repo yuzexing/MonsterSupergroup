@@ -99,7 +99,7 @@ namespace AstralShift.HellMaiden.AI.Boss.Scarmiglione
 		{
 			if (!fireLoopEvent.IsNull)
 			{
-				_instance = RuntimeManager.CreateInstance(fireLoopEvent);
+				_instance = OptionalAudio.CreateInstance(fireLoopEvent);
 				_instance.start();
 			}
 		}

@@ -90,7 +90,7 @@ namespace AstralShift.HellMaiden.UI.Menus
 
 		public override async void Open()
 		{
-			RuntimeManager.PlayOneShot(bestowalInSound);
+			OptionalAudio.PlayOneShot(bestowalInSound);
 			try
 			{
 				if (_instantiatedPerkViews == null)
@@ -119,7 +119,7 @@ namespace AstralShift.HellMaiden.UI.Menus
 
 		protected override async void Close()
 		{
-			RuntimeManager.PlayOneShot(bestowalOutSound);
+			OptionalAudio.PlayOneShot(bestowalOutSound);
 			try
 			{
 				_controller.TransitionToClose();

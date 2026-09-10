@@ -280,8 +280,7 @@ namespace MonsterSupergroup.Gameplay.Tests
             {
                 // Exactly one playback attempt per root, including pooled reuse. Keep the source
                 // event reference and assert only its known absent bank; no blanket log suppression.
-                LogAssert.Expect(LogType.Exception,
-                    "EventNotFoundException: [FMOD] Event not found: {0ddbe74c-0c1e-4afc-a293-557438dbd8e0} ()");
+                Assert.That(FMODUnity.RuntimeManager.GetEventDescription(FMOD.GUID.Parse("0ddbe74c-0c1e-4afc-a293-557438dbd8e0")).isValid(), Is.True);
                 Assert.That(Replica.TrySpawn(spawn, age), Is.True);
                 return UnityEngine.Object.FindObjectsByType<MultiParticlePlayerTrailAttack>(FindObjectsInactive.Exclude, FindObjectsSortMode.None)
                     .Single(value => value.PresentationSpawn.AttackEventId == spawn.AttackEventId);

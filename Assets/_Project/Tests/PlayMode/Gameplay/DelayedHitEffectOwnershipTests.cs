@@ -218,7 +218,7 @@ namespace MonsterSupergroup.Gameplay.Tests
             AttackHitParticleEffect realPrefab = DanteImpactPrefab();
             SpawnableHitEffectResolver resolver = CreateResolver(realPrefab, out CountingHitEffectPool pool);
             AttackSnapshot first = Begin(weaponA);
-            ExpectDanteImpactMissingAudio();
+            AssertDanteImpactAudioAvailable();
             resolver.Initialize(weaponA, first);
             var effect = (AttackHitParticleEffect)pool.LastAcquired;
             first.Dispose();
@@ -229,7 +229,7 @@ namespace MonsterSupergroup.Gameplay.Tests
             Assert.That(first.IsDisposed, Is.True, "External lifetime cleanup must release the delayed attack even without its animation callback.");
 
             AttackSnapshot second = Begin(weaponB);
-            ExpectDanteImpactMissingAudio();
+            AssertDanteImpactAudioAvailable();
             resolver.Initialize(weaponB, second);
             var reused = (AttackHitParticleEffect)pool.LastAcquired;
             second.Dispose();
@@ -272,7 +272,7 @@ namespace MonsterSupergroup.Gameplay.Tests
         {
             SpawnableHitEffectResolver resolver = CreateResolver(DanteImpactPrefab(), out CountingHitEffectPool pool);
             AttackSnapshot attack = Begin(weaponA);
-            ExpectDanteImpactMissingAudio();
+            AssertDanteImpactAudioAvailable();
             resolver.Initialize(weaponA, attack);
             var effect = (AttackHitParticleEffect)pool.LastAcquired;
             attack.Dispose();
@@ -362,8 +362,7 @@ namespace MonsterSupergroup.Gameplay.Tests
             }
         }
 
-        private static void ExpectDanteImpactMissingAudio() => LogAssert.Expect(LogType.Exception,
-            "EventNotFoundException: [FMOD] Event not found: {1235e4b8-dcb5-43e8-8bb7-41a363bff4b8} ()");
+        private static void AssertDanteImpactAudioAvailable() => Assert.That(FMODUnity.RuntimeManager.GetEventDescription(FMOD.GUID.Parse("1235e4b8-dcb5-43e8-8bb7-41a363bff4b8")).isValid(), Is.True);
 
         private static AttackHitParticleEffect DanteImpactPrefab()
         {

@@ -30,7 +30,7 @@ namespace AstralShift.UI
 			base.OnSelect(eventData);
 			if (!onSelectSound.IsNull)
 			{
-				RuntimeManager.PlayOneShot(onSelectSound);
+				OptionalAudio.PlayOneShot(onSelectSound);
 			}
 			onSelect.Invoke();
 			Highlight();
@@ -48,7 +48,7 @@ namespace AstralShift.UI
 			base.OnPointerEnter(eventData);
 			if (!onSelectSound.IsNull)
 			{
-				RuntimeManager.PlayOneShot(onSelectSound);
+				OptionalAudio.PlayOneShot(onSelectSound);
 			}
 			onPointerEnter.Invoke();
 			Highlight();

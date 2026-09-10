@@ -68,7 +68,7 @@ namespace AstralShift.HellMaiden.Controllers
 				animator.enabled = false;
 				canvasGroup.alpha = 0f;
 				animator.enabled = true;
-				RuntimeManager.PlayOneShot(menuInSound);
+				OptionalAudio.PlayOneShot(menuInSound);
 				await UniTask.Delay(TimeSpan.FromSeconds(showAnimDuration), DelayType.UnscaledDeltaTime, PlayerLoopTiming.Update, base.destroyCancellationToken);
 				OnAnyInputPressed += Hide;
 			}
@@ -87,7 +87,7 @@ namespace AstralShift.HellMaiden.Controllers
 			{
 				OnAnyInputPressed -= Hide;
 				animator.Play(HideAnimHash);
-				RuntimeManager.PlayOneShot(menuOutSound);
+				OptionalAudio.PlayOneShot(menuOutSound);
 				await UniTask.Delay(TimeSpan.FromSeconds(hideAnimDuration), DelayType.UnscaledDeltaTime, PlayerLoopTiming.Update, base.destroyCancellationToken);
 				ControllerManager.Instance.YieldGameController();
 				ControllerManager.Instance.UnSubscribe(this);

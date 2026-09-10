@@ -18,12 +18,13 @@ namespace FMODUnity
 
         private void Awake()
         {
+            if (Emitters == null) return;
             for (int i = 0; i < Emitters.Length; i++)
             {
                 var emitterRef = Emitters[i];
-                if (emitterRef.Target != null && !emitterRef.Target.EventReference.IsNull)
+                if (emitterRef != null && emitterRef.Target != null && emitterRef.Params != null && !emitterRef.Target.EventReference.IsNull)
                 {
-                    FMOD.Studio.EventDescription eventDesc = RuntimeManager.GetEventDescription(emitterRef.Target.EventReference);
+                    if (!OptionalAudio.TryGetEventDescription(emitterRef.Target.EventReference, out var eventDesc)) continue;
                     if (eventDesc.isValid())
                     {
                         for (int j = 0; j < Emitters[i].Params.Length; j++)
@@ -47,10 +48,11 @@ namespace FMODUnity
 
         public void TriggerParameters()
         {
+            if (Emitters == null) return;
             for (int i = 0; i < Emitters.Length; i++)
             {
                 var emitterRef = Emitters[i];
-                if (emitterRef.Target != null && emitterRef.Target.EventInstance.isValid())
+                if (emitterRef != null && emitterRef.Target != null && emitterRef.Params != null && emitterRef.Target.EventInstance.isValid())
                 {
                     for (int j = 0; j < Emitters[i].Params.Length; j++)
                     {

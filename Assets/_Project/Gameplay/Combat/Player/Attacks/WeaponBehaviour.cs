@@ -371,7 +371,7 @@ namespace AstralShift.HellMaiden.Player.Attacks
 		{
 			if (!attackSound.IsNull)
 			{
-				RuntimeManager.PlayOneShot(attackSound, base.transform.position);
+				OptionalAudio.PlayOneShot(attackSound, base.transform.position);
 			}
 		}
 	}

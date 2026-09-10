@@ -206,7 +206,7 @@ namespace AstralShift.HellMaiden.Player.Attacks.HoraceAttacks
 			chariotAttack.Init(this);
 			if (!trailSound.IsNull)
 			{
-				_trailSoundInstance = RuntimeManager.CreateInstance(trailSound);
+				_trailSoundInstance = OptionalAudio.CreateInstance(trailSound);
 			}
 			((IPausable)this).Subscribe();
 		}

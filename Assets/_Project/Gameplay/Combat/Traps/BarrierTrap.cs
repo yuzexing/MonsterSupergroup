@@ -178,7 +178,7 @@ namespace AstralShift.HellMaiden.Combat.Traps
 			}
 			GenerateCollider();
 			CreateParticleSystems();
-			trapStartSoundInstance = RuntimeManager.CreateInstance(trapStartSound);
+			trapStartSoundInstance = OptionalAudio.CreateInstance(trapStartSound);
 			trapStartSoundInstance.set3DAttributes(GetFlattenedPosition(_allParticleSystems[0][0].transform.localPosition).To3DAttributes());
 			trapStartSoundInstance.start();
 			float num = spawnAnimationDuration / (float)_allParticleSystems.Count;
@@ -459,7 +459,7 @@ namespace AstralShift.HellMaiden.Combat.Traps
 			{
 				if (i % num == 0 && _particleLoopSoundInstances.Count < 8)
 				{
-					EventInstance item = RuntimeManager.CreateInstance(trapLoopSound);
+					EventInstance item = OptionalAudio.CreateInstance(trapLoopSound);
 					item.set3DAttributes(GetFlattenedPosition(_allParticleSystems[i][0].transform.localPosition).To3DAttributes());
 					_particleLoopSoundInstances.Add(item);
 				}
@@ -502,7 +502,7 @@ namespace AstralShift.HellMaiden.Combat.Traps
 				_particleLoopSoundInstances[i].release();
 				if (outSfx)
 				{
-					RuntimeManager.PlayOneShot(trapEndSound, GetFlattenedPosition(_allParticleSystems[0][0].transform.localPosition));
+					OptionalAudio.PlayOneShot(trapEndSound, GetFlattenedPosition(_allParticleSystems[0][0].transform.localPosition));
 				}
 			}
 			_particleLoopSoundInstances.Clear();

@@ -56,7 +56,7 @@ namespace AstralShift.HellMaiden.UI
 			if (_stateMachine.GetState() == Focused)
 			{
 				this.OnFocusGained?.Invoke();
-				RuntimeManager.PlayOneShot(focusSound);
+				OptionalAudio.PlayOneShot(focusSound);
 			}
 		}
 

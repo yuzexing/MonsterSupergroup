@@ -148,7 +148,7 @@ namespace AstralShift.HellMaiden.Player.Attacks.OvidAttacks
 		{
 			if (!shootSound.IsNull)
 			{
-				RuntimeManager.PlayOneShot(shootSound, base.transform.position);
+				OptionalAudio.PlayOneShot(shootSound, base.transform.position);
 			}
 			for (int i = 0; i < projectileCount; i++)
 			{

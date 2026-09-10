@@ -473,7 +473,7 @@ namespace AstralShift.HellMaiden.UI.Menus
 		private async UniTask ScrollToRight()
 		{
 			EnableAllCardsStaticOpt();
-			RuntimeManager.PlayOneShot(cardChangedSound);
+			OptionalAudio.PlayOneShot(cardChangedSound);
 			CardsLayoutGroup.ScrollToRight();
 			UnRegisterScrollBindings();
 			_isScrolling = true;
@@ -486,7 +486,7 @@ namespace AstralShift.HellMaiden.UI.Menus
 		private async UniTask ScrollToLeft()
 		{
 			EnableAllCardsStaticOpt();
-			RuntimeManager.PlayOneShot(cardChangedSound);
+			OptionalAudio.PlayOneShot(cardChangedSound);
 			CardsLayoutGroup.ScrollToLeft();
 			UnRegisterScrollBindings();
 			_isScrolling = true;
@@ -527,7 +527,7 @@ namespace AstralShift.HellMaiden.UI.Menus
 			{
 				if (!_isScrolling)
 				{
-					RuntimeManager.PlayOneShot(cardSelectedSound);
+					OptionalAudio.PlayOneShot(cardSelectedSound);
 					_controller.TransitionToClose();
 					PlayerHand.Instance.SetSignatureWeapon(viewHandler.RuntimeWeaponData.Data);
 					GameDataManager.Instance.RegisterSignatureWeaponID(viewHandler.RuntimeWeaponData.Data.ID);
@@ -563,7 +563,7 @@ namespace AstralShift.HellMaiden.UI.Menus
 		{
 			if (!_isInfoPanelOpen)
 			{
-				RuntimeManager.PlayOneShot(cardInfoPanelInSound);
+				OptionalAudio.PlayOneShot(cardInfoPanelInSound);
 			}
 			_isInfoPanelOpen = true;
 			return InfoPanelOpenAnimation();
@@ -573,7 +573,7 @@ namespace AstralShift.HellMaiden.UI.Menus
 		{
 			if (_isInfoPanelOpen)
 			{
-				RuntimeManager.PlayOneShot(cardInfoPanelOutSound);
+				OptionalAudio.PlayOneShot(cardInfoPanelOutSound);
 			}
 			_isInfoPanelOpen = false;
 			return InfoPanelCloseAnimation();
@@ -634,7 +634,7 @@ namespace AstralShift.HellMaiden.UI.Menus
 			float spawnRotationDelay = animationSettings.SpawnRotationDelay;
 			_cardSpawnSequence?.Kill();
 			_cardSpawnSequence = DOTween.Sequence(this);
-			RuntimeManager.PlayOneShot(cardRevealSound);
+			OptionalAudio.PlayOneShot(cardRevealSound);
 			for (int i = 0; i < CardsLayoutGroup.ChildrenTransforms.Count; i++)
 			{
 				CardsLayoutGroup.TryGetViewHandlerOfIndex(i, out var resultCardViewHandler, out var resultSlotViewHandler);
@@ -798,12 +798,12 @@ namespace AstralShift.HellMaiden.UI.Menus
 
 		public void MenuInSound()
 		{
-			RuntimeManager.PlayOneShot(menuInSound);
+			OptionalAudio.PlayOneShot(menuInSound);
 		}
 
 		public void MenuOutSound()
 		{
-			RuntimeManager.PlayOneShot(menuOutSound);
+			OptionalAudio.PlayOneShot(menuOutSound);
 		}
 
 		public void RegisterScrollBindings()

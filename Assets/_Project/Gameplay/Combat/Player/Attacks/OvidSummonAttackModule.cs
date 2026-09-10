@@ -122,7 +122,7 @@ namespace AstralShift.HellMaiden.Player.Attacks
             if (_aiBehaviour == null) return;
             if (!beamSound.IsNull)
             {
-                attackSoundInstance = RuntimeManager.CreateInstance(beamSound);
+                attackSoundInstance = OptionalAudio.CreateInstance(beamSound);
                 Vector3 position = _aiBehaviour.transform.position;
                 position.z = 0f;
                 attackSoundInstance.set3DAttributes(position.To3DAttributes());

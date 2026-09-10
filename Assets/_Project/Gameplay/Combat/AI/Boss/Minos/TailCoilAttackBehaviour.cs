@@ -136,7 +136,7 @@ namespace AstralShift.HellMaiden.AI.Boss.Minos
 			{
 				AnimatedBossAttack attack = _pooler.GetOrCreate(null, activate: true);
 				attack.transform.position = new Vector3(positions[i].x, positions[i].y, positions[i].y + 100f);
-				RuntimeManager.PlayOneShot(tailEventRef, positions[i]);
+				OptionalAudio.PlayOneShot(tailEventRef, positions[i]);
 				_unavailablePositions.TryAdd(attack, positions[i]);
 				Action onEnd = delegate
 				{

@@ -106,7 +106,7 @@ namespace AstralShift.HellMaiden.AI.Enemy
 		{
 			if (isSuccubusBehindMap)
 			{
-				RuntimeManager.PlayOneShot(spawnSound);
+				OptionalAudio.PlayOneShot(spawnSound);
 			}
 			base.controller.SetImmunity(state: false);
 			base.controller.spriteRenderer.sortingLayerName = baseSortingLayer;

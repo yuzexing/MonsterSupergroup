@@ -374,32 +374,32 @@ MonoBehaviour:
   invulnerabilityTime: 0.6
   dashAudio:
     Guid:
-      Data1: 0
-      Data2: 0
-      Data3: 0
-      Data4: 0
-    Path: 
+      Data1: 1514720351
+      Data2: 1125937234
+      Data3: -351542111
+      Data4: 1321702800
+    Path: event:/sx/plr/Sx_plr_dash
   hurtSound:
     Guid:
-      Data1: 0
-      Data2: 0
-      Data3: 0
-      Data4: 0
-    Path: 
+      Data1: 1470421335
+      Data2: 1098605746
+      Data3: -1728109897
+      Data4: -1704822658
+    Path: event:/sx/plr/Sx_plr_hurt
   deadSound:
     Guid:
-      Data1: 0
-      Data2: 0
-      Data3: 0
-      Data4: 0
-    Path: 
+      Data1: 770948542
+      Data2: 1325436107
+      Data3: -613437003
+      Data4: -541210822
+    Path: event:/sx/cin/GameOver/sx_cin_dante_dying
   teleportSound:
     Guid:
-      Data1: 0
-      Data2: 0
-      Data3: 0
-      Data4: 0
-    Path: 
+      Data1: -1891585854
+      Data2: 1286847489
+      Data3: 1554641581
+      Data4: -789265226
+    Path: event:/sx/cin/Cutscene 1 Opening/sx_cin_portal_in
   dashExclusionLayerMask:
     serializedVersion: 2
     m_Bits: 4087

@@ -387,8 +387,7 @@ namespace MonsterSupergroup.Gameplay.Tests
                 AnimatedAttack[] previous = Attacks.GetComponentsInChildren<AnimatedAttack>();
                 // The preserved StudioParameterTrigger looks up this event in Awake only.
                 // Pool reuse does not invent an OnEnable audio playback requirement.
-                if (newInstance) LogAssert.Expect(LogType.Exception,
-                    "EventNotFoundException: [FMOD] Event not found: {840d4d3b-6223-4aab-a508-f0bcd8e4de60} ()");
+                Assert.That(FMODUnity.RuntimeManager.GetEventDescription(FMOD.GUID.Parse("840d4d3b-6223-4aab-a508-f0bcd8e4de60")).isValid(), Is.True);
                 Assert.That(Replica.TrySpawn(spawn, elapsedSeconds), Is.True);
                 return Attacks.GetComponentsInChildren<AnimatedAttack>().Except(previous).Single();
             }

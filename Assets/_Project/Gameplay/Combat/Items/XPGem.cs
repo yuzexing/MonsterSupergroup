@@ -34,7 +34,7 @@ namespace AstralShift.HellMaiden.Items
 			_disableCts = new CancellationTokenSource();
 			ResetAllParticles();
 			PlayParticles();
-			RuntimeManager.PlayOneShotAttached(soundEventSpawn, base.gameObject);
+			OptionalAudio.PlayOneShotAttached(soundEventSpawn, base.gameObject);
 			if (GameEvents.Instance.IsMagnetOn)
 			{
 				InstantPull();

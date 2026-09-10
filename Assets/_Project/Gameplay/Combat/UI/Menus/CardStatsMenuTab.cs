@@ -457,7 +457,7 @@ namespace AstralShift.HellMaiden.UI.Menus
 
 		private async UniTask ShiftCardsUp()
 		{
-			RuntimeManager.PlayOneShot(cardSlidingSound);
+			OptionalAudio.PlayOneShot(cardSlidingSound);
 			int cardCount = PlayerHand.Instance.GetHandSlotFromIndex(_currentSlotIndex).Equipments.Count + 1;
 			Vector3 position = _allCards[cardCount - 1].transform.position;
 			if (_allCards[cardCount - 1] == weaponCard)
@@ -488,7 +488,7 @@ namespace AstralShift.HellMaiden.UI.Menus
 
 		private async UniTask ShiftCardsDown()
 		{
-			RuntimeManager.PlayOneShot(cardSlidingSound);
+			OptionalAudio.PlayOneShot(cardSlidingSound);
 			int cardCount = PlayerHand.Instance.GetHandSlotFromIndex(_currentSlotIndex).Equipments.Count + 1;
 			Vector3 position = _allCards[0].transform.position;
 			Tween t = _allCards[cardCount - 1].transform.DOMove(downPosition.transform.position, cardBeginJumpAnimationDuration).SetUpdate(UpdateType.Late, isIndependentUpdate: true).SetEase(cardBeginJumpAnimationCurve.GetEaseFunction());

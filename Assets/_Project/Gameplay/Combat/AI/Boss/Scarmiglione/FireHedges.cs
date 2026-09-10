@@ -36,7 +36,7 @@ namespace AstralShift.HellMaiden.AI.Boss.Scarmiglione
 			}
 			if (!fireWaveSound.IsNull)
 			{
-				_fireWaveSoundInstance = RuntimeManager.CreateInstance(fireWaveSound);
+				_fireWaveSoundInstance = OptionalAudio.CreateInstance(fireWaveSound);
 			}
 			StartCoroutine(SpawnAnimatedWaves());
 		}

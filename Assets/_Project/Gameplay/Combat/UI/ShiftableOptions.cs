@@ -170,7 +170,7 @@ namespace AstralShift.UI
 			{
 				if (!optionSelectSuccessSound.IsNull)
 				{
-					RuntimeManager.PlayOneShot(optionSelectSuccessSound);
+					OptionalAudio.PlayOneShot(optionSelectSuccessSound);
 				}
 				_currentIndex--;
 				scrollSnap.GoToElement(_currentIndex, immediate: true);
@@ -188,7 +188,7 @@ namespace AstralShift.UI
 			}
 			else if (!optionSelectFailSound.IsNull)
 			{
-				RuntimeManager.PlayOneShot(optionSelectFailSound);
+				OptionalAudio.PlayOneShot(optionSelectFailSound);
 			}
 		}
 
@@ -202,7 +202,7 @@ namespace AstralShift.UI
 			{
 				if (!optionSelectSuccessSound.IsNull)
 				{
-					RuntimeManager.PlayOneShot(optionSelectSuccessSound);
+					OptionalAudio.PlayOneShot(optionSelectSuccessSound);
 				}
 				_currentIndex--;
 				scrollSnap.PreviousElement();
@@ -220,7 +220,7 @@ namespace AstralShift.UI
 			}
 			else if (!optionSelectFailSound.IsNull)
 			{
-				RuntimeManager.PlayOneShot(optionSelectFailSound);
+				OptionalAudio.PlayOneShot(optionSelectFailSound);
 			}
 		}
 
@@ -234,7 +234,7 @@ namespace AstralShift.UI
 			{
 				if (!optionSelectSuccessSound.IsNull)
 				{
-					RuntimeManager.PlayOneShot(optionSelectSuccessSound);
+					OptionalAudio.PlayOneShot(optionSelectSuccessSound);
 				}
 				_currentIndex++;
 				scrollSnap.GoToElement(_currentIndex, immediate: true);
@@ -252,7 +252,7 @@ namespace AstralShift.UI
 			}
 			else if (!optionSelectFailSound.IsNull)
 			{
-				RuntimeManager.PlayOneShot(optionSelectFailSound);
+				OptionalAudio.PlayOneShot(optionSelectFailSound);
 			}
 		}
 
@@ -266,7 +266,7 @@ namespace AstralShift.UI
 			{
 				if (!optionSelectSuccessSound.IsNull)
 				{
-					RuntimeManager.PlayOneShot(optionSelectSuccessSound);
+					OptionalAudio.PlayOneShot(optionSelectSuccessSound);
 				}
 				_currentIndex++;
 				scrollSnap.NextElement();
@@ -284,7 +284,7 @@ namespace AstralShift.UI
 			}
 			else if (!optionSelectFailSound.IsNull)
 			{
-				RuntimeManager.PlayOneShot(optionSelectFailSound);
+				OptionalAudio.PlayOneShot(optionSelectFailSound);
 			}
 		}
 

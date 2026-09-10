@@ -41,7 +41,7 @@ namespace AstralShift.UI.PopupWindows
 
 		private void PlayPressedSound()
 		{
-			RuntimeManager.PlayOneShot(buttonSound);
+			OptionalAudio.PlayOneShot(buttonSound);
 		}
 
 		public override void ClearContext()

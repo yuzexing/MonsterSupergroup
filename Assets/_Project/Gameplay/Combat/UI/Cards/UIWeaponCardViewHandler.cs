@@ -69,7 +69,7 @@ namespace AstralShift.HellMaiden.UI.Cards
 
 		public override void Select()
 		{
-			RuntimeManager.PlayOneShot(onSelectSound, ProCamera2D.Instance.GameCamera.transform.position);
+			OptionalAudio.PlayOneShot(onSelectSound, ProCamera2D.Instance.GameCamera.transform.position);
 		}
 
 		public override void UnSelect()

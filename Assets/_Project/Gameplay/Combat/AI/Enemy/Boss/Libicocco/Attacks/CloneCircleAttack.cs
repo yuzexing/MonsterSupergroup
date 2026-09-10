@@ -182,7 +182,7 @@ namespace AstralShift.HellMaiden.AI.Enemy.Boss.Libicocco.Attacks
 
 		private LibicoccoClone SpawnAndMoveClone(ref Vector3 position, int idx)
 		{
-			RuntimeManager.PlayOneShot(cloneSound);
+			OptionalAudio.PlayOneShot(cloneSound);
 			LibicoccoClone orCreate = pooler.GetOrCreate(null, activate: true);
 			orCreate.transform.position = position;
 			orCreate.AssignController(bossController);

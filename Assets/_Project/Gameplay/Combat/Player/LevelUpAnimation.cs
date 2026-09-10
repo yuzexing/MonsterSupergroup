@@ -39,7 +39,7 @@ namespace AstralShift.HellMaiden.Player
 			animancerComponent.UpdateMode = AnimatorUpdateMode.UnscaledTime;
 			animancerComponent.Stop();
 			animancerComponent.Layers[0].Play(levelUpAnimationClip);
-			RuntimeManager.PlayOneShot(levelUpSound);
+			OptionalAudio.PlayOneShot(levelUpSound);
 		}
 
 		public void TriggerLevelUp()

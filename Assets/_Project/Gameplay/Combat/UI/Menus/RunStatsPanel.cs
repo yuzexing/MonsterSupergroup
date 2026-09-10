@@ -324,7 +324,7 @@ namespace AstralShift.HellMaiden.UI.Menus
 		{
 			if (!panelEnterSound.IsNull)
 			{
-				RuntimeManager.PlayOneShot(menuEnterSound);
+				OptionalAudio.PlayOneShot(menuEnterSound);
 			}
 		}
 
@@ -332,7 +332,7 @@ namespace AstralShift.HellMaiden.UI.Menus
 		{
 			if (!crossEnterSound.IsNull)
 			{
-				RuntimeManager.PlayOneShot(crossEnterSound);
+				OptionalAudio.PlayOneShot(crossEnterSound);
 			}
 		}
 
@@ -340,7 +340,7 @@ namespace AstralShift.HellMaiden.UI.Menus
 		{
 			if (!numberEnterSound.IsNull)
 			{
-				RuntimeManager.PlayOneShot(numberEnterSound);
+				OptionalAudio.PlayOneShot(numberEnterSound);
 			}
 		}
 
@@ -348,7 +348,7 @@ namespace AstralShift.HellMaiden.UI.Menus
 		{
 			if (!titleEnterSound.IsNull)
 			{
-				RuntimeManager.PlayOneShot(titleEnterSound);
+				OptionalAudio.PlayOneShot(titleEnterSound);
 			}
 		}
 
@@ -356,7 +356,7 @@ namespace AstralShift.HellMaiden.UI.Menus
 		{
 			if (!panelEnterSound.IsNull)
 			{
-				RuntimeManager.PlayOneShot(panelEnterSound);
+				OptionalAudio.PlayOneShot(panelEnterSound);
 			}
 		}
 
@@ -364,7 +364,7 @@ namespace AstralShift.HellMaiden.UI.Menus
 		{
 			if (!exitSound.IsNull)
 			{
-				RuntimeManager.PlayOneShot(exitSound);
+				OptionalAudio.PlayOneShot(exitSound);
 			}
 		}
 	}

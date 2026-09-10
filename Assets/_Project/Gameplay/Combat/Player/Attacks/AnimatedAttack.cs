@@ -553,7 +553,7 @@ namespace AstralShift.HellMaiden.Player.Attacks
 			}
 			try
 			{
-				RuntimeManager.PlayOneShotAttached(sound, base.gameObject);
+				OptionalAudio.PlayOneShotAttached(sound, base.gameObject);
 			}
 			catch (EventNotFoundException)
 			{
@@ -567,14 +567,14 @@ namespace AstralShift.HellMaiden.Player.Attacks
 			{
 				try
 				{
-					_loopInstance = RuntimeManager.CreateInstance(loopSound);
+					_loopInstance = OptionalAudio.CreateInstance(loopSound);
 				}
 				catch (EventNotFoundException)
 				{
 					Debug.LogWarning($"FMOD event not found: {loopSound}", this);
 					return;
 				}
-				RuntimeManager.AttachInstanceToGameObject(_loopInstance, base.transform);
+				OptionalAudio.AttachInstanceToGameObject(_loopInstance, base.transform);
 				_loopInstance.start();
 			}
 		}

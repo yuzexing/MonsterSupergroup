@@ -108,7 +108,7 @@ namespace AstralShift.UI
 		{
 			if (!onClickFailedSound.IsNull && Time.unscaledTime - _lastFailedSoundPlayTime >= soundCooldown)
 			{
-				RuntimeManager.PlayOneShot(onClickFailedSound);
+				OptionalAudio.PlayOneShot(onClickFailedSound);
 				_lastFailedSoundPlayTime = Time.unscaledTime;
 			}
 		}
@@ -117,7 +117,7 @@ namespace AstralShift.UI
 		{
 			if (!onClickSucessfullSound.IsNull && Time.unscaledTime - _lastSuccessfulSoundPlayTime >= soundCooldown)
 			{
-				RuntimeManager.PlayOneShot(onClickSucessfullSound);
+				OptionalAudio.PlayOneShot(onClickSucessfullSound);
 				_lastSuccessfulSoundPlayTime = Time.unscaledTime;
 				_lastFailedSoundPlayTime = Time.unscaledTime;
 			}

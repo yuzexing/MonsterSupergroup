@@ -114,8 +114,8 @@ namespace MonsterSupergroup.Gameplay.Tests
         {
             CombatEventId started = default;
             build.NativeAttackStarted += (_, __, id) => started = id;
-            // The recovered projectile keeps its original event; its FMOD bank is not imported.
-            LogAssert.Expect(LogType.Exception, new Regex(@"EventNotFoundException: \[FMOD\] Event not found:.*"));
+
+            Assert.That(FMODUnity.RuntimeManager.GetEventDescription(FMOD.GUID.Parse("1235e4b8-dcb5-43e8-8bb7-41a363bff4b8")).isValid(), Is.True);
             weapon.Attack();
             Tick();
             Assert.That(started.IsValid, Is.True);

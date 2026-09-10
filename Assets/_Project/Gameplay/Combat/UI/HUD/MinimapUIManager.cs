@@ -240,7 +240,7 @@ namespace AstralShift.HellMaiden.UI.HUD
 		{
 			if (TryGetPingEvent(iconType, pingNumber, out var pingEvent))
 			{
-				RuntimeManager.PlayOneShot(pingEvent);
+				OptionalAudio.PlayOneShot(pingEvent);
 			}
 		}
 

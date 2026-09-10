@@ -77,7 +77,7 @@ namespace AstralShift.HellMaiden.AI.Enemy.Boss.Libicocco.Attacks
 			void Callback()
 			{
 				StartCoroutine(fullDarkness ? PlayWithLightFogFullDarkness() : PlayWithLightFog());
-				RuntimeManager.PlayOneShot(darknessSound);
+				OptionalAudio.PlayOneShot(darknessSound);
 			}
 		}
 

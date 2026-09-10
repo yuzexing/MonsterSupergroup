@@ -33,7 +33,7 @@ namespace AstralShift.UI
 			animator.SetBool(param, _state);
 			if (!stateChangeSound.IsNull)
 			{
-				RuntimeManager.PlayOneShot(stateChangeSound);
+				OptionalAudio.PlayOneShot(stateChangeSound);
 			}
 			onValueChanged.Invoke(_state ? 1 : 0);
 		}

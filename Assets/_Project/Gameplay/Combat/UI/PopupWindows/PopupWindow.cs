@@ -89,7 +89,7 @@ namespace AstralShift.UI.PopupWindows
 			{
 				if (!soundLoopReference.IsNull)
 				{
-					_soundLoopInstance = RuntimeManager.CreateInstance(soundLoopReference);
+					_soundLoopInstance = OptionalAudio.CreateInstance(soundLoopReference);
 				}
 			}
 			catch (EventNotFoundException ex)
@@ -128,7 +128,7 @@ namespace AstralShift.UI.PopupWindows
 			}
 			if (!openPopupSound.IsNull)
 			{
-				RuntimeManager.PlayOneShot(openPopupSound);
+				OptionalAudio.PlayOneShot(openPopupSound);
 			}
 		}
 
@@ -156,7 +156,7 @@ namespace AstralShift.UI.PopupWindows
 			}
 			if (!closePopupSound.IsNull)
 			{
-				RuntimeManager.PlayOneShot(closePopupSound);
+				OptionalAudio.PlayOneShot(closePopupSound);
 			}
 			if (_animator != null)
 			{

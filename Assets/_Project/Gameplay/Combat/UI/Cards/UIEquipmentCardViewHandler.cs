@@ -62,7 +62,7 @@ namespace AstralShift.HellMaiden.UI.Cards
 		{
 			if (RuntimeEquipmentData != null)
 			{
-				RuntimeManager.PlayOneShot(onSelectSound, ProCamera2D.Instance.GameCamera.transform.position);
+				OptionalAudio.PlayOneShot(onSelectSound, ProCamera2D.Instance.GameCamera.transform.position);
 				UICardPickMenuView.Instance?.HandView.RunCompatibilityCheck(this);
 			}
 		}

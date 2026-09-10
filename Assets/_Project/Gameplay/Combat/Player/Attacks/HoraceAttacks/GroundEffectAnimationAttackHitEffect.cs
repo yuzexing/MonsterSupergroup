@@ -108,7 +108,7 @@ namespace AstralShift.HellMaiden.Player.Attacks.HoraceAttacks
 		{
 			if (!groundEffectSound.IsNull)
 			{
-				RuntimeManager.PlayOneShot(groundEffectSound, base.transform.position);
+				OptionalAudio.PlayOneShot(groundEffectSound, base.transform.position);
 			}
 		}
 	}

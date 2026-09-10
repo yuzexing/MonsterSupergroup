@@ -83,7 +83,7 @@ namespace AstralShift.HellMaiden.Controllers
 			_canSkip = false;
 			skipGlyph.gameObject.SetActive(value: false);
 			videoPlayer.SkipVideo();
-			RuntimeManager.PlayOneShot(cutsceneSkip);
+			OptionalAudio.PlayOneShot(cutsceneSkip);
 		}
 
 		private void LoadNextScene()

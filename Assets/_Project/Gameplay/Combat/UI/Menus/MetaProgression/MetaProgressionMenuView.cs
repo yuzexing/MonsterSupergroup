@@ -191,7 +191,7 @@ namespace AstralShift.HellMaiden.UI.Menus.MetaProgression
 			}
 			finally
 			{
-				ambienceInstance = RuntimeManager.CreateInstance(ambienceSound);
+				ambienceInstance = OptionalAudio.CreateInstance(ambienceSound);
 				ambienceInstance.start();
 				_currentSelectedUpgrade = _upgrades[0];
 				SetCurrentSelection();
@@ -380,7 +380,7 @@ namespace AstralShift.HellMaiden.UI.Menus.MetaProgression
 			}
 			else
 			{
-				RuntimeManager.PlayOneShot(failToUpgradeSound);
+				OptionalAudio.PlayOneShot(failToUpgradeSound);
 			}
 		}
 
@@ -422,7 +422,7 @@ namespace AstralShift.HellMaiden.UI.Menus.MetaProgression
 			MetaProgressionUpgrade3DIcon metaProgression3DIcon2 = MetaProgressionUpgradeVisualsFactory.GetMetaProgression3DIcon(metaStatDatabaseEntry, isMaxLevel: true);
 			animatedUpgradeIcon.Initialize(metaProgression3DIcon, metaProgression3DIcon2);
 			animatedUpgradeIcon.Show();
-			RuntimeManager.PlayOneShot(upgradeSound);
+			OptionalAudio.PlayOneShot(upgradeSound);
 			if (isMaxLevel)
 			{
 				animatedUpgradeIcon.Upgrade();
@@ -439,7 +439,7 @@ namespace AstralShift.HellMaiden.UI.Menus.MetaProgression
 		{
 			_currentSelectedUpgrade.Refund();
 			UpdateInfoPanel(_currentSelectedUpgrade);
-			RuntimeManager.PlayOneShot(refundSound);
+			OptionalAudio.PlayOneShot(refundSound);
 		}
 
 		private void OnDestroy()

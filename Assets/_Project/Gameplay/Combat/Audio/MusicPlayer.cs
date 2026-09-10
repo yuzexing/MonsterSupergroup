@@ -62,7 +62,7 @@ namespace AstralShift.HellMaiden.Audio
 			{
 				PlayNextMusic();
 			};
-			gameStatus = RuntimeManager.CreateInstance("event:/snapshots/game_status");
+			gameStatus = OptionalAudio.CreateInstance("event:/snapshots/game_status");
 			gameStatus.start();
 		}
 
@@ -89,7 +89,8 @@ namespace AstralShift.HellMaiden.Audio
 			}
 			try
 			{
-				currentMusic = RuntimeManager.CreateInstance(_nextMusicEvent);
+				currentMusic = OptionalAudio.CreateInstance(_nextMusicEvent);
+				if (!currentMusic.isValid()) return;
 				currentMusicEvent = _nextMusicEvent;
 				if (!currentlyOverridingMusic)
 				{
@@ -124,7 +125,8 @@ namespace AstralShift.HellMaiden.Audio
 			{
 				try
 				{
-					overridenMusic = RuntimeManager.CreateInstance(musicEvent);
+					overridenMusic = OptionalAudio.CreateInstance(musicEvent);
+					if (!overridenMusic.isValid()) return;
 					currentMusic.getTimelinePosition(out savedTimelinePosition);
 					currentMusic.stop(swapImmediate ? FMOD.Studio.STOP_MODE.IMMEDIATE : FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
 					currentlyOverridingMusic = true;

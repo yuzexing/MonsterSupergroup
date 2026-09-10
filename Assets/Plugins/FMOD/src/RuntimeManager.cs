@@ -853,6 +853,7 @@ retry:
                 }
 
                 Instance.loadedBanks.Add(bankName, loadedBank);
+                OptionalAudio.OnBanksChanged();
             }
             else if (loadResult == FMOD.RESULT.ERR_EVENT_ALREADY_LOADED)
             {
@@ -948,6 +949,9 @@ retry:
                 {
                     bankPath = string.Format("{0}/{1}", bankFolder, bankName);
                 }
+#if UNITY_EDITOR || UNITY_STANDALONE
+                if (!File.Exists(bankPath)) throw new BankLoadException(bankPath, FMOD.RESULT.ERR_FILE_NOTFOUND);
+#endif
                 Instance.loadingBanksRef++;
 #if UNITY_ANDROID && !UNITY_EDITOR
                 if (Settings.Instance.AndroidUseOBB)
@@ -963,10 +967,13 @@ retry:
                 else
 #endif // (UNITY_ANDROID || UNITY_WEBGL) && !UNITY_EDITOR
                 {
-                    LoadedBank loadedBank = new LoadedBank();
-                    FMOD.RESULT loadResult = Instance.studioSystem.loadBankFile(bankPath, FMOD.Studio.LOAD_BANK_FLAGS.NORMAL, out loadedBank.Bank);
-                    Instance.RegisterLoadedBank(loadedBank, bankPath, bankId, loadSamples, loadResult);
-                    Instance.loadingBanksRef--;
+                    try
+                    {
+                        LoadedBank loadedBank = new LoadedBank();
+                        FMOD.RESULT loadResult = Instance.studioSystem.loadBankFile(bankPath, FMOD.Studio.LOAD_BANK_FLAGS.NORMAL, out loadedBank.Bank);
+                        Instance.RegisterLoadedBank(loadedBank, bankPath, bankId, loadSamples, loadResult);
+                    }
+                    finally { Instance.loadingBanksRef--; }
                 }
             }
 
@@ -1044,19 +1051,20 @@ retry:
                     sampleLoadRequests.AddRange(BanksToLoad(fmodSettings));
                 }
 
-                try
+                foreach (string bankName in BanksToLoad(fmodSettings))
                 {
-                    foreach (string bankName in BanksToLoad(fmodSettings))
+                    try
                     {
                         LoadBank(bankName);
                     }
-
-                    WaitForAllSampleLoading();
+                    catch (BankLoadException e)
+                    {
+                        sampleLoadRequests.Remove(bankName);
+                        RuntimeUtils.DebugLogWarning(e.Message);
+                    }
                 }
-                catch (BankLoadException e)
-                {
-                    RuntimeUtils.DebugLogException(e);
-                }
+                ExecuteSampleLoadRequestsIfReady();
+                WaitForAllSampleLoading();
             }
         }
 
@@ -1102,6 +1110,7 @@ retry:
                 {
                     loadedBank.Bank.unload();
                     Instance.loadedBanks.Remove(bankName);
+                    OptionalAudio.OnBanksChanged();
                     Instance.sampleLoadRequests.Remove(bankName);
                     return;
                 }

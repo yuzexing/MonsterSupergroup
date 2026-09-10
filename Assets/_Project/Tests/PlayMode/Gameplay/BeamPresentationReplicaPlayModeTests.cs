@@ -258,13 +258,9 @@ namespace MonsterSupergroup.Gameplay.Tests
             Assert.That(time, Is.EqualTo(expected).Within(0.001f), field);
         }
 
-        private static void ExpectSourceBeamAudio(bool newInstance)
+        private static void AssertSourceBeamAudio()
         {
-            const string message = "EventNotFoundException: [FMOD] Event not found: {b865f76c-9c2a-4679-9709-a288f22c9619} ()";
-            // StudioParameterTrigger.Awake looks up this exact source event on a new instance.
-            if (newInstance) LogAssert.Expect(LogType.Exception, message);
-            // StudioEventEmitter also looks up the same event each time its Start child enables.
-            LogAssert.Expect(LogType.Exception, message);
+            Assert.That(FMODUnity.RuntimeManager.GetEventDescription(FMOD.GUID.Parse("b865f76c-9c2a-4679-9709-a288f22c9619")).isValid(), Is.True);
         }
 
         private sealed class Fixture : IDisposable
@@ -303,7 +299,7 @@ namespace MonsterSupergroup.Gameplay.Tests
             public AnimatedAttack Spawn(BeamPresentationSpawn spawn, float elapsedSeconds, bool newInstance)
             {
                 AnimatedAttack[] previous = Attacks.GetComponentsInChildren<AnimatedAttack>();
-                ExpectSourceBeamAudio(newInstance);
+                AssertSourceBeamAudio();
                 Assert.That(Replica.TrySpawn(spawn, elapsedSeconds), Is.True);
                 return Attacks.GetComponentsInChildren<AnimatedAttack>().Except(previous).Single();
             }

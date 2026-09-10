@@ -768,7 +768,7 @@ namespace AstralShift.HellMaiden.Player
 			SetDashLayerMask();
 			try
 			{
-				if (!dashAudio.IsNull) RuntimeManager.PlayOneShotAttached(dashAudio, base.gameObject);
+				if (!dashAudio.IsNull) OptionalAudio.PlayOneShotAttached(dashAudio, base.gameObject);
 				Action onStart = OnDashStart;
 				if (onStart != null)
 					foreach (Action callback in onStart.GetInvocationList())
@@ -992,7 +992,7 @@ namespace AstralShift.HellMaiden.Player
 			StopMovement();
 			_hurtTime = hurtTime;
 			playerAnimator.Hurt(base.FacingDirection.x, base.FacingDirection.y);
-			RuntimeManager.PlayOneShot(hurtSound);
+			OptionalAudio.PlayOneShot(hurtSound);
 			ShowDamage();
 			DecreaseHealth(_damageReceived);
 			SetTimmedInvulnerability(invulnerabilityTime);
@@ -1149,7 +1149,7 @@ namespace AstralShift.HellMaiden.Player
 			CancelDash();
 			Died?.Invoke();
 			if (!UsesNetworkLifecycle) GameEvents.Instance?.OnBeforePlayerDeath?.Invoke();
-			RuntimeManager.PlayOneShot(deadSound);
+			OptionalAudio.PlayOneShot(deadSound);
 			body.bodyType = RigidbodyType2D.Static;
 			playerAnimator.Dead(base.FacingDirection.x, base.FacingDirection.y);
 		}
@@ -1175,7 +1175,7 @@ namespace AstralShift.HellMaiden.Player
 
 		private void OnEnterGivingUp()
 		{
-			RuntimeManager.PlayOneShot(hurtSound);
+			OptionalAudio.PlayOneShot(hurtSound);
 			_stateMachine.MakeTransition(Dead);
 		}
 
@@ -1290,7 +1290,7 @@ namespace AstralShift.HellMaiden.Player
 			playerVFX.TriggerTeleportVFX();
 			if (!teleportSound.IsNull)
 			{
-				RuntimeManager.PlayOneShotAttached(teleportSound, base.gameObject);
+				OptionalAudio.PlayOneShotAttached(teleportSound, base.gameObject);
 			}
 		}
 

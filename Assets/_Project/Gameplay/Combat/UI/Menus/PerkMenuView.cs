@@ -665,7 +665,7 @@ namespace AstralShift.HellMaiden.UI.Menus
 			}
 			if (!eventReference.IsNull)
 			{
-				RuntimeManager.PlayOneShot(eventReference);
+				OptionalAudio.PlayOneShot(eventReference);
 			}
 		}
 
@@ -803,7 +803,7 @@ namespace AstralShift.HellMaiden.UI.Menus
 			if (!soundRef.IsNull)
 			{
 				StopHoldSound(ref instance);
-				instance = RuntimeManager.CreateInstance(soundRef);
+				instance = OptionalAudio.CreateInstance(soundRef);
 				instance.start();
 			}
 		}

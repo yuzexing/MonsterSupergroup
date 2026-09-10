@@ -42,6 +42,22 @@ namespace MonsterSupergroup.NetworkCombat
             nextServerTick = NetworkTime.time;
         }
 
+        public override void OnStartClient()
+        {
+            base.OnStartClient();
+            // Boot's scene identity survives Stop and is spawned again. Mirror reuses
+            // netIds in a new session, so an older death/version must not mask its baseline.
+            Replica.Clear();
+        }
+
+        public override void OnStopClient()
+        {
+            // Host can receive a queued death after the enemy's OnStopClient forgot it.
+            // Clear the whole session, including such despawned entities and status bindings.
+            Replica.Clear();
+            base.OnStopClient();
+        }
+
         [Server]
         public ushort AllocateConnectionEpoch()
         {

@@ -50,8 +50,57 @@ namespace MonsterSupergroup.NetworkCombat
         /// <summary>Called by the server's start-run flow after the intended party has joined.</summary>
         public void BeginRun()
         {
-            if (!NetworkServer.active) throw new System.InvalidOperationException("Only the server can start a run.");
+            if (!TryBeginRun(out string error)) throw new System.InvalidOperationException(error);
+        }
+
+        public bool CanBeginRun(out string error)
+        {
+            error = null;
+            if (!NetworkServer.active) { error = "Only the server can start a run."; return false; }
+            if (Session.IsRosterLocked) return true;
+            if (!serverGameplayLoaded || IsGameplayTransitioning)
+            { error = "Waiting for Gameplay to finish loading."; return false; }
+            var world = NetworkCombatWorld.Instance;
+            if (world == null || !world.isServer || NetworkEnemySimulationWorld.Instance == null)
+            { error = "Waiting for the combat World."; return false; }
+            bool alive = false;
+            foreach (var connection in NetworkServer.connections.Values)
+            {
+                if (connection == null) continue;
+                if (!connection.isAuthenticated || !connection.isReady || connection.identity == null ||
+                    !Session.TryGetConnection(connection.connectionId, out var participant) ||
+                    participant.AvatarId != connection.identity.netId ||
+                    !world.Gateway.Ledger.TryGetState(participant.AvatarId, out var state))
+                { error = "Waiting for all connected players to enter Gameplay."; return false; }
+                if (state.Alive) alive = true;
+            }
+            if (!alive) { error = "At least one connected, living player is required."; return false; }
+            if (!TryGetGameplaySpawner(out var spawner, out error)) return false;
+            return spawner.CanBeginWaveRun(out error);
+        }
+
+        public bool TryBeginRun(out string error)
+        {
+            if (!CanBeginRun(out error)) return false;
+            if (Session.IsRosterLocked) return true;
+            if (!TryGetGameplaySpawner(out var spawner, out error) ||
+                !spawner.BeginWaveRun(Session.RunId, out error)) return false;
             Session.BeginRun();
+            return true;
+        }
+
+        private bool TryGetGameplaySpawner(out NetworkGameplayEnemySpawner spawner, out string error)
+        {
+            spawner = null; error = null;
+            if (TryGetGameplayScene(out var scene))
+                foreach (var root in scene.GetRootGameObjects())
+                    foreach (var candidate in root.GetComponentsInChildren<NetworkGameplayEnemySpawner>(true))
+                    {
+                        if (spawner != null) { error = "Gameplay contains multiple enemy spawners."; return false; }
+                        spawner = candidate;
+                    }
+            if (spawner != null) return true;
+            error = "Gameplay enemy spawner is missing."; return false;
         }
 
         public void ConfigureGameplay(
@@ -112,25 +161,30 @@ namespace MonsterSupergroup.NetworkCombat
 
         public override void OnServerReady(NetworkConnectionToClient connection)
         {
-            base.OnServerReady(connection);
-            Debug.Log(
-                $"[BootGameplay] Server connection {connection?.connectionId} is ready.",
-                this);
-
             if (connection != null &&
                 !(connection is LocalConnectionToClient) &&
                 remoteGameplayLoadRequests.Add(connection.connectionId))
             {
+                // Ready from Boot is only a scene-load request. Sending a spawn batch
+                // here and again after the additive load can bootstrap deferred identities
+                // without their payload, especially when reconnecting to many live enemies.
                 NetworkServer.SetClientNotReady(connection);
                 StartCoroutine(SendGameplaySceneWhenReady(connection));
                 return;
             }
 
+            base.OnServerReady(connection);
+            Debug.Log(
+                $"[BootGameplay] Server connection {connection?.connectionId} is ready.",
+                this);
             QueuePlayerCreation(connection);
         }
 
         public override void OnServerAddPlayer(NetworkConnectionToClient connection)
         {
+            // Mirror may send AddPlayer alongside the first Ready from Boot.
+            // The post-Gameplay Ready callback will create this avatar instead.
+            if (connection != null && !connection.isReady) return;
             QueuePlayerCreation(connection);
         }
 

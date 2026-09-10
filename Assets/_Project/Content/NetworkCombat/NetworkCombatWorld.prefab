@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 1618260355983830151}
   - component: {fileID: 6267950001883975477}
   - component: {fileID: 2096257799515299953}
+  - component: {fileID: 942500000000000001}
   m_Layer: 0
   m_Name: NetworkCombatWorld
   m_TagString: Untagged
@@ -85,3 +86,18 @@ MonoBehaviour:
   serverSnapshotInterval: 0.05
   maximumSnapshotsPerBatch: 20
   maximumAttackPresentationEdgesPerBatch: 32
+--- !u!114 &942500000000000001
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1719529174468981120}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e6384d28bde6462c998654ef96902a7c, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: MonsterSupergroup.NetworkCombat::MonsterSupergroup.NetworkCombat.NetworkWaveProgress
+  syncDirection: 0
+  syncMode: 0
+  syncInterval: 0

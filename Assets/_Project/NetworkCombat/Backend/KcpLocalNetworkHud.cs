@@ -84,7 +84,7 @@ namespace MonsterSupergroup.NetworkCombat
                     hudPosition.x,
                     hudPosition.y,
                     hudSize.x,
-                    hudSize.y),
+                    Mathf.Max(hudSize.y, 420f)),
                 GUI.skin.box);
             GUILayout.BeginHorizontal();
             GUILayout.Label("KCP Local / Boot -> Gameplay");
@@ -136,8 +136,23 @@ namespace MonsterSupergroup.NetworkCombat
                     service.StartClient();
                 }
             }
+            if (GUILayout.Button("Server only") && TryApplyInput()) service.StartServer();
             GUILayout.EndHorizontal();
             GUI.enabled = previousEnabled;
+
+            if (NetworkServer.active)
+            {
+                var manager = service.ConfiguredNetworkManager;
+                bool canBegin = manager.CanBeginRun(out string startReason);
+                GUI.enabled = previousEnabled && canBegin && !manager.Session.IsRosterLocked;
+                if (GUILayout.Button(manager.Session.IsRosterLocked ? "Run started" : "Start run"))
+                    if (!manager.TryBeginRun(out inputError)) Debug.LogWarning(inputError, this);
+                GUI.enabled = previousEnabled;
+                if (!canBegin) GUILayout.Label(startReason);
+                GUILayout.Label($"Members: {manager.Session.Participants.Count} | After start: original members only");
+                var wave = NetworkCombatWorld.Instance != null ? NetworkCombatWorld.Instance.GetComponent<NetworkWaveProgress>() : null;
+                if (wave != null) GUILayout.Label(NetworkWaveHUD.Format(wave.Snapshot));
+            }
 
             bool canStop = service.State != KcpLocalNetworkState.Disabled &&
                 (NetworkServer.active || NetworkClient.active ||

@@ -282,6 +282,7 @@ namespace MonsterSupergroup.NetworkCombat
                     continue;
                 }
 
+                spawner.Configure(spawner.EnemyPrefab, 5);
                 spawner.ConfigureRuntimeMinimumSpawnHealth(
                     ValidationEnemyMinimumHealth);
                 Debug.Log(

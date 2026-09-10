@@ -663,6 +663,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: MonsterSupergroup.NetworkCombat::MonsterSupergroup.NetworkCombat.NetworkGameplayEnemySpawner
   enemyPrefab: {fileID: 3911887690903730936, guid: 55ff35e83fff4c74ea6f8f2e82883aa2, type: 3}
   spawnDistance: 5
+  spawnMode: 1
+  waveRules: {fileID: 11400000, guid: 469fb543a2a54f5a93c8d7d1c128da92, type: 2}
+  boundaryGround: {fileID: 1759403621}
 --- !u!4 &529519221
 Transform:
   m_ObjectHideFlags: 0

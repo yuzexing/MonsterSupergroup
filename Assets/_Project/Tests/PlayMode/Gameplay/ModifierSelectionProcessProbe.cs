@@ -604,9 +604,12 @@ namespace MonsterSupergroup.Gameplay.Tests
             // Keep live enemies/world simulation. Avoid killing the finite smoke-test enemies during assertions.
             foreach (var root in scene.GetRootGameObjects())
                 foreach (var spawner in root.GetComponentsInChildren<NetworkGameplayEnemySpawner>(true))
+                {
+                    spawner.Configure(spawner.EnemyPrefab, 5);
                     typeof(NetworkGameplayEnemySpawner).GetMethod("ConfigureRuntimeMinimumSpawnHealth",
                         System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)
                         .Invoke(spawner, new object[] { 100000 });
+                }
         }
         private void HandleSceneUnloaded(Scene scene)
         {

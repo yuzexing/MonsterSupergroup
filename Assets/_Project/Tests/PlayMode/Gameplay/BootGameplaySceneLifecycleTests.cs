@@ -113,6 +113,35 @@ namespace MonsterSupergroup.Gameplay.Tests
             AssertSingleGameplayScene();
         }
 
+        [UnityTest]
+        public IEnumerator RemoteBootReady_DoesNotSendSpawnBatchOrQueueAvatarBeforeGameplayReady()
+        {
+            manager.StartServer();
+            yield return AssertSingleReadyGameplay();
+            Assert.That(NetworkServer.spawned.Count, Is.GreaterThan(0), "Exercise an existing World baseline.");
+            var connection = new NetworkConnectionToClient(9876) { isAuthenticated = true };
+            int spawnStarts = 0, notReady = 0;
+            void Observe(NetworkDiagnostics.MessageInfo info)
+            {
+                if (info.message is ObjectSpawnStartedMessage) spawnStarts++;
+                if (info.message is NotReadyMessage) notReady++;
+            }
+            NetworkDiagnostics.OutMessageEvent += Observe;
+            try
+            {
+                manager.OnServerReady(connection);
+                manager.OnServerAddPlayer(connection);
+                Assert.That(connection.isReady, Is.False);
+                Assert.That(spawnStarts, Is.Zero, "Boot Ready must not start a deferred spawn batch.");
+                Assert.That(notReady, Is.EqualTo(1), "Client must be able to Ready again after the additive load.");
+                var pending = (HashSet<int>)typeof(BootGameplayNetworkManager).GetField(
+                    "pendingPlayerConnections", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(manager);
+                Assert.That(pending, Has.No.Member(connection.connectionId));
+                Assert.That(connection.identity, Is.Null);
+            }
+            finally { NetworkDiagnostics.OutMessageEvent -= Observe; }
+        }
+
         private SceneLifecycleClientTransport ConfigureClientTransport()
         {
             var transportObject = new GameObject("Scene lifecycle fixture transport");

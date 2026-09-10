@@ -89,7 +89,7 @@ namespace MonsterSupergroup.Gameplay.Tests
             if (scene.path != "Assets/_Project/Scenes/Gameplay.unity") return;
             foreach (var root in scene.GetRootGameObjects())
                 foreach (var spawner in root.GetComponentsInChildren<NetworkGameplayEnemySpawner>(true))
-                { enemyPrefab = spawner.EnemyPrefab; spawner.enabled = false; }
+                { enemyPrefab = spawner.EnemyPrefab; spawner.Configure(spawner.EnemyPrefab, 5); spawner.enabled = false; }
         }
         private IEnumerator Run()
         {

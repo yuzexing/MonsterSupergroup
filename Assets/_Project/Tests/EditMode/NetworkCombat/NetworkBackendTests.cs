@@ -108,7 +108,7 @@ namespace MonsterSupergroup.NetworkCombat.Tests
             Assert.That(explicitOptions.UseSimulation, Is.True);
         }
 
-        [TestCase("--kcp-role=server")]
+        [TestCase("--kcp-role=unknown")]
         [TestCase("--kcp-role=")]
         [TestCase("--kcp-port=0")]
         [TestCase("--kcp-port=")]

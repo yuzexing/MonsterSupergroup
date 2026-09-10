@@ -10,7 +10,8 @@ namespace MonsterSupergroup.NetworkCombat
     {
         None = 0,
         Host = 1,
-        Client = 2
+        Client = 2,
+        Server = 3
     }
 
     public enum KcpLocalNetworkState : byte
@@ -21,7 +22,8 @@ namespace MonsterSupergroup.NetworkCombat
         Hosting = 3,
         Connected = 4,
         Stopping = 5,
-        Error = 6
+        Error = 6,
+        Serving = 7
     }
 
     public readonly struct KcpLocalLaunchOptions
@@ -68,6 +70,10 @@ namespace MonsterSupergroup.NetworkCombat
                              StringComparison.OrdinalIgnoreCase))
                 {
                     role = KcpLocalRole.Client;
+                }
+                else if (string.Equals(roleText, "server", StringComparison.OrdinalIgnoreCase))
+                {
+                    role = KcpLocalRole.Server;
                 }
                 else
                 {
@@ -231,6 +237,10 @@ namespace MonsterSupergroup.NetworkCombat
             {
                 StartHost();
             }
+            else if (automaticRole == KcpLocalRole.Server)
+            {
+                StartServer();
+            }
             else
             {
                 StartClient();
@@ -252,7 +262,7 @@ namespace MonsterSupergroup.NetworkCombat
                     $"[KcpLocal] Connected to {Address}:{Port}.",
                     this);
             }
-            else if (State == KcpLocalNetworkState.Hosting &&
+            else if ((State == KcpLocalNetworkState.Hosting || State == KcpLocalNetworkState.Serving) &&
                      !NetworkServer.active)
             {
                 BeginUnexpectedStop("The KCP Host stopped unexpectedly.");
@@ -348,6 +358,27 @@ namespace MonsterSupergroup.NetworkCombat
             {
                 StopAfterStartFailure();
                 SetError($"KCP StartHost failed: {exception.Message}");
+            }
+        }
+
+        public void StartServer()
+        {
+            if (!TryBeginStart(out string error) ||
+                !backendBootstrap.TryPrepareKcp(Address, Port, UseSimulation, out error))
+            { SetError(error); return; }
+            try
+            {
+                IsHostSession = false;
+                networkManager.StartServer();
+                if (!NetworkServer.active || NetworkClient.active)
+                    throw new InvalidOperationException("Mirror did not start as server-only.");
+                SetState(KcpLocalNetworkState.Serving, string.Empty);
+                Debug.Log($"[KcpLocal] Server listening on {Address}:{Port}.", this);
+            }
+            catch (Exception exception)
+            {
+                StopAfterStartFailure();
+                SetError($"KCP StartServer failed: {exception.Message}");
             }
         }
 

@@ -29,6 +29,56 @@ namespace MonsterSupergroup.Gameplay.Tests
         private ModifierSelectionController View => Player.GetComponent<ModifierSelectionController>();
 
         [UnityTest]
+        public IEnumerator DebugLevelUpBeforeMenuReady_RetainsRewardUntilPresentationReturns()
+        {
+            yield return StartHost();
+            View.CancelOffer();
+            yield return null;
+            Assert.That(Authority.RequestDebugLevelUp(), Is.True);
+            yield return WaitFor(() => Authority.Level == 2);
+            Assert.That(Authority.PendingUpgradeCount, Is.EqualTo(1));
+            Assert.That(Authority.PendingEventId, Is.Zero);
+            Assert.That(View.Offers, Is.Empty);
+            View.NotifyPresentationReady();
+            yield return WaitFor(() => View.Offers.Count > 0);
+            Assert.That(View.EarnedLevel, Is.EqualTo(2));
+            Assert.That(Authority.Level, Is.EqualTo(2));
+        }
+
+        [UnityTest]
+        public IEnumerator DebugLevelUp_UsesOwnerCommandAndXpQueue_WithoutReplacingPendingTargetChoice()
+        {
+            yield return StartHost();
+            Authority.ServerGrantExperience(.5f);
+            uint revision = Authority.BuildRevision;
+            Assert.That(Authority.RequestDebugLevelUp(), Is.True);
+            yield return WaitFor(() => Authority.Level == 2 && View.Offers.Count > 0);
+            Assert.That(Authority.Experience, Is.EqualTo(.5f));
+            View.Select(0);
+            yield return WaitFor(() => View.Stage == UpgradeSelectionStage.EquipmentTarget);
+            ulong targetEvent = Authority.PendingEventId;
+            var targetIds = View.Offers.Select(o => o.OfferId).ToArray();
+            for (int expectedLevel = 3; expectedLevel <= 7; expectedLevel++)
+            {
+                Assert.That(Authority.RequestDebugLevelUp(), Is.True);
+                int reached = expectedLevel;
+                yield return WaitFor(() => Authority.Level == reached);
+            }
+            Assert.That(Authority.Experience, Is.EqualTo(.5f));
+            Assert.That(Authority.PendingUpgradeCount, Is.EqualTo(6));
+            Assert.That(Authority.PendingEventId, Is.EqualTo(targetEvent));
+            Assert.That(View.Stage, Is.EqualTo(UpgradeSelectionStage.EquipmentTarget));
+            Assert.That(View.Offers.Select(o => o.OfferId), Is.EqualTo(targetIds));
+            Assert.That(Authority.BuildRevision, Is.EqualTo(revision));
+            Assert.That(Build.EquipmentCount, Is.Zero);
+            Assert.That(Authority.CaptureProgression().Rewards.Select(r => r.Kind), Is.EqualTo(new[] {
+                UpgradeRewardKind.Equipment, UpgradeRewardKind.Equipment, UpgradeRewardKind.Weapon,
+                UpgradeRewardKind.Equipment, UpgradeRewardKind.Equipment, UpgradeRewardKind.Perk }));
+            Authority.enabled = false;
+            Assert.That(Authority.RequestDebugLevelUp(), Is.False);
+        }
+
+        [UnityTest]
         public IEnumerator BulkXpQueuesEachEarnedLevel_EquipmentHasTwoPhases_BackAndOldRequestsCannotApply()
         {
             yield return StartHost();

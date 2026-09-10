@@ -135,12 +135,27 @@ namespace MonsterSupergroup.Gameplay.Tests
                 // Fix only RNG for repeatable coverage, keeping the real rules, six definitions and XP entry.
                 typeof(NetworkModifierSelection).GetField("provider", BindingFlags.Instance | BindingFlags.NonPublic)
                     .SetValue(selection, new UpgradeOfferProvider(new FirstRandom()));
-                selection.ServerGrantExperience(selection.ExperiencePerLevel * 17);
+            }
+            Mark("debug-level-client-enabled");
+            while (!Has("debug-level-client")) yield return null;
+            uint debugClientId = uint.Parse(Read("ready-client"));
+            Require(players.Single(p => p.netId != debugClientId).GetComponent<NetworkModifierSelection>().Level == 1,
+                "One client's debug request advanced another player.");
+            Mark("debug-level-other-enabled");
+            while (!Has("debug-level-" + Other)) yield return null;
+            foreach (var player in players)
+            {
+                var selection = player.GetComponent<NetworkModifierSelection>();
+                Require(selection.Level == 2 && selection.PendingUpgradeCount == 1 && selection.BuildRevision == 1,
+                    "The F5 owner request must queue exactly one level without applying a reward.");
+                selection.ServerGrantExperience(selection.ExperiencePerLevel * 16);
                 var progress = selection.CaptureProgression();
                 Require(progress.Rewards.Select(r => r.EarnedLevel).SequenceEqual(Enumerable.Range(2, 17)), "Bulk XP lost individual earned levels.");
                 Require(progress.Rewards.Where(r => r.Kind == UpgradeRewardKind.Weapon).Select(r => r.EarnedLevel).SequenceEqual(new[] { 4, 12, 18 }), "Wrong weapon schedule.");
                 Require(progress.Rewards.Count(r => r.Kind == UpgradeRewardKind.Perk) == 6, "Wrong Perk schedule.");
             }
+            Debug.Log("[M4Process] event=debug-level-owner-commands-verified players=2");
+            Mark("bulk-xp-queued");
             foreach (string phase in new[] { "reward", "target" })
             {
                 while (!Has("pause-" + phase)) yield return null;
@@ -216,6 +231,12 @@ namespace MonsterSupergroup.Gameplay.Tests
         {
             yield return WaitOwner();
             Mark("ready-" + role, Owner.netId.ToString());
+            while (!Has(role == "client" ? "debug-level-client-enabled" : "debug-level-other-enabled")) yield return null;
+            Require(Selection.RequestDebugLevelUp(), "F5 owner request was unavailable in the development player.");
+            while (Selection.Level < 2) yield return null;
+            Require(Selection.Level == 2, "One F5 request advanced more than one level.");
+            Mark("debug-level-" + role);
+            while (!Has("bulk-xp-queued")) yield return null;
             while (View.Offers.Count == 0) yield return null;
             if (role == "client")
             {

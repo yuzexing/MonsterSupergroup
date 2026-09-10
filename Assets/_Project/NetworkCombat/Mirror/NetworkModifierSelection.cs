@@ -274,7 +274,28 @@ namespace MonsterSupergroup.NetworkCombat
             if (!available) ServerCancelPending();
         }
 
-        /// <summary>Called by authoritative progression/reward code, never by a client XP command.</summary>
+        /// <summary>Development-only owner intent; the server determines and grants one level of XP.</summary>
+        public bool RequestDebugLevelUp()
+        {
+            if ((!Application.isEditor && !Debug.isDebugBuild) || !isActiveAndEnabled ||
+                !isOwned || !NetworkClient.active) return false;
+            CmdDebugLevelUp();
+            return true;
+        }
+
+        [Command]
+        private void CmdDebugLevelUp(NetworkConnectionToClient sender = null)
+        {
+            if ((!Application.isEditor && !Debug.isDebugBuild) || !isActiveAndEnabled ||
+                sender == null || sender != connectionToClient || sender.identity != netIdentity) return;
+            int previousLevel = level;
+            // A full threshold advances exactly one level and preserves the current XP remainder.
+            ServerGrantExperience(ExperiencePerLevel);
+            if (level != previousLevel)
+                Debug.Log($"[UpgradeSelection] debug F5 player={netId} level={previousLevel}->{level} pending={PendingUpgradeCount}", this);
+        }
+
+        /// <summary>Authoritative XP grant. Clients never provide an XP amount.</summary>
         [Server]
         public void ServerGrantExperience(float amount)
         {
@@ -653,6 +674,7 @@ namespace MonsterSupergroup.NetworkCombat
         {
             if (isOwned && NetworkClient.active)
             {
+                if (Application.isFocused && Input.GetKeyDown(KeyCode.F5)) RequestDebugLevelUp();
                 if (!presentation.isActiveAndEnabled && ownerReady)
                 {
                     CmdSetSelectionAvailable(false);

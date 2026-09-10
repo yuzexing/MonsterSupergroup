@@ -28,8 +28,17 @@ namespace MonsterSupergroup.NetworkCombat
             clientGems.Add(this);
             if (visual != null) visual.gameObject.SetActive(!claimed);
         }
+        [Server]
+        public void ServerPresentCollection(uint playerId)
+        {
+            // Host RPCs are queued, but Destroy removes the shared identity immediately.
+            // Detach its visual before despawn; remote clients receive the RPC before destroy.
+            if (isClient) PresentCollection(playerId);
+            RpcPresentCollection(playerId);
+        }
         [ClientRpc]
-        public void RpcPresentCollection(uint playerId)
+        private void RpcPresentCollection(uint playerId) => PresentCollection(playerId);
+        private void PresentCollection(uint playerId)
         {
             if (presented) return;
             presented = true;

@@ -105,7 +105,7 @@ namespace MonsterSupergroup.NetworkCombat
             if (!progression.TryGrantExperience(amount))
             { gem.SetClaimed(false); reason = "grant-rejected"; return false; }
             drops.Remove(dropId);
-            gem.RpcPresentCollection(avatar.netId);
+            gem.ServerPresentCollection(avatar.netId);
             NetworkServer.Destroy(gem.gameObject);
             reason = "collected";
             Debug.Log($"[XP] run={runId} drop={dropId} collector={avatar.netId} raw={gem.RawExperience} awarded={amount}");

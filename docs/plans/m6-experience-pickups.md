@@ -22,7 +22,7 @@
 1. `NetworkExperienceWorld` 挂在现有 `NetworkCombatWorld.prefab`。World 在 Enemy 生成前订阅 `ConfirmedKillProduced`，在后续死亡表现和销毁回调之前冻结 XP、位置与死亡身份。
 2. 客户端模拟者使用当前 epoch 的最新已接纳快照；服务器模拟者使用服务器位置；没有当前快照则使用 Agent 记录的生成位置。创建注册在 Boot.spawnPrefabs 的 `NetworkExperienceGem`，初始同步含 RunId、DropId 和基础值。
 3. `NetworkPlayer.prefab` 上的 `NetworkExperienceCollector` 仅在本地 Owner 存活、有效且未选择时搜索可拾取球。以每 0.1 秒最多一条请求提交 RunId/DropId；不提交数量、半径、目标玩家或最终位置。
-4. World 校验连接、当前角色与成员、本局、权威生命、选择锁定、服务器距离和未领取状态。先预留球，再通过 `TryGrantExperience` 入账，失败释放预留；成功后可靠通知各端表现并销毁网络球。
+4. World 校验连接、当前角色与成员、本局、权威生命、选择锁定、服务器距离和未领取状态。先预留球，再通过 `TryGrantExperience` 入账，失败释放预留；成功后通过 `ServerPresentCollection` 在 Host 本地先分离显示对象，可靠 RPC 通知远端，再立即销毁网络球。Host 本地与 RPC 共用 `presented` 去重；动画不决定入账。
 5. `NetworkModifierSelection` 按当前等级逐次扣门槛，保留余量，将所有等级加入原奖励队列；原 OnConfirmedKill 只保留自身死亡取消选择。F5 使用当前门槛，恰好升级一次，保留余量，不乘拾取倍率。
 6. 个人 XP/等级/队列/阶段仍使用原 checkpoint。未领取球及累加器只属于服务器局。断线后剩余球由 Mirror 当前生成对象基线恢复，已领取球不回放。
 7. `LocalPlayerUIBinder → CombatHUDController → PlayerExperienceHUD` 在底部中央显示本人等级、XP 余量/当前门槛和填充条，保留顶部波次与中央选择空间。HUD 和玩家任意先后创建、失权、重连均沿用现有 Owner 入口。
@@ -47,6 +47,18 @@
 画面检查修正了两个自动数值断言无法发现的问题：空 Sprite 导入表导致经验条显示白条，以及导出 XP_0 根节点旧坐标导致可见球偏离实际掉落位置。最终构建已验证贴图填充与经验数值变化，经验球出现在对应 Enemy 死亡位置。
 
 旧 Circling 碰撞夹具使用预估位置，未考虑球自身碰撞体偏移及当前缩小后的 Enemy 碰撞体。M6 和原 M3 夹具改为对齐实际 Collider.bounds；未调整正式 Enemy 尺寸、武器伤害或击退倍率。修正后 M3 同 root 五次真实命中、位置位移与 canonical HP 对齐通过（`Logs/M6/playmode-5.log`）。
+
+## Host 领取动画修复
+
+人工验收发现 Host 没有后退和飞行动画，独立客户端正常。断点是 `TryCollect → gem.RpcPresentCollection → NetworkServer.Destroy`：已安装 Mirror 的 `LocalConnectionToClient.Send` 将 Host RPC 排队，而 `NetworkServer.UnSpawnInternal` 立即移除共享对象的 `NetworkClient.spawned` 条目；随后 `NetworkClient.OnRPCMessage` 找不到 gem，静默跳过表现。远端在可靠通道中先处理 RPC，再处理销毁，因此能正常分离显示对象。
+
+修复仅在原表现入口增加 Host 本地同步执行，先分离已有 visual，再发送原 RPC 和销毁网络球；不延迟网络销毁，不改 XP 归属、倍率、领取校验、动画参数、Prefab 或场景。共享 `presented` 记录阻止本地调用与 RPC 重复创建动画，server-only 不创建表现。
+
+- 修复前新增正式 Boot 测试失败：Host 领取后期望 1 个飞行对象，实际 0 个（`Logs/M6HostFlight/before.xml`）。
+- 修复后 9/9 M6 PlayMode 测试通过（`Logs/M6HostFlight/after.xml`），包含后退/返回轨迹、网络球立即销毁后动画仍在、重复本地/RPC 表现仅一次、动画不发奖、飞行中断线清理与真实 Circling 击杀拾取。
+- 原测试只检查 0.5 秒后动画清空，并未断言它曾出现；此前通过记录不能证明 Host 播放正常。多进程夹具现增加每端实际轨迹、可见渲染、获胜者身份、单个动画和 Host 观看远端拾取的断言，并捕获后退与飞行两帧。
+- 同版本构建成功：`Logs/M6HostFlight/build.log`。正式 Boot 的 Host + Client（`Logs/M6/Host-20260910-201029-616-p7988`）与 server-only + 双 Client（`Logs/M6/Dedicated-20260910-201029-616-p7989`）在 80 ms 延迟、10% 不可靠快照丢包下通过；5 个进程退出码均为 0、玩法错误均为 0。
+- Host 与远端对同一球都记录到后退 1.000 单位，再从出生点朝领取者前进约 0.94 单位的逐帧采样（剩余帧在 0.4 秒结束时清理），接收目标身份一致。Host 自己获胜、Host 观看远端领取均覆盖；无重复动画、重复 XP 或重连/Stop 残留。已查看 Host 后退、Host 飞向获胜者及客户端飞行截图；截图名为 `host-flight-back.png`、`host-flight-to-winner.png`、`client-flight-to-winner.png`。
 
 ## 人工验收
 

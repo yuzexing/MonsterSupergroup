@@ -112,9 +112,11 @@ namespace MonsterSupergroup.Gameplay.Tests
             yield return new WaitForSecondsRealtime(.8f); Mark("race");
             yield return Wait(() => World.UnclaimedCount == 0, "first legal claim");
             Require(Players().Sum(p => p.GetComponent<NetworkModifierSelection>().Experience) == 4, "Concurrent claims must award 4 XP total.");
-            Mark("race-done");
+            Mark("race-done", Players().Single(p => p.GetComponent<NetworkModifierSelection>().Experience == 4).netId.ToString());
             yield return Wait(() => Has("race-client") && Has("race-" + Other), "duplicate claims and XP HUDs");
             Require(Players().Sum(p => p.GetComponent<NetworkModifierSelection>().Experience) == 4, "Duplicate request awarded XP.");
+            if (dedicated) Require(FindObjectsByType<ExperienceCollectionFlight>(FindObjectsSortMode.None).Length == 0,
+                "Server-only must not create client presentation.");
             Debug.Log("[M6Process] event=two-player-race-single-award");
 
             // A second confirmed-death boundary fixture makes disconnect during the flight deterministic.
@@ -186,6 +188,7 @@ namespace MonsterSupergroup.Gameplay.Tests
             if (capture) yield return Capture("before-race");
             Mark("near-" + role);
             yield return Wait(() => Has("race"), "race signal"); collecting = true;
+            yield return ObserveRaceFlight();
             yield return Wait(() => Has("race-done") && !NetworkExperienceGem.ClientGems.Any(), "claim confirmed");
             yield return new WaitForSecondsRealtime(.5f); collecting = false;
             float xp = Progression.Experience;
@@ -200,6 +203,7 @@ namespace MonsterSupergroup.Gameplay.Tests
                 yield return Wait(() => Has("flight") && NetworkExperienceGem.ClientGems.Any(), "second gem");
                 collecting = true;
                 yield return Wait(() => Progression.Experience == xp + 4, "confirmed pickup");
+                if (!dedicated) yield return Wait(() => Has("observed-remote-flight"), "Host saw remote winner's flight");
                 collecting = false; float awarded = Progression.Experience;
                 service.Stop(); yield return Wait(CanRestart, "flight cleanup"); Mark("offline-flight");
                 Require(FindObjectsByType<ExperienceCollectionFlight>(FindObjectsSortMode.None).Length == 0, "Flight survived disconnect.");
@@ -225,9 +229,56 @@ namespace MonsterSupergroup.Gameplay.Tests
                 Require(view.Select(0).Succeeded, "Restored target submission failed.");
                 yield return Wait(() => Progression.OwnerBuildRevision == 2, "restored Build"); Mark("restored-choice");
             }
+            else if (role == "host")
+            {
+                yield return Wait(() => Has("flight"), "remote-only pickup");
+                yield return Wait(() => FindFirstObjectByType<ExperienceCollectionFlight>() != null, "Host animation for remote winner");
+                var flight = FindFirstObjectByType<ExperienceCollectionFlight>();
+                Require(FlightTarget(flight).GetComponent<NetworkIdentity>().netId != Owner.netId,
+                    "Host animated the remote player's pickup toward its own player.");
+                Debug.Log("[M6Process] event=host-observed-remote-winner-flight");
+                Mark("observed-remote-flight");
+            }
             yield return Wait(() => Has("finish"), "finish");
             Mark("finished-" + role);
             if (role != "host") { service.Stop(); yield return Wait(CanRestart, "client Stop"); }
+        }
+        private static Transform FlightTarget(ExperienceCollectionFlight flight) =>
+            (Transform)typeof(ExperienceCollectionFlight).GetField("target", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(flight);
+        private IEnumerator ObserveRaceFlight()
+        {
+            yield return Wait(() => FindFirstObjectByType<ExperienceCollectionFlight>() != null, "visible collection flight");
+            var flight = FindFirstObjectByType<ExperienceCollectionFlight>();
+            var receiver = FlightTarget(flight);
+            uint receiverId = receiver.GetComponent<NetworkIdentity>().netId;
+            Vector3 origin = ReadPosition("position");
+            Vector3 away = (origin - receiver.position).normalized;
+            float maxBack = 0, minReturn = 0;
+            bool visible = false, capturedBack = false, capturedReturn = false;
+            while (flight != null)
+            {
+                Require(FindObjectsByType<ExperienceCollectionFlight>(FindObjectsSortMode.None).Length == 1,
+                    "One claim created duplicate flights.");
+                float displacement = Vector3.Dot(flight.transform.position - origin, away);
+                maxBack = Mathf.Max(maxBack, displacement); minReturn = Mathf.Min(minReturn, displacement);
+                visible |= flight.GetComponentsInChildren<SpriteRenderer>().Any(s => s.enabled) ||
+                    flight.GetComponentsInChildren<ParticleSystem>().Any(p => p.isPlaying);
+                if (capture && !capturedBack && displacement > .15f)
+                {
+                    capturedBack = true;
+                    ScreenCapture.CaptureScreenshot(Path.Combine(directory, role + "-flight-back.png"));
+                }
+                if (capture && !capturedReturn && displacement < -.1f)
+                {
+                    capturedReturn = true;
+                    ScreenCapture.CaptureScreenshot(Path.Combine(directory, role + "-flight-to-winner.png"));
+                }
+                yield return null;
+            }
+            yield return Wait(() => Has("race-done"), "winner identity");
+            Require(receiverId == uint.Parse(Read("race-done")), "Flight did not target the authoritative winner.");
+            Require(visible && maxBack > .1f && minReturn < -.3f, "Collection must visibly move back, then toward the winner.");
+            Debug.Log($"[M6Process] event=collection-flight role={role} receiver={receiverId} maxBack={maxBack:F3} minReturn={minReturn:F3} visible={visible}");
         }
         private IEnumerator ReconnectServer(string phase)
         {

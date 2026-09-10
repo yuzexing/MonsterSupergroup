@@ -117,6 +117,51 @@ namespace MonsterSupergroup.Gameplay.Tests
             Assert.That(World.UnclaimedCount, Is.Zero);
         }
         [UnityTest]
+        public IEnumerator HostPickupPreservesOneFlightAfterGemDespawn_AndMovesBackThenToWinner()
+        {
+            yield return StartHost();
+            Vector3 origin = Owner.transform.position + Vector3.right;
+            var gem = Drop(origin);
+            uint gemId = gem.netId;
+            Assert.That(Collect(gem, out string reason), Is.True, reason);
+            Assert.That(NetworkClient.spawned.ContainsKey(gemId), Is.False, "Claimed gem must despawn immediately.");
+            yield return null;
+            var flights = Object.FindObjectsByType<ExperienceCollectionFlight>(FindObjectsSortMode.None);
+            Assert.That(flights, Has.Length.EqualTo(1), "Host must retain a visible flight after its shared network gem is destroyed.");
+            var flight = flights.Single();
+            float maxX = origin.x, minReturnX = float.PositiveInfinity;
+            bool visible = false;
+            while (flight != null)
+            {
+                Assert.That(Object.FindObjectsByType<ExperienceCollectionFlight>(FindObjectsSortMode.None), Has.Length.EqualTo(1),
+                    "Host's local and RPC paths must not create two flights.");
+                maxX = Mathf.Max(maxX, flight.transform.position.x);
+                if (maxX > origin.x + .1f) minReturnX = Mathf.Min(minReturnX, flight.transform.position.x);
+                visible |= flight.GetComponentsInChildren<SpriteRenderer>().Any(s => s.enabled) ||
+                    flight.GetComponentsInChildren<ParticleSystem>().Any(p => p.isPlaying);
+                yield return null;
+            }
+            Assert.That(visible, Is.True, "A transform without visible renderers is not an animation.");
+            Assert.That(maxX, Is.GreaterThan(origin.x + .1f), "Back away from the winner first.");
+            Assert.That(minReturnX, Is.LessThan(origin.x - .3f), "Then fly toward the winner.");
+            Assert.That(Progression.Experience, Is.EqualTo(4), "Presentation must not grant a second award.");
+        }
+        [UnityTest]
+        public IEnumerator HostPresentationDeduplicatesLocalAndQueuedRpc_AndDisconnectCleansFlight()
+        {
+            yield return StartHost();
+            var gem = Drop(Owner.transform.position + Vector3.right);
+            // Keep the identity alive so the queued Host RPCs also reach the presentation consumer.
+            gem.ServerPresentCollection(Owner.netId);
+            gem.ServerPresentCollection(Owner.netId);
+            yield return null;
+            Assert.That(Object.FindObjectsByType<ExperienceCollectionFlight>(FindObjectsSortMode.None), Has.Length.EqualTo(1));
+            Assert.That(Progression.Experience, Is.Zero, "Playing or replaying a visual cannot award XP.");
+            manager.StopHost();
+            yield return WaitFor(() => !manager.IsGameplayLoaded && !manager.IsGameplayTransitioning, "disconnect during flight");
+            Assert.That(Object.FindObjectsByType<ExperienceCollectionFlight>(FindObjectsSortMode.None), Is.Empty);
+        }
+        [UnityTest]
         public IEnumerator InvalidClaimsKeepTheGem_SelectionAndDeathBlockPickup()
         {
             yield return StartHost();

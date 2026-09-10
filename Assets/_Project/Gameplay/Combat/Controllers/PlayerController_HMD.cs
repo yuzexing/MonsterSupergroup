@@ -210,7 +210,7 @@ namespace AstralShift.HellMaiden.Controllers
 
 		public override void RightTrigger(InputActionEventData data)
 		{
-			if (!InBusyState && data.GetButton())
+			if (Application.isFocused && !InBusyState && data.GetButton())
 			{
 				BoundPlayer?.Dash();
 			}
@@ -242,7 +242,7 @@ namespace AstralShift.HellMaiden.Controllers
 
 		public override void Button2(InputActionEventData data)
 		{
-			if (!InBusyState && !InHubState && data.eventType == InputActionEventType.ButtonJustPressed)
+			if (Application.isFocused && !InBusyState && !InHubState && data.eventType == InputActionEventType.ButtonJustPressed)
 			{
 				BoundPlayer?.UltimateAction();
 			}
@@ -336,6 +336,8 @@ namespace AstralShift.HellMaiden.Controllers
 
 		public override void DebugAction2Pressed(InputActionEventData data)
 		{
+			if (Application.isFocused && !InBusyState && !InHubState && data.eventType == InputActionEventType.ButtonJustPressed)
+				BoundPlayer?.RequestDebugUltimateCharge();
 		}
 
 		public override void DebugAction3Pressed(InputActionEventData data)

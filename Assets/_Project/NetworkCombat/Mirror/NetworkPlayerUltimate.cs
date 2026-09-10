@@ -83,7 +83,7 @@ namespace MonsterSupergroup.NetworkCombat
             ownerServerExecutionSuspended = !serverExecutionEnabled;
             ApplyOwnerState(state);
             DisposeRemote();
-            player.BindUltimateInput(RequestUse, () => HasCharge);
+            player.BindUltimateInput(RequestUse, () => HasCharge, RequestDebugUltimateCharge);
         }
 
         private void OnEnable()
@@ -96,7 +96,7 @@ namespace MonsterSupergroup.NetworkCombat
                     TargetServerExecutionState(connectionToClient, true, state);
             }
             if (!NetworkClient.active || netId == 0 || !isClient) return;
-            if (isOwned) player.BindUltimateInput(RequestUse, () => HasCharge);
+            if (isOwned) player.BindUltimateInput(RequestUse, () => HasCharge, RequestDebugUltimateCharge);
             else CmdRequestCurrentPresentation();
         }
 
@@ -106,6 +106,44 @@ namespace MonsterSupergroup.NetworkCombat
             if (ultimateData == null || !serverRuntime.TryGrantCharge()) return false;
             PublishState();
             return true;
+        }
+
+        /// <summary>Development-only Owner intent. A true result means the request was sent, not granted.</summary>
+        public bool RequestDebugUltimateCharge()
+        {
+            if (!Application.isEditor && !Debug.isDebugBuild) return false;
+            if (!isActiveAndEnabled || !isOwned || !NetworkClient.active || NetworkClient.localPlayer != netIdentity ||
+                !hasBaseline || ownerServerExecutionSuspended || !player.isActiveAndEnabled || !player.IsRuntimeInitialized ||
+                !player.IsLocalOwnerBound || !build.IsBuildActive || !selection.HasOwnerBaseline ||
+                player.IsUpgradeSelectionLocked || !combatant.IsAlive)
+            {
+                Debug.Log($"[UltimateDebug] player={netId} result=rejected reason=owner-not-ready", this);
+                return false;
+            }
+            CmdDebugUltimateCharge();
+            return true;
+        }
+
+        [Command(channel = Channels.Reliable)]
+        private void CmdDebugUltimateCharge(NetworkConnectionToClient sender = null)
+        {
+            string reason = null;
+            var world = NetworkCombatWorld.Instance;
+            if (!Application.isEditor && !Debug.isDebugBuild) reason = "non-development-server";
+            else if (sender == null || sender != connectionToClient || sender.identity != netIdentity || !sender.isReady)
+                reason = "not-current-owner";
+            else if (!isActiveAndEnabled || !serverExecutionEnabled || !hasBaseline || !player.IsRuntimeInitialized ||
+                !build.IsBuildActive || selection.BuildRevision == 0 || world == null || ultimateData == null)
+                reason = "server-not-ready";
+            else if (!world.Gateway.Ledger.IsAlive(netId)) reason = "dead";
+            else if (world.Gateway.Ledger.IsPlayerSelectingUpgrade(netId)) reason = "selecting";
+            if (reason != null)
+            {
+                Debug.Log($"[UltimateDebug] player={netId} result=rejected reason={reason}", this);
+                return;
+            }
+            bool granted = ServerGrantCharge();
+            Debug.Log($"[UltimateDebug] player={netId} result={(granted ? "granted" : "already-charged")}", this);
         }
 
         private void OnStateChanged(NetworkUltimateState previous, NetworkUltimateState current) => ApplyOwnerState(current);

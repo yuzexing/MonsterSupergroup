@@ -174,6 +174,7 @@ namespace AstralShift.HellMaiden.Player
 		private bool _ultimateCharge;
 		private Func<bool> _tryUseNativeUltimate;
 		private Func<bool> _hasNativeUltimateCharge;
+		private Func<bool> _requestDebugUltimateCharge;
 
 		public PlayerEffectResolver EffectVisualsResolver => playerEffectResolver;
 
@@ -250,16 +251,22 @@ namespace AstralShift.HellMaiden.Player
 
 		public bool HasUltimateCharge => _hasNativeUltimateCharge?.Invoke() ?? (!UsesNetworkLifecycle && _ultimateCharge);
 
-		public void BindUltimateInput(Func<bool> tryUse, Func<bool> hasCharge)
+		public void BindUltimateInput(Func<bool> tryUse, Func<bool> hasCharge, Func<bool> requestDebugCharge = null)
 		{
 			_tryUseNativeUltimate = tryUse ?? throw new System.ArgumentNullException(nameof(tryUse));
 			_hasNativeUltimateCharge = hasCharge ?? throw new System.ArgumentNullException(nameof(hasCharge));
+			_requestDebugUltimateCharge = requestDebugCharge;
 		}
+
+		public bool RequestDebugUltimateCharge() =>
+			isActiveAndEnabled && IsRuntimeInitialized && IsLocalOwnerBound && !IsUpgradeSelectionLocked &&
+			combatantBinding.Combatant.IsAlive && (_requestDebugUltimateCharge?.Invoke() ?? false);
 
 		public void UnbindUltimateInput()
 		{
 			_tryUseNativeUltimate = null;
 			_hasNativeUltimateCharge = null;
+			_requestDebugUltimateCharge = null;
 		}
 
 		public event Action OnDashStart;

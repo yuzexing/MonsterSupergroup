@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using AstralShift.HellMaiden.Player;
 using AstralShift.HellMaiden.Player.Attacks;
@@ -16,6 +17,10 @@ using UnityEngine.TestTools;
 using UnityEditor.SceneManagement;
 #endif
 using Object = UnityEngine.Object;
+using ReInput = global::Rewired.ReInput;
+using KeyboardMap = global::Rewired.KeyboardMap;
+using ActionElementMap = global::Rewired.ActionElementMap;
+using InputActionType = global::Rewired.InputActionType;
 
 namespace MonsterSupergroup.Gameplay.Tests
 {
@@ -34,6 +39,138 @@ namespace MonsterSupergroup.Gameplay.Tests
         private NetworkModifierSelection Selection => Player.GetComponent<NetworkModifierSelection>();
         private uint AbilityId => UltimateNativeDefinitionAdapter.EncodeAbilityId(Ultimate.Definition.Id);
         private bool RootExists(ulong root) => NetworkCombatWorld.Instance.Gateway.Attacks.Contains(Player.netId, root, AbilityId);
+
+        [UnityTest]
+        public IEnumerator Boot_RewiredNormalMapIncludesAbilitiesAndPreservesMovementAndInteract()
+        {
+            yield return StartHostFixture();
+            Assert.That(ReInput.isReady, Is.True);
+            var map = ReInput.players.GetPlayer(0).controllers.maps.GetMap<KeyboardMap>(0, 1, 0);
+            Assert.That(map, Is.Not.Null);
+            Assert.That(map.enabled, Is.True);
+            AssertAction(14, "R_Trigger", KeyCode.LeftShift, KeyCode.RightShift);
+            AssertAction(4, "Button2", KeyCode.Q);
+            AssertAction(51, "DebugAction_2", KeyCode.F6);
+            AssertKeys(1, KeyCode.A, KeyCode.D);
+            AssertKeys(3, KeyCode.W, KeyCode.S);
+            AssertAction(0, "Button1", KeyCode.E);
+
+            void AssertAction(int id, string name, params KeyCode[] keys)
+            {
+                var action = ReInput.mapping.GetAction(id);
+                Assert.That(action.name, Is.EqualTo(name));
+                Assert.That(action.type, Is.EqualTo(InputActionType.Button));
+                Assert.That(action.categoryId, Is.EqualTo(1));
+                AssertKeys(id, keys);
+            }
+            void AssertKeys(int id, params KeyCode[] keys)
+            {
+                var maps = new List<ActionElementMap>();
+                map.GetElementMapsWithAction(id, maps);
+                Assert.That(maps.Select(m => (int)m.keyboardKeyCode), Is.EquivalentTo(keys.Select(k => (int)k)));
+            }
+        }
+
+        [UnityTest]
+        public IEnumerator DebugCharge_HostRequestsUseRealCommandGrantOnceAndKeepActiveDeadline()
+        {
+            yield return StartHostFixture();
+            uint initial = Field<NetworkUltimateState>(Ultimate, "state").Revision;
+            Assert.That(Movement.RequestDebugUltimateCharge(), Is.True);
+            Assert.That(Ultimate.CaptureServerState().HasCharge, Is.False, "No speculative Host grant before the Command is processed.");
+            Assert.That(Movement.RequestDebugUltimateCharge(), Is.True);
+            PumpServerMessages();
+            Assert.That(Ultimate.HasCharge, Is.True);
+            Assert.That(Field<NetworkUltimateState>(Ultimate, "state").Revision, Is.EqualTo(initial + 1));
+            Assert.That(Ultimate.RequestUse(), Is.True);
+            yield return WaitFor(() => Ultimate.OwnerAttack.IsNativeActive, "The real Ultimate must consume the debug-granted resource.");
+            var spent = Ultimate.CaptureServerState();
+            Assert.That(Movement.RequestDebugUltimateCharge(), Is.True);
+            PumpServerMessages();
+            var refilled = Ultimate.CaptureServerState();
+            Assert.That(refilled.HasCharge, Is.True);
+            Assert.That(refilled.ActiveUntil, Is.EqualTo(spent.ActiveUntil));
+            Assert.That(refilled.InvulnerableUntil, Is.EqualTo(spent.InvulnerableUntil));
+            Assert.That(Ultimate.RequestUse(), Is.False);
+            Assert.That(Ultimate.AcceptedUseCount, Is.EqualTo(1));
+        }
+
+        [UnityTest]
+        public IEnumerator DebugCharge_ServerRejectsSelectingDeadDisabledAndNonCurrentAvatarEvenIfClientSends()
+        {
+            yield return StartHostFixture();
+            var world = NetworkCombatWorld.Instance;
+            world.SetPlayerUpgradeSelectionState(Player.netId, true);
+            AssertRejected("selecting");
+            world.SetPlayerUpgradeSelectionState(Player.netId, false);
+            var alive = world.Gateway.Ledger.CaptureEntityState(Player.netId);
+            var dead = alive.State;
+            dead.Health = 0; dead.Alive = false;
+            world.Gateway.Ledger.RestoreEntityState(Player.netId, new ServerEntityCheckpoint(dead, false));
+            AssertRejected("dead");
+            world.Gateway.Ledger.RestoreEntityState(Player.netId, alive);
+            Ultimate.enabled = false;
+            AssertRejected("server-not-ready");
+            Ultimate.enabled = true;
+            var connection = Player.connectionToClient;
+            var avatar = connection.identity;
+            try
+            {
+                typeof(NetworkConnection).GetProperty("identity").SetValue(connection, null);
+                AssertRejected("not-current-owner");
+            }
+            finally { typeof(NetworkConnection).GetProperty("identity").SetValue(connection, avatar); }
+            LogAssert.Expect(LogType.Log, $"[UltimateDebug] player={Player.netId} result=rejected reason=not-current-owner");
+            // Mirror normally rejects this before dispatch; also exercise the receiver's explicit sender check.
+            typeof(NetworkPlayerUltimate).GetMethods(Private).Single(m => m.Name.StartsWith("UserCode_CmdDebugUltimateCharge"))
+                .Invoke(Ultimate, new object[] { new NetworkConnectionToClient(99) { isReady = true } });
+            Assert.That(Ultimate.CaptureServerState().HasCharge, Is.False);
+            Assert.That(Movement.RequestDebugUltimateCharge(), Is.True);
+            PumpServerMessages();
+            Assert.That(Ultimate.HasCharge, Is.True, "Rejected intents must not poison later valid requests.");
+
+            void AssertRejected(string reason)
+            {
+                uint revision = Field<NetworkUltimateState>(Ultimate, "state").Revision;
+                LogAssert.Expect(LogType.Log, $"[UltimateDebug] player={Player.netId} result=rejected reason={reason}");
+                SendDebugCharge();
+                PumpServerMessages();
+                Assert.That(Ultimate.CaptureServerState().HasCharge, Is.False);
+                Assert.That(Field<NetworkUltimateState>(Ultimate, "state").Revision, Is.EqualTo(revision));
+            }
+        }
+
+        [UnityTest]
+        public IEnumerator DebugCharge_OwnerGatesAndBindingReleaseDoNotLeaveAnOldRequestDelegate()
+        {
+            yield return StartHostFixture();
+            Movement.enabled = false;
+            Assert.That(Movement.RequestDebugUltimateCharge(), Is.False);
+            Assert.That(Ultimate.RequestDebugUltimateCharge(), Is.False);
+            Movement.enabled = true;
+            typeof(NetworkPlayerUltimate).GetField("hasBaseline", Private).SetValue(Ultimate, false);
+            Assert.That(Ultimate.RequestDebugUltimateCharge(), Is.False);
+            typeof(NetworkPlayerUltimate).GetField("hasBaseline", Private).SetValue(Ultimate, true);
+            Selection.ServerQueueUpgrades(1);
+            yield return WaitFor(() => Movement.IsUpgradeSelectionLocked, "The actual selection lock must reach the Owner.");
+            Assert.That(Movement.RequestDebugUltimateCharge(), Is.False);
+            Assert.That(Ultimate.RequestDebugUltimateCharge(), Is.False);
+            Assert.That(Ultimate.CaptureServerState().HasCharge, Is.False);
+            Ultimate.enabled = false;
+            Assert.That(Field<Func<bool>>(Movement, "_requestDebugUltimateCharge"), Is.Null);
+            Ultimate.enabled = true;
+            Assert.That(Field<Func<bool>>(Movement, "_requestDebugUltimateCharge"), Is.Not.Null);
+            Ultimate.OnStopAuthority();
+            Assert.That(Field<Func<bool>>(Movement, "_requestDebugUltimateCharge"), Is.Null);
+            Ultimate.OnStartAuthority();
+            Assert.That(Field<Func<bool>>(Movement, "_requestDebugUltimateCharge"), Is.Not.Null);
+            manager.StopHost();
+            yield return WaitFor(() => !manager.IsGameplayLoaded && !manager.IsGameplayTransitioning, "Stop must release the old avatar.");
+            Assert.That(NetworkClient.localPlayer, Is.Null);
+        }
+
+        private void SendDebugCharge() => typeof(NetworkPlayerUltimate).GetMethod("CmdDebugUltimateCharge", Private)
+            .Invoke(Ultimate, new object[] { null });
 
         [UnityTest]
         public IEnumerator Host_OneServerChargeUsesTheAdmittedIdentityAndExistingGasUntilBothWavesComplete()

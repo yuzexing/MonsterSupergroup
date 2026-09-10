@@ -187,13 +187,53 @@ namespace MonsterSupergroup.Gameplay.Tests
             manager.BeginRun();
             while (!Has("owner-ready-client") || !Has(role == "host" ? "owner-ready-host" : "owner-ready-client2")) yield return null;
             NetworkIdentity[] players = ServerPlayers();
-            foreach (NetworkIdentity player in players)
+            if (!Debug.isDebugBuild)
             {
-                var ultimate = player.GetComponent<NetworkPlayerUltimate>();
-                Require(!ultimate.CaptureServerState().HasCharge && ultimate.ServerGrantCharge() && !ultimate.ServerGrantCharge(),
-                    "Grant must create exactly one held charge.");
-                RegisterTarget(player.netId);
+                var rejected = new HashSet<uint>();
+                void OnLog(string message, string stack, LogType type)
+                {
+                    foreach (var player in players)
+                        if (message == $"[UltimateDebug] player={player.netId} result=rejected reason=non-development-server")
+                            rejected.Add(player.netId);
+                }
+                Application.logMessageReceived += OnLog;
+                try
+                {
+                    Mark("release-request");
+                    while (rejected.Count != 2) yield return null;
+                    Require(players.All(p => !p.GetComponent<NetworkPlayerUltimate>().CaptureServerState().HasCharge),
+                        "A non-development server granted debug charge.");
+                    Debug.Log("[UltimateProcess] release-server rejected=2 held=0 actualCommands=true");
+                }
+                finally { Application.logMessageReceived -= OnLog; }
+                Mark("stop");
+                while (!Has("stopped-client") || (role == "server" && !Has("stopped-client2"))) yield return null;
+                yield break;
             }
+
+            Require(players.All(p => !p.GetComponent<NetworkPlayerUltimate>().CaptureServerState().HasCharge), "New avatars have free charge.");
+            Mark("debug-request-client");
+            while (!Has("debug-granted-client")) yield return null;
+            uint requestingId = uint.Parse(Read("debug-granted-client"));
+            Require(players.Single(p => p.netId == requestingId).GetComponent<NetworkPlayerUltimate>().CaptureServerState().HasCharge &&
+                players.Single(p => p.netId != requestingId).GetComponent<NetworkPlayerUltimate>().CaptureServerState().HasCharge == false,
+                "One Owner's debug request charged a different player.");
+            Mark("debug-request-other");
+            while (!Has("debug-granted-" + (role == "host" ? "host" : "client2"))) yield return null;
+            foreach (var player in players)
+                Require(Field<NetworkUltimateState>(player.GetComponent<NetworkPlayerUltimate>(), "state").Revision == 2,
+                    "Duplicate debug requests published more than one grant.");
+            Mark("held-disconnect");
+            while (!Has("held-disconnected") || NetworkServer.spawned.ContainsKey(requestingId)) yield return null;
+            var heldParticipant = manager.Session.Participants.Single(p => p.Checkpoint?.Ultimate?.HasCharge == true && p.AvatarId == 0);
+            Mark("held-reconnect");
+            while (!Has("held-resumed")) yield return null;
+            Require(heldParticipant.AvatarId != requestingId && heldParticipant.AvatarId != 0 &&
+                NetworkServer.spawned[heldParticipant.AvatarId].GetComponent<NetworkPlayerUltimate>().CaptureServerState().HasCharge,
+                "Unspent charge was lost on reconnect.");
+            players = ServerPlayers();
+            foreach (var player in players) RegisterTarget(player.netId);
+            Debug.Log("[UltimateProcess] debug-grant ownerOnly=true duplicateNoOp=true heldReconnect=true");
             VerifyServerHasNoVisuals();
             Mark("fire");
             while (!Has("verified-client") || !Has(role == "host" ? "verified-host" : "verified-client2")) yield return null;
@@ -379,6 +419,38 @@ namespace MonsterSupergroup.Gameplay.Tests
             var ultimate = NetworkClient.localPlayer.GetComponent<NetworkPlayerUltimate>();
             Require(!ultimate.HasCharge && !ultimate.RequestUse(), "An uncharged player used Ultimate.");
             Mark("owner-ready-" + role);
+            if (!Debug.isDebugBuild)
+            {
+                while (!Has("release-request")) yield return null;
+                Require(!ultimate.RequestDebugUltimateCharge(), "Release Owner sent a debug request through its public API.");
+                // Exercise the server guard even when a modified client bypasses the local gate.
+                typeof(NetworkPlayerUltimate).GetMethod("CmdDebugUltimateCharge", BindingFlags.Instance | BindingFlags.NonPublic)
+                    .Invoke(ultimate, new object[] { null });
+                while (!Has("stop")) yield return null;
+                Require(!ultimate.HasCharge, "Release player received debug charge.");
+                yield break;
+            }
+            while (!Has(role == "client" ? "debug-request-client" : "debug-request-other")) yield return null;
+            var movement = NetworkClient.localPlayer.GetComponent<PlayerMovement>();
+            Require(movement.RequestDebugUltimateCharge() && movement.RequestDebugUltimateCharge(), "Owner debug intent could not be sent.");
+            while (!ultimate.HasCharge) yield return null;
+            File.WriteAllText(Path.Combine(directory, "debug-granted-" + role), NetworkClient.localPlayer.netId.ToString());
+            if (role == "client")
+            {
+                while (!Has("held-disconnect")) yield return null;
+                uint oldId = NetworkClient.localPlayer.netId;
+                manager.StopClient();
+                while (manager.IsGameplayLoaded || manager.IsGameplayTransitioning || NetworkClient.active) yield return null;
+                Require(Field<Func<bool>>(movement, "_requestDebugUltimateCharge") == null, "Disconnected movement retained its charge delegate.");
+                Mark("held-disconnected");
+                while (!Has("held-reconnect")) yield return null;
+                manager.StartClient();
+                yield return WaitForOwner();
+                ultimate = NetworkClient.localPlayer.GetComponent<NetworkPlayerUltimate>();
+                Require(NetworkClient.localPlayer.netId != oldId && ultimate.HasCharge && !ultimate.OwnerAttack.IsNativeActive,
+                    "Held-charge reconnect lost charge or replayed an attack.");
+                Mark("held-resumed");
+            }
             while (!Has("fire") || !ultimate.HasCharge) yield return null;
             yield return VerifyCast("first");
             NetworkIdentity remote = RemotePlayer();

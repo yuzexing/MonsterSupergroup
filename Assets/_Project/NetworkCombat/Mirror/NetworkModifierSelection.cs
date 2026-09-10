@@ -5,7 +5,6 @@ using AstralShift.HellMaiden.Data.Cards;
 using AstralShift.HellMaiden.Data.Perks;
 using AstralShift.HellMaiden.Player;
 using AstralShift.HellMaiden.Player.Attacks;
-using AstralShift.HellMaiden.AI.Enemy;
 using Mirror;
 using MonsterSupergroup.GAS;
 using MonsterSupergroup.Gameplay.Combat;
@@ -58,13 +57,14 @@ namespace MonsterSupergroup.NetworkCombat
         [SyncVar(hook = nameof(OnSelectingChanged))] private bool selecting;
         [SyncVar] private int level = 1;
         [SyncVar] private float experience;
-        [SerializeField, Min(1)] private int experiencePerLevel = 2;
+        [SyncVar] private int experiencePerLevel;
         [SerializeField] private UpgradeSelectionRules selectionRules;
 
         public bool IsSelecting => selecting;
         public int Level => level;
         public float Experience => experience;
-        public int ExperiencePerLevel => Mathf.Max(1, experiencePerLevel);
+        public int ExperiencePerLevel => experiencePerLevel;
+        public int ExperienceRequiredAtLevel(int atLevel) => NetworkExperienceWorld.Current?.Parameters?.Threshold(atLevel) ?? 0;
         public int PendingUpgradeCount => rewards.Count;
         public UpgradeSelectionStage Stage => stage;
         public int OfferedLevel => rewards.Count == 0 ? 0 : rewards[0].EarnedLevel;
@@ -129,6 +129,7 @@ namespace MonsterSupergroup.NetworkCombat
             ValidateProgression(state);
             level = state.Level;
             experience = state.Experience;
+            experiencePerLevel = ExperienceRequiredAtLevel(level);
             rewards.Clear();
             rewards.AddRange(state.Rewards);
             stage = state.Stage;
@@ -215,6 +216,7 @@ namespace MonsterSupergroup.NetworkCombat
             provider = new UpgradeOfferProvider(new ServerRandom());
             EnsureServerBuild();
             world = NetworkCombatWorld.Instance;
+            experiencePerLevel = ExperienceRequiredAtLevel(level);
             if (world != null) world.Gateway.ConfirmedKillProduced += OnConfirmedKill;
         }
 
@@ -299,22 +301,34 @@ namespace MonsterSupergroup.NetworkCombat
         [Server]
         public void ServerGrantExperience(float amount)
         {
+            TryGrantExperience(amount);
+        }
+
+        /// <summary>False means no XP or queue mutation; pickups may safely release their reservation.</summary>
+        [Server]
+        public bool TryGrantExperience(float amount)
+        {
             if (float.IsNaN(amount) || float.IsInfinity(amount) || amount <= 0 ||
-                !build.IsBuildActive) return;
-            if (world != null && !world.Gateway.Ledger.IsAlive(netId)) return;
-            if (selectionRules == null) throw new InvalidOperationException("Upgrade selection rules are missing.");
-            selectionRules.Validate();
-            experience += amount;
-            int threshold = ExperiencePerLevel;
-            int gained = Mathf.FloorToInt(experience / threshold);
-            if (gained <= 0) return;
-            experience -= gained * threshold;
-            for (int i = 0; i < gained; i++)
+                !build.IsBuildActive || world == null || !world.Gateway.Ledger.IsAlive(netId)) return false;
+            var xpWorld = NetworkExperienceWorld.Current;
+            if (xpWorld == null || !xpWorld.CanGrant(out _) || selectionRules == null ||
+                !xpWorld.Parameters.TryAdvance(level, experience, amount, out int nextLevel, out float remainder)) return false;
+            try { selectionRules.Validate(); }
+            catch (InvalidOperationException) { return false; }
+            // Stage all rewards before changing authority state; never truncate consecutive level-ups.
+            var added = new List<PendingUpgradeReward>();
+            for (int earned = level + 1; earned <= nextLevel && earned > 0; earned++)
             {
-                level++;
-                rewards.Add(new PendingUpgradeReward { EarnedLevel = level, Kind = selectionRules.RewardAtLevel(level) });
+                added.Add(new PendingUpgradeReward { EarnedLevel = earned, Kind = selectionRules.RewardAtLevel(earned) });
             }
-            TryOpenNextOffer();
+            rewards.AddRange(added);
+            level = nextLevel;
+            experience = remainder;
+            experiencePerLevel = xpWorld.Parameters.Threshold(level);
+            // XP is committed even if a presentation transport callback fails. The retained queue can recover.
+            try { TryOpenNextOffer(); }
+            catch (Exception exception) { Debug.LogException(exception, this); }
+            return true;
         }
 
         [Server]
@@ -718,12 +732,6 @@ namespace MonsterSupergroup.NetworkCombat
             {
                 ServerCancelPending();
                 return;
-            }
-            if (kill.KillerPlayerId == netId &&
-                NetworkServer.spawned.TryGetValue(kill.TargetEntityId, out NetworkIdentity target))
-            {
-                EnemyController enemy = target.GetComponent<EnemyController>();
-                if (enemy != null) ServerGrantExperience(enemy.stats.XP);
             }
         }
 

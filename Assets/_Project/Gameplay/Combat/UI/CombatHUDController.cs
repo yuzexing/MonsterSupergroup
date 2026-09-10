@@ -8,6 +8,12 @@ namespace MonsterSupergroup.Gameplay.UI
     {
         [SerializeField] private CanvasGroup hudGroup;
         [SerializeField] private PlayerHealthHUD healthHUD;
+        [SerializeField] private PlayerExperienceHUD experienceHUD;
+
+        public void PresentExperience(int level, float experience, int threshold)
+        {
+            if (experienceHUD != null) experienceHUD.Present(level, experience, threshold);
+        }
 
         public CombatantBehaviour BoundCombatant => healthHUD != null
             ? healthHUD.BoundCombatant
@@ -27,6 +33,7 @@ namespace MonsterSupergroup.Gameplay.UI
 
         public void Unbind()
         {
+            if (experienceHUD != null) experienceHUD.Clear();
             if (healthHUD != null)
             {
                 healthHUD.Unbind();

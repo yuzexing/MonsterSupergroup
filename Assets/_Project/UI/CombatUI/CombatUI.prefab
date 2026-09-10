@@ -980,6 +980,7 @@ GameObject:
   - component: {fileID: 2149846828525672997}
   - component: {fileID: 912340000000000002}
   - component: {fileID: 912340000000000003}
+  - component: {fileID: 3744770239686118646}
   m_Layer: 5
   m_Name: CombatHUD
   m_TagString: Untagged
@@ -1071,10 +1072,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c312cd6a2b3c407c9b121283e6f30bb2, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: MonsterSupergroup.Gameplay.Combat::MonsterSupergroup.Gameplay.UI.CombatHUDController
   hudGroup: {fileID: 912340000000000003}
   healthHUD: {fileID: 7869970719629628022}
+  experienceHUD: {fileID: 3744770239686118646}
 --- !u!225 &912340000000000003
 CanvasGroup:
   m_ObjectHideFlags: 0
@@ -3252,3 +3254,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 02906e5144b14e53b7dcc1d16a5322f6, type: 3}
   m_Name:
   m_EditorClassIdentifier: MonsterSupergroup.NetworkCombat::MonsterSupergroup.NetworkCombat.NetworkWaveHUD
+--- !u!114 &3744770239686118646
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 867952697190894565}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d9373e67abb6b3e4187b25ffbd718ed2, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: MonsterSupergroup.Gameplay.Combat::MonsterSupergroup.Gameplay.UI.PlayerExperienceHUD
+  fillTexture: {fileID: 2800000, guid: 246ed0cb0610c284a913148f74ceac89, type: 3}
+  backgroundTexture: {fileID: 2800000, guid: 6c0b28683c49a09439c3c1b8020bd306, type: 3}

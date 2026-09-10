@@ -122,7 +122,7 @@ namespace MonsterSupergroup.Gameplay.Tests
                     rulesField.SetValue(authority, rules);
                     NetworkCombatWorld.Instance.Gateway.Ledger.SetAbsoluteInvulnerable(identity.netId, false);
                     identity.GetComponent<CombatantBehaviour>().SetCanonicalInvulnerable(false);
-                    authority.ServerGrantExperience(authority.ExperiencePerLevel * (simultaneous ? 2 : 1));
+                    authority.ServerGrantExperience(Enumerable.Range(authority.Level, simultaneous ? 2 : 1).Sum(authority.ExperienceRequiredAtLevel));
                     Require(authority.PendingUpgradeCount == (simultaneous ? 2 : 1), "Consecutive XP levels were lost.");
                 }
                 // Owner readiness arrives over the actual connection, after server XP may already be queued.
@@ -403,6 +403,7 @@ namespace MonsterSupergroup.Gameplay.Tests
                 yield return null;
                 var authority = NetworkClient.localPlayer.GetComponent<NetworkModifierSelection>();
                 int before = authority.Level;
+                float previousXp = authority.Experience;
                 var combatant = enemy.GetComponent<CombatantBehaviour>();
                 uint targetId = enemy.GetComponent<NetworkIdentity>().netId;
                 int hits = 0;
@@ -420,13 +421,23 @@ namespace MonsterSupergroup.Gameplay.Tests
                     Debug.Log($"{Prefix} event=controlled-hit count={hits} admitted={admission.AcceptedCooldownReportCount} rejected={admission.RejectedAttackCount} lastRejection={admission.LastAttackRejection} canonicalHP={(hasCanonical ? targetState.Health : -1)} predictedHP={(combatant != null ? combatant.CurrentHealth : -1)} invalidRoots={NetworkCombatWorld.Instance.Gateway.Metrics.GetRejected(CombatRejectionReason.InvalidAttackRoot)} level={authority.Level}");
                 }
                 Require(combatant == null || !combatant.IsAlive, "Native attacks did not defeat the production enemy.");
+                Require(authority.Level == before && authority.Experience == previousXp, "Kill must not grant XP directly.");
+                var xpWorld = NetworkExperienceWorld.Current;
+                while (xpWorld.UnclaimedCount == 0) yield return null;
+                var gem = xpWorld.Unclaimed.First();
+                localPlayer.transform.position = gem.transform.position;
+                localPlayer.GetComponent<PlayerMovement>().body.position = gem.transform.position;
+                float award = gem.RawExperience * localPlayer.GetComponent<PlayerMovement>().PlayerStats.currentStats.xpModifier;
+                Require(xpWorld.TryCollect(localPlayer.connectionToClient, localPlayer, xpWorld.RunId, gem.DropId, out string reason), reason);
+                Require(authority.Experience == previousXp + award && authority.Level == before, "Pickup must grant XP exactly once.");
+                // Preserve this fixture's subsequent menu assertions through the authorized debug/XP entry.
+                authority.ServerGrantExperience(authority.ExperiencePerLevel);
                 while (authority.Level == before) yield return null;
-                Require(authority.Level == before + 1, "Confirmed kill XP must advance exactly one configured level.");
                 var debugPanel = FindFirstObjectByType<NetworkEnemyDebugPanel>();
                 while (!debugPanel.Rows.Any(row => row.EntityId == targetId && row.Canonical.HasValue && !row.Canonical.Value.Alive))
                     yield return null;
                 Debug.Log($"{Prefix} event=enemy-debug-canonical-death enemy={targetId}");
-                Require(authority.PendingUpgradeCount == 1, "Confirmed kill failed to queue its upgrade.");
+                Require(authority.PendingUpgradeCount == 1, "Debug XP failed to queue its upgrade after pickup.");
                 Debug.Log($"{Prefix} event=production-enemy-kill-xp-verified hits={hits}");
             }
             finally

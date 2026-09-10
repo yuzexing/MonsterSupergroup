@@ -130,7 +130,10 @@ namespace MonsterSupergroup.Gameplay.Tests
             void KeepOrbInContact()
             {
                 // Follow the displacement so overtime hits genuinely keep touching the same enemy.
-                Vector2 position = enemy.hurtBox.GetPosition() - Vector2.right * (circling.baseRadius * circling.SizeValue + .15f);
+                Vector2 offset = circling.transform.TransformPoint(Vector3.right * (circling.baseRadius * circling.SizeValue)) - player.transform.position;
+                var orb = circling.GetComponentsInChildren<AnimatedAttack>().FirstOrDefault(a => a.hitbox != null && a.hitbox.collider.enabled);
+                if (orb != null) offset = orb.hitbox.collider.bounds.center - player.transform.position;
+                Vector2 position = (Vector2)enemy.hurtBox.GetBounds().center - offset;
                 player.SetDirection(Vector2.zero);
                 player.body.position = position;
                 player.transform.position = position;

@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 6267950001883975477}
   - component: {fileID: 2096257799515299953}
   - component: {fileID: 942500000000000001}
+  - component: {fileID: 7441154071849258081}
   m_Layer: 0
   m_Name: NetworkCombatWorld
   m_TagString: Untagged
@@ -101,3 +102,20 @@ MonoBehaviour:
   syncDirection: 0
   syncMode: 0
   syncInterval: 0
+--- !u!114 &7441154071849258081
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1719529174468981120}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2f9ffe8fb16cd2a44a019b480147036f, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: MonsterSupergroup.NetworkCombat::MonsterSupergroup.NetworkCombat.NetworkExperienceWorld
+  syncDirection: 0
+  syncMode: 0
+  syncInterval: 0
+  rules: {fileID: 11400000, guid: e735d34f6c31e8f4e8293c7301089899, type: 2}
+  gemPrefab: {fileID: 414360905370282006, guid: 524e6d24c51203a49b4866144f17e64e, type: 3}

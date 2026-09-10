@@ -63,6 +63,9 @@ namespace MonsterSupergroup.NetworkCombat
             var world = NetworkCombatWorld.Instance;
             if (world == null || !world.isServer || NetworkEnemySimulationWorld.Instance == null)
             { error = "Waiting for the combat World."; return false; }
+            var experienceWorld = world.GetComponent<NetworkExperienceWorld>();
+            if (experienceWorld == null) { error = "Gameplay XP World is missing."; return false; }
+            if (!experienceWorld.CanGrant(out error)) return false;
             bool alive = false;
             foreach (var connection in NetworkServer.connections.Values)
             {

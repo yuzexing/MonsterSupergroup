@@ -51,6 +51,7 @@ namespace MonsterSupergroup.NetworkCombat
         private uint initialServerTargetPlayerId;
 
         public EnemySimulationAssignment Assignment => assignment;
+        public Vector2 ServerSpawnPosition { get; private set; }
 
         public EnemySimulationAuthority Authority => authority;
 
@@ -125,6 +126,7 @@ namespace MonsterSupergroup.NetworkCombat
         public override void OnStartServer()
         {
             base.OnStartServer();
+            ServerSpawnPosition = transform.position;
             NetworkEnemySimulationWorld world = NetworkEnemySimulationWorld.Instance;
             if (world == null)
             {

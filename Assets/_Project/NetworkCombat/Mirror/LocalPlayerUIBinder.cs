@@ -58,10 +58,20 @@ namespace MonsterSupergroup.NetworkCombat
 
             if (ReferenceEquals(combatant, combatHUD.BoundCombatant))
             {
+                PresentExperience(player);
                 return;
             }
 
             combatHUD.Bind(combatant);
+            PresentExperience(player);
+        }
+
+        private void PresentExperience(NetworkIdentity owner)
+        {
+            var progression = owner != null ? owner.GetComponent<NetworkModifierSelection>() : null;
+            if (progression != null && progression.HasOwnerBaseline && progression.isActiveAndEnabled)
+                combatHUD.PresentExperience(progression.Level, progression.Experience, progression.ExperiencePerLevel);
+            else combatHUD.PresentExperience(0, 0, 0);
         }
 
         private void OnDisable()

@@ -83,7 +83,7 @@ namespace MonsterSupergroup.Gameplay.Tests
         {
             yield return StartHost();
             uint baseline = Authority.BuildRevision;
-            Authority.ServerGrantExperience(Authority.ExperiencePerLevel * 6);
+            Authority.ServerGrantExperience(Enumerable.Range(Authority.Level, 6).Sum(Authority.ExperienceRequiredAtLevel));
             yield return WaitFor(() => View.Offers.Count > 0);
             var state = Authority.CaptureProgression();
             Assert.That(state.Rewards.Select(r => r.EarnedLevel), Is.EqualTo(new[] { 2, 3, 4, 5, 6, 7 }));

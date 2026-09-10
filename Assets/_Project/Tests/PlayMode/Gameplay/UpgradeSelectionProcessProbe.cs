@@ -148,7 +148,7 @@ namespace MonsterSupergroup.Gameplay.Tests
                 var selection = player.GetComponent<NetworkModifierSelection>();
                 Require(selection.Level == 2 && selection.PendingUpgradeCount == 1 && selection.BuildRevision == 1,
                     "The F5 owner request must queue exactly one level without applying a reward.");
-                selection.ServerGrantExperience(selection.ExperiencePerLevel * 16);
+                selection.ServerGrantExperience(Enumerable.Range(selection.Level, 16).Sum(selection.ExperienceRequiredAtLevel));
                 var progress = selection.CaptureProgression();
                 Require(progress.Rewards.Select(r => r.EarnedLevel).SequenceEqual(Enumerable.Range(2, 17)), "Bulk XP lost individual earned levels.");
                 Require(progress.Rewards.Where(r => r.Kind == UpgradeRewardKind.Weapon).Select(r => r.EarnedLevel).SequenceEqual(new[] { 4, 12, 18 }), "Wrong weapon schedule.");

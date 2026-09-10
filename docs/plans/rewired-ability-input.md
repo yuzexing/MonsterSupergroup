@@ -12,7 +12,15 @@
 | Ultimate | `Button2` 4 / Normal | Q | Q，仅按下瞬间 |
 | 调试 | `DebugAction_2` 51 / Normal | 数字 2，回调为空 | F6，仅按下瞬间 |
 
-Boot 只增加这三个 Button Action 与键盘映射、分类 ID 列表和计数。保留 WASD/E，不导入旧输入管理器或手柄映射。原 Rewired `ignoreInputWhenAppNotInFocus` 保持启用，三个回调也检查 `Application.isFocused`。
+2026-09-10 的首轮改动只增加这三个 Button Action 与键盘映射、分类 ID 列表和计数。保留 WASD/E，不导入旧输入管理器。原 Rewired `ignoreInputWhenAppNotInFocus` 保持启用，三个回调也检查 `Application.isFocused`。
+
+## 手柄补齐（2026-09-11）
+
+按用户后续要求，正式 Boot 的 Normal 通用手柄模板增加 **RT：Dash，Y：Ultimate**。参考 HellMaiden Systems 场景的 Xbox One 专用映射（map 20，category 1，hardware GUID `19002688-7406-4f4a-8340-8d25335406c8`）：Action 14 使用 Right Trigger 的正半轴，Action 4 使用 Y。
+
+当前插件的通用模板中，RT 对应元素 13、Y 对应元素 8；将这两个原未分配的项绑定到 Action 14/4，并将 RT 范围设为 Positive。通过原 `InputHandler → PlayerController_HMD → BoundPlayer` 执行，与键盘复用同一 Owner/充能/选择限制。按住 RT 持续尝试 Dash，Y 仅按下瞬间触发 Ultimate。F6 仍是键盘开发充能入口。
+
+验证：已核对参考配置与正式 Boot 的三行变更；复用现有 Dash、Ultimate、键盘映射和交互回归，**14/14 PASS**，Unity 退出码 0，结果见 `Logs/GamepadAbilities/results.xml`、`tests.log`。本轮没有新的实体手柄按压记录，不把技能 API 回归当作物理输入验收。重新从 Boot 启动后用 RT/Y 人工确认；旧独立构建需重新打包才能包含新的 Scene 配置。手柄映射可独立恢复为原未分配状态，键盘入口保留。
 
 ## 接线与权限
 
@@ -46,8 +54,8 @@ F6 只传意图。两端均检查 Editor/Development；服务器额外校验发�
 
 使用同一版本开发构建（或 Editor），从 Boot 启动 Host＋Client；另验 server-only＋两个 Client。完成选卡后手动开始本局。
 
-1. 两端分别按左右 Shift，只控制本人；按住时充能允许便再次冲刺，耗尽后等待恢复。另装备 Dash 武器，观察火径及伤害。
-2. 初始 Q 无释放；F6 后 Q 释放两波、起手击退和本人震屏。Q/F6 按住不重复触发；充满时再次 F6 日志为 already-charged。
+1. 两端分别按左右 Shift 或手柄 RT，只控制本人；按住时充能允许便再次冲刺，耗尽后等待恢复。另装备 Dash 武器，观察火径及伤害。
+2. 初始 Q/Y 无释放；F6 后 Q/Y 释放两波、起手击退和本人震屏。Q/Y/F6 按住不重复触发；充满时再次 F6 日志为 already-charged。
 3. B 充能不改变 A。选卡、死亡、组件禁用及失焦时检查输入限制。选择期间 F5/1/2/3/4 原流程保持有效。
 4. 分别持有充能和释放后断线重连，检查资源保留、旧波次不重播。Stop 后重开无旧充能/委托。
 

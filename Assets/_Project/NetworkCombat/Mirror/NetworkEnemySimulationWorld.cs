@@ -78,6 +78,17 @@ namespace MonsterSupergroup.NetworkCombat
         {
             base.OnStartServer();
             nextServerSnapshotTime = NetworkTime.time + serverSnapshotInterval;
+            observedCombatGateway = NetworkCombatWorld.Instance?.Gateway;
+            if (observedCombatGateway != null) observedCombatGateway.CombatResultAccepted += HandleAcceptedOrdinaryHit;
+        }
+
+        private ServerCombatGateway observedCombatGateway;
+
+        public override void OnStopServer()
+        {
+            if (observedCombatGateway != null) observedCombatGateway.CombatResultAccepted -= HandleAcceptedOrdinaryHit;
+            observedCombatGateway = null;
+            base.OnStopServer();
         }
 
         [Server]
@@ -740,6 +751,8 @@ namespace MonsterSupergroup.NetworkCombat
 
         private void OnDestroy()
         {
+            if (observedCombatGateway != null) observedCombatGateway.CombatResultAccepted -= HandleAcceptedOrdinaryHit;
+            observedCombatGateway = null;
             ClearUltimateKnockbackState();
             players.Clear();
             enemies.Clear();

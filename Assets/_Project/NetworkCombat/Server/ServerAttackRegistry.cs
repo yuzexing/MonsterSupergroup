@@ -32,7 +32,7 @@ namespace MonsterSupergroup.NetworkCombat
 
         // The adapter supplies server-verified source, weapon and revision after checking its Build.
         public CombatRejectionReason Admit(uint playerId, uint sourceEntityId, uint weaponId,
-            uint buildRevision, ulong rootEventId)
+            uint buildRevision, ulong rootEventId, EnemyKnockbackSettings knockback = default)
         {
             if (!players.TryGetValue(playerId, out var player)) return CombatRejectionReason.InvalidSender;
             var id = new CombatEventId(rootEventId);
@@ -42,7 +42,7 @@ namespace MonsterSupergroup.NetworkCombat
                 return CombatRejectionReason.InvalidAttackRoot;
             if (player.Roots.Count >= maximumActiveRootsPerPlayer)
                 return CombatRejectionReason.AttackCapacityExceeded;
-            player.Roots.Add(rootEventId, new Root(sourceEntityId, weaponId, buildRevision));
+            player.Roots.Add(rootEventId, new Root(sourceEntityId, weaponId, buildRevision, knockback));
             player.LastRootSequence = id.Sequence;
             return CombatRejectionReason.None;
         }
@@ -53,6 +53,14 @@ namespace MonsterSupergroup.NetworkCombat
         public bool Contains(uint playerId, ulong rootEventId, uint weaponId) =>
             players.TryGetValue(playerId, out var player) && player.Roots.TryGetValue(rootEventId, out var root) &&
             root.WeaponId == weaponId;
+
+        public bool TryGetKnockback(uint playerId, ulong rootEventId, out EnemyKnockbackSettings preset)
+        {
+            if (players.TryGetValue(playerId, out var player) && player.Roots.TryGetValue(rootEventId, out var root))
+            { preset = root.Knockback; return preset.IsValid; }
+            preset = default;
+            return false;
+        }
 
         public CombatRejectionReason Validate(StatusMutation mutation)
         {
@@ -92,11 +100,12 @@ namespace MonsterSupergroup.NetworkCombat
 
         private readonly struct Root
         {
-            public Root(uint sourceEntityId, uint weaponId, uint buildRevision)
-            { SourceEntityId = sourceEntityId; WeaponId = weaponId; BuildRevision = buildRevision; }
+            public Root(uint sourceEntityId, uint weaponId, uint buildRevision, EnemyKnockbackSettings knockback)
+            { SourceEntityId = sourceEntityId; WeaponId = weaponId; BuildRevision = buildRevision; Knockback = knockback; }
             public uint SourceEntityId { get; }
             public uint WeaponId { get; }
             public uint BuildRevision { get; }
+            public EnemyKnockbackSettings Knockback { get; }
         }
     }
 }

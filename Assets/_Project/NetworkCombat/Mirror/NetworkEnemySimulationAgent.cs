@@ -341,14 +341,14 @@ namespace MonsterSupergroup.NetworkCombat
                 return;
             }
 
+            // Handoff changes the replica's kinematic body back to dynamic immediately.
+            // Keep its Transform in step too: a body-type change can otherwise restore the
+            // previous Transform pose before the next physics step (the spawn pose on a server-only peer).
+            transform.position = new Vector3(snapshot.Position.x, snapshot.Position.y, transform.position.z);
             if (body != null)
             {
                 body.position = snapshot.Position;
                 body.linearVelocity = Vector2.zero;
-            }
-            else
-            {
-                transform.position = snapshot.Position;
             }
         }
 

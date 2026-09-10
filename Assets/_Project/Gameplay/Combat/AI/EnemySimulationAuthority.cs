@@ -50,6 +50,7 @@ namespace AstralShift.HellMaiden.AI
 		private bool _hasPendingDiscontinuity;
 
 		public EnemySimulationRole Role => _role;
+		public bool IsNetworkManaged => networkManaged;
 
 		public EnemySimulationMode SimulationMode => simulationMode;
 

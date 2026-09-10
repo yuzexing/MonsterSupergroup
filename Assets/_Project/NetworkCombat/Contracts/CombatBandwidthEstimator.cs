@@ -6,7 +6,7 @@ namespace MonsterSupergroup.NetworkCombat
     /// </summary>
     public static class CombatBandwidthEstimator
     {
-        public const int CombatResultBytes = 66;
+        public const int CombatResultBytes = 91; // Existing 66 + bool/epoch/origin/time/multiplier (25).
         public const int StatusMutationBytes = 125;
         public const int PlayerHealthReportBytes = 33;
         public const int BatchAndArrayHeadersBytes = 16;

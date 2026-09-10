@@ -215,7 +215,7 @@ namespace MonsterSupergroup.NetworkCombat
                     out var next, weapon.GetAttackSequenceDuration()))
             { RejectAttack(CombatRejectionReason.InvalidAttackRate); return; }
             CombatRejectionReason admitted = world.Gateway.Attacks.Admit(netId, bridge.SourceEntityId,
-                weaponId, ownerBuildRevision, attackEventId);
+                weaponId, ownerBuildRevision, attackEventId, CaptureKnockback(weapon));
             if (admitted != CombatRejectionReason.None) { RejectAttack(admitted); return; }
             serverCooldowns[slotIndex] = next;
             if (weapon is SummonAttackBehaviour) serverSummonRootSlots.Add(attackEventId, slotIndex);
@@ -246,7 +246,7 @@ namespace MonsterSupergroup.NetworkCombat
                 !dash.CanAdmitWeapon(dashUseId, ownerBuildRevision, slotIndex, weaponId))
             { RejectAttack(CombatRejectionReason.InvalidAttackRate); return; }
             CombatRejectionReason admitted = world.Gateway.Attacks.Admit(netId, bridge.SourceEntityId,
-                weaponId, ownerBuildRevision, attackEventId);
+                weaponId, ownerBuildRevision, attackEventId, CaptureKnockback(weapon));
             if (admitted != CombatRejectionReason.None) { RejectAttack(admitted); return; }
             dash.MarkWeaponAdmitted(dashUseId, slotIndex);
             serverDashWeaponUses.Add(attackEventId, dashUseId);
@@ -257,6 +257,14 @@ namespace MonsterSupergroup.NetworkCombat
             LastAttackRejection = reason;
             RejectedAttackCount++;
             NetworkCombatWorld.Instance?.Gateway.Metrics.Reject(reason);
+        }
+
+        private static EnemyKnockbackSettings CaptureKnockback(WeaponBehaviour weapon)
+        {
+            var preset = weapon.KnockbackSettings;
+            if (preset == null || (!preset.HasKnockback && !preset.Staggers)) return default;
+            // Copy authored data once per admitted root, without evaluating the source player's GAS again.
+            return EnemyKnockbackSettings.From(preset);
         }
 
         /// <summary>Copy server-observed gameplay timing before the avatar is destroyed.</summary>

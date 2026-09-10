@@ -15,6 +15,8 @@ namespace MonsterSupergroup.NetworkCombat
         private readonly List<(uint Player, ulong Root)> completedKnockbackRoots = new List<(uint, ulong)>();
         private ulong knockbackCommandId;
         public int RoutedUltimateKnockbackCount { get; private set; }
+        public int RoutedOrdinaryKnockbackCount { get; private set; }
+        public int RejectedOrdinaryKnockbackCount { get; private set; }
         public int PendingClientKnockbackCount => pendingClientKnockbacks.Count;
 
         // Only the server coordinator calls this after admission. Owner requests contain
@@ -57,12 +59,12 @@ namespace MonsterSupergroup.NetworkCombat
                 {
                     if (!TryGetEligiblePlayer(assignment.SimulationOwnerPlayerId, out var endpoint) || endpoint.connectionToClient == null)
                         continue;
-                    endpoint.TargetApplyUltimateKnockback(endpoint.connectionToClient, command);
+                    endpoint.TargetApplyKnockback(endpoint.connectionToClient, command);
                 }
                 else if (assignment.Host == EnemySimulationHost.ServerFallback || assignment.Host == EnemySimulationHost.ServerAuthoritative)
                 {
                     // Boss immunity and the authored attack's OverrideKnockback still apply locally.
-                    enemy.TryApplyUltimateKnockback(command, 0, true);
+                    enemy.TryApplyKnockback(command, 0, true);
                 }
                 else continue;
                 applied++;
@@ -72,7 +74,7 @@ namespace MonsterSupergroup.NetworkCombat
         }
 
         [Client]
-        internal void ReceiveUltimateKnockback(EnemyKnockbackCommand command, uint receivingPlayerId)
+        internal void ReceiveKnockback(EnemyKnockbackCommand command, uint receivingPlayerId)
         {
             if (!command.IsValid || !command.IsTimely(NetworkTime.time) || NetworkClient.localPlayer == null ||
                 NetworkClient.localPlayer.netId != receivingPlayerId) return;
@@ -80,7 +82,7 @@ namespace MonsterSupergroup.NetworkCombat
             {
                 if (command.AssignmentEpoch == enemy.Assignment.Epoch && enemy.ProductEnemyInitialized)
                 {
-                    enemy.TryApplyUltimateKnockback(command, receivingPlayerId, false);
+                    enemy.TryApplyKnockback(command, receivingPlayerId, false);
                     return;
                 }
                 if (command.AssignmentEpoch != enemy.Assignment.Epoch &&
@@ -116,7 +118,7 @@ namespace MonsterSupergroup.NetworkCombat
                 }
                 if (!enemy.ProductEnemyInitialized) continue;
                 pendingClientKnockbacks.Remove(enemyId);
-                enemy.TryApplyUltimateKnockback(command, pending.ReceiverPlayerId, false);
+                enemy.TryApplyKnockback(command, pending.ReceiverPlayerId, false);
             }
         }
 
@@ -128,6 +130,40 @@ namespace MonsterSupergroup.NetworkCombat
                 if (combat == null || !combat.Gateway.Attacks.Contains(pulse.Key.Player, pulse.Key.Root, pulse.Value))
                     completedKnockbackRoots.Add(pulse.Key);
             foreach (var key in completedKnockbackRoots) appliedUltimatePulses.Remove(key);
+        }
+
+        internal void ForgetPendingKnockback(uint enemyId) => pendingClientKnockbacks.Remove(enemyId);
+
+        private void HandleAcceptedOrdinaryHit(CombatResult result, CombatApplyResult applied, double serverTime)
+        {
+            if (!result.Knockback.Requested) return;
+            var request = result.Knockback;
+            if (!isServer || !applied.State.Alive || applied.AppliedDamage <= 0 ||
+                !request.IsValid || !request.IsTimely(serverTime) || result.AbilityId == 0 ||
+                ServerStatusDamageAdmissions.IsPeriodic(result) ||
+                (result.AbilityId & 0x80000000u) != 0 ||
+                !enemies.TryGetValue(result.TargetEntityId, out var enemy) || enemy == null ||
+                !Registry.TryGetAssignment(result.TargetEntityId, out var assigned) ||
+                request.AssignmentEpoch != assigned.Epoch || assigned.Host == EnemySimulationHost.Frozen ||
+                !observedCombatGateway.Attacks.TryGetKnockback(result.SourcePlayerId, result.RootEventId, out var preset))
+            { RejectedOrdinaryKnockbackCount++; return; }
+            if (knockbackCommandId == ulong.MaxValue) throw new InvalidOperationException("Knockback command sequence exhausted.");
+            var command = new EnemyKnockbackCommand
+            {
+                Kind = EnemyKnockbackKind.OrdinaryHit, EnemyEntityId = enemy.netId,
+                AssignmentEpoch = assigned.Epoch, SourcePlayerId = result.SourcePlayerId, AbilityCombatId = result.AbilityId,
+                RootEventId = result.RootEventId, DamageEventId = result.EventId, CommandId = ++knockbackCommandId,
+                IssuedAt = request.HitNetworkTime, Origin = request.Origin, MultiplierSum = request.MultiplierSum, Settings = preset
+            };
+            if (!command.IsValid) { RejectedOrdinaryKnockbackCount++; return; }
+            if (assigned.Host == EnemySimulationHost.ClientPlayer)
+            {
+                if (!TryGetEligiblePlayer(assigned.SimulationOwnerPlayerId, out var endpoint) || endpoint.connectionToClient == null)
+                { RejectedOrdinaryKnockbackCount++; return; }
+                endpoint.TargetApplyKnockback(endpoint.connectionToClient, command);
+            }
+            else enemy.TryApplyKnockback(command, 0, true);
+            RoutedOrdinaryKnockbackCount++;
         }
 
         private void ForgetPlayerKnockbackPulses(uint player)

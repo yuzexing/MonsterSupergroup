@@ -167,10 +167,10 @@ namespace MonsterSupergroup.NetworkCombat
         }
 
         [TargetRpc(channel = Channels.Reliable)]
-        internal void TargetApplyUltimateKnockback(NetworkConnectionToClient target, EnemyKnockbackCommand command)
+        internal void TargetApplyKnockback(NetworkConnectionToClient target, EnemyKnockbackCommand command)
         {
             if (isOwned)
-                NetworkEnemySimulationWorld.Instance?.ReceiveUltimateKnockback(command, PlayerEntityId);
+                NetworkEnemySimulationWorld.Instance?.ReceiveKnockback(command, PlayerEntityId);
         }
     }
 }

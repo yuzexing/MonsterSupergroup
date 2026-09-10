@@ -19,6 +19,7 @@ namespace MonsterSupergroup.NetworkCombat
         public int Damage;
         public ulong DamageTags;
         public uint TargetStateVersion;
+        public OrdinaryHitKnockback Knockback;
 
         public static CombatResult From(CombatEvent combatEvent)
         {

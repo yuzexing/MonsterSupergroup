@@ -429,7 +429,7 @@ namespace MonsterSupergroup.NetworkCombat.Tests
             Assert.That(playerHitbox.GetComponent<Collider2D>().isTrigger, Is.True);
             PlayerBuildRuntime playerBuild = player.GetComponent<PlayerBuildRuntime>();
             Assert.That(playerBuild, Is.Not.Null);
-            Assert.That(playerBuild.InitialWeaponId, Is.EqualTo(2u));
+            Assert.That(playerBuild.InitialWeaponId, Is.EqualTo(6u));
             Assert.That(player.GetComponent<NetworkIdentity>(), Is.Not.Null);
             Assert.That(player.GetComponent<MirrorNetworkCombatBridge>(), Is.Not.Null);
             Assert.That(player.GetComponent<NetworkEnemySimulationEndpoint>(), Is.Not.Null);

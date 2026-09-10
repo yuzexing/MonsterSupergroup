@@ -84,18 +84,54 @@ namespace MonsterSupergroup.NetworkCombat
         public static bool Finite(double value) => !double.IsNaN(value) && !double.IsInfinity(value);
     }
 
+    // Optional metadata on the existing damage result. No client-authored curve or final position.
+    [Serializable]
+    public struct OrdinaryHitKnockback
+    {
+        public bool Requested;
+        public uint AssignmentEpoch;
+        public Vector2 Origin;
+        public double HitNetworkTime;
+        public float MultiplierSum;
+        public bool IsValid => Requested && AssignmentEpoch != 0 &&
+            EnemyKnockbackSettings.Finite(Origin.x) && EnemyKnockbackSettings.Finite(Origin.y) &&
+            EnemyKnockbackSettings.Finite(HitNetworkTime) && HitNetworkTime >= 0 &&
+            EnemyKnockbackSettings.Finite(MultiplierSum);
+        public bool IsTimely(double now) => EnemyKnockbackSettings.Finite(now) &&
+            HitNetworkTime <= now + .1d && HitNetworkTime >= now - 2d;
+    }
+
+    public enum EnemyKnockbackKind : byte { Ultimate = 0, OrdinaryHit = 1 }
+
     [Serializable]
     public struct EnemyKnockbackCommand
     {
+        public EnemyKnockbackKind Kind;
+        public ulong DamageEventId;
+        public float MultiplierSum;
         public uint EnemyEntityId, AssignmentEpoch, SourcePlayerId, AbilityCombatId;
         public ulong RootEventId, CommandId;
         public double IssuedAt;
         public Vector2 Origin;
         public EnemyKnockbackSettings Settings;
         public bool IsValid => EnemyEntityId != 0 && AssignmentEpoch != 0 && SourcePlayerId != 0 && CommandId != 0 &&
-            (AbilityCombatId & 0x80000000u) != 0 && new CombatEventId(RootEventId).IsValid &&
+            HasValidCause && new CombatEventId(RootEventId).IsValid &&
             new CombatEventId(RootEventId).Sequence != 0 && EnemyKnockbackSettings.Finite(IssuedAt) && IssuedAt >= 0d &&
             EnemyKnockbackSettings.Finite(Origin.x) && EnemyKnockbackSettings.Finite(Origin.y) && Settings.IsValid;
+
+        private bool HasValidCause
+        {
+            get
+            {
+                if (Kind == EnemyKnockbackKind.Ultimate) return (AbilityCombatId & 0x80000000u) != 0;
+                if (Kind != EnemyKnockbackKind.OrdinaryHit || AbilityCombatId == 0 ||
+                    (AbilityCombatId & 0x80000000u) != 0 || !EnemyKnockbackSettings.Finite(MultiplierSum)) return false;
+                var damage = new CombatEventId(DamageEventId);
+                var root = new CombatEventId(RootEventId);
+                return damage.IsValid && damage.Sequence > root.Sequence && damage.SourceSlot == root.SourceSlot &&
+                    damage.ConnectionEpoch == root.ConnectionEpoch;
+            }
+        }
 
         public bool IsTimely(double now) => EnemyKnockbackSettings.Finite(now) &&
             IssuedAt <= now + .1d && IssuedAt >= now - 2d;

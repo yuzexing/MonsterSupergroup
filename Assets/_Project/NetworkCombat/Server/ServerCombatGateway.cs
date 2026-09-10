@@ -71,6 +71,7 @@ namespace MonsterSupergroup.NetworkCombat
 
         public event Action<ConfirmedKill> ConfirmedKillProduced;
         public event Action<ServerStatusTick> ServerStatusTickProduced;
+        public event Action<CombatResult, CombatApplyResult, double> CombatResultAccepted;
 
         public void RegisterClientIdentity(
             uint playerId,
@@ -164,6 +165,7 @@ namespace MonsterSupergroup.NetworkCombat
                 ProcessedEvents.MarkProcessed(result.EventId, serverTime);
                 entities[applied.State.EntityId] = applied.State;
                 RecordDamage(result);
+                CombatResultAccepted?.Invoke(result, applied, serverTime);
                 if (applied.IsConfirmedKill)
                 {
                     AddConfirmedKill(applied.Kill, kills);

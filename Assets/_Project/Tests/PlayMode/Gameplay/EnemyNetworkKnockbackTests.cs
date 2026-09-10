@@ -142,6 +142,32 @@ namespace MonsterSupergroup.Gameplay.Tests
             Assert.That(movement.CanMove, Is.False, "Cancelling a network impulse must not unlock a pre-existing movement lock.");
             Assert.That(body.linearVelocity, Is.EqualTo(Vector2.zero));
         }
+
+        [UnityTest]
+        public IEnumerator OrdinaryFactorUsesFrozenModifierAndRecoveryStopsVelocityWithoutUnlockingNavigation()
+        {
+            movement.StopMovement();
+            enemy.stats.KnockBackMultiplier = .5f;
+            Assert.That(enemy.TryApplyNetworkHitKnockback(Vector2.left, preset, .5f), Is.True);
+            Vector2 destination = (Vector2)typeof(BaseEnemyMovement)
+                .GetField("_endPoint", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(movement);
+            Assert.That(destination.x, Is.EqualTo(1.5f).Within(.0001), "2 * (1 + .5) * .5; ordinary must not use BruteForce's factor.");
+            Assert.That(enemy.TryApplyNetworkHitKnockback(Vector2.right, preset, 4f), Is.False);
+            yield return new WaitForSeconds(1f);
+            Assert.That(enemy.IsNetworkKnockbackActive, Is.False);
+            Assert.That(movement.CanMove, Is.False);
+            Assert.That(body.linearVelocity, Is.EqualTo(Vector2.zero));
+            Assert.That(enemy.DamageCalls, Is.Zero);
+        }
+
+        [TestCase(0f)]
+        [TestCase(-1f)]
+        public void OrdinaryImmuneEnemyMultiplierDoesNotStartMovementOrStagger(float multiplier)
+        {
+            enemy.stats.KnockBackMultiplier = multiplier;
+            Assert.That(enemy.TryApplyNetworkHitKnockback(Vector2.left, preset, 0f), Is.False);
+            Assert.That(movement.IsKnockbackActive, Is.False);
+        }
     }
 
     public sealed class KnockbackOnlyTestEnemy : EnemyController

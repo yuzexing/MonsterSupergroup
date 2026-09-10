@@ -178,7 +178,7 @@ namespace MonsterSupergroup.Gameplay.Tests
             Settings = EnemyKnockbackSettings.From(Definition.InitialKnockbackSettings)
         };
         private void SendEndpoint(EnemyKnockbackCommand command) => typeof(NetworkEnemySimulationEndpoint)
-            .GetMethod("TargetApplyUltimateKnockback", Private).Invoke(Endpoint, new object[] { Player.connectionToClient, command });
+            .GetMethod("TargetApplyKnockback", Private).Invoke(Endpoint, new object[] { Player.connectionToClient, command });
         private NetworkEnemySimulationAgent SpawnEnemy(Vector2 offset)
         {
             GameObject instance = Object.Instantiate(enemyPrefab, Player.transform.position + (Vector3)offset, Quaternion.identity);

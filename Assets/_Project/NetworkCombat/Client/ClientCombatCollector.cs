@@ -98,6 +98,22 @@ namespace MonsterSupergroup.NetworkCombat
             playerHealthReports.Add(report);
         }
 
+        // The gameplay hit notification runs synchronously after DamageResolved, before Drain.
+        public bool TryAttachKnockback(ulong damageEventId, uint targetEntityId, OrdinaryHitKnockback knockback)
+        {
+            if (!knockback.IsValid) return false;
+            for (int index = results.Count - 1; index >= 0; index--)
+            {
+                CombatResult result = results[index];
+                if (result.EventId != damageEventId || result.TargetEntityId != targetEntityId) continue;
+                if (result.Knockback.Requested) return false;
+                result.Knockback = knockback;
+                results[index] = result;
+                return true;
+            }
+            return false;
+        }
+
         public CombatSubmissionBatch Drain(
             uint batchSequence,
             int maxResults = 256,

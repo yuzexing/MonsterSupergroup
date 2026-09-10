@@ -310,6 +310,9 @@ namespace AstralShift.HellMaiden.AI.Enemy
 
 		public event Action OnDispose;
 
+		// Synchronous notification: the network adapter can consume this hit before its result is flushed.
+		public event Action<NativeGasHit, GasCombatResolution> NativeHitKnockbackRequested;
+
 		public override void Init(int id)
 		{
 			Init(id, null);
@@ -1017,16 +1020,29 @@ namespace AstralShift.HellMaiden.AI.Enemy
 		// Uses the existing displacement coroutine even when the network actor intentionally
 		// has no combat FSM. The caller must hold the current network simulation assignment.
 		public bool TryApplyNetworkKnockback(Vector2 attackPosition, KnockbackSettings settings)
+			=> TryApplyNetworkKnockbackCore(attackPosition, settings, 1f, false);
+
+		public bool TryApplyNetworkHitKnockback(Vector2 attackPosition, KnockbackSettings settings, float multiplierSum)
+		{
+			if (settings == null) return false;
+			float distance = settings.distance * (1f + multiplierSum) * stats.KnockBackMultiplier;
+			if (float.IsNaN(distance) || float.IsInfinity(distance)) return false;
+			return TryApplyNetworkKnockbackCore(attackPosition, settings, multiplierSum, true);
+		}
+
+		private bool TryApplyNetworkKnockbackCore(Vector2 attackPosition, KnockbackSettings settings, float multiplierSum, bool ordinary)
 		{
 			if (!IsAlive || IsImmune || IsInKnockbackState || IsNetworkKnockbackActive || Movement == null ||
 				settings == null || (!settings.HasKnockback && !settings.Staggers) ||
-				(attackScript != null && attackScript.OverrideKnockback)) return false;
+				(ordinary && stats.KnockBackMultiplier <= 0f) ||
+				(!ordinary && attackScript != null && attackScript.OverrideKnockback)) return false;
 			_networkKnockbackMovement = Movement;
 			_networkMovementOnlyKnockback = _stateMachine == null;
 			if (rigidBody != null) rigidBody.simulated = true;
 			if (!_networkMovementOnlyKnockback)
 			{
-				BruteforceKnockBack(attackPosition, settings);
+				if (ordinary) ApplyKnockBackCore(attackPosition, settings, multiplierSum, false);
+				else BruteforceKnockBack(attackPosition, settings);
 				if (!IsNetworkKnockbackActive) _networkKnockbackMovement = null;
 				return IsNetworkKnockbackActive;
 			}
@@ -1041,14 +1057,15 @@ namespace AstralShift.HellMaiden.AI.Enemy
 			Movement.FreezeRigidbody(false);
 			if (rigidBody != null) rigidBody.simulated = true;
 			Vector2 position = hurtBox != null ? hurtBox.GetPosition() : (Vector2)transform.position;
-			// Source BruteforceKnockBack passes 1f: distance * (1 + 1) * Enemy multiplier.
-			Movement.KnockBack((position - attackPosition).normalized, settings, CompleteNetworkMovementKnockback, 1f);
+			// Ultimate keeps the source BruteForce factor; ordinary hits use their frozen GAS multiplier.
+			Movement.KnockBack((position - attackPosition).normalized, settings, CompleteNetworkMovementKnockback, multiplierSum);
 			return true;
 		}
 
 		private void CompleteNetworkMovementKnockback()
 		{
 			if (!_networkMovementOnlyKnockback) return;
+			if (rigidBody != null) rigidBody.linearVelocity = Vector2.zero;
 			_networkMovementOnlyKnockback = false;
 			_networkKnockbackMovement = null;
 			_canBeStuck = _networkRestoreCanBeStuck;
@@ -1316,11 +1333,13 @@ namespace AstralShift.HellMaiden.AI.Enemy
 				}
 				else
 				{
-					ApplyKnockBackCore(
-						hit.AttackPosition,
-						hit.KnockbackPresentation,
-						hit.Attack.Stats.KnockbackMultiplierSum,
-						isFatal);
+					var simulation = GetComponent<EnemySimulationAuthority>();
+					if (simulation != null && simulation.IsNetworkManaged)
+					{
+						if (!isFatal) NativeHitKnockbackRequested?.Invoke(hit, resolution);
+					}
+					else ApplyKnockBackCore(hit.AttackPosition, hit.KnockbackPresentation,
+						hit.Attack.Stats.KnockbackMultiplierSum, isFatal);
 				}
 
 				return true;

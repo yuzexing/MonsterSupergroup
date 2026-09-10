@@ -39,7 +39,17 @@ namespace MonsterSupergroup.NetworkCombat
         public override void OnStartServer()
         {
             base.OnStartServer();
+            // Boot survives Stop; each server run gets fresh registries before sibling
+            // World components and spawned combatants subscribe to this gateway.
+            Gateway = new ServerCombatGateway();
             nextServerTick = NetworkTime.time;
+        }
+
+        public override void OnStopServer()
+        {
+            // Preserve the gateway object while the remaining Stop callbacks unsubscribe.
+            Gateway.Statuses.Clear();
+            base.OnStopServer();
         }
 
         public override void OnStartClient()
@@ -187,6 +197,13 @@ namespace MonsterSupergroup.NetworkCombat
         {
             Replica.Apply(batch);
             CanonicalBatchReceived?.Invoke(batch);
+            // Host may already have despawned these Enemies before this queued RPC.
+            // Notify first: Debug owns its short-lived death rows independently.
+            if (batch.Entities == null) return;
+            foreach (var state in batch.Entities)
+                if (state.Kind == (byte)CombatEntityKind.Enemy && !state.Alive &&
+                    !NetworkClient.spawned.ContainsKey(state.EntityId))
+                    Replica.ForgetEntity(state.EntityId);
         }
 
         private static bool IsEmpty(CanonicalWorldBatch batch)

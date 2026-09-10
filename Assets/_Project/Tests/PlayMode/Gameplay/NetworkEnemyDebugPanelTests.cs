@@ -56,6 +56,29 @@ namespace MonsterSupergroup.Gameplay.Tests
         }
 
         [UnityTest]
+        public IEnumerator DeathRetirementPreservesLivePreSpawnBaselinesPlayersAndSpawnedEnemies()
+        {
+            var earlyEnemy = new CanonicalEntityState { EntityId = 700, Kind = (byte)CombatEntityKind.Enemy,
+                Health = 100, MaxHealth = 100, Alive = true, StateVersion = 1 };
+            var earlyPlayer = new CanonicalEntityState { EntityId = 701, Kind = (byte)CombatEntityKind.Player,
+                Health = 0, MaxHealth = 100, Alive = false, StateVersion = 2 };
+            Apply(earlyEnemy);
+            Apply(earlyPlayer);
+            Assert.That(world.Replica.TryGetEntity(700, out var live), Is.True);
+            Assert.That(live.Health, Is.EqualTo(100));
+            Assert.That(world.Replica.TryGetEntity(701, out var player), Is.True);
+            Assert.That(player.Alive, Is.False);
+            var enemy = SpawnEnemy();
+            uint enemyId = enemy.netId;
+            yield return WaitFor(() => NetworkClient.spawned.ContainsKey(enemyId));
+            Apply(State(enemy, 0, 2));
+            Assert.That(NetworkClient.spawned.ContainsKey(enemyId), Is.True);
+            Assert.That(world.Replica.TryGetEntity(enemyId, out _), Is.True,
+                "A still-spawned Enemy retains its canonical fact until its normal unregistration.");
+            yield return null;
+        }
+
+        [UnityTest]
         public IEnumerator ReadsBaseline_DistinguishesPrediction_AndNeverChangesHealthOrStatus()
         {
             var enemy = SpawnEnemy();
@@ -156,6 +179,8 @@ namespace MonsterSupergroup.Gameplay.Tests
             world.Replica.ForgetEntity(id);
             yield return WaitFor(() => panel.Rows.Count == 0);
             Apply(dead); // Host receives its queued RPC after the server destroys the shared object.
+            Assert.That(world.Replica.TryGetEntity(id, out _), Is.False,
+                "World must retire the despawned Enemy after notifying Debug, without retaining its death.");
             yield return WaitFor(() => panel.Rows.Count == 1);
             Assert.That(panel.Rows[0].Canonical.Value.Alive, Is.False);
             Assert.That(panel.Rows[0].Text, Does.Contain("Recent death - last observed data"));
@@ -213,7 +238,8 @@ namespace MonsterSupergroup.Gameplay.Tests
                 Health = health, MaxHealth = 100, Alive = health > 0, StateVersion = version };
 
         private void Apply(CanonicalEntityState state, params CanonicalStatusState[] statuses)
-            => world.Replica.Apply(new CanonicalWorldBatch { Entities = new[] { state }, Statuses = statuses });
+            => typeof(NetworkCombatWorld).GetMethod("ApplyCanonical", BindingFlags.Instance | BindingFlags.NonPublic)
+                .Invoke(world, new object[] { new CanonicalWorldBatch { Entities = new[] { state }, Statuses = statuses } });
 
         private static int SubscriberCount(NetworkCombatWorld value)
             => ((Delegate)typeof(CanonicalWorldReplica).GetField("EntityChanged", BindingFlags.Instance | BindingFlags.NonPublic)

@@ -6,6 +6,66 @@ namespace MonsterSupergroup.NetworkCombat.Tests
 {
     public sealed class PlayerCombatRestorationTests
     {
+        [Test]
+        public void EnemyRetirementReclaimsHistoryButKeepsPlayerRecoveryVersions()
+        {
+            var gateway = new ServerCombatGateway();
+            RegisterEnemy(gateway.Ledger, 100);
+            RegisterPlayer(gateway.Ledger, 10);
+            gateway.Statuses.AddServerStatus(Status(1, 100, 0, 6));
+            gateway.Statuses.AddServerStatus(Status(2, 10, 0, 6));
+            var checkpoint = gateway.Statuses.CaptureTarget(10, 1.25);
+            var removals = gateway.UnregisterEntity(10);
+            Assert.That(gateway.Statuses.RemovalHistoryCount, Is.EqualTo(1));
+            gateway.UnregisterEntity(100);
+            Assert.That(gateway.Statuses.RemovalHistoryCount, Is.EqualTo(1), "Only the recoverable player's history remains.");
+            gateway.Advance(3.25);
+            Assert.That(gateway.Statuses.RemovalHistoryCount, Is.EqualTo(1));
+            RegisterPlayer(gateway.Ledger, 11);
+            var restored = gateway.Statuses.RestoreTarget(10, 11, checkpoint, 3.25);
+            Assert.That(restored[0].Version, Is.GreaterThan(removals.Statuses[0].Version));
+            Assert.That(restored[0].CompletedTicks, Is.EqualTo(3));
+            Assert.That(restored[0].StartTime, Is.Zero);
+            Assert.That(gateway.Statuses.Advance(4).Ticks, Has.Count.EqualTo(1));
+            gateway.Advance(6);
+            Assert.That(gateway.Statuses.Count, Is.Zero);
+            Assert.That(gateway.Statuses.RemovalHistoryCount, Is.Zero);
+        }
+
+        [Test]
+        public void RemovalHistoryExpiresAtOriginalDeadlineAndCannotRestoreExpiredCheckpoint()
+        {
+            var gateway = new ServerCombatGateway();
+            RegisterPlayer(gateway.Ledger, 10);
+            gateway.Statuses.AddServerStatus(Status(1, 10, 10, 3));
+            var checkpoint = gateway.Statuses.CaptureTarget(10, 11);
+            gateway.UnregisterEntity(10);
+            gateway.Advance(12.99);
+            Assert.That(gateway.Statuses.RemovalHistoryCount, Is.EqualTo(1));
+            gateway.Advance(13);
+            Assert.That(gateway.Statuses.RemovalHistoryCount, Is.Zero);
+            RegisterPlayer(gateway.Ledger, 11);
+            Assert.That(gateway.Statuses.RestoreTarget(10, 11, checkpoint, 13), Is.Empty);
+            Assert.That(gateway.Statuses.Advance(20).Ticks, Is.Empty);
+        }
+
+        [Test]
+        public void ClearDropsBothActiveStatusesAndRecoveryHistory()
+        {
+            var gateway = new ServerCombatGateway();
+            RegisterPlayer(gateway.Ledger, 10);
+            RegisterPlayer(gateway.Ledger, 11);
+            gateway.Statuses.AddServerStatus(Status(1, 10, 0, 6));
+            gateway.Statuses.AddServerStatus(Status(2, 11, 0, 6));
+            gateway.Statuses.RemoveTarget(10);
+            Assert.That(gateway.Statuses.Count, Is.EqualTo(1));
+            Assert.That(gateway.Statuses.RemovalHistoryCount, Is.EqualTo(1));
+            gateway.Statuses.Clear();
+            Assert.That(gateway.Statuses.Count, Is.Zero);
+            Assert.That(gateway.Statuses.RemovalHistoryCount, Is.Zero);
+            Assert.That(gateway.Statuses.Advance(20).Ticks, Is.Empty);
+        }
+
         [TestCase(37, true)]
         [TestCase(0, false)]
         public void HealthCheckpoint_RestoresFactsIntoNewIdentityWithoutTouchingOtherPlayer(

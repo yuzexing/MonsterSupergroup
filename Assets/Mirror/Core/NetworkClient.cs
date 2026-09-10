@@ -1300,7 +1300,9 @@ namespace Mirror
         {
             // Debug.Log("SpawnStarted");
             PrepareToSpawnSceneObjects();
-            pendingSpawns.Clear();
+            // A ready connection can observe remote spawns before its own player
+            // starts this batch. Keep those deferred payloads until SpawnFinished;
+            // clearing them here leaves identities with netId=0 in spawned.
             isSpawnFinished = false;
         }
 
@@ -1814,6 +1816,7 @@ namespace Mirror
             ClearSpawners();
 
             spawned.Clear();
+            pendingSpawns.Clear();
             connection?.owned.Clear();
             handlers.Clear();
             spawnableObjects.Clear();

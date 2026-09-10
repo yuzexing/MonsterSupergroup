@@ -84,6 +84,25 @@ namespace MonsterSupergroup.NetworkCombat
 
         private ServerCombatGateway observedCombatGateway;
 
+        public override void OnStartClient()
+        {
+            base.OnStartClient();
+            ClearClientWaitingState();
+        }
+
+        public override void OnStopClient()
+        {
+            ClearClientWaitingState();
+            base.OnStopClient();
+        }
+
+        private void ClearClientWaitingState()
+        {
+            pendingClientAttackPresentations.Clear();
+            pendingClientKnockbacks.Clear();
+            pendingKnockbackIds.Clear();
+        }
+
         public override void OnStopServer()
         {
             if (observedCombatGateway != null) observedCombatGateway.CombatResultAccepted -= HandleAcceptedOrdinaryHit;
@@ -287,7 +306,9 @@ namespace MonsterSupergroup.NetworkCombat
                 return;
             }
 
-            if (enemy.ReceiveRemoteAttackPresentation(edge))
+            if ((edge.AssignmentEpoch != enemy.Assignment.Epoch &&
+                 !EnemySimulationSequence.IsNewer(edge.AssignmentEpoch, enemy.Assignment.Epoch)) ||
+                enemy.ReceiveRemoteAttackPresentation(edge))
             {
                 pendingClientAttackPresentations.Remove(enemy.netId);
             }

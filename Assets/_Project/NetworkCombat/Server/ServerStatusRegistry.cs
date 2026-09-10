@@ -49,8 +49,9 @@ namespace MonsterSupergroup.NetworkCombat
         private readonly CombatLedger ledger;
         private readonly Dictionary<StatusInstanceId, StatusInstance> instances =
             new Dictionary<StatusInstanceId, StatusInstance>();
-        private readonly Dictionary<StatusInstanceId, uint> removalVersions =
-            new Dictionary<StatusInstanceId, uint>();
+        private readonly Dictionary<StatusInstanceId, RemovalRecord> removalVersions =
+            new Dictionary<StatusInstanceId, RemovalRecord>();
+        private readonly List<StatusInstanceId> removalBuffer = new List<StatusInstanceId>();
 
         public ServerStatusRegistry(CombatLedger ledger)
         {
@@ -58,6 +59,46 @@ namespace MonsterSupergroup.NetworkCombat
         }
 
         public int Count => instances.Count;
+        public int RemovalHistoryCount => removalVersions.Count;
+
+        public void Clear()
+        {
+            instances.Clear();
+            removalVersions.Clear();
+            removalBuffer.Clear();
+        }
+
+        /// <summary>Retire history for a target that cannot be restored, such as a despawned Enemy.</summary>
+        public void ForgetTargetHistory(uint targetEntityId)
+        {
+            removalBuffer.Clear();
+            foreach (var entry in removalVersions)
+                if (entry.Value.TargetEntityId == targetEntityId) removalBuffer.Add(entry.Key);
+            foreach (var id in removalBuffer) removalVersions.Remove(id);
+            removalBuffer.Clear();
+        }
+
+        private void RememberRemoval(StatusInstance instance, uint version) =>
+            removalVersions[instance.InstanceId] = new RemovalRecord(
+                instance.TargetEntityId, version, instance.StartTime + instance.Duration);
+
+        private void PruneRemovalHistory(double serverTime)
+        {
+            removalBuffer.Clear();
+            foreach (var entry in removalVersions)
+                if (entry.Value.ExpiresAt <= serverTime) removalBuffer.Add(entry.Key);
+            foreach (var id in removalBuffer) removalVersions.Remove(id);
+            removalBuffer.Clear();
+        }
+
+        private readonly struct RemovalRecord
+        {
+            public RemovalRecord(uint targetEntityId, uint version, double expiresAt)
+            { TargetEntityId = targetEntityId; Version = version; ExpiresAt = expiresAt; }
+            public uint TargetEntityId { get; }
+            public uint Version { get; }
+            public double ExpiresAt { get; }
+        }
 
         public bool Has(uint targetEntityId, EnemyStatusID definitionId)
         {
@@ -230,8 +271,8 @@ namespace MonsterSupergroup.NetworkCombat
                     saved.DamageSourceId = targetEntityId;
                 saved.TargetEntityId = targetEntityId;
                 saved.CompletedTicks = completed;
-                removalVersions.TryGetValue(original.InstanceId, out uint removalVersion);
-                saved.Version = checked(Math.Max(saved.Version, removalVersion) + 1u);
+                removalVersions.TryGetValue(original.InstanceId, out RemovalRecord removal);
+                saved.Version = checked(Math.Max(saved.Version, removal.Version) + 1u);
 
                 StatusInstance instance = saved.ToStatusInstance();
                 restored.Add(instance);
@@ -271,7 +312,7 @@ namespace MonsterSupergroup.NetworkCombat
 
                 uint version = removed.Version + 1;
                 instances.Remove(instanceId);
-                removalVersions[instanceId] = version;
+                RememberRemoval(removed, version);
                 return new StatusMutationResult(
                     true,
                     CombatRejectionReason.None,
@@ -330,7 +371,7 @@ namespace MonsterSupergroup.NetworkCombat
             {
                 uint removedVersion = current.Version + 1;
                 instances.Remove(instanceId);
-                removalVersions[instanceId] = removedVersion;
+                RememberRemoval(current, removedVersion);
                 return new StatusMutationResult(
                     true,
                     CombatRejectionReason.None,
@@ -387,7 +428,7 @@ namespace MonsterSupergroup.NetworkCombat
                 {
                     uint removalVersion = current.Version + 1;
                     instances.Remove(current.InstanceId);
-                    removalVersions[current.InstanceId] = removalVersion;
+                    RememberRemoval(current, removalVersion);
                     changes.Add(CanonicalStatusState.Removal(
                         current.InstanceId,
                         removalVersion));
@@ -420,7 +461,7 @@ namespace MonsterSupergroup.NetworkCombat
 
                 uint removalVersion = current.Version + 1;
                 instances.Remove(current.InstanceId);
-                removalVersions[current.InstanceId] = removalVersion;
+                RememberRemoval(current, removalVersion);
                 changes.Add(CanonicalStatusState.Removal(
                     current.InstanceId,
                     removalVersion));
@@ -462,13 +503,15 @@ namespace MonsterSupergroup.NetworkCombat
                 {
                     uint removalVersion = current.Version + 1;
                     instances.Remove(current.InstanceId);
-                    removalVersions[current.InstanceId] = removalVersion;
+                    RememberRemoval(current, removalVersion);
                     result.Changes.Add(CanonicalStatusState.Removal(
                         current.InstanceId,
                         removalVersion));
                 }
             }
 
+            // RestoreTarget skips checkpoints once their original duration has elapsed.
+            PruneRemovalHistory(serverTime);
             return result;
         }
 

@@ -1,10 +1,13 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using AstralShift.HellMaiden.AI;
 using Mirror;
 using MonsterSupergroup.Gameplay.Combat;
 using MonsterSupergroup.Gameplay.UI;
+using MonsterSupergroup.GAS;
 using MonsterSupergroup.NetworkCombat;
 using NUnit.Framework;
 using UnityEngine;
@@ -170,6 +173,219 @@ namespace MonsterSupergroup.Gameplay.Tests
             Assert.That(enemy.GetComponent<CombatantBehaviour>().CurrentHealth, Is.EqualTo(server.Health));
             Assert.That(selection.IsSelecting, Is.True);
         }
+
+        [UnityTest, Category("CacheLifecycleReproduction")]
+        public IEnumerator RemovedStatusVersions_StopRestart_DoesNotRetainPreviousRunRecords()
+        {
+            yield return StartHost();
+            var world = NetworkCombatWorld.Instance;
+            string oldRun = manager.Session.RunId;
+            manager.BeginRun();
+            yield return WaitFor(() => Spawner.ServerProgress.TotalSpawned == 1);
+            var enemy = Object.FindFirstObjectByType<NetworkEnemySimulationAgent>();
+            uint enemyId = enemy.netId;
+            var ids = Owner.GetComponent<MirrorNetworkCombatBridge>().EventIds;
+            // Seed valid server status records to isolate their lifetime from weapon admission.
+            // Removal still runs through the real canonical-death/despawn callbacks.
+            for (int i = 0; i < 64; i++)
+            {
+                CombatEventId id = ids.Next();
+                var result = world.Gateway.Statuses.Apply(Owner.netId, new StatusMutation
+                {
+                    EventId = id.Value, RootEventId = id.Value, Sequence = id.Sequence,
+                    InstanceId = id.Value, Kind = StatusMutationKind.ApplyOrRefresh,
+                    SourcePlayerId = Owner.netId, SourceEntityId = Owner.netId, TargetEntityId = enemyId,
+                    DefinitionId = (uint)EnemyStatusID.Poison, StackMode = (byte)StatusStackMode.Add,
+                    MaxStacks = 1, StackDelta = 1, Duration = 60, TickInterval = 60, TotalTicks = 1,
+                    ExecutionAuthority = (byte)StatusExecutionAuthority.SourceClient
+                }, NetworkTime.time);
+                Assert.That(result.Accepted, Is.True, result.Rejection.ToString());
+            }
+            Assert.That(world.Gateway.Statuses.Count, Is.EqualTo(64));
+            SetCanonicalHealth(enemyId, 0);
+            yield return WaitFor(() => !NetworkServer.spawned.ContainsKey(enemyId));
+            Assert.That(world.Gateway.Statuses.Count, Is.Zero);
+            int removed = CountStatusRemovalVersions(world.Gateway);
+            Assert.That(removed, Is.Zero, "Retiring an Enemy must release its status history immediately.");
+            var previousGateway = world.Gateway;
+            manager.StopHost();
+            yield return WaitFor(() => !manager.IsGameplayLoaded && !manager.IsGameplayTransitioning);
+            Assert.That(NetworkCombatWorld.Instance, Is.SameAs(world));
+            int afterStop = CountStatusRemovalVersions(world.Gateway);
+            Assert.That(afterStop, Is.Zero);
+            manager.StartHost();
+            yield return WaitFor(() => Owner != null && Owner.GetComponent<NetworkModifierSelection>().HasOwnerBaseline && manager.CanBeginRun(out _));
+            Assert.That(manager.Session.RunId, Is.Not.EqualTo(oldRun));
+            Assert.That(world.Gateway, Is.Not.SameAs(previousGateway));
+            int afterRestart = CountStatusRemovalVersions(world.Gateway);
+            Debug.Log($"[CacheLifecycle] status removed={removed} afterStop={afterStop} afterRestart={afterRestart} active={world.Gateway.Statuses.Count}");
+            Assert.That(afterRestart, Is.Zero, "A new Boot server run retained the previous run's status removal versions.");
+        }
+
+        [UnityTest, Category("CacheLifecycleReproduction")]
+        public IEnumerator HostDeaths_DespawnedRecordsAreReleasedAfterNotifications()
+        {
+            yield return StartHost();
+            UseFastRules(1.5f, .2f, 30);
+            var world = NetworkCombatWorld.Instance;
+            var despawned = new List<uint>();
+            manager.BeginRun();
+            int firstSample = 0;
+            for (int i = 0; i < 12; i++)
+            {
+                yield return WaitFor(() => Object.FindFirstObjectByType<NetworkEnemySimulationAgent>() != null);
+                uint id = Object.FindFirstObjectByType<NetworkEnemySimulationAgent>().netId;
+                despawned.Add(id);
+                SetCanonicalHealth(id, 0);
+                yield return WaitFor(() => !NetworkServer.spawned.ContainsKey(id) && !NetworkClient.spawned.ContainsKey(id));
+                yield return new WaitForSecondsRealtime(.1f); // Consume the actual queued Host RPC.
+                if (i == 5) firstSample = CountRetainedDeaths(world.Replica, despawned);
+            }
+            Spawner.enabled = false;
+            int secondSample = CountRetainedDeaths(world.Replica, despawned);
+            yield return new WaitForSecondsRealtime(3f); // Longer than the Debug panel's death-row lifetime.
+            int afterIdle = CountRetainedDeaths(world.Replica, despawned);
+            Assert.That(despawned.All(id => !NetworkServer.spawned.ContainsKey(id) && !NetworkClient.spawned.ContainsKey(id)), Is.True);
+            Debug.Log($"[CacheLifecycle] host deaths=12 retainedAfter6={firstSample} retainedAfter12={secondSample} retainedAfterIdle={afterIdle}");
+            Assert.That(firstSample, Is.Zero);
+            Assert.That(secondSample, Is.Zero);
+            Assert.That(afterIdle, Is.Zero);
+            manager.StopHost();
+            yield return WaitFor(() => !manager.IsGameplayLoaded && !manager.IsGameplayTransitioning);
+            Assert.That(CountRetainedDeaths(world.Replica, despawned), Is.Zero, "The existing session cleanup must still work.");
+        }
+
+        [UnityTest, Category("CacheLifecycleReproduction")]
+        public IEnumerator PendingAttackEdge_StopRestart_ClearsWaitingRecordsAndAcceptsFreshSequence()
+        {
+            yield return StartHost();
+            var world = NetworkEnemySimulationWorld.Instance;
+            manager.BeginRun();
+            yield return WaitFor(() => Spawner.ServerProgress.TotalSpawned == 1);
+            var enemy = Object.FindFirstObjectByType<NetworkEnemySimulationAgent>();
+            uint previousId = enemy.netId;
+            uint previousEpoch = enemy.Assignment.Epoch;
+            var oldEdge = new EnemyAttackPresentationEdge
+            {
+                EnemyEntityId = previousId, AssignmentEpoch = previousEpoch, StateSequence = 10,
+                StateStartNetworkTime = NetworkTime.time, PhaseDuration = 1,
+                Phase = EnemyAttackPresentationPhase.Warning, Facing = Vector2.left
+            };
+            // Contract-level fault injection: EnemyBase does not produce phase edges in
+            // movement-only mode. Submit a valid edge through server admission and the real
+            // reliable RPC, then despawn before Host consumes it. Do not write the cache.
+            world.SubmitClientAttackPresentations(Owner.GetComponent<NetworkEnemySimulationEndpoint>(),
+                new EnemyAttackPresentationBatch { BatchSequence = 1, Edges = new[] { oldEdge } });
+            Assert.That(world.Registry.TryGetLatestAttackPresentation(previousId, out var admitted), Is.True);
+            Assert.That(admitted.StateSequence, Is.EqualTo(10));
+            SetCanonicalHealth(previousId, 0);
+            yield return WaitFor(() => !NetworkServer.spawned.ContainsKey(previousId));
+            yield return new WaitForSecondsRealtime(.2f);
+            int beforeStop = world.PendingClientAttackPresentationCount;
+            manager.StopHost();
+            yield return WaitFor(() => !manager.IsGameplayLoaded && !manager.IsGameplayTransitioning);
+            Assert.That(NetworkEnemySimulationWorld.Instance, Is.SameAs(world));
+            int afterStop = world.PendingClientAttackPresentationCount;
+            manager.StartHost();
+            yield return WaitFor(() => Owner != null && Owner.GetComponent<NetworkModifierSelection>().HasOwnerBaseline && manager.CanBeginRun(out _));
+            manager.BeginRun();
+            yield return WaitFor(() => Spawner.ServerProgress.TotalSpawned == 1);
+            enemy = Object.FindFirstObjectByType<NetworkEnemySimulationAgent>();
+            Assert.That(enemy.netId, Is.EqualTo(previousId));
+            Assert.That(enemy.Assignment.Epoch, Is.EqualTo(previousEpoch));
+            yield return new WaitForSecondsRealtime(.2f);
+            uint sequenceAtSpawn = enemy.HasLatestAttackPresentation ? enemy.LatestAttackPresentation.StateSequence : 0;
+            var fresh = oldEdge;
+            fresh.StateSequence = 1;
+            fresh.StateStartNetworkTime = NetworkTime.time;
+            fresh.Phase = EnemyAttackPresentationPhase.Inactive;
+            world.SubmitClientAttackPresentations(Owner.GetComponent<NetworkEnemySimulationEndpoint>(),
+                new EnemyAttackPresentationBatch { BatchSequence = 1, Edges = new[] { fresh } });
+            yield return new WaitForSecondsRealtime(.2f);
+            Assert.That(world.Registry.TryGetLatestAttackPresentation(enemy.netId, out var current), Is.True);
+            Assert.That(current.StateSequence, Is.EqualTo(1), "The new server run must accept its first phase edge.");
+            Debug.Log($"[CacheLifecycle] attack enemy={enemy.netId} epoch={enemy.Assignment.Epoch} pendingBeforeStop={beforeStop} pendingAfterStop={afterStop} sequenceAtSpawn={sequenceAtSpawn} serverSequence={current.StateSequence} clientSequence={enemy.LatestAttackPresentation.StateSequence}");
+            Assert.That(enemy.LatestAttackPresentation.StateSequence, Is.EqualTo(current.StateSequence),
+                "An old run's pending attack edge suppressed the new enemy's first accepted edge.");
+            Assert.That(afterStop, Is.Zero, "Stop retained an old run's pending attack presentation.");
+        }
+
+        private static int CountStatusRemovalVersions(ServerCombatGateway gateway) =>
+            gateway.Statuses.RemovalHistoryCount;
+
+        private static int CountRetainedDeaths(CanonicalWorldReplica replica, IEnumerable<uint> ids) =>
+            ids.Count(id => replica.TryGetEntity(id, out var state) && !state.Alive);
+
+        [UnityTest, Category("CacheLifecycleReproduction")]
+        public IEnumerator ClientWaitingCallbacks_ClearBothQueuesWithoutClearingHostRegistrations()
+        {
+            yield return StartHost();
+            manager.BeginRun();
+            yield return WaitFor(() => Spawner.ServerProgress.TotalSpawned == 1);
+            var world = NetworkEnemySimulationWorld.Instance;
+            var enemy = Object.FindFirstObjectByType<NetworkEnemySimulationAgent>();
+            var command = new EnemyKnockbackCommand
+            {
+                EnemyEntityId = uint.MaxValue, AssignmentEpoch = 1, SourcePlayerId = Owner.netId,
+                AbilityCombatId = 0x80000001, RootEventId = Owner.GetComponent<MirrorNetworkCombatBridge>().EventIds.Next().Value,
+                CommandId = 1, IssuedAt = NetworkTime.time,
+                Settings = new EnemyKnockbackSettings { Distance = .2f, SpeedMultiplier = 10,
+                    CurveKeys = new[] { new EnemyKnockbackCurveKey(), new EnemyKnockbackCurveKey { Time = 1, Value = 1 } } }
+            };
+            Assert.That(command.IsValid, Is.True);
+            for (int i = 0; i < 2; i++)
+            {
+                ApplyClientAttackEdge(world, new EnemyAttackPresentationEdge { EnemyEntityId = uint.MaxValue,
+                    AssignmentEpoch = 1, StateSequence = 1, Phase = EnemyAttackPresentationPhase.Warning,
+                    PhaseDuration = 1, StateStartNetworkTime = NetworkTime.time, Facing = Vector2.right });
+                typeof(NetworkEnemySimulationWorld).GetMethod("ReceiveKnockback", BindingFlags.Instance | BindingFlags.NonPublic)
+                    .Invoke(world, new object[] { command, Owner.netId });
+                Assert.That(world.PendingClientAttackPresentationCount, Is.EqualTo(1));
+                Assert.That(world.PendingClientKnockbackCount, Is.EqualTo(1));
+                if (i == 0) world.OnStopClient(); else world.OnStartClient();
+                Assert.That(world.PendingClientAttackPresentationCount, Is.Zero);
+                Assert.That(world.PendingClientKnockbackCount, Is.Zero);
+                Assert.That(world.Registry.Count, Is.EqualTo(1));
+                Assert.That(world.HasEligiblePlayer, Is.True);
+                var snapshots = new List<EnemySimulationSnapshot>();
+                world.CollectClientOwnedSnapshots(Owner.netId, NetworkTime.time, snapshots);
+                Assert.That(snapshots.Count, Is.EqualTo(1), "The Host's shared Enemy map must survive client queue cleanup.");
+                Assert.That(snapshots[0].EnemyEntityId, Is.EqualTo(enemy.netId));
+            }
+        }
+
+        [UnityTest, Category("CacheLifecycleReproduction")]
+        public IEnumerator WaitingAttackEdges_DiscardSkippedEpochAndPreservePreRegistrationDelivery()
+        {
+            yield return StartHost();
+            manager.BeginRun();
+            yield return WaitFor(() => Spawner.ServerProgress.TotalSpawned == 1);
+            var world = NetworkEnemySimulationWorld.Instance;
+            var enemy = Object.FindFirstObjectByType<NetworkEnemySimulationAgent>();
+            var edge = new EnemyAttackPresentationEdge { EnemyEntityId = enemy.netId,
+                AssignmentEpoch = enemy.Assignment.Epoch + 1, StateSequence = 10,
+                Phase = EnemyAttackPresentationPhase.Warning, PhaseDuration = 1,
+                StateStartNetworkTime = NetworkTime.time, Facing = Vector2.left };
+            ApplyClientAttackEdge(world, edge);
+            Assert.That(world.PendingClientAttackPresentationCount, Is.EqualTo(1));
+            world.Registry.Freeze(enemy.netId);
+            enemy.SetServerAssignment(world.Registry.AssignClientOwner(enemy.netId, Owner.netId, Owner.netId));
+            Assert.That(enemy.Assignment.Epoch, Is.GreaterThan(edge.AssignmentEpoch));
+            Assert.That(world.PendingClientAttackPresentationCount, Is.Zero);
+            edge.AssignmentEpoch = enemy.Assignment.Epoch;
+            edge.StateSequence = 1;
+            world.UnregisterClientEnemy(enemy); // Existing late-join registration-order fixture pattern.
+            ApplyClientAttackEdge(world, edge);
+            Assert.That(world.PendingClientAttackPresentationCount, Is.EqualTo(1));
+            world.RegisterClientEnemy(enemy);
+            Assert.That(world.PendingClientAttackPresentationCount, Is.Zero);
+            Assert.That(enemy.LatestAttackPresentation.StateSequence, Is.EqualTo(1));
+        }
+
+        private static void ApplyClientAttackEdge(NetworkEnemySimulationWorld world, EnemyAttackPresentationEdge edge) =>
+            typeof(NetworkEnemySimulationWorld).GetMethod("ApplyAttackPresentations", BindingFlags.Instance | BindingFlags.NonPublic)
+                .Invoke(world, new object[] { new EnemyAttackPresentationBatch { Edges = new[] { edge } } });
+
         [UnityTest]
         public IEnumerator GroundCornerPlacement_KeepsEnemyBodyInsideApprovedBounds()
         {

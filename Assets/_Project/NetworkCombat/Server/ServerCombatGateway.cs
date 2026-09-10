@@ -320,7 +320,10 @@ namespace MonsterSupergroup.NetworkCombat
         /// <summary>Returns all current canonical facts for a newly ready client.</summary>
         public CanonicalWorldBatch UnregisterEntity(uint entityId)
         {
+            bool retiredEnemy = Ledger.TryGetState(entityId, out var state) &&
+                state.Kind == (byte)CombatEntityKind.Enemy;
             IReadOnlyList<CanonicalStatusState> removed = Statuses.RemoveTarget(entityId);
+            if (retiredEnemy) Statuses.ForgetTargetHistory(entityId);
             Ledger.UnregisterEntity(entityId);
             return CreateBatch(Array.Empty<CanonicalEntityState>(), removed, Array.Empty<ConfirmedKill>());
         }

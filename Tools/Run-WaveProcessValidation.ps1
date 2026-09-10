@@ -2,6 +2,7 @@ param(
     [string]$Executable = 'Builds/M5Waves/M5Waves.exe',
     [switch]$Dedicated,
     [switch]$Simulation,
+    [switch]$SelectionBeforeRun,
     [switch]$CaptureFrames,
     [switch]$VisibleWindows,
     [int]$Port = 7986
@@ -13,7 +14,7 @@ if (-not (Test-Path -LiteralPath $Executable)) { throw "Missing M5 build: $Execu
 $modeName = if ($Dedicated) { 'Dedicated' } else { 'Host' }
 $logRoot = Join-Path $projectRoot ('Logs/M5/' + $modeName + '-' + (Get-Date -Format 'yyyyMMdd-HHmmss-fff') + '-p' + $Port)
 New-Item -ItemType Directory -Path $logRoot -Force | Out-Null
-[ordered]@{ executable = $Executable; dedicated = [bool]$Dedicated; simulation = [bool]$Simulation; port = $Port; captureFrames = [bool]$CaptureFrames } |
+[ordered]@{ executable = $Executable; dedicated = [bool]$Dedicated; simulation = [bool]$Simulation; selectionBeforeRun = [bool]$SelectionBeforeRun; port = $Port; captureFrames = [bool]$CaptureFrames } |
     ConvertTo-Json | Set-Content -LiteralPath (Join-Path $logRoot 'run.json')
 Write-Output "M5 process artifacts: $logRoot"
 $processes = @{}
@@ -22,6 +23,7 @@ function Launch([string]$role) {
         ('"--m5-artifacts=' + $logRoot + '"'), "--m5-port=$Port", '-screen-fullscreen', '0', '-screen-width', '1920', '-screen-height', '1080', '-force-d3d11')
     if ($Dedicated) { $arguments += '--m5-dedicated' }
     if ($Simulation) { $arguments += '--m5-simulation' }
+    if ($SelectionBeforeRun) { $arguments += '--m5-selection-before-run' }
     if ($CaptureFrames) { $arguments += '--m5-capture' }
     else { $arguments += @('-batchmode', '-nographics') }
     if ($role -eq 'server') { $arguments += '--dedicated-server' }
@@ -40,7 +42,7 @@ try {
     Launch $(if ($Dedicated) { 'server' } else { 'host' })
     AwaitMarker 'listening'
     Launch 'client'
-    if ($Dedicated) { AwaitMarker 'ready-client-1'; Launch 'client2' }
+    if ($Dedicated) { AwaitMarker $(if ($SelectionBeforeRun) { 'prime-ready-client' } else { 'ready-client-1' }); Launch 'client2' }
     $until = (Get-Date).AddSeconds(330)
     while (@($processes.Values | Where-Object { -not $_.HasExited }).Count -gt 0) {
         if ((Get-Date) -gt $until) { throw "M5 timed out: $logRoot" }

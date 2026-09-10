@@ -139,6 +139,38 @@ namespace MonsterSupergroup.Gameplay.Tests
             Assert.That(Spawner.ServerProgress.Wave, Is.EqualTo(1));
         }
         [UnityTest]
+        public IEnumerator CanonicalDeath_StopRestartWithSelection_DoesNotPoisonReusedEnemyId()
+        {
+            yield return StartHost();
+            var persistentWorld = NetworkCombatWorld.Instance;
+            manager.BeginRun();
+            yield return WaitFor(() => Spawner.ServerProgress.TotalSpawned == 1);
+            uint previousEnemyId = Object.FindFirstObjectByType<NetworkEnemySimulationAgent>().netId;
+            SetCanonicalHealth(previousEnemyId, 0);
+            yield return WaitFor(() => !NetworkServer.spawned.ContainsKey(previousEnemyId));
+            yield return new WaitForSecondsRealtime(.2f); // Host consumes the queued death after local despawn.
+            manager.StopHost();
+            yield return WaitFor(() => !manager.IsGameplayLoaded && !manager.IsGameplayTransitioning);
+            Assert.That(NetworkCombatWorld.Instance, Is.SameAs(persistentWorld), "Boot's scene World must survive Stop.");
+            manager.StartHost();
+            yield return WaitFor(() => Owner != null && Owner.GetComponent<NetworkModifierSelection>().HasOwnerBaseline && manager.CanBeginRun(out _));
+            var selection = Owner.GetComponent<NetworkModifierSelection>();
+            Assert.That(selection.RequestDebugLevelUp(), Is.True);
+            yield return WaitFor(() => selection.IsSelecting);
+            manager.BeginRun();
+            yield return WaitFor(() => Spawner.ServerProgress.TotalSpawned == 1);
+            var enemy = Object.FindFirstObjectByType<NetworkEnemySimulationAgent>();
+            Assert.That(enemy.netId, Is.EqualTo(previousEnemyId));
+            yield return new WaitForSecondsRealtime(.25f);
+            Assert.That(persistentWorld.Gateway.Ledger.TryGetState(enemy.netId, out var server), Is.True);
+            Assert.That(persistentWorld.Replica.TryGetEntity(enemy.netId, out var replica), Is.True);
+            Assert.That(server.Alive, Is.True);
+            Assert.That(replica.Health, Is.EqualTo(server.Health), "Previous run's canonical death blocked this run's baseline.");
+            Assert.That(replica.StateVersion, Is.EqualTo(server.StateVersion));
+            Assert.That(enemy.GetComponent<CombatantBehaviour>().CurrentHealth, Is.EqualTo(server.Health));
+            Assert.That(selection.IsSelecting, Is.True);
+        }
+        [UnityTest]
         public IEnumerator GroundCornerPlacement_KeepsEnemyBodyInsideApprovedBounds()
         {
             yield return StartHost();

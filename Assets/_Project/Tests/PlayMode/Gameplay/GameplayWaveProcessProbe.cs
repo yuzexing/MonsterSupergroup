@@ -3,6 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using AstralShift.HellMaiden.AI.Enemy;
+using AstralShift.HellMaiden.Player;
+using AstralShift.HellMaiden.Player.Attacks;
 using Mirror;
 using MonsterSupergroup.Gameplay.Combat;
 using MonsterSupergroup.Gameplay.UI;
@@ -17,9 +20,11 @@ namespace MonsterSupergroup.Gameplay.Tests
     {
         private string role, directory;
         private ushort port;
-        private bool dedicated, capture, simulation, finished;
+        private bool dedicated, capture, simulation, finished, selectionBeforeRun;
         private float deadline;
         private int loggedErrors;
+        private uint primingEnemyId;
+        private bool priming;
         private BootGameplayNetworkManager manager;
         private KcpLocalNetworkService service;
         private bool IsServer => role == "host" || role == "server";
@@ -41,6 +46,7 @@ namespace MonsterSupergroup.Gameplay.Tests
             probe.dedicated = args.Contains("--m5-dedicated");
             probe.capture = args.Contains("--m5-capture");
             probe.simulation = args.Contains("--m5-simulation");
+            probe.selectionBeforeRun = args.Contains("--m5-selection-before-run");
             DontDestroyOnLoad(probe.gameObject);
         }
         private IEnumerator Start()
@@ -59,6 +65,15 @@ namespace MonsterSupergroup.Gameplay.Tests
         {
             if (!finished && deadline > 0 && Time.realtimeSinceStartup > deadline)
             { Debug.LogError("[M5Process] timeout role=" + role); Finish(false); }
+            if (selectionBeforeRun && priming)
+            {
+                foreach (var enemy in Enemies())
+                    if (enemy.netId == primingEnemyId && enemy.ProductEnemyInitialized && enemy.Authority.RunsNavigation)
+                    {
+                        enemy.GetComponent<EnemyController>().Movement.StopMovement();
+                        enemy.GetComponent<Rigidbody2D>().gravityScale = 0;
+                    }
+            }
             // Runtime-only protection keeps real enemies alive for precise wave count assertions.
             if (Owner != null) Owner.GetComponent<CombatantBehaviour>().SetCanonicalInvulnerable(true);
             if (NetworkServer.active && NetworkCombatWorld.Instance != null)
@@ -67,6 +82,12 @@ namespace MonsterSupergroup.Gameplay.Tests
         }
         private IEnumerator Run()
         {
+            if (selectionBeforeRun)
+            {
+                if (role == "host") StartCoroutine(Guard(SelectingClientScenario()));
+                yield return IsServer ? SelectingServerScenario() : SelectingClientScenario();
+                yield break;
+            }
             if (role == "host") StartCoroutine(Guard(ClientScenario()));
             if (IsServer) yield return ServerScenario(); else yield return ClientScenario();
         }
@@ -231,6 +252,167 @@ namespace MonsterSupergroup.Gameplay.Tests
                 Mark("cleared-" + role + "-" + round);
             }
         }
+        // Prime the persistent Boot World with a real death, then restart without reloading Boot.
+        // Starting a fresh process for the F5 scenario misses retained replica facts and reused netIds.
+        private IEnumerator PrimeSelectionServer()
+        {
+            StartRole(role); Mark("listening");
+            yield return Wait(() => Has("prime-ready-client") && Has("prime-ready-" + Other) && manager.CanBeginRun(out _), "prime party");
+            uint clientId = uint.Parse(Read("prime-ready-client"));
+            manager.BeginRun();
+            yield return Wait(() => Enemies().Any(e => e.Assignment.SimulationOwnerPlayerId == clientId), "prime wave target");
+            primingEnemyId = Enemies().First(e => e.Assignment.SimulationOwnerPlayerId == clientId).netId;
+            priming = true; Mark("prime-enemy", primingEnemyId.ToString());
+            yield return Wait(() => !NetworkServer.spawned.ContainsKey(primingEnemyId), "real Circling canonical kill", 40);
+            Require(NetworkCombatWorld.Instance.Gateway.Metrics.ConfirmedKills > 0, "Prime target was merely destroyed.");
+            Mark("prime-killed");
+            yield return Wait(() => Has("prime-observed-client") && Has("prime-observed-" + Other), "prime death delivery");
+            Mark("prime-stop"); service.Stop();
+            yield return Wait(() => service.CanStart && !manager.IsGameplayLoaded && !manager.IsGameplayTransitioning, "prime server Stop");
+            yield return Wait(() => Has("prime-cleared-client") && Has("prime-cleared-" + Other), "prime clients Stop");
+            priming = false;
+        }
+        private IEnumerator PrimeSelectionClient()
+        {
+            yield return Wait(() => Has("listening"), "prime listening");
+            if (role != "host") StartRole("client");
+            yield return Wait(OwnerReady, "prime Owner baseline");
+            Owner.GetComponent<NetworkExperienceCollector>().enabled = false;
+            MoveSelectionOwner(role == "client" ? new Vector2(10, 0) : new Vector2(-15, 0));
+            Mark("prime-ready-" + role, Owner.netId.ToString());
+            yield return Wait(() => Has("prime-enemy"), "prime enemy identity");
+            primingEnemyId = uint.Parse(Read("prime-enemy")); priming = true;
+            yield return Wait(() => NetworkClient.spawned.ContainsKey(primingEnemyId) &&
+                NetworkClient.spawned[primingEnemyId].GetComponent<NetworkEnemySimulationAgent>().ProductEnemyInitialized, "prime target ready");
+            if (role == "client")
+            {
+                var target = NetworkClient.spawned[primingEnemyId].GetComponent<EnemyController>();
+                var weapon = (CirclingAttackBehaviour)Owner.GetComponent<PlayerBuildRuntime>().InitialWeapon;
+                weapon.baseSpeed = 0;
+                float next = 0, until = Time.realtimeSinceStartup + 35;
+                while (target != null && Time.realtimeSinceStartup < until)
+                {
+                    Vector2 offset = weapon.transform.TransformPoint(Vector3.right * weapon.baseRadius * weapon.SizeValue) - Owner.transform.position;
+                    var orb = weapon.GetComponentsInChildren<AnimatedAttack>().FirstOrDefault(a => a.hitbox != null && a.hitbox.collider.enabled);
+                    if (orb != null) offset = orb.hitbox.collider.bounds.center - Owner.transform.position;
+                    MoveSelectionOwner((Vector2)target.hurtBox.GetBounds().center - offset);
+                    if (Time.time >= next) { weapon.Attack(); next = Time.time + weapon.GetAttackSequenceDuration() + weapon.GetCooldown() + .3f; }
+                    yield return new WaitForFixedUpdate();
+                }
+                Require(target == null, "Real Circling did not kill the priming enemy.");
+            }
+            yield return Wait(() => Has("prime-killed") && !NetworkClient.spawned.ContainsKey(primingEnemyId), "prime despawn");
+            yield return new WaitForSecondsRealtime(.25f);
+            bool retained = NetworkCombatWorld.Instance.Replica.TryGetEntity(primingEnemyId, out var death);
+            Debug.Log($"[M5Process] event=prime-death role={role} enemy={primingEnemyId} retained={retained} hp={death.Health} version={death.StateVersion}");
+            Mark("prime-observed-" + role);
+            yield return Wait(() => Has("prime-stop"), "prime Stop signal");
+            if (role != "host") service.Stop();
+            yield return Wait(() => service.CanStart && !manager.IsGameplayLoaded && !manager.IsGameplayTransitioning, "prime client Stop");
+            priming = false; Mark("prime-cleared-" + role);
+        }
+        private void MoveSelectionOwner(Vector2 position)
+        {
+            var player = Owner.GetComponent<PlayerMovement>(); player.SetDirection(Vector2.zero);
+            player.body.position = position; player.transform.position = position; Physics2D.SyncTransforms();
+        }
+        // B enters the real F5 reward menu before A starts the second run's wave scheduler.
+        private IEnumerator SelectingServerScenario()
+        {
+            yield return PrimeSelectionServer();
+            StartRole(role); Mark("select-listening");
+            yield return Wait(() => Has("select-ready-client") && Has("select-ready-" + Other), "selection party");
+            uint selectingId = uint.Parse(Read("select-ready-client"));
+            var selection = NetworkServer.spawned[selectingId].GetComponent<NetworkModifierSelection>();
+            yield return Wait(() => selection.IsSelecting && manager.CanBeginRun(out _), "server sees F5 selection before start");
+            Require(Spawner.CountCanonicalEnemies() == 0, "Enemy spawned before Start Run.");
+            Require(manager.TryBeginRun(out string error), error);
+            yield return Wait(() => Enemies().Any(e => e.Assignment.SimulationOwnerPlayerId == selectingId), "wave assigned to selecting B");
+            var enemy = Enemies().First(e => e.Assignment.SimulationOwnerPlayerId == selectingId);
+            Require(enemy.netId == primingEnemyId, "Regression requires a reused enemy netId.");
+            var born = NetworkCombatWorld.Instance.Gateway.Ledger.CaptureEntityState(enemy.netId).State;
+            Debug.Log($"[M5Process] event=restart-ledger enemy={enemy.netId} hp={born.Health} version={born.StateVersion} alive={born.Alive}");
+            Mark("select-enemy", enemy.netId.ToString());
+            yield return Wait(() => Has("select-checked-client") && Has("select-checked-" + Other), "HP and movement checks");
+            Require(NetworkEnemySimulationWorld.Instance.Registry.TryGetLatestSnapshot(enemy.netId, out var snapshot) && snapshot.Sequence > 20,
+                "Selecting simulator stopped publishing accepted movement snapshots.");
+            var state = NetworkCombatWorld.Instance.Gateway.Ledger.CaptureEntityState(enemy.netId).State;
+            Require(state.Alive && state.Health == state.MaxHealth, "Untouched enemy lost canonical health.");
+            Debug.Log($"[M5Process] event=selection-before-run enemy={enemy.netId} canonical={state.Health} sequence={snapshot.Sequence} position={snapshot.Position}");
+            Mark("select-finish");
+            yield return Wait(() => Has("select-finished-client") && Has("select-finished-" + Other), "selection clients finish");
+            service.Stop();
+            yield return Wait(() => service.CanStart && !manager.IsGameplayLoaded && !manager.IsGameplayTransitioning, "selection Stop");
+            Require(Enemies().Length == 0, "Selection scenario retained enemies after Stop.");
+        }
+        [Serializable] private struct SelectionPosition { public float x, y; }
+        private IEnumerator SelectingClientScenario()
+        {
+            yield return PrimeSelectionClient();
+            yield return Wait(() => Has("select-listening"), "selection server listening");
+            if (role != "host") StartRole("client");
+            yield return Wait(OwnerReady, "selection Owner baseline");
+            var player = Owner.GetComponent<AstralShift.HellMaiden.Player.PlayerMovement>();
+            var selection = Owner.GetComponent<NetworkModifierSelection>();
+            player.SetDirection(Vector2.zero);
+            if (role == "client")
+            {
+                Require(selection.RequestDebugLevelUp(), "F5 request rejected.");
+                yield return Wait(() => selection.IsSelecting && FindFirstObjectByType<CardPickMenu>().IsOpen, "B keeps reward menu open");
+                Require(player.IsInvulnerable, "B lost selection immunity.");
+            }
+            Mark("select-ready-" + role, Owner.netId.ToString());
+            yield return Wait(() => Has("select-enemy"), "selection wave spawn");
+            uint enemyId = uint.Parse(Read("select-enemy"));
+            yield return Wait(() => NetworkClient.spawned.ContainsKey(enemyId) &&
+                NetworkClient.spawned[enemyId].GetComponent<NetworkEnemySimulationAgent>().ProductEnemyInitialized, "selection enemy ready");
+            var enemy = NetworkClient.spawned[enemyId].GetComponent<NetworkEnemySimulationAgent>();
+            var combatant = enemy.GetComponent<CombatantBehaviour>();
+            Vector2 origin = enemy.transform.position;
+            yield return Wait(() => NetworkCombatWorld.Instance.Replica.TryGetEntity(enemyId, out _), "new canonical baseline");
+            double until = Time.unscaledTimeAsDouble + 8;
+            bool healthAligned = true;
+            while (Time.unscaledTimeAsDouble < until)
+            {
+                NetworkCombatWorld.Instance.Replica.TryGetEntity(enemyId, out var state);
+                Debug.Log($"[M5Process] selection-observe role={role} enemy={enemyId} local={combatant.CurrentHealth} canonical={state.Health} version={state.StateVersion} simulator={enemy.Assignment.SimulationOwnerPlayerId} here={enemy.Authority.Role} position={enemy.transform.position}");
+                healthAligned &= state.Alive && state.Health == state.MaxHealth && combatant.CurrentHealth == state.Health;
+                if (role == "client") Require(selection.IsSelecting && player.IsInvulnerable, "Selection ended during reproduction.");
+                yield return new WaitForSecondsRealtime(.25f);
+            }
+            bool moved = Vector2.Distance(origin, enemy.transform.position) > .1f;
+            if (role == "client")
+            {
+                enemy.GetComponent<AstralShift.HellMaiden.AI.Enemy.EnemyController>().Movement.StopMovement();
+                var chase = enemy.GetComponent<MonsterSupergroup.Gameplay.Local.LocalEnemyChase>();
+                if (chase != null) chase.enabled = false;
+                var body = enemy.GetComponent<Rigidbody2D>(); body.linearVelocity = Vector2.zero; body.gravityScale = 0;
+                Mark("select-position", JsonUtility.ToJson(new SelectionPosition { x = body.position.x, y = body.position.y }));
+            }
+            yield return Wait(() => Has("select-position"), "final simulator position");
+            var expected = JsonUtility.FromJson<SelectionPosition>(Read("select-position"));
+            until = Time.unscaledTimeAsDouble + 2;
+            while (Vector2.Distance(enemy.transform.position, new Vector2(expected.x, expected.y)) > .02f && Time.unscaledTimeAsDouble < until)
+                yield return null;
+            float error = Vector2.Distance(enemy.transform.position, new Vector2(expected.x, expected.y));
+            Debug.Log($"[M5Process] event=restart-convergence role={role} enemy={enemyId} healthy={healthAligned} moved={moved} error={error:F4} here={enemy.transform.position} simulator=({expected.x:F4},{expected.y:F4})");
+            Require(healthAligned && moved && error <= .02f,
+                $"Reused enemy retained stale state or movement: role={role} enemy={enemyId} healthy={healthAligned} moved={moved} error={error:F4}.");
+            if (capture) yield return Capture("selection-before-run");
+            Mark("select-checked-" + role);
+            yield return Wait(() => Has("select-finish"), "selection assertions complete");
+            if (role == "client")
+            {
+                var view = Owner.GetComponent<ModifierSelectionController>();
+                Require(view.Select(0).Succeeded, "Selection card failed.");
+                yield return Wait(() => view.Stage == UpgradeSelectionStage.EquipmentTarget && !view.IsRequestPending, "Equipment target");
+                Require(view.Select(0).Succeeded, "Selection target failed.");
+                yield return Wait(() => !selection.IsSelecting, "selection unlock");
+                Require(combatant.IsAlive, "Finishing selection left the enemy locally dead.");
+            }
+            Mark("select-finished-" + role);
+            if (role != "host") { service.Stop(); yield return Wait(() => service.CanStart, "selection client Stop"); }
+        }
         private IEnumerator Reconnect(string phase)
         {
             yield return Wait(() => Has("disconnect-" + phase), "disconnect " + phase);
@@ -290,7 +472,13 @@ namespace MonsterSupergroup.Gameplay.Tests
         }
         private bool Has(string name) => File.Exists(Path.Combine(directory, name));
         private string Read(string name) => File.ReadAllText(Path.Combine(directory, name));
-        private void Mark(string name, string value = "ready") => File.WriteAllText(Path.Combine(directory, name), value);
+        private void Mark(string name, string value = "ready")
+        {
+            string path = Path.Combine(directory, name);
+            string temporary = path + "." + role + ".tmp";
+            File.WriteAllText(temporary, value);
+            File.Move(temporary, path); // Readers only see a closed, complete marker.
+        }
         private static void Require(bool condition, string message) { if (!condition) throw new InvalidOperationException(message); }
         private void ObserveLog(string message, string trace, LogType type)
         {

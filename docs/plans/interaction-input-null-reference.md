@@ -25,7 +25,7 @@ Unity 6000.3.17f1，正式 Boot 启动 Host。测试取得实际 Owner 和当前
 
 第一次修复后启动在测试诊断代码中使用了错误大小写 `controllers.joysticks`，编译失败；按已安装 Rewired API 改为 `controllers.Joysticks` 后完成上述回归。未放宽或跳过断言。
 
-## 当前手柄配置
+## 交互修复时的手柄配置
 
 Boot 仅有 `DualAnalogGamepad` 模板的 Normal map。运行时实际识别为 **Xbox One Controller**，读取当前启用的映射得到：
 
@@ -40,6 +40,8 @@ Boot 仅有 `DualAnalogGamepad` 模板的 Normal map。运行时实际识别为 
 证据见 `after-run.log` 的 `[InteractionInput]` 行，以及 Boot 的 `joystickMaps`。`R_Trigger` 是 Action 名称，不代表已经配置了 RT。
 
 用户报告实体 B 触发交互，堆栈能确认触发了 Action 0，但运行时映射名称是 A。实际设备型号、按键印字/驱动布局是否互换尚待用户补充，不能据此断定标准 Xbox B 被绑定为交互。摇杆向下错配作为独立发现记录，本次修复没有更改按键约定。
+
+后续更新：用户表示可能记错，按的应该是 A。RT／Y 已在后续提交中绑定 Dash／Ultimate；左摇杆下也已从 Action 1 的水平负向修正为 Action 3 的垂直负向。上表保留交互修复时的证据，最新配置与验证见 [Rewired 输入记录](rewired-ability-input.md)。
 
 人工复核：从 Boot 进入 Gameplay，在未选卡锁定时反复按键盘 E 及设备上触发交互的按钮，Console 不再出现该异常。按下后没有交互效果是当前正式 Prefab 未配置 finder 的结果，不代表新增了交互玩法。实体 A/B 对应关系和向下错配需要分别验证。
 

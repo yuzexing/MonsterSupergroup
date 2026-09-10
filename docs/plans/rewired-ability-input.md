@@ -22,6 +22,14 @@
 
 验证：已核对参考配置与正式 Boot 的三行变更；复用现有 Dash、Ultimate、键盘映射和交互回归，**14/14 PASS**，Unity 退出码 0，结果见 `Logs/GamepadAbilities/results.xml`、`tests.log`。本轮没有新的实体手柄按压记录，不把技能 API 回归当作物理输入验收。重新从 Boot 启动后用 RT/Y 人工确认；旧独立构建需重新打包才能包含新的 Scene 配置。手柄映射可独立恢复为原未分配状态，键盘入口保留。
 
+## 左摇杆向下修正（2026-09-11）
+
+正式 Boot 的通用手柄模板将左摇杆 Y 负半轴（元素 1、Negative）错绑到 Action 1 `L_Stick_Horizontal`，所以向下输入会调用水平移动的负方向。将该项的 Action 改为 3 `L_Stick_Vertical`，保留负半轴和负向贡献，无需反转轴或修改移动代码。
+
+静态核对四个摇杆方向及 RT／Y／A 共 7 项配置均通过，证据为 `Logs/GamepadMovement/mapping-check.txt`。修改后运行既有 Dash、Ultimate、键盘映射和正式 Boot 交互回归，**14/14 PASS**，无跳过，Unity 退出码 0，结果为 `Logs/GamepadMovement/results.xml`、`tests.log`。该轮没有连接手柄的映射日志，不将自动回归视为实体摇杆测试。
+
+人工复核：退出 Play Mode，重新从 Boot 进入 Gameplay，用左摇杆依次上／下／左／右移动；向下应只向下，斜向移动应组合两个轴。另确认 RT 冲刺与 F6 充能后 Y 释放大招。已经加载的 Rewired 配置需重新初始化；独立版需要重新构建。
+
 ## 接线与权限
 
 `Rewired → InputHandler → PlayerController_HMD.BoundPlayer → PlayerMovement`。

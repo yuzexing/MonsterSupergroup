@@ -25,7 +25,9 @@ namespace AstralShift.HellMaiden.Player.Attacks
         private readonly bool[] waveStarted = new bool[2];
         private readonly bool[] waveEnded = new bool[2];
         private readonly float[] waveTimes = new float[2];
-        private ParticleSystem[] mainParticles;
+        // Also guards timing initialization. Editor reload must not restore null as an empty array
+        // while the runtime-only wave times are reset, skipping EnsureVisualConfiguration.
+        [NonSerialized] private ParticleSystem[] mainParticles;
         private WeaponData compatibilityView;
         private GasAttackSnapshot activeSnapshot;
         private ProjectilePresentationStats frozenStats;

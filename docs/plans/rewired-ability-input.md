@@ -32,6 +32,8 @@
 
 ## 接线与权限
 
+2026-09-11 人工验收补充：F6 成功充能后，Ultimate 在 Editor 进入 Play Mode 时可能因时长缓存错误抛异常并断线；已通过域重载复现并修复。该问题与键盘／手柄映射无关，详见 [Ultimate Editor 缓存回归](ultimate-editor-reload-cache.md)。
+
 `Rewired → InputHandler → PlayerController_HMD.BoundPlayer → PlayerMovement`。
 
 Dash/Q 继续原 API；F6 经可选委托进入 `NetworkPlayerUltimate.RequestDebugUltimateCharge → CmdDebugUltimateCharge → ServerGrantCharge → 原状态同步/checkpoint`。Gameplay 不依赖 Mirror。失权、禁用和销毁使用原 `UnbindUltimateInput` 同时释放三个委托。

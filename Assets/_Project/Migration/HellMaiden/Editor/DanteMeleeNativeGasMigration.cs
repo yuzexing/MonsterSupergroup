@@ -25,7 +25,7 @@ namespace MonsterSupergroup.HellMaidenMigration.Editor
         public const string AttackPath = OutputFolder + "/GameObject/PlayerAttack_Dante_Slash.prefab";
         public const string ClipPath = OutputFolder + "/AnimationClip/PlayerAttack_Dante_Slash_Idle_0.anim";
         private const string KnockbackPath = OutputFolder + "/MonoBehaviour/KnockBack_MeleeAttack.asset";
-        private const string SourceDefault = "F:/DecomplieLatest/HellMaiden/ExportedProject";
+        private static string SourceDefault => MonsterSupergroup.EditorTools.ProjectToolPaths.HellMaiden();
         private const string ObsoleteParticleHelperGuid = "cffbb4d90507e888f705c8dc76ba6e21";
         private const string SpriteShaderPath = "Assets/Plugins/AllIn1SpriteShader/Shaders/AllIn1SpriteShader.shader";
         private const string VfxShaderPath = "Assets/Plugins/AllIn1VfxToolkit/Shaders/AllIn1VfxURPCompat.shader";
@@ -56,9 +56,10 @@ namespace MonsterSupergroup.HellMaidenMigration.Editor
             "MonoBehaviour/WeaponData_Dante_Melee.asset"
         };
 
-        [MenuItem("Tools/HellMaiden Migration/Import Dante Melee Native GAS Assets")]
+
         public static void Import()
         {
+            MonsterSupergroup.EditorTools.ProjectToolRunner.CheckLegacyMaintenance("import.melee", "MonsterSupergroup.HellMaidenMigration.Editor.DanteMeleeNativeGasMigration.Import");
             string sourceRoot = Environment.GetEnvironmentVariable("HELLMAIDEN_SOURCE_PROJECT");
             if (string.IsNullOrWhiteSpace(sourceRoot)) sourceRoot = SourceDefault;
             sourceRoot = Path.GetFullPath(sourceRoot);
@@ -222,7 +223,7 @@ namespace MonsterSupergroup.HellMaidenMigration.Editor
             EditorUtility.SetDirty(material);
         }
 
-        [MenuItem("Tools/HellMaiden Migration/Validate Dante Melee Native GAS Assets")]
+
         public static void ValidateImportedAssets()
         {
             WeaponData weapon = RequireAsset<WeaponData>(WeaponPath);

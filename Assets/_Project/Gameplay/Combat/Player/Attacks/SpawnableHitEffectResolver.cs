@@ -122,6 +122,7 @@ namespace AstralShift.HellMaiden.Player.Attacks
 					_checkoutRoot = staging.transform;
 				}
 				effect = pool.GetOrCreate(_checkoutRoot, activate: false);
+                MonsterSupergroup.Gameplay.Combat.GameplayMapPresentation.Effect(effect.gameObject);
 				effect.gameObject.SetActive(false);
 				effect.transform.SetParent(null, false);
 				effect.transform.position = position ?? (hitEffectSpawnPivot

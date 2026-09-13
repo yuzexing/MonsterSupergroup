@@ -47,7 +47,7 @@ namespace MonsterSupergroup.HellMaidenMigration.Editor
             "TimelineEffects and PausableParticleSystem remain for explicit Native/local-presentation adaptation; " +
             "the import does not activate global camera, pause, loot, invulnerability or legacy damage behavior.";
 
-        private const string SourceDefault = "F:/DecomplieLatest/HellMaiden/ExportedProject";
+        private static string SourceDefault => MonsterSupergroup.EditorTools.ProjectToolPaths.HellMaiden();
         private const string SpriteShaderPath = "Assets/Plugins/AllIn1SpriteShader/Shaders/AllIn1SpriteShader.shader";
         private const string VfxShaderPath = "Assets/Plugins/AllIn1VfxToolkit/Shaders/AllIn1VfxURPCompat.shader";
         private const string LightScriptPath = "Packages/com.unity.render-pipelines.universal/Runtime/2D/Light2D.cs";
@@ -135,9 +135,10 @@ namespace MonsterSupergroup.HellMaidenMigration.Editor
             "Texture2D/white_1.png",
         };
 
-        [MenuItem("Tools/HellMaiden Migration/Import Dante Ultimate Attack Assets")]
+
         public static void Import()
         {
+            MonsterSupergroup.EditorTools.ProjectToolRunner.CheckLegacyMaintenance("import.ultimate", "MonsterSupergroup.HellMaidenMigration.Editor.DanteUltimateAssetMigration.Import");
             string sourceRoot = Environment.GetEnvironmentVariable("HELLMAIDEN_SOURCE_PROJECT");
             if (string.IsNullOrWhiteSpace(sourceRoot)) sourceRoot = SourceDefault;
             sourceRoot = Path.GetFullPath(sourceRoot);
@@ -272,7 +273,7 @@ namespace MonsterSupergroup.HellMaidenMigration.Editor
             finally { PrefabUtility.UnloadPrefabContents(root); }
         }
 
-        [MenuItem("Tools/HellMaiden Migration/Validate Dante Ultimate Attack Assets")]
+
         public static void ValidateImportedAssets()
         {
             UltimateData definition = RequireAsset<UltimateData>(DefinitionPath);

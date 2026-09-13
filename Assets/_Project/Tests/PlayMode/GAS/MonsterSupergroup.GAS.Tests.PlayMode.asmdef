@@ -2,7 +2,8 @@
   "name": "MonsterSupergroup.GAS.Tests.PlayMode",
   "rootNamespace": "MonsterSupergroup.GAS.Tests",
   "references": [
-    "GUID:a7c8997642ef4acb9c3b5bb6f2af8b51"
+    "GUID:a7c8997642ef4acb9c3b5bb6f2af8b51",
+    "MonsterSupergroup.EditorTools"
   ],
   "includePlatforms": [],
   "excludePlatforms": [],

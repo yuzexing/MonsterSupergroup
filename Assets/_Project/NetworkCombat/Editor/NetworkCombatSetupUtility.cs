@@ -6,6 +6,7 @@ using AstralShift.HellMaiden.Data.Cards;
 using kcp2k;
 using Mirror;
 using Mirror.FizzySteam;
+using MonsterSupergroup.Gameplay.Combat;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
@@ -33,31 +34,15 @@ namespace MonsterSupergroup.NetworkCombat.Editor
         private const string WeaponDatabasePath =
             "Assets/_Project/Content/HellMaiden/NativeGAS/NativeGasWeaponDB.asset";
 
-        [MenuItem("Monster Supergroup/Network Combat/Configure Boot Gameplay Loop")]
+
         public static void ConfigureBootGameplayLoop()
         {
-            try
-            {
-                BuildBootGameplayAssets();
-                Debug.Log(
-                    "Boot -> Gameplay network combat loop assets configured.");
-                ExitBatchMode(0);
-            }
-            catch (Exception exception)
-            {
-                Debug.LogException(exception);
-                if (Application.isBatchMode)
-                {
-                    ExitBatchMode(1);
-                    return;
-                }
-
-                throw;
-            }
+            MonsterSupergroup.EditorTools.ProjectToolRunner.LegacyBatch("setup.boot");
         }
 
         public static void BuildBootGameplayAssets()
         {
+            MonsterSupergroup.EditorTools.ProjectToolRunner.CheckLegacyMaintenance("setup.boot", "MonsterSupergroup.NetworkCombat.Editor.NetworkCombatSetupUtility.BuildBootGameplayAssets");
             if (System.IO.File.Exists(BootScenePath) && System.IO.File.Exists(GameplayScenePath))
             {
                 EnemySimulationPrefabMigrator.Migrate();
@@ -69,33 +54,15 @@ namespace MonsterSupergroup.NetworkCombat.Editor
             AssetDatabase.Refresh();
         }
 
-        [MenuItem("Monster Supergroup/Network Combat/Build Validation Sandbox")]
+
         public static void BuildSandbox()
         {
-            try
-            {
-                BuildSandboxAssets();
-                Debug.Log(
-                    $"Network combat sandbox built: {SandboxScenePath}. " +
-                    "Skeleton melee validation and combat pooling are included. " +
-                    "Use Mirror HUD to start Host and up to three Clients.");
-                ExitBatchMode(0);
-            }
-            catch (Exception exception)
-            {
-                Debug.LogException(exception);
-                if (Application.isBatchMode)
-                {
-                    ExitBatchMode(1);
-                    return;
-                }
-
-                throw;
-            }
+            MonsterSupergroup.EditorTools.ProjectToolRunner.LegacyBatch("setup.sandbox");
         }
 
         public static void BuildSandboxAssets()
         {
+            MonsterSupergroup.EditorTools.ProjectToolRunner.CheckLegacyMaintenance("setup.sandbox", "MonsterSupergroup.NetworkCombat.Editor.NetworkCombatSetupUtility.BuildSandboxAssets");
             if (System.IO.File.Exists(SandboxScenePath))
             {
                 EnemySimulationPrefabMigrator.Migrate();
@@ -438,9 +405,14 @@ namespace MonsterSupergroup.NetworkCombat.Editor
                 spawner = new GameObject("Network Gameplay Enemy Spawner")
                     .AddComponent<NetworkGameplayEnemySpawner>();
             }
-            spawner.Configure(skeletonEnemy, 5f);
+            var authoredMap = scene.GetRootGameObjects().SelectMany(root =>
+                root.GetComponentsInChildren<GameplayMapContext>(true)).FirstOrDefault();
+            // An authored production map owns its wave configuration and relocated starts.
+            if (authoredMap == null) spawner.Configure(skeletonEnemy, 5f);
             EditorUtility.SetDirty(spawner);
 
+            if (authoredMap == null)
+            {
             GameObject[] startsRoots = scene.GetRootGameObjects()
                 .Where(root => root.name == NetworkPlayerStartsRootName)
                 .ToArray();
@@ -463,6 +435,7 @@ namespace MonsterSupergroup.NetworkCombat.Editor
             CreateStartPosition(startsRoot.transform, new Vector2(2f, 0f));
             CreateStartPosition(startsRoot.transform, new Vector2(0f, -2f));
             CreateStartPosition(startsRoot.transform, new Vector2(0f, 2f));
+            }
 
             if (!scene.GetRootGameObjects()
                 .SelectMany(root => root.GetComponentsInChildren<EnemyAIManager>(true))
@@ -524,12 +497,5 @@ namespace MonsterSupergroup.NetworkCombat.Editor
             }
         }
 
-        private static void ExitBatchMode(int exitCode)
-        {
-            if (Application.isBatchMode)
-            {
-                EditorApplication.Exit(exitCode);
-            }
-        }
     }
 }

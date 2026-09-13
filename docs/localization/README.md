@@ -17,10 +17,10 @@ Unity Localization 1.5.13 是唯一运行时本地化系统。正式启用简体
 ## 修改和增加内容
 
 1. 修改现有翻译：直接编辑表格；保留 Key 和 Id。
-2. 新增玩法内容：先创建资产和分配稳定内容 ID，选中资产后执行 **MonsterSupergroup → Localization → Create entries for selected content**，再填写各语言名称与说明。
+2. 新增玩法内容：先创建资产和分配稳定内容 ID，选中资产后执行 **MonsterSupergroup → 工具中心 → 创建内容本地化条目**，再填写各语言名称与说明。
 3. 装备等级共用参数化说明；确有不同文案时，在该等级的 `LocalizedDescription` 绑定专用条目。留空表示使用装备公共说明。
 4. 修改名称不修改键。例如 `weapon.2.name`；Perk 稀有度和装备等级不改变网络内容 ID。
-5. 执行 **Validate tables and content**，再使用 **Export translation CSV** 更新本目录副本。
+5. 执行 **MonsterSupergroup → 校验 → 本地化**，再使用 **工具中心 → 导出本地化 CSV** 更新本目录副本。
 
 ## 说明参数
 
@@ -55,7 +55,7 @@ Locale 的 **Locale Name** 是语言选择项显示的名称（例如“简体�
 
 初次迁移参考 Hellmaiden 的中英语言资源，保留本项目已有命名；说明按当前 GAS 效果重写。`Fonts/Chinese.otf` 来自参考工程的 REEJI-LiLing-Gothic-GB Regular 字体。现在编辑、运行和构建不需要外部 Hellmaiden 目录。
 
-`Tools/Export-LocalizationMigration.py` 只用于对迁移前的工程提取旧数据，需要显式提供参考工程路径和 PyYAML；它拒绝已迁移的资产。`GameLocalizationAssets.Import` 是显式的一次性导入入口，正常构建不会调用。旧文件的本机可恢复副本位于 `Logs/LocalizationMigration/removed`，不进入 Unity 导入或发布包。
+I2 一次性提取与导入实现已在 EditorTool 整理中退役删除。当前翻译维护直接使用 Unity Localization 表格或 CSV，不再从旧清单重新导入。历史可恢复副本仍位于 `Logs/LocalizationMigration/removed`，不进入 Unity 导入或发布包。工具入口见 [EditorTool 使用指南](../editor-tools/README.md)。
 
 Debug 文案、日志、昵称、SteamID、ParticipantId 和端口不是翻译目标。
 

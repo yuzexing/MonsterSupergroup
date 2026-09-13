@@ -13,7 +13,7 @@ namespace MonsterSupergroup.GAS.Editor
             if (!ModifierRegistryGenerator.IsCurrent())
             {
                 throw new BuildFailedException(
-                    "The generated GAS registry is stale. Run Tools/MonsterSupergroup/GAS/Rebuild Registry before building.");
+                    "The generated GAS registry is stale. Run generate.gas-registry -Apply before building.");
             }
 
             GasValidationIssue firstError = GasAssetValidator.ValidateAllAssets()

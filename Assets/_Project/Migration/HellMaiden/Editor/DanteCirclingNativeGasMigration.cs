@@ -35,7 +35,7 @@ namespace MonsterSupergroup.HellMaidenMigration.Editor
             "luminance-to-alpha as an explicit approximation of missing Rubfish opacity, preserving source alpha " +
             "blending and texture bytes. Source audio references/None triggers are preserved; no playback " +
             "timing is inferred and the bank is unavailable. The source card icon GUID has no asset in the export.";
-        private const string SourceDefault = "F:/DecomplieLatest/HellMaiden/ExportedProject";
+        private static string SourceDefault => MonsterSupergroup.EditorTools.ProjectToolPaths.HellMaiden();
         private const string SpriteShaderPath = "Assets/Plugins/AllIn1SpriteShader/Shaders/AllIn1SpriteShader.shader";
         private const string VfxShaderPath = "Assets/Plugins/AllIn1VfxToolkit/Shaders/AllIn1VfxURPCompat.shader";
         private const string KnockbackGuid = "b059a95aaaaea704682bf0db9a416783";
@@ -81,9 +81,10 @@ namespace MonsterSupergroup.HellMaidenMigration.Editor
             "Texture2D/seamlessNoise_1.png", "Texture2D/white_1.png"
         };
 
-        [MenuItem("Tools/HellMaiden Migration/Import Dante Circling Native GAS Assets")]
+
         public static void Import()
         {
+            MonsterSupergroup.EditorTools.ProjectToolRunner.CheckLegacyMaintenance("import.circling", "MonsterSupergroup.HellMaidenMigration.Editor.DanteCirclingNativeGasMigration.Import");
             string sourceRoot = Environment.GetEnvironmentVariable("HELLMAIDEN_SOURCE_PROJECT");
             if (string.IsNullOrWhiteSpace(sourceRoot)) sourceRoot = SourceDefault;
             sourceRoot = Path.GetFullPath(sourceRoot);
@@ -289,7 +290,7 @@ namespace MonsterSupergroup.HellMaidenMigration.Editor
             if (!entries.Contains(weapon)) { entries.Add(weapon); database.Configure(entries.ToArray()); EditorUtility.SetDirty(database); }
         }
 
-        [MenuItem("Tools/HellMaiden Migration/Validate Dante Circling Native GAS Assets")]
+
         public static void ValidateImportedAssets()
         {
             WeaponData weapon = RequireAsset<WeaponData>(WeaponPath);
@@ -335,7 +336,7 @@ namespace MonsterSupergroup.HellMaidenMigration.Editor
             }
         }
 
-        [MenuItem("Tools/HellMaiden Migration/Diagnose Dante Circling Presentation Dependencies")]
+
         public static void DiagnosePresentationDependencies()
         {
             GameObject root = RequireAsset<GameObject>(AttackPath);

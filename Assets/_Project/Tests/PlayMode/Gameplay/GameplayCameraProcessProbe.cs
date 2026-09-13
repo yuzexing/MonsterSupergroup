@@ -8,12 +8,14 @@ using AstralShift.HellMaiden.Player;
 using Com.LuisPedroFonseca.ProCamera2D;
 using Mirror;
 using MonsterSupergroup.NetworkCombat;
+using MonsterSupergroup.Gameplay.Combat;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 namespace MonsterSupergroup.Gameplay.Tests
 {
     // Opt-in test build only. Markers coordinate the harness; gameplay uses real Boot, KCP and admission.
+    [DefaultExecutionOrder(500)]
     public sealed class GameplayCameraProcessProbe : MonoBehaviour
     {
         private string role, artifacts;
@@ -24,12 +26,31 @@ namespace MonsterSupergroup.Gameplay.Tests
         private PlayerMovement player;
         private ProCamera2D rig;
         private readonly List<int> shakes = new List<int>();
+        private bool drive;
+        [Serializable] private sealed class AnimationTraffic { public string role; public int ownerCommands, mirrorMessageBytes, statePayloadBytes, stateChanges; public float seconds; }
+        private readonly AnimationTraffic animationTraffic = new AnimationTraffic();
+        private float trafficStarted;
+        private void RecordAnimationTraffic(NetworkDiagnostics.MessageInfo info)
+        {
+            if (NetworkClient.localPlayer == null || !(info.message is CommandMessage command)) return;
+            var presentation = NetworkClient.localPlayer.GetComponent<NetworkPlayerPresentation>();
+            if (presentation == null || command.netId != NetworkClient.localPlayer.netId || command.componentIndex != presentation.ComponentIndex) return;
+            animationTraffic.ownerCommands += info.count; animationTraffic.mirrorMessageBytes += info.bytes * info.count;
+        }
+        private void LateUpdate()
+        {
+            if (drive && player != null) player.SetDirection(host ? Vector2.right : Vector2.left);
+            if (finished || view == null || view.BoundPlayer == null) return;
+            try { CheckView(true); }
+            catch (Exception error) { Debug.LogException(error); Finish(false); }
+        }
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
         private static void Install()
         {
             string roleArgument = Environment.GetCommandLineArgs().FirstOrDefault(a => a.StartsWith("--camera-role="));
             if (roleArgument == null) return;
+            FindFirstObjectByType<BootGameplayNetworkManager>().ConfigurePreparationFlow(false);
             var probe = new GameObject("Gameplay camera process probe").AddComponent<GameplayCameraProcessProbe>();
             probe.role = roleArgument.Substring("--camera-role=".Length);
             probe.host = probe.role == "host";
@@ -42,6 +63,7 @@ namespace MonsterSupergroup.Gameplay.Tests
         private IEnumerator Start()
         {
             deadline = Time.realtimeSinceStartup + 120;
+            trafficStarted=Time.realtimeSinceStartup; NetworkDiagnostics.OutMessageEvent += RecordAnimationTraffic;
             Application.runInBackground = true;
             SceneManager.sceneLoaded += PrepareGameplay;
             IEnumerator run = Run();
@@ -72,12 +94,31 @@ namespace MonsterSupergroup.Gameplay.Tests
         {
             manager = FindFirstObjectByType<BootGameplayNetworkManager>();
             Require(manager != null, "Must start from formal Boot.");
+            manager.ConfigurePreparationFlow(false);
             gameObject.AddComponent<WeaponAttackAdmissionFixtureGate>();
             Require(manager.GetComponent<NetworkBackendBootstrap>().TryPrepareKcp("127.0.0.1", 7905, false, out var error), error);
             if (host) manager.StartHost(); else manager.StartClient();
             yield return AwaitOwner();
             Mark(role + "-ready");
             while (!Has("host-ready") || !Has("client-ready") || Players().Count() != 2) yield return null;
+            MoveOwner(new Vector2(host ? -2 : 2, 0));
+            drive = true;
+            Mark(role + "-walking");
+            while (!Has("host-walking") || !Has("client-walking")) yield return null;
+            yield return new WaitForSeconds(.6f);
+            var remote = Players().Single(p => p != NetworkClient.localPlayer);
+            var remoteAnimator = remote.GetComponentInChildren<NordicPlayerAnimator>();
+            Require(remoteAnimator.Motion == NordicMotion.Walk && remoteAnimator.FacingLeft == host, "Remote Axeldor walk/facing state was not delivered.");
+            Require(!remote.GetComponent<PlayerMovement>().enabled, "Remote player enabled local movement.");
+            Capture("multiplayer-walk");
+            Mark(role + "-saw-walk");
+            while (!Has("host-saw-walk") || !Has("client-saw-walk")) yield return null;
+            drive = false; player.StopMovement(); player.SetDirection(Vector2.zero);
+            yield return new WaitForSeconds(.3f);
+            Require(NetworkClient.localPlayer.GetComponent<NetworkPlayerPresentation>().SentChanges <= 16, "Animation sent continuously while a movement state was unchanged.");
+            using (var writer = NetworkWriterPool.Get()) { writer.Write(NetworkClient.localPlayer.GetComponent<NetworkPlayerPresentation>().Visual); animationTraffic.statePayloadBytes=writer.Position; }
+            animationTraffic.stateChanges=NetworkClient.localPlayer.GetComponent<NetworkPlayerPresentation>().SentChanges;
+            Debug.Log("[NordicGameplay] Remote walk, facing, disabled input and state-change traffic PASS");
             MoveOwner(new Vector2(host ? -20 : 20, host ? -8 : 8));
             yield return new WaitForSeconds(2);
             CheckView();
@@ -166,7 +207,7 @@ namespace MonsterSupergroup.Gameplay.Tests
 
         private IEnumerator CastAtBoundary(NetworkPlayerUltimate ultimate)
         {
-            Vector2 position = new Vector2(host ? -55 : 55, 55);
+            Vector2 position = GameplayMapContext.Active.FindSpawn(new Vector2(host ? -55 : 55, GameplayMapContext.Active.Bounds.max.y - .2f), .1f);
             MoveOwner(position);
             yield return new WaitForSeconds(2);
             while (!ultimate.HasCharge || ultimate.OwnerAttack == null) yield return null;
@@ -189,22 +230,23 @@ namespace MonsterSupergroup.Gameplay.Tests
             Capture("boundary-settled");
         }
 
-        private void CheckView()
+        private void CheckView(bool renderedBounds = false)
         {
             Require(view != null && view.BoundPlayer == player && rig.CameraTargets.Count == 1 &&
                 rig.CameraTargets[0].TargetTransform == player.transform, "Wrong or duplicate local follow target.");
-            Require(Mathf.Abs(view.GameCamera.orthographicSize - 5) < .001f, "Single-target zoom changed base view.");
+            Require(!view.GameCamera.orthographic && Mathf.Abs(view.GameCamera.fieldOfView - 80) < .001f && Mathf.Abs(view.transform.position.z + 10) < .001f, "Nordic fixed lens changed.");
             Require(FindObjectsByType<Camera>(FindObjectsSortMode.None).Count(c => c.enabled && c.CompareTag("MainCamera")) == 1, "Duplicate main camera.");
             Require(FindObjectsByType<AudioListener>(FindObjectsSortMode.None).Count(c => c.enabled) == 1, "Duplicate AudioListener.");
             var bounds = view.GetComponent<ProCamera2DNumericBoundaries>();
-            Vector3 p = view.transform.localPosition;
-            float halfX = view.GameCamera.orthographicSize * view.GameCamera.aspect;
-            Require(p.x >= bounds.LeftBoundary + halfX - .03f && p.x <= bounds.RightBoundary - halfX + .03f &&
-                p.y >= bounds.BottomBoundary + 4.97f && p.y <= bounds.TopBoundary - 4.97f, "Plugin base view escaped Ground limits.");
+            Bounds actual = GameplayCameraGeometry.ViewBounds(view.GameCamera);
+            // Shake coroutines run between Update and LateUpdate. Check the final rendered pose.
+            Require(!renderedBounds || (actual.min.x >= bounds.LeftBoundary - .03f && actual.max.x <= bounds.RightBoundary + .03f &&
+                actual.min.y >= bounds.BottomBoundary - .03f && actual.max.y <= bounds.TopBoundary + .03f), "Actual shaken view escaped Ground limits.");
         }
 
         private void MoveOwner(Vector2 position)
         {
+            position = GameplayMapContext.Active.FindSpawn(position, .1f);
             player.transform.position = new Vector3(position.x, position.y, player.transform.position.z);
             player.GetComponent<Rigidbody2D>().position = position;
         }
@@ -225,6 +267,9 @@ namespace MonsterSupergroup.Gameplay.Tests
         {
             if (finished) return;
             finished = true;
+            NetworkDiagnostics.OutMessageEvent -= RecordAnimationTraffic;
+            animationTraffic.role=role; animationTraffic.seconds=Time.realtimeSinceStartup-trafficStarted;
+            File.WriteAllText(Path.Combine(artifacts,role+"-animation-traffic.json"),JsonUtility.ToJson(animationTraffic,true));
             SceneManager.sceneLoaded -= PrepareGameplay;
             Debug.Log($"[GameplayCameraProcess] role={role} result={(passed ? "PASS" : "FAIL")}");
             Application.Quit(passed ? 0 : 1);

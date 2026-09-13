@@ -22,7 +22,7 @@ namespace MonsterSupergroup.HellMaidenMigration.Editor
             Capture();
         }
 
-        [MenuItem("Tools/HellMaiden Migration/Capture Dante Projectile Presentation Preview")]
+
         public static void Capture()
         {
             var clip = AssetDatabase.LoadAssetAtPath<AnimationClip>(DanteProjectilePresentationMigration.ClipPath);

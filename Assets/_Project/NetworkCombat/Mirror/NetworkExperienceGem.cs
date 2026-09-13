@@ -25,6 +25,7 @@ namespace MonsterSupergroup.NetworkCombat
         public override void OnStartServer() { if (!NetworkClient.active && visual != null) visual.gameObject.SetActive(false); }
         public override void OnStartClient()
         {
+            MonsterSupergroup.Gameplay.Combat.GameplayMapPresentation.Body(visual, transform);
             clientGems.Add(this);
             if (visual != null) visual.gameObject.SetActive(!claimed);
         }

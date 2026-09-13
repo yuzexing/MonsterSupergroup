@@ -29,7 +29,7 @@ namespace MonsterSupergroup.HellMaidenMigration.Editor
                 EditorApplication.playModeStateChanged += CaptureAfterPlayMode;
         }
 
-        [MenuItem("Tools/HellMaiden Migration/Capture Dante Ultimate Presentation Preview")]
+
         public static void Capture()
         {
             if (Application.isPlaying) { CaptureInPlayMode(); return; }
@@ -39,6 +39,7 @@ namespace MonsterSupergroup.HellMaidenMigration.Editor
                 throw new InvalidOperationException("Omit -quit: Ultimate preview enters Play Mode and exits Unity itself after capture.");
             // A batch validation clone has no user scene to preserve. An empty scene avoids Boot, UI and old global managers.
             EditorSceneManager.NewScene(NewSceneSetup.EmptyScene, NewSceneMode.Single);
+            SessionState.SetString(PendingCaptureKey + ".startScene", AssetDatabase.GetAssetPath(EditorSceneManager.playModeStartScene));
             EditorSceneManager.playModeStartScene = null;
             SessionState.SetBool(PendingCaptureKey, true);
             EditorApplication.playModeStateChanged -= CaptureAfterPlayMode;
@@ -60,7 +61,15 @@ namespace MonsterSupergroup.HellMaidenMigration.Editor
             int exitCode = 0;
             try { CaptureInPlayMode(); }
             catch (Exception exception) { Debug.LogException(exception); exitCode = 1; }
-            finally { EditorApplication.Exit(exitCode); }
+            finally
+            {
+                string previousStart = SessionState.GetString(PendingCaptureKey + ".startScene", "");
+                EditorSceneManager.playModeStartScene = string.IsNullOrEmpty(previousStart) ? null : AssetDatabase.LoadAssetAtPath<SceneAsset>(previousStart);
+                SessionState.EraseString(PendingCaptureKey + ".startScene");
+                if (MonsterSupergroup.EditorTools.ProjectToolRunner.IsPending)
+                    MonsterSupergroup.EditorTools.ProjectToolRunner.CompletePending(exitCode == 0 ? null : new InvalidOperationException("Ultimate preview failed; see Unity log."));
+                else EditorApplication.Exit(exitCode);
+            }
         }
 
         private static void CaptureInPlayMode()

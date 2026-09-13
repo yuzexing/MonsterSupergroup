@@ -50,11 +50,13 @@ def write_asset(relative, data, asset_guid, meta=None):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--source', default='F:/DecomplieLatest/NordicAshes/ExportedProject')
+    parser.add_argument('--source', required=True)
     parser.add_argument('--stage', choices=['smoke', 'full'], default='full')
     args = parser.parse_args()
     source = Path(args.source)
     target_layers = blocks(PROJECT / 'ProjectSettings/TagManager.asset')[0][3]['layers']
+    target_sorting = blocks(PROJECT / 'ProjectSettings/TagManager.asset')[0][3]['m_SortingLayers']
+    source_sorting = {s['uniqueID'] & 0xffffffff: s['name'] for s in blocks(source / 'ProjectSettings/TagManager.asset')[0][3]['m_SortingLayers']}
     index = {}
     for p in (source / 'Assets').rglob('*.meta'):
         match = re.search(r'^guid: ([0-9a-f]{32})', p.read_text(encoding='utf-8-sig'), re.M)
@@ -133,7 +135,7 @@ def main():
         keep = []
         lights = []
         for class_id, item_id, kind, d, raw in docs:
-            allowed = kind in ['GameObject', 'Transform', 'SpriteRenderer']
+            allowed = kind in ['GameObject', 'Transform', 'SpriteRenderer', 'SortingGroup']
             if kind in ['PolygonCollider2D', 'BoxCollider2D']:
                 allowed = group in [1, 2, 4, 6] and d.get('m_IsTrigger', 0) == 0
             if group in [6, 7] and kind in ['ParticleSystem', 'ParticleSystemRenderer']:
@@ -166,10 +168,18 @@ def main():
                 raw = re.sub(r'(?m)^  m_Materials:\n(?:  - .*\n)+',
                              '  m_Materials:\n  - {fileID: 2100000, guid: ' + guid('material/' + material) + ', type: 2}\n', raw)
                 raw = re.sub(r'(?m)^  m_MaskInteraction: .*$', '  m_MaskInteraction: 0', raw)
-                raw = re.sub(r'(?m)^  m_SortingLayerID: .*$', '  m_SortingLayerID: 0', raw)
-                raw = re.sub(r'(?m)^  m_SortingLayer: .*$', '  m_SortingLayer: 0', raw)
-                if kind == 'SpriteRenderer':
-                    raw = re.sub(r'(?m)^  m_SpriteSortPoint: .*$', '  m_SpriteSortPoint: 1', raw)
+            if kind in ['SpriteRenderer', 'ParticleSystemRenderer', 'SortingGroup']:
+                original_layer = source_sorting[d['m_SortingLayerID'] & 0xffffffff]
+                layer_name = 'BackgroundFront' if original_layer in ['Background', 'Shadow', 'Effects_Behind'] else 'Props'
+                sorting_index = next(i for i, s in enumerate(target_sorting) if s['name'] == layer_name)
+                sorting_id = target_sorting[sorting_index]['uniqueID']
+                if sorting_id >= 2**31:
+                    sorting_id -= 2**32
+                raw = re.sub(r'(?m)^  m_SortingLayerID: .*$', '  m_SortingLayerID: ' + str(sorting_id), raw)
+                raw = re.sub(r'(?m)^  m_SortingLayer: .*$', '  m_SortingLayer: ' + str(sorting_index), raw)
+                if kind == 'SortingGroup':
+                    # Original visibility callbacks enable these groups on screen.
+                    raw = re.sub(r'(?m)^  m_Enabled: .*$', '  m_Enabled: 1', raw)
             # Removed helpers have no retained references. External refs must be visual-only.
             for dep in set(re.findall(r'guid: ([0-9a-f]{32})', raw)):
                 if dep in [guid('material/Lit'), guid('material/Unlit')]:
@@ -204,6 +214,31 @@ def main():
             write_asset(dst, data, guid(src), meta)
             records.append(dict(source=src, target=dst, sourceGuid=old_guid, targetGuid=guid(src), removedAnimationEvents=True))
     manifest = dict(stage=args.stage, prefabs=prefabs, character=character, sprites=sprite_records, dependencies=records)
+    if args.stage == 'full':
+        world_path = 'Assets/MonoBehaviour/WorldData_Midgard.asset'
+        world = blocks(source / world_path)[0][3]
+        floor_prefab = next(d[3] for d in blocks(source / 'Assets/GameObject/Floor.prefab') if d[2] == 'SpriteRenderer')
+        by_prop = {r['propData']: r for r in rows if 'propData' in r}
+        def floor_rule(f):
+            src = index[f['floorSprite']['guid']]
+            return dict(min=f['minHeight'], max=f['maxHeight'], color=f['color'],
+                        path=OUTPUT + '/Sprites/' + Path(src).name, order=f['layer'])
+        groups = []
+        for i, g in enumerate(world['_enviroments']):
+            paths = [OUTPUT + '/Prefabs/' + Path(by_prop[index[p['guid']]]['prefab']).name for p in g['props']]
+            groups.append(dict(group=i+1, min=g['minHeight'], max=g['maxHeight'],
+                               distance=g['distanceBetweenProps'], mirror=bool(g['canRotate']), paths=paths))
+        rules = dict(version='native-midgard-static-v1', source=world_path,
+                     sourceSha256=hashlib.sha256((source / world_path).read_bytes()).hexdigest(),
+                     seed=20260913, screenColumns=4, screenRows=4, referenceWidth=1920, referenceHeight=1080,
+                     chunkSize=10, chunkBaseSize=2, bufferChunks=1,
+                     floorSortPoint=floor_prefab['m_SpriteSortPoint'],
+                     noiseImpact=world['_noiseImpact'], offset=world['_offset'], offsetBase=world['_offsetBase'],
+                     flipBaseX=bool(world['_flipBaseTileX']), flipBaseY=bool(world['_flipBaseTileY']),
+                     flipX=bool(world['_flipTileX']), flipY=bool(world['_flipTileY']), rotate=bool(world['_rotateTile']),
+                     baseFloors=[floor_rule(f) for f in world['_baseFloors']],
+                     floors=[floor_rule(f) for f in world['_floors']], groups=groups)
+        write_asset(OUTPUT + '/MidgardBuildConfig.json', json.dumps(rules, ensure_ascii=False, indent=2), guid('build-config'))
     write_asset(OUTPUT + '/ImportManifest.json', json.dumps(manifest, ensure_ascii=False, indent=2), guid('manifest'))
     print(json.dumps(dict(stage=args.stage, prefabs=len(prefabs), sprites=len(sprite_records),
                           visualDependencies=len(mapping), output=OUTPUT), ensure_ascii=False))

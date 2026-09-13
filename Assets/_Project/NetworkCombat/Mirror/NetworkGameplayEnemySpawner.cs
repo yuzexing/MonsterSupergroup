@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using AstralShift.HellMaiden.AI.Enemy;
 using Mirror;
+using MonsterSupergroup.Gameplay.Combat;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -133,6 +134,7 @@ namespace MonsterSupergroup.NetworkCombat
         public bool CanBeginWaveRun(out string error)
         {
             error = null;
+            if (GameplayMapContext.For(gameObject) is { IsReady: false }) { error = "Gameplay map navigation is not ready."; return false; }
             if (!UsesWaves) return true;
             if (!isActiveAndEnabled) { error = "Gameplay wave spawner is disabled."; return false; }
             if (stoppedRunId != null) { error = "This wave run was stopped; stop the session before starting a new run."; return false; }
@@ -234,6 +236,12 @@ namespace MonsterSupergroup.NetworkCombat
                 foreach (var participant in activeParticipants)
                     if (Vector2.Distance(position, NetworkServer.spawned[participant.AvatarId].transform.position) < settings.PlayerClearance)
                     { clear = false; break; }
+                var map = GameplayMapContext.For(gameObject);
+                if (clear && map != null)
+                {
+                    clear = map.IsFree(position, colliderRadius, colliderOffset);
+                    if (clear && !prefab.GetComponent<EnemyController>().enemyFlyingType) clear = map.IsReachable(bodyCenter, center);
+                }
                 if (clear) return true;
             }
             position = default; return false;

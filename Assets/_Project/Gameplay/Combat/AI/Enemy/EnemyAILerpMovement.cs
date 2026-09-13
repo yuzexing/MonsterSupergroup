@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Pathfinding;
 using Pathfinding.Util;
+using MonsterSupergroup.Gameplay.Combat;
 using UnityEngine;
 
 namespace AstralShift.HellMaiden.AI.Enemy
@@ -36,6 +37,7 @@ namespace AstralShift.HellMaiden.AI.Enemy
 		protected PathInterpolator _interpolatorPath = new PathInterpolator();
 
 		private bool _startHasRun;
+		private float _nextMapSearch;
 
 		private Vector3 _simulatedPosition;
 
@@ -206,6 +208,11 @@ namespace AstralShift.HellMaiden.AI.Enemy
 
 		public virtual void SearchPath()
 		{
+            if (GameplayMapContext.For(gameObject) != null)
+            {
+                if (!_canSearchAgain || Time.time < _nextMapSearch) return;
+                _nextMapSearch = Time.time + .2f;
+            }
 			if (!float.IsPositiveInfinity(_destination.x))
 			{
 				if (onSearchPath != null)
@@ -234,6 +241,7 @@ namespace AstralShift.HellMaiden.AI.Enemy
 			aBPath.Claim(this);
 			if (aBPath.error)
 			{
+                if (GameplayMapContext.For(gameObject) != null) { ClearPath(); if (_rigidbody != null) _rigidbody.linearVelocity = Vector2.zero; }
 				aBPath.Release(this);
 				return;
 			}
@@ -363,7 +371,25 @@ namespace AstralShift.HellMaiden.AI.Enemy
 			{
 				_simulatedPosition = enemyController.MovementCenterPosition;
 			}
-			Vector3 nextPosition = CalculateNextPosition(isStopped ? 0f : Time.fixedDeltaTime);
+            if (GameplayMapContext.For(gameObject) != null)
+            {
+                if (!_interpolator.valid || reachedEndOfPath || enemyController.IsInStoppingRange || isStopped)
+                { _rigidbody.linearVelocity = Vector2.zero; return; }
+                // Start at the physical feet each tick. Reusing the planned tangent after a
+                // collision drifts off the route; blending old and new paths can cut tree corners.
+                _interpolator.MoveToClosestPoint(_simulatedPosition);
+                _interpolator.distance += base.Speed * Time.fixedDeltaTime;
+                _rigidbody.linearVelocity = Vector2.ClampMagnitude(
+                    (_interpolator.position - _simulatedPosition) / Time.fixedDeltaTime, base.Speed);
+                _direction = _rigidbody.linearVelocity.normalized;
+                _tangent = _direction;
+                if (enemyController.enemyFlyingType || enemyController.forceWindInteraction)
+                    _rigidbody.linearVelocity += enemyController.windDirection + enemyController.ultimateWindInteraction * enemyController.stats.WindMultiplier;
+                _distanceToDestination = (_destination - _simulatedPosition).magnitude;
+                if (_interpolator.remainingDistance < .0001f) { reachedEndOfPath = true; OnTargetReached(); }
+                return;
+            }
+            Vector3 nextPosition = CalculateNextPosition(isStopped ? 0f : Time.fixedDeltaTime);
 			FinalizeMovement(nextPosition);
 		}
 

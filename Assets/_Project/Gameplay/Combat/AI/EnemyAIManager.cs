@@ -12,6 +12,7 @@ using Com.LuisPedroFonseca.ProCamera2D;
 using Unity.Collections;
 using Unity.Profiling;
 using UnityEngine;
+using MonsterSupergroup.Gameplay.Combat;
 
 namespace AstralShift.HellMaiden.AI
 {
@@ -387,7 +388,7 @@ namespace AstralShift.HellMaiden.AI
 						UpdateEnemyBoundsInNativeCache(num2);
 						continue;
 					}
-					if (_visibleIDsLUT.TryGetValue(num2, out var value2) && value2 && value.usesPathfinding)
+					if ((GameplayMapContext.For(gameObject) != null || (_visibleIDsLUT.TryGetValue(num2, out var value2) && value2)) && value.usesPathfinding)
 					{
 						value.CheckIfStuck();
 					}
@@ -515,10 +516,8 @@ namespace AstralShift.HellMaiden.AI
 		{
 			if ((bool)ProCamera2D.Instance && (bool)ProCamera2D.Instance.GameCamera)
 			{
-				Vector3 position = ProCamera2D.Instance.GameCamera.transform.position;
-				float num = ProCamera2D.Instance.GameCamera.orthographicSize * 2f;
-				float num2 = num * ProCamera2D.Instance.GameCamera.aspect;
-				_cameraRectData = new Vector4(position.x - num2 * 0.5f, position.x + num2 * 0.5f, position.y - num * 0.5f, position.y + num * 0.5f);
+				Bounds view = GameplayCameraGeometry.ViewBounds(ProCamera2D.Instance.GameCamera);
+				_cameraRectData = new Vector4(view.min.x, view.max.x, view.min.y, view.max.y);
 			}
 		}
 

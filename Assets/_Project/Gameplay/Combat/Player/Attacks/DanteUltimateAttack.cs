@@ -251,6 +251,7 @@ namespace AstralShift.HellMaiden.Player.Attacks
             {
                 // Parent to this player's root, matching the authored Ultimate manager and both waves.
                 GameObject instance = Instantiate(DanteUltimateWavePrefab, transform);
+                MonsterSupergroup.Gameplay.Combat.GameplayMapPresentation.Effect(instance);
                 instance.SetActive(false);
                 wave = instance.GetComponent<UltimateDamageAttack>();
                 waves[index] = wave;

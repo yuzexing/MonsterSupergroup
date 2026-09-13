@@ -20,9 +20,10 @@ namespace MonsterSupergroup.NetworkCombat.Editor
         public const string ExamplePath = "Assets/_Project/Content/NetworkCombat/NetworkEnemySkeletonExample.prefab";
         private const string ReportFolder = "Logs/EnemyVariants";
 
-        [MenuItem("Monster Supergroup/Network Combat/Migrate Enemy Prefab Variants")]
+
         public static void Migrate()
         {
+            MonsterSupergroup.EditorTools.ProjectToolRunner.CheckLegacyMaintenance("migrate.enemy-variants", "MonsterSupergroup.NetworkCombat.Editor.EnemyPrefabVariantMigration.Migrate");
             // Scene setup restoration cannot restore unsaved scene contents.
             for (int i = 0; i < SceneManager.sceneCount; i++)
                 if (SceneManager.GetSceneAt(i).isDirty)

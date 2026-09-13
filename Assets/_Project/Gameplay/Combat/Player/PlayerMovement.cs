@@ -108,6 +108,7 @@ namespace AstralShift.HellMaiden.Player
 		private float _dashElapsedTime;
 
 		private float _totalDashTime;
+		private Vector2 _mapDashOrigin;
 
 		private float _currentDashDistance;
 
@@ -439,6 +440,17 @@ namespace AstralShift.HellMaiden.Player
 		{
 			SetDefaultLayerMask();
 			bool started = _dashUseStarted;
+			var map = GameplayMapContext.For(gameObject);
+			if (started && map != null && _obstacleCollider != null)
+			{
+				Vector2 offset = GameplayMapContext.Offset(_obstacleCollider, transform);
+				if (!map.IsFree(body.position, GameplayMapContext.Radius(_obstacleCollider), offset))
+				{
+					float distance = Vector2.Distance(_mapDashOrigin, body.position);
+					Vector2 direction = (body.position - _mapDashOrigin).normalized;
+					body.position = _mapDashOrigin + direction * map.DashDistance(_mapDashOrigin, direction, distance, _obstacleCollider);
+				}
+			}
 			_dashUseStarted = false;
 			try { if (started) OnDashEnd?.Invoke(); }
 			finally { CurrentDashUseId = 0; }
@@ -632,6 +644,7 @@ namespace AstralShift.HellMaiden.Player
 				return;
 			}
 			_stateMachine.FixedUpdateTick();
+			GameplayMapContext.For(gameObject)?.ConstrainMotion(body, _obstacleCollider);
 		}
 
 		private void LateUpdate()
@@ -667,6 +680,7 @@ namespace AstralShift.HellMaiden.Player
 		public override void StopMovement()
 		{
 			_currentInputDirection = Vector2.zero;
+			if (body == null || body.bodyType == RigidbodyType2D.Static) return;
 			body.linearVelocity = Vector2.zero;
 			body.angularVelocity = 0f;
 		}
@@ -731,6 +745,9 @@ namespace AstralShift.HellMaiden.Player
 			if (!IsFiniteDashValue(dashDistance) || dashDistance < 0f || !IsFiniteDashValue(vector.x) ||
 				!IsFiniteDashValue(vector.y) || !IsFiniteDashValue(normalized.x) || !IsFiniteDashValue(normalized.y) ||
 				normalized.sqrMagnitude <= 0f) return false;
+			var map = GameplayMapContext.For(gameObject);
+			if (map != null && _obstacleCollider != null)
+				return TryCreateDashMotion(vector, normalized, map.DashDistance(vector, normalized, dashDistance, _obstacleCollider), out parameters);
 			RaycastHit2D[] array = Physics2D.RaycastAll(vector, normalized, dashDistance, obstacleLayerMask);
 			if (array.Length == 0)
 			{
@@ -789,6 +806,7 @@ namespace AstralShift.HellMaiden.Player
 			SyncDashChargeMirror();
 			if (useId == 0 || generation != _dashGeneration || !CanExecuteDash || _stateMachine.GetState() != Dashing) return false;
 			CurrentDashUseId = useId;
+			_mapDashOrigin = motion.StartPosition;
 			_currentDashDistance = motion.Distance;
 			_totalDashTime = motion.Duration;
 			_dashPeakSpeed = motion.PeakSpeed;
@@ -964,8 +982,8 @@ namespace AstralShift.HellMaiden.Player
 			if (IsMenuInputBlocked) return;
 			if (!_autoAim && _inputCamera != null)
 			{
-				Vector2 vector = position;
-				vector = _inputCamera.ScreenToWorldPoint(vector);
+				if (!_inputCamera.pixelRect.Contains(position)) return;
+				Vector2 vector = GameplayCameraGeometry.OnGround(_inputCamera.ScreenPointToRay(position));
 				attackDirection = vector - (Vector2)base.transform.position;
 				attackDirection.Normalize();
 			}
@@ -1130,7 +1148,7 @@ namespace AstralShift.HellMaiden.Player
 				_damageReceived,
 				DamageType.Normal,
 				isCritical: false);
-			if (spriteRenderer != null && base.gameObject.activeSelf && base.enabled)
+			if (!(playerAnimator is NordicPlayerAnimator) && spriteRenderer != null && base.gameObject.activeSelf && base.enabled)
 			{
 				if (_damageColorAnimation != null)
 				{

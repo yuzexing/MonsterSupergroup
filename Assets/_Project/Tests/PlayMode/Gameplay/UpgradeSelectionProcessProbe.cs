@@ -29,7 +29,6 @@ namespace MonsterSupergroup.Gameplay.Tests
         private WeaponAttackAdmissionFixtureGate gate;
         private GameObject enemyPrefab, assetCopies;
         private readonly HashSet<uint> attacked = new HashSet<uint>();
-        private readonly HashSet<uint> stationaryTargets = new HashSet<uint>();
         private string Other => dedicated ? "client2" : "host";
         private bool IsServer => role == "host" || role == "server";
         private NetworkIdentity Owner => NetworkClient.localPlayer;
@@ -43,6 +42,7 @@ namespace MonsterSupergroup.Gameplay.Tests
             var args = Environment.GetCommandLineArgs();
             string value = args.FirstOrDefault(a => a.StartsWith("--m4-role="));
             if (value == null) return;
+            FindFirstObjectByType<BootGameplayNetworkManager>().ConfigurePreparationFlow(false);
             var probe = new GameObject("M4 formal upgrade validation").AddComponent<UpgradeSelectionProcessProbe>();
             probe.role = value.Substring(10);
             probe.directory = args.First(a => a.StartsWith("--m4-artifacts=")).Substring(15);
@@ -80,7 +80,7 @@ namespace MonsterSupergroup.Gameplay.Tests
             if (!finished && deadline > 0 && Time.realtimeSinceStartup > deadline)
             { Debug.LogError("[M4Process] timeout role=" + role + " attacks=" + string.Join(",", attacked)); Finish(false); }
             foreach (var agent in FindObjectsByType<NetworkEnemySimulationAgent>(FindObjectsSortMode.None))
-                if (agent.ProductEnemyInitialized && stationaryTargets.Add(agent.netId))
+                if (agent.ProductEnemyInitialized)
                 {
                     agent.GetComponent<AstralShift.HellMaiden.AI.Enemy.EnemyController>().Movement.StopMovement();
                     var body = agent.GetComponent<Rigidbody2D>();

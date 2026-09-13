@@ -347,6 +347,7 @@ namespace MonsterSupergroup.Gameplay.Combat
             try
             {
                 behaviour = Instantiate(weaponData.WeaponPrefab, weaponParent);
+                GameplayMapPresentation.Effect(behaviour.gameObject);
                 behaviour.gameObject.SetActive(false);
                 behaviour.enabled = weaponExecutionEnabled;
                 behaviour.ConfigureOwner(owner);

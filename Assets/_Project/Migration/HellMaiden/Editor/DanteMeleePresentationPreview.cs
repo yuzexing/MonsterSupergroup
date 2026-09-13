@@ -8,7 +8,7 @@ namespace MonsterSupergroup.HellMaidenMigration.Editor
     /// <summary>Renders the imported clip and particles without starting gameplay or networking.</summary>
     public static class DanteMeleePresentationPreview
     {
-        [MenuItem("Tools/HellMaiden Migration/Capture Dante Melee Presentation Preview")]
+
         public static void Capture()
         {
             AnimationClip clip = AssetDatabase.LoadAssetAtPath<AnimationClip>(DanteMeleeNativeGasMigration.ClipPath)

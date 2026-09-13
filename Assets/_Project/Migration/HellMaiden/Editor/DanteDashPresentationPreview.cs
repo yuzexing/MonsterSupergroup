@@ -18,7 +18,7 @@ namespace MonsterSupergroup.HellMaidenMigration.Editor
         private const float SampleTime = 1f;
         private const float SegmentLife = 0.625f;
 
-        [MenuItem("Tools/HellMaiden Migration/Capture Dante Dash Presentation Preview")]
+
         public static void Capture()
         {
             if (SystemInfo.graphicsDeviceType == GraphicsDeviceType.Null)

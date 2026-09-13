@@ -28,7 +28,7 @@ namespace MonsterSupergroup.GAS.Editor
 
     public static class GasAssetValidator
     {
-        [MenuItem("Tools/MonsterSupergroup/GAS/Validate All")]
+
         public static void ValidateAllMenu()
         {
             IReadOnlyList<GasValidationIssue> issues = ValidateAllAssets();
@@ -43,6 +43,9 @@ namespace MonsterSupergroup.GAS.Editor
                     Debug.LogWarning(issue.Message, issue.Context);
                 }
             }
+
+            foreach (var issue in issues)
+                if (issue.Severity == GasValidationSeverity.Error) throw new InvalidOperationException(issue.Message);
 
             if (issues.Count == 0)
             {
@@ -75,7 +78,7 @@ namespace MonsterSupergroup.GAS.Editor
                 issues.Add(new GasValidationIssue(
                     GasValidationSeverity.Error,
                     null,
-                    $"Generated GAS registry is missing or stale. Run Tools/MonsterSupergroup/GAS/Rebuild Registry ({ModifierRegistryGenerator.OutputPath})."));
+                    $"Generated GAS registry is missing or stale. Run generate.gas-registry -Apply ({ModifierRegistryGenerator.OutputPath})."));
             }
 
             return issues;

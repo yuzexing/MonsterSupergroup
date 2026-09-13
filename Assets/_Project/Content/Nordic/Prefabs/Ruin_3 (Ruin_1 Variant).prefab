@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4061268324235159}
   - component: {fileID: 60587765826080250}
+  - component: {fileID: 210709867586078768}
   m_Layer: 11
   m_Name: Ruin_3 (Ruin_1 Variant)
   m_TagString: Untagged
@@ -209,6 +210,18 @@ PolygonCollider2D:
       - {x: -0.01367265, y: 0.27904946}
       - {x: 0.4100011, y: 0.30728152}
   m_UseDelaunayMesh: 0
+--- !u!210 &210709867586078768
+SortingGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1709254077376921}
+  m_Enabled: 1
+  m_SortingLayerID: -2050434577
+  m_SortingLayer: 5
+  m_SortingOrder: 0
+  m_SortAtRoot: 0
 --- !u!4 &4044625135789424
 Transform:
   serializedVersion: 2
@@ -262,8 +275,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: -2050434577
+  m_SortingLayer: 5
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 4144df42d98355d8bc70516a2ac6964c, type: 2}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -361,8 +374,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: -2050434577
+  m_SortingLayer: 5
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 7809f33de3975316a794a3c96b848b85, type: 2}
   m_Color: {r: 1, g: 0.3554371, b: 0, a: 1}
@@ -374,7 +387,7 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
-  m_SpriteSortPoint: 1
+  m_SpriteSortPoint: 0
 --- !u!4 &4002669891404536
 Transform:
   serializedVersion: 2
@@ -430,8 +443,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: -2050434577
+  m_SortingLayer: 5
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 2321efa3896a5c909bf15a1a29f15953, type: 2}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -443,7 +456,7 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
-  m_SpriteSortPoint: 1
+  m_SpriteSortPoint: 0
 --- !u!4 &4313026266067498
 Transform:
   serializedVersion: 2
@@ -2698,8 +2711,8 @@ ParticleSystemRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: -2050434577
+  m_SortingLayer: 5
   m_SortingOrder: 0
   m_RenderMode: 0
   m_MeshDistribution: 0

@@ -26,7 +26,7 @@ namespace MonsterSupergroup.HellMaidenMigration.Editor
         };
         private const string SpriteShader = "Assets/Plugins/AllIn1SpriteShader/Shaders/AllIn1SpriteShader.shader";
         private const string VfxShader = "Assets/Plugins/AllIn1VfxToolkit/Shaders/AllIn1VfxURPCompat.shader";
-        private const string SourceDefault = "F:/DecomplieLatest/HellMaiden/ExportedProject";
+        private static string SourceDefault => MonsterSupergroup.EditorTools.ProjectToolPaths.HellMaiden();
         private static readonly string[] Dependencies = {
             "Mesh/FX_MS_HeadCylinder.asset", "Sprite/Shadow (2)_0.asset",
             "Texture2D/Circle SmallAnim2.png", "Texture2D/cloud_2x2_soft_0.png",
@@ -48,9 +48,10 @@ namespace MonsterSupergroup.HellMaidenMigration.Editor
             "glow1_ADD_3.mat", "PlayerAttack_Dante_Projectile_Shadow_0.mat", "sparkle2_ADD 1Pixel_0.mat"
         };
 
-        [MenuItem("Tools/HellMaiden Migration/Import Dante Projectile Presentation")]
+
         public static void Import()
         {
+            MonsterSupergroup.EditorTools.ProjectToolRunner.CheckLegacyMaintenance("import.projectile", "MonsterSupergroup.HellMaidenMigration.Editor.DanteProjectilePresentationMigration.Import");
             string source = Environment.GetEnvironmentVariable("HELLMAIDEN_SOURCE_PROJECT");
             if (string.IsNullOrWhiteSpace(source)) source = SourceDefault;
             source = Path.Combine(source, "Assets");
@@ -233,7 +234,7 @@ namespace MonsterSupergroup.HellMaidenMigration.Editor
             so.FindProperty(field + ".automatic").boolValue = true;
         }
 
-        [MenuItem("Tools/HellMaiden Migration/Validate Dante Projectile Presentation")]
+
         public static void ValidateImportedAssets()
         {
             AnimationClip clip = Require<AnimationClip>(ClipPath);

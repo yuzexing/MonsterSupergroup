@@ -497,6 +497,12 @@ namespace MonsterSupergroup.NetworkCombat
                 yield break;
             }
 
+            var gameplayMap = MonsterSupergroup.Gameplay.Combat.GameplayMapContext.Active;
+            while (gameplayMap != null && !gameplayMap.IsReady)
+            {
+                yield return null;
+                if (!CanCreateGameplayAvatar || !IsCurrentServerGeneration(generation) || !IsCurrentConnection(connection)) yield break;
+            }
             Transform start = GetStartPosition();
             GameObject player = start != null
                 ? Instantiate(playerPrefab, start.position, start.rotation)
@@ -526,6 +532,13 @@ namespace MonsterSupergroup.NetworkCombat
                     player.GetComponent<NetworkPlayerDash>().PrepareServerRestore(participant.Checkpoint.Dash.Value);
                 if (participant.Checkpoint.Ultimate.HasValue)
                     player.GetComponent<NetworkPlayerUltimate>().PrepareServerRestore(participant.Checkpoint.Ultimate.Value);
+            }
+            if (gameplayMap != null)
+            {
+                var foot = player.GetComponent<CircleCollider2D>();
+                player.transform.position = gameplayMap.FindSpawn(player.transform.position, MonsterSupergroup.Gameplay.Combat.GameplayMapContext.Radius(foot),
+                    MonsterSupergroup.Gameplay.Combat.GameplayMapContext.Offset(foot, player.transform), true, foot);
+                player.GetComponent<Rigidbody2D>().position = player.transform.position;
             }
             NetworkServer.AddPlayerForConnection(connection, player);
             Session.AttachAvatar(connectionId, player.GetComponent<NetworkIdentity>().netId,

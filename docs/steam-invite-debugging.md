@@ -1,5 +1,9 @@
 # Steam 官方直接邀请验收
 
+> 2026-09-13 AppID 修复：当前项目已切换为《黑月魔女会》的正式 AppID `4886160`，启动检查与运行时校验使用同一常量。下文的 `480` / Spacewar 包和验收记录属于此前开发阶段，不再代表当前构建配置。
+>
+> Windows Development Build 会复制项目根目录的 `steam_appid.txt`（内容必须为 `4886160`），供本地启动调试使用。非 Development Build 不携带该文件，并清理输出目录中上一次开发构建遗留的文件；上传 Steam depot 时必须排除 `steam_appid.txt`。不要通过添加 `480` 文件绕过正式 AppID 校验。依据：[Valve 初始化与启动说明](https://partner.steamgames.com/doc/api/steam_api#SteamAPI_RestartAppIfNecessary)。
+
 ## 当前实现与验收边界
 
 准备房间的“邀请朋友”现在打开游戏内好友页。选中一位好友后，本机调用 `SteamMatchmaking.InviteUserToLobby(expectedLobbyId, friendSteamId)`。普通邀请入口不读取叠加层开关，也不打开 Steam 好友面板。

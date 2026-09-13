@@ -22,7 +22,7 @@ namespace MonsterSupergroup.NetworkCombat.Editor
         public const string LustSinnerPath = "Assets/_Project/Content/NetworkCombat/NetworkEnemyLustSinner.prefab";
         public const string LustResources = "Assets/_Project/Content/HellMaiden/Enemies/LustSinner";
         public const string LustWarningPath = LustResources + "/GameObject/LustSinner_Warning Variant.prefab";
-        private const string LustSource = "F:/DecomplieLatest/HellMaiden/ExportedProject/Assets";
+        private static string LustSource => MonsterSupergroup.EditorTools.ProjectToolPaths.HellMaiden() + "/Assets";
         private const string LustTemplate = LustResources + "/GameObject/Enemy_LustSinner.prefab";
         private const string LustReports = "Logs/LustSinner";
         private const string CompatibleShader = "Assets/Plugins/AllIn1SpriteShader/Shaders/AllIn1SpriteShader.shader";
@@ -35,9 +35,10 @@ namespace MonsterSupergroup.NetworkCombat.Editor
             if (AssetDatabase.LoadAssetAtPath<GameObject>(ImpPath) != null) yield return ImpPath;
         }
 
-        [MenuItem("Monster Supergroup/Network Combat/Migrate LustSinner Variant")]
+
         public static void MigrateLustSinner()
         {
+            MonsterSupergroup.EditorTools.ProjectToolRunner.CheckLegacyMaintenance("migrate.lust-sinner", "MonsterSupergroup.NetworkCombat.Editor.EnemyPrefabVariantMigration.MigrateLustSinner");
             for (int i = 0; i < SceneManager.sceneCount; i++)
                 if (SceneManager.GetSceneAt(i).isDirty) throw new InvalidOperationException("Save open scene edits before migrating enemy Prefabs.");
             Directory.CreateDirectory(LustReports);
@@ -327,7 +328,6 @@ namespace MonsterSupergroup.NetworkCombat.Editor
                         if (AnimationUtility.GetAnimatedObject(animator.gameObject, curve) == null)
                             throw new InvalidOperationException("Missing animated object " + clip.name + ":" + curve.path);
                 }
-            attack.enemyAnimator = animator;
             var stats = new SerializedObject(controller);
             var report = new LustReport {
                 guid = AssetDatabase.AssetPathToGUID(LustSinnerPath), parent = AssetDatabase.GetAssetPath(PrefabUtility.GetCorrespondingObjectFromSource(root)),
@@ -344,16 +344,7 @@ namespace MonsterSupergroup.NetworkCombat.Editor
 
         public static void BuildLustSinnerValidation()
         {
-            MigrateLustSinner();
-            const string output = "Builds/LustSinner/LustSinner.exe";
-            Directory.CreateDirectory(Path.GetDirectoryName(output));
-            var report = BuildPipeline.BuildPlayer(new BuildPlayerOptions {
-                scenes = new[] { NetworkCombatSetupUtility.BootScenePath, NetworkCombatSetupUtility.GameplayScenePath },
-                locationPathName = output, target = BuildTarget.StandaloneWindows64,
-                options = BuildOptions.Development | BuildOptions.IncludeTestAssemblies,
-                extraScriptingDefines = new[] { "MONSTER_KCP_DEVELOPMENT_BUILD", "MONSTER_MENU_VALIDATION" }
-            });
-            if (report.summary.result != BuildResult.Succeeded) throw new InvalidOperationException("LustSinner build failed.");
+            MonsterSupergroup.EditorTools.ProjectBuildService.Legacy("lust-sinner");
         }
     }
 }

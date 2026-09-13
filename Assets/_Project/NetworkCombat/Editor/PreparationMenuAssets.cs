@@ -9,9 +9,10 @@ namespace MonsterSupergroup.NetworkCombat.Editor
 {
     public static class PreparationMenuAssets
     {
-        [MenuItem("MonsterSupergroup/Menu/Create preparation catalog")]
+
         public static void CreateCatalog()
         {
+            MonsterSupergroup.EditorTools.ProjectToolRunner.CheckLegacyMaintenance("create.preparation-catalog", "MonsterSupergroup.NetworkCombat.Editor.PreparationMenuAssets.CreateCatalog");
             const string path = "Assets/Resources/PreparationMenuCatalog.asset";
             var catalog = AssetDatabase.LoadAssetAtPath<PreparationMenuCatalog>(path);
             if (catalog != null) return;

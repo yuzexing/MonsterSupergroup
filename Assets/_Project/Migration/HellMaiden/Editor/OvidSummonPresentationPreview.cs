@@ -10,7 +10,7 @@ namespace MonsterSupergroup.HellMaidenMigration.Editor
 {
     public static class OvidSummonPresentationPreview
     {
-        [MenuItem("Tools/HellMaiden Migration/Capture Ovid Summon Shadow Evidence")]
+
         public static void CaptureShadowEvidence()
         {
             string output = Environment.GetEnvironmentVariable("OVID_SUMMON_SHADOW_PREVIEW_OUTPUT");
@@ -65,7 +65,7 @@ namespace MonsterSupergroup.HellMaidenMigration.Editor
                 throw new InvalidOperationException("Shadow gray-background evidence did not confirm darkening, smooth fade and a transparent non-brightening tail.");
         }
 
-        [MenuItem("Tools/HellMaiden Migration/Capture Ovid Summon Presentation Preview")]
+
         public static void Capture()
         {
             string output = Environment.GetEnvironmentVariable("OVID_SUMMON_PREVIEW_OUTPUT");

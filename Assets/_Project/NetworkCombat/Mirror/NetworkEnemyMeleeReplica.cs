@@ -220,6 +220,7 @@ namespace MonsterSupergroup.NetworkCombat
             }
 
             attackInstance.SetStats(controller.stats);
+            MonsterSupergroup.Gameplay.Combat.GameplayMapPresentation.Warning(attackInstance.gameObject);
             PlayerDamageInteraction interaction = attackInstance.damageInteraction;
             interaction.enemyStats = controller.stats;
             SetDamageEnabled(false);

@@ -1226,8 +1226,7 @@
       "sourceGuid": "a6cc9527410d8e74a9412ff4b5ef27d8",
       "targetGuid": "07b449915c9e582ca41e70a174c7dade",
       "removedComponents": [
-        "MonoBehaviour",
-        "SortingGroup"
+        "MonoBehaviour"
       ]
     },
     {
@@ -1260,8 +1259,7 @@
       "sourceGuid": "0c6b021d5e32464448332369d48ad088",
       "targetGuid": "75aac25e858851428eef4f311a6a1b51",
       "removedComponents": [
-        "MonoBehaviour",
-        "SortingGroup"
+        "MonoBehaviour"
       ]
     },
     {
@@ -1294,8 +1292,7 @@
       "sourceGuid": "7f2ee30b609fe8542af726761fb816c5",
       "targetGuid": "5348383a6dd25616b7c82f9db332c9fe",
       "removedComponents": [
-        "MonoBehaviour",
-        "SortingGroup"
+        "MonoBehaviour"
       ]
     },
     {
@@ -1318,8 +1315,7 @@
       "sourceGuid": "dc6363cd73c347c43bba48f43f52107b",
       "targetGuid": "a4d3efa5bf415e78b472792207a18444",
       "removedComponents": [
-        "MonoBehaviour",
-        "SortingGroup"
+        "MonoBehaviour"
       ]
     },
     {
@@ -1362,8 +1358,7 @@
       "removedComponents": [
         "Animator",
         "MonoBehaviour",
-        "PolygonCollider2D",
-        "SortingGroup"
+        "PolygonCollider2D"
       ]
     },
     {
@@ -1396,8 +1391,7 @@
       "removedComponents": [
         "Animator",
         "MonoBehaviour",
-        "PolygonCollider2D",
-        "SortingGroup"
+        "PolygonCollider2D"
       ]
     },
     {

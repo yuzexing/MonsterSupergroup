@@ -675,6 +675,11 @@ namespace AstralShift.HellMaiden.AI.Enemy
 				throw new InvalidOperationException(
 					$"{nameof(EnemyController)} requires {nameof(EnemyDefaultMovement)}.");
 			}
+			if (GameplayMapContext.For(gameObject) != null && !enemyFlyingType)
+			{
+				usesPathfinding = true;
+				obstaclesLayerMask = LayerMask.GetMask("Obstacles", "Edges");
+			}
 			if (usesPathfinding && aILerpMovement == null)
 			{
 				aILerpMovement = GetComponentInChildren<EnemyAILerpMovement>(true);
@@ -684,6 +689,9 @@ namespace AstralShift.HellMaiden.AI.Enemy
 				aILerpMovement.Init(this);
 			}
 			defaultMovement.Init(this);
+			GameplayMapPresentation.Body(enemyAnimator.transform, transform);
+            if (GameplayMapContext.For(gameObject) != null)
+                foreach (var warning in GetComponentsInChildren<EnemyAttackWarning>(true)) GameplayMapPresentation.Warning(warning.gameObject);
 			ResetMovementMethod();
 			Movement.FreezeRigidbody(state: false);
 			ActivateColliders(activate: true);
@@ -776,6 +784,7 @@ namespace AstralShift.HellMaiden.AI.Enemy
 		public void RunFixedUpdate()
 		{
 			_currentMovementScript?.MovementUpdate();
+			GameplayMapContext.For(gameObject)?.ConstrainMotion(rigidBody, collider as CircleCollider2D);
 		}
 
 		public void RunLateUpdate()
@@ -831,7 +840,7 @@ namespace AstralShift.HellMaiden.AI.Enemy
 		public virtual void RefreshMovementMethod()
 		{
 			_canBeStuck = true;
-			if (_isAvoidingObstacle)
+			if (_isAvoidingObstacle || (GameplayMapContext.For(gameObject) != null && !enemyFlyingType))
 			{
 				SetPathfindingMovement();
 			}
@@ -851,7 +860,7 @@ namespace AstralShift.HellMaiden.AI.Enemy
 		protected virtual void SetPathfindingMovement()
 		{
 			_currentMovementScript = aILerpMovement;
-			rigidBody.mass = StuckMass;
+			rigidBody.mass = GameplayMapContext.For(gameObject) != null ? _defaultRigidbodyMass : StuckMass;
 		}
 
 		protected virtual void EnableMovement()
@@ -931,6 +940,7 @@ namespace AstralShift.HellMaiden.AI.Enemy
 
 		public void SetCullingOptimizations(bool state)
 		{
+			if (GameplayMapContext.For(gameObject) != null) { defaultMovement.SetOptimizations(false); return; }
 			if (_cullingOptimizationsEnabled)
 			{
 				if (state)

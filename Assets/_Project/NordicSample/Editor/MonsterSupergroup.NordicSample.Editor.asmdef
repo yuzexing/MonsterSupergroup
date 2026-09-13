@@ -1,7 +1,17 @@
 {
   "name": "MonsterSupergroup.NordicSample.Editor",
   "rootNamespace": "MonsterSupergroup.NordicSample.Editor",
-  "references": ["MonsterSupergroup.NordicSample", "ProCamera2D.Runtime", "Unity.RenderPipelines.Universal.Runtime", "Unity.RenderPipelines.Universal.2D.Runtime", "Unity.RenderPipelines.Core.Runtime", "RenderAs2DModule"],
-  "includePlatforms": ["Editor"],
+  "references": [
+    "MonsterSupergroup.NordicSample",
+    "ProCamera2D.Runtime",
+    "Unity.RenderPipelines.Universal.Runtime",
+    "Unity.RenderPipelines.Universal.2D.Runtime",
+    "Unity.RenderPipelines.Core.Runtime",
+    "RenderAs2DModule",
+    "MonsterSupergroup.EditorTools"
+  ],
+  "includePlatforms": [
+    "Editor"
+  ],
   "autoReferenced": false
 }

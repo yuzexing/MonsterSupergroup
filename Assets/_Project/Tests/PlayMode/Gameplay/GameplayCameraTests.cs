@@ -95,12 +95,12 @@ namespace MonsterSupergroup.Gameplay.Tests
             Assert.That(view.GetComponent<ProCamera2DShake>().ShakePresets.Select(p => p.name),
                 Is.EqualTo(new[] { "SmallExplosion", "GunShot", "LargeExplosion", "PlayerHit" }));
             var zoom = view.GetComponent<ProCamera2DZoomToFitTargets>();
-            Assert.That(zoom.DisableWhenOneTarget, Is.True);
+            Assert.That(zoom.enabled, Is.False);
             Assert.That(zoom.MaxZoomOutAmount, Is.EqualTo(12));
             var ground = GameObject.Find("Ground").GetComponent<SpriteRenderer>().bounds;
             var boundaries = view.GetComponent<ProCamera2DNumericBoundaries>();
-            Assert.That(ground.size.x, Is.EqualTo(100).Within(.001));
-            Assert.That(ground.size.y, Is.EqualTo(100).Within(.001));
+            Assert.That(ground.size.x, Is.EqualTo(119.3386f).Within(.001));
+            Assert.That(ground.size.y, Is.EqualTo(67.128f).Within(.001));
             Assert.That(boundaries.LeftBoundary, Is.EqualTo(ground.min.x));
             Assert.That(boundaries.RightBoundary, Is.EqualTo(ground.max.x));
             Assert.That(boundaries.BottomBoundary, Is.EqualTo(ground.min.y));
@@ -112,12 +112,14 @@ namespace MonsterSupergroup.Gameplay.Tests
                 yield return new WaitForSeconds(1.5f);
                 Assert.That(rig.CameraTargets.Count, Is.EqualTo(1));
                 Assert.That(rig.CameraTargets[0].TargetTransform, Is.EqualTo(player.transform));
-                Assert.That(view.GameCamera.orthographicSize, Is.EqualTo(5).Within(.001));
-                float halfX = view.GameCamera.orthographicSize * view.GameCamera.aspect;
-                Vector3 cameraPosition = view.transform.position;
-                Assert.That(cameraPosition.x, Is.InRange(ground.min.x + halfX - .02f, ground.max.x - halfX + .02f));
-                Assert.That(cameraPosition.y, Is.InRange(ground.min.y + 4.98f, ground.max.y - 4.98f));
-                Assert.That(Vector2.Distance(player.transform.position, position), Is.LessThan(.01f), "Camera must not clamp the actor.");
+                Assert.That(view.GameCamera.orthographic, Is.False);
+                Assert.That(view.GameCamera.fieldOfView, Is.EqualTo(80).Within(.001));
+                Assert.That(view.transform.position.z, Is.EqualTo(-10).Within(.001));
+                Bounds visible = GameplayCameraGeometry.ViewBounds(view.GameCamera);
+                Assert.That(visible.min.x, Is.GreaterThanOrEqualTo(ground.min.x - .02f));
+                Assert.That(visible.max.x, Is.LessThanOrEqualTo(ground.max.x + .02f));
+                Assert.That(visible.min.y, Is.GreaterThanOrEqualTo(ground.min.y - .02f));
+                Assert.That(visible.max.y, Is.LessThanOrEqualTo(ground.max.y + .02f));
             }
             MoveOwner(Vector2.zero);
             yield return new WaitForSeconds(1.5f);
@@ -219,6 +221,27 @@ namespace MonsterSupergroup.Gameplay.Tests
             var next = Object.FindFirstObjectByType<GameplayCameraRig>();
             Assert.That(next.BoundPlayer, Is.EqualTo(NetworkClient.localPlayer.GetComponent<PlayerMovement>()));
             Assert.That(Object.FindObjectsByType<GameplayCameraRig>(FindObjectsSortMode.None).Length, Is.EqualTo(1));
+        }
+
+        [UnityTest]
+        public IEnumerator Axeldor_DeathHoldsAndCanonicalLifeRestorationReversesClip()
+        {
+            player.enabled=false;
+            var visual=player.GetComponentInChildren<NordicPlayerAnimator>();
+            var health=player.GetComponent<CombatantBehaviour>(); int before=health.CurrentHealth;
+            NordicGameplayProcessProbe.ApplyPresentationHealth(health,0);
+            yield return new WaitForSeconds(1.2f);
+            var state=visual.GetComponent<Animancer.AnimancerComponent>().States.Current;
+            Assert.That(visual.Motion,Is.EqualTo(NordicMotion.Dead));
+            Assert.That(state.Time,Is.EqualTo(state.Length).Within(.001f));
+            Assert.That(state.Speed,Is.Zero);
+            NordicGameplayProcessProbe.ApplyPresentationHealth(health,before);
+            yield return null; yield return null;
+            Assert.That(visual.Motion,Is.EqualTo(NordicMotion.Revive));
+            Assert.That(state.Speed,Is.LessThan(0));
+            yield return new WaitForSeconds(1.2f);
+            Assert.That(visual.Motion,Is.EqualTo(NordicMotion.Idle),"time="+state.Time+" health="+health.CurrentHealth);
+            Assert.That(health.CurrentHealth,Is.EqualTo(before));
         }
 
         private void MoveOwner(Vector2 position)

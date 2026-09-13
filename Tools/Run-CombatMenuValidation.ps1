@@ -1,4 +1,4 @@
-param(
+﻿param(
     [string]$Executable = 'Builds/MenuDevelopment/MonsterSupergroup.exe',
     [ValidateSet('party','solo')][string]$Scenario = 'party',
     [int]$Width = 1280,
@@ -6,6 +6,5 @@ param(
     [int]$Port = 7998,
     [switch]$Visible
 )
-$ErrorActionPreference = 'Stop'
-$profile = if ($Scenario -eq 'party') { 'combat-menu' } else { 'combat-menu-solo' }
-& (Join-Path $PSScriptRoot 'Run-PreparationMenuValidation.ps1') -Executable $Executable -Profile $profile -Width $Width -Height $Height -Port $Port -Visible:$Visible
+Write-Warning '旧脚本兼容一版；新入口: Invoke-ProjectTool.ps1 -ToolId test.combat-menu'
+& (Join-Path $PSScriptRoot 'Invoke-ProjectTool.ps1') -ToolId 'test.combat-menu' -Parameters $PSBoundParameters

@@ -3,6 +3,7 @@ using DG.Tweening;
 using DG.Tweening.Core;
 using DG.Tweening.Plugins.Options;
 using UnityEngine;
+using MonsterSupergroup.Gameplay.Combat;
 
 namespace AstralShift.Helpers
 {
@@ -12,8 +13,7 @@ namespace AstralShift.Helpers
 
 		public static Vector2 GetCameraExtents()
 		{
-			float orthographicSize = ProCamera2D.Instance.GameCamera.orthographicSize;
-			return new Vector2(orthographicSize * ProCamera2D.Instance.GameCamera.aspect, orthographicSize);
+			return GameplayCameraGeometry.ViewBounds(ProCamera2D.Instance.GameCamera).extents;
 		}
 
 		public static bool IsWithinCameraBounds(Vector2 position, float extentsMultiplier = 1f)

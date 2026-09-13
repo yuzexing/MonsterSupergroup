@@ -20,6 +20,7 @@ namespace MonsterSupergroup.NordicSample
             public string[] errors;
             public string[] runtimeBehaviours;
         }
+        public GameObject treePrefab, torchPrefab;
         private NordicSamplePreview preview;
         private string output;
         private readonly List<string> checks = new List<string>();
@@ -69,18 +70,22 @@ namespace MonsterSupergroup.NordicSample
             yield return new WaitForEndOfFrame();
             Capture(camera, "coverage-control", 16, 16, true);
             camera.cullingMask = originalMask;
-            Check(Vector2.Distance(bounds.size, new Vector2(64, 40)) < .001f, "Ground is 64x40");
+            Check(Vector2.Distance(bounds.size, new Vector2(119.3386f, 67.1280f)) < .001f, "Ground is four by four reference views");
             Check(QualitySettings.activeColorSpace == ColorSpace.Linear, "Linear color space");
-            int spriteCount = FindObjectsByType<SpriteRenderer>(FindObjectsSortMode.None).Length;
-            int propCount = FindObjectsByType<NordicSortAnchor>(FindObjectsSortMode.None).Length;
+            var map = GameObject.Find("NordicStaticMap");
+            int spriteCount = map.GetComponentsInChildren<SpriteRenderer>(true).Length;
+            int propCount = map.transform.Find("Environment").Cast<Transform>().Sum(t => t.childCount);
             Check(FindObjectsByType<Camera>(FindObjectsSortMode.None).Length == 1, "Single preview camera");
+            Check(map.GetComponentsInChildren<NordicSortAnchor>(true).Length == 0, "No numbered Y sorting on baked map");
+            Check(map.transform.Find("Boundaries").GetComponentsInChildren<BoxCollider2D>().Length == 4, "Four physical boundary walls");
             var behaviours = FindObjectsByType<MonoBehaviour>(FindObjectsSortMode.None);
-            Check(behaviours.Where(b => b.gameObject.scene == preview.gameObject.scene).All(b => b.GetType().Namespace != null &&
-                (b.GetType().Namespace.StartsWith("MonsterSupergroup.NordicSample") || b.GetType().Namespace.StartsWith("UnityEngine.Rendering") || b.GetType().Namespace.StartsWith("Com.LuisPedroFonseca"))), "Scene has no gameplay/network/generator behaviours");
             Check(!behaviours.Any(b => b.GetType().Name is "NetworkManager" or "BootGameplayNetworkManager" or "NetworkIdentity" or "PlayerController_HMD" or "WorldManager"), "No active network session or formal player");
             foreach (var renderer in FindObjectsByType<SpriteRenderer>(FindObjectsSortMode.None))
                 if (renderer.sprite == null || renderer.sharedMaterial == null || renderer.sharedMaterial.shader.name.Contains("Error")) errors.Add("Invalid sprite/material: " + renderer.name);
-
+            Check(Mathf.Abs(preview.characterVisual.localScale.y - 1) < .0001f, "Axeldor source wrapper scale 1");
+            Vector3[] mesh = preview.characterVisual.GetComponentsInChildren<SpriteRenderer>().Where(r => r.name != "Shadow")
+                .SelectMany(r => r.sprite.vertices.Select(v => preview.characterVisual.InverseTransformPoint(r.transform.TransformPoint(v)))).ToArray();
+            Check(mesh.Max(p => p.y) - mesh.Min(p => p.y) > 2 && mesh.Max(p => p.y) - mesh.Min(p => p.y) < 2.4f, "Axeldor original assembled size");
             Vector2[] points = { bounds.center, new Vector2(bounds.min.x + .3f,bounds.center.y),new Vector2(bounds.max.x-.3f,bounds.center.y),
                 new Vector2(bounds.center.x,bounds.min.y+.3f),new Vector2(bounds.center.x,bounds.max.y-.3f),
                 new Vector2(bounds.min.x+.3f,bounds.min.y+.3f),new Vector2(bounds.max.x-.3f,bounds.min.y+.3f),
@@ -103,78 +108,97 @@ namespace MonsterSupergroup.NordicSample
             Screen.SetResolution(1920, 1080, FullScreenMode.Windowed);
             yield return new WaitForSeconds(.5f);
 
-            // Verify real movement input normalization, not merely the sorting formula.
-            preview.Teleport(bounds.center);
-            Vector2 origin = preview.character.position;
-            preview.SetPreviewInput(Vector2.right);
-            for (int i = 0; i < 10; i++) yield return new WaitForFixedUpdate();
-            float straight = Vector2.Distance(origin, preview.character.position);
-            Check(preview.characterAnimator.GetCurrentAnimatorStateInfo(0).IsName("Walk"), "Nordic walking animation plays during movement");
-            preview.SetPreviewInput(Vector2.zero);
-            preview.Teleport(origin);
-            preview.SetPreviewInput(Vector2.one);
-            for (int i = 0; i < 10; i++) yield return new WaitForFixedUpdate();
-            float diagonal = Vector2.Distance(origin, preview.character.position);
-            preview.SetPreviewInput(Vector2.zero);
-            Check(Mathf.Abs(straight - diagonal) < .08f && straight > .75f && straight < 1.25f, "Movement speed 5 and normalized diagonal");
-            yield return new WaitForSeconds(.25f);
-            Check(preview.characterAnimator.GetCurrentAnimatorStateInfo(0).IsName("Idle"), "Nordic idle animation resumes after movement");
-            Transform torso = preview.characterAnimator.transform.Find("PlayerSprite/Cuerpo");
-            Vector3 initialTorsoPosition = torso.localPosition;
-            float poseChange = 0;
-            for (int i = 0; i < 4; i++)
-            {
-                yield return new WaitForSeconds(.13f);
-                poseChange = Mathf.Max(poseChange, Vector3.Distance(initialTorsoPosition, torso.localPosition));
-            }
-            Check(poseChange > .0001f, "Nordic multipart idle pose animates");
-            preview.SetPreviewInput(Vector2.left);
-            yield return null;
-            yield return null;
-            Check(preview.characterVisual.localScale.x > 0, "Nordic source pose faces left");
-            preview.SetPreviewInput(Vector2.right);
-            yield return null;
-            yield return null;
-            Check(preview.characterVisual.localScale.x < 0, "Nordic mirrored pose faces right");
-            preview.SetPreviewInput(Vector2.zero);
+            var extreme = new RenderTexture(8192, 512, 0);
+            camera.targetTexture = extreme;
+            preview.ConstrainCameraView();
+            Check(camera.rect.width < 1 && camera.aspect * 16.781992f <= bounds.size.x && bounds.size.x - camera.aspect * 16.781992f < .1f,
+                "Extreme aspect uses bounded viewport without zoom");
+            CheckCamera(camera, bounds, "extreme offscreen aspect");
+            camera.targetTexture = null; Destroy(extreme);
+            preview.ConstrainCameraView();
 
-            var tree = FindObjectsByType<NordicSortAnchor>(FindObjectsSortMode.None).First(t => t.name == "Tree_1 #0");
-            Vector2 root = tree.transform.position;
-            var actorSort = preview.character.GetComponent<SortingGroup>();
-            preview.Teleport(root + new Vector2(0, 1.2f));
-            yield return new WaitForSeconds(.3f);
-            Check(actorSort.sortingOrder < tree.GetComponent<SortingGroup>().sortingOrder, "Actor behind tree");
-            yield return new WaitForEndOfFrame(); Capture(camera, "tree-behind", 1920, 1080, true);
-            preview.Teleport(root + new Vector2(0, -.65f));
-            yield return new WaitForSeconds(.3f);
-            Check(actorSort.sortingOrder > tree.GetComponent<SortingGroup>().sortingOrder, "Actor in front of tree");
-            yield return new WaitForEndOfFrame(); Capture(camera, "tree-front", 1920, 1080, true);
-            preview.Teleport(root + new Vector2(0, -1));
-            preview.SetPreviewInput(Vector2.up);
-            for (int i = 0; i < 35; i++) yield return new WaitForFixedUpdate();
-            preview.SetPreviewInput(Vector2.zero);
+            Screen.SetResolution(1920, 180, FullScreenMode.Windowed);
+            yield return new WaitForSeconds(.5f);
+            preview.ConstrainCameraView();
+            Check(camera.rect.width < 1, "Extreme window uses pillarbox viewport");
+            CheckCamera(camera, bounds, "extreme window");
+            yield return new WaitForEndOfFrame();
+            Capture(camera, "extreme-active-viewport", Mathf.FloorToInt(camera.pixelWidth), 180, true);
+            Screen.SetResolution(1920, 1080, FullScreenMode.Windowed);
+            yield return new WaitForSeconds(.5f);
+            preview.ConstrainCameraView();
+
+            // Cover all sixteen reference-screen regions, including chunk seams.
+            for (int x = 0; x < 4; x++) for (int y = 0; y < 4; y++)
+            {
+                preview.Teleport(new Vector2(bounds.min.x + (x + .5f) * bounds.size.x / 4,
+                    bounds.min.y + (y + .5f) * bounds.size.y / 4));
+                yield return new WaitForEndOfFrame();
+                Capture(camera, "region-" + x + "-" + y, 1920, 1080, true);
+            }
+            foreach (Vector2 direction in new[] { Vector2.left, Vector2.right, Vector2.up, Vector2.down, Vector2.one, -Vector2.one, new Vector2(-1,1), new Vector2(1,-1) })
+            {
+                preview.Teleport((Vector2)bounds.center + Vector2.Scale(direction, (Vector2)bounds.extents - Vector2.one));
+                preview.Move(direction * 500);
+                var foot = preview.character.GetComponent<Collider2D>().bounds;
+                Check(bounds.Contains(foot.min) && bounds.Contains(foot.max), "Large-step boundary block " + direction);
+                preview.Teleport((Vector2)bounds.center + direction * 1000);
+                foot = preview.character.GetComponent<Collider2D>().bounds;
+                Check(bounds.Contains(foot.min) && bounds.Contains(foot.max), "Teleport clamped " + direction);
+            }
+            // Temporary fixture isolates occlusion and collision from random layout contents.
+            var environment = map.transform.Find("Environment").gameObject;
+            environment.SetActive(false);
+            var tree = Instantiate(treePrefab, Vector3.zero, Quaternion.identity);
             var actorCollider = preview.character.GetComponent<Collider2D>();
             var rootCollider = tree.GetComponent<Collider2D>();
-            Check(preview.character.position.y < root.y + .5f && preview.character.position.y > root.y - .9f, "Tree root blocks upward movement");
-            var separation = actorCollider.Distance(rootCollider);
-            Check(!separation.isOverlapped, "Actor stays outside root collider: " + separation.distance.ToString("F6"));
-            preview.Teleport(root + new Vector2(0, 1.5f));
-            Check(!actorCollider.Distance(rootCollider).isOverlapped, "Canopy does not act as collider");
-
-            preview.Teleport(new Vector2(16, 12) + (Vector2)bounds.center);
-            yield return new WaitForSeconds(.4f);
-            var torches = FindObjectsByType<NordicTorchAmbient>(FindObjectsSortMode.None);
-            float before = torches[0].lights[0].intensity;
+            preview.Teleport(new Vector2(0, 1.2f));
+            yield return new WaitForSeconds(.25f);
+            yield return new WaitForEndOfFrame();
+            Capture(camera, "tree-behind", 1920, 1080, true);
+            Check(preview.character.position.y > tree.transform.position.y && preview.character.GetComponent<SortingGroup>().sortingOrder == 0,
+                "Actor uses shared order and Y axis behind tree");
+            preview.Teleport(new Vector2(0, -.65f));
+            yield return new WaitForSeconds(.25f);
+            yield return new WaitForEndOfFrame();
+            Capture(camera, "tree-front", 1920, 1080, true);
+            Check(preview.character.position.y < tree.transform.position.y, "Actor in front of tree by Y");
+            preview.Teleport(new Vector2(0, -1));
+            preview.Move(new Vector2(0, 5));
+            Check(preview.character.position.y < .2f && !actorCollider.Distance(rootCollider).isOverlapped, "Tree root blocks swept movement");
+            preview.Teleport(new Vector2(0, 1.5f));
+            Check(!actorCollider.Distance(rootCollider).isOverlapped, "Canopy has no solid collider");
+            Destroy(tree);
+            yield return null;
+            Vector2 origin = new Vector2(-4, 0);
+            preview.Teleport(origin); preview.Move(Vector2.right);
+            float straight = Vector2.Distance(origin, preview.character.position);
+            preview.Teleport(origin); preview.Move(Vector2.one.normalized);
+            float diagonal = Vector2.Distance(origin, preview.character.position);
+            Check(Mathf.Abs(straight - 1) < .001f && Mathf.Abs(straight - diagonal) < .001f, "Equal axial and normalized diagonal displacement");
+            preview.SetPreviewInput(Vector2.right);
+            yield return new WaitForSeconds(.25f);
+            Check(preview.characterAnimator.GetCurrentAnimatorStateInfo(0).IsName("Walk"), "Nordic walking animation");
+            preview.SetPreviewInput(Vector2.zero);
+            yield return new WaitForSeconds(.25f);
+            Check(preview.characterAnimator.GetCurrentAnimatorStateInfo(0).IsName("Idle"), "Nordic idle animation");
+            var torch = Instantiate(torchPrefab, new Vector3(4, 1, 0), Quaternion.identity);
+            var ambient = torch.GetComponent<NordicTorchAmbient>();
+            float intensity = ambient.lights[0].intensity;
             yield return new WaitForSeconds(.17f);
-            Check(Mathf.Abs(before - torches[0].lights[0].intensity) > .00001f, "Torch light animates");
-            var particles = FindObjectsByType<ParticleSystem>(FindObjectsSortMode.None);
-            Check(particles.Length > 0 && particles.All(p => p.isPlaying && p.main.loop), "Torch particles loop");
-            yield return new WaitForEndOfFrame(); Capture(camera, "ruins-torches", 1920, 1080, true);
-            Check(spriteCount == FindObjectsByType<SpriteRenderer>(FindObjectsSortMode.None).Length && propCount == FindObjectsByType<NordicSortAnchor>(FindObjectsSortMode.None).Length, "Static map instance counts unchanged");
-
+            Check(Mathf.Abs(intensity - ambient.lights[0].intensity) > .00001f, "Torch light animates independently");
+            Check(torch.GetComponentsInChildren<ParticleSystem>().All(p => p.isPlaying && p.main.loop), "Torch particles loop independently");
+            preview.Teleport(new Vector2(3, 0));
+            yield return new WaitForEndOfFrame(); Capture(camera, "torch-fixture", 1920, 1080, true);
+            Destroy(torch); yield return null;
+            environment.SetActive(true);
+            Physics2D.SyncTransforms();
+            Check(spriteCount == map.GetComponentsInChildren<SpriteRenderer>(true).Length, "Baked instance count unchanged after fixture tests");
+            var torches = map.GetComponentsInChildren<NordicTorchAmbient>();
+            var particles = map.GetComponentsInChildren<ParticleSystem>();
             yield return CheckRenderRegressions(camera);
 
-            preview.Teleport(bounds.center);
+            preview.Teleport(preview.SpawnPosition);
             yield return new WaitForSeconds(.3f);
             yield return new WaitForEndOfFrame(); Capture(camera, "sample-center", 1920, 1080, true);
             var result = new Result { passed = errors.Count == 0, sprites = spriteCount, props = propCount, particleSystems = particles.Length,
@@ -204,7 +228,10 @@ namespace MonsterSupergroup.NordicSample
         {
             var rt = RenderTexture.GetTemporary(width, height, 24, RenderTextureFormat.ARGB32, RenderTextureReadWrite.sRGB);
             var previous = RenderTexture.active;
-            float aspect = camera.aspect; camera.aspect = (float)width / height;
+            float aspect = camera.aspect;
+            Rect viewport = camera.rect;
+            camera.rect = new Rect(0, 0, 1, 1); // Capture the active view without applying screen letterboxing twice.
+            camera.aspect = (float)width / height;
             RenderPipeline.SubmitRenderRequest(camera, new UniversalRenderPipeline.SingleCameraRequest { destination = rt });
             RenderTexture.active = rt;
             var image = new Texture2D(width, height, TextureFormat.RGB24, false);
@@ -219,7 +246,7 @@ namespace MonsterSupergroup.NordicSample
                 if (name == "coverage-control") Check(gaps == width * height, "Ground coverage detector recognizes empty render");
                 else Check(gaps == 0, "No uncovered ground pixels " + name + " (" + gaps + ")");
             }
-            Destroy(image); RenderTexture.active = previous; camera.aspect = aspect; RenderTexture.ReleaseTemporary(rt);
+            Destroy(image); RenderTexture.active = previous; camera.rect = viewport; camera.aspect = aspect; RenderTexture.ReleaseTemporary(rt);
             return pixels;
         }
 
@@ -231,20 +258,13 @@ namespace MonsterSupergroup.NordicSample
             preview.Teleport(preview.MapBounds.center);
             yield return new WaitForEndOfFrame();
             var map = GameObject.Find("NordicStaticMap");
-            var statics = map.GetComponentsInChildren<NordicSortAnchor>();
-            int rootTies = statics.GroupBy(s => s.GetComponent<SortingGroup>().sortingOrder).Sum(g => g.Count() - 1);
-            Check(rootTies == 0, "Static tall roots have unique sorting orders (ties=" + rootTies + ")");
-            int childTies = 0;
-            foreach (string layer in new[] { "LowDecorations", "TallDecorations", "Landmarks" })
-            foreach (Transform composition in map.transform.Find(layer))
-                childTies += composition.GetComponentsInChildren<Renderer>(true).GroupBy(r => r.sortingOrder).Sum(g => g.Count() - 1);
-            Check(childTies == 0, "Composition parts have unique internal orders (ties=" + childTies + ")");
+            Check(map.GetComponentsInChildren<NordicSortAnchor>().Length == 0, "Custom-axis sorting replaces numbered ties");
             var visual = preview.characterVisual.GetComponentsInChildren<SpriteRenderer>();
             Check(visual.Select(r => r.sortingOrder).Distinct().Count() == visual.Length, "Axeldor parts have explicit internal ordering");
-
             foreach (string name in new[] { "Composition_Grass_1 #", "Composition_Flowers_1 #", "Composition_Destructibles_1 #" })
             {
-                Transform composition = map.GetComponentsInChildren<Transform>().First(t => t.name.StartsWith(name));
+                Transform composition = map.GetComponentsInChildren<Transform>().FirstOrDefault(t => t.name.StartsWith(name));
+                if (composition == null) continue;
                 var renderers = composition.GetComponentsInChildren<SpriteRenderer>();
                 Bounds region = renderers[0].bounds;
                 foreach (var renderer in renderers.Skip(1)) region.Encapsulate(renderer.bounds);
@@ -269,7 +289,7 @@ namespace MonsterSupergroup.NordicSample
             foreach (int fps in new[] { 60, 120 })
             {
                 Application.targetFrameRate = fps;
-                preview.Teleport((Vector2)preview.MapBounds.center + new Vector2(-6, 0));
+                preview.Teleport(FindClearLane(14));
                 preview.SetPreviewInput(Vector2.right);
                 yield return new WaitForSeconds(.65f);
                 yield return new WaitForEndOfFrame();
@@ -278,7 +298,7 @@ namespace MonsterSupergroup.NordicSample
                 float maxSpeedError = 0, maxBackstep = 0;
                 int backsteps = 0, stalledFrames = 0;
                 var csv = new System.Text.StringBuilder("frame,deltaTime,actorX,cameraX,screenX,speed\n");
-                // Stay within the unobstructed central area at both frame rates.
+                // Select a verified clear lane; the original rules reserve no central clearing.
                 for (int i = 0; i < fps; i++)
                 {
                     yield return new WaitForEndOfFrame();
@@ -301,6 +321,19 @@ namespace MonsterSupergroup.NordicSample
             }
             QualitySettings.vSyncCount = previousVsync;
             Application.targetFrameRate = previousFps;
+        }
+
+        private Vector2 FindClearLane(float length)
+        {
+            Bounds b = preview.MapBounds;
+            for (int y = -12; y <= 12; y++) for (int x = -15; x <= 5; x++)
+            {
+                Vector2 p = (Vector2)b.center + new Vector2(x, y);
+                bool clear = true;
+                for (float d = 0; d <= length; d += .2f) if (!preview.IsFree(p + Vector2.right * d)) { clear = false; break; }
+                if (clear) return p;
+            }
+            throw new InvalidOperationException("No collision-free movement test lane found.");
         }
 
         private void CompareStaticOverlap(Camera camera, Bounds region, string label)

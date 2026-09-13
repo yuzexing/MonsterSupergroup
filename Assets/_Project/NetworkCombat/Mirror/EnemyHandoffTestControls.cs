@@ -26,7 +26,7 @@ namespace MonsterSupergroup.NetworkCombat
             DontDestroyOnLoad(new GameObject("Enemy Handoff Test Controls").AddComponent<EnemyHandoffTestControls>().gameObject);
         }
 #if UNITY_EDITOR
-        [UnityEditor.MenuItem("Tools/Network Combat/Show Handoff Test Controls")]
+
         private static void ShowInEditor()
         {
             if (Application.isPlaying && FindFirstObjectByType<EnemyHandoffTestControls>() == null)

@@ -35,7 +35,7 @@ namespace MonsterSupergroup.HellMaidenMigration.Editor
             "Rubfish gradients/noise are not restored. CartoonCoffee ember alpha tint uses its original RGB as a " +
             "flat fallback, without the missing alpha-dependent tint/UV distortion. Source FMOD event is retained; " +
             "its bank and the source card icon asset are unavailable. Native attack and network validation run separately.";
-        private const string SourceDefault = "F:/DecomplieLatest/HellMaiden/ExportedProject";
+        private static string SourceDefault => MonsterSupergroup.EditorTools.ProjectToolPaths.HellMaiden();
         private const string SpriteShaderPath = "Assets/Plugins/AllIn1SpriteShader/Shaders/AllIn1SpriteShader.shader";
         private const string VfxShaderPath = "Assets/Plugins/AllIn1VfxToolkit/Shaders/AllIn1VfxURPCompat.shader";
         private const string KnockbackGuid = "fa1ccdc3a358d964ba88355c94961878";
@@ -66,9 +66,10 @@ namespace MonsterSupergroup.HellMaidenMigration.Editor
             "Texture2D/seamlessNoise_1.png", "Texture2D/white_1.png"
         };
 
-        [MenuItem("Tools/HellMaiden Migration/Import Dante Dash Native GAS Assets")]
+
         public static void Import()
         {
+            MonsterSupergroup.EditorTools.ProjectToolRunner.CheckLegacyMaintenance("import.dash", "MonsterSupergroup.HellMaidenMigration.Editor.DanteDashNativeGasMigration.Import");
             string sourceRoot = Environment.GetEnvironmentVariable("HELLMAIDEN_SOURCE_PROJECT");
             if (string.IsNullOrWhiteSpace(sourceRoot)) sourceRoot = SourceDefault;
             sourceRoot = Path.GetFullPath(sourceRoot);
@@ -86,9 +87,10 @@ namespace MonsterSupergroup.HellMaidenMigration.Editor
             Debug.Log("Dante FireTrail ID 8 assets imported; existing database entries/default weapon preserved. " + RestorationLimits);
         }
 
-        [MenuItem("Tools/HellMaiden Migration/Restore Source Player Dash Movement Configuration")]
+
         public static void RestoreDashMovementConfiguration()
         {
+            MonsterSupergroup.EditorTools.ProjectToolRunner.CheckLegacyMaintenance("maintenance.restore-dash", "MonsterSupergroup.HellMaidenMigration.Editor.DanteDashNativeGasMigration.RestoreDashMovementConfiguration");
             string sourceRoot = Environment.GetEnvironmentVariable("HELLMAIDEN_SOURCE_PROJECT");
             if (string.IsNullOrWhiteSpace(sourceRoot)) sourceRoot = SourceDefault;
             RestoreDashMovementConfiguration(Path.GetFullPath(sourceRoot));
@@ -248,7 +250,7 @@ namespace MonsterSupergroup.HellMaidenMigration.Editor
             if (!entries.Contains(weapon)) { entries.Add(weapon); database.Configure(entries.ToArray()); EditorUtility.SetDirty(database); }
         }
 
-        [MenuItem("Tools/HellMaiden Migration/Validate Dante Dash Native GAS Assets")]
+
         public static void ValidateImportedAssets()
         {
             WeaponData weapon = RequireAsset<WeaponData>(WeaponPath);
@@ -285,7 +287,7 @@ namespace MonsterSupergroup.HellMaidenMigration.Editor
             }
         }
 
-        [MenuItem("Tools/HellMaiden Migration/Diagnose Dante Dash Presentation Dependencies")]
+
         public static void DiagnosePresentationDependencies()
         {
             foreach (string assetPath in new[] { FireAttackPath, PoisonAttackPath, FireParticlesPath, PoisonParticlesPath })

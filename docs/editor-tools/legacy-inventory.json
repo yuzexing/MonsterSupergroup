@@ -1,0 +1,1367 @@
+{
+  "menus": [
+    {
+      "oldMenu": "Tools/MonsterSupergroup/Gameplay/Rebuild GAS Vertical Slice",
+      "path": "Assets/_Project/Gameplay/Editor/GasVerticalSliceSceneBuilder.cs",
+      "method": "MonsterSupergroup.Gameplay.Editor.GasVerticalSliceSceneBuilder.RebuildFromMenu",
+      "newId": "sample.gas-rebuild",
+      "disposition": "归维护；显式 Apply"
+    },
+    {
+      "oldMenu": "Tools/MonsterSupergroup/GAS/Validate All",
+      "path": "Assets/_Project/GAS/Editor/GasAssetValidator.cs",
+      "method": "MonsterSupergroup.GAS.Editor.GasAssetValidator.ValidateAllMenu",
+      "newId": "validate.gas",
+      "disposition": "保留并统一入口"
+    },
+    {
+      "oldMenu": "Tools/MonsterSupergroup/GAS/Rebuild Registry",
+      "path": "Assets/_Project/GAS/Editor/ModifierRegistryGenerator.cs",
+      "method": "MonsterSupergroup.GAS.Editor.ModifierRegistryGenerator.Rebuild",
+      "newId": "generate.gas-registry",
+      "disposition": "归维护；显式 Apply"
+    },
+    {
+      "oldMenu": "Tools/HellMaiden Migration/Import Dante Beam Native GAS Assets",
+      "path": "Assets/_Project/Migration/HellMaiden/Editor/DanteBeamNativeGasMigration.cs",
+      "method": "MonsterSupergroup.HellMaidenMigration.Editor.DanteBeamNativeGasMigration.Import",
+      "newId": "import.beam",
+      "disposition": "归维护；显式 Apply"
+    },
+    {
+      "oldMenu": "Tools/HellMaiden Migration/Validate Dante Beam Native GAS Assets",
+      "path": "Assets/_Project/Migration/HellMaiden/Editor/DanteBeamNativeGasMigration.cs",
+      "method": "MonsterSupergroup.HellMaidenMigration.Editor.DanteBeamNativeGasMigration.ValidateImportedAssets",
+      "newId": "validate.beam",
+      "disposition": "保留并统一入口"
+    },
+    {
+      "oldMenu": "Tools/HellMaiden Migration/Capture Dante Beam Presentation Preview",
+      "path": "Assets/_Project/Migration/HellMaiden/Editor/DanteBeamPresentationPreview.cs",
+      "method": "MonsterSupergroup.HellMaidenMigration.Editor.DanteBeamPresentationPreview.Capture",
+      "newId": "preview.beam",
+      "disposition": "保留并统一入口"
+    },
+    {
+      "oldMenu": "Tools/HellMaiden Migration/Import Dante Circling Native GAS Assets",
+      "path": "Assets/_Project/Migration/HellMaiden/Editor/DanteCirclingNativeGasMigration.cs",
+      "method": "MonsterSupergroup.HellMaidenMigration.Editor.DanteCirclingNativeGasMigration.Import",
+      "newId": "import.circling",
+      "disposition": "归维护；显式 Apply"
+    },
+    {
+      "oldMenu": "Tools/HellMaiden Migration/Validate Dante Circling Native GAS Assets",
+      "path": "Assets/_Project/Migration/HellMaiden/Editor/DanteCirclingNativeGasMigration.cs",
+      "method": "MonsterSupergroup.HellMaidenMigration.Editor.DanteCirclingNativeGasMigration.ValidateImportedAssets",
+      "newId": "validate.circling",
+      "disposition": "保留并统一入口"
+    },
+    {
+      "oldMenu": "Tools/HellMaiden Migration/Diagnose Dante Circling Presentation Dependencies",
+      "path": "Assets/_Project/Migration/HellMaiden/Editor/DanteCirclingNativeGasMigration.cs",
+      "method": "MonsterSupergroup.HellMaidenMigration.Editor.DanteCirclingNativeGasMigration.DiagnosePresentationDependencies",
+      "newId": "diagnostic.circling-dependencies",
+      "disposition": "保留并统一入口"
+    },
+    {
+      "oldMenu": "Tools/HellMaiden Migration/Capture Dante Circling Presentation Preview",
+      "path": "Assets/_Project/Migration/HellMaiden/Editor/DanteCirclingPresentationPreview.cs",
+      "method": "MonsterSupergroup.HellMaidenMigration.Editor.DanteCirclingPresentationPreview.Capture",
+      "newId": "preview.circling",
+      "disposition": "保留并统一入口"
+    },
+    {
+      "oldMenu": "Tools/HellMaiden Migration/Import Dante Dash Native GAS Assets",
+      "path": "Assets/_Project/Migration/HellMaiden/Editor/DanteDashNativeGasMigration.cs",
+      "method": "MonsterSupergroup.HellMaidenMigration.Editor.DanteDashNativeGasMigration.Import",
+      "newId": "import.dash",
+      "disposition": "归维护；显式 Apply"
+    },
+    {
+      "oldMenu": "Tools/HellMaiden Migration/Restore Source Player Dash Movement Configuration",
+      "path": "Assets/_Project/Migration/HellMaiden/Editor/DanteDashNativeGasMigration.cs",
+      "method": "MonsterSupergroup.HellMaidenMigration.Editor.DanteDashNativeGasMigration.RestoreDashMovementConfiguration",
+      "newId": "maintenance.restore-dash",
+      "disposition": "归维护；显式 Apply"
+    },
+    {
+      "oldMenu": "Tools/HellMaiden Migration/Validate Dante Dash Native GAS Assets",
+      "path": "Assets/_Project/Migration/HellMaiden/Editor/DanteDashNativeGasMigration.cs",
+      "method": "MonsterSupergroup.HellMaidenMigration.Editor.DanteDashNativeGasMigration.ValidateImportedAssets",
+      "newId": "validate.dash",
+      "disposition": "保留并统一入口"
+    },
+    {
+      "oldMenu": "Tools/HellMaiden Migration/Diagnose Dante Dash Presentation Dependencies",
+      "path": "Assets/_Project/Migration/HellMaiden/Editor/DanteDashNativeGasMigration.cs",
+      "method": "MonsterSupergroup.HellMaidenMigration.Editor.DanteDashNativeGasMigration.DiagnosePresentationDependencies",
+      "newId": "diagnostic.dash-dependencies",
+      "disposition": "保留并统一入口"
+    },
+    {
+      "oldMenu": "Tools/HellMaiden Migration/Capture Dante Dash Presentation Preview",
+      "path": "Assets/_Project/Migration/HellMaiden/Editor/DanteDashPresentationPreview.cs",
+      "method": "MonsterSupergroup.HellMaidenMigration.Editor.DanteDashPresentationPreview.Capture",
+      "newId": "preview.dash",
+      "disposition": "保留并统一入口"
+    },
+    {
+      "oldMenu": "Tools/HellMaiden Migration/Import Dante Melee Native GAS Assets",
+      "path": "Assets/_Project/Migration/HellMaiden/Editor/DanteMeleeNativeGasMigration.cs",
+      "method": "MonsterSupergroup.HellMaidenMigration.Editor.DanteMeleeNativeGasMigration.Import",
+      "newId": "import.melee",
+      "disposition": "归维护；显式 Apply"
+    },
+    {
+      "oldMenu": "Tools/HellMaiden Migration/Validate Dante Melee Native GAS Assets",
+      "path": "Assets/_Project/Migration/HellMaiden/Editor/DanteMeleeNativeGasMigration.cs",
+      "method": "MonsterSupergroup.HellMaidenMigration.Editor.DanteMeleeNativeGasMigration.ValidateImportedAssets",
+      "newId": "validate.melee",
+      "disposition": "保留并统一入口"
+    },
+    {
+      "oldMenu": "Tools/HellMaiden Migration/Capture Dante Melee Presentation Preview",
+      "path": "Assets/_Project/Migration/HellMaiden/Editor/DanteMeleePresentationPreview.cs",
+      "method": "MonsterSupergroup.HellMaidenMigration.Editor.DanteMeleePresentationPreview.Capture",
+      "newId": "preview.melee",
+      "disposition": "保留并统一入口"
+    },
+    {
+      "oldMenu": "Tools/HellMaiden Migration/Rebuild Dante Native GAS Assets",
+      "path": "Assets/_Project/Migration/HellMaiden/Editor/DanteNativeGasMigration.cs",
+      "method": "MonsterSupergroup.HellMaidenMigration.Editor.DanteNativeGasMigration.Rebuild",
+      "newId": "rebuild.dante",
+      "disposition": "归维护；显式 Apply"
+    },
+    {
+      "oldMenu": "Tools/HellMaiden Migration/Reserialize Canonical Equipment Assets",
+      "path": "Assets/_Project/Migration/HellMaiden/Editor/DanteNativeGasMigration.cs",
+      "method": "MonsterSupergroup.HellMaidenMigration.Editor.DanteNativeGasMigration.ReserializeCanonicalEquipmentAssets",
+      "newId": "maintenance.reserialize-equipment",
+      "disposition": "归维护；显式 Apply"
+    },
+    {
+      "oldMenu": "Tools/HellMaiden Migration/Import Dante Projectile Presentation",
+      "path": "Assets/_Project/Migration/HellMaiden/Editor/DanteProjectilePresentationMigration.cs",
+      "method": "MonsterSupergroup.HellMaidenMigration.Editor.DanteProjectilePresentationMigration.Import",
+      "newId": "import.projectile",
+      "disposition": "归维护；显式 Apply"
+    },
+    {
+      "oldMenu": "Tools/HellMaiden Migration/Validate Dante Projectile Presentation",
+      "path": "Assets/_Project/Migration/HellMaiden/Editor/DanteProjectilePresentationMigration.cs",
+      "method": "MonsterSupergroup.HellMaidenMigration.Editor.DanteProjectilePresentationMigration.ValidateImportedAssets",
+      "newId": "validate.projectile",
+      "disposition": "保留并统一入口"
+    },
+    {
+      "oldMenu": "Tools/HellMaiden Migration/Capture Dante Projectile Presentation Preview",
+      "path": "Assets/_Project/Migration/HellMaiden/Editor/DanteProjectilePresentationPreview.cs",
+      "method": "MonsterSupergroup.HellMaidenMigration.Editor.DanteProjectilePresentationPreview.Capture",
+      "newId": "preview.projectile",
+      "disposition": "保留并统一入口"
+    },
+    {
+      "oldMenu": "Tools/HellMaiden Migration/Import Dante Ultimate Attack Assets",
+      "path": "Assets/_Project/Migration/HellMaiden/Editor/DanteUltimateAssetMigration.cs",
+      "method": "MonsterSupergroup.HellMaidenMigration.Editor.DanteUltimateAssetMigration.Import",
+      "newId": "import.ultimate",
+      "disposition": "归维护；显式 Apply"
+    },
+    {
+      "oldMenu": "Tools/HellMaiden Migration/Validate Dante Ultimate Attack Assets",
+      "path": "Assets/_Project/Migration/HellMaiden/Editor/DanteUltimateAssetMigration.cs",
+      "method": "MonsterSupergroup.HellMaidenMigration.Editor.DanteUltimateAssetMigration.ValidateImportedAssets",
+      "newId": "validate.ultimate",
+      "disposition": "保留并统一入口"
+    },
+    {
+      "oldMenu": "Tools/HellMaiden Migration/Capture Dante Ultimate Presentation Preview",
+      "path": "Assets/_Project/Migration/HellMaiden/Editor/DanteUltimatePresentationPreview.cs",
+      "method": "MonsterSupergroup.HellMaidenMigration.Editor.DanteUltimatePresentationPreview.Capture",
+      "newId": "preview.ultimate",
+      "disposition": "保留并统一入口"
+    },
+    {
+      "oldMenu": "Tools/HellMaiden Migration/Import Ovid Summon Native GAS Assets",
+      "path": "Assets/_Project/Migration/HellMaiden/Editor/OvidSummonNativeGasMigration.cs",
+      "method": "MonsterSupergroup.HellMaidenMigration.Editor.OvidSummonNativeGasMigration.Import",
+      "newId": "import.summon",
+      "disposition": "归维护；显式 Apply"
+    },
+    {
+      "oldMenu": "Tools/HellMaiden Migration/Validate Ovid Summon Native GAS Assets",
+      "path": "Assets/_Project/Migration/HellMaiden/Editor/OvidSummonNativeGasMigration.cs",
+      "method": "MonsterSupergroup.HellMaidenMigration.Editor.OvidSummonNativeGasMigration.ValidateImportedAssets",
+      "newId": "validate.summon",
+      "disposition": "保留并统一入口"
+    },
+    {
+      "oldMenu": "Tools/HellMaiden Migration/Capture Ovid Summon Shadow Evidence",
+      "path": "Assets/_Project/Migration/HellMaiden/Editor/OvidSummonPresentationPreview.cs",
+      "method": "MonsterSupergroup.HellMaidenMigration.Editor.OvidSummonPresentationPreview.CaptureShadowEvidence",
+      "newId": "preview.summon-shadow",
+      "disposition": "保留并统一入口"
+    },
+    {
+      "oldMenu": "Tools/HellMaiden Migration/Capture Ovid Summon Presentation Preview",
+      "path": "Assets/_Project/Migration/HellMaiden/Editor/OvidSummonPresentationPreview.cs",
+      "method": "MonsterSupergroup.HellMaidenMigration.Editor.OvidSummonPresentationPreview.Capture",
+      "newId": "preview.summon",
+      "disposition": "保留并统一入口"
+    },
+    {
+      "oldMenu": "Tools/HellMaiden Migration/Rebuild Pure Weapon Perks",
+      "path": "Assets/_Project/Migration/HellMaiden/Editor/PureWeaponPerkMigration.cs",
+      "method": "MonsterSupergroup.HellMaidenMigration.Editor.PureWeaponPerkMigration.Rebuild",
+      "newId": "rebuild.perks",
+      "disposition": "归维护；显式 Apply"
+    },
+    {
+      "oldMenu": "Monster Supergroup/Network Combat/Build Boot Gameplay Process Validation Player",
+      "path": "Assets/_Project/NetworkCombat/Editor/BootGameplayProcessValidationBuildUtility.cs",
+      "method": "MonsterSupergroup.NetworkCombat.Editor.BootGameplayProcessValidationBuildUtility.BuildWindowsPlayer",
+      "newId": "build.player",
+      "profile": "boot-process",
+      "disposition": "构建流程合并；旧方法转发一版"
+    },
+    {
+      "oldMenu": "Monster Supergroup/Network Combat/Migrate Enemy Prefab Variants",
+      "path": "Assets/_Project/NetworkCombat/Editor/EnemyPrefabVariantMigration.cs",
+      "method": "MonsterSupergroup.NetworkCombat.Editor.EnemyPrefabVariantMigration.Migrate",
+      "newId": "migrate.enemy-variants",
+      "disposition": "归维护；显式 Apply"
+    },
+    {
+      "oldMenu": "Monster Supergroup/Network Combat/Migrate Imp Variant",
+      "path": "Assets/_Project/NetworkCombat/Editor/EnemyPrefabVariantMigration.Imp.cs",
+      "method": "MonsterSupergroup.NetworkCombat.Editor.EnemyPrefabVariantMigration.MigrateImp",
+      "newId": "migrate.imp",
+      "disposition": "归维护；显式 Apply"
+    },
+    {
+      "oldMenu": "Monster Supergroup/Network Combat/Migrate LustSinner Variant",
+      "path": "Assets/_Project/NetworkCombat/Editor/EnemyPrefabVariantMigration.LustSinner.cs",
+      "method": "MonsterSupergroup.NetworkCombat.Editor.EnemyPrefabVariantMigration.MigrateLustSinner",
+      "newId": "migrate.lust-sinner",
+      "disposition": "归维护；显式 Apply"
+    },
+    {
+      "oldMenu": "Monster Supergroup/Network Combat/Migrate Enemy Simulation Prefabs",
+      "path": "Assets/_Project/NetworkCombat/Editor/EnemySimulationPrefabMigrator.cs",
+      "method": "MonsterSupergroup.NetworkCombat.Editor.EnemySimulationPrefabMigrator.Migrate",
+      "newId": "migrate.enemy-variants",
+      "disposition": "删除重复菜单；旧方法兼容转发"
+    },
+    {
+      "oldMenu": "MonsterSupergroup/Localization/Create entries for selected content",
+      "path": "Assets/_Project/NetworkCombat/Editor/GameLocalizationAssets.cs",
+      "method": "MonsterSupergroup.NetworkCombat.Editor.GameLocalizationAssets.CreateSelectedEntries",
+      "newId": "create.localization-entries",
+      "disposition": "归维护；显式 Apply"
+    },
+    {
+      "oldMenu": "MonsterSupergroup/Localization/Validate tables and content",
+      "path": "Assets/_Project/NetworkCombat/Editor/GameLocalizationAssets.cs",
+      "method": "MonsterSupergroup.NetworkCombat.Editor.GameLocalizationAssets.Validate",
+      "newId": "validate.localization",
+      "disposition": "保留并统一入口"
+    },
+    {
+      "oldMenu": "MonsterSupergroup/Localization/Export translation CSV",
+      "path": "Assets/_Project/NetworkCombat/Editor/GameLocalizationAssets.cs",
+      "method": "MonsterSupergroup.NetworkCombat.Editor.GameLocalizationAssets.ExportCsv",
+      "newId": "export.localization-csv",
+      "disposition": "保留并统一入口"
+    },
+    {
+      "oldMenu": "Tools/Network Combat/Apply M6 Experience Setup",
+      "path": "Assets/_Project/NetworkCombat/Editor/GameplayExperienceSetup.cs",
+      "method": "MonsterSupergroup.NetworkCombat.Editor.GameplayExperienceSetup.Apply",
+      "newId": "setup.experience-legacy",
+      "disposition": "归维护；显式 Apply"
+    },
+    {
+      "oldMenu": "Monster Supergroup/Network Combat/Build KCP Development Player",
+      "path": "Assets/_Project/NetworkCombat/Editor/KcpDevelopmentBuildUtility.cs",
+      "method": "MonsterSupergroup.NetworkCombat.Editor.KcpDevelopmentBuildUtility.BuildWindowsPlayer",
+      "newId": "build.player",
+      "profile": "kcp-development",
+      "disposition": "构建流程合并；旧方法转发一版"
+    },
+    {
+      "oldMenu": "Monster Supergroup/Network Combat/Editor Backend/Steam",
+      "path": "Assets/_Project/NetworkCombat/Editor/NetworkBackendEditorSettings.cs",
+      "method": "MonsterSupergroup.NetworkCombat.Editor.NetworkBackendEditorSettings.SelectSteam",
+      "newId": "diagnostic.backend-steam",
+      "disposition": "保留并统一入口"
+    },
+    {
+      "oldMenu": "Monster Supergroup/Network Combat/Editor Backend/KCP Local",
+      "path": "Assets/_Project/NetworkCombat/Editor/NetworkBackendEditorSettings.cs",
+      "method": "MonsterSupergroup.NetworkCombat.Editor.NetworkBackendEditorSettings.SelectKcp",
+      "newId": "diagnostic.backend-kcp",
+      "disposition": "保留并统一入口"
+    },
+    {
+      "oldMenu": "Monster Supergroup/Network Combat/Steam/Log Invite Diagnostics",
+      "path": "Assets/_Project/NetworkCombat/Editor/NetworkBackendEditorSettings.cs",
+      "method": "MonsterSupergroup.NetworkCombat.Editor.NetworkBackendEditorSettings.LogInviteDiagnostics",
+      "newId": "diagnostic.steam",
+      "disposition": "保留并统一入口"
+    },
+    {
+      "oldMenu": "Monster Supergroup/Network Combat/Steam/Open Lobby Invite Dialog",
+      "path": "Assets/_Project/NetworkCombat/Editor/NetworkBackendEditorSettings.cs",
+      "method": "MonsterSupergroup.NetworkCombat.Editor.NetworkBackendEditorSettings.OpenInviteDialog",
+      "newId": "diagnostic.overlay",
+      "disposition": "保留并统一入口"
+    },
+    {
+      "oldMenu": "Monster Supergroup/Network Combat/Configure Boot Gameplay Loop",
+      "path": "Assets/_Project/NetworkCombat/Editor/NetworkCombatSetupUtility.cs",
+      "method": "MonsterSupergroup.NetworkCombat.Editor.NetworkCombatSetupUtility.ConfigureBootGameplayLoop",
+      "newId": "setup.boot",
+      "disposition": "归维护；显式 Apply"
+    },
+    {
+      "oldMenu": "Monster Supergroup/Network Combat/Build Validation Sandbox",
+      "path": "Assets/_Project/NetworkCombat/Editor/NetworkCombatSetupUtility.cs",
+      "method": "MonsterSupergroup.NetworkCombat.Editor.NetworkCombatSetupUtility.BuildSandbox",
+      "newId": "setup.sandbox",
+      "disposition": "归维护；显式 Apply"
+    },
+    {
+      "oldMenu": "Monster Supergroup/Network Combat/Build Enemy Simulation Process Validation Player",
+      "path": "Assets/_Project/NetworkCombat/Editor/NetworkEnemyProcessValidationBuildUtility.cs",
+      "method": "MonsterSupergroup.NetworkCombat.Editor.NetworkEnemyProcessValidationBuildUtility.BuildWindowsPlayer",
+      "newId": "build.player",
+      "profile": "sandbox",
+      "disposition": "构建流程合并；旧方法转发一版"
+    },
+    {
+      "oldMenu": "Monster Supergroup/Network Combat/Waves/Create Default Timeline",
+      "path": "Assets/_Project/NetworkCombat/Editor/NetworkWaveTimelineEditorUtility.cs",
+      "method": "MonsterSupergroup.NetworkCombat.Editor.NetworkWaveTimelineEditorUtility.EnsureDefault",
+      "newId": "create.wave-timeline",
+      "disposition": "归维护；显式 Apply"
+    },
+    {
+      "oldMenu": "Monster Supergroup/Network Combat/Waves/Open Timeline",
+      "path": "Assets/_Project/NetworkCombat/Editor/NetworkWaveTimelineEditorUtility.cs",
+      "method": "MonsterSupergroup.NetworkCombat.Editor.NetworkWaveTimelineEditorUtility.Open",
+      "newId": "open.waves",
+      "disposition": "保留并统一入口"
+    },
+    {
+      "oldMenu": "Monster Supergroup/Network Combat/Waves/Validate and Export Preview",
+      "path": "Assets/_Project/NetworkCombat/Editor/NetworkWaveTimelineEditorUtility.cs",
+      "method": "MonsterSupergroup.NetworkCombat.Editor.NetworkWaveTimelineEditorUtility.ValidateConfigured",
+      "newId": "validate.waves",
+      "disposition": "保留并统一入口"
+    },
+    {
+      "oldMenu": "Tools/Monster Supergroup/Repair Network Player Runtime Combat Prefab",
+      "path": "Assets/_Project/NetworkCombat/Editor/PlayerRuntimeCombatPrefabMigrator.cs",
+      "method": "MonsterSupergroup.NetworkCombat.Editor.PlayerRuntimeCombatPrefabMigrator.Run",
+      "newId": "repair.player-prefab",
+      "disposition": "归维护；显式 Apply"
+    },
+    {
+      "oldMenu": "MonsterSupergroup/Menu/Create preparation catalog",
+      "path": "Assets/_Project/NetworkCombat/Editor/PreparationMenuAssets.cs",
+      "method": "MonsterSupergroup.NetworkCombat.Editor.PreparationMenuAssets.CreateCatalog",
+      "newId": "create.preparation-catalog",
+      "disposition": "归维护；显式 Apply"
+    },
+    {
+      "oldMenu": "Tools/Network Combat/Show Handoff Test Controls",
+      "path": "Assets/_Project/NetworkCombat/Mirror/EnemyHandoffTestControls.cs",
+      "method": "MonsterSupergroup.NetworkCombat.EnemyHandoffTestControls.ShowInEditor",
+      "newId": "diagnostic.enemy-handoff",
+      "disposition": "保留并统一入口"
+    },
+    {
+      "oldMenu": "Tools/Nordic/1. Validate Imported Resources",
+      "path": "Assets/_Project/NordicSample/Editor/NordicStaticSampleBuilder.cs",
+      "method": "MonsterSupergroup.NordicSample.Editor.NordicStaticSampleBuilder.ValidateImports",
+      "newId": "sample.nordic-validate-imports",
+      "disposition": "保留并统一入口"
+    },
+    {
+      "oldMenu": "Tools/Nordic/2. Build Static Sample",
+      "path": "Assets/_Project/NordicSample/Editor/NordicStaticSampleBuilder.cs",
+      "method": "MonsterSupergroup.NordicSample.Editor.NordicStaticSampleBuilder.BuildSample",
+      "newId": "sample.nordic-create",
+      "disposition": "归维护；显式 Apply"
+    },
+    {
+      "oldMenu": "Tools/Nordic/5. Refresh Sample Sorting (Keep Layout)",
+      "path": "Assets/_Project/NordicSample/Editor/NordicStaticSampleBuilder.cs",
+      "method": "MonsterSupergroup.NordicSample.Editor.NordicStaticSampleBuilder.RefreshSampleSorting",
+      "newId": "sample.nordic-sorting",
+      "disposition": "归维护；显式 Apply"
+    },
+    {
+      "oldMenu": "Tools/Nordic/3. Validate Static Sample",
+      "path": "Assets/_Project/NordicSample/Editor/NordicStaticSampleBuilder.cs",
+      "method": "MonsterSupergroup.NordicSample.Editor.NordicStaticSampleBuilder.ValidateScene",
+      "newId": "sample.nordic-validate",
+      "disposition": "保留并统一入口"
+    },
+    {
+      "oldMenu": "Tools/Nordic/4. Build Standalone Preview",
+      "path": "Assets/_Project/NordicSample/Editor/NordicStaticSampleBuilder.cs",
+      "method": "MonsterSupergroup.NordicSample.Editor.NordicStaticSampleBuilder.BuildPlayer",
+      "newId": "build.player",
+      "profile": "nordic",
+      "disposition": "构建流程合并；旧方法转发一版"
+    }
+  ],
+  "editorIntegrations": [
+    {
+      "path": "Assets/_Project/Gameplay/Editor/GasVerticalSliceSceneBuilder.cs",
+      "types": [
+        "GasVerticalSliceSceneBuilder"
+      ],
+      "hooks": [],
+      "disposition": "保留；菜单与批处理按映射统一，Inspector/自动钩子保持"
+    },
+    {
+      "path": "Assets/_Project/GAS/Editor/GasAssetValidator.cs",
+      "types": [
+        "GasValidationIssue",
+        "GasAssetValidator"
+      ],
+      "hooks": [],
+      "disposition": "保留；菜单与批处理按映射统一，Inspector/自动钩子保持"
+    },
+    {
+      "path": "Assets/_Project/GAS/Editor/GasBuildPreprocessor.cs",
+      "types": [
+        "GasBuildPreprocessor"
+      ],
+      "hooks": [],
+      "disposition": "保留；菜单与批处理按映射统一，Inspector/自动钩子保持"
+    },
+    {
+      "path": "Assets/_Project/GAS/Editor/ModifierDataDrawers.cs",
+      "types": [
+        "ModifierDataDrawer",
+        "EquipmentDataModifierDrawer",
+        "PerkDataModifierDrawer"
+      ],
+      "hooks": [
+        "CustomPropertyDrawer",
+        "CustomPropertyDrawer"
+      ],
+      "disposition": "保留；菜单与批处理按映射统一，Inspector/自动钩子保持"
+    },
+    {
+      "path": "Assets/_Project/GAS/Editor/ModifierRegistryGenerator.cs",
+      "types": [
+        "ModifierRegistryGenerator",
+        "GeneratedModifierRegistry"
+      ],
+      "hooks": [],
+      "disposition": "保留；菜单与批处理按映射统一，Inspector/自动钩子保持"
+    },
+    {
+      "path": "Assets/_Project/GAS/Editor/ModifierSelectionService.cs",
+      "types": [
+        "ModifierSelectionService"
+      ],
+      "hooks": [],
+      "disposition": "保留；菜单与批处理按映射统一，Inspector/自动钩子保持"
+    },
+    {
+      "path": "Assets/_Project/GAS/Editor/ModifierTypeCatalog.cs",
+      "types": [
+        "ModifierDescriptor",
+        "ModifierTypeCatalog"
+      ],
+      "hooks": [],
+      "disposition": "保留；菜单与批处理按映射统一，Inspector/自动钩子保持"
+    },
+    {
+      "path": "Assets/_Project/Migration/HellMaiden/Editor/DanteAttackPresentationPreview.cs",
+      "types": [
+        "DanteAttackPresentationPreview"
+      ],
+      "hooks": [],
+      "disposition": "保留；菜单与批处理按映射统一，Inspector/自动钩子保持"
+    },
+    {
+      "path": "Assets/_Project/Migration/HellMaiden/Editor/DanteBeamNativeGasMigration.cs",
+      "types": [
+        "DanteBeamNativeGasMigration"
+      ],
+      "hooks": [],
+      "disposition": "保留；菜单与批处理按映射统一，Inspector/自动钩子保持"
+    },
+    {
+      "path": "Assets/_Project/Migration/HellMaiden/Editor/DanteBeamPresentationPreview.cs",
+      "types": [
+        "DanteBeamPresentationPreview"
+      ],
+      "hooks": [],
+      "disposition": "保留；菜单与批处理按映射统一，Inspector/自动钩子保持"
+    },
+    {
+      "path": "Assets/_Project/Migration/HellMaiden/Editor/DanteCirclingNativeGasMigration.cs",
+      "types": [
+        "DanteCirclingNativeGasMigration"
+      ],
+      "hooks": [],
+      "disposition": "保留；菜单与批处理按映射统一，Inspector/自动钩子保持"
+    },
+    {
+      "path": "Assets/_Project/Migration/HellMaiden/Editor/DanteCirclingPresentationPreview.cs",
+      "types": [
+        "DanteCirclingPresentationPreview"
+      ],
+      "hooks": [],
+      "disposition": "保留；菜单与批处理按映射统一，Inspector/自动钩子保持"
+    },
+    {
+      "path": "Assets/_Project/Migration/HellMaiden/Editor/DanteDashNativeGasMigration.cs",
+      "types": [
+        "DanteDashNativeGasMigration"
+      ],
+      "hooks": [],
+      "disposition": "保留；菜单与批处理按映射统一，Inspector/自动钩子保持"
+    },
+    {
+      "path": "Assets/_Project/Migration/HellMaiden/Editor/DanteDashPresentationPreview.cs",
+      "types": [
+        "DanteDashPresentationPreview"
+      ],
+      "hooks": [],
+      "disposition": "保留；菜单与批处理按映射统一，Inspector/自动钩子保持"
+    },
+    {
+      "path": "Assets/_Project/Migration/HellMaiden/Editor/DanteMeleeNativeGasMigration.cs",
+      "types": [
+        "DanteMeleeNativeGasMigration"
+      ],
+      "hooks": [],
+      "disposition": "保留；菜单与批处理按映射统一，Inspector/自动钩子保持"
+    },
+    {
+      "path": "Assets/_Project/Migration/HellMaiden/Editor/DanteMeleePresentationPreview.cs",
+      "types": [
+        "DanteMeleePresentationPreview"
+      ],
+      "hooks": [],
+      "disposition": "保留；菜单与批处理按映射统一，Inspector/自动钩子保持"
+    },
+    {
+      "path": "Assets/_Project/Migration/HellMaiden/Editor/DanteNativeGasMigration.cs",
+      "types": [
+        "DanteNativeGasMigration",
+        "EquipmentMigration"
+      ],
+      "hooks": [],
+      "disposition": "保留；菜单与批处理按映射统一，Inspector/自动钩子保持"
+    },
+    {
+      "path": "Assets/_Project/Migration/HellMaiden/Editor/DanteProjectilePresentationMigration.cs",
+      "types": [
+        "DanteProjectilePresentationMigration"
+      ],
+      "hooks": [],
+      "disposition": "保留；菜单与批处理按映射统一，Inspector/自动钩子保持"
+    },
+    {
+      "path": "Assets/_Project/Migration/HellMaiden/Editor/DanteProjectilePresentationPreview.cs",
+      "types": [
+        "DanteProjectilePresentationPreview"
+      ],
+      "hooks": [],
+      "disposition": "保留；菜单与批处理按映射统一，Inspector/自动钩子保持"
+    },
+    {
+      "path": "Assets/_Project/Migration/HellMaiden/Editor/DanteUltimateAssetMigration.cs",
+      "types": [
+        "DanteUltimateAssetMigration",
+        "GUID"
+      ],
+      "hooks": [],
+      "disposition": "保留；菜单与批处理按映射统一，Inspector/自动钩子保持"
+    },
+    {
+      "path": "Assets/_Project/Migration/HellMaiden/Editor/DanteUltimatePresentationPreview.cs",
+      "types": [
+        "DanteUltimatePresentationPreview"
+      ],
+      "hooks": [
+        "InitializeOnLoad"
+      ],
+      "disposition": "保留；菜单与批处理按映射统一，Inspector/自动钩子保持"
+    },
+    {
+      "path": "Assets/_Project/Migration/HellMaiden/Editor/LegacyEquipmentModifierConverter.cs",
+      "types": [
+        "LegacyEquipmentModifierConverter"
+      ],
+      "hooks": [],
+      "disposition": "保留；菜单与批处理按映射统一，Inspector/自动钩子保持"
+    },
+    {
+      "path": "Assets/_Project/Migration/HellMaiden/Editor/LegacyPerkModifierConverter.cs",
+      "types": [
+        "LegacyPerkModifierConverter"
+      ],
+      "hooks": [],
+      "disposition": "保留；菜单与批处理按映射统一，Inspector/自动钩子保持"
+    },
+    {
+      "path": "Assets/_Project/Migration/HellMaiden/Editor/OvidSummonNativeGasMigration.cs",
+      "types": [
+        "OvidSummonNativeGasMigration"
+      ],
+      "hooks": [],
+      "disposition": "保留；菜单与批处理按映射统一，Inspector/自动钩子保持"
+    },
+    {
+      "path": "Assets/_Project/Migration/HellMaiden/Editor/OvidSummonPresentationPreview.cs",
+      "types": [
+        "OvidSummonPresentationPreview"
+      ],
+      "hooks": [],
+      "disposition": "保留；菜单与批处理按映射统一，Inspector/自动钩子保持"
+    },
+    {
+      "path": "Assets/_Project/Migration/HellMaiden/Editor/PureWeaponPerkMigration.cs",
+      "types": [
+        "PureWeaponPerkMigration",
+        "PerkMigration"
+      ],
+      "hooks": [],
+      "disposition": "保留；菜单与批处理按映射统一，Inspector/自动钩子保持"
+    },
+    {
+      "path": "Assets/_Project/NetworkCombat/Editor/BootGameplayProcessValidationBuildUtility.cs",
+      "types": [
+        "BootGameplayProcessValidationBuildUtility"
+      ],
+      "hooks": [],
+      "disposition": "保留；菜单与批处理按映射统一，Inspector/自动钩子保持"
+    },
+    {
+      "path": "Assets/_Project/NetworkCombat/Editor/EnemyPrefabVariantMigration.cs",
+      "types": [
+        "EnemyPrefabVariantMigration",
+        "ReferenceRecord",
+        "ReferenceReport",
+        "Baseline",
+        "Baselines"
+      ],
+      "hooks": [],
+      "disposition": "保留；菜单与批处理按映射统一，Inspector/自动钩子保持"
+    },
+    {
+      "path": "Assets/_Project/NetworkCombat/Editor/EnemyPrefabVariantMigration.Imp.cs",
+      "types": [
+        "EnemyPrefabVariantMigration"
+      ],
+      "hooks": [],
+      "disposition": "保留；菜单与批处理按映射统一，Inspector/自动钩子保持"
+    },
+    {
+      "path": "Assets/_Project/NetworkCombat/Editor/EnemyPrefabVariantMigration.LustSinner.cs",
+      "types": [
+        "EnemyPrefabVariantMigration",
+        "LustReport"
+      ],
+      "hooks": [],
+      "disposition": "保留；菜单与批处理按映射统一，Inspector/自动钩子保持"
+    },
+    {
+      "path": "Assets/_Project/NetworkCombat/Editor/EnemyPrefabVariantMigration.Validation.cs",
+      "types": [
+        "EnemyPrefabVariantMigration",
+        "ContentComparison"
+      ],
+      "hooks": [],
+      "disposition": "保留；菜单与批处理按映射统一，Inspector/自动钩子保持"
+    },
+    {
+      "path": "Assets/_Project/NetworkCombat/Editor/EnemySimulationPrefabMigrator.cs",
+      "types": [
+        "EnemySimulationPrefabMigrator"
+      ],
+      "hooks": [],
+      "disposition": "保留；菜单与批处理按映射统一，Inspector/自动钩子保持"
+    },
+    {
+      "path": "Assets/_Project/NetworkCombat/Editor/GameLocalizationAssets.cs",
+      "types": [
+        "GameLocalizationAssets",
+        "Entry",
+        "LevelOverride",
+        "Binding",
+        "Manifest"
+      ],
+      "hooks": [],
+      "disposition": "保留；菜单与批处理按映射统一，Inspector/自动钩子保持"
+    },
+    {
+      "path": "Assets/_Project/NetworkCombat/Editor/GameplayExperienceSetup.cs",
+      "types": [
+        "GameplayExperienceSetup"
+      ],
+      "hooks": [],
+      "disposition": "保留；菜单与批处理按映射统一，Inspector/自动钩子保持"
+    },
+    {
+      "path": "Assets/_Project/NetworkCombat/Editor/KcpDevelopmentBuildUtility.cs",
+      "types": [
+        "KcpDevelopmentBuildUtility"
+      ],
+      "hooks": [],
+      "disposition": "保留；菜单与批处理按映射统一，Inspector/自动钩子保持"
+    },
+    {
+      "path": "Assets/_Project/NetworkCombat/Editor/MenuLocalizationAssets.cs",
+      "types": [
+        "MenuLocalizationAssets"
+      ],
+      "hooks": [],
+      "disposition": "保留；菜单与批处理按映射统一，Inspector/自动钩子保持"
+    },
+    {
+      "path": "Assets/_Project/NetworkCombat/Editor/NetworkBackendEditorSettings.cs",
+      "types": [
+        "NetworkBackendEditorSettings"
+      ],
+      "hooks": [],
+      "disposition": "保留；菜单与批处理按映射统一，Inspector/自动钩子保持"
+    },
+    {
+      "path": "Assets/_Project/NetworkCombat/Editor/NetworkCombatSetupUtility.cs",
+      "types": [
+        "NetworkCombatSetupUtility"
+      ],
+      "hooks": [],
+      "disposition": "保留；菜单与批处理按映射统一，Inspector/自动钩子保持"
+    },
+    {
+      "path": "Assets/_Project/NetworkCombat/Editor/NetworkEnemyProcessValidationBuildUtility.cs",
+      "types": [
+        "NetworkEnemyProcessValidationBuildUtility"
+      ],
+      "hooks": [],
+      "disposition": "保留；菜单与批处理按映射统一，Inspector/自动钩子保持"
+    },
+    {
+      "path": "Assets/_Project/NetworkCombat/Editor/NetworkWaveTimelineEditorUtility.cs",
+      "types": [
+        "NetworkWaveTimelineEditorUtility",
+        "GameplayWaveRulesInspector"
+      ],
+      "hooks": [
+        "CustomEditor"
+      ],
+      "disposition": "保留；菜单与批处理按映射统一，Inspector/自动钩子保持"
+    },
+    {
+      "path": "Assets/_Project/NetworkCombat/Editor/PlayerBuildRuntimeEditor.cs",
+      "types": [
+        "PlayerBuildRuntimeEditor"
+      ],
+      "hooks": [
+        "CustomEditor"
+      ],
+      "disposition": "保留；菜单与批处理按映射统一，Inspector/自动钩子保持"
+    },
+    {
+      "path": "Assets/_Project/NetworkCombat/Editor/PlayerRuntimeCombatPrefabMigrator.cs",
+      "types": [
+        "PlayerRuntimeCombatPrefabMigrator"
+      ],
+      "hooks": [],
+      "disposition": "保留；菜单与批处理按映射统一，Inspector/自动钩子保持"
+    },
+    {
+      "path": "Assets/_Project/NetworkCombat/Editor/PreparationMenuAssets.cs",
+      "types": [
+        "PreparationMenuAssets"
+      ],
+      "hooks": [],
+      "disposition": "保留；菜单与批处理按映射统一，Inspector/自动钩子保持"
+    },
+    {
+      "path": "Assets/_Project/NetworkCombat/Editor/SteamAppIdBuildPostprocessor.cs",
+      "types": [
+        "SteamAppIdBuildPostprocessor"
+      ],
+      "hooks": [
+        "PostProcessBuild"
+      ],
+      "disposition": "保留；菜单与批处理按映射统一，Inspector/自动钩子保持"
+    },
+    {
+      "path": "Assets/_Project/NordicSample/Editor/NordicStaticSampleBuilder.cs",
+      "types": [
+        "NordicStaticSampleBuilder",
+        "Manifest",
+        "Prop",
+        "Lamp",
+        "SpriteInfo",
+        "ImportResult"
+      ],
+      "hooks": [],
+      "disposition": "保留；菜单与批处理按映射统一，Inspector/自动钩子保持"
+    }
+  ],
+  "batchCandidates": [
+    {
+      "path": "Assets/_Project/EditorTools/Editor/ProjectToolCatalog.cs",
+      "method": "Load",
+      "disposition": "保留领域入口；旧构建转发统一服务；以工具清单标注为日常调用范围"
+    },
+    {
+      "path": "Assets/_Project/EditorTools/Editor/ProjectToolCatalog.cs",
+      "method": "Validate",
+      "disposition": "保留领域入口；旧构建转发统一服务；以工具清单标注为日常调用范围"
+    },
+    {
+      "path": "Assets/_Project/EditorTools/Editor/ProjectToolRunner.cs",
+      "method": "Batch",
+      "disposition": "保留领域入口；旧构建转发统一服务；以工具清单标注为日常调用范围"
+    },
+    {
+      "path": "Assets/_Project/EditorTools/Editor/ProjectToolRunner.cs",
+      "method": "HellMaiden",
+      "disposition": "保留领域入口；旧构建转发统一服务；以工具清单标注为日常调用范围"
+    },
+    {
+      "path": "Assets/_Project/Gameplay/Editor/GasVerticalSliceSceneBuilder.cs",
+      "method": "RebuildAndValidate",
+      "disposition": "保留领域入口；旧构建转发统一服务；以工具清单标注为日常调用范围"
+    },
+    {
+      "path": "Assets/_Project/Gameplay/Editor/GasVerticalSliceSceneBuilder.cs",
+      "method": "ValidateGeneratedContent",
+      "disposition": "保留领域入口；旧构建转发统一服务；以工具清单标注为日常调用范围"
+    },
+    {
+      "path": "Assets/_Project/GAS/Editor/GasAssetValidator.cs",
+      "method": "ValidateAllMenu",
+      "disposition": "保留领域入口；旧构建转发统一服务；以工具清单标注为日常调用范围"
+    },
+    {
+      "path": "Assets/_Project/GAS/Editor/ModifierRegistryGenerator.cs",
+      "method": "Rebuild",
+      "disposition": "保留领域入口；旧构建转发统一服务；以工具清单标注为日常调用范围"
+    },
+    {
+      "path": "Assets/_Project/GAS/Editor/ModifierRegistryGenerator.cs",
+      "method": "IsCurrent",
+      "disposition": "保留领域入口；旧构建转发统一服务；以工具清单标注为日常调用范围"
+    },
+    {
+      "path": "Assets/_Project/GAS/Editor/ModifierRegistryGenerator.cs",
+      "method": "GenerateSource",
+      "disposition": "保留领域入口；旧构建转发统一服务；以工具清单标注为日常调用范围"
+    },
+    {
+      "path": "Assets/_Project/GAS/Editor/ModifierRegistryGenerator.cs",
+      "method": "Create",
+      "disposition": "保留领域入口；旧构建转发统一服务；以工具清单标注为日常调用范围"
+    },
+    {
+      "path": "Assets/_Project/GAS/Editor/ModifierTypeCatalog.cs",
+      "method": "Refresh",
+      "disposition": "保留领域入口；旧构建转发统一服务；以工具清单标注为日常调用范围"
+    },
+    {
+      "path": "Assets/_Project/Migration/HellMaiden/Editor/DanteBeamNativeGasMigration.cs",
+      "method": "Import",
+      "disposition": "保留领域入口；旧构建转发统一服务；以工具清单标注为日常调用范围"
+    },
+    {
+      "path": "Assets/_Project/Migration/HellMaiden/Editor/DanteBeamNativeGasMigration.cs",
+      "method": "ValidateImportedAssets",
+      "disposition": "保留领域入口；旧构建转发统一服务；以工具清单标注为日常调用范围"
+    },
+    {
+      "path": "Assets/_Project/Migration/HellMaiden/Editor/DanteBeamPresentationPreview.cs",
+      "method": "Capture",
+      "disposition": "保留领域入口；旧构建转发统一服务；以工具清单标注为日常调用范围"
+    },
+    {
+      "path": "Assets/_Project/Migration/HellMaiden/Editor/DanteCirclingNativeGasMigration.cs",
+      "method": "Import",
+      "disposition": "保留领域入口；旧构建转发统一服务；以工具清单标注为日常调用范围"
+    },
+    {
+      "path": "Assets/_Project/Migration/HellMaiden/Editor/DanteCirclingNativeGasMigration.cs",
+      "method": "ValidateImportedAssets",
+      "disposition": "保留领域入口；旧构建转发统一服务；以工具清单标注为日常调用范围"
+    },
+    {
+      "path": "Assets/_Project/Migration/HellMaiden/Editor/DanteCirclingNativeGasMigration.cs",
+      "method": "DiagnosePresentationDependencies",
+      "disposition": "保留领域入口；旧构建转发统一服务；以工具清单标注为日常调用范围"
+    },
+    {
+      "path": "Assets/_Project/Migration/HellMaiden/Editor/DanteCirclingPresentationPreview.cs",
+      "method": "Capture",
+      "disposition": "保留领域入口；旧构建转发统一服务；以工具清单标注为日常调用范围"
+    },
+    {
+      "path": "Assets/_Project/Migration/HellMaiden/Editor/DanteDashNativeGasMigration.cs",
+      "method": "Import",
+      "disposition": "保留领域入口；旧构建转发统一服务；以工具清单标注为日常调用范围"
+    },
+    {
+      "path": "Assets/_Project/Migration/HellMaiden/Editor/DanteDashNativeGasMigration.cs",
+      "method": "RestoreDashMovementConfiguration",
+      "disposition": "保留领域入口；旧构建转发统一服务；以工具清单标注为日常调用范围"
+    },
+    {
+      "path": "Assets/_Project/Migration/HellMaiden/Editor/DanteDashNativeGasMigration.cs",
+      "method": "ValidateImportedAssets",
+      "disposition": "保留领域入口；旧构建转发统一服务；以工具清单标注为日常调用范围"
+    },
+    {
+      "path": "Assets/_Project/Migration/HellMaiden/Editor/DanteDashNativeGasMigration.cs",
+      "method": "DiagnosePresentationDependencies",
+      "disposition": "保留领域入口；旧构建转发统一服务；以工具清单标注为日常调用范围"
+    },
+    {
+      "path": "Assets/_Project/Migration/HellMaiden/Editor/DanteDashPresentationPreview.cs",
+      "method": "Capture",
+      "disposition": "保留领域入口；旧构建转发统一服务；以工具清单标注为日常调用范围"
+    },
+    {
+      "path": "Assets/_Project/Migration/HellMaiden/Editor/DanteMeleeNativeGasMigration.cs",
+      "method": "Import",
+      "disposition": "保留领域入口；旧构建转发统一服务；以工具清单标注为日常调用范围"
+    },
+    {
+      "path": "Assets/_Project/Migration/HellMaiden/Editor/DanteMeleeNativeGasMigration.cs",
+      "method": "ValidateImportedAssets",
+      "disposition": "保留领域入口；旧构建转发统一服务；以工具清单标注为日常调用范围"
+    },
+    {
+      "path": "Assets/_Project/Migration/HellMaiden/Editor/DanteMeleePresentationPreview.cs",
+      "method": "Capture",
+      "disposition": "保留领域入口；旧构建转发统一服务；以工具清单标注为日常调用范围"
+    },
+    {
+      "path": "Assets/_Project/Migration/HellMaiden/Editor/DanteNativeGasMigration.cs",
+      "method": "Rebuild",
+      "disposition": "保留领域入口；旧构建转发统一服务；以工具清单标注为日常调用范围"
+    },
+    {
+      "path": "Assets/_Project/Migration/HellMaiden/Editor/DanteNativeGasMigration.cs",
+      "method": "ReserializeCanonicalEquipmentAssets",
+      "disposition": "保留领域入口；旧构建转发统一服务；以工具清单标注为日常调用范围"
+    },
+    {
+      "path": "Assets/_Project/Migration/HellMaiden/Editor/DanteProjectilePresentationMigration.cs",
+      "method": "Import",
+      "disposition": "保留领域入口；旧构建转发统一服务；以工具清单标注为日常调用范围"
+    },
+    {
+      "path": "Assets/_Project/Migration/HellMaiden/Editor/DanteProjectilePresentationMigration.cs",
+      "method": "ValidateImportedAssets",
+      "disposition": "保留领域入口；旧构建转发统一服务；以工具清单标注为日常调用范围"
+    },
+    {
+      "path": "Assets/_Project/Migration/HellMaiden/Editor/DanteProjectilePresentationPreview.cs",
+      "method": "ImportAndCapture",
+      "disposition": "保留显式维护/历史验证组合；可能修改资源或需要历史基线，不作为只读预览和普通构建调用"
+    },
+    {
+      "path": "Assets/_Project/Migration/HellMaiden/Editor/DanteProjectilePresentationPreview.cs",
+      "method": "Capture",
+      "disposition": "保留领域入口；旧构建转发统一服务；以工具清单标注为日常调用范围"
+    },
+    {
+      "path": "Assets/_Project/Migration/HellMaiden/Editor/DanteUltimateAssetMigration.cs",
+      "method": "Import",
+      "disposition": "保留领域入口；旧构建转发统一服务；以工具清单标注为日常调用范围"
+    },
+    {
+      "path": "Assets/_Project/Migration/HellMaiden/Editor/DanteUltimateAssetMigration.cs",
+      "method": "ValidateImportedAssets",
+      "disposition": "保留领域入口；旧构建转发统一服务；以工具清单标注为日常调用范围"
+    },
+    {
+      "path": "Assets/_Project/Migration/HellMaiden/Editor/DanteUltimatePresentationPreview.cs",
+      "method": "Capture",
+      "disposition": "保留领域入口；旧构建转发统一服务；以工具清单标注为日常调用范围"
+    },
+    {
+      "path": "Assets/_Project/Migration/HellMaiden/Editor/OvidSummonNativeGasMigration.cs",
+      "method": "Import",
+      "disposition": "保留领域入口；旧构建转发统一服务；以工具清单标注为日常调用范围"
+    },
+    {
+      "path": "Assets/_Project/Migration/HellMaiden/Editor/OvidSummonNativeGasMigration.cs",
+      "method": "ValidateImportedAssets",
+      "disposition": "保留领域入口；旧构建转发统一服务；以工具清单标注为日常调用范围"
+    },
+    {
+      "path": "Assets/_Project/Migration/HellMaiden/Editor/OvidSummonPresentationPreview.cs",
+      "method": "CaptureShadowEvidence",
+      "disposition": "保留领域入口；旧构建转发统一服务；以工具清单标注为日常调用范围"
+    },
+    {
+      "path": "Assets/_Project/Migration/HellMaiden/Editor/OvidSummonPresentationPreview.cs",
+      "method": "Capture",
+      "disposition": "保留领域入口；旧构建转发统一服务；以工具清单标注为日常调用范围"
+    },
+    {
+      "path": "Assets/_Project/Migration/HellMaiden/Editor/PureWeaponPerkMigration.cs",
+      "method": "Rebuild",
+      "disposition": "保留领域入口；旧构建转发统一服务；以工具清单标注为日常调用范围"
+    },
+    {
+      "path": "Assets/_Project/NetworkCombat/Editor/BootGameplayProcessValidationBuildUtility.cs",
+      "method": "BuildWindowsPlayer",
+      "disposition": "保留原签名并薄转发统一构建服务；兼容一版；输出替代 Profile 提示"
+    },
+    {
+      "path": "Assets/_Project/NetworkCombat/Editor/BootGameplayProcessValidationBuildUtility.cs",
+      "method": "BuildWindowsPlayerBatch",
+      "disposition": "保留原签名并薄转发统一构建服务；兼容一版；输出替代 Profile 提示"
+    },
+    {
+      "path": "Assets/_Project/NetworkCombat/Editor/EnemyPrefabVariantMigration.cs",
+      "method": "Migrate",
+      "disposition": "保留领域入口；旧构建转发统一服务；以工具清单标注为日常调用范围"
+    },
+    {
+      "path": "Assets/_Project/NetworkCombat/Editor/EnemyPrefabVariantMigration.cs",
+      "method": "Validate",
+      "disposition": "保留领域入口；旧构建转发统一服务；以工具清单标注为日常调用范围"
+    },
+    {
+      "path": "Assets/_Project/NetworkCombat/Editor/EnemyPrefabVariantMigration.Imp.cs",
+      "method": "MigrateImp",
+      "disposition": "保留领域入口；旧构建转发统一服务；以工具清单标注为日常调用范围"
+    },
+    {
+      "path": "Assets/_Project/NetworkCombat/Editor/EnemyPrefabVariantMigration.Imp.cs",
+      "method": "ValidateImp",
+      "disposition": "保留领域入口；旧构建转发统一服务；以工具清单标注为日常调用范围"
+    },
+    {
+      "path": "Assets/_Project/NetworkCombat/Editor/EnemyPrefabVariantMigration.Imp.cs",
+      "method": "BuildImpValidation",
+      "disposition": "保留领域入口；旧构建转发统一服务；以工具清单标注为日常调用范围"
+    },
+    {
+      "path": "Assets/_Project/NetworkCombat/Editor/EnemyPrefabVariantMigration.Imp.cs",
+      "method": "VerifyImpMigrationRepeat",
+      "disposition": "保留领域入口；旧构建转发统一服务；以工具清单标注为日常调用范围"
+    },
+    {
+      "path": "Assets/_Project/NetworkCombat/Editor/EnemyPrefabVariantMigration.LustSinner.cs",
+      "method": "MigrateLustSinner",
+      "disposition": "保留领域入口；旧构建转发统一服务；以工具清单标注为日常调用范围"
+    },
+    {
+      "path": "Assets/_Project/NetworkCombat/Editor/EnemyPrefabVariantMigration.LustSinner.cs",
+      "method": "ValidateLustSinner",
+      "disposition": "保留领域入口；旧构建转发统一服务；以工具清单标注为日常调用范围"
+    },
+    {
+      "path": "Assets/_Project/NetworkCombat/Editor/EnemyPrefabVariantMigration.LustSinner.cs",
+      "method": "BuildLustSinnerValidation",
+      "disposition": "保留领域入口；旧构建转发统一服务；以工具清单标注为日常调用范围"
+    },
+    {
+      "path": "Assets/_Project/NetworkCombat/Editor/EnemyPrefabVariantMigration.Validation.cs",
+      "method": "AuditAndBuild",
+      "disposition": "保留领域入口；旧构建转发统一服务；以工具清单标注为日常调用范围"
+    },
+    {
+      "path": "Assets/_Project/NetworkCombat/Editor/EnemyPrefabVariantMigration.Validation.cs",
+      "method": "CompareArchivedSkeleton",
+      "disposition": "保留显式维护/历史验证组合；可能修改资源或需要历史基线，不作为只读预览和普通构建调用"
+    },
+    {
+      "path": "Assets/_Project/NetworkCombat/Editor/EnemySimulationPrefabMigrator.cs",
+      "method": "Migrate",
+      "disposition": "保留领域入口；旧构建转发统一服务；以工具清单标注为日常调用范围"
+    },
+    {
+      "path": "Assets/_Project/NetworkCombat/Editor/EnemySimulationPrefabMigrator.cs",
+      "method": "MigrateBatch",
+      "disposition": "保留领域入口；旧构建转发统一服务；以工具清单标注为日常调用范围"
+    },
+    {
+      "path": "Assets/_Project/NetworkCombat/Editor/GameLocalizationAssets.cs",
+      "method": "Import",
+      "disposition": "删除：I2 一次性迁移已完成；无安全的日常等价操作，不再调用"
+    },
+    {
+      "path": "Assets/_Project/NetworkCombat/Editor/GameLocalizationAssets.cs",
+      "method": "CreateSelectedEntries",
+      "disposition": "保留领域入口；旧构建转发统一服务；以工具清单标注为日常调用范围"
+    },
+    {
+      "path": "Assets/_Project/NetworkCombat/Editor/GameLocalizationAssets.cs",
+      "method": "Validate",
+      "disposition": "保留领域入口；旧构建转发统一服务；以工具清单标注为日常调用范围"
+    },
+    {
+      "path": "Assets/_Project/NetworkCombat/Editor/GameLocalizationAssets.cs",
+      "method": "ExportCsv",
+      "disposition": "保留领域入口；旧构建转发统一服务；以工具清单标注为日常调用范围"
+    },
+    {
+      "path": "Assets/_Project/NetworkCombat/Editor/GameplayExperienceSetup.cs",
+      "method": "Apply",
+      "disposition": "保留领域入口；旧构建转发统一服务；以工具清单标注为日常调用范围"
+    },
+    {
+      "path": "Assets/_Project/NetworkCombat/Editor/GameplayExperienceSetup.cs",
+      "method": "EnsurePrefabIds",
+      "disposition": "保留领域入口；旧构建转发统一服务；以工具清单标注为日常调用范围"
+    },
+    {
+      "path": "Assets/_Project/NetworkCombat/Editor/GameplayExperienceSetup.cs",
+      "method": "FinalizePresentationAssets",
+      "disposition": "保留领域入口；旧构建转发统一服务；以工具清单标注为日常调用范围"
+    },
+    {
+      "path": "Assets/_Project/NetworkCombat/Editor/KcpDevelopmentBuildUtility.cs",
+      "method": "BuildWindowsPlayer",
+      "disposition": "保留原签名并薄转发统一构建服务；兼容一版；输出替代 Profile 提示"
+    },
+    {
+      "path": "Assets/_Project/NetworkCombat/Editor/KcpDevelopmentBuildUtility.cs",
+      "method": "BuildWindowsPlayerBatch",
+      "disposition": "保留原签名并薄转发统一构建服务；兼容一版；输出替代 Profile 提示"
+    },
+    {
+      "path": "Assets/_Project/NetworkCombat/Editor/NetworkCombatSetupUtility.cs",
+      "method": "ConfigureBootGameplayLoop",
+      "disposition": "保留领域入口；旧构建转发统一服务；以工具清单标注为日常调用范围"
+    },
+    {
+      "path": "Assets/_Project/NetworkCombat/Editor/NetworkCombatSetupUtility.cs",
+      "method": "BuildBootGameplayAssets",
+      "disposition": "保留领域入口；旧构建转发统一服务；以工具清单标注为日常调用范围"
+    },
+    {
+      "path": "Assets/_Project/NetworkCombat/Editor/NetworkCombatSetupUtility.cs",
+      "method": "BuildSandbox",
+      "disposition": "保留领域入口；旧构建转发统一服务；以工具清单标注为日常调用范围"
+    },
+    {
+      "path": "Assets/_Project/NetworkCombat/Editor/NetworkCombatSetupUtility.cs",
+      "method": "BuildSandboxAssets",
+      "disposition": "保留领域入口；旧构建转发统一服务；以工具清单标注为日常调用范围"
+    },
+    {
+      "path": "Assets/_Project/NetworkCombat/Editor/NetworkEnemyProcessValidationBuildUtility.cs",
+      "method": "BuildWindowsPlayer",
+      "disposition": "保留原签名并薄转发统一构建服务；兼容一版；输出替代 Profile 提示"
+    },
+    {
+      "path": "Assets/_Project/NetworkCombat/Editor/NetworkEnemyProcessValidationBuildUtility.cs",
+      "method": "BuildWindowsPlayerBatch",
+      "disposition": "保留原签名并薄转发统一构建服务；兼容一版；输出替代 Profile 提示"
+    },
+    {
+      "path": "Assets/_Project/NetworkCombat/Editor/NetworkWaveTimelineEditorUtility.cs",
+      "method": "EnsureDefault",
+      "disposition": "保留领域入口；旧构建转发统一服务；以工具清单标注为日常调用范围"
+    },
+    {
+      "path": "Assets/_Project/NetworkCombat/Editor/NetworkWaveTimelineEditorUtility.cs",
+      "method": "Open",
+      "disposition": "保留领域入口；旧构建转发统一服务；以工具清单标注为日常调用范围"
+    },
+    {
+      "path": "Assets/_Project/NetworkCombat/Editor/NetworkWaveTimelineEditorUtility.cs",
+      "method": "ValidateConfigured",
+      "disposition": "保留领域入口；旧构建转发统一服务；以工具清单标注为日常调用范围"
+    },
+    {
+      "path": "Assets/_Project/NetworkCombat/Editor/NetworkWaveTimelineEditorUtility.cs",
+      "method": "VerifyRepeat",
+      "disposition": "保留显式维护/历史验证组合；可能修改资源或需要历史基线，不作为只读预览和普通构建调用"
+    },
+    {
+      "path": "Assets/_Project/NetworkCombat/Editor/PlayerRuntimeCombatPrefabMigrator.cs",
+      "method": "Run",
+      "disposition": "保留领域入口；旧构建转发统一服务；以工具清单标注为日常调用范围"
+    },
+    {
+      "path": "Assets/_Project/NetworkCombat/Editor/PlayerRuntimeCombatPrefabMigrator.cs",
+      "method": "RunBatch",
+      "disposition": "保留领域入口；旧构建转发统一服务；以工具清单标注为日常调用范围"
+    },
+    {
+      "path": "Assets/_Project/NetworkCombat/Editor/PreparationMenuAssets.cs",
+      "method": "CreateCatalog",
+      "disposition": "保留领域入口；旧构建转发统一服务；以工具清单标注为日常调用范围"
+    },
+    {
+      "path": "Assets/_Project/NordicSample/Editor/NordicStaticSampleBuilder.cs",
+      "method": "ValidateImports",
+      "disposition": "保留领域入口；旧构建转发统一服务；以工具清单标注为日常调用范围"
+    },
+    {
+      "path": "Assets/_Project/NordicSample/Editor/NordicStaticSampleBuilder.cs",
+      "method": "SmokeCheck",
+      "disposition": "保留领域入口；旧构建转发统一服务；以工具清单标注为日常调用范围"
+    },
+    {
+      "path": "Assets/_Project/NordicSample/Editor/NordicStaticSampleBuilder.cs",
+      "method": "BuildSample",
+      "disposition": "保留领域入口；旧构建转发统一服务；以工具清单标注为日常调用范围"
+    },
+    {
+      "path": "Assets/_Project/NordicSample/Editor/NordicStaticSampleBuilder.cs",
+      "method": "RefreshSampleSorting",
+      "disposition": "保留领域入口；旧构建转发统一服务；以工具清单标注为日常调用范围"
+    },
+    {
+      "path": "Assets/_Project/NordicSample/Editor/NordicStaticSampleBuilder.cs",
+      "method": "RefreshSortingAndBuildPlayer",
+      "disposition": "保留显式维护/历史验证组合；可能修改资源或需要历史基线，不作为只读预览和普通构建调用"
+    },
+    {
+      "path": "Assets/_Project/NordicSample/Editor/NordicStaticSampleBuilder.cs",
+      "method": "ValidateScene",
+      "disposition": "保留领域入口；旧构建转发统一服务；以工具清单标注为日常调用范围"
+    },
+    {
+      "path": "Assets/_Project/NordicSample/Editor/NordicStaticSampleBuilder.cs",
+      "method": "BuildPlayer",
+      "disposition": "保留领域入口；旧构建转发统一服务；以工具清单标注为日常调用范围"
+    },
+    {
+      "path": "Assets/_Project/NordicSample/Editor/NordicStaticSampleBuilder.cs",
+      "method": "BuildAndValidatePlayer",
+      "disposition": "保留显式维护/历史验证组合；可能修改资源或需要历史基线，不作为只读预览和普通构建调用"
+    },
+    {
+      "path": "Assets/_Project/Tests/PlayMode/Gameplay/EnemyHandoffValidationBuild.cs",
+      "method": "Build",
+      "disposition": "保留原签名并薄转发统一构建服务；兼容一版；输出替代 Profile 提示"
+    },
+    {
+      "path": "Assets/_Project/Tests/PlayMode/Gameplay/EnemyHitFlashValidationBuild.cs",
+      "method": "Build",
+      "disposition": "保留原签名并薄转发统一构建服务；兼容一版；输出替代 Profile 提示"
+    },
+    {
+      "path": "Assets/_Project/Tests/PlayMode/Gameplay/EnemyHitFlashValidationBuild.cs",
+      "method": "BuildScriptsOnly",
+      "disposition": "保留原签名并薄转发统一构建服务；兼容一版；输出替代 Profile 提示"
+    },
+    {
+      "path": "Assets/_Project/Tests/PlayMode/Gameplay/GameOptionsValidationBuild.cs",
+      "method": "Build",
+      "disposition": "保留原签名并薄转发统一构建服务；兼容一版；输出替代 Profile 提示"
+    },
+    {
+      "path": "Assets/_Project/Tests/PlayMode/Gameplay/GameOptionsValidationBuild.cs",
+      "method": "BuildScriptsOnly",
+      "disposition": "保留原签名并薄转发统一构建服务；兼容一版；输出替代 Profile 提示"
+    },
+    {
+      "path": "Assets/_Project/Tests/PlayMode/Gameplay/GameplayCameraValidationBuild.cs",
+      "method": "Build",
+      "disposition": "保留原签名并薄转发统一构建服务；兼容一版；输出替代 Profile 提示"
+    },
+    {
+      "path": "Assets/_Project/Tests/PlayMode/Gameplay/GameplayExperienceValidationBuild.cs",
+      "method": "Build",
+      "disposition": "保留原签名并薄转发统一构建服务；兼容一版；输出替代 Profile 提示"
+    },
+    {
+      "path": "Assets/_Project/Tests/PlayMode/Gameplay/GameplayWaveValidationBuild.cs",
+      "method": "Build",
+      "disposition": "保留原签名并薄转发统一构建服务；兼容一版；输出替代 Profile 提示"
+    },
+    {
+      "path": "Assets/_Project/Tests/PlayMode/Gameplay/HealthHUDValidationBuild.cs",
+      "method": "Build",
+      "disposition": "保留原签名并薄转发统一构建服务；兼容一版；输出替代 Profile 提示"
+    },
+    {
+      "path": "Assets/_Project/Tests/PlayMode/Gameplay/ModifierSelectionValidationBuild.cs",
+      "method": "Build",
+      "disposition": "保留原签名并薄转发统一构建服务；兼容一版；输出替代 Profile 提示"
+    },
+    {
+      "path": "Assets/_Project/Tests/PlayMode/Gameplay/OrdinaryKnockbackValidationBuild.cs",
+      "method": "Build",
+      "disposition": "保留原签名并薄转发统一构建服务；兼容一版；输出替代 Profile 提示"
+    },
+    {
+      "path": "Assets/_Project/Tests/PlayMode/Gameplay/PlayerDebugValidationBuild.cs",
+      "method": "Build",
+      "disposition": "保留原签名并薄转发统一构建服务；兼容一版；输出替代 Profile 提示"
+    },
+    {
+      "path": "Assets/_Project/Tests/PlayMode/Gameplay/PreparationMenuValidationBuild.cs",
+      "method": "Build",
+      "disposition": "保留原签名并薄转发统一构建服务；兼容一版；输出替代 Profile 提示"
+    },
+    {
+      "path": "Assets/_Project/Tests/PlayMode/Gameplay/RewiredAbilityValidationBuild.cs",
+      "method": "Development",
+      "disposition": "保留原签名并薄转发统一构建服务；兼容一版；输出替代 Profile 提示"
+    },
+    {
+      "path": "Assets/_Project/Tests/PlayMode/Gameplay/RewiredAbilityValidationBuild.cs",
+      "method": "Release",
+      "disposition": "保留原签名并薄转发统一构建服务；兼容一版；输出替代 Profile 提示"
+    },
+    {
+      "path": "Assets/_Project/Tests/PlayMode/Gameplay/TimelineWaveValidationBuild.cs",
+      "method": "Build",
+      "disposition": "保留原签名并薄转发统一构建服务；兼容一版；输出替代 Profile 提示"
+    },
+    {
+      "path": "Assets/_Project/Tests/PlayMode/Gameplay/WispValidationBuild.cs",
+      "method": "Build",
+      "disposition": "保留原签名并薄转发统一构建服务；兼容一版；输出替代 Profile 提示"
+    }
+  ],
+  "scripts": [
+    "Tools/Export-LocalizationMigration.py",
+    "Tools/Import-NordicStaticSample.py",
+    "Tools/Run-BeamProcessValidation.ps1",
+    "Tools/Run-BootGameplayProcessValidation.ps1",
+    "Tools/Run-CirclingProcessValidation.ps1",
+    "Tools/Run-CombatMenuValidation.ps1",
+    "Tools/Run-DashProcessValidation.ps1",
+    "Tools/Run-EnemyHandoffValidation.ps1",
+    "Tools/Run-EnemySimulationProcessValidation.ps1",
+    "Tools/Run-ExperienceProcessValidation.ps1",
+    "Tools/Run-GameplayCameraProcessValidation.ps1",
+    "Tools/Run-HealthHUDProcessValidation.ps1",
+    "Tools/Run-ImpProjectileValidation.ps1",
+    "Tools/Run-LocalizationValidation.ps1",
+    "Tools/Run-LocalRoomValidation.ps1",
+    "Tools/Run-MeleeProcessValidation.ps1",
+    "Tools/Run-ModifierSelectionProcessValidation.ps1",
+    "Tools/Run-NordicStaticSampleValidation.ps1",
+    "Tools/Run-OptionsValidation.ps1",
+    "Tools/Run-OrdinaryKnockbackProcessValidation.ps1",
+    "Tools/Run-PlayerDebugProcessValidation.ps1",
+    "Tools/Run-PreparationMenuValidation.ps1",
+    "Tools/Run-RunEndValidation.ps1",
+    "Tools/Run-RuntimeBoundaryProcessValidation.ps1",
+    "Tools/Run-SummonProcessValidation.ps1",
+    "Tools/Run-TimelineWaveValidation.ps1",
+    "Tools/Run-UltimateProcessValidation.ps1",
+    "Tools/Run-UpgradeSelectionProcessValidation.ps1",
+    "Tools/Run-WaveProcessValidation.ps1",
+    "Tools/Run-WispProcessValidation.ps1"
+  ]
+}

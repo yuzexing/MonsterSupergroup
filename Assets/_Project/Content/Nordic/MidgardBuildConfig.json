@@ -1,0 +1,204 @@
+{
+  "version": "native-midgard-static-v1",
+  "source": "Assets/MonoBehaviour/WorldData_Midgard.asset",
+  "sourceSha256": "90b670ee4eb1d361155bf63532b3823cb96736342acd0eb59b5fb5a079258152",
+  "seed": 20260913,
+  "screenColumns": 4,
+  "screenRows": 4,
+  "referenceWidth": 1920,
+  "referenceHeight": 1080,
+  "chunkSize": 10,
+  "chunkBaseSize": 2,
+  "bufferChunks": 1,
+  "floorSortPoint": 0,
+  "noiseImpact": 2.6,
+  "offset": 1,
+  "offsetBase": 4,
+  "flipBaseX": true,
+  "flipBaseY": true,
+  "flipX": true,
+  "flipY": true,
+  "rotate": false,
+  "baseFloors": [
+    {
+      "min": 0,
+      "max": 1,
+      "color": {
+        "r": 1,
+        "g": 1,
+        "b": 1,
+        "a": 1
+      },
+      "path": "Assets/_Project/Content/Nordic/Sprites/fondo base_V3.asset",
+      "order": 0
+    }
+  ],
+  "floors": [
+    {
+      "min": 0.8,
+      "max": 0.85,
+      "color": {
+        "r": 1,
+        "g": 1,
+        "b": 1,
+        "a": 1
+      },
+      "path": "Assets/_Project/Content/Nordic/Sprites/terreno dibujado7.asset",
+      "order": 1
+    },
+    {
+      "min": 0.85,
+      "max": 0.925,
+      "color": {
+        "r": 1,
+        "g": 1,
+        "b": 1,
+        "a": 1
+      },
+      "path": "Assets/_Project/Content/Nordic/Sprites/terreno dibujado_rocas2.asset",
+      "order": 1
+    },
+    {
+      "min": 0.75,
+      "max": 0.8,
+      "color": {
+        "r": 1,
+        "g": 0.9340802,
+        "b": 0.86477983,
+        "a": 1
+      },
+      "path": "Assets/_Project/Content/Nordic/Sprites/terreno dibujado7.asset",
+      "order": 1
+    },
+    {
+      "min": 0.925,
+      "max": 1,
+      "color": {
+        "r": 1,
+        "g": 0.9340802,
+        "b": 0.86477983,
+        "a": 1
+      },
+      "path": "Assets/_Project/Content/Nordic/Sprites/terreno dibujado_rocas2.asset",
+      "order": 1
+    }
+  ],
+  "groups": [
+    {
+      "group": 1,
+      "min": 0.86,
+      "max": 0.9,
+      "distance": 12,
+      "mirror": true,
+      "paths": [
+        "Assets/_Project/Content/Nordic/Prefabs/Tree_1.prefab"
+      ]
+    },
+    {
+      "group": 2,
+      "min": 0.9053921,
+      "max": 1,
+      "distance": 20,
+      "mirror": true,
+      "paths": [
+        "Assets/_Project/Content/Nordic/Prefabs/Stone_4 Snow (Stone_1 Variant).prefab",
+        "Assets/_Project/Content/Nordic/Prefabs/Stone_5 Snow (Stone_1 Variant).prefab",
+        "Assets/_Project/Content/Nordic/Prefabs/Stone_6 Snow (Stone_1 Variant).prefab",
+        "Assets/_Project/Content/Nordic/Prefabs/Stone_7 Snow (Stone_1 Variant).prefab",
+        "Assets/_Project/Content/Nordic/Prefabs/Stone_8 Snow (Stone_1 Variant).prefab"
+      ]
+    },
+    {
+      "group": 3,
+      "min": 0.60156864,
+      "max": 0.9,
+      "distance": 0.1,
+      "mirror": true,
+      "paths": [
+        "Assets/_Project/Content/Nordic/Prefabs/Composition_Grass_1.prefab",
+        "Assets/_Project/Content/Nordic/Prefabs/Composition_Grass_2.prefab",
+        "Assets/_Project/Content/Nordic/Prefabs/Composition_Grass_3.prefab",
+        "Assets/_Project/Content/Nordic/Prefabs/Composition_Grass_4.prefab",
+        "Assets/_Project/Content/Nordic/Prefabs/Composition_Grass_5.prefab",
+        "Assets/_Project/Content/Nordic/Prefabs/Composition_Grass_6.prefab",
+        "Assets/_Project/Content/Nordic/Prefabs/Grass_1.prefab",
+        "Assets/_Project/Content/Nordic/Prefabs/Grass_2 (Grass_1 Variant).prefab",
+        "Assets/_Project/Content/Nordic/Prefabs/Flower_6 Snow (Flower_1 Variant).prefab"
+      ]
+    },
+    {
+      "group": 4,
+      "min": 0,
+      "max": 0.02,
+      "distance": 3,
+      "mirror": true,
+      "paths": [
+        "Assets/_Project/Content/Nordic/Prefabs/Tree_2 (Tree_1 Variant).prefab"
+      ]
+    },
+    {
+      "group": 5,
+      "min": 0.6784314,
+      "max": 0.7163235,
+      "distance": 1,
+      "mirror": true,
+      "paths": [
+        "Assets/_Project/Content/Nordic/Prefabs/Composition_Flowers_1.prefab",
+        "Assets/_Project/Content/Nordic/Prefabs/Composition_Flowers_2.prefab",
+        "Assets/_Project/Content/Nordic/Prefabs/Composition_Flowers_3.prefab",
+        "Assets/_Project/Content/Nordic/Prefabs/Composition_Flowers_4.prefab",
+        "Assets/_Project/Content/Nordic/Prefabs/Composition_Flowers_5.prefab",
+        "Assets/_Project/Content/Nordic/Prefabs/Composition_Flowers_6.prefab",
+        "Assets/_Project/Content/Nordic/Prefabs/Composition_Flowers_7.prefab"
+      ]
+    },
+    {
+      "group": 6,
+      "min": 0.19460787,
+      "max": 0.20014702,
+      "distance": 30,
+      "mirror": true,
+      "paths": [
+        "Assets/_Project/Content/Nordic/Prefabs/Ruin_1 v2 (Ruin_1 Variant).prefab",
+        "Assets/_Project/Content/Nordic/Prefabs/Ruin_2 (Ruin_1 Variant).prefab",
+        "Assets/_Project/Content/Nordic/Prefabs/Ruin_3 (Ruin_1 Variant).prefab",
+        "Assets/_Project/Content/Nordic/Prefabs/Ruin_4 (Ruin_1 Variant).prefab",
+        "Assets/_Project/Content/Nordic/Prefabs/Ruin_5 (Ruin_1 Variant).prefab"
+      ]
+    },
+    {
+      "group": 7,
+      "min": 0.100000024,
+      "max": 0.11250003,
+      "distance": 10,
+      "mirror": false,
+      "paths": [
+        "Assets/_Project/Content/Nordic/Prefabs/Torch_Midgard.prefab"
+      ]
+    },
+    {
+      "group": 8,
+      "min": 0.8160844,
+      "max": 0.8223864,
+      "distance": 40,
+      "mirror": true,
+      "paths": [
+        "Assets/_Project/Content/Nordic/Prefabs/Destructible_1.prefab",
+        "Assets/_Project/Content/Nordic/Prefabs/Composition_Destructibles_1.prefab",
+        "Assets/_Project/Content/Nordic/Prefabs/Composition_Destructibles_2.prefab",
+        "Assets/_Project/Content/Nordic/Prefabs/Composition_Destructibles_3.prefab",
+        "Assets/_Project/Content/Nordic/Prefabs/Composition_Destructibles_4.prefab"
+      ]
+    },
+    {
+      "group": 9,
+      "min": 0.080214135,
+      "max": 0.085808486,
+      "distance": 45,
+      "mirror": true,
+      "paths": [
+        "Assets/_Project/Content/Nordic/Prefabs/Destructible_Bush_1.prefab"
+      ]
+    }
+  ]
+}

@@ -21,9 +21,10 @@ namespace MonsterSupergroup.NetworkCombat.Editor
         public const string ImpBulletPath = ImpResources + "/GameObject/EnemyBulletAttackImp.prefab";
         private const string ImpReports = "Logs/Imp";
 
-        [MenuItem("Monster Supergroup/Network Combat/Migrate Imp Variant")]
+
         public static void MigrateImp()
         {
+            MonsterSupergroup.EditorTools.ProjectToolRunner.CheckLegacyMaintenance("migrate.imp", "MonsterSupergroup.NetworkCombat.Editor.EnemyPrefabVariantMigration.MigrateImp");
             for (int i = 0; i < SceneManager.sceneCount; i++)
                 if (SceneManager.GetSceneAt(i).isDirty) throw new InvalidOperationException("Save open scenes before migrating enemy Prefabs.");
             Directory.CreateDirectory(ImpReports);
@@ -150,15 +151,7 @@ namespace MonsterSupergroup.NetworkCombat.Editor
 
         public static void BuildImpValidation()
         {
-            VerifyImpMigrationRepeat();
-            const string output = "Builds/Imp/Imp.exe"; Directory.CreateDirectory(Path.GetDirectoryName(output));
-            var report = BuildPipeline.BuildPlayer(new BuildPlayerOptions {
-                scenes = new[] { NetworkCombatSetupUtility.BootScenePath, NetworkCombatSetupUtility.GameplayScenePath },
-                locationPathName = output, target = BuildTarget.StandaloneWindows64,
-                options = BuildOptions.Development | BuildOptions.IncludeTestAssemblies,
-                extraScriptingDefines = new[] { "MONSTER_KCP_DEVELOPMENT_BUILD", "MONSTER_MENU_VALIDATION" }
-            });
-            if (report.summary.result != BuildResult.Succeeded) throw new InvalidOperationException("Imp build failed.");
+            MonsterSupergroup.EditorTools.ProjectBuildService.Legacy("imp");
         }
 
         public static void VerifyImpMigrationRepeat()

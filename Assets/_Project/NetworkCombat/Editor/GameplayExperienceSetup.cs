@@ -18,14 +18,15 @@ namespace MonsterSupergroup.NetworkCombat.Editor
     {
         public const string RulesPath = "Assets/_Project/Content/NetworkCombat/GameplayExperienceRules.asset";
         public const string GemPath = "Assets/_Project/Content/NetworkCombat/NetworkExperienceGem.prefab";
-        private const string Source = "F:/DecomplieLatest/HellMaiden/ExportedProject/Assets";
+        private static string Source => MonsterSupergroup.EditorTools.ProjectToolPaths.HellMaiden() + "/Assets";
         private const string Output = "Assets/_Project/Content/HellMaiden/NativeGAS/Experience";
         private const string Network = "Assets/_Project/Content/NetworkCombat/";
         private static readonly Dictionary<string, string> sourcePaths = new Dictionary<string, string>();
 
-        [MenuItem("Tools/Network Combat/Apply M6 Experience Setup")]
+
         public static void Apply()
         {
+            MonsterSupergroup.EditorTools.ProjectToolRunner.CheckLegacyMaintenance("setup.experience-legacy", "MonsterSupergroup.NetworkCombat.Editor.GameplayExperienceSetup.Apply");
             if (!Directory.Exists(Source)) throw new DirectoryNotFoundException(Source);
             sourcePaths.Clear();
             foreach (string meta in Directory.EnumerateFiles(Source, "*.meta", SearchOption.AllDirectories))

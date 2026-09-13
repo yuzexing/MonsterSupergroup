@@ -16,9 +16,10 @@ namespace MonsterSupergroup.NetworkCombat.Editor
         public const string TimelinePath = "Assets/_Project/Content/NetworkCombat/GameplayEnemyWaves.playable";
         private const string Content = "Assets/_Project/Content/NetworkCombat/";
 
-        [MenuItem("Monster Supergroup/Network Combat/Waves/Create Default Timeline")]
+
         public static void EnsureDefault()
         {
+            MonsterSupergroup.EditorTools.ProjectToolRunner.CheckLegacyMaintenance("create.wave-timeline", "MonsterSupergroup.NetworkCombat.Editor.NetworkWaveTimelineEditorUtility.EnsureDefault");
             var timeline = AssetDatabase.LoadAssetAtPath<TimelineAsset>(TimelinePath);
             if (timeline == null)
             {
@@ -61,15 +62,17 @@ namespace MonsterSupergroup.NetworkCombat.Editor
             }
         }
 
-        [MenuItem("Monster Supergroup/Network Combat/Waves/Open Timeline")]
+
         public static void Open()
         {
             var rules = AssetDatabase.LoadAssetAtPath<GameplayWaveRules>(RulesPath);
-            if (rules?.Timeline == null) { EnsureDefault(); rules = AssetDatabase.LoadAssetAtPath<GameplayWaveRules>(RulesPath); }
-            Selection.activeObject = rules.Timeline; AssetDatabase.OpenAsset(rules.Timeline);
+            var timeline = rules != null ? rules.Timeline : null;
+            if (timeline == null) throw new InvalidOperationException("波次时间轴缺失，请显式运行 create.wave-timeline -Apply。");
+            Selection.activeObject = timeline;
+            AssetDatabase.OpenAsset(timeline);
         }
 
-        [MenuItem("Monster Supergroup/Network Combat/Waves/Validate and Export Preview")]
+
         public static void ValidateConfigured()
         {
             var rules = AssetDatabase.LoadAssetAtPath<GameplayWaveRules>(RulesPath);

@@ -1,0 +1,7 @@
+{
+  "name": "MonsterSupergroup.EditorTools",
+  "rootNamespace": "MonsterSupergroup.EditorTools",
+  "references": [],
+  "includePlatforms": ["Editor"],
+  "autoReferenced": false
+}

@@ -95,6 +95,7 @@ namespace AstralShift.HellMaiden.Player.Attacks
 			Action onStart,
 			Action onEnd)
 		{
+			MonsterSupergroup.Gameplay.Combat.GameplayMapPresentation.Effect(gameObject);
 			_behaviour = behaviour;
 			_onStart = onStart;
 			_onEnd = onEnd;

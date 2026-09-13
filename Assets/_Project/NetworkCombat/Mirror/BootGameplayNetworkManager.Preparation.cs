@@ -271,6 +271,7 @@ namespace MonsterSupergroup.NetworkCombat
         private void TrySendGameplayReady()
         {
             if (!NetworkClient.isConnected || RoomSnapshot.Phase != PreparationPhase.Loading || !IsGameplayLoaded) return;
+            if (MonsterSupergroup.Gameplay.Combat.GameplayMapContext.Active is { IsReady: false }) return;
             var avatar = NetworkClient.localPlayer;
             if (avatar == null || !avatar.isOwned || avatar.netId == readyAvatarSent) return;
             var build = avatar.GetComponent<PlayerBuildRuntime>();

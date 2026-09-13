@@ -1,84 +1,64 @@
 # Nordic Midgard 静态样板
 
-打开 `Assets/_Project/Scenes/NordicStaticSample.unity`，直接进入 Play 即可查看。
-使用 WASD 或方向键移动，R 回到起点。样板使用 Nordic 默认角色 Axeldor 的原始头、身体、手脚组合，以及原始待机、行走动画；没有引用 MonsterSupergroup 的角色美术，不实例化正式玩家，也不启动联机与战斗。
+打开 `Assets/_Project/Scenes/NordicStaticSample.unity` 后直接 Play。WASD／方向键移动，R 回到出生点。使用 Nordic Axeldor 原始美术及 Idle／Walk 动画，外层缩放为 1，导出 Prefab 待机网格高度为 2.148753 世界单位。
 
-角色按 Nordic 导出 Prefab 的原始尺寸展示，外层缩放为 1，待机起始姿态的网格高度约 2.15 个世界单位（排除脚下阴影）。外层节点只调整脚底对齐和左右朝向；原始部件变换与动画路径保持对应。角色随待机、行走姿态略微起伏。此尺寸依据导出 Prefab，还未核验原游戏运行时是否另有缩放。
+## 地图和运行
 
-角色视觉来自 `Viking (Character Variant).prefab` 的 Scaler、Shadow 和 PlayerSprite 子树；不导入采集器、HUD、战斗控制或战斗特效。两个动画只移除原脚步/音效事件，通过样板专用 Idle / Walk 控制器切换，不依赖原版角色脚本。
+横向四屏、纵向四屏，以 1920×1080、透视 FOV 80、Z=-10 换算为 **119.3386×67.1280** 世界单位。Ground 中心 `(0,0.99)`，边界约为 X ±59.6693、Y -32.5740～34.5540。窗口变化不改变地图尺寸。ProCamera2D 在 LateUpdate 跟随，样板随后约束实际视野；极端宽屏使用留边视口，不改变 FOV 或距离。
 
-## 固定配置
+地图已保存到 `Assets/_Project/Content/Nordic/NordicStaticMap.prefab`。运行不生成或回收地图块，也不访问 Nordic 源目录。四边非触发 BoxCollider2D 位于 Obstacles 层，内侧与 Ground 对齐，四角重叠封闭。角色使用脚底碰撞体、扫掠和滑动；出生／重置寻找最近的无阻挡网格位置，不删除装饰。移动保持每帧同步刚体与显示位置。
 
-- Ground：64×40，中心沿用 Gameplay 的 `(0, 0.99, 0)`；其透明 SpriteRenderer 提供边界，雪地是独立视觉层。
-- 相机：透视、FOV 80、Z=-10、旋转为零。ProCamera2D 跟随预览角色，Numeric Boundaries 读取 Ground.bounds；不启用变焦、震屏。
-- 镜头重置和窗口变化后，样板组件按实际视野再做边界约束，避免瞬移绕过插件的移动增量限制。
-- 1920×1080 时，Z=0 平面可见高度约 16.782、宽度约 29.835。
-- Linear 色彩空间；标准 URP 2D Lit / Unlit 材质；白色环境光强度 0.9。没有复制原版占位 Shader，没有新增后处理要求。
-- 地面使用原始 PPU、网格与贴图。雪地以 5.8 单位步长叠铺，向边界外多铺；泥地、碎石作为固定贴片。
-- 地图实例及排序保存于场景和 `Assets/_Project/Content/Nordic/NordicStaticMap.prefab`，运行时不生成地图。
+## 原规则和静态适配
 
-| 内容 | Sorting Layer |
-|---|---|
-| 雪地 | BackgroundBack |
-| 泥地、碎石 | Background |
-| 草花 | BackgroundFront |
-| 角色、树石、遗迹、火把主体 | Props |
+`MidgardBuildConfig.json` 保存当前 Midgard 的基础地面、四条贴片配置、九组环境参数、35 条非季节装饰引用和来源哈希。默认种子 20260913。`MidgardLayout.json` 保存噪声偏移、资源路径、Chunk／环境组、坐标、缩放、颜色及未出现资源。
 
-高物件通过根部 SortingGroup 排序，以 `-RoundToInt(脚底/根部世界 Y × 100) × 8 + 稳定槽位` 确定次序。角色使用槽位 0，同一脚底行的静态高物件使用不同的槽位 1～7，避免同值时再次按透视镜头距离排序。预览角色实时更新；静态物件数值保存到场景。源 Sprite Pivot 和组合局部变换不变。没有改变共享玩家 Prefab 或全局排序层。
+- 原点对齐的 10 单位 Chunk 覆盖 Ground，外围再加一圈；每块四张雪地，局部间隔为 4。
+- 使用 `Clamp(PerlinNoise(x/2.6+xRand,y/2.6+yRand),0,0.999)`；贴片取第一条匹配，装饰取全部匹配组，采样步长为 1。
+- 仅同组、本块和相邻八块参与间距拒绝，距离平方小于等于配置值平方时拒绝。跨组允许重叠，不额外执行图像或物理避让。
+- 每轴正向扰动 0～0.5；根缩放 1～1.25，canRotate 在此路径控制水平镜像。组合内部变换保持来源值。
+- 地面保留微小 Y 偏移和最终 ±1 翻转缩放；原代码较早写入的 `_scale=2` 被后续赋值覆盖。
 
-每个草花组合也有独立 SortingGroup。组合内先保留原有不同排序值的先后关系，再按固定的根部 Y 和层级顺序消除并列值；Axeldor 则按阴影、腿、后手、身体、头、前手明确排序。移动镜头不再参与决定这些部件之间的先后。
+烘焙按 Chunk X、Y、采样 X、Y 和源数组顺序执行，保存并恢复 Unity 随机状态。这是有限区域的确定性适配，不是原游戏某一局的随机序列或协程调度复刻。实体按资源类型组织，逻辑分块记录于清单，运行不需要对象池。祭坛、成长条件和事件结构生成不纳入本次。
 
-预览角色采用每帧 Update 移动并执行静态障碍碰撞查询，同一帧同步刚体位置与显示 Transform，镜头继续在 LateUpdate 跟随。原先 FixedUpdate 的 50 Hz 位移没有插值，配合每帧平滑镜头会产生相对倒跳；仅更新 Rigidbody2D.position 仍会让显示位置等待物理帧同步，所以两者必须一起更新。这个无动力学交互的预览不需要把镜头移到 FixedUpdate，也没有修改项目的物理步长。Axeldor 的源部件已经带有翻转，正 X 缩放表示面向左，负 X 缩放表示面向右。
+本次包含 140 个缓冲后 Chunk、560 张底图、736 张贴片、3622 个装饰组合。按根位置统计，Ground 内为 2056 个组合、34 种类型；包含缓冲区时 35 种均自然出现，Ruin_5 只出现在缓冲区。更换种子不保证全部出现，不自动补放。详见 [布局统计与来源对照](nordic-static-sample/rule-recovery-summary.json)。
 
-## 构建与资源来源
+## 排序和资源
 
-Unity 菜单 `Tools > Nordic` 提供资源校验、重建场景、场景校验和独立预览构建入口。重建场景会重写本样板的场景和地图 Prefab；若已手动编辑，请先另存场景或在版本控制中保存修改。
+`NordicRenderer2D.asset` 采用原版 CustomAxis `(0,1,0)`，追加到 UniversalRP 的渲染器列表，仅样板相机选择；默认索引 0 和原 Renderer2D 保持原样。取消旧 Y 编号及人为添加的草花 SortingGroup，恢复源 Pivot／Center、原 SortingGroup 边界和静态部件排序。原版通过可见性回调启用的组在样板中直接启用。Axeldor 保留已验证的部件层次与脚底包装节点。
 
-调整布景后，可使用 `5. Refresh Sample Sorting (Keep Layout)` 重新保存稳定排序，同时保留物件坐标和当前角色尺寸；这也会更新地图 Prefab。同一 0.01 单位脚底行若放置超过 7 个静态高物件，会明确报错，请调整根部排序锚点。
+基础地面及贴片恢复 Floor.prefab 的 Center 排序点。Numeric Boundaries 的自动尺寸覆盖从样板中解除，仅保留位置限制；窗口变化时在跟随前刷新视野缓存。极端宽屏给视口两边各预留一个像素，按实际视口射线限位，避免像素取整把画面推出 Ground。
 
-`Assets/_Project/Content/Nordic/ImportManifest.json` 记录源路径、目标路径、GUID 映射、贴图/精灵来源哈希，以及各 Prefab 移除的组件类型。内容包括 Midgard 三种地面、35 条非季节装饰引用和 Axeldor 基础外观、两个动画的视觉依赖；共享资源按引用去重。角色条目单独记录为 character，不计入 35 条地图装饰。
+雪地、贴片分别使用 BackgroundBack、Background；源低层装饰映射 BackgroundFront，主体映射 Props。保持 Linear、标准 URP Sprite-Lit／Unlit、环境光 0.9，以及简化火把动态。不恢复树冠淡出、轮廓、遮罩或原版最终色调。
 
-本次共迁入 41 个 Sprite、8 张必要贴图，未生成衍生贴图。源 Sprite 直接引用打包图集，保留被引用的图集纹理容器以维持原网格和 UV；没有复制其他地图、其他角色或整套项目资源。地图组合 264 个节点加角色视觉 13 个节点的局部位置、旋转、缩放均与源数据一致。
+保留必要图集容器以维持原网格和 UV，没有复制完整资源包。无原游戏脚本、DLL、掉落或破坏行为。资源对照记录在 `Logs/NordicStaticSample/source-art-comparison.json`，核验节点变换、Sprite 颜色／翻转／排序点及碰撞数据。
 
-需要从 Nordic 导出工程重新导入时，使用 Python（需安装 PyYAML）：
+## 工具和验收
+
+项目工具中心：`sample.nordic-create` 重建，`sample.nordic-validate-imports` 资源检查，`sample.nordic-validate` 场景检查，`sample.nordic-sorting` 保留布局并重绑排序；`build.player` 选择 nordic 配置；`test.nordic` 执行独立程序验收。写入操作沿用工具中心的 Apply 参数。
+
+在 MonsterSupergroup 项目目录运行：
 
 ```powershell
-python Tools/Import-NordicStaticSample.py --source F:/DecomplieLatest/NordicAshes/ExportedProject --stage full
+./Tools/Invoke-ProjectTool.ps1 -ToolId sample.nordic-create -Apply -Unity 'D:/RealSoftware/6000.3.17f1/Editor/Unity.exe'
+./Tools/Invoke-ProjectTool.ps1 -ToolId build.player -Profile nordic -Unity 'D:/RealSoftware/6000.3.17f1/Editor/Unity.exe'
+./Tools/Invoke-ProjectTool.ps1 -ToolId test.nordic
 ```
 
-先用 `--stage smoke` 可导入雪地、Tree_1 和 Composition_Grass_1；随后调用编辑器方法 `MonsterSupergroup.NordicSample.Editor.NordicStaticSampleBuilder.SmokeCheck`，生成 3×3 拼接检查图。完整场景构建要求恢复 `--stage full`。
+重新导入命令：`Tools/Import-NordicStaticSample.py --source <Nordic导出工程> --stage full`，随后重建样板。重建会替换样板生成内容。此次变更前备份位于 `Logs/NordicStaticSample/BeforeRuleRecovery-20260913-140830`。
 
-导入器只重写自己拥有的 GUID；目标路径存在其他资源时直接报错。原脚本、DLL、地图配方管理器、季节变化、掉落、破坏与遮罩行为不迁入。运行已生成场景不再读取 Nordic 源目录。
+独立程序：`Builds/NordicStaticSample/NordicStaticSample.exe`。只有传入 `--nordic-validate=<输出目录>` 才进行验收并退出。也可调用兼容脚本 `Tools/Run-NordicStaticSampleValidation.ps1`。
 
-## 验证
+运行检查与截图位于 `Logs/NordicStaticSample/Acceptance`，覆盖十六屏区域、四边四角、宽高比变化、大步长阻挡、瞬移、原尺寸角色、朝向、60／120 fps 运动、重叠稳定性、树根碰撞和火把动态。树和火把使用临时验收实例，完成后删除，不向地图补放；测试火把 Prefab 仅复用已导入依赖。
 
-先从菜单构建独立预览，然后执行：
+依据为原配置、Prefab 和 GameAssembly 中已定位函数的静态分析；原始证据位于 Nordic 导出工程的 `Docs/SceneAnalysis`。未执行原游戏 DLL，不声称逐像素匹配原版或恢复旧游戏局面。
 
-```powershell
-./Tools/Run-NordicStaticSampleValidation.ps1
-```
+## 本次验收结果
 
-检查结果和截图位于 `Logs/NordicStaticSample/Acceptance/`。自动验证包含视野、四边四角、窗口比例变化、移动速度、Nordic 待机/行走与朝向、树前后排序、树根碰撞、火把动态、地面露底像素与静态实例数量；地面检测先用空画面确认能识别露底，再检查实际场景。截图另外用于人工检查拼缝、素材比例与遮挡。
+2026-09-13，Unity 6000.3.17f1 / Windows / D3D11 独立程序通过 **117 项检查，0 项错误**。含缓冲区共 17385 个地图 SpriteRenderer、38 套粒子和 76 个火把灯光。三个重叠区域的像素对照均为 0 次变化；60／120 fps 运动采样均无停帧位移或镜头相对倒跳。全部十六屏区域和边界巡检无露底。
 
-独立程序位于 `Builds/NordicStaticSample/NordicStaticSample.exe`。普通启动供手动查看；只有显式传入 `--nordic-validate=<输出目录>` 才会执行自动巡检并退出。
+已逐项确认正式 Gameplay、默认 Renderer2D、默认构建场景和 Sorting Layers 与变更前一致；UniversalRP 仅追加一个渲染器引用。资源小样、同种子重复生成、负坐标相邻块间距和源数据对照均通过。
 
-2026-09-12 在 Unity 6000.3.17f1 / Windows 独立程序中完成 78 项运行检查，错误数为 0。场景有 1023 个 SpriteRenderer、39 个排序锚点、5 套持续粒子和 10 个火把灯光。检查涵盖 1920×1080 与 1440×1080 两种窗口尺寸，以及 60 / 120 fps 两种帧率；没有声称验证所有分辨率或设备。
-
-原来的 64 项检查没有覆盖移动镜头时的重叠部件跳变和逐帧倒跳。现在新增渲染区域对齐比较、组合及根部排序冲突检查、实际左右朝向截图、60 / 120 fps 连续运动检查。详见 [这次修复的原因与对比数据](nordic-static-sample/render-fixes.md)。
-
-验收存档：
-
-- [运行检查结果](nordic-static-sample/acceptance.json)
-- [中央视野与 Axeldor](nordic-static-sample/sample-center.png)
-- [角色在树前](nordic-static-sample/tree-front.png) / [角色在树后](nordic-static-sample/tree-behind.png)
-- [向左移动](nordic-static-sample/facing-left.png) / [向右移动](nordic-static-sample/facing-right.png)
-- [遗迹与火把](nordic-static-sample/ruins-torches.png)
-- [全图布局](nordic-static-sample/layout-overview.png)（更新排序后的编辑器远景；运行镜头仍为 Z=-10）
-
-## 表现边界
-
-这是按原美术重新构图的固定布局，不是某一局 Nordic 地图的坐标复原。使用 Linear 和标准材质，颜色不以原版逐像素匹配为验收条件。只实现前后排序，不实现树冠淡出、轮廓或原版遮罩。可破坏物保留静态外观；火把采用简化动态，不恢复原材质行为。
-
-正式 Gameplay、默认构建场景、全局排序层、渲染管线和现有玩家流程均不需要本样板的修改。
-
-项目已有的全局 GameOptionsService 和 URP 调试服务仍可能自动初始化；它们不代表样板启动了网络会话或正式玩家。样板没有新增这类全局初始化，也没有修改其设置文件。
+- [运行检查结果](nordic-static-sample/acceptance.json) / [布局、依赖对照与性能采样](nordic-static-sample/rule-recovery-summary.json)
+- [中央视野](nordic-static-sample/sample-center.png) / [全图远景](nordic-static-sample/layout-overview.png)
+- [树后遮挡](nordic-static-sample/tree-behind.png) / [树前显示](nordic-static-sample/tree-front.png)
+- [边界角落](nordic-static-sample/boundary-corner.png) / [极端宽屏的有效视野](nordic-static-sample/extreme-active-viewport.png)

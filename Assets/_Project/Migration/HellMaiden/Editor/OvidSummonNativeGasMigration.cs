@@ -53,7 +53,7 @@ namespace MonsterSupergroup.HellMaidenMigration.Editor
             "SSU wiggle and custom pixel autoscale are unavailable. " +
             "The source card visual Addressable GUID is absent from the export. Runtime/authority validation is separate.";
 
-        private const string SourceDefault = "F:/DecomplieLatest/HellMaiden/ExportedProject";
+        private static string SourceDefault => MonsterSupergroup.EditorTools.ProjectToolPaths.HellMaiden();
         private const string SpriteShaderPath = "Assets/Plugins/AllIn1SpriteShader/Shaders/AllIn1SpriteShader.shader";
         private const string VfxShaderPath = "Assets/Plugins/AllIn1VfxToolkit/Shaders/AllIn1VfxURPCompat.shader";
         private const string KnockbackGuid = "75da00b77c9efb247ba641b508fa9e9f";
@@ -135,9 +135,10 @@ namespace MonsterSupergroup.HellMaidenMigration.Editor
             "Texture2D/white_1.png",
         };
 
-        [MenuItem("Tools/HellMaiden Migration/Import Ovid Summon Native GAS Assets")]
+
         public static void Import()
         {
+            MonsterSupergroup.EditorTools.ProjectToolRunner.CheckLegacyMaintenance("import.summon", "MonsterSupergroup.HellMaidenMigration.Editor.OvidSummonNativeGasMigration.Import");
             string sourceRoot = Environment.GetEnvironmentVariable("HELLMAIDEN_SOURCE_PROJECT");
             if (string.IsNullOrWhiteSpace(sourceRoot)) sourceRoot = SourceDefault;
             sourceRoot = Path.GetFullPath(sourceRoot);
@@ -433,7 +434,7 @@ namespace MonsterSupergroup.HellMaidenMigration.Editor
             if (!entries.Contains(weapon)) { entries.Add(weapon); database.Configure(entries.ToArray()); EditorUtility.SetDirty(database); }
         }
 
-        [MenuItem("Tools/HellMaiden Migration/Validate Ovid Summon Native GAS Assets")]
+
         public static void ValidateImportedAssets()
         {
             WeaponData weapon = RequireAsset<WeaponData>(WeaponPath);

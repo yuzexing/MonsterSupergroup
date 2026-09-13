@@ -7,7 +7,7 @@ namespace MonsterSupergroup.HellMaidenMigration.Editor
 {
     public static class DanteCirclingPresentationPreview
     {
-        [MenuItem("Tools/HellMaiden Migration/Capture Dante Circling Presentation Preview")]
+
         public static void Capture()
         {
             AnimationClip[] clips =

@@ -6,86 +6,40 @@ using AstralShift.HellMaiden.Data.Perks;
 using MonsterSupergroup.Gameplay.Options;
 using TMPro;
 using UnityEditor;
-using UnityEditor.AddressableAssets;
-using UnityEditor.AddressableAssets.Settings;
 using UnityEditor.Build;
 using UnityEditor.Localization;
 using UnityEditor.Localization.Plugins.CSV;
 using UnityEngine;
 using UnityEngine.Localization;
 using UnityEngine.Localization.Tables;
-using UnityEngine.TextCore.LowLevel;
 
 namespace MonsterSupergroup.NetworkCombat.Editor
 {
     public static class GameLocalizationAssets
     {
         public const string Root = "Assets/_Project/Localization";
-        [Serializable] private sealed class Entry { public string table, key, zh, en; public bool smart; }
-        [Serializable] private sealed class LevelOverride { public int index; public string key; }
-        [Serializable] private sealed class Binding { public string path, kind, baseKey; public uint id; public LevelOverride[] overrides; }
-        [Serializable] private sealed class Manifest { public Entry[] entries; public Binding[] assets; }
-
-        // Explicit one-time migration. Normal builds only Validate; they never import or overwrite translations.
-        public static void Import()
-        {
-            string path = Environment.GetEnvironmentVariable("MONSTER_LOCALIZATION_MANIFEST") ?? "Logs/LocalizationMigration/manifest.json";
-            var manifest = JsonUtility.FromJson<Manifest>(File.ReadAllText(path));
-            foreach (string name in new[] { GameLocalization.MenuTable, GameLocalization.ContentTable })
-            {
-                var collection = LocalizationEditorSettings.GetStringTableCollection(name) ?? LocalizationEditorSettings.CreateStringTableCollection(name, Root + "/Tables");
-                foreach (string code in new[] { "zh-CN", "en" })
-                {
-                    var table = (StringTable)(collection.GetTable(code) ?? collection.AddNewTable(code));
-                    foreach (var entry in manifest.entries.Where(e => e.table == name))
-                    {
-                        var value = table.AddEntry(entry.key, code == "en" ? entry.en : entry.zh);
-                        value.IsSmart = entry.smart;
-                    }
-                    // Names now have one source in MonsterContent.
-                    if (name == GameLocalization.MenuTable)
-                        foreach (var old in table.Values.Where(e => e.Key.StartsWith("weapon.") || e.Key.StartsWith("equipment.")).ToArray()) table.RemoveEntry(old.KeyId);
-                    EditorUtility.SetDirty(table);
-                }
-                collection.RefreshAddressables();
-                collection.SetPreloadTableFlag(true);
-                if (name == GameLocalization.MenuTable)
-                    foreach (var entry in collection.SharedData.Entries.Where(e => e.Key.StartsWith("weapon.") || e.Key.StartsWith("equipment.")).ToArray())
-                        collection.SharedData.RemoveKey(entry.Id);
-                EditorUtility.SetDirty(collection.SharedData); EditorUtility.SetDirty(collection);
-            }
-            foreach (var item in manifest.assets)
-            {
-                var asset = AssetDatabase.LoadMainAssetAtPath(item.path);
-                if (asset is CardData card)
-                {
-                    Bind(card.LocalizedTitle, item.baseKey + ".name"); Bind(card.LocalizedDescription, item.baseKey + ".description");
-                    if (manifest.entries.Any(e => e.key == item.baseKey + ".quote")) Bind(card.LocalizedQuote, item.baseKey + ".quote");
-                    if (card is EquipmentData equipment)
-                        foreach (var level in item.overrides) Bind(equipment.Levels[level.index].LocalizedDescription, level.key);
-                }
-                else if (asset is PerkData perk) { Bind(perk.LocalizedTitle, item.baseKey + ".name"); Bind(perk.LocalizedDescription, item.baseKey + ".description"); }
-                else if (asset is UltimateData ultimate) { Bind(ultimate.LocalizedTitle, item.baseKey + ".name"); Bind(ultimate.LocalizedDescription, item.baseKey + ".description"); }
-                else throw new BuildFailedException("Unresolved migrated content: " + item.path);
-                EditorUtility.SetDirty(asset);
-            }
-            var catalog = PreparationMenuCatalog.Load();
-            Bind(catalog.LocalizedCharacterName, "character.1.name"); Bind(catalog.LocalizedMapName, "map.1.name"); Bind(catalog.LocalizedMapDescription, "map.1.description");
-            EditorUtility.SetDirty(catalog);
-            BuildFonts();
-            AssetDatabase.SaveAssets();
-            AssetDatabase.ForceReserializeAssets(manifest.assets.Select(a => a.path).Append(AssetDatabase.GetAssetPath(catalog)));
-            Validate(); ExportCsv();
-            Debug.Log("[Localization] Migrated " + manifest.assets.Length + " content assets and " + manifest.entries.Length + " translations.");
-        }
-
         private static void Bind(LocalizedString text, string key) { text.TableReference = GameLocalization.ContentTable; text.TableEntryReference = key; }
 
-        [MenuItem("MonsterSupergroup/Localization/Create entries for selected content")]
+
         public static void CreateSelectedEntries()
         {
+            Debug.LogWarning("[ProjectTools] Use create.localization-entries -AssetPath ... -Apply.");
+            CreateEntries(AssetDatabase.GetAssetPath(Selection.activeObject));
+        }
+
+        public static void CreateEntries(string path)
+        {
+            MonsterSupergroup.EditorTools.ProjectToolRunner.CheckLegacyMaintenance("create.localization-entries", "MonsterSupergroup.NetworkCombat.Editor.GameLocalizationAssets.CreateEntries");
+            var asset = AssetDatabase.LoadMainAssetAtPath(path);
+            if (asset == null || !(asset is CardData || asset is PerkData || asset is UltimateData))
+                throw new ArgumentException("Please specify a content asset: " + path);
+            CreateEntriesForAssets(new[] { asset });
+        }
+
+        private static void CreateEntriesForAssets(UnityEngine.Object[] assets)
+        {
             var collection = LocalizationEditorSettings.GetStringTableCollection(GameLocalization.ContentTable);
-            foreach (var asset in Selection.objects)
+            foreach (var asset in assets)
             {
                 LocalizedString title, description; LocalizedContentKind kind; uint id;
                 if (asset is CardData card) { kind = card is WeaponData ? LocalizedContentKind.Weapon : LocalizedContentKind.Equipment; id = card.ID; title = card.LocalizedTitle; description = card.LocalizedDescription; }
@@ -105,53 +59,6 @@ namespace MonsterSupergroup.NetworkCombat.Editor
             EditorUtility.SetDirty(collection.SharedData); AssetDatabase.SaveAssets();
         }
 
-        private static void BuildFonts()
-        {
-            var collection = LocalizationEditorSettings.GetAssetTableCollection(GameLocalization.FontTable) ?? LocalizationEditorSettings.CreateAssetTableCollection(GameLocalization.FontTable, Root + "/Tables");
-            var zh = AssetDatabase.LoadAssetAtPath<Font>(Root + "/Fonts/Chinese.otf");
-            var en = AssetDatabase.LoadAssetAtPath<Font>("Assets/TextMesh Pro/Fonts/LiberationSans.ttf");
-            if (zh == null || en == null) throw new BuildFailedException("Bundled localization fonts are missing.");
-            foreach (var pair in new[] { ("zh-CN", zh), ("en", en) })
-            {
-                var fontPath = Root + "/Fonts/" + pair.Item1 + " SDF.asset";
-                var tmp = AssetDatabase.LoadAssetAtPath<TMP_FontAsset>(fontPath);
-                if (tmp != null && (tmp.material == null || tmp.atlasTextures == null || tmp.atlasTextures.Any(t => t == null)))
-                { AssetDatabase.DeleteAsset(fontPath); tmp = null; }
-                if (tmp == null)
-                {
-                    tmp = TMP_FontAsset.CreateFontAsset(pair.Item2, 32, 5, GlyphRenderMode.SDFAA, 1024, 1024, AtlasPopulationMode.Dynamic, true);
-                    var textures = tmp.atlasTextures;
-                    var material = tmp.material;
-                    AssetDatabase.CreateAsset(tmp, fontPath);
-                    foreach (var texture in textures) AssetDatabase.AddObjectToAsset(texture, tmp);
-                    AssetDatabase.AddObjectToAsset(material, tmp);
-                    tmp.atlasTextures = textures; tmp.material = material;
-                    EditorUtility.SetDirty(tmp);
-                    AssetDatabase.SaveAssets();
-                }
-                // Preserve language-neutral symbols as fallback glyphs.
-                var latin = AssetDatabase.LoadAssetAtPath<TMP_FontAsset>("Assets/TextMesh Pro/Resources/Fonts & Materials/LiberationSans SDF.asset");
-                tmp.fallbackFontAssetTable ??= new System.Collections.Generic.List<TMP_FontAsset>();
-                if (latin != null && !tmp.fallbackFontAssetTable.Contains(latin)) tmp.fallbackFontAssetTable.Add(latin);
-                // UGUI has no per-character asset fallback; this bundled font covers Latin and Chinese nicknames.
-                collection.AddAssetToTable(pair.Item1, "ui.font", zh);
-                collection.AddAssetToTable(pair.Item1, "ui.tmp", tmp);
-                EditorUtility.SetDirty(tmp);
-            }
-            var chineseTmp = AssetDatabase.LoadAssetAtPath<TMP_FontAsset>(Root + "/Fonts/zh-CN SDF.asset");
-            var englishTmp = AssetDatabase.LoadAssetAtPath<TMP_FontAsset>(Root + "/Fonts/en SDF.asset");
-            if (!englishTmp.fallbackFontAssetTable.Contains(chineseTmp)) englishTmp.fallbackFontAssetTable.Add(chineseTmp);
-            EditorUtility.SetDirty(englishTmp);
-            collection.RefreshAddressables();
-            // GameLocalization preloads typed font assets before publishing a locale change.
-            // Do not start a second untyped font preload during SelectedLocale transitions.
-            collection.SetPreloadTableFlag(false);
-            var addressables = AddressableAssetSettingsDefaultObject.GetSettings(true);
-            addressables.BuildAddressablesWithPlayerBuild = AddressableAssetSettings.PlayerBuildOption.BuildWithPlayer;
-            EditorUtility.SetDirty(addressables); EditorUtility.SetDirty(collection.SharedData); EditorUtility.SetDirty(collection);
-        }
-
-        [MenuItem("MonsterSupergroup/Localization/Validate tables and content")]
         public static void Validate()
         {
             var locales = LocalizationEditorSettings.GetLocales();
@@ -229,7 +136,7 @@ namespace MonsterSupergroup.NetworkCombat.Editor
                 if (text.Contains('{') || text.Contains('}')) throw new BuildFailedException("Unresolved content parameters: " + key);
             }
         }
-        [MenuItem("MonsterSupergroup/Localization/Export translation CSV")]
+
         public static void ExportCsv()
         {
             Directory.CreateDirectory("docs/localization");

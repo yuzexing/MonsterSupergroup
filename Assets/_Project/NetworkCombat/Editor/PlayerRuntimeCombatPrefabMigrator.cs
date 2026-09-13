@@ -13,9 +13,10 @@ namespace MonsterSupergroup.NetworkCombat.Editor
         public const string NetworkPlayerPath =
             "Assets/_Project/Content/NetworkCombat/NetworkPlayer.prefab";
 
-        [MenuItem("Tools/Monster Supergroup/Repair Network Player Runtime Combat Prefab")]
+
         public static void Run()
         {
+            MonsterSupergroup.EditorTools.ProjectToolRunner.CheckLegacyMaintenance("repair.player-prefab", "MonsterSupergroup.NetworkCombat.Editor.PlayerRuntimeCombatPrefabMigrator.Run");
             if (AssetDatabase.LoadAssetAtPath<GameObject>(NetworkPlayerPath) == null)
             {
                 throw new InvalidOperationException(
@@ -90,9 +91,10 @@ namespace MonsterSupergroup.NetworkCombat.Editor
             if (playerAnimator != null)
             {
                 SetObjectReference(serializedMovement, "animator", playerAnimator);
+                SetObjectReference(serializedMovement, "playerAnimator", playerAnimator);
             }
 
-            SpriteRenderer spriteRenderer = root.GetComponentInChildren<SpriteRenderer>(true);
+            SpriteRenderer spriteRenderer = playerAnimator is NordicPlayerAnimator nordic ? nordic.BodySprite : root.GetComponentInChildren<SpriteRenderer>(true);
             if (spriteRenderer != null)
             {
                 SetObjectReference(serializedMovement, "spriteRenderer", spriteRenderer);

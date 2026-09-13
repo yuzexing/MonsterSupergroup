@@ -2,17 +2,27 @@ using System;
 using System.IO;
 using UnityEditor;
 using UnityEditor.Build;
-using UnityEditor.Callbacks;
+using UnityEditor.Build.Reporting;
 using UnityEngine;
 
 namespace MonsterSupergroup.NetworkCombat.Editor
 {
-    public static class SteamAppIdBuildPostprocessor
+    public sealed class SteamAppIdBuildPostprocessor : IPostprocessBuildWithReport
     {
-        [PostProcessBuild(100)]
-        public static void CopyDevelopmentAppId(
+        public int callbackOrder => 100;
+
+        public void OnPostprocessBuild(BuildReport report)
+        {
+            ConfigureAppIdFile(
+                report.summary.platform,
+                report.summary.outputPath,
+                (report.summary.options & BuildOptions.Development) != 0);
+        }
+
+        public static void ConfigureAppIdFile(
             BuildTarget target,
-            string builtPlayerPath)
+            string builtPlayerPath,
+            bool developmentBuild)
         {
             if (target != BuildTarget.StandaloneWindows64)
             {
@@ -22,20 +32,6 @@ namespace MonsterSupergroup.NetworkCombat.Editor
             string projectRoot = Path.GetFullPath(
                 Path.Combine(Application.dataPath, ".."));
             string source = Path.Combine(projectRoot, "steam_appid.txt");
-            if (!File.Exists(source))
-            {
-                throw new BuildFailedException(
-                    "Windows Steam development build requires steam_appid.txt.");
-            }
-
-            string appId = File.ReadAllText(source).Trim();
-            string expected = SteamLobbyService.DevelopmentAppId.ToString();
-            if (!string.Equals(appId, expected, StringComparison.Ordinal))
-            {
-                throw new BuildFailedException(
-                    $"steam_appid.txt must contain {expected}, but contains " +
-                    $"'{appId}'.");
-            }
 
             string outputDirectory = Path.GetDirectoryName(builtPlayerPath);
             if (string.IsNullOrEmpty(outputDirectory))
@@ -44,16 +40,43 @@ namespace MonsterSupergroup.NetworkCombat.Editor
                     "Windows build output directory could not be resolved.");
             }
 
-            string destination = Path.Combine(
+            string destination = Path.GetFullPath(Path.Combine(
                 outputDirectory,
-                "steam_appid.txt");
-            if (!string.Equals(
-                    Path.GetFullPath(source),
-                    Path.GetFullPath(destination),
-                    StringComparison.OrdinalIgnoreCase))
+                "steam_appid.txt"));
+            if (string.Equals(source, destination, StringComparison.OrdinalIgnoreCase))
             {
-                File.Copy(source, destination, true);
+                throw new BuildFailedException(
+                    "Build the Windows player into a separate directory, not the project root.");
             }
+
+            // Steam supplies the AppID for depot builds. Remove leftovers from
+            // development builds when reusing an output directory.
+            if (!developmentBuild)
+            {
+                if (File.Exists(destination))
+                {
+                    File.Delete(destination);
+                }
+                Debug.Log($"Steam depot build uses AppID {SteamLobbyService.SteamAppId}; steam_appid.txt excluded.");
+                return;
+            }
+
+            if (!File.Exists(source))
+            {
+                throw new BuildFailedException(
+                    "Windows Steam development build requires steam_appid.txt.");
+            }
+
+            string appId = File.ReadAllText(source).Trim();
+            string expected = SteamLobbyService.SteamAppId.ToString();
+            if (!string.Equals(appId, expected, StringComparison.Ordinal))
+            {
+                throw new BuildFailedException(
+                    $"steam_appid.txt must contain {expected}, but contains " +
+                    $"'{appId}'.");
+            }
+
+            File.Copy(source, destination, true);
             Debug.Log($"Steam development AppID available at: {destination}");
         }
     }

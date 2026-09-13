@@ -1,5 +1,6 @@
 using AstralShift.HellMaiden.Player;
 using Mirror;
+using MonsterSupergroup.Gameplay.Combat;
 using UnityEngine;
 
 namespace MonsterSupergroup.NetworkCombat
@@ -27,6 +28,12 @@ namespace MonsterSupergroup.NetworkCombat
             {
                 serverSnapshots.Clear();
                 return;
+            }
+            var map = GameplayMapContext.For(gameObject);
+            if (map != null && position.HasValue && player != null)
+            {
+                var foot = player.GetComponent<CircleCollider2D>();
+                position = (Vector3)map.Clamp(position.Value, GameplayMapContext.Radius(foot), GameplayMapContext.Offset(foot, transform));
             }
             base.OnClientToServerSync(position, rotation, scale);
         }

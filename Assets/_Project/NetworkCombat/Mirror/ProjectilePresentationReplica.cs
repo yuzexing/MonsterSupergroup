@@ -96,6 +96,7 @@ namespace MonsterSupergroup.NetworkCombat
                 ? owner.AttacksParent
                 : owner.transform;
             emitter = UnityEngine.Object.Instantiate(prefab, parent);
+            MonsterSupergroup.Gameplay.Combat.GameplayMapPresentation.Effect(emitter.gameObject);
             emitter.gameObject.SetActive(false);
             emitter.name = $"{prefab.name} (Remote Presentation)";
             emitter.InitializePresentationReplica(weaponId, owner);

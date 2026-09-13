@@ -16,6 +16,7 @@ namespace AstralShift.HellMaiden.CameraFX
     {
         [SerializeField] private SpriteRenderer boundaryGround;
         [SerializeField] private bool shakeEnabled = true;
+        [SerializeField] private bool nordicFixedView;
         [SerializeField] private ShakePreset playerHitPreset;
 
         private ProCamera2D rig;
@@ -57,6 +58,12 @@ namespace AstralShift.HellMaiden.CameraFX
             boundaries.UseLeftBoundary = boundaries.UseRightBoundary = true;
             boundaries.UseBottomBoundary = boundaries.UseTopBoundary = true;
             boundaries.UseNumericBoundaries = true;
+            if (nordicFixedView)
+            {
+                boundaries.UseSoftBoundaries = false;
+                rig.RemoveSizeOverrider(boundaries);
+                ConstrainView();
+            }
         }
 
         public void BindOwner(PlayerMovement player)
@@ -110,10 +117,23 @@ namespace AstralShift.HellMaiden.CameraFX
 
         private void Update()
         {
+            ConstrainView();
             if (owner == null || !owner.IsLocalOwnerBound || !owner.isActiveAndEnabled)
             {
                 if (rig.enabled) ReleaseOwner(owner);
             }
+        }
+
+        private void LateUpdate() => ConstrainView();
+        private void ConstrainView()
+        {
+            if (!nordicFixedView || rig == null || boundaryGround == null) return;
+            if (shakeContainer != null)
+            {
+                Vector3 p = shakeContainer.localPosition; p.z = 0;
+                shakeContainer.localPosition = p; shakeContainer.localRotation = Quaternion.identity;
+            }
+            GameplayCameraGeometry.ConstrainNordic(GetComponent<Camera>(), rig, boundaryGround.bounds);
         }
 
         private void OnEnable() => GameOptionsService.Changed += ApplyShakePreference;

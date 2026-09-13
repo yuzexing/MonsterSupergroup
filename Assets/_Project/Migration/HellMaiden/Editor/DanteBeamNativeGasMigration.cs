@@ -26,7 +26,7 @@ namespace MonsterSupergroup.HellMaidenMigration.Editor
         public const string StartClipPath = OutputFolder + "/AnimationClip/PlayerAttack_Dante_DragonsBreath_In.anim";
         public const string MainClipPath = OutputFolder + "/AnimationClip/PlayerAttack_Dante_DragonsBreath_Idle.anim";
         public const string EndClipPath = OutputFolder + "/AnimationClip/PlayerAttack_Dante_DragonsBreath_Out.anim";
-        private const string SourceDefault = "F:/DecomplieLatest/HellMaiden/ExportedProject";
+        private static string SourceDefault => MonsterSupergroup.EditorTools.ProjectToolPaths.HellMaiden();
         private const string SpriteShaderPath = "Assets/Plugins/AllIn1SpriteShader/Shaders/AllIn1SpriteShader.shader";
         private const string VfxShaderPath = "Assets/Plugins/AllIn1VfxToolkit/Shaders/AllIn1VfxURPCompat.shader";
         private const string OvertimeScalerGuid = "de190b0c94c56a15ceb304d88098c94e";
@@ -92,9 +92,10 @@ namespace MonsterSupergroup.HellMaidenMigration.Editor
             "Texture2D/rainbow_1.png", "Texture2D/seamlessNoise_1.png", "Texture2D/white_1.png"
         };
 
-        [MenuItem("Tools/HellMaiden Migration/Import Dante Beam Native GAS Assets")]
+
         public static void Import()
         {
+            MonsterSupergroup.EditorTools.ProjectToolRunner.CheckLegacyMaintenance("import.beam", "MonsterSupergroup.HellMaidenMigration.Editor.DanteBeamNativeGasMigration.Import");
             string sourceRoot = Environment.GetEnvironmentVariable("HELLMAIDEN_SOURCE_PROJECT");
             if (string.IsNullOrWhiteSpace(sourceRoot)) sourceRoot = SourceDefault;
             sourceRoot = Path.GetFullPath(sourceRoot);
@@ -281,7 +282,7 @@ namespace MonsterSupergroup.HellMaidenMigration.Editor
             EditorUtility.SetDirty(material);
         }
 
-        [MenuItem("Tools/HellMaiden Migration/Validate Dante Beam Native GAS Assets")]
+
         public static void ValidateImportedAssets()
         {
             WeaponData weapon = RequireAsset<WeaponData>(WeaponPath);

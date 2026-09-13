@@ -5,71 +5,30 @@ namespace MonsterSupergroup.NetworkCombat.Editor
 {
     public static class NetworkBackendEditorSettings
     {
-        private const string SteamMenuPath =
-            "Monster Supergroup/Network Combat/Editor Backend/Steam";
-        private const string KcpMenuPath =
-            "Monster Supergroup/Network Combat/Editor Backend/KCP Local";
-
-        [MenuItem(SteamMenuPath)]
         private static void SelectSteam()
         {
             Select(NetworkBackendKind.Steam);
         }
 
-        [MenuItem(KcpMenuPath)]
+
         private static void SelectKcp()
         {
             Select(NetworkBackendKind.Kcp);
         }
 
-        [MenuItem("Monster Supergroup/Network Combat/Steam/Log Invite Diagnostics")]
+
         private static void LogInviteDiagnostics()
         {
-            Object.FindFirstObjectByType<SteamLobbyService>()?.LogInviteDiagnostics();
+            (Object.FindFirstObjectByType<SteamLobbyService>() ?? throw new System.InvalidOperationException("Steam service is not ready.")).LogInviteDiagnostics();
         }
 
-        [MenuItem("Monster Supergroup/Network Combat/Steam/Open Lobby Invite Dialog")]
+
         private static void OpenInviteDialog()
         {
-            Object.FindFirstObjectByType<SteamLobbyService>()?.OpenLobbyInviteOverlay();
+            (Object.FindFirstObjectByType<SteamLobbyService>() ?? throw new System.InvalidOperationException("Steam service is not ready.")).OpenLobbyInviteOverlay();
         }
 
-        [MenuItem("Monster Supergroup/Network Combat/Steam/Log Invite Diagnostics", true)]
-        [MenuItem("Monster Supergroup/Network Combat/Steam/Open Lobby Invite Dialog", true)]
-        private static bool ValidateSteamDiagnostics()
-        {
-            return EditorApplication.isPlaying &&
-                Object.FindFirstObjectByType<SteamLobbyService>() != null;
-        }
 
-        [MenuItem(SteamMenuPath, true)]
-        private static bool ValidateSteam()
-        {
-            Menu.SetChecked(
-                SteamMenuPath,
-                Current == NetworkBackendKind.Steam);
-            return !EditorApplication.isPlayingOrWillChangePlaymode;
-        }
-
-        [MenuItem(KcpMenuPath, true)]
-        private static bool ValidateKcp()
-        {
-            Menu.SetChecked(KcpMenuPath, Current == NetworkBackendKind.Kcp);
-            return !EditorApplication.isPlayingOrWillChangePlaymode;
-        }
-
-        private static NetworkBackendKind Current
-        {
-            get
-            {
-                int stored = EditorPrefs.GetInt(
-                    NetworkBackendBootstrap.EditorPreferenceKey,
-                    (int)NetworkBackendKind.Steam);
-                return stored == (int)NetworkBackendKind.Kcp
-                    ? NetworkBackendKind.Kcp
-                    : NetworkBackendKind.Steam;
-            }
-        }
 
         private static void Select(NetworkBackendKind backend)
         {

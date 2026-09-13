@@ -73,6 +73,7 @@ namespace MonsterSupergroup.NetworkCombat
             try
             {
                 emitter = UnityEngine.Object.Instantiate(prefab, staging.transform);
+            MonsterSupergroup.Gameplay.Combat.GameplayMapPresentation.Effect(emitter.gameObject);
                 emitter.gameObject.SetActive(false);
                 emitter.name = $"{prefab.name} (Remote Presentation)";
                 emitter.transform.SetParent(parent, false);

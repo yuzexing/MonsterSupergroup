@@ -1,0 +1,81 @@
+{
+  "mapSize": {
+    "x": 119.33860778808594,
+    "y": 67.12796783447266
+  },
+  "center": {
+    "x": 0.0,
+    "y": 0.9900000095367432
+  },
+  "seed": 20260913,
+  "noiseOffset": {
+    "x": 589.415283203125,
+    "y": -180.24935913085938
+  },
+  "chunksIncludingBuffer": 140,
+  "placementsByKind": {
+    "base": 560,
+    "floor": 736,
+    "prop": 3622
+  },
+  "propsByGroup": {
+    "3": 3046,
+    "5": 423,
+    "1": 37,
+    "6": 23,
+    "4": 21,
+    "7": 27,
+    "8": 16,
+    "9": 9,
+    "2": 20
+  },
+  "propRootsInsideGround": 2056,
+  "propTypesInsideGround": 34,
+  "propTypesIncludingBuffer": 35,
+  "typesOnlyInBuffer": [
+    "Assets/_Project/Content/Nordic/Prefabs/Ruin_5 (Ruin_1 Variant).prefab"
+  ],
+  "sourceArt": {
+    "passed": true,
+    "compared": {
+      "GameObject": 277,
+      "Transform": 277,
+      "PolygonCollider2D": 12,
+      "SpriteRenderer": 130,
+      "SortingGroup": 6,
+      "ParticleSystem": 4,
+      "ParticleSystemRenderer": 4
+    },
+    "issues": []
+  },
+  "originalFloorSortPoint": 0,
+  "unaffectedBaselineFiles": {
+    "defaultRenderer": true,
+    "buildScenes": true,
+    "gameplay": true,
+    "sortingLayers": true
+  },
+  "layoutSha256": "7bca8dba0a095e257c1a48cc2d4965785a5013e1ccc5fa5a6b5657e488e46fff",
+  "runtimeAcceptance": {
+    "passed": true,
+    "checks": 117,
+    "errors": [],
+    "sprites": 17385,
+    "particles": 38,
+    "torchLights": 76
+  },
+  "motionSamples": {
+    "60": {
+      "sampleFrames": 60,
+      "meanFrameMs": 16.694066666666668,
+      "maxFrameMs": 17.134,
+      "measuredFps": 59.901521897999686
+    },
+    "120": {
+      "sampleFrames": 120,
+      "meanFrameMs": 8.3768,
+      "maxFrameMs": 8.734,
+      "measuredFps": 119.37732785789322
+    }
+  }
+}

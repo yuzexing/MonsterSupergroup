@@ -12,9 +12,10 @@ namespace MonsterSupergroup.GAS.Editor
     {
         public const string OutputPath = "Assets/_Project/GAS/Core/Generated/GeneratedModifierRegistry.g.cs";
 
-        [MenuItem("Tools/MonsterSupergroup/GAS/Rebuild Registry")]
+
         public static void Rebuild()
         {
+            MonsterSupergroup.EditorTools.ProjectToolRunner.CheckLegacyMaintenance("generate.gas-registry", "MonsterSupergroup.GAS.Editor.ModifierRegistryGenerator.Rebuild");
             string source = GenerateSource();
             string directory = Path.GetDirectoryName(OutputPath);
             if (!string.IsNullOrEmpty(directory))

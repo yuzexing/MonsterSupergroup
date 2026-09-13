@@ -26,7 +26,7 @@ namespace MonsterSupergroup.NetworkCombat
     [DisallowMultipleComponent]
     public sealed partial class SteamLobbyService : MonoBehaviour
     {
-        public const uint DevelopmentAppId = 480u;
+        public const uint SteamAppId = 4886160u;
 
         private const int SearchResultLimit = 50;
         private static SteamLobbyService instance;
@@ -250,7 +250,7 @@ namespace MonsterSupergroup.NetworkCombat
             try
             {
                 if (SteamAPI.RestartAppIfNecessary(
-                        new AppId_t(DevelopmentAppId)))
+                        new AppId_t(SteamAppId)))
                 {
                     SetError("Steam requested that the application restart.");
                     return false;
@@ -275,11 +275,12 @@ namespace MonsterSupergroup.NetworkCombat
 
                 ownsSteamApi = true;
                 everInitialized = true;
-                if (SteamUtils.GetAppID().m_AppId != DevelopmentAppId)
+                uint actualAppId = SteamUtils.GetAppID().m_AppId;
+                if (actualAppId != SteamAppId)
                 {
                     ShutdownSteam();
                     SetError(
-                        $"Steam AppID mismatch; expected {DevelopmentAppId}.");
+                        $"Steam AppID mismatch; expected {SteamAppId}, actual {actualAppId}.");
                     return false;
                 }
 
@@ -290,7 +291,7 @@ namespace MonsterSupergroup.NetworkCombat
                 SetState(SteamLobbyState.Idle, string.Empty);
                 Debug.Log(
                     $"[SteamLobby] Steam initialized with AppID " +
-                    $"{DevelopmentAppId}.",
+                    $"{actualAppId}.",
                     this);
                 return true;
             }

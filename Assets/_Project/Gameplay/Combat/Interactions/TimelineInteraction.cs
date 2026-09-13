@@ -80,7 +80,9 @@ namespace AstralShift.HellMaiden.Interactions
 						}
 						else
 						{
-							player.transform.position = timelineDirector.StartTransformPlayer.position;
+                            var map = MonsterSupergroup.Gameplay.Combat.GameplayMapContext.For(player.gameObject);
+                            if (map != null) map.Place(player.body, player.GetComponent<CircleCollider2D>(), timelineDirector.StartTransformPlayer.position);
+                            else player.transform.position = timelineDirector.StartTransformPlayer.position;
 							player.SetDirectionImmediate(directionToFace.ToVector2());
 							ProCamera2D.Instance.CenterOnTargets();
 							if (timelineDirector.overwriteFadeIn)

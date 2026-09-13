@@ -58,9 +58,10 @@ namespace MonsterSupergroup.HellMaidenMigration.Editor
                 "NativeGasEquipment_Knockback.asset")
         };
 
-        [MenuItem("Tools/HellMaiden Migration/Rebuild Dante Native GAS Assets")]
+
         public static void Rebuild()
         {
+            MonsterSupergroup.EditorTools.ProjectToolRunner.CheckLegacyMaintenance("rebuild.dante", "MonsterSupergroup.HellMaidenMigration.Editor.DanteNativeGasMigration.Rebuild");
             NormalizeAnimancerComponentReferences();
             RepairDanteProjectilePrefabReferences();
             EnsureFolder(OutputFolder);
@@ -84,9 +85,10 @@ namespace MonsterSupergroup.HellMaidenMigration.Editor
                 "by the Editor converter; runtime definitions contain stable IDs.");
         }
 
-        [MenuItem("Tools/HellMaiden Migration/Reserialize Canonical Equipment Assets")]
+
         public static void ReserializeCanonicalEquipmentAssets()
         {
+            MonsterSupergroup.EditorTools.ProjectToolRunner.CheckLegacyMaintenance("maintenance.reserialize-equipment", "MonsterSupergroup.HellMaidenMigration.Editor.DanteNativeGasMigration.ReserializeCanonicalEquipmentAssets");
             var paths = new List<string>(EquipmentMigrations.Length);
             for (int i = 0; i < EquipmentMigrations.Length; i++)
             {

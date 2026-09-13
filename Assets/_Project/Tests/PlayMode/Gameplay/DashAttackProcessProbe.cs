@@ -142,6 +142,7 @@ namespace MonsterSupergroup.Gameplay.Tests
         {
             manager = FindFirstObjectByType<BootGameplayNetworkManager>();
             Require(manager != null, "Boot manager missing.");
+            manager.ConfigurePreparationFlow(false);
             RuntimeDB database = FindFirstObjectByType<RuntimeDB>();
             Require(database != null && database.TryGetWeaponData(8, out _), "Migrated Dash ID 8 is absent from the weapon database.");
             var weapons = Instantiate(database.WeaponDB);

@@ -1,0 +1,2379 @@
+{
+  "version": 1,
+  "tools": [
+    {
+      "id": "sample.gas-rebuild",
+      "name": "重建 GAS Vertical Slice",
+      "category": "维护与样例",
+      "description": "创建/重建 GAS 样例场景和配置",
+      "method": "MonsterSupergroup.Gameplay.Editor.GasVerticalSliceSceneBuilder.RebuildAndValidate",
+      "audience": "人工 / AI",
+      "impact": "创建/重建 GAS 样例场景和配置",
+      "output": "Logs/ProjectTools",
+      "condition": "edit",
+      "parameters": [
+        "Apply"
+      ],
+      "writesAssets": true,
+      "maintenance": true,
+      "source": "Assets/_Project/Gameplay/Editor/GasVerticalSliceSceneBuilder.cs",
+      "oldMenus": [
+        "Tools/MonsterSupergroup/Gameplay/Rebuild GAS Vertical Slice"
+      ]
+    },
+    {
+      "id": "validate.gas",
+      "name": "校验 GAS",
+      "category": "校验",
+      "description": "检查 Modifier 配置与生成注册表",
+      "method": "MonsterSupergroup.GAS.Editor.GasAssetValidator.ValidateAllMenu",
+      "audience": "人工 / AI",
+      "impact": "只读；不修改玩法资产",
+      "output": "Logs/ProjectTools",
+      "condition": "edit",
+      "parameters": [],
+      "writesAssets": false,
+      "maintenance": false,
+      "source": "Assets/_Project/GAS/Editor/GasAssetValidator.cs",
+      "oldMenus": [
+        "Tools/MonsterSupergroup/GAS/Validate All"
+      ]
+    },
+    {
+      "id": "generate.gas-registry",
+      "name": "生成 GAS 注册表",
+      "category": "制作",
+      "description": "扫描 Modifier 类型，更新 GeneratedModifierRegistry.g.cs",
+      "method": "MonsterSupergroup.GAS.Editor.ModifierRegistryGenerator.Rebuild",
+      "audience": "人工 / AI",
+      "impact": "扫描 Modifier 类型，更新 GeneratedModifierRegistry.g.cs",
+      "output": "Logs/ProjectTools",
+      "condition": "edit",
+      "parameters": [
+        "Apply"
+      ],
+      "writesAssets": true,
+      "maintenance": false,
+      "source": "Assets/_Project/GAS/Editor/ModifierRegistryGenerator.cs",
+      "oldMenus": [
+        "Tools/MonsterSupergroup/GAS/Rebuild Registry"
+      ]
+    },
+    {
+      "id": "import.beam",
+      "name": "导入 beam",
+      "category": "维护与样例",
+      "description": "导入或重建 beam 的玩法和表现资产；可能覆盖当前绑定和默认参数",
+      "method": "MonsterSupergroup.HellMaidenMigration.Editor.DanteBeamNativeGasMigration.Import",
+      "audience": "人工 / AI",
+      "impact": "导入或重建 beam 的玩法和表现资产；可能覆盖当前绑定和默认参数",
+      "output": "Logs/ProjectTools",
+      "condition": "edit",
+      "parameters": [
+        "Apply",
+        "Source"
+      ],
+      "writesAssets": true,
+      "maintenance": true,
+      "source": "Assets/_Project/Migration/HellMaiden/Editor/DanteBeamNativeGasMigration.cs",
+      "oldMenus": [
+        "Tools/HellMaiden Migration/Import Dante Beam Native GAS Assets"
+      ],
+      "externalSource": true
+    },
+    {
+      "id": "validate.beam",
+      "name": "校验 光束 资源",
+      "category": "校验",
+      "description": "校验当前已导入的 beam 配置与表现引用",
+      "method": "MonsterSupergroup.HellMaidenMigration.Editor.DanteBeamNativeGasMigration.ValidateImportedAssets",
+      "audience": "人工 / AI",
+      "impact": "只读；不修改玩法资产",
+      "output": "Logs/ProjectTools",
+      "condition": "edit",
+      "parameters": [],
+      "writesAssets": false,
+      "maintenance": false,
+      "source": "Assets/_Project/Migration/HellMaiden/Editor/DanteBeamNativeGasMigration.cs",
+      "oldMenus": [
+        "Tools/HellMaiden Migration/Validate Dante Beam Native GAS Assets"
+      ]
+    },
+    {
+      "id": "preview.beam",
+      "name": "光束 表现预览",
+      "category": "表现预览",
+      "description": "采集现有 beam 表现 PNG；仍需视觉核验",
+      "method": "MonsterSupergroup.HellMaidenMigration.Editor.DanteBeamPresentationPreview.Capture",
+      "audience": "人工 / AI",
+      "impact": "只读；不修改玩法资产",
+      "output": "Logs/Phase02",
+      "condition": "",
+      "parameters": [],
+      "writesAssets": false,
+      "maintenance": false,
+      "source": "Assets/_Project/Migration/HellMaiden/Editor/DanteBeamPresentationPreview.cs",
+      "oldMenus": [
+        "Tools/HellMaiden Migration/Capture Dante Beam Presentation Preview"
+      ],
+      "graphics": true
+    },
+    {
+      "id": "import.circling",
+      "name": "导入 circling",
+      "category": "维护与样例",
+      "description": "导入或重建 circling 的玩法和表现资产；可能覆盖当前绑定和默认参数",
+      "method": "MonsterSupergroup.HellMaidenMigration.Editor.DanteCirclingNativeGasMigration.Import",
+      "audience": "人工 / AI",
+      "impact": "导入或重建 circling 的玩法和表现资产；可能覆盖当前绑定和默认参数",
+      "output": "Logs/ProjectTools",
+      "condition": "edit",
+      "parameters": [
+        "Apply",
+        "Source"
+      ],
+      "writesAssets": true,
+      "maintenance": true,
+      "source": "Assets/_Project/Migration/HellMaiden/Editor/DanteCirclingNativeGasMigration.cs",
+      "oldMenus": [
+        "Tools/HellMaiden Migration/Import Dante Circling Native GAS Assets"
+      ],
+      "externalSource": true
+    },
+    {
+      "id": "validate.circling",
+      "name": "校验 环绕 资源",
+      "category": "校验",
+      "description": "校验当前已导入的 circling 配置与表现引用",
+      "method": "MonsterSupergroup.HellMaidenMigration.Editor.DanteCirclingNativeGasMigration.ValidateImportedAssets",
+      "audience": "人工 / AI",
+      "impact": "只读；不修改玩法资产",
+      "output": "Logs/ProjectTools",
+      "condition": "edit",
+      "parameters": [],
+      "writesAssets": false,
+      "maintenance": false,
+      "source": "Assets/_Project/Migration/HellMaiden/Editor/DanteCirclingNativeGasMigration.cs",
+      "oldMenus": [
+        "Tools/HellMaiden Migration/Validate Dante Circling Native GAS Assets"
+      ]
+    },
+    {
+      "id": "diagnostic.circling-dependencies",
+      "name": "环绕 表现依赖诊断",
+      "category": "校验",
+      "description": "输出 circling 的表现资源依赖",
+      "method": "MonsterSupergroup.HellMaidenMigration.Editor.DanteCirclingNativeGasMigration.DiagnosePresentationDependencies",
+      "audience": "人工 / AI",
+      "impact": "只读；不修改玩法资产",
+      "output": "Logs/ProjectTools",
+      "condition": "edit",
+      "parameters": [],
+      "writesAssets": false,
+      "maintenance": false,
+      "source": "Assets/_Project/Migration/HellMaiden/Editor/DanteCirclingNativeGasMigration.cs",
+      "oldMenus": [
+        "Tools/HellMaiden Migration/Diagnose Dante Circling Presentation Dependencies"
+      ]
+    },
+    {
+      "id": "preview.circling",
+      "name": "环绕 表现预览",
+      "category": "表现预览",
+      "description": "采集现有 circling 表现 PNG；仍需视觉核验",
+      "method": "MonsterSupergroup.HellMaidenMigration.Editor.DanteCirclingPresentationPreview.Capture",
+      "audience": "人工 / AI",
+      "impact": "只读；不修改玩法资产",
+      "output": "Logs/Phase02",
+      "condition": "",
+      "parameters": [],
+      "writesAssets": false,
+      "maintenance": false,
+      "source": "Assets/_Project/Migration/HellMaiden/Editor/DanteCirclingPresentationPreview.cs",
+      "oldMenus": [
+        "Tools/HellMaiden Migration/Capture Dante Circling Presentation Preview"
+      ],
+      "graphics": true
+    },
+    {
+      "id": "import.dash",
+      "name": "导入 dash",
+      "category": "维护与样例",
+      "description": "导入或重建 dash 的玩法和表现资产；可能覆盖当前绑定和默认参数",
+      "method": "MonsterSupergroup.HellMaidenMigration.Editor.DanteDashNativeGasMigration.Import",
+      "audience": "人工 / AI",
+      "impact": "导入或重建 dash 的玩法和表现资产；可能覆盖当前绑定和默认参数",
+      "output": "Logs/ProjectTools",
+      "condition": "edit",
+      "parameters": [
+        "Apply",
+        "Source"
+      ],
+      "writesAssets": true,
+      "maintenance": true,
+      "source": "Assets/_Project/Migration/HellMaiden/Editor/DanteDashNativeGasMigration.cs",
+      "oldMenus": [
+        "Tools/HellMaiden Migration/Import Dante Dash Native GAS Assets"
+      ],
+      "externalSource": true
+    },
+    {
+      "id": "maintenance.restore-dash",
+      "name": "恢复来源冲刺默认配置",
+      "category": "维护与样例",
+      "description": "覆盖玩家冲刺参数为参考工程默认配置",
+      "method": "MonsterSupergroup.HellMaidenMigration.Editor.DanteDashNativeGasMigration.RestoreDashMovementConfiguration",
+      "audience": "人工 / AI",
+      "impact": "覆盖玩家冲刺参数为参考工程默认配置",
+      "output": "Logs/ProjectTools",
+      "condition": "edit",
+      "parameters": [
+        "Apply",
+        "Source"
+      ],
+      "writesAssets": true,
+      "maintenance": true,
+      "source": "Assets/_Project/Migration/HellMaiden/Editor/DanteDashNativeGasMigration.cs",
+      "oldMenus": [
+        "Tools/HellMaiden Migration/Restore Source Player Dash Movement Configuration"
+      ],
+      "externalSource": true
+    },
+    {
+      "id": "validate.dash",
+      "name": "校验 冲刺 资源",
+      "category": "校验",
+      "description": "校验当前已导入的 dash 配置与表现引用",
+      "method": "MonsterSupergroup.HellMaidenMigration.Editor.DanteDashNativeGasMigration.ValidateImportedAssets",
+      "audience": "人工 / AI",
+      "impact": "只读；不修改玩法资产",
+      "output": "Logs/ProjectTools",
+      "condition": "edit",
+      "parameters": [],
+      "writesAssets": false,
+      "maintenance": false,
+      "source": "Assets/_Project/Migration/HellMaiden/Editor/DanteDashNativeGasMigration.cs",
+      "oldMenus": [
+        "Tools/HellMaiden Migration/Validate Dante Dash Native GAS Assets"
+      ]
+    },
+    {
+      "id": "diagnostic.dash-dependencies",
+      "name": "冲刺 表现依赖诊断",
+      "category": "校验",
+      "description": "输出 dash 的表现资源依赖",
+      "method": "MonsterSupergroup.HellMaidenMigration.Editor.DanteDashNativeGasMigration.DiagnosePresentationDependencies",
+      "audience": "人工 / AI",
+      "impact": "只读；不修改玩法资产",
+      "output": "Logs/ProjectTools",
+      "condition": "edit",
+      "parameters": [],
+      "writesAssets": false,
+      "maintenance": false,
+      "source": "Assets/_Project/Migration/HellMaiden/Editor/DanteDashNativeGasMigration.cs",
+      "oldMenus": [
+        "Tools/HellMaiden Migration/Diagnose Dante Dash Presentation Dependencies"
+      ]
+    },
+    {
+      "id": "preview.dash",
+      "name": "冲刺 表现预览",
+      "category": "表现预览",
+      "description": "采集现有 dash 表现 PNG；仍需视觉核验",
+      "method": "MonsterSupergroup.HellMaidenMigration.Editor.DanteDashPresentationPreview.Capture",
+      "audience": "人工 / AI",
+      "impact": "只读；不修改玩法资产",
+      "output": "Logs/Phase02",
+      "condition": "",
+      "parameters": [],
+      "writesAssets": false,
+      "maintenance": false,
+      "source": "Assets/_Project/Migration/HellMaiden/Editor/DanteDashPresentationPreview.cs",
+      "oldMenus": [
+        "Tools/HellMaiden Migration/Capture Dante Dash Presentation Preview"
+      ],
+      "graphics": true
+    },
+    {
+      "id": "import.melee",
+      "name": "导入 melee",
+      "category": "维护与样例",
+      "description": "导入或重建 melee 的玩法和表现资产；可能覆盖当前绑定和默认参数",
+      "method": "MonsterSupergroup.HellMaidenMigration.Editor.DanteMeleeNativeGasMigration.Import",
+      "audience": "人工 / AI",
+      "impact": "导入或重建 melee 的玩法和表现资产；可能覆盖当前绑定和默认参数",
+      "output": "Logs/ProjectTools",
+      "condition": "edit",
+      "parameters": [
+        "Apply",
+        "Source"
+      ],
+      "writesAssets": true,
+      "maintenance": true,
+      "source": "Assets/_Project/Migration/HellMaiden/Editor/DanteMeleeNativeGasMigration.cs",
+      "oldMenus": [
+        "Tools/HellMaiden Migration/Import Dante Melee Native GAS Assets"
+      ],
+      "externalSource": true
+    },
+    {
+      "id": "validate.melee",
+      "name": "校验 近战 资源",
+      "category": "校验",
+      "description": "校验当前已导入的 melee 配置与表现引用",
+      "method": "MonsterSupergroup.HellMaidenMigration.Editor.DanteMeleeNativeGasMigration.ValidateImportedAssets",
+      "audience": "人工 / AI",
+      "impact": "只读；不修改玩法资产",
+      "output": "Logs/ProjectTools",
+      "condition": "edit",
+      "parameters": [],
+      "writesAssets": false,
+      "maintenance": false,
+      "source": "Assets/_Project/Migration/HellMaiden/Editor/DanteMeleeNativeGasMigration.cs",
+      "oldMenus": [
+        "Tools/HellMaiden Migration/Validate Dante Melee Native GAS Assets"
+      ]
+    },
+    {
+      "id": "preview.melee",
+      "name": "近战 表现预览",
+      "category": "表现预览",
+      "description": "采集现有 melee 表现 PNG；仍需视觉核验",
+      "method": "MonsterSupergroup.HellMaidenMigration.Editor.DanteMeleePresentationPreview.Capture",
+      "audience": "人工 / AI",
+      "impact": "只读；不修改玩法资产",
+      "output": "Logs/Phase02",
+      "condition": "",
+      "parameters": [],
+      "writesAssets": false,
+      "maintenance": false,
+      "source": "Assets/_Project/Migration/HellMaiden/Editor/DanteMeleePresentationPreview.cs",
+      "oldMenus": [
+        "Tools/HellMaiden Migration/Capture Dante Melee Presentation Preview"
+      ],
+      "graphics": true
+    },
+    {
+      "id": "rebuild.dante",
+      "name": "重建 dante",
+      "category": "维护与样例",
+      "description": "导入或重建 dante 的玩法和表现资产；可能覆盖当前绑定和默认参数",
+      "method": "MonsterSupergroup.HellMaidenMigration.Editor.DanteNativeGasMigration.Rebuild",
+      "audience": "人工 / AI",
+      "impact": "导入或重建 dante 的玩法和表现资产；可能覆盖当前绑定和默认参数",
+      "output": "Logs/ProjectTools",
+      "condition": "edit",
+      "parameters": [
+        "Apply"
+      ],
+      "writesAssets": true,
+      "maintenance": true,
+      "source": "Assets/_Project/Migration/HellMaiden/Editor/DanteNativeGasMigration.cs",
+      "oldMenus": [
+        "Tools/HellMaiden Migration/Rebuild Dante Native GAS Assets"
+      ]
+    },
+    {
+      "id": "maintenance.reserialize-equipment",
+      "name": "重存规范装备资产",
+      "category": "维护与样例",
+      "description": "一次性重存已完成；仅用于明确的资源维护，重存八种装备及元数据",
+      "method": "MonsterSupergroup.HellMaidenMigration.Editor.DanteNativeGasMigration.ReserializeCanonicalEquipmentAssets",
+      "audience": "人工 / AI",
+      "impact": "一次性重存已完成；仅用于明确的资源维护，重存八种装备及元数据",
+      "output": "Logs/ProjectTools",
+      "condition": "edit",
+      "parameters": [
+        "Apply"
+      ],
+      "writesAssets": true,
+      "maintenance": true,
+      "source": "Assets/_Project/Migration/HellMaiden/Editor/DanteNativeGasMigration.cs",
+      "oldMenus": [
+        "Tools/HellMaiden Migration/Reserialize Canonical Equipment Assets"
+      ]
+    },
+    {
+      "id": "import.projectile",
+      "name": "导入 projectile",
+      "category": "维护与样例",
+      "description": "导入或重建 projectile 的玩法和表现资产；可能覆盖当前绑定和默认参数",
+      "method": "MonsterSupergroup.HellMaidenMigration.Editor.DanteProjectilePresentationMigration.Import",
+      "audience": "人工 / AI",
+      "impact": "导入或重建 projectile 的玩法和表现资产；可能覆盖当前绑定和默认参数",
+      "output": "Logs/ProjectTools",
+      "condition": "edit",
+      "parameters": [
+        "Apply",
+        "Source"
+      ],
+      "writesAssets": true,
+      "maintenance": true,
+      "source": "Assets/_Project/Migration/HellMaiden/Editor/DanteProjectilePresentationMigration.cs",
+      "oldMenus": [
+        "Tools/HellMaiden Migration/Import Dante Projectile Presentation"
+      ],
+      "externalSource": true
+    },
+    {
+      "id": "validate.projectile",
+      "name": "校验 投射物 资源",
+      "category": "校验",
+      "description": "校验当前已导入的 projectile 配置与表现引用",
+      "method": "MonsterSupergroup.HellMaidenMigration.Editor.DanteProjectilePresentationMigration.ValidateImportedAssets",
+      "audience": "人工 / AI",
+      "impact": "只读；不修改玩法资产",
+      "output": "Logs/ProjectTools",
+      "condition": "edit",
+      "parameters": [],
+      "writesAssets": false,
+      "maintenance": false,
+      "source": "Assets/_Project/Migration/HellMaiden/Editor/DanteProjectilePresentationMigration.cs",
+      "oldMenus": [
+        "Tools/HellMaiden Migration/Validate Dante Projectile Presentation"
+      ]
+    },
+    {
+      "id": "preview.projectile",
+      "name": "投射物 表现预览",
+      "category": "表现预览",
+      "description": "采集现有 projectile 表现 PNG；仍需视觉核验",
+      "method": "MonsterSupergroup.HellMaidenMigration.Editor.DanteProjectilePresentationPreview.Capture",
+      "audience": "人工 / AI",
+      "impact": "只读；不修改玩法资产",
+      "output": "Logs/Wisp/Previews",
+      "condition": "",
+      "parameters": [],
+      "writesAssets": false,
+      "maintenance": false,
+      "source": "Assets/_Project/Migration/HellMaiden/Editor/DanteProjectilePresentationPreview.cs",
+      "oldMenus": [
+        "Tools/HellMaiden Migration/Capture Dante Projectile Presentation Preview"
+      ],
+      "graphics": true
+    },
+    {
+      "id": "import.ultimate",
+      "name": "导入 ultimate",
+      "category": "维护与样例",
+      "description": "导入或重建 ultimate 的玩法和表现资产；可能覆盖当前绑定和默认参数",
+      "method": "MonsterSupergroup.HellMaidenMigration.Editor.DanteUltimateAssetMigration.Import",
+      "audience": "人工 / AI",
+      "impact": "导入或重建 ultimate 的玩法和表现资产；可能覆盖当前绑定和默认参数",
+      "output": "Logs/ProjectTools",
+      "condition": "edit",
+      "parameters": [
+        "Apply",
+        "Source"
+      ],
+      "writesAssets": true,
+      "maintenance": true,
+      "source": "Assets/_Project/Migration/HellMaiden/Editor/DanteUltimateAssetMigration.cs",
+      "oldMenus": [
+        "Tools/HellMaiden Migration/Import Dante Ultimate Attack Assets"
+      ],
+      "externalSource": true
+    },
+    {
+      "id": "validate.ultimate",
+      "name": "校验 大招 资源",
+      "category": "校验",
+      "description": "校验当前已导入的 ultimate 配置与表现引用",
+      "method": "MonsterSupergroup.HellMaidenMigration.Editor.DanteUltimateAssetMigration.ValidateImportedAssets",
+      "audience": "人工 / AI",
+      "impact": "只读；不修改玩法资产",
+      "output": "Logs/ProjectTools",
+      "condition": "edit",
+      "parameters": [],
+      "writesAssets": false,
+      "maintenance": false,
+      "source": "Assets/_Project/Migration/HellMaiden/Editor/DanteUltimateAssetMigration.cs",
+      "oldMenus": [
+        "Tools/HellMaiden Migration/Validate Dante Ultimate Attack Assets"
+      ]
+    },
+    {
+      "id": "preview.ultimate",
+      "name": "大招 表现预览",
+      "category": "表现预览",
+      "description": "采集现有 ultimate 表现 PNG；仍需视觉核验",
+      "method": "MonsterSupergroup.HellMaidenMigration.Editor.DanteUltimatePresentationPreview.Capture",
+      "audience": "人工 / AI",
+      "impact": "只读；不修改玩法资产",
+      "output": "Logs/Phase02",
+      "condition": "",
+      "parameters": [],
+      "writesAssets": false,
+      "maintenance": false,
+      "source": "Assets/_Project/Migration/HellMaiden/Editor/DanteUltimatePresentationPreview.cs",
+      "oldMenus": [
+        "Tools/HellMaiden Migration/Capture Dante Ultimate Presentation Preview"
+      ],
+      "graphics": true,
+      "asynchronous": true
+    },
+    {
+      "id": "import.summon",
+      "name": "导入 summon",
+      "category": "维护与样例",
+      "description": "导入或重建 summon 的玩法和表现资产；可能覆盖当前绑定和默认参数",
+      "method": "MonsterSupergroup.HellMaidenMigration.Editor.OvidSummonNativeGasMigration.Import",
+      "audience": "人工 / AI",
+      "impact": "导入或重建 summon 的玩法和表现资产；可能覆盖当前绑定和默认参数",
+      "output": "Logs/ProjectTools",
+      "condition": "edit",
+      "parameters": [
+        "Apply",
+        "Source"
+      ],
+      "writesAssets": true,
+      "maintenance": true,
+      "source": "Assets/_Project/Migration/HellMaiden/Editor/OvidSummonNativeGasMigration.cs",
+      "oldMenus": [
+        "Tools/HellMaiden Migration/Import Ovid Summon Native GAS Assets"
+      ],
+      "externalSource": true
+    },
+    {
+      "id": "validate.summon",
+      "name": "校验 召唤 资源",
+      "category": "校验",
+      "description": "校验当前已导入的 summon 配置与表现引用",
+      "method": "MonsterSupergroup.HellMaidenMigration.Editor.OvidSummonNativeGasMigration.ValidateImportedAssets",
+      "audience": "人工 / AI",
+      "impact": "只读；不修改玩法资产",
+      "output": "Logs/ProjectTools",
+      "condition": "edit",
+      "parameters": [],
+      "writesAssets": false,
+      "maintenance": false,
+      "source": "Assets/_Project/Migration/HellMaiden/Editor/OvidSummonNativeGasMigration.cs",
+      "oldMenus": [
+        "Tools/HellMaiden Migration/Validate Ovid Summon Native GAS Assets"
+      ]
+    },
+    {
+      "id": "preview.summon-shadow",
+      "name": "召唤物阴影证据",
+      "category": "表现预览",
+      "description": "采集召唤物阴影，不修改原始材质",
+      "method": "MonsterSupergroup.HellMaidenMigration.Editor.OvidSummonPresentationPreview.CaptureShadowEvidence",
+      "audience": "人工 / AI",
+      "impact": "只读；不修改玩法资产",
+      "output": "Logs/Phase02",
+      "condition": "",
+      "parameters": [],
+      "writesAssets": false,
+      "maintenance": false,
+      "source": "Assets/_Project/Migration/HellMaiden/Editor/OvidSummonPresentationPreview.cs",
+      "oldMenus": [
+        "Tools/HellMaiden Migration/Capture Ovid Summon Shadow Evidence"
+      ],
+      "graphics": true
+    },
+    {
+      "id": "preview.summon",
+      "name": "召唤 表现预览",
+      "category": "表现预览",
+      "description": "采集现有 summon 表现 PNG；仍需视觉核验",
+      "method": "MonsterSupergroup.HellMaidenMigration.Editor.OvidSummonPresentationPreview.Capture",
+      "audience": "人工 / AI",
+      "impact": "只读；不修改玩法资产",
+      "output": "Logs/Phase02",
+      "condition": "",
+      "parameters": [],
+      "writesAssets": false,
+      "maintenance": false,
+      "source": "Assets/_Project/Migration/HellMaiden/Editor/OvidSummonPresentationPreview.cs",
+      "oldMenus": [
+        "Tools/HellMaiden Migration/Capture Ovid Summon Presentation Preview"
+      ],
+      "graphics": true
+    },
+    {
+      "id": "rebuild.perks",
+      "name": "重建 perks",
+      "category": "维护与样例",
+      "description": "重设七种 Perk 的权重、依赖、稀有度参数及数据库",
+      "method": "MonsterSupergroup.HellMaidenMigration.Editor.PureWeaponPerkMigration.Rebuild",
+      "audience": "人工 / AI",
+      "impact": "重设七种 Perk 的权重、依赖、稀有度参数及数据库",
+      "output": "Logs/ProjectTools",
+      "condition": "edit",
+      "parameters": [
+        "Apply"
+      ],
+      "writesAssets": true,
+      "maintenance": true,
+      "source": "Assets/_Project/Migration/HellMaiden/Editor/PureWeaponPerkMigration.cs",
+      "oldMenus": [
+        "Tools/HellMaiden Migration/Rebuild Pure Weapon Perks"
+      ]
+    },
+    {
+      "id": "migrate.enemy-variants",
+      "name": "迁移普通怪物 Variant",
+      "category": "维护与样例",
+      "description": "迁移怪物 Prefab 继承关系、组件和场景注册",
+      "method": "MonsterSupergroup.NetworkCombat.Editor.EnemyPrefabVariantMigration.Migrate",
+      "audience": "人工 / AI",
+      "impact": "迁移怪物 Prefab 继承关系、组件和场景注册",
+      "output": "Logs/ProjectTools",
+      "condition": "edit",
+      "parameters": [
+        "Apply"
+      ],
+      "writesAssets": true,
+      "maintenance": true,
+      "source": "Assets/_Project/NetworkCombat/Editor/EnemyPrefabVariantMigration.cs",
+      "oldMenus": [
+        "Monster Supergroup/Network Combat/Migrate Enemy Prefab Variants"
+      ]
+    },
+    {
+      "id": "migrate.imp",
+      "name": "迁移 Imp Variant",
+      "category": "维护与样例",
+      "description": "导入 Imp 资源并更新网络怪物 Prefab 与场景注册",
+      "method": "MonsterSupergroup.NetworkCombat.Editor.EnemyPrefabVariantMigration.MigrateImp",
+      "audience": "人工 / AI",
+      "impact": "导入 Imp 资源并更新网络怪物 Prefab 与场景注册",
+      "output": "Logs/ProjectTools",
+      "condition": "edit",
+      "parameters": [
+        "Apply",
+        "Source"
+      ],
+      "writesAssets": true,
+      "maintenance": true,
+      "source": "Assets/_Project/NetworkCombat/Editor/EnemyPrefabVariantMigration.Imp.cs",
+      "oldMenus": [
+        "Monster Supergroup/Network Combat/Migrate Imp Variant"
+      ],
+      "externalSource": true
+    },
+    {
+      "id": "migrate.lust-sinner",
+      "name": "迁移 LustSinner Variant",
+      "category": "维护与样例",
+      "description": "导入 LustSinner 资源并更新网络怪物 Prefab 与场景注册",
+      "method": "MonsterSupergroup.NetworkCombat.Editor.EnemyPrefabVariantMigration.MigrateLustSinner",
+      "audience": "人工 / AI",
+      "impact": "导入 LustSinner 资源并更新网络怪物 Prefab 与场景注册",
+      "output": "Logs/ProjectTools",
+      "condition": "edit",
+      "parameters": [
+        "Apply",
+        "Source"
+      ],
+      "writesAssets": true,
+      "maintenance": true,
+      "source": "Assets/_Project/NetworkCombat/Editor/EnemyPrefabVariantMigration.LustSinner.cs",
+      "oldMenus": [
+        "Monster Supergroup/Network Combat/Migrate LustSinner Variant"
+      ],
+      "externalSource": true
+    },
+    {
+      "id": "create.localization-entries",
+      "name": "创建内容本地化条目",
+      "category": "制作",
+      "description": "绑定指定内容资产的名称与说明条目，不覆盖已有译文",
+      "method": "MonsterSupergroup.NetworkCombat.Editor.GameLocalizationAssets.CreateEntries",
+      "audience": "人工 / AI",
+      "impact": "绑定指定内容资产的名称与说明条目，不覆盖已有译文",
+      "output": "Logs/ProjectTools",
+      "condition": "edit",
+      "parameters": [
+        "AssetPath",
+        "Apply"
+      ],
+      "writesAssets": true,
+      "maintenance": false,
+      "source": "Assets/_Project/NetworkCombat/Editor/GameLocalizationAssets.cs",
+      "oldMenus": [
+        "MonsterSupergroup/Localization/Create entries for selected content"
+      ]
+    },
+    {
+      "id": "validate.localization",
+      "name": "校验本地化",
+      "category": "校验",
+      "description": "校验全部语言、内容参数、引用与字体",
+      "method": "MonsterSupergroup.NetworkCombat.Editor.GameLocalizationAssets.Validate",
+      "audience": "人工 / AI",
+      "impact": "只读；不修改玩法资产",
+      "output": "Logs/ProjectTools",
+      "condition": "edit",
+      "parameters": [],
+      "writesAssets": false,
+      "maintenance": false,
+      "source": "Assets/_Project/NetworkCombat/Editor/GameLocalizationAssets.cs",
+      "oldMenus": [
+        "MonsterSupergroup/Localization/Validate tables and content"
+      ]
+    },
+    {
+      "id": "export.localization-csv",
+      "name": "导出本地化 CSV",
+      "category": "制作",
+      "description": "从插件表格导出 CSV，写入 docs/localization",
+      "method": "MonsterSupergroup.NetworkCombat.Editor.GameLocalizationAssets.ExportCsv",
+      "audience": "人工 / AI",
+      "impact": "只读；不修改玩法资产",
+      "output": "Logs/ProjectTools",
+      "condition": "edit",
+      "parameters": [],
+      "writesAssets": false,
+      "maintenance": false,
+      "source": "Assets/_Project/NetworkCombat/Editor/GameLocalizationAssets.cs",
+      "oldMenus": [
+        "MonsterSupergroup/Localization/Export translation CSV"
+      ]
+    },
+    {
+      "id": "setup.experience-legacy",
+      "name": "M6 经验历史初始化",
+      "category": "维护与样例",
+      "description": "导入经验美术并覆盖经验曲线、XP 配置、HUD 和 Boot 场景",
+      "method": "MonsterSupergroup.NetworkCombat.Editor.GameplayExperienceSetup.Apply",
+      "audience": "人工 / AI",
+      "impact": "导入经验美术并覆盖经验曲线、XP 配置、HUD 和 Boot 场景",
+      "output": "Logs/ProjectTools",
+      "condition": "edit",
+      "parameters": [
+        "Apply",
+        "Source"
+      ],
+      "writesAssets": true,
+      "maintenance": true,
+      "source": "Assets/_Project/NetworkCombat/Editor/GameplayExperienceSetup.cs",
+      "oldMenus": [
+        "Tools/Network Combat/Apply M6 Experience Setup"
+      ],
+      "externalSource": true
+    },
+    {
+      "id": "diagnostic.backend-steam",
+      "name": "Editor 后端：Steam",
+      "category": "联机诊断",
+      "description": "设置本机 Editor 首选后端，仅影响下一次 Play Mode",
+      "method": "MonsterSupergroup.NetworkCombat.Editor.NetworkBackendEditorSettings.SelectSteam",
+      "audience": "人工 / AI",
+      "impact": "只读；不修改玩法资产",
+      "output": "Logs/ProjectTools",
+      "condition": "edit",
+      "parameters": [],
+      "writesAssets": false,
+      "maintenance": false,
+      "source": "Assets/_Project/NetworkCombat/Editor/NetworkBackendEditorSettings.cs",
+      "oldMenus": [
+        "Monster Supergroup/Network Combat/Editor Backend/Steam"
+      ],
+      "interactive": true
+    },
+    {
+      "id": "diagnostic.backend-kcp",
+      "name": "Editor 后端：KCP",
+      "category": "联机诊断",
+      "description": "设置本机 Editor 首选后端；日常验收优先游戏内本地联机入口",
+      "method": "MonsterSupergroup.NetworkCombat.Editor.NetworkBackendEditorSettings.SelectKcp",
+      "audience": "人工 / AI",
+      "impact": "只读；不修改玩法资产",
+      "output": "Logs/ProjectTools",
+      "condition": "edit",
+      "parameters": [],
+      "writesAssets": false,
+      "maintenance": false,
+      "source": "Assets/_Project/NetworkCombat/Editor/NetworkBackendEditorSettings.cs",
+      "oldMenus": [
+        "Monster Supergroup/Network Combat/Editor Backend/KCP Local"
+      ],
+      "interactive": true
+    },
+    {
+      "id": "diagnostic.steam",
+      "name": "Steam 状态诊断",
+      "category": "联机诊断",
+      "description": "输出当前 Steam 与邀请状态，不发送邀请",
+      "method": "MonsterSupergroup.NetworkCombat.Editor.NetworkBackendEditorSettings.LogInviteDiagnostics",
+      "audience": "人工 / AI",
+      "impact": "只读；不修改玩法资产",
+      "output": "Logs/ProjectTools",
+      "condition": "play",
+      "parameters": [],
+      "writesAssets": false,
+      "maintenance": false,
+      "source": "Assets/_Project/NetworkCombat/Editor/NetworkBackendEditorSettings.cs",
+      "oldMenus": [
+        "Monster Supergroup/Network Combat/Steam/Log Invite Diagnostics"
+      ],
+      "interactive": true
+    },
+    {
+      "id": "diagnostic.overlay",
+      "name": "Steam 叠加层诊断",
+      "category": "联机诊断",
+      "description": "只打开叠加层；不能据此判定大厅邀请成功",
+      "method": "MonsterSupergroup.NetworkCombat.Editor.NetworkBackendEditorSettings.OpenInviteDialog",
+      "audience": "人工 / AI",
+      "impact": "只读；不修改玩法资产",
+      "output": "Logs/ProjectTools",
+      "condition": "play",
+      "parameters": [],
+      "writesAssets": false,
+      "maintenance": false,
+      "source": "Assets/_Project/NetworkCombat/Editor/NetworkBackendEditorSettings.cs",
+      "oldMenus": [
+        "Monster Supergroup/Network Combat/Steam/Open Lobby Invite Dialog"
+      ],
+      "interactive": true
+    },
+    {
+      "id": "setup.boot",
+      "name": "初始化 Boot / Gameplay",
+      "category": "维护与样例",
+      "description": "历史初始化：创建缺失场景，可能迁移怪物及修复组件",
+      "method": "MonsterSupergroup.NetworkCombat.Editor.NetworkCombatSetupUtility.BuildBootGameplayAssets",
+      "audience": "人工 / AI",
+      "impact": "历史初始化：创建缺失场景，可能迁移怪物及修复组件",
+      "output": "Logs/ProjectTools",
+      "condition": "edit",
+      "parameters": [
+        "Apply"
+      ],
+      "writesAssets": true,
+      "maintenance": true,
+      "source": "Assets/_Project/NetworkCombat/Editor/NetworkCombatSetupUtility.cs",
+      "oldMenus": [
+        "Monster Supergroup/Network Combat/Configure Boot Gameplay Loop"
+      ]
+    },
+    {
+      "id": "setup.sandbox",
+      "name": "初始化网络 Sandbox",
+      "category": "维护与样例",
+      "description": "创建测试场景、玩家与怪物配置；不属于正式构建",
+      "method": "MonsterSupergroup.NetworkCombat.Editor.NetworkCombatSetupUtility.BuildSandboxAssets",
+      "audience": "人工 / AI",
+      "impact": "创建测试场景、玩家与怪物配置；不属于正式构建",
+      "output": "Logs/ProjectTools",
+      "condition": "edit",
+      "parameters": [
+        "Apply"
+      ],
+      "writesAssets": true,
+      "maintenance": true,
+      "source": "Assets/_Project/NetworkCombat/Editor/NetworkCombatSetupUtility.cs",
+      "oldMenus": [
+        "Monster Supergroup/Network Combat/Build Validation Sandbox"
+      ]
+    },
+    {
+      "id": "create.wave-timeline",
+      "name": "创建默认波次时间轴",
+      "category": "维护与样例",
+      "description": "创建缺失的波次时间轴，并在缺失时绑定波次规则",
+      "method": "MonsterSupergroup.NetworkCombat.Editor.NetworkWaveTimelineEditorUtility.EnsureDefault",
+      "audience": "人工 / AI",
+      "impact": "创建缺失的波次时间轴，并在缺失时绑定波次规则",
+      "output": "Logs/ProjectTools",
+      "condition": "edit",
+      "parameters": [
+        "Apply"
+      ],
+      "writesAssets": true,
+      "maintenance": true,
+      "source": "Assets/_Project/NetworkCombat/Editor/NetworkWaveTimelineEditorUtility.cs",
+      "oldMenus": [
+        "Monster Supergroup/Network Combat/Waves/Create Default Timeline"
+      ]
+    },
+    {
+      "id": "open.waves",
+      "name": "波次时间轴",
+      "category": "制作",
+      "description": "打开已提交的时间轴；缺失时明确失败",
+      "method": "MonsterSupergroup.NetworkCombat.Editor.NetworkWaveTimelineEditorUtility.Open",
+      "audience": "人工 / AI",
+      "impact": "只读；不修改玩法资产",
+      "output": "Logs/ProjectTools",
+      "condition": "edit",
+      "parameters": [],
+      "writesAssets": false,
+      "maintenance": false,
+      "source": "Assets/_Project/NetworkCombat/Editor/NetworkWaveTimelineEditorUtility.cs",
+      "oldMenus": [
+        "Monster Supergroup/Network Combat/Waves/Open Timeline"
+      ]
+    },
+    {
+      "id": "validate.waves",
+      "name": "校验波次并导出预览",
+      "category": "校验",
+      "description": "验证规则和注册怪物，输出波次 CSV 到 Logs/TimelineWaves",
+      "method": "MonsterSupergroup.NetworkCombat.Editor.NetworkWaveTimelineEditorUtility.ValidateConfigured",
+      "audience": "人工 / AI",
+      "impact": "只读；不修改玩法资产",
+      "output": "Logs/ProjectTools",
+      "condition": "edit",
+      "parameters": [],
+      "writesAssets": false,
+      "maintenance": false,
+      "source": "Assets/_Project/NetworkCombat/Editor/NetworkWaveTimelineEditorUtility.cs",
+      "oldMenus": [
+        "Monster Supergroup/Network Combat/Waves/Validate and Export Preview"
+      ]
+    },
+    {
+      "id": "repair.player-prefab",
+      "name": "修复玩家运行时 Prefab",
+      "category": "维护与样例",
+      "description": "修改 NetworkPlayer.prefab 的战斗、输入、Build 和网络组件绑定",
+      "method": "MonsterSupergroup.NetworkCombat.Editor.PlayerRuntimeCombatPrefabMigrator.Run",
+      "audience": "人工 / AI",
+      "impact": "修改 NetworkPlayer.prefab 的战斗、输入、Build 和网络组件绑定",
+      "output": "Logs/ProjectTools",
+      "condition": "edit",
+      "parameters": [
+        "Apply"
+      ],
+      "writesAssets": true,
+      "maintenance": true,
+      "source": "Assets/_Project/NetworkCombat/Editor/PlayerRuntimeCombatPrefabMigrator.cs",
+      "oldMenus": [
+        "Tools/Monster Supergroup/Repair Network Player Runtime Combat Prefab"
+      ]
+    },
+    {
+      "id": "create.preparation-catalog",
+      "name": "创建缺失的准备房间配置",
+      "category": "维护与样例",
+      "description": "仅在缺失时创建 Assets/Resources/PreparationMenuCatalog.asset",
+      "method": "MonsterSupergroup.NetworkCombat.Editor.PreparationMenuAssets.CreateCatalog",
+      "audience": "人工 / AI",
+      "impact": "仅在缺失时创建 Assets/Resources/PreparationMenuCatalog.asset",
+      "output": "Logs/ProjectTools",
+      "condition": "edit",
+      "parameters": [
+        "Apply"
+      ],
+      "writesAssets": true,
+      "maintenance": true,
+      "source": "Assets/_Project/NetworkCombat/Editor/PreparationMenuAssets.cs",
+      "oldMenus": [
+        "MonsterSupergroup/Menu/Create preparation catalog"
+      ]
+    },
+    {
+      "id": "diagnostic.enemy-handoff",
+      "name": "仇恨交接控制",
+      "category": "联机诊断",
+      "description": "在运行中的 Host 显式启用仇恨目标切换控制",
+      "method": "MonsterSupergroup.NetworkCombat.EnemyHandoffTestControls.ShowInEditor",
+      "audience": "人工 / AI",
+      "impact": "只读；不修改玩法资产",
+      "output": "Logs/ProjectTools",
+      "condition": "play-host",
+      "parameters": [],
+      "writesAssets": false,
+      "maintenance": false,
+      "source": "Assets/_Project/NetworkCombat/Mirror/EnemyHandoffTestControls.cs",
+      "oldMenus": [
+        "Tools/Network Combat/Show Handoff Test Controls"
+      ],
+      "interactive": true
+    },
+    {
+      "id": "sample.nordic-validate-imports",
+      "name": "校验 Nordic 资源",
+      "category": "维护与样例",
+      "description": "检查导入的 Nordic 美术、GUID 依赖与着色器",
+      "method": "MonsterSupergroup.NordicSample.Editor.NordicStaticSampleBuilder.ValidateImports",
+      "audience": "人工 / AI",
+      "impact": "只读；不修改玩法资产",
+      "output": "Logs/ProjectTools",
+      "condition": "edit",
+      "parameters": [],
+      "writesAssets": false,
+      "maintenance": true,
+      "source": "Assets/_Project/NordicSample/Editor/NordicStaticSampleBuilder.cs",
+      "oldMenus": [
+        "Tools/Nordic/1. Validate Imported Resources"
+      ]
+    },
+    {
+      "id": "sample.nordic-create",
+      "name": "创建 Nordic 样例场景",
+      "category": "维护与样例",
+      "description": "按已恢复的 Midgard 规则重建四屏乘四屏静态场景、固定碰撞边界和样板专用 Y 轴渲染器。",
+      "method": "MonsterSupergroup.NordicSample.Editor.NordicStaticSampleBuilder.BuildSample",
+      "audience": "人工 / AI",
+      "impact": "重建 NordicStaticSample 场景布局",
+      "output": "Logs/ProjectTools",
+      "condition": "edit",
+      "parameters": [
+        "Apply"
+      ],
+      "writesAssets": true,
+      "maintenance": true,
+      "source": "Assets/_Project/NordicSample/Editor/NordicStaticSampleBuilder.cs",
+      "oldMenus": [
+        "Tools/Nordic/2. Build Static Sample"
+      ]
+    },
+    {
+      "id": "sample.nordic-sorting",
+      "name": "更新 Nordic 排序",
+      "category": "维护与样例",
+      "description": "保留原规则布局，核验无旧排序编号并重新绑定样板专用 Y 轴渲染器；旧手工场景需先重建。",
+      "method": "MonsterSupergroup.NordicSample.Editor.NordicStaticSampleBuilder.RefreshSampleSorting",
+      "audience": "人工 / AI",
+      "impact": "保留布局，修改 Nordic 样例渲染排序",
+      "output": "Logs/ProjectTools",
+      "condition": "edit",
+      "parameters": [
+        "Apply"
+      ],
+      "writesAssets": true,
+      "maintenance": true,
+      "source": "Assets/_Project/NordicSample/Editor/NordicStaticSampleBuilder.cs",
+      "oldMenus": [
+        "Tools/Nordic/5. Refresh Sample Sorting (Keep Layout)"
+      ]
+    },
+    {
+      "id": "sample.nordic-validate",
+      "name": "校验 Nordic 场景",
+      "category": "维护与样例",
+      "description": "校验四屏地图尺寸、固定边界、Nordic 视觉依赖和样板相机。",
+      "method": "MonsterSupergroup.NordicSample.Editor.NordicStaticSampleBuilder.ValidateScene",
+      "audience": "人工 / AI",
+      "impact": "只读；不修改玩法资产",
+      "output": "Logs/ProjectTools",
+      "condition": "edit",
+      "parameters": [],
+      "writesAssets": false,
+      "maintenance": true,
+      "source": "Assets/_Project/NordicSample/Editor/NordicStaticSampleBuilder.cs",
+      "oldMenus": [
+        "Tools/Nordic/3. Validate Static Sample"
+      ]
+    },
+    {
+      "id": "open.preparation",
+      "name": "准备房间配置",
+      "category": "制作",
+      "description": "选中现有配置；不会创建默认资源",
+      "method": "",
+      "audience": "人工 / AI",
+      "impact": "只读；不修改玩法资产",
+      "output": "Logs/ProjectTools",
+      "condition": "edit",
+      "parameters": [],
+      "asset": "Assets/Resources/PreparationMenuCatalog.asset",
+      "interactive": true
+    },
+    {
+      "id": "open.localization",
+      "name": "本地化表格",
+      "category": "制作",
+      "description": "选中现有配置；不会创建默认资源",
+      "method": "",
+      "audience": "人工 / AI",
+      "impact": "只读；不修改玩法资产",
+      "output": "Logs/ProjectTools",
+      "condition": "edit",
+      "parameters": [],
+      "asset": "Assets/_Project/Localization/Tables/MonsterMenus.asset",
+      "interactive": true
+    },
+    {
+      "id": "validate.all",
+      "name": "全部正式资源",
+      "category": "校验",
+      "description": "依次校验 GAS、本地化、波次与怪物",
+      "method": "",
+      "audience": "人工 / AI",
+      "impact": "只读；不修改玩法资产",
+      "output": "Logs/ProjectTools",
+      "condition": "edit",
+      "parameters": []
+    },
+    {
+      "id": "validate.tools",
+      "name": "校验工具清单",
+      "category": "校验",
+      "description": "检查重复 ID、工具绑定、文档元数据和构建场景",
+      "method": "",
+      "audience": "人工 / AI",
+      "impact": "只读；不修改玩法资产",
+      "output": "Logs/ProjectTools",
+      "condition": "edit",
+      "parameters": []
+    },
+    {
+      "id": "validate.enemies",
+      "name": "校验怪物 Variant",
+      "category": "校验",
+      "description": "校验现有怪物继承与注册",
+      "method": "MonsterSupergroup.NetworkCombat.Editor.EnemyPrefabVariantMigration.Validate",
+      "audience": "人工 / AI",
+      "impact": "只读；不修改玩法资产",
+      "output": "Logs/ProjectTools",
+      "condition": "edit",
+      "parameters": []
+    },
+    {
+      "id": "build.player",
+      "name": "构建验收包",
+      "category": "构建与验收",
+      "description": "按配置校验并构建已提交资源；不执行导入或修复",
+      "method": "",
+      "audience": "人工 / AI",
+      "impact": "只读；不修改玩法资产",
+      "output": "配置中定义的 Builds 子目录",
+      "condition": "edit",
+      "parameters": [
+        "Profile",
+        "Output",
+        "ScriptsOnly"
+      ]
+    },
+    {
+      "id": "preview.attack",
+      "name": "武器表现预览",
+      "category": "表现预览",
+      "description": "选择 projectile、beam、circling、dash、melee 或 summon；大招使用 preview.ultimate",
+      "method": "",
+      "audience": "人工 / AI",
+      "impact": "只读；不修改玩法资产",
+      "output": "Logs/Phase02",
+      "condition": "",
+      "parameters": [
+        "Profile"
+      ],
+      "graphics": true
+    },
+    {
+      "id": "test.beam",
+      "name": "光束攻击验收",
+      "category": "自动验收",
+      "description": "光束武器的多进程攻击与命中。检查真实进程退出码与完成结果。",
+      "method": "",
+      "audience": "人工 / AI",
+      "impact": "只读；不修改玩法资产",
+      "output": "原场景日志目录及 Logs/ProjectTools",
+      "condition": "",
+      "parameters": [
+        "Executable",
+        "Dedicated",
+        "Port",
+        "LogDirectory"
+      ],
+      "script": "Tools/Run-BeamProcessValidation.ps1"
+    },
+    {
+      "id": "test.boot-process",
+      "name": "启动与战斗加载验收",
+      "category": "自动验收",
+      "description": "Boot 服务、Gameplay 加载及玩家绑定。检查真实进程退出码与完成结果。",
+      "method": "",
+      "audience": "人工 / AI",
+      "impact": "只读；不修改玩法资产",
+      "output": "原场景日志目录及 Logs/ProjectTools",
+      "condition": "",
+      "parameters": [
+        "Executable",
+        "Port",
+        "ProcessTimeoutSeconds"
+      ],
+      "script": "Tools/Run-BootGameplayProcessValidation.ps1"
+    },
+    {
+      "id": "test.circling",
+      "name": "环绕攻击验收",
+      "category": "自动验收",
+      "description": "环绕武器的多进程表现与命中。检查真实进程退出码与完成结果。",
+      "method": "",
+      "audience": "人工 / AI",
+      "impact": "只读；不修改玩法资产",
+      "output": "原场景日志目录及 Logs/ProjectTools",
+      "condition": "",
+      "parameters": [
+        "Executable",
+        "Dedicated",
+        "Port",
+        "LogDirectory"
+      ],
+      "script": "Tools/Run-CirclingProcessValidation.ps1"
+    },
+    {
+      "id": "test.combat-menu",
+      "name": "战斗 ESC 菜单验收",
+      "category": "自动验收",
+      "description": "菜单打开、输入阻隔、选卡恢复及退出；复用准备页测试。检查真实进程退出码与完成结果。",
+      "method": "",
+      "audience": "人工 / AI",
+      "impact": "只读；不修改玩法资产",
+      "output": "原场景日志目录及 Logs/ProjectTools",
+      "condition": "",
+      "parameters": [
+        "Executable",
+        "Scenario",
+        "Width",
+        "Height",
+        "Port",
+        "Visible"
+      ],
+      "script": "Tools/Run-CombatMenuValidation.ps1"
+    },
+    {
+      "id": "test.dash",
+      "name": "冲刺攻击验收",
+      "category": "自动验收",
+      "description": "冲刺武器、多进程执行及同步。检查真实进程退出码与完成结果。",
+      "method": "",
+      "audience": "人工 / AI",
+      "impact": "只读；不修改玩法资产",
+      "output": "原场景日志目录及 Logs/ProjectTools",
+      "condition": "",
+      "parameters": [
+        "Executable",
+        "Dedicated",
+        "Port",
+        "LogDirectory"
+      ],
+      "script": "Tools/Run-DashProcessValidation.ps1"
+    },
+    {
+      "id": "test.enemy-handoff",
+      "name": "怪物仇恨交接验收",
+      "category": "自动验收",
+      "description": "三进程权限交接、动作继承、异常恢复和高频压力；Profile 为 normal / impaired。检查真实进程退出码与完成结果。",
+      "method": "",
+      "audience": "人工 / AI",
+      "impact": "只读；不修改玩法资产",
+      "output": "原场景日志目录及 Logs/ProjectTools",
+      "condition": "",
+      "parameters": [
+        "Executable",
+        "Profile",
+        "Duration",
+        "SkeletonPrefab",
+        "Port"
+      ],
+      "script": "Tools/Run-EnemyHandoffValidation.ps1"
+    },
+    {
+      "id": "test.enemy-simulation",
+      "name": "怪物模拟验收",
+      "category": "自动验收",
+      "description": "普通怪模拟、权威写入及多进程同步。检查真实进程退出码与完成结果。",
+      "method": "",
+      "audience": "人工 / AI",
+      "impact": "只读；不修改玩法资产",
+      "output": "原场景日志目录及 Logs/ProjectTools",
+      "condition": "",
+      "parameters": [
+        "Executable",
+        "Port",
+        "ProcessTimeoutSeconds"
+      ],
+      "script": "Tools/Run-EnemySimulationProcessValidation.ps1"
+    },
+    {
+      "id": "test.experience",
+      "name": "经验与升级验收",
+      "category": "自动验收",
+      "description": "经验拾取、等级进度及多进程同步。检查真实进程退出码与完成结果。",
+      "method": "",
+      "audience": "人工 / AI",
+      "impact": "只读；不修改玩法资产",
+      "output": "原场景日志目录及 Logs/ProjectTools",
+      "condition": "",
+      "parameters": [
+        "Executable",
+        "Dedicated",
+        "Simulation",
+        "CaptureFrames",
+        "VisibleWindows",
+        "Port"
+      ],
+      "script": "Tools/Run-ExperienceProcessValidation.ps1"
+    },
+    {
+      "id": "test.camera",
+      "name": "战斗相机验收",
+      "category": "自动验收",
+      "description": "本地拥有角色绑定与相机跟随。检查真实进程退出码与完成结果。",
+      "method": "",
+      "audience": "人工 / AI",
+      "impact": "只读；不修改玩法资产",
+      "output": "原场景日志目录及 Logs/ProjectTools",
+      "condition": "",
+      "parameters": [
+        "Executable",
+        "CaptureFrames",
+        "VisibleWindows",
+        "ForceD3D11"
+      ],
+      "script": "Tools/Run-GameplayCameraProcessValidation.ps1"
+    },
+    {
+      "id": "test.health-hud",
+      "name": "生命 HUD验收",
+      "category": "自动验收",
+      "description": "生命显示、角色绑定及网络更新。检查真实进程退出码与完成结果。",
+      "method": "",
+      "audience": "人工 / AI",
+      "impact": "只读；不修改玩法资产",
+      "output": "原场景日志目录及 Logs/ProjectTools",
+      "condition": "",
+      "parameters": [
+        "Executable"
+      ],
+      "script": "Tools/Run-HealthHUDProcessValidation.ps1"
+    },
+    {
+      "id": "test.imp",
+      "name": "小恶魔投射物验收",
+      "category": "自动验收",
+      "description": "Imp 投射物、表现及命中。检查真实进程退出码与完成结果。",
+      "method": "",
+      "audience": "人工 / AI",
+      "impact": "只读；不修改玩法资产",
+      "output": "原场景日志目录及 Logs/ProjectTools",
+      "condition": "",
+      "parameters": [
+        "Executable",
+        "Dedicated",
+        "Impaired",
+        "Graphics",
+        "Port"
+      ],
+      "script": "Tools/Run-ImpProjectileValidation.ps1"
+    },
+    {
+      "id": "test.localization",
+      "name": "本地化与选项验收",
+      "category": "自动验收",
+      "description": "Unity PlayMode 中的翻译、语言选项及卡片刷新，并校验正式表格。检查真实进程退出码与完成结果。",
+      "method": "",
+      "audience": "人工 / AI",
+      "impact": "只读；不修改玩法资产",
+      "output": "原场景日志目录及 Logs/ProjectTools",
+      "condition": "",
+      "parameters": [
+        "Unity",
+        "BuildPlayers",
+        "Network"
+      ],
+      "script": "Tools/Run-LocalizationValidation.ps1"
+    },
+    {
+      "id": "test.local-room",
+      "name": "本机 KCP 房间验收",
+      "category": "自动验收",
+      "description": "真实首页建房与加入 UI；Profile 支持 party / solo / errors / admission / release。检查真实进程退出码与完成结果。",
+      "method": "",
+      "audience": "人工 / AI",
+      "impact": "只读；不修改玩法资产",
+      "output": "原场景日志目录及 Logs/ProjectTools",
+      "condition": "",
+      "parameters": [
+        "Executable",
+        "Scenario",
+        "Width",
+        "Height",
+        "Port",
+        "Visible",
+        "Headless"
+      ],
+      "script": "Tools/Run-LocalRoomValidation.ps1"
+    },
+    {
+      "id": "test.melee",
+      "name": "近战攻击验收",
+      "category": "自动验收",
+      "description": "近战武器的多进程攻击与命中。检查真实进程退出码与完成结果。",
+      "method": "",
+      "audience": "人工 / AI",
+      "impact": "只读；不修改玩法资产",
+      "output": "原场景日志目录及 Logs/ProjectTools",
+      "condition": "",
+      "parameters": [
+        "Executable",
+        "Dedicated",
+        "Port",
+        "LogDirectory"
+      ],
+      "script": "Tools/Run-MeleeProcessValidation.ps1"
+    },
+    {
+      "id": "test.modifier-selection",
+      "name": "联网选卡验收",
+      "category": "自动验收",
+      "description": "奖励队列、选项请求和装备目标选择。检查真实进程退出码与完成结果。",
+      "method": "",
+      "audience": "人工 / AI",
+      "impact": "只读；不修改玩法资产",
+      "output": "原场景日志目录及 Logs/ProjectTools",
+      "condition": "",
+      "parameters": [
+        "Executable",
+        "Keyboard"
+      ],
+      "script": "Tools/Run-ModifierSelectionProcessValidation.ps1"
+    },
+    {
+      "id": "test.nordic",
+      "name": "Nordic 场景验收",
+      "category": "自动验收",
+      "description": "独立样例的场景加载、渲染及静态资源。检查真实进程退出码与完成结果。",
+      "method": "",
+      "audience": "人工 / AI",
+      "impact": "只读；不修改玩法资产",
+      "output": "原场景日志目录及 Logs/ProjectTools",
+      "condition": "",
+      "parameters": [
+        "Executable",
+        "OutputDirectory"
+      ],
+      "script": "Tools/Run-NordicStaticSampleValidation.ps1"
+    },
+    {
+      "id": "test.options",
+      "name": "游戏选项验收",
+      "category": "自动验收",
+      "description": "音量、画面、语言设置与输入交互。检查真实进程退出码与完成结果。",
+      "method": "",
+      "audience": "人工 / AI",
+      "impact": "只读；不修改玩法资产",
+      "output": "原场景日志目录及 Logs/ProjectTools",
+      "condition": "",
+      "parameters": [
+        "Executable",
+        "Artifacts"
+      ],
+      "script": "Tools/Run-OptionsValidation.ps1"
+    },
+    {
+      "id": "test.knockback",
+      "name": "普通怪击退验收",
+      "category": "自动验收",
+      "description": "击退轨迹、剩余时间及网络继承。检查真实进程退出码与完成结果。",
+      "method": "",
+      "audience": "人工 / AI",
+      "impact": "只读；不修改玩法资产",
+      "output": "原场景日志目录及 Logs/ProjectTools",
+      "condition": "",
+      "parameters": [
+        "Executable",
+        "EnemyPrefab",
+        "Dedicated",
+        "ImpairedNetwork",
+        "CaptureFrames",
+        "ValidateHitFlash",
+        "ValidateDamageNumbers",
+        "VisibleWindows",
+        "ForceD3D11",
+        "ForceGfxDirect",
+        "IsolateTemporaryCache",
+        "PsoCacheSeed",
+        "Port"
+      ],
+      "script": "Tools/Run-OrdinaryKnockbackProcessValidation.ps1"
+    },
+    {
+      "id": "test.player-debug",
+      "name": "玩家状态面板验收",
+      "category": "自动验收",
+      "description": "Host 全员与客户端自己状态的展示及只读采集。检查真实进程退出码与完成结果。",
+      "method": "",
+      "audience": "人工 / AI",
+      "impact": "只读；不修改玩法资产",
+      "output": "原场景日志目录及 Logs/ProjectTools",
+      "condition": "",
+      "parameters": [
+        "Executable",
+        "Width",
+        "Height",
+        "Port",
+        "Headless"
+      ],
+      "script": "Tools/Run-PlayerDebugProcessValidation.ps1"
+    },
+    {
+      "id": "test.preparation-menu",
+      "name": "准备房间与开局验收",
+      "category": "自动验收",
+      "description": "四席位、邀请适配、本机房间、ESC 和换局的组合流程；保留原有独立场景断言。检查真实进程退出码与完成结果。",
+      "method": "",
+      "audience": "人工 / AI",
+      "impact": "只读；不修改玩法资产",
+      "output": "原场景日志目录及 Logs/ProjectTools",
+      "condition": "",
+      "parameters": [
+        "Executable",
+        "Profile",
+        "Width",
+        "Height",
+        "Port",
+        "Headless",
+        "MixedLanguages",
+        "Language",
+        "Visible"
+      ],
+      "script": "Tools/Run-PreparationMenuValidation.ps1"
+    },
+    {
+      "id": "test.run-end",
+      "name": "全员倒地与换局验收",
+      "category": "自动验收",
+      "description": "战败、回大厅、连续重开和队伍身份保留；复用准备页测试。检查真实进程退出码与完成结果。",
+      "method": "",
+      "audience": "人工 / AI",
+      "impact": "只读；不修改玩法资产",
+      "output": "原场景日志目录及 Logs/ProjectTools",
+      "condition": "",
+      "parameters": [
+        "Executable",
+        "Scenario",
+        "Width",
+        "Height",
+        "Port",
+        "Visible",
+        "profile"
+      ],
+      "script": "Tools/Run-RunEndValidation.ps1"
+    },
+    {
+      "id": "test.runtime-boundary",
+      "name": "战斗运行边界验收",
+      "category": "自动验收",
+      "description": "拥有端与服务端战斗执行边界。检查真实进程退出码与完成结果。",
+      "method": "",
+      "audience": "人工 / AI",
+      "impact": "只读；不修改玩法资产",
+      "output": "原场景日志目录及 Logs/ProjectTools",
+      "condition": "",
+      "parameters": [
+        "Executable",
+        "Dedicated",
+        "Port",
+        "LogDirectory"
+      ],
+      "script": "Tools/Run-RuntimeBoundaryProcessValidation.ps1"
+    },
+    {
+      "id": "test.summon",
+      "name": "召唤攻击验收",
+      "category": "自动验收",
+      "description": "召唤武器、召唤物及多进程同步。检查真实进程退出码与完成结果。",
+      "method": "",
+      "audience": "人工 / AI",
+      "impact": "只读；不修改玩法资产",
+      "output": "原场景日志目录及 Logs/ProjectTools",
+      "condition": "",
+      "parameters": [
+        "Executable",
+        "Dedicated",
+        "Port",
+        "LogDirectory"
+      ],
+      "script": "Tools/Run-SummonProcessValidation.ps1"
+    },
+    {
+      "id": "test.timeline-waves",
+      "name": "时间轴刷怪验收",
+      "category": "自动验收",
+      "description": "波次时间轴调度与怪物生成。检查真实进程退出码与完成结果。",
+      "method": "",
+      "audience": "人工 / AI",
+      "impact": "只读；不修改玩法资产",
+      "output": "原场景日志目录及 Logs/ProjectTools",
+      "condition": "",
+      "parameters": [
+        "Executable",
+        "Dedicated",
+        "Impaired",
+        "Port"
+      ],
+      "script": "Tools/Run-TimelineWaveValidation.ps1"
+    },
+    {
+      "id": "test.ultimate",
+      "name": "大招验收",
+      "category": "自动验收",
+      "description": "充能、执行、生效与表现同步。检查真实进程退出码与完成结果。",
+      "method": "",
+      "audience": "人工 / AI",
+      "impact": "只读；不修改玩法资产",
+      "output": "原场景日志目录及 Logs/ProjectTools",
+      "condition": "",
+      "parameters": [
+        "Executable",
+        "Dedicated",
+        "Port",
+        "LogDirectory"
+      ],
+      "script": "Tools/Run-UltimateProcessValidation.ps1"
+    },
+    {
+      "id": "test.upgrade-selection",
+      "name": "升级选卡验收",
+      "category": "自动验收",
+      "description": "经验跨级、奖励选择与 Build 更新。检查真实进程退出码与完成结果。",
+      "method": "",
+      "audience": "人工 / AI",
+      "impact": "只读；不修改玩法资产",
+      "output": "原场景日志目录及 Logs/ProjectTools",
+      "condition": "",
+      "parameters": [
+        "Executable",
+        "Dedicated",
+        "CaptureFrames",
+        "VisibleWindows",
+        "ForceD3D11",
+        "IsolateTemporaryCache",
+        "PsoCacheSeed",
+        "Port"
+      ],
+      "script": "Tools/Run-UpgradeSelectionProcessValidation.ps1"
+    },
+    {
+      "id": "test.waves",
+      "name": "波次验收",
+      "category": "自动验收",
+      "description": "波次调度、计时及网络生成。检查真实进程退出码与完成结果。",
+      "method": "",
+      "audience": "人工 / AI",
+      "impact": "只读；不修改玩法资产",
+      "output": "原场景日志目录及 Logs/ProjectTools",
+      "condition": "",
+      "parameters": [
+        "Executable",
+        "Dedicated",
+        "Simulation",
+        "SelectionBeforeRun",
+        "CaptureFrames",
+        "VisibleWindows",
+        "Port"
+      ],
+      "script": "Tools/Run-WaveProcessValidation.ps1"
+    },
+    {
+      "id": "test.wisp",
+      "name": "幽灵投射物验收",
+      "category": "自动验收",
+      "description": "Wisp 投射物表现及构建场景探针。检查真实进程退出码与完成结果。",
+      "method": "",
+      "audience": "人工 / AI",
+      "impact": "只读；不修改玩法资产",
+      "output": "原场景日志目录及 Logs/ProjectTools",
+      "condition": "",
+      "parameters": [
+        "Executable",
+        "Dedicated",
+        "Port",
+        "LogDirectory"
+      ],
+      "script": "Tools/Run-WispProcessValidation.ps1"
+    },
+    {
+      "id": "test.editor-tools",
+      "name": "编辑器工具验收",
+      "category": "自动验收",
+      "description": "运行入口约束、维护权限、缺失资源、构建场景和只读本地化测试",
+      "audience": "人工 / AI",
+      "impact": "只读测试，不生成正式资源",
+      "output": "Logs/ProjectTools/Tests",
+      "condition": "edit",
+      "parameters": [
+        "Unity"
+      ],
+      "script": "Tools/Scenarios/Test-EditorTools.ps1"
+    },
+    {
+      "id": "validate.waves-and-enemies",
+      "name": "校验波次与怪物",
+      "category": "校验",
+      "description": "依次校验波次规则和怪物；任一失败则整体失败",
+      "audience": "人工 / AI",
+      "impact": "只读；输出诊断报告",
+      "output": "Logs/TimelineWaves、Logs/ProjectTools",
+      "condition": "edit",
+      "parameters": []
+    },
+    {
+      "id": "migrate.nordic-gameplay",
+      "name": "接入 Nordic 正式地图",
+      "category": "维护与样例",
+      "description": "正式 Gameplay 的地图、导航、Axeldor 与镜头适配。",
+      "method": "MonsterSupergroup.NetworkCombat.Editor.NordicGameplayMigration.Run",
+      "audience": "人工 / AI",
+      "impact": "迁移 Gameplay 场景及 NetworkPlayer；保留玩法配置",
+      "output": "Logs/ProjectTools",
+      "condition": "edit",
+      "parameters": [
+        "Apply"
+      ],
+      "writesAssets": true,
+      "maintenance": true,
+      "source": "Assets/_Project/NetworkCombat/Editor/NordicGameplayMigration.cs",
+      "oldMenus": []
+    },
+    {
+      "id": "validate.nordic-gameplay",
+      "name": "校验 Nordic 正式地图",
+      "category": "维护与样例",
+      "description": "正式 Gameplay 的地图、导航、Axeldor 与镜头适配。",
+      "method": "MonsterSupergroup.NetworkCombat.Editor.NordicGameplayMigration.Validate",
+      "audience": "人工 / AI",
+      "impact": "只读校验正式场景",
+      "output": "Logs/ProjectTools",
+      "condition": "edit",
+      "parameters": [],
+      "writesAssets": false,
+      "maintenance": true,
+      "source": "Assets/_Project/NetworkCombat/Editor/NordicGameplayMigration.cs",
+      "oldMenus": []
+    },
+    {
+      "id": "test.nordic-gameplay",
+      "name": "Nordic 正式玩法验收",
+      "category": "自动验收",
+      "description": "正式地图、人物、镜头、冲刺与边界验收；FullSuite 追加多人、专服、六波次、敌人交接、升级和换局回归。",
+      "method": "",
+      "audience": "人工 / AI",
+      "impact": "只读；不修改玩法资产",
+      "output": "原场景日志目录及 Logs/ProjectTools",
+      "condition": "",
+      "parameters": [
+        "Executable",
+        "OutputDirectory",
+        "FullSuite",
+        "FullPerformance"
+      ],
+      "script": "Tools/Run-NordicGameplayValidation.ps1"
+    }
+  ],
+  "builds": [
+    {
+      "id": "menu-development",
+      "name": "menu-development",
+      "output": "Builds/MenuDevelopment/MonsterSupergroup.exe",
+      "defines": [
+        "MONSTER_MENU_VALIDATION"
+      ],
+      "development": true,
+      "testAssemblies": true,
+      "scenes": [
+        "Assets/_Project/Scenes/Boot.unity",
+        "Assets/_Project/Scenes/MainMenu.unity",
+        "Assets/_Project/Scenes/Gameplay.unity"
+      ],
+      "validations": [
+        "validate.all"
+      ]
+    },
+    {
+      "id": "menu-release",
+      "name": "menu-release",
+      "output": "Builds/MenuRelease/MonsterSupergroup.exe",
+      "defines": [
+        "MONSTER_MENU_VALIDATION"
+      ],
+      "development": false,
+      "testAssemblies": true,
+      "scenes": [
+        "Assets/_Project/Scenes/Boot.unity",
+        "Assets/_Project/Scenes/MainMenu.unity",
+        "Assets/_Project/Scenes/Gameplay.unity"
+      ],
+      "validations": [
+        "validate.all"
+      ]
+    },
+    {
+      "id": "kcp-development",
+      "name": "kcp-development",
+      "output": "Builds/KcpDevelopment/MonsterSupergroupKcp.exe",
+      "defines": [
+        "MONSTER_KCP_DEVELOPMENT_BUILD"
+      ],
+      "development": true,
+      "testAssemblies": false,
+      "scenes": [
+        "Assets/_Project/Scenes/Boot.unity",
+        "Assets/_Project/Scenes/MainMenu.unity",
+        "Assets/_Project/Scenes/Gameplay.unity"
+      ],
+      "validations": [
+        "validate.all"
+      ]
+    },
+    {
+      "id": "boot-process",
+      "name": "boot-process",
+      "output": "Builds/BootGameplayValidation/MonsterSupergroupBootGameplayValidation.exe",
+      "defines": [],
+      "development": true,
+      "testAssemblies": false,
+      "scenes": [
+        "Assets/_Project/Scenes/Boot.unity",
+        "Assets/_Project/Scenes/MainMenu.unity",
+        "Assets/_Project/Scenes/Gameplay.unity"
+      ],
+      "validations": [
+        "validate.all"
+      ]
+    },
+    {
+      "id": "sandbox",
+      "name": "sandbox",
+      "output": "Builds/EnemySimulationValidation/MonsterSupergroupEnemySimulationValidation.exe",
+      "defines": [],
+      "development": true,
+      "testAssemblies": false,
+      "scenes": [
+        "Assets/_Project/Scenes/Development/NetworkCombatSandbox.unity"
+      ],
+      "validations": [
+        "validate.gas"
+      ]
+    },
+    {
+      "id": "nordic",
+      "name": "nordic",
+      "output": "Builds/NordicStaticSample/NordicStaticSample.exe",
+      "defines": [],
+      "development": true,
+      "testAssemblies": false,
+      "scenes": [
+        "Assets/_Project/Scenes/NordicStaticSample.unity"
+      ],
+      "validations": [
+        "sample.nordic-validate"
+      ]
+    },
+    {
+      "id": "enemy-variants",
+      "name": "enemy-variants",
+      "output": "Builds/EnemyVariants/EnemyVariants.exe",
+      "defines": [
+        "MONSTER_KCP_DEVELOPMENT_BUILD",
+        "MONSTER_MENU_VALIDATION"
+      ],
+      "development": true,
+      "testAssemblies": true,
+      "scenes": [
+        "Assets/_Project/Scenes/Boot.unity",
+        "Assets/_Project/Scenes/MainMenu.unity",
+        "Assets/_Project/Scenes/Gameplay.unity"
+      ],
+      "validations": [
+        "validate.all"
+      ]
+    },
+    {
+      "id": "imp",
+      "name": "imp",
+      "output": "Builds/Imp/Imp.exe",
+      "defines": [
+        "MONSTER_KCP_DEVELOPMENT_BUILD",
+        "MONSTER_MENU_VALIDATION"
+      ],
+      "development": true,
+      "testAssemblies": true,
+      "scenes": [
+        "Assets/_Project/Scenes/Boot.unity",
+        "Assets/_Project/Scenes/MainMenu.unity",
+        "Assets/_Project/Scenes/Gameplay.unity"
+      ],
+      "validations": [
+        "validate.all"
+      ]
+    },
+    {
+      "id": "lust-sinner",
+      "name": "lust-sinner",
+      "output": "Builds/LustSinner/LustSinner.exe",
+      "defines": [
+        "MONSTER_KCP_DEVELOPMENT_BUILD",
+        "MONSTER_MENU_VALIDATION"
+      ],
+      "development": true,
+      "testAssemblies": true,
+      "scenes": [
+        "Assets/_Project/Scenes/Boot.unity",
+        "Assets/_Project/Scenes/MainMenu.unity",
+        "Assets/_Project/Scenes/Gameplay.unity"
+      ],
+      "validations": [
+        "validate.all"
+      ]
+    },
+    {
+      "id": "enemy-hit-flash",
+      "name": "enemy-hit-flash",
+      "output": "Builds/EnemyHitFlash/EnemyHitFlash.exe",
+      "defines": [
+        "MONSTER_KCP_DEVELOPMENT_BUILD",
+        "MONSTER_MENU_VALIDATION"
+      ],
+      "development": true,
+      "testAssemblies": true,
+      "scenes": [
+        "Assets/_Project/Scenes/Boot.unity",
+        "Assets/_Project/Scenes/MainMenu.unity",
+        "Assets/_Project/Scenes/Gameplay.unity"
+      ],
+      "validations": [
+        "validate.all"
+      ]
+    },
+    {
+      "id": "camera",
+      "name": "camera",
+      "output": "Builds/GameplayCameraValidation/GameplayCameraValidation.exe",
+      "defines": [
+        "MONSTER_KCP_DEVELOPMENT_BUILD",
+        "MONSTER_MENU_VALIDATION"
+      ],
+      "development": true,
+      "testAssemblies": true,
+      "scenes": [
+        "Assets/_Project/Scenes/Boot.unity",
+        "Assets/_Project/Scenes/MainMenu.unity",
+        "Assets/_Project/Scenes/Gameplay.unity"
+      ],
+      "validations": [
+        "validate.all"
+      ]
+    },
+    {
+      "id": "experience",
+      "name": "experience",
+      "output": "Builds/M6Experience/M6Experience.exe",
+      "defines": [
+        "MONSTER_KCP_DEVELOPMENT_BUILD",
+        "MONSTER_MENU_VALIDATION"
+      ],
+      "development": true,
+      "testAssemblies": true,
+      "scenes": [
+        "Assets/_Project/Scenes/Boot.unity",
+        "Assets/_Project/Scenes/MainMenu.unity",
+        "Assets/_Project/Scenes/Gameplay.unity"
+      ],
+      "validations": [
+        "validate.all"
+      ]
+    },
+    {
+      "id": "waves",
+      "name": "waves",
+      "output": "Builds/M5Waves/M5Waves.exe",
+      "defines": [
+        "MONSTER_KCP_DEVELOPMENT_BUILD",
+        "MONSTER_MENU_VALIDATION"
+      ],
+      "development": true,
+      "testAssemblies": true,
+      "scenes": [
+        "Assets/_Project/Scenes/Boot.unity",
+        "Assets/_Project/Scenes/MainMenu.unity",
+        "Assets/_Project/Scenes/Gameplay.unity"
+      ],
+      "validations": [
+        "validate.all"
+      ]
+    },
+    {
+      "id": "health-hud",
+      "name": "health-hud",
+      "output": "Builds/HealthHUDValidation/HealthHUDValidation.exe",
+      "defines": [
+        "MONSTER_KCP_DEVELOPMENT_BUILD",
+        "MONSTER_MENU_VALIDATION"
+      ],
+      "development": true,
+      "testAssemblies": true,
+      "scenes": [
+        "Assets/_Project/Scenes/Boot.unity",
+        "Assets/_Project/Scenes/MainMenu.unity",
+        "Assets/_Project/Scenes/Gameplay.unity"
+      ],
+      "validations": [
+        "validate.all"
+      ]
+    },
+    {
+      "id": "modifier-selection",
+      "name": "modifier-selection",
+      "output": "Builds/ModifierSelectionValidation/ModifierSelectionValidation.exe",
+      "defines": [
+        "MONSTER_KCP_DEVELOPMENT_BUILD",
+        "MONSTER_MENU_VALIDATION"
+      ],
+      "development": true,
+      "testAssemblies": true,
+      "scenes": [
+        "Assets/_Project/Scenes/Boot.unity",
+        "Assets/_Project/Scenes/MainMenu.unity",
+        "Assets/_Project/Scenes/Gameplay.unity"
+      ],
+      "validations": [
+        "validate.all"
+      ]
+    },
+    {
+      "id": "knockback",
+      "name": "knockback",
+      "output": "Builds/M3Knockback/M3Knockback.exe",
+      "defines": [
+        "MONSTER_KCP_DEVELOPMENT_BUILD",
+        "MONSTER_MENU_VALIDATION"
+      ],
+      "development": true,
+      "testAssemblies": true,
+      "scenes": [
+        "Assets/_Project/Scenes/Boot.unity",
+        "Assets/_Project/Scenes/MainMenu.unity",
+        "Assets/_Project/Scenes/Gameplay.unity"
+      ],
+      "validations": [
+        "validate.all"
+      ]
+    },
+    {
+      "id": "timeline-waves",
+      "name": "timeline-waves",
+      "output": "Builds/TimelineWaves/TimelineWaves.exe",
+      "defines": [
+        "MONSTER_KCP_DEVELOPMENT_BUILD",
+        "MONSTER_MENU_VALIDATION"
+      ],
+      "development": true,
+      "testAssemblies": true,
+      "scenes": [
+        "Assets/_Project/Scenes/Boot.unity",
+        "Assets/_Project/Scenes/MainMenu.unity",
+        "Assets/_Project/Scenes/Gameplay.unity"
+      ],
+      "validations": [
+        "validate.all"
+      ]
+    },
+    {
+      "id": "wisp",
+      "name": "wisp",
+      "output": "Builds/WispValidation/MonsterSupergroup.exe",
+      "defines": [
+        "MONSTER_KCP_DEVELOPMENT_BUILD",
+        "MONSTER_MENU_VALIDATION"
+      ],
+      "development": true,
+      "testAssemblies": true,
+      "scenes": [
+        "Assets/_Project/Scenes/Boot.unity",
+        "Assets/_Project/Scenes/MainMenu.unity",
+        "Assets/_Project/Scenes/Gameplay.unity"
+      ],
+      "validations": [
+        "validate.all"
+      ]
+    },
+    {
+      "id": "options",
+      "name": "options",
+      "output": "Builds/OptionsValidation/MonsterSupergroup.exe",
+      "defines": [
+        "MONSTER_KCP_DEVELOPMENT_BUILD",
+        "MONSTER_MENU_VALIDATION",
+        "MONSTER_OPTIONS_VALIDATION"
+      ],
+      "development": true,
+      "testAssemblies": true,
+      "scenes": [
+        "Assets/_Project/Scenes/Boot.unity",
+        "Assets/_Project/Scenes/MainMenu.unity",
+        "Assets/_Project/Scenes/Gameplay.unity"
+      ],
+      "validations": [
+        "validate.all"
+      ]
+    },
+    {
+      "id": "enemy-handoff-development",
+      "name": "enemy-handoff-development",
+      "output": "Builds/EnemyHandoff/EnemyHandoff.exe",
+      "defines": [
+        "MONSTER_KCP_DEVELOPMENT_BUILD",
+        "MONSTER_MENU_VALIDATION",
+        "MONSTER_ENEMY_HANDOFF_VALIDATION"
+      ],
+      "development": true,
+      "testAssemblies": true,
+      "scenes": [
+        "Assets/_Project/Scenes/Boot.unity",
+        "Assets/_Project/Scenes/MainMenu.unity",
+        "Assets/_Project/Scenes/Gameplay.unity"
+      ],
+      "validations": [
+        "validate.all"
+      ]
+    },
+    {
+      "id": "player-debug-development",
+      "name": "player-debug-development",
+      "output": "Builds/PlayerDebugDevelopment/PlayerDebug.exe",
+      "defines": [
+        "MONSTER_KCP_DEVELOPMENT_BUILD",
+        "MONSTER_MENU_VALIDATION"
+      ],
+      "development": true,
+      "testAssemblies": true,
+      "scenes": [
+        "Assets/_Project/Scenes/Boot.unity",
+        "Assets/_Project/Scenes/MainMenu.unity",
+        "Assets/_Project/Scenes/Gameplay.unity"
+      ],
+      "validations": [
+        "validate.all"
+      ]
+    },
+    {
+      "id": "rewired-development",
+      "name": "rewired-development",
+      "output": "Builds/RewiredAbilities/Development/RewiredAbilities.exe",
+      "defines": [
+        "MONSTER_KCP_DEVELOPMENT_BUILD",
+        "MONSTER_MENU_VALIDATION"
+      ],
+      "development": true,
+      "testAssemblies": true,
+      "scenes": [
+        "Assets/_Project/Scenes/Boot.unity",
+        "Assets/_Project/Scenes/MainMenu.unity",
+        "Assets/_Project/Scenes/Gameplay.unity"
+      ],
+      "validations": [
+        "validate.all"
+      ]
+    },
+    {
+      "id": "enemy-handoff-release",
+      "name": "enemy-handoff-release",
+      "output": "Builds/EnemyHandoffRelease/EnemyHandoff.exe",
+      "defines": [
+        "MONSTER_KCP_DEVELOPMENT_BUILD",
+        "MONSTER_MENU_VALIDATION",
+        "MONSTER_ENEMY_HANDOFF_VALIDATION"
+      ],
+      "development": false,
+      "testAssemblies": true,
+      "scenes": [
+        "Assets/_Project/Scenes/Boot.unity",
+        "Assets/_Project/Scenes/MainMenu.unity",
+        "Assets/_Project/Scenes/Gameplay.unity"
+      ],
+      "validations": [
+        "validate.all"
+      ]
+    },
+    {
+      "id": "player-debug-release",
+      "name": "player-debug-release",
+      "output": "Builds/PlayerDebugRelease/PlayerDebug.exe",
+      "defines": [
+        "MONSTER_KCP_DEVELOPMENT_BUILD",
+        "MONSTER_MENU_VALIDATION"
+      ],
+      "development": false,
+      "testAssemblies": true,
+      "scenes": [
+        "Assets/_Project/Scenes/Boot.unity",
+        "Assets/_Project/Scenes/MainMenu.unity",
+        "Assets/_Project/Scenes/Gameplay.unity"
+      ],
+      "validations": [
+        "validate.all"
+      ]
+    },
+    {
+      "id": "rewired-release",
+      "name": "rewired-release",
+      "output": "Builds/RewiredAbilities/Release/RewiredAbilities.exe",
+      "defines": [
+        "MONSTER_KCP_DEVELOPMENT_BUILD",
+        "MONSTER_MENU_VALIDATION"
+      ],
+      "development": false,
+      "testAssemblies": true,
+      "scenes": [
+        "Assets/_Project/Scenes/Boot.unity",
+        "Assets/_Project/Scenes/MainMenu.unity",
+        "Assets/_Project/Scenes/Gameplay.unity"
+      ],
+      "validations": [
+        "validate.all"
+      ]
+    },
+    {
+      "id": "beam",
+      "name": "beam",
+      "output": "Builds/Phase02/BeamValidation.exe",
+      "defines": [
+        "MONSTER_KCP_DEVELOPMENT_BUILD",
+        "MONSTER_MENU_VALIDATION"
+      ],
+      "development": true,
+      "testAssemblies": true,
+      "scenes": [
+        "Assets/_Project/Scenes/Boot.unity",
+        "Assets/_Project/Scenes/MainMenu.unity",
+        "Assets/_Project/Scenes/Gameplay.unity"
+      ],
+      "validations": [
+        "validate.all"
+      ]
+    },
+    {
+      "id": "circling",
+      "name": "circling",
+      "output": "Builds/Phase02/CirclingValidation.exe",
+      "defines": [
+        "MONSTER_KCP_DEVELOPMENT_BUILD",
+        "MONSTER_MENU_VALIDATION"
+      ],
+      "development": true,
+      "testAssemblies": true,
+      "scenes": [
+        "Assets/_Project/Scenes/Boot.unity",
+        "Assets/_Project/Scenes/MainMenu.unity",
+        "Assets/_Project/Scenes/Gameplay.unity"
+      ],
+      "validations": [
+        "validate.all"
+      ]
+    },
+    {
+      "id": "dash",
+      "name": "dash",
+      "output": "Builds/Phase02/DashValidation.exe",
+      "defines": [
+        "MONSTER_KCP_DEVELOPMENT_BUILD",
+        "MONSTER_MENU_VALIDATION"
+      ],
+      "development": true,
+      "testAssemblies": true,
+      "scenes": [
+        "Assets/_Project/Scenes/Boot.unity",
+        "Assets/_Project/Scenes/MainMenu.unity",
+        "Assets/_Project/Scenes/Gameplay.unity"
+      ],
+      "validations": [
+        "validate.all"
+      ]
+    },
+    {
+      "id": "melee",
+      "name": "melee",
+      "output": "Builds/Phase02/MeleeValidation.exe",
+      "defines": [
+        "MONSTER_KCP_DEVELOPMENT_BUILD",
+        "MONSTER_MENU_VALIDATION"
+      ],
+      "development": true,
+      "testAssemblies": true,
+      "scenes": [
+        "Assets/_Project/Scenes/Boot.unity",
+        "Assets/_Project/Scenes/MainMenu.unity",
+        "Assets/_Project/Scenes/Gameplay.unity"
+      ],
+      "validations": [
+        "validate.all"
+      ]
+    },
+    {
+      "id": "summon",
+      "name": "summon",
+      "output": "Builds/Phase02/SummonValidation.exe",
+      "defines": [
+        "MONSTER_KCP_DEVELOPMENT_BUILD",
+        "MONSTER_MENU_VALIDATION"
+      ],
+      "development": true,
+      "testAssemblies": true,
+      "scenes": [
+        "Assets/_Project/Scenes/Boot.unity",
+        "Assets/_Project/Scenes/MainMenu.unity",
+        "Assets/_Project/Scenes/Gameplay.unity"
+      ],
+      "validations": [
+        "validate.all"
+      ]
+    },
+    {
+      "id": "ultimate",
+      "name": "ultimate",
+      "output": "Builds/Phase02/UltimateValidation.exe",
+      "defines": [
+        "MONSTER_KCP_DEVELOPMENT_BUILD",
+        "MONSTER_MENU_VALIDATION"
+      ],
+      "development": true,
+      "testAssemblies": true,
+      "scenes": [
+        "Assets/_Project/Scenes/Boot.unity",
+        "Assets/_Project/Scenes/MainMenu.unity",
+        "Assets/_Project/Scenes/Gameplay.unity"
+      ],
+      "validations": [
+        "validate.all"
+      ]
+    },
+    {
+      "id": "runtime-boundary",
+      "name": "runtime-boundary",
+      "output": "Builds/Phase01/RuntimeBoundaryValidation.exe",
+      "defines": [
+        "MONSTER_KCP_DEVELOPMENT_BUILD",
+        "MONSTER_MENU_VALIDATION"
+      ],
+      "development": true,
+      "testAssemblies": true,
+      "scenes": [
+        "Assets/_Project/Scenes/Boot.unity",
+        "Assets/_Project/Scenes/MainMenu.unity",
+        "Assets/_Project/Scenes/Gameplay.unity"
+      ],
+      "validations": [
+        "validate.all"
+      ]
+    },
+    {
+      "id": "nordic-gameplay",
+      "name": "Nordic 正式 Gameplay",
+      "output": "Builds/NordicGameplay/MonsterSupergroup.exe",
+      "defines": [
+        "MONSTER_KCP_DEVELOPMENT_BUILD",
+        "MONSTER_MENU_VALIDATION"
+      ],
+      "development": true,
+      "testAssemblies": true,
+      "scenes": [
+        "Assets/_Project/Scenes/Boot.unity",
+        "Assets/_Project/Scenes/MainMenu.unity",
+        "Assets/_Project/Scenes/Gameplay.unity"
+      ],
+      "validations": [
+        "validate.all",
+        "validate.nordic-gameplay"
+      ]
+    }
+  ]
+}

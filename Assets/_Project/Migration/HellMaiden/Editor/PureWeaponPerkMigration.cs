@@ -86,9 +86,10 @@ namespace MonsterSupergroup.HellMaidenMigration.Editor
             }
         }
 
-        [MenuItem("Tools/HellMaiden Migration/Rebuild Pure Weapon Perks")]
+
         public static void Rebuild()
         {
+            MonsterSupergroup.EditorTools.ProjectToolRunner.CheckLegacyMaintenance("rebuild.perks", "MonsterSupergroup.HellMaidenMigration.Editor.PureWeaponPerkMigration.Rebuild");
             var perks = new PerkData[Migrations.Length];
             for (int i = 0; i < Migrations.Length; i++)
             {

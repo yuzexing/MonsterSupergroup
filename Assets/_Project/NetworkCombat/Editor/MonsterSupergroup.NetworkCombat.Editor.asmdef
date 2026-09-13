@@ -14,7 +14,16 @@
     "Unity.Localization",
     "Unity.Localization.Editor",
     "Unity.Addressables.Editor",
-    "Unity.TextMeshPro"
+    "Unity.TextMeshPro",
+    "MonsterSupergroup.EditorTools",
+    "AstarPathfindingProject",
+    "Kybernetik.Animancer",
+    "ProCamera2D.Runtime",
+    "Unity.RenderPipelines.Universal.Runtime",
+    "Unity.RenderPipelines.Universal.2D.Runtime",
+    "Unity.RenderPipelines.Core.Runtime",
+    "PackageTools",
+    "Drawing"
   ],
   "includePlatforms": [
     "Editor"

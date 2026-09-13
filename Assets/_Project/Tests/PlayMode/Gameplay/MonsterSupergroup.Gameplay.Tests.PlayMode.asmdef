@@ -26,7 +26,8 @@
     "Unity.ugui",
     "MonsterSupergroup.NetworkCombat.Editor",
     "Unity.Localization.Editor",
-    "Unity.ResourceManager"
+    "Unity.ResourceManager",
+    "MonsterSupergroup.EditorTools"
   ],
   "includePlatforms": [],
   "excludePlatforms": [],

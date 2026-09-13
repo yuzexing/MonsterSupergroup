@@ -20,20 +20,7 @@ namespace MonsterSupergroup.NetworkCombat.Editor
 
         public static void AuditAndBuild()
         {
-            Migrate();
-            CompareArchivedSkeleton();
-            const string output = "Builds/EnemyVariants/EnemyVariants.exe";
-            Directory.CreateDirectory(Path.GetDirectoryName(output));
-            var report = BuildPipeline.BuildPlayer(new BuildPlayerOptions
-            {
-                scenes = new[] { NetworkCombatSetupUtility.BootScenePath, NetworkCombatSetupUtility.GameplayScenePath },
-                locationPathName = output, target = BuildTarget.StandaloneWindows64,
-                options = BuildOptions.Development | BuildOptions.IncludeTestAssemblies,
-                // IncludeTestAssemblies also compiles the existing menu tests, whose
-                // shared player-side helper is guarded by this validation symbol.
-                extraScriptingDefines = new[] { "MONSTER_KCP_DEVELOPMENT_BUILD", "MONSTER_MENU_VALIDATION" }
-            });
-            if (report.summary.result != BuildResult.Succeeded) throw new InvalidOperationException("Enemy Variant build failed.");
+            MonsterSupergroup.EditorTools.ProjectBuildService.Legacy("enemy-variants");
         }
 
         public static void CompareArchivedSkeleton()

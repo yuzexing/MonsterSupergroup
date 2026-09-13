@@ -77,6 +77,7 @@ namespace AstralShift.HellMaiden.AI.Enemy
 
 		private void OnEnable()
 		{
+            MonsterSupergroup.Gameplay.Combat.GameplayMapPresentation.Effect(gameObject);
             _stateMachine = null;
 			fired = false;
 			elapsedTime = 0f;

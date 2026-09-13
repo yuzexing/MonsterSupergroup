@@ -22,22 +22,9 @@ namespace MonsterSupergroup.Gameplay.Editor
         public const string PerkPath =
             "Assets/_Project/Content/Development/GASVerticalSlicePerks.asset";
 
-        private const string MenuPath =
-            "Tools/MonsterSupergroup/Gameplay/Rebuild GAS Vertical Slice";
-
-        [MenuItem(MenuPath)]
-        private static void RebuildFromMenu()
-        {
-            if (!EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo())
-            {
-                return;
-            }
-
-            RebuildAndValidate();
-        }
-
         public static void RebuildAndValidate()
         {
+            MonsterSupergroup.EditorTools.ProjectToolRunner.CheckLegacyMaintenance("sample.gas-rebuild", "MonsterSupergroup.Gameplay.Editor.GasVerticalSliceSceneBuilder.RebuildAndValidate");
             EnsureProjectFolders();
             EquipmentModifierSet equipment = BuildEquipmentAsset();
             PerkModifierSet perks = BuildPerkAsset();

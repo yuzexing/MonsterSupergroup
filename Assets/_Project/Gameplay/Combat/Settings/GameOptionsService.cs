@@ -114,15 +114,24 @@ namespace MonsterSupergroup.Gameplay.Options
         private static float FiniteClamp(float value, float min, float max, float fallback) =>
             float.IsNaN(value) || float.IsInfinity(value) ? fallback : Mathf.Clamp(value, min, max);
 
-        public List<Resolution> AvailableResolutions()
+        public List<Resolution> AvailableResolutions(GameOptionsData display = null)
         {
+            display ??= current;
             var result = Screen.resolutions.Where(r => r.width >= 640 && r.height >= 360)
                 .GroupBy(r => (r.width, r.height, r.refreshRateRatio.numerator, r.refreshRateRatio.denominator))
                 .Select(g => g.First()).ToList();
             // A custom window size is valid even if it is not an exclusive fullscreen mode.
-            if (result.Count == 0 || current.DisplayMode == FullScreenMode.Windowed)
-                if (!result.Any(r => MatchesResolution(current, r))) result.Add(ToResolution(current));
+            if (result.Count == 0 || display.DisplayMode == FullScreenMode.Windowed)
+                if (!result.Any(r => MatchesResolution(display, r))) result.Add(ToResolution(display));
             return result.OrderBy(r => r.width).ThenBy(r => r.height).ThenBy(r => r.refreshRateRatio.value).ToList();
+        }
+
+        public static RefreshRate ClosestRefreshRate(GameOptionsData display, IEnumerable<Resolution> modes)
+        {
+            double preferred = (double)display.RefreshNumerator / display.RefreshDenominator;
+            return modes.Where(r => r.width == display.Width && r.height == display.Height)
+                .OrderBy(r => Math.Abs(r.refreshRateRatio.value - preferred))
+                .ThenByDescending(r => r.refreshRateRatio.value).First().refreshRateRatio;
         }
 
         public static bool MatchesResolution(GameOptionsData data, Resolution resolution) =>

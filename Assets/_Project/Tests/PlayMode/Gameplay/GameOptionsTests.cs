@@ -109,7 +109,7 @@ namespace MonsterSupergroup.Gameplay.Tests
             Find<Slider>("Options.RenderScale").value = .6f;
             Assert.That(service.Current.RenderScale, Is.EqualTo(start.RenderScale));
             Find<Dropdown>("Options.VSync").value = 1; yield return null;
-            Assert.That(Find<Dropdown>("Options.FrameLimit").interactable, Is.False);
+            Assert.That(Find<OptionsArrowChoice>("Options.FrameLimit").interactable, Is.False);
             Assert.That(Find<Dropdown>("Options.DisplayMode").interactable, Is.EqualTo(!Application.isEditor));
             Find<Button>("Options.Back").onClick.Invoke(); yield return null;
             Assert.That(closed, Is.True); Assert.That(GameOptionsPanel.IsOpen, Is.False);
@@ -159,6 +159,72 @@ namespace MonsterSupergroup.Gameplay.Tests
             Assert.That(effectsVolume, Is.EqualTo(.4f).Within(.001));
             service.SetAudio(1, 1, 1); yield return null;
             master.getVolume(out masterVolume); Assert.That(masterVolume, Is.EqualTo(1));
+        }
+
+        [Test] public void ResolutionChangeKeepsSupportedRefreshRateOrUsesNearestAvailable()
+        {
+            Resolution Mode(int width, int height, uint numerator, uint denominator = 1) => new Resolution {
+                width = width, height = height, refreshRateRatio = new RefreshRate { numerator = numerator, denominator = denominator }
+            };
+            var modes = new[] { Mode(1920, 1080, 60), Mode(1920, 1080, 144), Mode(1280, 720, 60),
+                Mode(1280, 720, 75), Mode(1280, 720, 60000, 1001) };
+            var display = new GameOptionsData { Width = 1920, Height = 1080, RefreshNumerator = 144, RefreshDenominator = 1, FrameLimit = 30 };
+            Assert.That(GameOptionsService.ClosestRefreshRate(display, modes).value, Is.EqualTo(144));
+            display.Width = 1280; display.Height = 720;
+            Assert.That(GameOptionsService.ClosestRefreshRate(display, modes).value, Is.EqualTo(75));
+            display.RefreshNumerator = 60000; display.RefreshDenominator = 1001;
+            var fractional = GameOptionsService.ClosestRefreshRate(display, modes);
+            Assert.That(fractional.numerator, Is.EqualTo(60000)); Assert.That(fractional.denominator, Is.EqualTo(1001));
+            Assert.That(display.FrameLimit, Is.EqualTo(30));
+        }
+
+        [UnityTest] public IEnumerator ResolutionRefreshAndFrameLimitAreSeparateDraftControls()
+        {
+            var start = service.Current;
+            var panel = GameOptionsPanel.Open(canvas.transform, font, null);
+            Find<Button>("Options.Tab.2").onClick.Invoke(); yield return null;
+            var resolution = Find<OptionsArrowChoice>("Options.Resolution");
+            var refresh = Find<OptionsArrowChoice>("Options.RefreshRate");
+            var frames = Find<OptionsArrowChoice>("Options.FrameLimit");
+            Assert.That(refresh.interactable, Is.EqualTo(!Application.isEditor));
+            var modes = service.AvailableResolutions(start);
+            var sizes = modes.GroupBy(r => (r.width, r.height)).Select(g => g.First()).ToList();
+            Assert.That(resolution.Options, Is.EqualTo(sizes.Select(r => $"{r.width} × {r.height}")));
+            for (int i = 0; i < sizes.Count; i++)
+            {
+                resolution.Value = i;
+                var draft = panel.Draft;
+                Assert.That((draft.Width, draft.Height), Is.EqualTo((sizes[i].width, sizes[i].height)));
+                var rates = modes.Where(r => r.width == draft.Width && r.height == draft.Height)
+                    .GroupBy(r => r.refreshRateRatio.value).Select(g => g.First()).ToList();
+                Assert.That(refresh.Options, Is.EqualTo(rates.Select(r => r.refreshRateRatio.value.ToString("0.##"))));
+                refresh.Value = rates.Count - 1;
+                Assert.That(GameOptionsService.MatchesResolution(panel.Draft, rates.Last()), Is.True);
+                Assert.That(panel.Draft.FrameLimit, Is.EqualTo(start.FrameLimit));
+            }
+            var beforeFps = panel.Draft;
+            frames.Value = (frames.Value + 1) % frames.Options.Count;
+            Assert.That(panel.Draft.SameDisplay(beforeFps), Is.True);
+            Assert.That(panel.Draft.FrameLimit, Is.EqualTo(GameOptionsService.FrameLimits[frames.Value]));
+            Assert.That(service.Current.SameGraphics(start), Is.True, "Changing either dropdown must wait for Apply.");
+            service.SetLanguage("en"); yield return WaitForLanguage(() => GameLocalization.Language == "en");
+            Assert.That(Find<OptionsArrowChoice>("Options.RefreshRate"), Is.SameAs(refresh));
+            var labels = canvas.GetComponentsInChildren<Text>().Select(t => t.text).ToArray();
+            Assert.That(labels, Does.Contain("Screen refresh rate (Hz)"));
+            Assert.That(labels, Does.Contain("Frame rate limit (FPS)"));
+            Find<Dropdown>("Options.VSync").value = 0; yield return null;
+            frames.Value = frames.Options.Count - 1;
+            EventSystem.current.SetSelectedGameObject(frames.gameObject);
+            ExecuteEvents.Execute(frames.gameObject, new AxisEventData(EventSystem.current) { moveDir = MoveDirection.Right }, ExecuteEvents.moveHandler);
+            Assert.That(frames.Value, Is.Zero, "Right key must wrap to the first option.");
+            Find<Button>("Options.FrameLimit.Previous").onClick.Invoke();
+            Assert.That(frames.Value, Is.EqualTo(frames.Options.Count - 1));
+            Assert.That(EventSystem.current.currentSelectedGameObject, Is.EqualTo(frames.gameObject));
+            Find<Dropdown>("Options.VSync").value = 1; yield return null;
+            int locked = frames.Value;
+            frames.Step(1);
+            Assert.That(frames.Value, Is.EqualTo(locked));
+            Assert.That(Find<Button>("Options.FrameLimit.Next").interactable, Is.False);
         }
 
         private static IEnumerator WaitForLanguage(System.Func<bool> predicate)

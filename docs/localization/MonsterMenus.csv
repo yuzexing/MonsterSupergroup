@@ -21,7 +21,7 @@
 "独占全屏",1366286351,"","独占全屏","","Exclusive fullscreen",""
 "分辨率",1366286352,"","分辨率","","Resolution",""
 "垂直同步",1366286353,"","垂直同步","","VSync",""
-"帧率上限",1366286354,"","帧率上限","","Frame rate limit",""
+"帧率上限",1366286354,"","帧率上限（FPS）","","Frame rate limit (FPS)",""
 "不限制",1366286355,"","不限制","","Unlimited",""
 "渲染比例",1366286356,"","渲染比例","","Render scale",""
 "抗锯齿",1366286357,"","抗锯齿","","Anti-aliasing",""
@@ -1064,3 +1064,4 @@ Your support means everything and we hope you'll consider joining our open devel
 存活 {3}/{4}  |  已生成 {5}/{6}  |  跳过 {7}","","Wave {0}  |  {1}: {2:F1}s
 Alive {3}/{4}  |  Spawned {5}/{6}  |  Skipped {7}",""
 "ui.connection.transport_error",343984059703519,"","连接失败，请检查网络或稍后重试。","","Connection failed. Check your connection and try again.",""
+"ui.options.refresh_rate",343984059703520,"","屏幕刷新率（Hz）","","Screen refresh rate (Hz)",""

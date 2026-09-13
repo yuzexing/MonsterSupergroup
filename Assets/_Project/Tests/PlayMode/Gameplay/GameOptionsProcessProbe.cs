@@ -103,8 +103,13 @@ namespace MonsterSupergroup.Gameplay.Tests
             Check(QualitySettings.globalTextureMipmapLimit == 2 && Application.targetFrameRate == 120, "Texture/FPS settings were ignored");
             GameOptionsPanel.HandleBack(); yield return null; Click("选项"); Click("Options.Tab.2");
             yield return Shot("options-video-en");
-            var resolutionChoice = FindObjectsByType<Dropdown>(FindObjectsSortMode.None).Single(d => d.name == "Options.Resolution");
-            resolutionChoice.Show(); yield return Shot("options-resolution-list"); resolutionChoice.Hide();
+            var resolutionChoice = FindObjectsByType<OptionsArrowChoice>(FindObjectsSortMode.None).Single(d => d.name == "Options.Resolution");
+            Check(resolutionChoice.Options.All(o => !o.Contains("Hz")) && resolutionChoice.Options.Distinct().Count() == resolutionChoice.Options.Count,
+                "Resolution list still combines refresh rates or duplicates sizes");
+            resolutionChoice.Step(1); yield return Shot("options-resolution-choice");
+            var refreshChoice = FindObjectsByType<OptionsArrowChoice>(FindObjectsSortMode.None).Single(d => d.name == "Options.RefreshRate");
+            Check(refreshChoice.Options.Count > 0, "Separate refresh-rate choices are missing");
+            refreshChoice.Step(1); yield return Shot("options-refresh-rate-choice");
             var slow = options.Current; slow.FrameLimit = 30; options.ApplyGraphics(slow);
             yield return new WaitForSecondsRealtime(.5f);
             int firstFrame = Time.frameCount; float firstTime = Time.realtimeSinceStartup;

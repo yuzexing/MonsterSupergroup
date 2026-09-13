@@ -27,6 +27,7 @@ namespace MonsterSupergroup.Gameplay.Options
         private int lastBackFrame = -1;
         private bool closing, wasConfirming, rebuildPending;
         private readonly List<(Dropdown dropdown, string[] values)> translatedChoices = new();
+        private readonly List<(OptionsArrowChoice choice, string[] values)> translatedArrowChoices = new();
         private readonly List<Selectable> navigation = new List<Selectable>();
         private readonly Color ink = new Color32(15, 23, 29, 255), panel = new Color32(28, 40, 46, 255);
         private readonly Color cream = new Color32(243, 233, 208, 255), accent = new Color32(222, 174, 92, 255);
@@ -89,6 +90,8 @@ namespace MonsterSupergroup.Gameplay.Options
                 for (int i = 0; i < choice.values.Length; i++) choice.dropdown.options[i].text = MenuLocalization.Get(choice.values[i]);
                 choice.dropdown.RefreshShownValue();
             }
+            foreach (var choice in translatedArrowChoices)
+                choice.choice.SetOptions(choice.values.Select(v => MenuLocalization.Get(v)), choice.choice.Value);
             OnSettingsChanged();
         }
 
@@ -99,7 +102,7 @@ namespace MonsterSupergroup.Gameplay.Options
             var selection = EventSystem.current != null ? EventSystem.current.currentSelectedGameObject : null;
             string focus = selection != null ? selection.name : null;
             foreach (Transform child in transform) { child.gameObject.SetActive(false); Destroy(child.gameObject); }
-            navigation.Clear(); translatedChoices.Clear();
+            navigation.Clear(); translatedChoices.Clear(); translatedArrowChoices.Clear();
             frame = Box(transform, "Options frame", new Rect(0, 0, 1280, 720), Color.clear);
             frame.anchorMin = frame.anchorMax = frame.pivot = new Vector2(.5f, .5f); frame.anchoredPosition = Vector2.zero;
             Text(frame, "选项", new Rect(64, 28, 550, 52), 36);
@@ -166,28 +169,46 @@ namespace MonsterSupergroup.Gameplay.Options
             var display = Choice(parent, "Options.DisplayMode", "显示模式", 160, new[] { "窗口", "无边框全屏", "独占全屏" },
                 Math.Max(0, Array.IndexOf(modes, draft.DisplayMode)), value => draft.DisplayMode = modes[value]);
             display.interactable = GameOptionsService.DisplayChangesSupported;
-            var resolutions = service.AvailableResolutions();
-            var resolution = Choice(parent, "Options.Resolution", "分辨率", 214,
-                resolutions.Select(r => $"{r.width} × {r.height}  ·  {r.refreshRateRatio.value:0.##} Hz").ToArray(),
-                Math.Max(0, resolutions.FindIndex(r => GameOptionsService.MatchesResolution(draft, r))), value => {
-                    var r = resolutions[value]; draft.Width = r.width; draft.Height = r.height;
-                    draft.RefreshNumerator = r.refreshRateRatio.numerator; draft.RefreshDenominator = r.refreshRateRatio.denominator;
+            var resolutions = service.AvailableResolutions(draft);
+            var sizes = resolutions.GroupBy(r => (r.width, r.height)).Select(g => g.First()).ToList();
+            var refreshModes = new List<Resolution>();
+            OptionsArrowChoice refresh = null;
+            void UpdateRefreshChoices()
+            {
+                refreshModes = resolutions.Where(r => r.width == draft.Width && r.height == draft.Height)
+                    .GroupBy(r => r.refreshRateRatio.value).Select(g => g.First()).ToList();
+                refresh.SetOptions(refreshModes.Select(r => r.refreshRateRatio.value.ToString("0.##")),
+                    Math.Max(0, refreshModes.FindIndex(r => GameOptionsService.MatchesResolution(draft, r))));
+            }
+            var resolution = ArrowChoice(parent, "Options.Resolution", "分辨率", 208,
+                sizes.Select(r => $"{r.width} × {r.height}").ToArray(),
+                Math.Max(0, sizes.FindIndex(r => r.width == draft.Width && r.height == draft.Height)), value => {
+                    draft.Width = sizes[value].width; draft.Height = sizes[value].height;
+                    var rate = GameOptionsService.ClosestRefreshRate(draft, resolutions);
+                    draft.RefreshNumerator = rate.numerator; draft.RefreshDenominator = rate.denominator;
+                    UpdateRefreshChoices();
                 }, false);
             resolution.interactable = GameOptionsService.DisplayChangesSupported;
-            Choice(parent, "Options.VSync", "垂直同步", 268, new[] { "关闭", "开启" }, draft.VSync ? 1 : 0,
+            refresh = ArrowChoice(parent, "Options.RefreshRate", "ui.options.refresh_rate", 256, Array.Empty<string>(), 0, value => {
+                var rate = refreshModes[value].refreshRateRatio;
+                draft.RefreshNumerator = rate.numerator; draft.RefreshDenominator = rate.denominator;
+            }, false);
+            refresh.interactable = GameOptionsService.DisplayChangesSupported;
+            UpdateRefreshChoices();
+            Choice(parent, "Options.VSync", "垂直同步", 304, new[] { "关闭", "开启" }, draft.VSync ? 1 : 0,
                 value => { draft.VSync = value == 1; QueueRebuild(); });
-            var frames = Choice(parent, "Options.FrameLimit", "帧率上限", 322,
+            var frames = ArrowChoice(parent, "Options.FrameLimit", "帧率上限", 352,
                 GameOptionsService.FrameLimits.Select(v => v < 0 ? "不限制" : v.ToString()).ToArray(),
                 Math.Max(0, Array.IndexOf(GameOptionsService.FrameLimits, draft.FrameLimit)), v => draft.FrameLimit = GameOptionsService.FrameLimits[v]);
             frames.interactable = !draft.VSync;
-            var scale = Slider(parent, "Options.RenderScale", "渲染比例", 376, draft.RenderScale, .5f, 1.5f,
+            var scale = Slider(parent, "Options.RenderScale", "渲染比例", 400, draft.RenderScale, .5f, 1.5f,
                 value => draft.RenderScale = value);
             scale.interactable = service.RuntimePipeline != null;
             var msaa = service.SupportedMsaa();
-            var aa = Choice(parent, "Options.Msaa", "抗锯齿", 430, msaa.Select(v => v == 1 ? "关闭" : $"MSAA {v}×").ToArray(),
+            var aa = Choice(parent, "Options.Msaa", "抗锯齿", 448, msaa.Select(v => v == 1 ? "关闭" : $"MSAA {v}×").ToArray(),
                 Math.Max(0, Array.IndexOf(msaa, draft.Msaa)), v => draft.Msaa = msaa[v]);
             aa.interactable = msaa.Length > 1;
-            Choice(parent, "Options.Texture", "纹理质量", 484, new[] { "原始", "二分之一", "四分之一" }, draft.TextureLimit, v => draft.TextureLimit = v);
+            Choice(parent, "Options.Texture", "纹理质量", 496, new[] { "原始", "二分之一", "四分之一" }, draft.TextureLimit, v => draft.TextureLimit = v);
         }
 
         private void OnSettingsChanged()
@@ -205,6 +226,7 @@ namespace MonsterSupergroup.Gameplay.Options
             else status.text = "";
             var frameChoice = navigation.FirstOrDefault(s => s != null && s.name == "Options.FrameLimit");
             if (frameChoice != null) frameChoice.interactable = !draft.VSync && !pending;
+            WireNavigation();
             if (apply != null) apply.interactable = !pending && !draft.SameGraphics(service.Current);
         }
 
@@ -266,6 +288,26 @@ namespace MonsterSupergroup.Gameplay.Options
             var label = Text(rect, key, new Rect(12, 0, bounds.width - 24, bounds.height), 21);
             label.alignment = TextAnchor.MiddleCenter; if (primary) label.color = ink;
             button.onClick.AddListener(() => action()); navigation.Add(button); return button;
+        }
+
+        private OptionsArrowChoice ArrowChoice(Transform parent, string name, string key, float y, string[] values, int selected, Action<int> change, bool localize = true)
+        {
+            Text(parent, key, new Rect(64, y, 330, 42), 21);
+            var root = Box(parent, name, new Rect(430, y, 786, 42), panel); root.GetComponent<Image>().raycastTarget = true;
+            var choice = root.gameObject.AddComponent<OptionsArrowChoice>(); choice.targetGraphic = root.GetComponent<Image>();
+            var caption = Text(root, "", new Rect(54, 0, 678, 42), 20); caption.alignment = TextAnchor.MiddleCenter;
+            Button Arrow(string suffix, string symbol, float x)
+            {
+                var rect = Box(root, name + suffix, new Rect(x, 0, 48, 42), panel); rect.GetComponent<Image>().raycastTarget = true;
+                var button = rect.gameObject.AddComponent<Button>(); button.targetGraphic = rect.GetComponent<Image>();
+                button.navigation = new Navigation { mode = Navigation.Mode.None };
+                var label = Text(rect, "", new Rect(0, 0, 48, 42), 23); label.text = symbol; label.alignment = TextAnchor.MiddleCenter;
+                return button;
+            }
+            choice.Initialize(caption, Arrow(".Previous", "◀", 0), Arrow(".Next", "▶", 738),
+                values.Select(v => localize ? MenuLocalization.Get(v) : v).ToArray(), selected, v => { change(v); OnSettingsChanged(); });
+            if (localize) translatedArrowChoices.Add((choice, values));
+            navigation.Add(choice); return choice;
         }
 
         private Dropdown Choice(Transform parent, string name, string key, float y, string[] values, int selected, Action<int> change, bool localize = true)

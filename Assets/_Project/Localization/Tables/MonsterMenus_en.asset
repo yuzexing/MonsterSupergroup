@@ -109,7 +109,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 1366286354
-    m_Localized: Frame rate limit
+    m_Localized: "Frame rate limit (FPS)"
     m_Metadata:
       m_Items: []
   - m_Id: 1366286355
@@ -3991,6 +3991,10 @@ MonoBehaviour:
       m_Items: []
   - m_Id: 343984059703519
     m_Localized: Connection failed. Check your connection and try again.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703520
+    m_Localized: "Screen refresh rate (Hz)"
     m_Metadata:
       m_Items: []
   references:

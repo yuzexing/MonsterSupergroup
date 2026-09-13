@@ -202,7 +202,8 @@ namespace MonsterSupergroup.Gameplay.Combat
             ICombatTarget target,
             float onHitChanceMultiplier = 1f,
             float predictedLethalChanceMultiplier = 1f,
-            float burnDamageMultiplier = 0f)
+            float burnDamageMultiplier = 0f,
+            DamageType? presentationDamageType = null)
         {
             EnsureInitialized();
             return pipeline.ResolveHitDetailed(
@@ -210,7 +211,8 @@ namespace MonsterSupergroup.Gameplay.Combat
                 target,
                 onHitChanceMultiplier,
                 predictedLethalChanceMultiplier,
-                burnDamageMultiplier);
+                burnDamageMultiplier,
+                presentationDamageType);
         }
 
         /// <summary>

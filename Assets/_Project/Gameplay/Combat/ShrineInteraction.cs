@@ -1,3 +1,4 @@
+using MonsterSupergroup.Gameplay.Options;
 using System;
 using System.Threading;
 using AstralShift.HellMaiden.Combat.Hand;
@@ -64,7 +65,7 @@ namespace AstralShift.HellMaiden.Combat
 			shrineAnimator.SetBool(PickedUpParamHash, value: true);
 			_buffAnimator.SetBool(PickedUpParamHash, value: true);
 			string term = shrineData.pickupText;
-			LocalizationMediator.GetTranslation(ref term);
+			term = GameLocalization.Menu(term);
 			text.text = term;
 			if (_timeoutLabelCTS == null)
 			{

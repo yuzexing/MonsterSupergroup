@@ -409,7 +409,6 @@ GameObject:
   - component: {fileID: 832505069335744640}
   - component: {fileID: 643773787611812521}
   - component: {fileID: 3464355175358801471}
-  - component: {fileID: 2464605253639789982}
   - component: {fileID: 2313317899732089277}
   - component: {fileID: 1182271614744417403}
   - component: {fileID: 8989830584249552381}
@@ -420,6 +419,7 @@ GameObject:
   - component: {fileID: 8610229519361375326}
   - component: {fileID: 4298737649338467457}
   - component: {fileID: 5871699316676795926}
+  - component: {fileID: 6636599899439864565}
   m_Layer: 0
   m_Name: NetworkEnemyBase
   m_TagString: Untagged
@@ -509,7 +509,7 @@ MonoBehaviour:
   lootSettings: {fileID: 0}
   _currentMovementScript: {fileID: 0}
   previousFacingDirection: {x: 0, y: 0}
-  attackScript: {fileID: 2464605253639789982}
+  attackScript: {fileID: 0}
   attackCooldown: 0.5
   attackPivot: {x: 0, y: 0}
   attackDistance: 0
@@ -579,23 +579,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3d4bf067ee544cfca19baf479c92f7e5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: MonsterSupergroup.Gameplay.Combat::AstralShift.HellMaiden.AI.Enemy.EnemyStatus
---- !u!114 &2464605253639789982
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3911887690903730936}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 70825c9b33264fa384508209ae8b1fea, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: MonsterSupergroup.Gameplay.Combat::ThornsEnemyAttack
-  warningTime: 0
-  attackTime: 0
-  recoveryTime: 0
-  damageInteraction: {fileID: 2518031161041091853}
-  deactivateColliderOnCancelAttack: 1
 --- !u!114 &2313317899732089277
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -752,6 +735,20 @@ MonoBehaviour:
   syncDirection: 0
   syncMode: 0
   syncInterval: 0
+--- !u!114 &6636599899439864565
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3911887690903730936}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c6f576648c1fdcc46b0b23870c23a0c8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: MonsterSupergroup.Gameplay.Combat::AstralShift.HellMaiden.AI.Enemy.EnemyContactDamage
+  contactEnabled: 1
+  damageInteraction: {fileID: 2518031161041091853}
 --- !u!1 &4919775779397899460
 GameObject:
   m_ObjectHideFlags: 0

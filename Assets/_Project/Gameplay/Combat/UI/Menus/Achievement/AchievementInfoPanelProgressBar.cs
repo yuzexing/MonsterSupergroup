@@ -1,3 +1,4 @@
+using MonsterSupergroup.Gameplay.Options;
 using System;
 using System.Collections;
 using TMPro;
@@ -199,7 +200,7 @@ namespace AstralShift.HellMaiden.UI.Menus.Achievement
 			if (progressText != null)
 			{
 				float f = currentProgress / maxProgress * 100f;
-				string translation = LocalizationMediator.GetTranslation("ACH_InfoPanel_Archievement_Progression_Complete");
+				string translation = GameLocalization.Menu("ACH_InfoPanel_Archievement_Progression_Complete");
 				string text = (string.IsNullOrEmpty(translation) ? "Complete" : translation);
 				string text2 = $"<color=blue>{Mathf.RoundToInt(f)}%</color> <color=lightblue>{text}\n{Mathf.RoundToInt(currentProgress)}/{Mathf.RoundToInt(maxProgress)}</color>";
 				progressText.text = text2;

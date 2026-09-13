@@ -13,12 +13,24 @@ MonoBehaviour:
   m_Name: UltimateData_Dante
   m_EditorClassIdentifier: 
   id: 0
-  title: Dante's Inferno
-  description: Unleashes a fiery inferno upon surrounding enemies, incinerating them
-    instantly.
-  hasLocalization: 1
-  titleKey: ULT_Dante_Name
-  descriptionKey: ULT_Dante_Desc
+  localizedTitle:
+    m_TableReference:
+      m_TableCollectionName: MonsterContent
+    m_TableEntryReference:
+      m_KeyId: 0
+      m_Key: ultimate.0.name
+    m_FallbackState: 0
+    m_WaitForCompletion: 0
+    m_LocalVariables: []
+  localizedDescription:
+    m_TableReference:
+      m_TableCollectionName: MonsterContent
+    m_TableEntryReference:
+      m_KeyId: 0
+      m_Key: ultimate.0.description
+    m_FallbackState: 0
+    m_WaitForCompletion: 0
+    m_LocalVariables: []
   ultimateAttackEvents: {fileID: 0}
   ultimateAttackWeaponBehaviour: {fileID: 114470112387431263, guid: 3f72cb7200910214c8f59bd4f24f105a, type: 3}
   baseStats:
@@ -45,3 +57,6 @@ MonoBehaviour:
     cameraShakePerLevelIncrement: 0.1
     knockbackSettings: {fileID: 11400000, guid: fa1ccdc3a358d964ba88355c94961878, type: 2}
     damageType: 0
+  references:
+    version: 2
+    RefIds: []

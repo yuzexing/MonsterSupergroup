@@ -29,8 +29,7 @@ namespace MonsterSupergroup.NetworkCombat
         private double nextPublish;
         private ulong lastTargetParticipant;
         private Bounds groundBounds;
-        private Vector2 colliderOffset;
-        private float colliderRadius;
+        private readonly Dictionary<GameObject, (Vector2 offset, float radius)> spawnFootprints = new Dictionary<GameObject, (Vector2, float)>();
         private int runtimeMinimumSpawnHealth;
         private bool legacySubscribed;
 
@@ -39,6 +38,7 @@ namespace MonsterSupergroup.NetworkCombat
         public bool UsesWaves => spawnMode == GameplayEnemySpawnMode.Waves;
         public WaveProgressSnapshot ServerProgress => schedule != null ? schedule.State : WaitingSnapshot();
         public SpriteRenderer BoundaryGround => boundaryGround;
+        public event System.Action<WaveSpawnOpportunity, uint> WaveEnemySpawned;
 
         internal void ConfigureRuntimeMinimumSpawnHealth(int minimumHealth) => runtimeMinimumSpawnHealth = Mathf.Max(0, minimumHealth);
 
@@ -63,10 +63,12 @@ namespace MonsterSupergroup.NetworkCombat
                 Unsubscribe();
                 boundRunId = manager.Session.RunId;
                 schedule = null; settings = null; stoppedRunId = null;
+                spawnFootprints.Clear();
                 spawnedForPlayers.Clear(); lastTargetParticipant = 0; nextPublish = 0;
             }
             if (!UsesWaves)
             {
+                if (manager.UsePreparationRoom && !manager.Session.IsRunStarted) return;
                 if (!legacySubscribed)
                 {
                     world.ServerPlayerRegistered += HandlePlayerRegistered;
@@ -83,27 +85,30 @@ namespace MonsterSupergroup.NetworkCombat
                 CollectActiveParticipants();
                 int alive = CountCanonicalEnemies();
                 var before = schedule.State;
-                if (schedule.Tick(now, activeParticipants.Count > 0, alive, out var opportunity))
+                while (schedule.Tick(now, activeParticipants.Count > 0, alive, out var opportunity))
                 {
                     long missed = schedule.State.TotalSkipped - before.TotalSkipped;
                     if (missed > 0) Debug.Log($"[Waves] run={boundRunId} wave={opportunity.Wave} firstEvent={opportunity.Sequence - missed} lastEvent={opportunity.Sequence - 1} skipped={missed} reason=MissedClockSlots", this);
                     bool spawned = false;
                     string reason = "AliveLimit";
                     uint enemyId = 0, targetId = 0;
+                    var prefab = settings.Prefabs[opportunity.PrefabIndex];
                     if (alive < settings.Limit)
                     {
                         var target = NextTarget();
                         targetId = target.AvatarId;
-                        if (TryChoosePosition(target, opportunity.Sequence, out var position))
+                        if (TryChoosePosition(target, opportunity.Sequence, prefab, out var position))
                         {
-                            enemyId = SpawnEnemy(position, targetId);
+                            enemyId = SpawnEnemy(position, targetId, prefab);
                             spawned = enemyId != 0;
                             reason = spawned ? "Spawned" : "SpawnFailed";
                         }
                         else reason = "NoLegalPosition";
                     }
                     schedule.Resolve(opportunity, spawned);
-                    Debug.Log($"[Waves] run={boundRunId} wave={opportunity.Wave} slot={opportunity.Index} event={opportunity.Sequence} reason={reason} enemy={enemyId} target={targetId} alive={schedule.State.Alive}", this);
+                    if (spawned) { alive++; WaveEnemySpawned?.Invoke(opportunity, enemyId); }
+                    Debug.Log($"[Waves] run={boundRunId} wave={opportunity.Wave} slot={opportunity.Index} event={opportunity.Sequence} prefab={prefab.name} reason={reason} enemy={enemyId} target={targetId} alive={schedule.State.Alive}", this);
+                    before = schedule.State;
                 }
                 if (before.Phase != schedule.State.Phase)
                     Debug.Log($"[Waves] run={boundRunId} phase={schedule.State.Phase} elapsed={schedule.State.Elapsed:F3}", this);
@@ -132,15 +137,18 @@ namespace MonsterSupergroup.NetworkCombat
             if (!isActiveAndEnabled) { error = "Gameplay wave spawner is disabled."; return false; }
             if (stoppedRunId != null) { error = "This wave run was stopped; stop the session before starting a new run."; return false; }
             if (waveRules == null) { error = "Gameplay wave rules are missing."; return false; }
-            if (!waveRules.TryCapture(out _, out error)) return false;
+            if (!waveRules.TryCapture(out var captured, out error)) return false;
             if (boundaryGround == null || boundaryGround.bounds.size.x <= 0 || boundaryGround.bounds.size.y <= 0)
             { error = "Gameplay requires the approved Ground boundary."; return false; }
-            var controller = enemyPrefab != null ? enemyPrefab.GetComponent<EnemyController>() : null;
-            if (controller == null || !(controller.collider is CircleCollider2D) ||
-                enemyPrefab.GetComponent<NetworkEnemySimulationAgent>() == null || enemyPrefab.GetComponent<NetworkIdentity>() == null)
-            { error = "Gameplay requires its registered network Enemy with a circle body collider."; return false; }
-            if (NetworkManager.singleton == null || !NetworkManager.singleton.spawnPrefabs.Contains(enemyPrefab))
-            { error = "Gameplay Enemy prefab is not registered with Mirror."; return false; }
+            foreach (var prefab in captured.Prefabs)
+            {
+                var controller = prefab != null ? prefab.GetComponent<EnemyController>() : null;
+                if (controller == null || !(controller.collider is CircleCollider2D) ||
+                    prefab.GetComponent<NetworkEnemySimulationAgent>() == null || prefab.GetComponentsInChildren<NetworkIdentity>(true).Length != 1)
+                { error = "Wave enemy requires one network identity and a circle body collider: " + prefab?.name; return false; }
+                if (NetworkManager.singleton == null || !NetworkManager.singleton.spawnPrefabs.Contains(prefab))
+                { error = "Wave enemy is not registered with Mirror: " + prefab.name; return false; }
+            }
             return true;
         }
 
@@ -153,15 +161,20 @@ namespace MonsterSupergroup.NetworkCombat
             if (!BindProgress()) { error = "The network wave World is not ready or already has a producer."; return false; }
             waveRules.TryCapture(out settings, out error);
             boundRunId = runId;
-            var circle = (CircleCollider2D)enemyPrefab.GetComponent<EnemyController>().collider;
-            colliderRadius = circle.radius * Mathf.Max(Mathf.Abs(circle.transform.lossyScale.x), Mathf.Abs(circle.transform.lossyScale.y));
-            colliderOffset = circle.transform.TransformPoint(circle.offset) - enemyPrefab.transform.position;
+            spawnFootprints.Clear();
+            foreach (var prefab in settings.Prefabs)
+            {
+                var circle = (CircleCollider2D)prefab.GetComponent<EnemyController>().collider;
+                float radius = circle.radius * Mathf.Max(Mathf.Abs(circle.transform.lossyScale.x), Mathf.Abs(circle.transform.lossyScale.y));
+                Vector2 offset = circle.transform.TransformPoint(circle.offset) - prefab.transform.position;
+                spawnFootprints.Add(prefab, (offset, radius));
+            }
             groundBounds = boundaryGround.bounds;
             schedule = new ServerWaveSchedule(runId, settings, NetworkTime.time);
             lastTargetParticipant = 0;
             progress.Publish(this, schedule.State);
             nextPublish = NetworkTime.time + 0.2;
-            Debug.Log($"[Waves] run={runId} begin duration={settings.Duration} count={settings.Count} interval={settings.Interval} cap={settings.Limit}", this);
+            Debug.Log($"[Waves] run={runId} begin waveDuration={settings.Duration} authoredWaves={settings.Program.WaveCount} events={settings.Program.EventCount} cap={settings.Limit}", this);
             return true;
         }
 
@@ -204,8 +217,11 @@ namespace MonsterSupergroup.NetworkCombat
             return chosen;
         }
 
-        private bool TryChoosePosition(RunParticipant target, long sequence, out Vector2 position)
+        private bool TryChoosePosition(RunParticipant target, long sequence, GameObject prefab, out Vector2 position)
         {
+            var footprint = spawnFootprints[prefab];
+            Vector2 colliderOffset = footprint.offset;
+            float colliderRadius = footprint.radius;
             Vector2 center = NetworkServer.spawned[target.AvatarId].transform.position;
             for (int i = 0; i < settings.Attempts; i++)
             {
@@ -231,12 +247,12 @@ namespace MonsterSupergroup.NetworkCombat
             var participant = endpoint.GetComponent<NetworkRunParticipant>();
             ulong key = participant != null && participant.ParticipantId != 0 ? participant.ParticipantId : ((ulong)1 << 32) | endpoint.PlayerEntityId;
             if (!spawnedForPlayers.Add(key)) return;
-            SpawnEnemy((Vector2)endpoint.transform.position + DirectionFor(endpoint.PlayerEntityId) * spawnDistance, endpoint.PlayerEntityId);
+            SpawnEnemy((Vector2)endpoint.transform.position + DirectionFor(endpoint.PlayerEntityId) * spawnDistance, endpoint.PlayerEntityId, enemyPrefab);
         }
 
-        private uint SpawnEnemy(Vector2 position, uint targetId)
+        private uint SpawnEnemy(Vector2 position, uint targetId, GameObject prefab)
         {
-            GameObject enemy = Instantiate(enemyPrefab, position, Quaternion.identity);
+            GameObject enemy = Instantiate(prefab, position, Quaternion.identity);
             var agent = enemy.GetComponent<NetworkEnemySimulationAgent>();
             if (agent == null) { Destroy(enemy); return 0; }
             agent.ConfigureRuntimeMinimumHealthOverride(runtimeMinimumSpawnHealth);

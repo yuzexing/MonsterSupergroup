@@ -9,21 +9,10 @@ namespace AstralShift.HellMaiden.Data.Cards
 		[SerializeField]
 		protected uint id;
 
-		[SerializeField]
-		protected string title;
-
-		[TextArea]
-		[SerializeField]
-		protected string description;
-
-		[SerializeField]
-		protected bool hasLocalization;
-
-		[SerializeField]
-		protected string titleKey;
-
-		[SerializeField]
-		protected string descriptionKey;
+        [SerializeField] private UnityEngine.Localization.LocalizedString localizedTitle = new();
+        [SerializeField] private UnityEngine.Localization.LocalizedString localizedDescription = new();
+        public UnityEngine.Localization.LocalizedString LocalizedTitle => localizedTitle;
+        public UnityEngine.Localization.LocalizedString LocalizedDescription => localizedDescription;
 
 		[SerializeField]
 		public UltimateAttackEvents ultimateAttackEvents;
@@ -37,30 +26,10 @@ namespace AstralShift.HellMaiden.Data.Cards
 
 		public uint Id => id;
 
-		public bool HasLocalization => hasLocalization;
 
 		public AttackStats BaseStats => baseStats;
 
-		public virtual string GetTitle()
-		{
-			if (HasLocalization)
-			{
-				string term = titleKey;
-				LocalizationMediator.GetTranslation(ref term);
-				return term;
-			}
-			return title;
-		}
-
-		public virtual string GetDescription()
-		{
-			if (HasLocalization)
-			{
-				string term = descriptionKey;
-				LocalizationMediator.GetTranslation(ref term);
-				return term;
-			}
-			return description;
-		}
-	}
+        public virtual string GetTitle() => MonsterSupergroup.Gameplay.Options.GameLocalization.Resolve(localizedTitle, Id);
+        public virtual string GetDescription() => MonsterSupergroup.Gameplay.Options.GameLocalization.Resolve(localizedDescription, Id);
+    }
 }

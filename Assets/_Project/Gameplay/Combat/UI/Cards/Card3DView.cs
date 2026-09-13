@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using MonsterSupergroup.Gameplay.Options;
 using AstralShift.Helpers;
 using Cysharp.Threading.Tasks;
 using TMPro;
@@ -204,6 +205,7 @@ namespace AstralShift.HellMaiden.UI.Cards
 			if ((bool)titleText)
 			{
 				titleText.enabled = true;
+                if (GameLocalization.TMPFont != null) titleText.font = GameLocalization.TMPFont;
 				titleText.SetText(text);
 				titleText.color = color;
 				titleText.ForceMeshUpdate(ignoreActiveState: true, forceTextReparsing: true);
@@ -234,6 +236,7 @@ namespace AstralShift.HellMaiden.UI.Cards
 			{
 				fullDescriptionParent.gameObject.SetActive(value: true);
 				fullDescriptionText.enabled = true;
+                if (GameLocalization.TMPFont != null) fullDescriptionText.font = GameLocalization.TMPFont;
 				fullDescriptionText.SetText(text);
 				fullDescriptionText.color = color;
 				fullDescriptionText.ForceMeshUpdate(ignoreActiveState: true, forceTextReparsing: true);
@@ -252,6 +255,7 @@ namespace AstralShift.HellMaiden.UI.Cards
 					quoteSeparator.color = separatorColor;
 				}
 				quoteText.SetText(text);
+                if (GameLocalization.TMPFont != null) quoteText.font = GameLocalization.TMPFont;
 				quoteText.color = color;
 				quoteText.ForceMeshUpdate(ignoreActiveState: true, forceTextReparsing: true);
 			}

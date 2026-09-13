@@ -46,6 +46,7 @@ namespace MonsterSupergroup.NetworkCombat
         }
 
         public int PendingResultCount => results.Count;
+        public event Action<CombatEvent> DamageResolved;
         public int PendingStatusMutationCount => statusMutations.Count;
         public int PendingPlayerHealthReportCount => playerHealthReports.Count;
         public bool RequiresFlush =>
@@ -84,6 +85,7 @@ namespace MonsterSupergroup.NetworkCombat
 
             EnsureCapacity();
             results.Add(CombatResult.From(combatEvent));
+            DamageResolved?.Invoke(combatEvent);
         }
 
         public void EnqueuePlayerHealth(PlayerHealthReport report)
@@ -146,6 +148,7 @@ namespace MonsterSupergroup.NetworkCombat
             statusMutations.Clear();
             playerHealthReports.Clear();
             lastSubmittedStacks.Clear();
+            DamageResolved = null;
         }
 
         private void HandleStatusChanged(StatusChange change)

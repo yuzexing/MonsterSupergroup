@@ -1,5 +1,6 @@
 using AstralShift.Helpers;
-using AstralShift.QTI.Helpers.Attributes;
+using MonsterSupergroup.Gameplay.Options;
+using UnityEngine.Localization;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
@@ -11,30 +12,12 @@ namespace AstralShift.HellMaiden.Data.Cards
 		[Header("General Settings")]
 		public uint ID;
 
-		public string Title;
-
-		[TextArea]
-		[SerializeField]
-		protected string Description;
-
-		[SerializeField]
-		protected bool HasQuote;
-
-		[SerializeField]
-		[ConditionalHide("HasQuote", true)]
-		[TextArea]
-		protected string Quote;
-
-		public bool hasLocalization;
-
-		[SerializeField]
-		protected string TitleKey;
-
-		[SerializeField]
-		protected string DescriptionKey;
-
-		[SerializeField]
-		protected string QuoteKey;
+        [SerializeField] private LocalizedString localizedTitle = new();
+        [SerializeField] protected LocalizedString localizedDescription = new();
+        [SerializeField] private LocalizedString localizedQuote = new();
+        public LocalizedString LocalizedTitle => localizedTitle;
+        public LocalizedString LocalizedDescription => localizedDescription;
+        public LocalizedString LocalizedQuote => localizedQuote;
 
 		public PoetPoolID poolID;
 
@@ -47,18 +30,6 @@ namespace AstralShift.HellMaiden.Data.Cards
 		[Space]
 		[SerializeField]
 		protected AssetReference visualDataReference;
-
-		public bool HideQuoteKeyField
-		{
-			get
-			{
-				if (hasLocalization)
-				{
-					return !HasQuote;
-				}
-				return false;
-			}
-		}
 
 		public DataDependency[] Dependencies => dependencies;
 
@@ -76,45 +47,13 @@ namespace AstralShift.HellMaiden.Data.Cards
 
 		public AssetReference VisualDataReference => visualDataReference;
 
-		public virtual string GetTitle()
-		{
-			if (hasLocalization)
-			{
-				string term = TitleKey;
-				LocalizationMediator.GetTranslation(ref term);
-				return term;
-			}
-			return Title;
-		}
-
-		public virtual string GetDescription()
-		{
-			if (hasLocalization)
-			{
-				string term = DescriptionKey;
-				LocalizationMediator.GetTranslation(ref term);
-				return term;
-			}
-			return Description;
-		}
-
-		public virtual bool GetQuote(out string text)
-		{
-			if (HasQuote)
-			{
-				if (hasLocalization)
-				{
-					string term = QuoteKey;
-					LocalizationMediator.GetTranslation(ref term);
-					text = term;
-					return true;
-				}
-				text = Quote;
-				return true;
-			}
-			text = null;
-			return false;
-		}
+        public virtual string GetTitle() => GameLocalization.Resolve(localizedTitle, ID);
+        public virtual string GetDescription() => GameLocalization.Resolve(localizedDescription, ID);
+        public virtual bool GetQuote(out string text)
+        {
+            text = localizedQuote == null || localizedQuote.IsEmpty ? null : GameLocalization.Resolve(localizedQuote, ID);
+            return !string.IsNullOrWhiteSpace(text);
+        }
 
 		public bool RequestVisualData(out AsyncOperationHandle<CardVisualData> operationHandle)
 		{

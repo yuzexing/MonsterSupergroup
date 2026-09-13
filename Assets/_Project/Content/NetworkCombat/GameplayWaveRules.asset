@@ -13,8 +13,7 @@ MonoBehaviour:
   m_Name: GameplayWaveRules
   m_EditorClassIdentifier: MonsterSupergroup.NetworkCombat::MonsterSupergroup.NetworkCombat.GameplayWaveRules
   waveDuration: 30
-  enemiesPerWave: 6
-  spawnInterval: 2
+  timeline: {fileID: 11400000, guid: b13b9fc0a0112eb44a4b5f0cfe279fe7, type: 2}
   maximumAlive: 30
   spawnRadius: 5
   minimumPlayerDistance: 2

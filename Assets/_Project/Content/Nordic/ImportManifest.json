@@ -1,0 +1,1505 @@
+{
+  "stage": "full",
+  "prefabs": [
+    {
+      "path": "Assets/_Project/Content/Nordic/Prefabs/Tree_1.prefab",
+      "source": "Assets/GameObject/Tree_1.prefab",
+      "group": 1,
+      "lights": [],
+      "sourceSpriteCount": 1,
+      "transformCount": 2
+    },
+    {
+      "path": "Assets/_Project/Content/Nordic/Prefabs/Stone_4 Snow (Stone_1 Variant).prefab",
+      "source": "Assets/GameObject/Stone_4 Snow (Stone_1 Variant).prefab",
+      "group": 2,
+      "lights": [],
+      "sourceSpriteCount": 1,
+      "transformCount": 2
+    },
+    {
+      "path": "Assets/_Project/Content/Nordic/Prefabs/Stone_5 Snow (Stone_1 Variant).prefab",
+      "source": "Assets/GameObject/Stone_5 Snow (Stone_1 Variant).prefab",
+      "group": 2,
+      "lights": [],
+      "sourceSpriteCount": 1,
+      "transformCount": 2
+    },
+    {
+      "path": "Assets/_Project/Content/Nordic/Prefabs/Stone_6 Snow (Stone_1 Variant).prefab",
+      "source": "Assets/GameObject/Stone_6 Snow (Stone_1 Variant).prefab",
+      "group": 2,
+      "lights": [],
+      "sourceSpriteCount": 1,
+      "transformCount": 2
+    },
+    {
+      "path": "Assets/_Project/Content/Nordic/Prefabs/Stone_7 Snow (Stone_1 Variant).prefab",
+      "source": "Assets/GameObject/Stone_7 Snow (Stone_1 Variant).prefab",
+      "group": 2,
+      "lights": [],
+      "sourceSpriteCount": 1,
+      "transformCount": 2
+    },
+    {
+      "path": "Assets/_Project/Content/Nordic/Prefabs/Stone_8 Snow (Stone_1 Variant).prefab",
+      "source": "Assets/GameObject/Stone_8 Snow (Stone_1 Variant).prefab",
+      "group": 2,
+      "lights": [],
+      "sourceSpriteCount": 1,
+      "transformCount": 2
+    },
+    {
+      "path": "Assets/_Project/Content/Nordic/Prefabs/Composition_Grass_1.prefab",
+      "source": "Assets/GameObject/Composition_Grass_1.prefab",
+      "group": 3,
+      "lights": [],
+      "sourceSpriteCount": 8,
+      "transformCount": 9
+    },
+    {
+      "path": "Assets/_Project/Content/Nordic/Prefabs/Composition_Grass_2.prefab",
+      "source": "Assets/GameObject/Composition_Grass_2.prefab",
+      "group": 3,
+      "lights": [],
+      "sourceSpriteCount": 8,
+      "transformCount": 9
+    },
+    {
+      "path": "Assets/_Project/Content/Nordic/Prefabs/Composition_Grass_3.prefab",
+      "source": "Assets/GameObject/Composition_Grass_3.prefab",
+      "group": 3,
+      "lights": [],
+      "sourceSpriteCount": 4,
+      "transformCount": 5
+    },
+    {
+      "path": "Assets/_Project/Content/Nordic/Prefabs/Composition_Grass_4.prefab",
+      "source": "Assets/GameObject/Composition_Grass_4.prefab",
+      "group": 3,
+      "lights": [],
+      "sourceSpriteCount": 4,
+      "transformCount": 5
+    },
+    {
+      "path": "Assets/_Project/Content/Nordic/Prefabs/Composition_Grass_5.prefab",
+      "source": "Assets/GameObject/Composition_Grass_5.prefab",
+      "group": 3,
+      "lights": [],
+      "sourceSpriteCount": 6,
+      "transformCount": 7
+    },
+    {
+      "path": "Assets/_Project/Content/Nordic/Prefabs/Composition_Grass_6.prefab",
+      "source": "Assets/GameObject/Composition_Grass_6.prefab",
+      "group": 3,
+      "lights": [],
+      "sourceSpriteCount": 6,
+      "transformCount": 7
+    },
+    {
+      "path": "Assets/_Project/Content/Nordic/Prefabs/Grass_1.prefab",
+      "source": "Assets/GameObject/Grass_1.prefab",
+      "group": 3,
+      "lights": [],
+      "sourceSpriteCount": 1,
+      "transformCount": 1
+    },
+    {
+      "path": "Assets/_Project/Content/Nordic/Prefabs/Grass_2 (Grass_1 Variant).prefab",
+      "source": "Assets/GameObject/Grass_2 (Grass_1 Variant).prefab",
+      "group": 3,
+      "lights": [],
+      "sourceSpriteCount": 1,
+      "transformCount": 1
+    },
+    {
+      "path": "Assets/_Project/Content/Nordic/Prefabs/Flower_6 Snow (Flower_1 Variant).prefab",
+      "source": "Assets/GameObject/Flower_6 Snow (Flower_1 Variant).prefab",
+      "group": 3,
+      "lights": [],
+      "sourceSpriteCount": 1,
+      "transformCount": 2
+    },
+    {
+      "path": "Assets/_Project/Content/Nordic/Prefabs/Tree_2 (Tree_1 Variant).prefab",
+      "source": "Assets/GameObject/Tree_2 (Tree_1 Variant).prefab",
+      "group": 4,
+      "lights": [],
+      "sourceSpriteCount": 1,
+      "transformCount": 2
+    },
+    {
+      "path": "Assets/_Project/Content/Nordic/Prefabs/Composition_Flowers_1.prefab",
+      "source": "Assets/GameObject/Composition_Flowers_1.prefab",
+      "group": 5,
+      "lights": [],
+      "sourceSpriteCount": 6,
+      "transformCount": 25
+    },
+    {
+      "path": "Assets/_Project/Content/Nordic/Prefabs/Composition_Flowers_2.prefab",
+      "source": "Assets/GameObject/Composition_Flowers_2.prefab",
+      "group": 5,
+      "lights": [],
+      "sourceSpriteCount": 8,
+      "transformCount": 17
+    },
+    {
+      "path": "Assets/_Project/Content/Nordic/Prefabs/Composition_Flowers_3.prefab",
+      "source": "Assets/GameObject/Composition_Flowers_3.prefab",
+      "group": 5,
+      "lights": [],
+      "sourceSpriteCount": 7,
+      "transformCount": 15
+    },
+    {
+      "path": "Assets/_Project/Content/Nordic/Prefabs/Composition_Flowers_4.prefab",
+      "source": "Assets/GameObject/Composition_Flowers_4.prefab",
+      "group": 5,
+      "lights": [],
+      "sourceSpriteCount": 3,
+      "transformCount": 7
+    },
+    {
+      "path": "Assets/_Project/Content/Nordic/Prefabs/Composition_Flowers_5.prefab",
+      "source": "Assets/GameObject/Composition_Flowers_5.prefab",
+      "group": 5,
+      "lights": [],
+      "sourceSpriteCount": 3,
+      "transformCount": 7
+    },
+    {
+      "path": "Assets/_Project/Content/Nordic/Prefabs/Composition_Flowers_6.prefab",
+      "source": "Assets/GameObject/Composition_Flowers_6.prefab",
+      "group": 5,
+      "lights": [],
+      "sourceSpriteCount": 6,
+      "transformCount": 13
+    },
+    {
+      "path": "Assets/_Project/Content/Nordic/Prefabs/Composition_Flowers_7.prefab",
+      "source": "Assets/GameObject/Composition_Flowers_7.prefab",
+      "group": 5,
+      "lights": [],
+      "sourceSpriteCount": 9,
+      "transformCount": 19
+    },
+    {
+      "path": "Assets/_Project/Content/Nordic/Prefabs/Ruin_1 v2 (Ruin_1 Variant).prefab",
+      "source": "Assets/GameObject/Ruin_1 v2 (Ruin_1 Variant).prefab",
+      "group": 6,
+      "lights": [
+        {
+          "node": "Light 2D Background (1)",
+          "r": 1,
+          "g": 0.51768756,
+          "b": 0,
+          "intensity": 0.5,
+          "inner": 0.38,
+          "outer": 6.05,
+          "falloff": 0.662
+        },
+        {
+          "node": "Light 2D Entities",
+          "r": 1,
+          "g": 0.73534495,
+          "b": 0.44968545,
+          "intensity": 0.3,
+          "inner": 1.47,
+          "outer": 2.88,
+          "falloff": 0.677
+        }
+      ],
+      "sourceSpriteCount": 3,
+      "transformCount": 8
+    },
+    {
+      "path": "Assets/_Project/Content/Nordic/Prefabs/Ruin_2 (Ruin_1 Variant).prefab",
+      "source": "Assets/GameObject/Ruin_2 (Ruin_1 Variant).prefab",
+      "group": 6,
+      "lights": [],
+      "sourceSpriteCount": 1,
+      "transformCount": 2
+    },
+    {
+      "path": "Assets/_Project/Content/Nordic/Prefabs/Ruin_3 (Ruin_1 Variant).prefab",
+      "source": "Assets/GameObject/Ruin_3 (Ruin_1 Variant).prefab",
+      "group": 6,
+      "lights": [
+        {
+          "node": "Light 2D Background (1)",
+          "r": 1,
+          "g": 0.51768756,
+          "b": 0,
+          "intensity": 0.5,
+          "inner": 0.38,
+          "outer": 6.05,
+          "falloff": 0.662
+        },
+        {
+          "node": "Light 2D Entities",
+          "r": 1,
+          "g": 0.73534495,
+          "b": 0.44968545,
+          "intensity": 0.3,
+          "inner": 1.47,
+          "outer": 2.88,
+          "falloff": 0.677
+        }
+      ],
+      "sourceSpriteCount": 3,
+      "transformCount": 8
+    },
+    {
+      "path": "Assets/_Project/Content/Nordic/Prefabs/Ruin_4 (Ruin_1 Variant).prefab",
+      "source": "Assets/GameObject/Ruin_4 (Ruin_1 Variant).prefab",
+      "group": 6,
+      "lights": [],
+      "sourceSpriteCount": 1,
+      "transformCount": 2
+    },
+    {
+      "path": "Assets/_Project/Content/Nordic/Prefabs/Ruin_5 (Ruin_1 Variant).prefab",
+      "source": "Assets/GameObject/Ruin_5 (Ruin_1 Variant).prefab",
+      "group": 6,
+      "lights": [
+        {
+          "node": "Light 2D Background (1)",
+          "r": 1,
+          "g": 0.51768756,
+          "b": 0,
+          "intensity": 0.5,
+          "inner": 0.38,
+          "outer": 6.05,
+          "falloff": 0.662
+        },
+        {
+          "node": "Light 2D Entities",
+          "r": 1,
+          "g": 0.73534495,
+          "b": 0.44968545,
+          "intensity": 0.3,
+          "inner": 1.47,
+          "outer": 2.88,
+          "falloff": 0.677
+        }
+      ],
+      "sourceSpriteCount": 3,
+      "transformCount": 8
+    },
+    {
+      "path": "Assets/_Project/Content/Nordic/Prefabs/Torch_Midgard.prefab",
+      "source": "Assets/GameObject/Torch_Midgard.prefab",
+      "group": 7,
+      "lights": [
+        {
+          "node": "Light 2D Entities",
+          "r": 1,
+          "g": 0.73534495,
+          "b": 0.44968545,
+          "intensity": 0.3,
+          "inner": 1.47,
+          "outer": 2.88,
+          "falloff": 0.677
+        },
+        {
+          "node": "Light 2D Background",
+          "r": 1,
+          "g": 0.51768756,
+          "b": 0,
+          "intensity": 0.5,
+          "inner": 0.38,
+          "outer": 6.05,
+          "falloff": 0.662
+        }
+      ],
+      "sourceSpriteCount": 4,
+      "transformCount": 9
+    },
+    {
+      "path": "Assets/_Project/Content/Nordic/Prefabs/Destructible_1.prefab",
+      "source": "Assets/GameObject/Destructible_1.prefab",
+      "group": 8,
+      "lights": [],
+      "sourceSpriteCount": 2,
+      "transformCount": 6
+    },
+    {
+      "path": "Assets/_Project/Content/Nordic/Prefabs/Composition_Destructibles_1.prefab",
+      "source": "Assets/GameObject/Composition_Destructibles_1.prefab",
+      "group": 8,
+      "lights": [],
+      "sourceSpriteCount": 4,
+      "transformCount": 13
+    },
+    {
+      "path": "Assets/_Project/Content/Nordic/Prefabs/Composition_Destructibles_2.prefab",
+      "source": "Assets/GameObject/Composition_Destructibles_2.prefab",
+      "group": 8,
+      "lights": [],
+      "sourceSpriteCount": 4,
+      "transformCount": 13
+    },
+    {
+      "path": "Assets/_Project/Content/Nordic/Prefabs/Composition_Destructibles_3.prefab",
+      "source": "Assets/GameObject/Composition_Destructibles_3.prefab",
+      "group": 8,
+      "lights": [],
+      "sourceSpriteCount": 4,
+      "transformCount": 13
+    },
+    {
+      "path": "Assets/_Project/Content/Nordic/Prefabs/Composition_Destructibles_4.prefab",
+      "source": "Assets/GameObject/Composition_Destructibles_4.prefab",
+      "group": 8,
+      "lights": [],
+      "sourceSpriteCount": 4,
+      "transformCount": 13
+    },
+    {
+      "path": "Assets/_Project/Content/Nordic/Prefabs/Destructible_Bush_1.prefab",
+      "source": "Assets/GameObject/Destructible_Bush_1.prefab",
+      "group": 9,
+      "lights": [],
+      "sourceSpriteCount": 2,
+      "transformCount": 6
+    }
+  ],
+  "character": {
+    "path": "Assets/_Project/Content/Nordic/Prefabs/Viking (Character Variant).prefab",
+    "source": "Assets/GameObject/Viking (Character Variant).prefab",
+    "group": 10,
+    "lights": [],
+    "sourceSpriteCount": 7,
+    "transformCount": 13
+  },
+  "sprites": [
+    {
+      "path": "Assets/_Project/Content/Nordic/Sprites/fondo base_V3.asset",
+      "source": "Assets/Sprite/fondo base_V3.asset",
+      "ppu": 100,
+      "width": 876,
+      "height": 871,
+      "vertexCount": 191,
+      "pivotX": 0.5,
+      "pivotY": 0.50287026
+    },
+    {
+      "path": "Assets/_Project/Content/Nordic/Sprites/terreno dibujado7.asset",
+      "source": "Assets/Sprite/terreno dibujado7.asset",
+      "ppu": 100,
+      "width": 1092,
+      "height": 403,
+      "vertexCount": 119,
+      "pivotX": 0.5,
+      "pivotY": 0.5
+    },
+    {
+      "path": "Assets/_Project/Content/Nordic/Sprites/terreno dibujado_rocas2.asset",
+      "source": "Assets/Sprite/terreno dibujado_rocas2.asset",
+      "ppu": 100,
+      "width": 1092,
+      "height": 403,
+      "vertexCount": 119,
+      "pivotX": 0.5,
+      "pivotY": 0.5
+    },
+    {
+      "path": "Assets/_Project/Content/Nordic/Sprites/arbol 1.asset",
+      "source": "Assets/Sprite/arbol 1.asset",
+      "ppu": 100,
+      "width": 398,
+      "height": 493,
+      "vertexCount": 45,
+      "pivotX": 0.5096876,
+      "pivotY": 0.16320394
+    },
+    {
+      "path": "Assets/_Project/Content/Nordic/Sprites/monticulo 1.asset",
+      "source": "Assets/Sprite/monticulo 1.asset",
+      "ppu": 100,
+      "width": 421,
+      "height": 240,
+      "vertexCount": 58,
+      "pivotX": 0.5328625,
+      "pivotY": 0.30031535
+    },
+    {
+      "path": "Assets/_Project/Content/Nordic/Sprites/monticulo 2.asset",
+      "source": "Assets/Sprite/monticulo 2.asset",
+      "ppu": 100,
+      "width": 339,
+      "height": 212,
+      "vertexCount": 50,
+      "pivotX": 0.51866925,
+      "pivotY": 0.32427892
+    },
+    {
+      "path": "Assets/_Project/Content/Nordic/Sprites/monticulo 3_0.asset",
+      "source": "Assets/Sprite/monticulo 3_0.asset",
+      "ppu": 100,
+      "width": 393,
+      "height": 220,
+      "vertexCount": 26,
+      "pivotX": 0.51866937,
+      "pivotY": 0.3149422
+    },
+    {
+      "path": "Assets/_Project/Content/Nordic/Sprites/monticulo 4_0.asset",
+      "source": "Assets/Sprite/monticulo 4_0.asset",
+      "ppu": 100,
+      "width": 331,
+      "height": 292,
+      "vertexCount": 23,
+      "pivotX": 0.49321112,
+      "pivotY": 0.26877868
+    },
+    {
+      "path": "Assets/_Project/Content/Nordic/Sprites/monticulo 5.asset",
+      "source": "Assets/Sprite/monticulo 5.asset",
+      "ppu": 100,
+      "width": 550,
+      "height": 464,
+      "vertexCount": 67,
+      "pivotX": 0.48754966,
+      "pivotY": 0.2509606
+    },
+    {
+      "path": "Assets/_Project/Content/Nordic/Sprites/minihierba 1.asset",
+      "source": "Assets/Sprite/minihierba 1.asset",
+      "ppu": 100,
+      "width": 13,
+      "height": 16,
+      "vertexCount": 4,
+      "pivotX": 0.4870035,
+      "pivotY": 0.16913058
+    },
+    {
+      "path": "Assets/_Project/Content/Nordic/Sprites/minihierba 2.asset",
+      "source": "Assets/Sprite/minihierba 2.asset",
+      "ppu": 100,
+      "width": 10,
+      "height": 15,
+      "vertexCount": 4,
+      "pivotX": 0.4815206,
+      "pivotY": 0.14977117
+    },
+    {
+      "path": "Assets/_Project/Content/Nordic/Sprites/minihierba 3.asset",
+      "source": "Assets/Sprite/minihierba 3.asset",
+      "ppu": 100,
+      "width": 11,
+      "height": 16,
+      "vertexCount": 4,
+      "pivotX": 0.5127996,
+      "pivotY": 0.1902499
+    },
+    {
+      "path": "Assets/_Project/Content/Nordic/Sprites/minihierba 4.asset",
+      "source": "Assets/Sprite/minihierba 4.asset",
+      "ppu": 100,
+      "width": 15,
+      "height": 15,
+      "vertexCount": 4,
+      "pivotX": 0.50527984,
+      "pivotY": 0.16561066
+    },
+    {
+      "path": "Assets/_Project/Content/Nordic/Sprites/piedras suelo 1.asset",
+      "source": "Assets/Sprite/piedras suelo 1.asset",
+      "ppu": 100,
+      "width": 32,
+      "height": 27,
+      "vertexCount": 4,
+      "pivotX": 0.48302785,
+      "pivotY": 0.36522844
+    },
+    {
+      "path": "Assets/_Project/Content/Nordic/Sprites/piedras suelo 4.asset",
+      "source": "Assets/Sprite/piedras suelo 4.asset",
+      "ppu": 100,
+      "width": 19,
+      "height": 12,
+      "vertexCount": 4,
+      "pivotX": 0.48981673,
+      "pivotY": 0.24739765
+    },
+    {
+      "path": "Assets/_Project/Content/Nordic/Sprites/piedras suelo 3.asset",
+      "source": "Assets/Sprite/piedras suelo 3.asset",
+      "ppu": 100,
+      "width": 25,
+      "height": 13,
+      "vertexCount": 4,
+      "pivotX": 0.44568905,
+      "pivotY": 0.17361227
+    },
+    {
+      "path": "Assets/_Project/Content/Nordic/Sprites/planta nevada 2.asset",
+      "source": "Assets/Sprite/planta nevada 2.asset",
+      "ppu": 100,
+      "width": 88,
+      "height": 73,
+      "vertexCount": 4,
+      "pivotX": 0.53224707,
+      "pivotY": 0.29110205
+    },
+    {
+      "path": "Assets/_Project/Content/Nordic/Sprites/arbol 2.asset",
+      "source": "Assets/Sprite/arbol 2.asset",
+      "ppu": 100,
+      "width": 398,
+      "height": 526,
+      "vertexCount": 45,
+      "pivotX": 0.4785092,
+      "pivotY": 0.18848997
+    },
+    {
+      "path": "Assets/_Project/Content/Nordic/Sprites/planta nevada 4.asset",
+      "source": "Assets/Sprite/planta nevada 4.asset",
+      "ppu": 100,
+      "width": 100,
+      "height": 116,
+      "vertexCount": 4,
+      "pivotX": 0.52976066,
+      "pivotY": 0.15857099
+    },
+    {
+      "path": "Assets/_Project/Content/Nordic/Sprites/planta nevada 3.asset",
+      "source": "Assets/Sprite/planta nevada 3.asset",
+      "ppu": 100,
+      "width": 123,
+      "height": 132,
+      "vertexCount": 4,
+      "pivotX": 0.49699718,
+      "pivotY": 0.19904964
+    },
+    {
+      "path": "Assets/_Project/Content/Nordic/Sprites/planta nevada 1.asset",
+      "source": "Assets/Sprite/planta nevada 1.asset",
+      "ppu": 100,
+      "width": 79,
+      "height": 127,
+      "vertexCount": 4,
+      "pivotX": 0.5105788,
+      "pivotY": 0.18497013
+    },
+    {
+      "path": "Assets/_Project/Content/Nordic/Sprites/planta nevada 5.asset",
+      "source": "Assets/Sprite/planta nevada 5.asset",
+      "ppu": 100,
+      "width": 85,
+      "height": 135,
+      "vertexCount": 23,
+      "pivotX": 0.5994487,
+      "pivotY": 0.12161217
+    },
+    {
+      "path": "Assets/_Project/Content/Nordic/Sprites/ruinas 1.asset",
+      "source": "Assets/Sprite/ruinas 1.asset",
+      "ppu": 100,
+      "width": 520,
+      "height": 352,
+      "vertexCount": 65,
+      "pivotX": 0.49660558,
+      "pivotY": 0.25930384
+    },
+    {
+      "path": "Assets/_Project/Content/Nordic/Sprites/light.asset",
+      "source": "Assets/Sprite/light.asset",
+      "ppu": 100,
+      "width": 256,
+      "height": 256,
+      "vertexCount": 28,
+      "pivotX": 0.5,
+      "pivotY": 0.5
+    },
+    {
+      "path": "Assets/_Project/Content/Nordic/Sprites/llama antorcha.asset",
+      "source": "Assets/Sprite/llama antorcha.asset",
+      "ppu": 100,
+      "width": 48,
+      "height": 104,
+      "vertexCount": 6,
+      "pivotX": 0.5118222,
+      "pivotY": 0.07761362
+    },
+    {
+      "path": "Assets/_Project/Content/Nordic/Sprites/brillo arma panel.asset",
+      "source": "Assets/Sprite/brillo arma panel.asset",
+      "ppu": 100,
+      "width": 483,
+      "height": 483,
+      "vertexCount": 76,
+      "pivotX": 0.5,
+      "pivotY": 0.5
+    },
+    {
+      "path": "Assets/_Project/Content/Nordic/Sprites/ruinas 2 v2.asset",
+      "source": "Assets/Sprite/ruinas 2 v2.asset",
+      "ppu": 100,
+      "width": 366,
+      "height": 372,
+      "vertexCount": 60,
+      "pivotX": 0.5196767,
+      "pivotY": 0.20784935
+    },
+    {
+      "path": "Assets/_Project/Content/Nordic/Sprites/ruinas 2 v2 antorcha.asset",
+      "source": "Assets/Sprite/ruinas 2 v2 antorcha.asset",
+      "ppu": 100,
+      "width": 366,
+      "height": 372,
+      "vertexCount": 60,
+      "pivotX": 0.52146554,
+      "pivotY": 0.21664909
+    },
+    {
+      "path": "Assets/_Project/Content/Nordic/Sprites/ruinas 3 v2.asset",
+      "source": "Assets/Sprite/ruinas 3 v2.asset",
+      "ppu": 100,
+      "width": 444,
+      "height": 279,
+      "vertexCount": 35,
+      "pivotX": 0.5036295,
+      "pivotY": 0.32713926
+    },
+    {
+      "path": "Assets/_Project/Content/Nordic/Sprites/ruinas 3 v2 antorcha.asset",
+      "source": "Assets/Sprite/ruinas 3 v2 antorcha.asset",
+      "ppu": 100,
+      "width": 444,
+      "height": 279,
+      "vertexCount": 34,
+      "pivotX": 0.5,
+      "pivotY": 0.3271393
+    },
+    {
+      "path": "Assets/_Project/Content/Nordic/Sprites/antorcha 2.asset",
+      "source": "Assets/Sprite/antorcha 2.asset",
+      "ppu": 100,
+      "width": 87,
+      "height": 245,
+      "vertexCount": 8,
+      "pivotX": 0.50741464,
+      "pivotY": 0.08465326
+    },
+    {
+      "path": "Assets/_Project/Content/Nordic/Sprites/antorcha 2 top.asset",
+      "source": "Assets/Sprite/antorcha 2 top.asset",
+      "ppu": 100,
+      "width": 66,
+      "height": 66,
+      "vertexCount": 7,
+      "pivotX": 0.50678885,
+      "pivotY": 0.08022173
+    },
+    {
+      "path": "Assets/_Project/Content/Nordic/Sprites/caja sombra_4.asset",
+      "source": "Assets/Sprite/caja sombra_4.asset",
+      "ppu": 100,
+      "width": 334,
+      "height": 230,
+      "vertexCount": 25,
+      "pivotX": 0.5,
+      "pivotY": 0.5
+    },
+    {
+      "path": "Assets/_Project/Content/Nordic/Sprites/caja_0.asset",
+      "source": "Assets/Sprite/caja_0.asset",
+      "ppu": 100,
+      "width": 157,
+      "height": 146,
+      "vertexCount": 8,
+      "pivotX": 0.50678885,
+      "pivotY": 0.18790975
+    },
+    {
+      "path": "Assets/_Project/Content/Nordic/Sprites/semillero midgard.asset",
+      "source": "Assets/Sprite/semillero midgard.asset",
+      "ppu": 100,
+      "width": 228,
+      "height": 228,
+      "vertexCount": 14,
+      "pivotX": 0.50645995,
+      "pivotY": 0.30620155
+    },
+    {
+      "path": "Assets/_Project/Content/Nordic/Sprites/Sombra_Characters_16.asset",
+      "source": "Assets/Sprite/Sombra_Characters_16.asset",
+      "ppu": 100,
+      "width": 92,
+      "height": 92,
+      "vertexCount": 24,
+      "pivotX": 0.5,
+      "pivotY": 0.5
+    },
+    {
+      "path": "Assets/_Project/Content/Nordic/Sprites/vikingo bota sm.asset",
+      "source": "Assets/Sprite/vikingo bota sm.asset",
+      "ppu": 100,
+      "width": 52,
+      "height": 50.88097,
+      "vertexCount": 7,
+      "pivotX": 0.4271691,
+      "pivotY": 0.81583863
+    },
+    {
+      "path": "Assets/_Project/Content/Nordic/Sprites/mano 2 guante v2 sm.asset",
+      "source": "Assets/Sprite/mano 2 guante v2 sm.asset",
+      "ppu": 100,
+      "width": 63,
+      "height": 52,
+      "vertexCount": 9,
+      "pivotX": 0.1267065,
+      "pivotY": 0.50758433
+    },
+    {
+      "path": "Assets/_Project/Content/Nordic/Sprites/vikingo cuerpo sm.asset",
+      "source": "Assets/Sprite/vikingo cuerpo sm.asset",
+      "ppu": 100,
+      "width": 162,
+      "height": 175,
+      "vertexCount": 13,
+      "pivotX": 0.59012294,
+      "pivotY": 0.50758433
+    },
+    {
+      "path": "Assets/_Project/Content/Nordic/Sprites/vikingo cabeza sm.asset",
+      "source": "Assets/Sprite/vikingo cabeza sm.asset",
+      "ppu": 100,
+      "width": 146.89713,
+      "height": 161.92387,
+      "vertexCount": 8,
+      "pivotX": 0.483018,
+      "pivotY": 0.6562026
+    },
+    {
+      "path": "Assets/_Project/Content/Nordic/Sprites/mano 1 guante V2 sm.asset",
+      "source": "Assets/Sprite/mano 1 guante V2 sm.asset",
+      "ppu": 100,
+      "width": 61,
+      "height": 55,
+      "vertexCount": 7,
+      "pivotX": 0.08567781,
+      "pivotY": 0.6156617
+    }
+  ],
+  "dependencies": [
+    {
+      "source": "Assets/Texture2D/sactx-0-2048x1024-DXT5_BC3-Atlas - Midgard Tiles-e1f3ecb6.png",
+      "target": "Assets/_Project/Content/Nordic/Textures/sactx-0-2048x1024-DXT5_BC3-Atlas - Midgard Tiles-e1f3ecb6.png",
+      "sourceGuid": "bf3078ad2d240814c94133b3b7c0956b",
+      "targetGuid": "e1e21a7c8f9658289d25145ed67d7566",
+      "sourceSha256": "34c53a75bd6fc63b33cf266bf8a9e58725ca5a515a759c16f24787aa0b775a1e"
+    },
+    {
+      "source": "Assets/Sprite/fondo base_V3.asset",
+      "target": "Assets/_Project/Content/Nordic/Sprites/fondo base_V3.asset",
+      "sourceGuid": "70c8d14ab2ee62d4c9c537f054986ea6",
+      "targetGuid": "86bc9fcdab2952878ee44e6679238346",
+      "sourceSha256": "51008f8d2157bd600b95695b77392b304f085bcb03cf15095af0393eb2abaaef"
+    },
+    {
+      "source": "Assets/Sprite/terreno dibujado7.asset",
+      "target": "Assets/_Project/Content/Nordic/Sprites/terreno dibujado7.asset",
+      "sourceGuid": "d0ffefdf7c47b5b4ea4a9aedf3987e40",
+      "targetGuid": "eb9bdaa3b5525f789de00e2e0dd479b0",
+      "sourceSha256": "5983b9e9ced1de4fdf211ae1baa7da2a35183fdfe97e19a681b12e68f09ca63a"
+    },
+    {
+      "source": "Assets/Sprite/terreno dibujado_rocas2.asset",
+      "target": "Assets/_Project/Content/Nordic/Sprites/terreno dibujado_rocas2.asset",
+      "sourceGuid": "2f472d86c543f5644a4349b955a348df",
+      "targetGuid": "4b7309e9282d5139831849bc3ac0fbbb",
+      "sourceSha256": "15fe5efe42d1e9caa28c019d52d47c0e66b9011faf16fdde72be829a3799d582"
+    },
+    {
+      "source": "Assets/Texture2D/sactx-0-2048x2048-DXT5_BC3-Atlas - Midgard Props-9c79dc5d.png",
+      "target": "Assets/_Project/Content/Nordic/Textures/sactx-0-2048x2048-DXT5_BC3-Atlas - Midgard Props-9c79dc5d.png",
+      "sourceGuid": "431beab1bca8cea4b99f78c4186d52fa",
+      "targetGuid": "570732d6ddcc5a3b8db0eb1ff880ce3e",
+      "sourceSha256": "fcee382e10b2fcecfb049831044a5a3a06a553e58e1c6a134e0a9b1305577674"
+    },
+    {
+      "source": "Assets/Sprite/arbol 1.asset",
+      "target": "Assets/_Project/Content/Nordic/Sprites/arbol 1.asset",
+      "sourceGuid": "aa53f180d971df2479f207c06ea18a97",
+      "targetGuid": "7be7bb531051584eb5aa0c74251d6aaa",
+      "sourceSha256": "e05d426b7ae5ace2cb11e183bed51fd7591ad47d1e69493a4a30149740af3da5"
+    },
+    {
+      "source": "Assets/GameObject/Tree_1.prefab",
+      "target": "Assets/_Project/Content/Nordic/Prefabs/Tree_1.prefab",
+      "sourceGuid": "3e71a85df021c9b4aad7873b813ad013",
+      "targetGuid": "925d28ac682a5a11aff839f7fd5a3749",
+      "removedComponents": [
+        "MonoBehaviour",
+        "SpriteMask"
+      ]
+    },
+    {
+      "source": "Assets/Sprite/monticulo 1.asset",
+      "target": "Assets/_Project/Content/Nordic/Sprites/monticulo 1.asset",
+      "sourceGuid": "7706428b799dafa46aa49aa48357de96",
+      "targetGuid": "06559553a2ad536ba041f6f220309684",
+      "sourceSha256": "73eb5512823bfa9bfa79d4205764ff4a9db11f2edd4145b7bdc099c87a0e6250"
+    },
+    {
+      "source": "Assets/GameObject/Stone_4 Snow (Stone_1 Variant).prefab",
+      "target": "Assets/_Project/Content/Nordic/Prefabs/Stone_4 Snow (Stone_1 Variant).prefab",
+      "sourceGuid": "e85a03f35fcdd8f458e7547bef2cd7d4",
+      "targetGuid": "b8eaa5c7678d51728de92766d36ca957",
+      "removedComponents": [
+        "MonoBehaviour",
+        "SpriteMask"
+      ]
+    },
+    {
+      "source": "Assets/Sprite/monticulo 2.asset",
+      "target": "Assets/_Project/Content/Nordic/Sprites/monticulo 2.asset",
+      "sourceGuid": "3acf8e6de7c9a9c42aeb7a9c6eb7cca8",
+      "targetGuid": "30a72b9865d55f8ebcea067b4a0a9088",
+      "sourceSha256": "1bff44479cf881e16838132dd76f3d31a9f6f6e1b04c900f8f440dccabec394b"
+    },
+    {
+      "source": "Assets/GameObject/Stone_5 Snow (Stone_1 Variant).prefab",
+      "target": "Assets/_Project/Content/Nordic/Prefabs/Stone_5 Snow (Stone_1 Variant).prefab",
+      "sourceGuid": "e05094812e1d8204c8996382f02a814b",
+      "targetGuid": "03d5577580ab5e5ca5d364ed8659e567",
+      "removedComponents": [
+        "MonoBehaviour",
+        "SpriteMask"
+      ]
+    },
+    {
+      "source": "Assets/Sprite/monticulo 3_0.asset",
+      "target": "Assets/_Project/Content/Nordic/Sprites/monticulo 3_0.asset",
+      "sourceGuid": "623c4c855bc45914d8c2f0701faa622f",
+      "targetGuid": "776faed123f952ecbe28db5f630efc15",
+      "sourceSha256": "a75005cb267a576f4104c758387760ea4fb747891db43d2905f2ba7b5878b69d"
+    },
+    {
+      "source": "Assets/GameObject/Stone_6 Snow (Stone_1 Variant).prefab",
+      "target": "Assets/_Project/Content/Nordic/Prefabs/Stone_6 Snow (Stone_1 Variant).prefab",
+      "sourceGuid": "d02228f1aa6e01f4ca22c0adbd87bb7f",
+      "targetGuid": "e1afe9c7f6355271873a84017c203822",
+      "removedComponents": [
+        "MonoBehaviour",
+        "SpriteMask"
+      ]
+    },
+    {
+      "source": "Assets/Sprite/monticulo 4_0.asset",
+      "target": "Assets/_Project/Content/Nordic/Sprites/monticulo 4_0.asset",
+      "sourceGuid": "da26f174aca4a2344a6d0f20f77450e1",
+      "targetGuid": "fd376f30a4115786bf5fdc5a6153eb73",
+      "sourceSha256": "74c35805446ada42ff1dc1b2dd34aefa729e1231b040032d5d349eae77d93fce"
+    },
+    {
+      "source": "Assets/GameObject/Stone_7 Snow (Stone_1 Variant).prefab",
+      "target": "Assets/_Project/Content/Nordic/Prefabs/Stone_7 Snow (Stone_1 Variant).prefab",
+      "sourceGuid": "5522560c63569a24a8e3d94523d79b19",
+      "targetGuid": "51b266ad34925eada6b66b2d0464db1d",
+      "removedComponents": [
+        "MonoBehaviour",
+        "SpriteMask"
+      ]
+    },
+    {
+      "source": "Assets/Sprite/monticulo 5.asset",
+      "target": "Assets/_Project/Content/Nordic/Sprites/monticulo 5.asset",
+      "sourceGuid": "00a007447b96f3a419dbcc575ca36ca8",
+      "targetGuid": "97e6b9502d825b809f71170082ffb2a4",
+      "sourceSha256": "98fff04f7b4cdd22c420bfb756e03bc45cbb1f610826a3c364348db39e9dc37f"
+    },
+    {
+      "source": "Assets/GameObject/Stone_8 Snow (Stone_1 Variant).prefab",
+      "target": "Assets/_Project/Content/Nordic/Prefabs/Stone_8 Snow (Stone_1 Variant).prefab",
+      "sourceGuid": "e8b00f7a254b91043876e06b50e37d90",
+      "targetGuid": "d61b0e80099d5a28af971c836008923d",
+      "removedComponents": [
+        "MonoBehaviour",
+        "SpriteMask"
+      ]
+    },
+    {
+      "source": "Assets/Sprite/minihierba 1.asset",
+      "target": "Assets/_Project/Content/Nordic/Sprites/minihierba 1.asset",
+      "sourceGuid": "f98b97311d8b7034482376e5d093ef11",
+      "targetGuid": "451eebe89a9454558d0b56c3c3f844a3",
+      "sourceSha256": "f91077e56b1c23f09c0c1a032a17b1948b22f88775549079bae12a983fff283d"
+    },
+    {
+      "source": "Assets/Sprite/minihierba 2.asset",
+      "target": "Assets/_Project/Content/Nordic/Sprites/minihierba 2.asset",
+      "sourceGuid": "aeaf359c341087945b8c6f8d2e1208ac",
+      "targetGuid": "e201f8bacb9b5646a5722b4a2b650690",
+      "sourceSha256": "11122e70534cc1edaf30852571b3c217923c9f6d9dd6569bd143e6aa630e6d00"
+    },
+    {
+      "source": "Assets/Sprite/minihierba 3.asset",
+      "target": "Assets/_Project/Content/Nordic/Sprites/minihierba 3.asset",
+      "sourceGuid": "7da1d9289adc2414689020261e3d3a01",
+      "targetGuid": "5025cb267fba581cbffcc1c2b0b406cf",
+      "sourceSha256": "9bed0da16e7387845a2a8b6d81c7e1c71f2c4c23c8748f4beaff3366bc1d72e9"
+    },
+    {
+      "source": "Assets/Sprite/minihierba 4.asset",
+      "target": "Assets/_Project/Content/Nordic/Sprites/minihierba 4.asset",
+      "sourceGuid": "2bc15b50ffa4efa4995a951fa5e45963",
+      "targetGuid": "c7177582d4a5521c96984752cb298194",
+      "sourceSha256": "3585e44b9830a59442f5947157bf8ba9f1eaa2fd380cd06f8f820d35b866de37"
+    },
+    {
+      "source": "Assets/GameObject/Composition_Grass_1.prefab",
+      "target": "Assets/_Project/Content/Nordic/Prefabs/Composition_Grass_1.prefab",
+      "sourceGuid": "32ec00a6939eaf24a8b9ed688e3d4e72",
+      "targetGuid": "afbcf2911ea25604b32c792eba5c86af",
+      "removedComponents": []
+    },
+    {
+      "source": "Assets/GameObject/Composition_Grass_2.prefab",
+      "target": "Assets/_Project/Content/Nordic/Prefabs/Composition_Grass_2.prefab",
+      "sourceGuid": "c3b830df2d24a614ba30aba47c309590",
+      "targetGuid": "9f78301374f657c38d6735dda5cfe0c8",
+      "removedComponents": []
+    },
+    {
+      "source": "Assets/GameObject/Composition_Grass_3.prefab",
+      "target": "Assets/_Project/Content/Nordic/Prefabs/Composition_Grass_3.prefab",
+      "sourceGuid": "adea70274d6aecd48aba16730f892716",
+      "targetGuid": "b223516fbd805171aae81c21d3bb29e9",
+      "removedComponents": []
+    },
+    {
+      "source": "Assets/GameObject/Composition_Grass_4.prefab",
+      "target": "Assets/_Project/Content/Nordic/Prefabs/Composition_Grass_4.prefab",
+      "sourceGuid": "85e290a3f7b2a934d9642eff39ed6c60",
+      "targetGuid": "83530012ea015849abc764a3005ecd74",
+      "removedComponents": []
+    },
+    {
+      "source": "Assets/Sprite/piedras suelo 1.asset",
+      "target": "Assets/_Project/Content/Nordic/Sprites/piedras suelo 1.asset",
+      "sourceGuid": "c7867785e2b21d14ca46bbb8b10b0f3f",
+      "targetGuid": "98b28f1d24a75908acff658357f7ab0e",
+      "sourceSha256": "77330294807850f5e9fea24448566937f06c2e72abf10eec29e97a403ca29dd8"
+    },
+    {
+      "source": "Assets/Sprite/piedras suelo 4.asset",
+      "target": "Assets/_Project/Content/Nordic/Sprites/piedras suelo 4.asset",
+      "sourceGuid": "1da644c13ccd8814eb92625d2a9897b5",
+      "targetGuid": "415cc122a95b5f9f965e428649cdc67b",
+      "sourceSha256": "90190fbc2e549d5b2ef152000ba63e10246b62312f0aac0b4e9d761a04b9125c"
+    },
+    {
+      "source": "Assets/GameObject/Composition_Grass_5.prefab",
+      "target": "Assets/_Project/Content/Nordic/Prefabs/Composition_Grass_5.prefab",
+      "sourceGuid": "d05c47158671196459b7bceceaa38922",
+      "targetGuid": "535083cf67485513b266ea262f5aeb09",
+      "removedComponents": []
+    },
+    {
+      "source": "Assets/Sprite/piedras suelo 3.asset",
+      "target": "Assets/_Project/Content/Nordic/Sprites/piedras suelo 3.asset",
+      "sourceGuid": "3bfcaa48aa20ec040b28028b901b51c6",
+      "targetGuid": "98fb98c35be0552b8682050a3e80f6b6",
+      "sourceSha256": "e5f67f9fd5f725bb0ebae10310cdfc426a7cd22b90961e00631d3d1088badfb9"
+    },
+    {
+      "source": "Assets/GameObject/Composition_Grass_6.prefab",
+      "target": "Assets/_Project/Content/Nordic/Prefabs/Composition_Grass_6.prefab",
+      "sourceGuid": "8313c6cab103a6c4199ccf80780e6f07",
+      "targetGuid": "34d3fd7108f95c07b45fac0863b1fb3e",
+      "removedComponents": []
+    },
+    {
+      "source": "Assets/GameObject/Grass_1.prefab",
+      "target": "Assets/_Project/Content/Nordic/Prefabs/Grass_1.prefab",
+      "sourceGuid": "31a34b49fd4a67a4cbd00b48a7e9d8c9",
+      "targetGuid": "b9bbd5ca89d15c6bbab61dff0b58d640",
+      "removedComponents": []
+    },
+    {
+      "source": "Assets/GameObject/Grass_2 (Grass_1 Variant).prefab",
+      "target": "Assets/_Project/Content/Nordic/Prefabs/Grass_2 (Grass_1 Variant).prefab",
+      "sourceGuid": "8b59a3a72902c204d85090dcab86a563",
+      "targetGuid": "4c754440d66e5a279522d97fe6060fac",
+      "removedComponents": []
+    },
+    {
+      "source": "Assets/Sprite/planta nevada 2.asset",
+      "target": "Assets/_Project/Content/Nordic/Sprites/planta nevada 2.asset",
+      "sourceGuid": "3ab88a9773c526b4da1599046d5d140d",
+      "targetGuid": "5550c66428bf5aaca7b9cbeb83ad621f",
+      "sourceSha256": "b15208fecb31689cbadbebbae640987c6824fd0ebe68fef018879873a32a23de"
+    },
+    {
+      "source": "Assets/GameObject/Flower_6 Snow (Flower_1 Variant).prefab",
+      "target": "Assets/_Project/Content/Nordic/Prefabs/Flower_6 Snow (Flower_1 Variant).prefab",
+      "sourceGuid": "58a0954716a0c8c4086190677d6fe2c5",
+      "targetGuid": "35fa166cb0b055bc898549323c527d47",
+      "removedComponents": [
+        "Animation",
+        "BoxCollider2D",
+        "MonoBehaviour"
+      ]
+    },
+    {
+      "source": "Assets/Sprite/arbol 2.asset",
+      "target": "Assets/_Project/Content/Nordic/Sprites/arbol 2.asset",
+      "sourceGuid": "584af59b0b127294bab94bf112774476",
+      "targetGuid": "83441096b8475e529fdf29fee1d5a44f",
+      "sourceSha256": "76a5e62a99bfc8cfba7a0aa7cc684057534b83a01acda798113c8d2f4f17665b"
+    },
+    {
+      "source": "Assets/GameObject/Tree_2 (Tree_1 Variant).prefab",
+      "target": "Assets/_Project/Content/Nordic/Prefabs/Tree_2 (Tree_1 Variant).prefab",
+      "sourceGuid": "722cfb29d3f17ca4489ccbb4a93fc913",
+      "targetGuid": "dc24c921cc505d1098a2061f5afc6580",
+      "removedComponents": [
+        "MonoBehaviour",
+        "SpriteMask"
+      ]
+    },
+    {
+      "source": "Assets/Sprite/planta nevada 4.asset",
+      "target": "Assets/_Project/Content/Nordic/Sprites/planta nevada 4.asset",
+      "sourceGuid": "9e1e7f8759f0f15439851555edc654b2",
+      "targetGuid": "49a517d049135629afc60126a98d76a8",
+      "sourceSha256": "2fcb8ccf0338a93027755455a3df7e1c45530a00449acd31bd9f4cdfdcaf2f09"
+    },
+    {
+      "source": "Assets/Sprite/planta nevada 3.asset",
+      "target": "Assets/_Project/Content/Nordic/Sprites/planta nevada 3.asset",
+      "sourceGuid": "205f81a7a43e3614d890462e451b437f",
+      "targetGuid": "e7ffa835eb7a5693a42d18f625e1270e",
+      "sourceSha256": "0979ef482f92bcf9c16a02abb81807518f637502db1106c0e897a82926d79643"
+    },
+    {
+      "source": "Assets/GameObject/Composition_Flowers_1.prefab",
+      "target": "Assets/_Project/Content/Nordic/Prefabs/Composition_Flowers_1.prefab",
+      "sourceGuid": "059dd43a092049843aa34bdfe34fb0cf",
+      "targetGuid": "ee1e48dfc28451b9a6c9775ba579ae9b",
+      "removedComponents": [
+        "Animation",
+        "BoxCollider2D",
+        "MonoBehaviour",
+        "ParticleSystem",
+        "ParticleSystemRenderer"
+      ]
+    },
+    {
+      "source": "Assets/Sprite/planta nevada 1.asset",
+      "target": "Assets/_Project/Content/Nordic/Sprites/planta nevada 1.asset",
+      "sourceGuid": "a7463fadc2cb8944780e886cd2100be0",
+      "targetGuid": "80d25c48e1675ce39dd280dc5acfe884",
+      "sourceSha256": "e91b019c07862921572231d919bbcfecf38a2afe2b321ebcce737fa39c37897a"
+    },
+    {
+      "source": "Assets/Sprite/planta nevada 5.asset",
+      "target": "Assets/_Project/Content/Nordic/Sprites/planta nevada 5.asset",
+      "sourceGuid": "11acce89667c66144b87b187cf79a4b3",
+      "targetGuid": "310ad5d146225ea4b91ff91b5611638c",
+      "sourceSha256": "49c0a6ee5e384f7b2d4a79510c6dd537fac8330c63274a46396283781e4b6b65"
+    },
+    {
+      "source": "Assets/GameObject/Composition_Flowers_2.prefab",
+      "target": "Assets/_Project/Content/Nordic/Prefabs/Composition_Flowers_2.prefab",
+      "sourceGuid": "45e2034fb63477d40836e3148e6db0e8",
+      "targetGuid": "12a23f870d1150afb48b30c036b03147",
+      "removedComponents": [
+        "Animation",
+        "BoxCollider2D",
+        "MonoBehaviour"
+      ]
+    },
+    {
+      "source": "Assets/GameObject/Composition_Flowers_3.prefab",
+      "target": "Assets/_Project/Content/Nordic/Prefabs/Composition_Flowers_3.prefab",
+      "sourceGuid": "f190145a23efe2e47926ab9239c0c05e",
+      "targetGuid": "5f2d13b6d1a85cc79122b26f6673bd4f",
+      "removedComponents": [
+        "Animation",
+        "BoxCollider2D",
+        "MonoBehaviour"
+      ]
+    },
+    {
+      "source": "Assets/GameObject/Composition_Flowers_4.prefab",
+      "target": "Assets/_Project/Content/Nordic/Prefabs/Composition_Flowers_4.prefab",
+      "sourceGuid": "0705fa96bc0ad1a4bad2da8ff1d71eb5",
+      "targetGuid": "3833ae1aaab456b6b4d17ce60d251d00",
+      "removedComponents": [
+        "Animation",
+        "BoxCollider2D",
+        "MonoBehaviour"
+      ]
+    },
+    {
+      "source": "Assets/GameObject/Composition_Flowers_5.prefab",
+      "target": "Assets/_Project/Content/Nordic/Prefabs/Composition_Flowers_5.prefab",
+      "sourceGuid": "175cf5b77a7b0754091397223a20f24b",
+      "targetGuid": "eaf474d86db55fa9a01bdf8485af0531",
+      "removedComponents": [
+        "Animation",
+        "BoxCollider2D",
+        "MonoBehaviour"
+      ]
+    },
+    {
+      "source": "Assets/GameObject/Composition_Flowers_6.prefab",
+      "target": "Assets/_Project/Content/Nordic/Prefabs/Composition_Flowers_6.prefab",
+      "sourceGuid": "094bf370bc91297419d4924d6d67209a",
+      "targetGuid": "fb17e89da3e55d37b3d8cfe9a80702a6",
+      "removedComponents": [
+        "Animation",
+        "BoxCollider2D",
+        "MonoBehaviour"
+      ]
+    },
+    {
+      "source": "Assets/GameObject/Composition_Flowers_7.prefab",
+      "target": "Assets/_Project/Content/Nordic/Prefabs/Composition_Flowers_7.prefab",
+      "sourceGuid": "83556351b2b46b843bb39bd97c139399",
+      "targetGuid": "abdb288273335381a3cc16c83ca6edaa",
+      "removedComponents": [
+        "Animation",
+        "BoxCollider2D",
+        "MonoBehaviour"
+      ]
+    },
+    {
+      "source": "Assets/Sprite/ruinas 1.asset",
+      "target": "Assets/_Project/Content/Nordic/Sprites/ruinas 1.asset",
+      "sourceGuid": "7d647854bf5e13143b6dd240283c2c59",
+      "targetGuid": "6a07f48cff64546b83f13bd05725efd8",
+      "sourceSha256": "8a85943295a0ee8c84c7ec55934b52029f4e5cceffbfe18c30638db0ffc80a3e"
+    },
+    {
+      "source": "Assets/Texture2D/light.png",
+      "target": "Assets/_Project/Content/Nordic/Textures/light.png",
+      "sourceGuid": "5b8a363b554da07469c166bf91cb1861",
+      "targetGuid": "8d0ad0e5df045c049a746928072df809",
+      "sourceSha256": "0a95c966f340fcb29b5652ca73e6dd8c48eb29dd4b7b6f4860fa5a3fe12b82a5"
+    },
+    {
+      "source": "Assets/Sprite/light.asset",
+      "target": "Assets/_Project/Content/Nordic/Sprites/light.asset",
+      "sourceGuid": "620e1bd0e7b7ec548b92d27eb2f1722c",
+      "targetGuid": "7809f33de3975316a794a3c96b848b85",
+      "sourceSha256": "8cc318f475b09bfb7aa44e0744df55d7837f6817f4edcdc6750c9362a167ab78"
+    },
+    {
+      "source": "Assets/Texture2D/llama antorcha.png",
+      "target": "Assets/_Project/Content/Nordic/Textures/llama antorcha.png",
+      "sourceGuid": "a32f5c5791ef6074596a6fa30f23d894",
+      "targetGuid": "2f93d0e2fbe25b9aa8b9dfbf2250ce00",
+      "sourceSha256": "e334f51e995b4d6698ee5d587a6c6e2f438c2c94123905df1f2182bf3cc7622a"
+    },
+    {
+      "source": "Assets/Sprite/llama antorcha.asset",
+      "target": "Assets/_Project/Content/Nordic/Sprites/llama antorcha.asset",
+      "sourceGuid": "9aa3e422f4def9447a626740122b6a1b",
+      "targetGuid": "2321efa3896a5c909bf15a1a29f15953",
+      "sourceSha256": "ef78dfb5b6871576b18fd6d7eaa022838da84aa005ee2f67c6db42ff077b4469"
+    },
+    {
+      "source": "Assets/Texture2D/sactx-0-2048x1024-DXT5_BC3-Atlas - Effects-e93d2578.png",
+      "target": "Assets/_Project/Content/Nordic/Textures/sactx-0-2048x1024-DXT5_BC3-Atlas - Effects-e93d2578.png",
+      "sourceGuid": "ab2389f8d5b3ef44abb2f085aca143b1",
+      "targetGuid": "772bac772bf25a138a620a07d6c621f4",
+      "sourceSha256": "5760a2d19b2e6a26d6d81b8527d1844711084393147a7f97b525794db214e43f"
+    },
+    {
+      "source": "Assets/Sprite/brillo arma panel.asset",
+      "target": "Assets/_Project/Content/Nordic/Sprites/brillo arma panel.asset",
+      "sourceGuid": "eddbac623c2096d42b238ea90c87c022",
+      "targetGuid": "3490d58f08c95d53a002c544b001f894",
+      "sourceSha256": "3b4accae060788cc0680a9b0a6b9dc297e253ccf0ba24ecc4c5dc9eb4a1d70ba"
+    },
+    {
+      "source": "Assets/GameObject/Ruin_1 v2 (Ruin_1 Variant).prefab",
+      "target": "Assets/_Project/Content/Nordic/Prefabs/Ruin_1 v2 (Ruin_1 Variant).prefab",
+      "sourceGuid": "a6cc9527410d8e74a9412ff4b5ef27d8",
+      "targetGuid": "07b449915c9e582ca41e70a174c7dade",
+      "removedComponents": [
+        "MonoBehaviour",
+        "SortingGroup"
+      ]
+    },
+    {
+      "source": "Assets/Sprite/ruinas 2 v2.asset",
+      "target": "Assets/_Project/Content/Nordic/Sprites/ruinas 2 v2.asset",
+      "sourceGuid": "4f19e2cad4bcd00448ade9dfdc91e22f",
+      "targetGuid": "c5ca05f7ce595a5f82c3e39c184afeeb",
+      "sourceSha256": "52ac1952d3a5e4e3aefdf7d7a8edc01331f04f0b73f854616f95a1d5c556891a"
+    },
+    {
+      "source": "Assets/GameObject/Ruin_2 (Ruin_1 Variant).prefab",
+      "target": "Assets/_Project/Content/Nordic/Prefabs/Ruin_2 (Ruin_1 Variant).prefab",
+      "sourceGuid": "da89f9502be675f4ea600d5c483d9bf4",
+      "targetGuid": "e425bde9af645de2bcdcde742418e391",
+      "removedComponents": [
+        "MonoBehaviour",
+        "SpriteMask"
+      ]
+    },
+    {
+      "source": "Assets/Sprite/ruinas 2 v2 antorcha.asset",
+      "target": "Assets/_Project/Content/Nordic/Sprites/ruinas 2 v2 antorcha.asset",
+      "sourceGuid": "2ebd514af0078764aa38a5b09af2e6a7",
+      "targetGuid": "4144df42d98355d8bc70516a2ac6964c",
+      "sourceSha256": "4dd150bf90e82c7f05900b9b9da1b54b6127a851bc7030dd37dde1f1c231af61"
+    },
+    {
+      "source": "Assets/GameObject/Ruin_3 (Ruin_1 Variant).prefab",
+      "target": "Assets/_Project/Content/Nordic/Prefabs/Ruin_3 (Ruin_1 Variant).prefab",
+      "sourceGuid": "0c6b021d5e32464448332369d48ad088",
+      "targetGuid": "75aac25e858851428eef4f311a6a1b51",
+      "removedComponents": [
+        "MonoBehaviour",
+        "SortingGroup"
+      ]
+    },
+    {
+      "source": "Assets/Sprite/ruinas 3 v2.asset",
+      "target": "Assets/_Project/Content/Nordic/Sprites/ruinas 3 v2.asset",
+      "sourceGuid": "7ea23ec2b10a5ba4184169da5f137758",
+      "targetGuid": "44eb5481de255a09ae9958c63ca337e5",
+      "sourceSha256": "644ff0167600acd8008db6f725ca9555c798a4a5118c295ee1774f98a8eadf76"
+    },
+    {
+      "source": "Assets/GameObject/Ruin_4 (Ruin_1 Variant).prefab",
+      "target": "Assets/_Project/Content/Nordic/Prefabs/Ruin_4 (Ruin_1 Variant).prefab",
+      "sourceGuid": "80a7e2a81a6972e478cb1ef4383f0197",
+      "targetGuid": "e4dbbbb1ec0b5eaeb44136215f2eeeca",
+      "removedComponents": [
+        "MonoBehaviour",
+        "SpriteMask"
+      ]
+    },
+    {
+      "source": "Assets/Sprite/ruinas 3 v2 antorcha.asset",
+      "target": "Assets/_Project/Content/Nordic/Sprites/ruinas 3 v2 antorcha.asset",
+      "sourceGuid": "5122172c8ea1f2447b078700c2839333",
+      "targetGuid": "33124f00dd8556a3b4c9a276a2f6c64a",
+      "sourceSha256": "d8de5efcdb27d5dba6f8f1c6677604cf1df20267dc61364c662ebe72b8f8c9ab"
+    },
+    {
+      "source": "Assets/GameObject/Ruin_5 (Ruin_1 Variant).prefab",
+      "target": "Assets/_Project/Content/Nordic/Prefabs/Ruin_5 (Ruin_1 Variant).prefab",
+      "sourceGuid": "7f2ee30b609fe8542af726761fb816c5",
+      "targetGuid": "5348383a6dd25616b7c82f9db332c9fe",
+      "removedComponents": [
+        "MonoBehaviour",
+        "SortingGroup"
+      ]
+    },
+    {
+      "source": "Assets/Sprite/antorcha 2.asset",
+      "target": "Assets/_Project/Content/Nordic/Sprites/antorcha 2.asset",
+      "sourceGuid": "52a1b501127d2ff418e87fe365423c8c",
+      "targetGuid": "1fb04a0cde675acc93f7a48cc382418d",
+      "sourceSha256": "a4e4acc5676f473521a8448aa8236bd2487757bc9bc3e72e5c87845c96fadbc1"
+    },
+    {
+      "source": "Assets/Sprite/antorcha 2 top.asset",
+      "target": "Assets/_Project/Content/Nordic/Sprites/antorcha 2 top.asset",
+      "sourceGuid": "f618fd69d9e53454d9ed4dd37b805e08",
+      "targetGuid": "337f5cf23eed5db0a053cc964130af18",
+      "sourceSha256": "3ac8e39b82d4e8133dc4d47aff6ba27b89cfef3cd7ad65ac87c898b6c5339975"
+    },
+    {
+      "source": "Assets/GameObject/Torch_Midgard.prefab",
+      "target": "Assets/_Project/Content/Nordic/Prefabs/Torch_Midgard.prefab",
+      "sourceGuid": "dc6363cd73c347c43bba48f43f52107b",
+      "targetGuid": "a4d3efa5bf415e78b472792207a18444",
+      "removedComponents": [
+        "MonoBehaviour",
+        "SortingGroup"
+      ]
+    },
+    {
+      "source": "Assets/Texture2D/sactx-0-512x256-DXT5_BC3-Atlas - Midgard Destructibles-ab3ce8e5.png",
+      "target": "Assets/_Project/Content/Nordic/Textures/sactx-0-512x256-DXT5_BC3-Atlas - Midgard Destructibles-ab3ce8e5.png",
+      "sourceGuid": "bbe17f7bfe26d854e879b72cf968d728",
+      "targetGuid": "0407a85e6f155c0db2061fcb4742cae8",
+      "sourceSha256": "19a6732b4c928fc2a0b123dfaee5c905d6ffb34726fd6068ee397c4d7b6b77ce"
+    },
+    {
+      "source": "Assets/Sprite/caja sombra_4.asset",
+      "target": "Assets/_Project/Content/Nordic/Sprites/caja sombra_4.asset",
+      "sourceGuid": "4f43f06b3501fbc47b5a495b81986dc5",
+      "targetGuid": "6e267ad014ca57bdabe53c4a11ff4504",
+      "sourceSha256": "45e90fb0283ecd67d95a38440150a7fec46f5060cfde776f13a6f8485d48caf6"
+    },
+    {
+      "source": "Assets/Sprite/caja_0.asset",
+      "target": "Assets/_Project/Content/Nordic/Sprites/caja_0.asset",
+      "sourceGuid": "a861ac1046cbb9144be5ee835b9bd339",
+      "targetGuid": "c3998f48efbf59de83c221c071adc3e5",
+      "sourceSha256": "84b52f71495136c8c0c718c6ec4ae1787cd1f1657a9f29faef5d61ee0d7a50a0"
+    },
+    {
+      "source": "Assets/GameObject/Destructible_1.prefab",
+      "target": "Assets/_Project/Content/Nordic/Prefabs/Destructible_1.prefab",
+      "sourceGuid": "dca6dc3ae5837414999ac71c64b0422c",
+      "targetGuid": "a6857302085a5229a19ef597fc4143f3",
+      "removedComponents": [
+        "Animator",
+        "MonoBehaviour",
+        "PolygonCollider2D"
+      ]
+    },
+    {
+      "source": "Assets/GameObject/Composition_Destructibles_1.prefab",
+      "target": "Assets/_Project/Content/Nordic/Prefabs/Composition_Destructibles_1.prefab",
+      "sourceGuid": "382261934ed83884f89592154f36c597",
+      "targetGuid": "71b933bc29dc5ff6b2b5232683fdef96",
+      "removedComponents": [
+        "Animator",
+        "MonoBehaviour",
+        "PolygonCollider2D",
+        "SortingGroup"
+      ]
+    },
+    {
+      "source": "Assets/GameObject/Composition_Destructibles_2.prefab",
+      "target": "Assets/_Project/Content/Nordic/Prefabs/Composition_Destructibles_2.prefab",
+      "sourceGuid": "98b95fcf7f49f3b4bb0ab4fcec57004a",
+      "targetGuid": "a8e5ff644e0f56f19961db8d885775a8",
+      "removedComponents": [
+        "Animator",
+        "MonoBehaviour",
+        "PolygonCollider2D"
+      ]
+    },
+    {
+      "source": "Assets/GameObject/Composition_Destructibles_3.prefab",
+      "target": "Assets/_Project/Content/Nordic/Prefabs/Composition_Destructibles_3.prefab",
+      "sourceGuid": "c88932eac6bf3f04bbc661d00aeff2cf",
+      "targetGuid": "2f5f50e470a354b2bd66f6cc0309c3bf",
+      "removedComponents": [
+        "Animator",
+        "MonoBehaviour",
+        "PolygonCollider2D"
+      ]
+    },
+    {
+      "source": "Assets/GameObject/Composition_Destructibles_4.prefab",
+      "target": "Assets/_Project/Content/Nordic/Prefabs/Composition_Destructibles_4.prefab",
+      "sourceGuid": "240d4d069fd54024182ca155109467f9",
+      "targetGuid": "ff4b2b07cb2859e2b99952566a03d1b5",
+      "removedComponents": [
+        "Animator",
+        "MonoBehaviour",
+        "PolygonCollider2D",
+        "SortingGroup"
+      ]
+    },
+    {
+      "source": "Assets/Texture2D/sactx-0-1024x1024-DXT5_BC3-Atlas - Destructibles-eff337a7.png",
+      "target": "Assets/_Project/Content/Nordic/Textures/sactx-0-1024x1024-DXT5_BC3-Atlas - Destructibles-eff337a7.png",
+      "sourceGuid": "bb80ff1950a5dfd4d822a0ee07401788",
+      "targetGuid": "c9b484e045a35552be010d93ce603d32",
+      "sourceSha256": "de6c221e1e563108766be1e50e230004db2c53f275732ed62456882e142934d4"
+    },
+    {
+      "source": "Assets/Sprite/semillero midgard.asset",
+      "target": "Assets/_Project/Content/Nordic/Sprites/semillero midgard.asset",
+      "sourceGuid": "0ae129f232fca944c9e8aee2b994e672",
+      "targetGuid": "e6c0eda09d2157a8853c0e26c954d4dd",
+      "sourceSha256": "cf6480481c708e88860a3adcc30baac5292ceb93c90831d0920be1506eeac485"
+    },
+    {
+      "source": "Assets/GameObject/Destructible_Bush_1.prefab",
+      "target": "Assets/_Project/Content/Nordic/Prefabs/Destructible_Bush_1.prefab",
+      "sourceGuid": "7223cc4af076cc348977def790aa4a52",
+      "targetGuid": "888c1ebe2e0e5f3caa86eb4d25281f0b",
+      "removedComponents": [
+        "Animator",
+        "MonoBehaviour",
+        "PolygonCollider2D"
+      ]
+    },
+    {
+      "source": "Assets/Texture2D/sactx-0-512x256-DXT5_BC3-Atlas - Survivor Viking-0fb53d48.png",
+      "target": "Assets/_Project/Content/Nordic/Textures/sactx-0-512x256-DXT5_BC3-Atlas - Survivor Viking-0fb53d48.png",
+      "sourceGuid": "3d819bcd0a2dc8b4c9e6f788801212d6",
+      "targetGuid": "469089a7d56651678f10b439657c0fbe",
+      "sourceSha256": "d71699010c65de5b1825f44e7d8da32062932c93dc73f2b097207048462e6a89"
+    },
+    {
+      "source": "Assets/Sprite/Sombra_Characters_16.asset",
+      "target": "Assets/_Project/Content/Nordic/Sprites/Sombra_Characters_16.asset",
+      "sourceGuid": "935b284b1db5add42ac676884e623414",
+      "targetGuid": "b870c03a5ce455f286062642ed1cd538",
+      "sourceSha256": "038201b8554ea57cf17ff5ae88726afa2a9d4de8fd4244dfb95c589d504617d1"
+    },
+    {
+      "source": "Assets/Sprite/vikingo bota sm.asset",
+      "target": "Assets/_Project/Content/Nordic/Sprites/vikingo bota sm.asset",
+      "sourceGuid": "c609cba7d8d053b4d82d102a1d38bc23",
+      "targetGuid": "c3b0d7bbad275590bdad1a83608acd88",
+      "sourceSha256": "55c29ac0ae12a16807b157428550f6dfdea4a9a1162fc0f7c2c513cb522fdb2b"
+    },
+    {
+      "source": "Assets/Sprite/mano 2 guante v2 sm.asset",
+      "target": "Assets/_Project/Content/Nordic/Sprites/mano 2 guante v2 sm.asset",
+      "sourceGuid": "080ebbfca5801e04499cf4b4295a6e4f",
+      "targetGuid": "28f31ae39d2154f3ac28090eeb6b6fb4",
+      "sourceSha256": "1a31114e2b3cb72c411fa98e4f780db607b82fad4ccef16ec5f07f8996bb40d9"
+    },
+    {
+      "source": "Assets/Sprite/vikingo cuerpo sm.asset",
+      "target": "Assets/_Project/Content/Nordic/Sprites/vikingo cuerpo sm.asset",
+      "sourceGuid": "8276c7b793a076a4dba151a8f6cd08f0",
+      "targetGuid": "9b1926539707547086c9238cf4b02992",
+      "sourceSha256": "e6c81bcd14221d065cfbad4d543acace5659a2faab1ad151abc87cb7863c4082"
+    },
+    {
+      "source": "Assets/Sprite/vikingo cabeza sm.asset",
+      "target": "Assets/_Project/Content/Nordic/Sprites/vikingo cabeza sm.asset",
+      "sourceGuid": "6d33a72e90011f3439026dae21f1cbf3",
+      "targetGuid": "cb06373491e4556b9c050c965a4c8218",
+      "sourceSha256": "b28e6af0a7c140d0831896b8cd7e0147cb0aa860ef2f59cbeb6b537b7cd861c3"
+    },
+    {
+      "source": "Assets/Sprite/mano 1 guante V2 sm.asset",
+      "target": "Assets/_Project/Content/Nordic/Sprites/mano 1 guante V2 sm.asset",
+      "sourceGuid": "9419df865729d414b83a321440ce5190",
+      "targetGuid": "8012b7df92bc590da75d21ba396fbbb1",
+      "sourceSha256": "da7d4f907fbc12e1052aa5da2ee6417854d75b626f106ec85b5a7081682ba221"
+    },
+    {
+      "source": "Assets/GameObject/Viking (Character Variant).prefab",
+      "target": "Assets/_Project/Content/Nordic/Prefabs/Viking (Character Variant).prefab",
+      "sourceGuid": "2bb64dd34084e52489b228f62a8d16bf",
+      "targetGuid": "969787e74e61554494193ba0f1385a2a",
+      "removedComponents": [
+        "Animator",
+        "BoxCollider2D",
+        "MonoBehaviour",
+        "ParticleSystem",
+        "ParticleSystemRenderer"
+      ]
+    },
+    {
+      "source": "Assets/AnimationClip/Viking_Idle_Player.anim",
+      "target": "Assets/_Project/Content/Nordic/Animations/Viking_Idle_Player.anim",
+      "sourceGuid": "f9d5f56241a8e3c42aa9182ee3c876cc",
+      "targetGuid": "e89897ca9e635f88ad0807b90882a143",
+      "removedAnimationEvents": true
+    },
+    {
+      "source": "Assets/AnimationClip/Viking_Walk_Player.anim",
+      "target": "Assets/_Project/Content/Nordic/Animations/Viking_Walk_Player.anim",
+      "sourceGuid": "499ce2ca55103d143a13ef8c47b85bab",
+      "targetGuid": "ae75415c1abc5e62b7c452bfba29dd6a",
+      "removedAnimationEvents": true
+    }
+  ]
+}

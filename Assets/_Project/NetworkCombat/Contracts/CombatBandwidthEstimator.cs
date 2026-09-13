@@ -6,10 +6,29 @@ namespace MonsterSupergroup.NetworkCombat
     /// </summary>
     public static class CombatBandwidthEstimator
     {
-        public const int CombatResultBytes = 91; // Existing 66 + bool/epoch/origin/time/multiplier (25).
-        public const int StatusMutationBytes = 125;
+        public const int CombatResultBytes = 109; // Base 66 + knockback 25 + status instance/round 12 + presentation 6.
+        public const int EnemyHitPresentationBytes = 43; // Identity/version 16 + damage/style/source 14 + position 13.
+        public const int StatusMutationBytes = 133; // Includes magnitude and application revision.
         public const int PlayerHealthReportBytes = 33;
         public const int BatchAndArrayHeadersBytes = 16;
+        public const int EnemyActionProjectileProgressBytes = 9;
+
+        // Projectile-only batches. Mirror uses variable-length integer and array writers.
+        // Checkpoints contain a variable number of knockback receipts, measured separately.
+        public static long EstimateEnemyProjectilePayloadBytes(EnemyAttackPresentationBatch batch, long totalCheckpointBytes)
+        {
+            long bytes = Mirror.Compression.VarUIntSize(batch.Round) + Mirror.Compression.VarUIntSize(batch.BatchSequence) + 1 +
+                Mirror.Compression.VarUIntSize(batch.ProjectileLaunches == null ? 0 : (ulong)batch.ProjectileLaunches.Length + 1) +
+                Mirror.Compression.VarUIntSize(batch.ProjectileTerminations == null ? 0 : (ulong)batch.ProjectileTerminations.Length + 1) + totalCheckpointBytes;
+            if (batch.ProjectileLaunches != null)
+                foreach (var launch in batch.ProjectileLaunches)
+                    bytes += 34 + Mirror.Compression.VarUIntSize(launch.Key.EnemyEntityId) + Mirror.Compression.VarUIntSize(launch.Key.ActionId) +
+                        Mirror.Compression.VarUIntSize(launch.AssignmentEpoch) + Mirror.Compression.VarUIntSize(launch.EnemyPrefabAssetId) + Mirror.Compression.VarIntSize(launch.Damage);
+            if (batch.ProjectileTerminations != null)
+                foreach (var terminal in batch.ProjectileTerminations)
+                    bytes += 3 + Mirror.Compression.VarUIntSize(terminal.Key.EnemyEntityId) + Mirror.Compression.VarUIntSize(terminal.Key.ActionId);
+            return bytes;
+        }
 
         public static long EstimatePayloadBytes(CombatSubmissionBatch batch)
         {

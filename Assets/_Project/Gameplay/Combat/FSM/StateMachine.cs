@@ -239,6 +239,15 @@ namespace AstralShift.FSM
 			return _currentState;
 		}
 
+		/// <summary>Restore a simulation checkpoint without replaying gameplay enter/exit callbacks.</summary>
+		public void RestoreStateNoCallbacks(State state, State previous = null)
+		{
+			if (state == null || !_states.Contains(state)) throw new ArgumentException("Unknown state.", nameof(state));
+			_currentState = state;
+			PreviousState = previous;
+			_currentTransitions = _transitions.TryGetValue(state.name, out var transitions) ? transitions : EmptyTransitions;
+		}
+
 		public State[] GetStates()
 		{
 			return _states.ToArray();

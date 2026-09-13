@@ -1,3 +1,4 @@
+using MonsterSupergroup.Gameplay.Options;
 using AstralShift.HellMaiden.Data;
 using AstralShift.QTI.Helpers.Attributes;
 using UnityEngine;
@@ -97,9 +98,9 @@ namespace AstralShift.HellMaiden.UI.Menus.Achievement
 			{
 				if (DisplayState == AchievementDisplayState.SecretLocked)
 				{
-					return LocalizationMediator.GetTranslation("ACH_HIDDEN_TITLE");
+					return GameLocalization.Menu("ACH_HIDDEN_TITLE");
 				}
-				string translation = LocalizationMediator.GetTranslation(FormatLocalizationKey(((int)(linkedAchievementID + 1)).ToString(), "Title"));
+				string translation = GameLocalization.Menu(FormatLocalizationKey(((int)(linkedAchievementID + 1)).ToString(), "Title"));
 				if (!string.IsNullOrEmpty(translation))
 				{
 					return translation;
@@ -114,9 +115,9 @@ namespace AstralShift.HellMaiden.UI.Menus.Achievement
 			{
 				if (DisplayState == AchievementDisplayState.SecretLocked)
 				{
-					return LocalizationMediator.GetTranslation("ACH_HIDDEN_DESCRIPTION");
+					return GameLocalization.Menu("ACH_HIDDEN_DESCRIPTION");
 				}
-				string translation = LocalizationMediator.GetTranslation(FormatLocalizationKey(((int)(linkedAchievementID + 1)).ToString(), "Description"));
+				string translation = GameLocalization.Menu(FormatLocalizationKey(((int)(linkedAchievementID + 1)).ToString(), "Description"));
 				if (!string.IsNullOrEmpty(translation))
 				{
 					return translation;

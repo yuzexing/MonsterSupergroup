@@ -22,7 +22,7 @@ using GasStatusTick = MonsterSupergroup.GAS.StatusTick;
 
 namespace AstralShift.HellMaiden.AI.Enemy
 {
-	public class EnemyController : BaseEnemyController
+	public partial class EnemyController : BaseEnemyController
 	{
 		[SerializeField]
 		protected Transform _target;
@@ -342,8 +342,8 @@ namespace AstralShift.HellMaiden.AI.Enemy
 
 		/// <summary>
 		/// Initializes the existing runtime Stats, Combatant, target and movement
-		/// without starting the attack/presentation FSM. Network movement uses this
-		/// until replicated attack state is introduced.
+		/// without starting the attack FSM. Presentation and hit feedback remain
+		/// available independently of combat decision simulation.
 		/// </summary>
 		public void InitNetworkMovementOnly(int id)
 		{
@@ -356,6 +356,7 @@ namespace AstralShift.HellMaiden.AI.Enemy
 			{
 			}
 			InitValues(null);
+			enemyAnimator.Init(this);
 			direction = Direction.None;
 			angle = 0f;
 			OnInit?.Invoke();
@@ -423,8 +424,8 @@ namespace AstralShift.HellMaiden.AI.Enemy
 				}
 				_canRubberband = false;
 			};
-			attackScript.controller = this;
-			if (hasAttackAnimation)
+			if (attackScript != null) attackScript.controller = this;
+			if (attackScript != null && hasAttackAnimation)
 			{
 				attackScript.enemyAnimator = enemyAnimator;
 				attackScript.onAttackWarningEnd = OnAttackWarningEnd;
@@ -442,7 +443,7 @@ namespace AstralShift.HellMaiden.AI.Enemy
 					attackScript.AttackWarningTick();
 					if (facingPlayerDuringWarning)
 					{
-						Movement.SetFacingDirection(GetTargetPosition - (Vector2)base.transform.position);
+						Movement.SetFacingDirection(GetSimulationAttackTargetPosition() - (Vector2)base.transform.position);
 						enemyAnimator.AttackWarning(FacingDirection.x, FacingDirection.y);
 					}
 				};
@@ -457,7 +458,7 @@ namespace AstralShift.HellMaiden.AI.Enemy
 					attackScript.AttackTick();
 					if (facingPlayerDuringAttack)
 					{
-						Movement.SetFacingDirection(GetTargetPosition - (Vector2)base.transform.position);
+						Movement.SetFacingDirection(GetSimulationAttackTargetPosition() - (Vector2)base.transform.position);
 						previousFacingDirection = FacingDirection;
 						enemyAnimator.Attack(FacingDirection.x, FacingDirection.y);
 					}
@@ -493,7 +494,7 @@ namespace AstralShift.HellMaiden.AI.Enemy
 			Dead.onEnter = delegate
 			{
 				ActivateColliders(activate: false);
-				if (((bool)attackScript && (StateMachine.PreviousState == Attacking || StateMachine.PreviousState == Warning)) || alwaysAttacking)
+				if (attackScript != null && (StateMachine.PreviousState == Attacking || StateMachine.PreviousState == Warning || alwaysAttacking))
 				{
 					attackScript.CancelAttack();
 				}
@@ -509,7 +510,7 @@ namespace AstralShift.HellMaiden.AI.Enemy
 			InstantDead.onEnter = delegate
 			{
 				ActivateColliders(activate: false);
-				if (((bool)attackScript && (StateMachine.PreviousState == Attacking || StateMachine.PreviousState == Warning)) || alwaysAttacking)
+				if (attackScript != null && (StateMachine.PreviousState == Attacking || StateMachine.PreviousState == Warning || alwaysAttacking))
 				{
 					attackScript.CancelAttack();
 				}
@@ -526,7 +527,7 @@ namespace AstralShift.HellMaiden.AI.Enemy
 				{
 					Debug.Log("Enemy deactivated in Knockback state!");
 				}
-				if (((bool)attackScript && (StateMachine.PreviousState == Attacking || StateMachine.PreviousState == Warning)) || alwaysAttacking)
+				if (attackScript != null && (StateMachine.PreviousState == Attacking || StateMachine.PreviousState == Warning || alwaysAttacking))
 				{
 					attackScript.CancelAttack();
 				}
@@ -587,6 +588,7 @@ namespace AstralShift.HellMaiden.AI.Enemy
 			EnemyAttackPresentationPhase phase)
 		{
 			CurrentAttackPresentationPhase = phase;
+			RecordSimulationActionPhase(phase);
 			Vector2 facing = Movement != null
 				? FacingDirection
 				: previousFacingDirection;
@@ -716,6 +718,13 @@ namespace AstralShift.HellMaiden.AI.Enemy
 			this.OnDeathPresentationCompleted = null;
 			this.OnDeathFinalized = null;
 			this.OnDispose = null;
+			var contact = GetComponent<EnemyContactDamage>();
+			if (contact != null)
+			{
+				contact.Bind(this);
+				var authority = GetComponent<EnemySimulationAuthority>();
+				contact.SetRuntimeReady(authority == null || !authority.IsNetworkManaged);
+			}
 		}
 
 		public void Deactivate()
@@ -730,6 +739,7 @@ namespace AstralShift.HellMaiden.AI.Enemy
 
 		public override void Dispose()
 		{
+			GetComponent<EnemyContactDamage>()?.SetRuntimeReady(false);
 			if ((bool)spriteRenderer)
 			{
 				spriteRenderer.transform.rotation = Quaternion.identity;
@@ -1042,9 +1052,16 @@ namespace AstralShift.HellMaiden.AI.Enemy
 			if (!_networkMovementOnlyKnockback)
 			{
 				if (ordinary) ApplyKnockBackCore(attackPosition, settings, multiplierSum, false);
-				else BruteforceKnockBack(attackPosition, settings);
-				if (!IsNetworkKnockbackActive) _networkKnockbackMovement = null;
-				return IsNetworkKnockbackActive;
+                else BruteforceKnockBack(attackPosition, settings);
+                if (!IsNetworkKnockbackActive) _networkKnockbackMovement = null;
+                else if (simulationClock != null)
+                {
+                    // Knockback replaces its onEnter delegate at runtime; publish the
+                    // cancellation explicitly instead of losing the network phase hook.
+                    if (attackScript is EnemyAttackMelee melee) melee.SuspendSimulation();
+                    PublishAttackPresentationCancelled();
+                }
+                return IsNetworkKnockbackActive;
 			}
 			_networkRestoreDefaultMovement = defaultMovement != null && defaultMovement.CanMove;
 			_networkRestorePathMovement = usesPathfinding && aILerpMovement != null && aILerpMovement.CanMove;
@@ -1134,6 +1151,7 @@ namespace AstralShift.HellMaiden.AI.Enemy
 
 		protected virtual bool IsInAttackDistance()
 		{
+			if (attackScript == null) return false;
 			if (attackOnCameraBounds)
 			{
 				if (hasAttackAnimation && ProCamera2DHelpers.IsWithinCameraBounds(Bounds, cameraBoundsDistanceMultiplier))
@@ -1159,7 +1177,7 @@ namespace AstralShift.HellMaiden.AI.Enemy
 
 		public void Attack()
 		{
-			TransitionToWarning();
+			if (attackScript != null) TransitionToWarning();
 		}
 
 		protected virtual void OnAttackWarningEnd()
@@ -1174,12 +1192,14 @@ namespace AstralShift.HellMaiden.AI.Enemy
 
 		protected virtual void OnRecoveryEnd()
 		{
-			lastAttackTime = Time.time;
+			lastAttackTime = simulationClock != null
+				? (float)(Time.time + simulationAction.NextAttackAt - simulationClock() - attackCooldown) : Time.time;
 			TransitionToMoving();
 		}
 
 		public void ActivateColliders(bool activate)
 		{
+			if (!activate) GetComponent<EnemyContactDamage>()?.SetRuntimeReady(false);
 			collider.enabled = activate;
 			hurtBox.ActivateCollider(activate);
 		}
@@ -1199,13 +1219,13 @@ namespace AstralShift.HellMaiden.AI.Enemy
 			{
 				GasCombatResolution resolution = source.Resolve(
 					CombatantBinding.Combatant,
-					damageInfo);
+					damageInfo, damageType);
 				LegacyDamageSource resolvedSource = source.WithContext(
 					resolution.DamageContext);
 				ApplyOnHitEffects(weapon, damageInfo, resolvedSource);
 				if (resolution.PredictedAppliedDamage.Value > 0)
 				{
-					ShowDamageNumbers(
+					ShowStandaloneDamageNumbers(
 						(int)resolution.PredictedAppliedDamage.Id,
 						resolution.PredictedAppliedDamage.Value,
 						damageType,
@@ -1223,7 +1243,7 @@ namespace AstralShift.HellMaiden.AI.Enemy
 						source.WithContext(resolution.PredictedLethalContext));
 				}
 
-				enemyAnimator.HurtBlinkAnimation();
+				PlayLocalHurtBlink();
 				if (isFatal && attackOnDeath)
 				{
 					Attack();
@@ -1266,10 +1286,10 @@ namespace AstralShift.HellMaiden.AI.Enemy
 					isCritical: false);
 				GasCombatResolution resolution = effectiveSource.Resolve(
 					CombatantBinding.Combatant,
-					damage);
+					damage, damageType);
 				if (resolution.PredictedAppliedDamage.Value > 0)
 				{
-					ShowDamageNumbers(
+					ShowStandaloneDamageNumbers(
 						(int)resolution.PredictedAppliedDamage.Id,
 						resolution.PredictedAppliedDamage.Value,
 						damageType,
@@ -1277,7 +1297,7 @@ namespace AstralShift.HellMaiden.AI.Enemy
 						damagePosition);
 				}
 
-				enemyAnimator.HurtBlinkAnimation();
+				PlayLocalHurtBlink();
 				if (resolution.IsPredictedLethal)
 				{
 					_combatDefeat = effectiveSource.ServicesArePlayerAuthored();
@@ -1302,7 +1322,8 @@ namespace AstralShift.HellMaiden.AI.Enemy
 			{
 				GasCombatResolution resolution = hit.Runtime.ResolveHitDetailed(
 					hit.Attack,
-					CombatantBinding.Combatant);
+					CombatantBinding.Combatant,
+					presentationDamageType: (MonsterSupergroup.GAS.DamageType)hit.PresentationDamageType);
 				hit.PresentationWeapon?.NotifyNativeDamage(
 					resolution.ResolvedDamage.Value,
 					resolution.ResolvedDamage.IsCritical);
@@ -1312,13 +1333,13 @@ namespace AstralShift.HellMaiden.AI.Enemy
 					return false;
 				}
 
-				ShowDamageNumbers(
+				ShowStandaloneDamageNumbers(
 					(int)resolution.PredictedAppliedDamage.Id,
 					resolution.PredictedAppliedDamage.Value,
 					hit.PresentationDamageType,
 					resolution.PredictedAppliedDamage.IsCritical,
 					damagePosition);
-				enemyAnimator.HurtBlinkAnimation();
+				PlayLocalHurtBlink();
 
 				bool isFatal = resolution.IsPredictedLethal;
 				if (isFatal)
@@ -1411,13 +1432,31 @@ namespace AstralShift.HellMaiden.AI.Enemy
 				break;
 			}
 
-			ShowDamageNumbers(
+			ShowStandaloneDamageNumbers(
 				(int)damage.Id,
 				damage.Value,
 				damageType,
 				damage.IsCritical,
 				damagePosition);
-			enemyAnimator.HurtBlinkAnimation();
+			PlayLocalHurtBlink();
+		}
+
+		private void ShowStandaloneDamageNumbers(int sourceId, int value, DamageType type, bool isCritical, Transform position)
+		{
+			var simulation = GetComponent<EnemySimulationAuthority>();
+			if (simulation == null || !simulation.IsNetworkManaged)
+				ShowDamageNumbers(sourceId, value, type, isCritical, position);
+		}
+
+		private void PlayLocalHurtBlink()
+		{
+			// Network damage presentation carries the GAS event identity so the
+			// owner's immediate feedback and the server echo share one receipt.
+			var simulation = GetComponent<EnemySimulationAuthority>();
+			if (simulation == null || !simulation.IsNetworkManaged)
+			{
+				enemyAnimator.HurtBlinkAnimation();
+			}
 		}
 
 		private void HandleConfirmedKill(GasConfirmedKill kill)

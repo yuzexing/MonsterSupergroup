@@ -52,6 +52,12 @@ namespace MonsterSupergroup.Gameplay.Combat
         public PlayerDashSnapshot Capture(double now)
         {
             Refresh(now);
+            return ReadSnapshot();
+        }
+
+        /// <summary>Copies deadlines without completing recharges or advancing the gameplay runtime.</summary>
+        public PlayerDashSnapshot ReadSnapshot()
+        {
             return new PlayerDashSnapshot
             {
                 MaxCharges = MaxCharges,

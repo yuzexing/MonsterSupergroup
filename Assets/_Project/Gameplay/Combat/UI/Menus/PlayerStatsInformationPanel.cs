@@ -1,3 +1,4 @@
+using MonsterSupergroup.Gameplay.Options;
 using System.Globalization;
 using AstralShift.HellMaiden.Combat.Hand;
 using AstralShift.HellMaiden.Data;
@@ -150,7 +151,7 @@ namespace AstralShift.HellMaiden.UI.Menus
 			}
 			maxHPShrineCanvasGroup.alpha = (flag ? 1 : 0);
 			string text2 = GameDirector.Instance.Player.PlayerStats.currentStats.maxHP.ToString(CultureInfo.InvariantCulture);
-			maxHpText.text = LocalizationMediator.GetTranslation(maxHpKey) + " " + text2 + " ";
+			maxHpText.text = GameLocalization.Menu(maxHpKey) + " " + text2 + " ";
 			RefreshLayout(maxHPContainer).Forget();
 		}
 
@@ -165,7 +166,7 @@ namespace AstralShift.HellMaiden.UI.Menus
 			}
 			xpModShrineCanvasGroup.alpha = (flag ? 1 : 0);
 			string text2 = DataModifierUtils.FormatMultiplierToPercentage(GameDirector.Instance.Player.PlayerStats.currentStats.xpModifier);
-			xpModText.text = LocalizationMediator.GetTranslation(xpModKey) + " " + text2 + "%";
+			xpModText.text = GameLocalization.Menu(xpModKey) + " " + text2 + "%";
 			RefreshLayout(xpModContainer).Forget();
 		}
 
@@ -180,7 +181,7 @@ namespace AstralShift.HellMaiden.UI.Menus
 			}
 			magAreaShrineCanvasGroup.alpha = (flag ? 1 : 0);
 			string text2 = DataModifierUtils.FormatAbsoluteValue(GameDirector.Instance.Player.PlayerStats.currentStats.pullArea);
-			magAreaTxt.text = LocalizationMediator.GetTranslation(magAreaKey) + " " + text2;
+			magAreaTxt.text = GameLocalization.Menu(magAreaKey) + " " + text2;
 			RefreshLayout(magAreaContainer).Forget();
 		}
 
@@ -195,7 +196,7 @@ namespace AstralShift.HellMaiden.UI.Menus
 			}
 			movSpeedShrineCanvasGroup.alpha = (flag ? 1 : 0);
 			string text2 = DataModifierUtils.FormatAbsoluteValue(GameDirector.Instance.Player.PlayerStats.currentStats.moveSpeed);
-			movSpeedTxt.text = LocalizationMediator.GetTranslation(moveSpeedKey) + " " + text2;
+			movSpeedTxt.text = GameLocalization.Menu(moveSpeedKey) + " " + text2;
 			RefreshLayout(movSpeedContainer).Forget();
 		}
 

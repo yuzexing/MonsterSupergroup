@@ -40,7 +40,11 @@ namespace MonsterSupergroup.NetworkCombat
 
         private void OnEnable()
         {
-            if ((!Application.isEditor && !Debug.isDebugBuild) || GameplayRuntimeEnvironment.IsDedicatedServer)
+            bool supported = Application.isEditor || Debug.isDebugBuild;
+#if MONSTER_ENEMY_HANDOFF_VALIDATION
+            supported = true;
+#endif
+            if (!supported || GameplayRuntimeEnvironment.IsDedicatedServer)
             {
                 enabled = false;
                 return;
@@ -50,11 +54,13 @@ namespace MonsterSupergroup.NetworkCombat
 
         private void Update()
         {
-            if (Application.isFocused && Input.GetKeyDown(KeyCode.F3)) SetExpanded(!expanded);
+            if (!BootGameplayNetworkManager.CombatHasEnded && !MonsterSupergroup.Gameplay.Combat.GameplayMenuInput.IsOpen && Application.isFocused && Input.GetKeyDown(KeyCode.F3)) SetExpanded(!expanded);
 
             // Check lifecycle every frame; enumerate only Mirror's spawned objects at 5 Hz.
             NetworkCombatWorld current = NetworkClient.isConnected ? NetworkCombatWorld.Instance : null;
-            if (current != null && !current.isActiveAndEnabled) current = null;
+            // OnStartClient clears the replica's previous-session subscriptions.
+            // Do not bind to a Boot world before its client spawn has completed.
+            if (current != null && (!current.isActiveAndEnabled || !current.ClientStarted)) current = null;
             NetworkConnectionToServer currentConnection = NetworkClient.active ? NetworkClient.connection : null;
             if (!ReferenceEquals(world, current) || !ReferenceEquals(connection, currentConnection))
             {
@@ -140,6 +146,15 @@ namespace MonsterSupergroup.NetworkCombat
                   $"Simulator: {assignment.SimulationOwnerPlayerId} | Target: {assignment.AggroTargetPlayerId} | Epoch: {assignment.Epoch}";
             string runtime = $"Runtime: {(agent.ProductEnemyInitialized ? "ready" : "waiting")} | " +
                 (agent.ProductMovementOnly ? "MovementOnly" : "Combat simulation");
+            simulation += $"\nTransfer: {agent.Handoff.Reason} | Applied epoch: {agent.AppliedHandoffEpoch}" +
+                $" | Baseline age: {Math.Max(0, NetworkTime.time - agent.Handoff.Checkpoint.Movement.SampleNetworkTime):0.00}s" +
+                $" | Action: {agent.CurrentActionId}";
+            if (NetworkServer.active && NetworkEnemySimulationWorld.Instance != null &&
+                NetworkEnemySimulationWorld.Instance.TryReadHandoff(identity.netId, out var transfer))
+                simulation += $"\nRequested: {transfer.RequestedTarget} | Waiting: {transfer.AwaitingFirstSnapshot}" +
+                    $" | Requests/merged/done: {transfer.Requests}/{transfer.Coalesced}/{transfer.Completed}" +
+                    $"\nFirst frame: {transfer.LastDuration:0.000}s | Waiting: {(transfer.AwaitingFirstSnapshot ? NetworkTime.time - transfer.StartedAt : 0):0.000}s" +
+                    $" | Reject owner/epoch: {transfer.WrongOwner}/{transfer.WrongEpoch}";
             return new Row(identity.netId, identity.name, canonical, localHealth, statusText.ToString(), simulation, runtime, recentDeath);
         }
 
@@ -181,6 +196,9 @@ namespace MonsterSupergroup.NetworkCombat
 
         private void OnGUI()
         {
+            if (BootGameplayNetworkManager.CombatHasEnded || MonsterSupergroup.Gameplay.Combat.GameplayMenuInput.IsOpen) return;
+            if (NetworkManager.singleton is BootGameplayNetworkManager manager && manager.UsePreparationRoom &&
+                manager.RoomSnapshot.Phase != PreparationPhase.InGame) return;
             if (!isActiveAndEnabled) return;
             float width = Mathf.Min(500f, Screen.width - 24f);
             float height = Mathf.Min(460f, Screen.height - 24f);

@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.Timeline;
 
 namespace MonsterSupergroup.NetworkCombat
 {
@@ -7,8 +8,7 @@ namespace MonsterSupergroup.NetworkCombat
     public sealed class GameplayWaveRules : ScriptableObject
     {
         [SerializeField] private float waveDuration = 30;
-        [SerializeField] private int enemiesPerWave = 6;
-        [SerializeField] private float spawnInterval = 2;
+        [SerializeField] private TimelineAsset timeline;
         [SerializeField] private int maximumAlive = 30;
         [SerializeField] private float spawnRadius = 5;
         [SerializeField] private float minimumPlayerDistance = 2;
@@ -18,11 +18,13 @@ namespace MonsterSupergroup.NetworkCombat
         {
             try
             {
-                parameters = new WaveParameters(waveDuration, enemiesPerWave, spawnInterval,
-                    maximumAlive, spawnRadius, minimumPlayerDistance, positionAttempts);
+                var program = NetworkWaveTimelineCompiler.Compile(timeline, waveDuration, out var prefabs);
+                parameters = new WaveParameters(program, prefabs, maximumAlive, spawnRadius, minimumPlayerDistance, positionAttempts);
                 error = null; return true;
             }
             catch (ArgumentException exception) { parameters = null; error = exception.Message; return false; }
         }
+        public TimelineAsset Timeline => timeline;
+        public float WaveDuration => waveDuration;
     }
 }

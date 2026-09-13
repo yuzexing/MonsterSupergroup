@@ -2050,8 +2050,10 @@ GameObject:
   - component: {fileID: 912340000000000001}
   - component: {fileID: 470500000000}
   - component: {fileID: 912340000000000010}
+  - component: {fileID: 912340000000000011}
   - component: {fileID: 942500000000000002}
   - component: {fileID: 942500000000000003}
+  - component: {fileID: 942500000000000004}
   m_Layer: 5
   m_Name: CombatUI
   m_TagString: Untagged
@@ -2164,6 +2166,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 91e63b8305c54621bfa058ae6e3d3bb2, type: 3}
   m_Name:
   m_EditorClassIdentifier: MonsterSupergroup.NetworkCombat::MonsterSupergroup.NetworkCombat.NetworkEnemyDebugPanel
+  expanded: 1
+  cardPickMenu: {fileID: 470500000103}
+--- !u!114 &912340000000000011
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8069339087975136152}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8506d7df99654c8096bc5645c3ed96ca, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: MonsterSupergroup.NetworkCombat::MonsterSupergroup.NetworkCombat.NetworkPlayerDebugPanel
   expanded: 1
   cardPickMenu: {fileID: 470500000103}
 --- !u!114 &470500000000
@@ -3268,3 +3284,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: MonsterSupergroup.Gameplay.Combat::MonsterSupergroup.Gameplay.UI.PlayerExperienceHUD
   fillTexture: {fileID: 2800000, guid: 246ed0cb0610c284a913148f74ceac89, type: 3}
   backgroundTexture: {fileID: 2800000, guid: 6c0b28683c49a09439c3c1b8020bd306, type: 3}
+
+--- !u!114 &942500000000000004
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8069339087975136152}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ca36788dd41744109233262d45b9d2a9, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: MonsterSupergroup.NetworkCombat::MonsterSupergroup.NetworkCombat.NetworkGameplayMenuController
+  cardPickMenu: {fileID: 470500000103}

@@ -48,7 +48,10 @@ namespace MonsterSupergroup.GAS
             CombatEventKind kind,
             CombatContext context,
             DamageInfo resolvedDamage = default,
-            DamageInfo predictedAppliedDamage = default)
+            DamageInfo predictedAppliedDamage = default,
+            StatusInstanceId statusInstanceId = default,
+            uint statusApplicationRevision = 0u,
+            DamageType presentationDamageType = DamageType.Normal)
         {
             if (!context.IsValid)
             {
@@ -59,9 +62,15 @@ namespace MonsterSupergroup.GAS
             Context = context;
             ResolvedDamage = resolvedDamage;
             PredictedAppliedDamage = predictedAppliedDamage;
+            StatusInstanceId = statusInstanceId;
+            StatusApplicationRevision = statusApplicationRevision;
+            PresentationDamageType = presentationDamageType;
         }
 
         public CombatEventKind Kind { get; }
+        public StatusInstanceId StatusInstanceId { get; }
+        public uint StatusApplicationRevision { get; }
+        public DamageType PresentationDamageType { get; }
         public CombatContext Context { get; }
         public DamageInfo ResolvedDamage { get; }
         public DamageInfo PredictedAppliedDamage { get; }

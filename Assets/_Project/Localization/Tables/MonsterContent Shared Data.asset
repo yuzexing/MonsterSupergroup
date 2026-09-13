@@ -1,0 +1,220 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b11a58205ec3474ca216360e9fa74a8, type: 3}
+  m_Name: MonsterContent Shared Data
+  m_EditorClassIdentifier: Unity.Localization::UnityEngine.Localization.Tables.SharedTableData
+  m_TableCollectionName: MonsterContent
+  m_TableCollectionNameGuidString: 31db1828b5f475c44904cc5748726346
+  m_Entries:
+  - m_Id: 1194319872
+    m_Key: perk.2.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1219485696
+    m_Key: perk.2.description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1223680000
+    m_Key: perk.3.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1223680001
+    m_Key: perk.3.description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1223680002
+    m_Key: perk.18.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1223680003
+    m_Key: perk.18.description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1223680004
+    m_Key: perk.17.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1223680005
+    m_Key: perk.17.description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1223680006
+    m_Key: perk.28.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1223680007
+    m_Key: perk.28.description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1223680008
+    m_Key: perk.19.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1223680009
+    m_Key: perk.19.description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1223680010
+    m_Key: perk.22.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1223680011
+    m_Key: perk.22.description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1223680012
+    m_Key: equipment.17.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1223680013
+    m_Key: equipment.17.description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1223680014
+    m_Key: equipment.16.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1223680015
+    m_Key: equipment.16.description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1223680016
+    m_Key: equipment.2.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1223680017
+    m_Key: equipment.2.description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1223680018
+    m_Key: equipment.4.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1223680019
+    m_Key: equipment.4.description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1223680020
+    m_Key: equipment.304.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1223680021
+    m_Key: equipment.304.description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1223680022
+    m_Key: equipment.6.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1223680023
+    m_Key: equipment.6.description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1223680024
+    m_Key: equipment.1.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1223680025
+    m_Key: equipment.1.description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1223680026
+    m_Key: equipment.3.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1223680027
+    m_Key: equipment.3.description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1223680028
+    m_Key: weapon.2.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1223680029
+    m_Key: weapon.2.description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1223680030
+    m_Key: weapon.3.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1223680031
+    m_Key: weapon.3.description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1223680032
+    m_Key: weapon.6.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1223680033
+    m_Key: weapon.6.description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1223680034
+    m_Key: weapon.8.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1223680035
+    m_Key: weapon.8.description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1223680036
+    m_Key: weapon.1.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1223680037
+    m_Key: weapon.1.description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1223680038
+    m_Key: weapon.1.quote
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1223680039
+    m_Key: ultimate.0.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1223680040
+    m_Key: ultimate.0.description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1223680041
+    m_Key: weapon.402.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1223680042
+    m_Key: weapon.402.description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1223680043
+    m_Key: character.1.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1223680044
+    m_Key: map.1.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1223680045
+    m_Key: map.1.description
+    m_Metadata:
+      m_Items: []
+  m_Metadata:
+    m_Items: []
+  m_KeyGenerator:
+    rid: 8799243419999797248
+  references:
+    version: 2
+    RefIds:
+    - rid: 8799243419999797248
+      type: {class: DistributedUIDGenerator, ns: UnityEngine.Localization.Tables, asm: Unity.Localization}
+      data:
+        m_CustomEpoch: 1789267282460

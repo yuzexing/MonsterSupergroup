@@ -1,7 +1,8 @@
+using MonsterSupergroup.Gameplay.Options;
 using System;
 using System.Collections.Generic;
 using FMODUnity;
-using I2.Loc;
+
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -123,13 +124,13 @@ namespace AstralShift.UI
 
 		private void OnEnable()
 		{
-			LocalizationManager.OnLocalizeEvent += RefreshLocalizedOptions;
+			GameLocalization.Changed += RefreshLocalizedOptions;
 			RefreshLocalizedOptions();
 		}
 
 		private void OnDisable()
 		{
-			LocalizationManager.OnLocalizeEvent -= RefreshLocalizedOptions;
+			GameLocalization.Changed -= RefreshLocalizedOptions;
 		}
 
 		private void Start()
@@ -295,7 +296,7 @@ namespace AstralShift.UI
 			if (localize)
 			{
 				text = "STT_" + text;
-				LocalizationMediator.GetTranslation(ref text);
+				text = GameLocalization.Menu(text);
 			}
 			TMP_Text componentInChildren = obj.GetComponentInChildren<TMP_Text>();
 			componentInChildren.text = text;
@@ -324,9 +325,9 @@ namespace AstralShift.UI
 			foreach (Entry entry in _entries)
 			{
 				string term = (entry.localize ? ("STT_" + entry.raw) : entry.raw);
-				if (entry.localize && LocalizationMediator.GetTranslationPath(ref term))
+				if (entry.localize)
 				{
-					entry.label.text = LocalizationManager.GetTranslation(term);
+					entry.label.text = GameLocalization.Menu(term);
 				}
 				else
 				{

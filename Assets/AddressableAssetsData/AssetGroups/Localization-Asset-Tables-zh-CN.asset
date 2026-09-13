@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: Localization-Asset-Tables-zh-CN
+  m_EditorClassIdentifier: Unity.Addressables.Editor::UnityEditor.AddressableAssets.Settings.AddressableAssetGroup
+  m_GroupName: Localization-Asset-Tables-zh-CN
+  m_GUID: d80172fefa8b9a94aa2257913dc0ea97
+  m_SerializeEntries:
+  - m_GUID: 5930162e323fcc845b079a371619e60a
+    m_Address: MonsterFonts_zh-CN
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-zh-CN
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 1
+  m_Settings: {fileID: 11400000, guid: 16ced2ee9fdab8549b205ec3061a501a, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: f48d29025dc33bb4d8fe6f8025d8a421, type: 2}
+    - {fileID: 11400000, guid: 2692e456902175c449a5cd4b5f010309, type: 2}
+    - {fileID: 11400000, guid: b69c72207faa42549a0eee31f910c377, type: 2}

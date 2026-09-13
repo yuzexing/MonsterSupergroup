@@ -29,6 +29,7 @@ namespace MonsterSupergroup.NetworkCombat
 
         private void OnGUI()
         {
+            if (NetworkManager.singleton is BootGameplayNetworkManager manager && manager.UsePreparationRoom) return;
             if (Application.isBatchMode || service == null ||
                 !service.IsSteamBackendSelected)
             {

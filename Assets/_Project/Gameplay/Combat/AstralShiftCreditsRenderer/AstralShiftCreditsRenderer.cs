@@ -1,3 +1,4 @@
+using MonsterSupergroup.Gameplay.Options;
 using System;
 using Newtonsoft.Json;
 using TMPro;
@@ -146,7 +147,7 @@ namespace AstralShift.AstralShiftCreditsRenderer
 			if (componentInChildren != null)
 			{
 				string term = session.Title;
-				LocalizationMediator.GetTranslation(ref term);
+				term = GameLocalization.Menu(term);
 				componentInChildren.text = ((!string.IsNullOrEmpty(term)) ? term : session.Title);
 				if (string.IsNullOrEmpty(term) && session.Title.StartsWith("CRD_"))
 				{
@@ -241,7 +242,7 @@ namespace AstralShift.AstralShiftCreditsRenderer
 			if (componentInChildren != null)
 			{
 				string term = category.Title;
-				LocalizationMediator.GetTranslation(ref term);
+				term = GameLocalization.Menu(term);
 				if (!string.IsNullOrEmpty(term))
 				{
 					componentInChildren.text = term;
@@ -297,7 +298,7 @@ namespace AstralShift.AstralShiftCreditsRenderer
 				if (!flag && tMP_Text.gameObject.name.ToLower().Contains("role"))
 				{
 					string term = credit.Role;
-					LocalizationMediator.GetTranslation(ref term);
+					term = GameLocalization.Menu(term);
 					tMP_Text.text = ((!string.IsNullOrEmpty(term)) ? term : credit.Role);
 					if (string.IsNullOrEmpty(term) && credit.Role.StartsWith("CRD_RL_"))
 					{
@@ -316,7 +317,7 @@ namespace AstralShift.AstralShiftCreditsRenderer
 				return;
 			}
 			string term2 = credit.Role;
-			LocalizationMediator.GetTranslation(ref term2);
+			term2 = GameLocalization.Menu(term2);
 			componentsInChildren[0].text = ((!string.IsNullOrEmpty(term2)) ? term2 : credit.Role);
 			if (credit.Names != null)
 			{

@@ -17,9 +17,14 @@ namespace MonsterSupergroup.NetworkCombat
         public uint AbilityId;
         public uint BuildId;
         public int Damage;
+        public byte PresentationDamageType;
+        public bool IsCritical;
+        public uint DamageSourceId;
         public ulong DamageTags;
         public uint TargetStateVersion;
         public OrdinaryHitKnockback Knockback;
+        public ulong StatusInstanceId;
+        public uint StatusApplicationRevision;
 
         public static CombatResult From(CombatEvent combatEvent)
         {
@@ -44,6 +49,11 @@ namespace MonsterSupergroup.NetworkCombat
                 AbilityId = context.AbilityId,
                 BuildId = context.BuildId,
                 Damage = combatEvent.ResolvedDamage.Value,
+                PresentationDamageType = (byte)combatEvent.PresentationDamageType,
+                IsCritical = combatEvent.ResolvedDamage.IsCritical,
+                DamageSourceId = combatEvent.ResolvedDamage.Id,
+                StatusInstanceId = combatEvent.StatusInstanceId.Value,
+                StatusApplicationRevision = combatEvent.StatusApplicationRevision,
                 DamageTags = (ulong)context.Tags,
                 TargetStateVersion = context.TargetStateVersion
             };

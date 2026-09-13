@@ -36,6 +36,14 @@ namespace MonsterSupergroup.Gameplay.Tests
         public IEnumerator TearDown()
         {
             yield return StopExistingNetworkRuntime();
+            // Scene identities survive StopHost. Do not leak this world's singleton
+            // into following fixtures which construct their own network world.
+            var sandbox = SceneManager.GetSceneByPath(SandboxScenePath);
+            if (sandbox.IsValid() && sandbox.isLoaded)
+            {
+                SceneManager.SetActiveScene(SceneManager.CreateScene("After network sandbox test"));
+                yield return SceneManager.UnloadSceneAsync(sandbox);
+            }
         }
 
         private static IEnumerator StopExistingNetworkRuntime()
@@ -388,12 +396,16 @@ namespace MonsterSupergroup.Gameplay.Tests
                     remoteEndpointObject.GetComponent<NetworkEnemySimulationEndpoint>();
                 NetworkEnemySimulationWorld simulationWorld =
                     NetworkEnemySimulationWorld.Instance;
+                // This fixture supplies a synthetic endpoint and drives packets directly.
+                // Isolate replica execution from production candidate re-selection.
+                simulationWorld.enabled = false;
                 EnemySimulationAssignment replicaAssignment =
                     simulationWorld.Registry.AssignClientOwner(
                         agent.netId,
                         remoteEndpoint.PlayerEntityId,
                         remoteEndpoint.PlayerEntityId);
                 agent.SetServerAssignment(replicaAssignment);
+                agent.GetComponent<EnemySnapshotInterpolator>().ClearSnapshots();
                 float replicaDeadline = Time.realtimeSinceStartup + 2f;
                 while (agent.Authority.Role != EnemySimulationRole.Replica &&
                        Time.realtimeSinceStartup < replicaDeadline)
@@ -643,12 +655,15 @@ namespace MonsterSupergroup.Gameplay.Tests
                 }
                 Assert.That(agent.ProductEnemyInitialized, Is.True);
 
+                // No actual remote connection backs this packet-injection fixture.
+                world.enabled = false;
                 EnemySimulationAssignment replicaAssignment =
                     world.Registry.AssignClientOwner(
                         agent.netId,
                         remoteEndpoint.PlayerEntityId,
                         remoteEndpoint.PlayerEntityId);
                 agent.SetServerAssignment(replicaAssignment);
+                agent.GetComponent<EnemySnapshotInterpolator>().ClearSnapshots();
                 float replicaDeadline = Time.realtimeSinceStartup + 2f;
                 while (agent.Authority.Role != EnemySimulationRole.Replica &&
                        Time.realtimeSinceStartup < replicaDeadline)
@@ -776,6 +791,8 @@ namespace MonsterSupergroup.Gameplay.Tests
                 // A new epoch reproduces a Late Join whose first cached phase is
                 // an already-expired Active edge. Visual replay is allowed; damage
                 // compensation is explicitly forbidden.
+                // Repeating the same assignment is now intentionally idempotent.
+                world.Registry.Freeze(agent.netId);
                 replicaAssignment = world.Registry.AssignClientOwner(
                     agent.netId,
                     remoteEndpoint.PlayerEntityId,

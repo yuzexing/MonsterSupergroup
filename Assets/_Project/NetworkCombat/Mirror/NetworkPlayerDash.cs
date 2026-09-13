@@ -32,6 +32,18 @@ namespace MonsterSupergroup.NetworkCombat
         public int PendingOwnerUseCount => prediction?.PendingCount ?? 0;
         public event Action<ulong> OwnerUseRejected;
 
+        public bool TryReadDebugState(bool serverView, out PlayerDashSnapshot snapshot)
+        {
+            snapshot = default;
+            if (!isActiveAndEnabled) return false;
+            PlayerDashRuntime runtime = serverView
+                ? (isServer ? serverUses?.Runtime : null)
+                : (isOwned && HasOwnerBaseline ? OwnerRuntime : null);
+            if (runtime == null) return false;
+            snapshot = runtime.ReadSnapshot();
+            return true;
+        }
+
         private void Awake()
         {
             movement = GetComponent<PlayerMovement>();
@@ -80,7 +92,7 @@ namespace MonsterSupergroup.NetworkCombat
         {
             if (!ownerBound || !isOwned || !NetworkClient.active || !isActiveAndEnabled ||
                 prediction == null || !prediction.HasBaseline || bridge.EventIds == null ||
-                selection == null || !selection.HasOwnerBaseline || movement.IsUpgradeSelectionLocked ||
+                selection == null || !selection.HasOwnerBaseline || movement.IsMenuInputBlocked || movement.IsUpgradeSelectionLocked || movement.IsRunLoadingLocked ||
                 build == null || !build.IsBuildActive) return 0;
             double now = NetworkTime.time;
             ulong useId = bridge.EventIds.Next().Value;
@@ -110,7 +122,7 @@ namespace MonsterSupergroup.NetworkCombat
             { RejectUse(useId); return; }
             lastProcessedUseId = useId;
             double now = NetworkTime.time;
-            if (!isActiveAndEnabled || selection == null || buildRevision == 0 || buildRevision != selection.BuildRevision ||
+            if (BootGameplayNetworkManager.CombatHasEnded || !isActiveAndEnabled || movement.IsRunLoadingLocked || selection == null || buildRevision == 0 || buildRevision != selection.BuildRevision ||
                 !world.Gateway.Ledger.TryGetState(netId, out var state) || !state.Alive ||
                 world.Gateway.Ledger.IsPlayerSelectingUpgrade(netId) ||
                 !Finite(ownerTime) || ownerTime < now - 2d || ownerTime > now + 0.1d ||

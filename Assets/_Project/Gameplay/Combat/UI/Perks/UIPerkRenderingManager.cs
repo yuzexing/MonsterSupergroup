@@ -57,7 +57,7 @@ namespace AstralShift.HellMaiden.UI.Perks
 			if (!_viewTo3DViewLut.ContainsKey(perkView))
 			{
 				perk3DView.Initialize();
-				perk3DView.name = perkView.PerkData.Data.Title + " (3D Perk View)";
+				perk3DView.name = perkView.PerkData.Data.GetTitle() + " (3D Perk View)";
 				perk3DView.transform.SetParent(pivot);
 				perk3DView.transform.localPosition = Vector3.zero;
 				_viewTo3DViewLut.Add(perkView, perk3DView);
@@ -87,7 +87,7 @@ namespace AstralShift.HellMaiden.UI.Perks
 		private void CreateDynamicTexture(PerkView perkView, Perk3DView perk3DView)
 		{
 			RenderTexture renderTexture = new RenderTexture(RenderTextureAsset);
-			renderTexture.name = "UI Perk Dynamic Texture - " + perkView.PerkData.Data.Title;
+			renderTexture.name = "UI Perk Dynamic Texture - " + perkView.PerkData.Data.GetTitle();
 			renderTexture.Create();
 			perk3DView.AssignTexture(renderTexture);
 			_dynamicTextures.Add(perk3DView, renderTexture);
@@ -121,7 +121,7 @@ namespace AstralShift.HellMaiden.UI.Perks
 				if (runtimePerkData == null || !_staticTextures.ContainsKey(runtimePerkData))
 				{
 					RenderTexture renderTexture = new RenderTexture(RenderTextureAsset);
-					renderTexture.name = "UI Perk Static Texture - " + data.Data.Title + " Lvl: " + data.Rarity;
+					renderTexture.name = "UI Perk Static Texture - " + data.Data.GetTitle() + " Lvl: " + data.Rarity;
 					renderTexture.Create();
 					_staticTextures.Add(runtimePerkData, renderTexture);
 					perk3DView.Render(Camera, renderTexture);

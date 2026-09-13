@@ -39,7 +39,10 @@ namespace MonsterSupergroup.NetworkCombat
             public EnemySimulationAssignment Assignment;
             public EnemySimulationSnapshot LastSnapshot;
             public bool HasSnapshot;
+            public ulong LastConfirmedProjectileAction;
             public uint LastAcceptedSequence;
+            public double LastAcceptedMovementTime;
+            public bool LastSnapshotIsCheckpoint;
             public EnemyAttackPresentationEdge LastAttackPresentation;
             public bool HasAttackPresentation;
             public uint LastAcceptedAttackStateSequence;
@@ -176,11 +179,27 @@ namespace MonsterSupergroup.NetworkCombat
             if (entries.TryGetValue(enemyEntityId, out Entry entry) && entry.HasSnapshot)
             {
                 snapshot = entry.LastSnapshot;
+                snapshot.Runtime.Action.ProjectileEmitted = snapshot.Runtime.Action.ActionId != 0 && snapshot.Runtime.Action.ActionId == entry.LastConfirmedProjectileAction;
                 return true;
             }
 
             snapshot = default;
             return false;
+        }
+
+        public void ConfirmProjectileLaunch(EnemyProjectileLaunch launch)
+        {
+            Entry entry = RequireEntry(launch.Key.EnemyEntityId);
+            entry.LastConfirmedProjectileAction = Math.Max(entry.LastConfirmedProjectileAction, launch.Key.ActionId);
+            RecordCheckpoint(launch.Checkpoint);
+        }
+
+        public void RecordCheckpoint(EnemySimulationCheckpoint checkpoint)
+        {
+            Entry entry = RequireEntry(checkpoint.Movement.EnemyEntityId);
+            // Reliable action boundaries may overtake an unreliable movement sample.
+            if (!entry.HasSnapshot || checkpoint.Movement.SampleNetworkTime >= entry.LastSnapshot.SampleNetworkTime)
+            { entry.LastSnapshot = checkpoint.Movement; entry.HasSnapshot = true; entry.LastSnapshotIsCheckpoint = true; }
         }
 
         public bool TryGetLatestAttackPresentation(
@@ -237,25 +256,9 @@ namespace MonsterSupergroup.NetworkCombat
             {
                 return EnemySnapshotRejectionReason.WrongEpoch;
             }
-            if (!EnemySimulationSequence.IsNewer(
-                snapshot.Sequence,
-                entry.LastAcceptedSequence))
-            {
-                return EnemySnapshotRejectionReason.StaleSequence;
-            }
-            if (!snapshot.IsFinite)
-            {
-                return EnemySnapshotRejectionReason.InvalidValue;
-            }
-            if (entry.LastAcceptedSequence != 0u &&
-                snapshot.SampleNetworkTime <= entry.LastSnapshot.SampleNetworkTime)
-            {
-                return EnemySnapshotRejectionReason.StaleTimestamp;
-            }
-
-            entry.LastAcceptedSequence = snapshot.Sequence;
-            entry.LastSnapshot = snapshot;
-            entry.HasSnapshot = true;
+            var reason = ValidateMovement(entry, snapshot);
+            if (reason != EnemySnapshotRejectionReason.None) return reason;
+            AcceptMovement(entry, snapshot);
             return EnemySnapshotRejectionReason.None;
         }
 
@@ -301,6 +304,9 @@ namespace MonsterSupergroup.NetworkCombat
             entry.LastAcceptedAttackStateSequence = edge.StateSequence;
             entry.LastAttackPresentation = edge;
             entry.HasAttackPresentation = true;
+            if (edge.Checkpoint.Movement.EnemyEntityId == edge.EnemyEntityId &&
+                edge.Checkpoint.Movement.AssignmentEpoch == edge.AssignmentEpoch && edge.Checkpoint.Movement.IsFinite)
+                RecordCheckpoint(edge.Checkpoint);
             return EnemyAttackPresentationRejectionReason.None;
         }
 
@@ -313,20 +319,37 @@ namespace MonsterSupergroup.NetworkCombat
                 throw new InvalidOperationException(
                     $"Enemy {snapshot.EnemyEntityId} is not simulated by the server.");
             }
-            if (snapshot.AssignmentEpoch != entry.Assignment.Epoch ||
-                !EnemySimulationSequence.IsNewer(
-                    snapshot.Sequence,
-                    entry.LastAcceptedSequence) ||
-                !snapshot.IsFinite ||
-                (entry.LastAcceptedSequence != 0u &&
-                 snapshot.SampleNetworkTime <= entry.LastSnapshot.SampleNetworkTime))
+            var reason = ValidateMovement(entry, snapshot);
+            if (reason != EnemySnapshotRejectionReason.None)
             {
-                throw new ArgumentException("Invalid server simulation snapshot.", nameof(snapshot));
+                throw new ArgumentException($"Invalid server simulation snapshot: {reason}; enemy={snapshot.EnemyEntityId}, " +
+                    $"epoch={snapshot.AssignmentEpoch}/{entry.Assignment.Epoch}, sequence={snapshot.Sequence}/{entry.LastAcceptedSequence}, " +
+                    $"time={snapshot.SampleNetworkTime:R}/{entry.LastAcceptedMovementTime:R}, checkpointTime={entry.LastSnapshot.SampleNetworkTime:R}.", nameof(snapshot));
             }
+            AcceptMovement(entry, snapshot);
+        }
 
+        private static EnemySnapshotRejectionReason ValidateMovement(Entry entry, EnemySimulationSnapshot snapshot)
+        {
+            if (snapshot.AssignmentEpoch != entry.Assignment.Epoch) return EnemySnapshotRejectionReason.WrongEpoch;
+            if (!EnemySimulationSequence.IsNewer(snapshot.Sequence, entry.LastAcceptedSequence)) return EnemySnapshotRejectionReason.StaleSequence;
+            if (!snapshot.IsFinite) return EnemySnapshotRejectionReason.InvalidValue;
+            if (entry.LastAcceptedSequence != 0 && snapshot.SampleNetworkTime <= entry.LastAcceptedMovementTime)
+                return EnemySnapshotRejectionReason.StaleTimestamp;
+            return EnemySnapshotRejectionReason.None;
+        }
+
+        private static void AcceptMovement(Entry entry, EnemySimulationSnapshot snapshot)
+        {
             entry.LastAcceptedSequence = snapshot.Sequence;
-            entry.LastSnapshot = snapshot;
-            entry.HasSnapshot = true;
+            entry.LastAcceptedMovementTime = snapshot.SampleNetworkTime;
+            if (!entry.HasSnapshot || snapshot.SampleNetworkTime > entry.LastSnapshot.SampleNetworkTime ||
+                (snapshot.SampleNetworkTime == entry.LastSnapshot.SampleNetworkTime && !entry.LastSnapshotIsCheckpoint))
+            {
+                entry.LastSnapshot = snapshot;
+                entry.HasSnapshot = true;
+                entry.LastSnapshotIsCheckpoint = false;
+            }
         }
 
         public void RecordServerAttackPresentation(
@@ -356,6 +379,8 @@ namespace MonsterSupergroup.NetworkCombat
             entry.LastAcceptedAttackStateSequence = edge.StateSequence;
             entry.LastAttackPresentation = edge;
             entry.HasAttackPresentation = true;
+            if (edge.Checkpoint.Movement.EnemyEntityId == edge.EnemyEntityId)
+                RecordCheckpoint(edge.Checkpoint);
         }
 
         public void GetEnemiesOwnedBy(uint playerId, List<uint> results)
@@ -390,10 +415,7 @@ namespace MonsterSupergroup.NetworkCombat
                 bool clientOwnerDisconnected =
                     assignment.Host == EnemySimulationHost.ClientPlayer &&
                     assignment.SimulationOwnerPlayerId == playerId;
-                bool fallbackTargetDisconnected =
-                    (assignment.Host == EnemySimulationHost.ServerFallback ||
-                     assignment.Host == EnemySimulationHost.ServerAuthoritative) &&
-                    assignment.AggroTargetPlayerId == playerId;
+                bool fallbackTargetDisconnected = assignment.AggroTargetPlayerId == playerId;
                 if (clientOwnerDisconnected || fallbackTargetDisconnected)
                 {
                     results.Add(pair.Key);
@@ -418,6 +440,9 @@ namespace MonsterSupergroup.NetworkCombat
             uint ownerPlayerId,
             uint targetPlayerId)
         {
+            if (entry.Assignment.Host == host && entry.Assignment.SimulationOwnerPlayerId == ownerPlayerId &&
+                entry.Assignment.AggroTargetPlayerId == targetPlayerId && entry.Assignment.Epoch != 0)
+                return entry.Assignment;
             uint epoch = unchecked(entry.Assignment.Epoch + 1u);
             if (epoch == 0u)
             {
@@ -433,6 +458,7 @@ namespace MonsterSupergroup.NetworkCombat
                 Epoch = epoch
             };
             entry.LastAcceptedSequence = 0u;
+            entry.LastAcceptedMovementTime = 0d;
             entry.LastAcceptedAttackStateSequence = 0u;
             entry.HasAttackPresentation = false;
             return entry.Assignment;

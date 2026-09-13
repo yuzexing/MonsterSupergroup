@@ -1,3 +1,5 @@
+using MonsterSupergroup.Gameplay.Options;
+using UnityEngine.Localization;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,19 +15,10 @@ namespace AstralShift.HellMaiden.Data.Perks
 		[Header("General Settings")]
 		public uint ID;
 
-		public string Title;
-
-		[TextArea]
-		[SerializeField]
-		protected string Description;
-
-		public bool hasLocalization;
-
-		[SerializeField]
-		protected string TitleKey;
-
-		[SerializeField]
-		protected string DescriptionKey;
+        [SerializeField] private LocalizedString localizedTitle = new();
+        [SerializeField] private LocalizedString localizedDescription = new();
+        public LocalizedString LocalizedTitle => localizedTitle;
+        public LocalizedString LocalizedDescription => localizedDescription;
 
 		[SerializeField]
 		private Sprite icon;
@@ -39,7 +32,6 @@ namespace AstralShift.HellMaiden.Data.Perks
 
 		public static readonly int LevelsPerRarity = 3;
 
-		private static string _descriptionRegexPattern;
 
 		private HashSet<PerkRarity> _cachedRarities;
 
@@ -120,59 +112,8 @@ namespace AstralShift.HellMaiden.Data.Perks
 			}
 		}
 
-		public string GetTitle()
-		{
-			if (hasLocalization)
-			{
-				string term = TitleKey;
-				LocalizationMediator.GetTranslation(ref term);
-				return term;
-			}
-			return Title;
-		}
-
-		public string GetDescription(PerkRarity rarity)
-		{
-			string term = DescriptionKey;
-			if (hasLocalization)
-			{
-				LocalizationMediator.GetTranslation(ref term);
-			}
-			else
-			{
-				term = Description;
-			}
-			Dictionary<string, PerkModifierApplication> modifiersMap =
-				new Dictionary<string, PerkModifierApplication>();
-			PerkModifierApplication[] modifiers = GetRarity(rarity).Modifiers;
-			foreach (PerkModifierApplication perkDataModifier in modifiers)
-			{
-				modifiersMap[perkDataModifier.DescriptionToken] = perkDataModifier;
-			}
-			if (string.IsNullOrEmpty(_descriptionRegexPattern))
-			{
-				_descriptionRegexPattern =
-					"\\{([^}]+)\\}\\[(\\d+)\\](?:\\[([^\\]]*)\\])?";
-			}
-			try
-			{
-				return Regex.Replace(term, _descriptionRegexPattern, delegate(Match match)
-				{
-					if (!modifiersMap.TryGetValue(match.Groups[1].Value, out var value))
-					{
-						return match.Value;
-					}
-					int idx = int.Parse(match.Groups[2].Value);
-					float parameterByIndex = value.GetParameterByIndex(idx);
-					return ((match.Groups[3].Success ? match.Groups[3].Value : string.Empty) == "%") ? (DataModifierUtils.FormatMultiplierToPercentage(parameterByIndex) + "%") : $"{parameterByIndex}";
-				});
-			}
-			catch (Exception ex)
-			{
-				Debug.Log("Caught during regex: " + ex);
-			}
-			return null;
-		}
+        public string GetTitle() => GameLocalization.Resolve(localizedTitle, ID);
+        public string GetDescription(PerkRarity rarity) => GameLocalization.Resolve(localizedDescription, ID, ContentText.Arguments(GetRarity(rarity).Modifiers));
 
 		public Sprite GetIcon()
 		{

@@ -45,6 +45,12 @@ namespace MonsterSupergroup.Gameplay.Tests
                 Assert.That(debugPanel.transform, Is.EqualTo(ui.transform), "Debug lives outside the HP and selection subtrees.");
                 Assert.That(debugPanel.Expanded, Is.True);
                 Assert.That(debugPanel.Rows, Is.Empty);
+                var playerPanel = ui.GetComponent<NetworkPlayerDebugPanel>();
+                Assert.That(playerPanel, Is.Not.Null, "Production Gameplay must load Player Debug at the UI root.");
+                Assert.That(ui.GetComponentsInChildren<NetworkPlayerDebugPanel>(true), Has.Length.EqualTo(1));
+                Assert.That(playerPanel.isActiveAndEnabled, Is.True);
+                Assert.That(playerPanel.Expanded, Is.True);
+                Assert.That(playerPanel.Rows, Is.Empty);
                 Assert.That(SceneManager.GetActiveScene(), Is.EqualTo(originalScene),
                     "The loader must not depend on the newly loaded scene being active.");
                 Assert.That(gameplay.GetRootGameObjects().SelectMany(root =>
@@ -58,6 +64,7 @@ namespace MonsterSupergroup.Gameplay.Tests
                 yield return SceneManager.UnloadSceneAsync(gameplay);
                 Assert.That(ui == null, Is.True);
                 Assert.That(debugPanel == null, Is.True);
+                Assert.That(playerPanel == null, Is.True);
                 Assert.That(HealthSubscribers(combatant), Is.Zero);
             }
             finally

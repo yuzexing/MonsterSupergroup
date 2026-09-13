@@ -1,3 +1,4 @@
+using MonsterSupergroup.Gameplay.Options;
 using System;
 using System.Collections.Generic;
 using System.Threading;
@@ -289,7 +290,7 @@ namespace AstralShift.HellMaiden.UI.Menus.MetaProgression
 		{
 			MetaStatDatabaseEntry metaStatDatabaseEntry = upgrade.MetaStatDatabaseEntry;
 			string term = metaStatDatabaseEntry.name;
-			LocalizationMediator.GetTranslation(ref term);
+			term = GameLocalization.Menu(term);
 			if (term != null)
 			{
 				infoTitle.text = term;
@@ -299,7 +300,7 @@ namespace AstralShift.HellMaiden.UI.Menus.MetaProgression
 				infoTitle.text = metaStatDatabaseEntry.name;
 			}
 			string term2 = metaStatDatabaseEntry.description;
-			LocalizationMediator.GetTranslation(ref term2);
+			term2 = GameLocalization.Menu(term2);
 			if (term2 != null)
 			{
 				infoDescription.text = term2;

@@ -1,8 +1,9 @@
+using MonsterSupergroup.Gameplay.Options;
 using System;
 using Assets.Scripts.AstralShift.HellMaiden.Data;
 using AstralShift.HellMaiden.Data;
 using AstralShift.UI;
-using I2.Loc;
+
 using TMPro;
 using UnityEngine;
 
@@ -53,7 +54,7 @@ namespace AstralShift.HellMaiden.UI.Menus.MetaProgression
 			onSelect.AddListener(OnSelect);
 			onPointerEnter.AddListener(OnSelect);
 			AchievementManager.Instance.OnAchievementUnlocked += OnAchievementUnlock;
-			LocalizationManager.OnLocalizeEvent += SetTitle;
+			GameLocalization.Changed += SetTitle;
 		}
 
 		public bool Upgrade()
@@ -99,7 +100,7 @@ namespace AstralShift.HellMaiden.UI.Menus.MetaProgression
 		private void SetTitle()
 		{
 			string term = MetaStatDatabaseEntry.name;
-			LocalizationMediator.GetTranslation(ref term);
+			term = GameLocalization.Menu(term);
 			if (term != null)
 			{
 				title.text = term;

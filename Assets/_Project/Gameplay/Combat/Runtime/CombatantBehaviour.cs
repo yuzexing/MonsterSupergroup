@@ -47,6 +47,8 @@ namespace MonsterSupergroup.Gameplay.Combat
 
         public int CurrentHealth { get; private set; }
 
+        public bool IsInitialized => isInitialized;
+
         public int MaxHealth => maxHealth;
 
         public bool IsAlive => isInitialized && CurrentHealth > 0;
@@ -428,7 +430,10 @@ namespace MonsterSupergroup.Gameplay.Combat
                 CombatEventKind.DamageResolved,
                 damageContext,
                 tick.Damage,
-                predictedApplied));
+                predictedApplied,
+                tick.Instance.InstanceId,
+                tick.Instance.ApplicationRevision,
+                DamageTypeUtility.FromStatus(tick.StatusId)));
 
             if (targetWasAlive && !IsAlive)
             {

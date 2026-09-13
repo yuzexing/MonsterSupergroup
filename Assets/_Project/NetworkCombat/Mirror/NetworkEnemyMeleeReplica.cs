@@ -76,7 +76,7 @@ namespace MonsterSupergroup.NetworkCombat
             }
 
             if (damageWindowActive &&
-                NetworkTime.time >= damageWindowEndNetworkTime)
+                EnemySimulationClock.Now >= damageWindowEndNetworkTime)
             {
                 SetDamageEnabled(false);
             }
@@ -152,10 +152,10 @@ namespace MonsterSupergroup.NetworkCombat
             }
 
             warning.SetWarningTime(
-                meleeAttack.WarningTime,
+                (float)edge.RemainingAt(EnemySimulationClock.Now),
                 meleeAttack.AttackTime);
             warning.Show();
-            if (edge.IsExpiredAt(NetworkTime.time))
+            if (edge.IsExpiredAt(EnemySimulationClock.Now))
             {
                 warning.Hide();
             }
@@ -171,7 +171,7 @@ namespace MonsterSupergroup.NetworkCombat
             PositionAttack(edge.Facing);
             attackInstance.attackWarning?.Hide();
 
-            double remaining = edge.RemainingAt(NetworkTime.time);
+            double remaining = edge.RemainingAt(EnemySimulationClock.Now);
             if (remaining <= 0d)
             {
                 // Presentation has already been fast-forwarded by EnemyAnimator.
@@ -180,7 +180,7 @@ namespace MonsterSupergroup.NetworkCombat
                 return;
             }
 
-            damageWindowEndNetworkTime = NetworkTime.time + remaining;
+            damageWindowEndNetworkTime = EnemySimulationClock.Now + remaining;
             SetDamageEnabled(true);
         }
 
@@ -263,6 +263,8 @@ namespace MonsterSupergroup.NetworkCombat
 
         private void ReleaseAttackInstance()
         {
+            // Epoch/role changes invalidate deferred contacts from the old window.
+            attackInstance?.damageInteraction?.DiscardPendingCollisions();
             if (attackInstance == null)
             {
                 damageWindowActive = false;
@@ -274,7 +276,12 @@ namespace MonsterSupergroup.NetworkCombat
             attackInstance = null;
             if (instanceBorrowedFromPool && attackPool != null)
             {
-                attackPool.Return(released);
+                if (!gameObject.activeInHierarchy)
+                {
+                    released.gameObject.SetActive(false);
+                    EnemyAttackPrefab.ReturnAfterHierarchyChange(released, attackPool);
+                }
+                else attackPool.Return(released);
             }
             else
             {

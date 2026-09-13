@@ -1,0 +1,3998 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9620f8c34305754d8cc9a7e49e852d9, type: 3}
+  m_Name: MonsterMenus_en
+  m_EditorClassIdentifier: Unity.Localization::UnityEngine.Localization.Tables.StringTable
+  m_LocaleId:
+    m_Code: en
+  m_SharedData: {fileID: 11400000, guid: 62d67febafe785b4c87e874251ddf823, type: 2}
+  m_Metadata:
+    m_Items: []
+  m_TableData:
+  - m_Id: 1320148992
+    m_Localized: Options
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1362092032
+    m_Localized: General
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1362092033
+    m_Localized: Audio
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1362092034
+    m_Localized: Video
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286336
+    m_Localized: Language
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286337
+    m_Localized: "\u7B80\u4F53\u4E2D\u6587"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286338
+    m_Localized: English
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286339
+    m_Localized: Screen shake
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286340
+    m_Localized: Off
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286341
+    m_Localized: On
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286342
+    m_Localized: Language changes update menus immediately. Screen shake only affects
+      your local view.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286343
+    m_Localized: Master volume
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286344
+    m_Localized: Music
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286345
+    m_Localized: Sound effects
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286346
+    m_Localized: Controls weapon, damage, ambience and menu sounds. Changes apply
+      immediately.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286347
+    m_Localized: Audio is loading. Your saved volumes will apply when it is ready.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286348
+    m_Localized: Display mode
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286349
+    m_Localized: Windowed
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286350
+    m_Localized: Borderless fullscreen
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286351
+    m_Localized: Exclusive fullscreen
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286352
+    m_Localized: Resolution
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286353
+    m_Localized: VSync
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286354
+    m_Localized: Frame rate limit
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286355
+    m_Localized: Unlimited
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286356
+    m_Localized: Render scale
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286357
+    m_Localized: Anti-aliasing
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286358
+    m_Localized: Texture quality
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286359
+    m_Localized: Full resolution
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286360
+    m_Localized: Half resolution
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286361
+    m_Localized: Quarter resolution
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286362
+    m_Localized: Back
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286363
+    m_Localized: Reset this page
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286364
+    m_Localized: Apply
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286365
+    m_Localized: Revert
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286366
+    m_Localized: Keep settings
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286367
+    m_Localized: 'Keep these display settings?
+
+      Reverting in {0} seconds.'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286368
+    m_Localized: VSync is on. The display refresh rate controls the frame rate.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286369
+    m_Localized: Lower render scale can improve performance. Texture quality affects
+      mipmapped textures only.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286370
+    m_Localized: Display mode and resolution can only be changed in the standalone
+      game.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286371
+    m_Localized: "ASSEMBLE \xB7 PREPARE \xB7 DEPART"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286372
+    m_Localized: Gather your party for the next battle.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286373
+    m_Localized: "Connecting\u2026"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286374
+    m_Localized: Play
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286375
+    m_Localized: Feedback
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286376
+    m_Localized: Quit
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286377
+    m_Localized: "One battle \xB7 Up to four players"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286378
+    m_Localized: "Steam connected \xB7 Friend invites available"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286379
+    m_Localized: "Local solo available \xB7 Steam disconnected"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286380
+    m_Localized: Steam connection failed. Go back and try again.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286381
+    m_Localized: Entering the battlefield
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286382
+    m_Localized: Preparation room
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286383
+    m_Localized: Friends lobby
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286384
+    m_Localized: Local solo
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286385
+    m_Localized: '{0}    {1} / 4'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286386
+    m_Localized: "    \xB7    Lobby {0}"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286387
+    m_Localized: Waiting for a player
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286388
+    m_Localized: Invite friends
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286389
+    m_Localized: " \xB7 Host"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286390
+    m_Localized: " \xB7 You"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286391
+    m_Localized: Ready to play
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286392
+    m_Localized: "Loading\u2026"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286393
+    m_Localized: Ready
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286394
+    m_Localized: Not ready
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286395
+    m_Localized: This expedition
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286396
+    m_Localized: Map
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286397
+    m_Localized: Ruins Frontier
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286398
+    m_Localized: Enter the battlefield and face waves of monsters with your companions.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286399
+    m_Localized: Difficulty
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286400
+    m_Localized: Normal
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286401
+    m_Localized: Waiting for every player and starting weapon to finish loading.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286402
+    m_Localized: Choose a starting weapon and ready up. The host starts when everyone
+      is ready.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286403
+    m_Localized: Cancel start
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286404
+    m_Localized: Unready
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286405
+    m_Localized: Ready
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286406
+    m_Localized: Start game
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286407
+    m_Localized: Waiting for host
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286408
+    m_Localized: Choose a starting weapon
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286409
+    m_Localized: "{0} \xB7 Available character    /    Changing your weapon cancels
+      your ready status"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286410
+    m_Localized: Selected
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286411
+    m_Localized: Select
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286412
+    m_Localized: Back to lobby
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286413
+    m_Localized: Unleash a searing slash at close range.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286414
+    m_Localized: Launch slow-moving fireballs.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286415
+    m_Localized: Breathe a stream of scorching fire.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286416
+    m_Localized: Create two orbs that orbit your character.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286417
+    m_Localized: Leave a burning trail after dashing.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286418
+    m_Localized: Summon a companion to fight alongside you.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286419
+    m_Localized: S
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286420
+    m_Localized: F
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286421
+    m_Localized: B
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286422
+    m_Localized: O
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286423
+    m_Localized: T
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286424
+    m_Localized: C
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286425
+    m_Localized: Invite Steam friends
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286426
+    m_Localized: "Lobby {0}    \xB7    Invite a friend. Accepting the invite joins
+      this preparation room."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286427
+    m_Localized: "Search friends\u2026"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286428
+    m_Localized: Refresh
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286429
+    m_Localized: "Tab / \u2191\u2193 Select \xB7 Enter Invite \xB7 Esc Back"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286430
+    m_Localized: "Submitted \xB7 {0}s"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286431
+    m_Localized: Invite again
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286432
+    m_Localized: Already in lobby
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286433
+    m_Localized: Submitted
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286434
+    m_Localized: Invite
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286435
+    m_Localized: No Steam friends to display. Refresh to try again.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286436
+    m_Localized: No matching friends.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286437
+    m_Localized: "Showing {0} / {1} friends \xB7 Refreshes every 2 seconds"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286438
+    m_Localized: 'End this run and return to the main menu?
+
+      Other players
+      will also be disconnected.'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286439
+    m_Localized: End this run and return to the main menu?
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286440
+    m_Localized: Leave this run and return to the main menu?
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286441
+    m_Localized: "Leaving\u2026"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286442
+    m_Localized: 'Menu [Esc]'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286443
+    m_Localized: Run menu
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286444
+    m_Localized: "{0}    /    Difficulty \xB7 Normal"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286445
+    m_Localized: Resume
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286446
+    m_Localized: Leave run
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286447
+    m_Localized: The battle continues
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286448
+    m_Localized: You can still take damage. Automatic attacks continue.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286449
+    m_Localized: Character stats
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286450
+    m_Localized: Spell stats
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286451
+    m_Localized: "Esc Back    \xB7    Arrows / Tab Select    \xB7    Enter Confirm   
+      \xB7    Scroll for more"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286452
+    m_Localized: Leave this run
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286453
+    m_Localized: Cancel
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286454
+    m_Localized: Confirm exit
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286455
+    m_Localized: "{0}    \xB7    Current stats"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286456
+    m_Localized: Health    {0} / {1}       {2}
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286457
+    m_Localized: Alive
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286458
+    m_Localized: Downed
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286459
+    m_Localized: 'Health    '
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286460
+    m_Localized: Level    {0}       XP    {1} / {2}
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286461
+    m_Localized: 'Level / XP    '
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286462
+    m_Localized: Move speed    {0}
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286463
+    m_Localized: Flat damage reduction    {0}
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286464
+    m_Localized: Pickup range    {0}
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286465
+    m_Localized: "XP multiplier    \xD7{0}"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286466
+    m_Localized: Dash stats
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286467
+    m_Localized: Distance    {0}       Speed    {1}
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286468
+    m_Localized: Recharge interval    {0}s
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286469
+    m_Localized: 'Character / dash stats    '
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286470
+    m_Localized: 'Dash charges    '
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286471
+    m_Localized: 'Slot {0}{1}
+
+      {2}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286472
+    m_Localized: " \xB7 Starting"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286473
+    m_Localized: " \xB7 Starting weapon"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286474
+    m_Localized: Current stats
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286475
+    m_Localized: Damage    {0}       Attack speed    {1}
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286476
+    m_Localized: Critical chance    {0}       Critical multiplier    {1}
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286477
+    m_Localized: Uses dash charges
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286478
+    m_Localized: Cooldown remaining    {0}s
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286479
+    m_Localized: Weapon equipment
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286480
+    m_Localized: No equipment
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286481
+    m_Localized: '{0}    Level {1}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286482
+    m_Localized: Stats reflect your current build. Target conditions and on-hit effects
+      are excluded.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286483
+    m_Localized: Empty slot
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286484
+    m_Localized: Not available yet
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286485
+    m_Localized: Synchronizing
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286486
+    m_Localized: Character
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286487
+    m_Localized: Weapon #{0}
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286488
+    m_Localized: Equipment #{0}
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286489
+    m_Localized: Cleaning up the previous run. Please wait.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286490
+    m_Localized: The main menu is not ready yet.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286491
+    m_Localized: The room is loading. Please reconnect shortly.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286492
+    m_Localized: The battle scene could not load. The start was cancelled.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286493
+    m_Localized: Steam multiplayer is unavailable. A local solo room was created.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286494
+    m_Localized: Loading timed out after 120 seconds. Please create a new room.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286495
+    m_Localized: A player disconnected while loading. The start was cancelled.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286496
+    m_Localized: The host ended the session.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286497
+    m_Localized: Disconnected from the host. The host may have ended the session.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286498
+    m_Localized: 'Connection failed: {0}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286499
+    m_Localized: Offline
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286500
+    m_Localized: Online
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286501
+    m_Localized: Busy
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286502
+    m_Localized: Away
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286503
+    m_Localized: Snooze
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286504
+    m_Localized: Looking to trade
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286505
+    m_Localized: Looking to play
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286506
+    m_Localized: Unknown status
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286507
+    m_Localized: Steam is not connected. Sign in to Steam and try again.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286508
+    m_Localized: The lobby changed. Return to the room and reopen the friends list.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286509
+    m_Localized: Invites are no longer available. Return to the room to check its
+      status.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286510
+    m_Localized: Cannot invite while leaving or when the lobby is invalid.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286511
+    m_Localized: Cannot invite while the lobby is loading or closed.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286512
+    m_Localized: You are no longer in this Steam lobby. Return to the room.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286513
+    m_Localized: Lobby information is not ready. Refresh and try again.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286514
+    m_Localized: The lobby is full. No more invites can be sent.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286515
+    m_Localized: Could not read Steam friends or lobby members. Refresh and try again.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286516
+    m_Localized: This person is no longer an eligible Steam friend. Refresh the list.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286517
+    m_Localized: This friend is already in the lobby.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286518
+    m_Localized: Invite submitted. Wait 5 seconds before trying again.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286519
+    m_Localized: Invite submitted. Waiting for your friend to accept.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286520
+    m_Localized: Steam could not send the invite. Please try again.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286521
+    m_Localized: Steam friend invite failed. Please try again.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286522
+    m_Localized: Room created. Choose a weapon and ready up.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286523
+    m_Localized: "Joining your friend's Steam lobby\u2026"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286524
+    m_Localized: "Joined the Steam lobby. Connecting to the host\u2026"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286525
+    m_Localized: "Connected to the host. Verifying identity and synchronizing the
+      room\u2026"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286526
+    m_Localized: The lobby is full (maximum four players).
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286527
+    m_Localized: Incompatible game versions. Both players must use the same version.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286528
+    m_Localized: The host ended the session. Please rejoin the room.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286529
+    m_Localized: The invited lobby is closed or not ready. Ask your friend for a
+      new invite.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286530
+    m_Localized: Steam lobby failed. Check your Steam connection and try again.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286531
+    m_Localized: Create or join a preparation room before inviting friends.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286532
+    m_Localized: Steam Overlay is inactive in the Unity Editor. Send invites from
+      the game launched through Steam.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286533
+    m_Localized: Steam Overlay is inactive. Try again shortly. If it remains unavailable,
+      enable the overlay and launch the game through Steam.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286534
+    m_Localized: Leave the current room before accepting an invite to another lobby.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2416110985216
+    m_Localized: "Esc Resume    \xB7    Arrows / Tab Select    \xB7    Enter Confirm   
+      \xB7    Scroll for stats"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2416148733952
+    m_Localized: Joined the preparation room. Choose a weapon and ready up.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2416148733953
+    m_Localized: Cleaning up the previous run. Please wait.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2416148733954
+    m_Localized: The room is not ready yet.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2416148733955
+    m_Localized: The run has started. Only existing players can reconnect.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2416148733956
+    m_Localized: The room is full (maximum four players).
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2416148733957
+    m_Localized: This character or starting weapon is not available.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2416148733958
+    m_Localized: Your selection changed. Check your loadout and ready up again.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2416148733959
+    m_Localized: Only the host can start the game.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2416148733960
+    m_Localized: The room changed. Confirm the start again.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2416148733961
+    m_Localized: Waiting for all players to ready up.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2416148733962
+    m_Localized: The run is starting. The loadout cannot be changed.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2416148733963
+    m_Localized: You have not joined a room yet.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 8272814792704
+    m_Localized: Dante
+    m_Metadata:
+      m_Items: []
+  - m_Id: 8272852541440
+    m_Localized: DANTE
+    m_Metadata:
+      m_Items: []
+  - m_Id: 113251252690944
+    m_Localized: Game Over
+    m_Metadata:
+      m_Items: []
+  - m_Id: 113251294633984
+    m_Localized: All online players are down.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 113251294633985
+    m_Localized: "Clearing the battlefield. Restarting\u2026"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 113251294633986
+    m_Localized: "Returning to the preparation room\u2026"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 113251294633987
+    m_Localized: Leave the room and return to the main menu?
+    m_Metadata:
+      m_Items: []
+  - m_Id: 113251294633988
+    m_Localized: Leave room
+    m_Metadata:
+      m_Items: []
+  - m_Id: 113251294633989
+    m_Localized: Return to Lobby
+    m_Metadata:
+      m_Items: []
+  - m_Id: 113251294633990
+    m_Localized: Restart
+    m_Metadata:
+      m_Items: []
+  - m_Id: 113251294633991
+    m_Localized: "Your party stays together. Restart uses this run\u2019s starting
+      loadouts."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 113251294633992
+    m_Localized: Waiting for the host
+    m_Metadata:
+      m_Items: []
+  - m_Id: 113251294633993
+    m_Localized: Leave Room
+    m_Metadata:
+      m_Items: []
+  - m_Id: 113251294633994
+    m_Localized: "Please wait\u2026"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 113251294633995
+    m_Localized: Cleanup timed out after 120 seconds. Please create a new room.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 113251294633996
+    m_Localized: Only the host can choose the next action.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 113251294633997
+    m_Localized: This action has already been handled or is unavailable.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 113251294633998
+    m_Localized: This run has ended.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 119898259841024
+    m_Localized: Could not start the next round. Please create a new room.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 135909377826816
+    m_Localized: "Local multiplayer \xB7 Development"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 135909423964160
+    m_Localized: 'Address: 127.0.0.1'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 135909423964161
+    m_Localized: Port
+    m_Metadata:
+      m_Items: []
+  - m_Id: 135909423964162
+    m_Localized: Use the same port in the other game windows.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 135909423964163
+    m_Localized: Create local host
+    m_Metadata:
+      m_Items: []
+  - m_Id: 135909423964164
+    m_Localized: Join local host
+    m_Metadata:
+      m_Items: []
+  - m_Id: 135909423964165
+    m_Localized: Cancel connection
+    m_Metadata:
+      m_Items: []
+  - m_Id: 135909423964166
+    m_Localized: "Cleaning up connection\u2026"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 135909423964167
+    m_Localized: "Creating local host\u2026"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 135909423964168
+    m_Localized: "Connecting and syncing room\u2026"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 135909423964169
+    m_Localized: No Steam invitation needed
+    m_Metadata:
+      m_Items: []
+  - m_Id: 135909423964170
+    m_Localized: Choose Join local host in the other game windows.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 135909423964171
+    m_Localized: "Local KCP \xB7 127.0.0.1:{0} \xB7 {1} / 4"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 135909423964172
+    m_Localized: Local multiplayer controls are only available in development builds.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 135909423964173
+    m_Localized: Enter a port from 1 to 65535.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 135909423964174
+    m_Localized: Wait for the current connection or session to finish.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 135909423964175
+    m_Localized: Local networking is not ready.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 135909423964176
+    m_Localized: This port is already in use. Join the existing host or choose another
+      port.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 135909423964177
+    m_Localized: The local connection closed. Please retry.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 135909423964178
+    m_Localized: Connection timed out. Check that the host is running and the ports
+      match.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 135909423964179
+    m_Localized: Local connection canceled.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 135909423964180
+    m_Localized: Local connection closed. Check the host and port.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 135909423964181
+    m_Localized: Local connection failed. Check that the host is running and the
+      ports match.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984013565952
+    m_Localized: 00_0_Component_1
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055508992
+    m_Localized: General
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055508993
+    m_Localized: Audio
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055508994
+    m_Localized: Graphics
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055508995
+    m_Localized: Controls
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055508996
+    m_Localized: Accessibility
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055508997
+    m_Localized: Language
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055508998
+    m_Localized: Select your preferred language.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055508999
+    m_Localized: Auto Aim
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509000
+    m_Localized: Enables Auto Aim.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509001
+    m_Localized: Skip Spell Animation
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509002
+    m_Localized: Automatically skips any Spell animation.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509003
+    m_Localized: Damage numbers
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509004
+    m_Localized: Toggle damage number visibility in combat.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509005
+    m_Localized: Health Bars
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509006
+    m_Localized: Toggle enemy health bar visibility in combat.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509007
+    m_Localized: UI Opacity
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509008
+    m_Localized: Adjusts the user interface opacity.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509009
+    m_Localized: Attack Opacity
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509010
+    m_Localized: Adjusts the opacity of in-game attacks and weapon effects.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509011
+    m_Localized: Dialogue Speed
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509012
+    m_Localized: Adjusts the text speed.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509013
+    m_Localized: Text Wait
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509014
+    m_Localized: Automatically advances dialogue.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509015
+    m_Localized: Master Volume
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509016
+    m_Localized: Adjusts the master volume.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509017
+    m_Localized: Music Volume
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509018
+    m_Localized: Adjusts the music volume.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509019
+    m_Localized: SFX Volume
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509020
+    m_Localized: Adjusts the volume of sound effects.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509021
+    m_Localized: Dialogue Volume
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509022
+    m_Localized: Adjusts the volume of dialogue sound effects.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509023
+    m_Localized: Dialogue Language
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509024
+    m_Localized: Select your preferred dialogue language.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509025
+    m_Localized: Ambience
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509026
+    m_Localized: Adjusts the volume of ambient sounds.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509027
+    m_Localized: Display Screen
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509028
+    m_Localized: Select the screen you'd like to use.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509029
+    m_Localized: Display mode
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509030
+    m_Localized: Select your preferred display mode.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509031
+    m_Localized: Display Resolution
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509032
+    m_Localized: Select your preferred game resolution.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509033
+    m_Localized: FPS Limit
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509034
+    m_Localized: Adjusts the in-game frame rate limit.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509035
+    m_Localized: Vsync
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509036
+    m_Localized: Enables/disables Vsync.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509037
+    m_Localized: HDR Rendering
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509038
+    m_Localized: Enables/disables HDR rendering.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509039
+    m_Localized: Brightness
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509040
+    m_Localized: Adjusts screen brightness.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509041
+    m_Localized: Gamma
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509042
+    m_Localized: Adjusts screen gamma.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509043
+    m_Localized: Contrast
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509044
+    m_Localized: Adjusts screen contrast.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509045
+    m_Localized: Bloom
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509046
+    m_Localized: Adjusts bloom effects.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509047
+    m_Localized: Camera Shake
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509048
+    m_Localized: Enables/disables the camera shake effect.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509049
+    m_Localized: Colorblind Mode
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509050
+    m_Localized: Select a colorblind mode.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509051
+    m_Localized: Colorblind Strength
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509052
+    m_Localized: Adjust colorblind filter strength.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509053
+    m_Localized: Cursor Size
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509054
+    m_Localized: Adjust the cursor size
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509055
+    m_Localized: Cursor Hue
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509056
+    m_Localized: Adjust the cursor hue
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509057
+    m_Localized: Cursor Saturation
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509058
+    m_Localized: Adjust the cursor saturation
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509059
+    m_Localized: Do you wish to keep these settings?
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509060
+    m_Localized: Reset all settings
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509061
+    m_Localized: Reset general settings
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509062
+    m_Localized: Reset audio settings
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509063
+    m_Localized: Reset graphics settings
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509064
+    m_Localized: Reset controls settings
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509065
+    m_Localized: Reset accessibility settings
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509066
+    m_Localized: Do you wish to reset all settings?
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509067
+    m_Localized: Do you wish to reset these settings?
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509068
+    m_Localized: CARDS
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509069
+    m_Localized: CHARMS
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509070
+    m_Localized: ON KILL
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509071
+    m_Localized: ON HIT
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509072
+    m_Localized: Slow
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509073
+    m_Localized: Burn
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509074
+    m_Localized: Poison
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509075
+    m_Localized: Bleed
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509076
+    m_Localized: Life Steal
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509077
+    m_Localized: Explosion
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509078
+    m_Localized: XP Pull AOE
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509079
+    m_Localized: 'Damage:'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509080
+    m_Localized: 'ATK SPD:'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509081
+    m_Localized: 'CRIT DMG:'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509082
+    m_Localized: 'CRIT Rate:'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509083
+    m_Localized: 'ATK Size:'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509084
+    m_Localized: 'Duration:'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509085
+    m_Localized: 'PROJ Count:'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509086
+    m_Localized: MAX HP
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509087
+    m_Localized: XP MOD
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509088
+    m_Localized: MAG Area
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509089
+    m_Localized: MOV SPD
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509090
+    m_Localized: Chain Lightning
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509091
+    m_Localized: Weaken
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509092
+    m_Localized: Transform
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509093
+    m_Localized: STT_KnockBack
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509094
+    m_Localized: Clone
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509095
+    m_Localized: Tentacles
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509096
+    m_Localized: OnKillSpawnUndead
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509097
+    m_Localized: OnStatusIntaKillChance
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509098
+    m_Localized: StatSwapChanceModifier
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509099
+    m_Localized: StatusStackConsumeChance
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509100
+    m_Localized: CloneBoostCardsModifier
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509101
+    m_Localized: ExtraDamageBasedOnKnockback
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509102
+    m_Localized: ExtraDamageOnLowerHealth
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509103
+    m_Localized: OnHItBoot
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509104
+    m_Localized: OnKillEnemyToDamageEffectMorph
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509105
+    m_Localized: Spell
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509106
+    m_Localized: Level
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509107
+    m_Localized: Toggle Stats
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509108
+    m_Localized: 'DMG Taken:'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509109
+    m_Localized: 'Enemies:'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509110
+    m_Localized: 'Total DMG:'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509111
+    m_Localized: 'Quests Cleared:'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509112
+    m_Localized: 'Elite Enemies:'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509113
+    m_Localized: 'Temples:'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509114
+    m_Localized: 'HP Recovered:'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509115
+    m_Localized: 'Hits:'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509116
+    m_Localized: 'Total Score:'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509117
+    m_Localized: 'In possession:'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509118
+    m_Localized: Auto
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509119
+    m_Localized: Skip
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509120
+    m_Localized: Choose a Weapon Card
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509121
+    m_Localized: Choose a Mod Card
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509122
+    m_Localized: Blessing of Virgil
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509123
+    m_Localized: Blessing of Horace
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509124
+    m_Localized: Blessing of Homer
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509125
+    m_Localized: Blessing of Ovid
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509126
+    m_Localized: Blessing of Lucan
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509127
+    m_Localized: Select
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509128
+    m_Localized: Cancel
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509129
+    m_Localized: Equip
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509130
+    m_Localized: Move
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509131
+    m_Localized: Cancel Swap
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509132
+    m_Localized: Sort
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509133
+    m_Localized: Confirm
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509134
+    m_Localized: Move Slot
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509135
+    m_Localized: Give Up
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509136
+    m_Localized: Give up and return to the Forum?
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509137
+    m_Localized: Quit Game
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509138
+    m_Localized: Do you wish to quit? Progress may be lost.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509139
+    m_Localized: Continue
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509140
+    m_Localized: Settings
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509141
+    m_Localized: Choose a Charm
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509142
+    m_Localized: Favour of Beatrice
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509143
+    m_Localized: Offerings to the Abyss
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509144
+    m_Localized: This feature is only available in the full version.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509145
+    m_Localized: Limbo
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509146
+    m_Localized: Lust
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509147
+    m_Localized: Collect Reward
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509148
+    m_Localized: New Game
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509149
+    m_Localized: Credits
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509150
+    m_Localized: Press Any Key
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509151
+    m_Localized: 'CIRCLE 1 '
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509152
+    m_Localized: LimboQuote
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509153
+    m_Localized: The Limbo
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509154
+    m_Localized: <size=200%><font="CSGrimore-Italic SDFAA 2k padding30">Tip </font></size>
+      Level up your Mod Cards by merging two of the same card and level.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509155
+    m_Localized: <size=200%><font="CSGrimore-Italic SDFAA 2k padding30">Tip </font></size>
+      Sort your Player Hand and make the most of your Spread Cards.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509156
+    m_Localized: <size=200%><font="CSGrimore-Italic SDFAA 2k padding30">Tip </font></size>
+      Improve your stats in each run by triggering Temples.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509157
+    m_Localized: <size=200%><font="CSGrimore-Italic SDFAA 2k padding30">Tip </font></size>
+      Save up on Wails of the Abyss and upgrade your abilities!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509158
+    m_Localized: <size=200%><font="CSGrimore-Italic SDFAA 2k padding30">Tip </font></size>
+      Pick your preferred Signature Weapon by the altar in the Forum!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509159
+    m_Localized: <size=200%><font="CSGrimore-Italic SDFAA 2k padding30">Tip </font></size>
+      Underleveled? Try rearranging your Player Hand!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509160
+    m_Localized: <size=200%><font="CSGrimore-Italic SDFAA 2k padding30">Mythos </font></size>
+      Limbo harbors the souls of those who died without knowledge of Her glory.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509161
+    m_Localized: <size=200%><font="CSGrimore-Italic SDFAA 2k padding30">Mythos </font></size>
+      The Forum is where all virtuous Poets of Limbo reside.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509162
+    m_Localized: <size=200%><font="CSGrimore-Italic SDFAA 2k padding30">Mythos </font></size>
+      Spirit Cards are the physical embodiment of one's soul.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509163
+    m_Localized: <size=200%><font="CSGrimore-Italic SDFAA 2k padding30">Mythos </font></size>
+      Each Circle of Hell has a native Brotchi species.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509164
+    m_Localized: <size=200%><font="CSGrimore-Italic SDFAA 2k padding30">Mythos </font></size>
+      Beware, for the Tempest of Lust is unavoidable!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509165
+    m_Localized: "<size=200%><font=\"CSGrimore-Italic SDFAA 2k padding30\">Mythos
+      </font></size> Don\u2019t let the succubi fool you: the caverns of Lust are
+      no place for romance!"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509166
+    m_Localized: '<size=200%><font="CSGrimore-Italic SDFAA 2k padding30">Mythos </font></size>
+      In the afterlife, all human souls are granted Her likeness: that of a woman.'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509167
+    m_Localized: '"Abandon all hope, ye who enter here."'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509168
+    m_Localized: '"The gift that She most prizes, is the freedom of the will."'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509169
+    m_Localized: '"Where She governs, no thing depends upon the laws of nature."'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509170
+    m_Localized: '"Let mortals never take a vow in jest."'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509171
+    m_Localized: '"And in Her will there is our peace."'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509172
+    m_Localized: '"No hope for rest and none for lesser pain."'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509173
+    m_Localized: '"Let her be gone, for she was reckless, entering this realm."'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509174
+    m_Localized: '"Into the eternal dark, to fire and frost."'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509175
+    m_Localized: GameOverEN_JPN
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509176
+    m_Localized: Stage_ClearEN_JPN
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509177
+    m_Localized: coming soon...
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509178
+    m_Localized: Next
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509179
+    m_Localized: Details
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509180
+    m_Localized: Reset Bindings
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509181
+    m_Localized: Move
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509182
+    m_Localized: Move Up
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509183
+    m_Localized: Move Left
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509184
+    m_Localized: Move Down
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509185
+    m_Localized: Move Right
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509186
+    m_Localized: Spell
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509187
+    m_Localized: Dash
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509188
+    m_Localized: Stats
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509189
+    m_Localized: Interact
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509190
+    m_Localized: Aim
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509191
+    m_Localized: Keyboard
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509192
+    m_Localized: Adjust general options.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509193
+    m_Localized: Adjust the overall Volume of the Game. This affects all the sound
+      parameter, music sfx, etc.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509194
+    m_Localized: Adjust the graphics.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509195
+    m_Localized: Adjust the controls.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509196
+    m_Localized: Accessibility options.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509197
+    m_Localized: Apply Changes
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509198
+    m_Localized: "\u5426"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509199
+    m_Localized: true
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509200
+    m_Localized: LOW
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509201
+    m_Localized: MEDIUM
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509202
+    m_Localized: HIGH
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509203
+    m_Localized: WINDOWED
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509204
+    m_Localized: FULLSCREEN
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509205
+    m_Localized: BORDERLESS
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509206
+    m_Localized: ENG
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509207
+    m_Localized: JPG
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509208
+    m_Localized: English
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509209
+    m_Localized: "Portugu\xEAs (PT)"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509210
+    m_Localized: "Portugu\xEAs (BR)"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509211
+    m_Localized: "\u65E5\u672C\u8A9E"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509212
+    m_Localized: "Espa\xF1ol"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509213
+    m_Localized: "\uD55C\uAD6D\uC5B4"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509214
+    m_Localized: "\u7B80\u4F53\u4E2D\u6587"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509215
+    m_Localized: "\u7E41\u9AD4\u4E2D\u6587"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509216
+    m_Localized: None
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509217
+    m_Localized: Deuteranopia
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509218
+    m_Localized: Protanopia
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509219
+    m_Localized: Tritanopia
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509220
+    m_Localized: true
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509221
+    m_Localized: New Game will overwrite your existing save file, proceed?
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509222
+    m_Localized: Do you wish to keep these settings? (Setting changes will revert
+      in {0} seconds).
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509223
+    m_Localized: Conflict found. Rebind?
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509224
+    m_Localized: Lv
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509225
+    m_Localized: Move
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509226
+    m_Localized: Aim
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509227
+    m_Localized: Dash
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509228
+    m_Localized: Stats
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509229
+    m_Localized: Spell
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509230
+    m_Localized: Dash Charges
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509231
+    m_Localized: Health and Experience
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509232
+    m_Localized: Player Level
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509233
+    m_Localized: Time
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509234
+    m_Localized: Mini Map
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509235
+    m_Localized: Player Hand
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509236
+    m_Localized: Mod Cards
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509237
+    m_Localized: Card Level
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509238
+    m_Localized: Main Attribute
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509239
+    m_Localized: Card Color
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509240
+    m_Localized: Background color indicates the card's type.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509241
+    m_Localized: Description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509242
+    m_Localized: Explains the card's effects and statistics.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509243
+    m_Localized: 'Mod Cards modify and enhance your Weapon Cards during the run.
+
+
+      Explore
+      different combinations and refine your playstyle!'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509244
+    m_Localized: Mod Card Types
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509245
+    m_Localized: Boost Cards
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509246
+    m_Localized: Cards that boost a single stat on an individual Weapon Card.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509247
+    m_Localized: 'There are various types of Mod Cards.
+
+
+      Each type is indicated
+      by the card''s background color.
+
+
+      There are 5 different types of Mod
+      Cards: <color=#ed5ed5>BOOST</color>, <color=#89ff91>EFFECT</color>, <color=#89d0ff>SPREAD</color>,
+      <color=#fec801>MIRACLE</color> and <color=#cd78ef>CURSE</color>.'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509248
+    m_Localized: Effect Cards
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509249
+    m_Localized: Cards that apply extra effects to your Weapon Card.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509250
+    m_Localized: Spread Cards
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509251
+    m_Localized: "Cards that spread boosts and/or effects across multiple Weapon
+      Cards. \n\nHow you position them in your hand is key!"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509252
+    m_Localized: Miracle Cards
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509253
+    m_Localized: Rare cards that grant multiple powerful boosts and/or effects.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509254
+    m_Localized: Curse Cards
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509255
+    m_Localized: Rare cards that give you an extraordinary advantage that comes at
+      a significant cost.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509256
+    m_Localized: Merging Cards
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509257
+    m_Localized: "You can merge two copies of the same card to level it up! \n\nTo
+      do this, drag one of them on top of the other in your Player Hand.\n\nYou'll
+      know they're ready when there's an orange glow and you can see the merge symbol
+      in the center!\n\nNote: You can only merge two cards of the same level."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509258
+    m_Localized: Card Levels
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509259
+    m_Localized: "Mod Cards can be evolved up to level 3, and each level enhances
+      your card's appearance. \n\nTheir base stats are increased with every level
+      up!"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509260
+    m_Localized: Weapon Cards
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509261
+    m_Localized: Card Plating
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509262
+    m_Localized: Border plating indicates the card's rarity.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509263
+    m_Localized: Card Title
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509264
+    m_Localized: Description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509265
+    m_Localized: Explains how the weapon works against enemies.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509266
+    m_Localized: 'Weapon Cards are the different attacks you can collect throughout
+      the run.
+
+
+      Your Player Hand can hold up to 4 unique cards per run.
+
+
+      Weapon
+      Cards come in different rarities!'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509267
+    m_Localized: Player Hand Management
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509268
+    m_Localized: This Spread Card affects both Weapon Cards to the left and right!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509269
+    m_Localized: "Press {0} to move each Stack of Cards to your desired position.
+      \n\nYou can also switch individual Mod Cards between different Weapon Cards."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509270
+    m_Localized: Card Stats
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509271
+    m_Localized: "You can hit {0} to view the Card Stats Menu at any time. \n\nAnalyze
+      your Player Hand in full detail and strategize as needed!"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509272
+    m_Localized: Signature Weapons
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509273
+    m_Localized: Card Title
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509274
+    m_Localized: Description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509275
+    m_Localized: Spell
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509276
+    m_Localized: Signature Weapon Cards represent unique abilities specific to each
+      Poet of Limbo.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509277
+    m_Localized: You can select your preferred Signature Weapon Card before each
+      run at the pedestal in the Forum.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509278
+    m_Localized: Each Signature Weapon Card comes with an ultimate attack called
+      a <i>Spell</i>.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509279
+    m_Localized: Spells
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509280
+    m_Localized: Spells are powerful abilities unique to each Signature Weapon Card.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509281
+    m_Localized: Spell Token
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509282
+    m_Localized: "Obtain the Spell Token during your run and hit {0} to unleash it
+      upon your enemies. \n\nSave it for when you're in a pinch!\n\nWhen to use a
+      Spell:"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509283
+    m_Localized: Keep an eye on this indicator to know when you can use a Spell!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509284
+    m_Localized: Charms
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509285
+    m_Localized: Silver
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509286
+    m_Localized: Bronze
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509287
+    m_Localized: Gold
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509288
+    m_Localized: "Offered by Beatrice herself, Charms give your stats a small power-up!\n
+      \nHowever, they'll only affect your current run.\n\nThey come in 3 different
+      rarities: bronze, silver and gold."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509289
+    m_Localized: Wails of the Abyss
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509290
+    m_Localized: 'The longer your run lasts, the more Wails of the Abyss you will
+      collect.
+
+
+      Use them as an offering at the Gates of Hell in exchange for
+      permanent upgrades which you can level up.
+
+
+      You can refund them at any
+      time so you can experiment to your heart''s desire!'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509291
+    m_Localized: splashOvid__0001_Ovid
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509292
+    m_Localized: splashOvid__0000_description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509293
+    m_Localized: "ScarmiCocoSplash__0001_Cocco-&-Scarmi\u2019s--------Taboo-Arts"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509294
+    m_Localized: ScarmiCocoSplash__0000__Lady-Malacoda-will-be-hearing--all-about-this,-you-ruffians!_
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509295
+    m_Localized: Labyrinth Supreme Gasileus
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509296
+    m_Localized: "Love\u2665Panic Pirouette "
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509297
+    m_Localized: Paganic Paradise ~ Threshold between Life and Death
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509298
+    m_Localized: Maiden's Pantheon ~ The Forum
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509299
+    m_Localized: Serpentine Gasileus ~ Ultimate Sentence
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509300
+    m_Localized: Prefazione
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509301
+    m_Localized: "Corridors of Love \u2764 Tourbillon"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509302
+    m_Localized: Undying Anima
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509303
+    m_Localized: Requiem Aeternam
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509304
+    m_Localized: Hall of Judgement
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509305
+    m_Localized: "LOVE \u2764 Panic Pirouette"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509306
+    m_Localized: Sacro Cuore
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509307
+    m_Localized: Luminous Andantino
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509308
+    m_Localized: Black Bat Tango
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509309
+    m_Localized: Permanent Damage+ <size=1><sprite="Damage" index=0></size>
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509310
+    m_Localized: Temporary Damage+ <size=1><sprite="Damage" index=0></size>
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509311
+    m_Localized: Dash Distance+ <size=1><sprite="MovementSpeed" index=0></size>
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509312
+    m_Localized: Max HP+ <size=1><sprite="MaxHP" index=0></size>
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509313
+    m_Localized: Move Speed+ <size=1><sprite="MovementSpeed" index=0></size>
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509314
+    m_Localized: Pull Area+ <size=1><sprite="Magnet" index=0></size>
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509315
+    m_Localized: XP+ <size=1><sprite="XP_Modifier" index=0></size>
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509316
+    m_Localized: Pick a Signature Weapon
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509317
+    m_Localized: Quest Failed!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509318
+    m_Localized: Quest Timed-out!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509319
+    m_Localized: CSGrimore-Regular SDFAA Padded
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509320
+    m_Localized: CSGrimore-Regular Padded
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509321
+    m_Localized: Alegreya-Medium SDF
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509322
+    m_Localized: Dante card pick
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509323
+    m_Localized: Virgil card pick 1
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509324
+    m_Localized: Horace card pick 2
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509325
+    m_Localized: Homer card pick
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509326
+    m_Localized: Ovid card pick
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509327
+    m_Localized: Alegreya-BoldItalic OUTLINESDFAA 2k padding30 1
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509328
+    m_Localized: Alegreya-SemiBoldItalic SDFAA 2k padding30
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509329
+    m_Localized: Alegreya-Medium SDFAA 2k padding30
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509330
+    m_Localized: Alegreya-Medium SDFAA 2k padding30 Drop Shadow
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509331
+    m_Localized: Alegreya-Italic SDFAA 2k padding30
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509332
+    m_Localized: CSGrimore-ItalicSTROKEWHITE SDFAA
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509333
+    m_Localized: CSGrimore-ItalicGlow
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509334
+    m_Localized: CSGrimore-ItalicGlowpink
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509335
+    m_Localized: Movement Speed
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509336
+    m_Localized: Attack Damage
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509337
+    m_Localized: Attack Speed
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509338
+    m_Localized: Magnet Area
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509339
+    m_Localized: Dash Distance
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509340
+    m_Localized: Gained XP
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509341
+    m_Localized: Max Health Damage
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509342
+    m_Localized: Melee Defense
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509343
+    m_Localized: Projectile Defense
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509344
+    m_Localized: Elite Damage
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509345
+    m_Localized: Extra Burn Damage
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509346
+    m_Localized: Extra Poison Damage
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509347
+    m_Localized: Extra Bleed Damage
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509348
+    m_Localized: Status Effect Damage
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509349
+    m_Localized: General Defense
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509350
+    m_Localized: Extra Dash Charges
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509351
+    m_Localized: Critical Damage
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509352
+    m_Localized: Critical Rate
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509353
+    m_Localized: Attack Duration
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509354
+    m_Localized: Damage to Melee
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509355
+    m_Localized: Damage to Ranged
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509356
+    m_Localized: Weapon Size
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509357
+    m_Localized: Max Health
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509358
+    m_Localized: Saving...
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509359
+    m_Localized: Early Access
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509360
+    m_Localized: 'Hell Maiden is currently in Early Access and will be receiving
+      continuous support based on your feedback.
+
+
+      As development progresses,
+      we will be adding new levels, characters, cards, boss encounters and narrative
+      events while improving the overall experience.
+
+
+      Have fun traversing
+      the depths of Hell!'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509361
+    m_Localized: Thank you for playing!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509362
+    m_Localized: 'You''ve reached the end of the current Early Access main storyline
+      and progression.
+
+
+      There''s more to explore, content to unlock, character
+      interactions to experience and dozens of builds to tinker with, and we hope
+      you''ll enjoy what Hell Maiden EA 1.0 has to offer!
+
+
+      Your support means
+      everything and we hope you''ll consider joining our open development process
+      by leaving us your feedback and reviews on Steam.'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509363
+    m_Localized: CardPickMenu_Button_ReRoll_Text
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509364
+    m_Localized: CardPickMenu_Button_Discard_Text
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509365
+    m_Localized: CardPickMenu_Button_Merge_Text_0
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509366
+    m_Localized: Previous
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509367
+    m_Localized: Confirm
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509368
+    m_Localized: Damte_InfernoEN
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509369
+    m_Localized: atk/s
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509370
+    m_Localized: n/a
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509371
+    m_Localized: Obtain
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509372
+    m_Localized: Refund
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509373
+    m_Localized: Lion-hearted
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509374
+    m_Localized: Increase maximum base HP.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509375
+    m_Localized: Swift-footed
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509376
+    m_Localized: Increase base movement speed.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509377
+    m_Localized: Wide Strides
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509378
+    m_Localized: Increase distance traveled with each dash.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509379
+    m_Localized: Brisk Recovery
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509380
+    m_Localized: Reduce dash charge cooldown.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509381
+    m_Localized: Stamina
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509382
+    m_Localized: Increase total number of dash charges.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509383
+    m_Localized: Magnetism
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509384
+    m_Localized: Increase base magnetic pull.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509385
+    m_Localized: Innate Resolve
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509386
+    m_Localized: Increase base experience gain.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509387
+    m_Localized: Fighter's Grit
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509388
+    m_Localized: Decrease damage received from enemies.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509389
+    m_Localized: Fortune's Grace
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509390
+    m_Localized: Increase number of card selection rerolls.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509391
+    m_Localized: 'Dispelling '
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509392
+    m_Localized: Increase number of card selection banishes.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509393
+    m_Localized: Beatrice's Grace
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509394
+    m_Localized: Increase number of charm selection rerolls.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509395
+    m_Localized: Fighter's Might
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509396
+    m_Localized: Increase base attack damage.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509397
+    m_Localized: Sharpshooter
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509398
+    m_Localized: Increase base critical rate.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509399
+    m_Localized: Decisive Strike
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509400
+    m_Localized: Increase base critical damage.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509401
+    m_Localized: Nimble Strikes
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509402
+    m_Localized: Increase base attack speed.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509403
+    m_Localized: Broad Sight
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509404
+    m_Localized: Increase base attack size.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509405
+    m_Localized: Perseverance
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509406
+    m_Localized: Increase base attack duration.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509407
+    m_Localized: Fighter's Arsenal
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509408
+    m_Localized: Increase base number of projectiles.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509409
+    m_Localized: The Gates of Hell
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509410
+    m_Localized: Make an Offering
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509411
+    m_Localized: Wails of the Abyss
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509412
+    m_Localized: MAX
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509413
+    m_Localized: Next Lv
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509414
+    m_Localized: Presented by
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509415
+    m_Localized: ASTRALSHIFT
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509416
+    m_Localized: Game Concept
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509417
+    m_Localized: Story
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509418
+    m_Localized: Creative Director
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509419
+    m_Localized: Producer
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509420
+    m_Localized: CREATIVE TEAM
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509421
+    m_Localized: Art Director
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509422
+    m_Localized: Character Art
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509423
+    m_Localized: Environment Artist
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509424
+    m_Localized: Pixel Artist
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509425
+    m_Localized: 2D Animator
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509426
+    m_Localized: PROGRAMMING
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509427
+    m_Localized: Lead Programmer
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509428
+    m_Localized: VFX Programmer
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509429
+    m_Localized: Gameplay Programmer
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509430
+    m_Localized: Programmers
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509431
+    m_Localized: WRITING
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509432
+    m_Localized: Lead Writer
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509433
+    m_Localized: UI
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509434
+    m_Localized: UI Designer
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509435
+    m_Localized: 3D Modeler
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509436
+    m_Localized: CUTSCENE
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509437
+    m_Localized: Cutscene Artist
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509438
+    m_Localized: Cutscene Director
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509439
+    m_Localized: AUDIO
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509440
+    m_Localized: Composer
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509441
+    m_Localized: Sound Designer
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509442
+    m_Localized: VOICE ACTING
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509443
+    m_Localized: Voice Director
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509444
+    m_Localized: Dante
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509445
+    m_Localized: Virgil
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509446
+    m_Localized: Beatrice
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509447
+    m_Localized: Horace
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509448
+    m_Localized: Homer
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509449
+    m_Localized: Queen Minos
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509450
+    m_Localized: Ovid
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509451
+    m_Localized: Scarmiglione
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509452
+    m_Localized: Libicocco
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509453
+    m_Localized: OPENING ANIMATION
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509454
+    m_Localized: '"Not My Paradiso"'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509455
+    m_Localized: Original Song
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509456
+    m_Localized: 2D Animators
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509457
+    m_Localized: Compositing
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509458
+    m_Localized: Settei
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509459
+    m_Localized: Special Thanks
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509460
+    m_Localized: Animation Director
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509461
+    m_Localized: Proofreading
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509462
+    m_Localized: ENGLISH
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509463
+    m_Localized: SPANISH
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509464
+    m_Localized: Localizer
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509465
+    m_Localized: PORTUGUESE (BRAZIL)
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509466
+    m_Localized: Legacy Localization
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509467
+    m_Localized: PORTUGUESE (PORTUGAL)
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509468
+    m_Localized: JAPANESE
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509469
+    m_Localized: KOREAN
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509470
+    m_Localized: SIMPLIFIED CHINESE
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509471
+    m_Localized: TRADITIONAL CHINESE
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509472
+    m_Localized: QA TESTING
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509473
+    m_Localized: QA Tester
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703296
+    m_Localized: From AstralShift
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703297
+    m_Localized: GAME DESIGN
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703298
+    m_Localized: Lead Game Designer
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703299
+    m_Localized: Level Designer
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703300
+    m_Localized: Gameplay Designer
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703301
+    m_Localized: Card System Concept Designer
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703302
+    m_Localized: ASIAN PUBLISHING
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703303
+    m_Localized: Publishing Operations
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703304
+    m_Localized: Community Operations
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703305
+    m_Localized: Marketing & Public Relations
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703306
+    m_Localized: Business Development
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703307
+    m_Localized: LOCALIZATION
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703308
+    m_Localized: Korean Linguist
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703309
+    m_Localized: Simplfied Chinese Linguist
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703310
+    m_Localized: Traditional Chinese Linguist
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703311
+    m_Localized: Project Manager
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703312
+    m_Localized: English Proofreading
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703313
+    m_Localized: Legacy Brazilian Portuguese
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703314
+    m_Localized: Legacy Spanish
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703315
+    m_Localized: Legacy Korean
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703316
+    m_Localized: Legacy Traditional Chinese
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703317
+    m_Localized: MARKETING
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703318
+    m_Localized: Marketing Manager
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703319
+    m_Localized: Graphic Designer
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703320
+    m_Localized: TOOLS & ASSETS
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703321
+    m_Localized: FROM ALL OF US
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703322
+    m_Localized: At AstralShift
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703323
+    m_Localized: FONTS
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703324
+    m_Localized: OTHER ASSETS
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703325
+    m_Localized: THANK YOU FOR PLAYING
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703326
+    m_Localized: Special Thanks
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703327
+    m_Localized: Visual Effects
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703328
+    m_Localized: Card Artist
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703329
+    m_Localized: Video Editor
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703330
+    m_Localized: VIDEO
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703331
+    m_Localized: 3D Textures
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703332
+    m_Localized: QA Testers
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703333
+    m_Localized: Animation Studio
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703334
+    m_Localized: Achievements
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703335
+    m_Localized: Circle
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703336
+    m_Localized: Combat
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703337
+    m_Localized: Story
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703338
+    m_Localized: Limbo
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703339
+    m_Localized: Lust
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703340
+    m_Localized: Next
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703341
+    m_Localized: Previous
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703342
+    m_Localized: Complete
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703343
+    m_Localized: ???
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703344
+    m_Localized: Hidden Achievement
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703345
+    m_Localized: 'Chapter Achievements: <color=#5494ff>{unlocked}</color> / {total}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703346
+    m_Localized: Soul Magister
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703347
+    m_Localized: Golden Satirist
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703348
+    m_Localized: Crystal-eyed Bard
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703349
+    m_Localized: Astral Wayfarer
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703350
+    m_Localized: Conqueror of Limbo
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703351
+    m_Localized: Conqueror of Lust
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703352
+    m_Localized: Malebranche Punisher
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703353
+    m_Localized: Salamander Inquisitor
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703354
+    m_Localized: Cerulean Imago
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703355
+    m_Localized: Taboo Arts I
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703356
+    m_Localized: Taboo Arts II
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703357
+    m_Localized: Brotchi Hunter
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703358
+    m_Localized: Infernal Prowess I
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703359
+    m_Localized: Infernal Prowess II
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703360
+    m_Localized: Heavenly Prowess I
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703361
+    m_Localized: Heavenly Gift
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703362
+    m_Localized: Devilish Talent
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703363
+    m_Localized: Hellish Mastery I
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703364
+    m_Localized: Hellish Mastery II
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703365
+    m_Localized: Weapon Master
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703366
+    m_Localized: Strategy Master
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703367
+    m_Localized: Soul of Poet I
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703368
+    m_Localized: Essence of Poet I
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703369
+    m_Localized: Soul of Poet II
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703370
+    m_Localized: Essence of Poet II
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703371
+    m_Localized: Soul of Poet III
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703372
+    m_Localized: Essence of Poet III
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703373
+    m_Localized: Soul of Poet IV
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703374
+    m_Localized: Essence of Poet IV
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703375
+    m_Localized: Soul of Poet V
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703376
+    m_Localized: Essence of Poet V
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703377
+    m_Localized: Mod Master
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703378
+    m_Localized: Perfect Hand
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703379
+    m_Localized: Bloodthirsty
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703380
+    m_Localized: Devout Pilgrim
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703381
+    m_Localized: Pious Pilgrim
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703382
+    m_Localized: Vital Endurance I
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703383
+    m_Localized: Vital Endurance II
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703384
+    m_Localized: Wayfinder I
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703385
+    m_Localized: Wayfinder II
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703386
+    m_Localized: Succubi Hunter
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703387
+    m_Localized: Wayfinder III
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703388
+    m_Localized: Elite Killer I
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703389
+    m_Localized: Elite Vaporizer
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703390
+    m_Localized: Skeleton Hunter
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703391
+    m_Localized: Ghoul Hunter
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703392
+    m_Localized: Imp Hunter
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703393
+    m_Localized: Lost Soul Hunter
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703394
+    m_Localized: Slime Hunter
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703395
+    m_Localized: Carpe Diem I
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703396
+    m_Localized: Carpe Diem II
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703397
+    m_Localized: Carpe Diem III
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703398
+    m_Localized: Winged Lyric I
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703399
+    m_Localized: Winged Lyric II
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703400
+    m_Localized: Winged Lyric III
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703401
+    m_Localized: Codex Amoris I
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703402
+    m_Localized: Codex Amoris II
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703403
+    m_Localized: Codex Amoris III
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703404
+    m_Localized: Blazing Quill II
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703405
+    m_Localized: Blazing Quill III
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703406
+    m_Localized: Blazing Quill I
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703407
+    m_Localized: Elite Killer II
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703408
+    m_Localized: Lust Sinner Hunter
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703409
+    m_Localized: Lust Mine Hunter
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703410
+    m_Localized: Fairy Hunter
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703411
+    m_Localized: Viper Hunter
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703412
+    m_Localized: Devi-Brotchi Hunter
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703413
+    m_Localized: Winds of Desire
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703414
+    m_Localized: Abyssal Spender
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703415
+    m_Localized: Pilgrim's Journey I
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703416
+    m_Localized: Poets of Limbo I
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703417
+    m_Localized: Poets of Limbo II
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703418
+    m_Localized: Powerless Queen
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703419
+    m_Localized: Climbing the Ladder
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703420
+    m_Localized: Forum Dweller
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703421
+    m_Localized: Novice Poet
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703422
+    m_Localized: 'Defeat Queen Minos. Unlocks: rerolls in the Gates of Hell menu.'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703423
+    m_Localized: 'Rescue Horace. Unlocks: Horace''s Blessing.'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703424
+    m_Localized: 'Rescue Homer. Unlocks: Homer''s Blessing.'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703425
+    m_Localized: 'Use Blazing Quill in Limbo twice. Unlocks: Virgil''s Blessing.'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703426
+    m_Localized: Survive 12 minutes in Circle 1, Limbo.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703427
+    m_Localized: Survive 12 minutes in Circle 2, Lust.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703428
+    m_Localized: 'Defeat Libicocco and Scarmiglione. Unlocks: banish in the Gates
+      of Hell menu.'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703429
+    m_Localized: Defeat Scarmiglione in Circle 2, Lust.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703430
+    m_Localized: 'Rescue Ovid. Unlocks: Ovid''s Blessing.'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703431
+    m_Localized: 'Defeat Queen Minos three separate times. Unlocks: Minos'' Taboo
+      Arts.'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703432
+    m_Localized: 'Defeat Libicocco and Scarmiglione three separate times. Unlocks:
+      Libocco''s and Scarmiglione''s Taboo Arts.'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703433
+    m_Localized: Kill 2000 Brotchi enemies.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703434
+    m_Localized: Reach Level 50.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703435
+    m_Localized: Reach Level 75.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703436
+    m_Localized: Level up a Charm to Level 9.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703437
+    m_Localized: Get a Charm of Crystal rarity.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703438
+    m_Localized: Deal 200.000 damage with a single weapon in a single run.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703439
+    m_Localized: Reach a high-score of 100.000 in Circle 1, Limbo.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703440
+    m_Localized: Reach a high-score of 100.000 in Circle 2, Lust.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703441
+    m_Localized: Get a full hand of Weapon cards in a single run.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703442
+    m_Localized: Get a full hand of Weapon and Mod cards in a single run.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703443
+    m_Localized: Equip all of Dante's Weapon cards.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703444
+    m_Localized: Equip all of Dante's Mod cards.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703445
+    m_Localized: Equip all of Virgil's Weapon cards.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703446
+    m_Localized: Equip all of Virgil's Mod cards.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703447
+    m_Localized: Equip all of Horace's Weapon cards.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703448
+    m_Localized: Equip all of Horace's Mod cards.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703449
+    m_Localized: Equip all of Homer's Weapon cards.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703450
+    m_Localized: Equip all of Homer's Mod cards.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703451
+    m_Localized: Equip all of Ovid's Weapon cards.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703452
+    m_Localized: Equip all of Ovid's Mod cards.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703453
+    m_Localized: Equip three Level 3 Mod cards onto a single Weapon card.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703454
+    m_Localized: Get a full hand of Level 3 Mod cards in a single run.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703455
+    m_Localized: Kill 2500 enemies in a single run.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703456
+    m_Localized: Activate all available Temple types.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703457
+    m_Localized: Activate 12 different Temples in a single run.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703458
+    m_Localized: Beat Circle 1, Limbo, without healing more than 500 HP.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703459
+    m_Localized: Beat Circle 2, Lust, without healing more than 500 HP.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703460
+    m_Localized: Use Virgil's Wayfinder.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703461
+    m_Localized: Use Virgil's Spell.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703462
+    m_Localized: Kill 250 Succubus enemies in Circle 2, Lust.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703463
+    m_Localized: Beat Circle 1, Limbo, using Virgil's Wayfinder.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703464
+    m_Localized: Kill the Elite Viper enemy in Circle 2, Lust.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703465
+    m_Localized: Kill the first Elite Skeleton in Circle 1, Limbo, within 30 seconds.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703466
+    m_Localized: Kill 1000 Skeleton enemies.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703467
+    m_Localized: Kill 500 Ghoul enemies.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703468
+    m_Localized: Kill 500 Imp enemies.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703469
+    m_Localized: Kill 500 Lost Soul enemies.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703470
+    m_Localized: Kill 1500 Slime enemies.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703471
+    m_Localized: Use Horace's Carpe Diem.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703472
+    m_Localized: Use Horace's Spell.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703473
+    m_Localized: Beat Circle 1, Limbo, using Horace's Carpe Diem.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703474
+    m_Localized: Use Homer's Winged Lyric.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703475
+    m_Localized: Use Homer's Spell.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703476
+    m_Localized: Beat Circle 1, Limbo, using Homer's Winged Lyric.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703477
+    m_Localized: Use Ovid's Codex Amoris.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703478
+    m_Localized: Use Ovid's Spell.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703479
+    m_Localized: Beat Circle 2, Lust, using Ovid's Codex Amoris.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703480
+    m_Localized: Beat Circle 1, Limbo, using Dante's Blazing Quill.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703481
+    m_Localized: Beat Circle 2, Lust, using Dante's Blazing Quill.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703482
+    m_Localized: Use Dante's Spell.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703483
+    m_Localized: Kill the Elite Succubus enemy in Circle 2, Lust.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703484
+    m_Localized: Kill 2000 Lust Sinner enemies.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703485
+    m_Localized: Kill 1000 Lust Mine enemies.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703486
+    m_Localized: Kill 500 Fairy enemies.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703487
+    m_Localized: Kill 1000 Viper enemies.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703488
+    m_Localized: Kill 500 Devi-Brotchi enemies.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703489
+    m_Localized: Unlock Circle 2, Lust.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703490
+    m_Localized: Spend a total of 5.000 Wails of the Abyss.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703491
+    m_Localized: Talk to Beatrice three times.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703492
+    m_Localized: Save Horace and Homer.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703493
+    m_Localized: Save Horace, Homer and Ovid.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703494
+    m_Localized: Watch all of Queen Minos' introductory chapters.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703495
+    m_Localized: Watch all of Libicocco's and Scarmiglione's introductory chapters.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703496
+    m_Localized: Exhaust all dialogue interactions with every Poet of Limbo (Limbo).
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703497
+    m_Localized: Exhaust all dialogue interactions with every Poet of Limbo (Lust).
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703498
+    m_Localized: Unknown content #{0}
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703499
+    m_Localized: Content not ready
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703500
+    m_Localized: "Level {0} \xB7 {1}"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703501
+    m_Localized: "{0} \u2014 Choose a weapon"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703502
+    m_Localized: Add equipment
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703503
+    m_Localized: Upgrade to level {0}
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703504
+    m_Localized: Choose an equipment target next
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703505
+    m_Localized: Weapon
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703506
+    m_Localized: Equipment
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703507
+    m_Localized: Perk
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703508
+    m_Localized: Bronze
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703509
+    m_Localized: Silver
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703510
+    m_Localized: Gold
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703511
+    m_Localized: Crystal
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703512
+    m_Localized: Lv. {0}    XP {1:0.##} / {2}
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703513
+    m_Localized: Synchronizing waves
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703514
+    m_Localized: Waiting for the host to start
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703515
+    m_Localized: Run ended
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703516
+    m_Localized: "Paused \xB7 No active players"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703517
+    m_Localized: Next wave
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703518
+    m_Localized: 'Wave {0}  |  {1}: {2:F1}s
+
+      Alive {3}/{4}  |  Spawned {5}/{6} 
+      |  Skipped {7}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703519
+    m_Localized: Connection failed. Check your connection and try again.
+    m_Metadata:
+      m_Items: []
+  references:
+    version: 2
+    RefIds: []

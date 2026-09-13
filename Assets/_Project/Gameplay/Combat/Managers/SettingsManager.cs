@@ -1,5 +1,7 @@
 using System;
+using MonsterSupergroup.Gameplay.Options;
 using System.Collections.Generic;
+using System.Linq;
 using AstralShift.ProfileData;
 using AstralShift.Rendering;
 using Cysharp.Threading.Tasks;
@@ -33,18 +35,6 @@ public class SettingsManager : MonoBehaviour
 	{
 		ENG = 0,
 		JPN = 1
-	}
-
-	public enum Language
-	{
-		en = 0,
-		pt = 1,
-		br = 2,
-		es = 3,
-		ja = 4,
-		kr = 5,
-		cnsi = 6,
-		cntr = 7
 	}
 
 	[BankRef]
@@ -296,8 +286,8 @@ public class SettingsManager : MonoBehaviour
 	public void SetLanguage(int index)
 	{
 		LanguageIdx = index;
-		Language language = (Language)index;
-		LocalizationMediator.SetLanguage(language.ToString());
+		var locales = GameLocalization.Locales;
+        if ((uint)index < locales.Count) GameOptionsService.EnsureInitialized()?.SetLanguage(locales[index].Identifier.Code);
 	}
 
 	public void SetMasterVolume(float volume)
@@ -603,7 +593,7 @@ public class SettingsManager : MonoBehaviour
 		TextSpeed = SettingsData.Instance.TextSpeed;
 		TextWaitSpeed = SettingsData.Instance.TextWaitSpeed;
 		ForceSkip = SettingsData.Instance.ForceSkip;
-		LanguageIdx = SettingsData.Instance.Language;
+		LanguageIdx = GameLocalization.Locales.ToList().FindIndex(locale => locale.Identifier.Code == GameLocalization.Language);
 		SetAutoAim(AutoAim);
 		SetUltiSkip(UltiSkip);
 		SetHealthBar(HealthBar);
@@ -612,7 +602,7 @@ public class SettingsManager : MonoBehaviour
 		SetAttackOpacity(AttackOpacity);
 		SetTextSpeed(TextSpeed);
 		SetTextWaitSpeed(TextWaitSpeed);
-		SetLanguage(LanguageIdx);
+		// Language is owned by GameOptionsService; legacy settings must not overwrite it.
 	}
 
 	private void LoadAudioSettings()

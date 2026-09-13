@@ -144,6 +144,7 @@ namespace MonsterSupergroup.NetworkCombat.Tests
 
         private static StatusMutation Poison(ulong eventId) => new StatusMutation
         {
+            ApplicationRevision = 1,
             EventId = eventId, Sequence = (uint)eventId, InstanceId = 500,
             Kind = StatusMutationKind.ApplyOrRefresh,
             SourcePlayerId = 1, SourceEntityId = 1, TargetEntityId = 100,

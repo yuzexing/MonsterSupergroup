@@ -15,6 +15,87 @@ namespace MonsterSupergroup.NetworkCombat.Tests
         private const ushort SourceSlot = 7;
         private const ushort Epoch = 3;
 
+        [Test]
+        public void SameApplicationAcrossStatusVersionsSharesAcceptedTickBudget()
+        {
+            using (var run = new BurnRun())
+            {
+                run.ApplyInitial();
+                run.SubmitTicks(1d, run.NextTicks(1f));
+                var mutation = run.Initial.StatusMutations[0];
+                var next = new CombatEventId(run.WithNewEvent(default).EventId);
+                mutation.EventId = next.Value; mutation.Sequence = next.Sequence; mutation.StackDelta = 0;
+                var updated = run.Gateway.Statuses.Apply(PlayerId, mutation, 1d);
+                Assert.That(updated.Accepted, Is.True);
+                run.Gateway.StatusDamageAdmissions.Observe(mutation, updated.State, 1d);
+                var remaining = run.NextTicks(2f);
+                run.SubmitTicks(3d, remaining);
+                run.SubmitTicks(3d, run.WithNewEvent(remaining[1]));
+                run.AssertHealth(75);
+                Assert.That(run.Gateway.Metrics.AcceptedCombatResults, Is.EqualTo(4));
+                Assert.That(run.Gateway.Metrics.GetRejected(CombatRejectionReason.InvalidStatus), Is.EqualTo(1));
+            }
+        }
+
+        [Test]
+        public void DisconnectUsesAcceptedProgressWhenItIsAheadOfServerClock()
+        {
+            using (var run = new BurnRun())
+            {
+                run.ApplyInitial();
+                run.SubmitTicks(.1d, run.NextTicks(1f));
+                var takeover = run.Gateway.HandleSourceDisconnected(PlayerId, .2d);
+                Assert.That(takeover.Statuses[0].CompletedTicks, Is.EqualTo(1));
+                Assert.That(takeover.Statuses[0].ApplicationRevision, Is.EqualTo(1));
+                run.Gateway.Advance(1.01d);
+                run.AssertHealth(85);
+                run.Gateway.Advance(3.01d);
+                run.AssertHealth(75);
+            }
+        }
+
+        [Test]
+        public void ARealRefreshGrantsOneNewApplicationBudget()
+        {
+            using (var run = new BurnRun())
+            {
+                run.ApplyInitial();
+                run.SubmitTicks(3d, run.NextTicks(3f));
+                var mutation = run.Initial.StatusMutations[0];
+                var next = new CombatEventId(run.WithNewEvent(default).EventId);
+                mutation.EventId = next.Value; mutation.Sequence = next.Sequence;
+                mutation.ApplicationRevision = 2;
+                var updated = run.Gateway.Statuses.Apply(PlayerId, mutation, 3d);
+                Assert.That(updated.Accepted, Is.True);
+                run.Gateway.StatusDamageAdmissions.Observe(mutation, updated.State, 3d);
+                run.Target.StatusController.UpsertCanonical(updated.State.ToStatusInstance());
+                var refreshed = run.NextTicks(3f);
+                Assert.That(refreshed, Has.Length.EqualTo(3));
+                run.SubmitTicks(6d, refreshed);
+                run.SubmitTicks(6d, run.WithNewEvent(refreshed[2]));
+                run.AssertHealth(60);
+                Assert.That(run.Gateway.Metrics.AcceptedCombatResults, Is.EqualTo(7));
+                Assert.That(run.Gateway.Metrics.GetRejected(CombatRejectionReason.InvalidStatus), Is.EqualTo(1));
+            }
+        }
+
+        [TestCase("instance")]
+        [TestCase("revision")]
+        public void APeriodicResultCannotSpendAnotherApplicationBudget(string defect)
+        {
+            using (var run = new BurnRun())
+            {
+                run.ApplyInitial();
+                var tick = run.NextTicks(1f)[0];
+                var invalid = run.WithNewEvent(tick);
+                if (defect == "instance") invalid.StatusInstanceId++;
+                else invalid.StatusApplicationRevision++;
+                run.SubmitTicks(1d, invalid, tick);
+                run.AssertHealth(85);
+                Assert.That(run.Gateway.Metrics.GetRejected(CombatRejectionReason.InvalidStatus), Is.EqualTo(1));
+            }
+        }
+
         [TestCase(false)]
         [TestCase(true)]
         public void RealOnHitBurn_TicksAfterWeaponRootRetires_WithPredictedOrCanonicalParent(bool canonicalEcho)

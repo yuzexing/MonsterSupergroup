@@ -13,11 +13,24 @@ MonoBehaviour:
   m_Name: ExtraCriteRatePerk
   m_EditorClassIdentifier: MonsterSupergroup.Gameplay.Combat::AstralShift.HellMaiden.Data.Perks.PerkData
   ID: 18
-  Title: Extra Crit Rate
-  Description: Adds {CritRate}[0]% raises crit Rate.
-  hasLocalization: 1
-  TitleKey: PRK_Name_018
-  DescriptionKey: PRK_Desc_018
+  localizedTitle:
+    m_TableReference:
+      m_TableCollectionName: MonsterContent
+    m_TableEntryReference:
+      m_KeyId: 0
+      m_Key: perk.18.name
+    m_FallbackState: 0
+    m_WaitForCompletion: 0
+    m_LocalVariables: []
+  localizedDescription:
+    m_TableReference:
+      m_TableCollectionName: MonsterContent
+    m_TableEntryReference:
+      m_KeyId: 0
+      m_Key: perk.18.description
+    m_FallbackState: 0
+    m_WaitForCompletion: 0
+    m_LocalVariables: []
   icon: {fileID: 0}
   poolWeight: 1
   Dependencies: []

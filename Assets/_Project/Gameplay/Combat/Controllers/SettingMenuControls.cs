@@ -1,3 +1,4 @@
+using MonsterSupergroup.Gameplay.Options;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -329,7 +330,7 @@ public class SettingMenuControls : SettingsTabContentController, ICanSkipNotNull
 			if (currentControllerText != null)
 			{
 				string term = prefixKey + ControllerType.Keyboard;
-				LocalizationMediator.GetTranslation(ref term);
+				term = GameLocalization.Menu(term);
 				currentControllerText.SetText(term);
 			}
 			controllerAim.SetActive(value: false);
@@ -340,7 +341,7 @@ public class SettingMenuControls : SettingsTabContentController, ICanSkipNotNull
 			if (currentControllerText != null)
 			{
 				string term2 = prefixKey + controller.name;
-				LocalizationMediator.GetTranslation(ref term2);
+				term2 = GameLocalization.Menu(term2);
 				currentControllerText.SetText(term2);
 			}
 			controllerAim.SetActive(value: true);
@@ -612,7 +613,7 @@ public class SettingMenuControls : SettingsTabContentController, ICanSkipNotNull
 			settingsMenuController.blockInputs = true;
 			blockRaycastPanel.SetActive(value: true);
 			string term = "STT_ConflictFound";
-			LocalizationMediator.GetTranslation(ref term);
+			term = GameLocalization.Menu(term);
 			UniTask<PopupWindow> windowTask = PopupLauncher.Instance.RequestPopup(PopupLauncher.PopupType.SmallChoice, new PopupContext(string.Format(term), new System.Action(RebindConflictingInput), new System.Action(CancelConflictingInput)));
 			await windowTask;
 			conflictPopupWindow = windowTask.GetAwaiter().GetResult();

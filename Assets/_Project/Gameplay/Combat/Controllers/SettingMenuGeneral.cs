@@ -1,4 +1,5 @@
 using System;
+using MonsterSupergroup.Gameplay.Options;
 using AstralShift.UI;
 using UnityEngine.UI;
 
@@ -70,9 +71,9 @@ public class SettingMenuGeneral : SettingsTabContentController
 		shiftableOptions2.OnOptionChanged = (Action<int>)Delegate.Combine(shiftableOptions2.OnOptionChanged, new Action<int>(OnTextSpeedChange));
 		ShiftableOptions shiftableOptions3 = textWait;
 		shiftableOptions3.OnOptionChanged = (Action<int>)Delegate.Combine(shiftableOptions3.OnOptionChanged, new Action<int>(OnTextWaitChange));
-		foreach (object value in Enum.GetValues(typeof(SettingsManager.Language)))
+		foreach (var value in GameLocalization.Locales)
 		{
-			language.AddOption(value.ToString());
+			language.AddOption(value.LocaleName);
 		}
 		foreach (object value2 in Enum.GetValues(typeof(SettingsManager.Level)))
 		{

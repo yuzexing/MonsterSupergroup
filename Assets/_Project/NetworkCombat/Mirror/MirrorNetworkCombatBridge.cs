@@ -66,6 +66,7 @@ namespace MonsterSupergroup.NetworkCombat
                 ownerPlayerId,
                 eventIds,
                 trace: Trace);
+            collector.DamageResolved += HandleDamageResolved;
             NetworkCombatWorld world = NetworkCombatWorld.Instance;
             if (world != null)
             {
@@ -165,6 +166,7 @@ namespace MonsterSupergroup.NetworkCombat
                 world.Replica.KillConfirmed -= HandleConfirmedKill;
             }
 
+            if (collector != null) collector.DamageResolved -= HandleDamageResolved;
             collector?.Dispose();
             collector = null;
             Trace = null;
@@ -188,6 +190,12 @@ namespace MonsterSupergroup.NetworkCombat
             }
 
             base.OnStopServer();
+        }
+
+        private void HandleDamageResolved(CombatEvent damage)
+        {
+            if (isOwned)
+                NetworkCombatWorld.Instance?.PresentPredictedEnemyHit(damage);
         }
 
         private void HandleConfirmedKill(ConfirmedKill kill)

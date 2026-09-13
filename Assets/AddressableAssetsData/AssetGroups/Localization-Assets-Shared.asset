@@ -1,0 +1,46 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: Localization-Assets-Shared
+  m_EditorClassIdentifier: Unity.Addressables.Editor::UnityEditor.AddressableAssets.Settings.AddressableAssetGroup
+  m_GroupName: Localization-Assets-Shared
+  m_GUID: cee3c2754da9ef74ead8a4178e29d6f5
+  m_SerializeEntries:
+  - m_GUID: 31db1828b5f475c44904cc5748726346
+    m_Address: Assets/_Project/Localization/Tables/MonsterContent Shared Data.asset
+    m_ReadOnly: 1
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 52462428a5eaaf44abb537f4db6deb75
+    m_Address: Chinese
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-en
+    - Locale-zh-CN
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 62d67febafe785b4c87e874251ddf823
+    m_Address: Assets/_Project/Localization/Tables/MonsterMenus Shared Data.asset
+    m_ReadOnly: 1
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 99321f0d413f63a46b5b9e64796e48d6
+    m_Address: Assets/_Project/Localization/Tables/MonsterFonts Shared Data.asset
+    m_ReadOnly: 1
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 1
+  m_Settings: {fileID: 11400000, guid: 16ced2ee9fdab8549b205ec3061a501a, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: 8eab667cddd1c9c47b637a04cf6f4362, type: 2}
+    - {fileID: 11400000, guid: 0566c6074365a7f4698156d4e7867400, type: 2}
+    - {fileID: 11400000, guid: ded916c5d8a3bff49a68475420e90983, type: 2}

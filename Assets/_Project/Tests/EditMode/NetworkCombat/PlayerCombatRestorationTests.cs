@@ -393,6 +393,7 @@ namespace MonsterSupergroup.NetworkCombat.Tests
         {
             StatusMutationResult applied = registry.Apply(source, new StatusMutation
             {
+                ApplicationRevision = 1,
                 EventId = id,
                 RootEventId = id,
                 Sequence = (uint)id,

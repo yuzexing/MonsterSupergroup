@@ -1,3 +1,4 @@
+using MonsterSupergroup.Gameplay.Options;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -192,7 +193,7 @@ namespace AstralShift.HellMaiden.UI.Menus
 				PerkModifierApplication perkDataModifier = modifiers[i];
 				float atIndexModifierParameterValue = _currentPerk.GetAtIndexModifierParameterValue(i);
 				string term = "STP_" + ModifiersStringHelpers.GetPerkModifierNameLocKey(perkDataModifier.ModifierIdValue);
-				LocalizationMediator.GetTranslation(ref term);
+				term = GameLocalization.Menu(term);
 				stringBuilder.AppendFormat("{0} {1} : {2}%", ModifiersStringHelpers.GetPerkModifierStringIcon(perkDataModifier.ModifierIdValue), term, $"{atIndexModifierParameterValue * 100f:0.##}");
 				if (i + 1 < modifiers.Length)
 				{

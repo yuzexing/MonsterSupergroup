@@ -1,3 +1,4 @@
+using MonsterSupergroup.Gameplay.Options;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +8,7 @@ using AstralShift.HellMaiden.Data.Cards;
 using AstralShift.Managers;
 using AstralShift.Rendering;
 using Cysharp.Threading.Tasks;
-using I2.Loc;
+
 using UnityEngine;
 using UnityEngine.Experimental.Rendering;
 using UnityEngine.Rendering;
@@ -190,7 +191,7 @@ namespace AstralShift.HellMaiden.UI.Cards
 			SetupBlitMaterials();
 			GameDirector.Instance.Settings.OnResolutionChanged += ResizeAllDynamicTextures;
 			GameDirector.Instance.Settings.OnResolutionChanged += ResizeAllCardStaticTextures;
-			LocalizationManager.OnLocalizeEvent += RefreshAllCardStaticTextures;
+			GameLocalization.Changed += RefreshAllCardStaticTextures;
 			IsInitialized = true;
 		}
 
@@ -215,7 +216,7 @@ namespace AstralShift.HellMaiden.UI.Cards
 			if (!_cardViewHandlerTo3DViewLut.ContainsKey(cardViewHandler))
 			{
 				card3DView.Initialize(cardViewHandler.CardView.Card3DProxy);
-				card3DView.name = cardViewHandler.RuntimeCardData.BaseData.Title + " (3D Card View)";
+				card3DView.name = cardViewHandler.RuntimeCardData.BaseData.GetTitle() + " (3D Card View)";
 				card3DView.transform.SetParent(DynamicCardsParent);
 				card3DView.transform.localPosition = Vector3.zero;
 				_cardViewHandlerTo3DViewLut.Add(cardViewHandler, card3DView);
@@ -254,7 +255,7 @@ namespace AstralShift.HellMaiden.UI.Cards
 		private void CreateCardDynamicTexture(UICardViewHandler cardViewHandler, UICard3DView card3DView)
 		{
 			RenderTexture renderTexture = new RenderTexture(cardViewHandler.CardView.Card3DProxy.GetRenderTextureDescriptor());
-			renderTexture.name = "UI Card Dynamic Texture - " + cardViewHandler.RuntimeCardData.BaseData.Title;
+			renderTexture.name = "UI Card Dynamic Texture - " + cardViewHandler.RuntimeCardData.BaseData.GetTitle();
 			renderTexture.filterMode = FilterMode.Bilinear;
 			renderTexture.Create();
 			card3DView.AssignTexture(renderTexture);
@@ -269,7 +270,7 @@ namespace AstralShift.HellMaiden.UI.Cards
 				value2.DiscardContents(discardColor: true, discardDepth: true);
 				UnityEngine.Object.Destroy(value2);
 				RenderTexture renderTexture = new RenderTexture(cardViewHandler.CardView.Card3DProxy.GetRenderTextureDescriptor());
-				renderTexture.name = "UI Card Dynamic Texture - " + cardViewHandler.RuntimeCardData.BaseData.Title;
+				renderTexture.name = "UI Card Dynamic Texture - " + cardViewHandler.RuntimeCardData.BaseData.GetTitle();
 				renderTexture.filterMode = FilterMode.Bilinear;
 				renderTexture.Create();
 				_cardsDynamicTextures[value] = renderTexture;
@@ -364,7 +365,7 @@ namespace AstralShift.HellMaiden.UI.Cards
 			{
 				return null;
 			}
-			string text = "UI Card Static Texture - " + data.BaseData.Title + " Lvl: " + (data.LevelIndex + 1);
+			string text = "UI Card Static Texture - " + data.BaseData.GetTitle() + " Lvl: " + (data.LevelIndex + 1);
 			RenderTexture[] array = new RenderTexture[3];
 			_cardsStaticTextures.Add(runtimeCardData, array);
 			RenderTextureDescriptor staticRenderTextureDescriptor = GetStaticRenderTextureDescriptor();
@@ -420,7 +421,7 @@ namespace AstralShift.HellMaiden.UI.Cards
 			if (data != null && data.Clone() is RuntimeCardData runtimeCardData && _cardsStaticTextures.TryGetValue(runtimeCardData, out var renderTextures))
 			{
 				UnityEngine.Object.Destroy(renderTextures[0]);
-				string text = "UI Card Static Texture - " + data.BaseData.Title + " Lvl: " + (data.LevelIndex + 1);
+				string text = "UI Card Static Texture - " + data.BaseData.GetTitle() + " Lvl: " + (data.LevelIndex + 1);
 				RenderTextureDescriptor staticRenderTextureDescriptor = GetStaticRenderTextureDescriptor();
 				staticRenderTextureDescriptor.width = (int)((float)staticRenderTextureDescriptor.width * InternalResolutionFactor);
 				staticRenderTextureDescriptor.height = (int)((float)staticRenderTextureDescriptor.height * InternalResolutionFactor);
@@ -777,7 +778,7 @@ namespace AstralShift.HellMaiden.UI.Cards
 		private void OnDestroy()
 		{
 			GameDirector.Instance.Settings.OnResolutionChanged -= ResizeAllCardStaticTextures;
-			LocalizationManager.OnLocalizeEvent -= RefreshAllCardStaticTextures;
+			GameLocalization.Changed -= RefreshAllCardStaticTextures;
 			UnityEngine.Object.Destroy(_blitHalfMaterial);
 			DestroyAllGenericDynamicTextures();
 			DestroyAllGenericStaticTextures();

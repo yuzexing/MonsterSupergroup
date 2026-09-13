@@ -194,7 +194,7 @@ namespace AstralShift.HellMaiden.Player.Attacks
 		public ProjectileAttack PlayPresentation(
 			ProjectilePresentationSpawn spawn,
 			float elapsedSeconds,
-			Action<ProjectileAttack> onReturned = null)
+			Action<ProjectileAttack> onReturned = null, bool playLaunchSound = true)
 		{
 			if (!_presentationReplicaInitialized || spawn.WeaponId != base.ID)
 			{
@@ -211,7 +211,7 @@ namespace AstralShift.HellMaiden.Player.Attacks
 			attack.InitPresentation(this, spawn.Stats, null, onEnd);
 			attack.gameObject.SetActive(value: true);
 			attack.transform.position = spawn.Position;
-			attack.PlayPresentation(spawn, elapsedSeconds);
+			attack.PlayPresentation(spawn, elapsedSeconds, playLaunchSound);
 			return attack;
 		}
 

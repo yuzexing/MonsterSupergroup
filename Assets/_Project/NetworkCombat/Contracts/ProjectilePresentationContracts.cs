@@ -37,7 +37,7 @@ namespace MonsterSupergroup.NetworkCombat
             new ProjectilePresentationKey(AttackEventId, ProjectileIndex);
 
         public bool HasKnownPhase =>
-            (byte)Phase <= (byte)ProjectilePresentationPhase.Cancelled;
+            (byte)Phase <= (byte)ProjectilePresentationPhase.Impact;
 
         public bool IsValid
         {

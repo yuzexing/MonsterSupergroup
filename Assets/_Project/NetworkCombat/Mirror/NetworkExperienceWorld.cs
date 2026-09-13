@@ -30,6 +30,11 @@ namespace MonsterSupergroup.NetworkCombat
 
         public override void OnStartServer()
         {
+            InitializeRun();
+        }
+
+        private void InitializeRun()
+        {
             combat = GetComponent<NetworkCombatWorld>();
             runId = (NetworkManager.singleton as BootGameplayNetworkManager)?.Session.RunId;
             if (rules == null) configurationError = "Gameplay XP rules are missing.";
@@ -52,7 +57,7 @@ namespace MonsterSupergroup.NetworkCombat
 
         private void OnConfirmedKill(ConfirmedKill kill)
         {
-            if (!CanGrant(out _) || !NetworkServer.spawned.TryGetValue(kill.TargetEntityId, out var identity)) return;
+            if (BootGameplayNetworkManager.CombatHasEnded || !CanGrant(out _) || !NetworkServer.spawned.TryGetValue(kill.TargetEntityId, out var identity)) return;
             var enemy = identity.GetComponent<EnemyController>();
             var agent = identity.GetComponent<NetworkEnemySimulationAgent>();
             if (enemy == null || agent == null) return;
@@ -78,6 +83,7 @@ namespace MonsterSupergroup.NetworkCombat
         public bool TryCollect(NetworkConnectionToClient sender, NetworkIdentity avatar, string requestedRun,
             ulong dropId, out string reason)
         {
+            if (BootGameplayNetworkManager.CombatHasEnded) { reason = "run-ended"; return false; }
             if (!CanGrant(out reason)) return false;
             var manager = NetworkManager.singleton as BootGameplayNetworkManager;
             if (sender == null || avatar == null || sender.identity != avatar || avatar.connectionToClient != sender ||
@@ -119,6 +125,7 @@ namespace MonsterSupergroup.NetworkCombat
                 if (gem != null && NetworkServer.active) NetworkServer.Destroy(gem.gameObject);
             drops.Clear(); schedule = null; Parameters = null; sequence = 0; runId = null;
         }
+        public void ResetForNextRun() { ClearServer(); InitializeRun(); }
         public override void OnStopServer() => ClearServer();
         public override void OnStopClient() { if (!NetworkServer.active) runId = null; }
         private void OnDisable() { if (isServer) ClearServer(); }

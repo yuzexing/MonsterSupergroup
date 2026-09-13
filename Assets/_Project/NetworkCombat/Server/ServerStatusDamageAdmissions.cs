@@ -26,14 +26,18 @@ namespace MonsterSupergroup.NetworkCombat
             // A lower-priority application can return the unchanged existing status.
             if (state.SourceEventId != mutation.EventId || state.TickDamage <= 0 ||
                 state.ExecutionAuthority != (byte)StatusExecutionAuthority.SourceClient) return;
+            TickBudget budget = null;
             foreach (Receipt prior in receipts)
                 if (prior.State.InstanceId == state.InstanceId)
                 {
-                    if (prior.State.Version == state.Version) return;
+                    if (prior.State.Version == state.Version && prior.State.ApplicationRevision == state.ApplicationRevision) return;
+                    if (prior.State.ApplicationRevision == state.ApplicationRevision) budget = prior.Budget;
                     prior.ExpiresAt = Math.Min(prior.ExpiresAt, serverTime + DeliveryGrace);
                 }
+            budget ??= new TickBudget();
+            budget.AcceptedTicks = Math.Max(budget.AcceptedTicks, state.CompletedTicks);
             receipts.Add(new Receipt(state, mutation.ParentEventId,
-                state.StartTime + state.TotalTicks * (double)state.TickInterval + DeliveryGrace));
+                state.StartTime + state.TotalTicks * (double)state.TickInterval + DeliveryGrace, budget));
         }
 
         public CombatRejectionReason Validate(CombatResult result, double serverTime)
@@ -45,7 +49,7 @@ namespace MonsterSupergroup.NetworkCombat
             // StartTime is the registry's server baseline, not an owner-provided clock.
             int available = (int)Math.Min(state.TotalTicks,
                 Math.Max(0d, Math.Floor((serverTime - state.StartTime + DeliveryGrace) / state.TickInterval)));
-            if (result.Damage != state.TickDamage || receipt.AcceptedTicks >= available)
+            if (result.Damage != state.TickDamage || receipt.Budget.AcceptedTicks >= available)
                 return CombatRejectionReason.InvalidStatus;
             return CombatRejectionReason.None;
         }
@@ -53,7 +57,16 @@ namespace MonsterSupergroup.NetworkCombat
         public void Commit(CombatResult result)
         {
             Receipt receipt = Find(result);
-            if (receipt != null) receipt.AcceptedTicks++;
+            if (receipt != null) receipt.Budget.AcceptedTicks++;
+        }
+
+        public int GetAcceptedTicks(StatusInstance instance)
+        {
+            foreach (var receipt in receipts)
+                if (receipt.State.InstanceId == instance.InstanceId.Value &&
+                    receipt.State.ApplicationRevision == instance.ApplicationRevision)
+                    return receipt.Budget.AcceptedTicks;
+            return 0;
         }
 
         public void RemovePlayer(uint playerId) => receipts.RemoveAll(item => item.State.SourcePlayerId == playerId);
@@ -65,10 +78,11 @@ namespace MonsterSupergroup.NetworkCombat
 
         private Receipt Find(CombatResult result)
         {
-            if (!IsPeriodic(result)) return null;
+            if (!IsPeriodic(result) || result.StatusInstanceId == 0 || result.StatusApplicationRevision == 0) return null;
             foreach (Receipt receipt in receipts)
             {
                 CanonicalStatusState state = receipt.State;
+                if (result.StatusInstanceId != state.InstanceId || result.StatusApplicationRevision != state.ApplicationRevision) continue;
                 if (result.SourcePlayerId != state.SourcePlayerId || result.SourceEntityId != state.SourceEntityId ||
                     result.TargetEntityId != state.TargetEntityId || result.RootEventId != state.RootEventId ||
                     result.AbilityId != state.AbilityId || result.BuildId != state.BuildId) continue;
@@ -90,12 +104,13 @@ namespace MonsterSupergroup.NetworkCombat
 
         private sealed class Receipt
         {
-            public Receipt(CanonicalStatusState state, ulong predictedParent, double expiresAt)
-            { State = state; PredictedParent = predictedParent; ExpiresAt = expiresAt; AcceptedTicks = state.CompletedTicks; }
+            public Receipt(CanonicalStatusState state, ulong predictedParent, double expiresAt, TickBudget budget)
+            { State = state; PredictedParent = predictedParent; ExpiresAt = expiresAt; Budget = budget; }
             public readonly CanonicalStatusState State;
             public readonly ulong PredictedParent;
             public double ExpiresAt;
-            public int AcceptedTicks;
+            public readonly TickBudget Budget;
         }
+        private sealed class TickBudget { public int AcceptedTicks; }
     }
 }

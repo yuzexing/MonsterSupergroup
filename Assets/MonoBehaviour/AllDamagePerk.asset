@@ -13,11 +13,24 @@ MonoBehaviour:
   m_Name: AllDamagePerk
   m_EditorClassIdentifier: MonsterSupergroup.Gameplay.Combat::AstralShift.HellMaiden.Data.Perks.PerkData
   ID: 2
-  Title: All Damage
-  Description: Adds {PlayerDamage}[0]% more damage to all weapons.
-  hasLocalization: 1
-  TitleKey: PRK_Name_002
-  DescriptionKey: PRK_Desc_002
+  localizedTitle:
+    m_TableReference:
+      m_TableCollectionName: MonsterContent
+    m_TableEntryReference:
+      m_KeyId: 0
+      m_Key: perk.2.name
+    m_FallbackState: 0
+    m_WaitForCompletion: 0
+    m_LocalVariables: []
+  localizedDescription:
+    m_TableReference:
+      m_TableCollectionName: MonsterContent
+    m_TableEntryReference:
+      m_KeyId: 0
+      m_Key: perk.2.description
+    m_FallbackState: 0
+    m_WaitForCompletion: 0
+    m_LocalVariables: []
   icon: {fileID: 0}
   poolWeight: 1
   Dependencies: []

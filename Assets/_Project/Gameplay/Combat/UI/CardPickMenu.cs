@@ -1,3 +1,4 @@
+using MonsterSupergroup.Gameplay.Options;
 using MonsterSupergroup.Gameplay.Combat;
 using TMPro;
 using UnityEngine;
@@ -20,7 +21,36 @@ namespace MonsterSupergroup.Gameplay.UI
 
         public ModifierSelectionController BoundSelection { get; private set; }
         public bool IsOpen { get; private set; }
+        public bool IsPresentationSuppressed { get; private set; }
+        private GameObject suppressedFocus;
 
+        public void SetPresentationSuppressed(bool suppressed)
+        {
+            if (IsPresentationSuppressed == suppressed) return;
+            if (suppressed && EventSystem.current != null)
+                suppressedFocus = EventSystem.current.currentSelectedGameObject;
+            IsPresentationSuppressed = suppressed;
+            ApplyPresentation();
+            if (!suppressed && IsOpen && EventSystem.current != null)
+            {
+                var previous = suppressedFocus != null ? suppressedFocus.GetComponent<Selectable>() : null;
+                if (previous != null && previous.transform.IsChildOf(transform) && previous.IsActive() && previous.IsInteractable())
+                    previous.Select();
+                else if (!BoundSelection.IsRequestPending) optionButtons[0].Select();
+            }
+            if (!suppressed) suppressedFocus = null;
+        }
+
+        private void ApplyPresentation()
+        {
+            if (menuGroup == null) return;
+            bool visible = IsOpen && !IsPresentationSuppressed;
+            menuGroup.alpha = visible ? 1f : 0f;
+            menuGroup.blocksRaycasts = visible;
+            menuGroup.interactable = visible && BoundSelection != null && !BoundSelection.IsRequestPending;
+        }
+
+        private void OnEnable() => GameLocalization.Changed += Refresh;
         private void Awake()
         {
             optionButtons[0].onClick.AddListener(SelectFirst);
@@ -63,10 +93,17 @@ namespace MonsterSupergroup.Gameplay.UI
 
             bool wasOpen = IsOpen;
             bool targets = BoundSelection.Stage == UpgradeSelectionStage.EquipmentTarget;
-            if (heading != null) heading.text = $"Level {BoundSelection.EarnedLevel} · " +
-                (targets ? $"{BoundSelection.Offers[0].DisplayName} — Choose a weapon" : BoundSelection.Offers[0].Kind.ToString());
+            if (GameLocalization.TMPFont != null)
+            {
+                if (heading != null) heading.font = GameLocalization.TMPFont;
+                foreach (var label in optionTitles) if (label != null) label.font = GameLocalization.TMPFont;
+            }
+            if (heading != null) heading.text = MenuLocalization.Get("ui.card.heading", BoundSelection.EarnedLevel,
+                targets ? MenuLocalization.Get("ui.card.choose_weapon", BoundSelection.Offers[0].DisplayName) : MenuLocalization.Get("ui.reward." + BoundSelection.Offers[0].Kind.ToString().ToLowerInvariant()));
             if (backButton != null)
             {
+                var backText = backButton.GetComponentInChildren<TMP_Text>();
+                if (backText != null) { backText.text = MenuLocalization.Get("返回"); if (GameLocalization.TMPFont != null) backText.font = GameLocalization.TMPFont; }
                 backButton.gameObject.SetActive(BoundSelection.CanGoBack);
                 backButton.interactable = !BoundSelection.IsRequestPending;
             }
@@ -92,33 +129,40 @@ namespace MonsterSupergroup.Gameplay.UI
                 if (targets)
                 {
                     var weapon = BoundSelection.BoundBuild.GetWeaponAtSlot(offer.TargetSlotIndex);
-                    description = $"{weapon.WeaponData.Title}\n" +
-                        (offer.LevelIndex == 0 ? "Add Equipment" : $"Upgrade to level {offer.LevelIndex + 1}");
+                    description = $"{weapon.WeaponData.GetTitle()}\n" +
+                        (offer.LevelIndex == 0 ? MenuLocalization.Get("ui.card.add_equipment") : MenuLocalization.Get("ui.card.upgrade_level", offer.LevelIndex + 1));
                 }
                 else if (offer.Kind == UpgradeRewardKind.Perk)
-                    description += $"\n{offer.Rarity} · Growth {offer.PerkLevel}";
+                    description += "\n" + ContentText.Rarity(offer.Rarity);
                 else if (offer.Kind == UpgradeRewardKind.Equipment)
-                    description += "\nChoose target next";
-                optionTitles[i].text = $"{i + 1}. {description}";
+                    description += "\n" + MenuLocalization.Get("ui.card.choose_target_next");
+                string effect = offer.Kind == UpgradeRewardKind.Weapon ? offer.Weapon.GetDescription() :
+                    offer.Kind == UpgradeRewardKind.Perk ? offer.Perk.GetDescription(offer.Rarity) :
+                    offer.Equipment.GetDescription((uint)Mathf.Max(0, offer.LevelIndex));
+                optionTitles[i].enableAutoSizing = true;
+                optionTitles[i].fontSizeMin = 16; optionTitles[i].fontSizeMax = 24;
+                optionTitles[i].text = $"{i + 1}. {description}\n\n{effect}";
                 optionButtons[i].interactable = !BoundSelection.IsRequestPending;
             }
             IsOpen = true;
-            menuGroup.alpha = 1f;
-            menuGroup.blocksRaycasts = true;
-            menuGroup.interactable = !BoundSelection.IsRequestPending;
-            if (!wasOpen && EventSystem.current != null)
-                EventSystem.current.SetSelectedGameObject(optionButtons[0].gameObject);
+            ApplyPresentation();
+            var events = EventSystem.current;
+            var selected = events != null ? events.currentSelectedGameObject : null;
+            // A reply can arrive after the overlay closed while the request was still pending.
+            if (!IsPresentationSuppressed && !BoundSelection.IsRequestPending && events != null &&
+                (!wasOpen || selected == null || (selected.transform.IsChildOf(transform) && !selected.activeInHierarchy)))
+                events.SetSelectedGameObject(optionButtons[0].gameObject);
         }
 
         private void SelectFirst() => Submit(0);
         private void SelectSecond() => Submit(1);
         private void SelectThird() => Submit(2);
         private void SelectFourth() => Submit(3);
-        private void Back() => BoundSelection?.Back();
+        private void Back() { if (!IsPresentationSuppressed) BoundSelection?.Back(); }
 
         private void Submit(int index)
         {
-            if (!IsOpen || BoundSelection == null || BoundSelection.IsRequestPending) return;
+            if (IsPresentationSuppressed || !IsOpen || BoundSelection == null || BoundSelection.IsRequestPending) return;
             // Keep the menu until the authoritative response clears/advances the offer.
             ModifierSelectionResult result = BoundSelection.SelectOffer(displayedOfferIds[index]);
             if (!result.Succeeded)
@@ -148,7 +192,7 @@ namespace MonsterSupergroup.Gameplay.UI
                 events.SetSelectedGameObject(null);
         }
 
-        private void OnDisable() => Unbind();
+        private void OnDisable() { GameLocalization.Changed -= Refresh; Unbind(); }
 
         private void OnDestroy()
         {

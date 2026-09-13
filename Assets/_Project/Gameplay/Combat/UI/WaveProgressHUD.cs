@@ -37,7 +37,7 @@ namespace MonsterSupergroup.Gameplay.UI
         }
         public void Present(string content)
         {
-            if (label != null) label.text = content;
+            if (label != null) { label.text = content; if (MonsterSupergroup.Gameplay.Options.GameLocalization.UIFont != null) label.font = MonsterSupergroup.Gameplay.Options.GameLocalization.UIFont; }
             if (panel != null) panel.SetActive(isActiveAndEnabled && !string.IsNullOrEmpty(content));
         }
         private void OnDisable() { if (panel != null) panel.SetActive(false); }

@@ -8,6 +8,8 @@ namespace MonsterSupergroup.NetworkCombat
     {
         [SyncVar] private ulong participantId;
         [SyncVar] private string runId;
+        [SyncVar] private uint initialWeaponId = PreparationRoom.DefaultWeapon;
+        public uint InitialWeaponId => initialWeaponId;
         public ulong ParticipantId => participantId;
         public string RunId => runId;
         public uint AvatarId => netId;
@@ -17,6 +19,12 @@ namespace MonsterSupergroup.NetworkCombat
         {
             runId = sessionId;
             participantId = participant.Id;
+        }
+
+        internal void PrepareInitialWeapon(uint weaponId)
+        {
+            initialWeaponId = weaponId;
+            GetComponent<MonsterSupergroup.Gameplay.Combat.PlayerBuildRuntime>().ConfigureInitialWeapon(weaponId);
         }
     }
 }

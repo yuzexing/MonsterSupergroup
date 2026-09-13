@@ -48,6 +48,7 @@ namespace MonsterSupergroup.NetworkCombat
             if (playerMovement != null)
             {
                 playerMovement.ConfigureNetworkLifecycle();
+                playerMovement.SetRunLoadingLocked(NetworkManager.singleton is BootGameplayNetworkManager manager && manager.IsLoadingLocked);
                 playerMovement.enabled = false;
             }
 
@@ -117,7 +118,11 @@ namespace MonsterSupergroup.NetworkCombat
                 // The server already owns the host's canonical Build. A remote Owner
                 // creates the execution replica, populated by NetworkModifierSelection.
                 if (!playerBuildRuntime.IsBuildActive)
+                {
+                    var participant = GetComponent<NetworkRunParticipant>();
+                    if (participant != null) playerBuildRuntime.ConfigureInitialWeapon(participant.InitialWeaponId);
                     playerBuildRuntime.StartInitialBuild(database);
+                }
                 var selectionAuthority = GetComponent<NetworkModifierSelection>();
                 playerBuildRuntime.SetWeaponExecutionEnabled(isServer || selectionAuthority == null ||
                     selectionAuthority.HasOwnerBaseline);
@@ -168,6 +173,8 @@ namespace MonsterSupergroup.NetworkCombat
         [ClientCallback]
         private void Update()
         {
+            if (playerMovement != null && NetworkManager.singleton is BootGameplayNetworkManager manager)
+                playerMovement.SetRunLoadingLocked(manager.IsLoadingLocked);
             if (isOwned && !GameplayRuntimeEnvironment.IsDedicatedServer)
             {
                 EnsureLocalPlayerRegistration();

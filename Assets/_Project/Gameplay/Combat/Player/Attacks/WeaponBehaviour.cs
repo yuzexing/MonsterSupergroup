@@ -35,7 +35,7 @@ namespace AstralShift.HellMaiden.Player.Attacks
 
 		public PlayerMovement OwnerPlayer => player;
 
-		public bool CanAttack => player == null || (!player.IsUpgradeSelectionLocked &&
+		public bool CanAttack => player == null || (!player.IsUpgradeSelectionLocked && !player.IsRunLoadingLocked &&
 			(!player.UsesNetworkLifecycle || (player.IsLocalOwnerBound && player.CombatantBinding.IsAlive)));
 
 		public PlayerCombatantBinding OwnerCombatant => player != null
@@ -360,6 +360,8 @@ namespace AstralShift.HellMaiden.Player.Attacks
 				return DamageType.Fire;
 			case MonsterSupergroup.GAS.DamageType.Poison:
 				return DamageType.Poison;
+			case MonsterSupergroup.GAS.DamageType.Lightning:
+				return DamageType.Lightning;
 			case MonsterSupergroup.GAS.DamageType.Bleed:
 				return DamageType.Bleed;
 			default:

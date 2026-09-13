@@ -24,6 +24,8 @@ namespace AstralShift.HellMaiden.Combat
 
 		[SerializeField]
 		private DamageColorsSO damageColors;
+		private readonly HashSet<DamageNumber> networkDamageNumbers = new HashSet<DamageNumber>();
+		public bool NetworkDamageNumbersEnabled { get; set; } = true;
 
 		public void Init()
 		{
@@ -32,7 +34,37 @@ namespace AstralShift.HellMaiden.Combat
 
 		private void OnDestroy()
 		{
+			ClearNetworkDamageNumbers();
 			ClearAllPoolers();
+			if (Instance == this) Instance = null;
+		}
+
+		public static string NetworkDamageNumberGroup(uint sourcePlayerId, uint damageSourceId,
+			uint targetEntityId, DamageType type, bool critical) =>
+			$"network:{sourcePlayerId}:{damageSourceId}:{targetEntityId}:{(int)type}:{critical}";
+
+		public bool TrySpawnNetworkDamageNumber(Vector3 position, Transform target, int damage,
+			DamageType type, bool critical, uint sourcePlayerId, uint damageSourceId, uint targetEntityId)
+		{
+			if (!NetworkDamageNumbersEnabled || damageColors == null || damage <= 0) return false;
+			// Thorns/projectiles share the normal style, including its critical variant.
+			DamageType style = type == DamageType.Thorns || type == DamageType.Projectile ? DamageType.Normal : type;
+			DamageNumber prefab = damageColors.GetDamageTypeColor(style, critical);
+			if (prefab == null) return false;
+			DamageNumber popup = prefab.Spawn(position, damage, target);
+			if (popup == null) return false;
+			popup.SetSpamGroup(NetworkDamageNumberGroup(sourcePlayerId, damageSourceId, targetEntityId, type, critical));
+			networkDamageNumbers.RemoveWhere(number => number == null);
+			networkDamageNumbers.Add(popup);
+			return true;
+		}
+
+		public void ClearNetworkDamageNumbers()
+		{
+			// Includes our active and pooled instances; unrelated popups keep their lifecycle.
+			foreach (DamageNumber number in networkDamageNumbers)
+				if (number != null) Destroy(number.gameObject);
+			networkDamageNumbers.Clear();
 		}
 
 		public void SpawnDamageNumber(int damageableID, Transform targetTransform, int number, DamageType damageType, bool isCritical)

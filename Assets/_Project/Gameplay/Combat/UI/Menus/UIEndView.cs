@@ -1,3 +1,4 @@
+using MonsterSupergroup.Gameplay.Options;
 using System.Collections;
 using System.Collections.Generic;
 using Animancer;
@@ -137,7 +138,7 @@ namespace AstralShift.HellMaiden.UI.Menus
 			_activeCanvasGroup = deathCanvasGroup;
 			_statsPanelToActivate = deathRunStatsPanel;
 			string term = defeatQuotes[Random.Range(0, defeatQuotes.Count)];
-			LocalizationMediator.GetTranslation(ref term);
+			term = GameLocalization.Menu(term);
 			defeatQuoteText.SetText(term);
 			if (!defeatBGM.IsNull)
 			{
@@ -156,7 +157,7 @@ namespace AstralShift.HellMaiden.UI.Menus
 			_activeCanvasGroup = winCanvasGroup;
 			_statsPanelToActivate = winRunStatsPanel;
 			string term = winQuotes[Random.Range(0, winQuotes.Count)];
-			LocalizationMediator.GetTranslation(ref term);
+			term = GameLocalization.Menu(term);
 			winQuoteText.SetText(term);
 			if (!winBGM.IsNull)
 			{

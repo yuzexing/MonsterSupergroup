@@ -40,9 +40,9 @@ namespace MonsterSupergroup.Gameplay.Tests
             worldObject.SetActive(true);
             panel = new GameObject("Enemy debug panel").AddComponent<NetworkEnemyDebugPanel>();
             manager.StartHost();
-            yield return WaitFor(() => NetworkClient.ready);
+            yield return WaitFor(() => NetworkClient.ready && NetworkServer.localConnection != null && NetworkServer.localConnection.isReady);
             NetworkServer.Spawn(world.gameObject);
-            yield return null;
+            yield return WaitFor(() => NetworkClient.spawned.ContainsKey(world.netId));
         }
 
         [UnityTearDown]
@@ -53,6 +53,7 @@ namespace MonsterSupergroup.Gameplay.Tests
             yield return null;
             if (world != null) Object.DestroyImmediate(world.gameObject);
             if (network != null) Object.DestroyImmediate(network);
+            NetworkManager.ResetStatics();
         }
 
         [UnityTest]
@@ -85,6 +86,7 @@ namespace MonsterSupergroup.Gameplay.Tests
             var combatant = enemy.GetComponent<CombatantBehaviour>();
             var status = new CanonicalStatusState
             {
+                ApplicationRevision = 1,
                 InstanceId = 501, DefinitionId = (uint)EnemyStatusID.Burn,
                 StackMode = (byte)StatusStackMode.Add, MaxStacks = 10, Stack = 2,
                 TargetEntityId = enemy.netId, SourcePlayerId = 7, SourceEntityId = 7,
@@ -213,7 +215,10 @@ namespace MonsterSupergroup.Gameplay.Tests
             yield return WaitFor(() => panel.Rows.Count == 1);
             NetworkServer.Destroy(world.gameObject);
             yield return null;
-            world = new GameObject("Replacement debug world").AddComponent<NetworkCombatWorld>();
+            var replacement = new GameObject("Replacement debug world");
+            replacement.SetActive(false);
+            world = replacement.AddComponent<NetworkCombatWorld>();
+            replacement.SetActive(true);
             NetworkServer.Spawn(world.gameObject);
             yield return WaitFor(() => panel.Rows.Count == 1 && !panel.Rows[0].Canonical.HasValue);
             Assert.That(SubscriberCount(world), Is.EqualTo(1));
@@ -245,11 +250,11 @@ namespace MonsterSupergroup.Gameplay.Tests
             => ((Delegate)typeof(CanonicalWorldReplica).GetField("EntityChanged", BindingFlags.Instance | BindingFlags.NonPublic)
                 .GetValue(value.Replica))?.GetInvocationList().Length ?? 0;
 
-        private static IEnumerator WaitFor(Func<bool> predicate)
+        private static IEnumerator WaitFor(Func<bool> predicate, [System.Runtime.CompilerServices.CallerMemberName] string caller = null)
         {
             float deadline = Time.realtimeSinceStartup + 5f;
             while (!predicate() && Time.realtimeSinceStartup < deadline) yield return null;
-            Assert.That(predicate(), Is.True, "Enemy Debug condition did not become true within five seconds.");
+            Assert.That(predicate(), Is.True, $"Enemy Debug {caller} timed out. Client active={NetworkClient.active}, connected={NetworkClient.isConnected}, ready={NetworkClient.ready}, spawned={NetworkClient.spawned.Count}, world={NetworkCombatWorld.Instance != null}");
         }
     }
 }

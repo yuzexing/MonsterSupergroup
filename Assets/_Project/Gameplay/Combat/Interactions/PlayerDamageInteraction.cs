@@ -25,17 +25,45 @@ namespace AstralShift.HellMaiden.Interactions
 		public EnemyStats enemyStats;
 
 		public DamageType damageType;
+        private bool localProjectileMode, localProjectileConsumed;
+        private System.Action localProjectileHit;
+
+        public void ConfigureLocalProjectile(int amount, float stun, System.Action onHit)
+        {
+            DiscardPendingCollisions();
+            localProjectileMode = true;
+            localProjectileConsumed = false;
+            directDamage = true; damage = amount; stunTime = stun; enemyStats = null;
+            damageType = DamageType.Projectile;
+            localProjectileHit = onHit;
+            FlushPendingCollisionsOnDisable = false;
+        }
+
+		// Active attack windows retain their legacy final-frame settlement.
+		// Continuous contact can opt out without depending on OnDisable order.
+		public bool FlushPendingCollisionsOnDisable { get; set; } = true;
 
 		private Coroutine _collisionCheckCoroutine;
 
 		private readonly List<PlayerHitbox> _collidedPlayerHitboxes = new List<PlayerHitbox>();
 
 		private readonly List<Transform> _collidedTransforms = new List<Transform>();
+		private readonly HashSet<PlayerCombatantBinding> _processedPlayerOwners = new HashSet<PlayerCombatantBinding>();
 
 		public static TimedCollection<int> damageablesToIgnore = new TimedCollection<int>();
 
 		public override void Interact(IInteractor interactor)
 		{
+            if (localProjectileMode)
+            {
+                if (!isActiveAndEnabled || localProjectileConsumed ||
+                    !interactor.Transform.TryGetComponent<PlayerHitbox>(out var localHitbox) || !localHitbox.IsLocallyControlled) return;
+                localProjectileConsumed = true;
+                DamagePlayer(localHitbox);
+                // Remote hitboxes never reach OnEnd (which consumes the legacy bullet).
+                localProjectileHit?.Invoke();
+                return;
+            }
 			if (damageablesToIgnore.Contains(GetInstanceID()))
 			{
 				base.Interact(interactor);
@@ -74,8 +102,17 @@ namespace AstralShift.HellMaiden.Interactions
 			OnEnd();
 		}
 
-		private void OnDisable()
-		{
+        private void OnDisable()
+        {
+            // Parent/child OnDisable ordering is not guaranteed. A disabled enemy
+            // must never flush deferred hits while its attack is being released.
+            var enemy = GetComponentInParent<AstralShift.HellMaiden.AI.Enemy.EnemyController>(true);
+            if (!FlushPendingCollisionsOnDisable || (enemy != null &&
+                (!enemy.gameObject.activeSelf || !enemy.gameObject.activeInHierarchy || !enemy.enabled)))
+			{
+				DiscardPendingCollisions();
+				return;
+			}
 			if (_collisionCheckCoroutine != null)
 			{
 				VerifyCollisions();
@@ -134,8 +171,17 @@ namespace AstralShift.HellMaiden.Interactions
 			VerifyCollisions();
 		}
 
+		public void DiscardPendingCollisions()
+		{
+			if (_collisionCheckCoroutine != null) StopCoroutine(_collisionCheckCoroutine);
+			_collisionCheckCoroutine = null;
+			_collidedPlayerHitboxes.Clear();
+			_collidedTransforms.Clear();
+		}
+
 		private void VerifyCollisions()
 		{
+			_processedPlayerOwners.Clear();
 			var damagedObjects = new HashSet<EnemyDamageableObject>();
 			bool processedLocalPlayer = false;
 			for (int i = 0; i < _collidedPlayerHitboxes.Count; i++)
@@ -143,7 +189,8 @@ namespace AstralShift.HellMaiden.Interactions
 				PlayerHitbox playerHitbox = _collidedPlayerHitboxes[i];
 				if (playerHitbox == null ||
 					!playerHitbox.TryGetOwner(out PlayerCombatantBinding binding) ||
-					!binding.AcceptsLocalMutations || binding.PlayerMovement == null)
+					!binding.AcceptsLocalMutations || binding.PlayerMovement == null ||
+					!_processedPlayerOwners.Add(binding))
 				{
 					continue;
 				}
@@ -172,6 +219,7 @@ namespace AstralShift.HellMaiden.Interactions
 
 			_collidedPlayerHitboxes.Clear();
 			_collidedTransforms.Clear();
+			_processedPlayerOwners.Clear();
 			_collisionCheckCoroutine = null;
 		}
 

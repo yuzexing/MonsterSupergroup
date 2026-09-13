@@ -1,3 +1,4 @@
+using MonsterSupergroup.Gameplay.Options;
 using System;
 using AstralShift.DebugTools;
 using AstralShift.Helpers;
@@ -244,7 +245,7 @@ public class SettingsMenuController : TabMenuController
 	private void LaunchSaveSettingsPopup()
 	{
 		string term = saveSettingsText;
-		LocalizationMediator.GetTranslation(ref term);
+		term = GameLocalization.Menu(term);
 		PopupLauncher.Instance.RequestPopup(PopupLauncher.PopupType.SmallChoice, new PopupContext(term, (Action)delegate
 		{
 			settings.SaveSettings();
@@ -262,7 +263,7 @@ public class SettingsMenuController : TabMenuController
 	private void LaunchRestoreDefaultSettingsPopup()
 	{
 		string term = restoreDefaultSettingsText;
-		LocalizationMediator.GetTranslation(ref term);
+		term = GameLocalization.Menu(term);
 		PopupLauncher.Instance.RequestPopup(PopupLauncher.PopupType.SmallChoice, new PopupContext(term, (Action)delegate
 		{
 			settings.LoadSettings();
@@ -274,7 +275,7 @@ public class SettingsMenuController : TabMenuController
 	private void LaunchRestoreCurrentDefaultSettingsPopup()
 	{
 		string term = restoreCurrentWindowSettingsText;
-		LocalizationMediator.GetTranslation(ref term);
+		term = GameLocalization.Menu(term);
 		PopupLauncher.Instance.RequestPopup(PopupLauncher.PopupType.SmallChoice, new PopupContext(term, (Action)delegate
 		{
 			if (_currentMenu == _settingsMenuControls)

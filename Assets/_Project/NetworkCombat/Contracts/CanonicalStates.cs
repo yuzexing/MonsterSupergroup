@@ -47,6 +47,7 @@ namespace MonsterSupergroup.NetworkCombat
         public float Duration;
         public byte ExecutionAuthority;
         public uint Version;
+        public uint ApplicationRevision;
         public int TickDamage;
         public int TotalTicks;
         public int CompletedTicks;
@@ -107,7 +108,8 @@ namespace MonsterSupergroup.NetworkCombat
                 Priority,
                 DamageSourceId,
                 sourceContext,
-                Magnitude);
+                Magnitude,
+                ApplicationRevision);
         }
 
         public static CanonicalStatusState From(StatusInstance instance)
@@ -127,6 +129,7 @@ namespace MonsterSupergroup.NetworkCombat
                 Duration = instance.Duration,
                 ExecutionAuthority = (byte)instance.ExecutionAuthority,
                 Version = instance.Version,
+                ApplicationRevision = instance.ApplicationRevision,
                 TickDamage = instance.TickDamage,
                 TotalTicks = instance.TotalTicks,
                 CompletedTicks = instance.CompletedTicks,
@@ -146,15 +149,39 @@ namespace MonsterSupergroup.NetworkCombat
             };
         }
 
-        public static CanonicalStatusState Removal(StatusInstanceId instanceId, uint version)
+        public static CanonicalStatusState Removal(StatusInstanceId instanceId, uint version, uint applicationRevision = 1u)
         {
             return new CanonicalStatusState
             {
                 Removed = true,
                 InstanceId = instanceId.Value,
-                Version = version
+                Version = version,
+                ApplicationRevision = applicationRevision
             };
         }
+
+        public static CanonicalStatusState Removal(StatusInstance instance, uint version)
+        {
+            var state = Removal(instance.InstanceId, version, instance.ApplicationRevision);
+            state.TargetEntityId = instance.TargetEntityId;
+            return state;
+        }
+    }
+
+    /// <summary>A transient accepted damage edge, never retained in snapshots.</summary>
+    [Serializable]
+    public struct EnemyHitPresentation
+    {
+        public int Damage;
+        public byte PresentationDamageType;
+        public bool IsCritical;
+        public uint SourcePlayerId;
+        public uint DamageSourceId;
+        public bool HasPosition;
+        public UnityEngine.Vector3 Position;
+        public ulong DamageEventId;
+        public uint TargetEntityId;
+        public uint TargetStateVersion;
     }
 
     [Serializable]
@@ -164,5 +191,6 @@ namespace MonsterSupergroup.NetworkCombat
         public CanonicalEntityState[] Entities;
         public CanonicalStatusState[] Statuses;
         public ConfirmedKill[] ConfirmedKills;
+        public EnemyHitPresentation[] EnemyHitPresentations;
     }
 }

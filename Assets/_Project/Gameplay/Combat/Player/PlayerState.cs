@@ -11,7 +11,7 @@ namespace AstralShift.HellMaiden.Player
 	public static class PlayerState
 	{
 		public static bool IsBusy(PlayerMovement player) => player == null ||
-			!player.IsRuntimeInitialized || player.IsUpgradeSelectionLocked ||
+			!player.IsRuntimeInitialized || player.IsUpgradeSelectionLocked || player.IsRunLoadingLocked ||
 			(player.CombatantBinding != null && !player.CombatantBinding.IsAlive);
 
 		public static bool IsLevelingUp(PlayerMovement player) =>

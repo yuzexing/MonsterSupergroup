@@ -1,3 +1,4 @@
+using MonsterSupergroup.Gameplay.Options;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -29,7 +30,7 @@ namespace AstralShift.HellMaiden.UI.Menus.MetaProgression
 		{
 			background.sprite = bgMaxed;
 			string term = maxCostLocalizeID;
-			LocalizationMediator.GetTranslation(ref term);
+			term = GameLocalization.Menu(term);
 			if (term != null)
 			{
 				text.text = term;

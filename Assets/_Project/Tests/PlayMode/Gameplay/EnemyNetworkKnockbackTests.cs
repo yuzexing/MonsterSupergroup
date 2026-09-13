@@ -129,6 +129,44 @@ namespace MonsterSupergroup.Gameplay.Tests
             Assert.That(enemy.DamageCalls, Is.Zero);
         }
 
+        [UnityTest]
+        public IEnumerator RepeatedHandoffPreservesTrajectoryAndOriginalStaggerDeadline()
+        {
+            Assert.That(enemy.TryApplyNetworkKnockback(Vector2.left, preset), Is.True);
+            float started = Time.time;
+            var initial = enemy.CaptureSimulationKnockback();
+            for (int i = 0; i < 5; i++)
+            {
+                yield return new WaitForSeconds(.07f);
+                var checkpoint = enemy.CaptureSimulationKnockback();
+                Assert.That(checkpoint.Start, Is.EqualTo(initial.Start));
+                Assert.That(checkpoint.End, Is.EqualTo(initial.End));
+                Assert.That(checkpoint.Elapsed, Is.GreaterThan(0));
+                enemy.SuspendSimulationExecution();
+                Assert.That(enemy.RestoreSimulationKnockback(checkpoint, preset, 0), Is.True);
+            }
+            while (enemy.IsNetworkKnockbackActive && Time.time - started < 1.2f) yield return null;
+            Assert.That(enemy.IsNetworkKnockbackActive, Is.False);
+            Assert.That(Time.time - started, Is.LessThan(initial.Duration + initial.StaggerDuration + .15f));
+            Assert.That(movement.CanMove, Is.True);
+            Assert.That(enemy.DamageCalls, Is.Zero);
+        }
+
+        [Test]
+        public void ReturningAfterAnExpiredImpulseRestoresNavigationWithoutReapplyingIt()
+        {
+            Assert.That(enemy.TryApplyNetworkKnockback(Vector2.left, preset), Is.True);
+            var checkpoint = enemy.CaptureSimulationKnockback();
+            enemy.SuspendSimulationExecution();
+            Assert.That(movement.CanMove, Is.True);
+            Assert.That(enemy.RestoreSimulationKnockback(checkpoint, preset, 2), Is.False);
+            Assert.That(enemy.IsNetworkKnockbackActive, Is.False);
+            Assert.That(movement.CanMove, Is.True);
+            checkpoint.RestoreDefaultMovement = false;
+            Assert.That(enemy.RestoreSimulationKnockback(checkpoint, preset, 2), Is.False);
+            Assert.That(movement.CanMove, Is.False, "An independent navigation lock survives an expired handoff too.");
+        }
+
         [Test]
         public void ExistingMovementLockAndEnemyKnockbackMultiplierSurviveCancellation()
         {

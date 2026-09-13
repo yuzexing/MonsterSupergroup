@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Linq;
 using Mirror;
 using UnityEngine;
 
@@ -35,6 +36,20 @@ namespace MonsterSupergroup.NetworkCombat
         public override void OnStartServer()
         {
             base.OnStartServer();
+            // Optional development selection; the scene's authored default is unchanged.
+            const string option = "--enemy-sandbox-prefab=";
+            string selected = Environment.GetCommandLineArgs().FirstOrDefault(a => a.StartsWith(option));
+            if (selected != null)
+            {
+                string name = selected.Substring(option.Length);
+                var registered = NetworkManager.singleton.spawnPrefabs.FirstOrDefault(p => p != null && p.name == name);
+                if (registered == null || registered.GetComponent<NetworkEnemySimulationAgent>() == null)
+                {
+                    Debug.LogError("Unknown registered Sandbox enemy: " + name, this);
+                    return;
+                }
+                enemyPrefab = registered;
+            }
             if (enemyPrefab == null)
             {
                 Debug.LogError("NetworkEnemySandboxSpawner requires an enemy prefab.", this);

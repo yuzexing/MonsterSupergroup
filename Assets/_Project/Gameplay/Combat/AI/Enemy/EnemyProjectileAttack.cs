@@ -18,6 +18,11 @@ namespace AstralShift.HellMaiden.AI.Enemy
 
 		protected Vector2 direction;
 
+        public IEnemyProjectileExecution NetworkExecution { get; set; }
+        public Vector2 LockedDirection => direction;
+        public bool ProjectileEmitted { get; private set; }
+        public bool RotateAttack => rotateAttack;
+
 		[Tooltip("Rotate attack to face target")]
 		[SerializeField]
 		protected bool rotateAttack;
@@ -25,6 +30,16 @@ namespace AstralShift.HellMaiden.AI.Enemy
 		public override void AttackWarningEnter()
 		{
 			base.AttackWarningEnter();
+			ProjectileEmitted = false;
+			if (NetworkExecution != null)
+			{
+                Vector2 facing = (Vector2)Target.position - (Vector2)controller.transform.position;
+                AlignProjectileOrigin(facing);
+                direction = ((Vector2)Target.position - (Vector2)bulletPosition.position).normalized;
+                if (direction.sqrMagnitude < .0001f) direction = Vector2.right;
+                NetworkExecution.ShowCharge();
+                return;
+			}
 			float num = Mathf.Abs(bulletPosition.transform.localPosition.x);
 			bulletPosition.transform.localPosition = new Vector3((enemyController.FacingDirection.x < 0f) ? (0f - num) : num, bulletPosition.transform.localPosition.y, bulletPosition.transform.localPosition.z);
 			bulletPooler = PoolManager.Instance.GetOrCreatePooler(bulletPrefab);
@@ -50,6 +65,11 @@ namespace AstralShift.HellMaiden.AI.Enemy
 		public override void AttackEnter()
 		{
 			base.AttackEnter();
+            if (NetworkExecution != null)
+            {
+                if (!ProjectileEmitted) { ProjectileEmitted = true; NetworkExecution.Launch(direction); }
+                return;
+            }
 			if (!(_currentBullet == null))
 			{
 				_currentBullet.transform.parent = null;
@@ -72,6 +92,12 @@ namespace AstralShift.HellMaiden.AI.Enemy
 
 		public override void CancelAttack()
 		{
+            if (NetworkExecution != null)
+            {
+                if (controller != null && (controller.CurrentAttackPresentationPhase == EnemyAttackPresentationPhase.Warning ||
+                    controller.CurrentAttackPresentationPhase == EnemyAttackPresentationPhase.Active)) controller.lastAttackTime = Time.time;
+                NetworkExecution.CancelCharge(); return;
+            }
 			if (!(_currentBullet == null))
 			{
 				base.controller.lastAttackTime = Time.time;
@@ -79,5 +105,24 @@ namespace AstralShift.HellMaiden.AI.Enemy
 				_currentBullet = null;
 			}
 		}
+
+        public void RestoreProjectileSimulation(EnemyActionState state, EnemyAttackPresentationPhase phase)
+        {
+            if (NetworkExecution == null) return;
+            direction = state.ProjectileDirection;
+            AlignProjectileOrigin(direction);
+            ProjectileEmitted = state.ProjectileEmitted;
+            NetworkExecution.CancelCharge();
+            if (phase == EnemyAttackPresentationPhase.Warning) NetworkExecution.ShowCharge();
+            else if (phase == EnemyAttackPresentationPhase.Active && !ProjectileEmitted) AttackEnter();
+        }
+
+        public void AlignProjectileOrigin(Vector2 facing)
+        {
+            float x = Mathf.Abs(bulletPosition.localPosition.x);
+            bulletPosition.localPosition = new Vector3(facing.x < 0 ? -x : x, bulletPosition.localPosition.y, bulletPosition.localPosition.z);
+        }
+
+        private void OnDisable() { NetworkExecution?.CancelCharge(); }
 	}
 }

@@ -1,3 +1,4 @@
+using MonsterSupergroup.Gameplay.Options;
 using UnityEngine;
 using UnityEngine.Playables;
 
@@ -5,7 +6,8 @@ namespace AstralShift.Cinematics.Timeline
 {
 	public class TimelineSubtitleBehaviour : PlayableBehaviour
 	{
-		public string Text { get; private set; }
+        private string literalText, localizedKey;
+        public string Text => localizedKey == null ? literalText : GameLocalization.Menu(localizedKey);
 
 		public bool HasPositionOverride => Position != Vector2.zero;
 
@@ -13,13 +15,12 @@ namespace AstralShift.Cinematics.Timeline
 
 		public void SetTranslatedText(string text)
 		{
-			LocalizationMediator.GetTranslation(ref text);
-			SetText(text);
+            localizedKey = text;
 		}
 
 		public void SetText(string text)
 		{
-			Text = text;
+            localizedKey = null; literalText = text;
 		}
 
 		public void SetPosition(Vector2 position)

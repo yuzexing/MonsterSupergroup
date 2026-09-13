@@ -57,6 +57,7 @@ namespace MonsterSupergroup.NetworkCombat
 
         private void OnGUI()
         {
+            if (NetworkManager.singleton is BootGameplayNetworkManager menuManager && menuManager.UsePreparationRoom) return;
             if (Application.isBatchMode || service == null ||
                 !service.IsInteractiveKcp)
             {

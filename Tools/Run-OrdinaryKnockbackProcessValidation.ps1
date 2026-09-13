@@ -1,10 +1,14 @@
 param(
     [string]$Executable = 'Builds/M3Knockback/M3Knockback.exe',
+    [string]$EnemyPrefab,
     [switch]$Dedicated,
     [switch]$ImpairedNetwork,
     [switch]$CaptureFrames,
+    [switch]$ValidateHitFlash,
+    [switch]$ValidateDamageNumbers,
     [switch]$VisibleWindows,
     [switch]$ForceD3D11,
+    [switch]$ForceGfxDirect,
     [switch]$IsolateTemporaryCache,
     [string]$PsoCacheSeed,
     [int]$Port = 7962
@@ -26,10 +30,14 @@ $logRoot = Join-Path $projectRoot ('Logs/M3Knockback/' + $modeName + '-' + (Get-
 New-Item -ItemType Directory -Path $logRoot -Force | Out-Null
 [ordered]@{
     executable = $Executable
+    enemyPrefab = $EnemyPrefab
     dedicated = [bool]$Dedicated
     impairedNetwork = [bool]$ImpairedNetwork
     captureFrames = [bool]$CaptureFrames
+    validateHitFlash = [bool]$ValidateHitFlash
+    validateDamageNumbers = [bool]$ValidateDamageNumbers
     forceD3D11 = [bool]$ForceD3D11
+    forceGfxDirect = [bool]$ForceGfxDirect
     isolateTemporaryCache = [bool]$IsolateTemporaryCache
     psoCacheSeedSha256 = $(if ($PsoCacheSeed) { (Get-FileHash -LiteralPath $PsoCacheSeed -Algorithm SHA256).Hash } else { $null })
     port = $Port
@@ -40,7 +48,11 @@ function Launch([string]$role) {
     $arguments = @('-logFile', ('"' + $logRoot + '/' + $role + '.log"'), "--m3-role=$role",
         ('"--m3-artifacts=' + $logRoot + '"'), "--m3-port=$Port", '-screen-fullscreen','0','-screen-width','1920','-screen-height','1080')
     if ($Dedicated) { $arguments += '--m3-dedicated' }
+    if ($EnemyPrefab) { $arguments += "--m3-enemy-prefab=$EnemyPrefab" }
+    if ($ValidateHitFlash) { $arguments += '--enemy-hit-flash' }
+    if ($ValidateDamageNumbers) { $arguments += '--enemy-damage-numbers' }
     if ($ForceD3D11) { $arguments += '-force-d3d11' }
+    if ($ForceGfxDirect) { $arguments += '-force-gfx-direct' }
     if ($ImpairedNetwork) { $arguments += '--m3-impaired' }
     if ($CaptureFrames -and $role -ne 'server') { $arguments += '--m3-capture' }
     else { $arguments += @('-batchmode','-nographics') }
@@ -88,6 +100,11 @@ try {
         Set-Content -LiteralPath (Join-Path $logRoot ($role + '.exit.txt')) -Value $code
         if ($code -ne 0 -or -not (Select-String -LiteralPath (Join-Path $logRoot ($role + '.log')) -SimpleMatch "[M3Process] result=PASS role=$role" -Quiet)) {
             throw "M3 validation failed for $role : $logRoot"
+        }
+        $exceptions = Select-String -LiteralPath (Join-Path $logRoot ($role + '.log')) -Pattern '^\s*[\w.]*Exception\s*:|Invalid server simulation snapshot|\[M3Process\].*FAIL|Assertion failed'
+        if ($exceptions) {
+            $exceptions | ForEach-Object { Write-Output $_.Line }
+            throw "M3 exception/assertion log validation failed for $role : $logRoot"
         }
     }
     Write-Output "M3 validation passed: $logRoot"

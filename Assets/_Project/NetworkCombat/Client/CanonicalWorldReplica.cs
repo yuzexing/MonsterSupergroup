@@ -73,6 +73,15 @@ namespace MonsterSupergroup.NetworkCombat
                 controller.Has(definitionId);
         }
 
+        /// <summary>Detached canonical records, including stacks locally predicted away.</summary>
+        public IReadOnlyList<StatusInstance> ReadStatuses(uint targetEntityId)
+        {
+            var result = new List<StatusInstance>();
+            foreach (CanonicalStatusState state in canonicalStatuses.Values)
+                if (!state.Removed && state.TargetEntityId == targetEntityId) result.Add(state.ToStatusInstance());
+            return result;
+        }
+
         public void Apply(CanonicalWorldBatch batch)
         {
             CanonicalEntityState[] entityStates =
@@ -96,16 +105,23 @@ namespace MonsterSupergroup.NetworkCombat
             {
                 CanonicalStatusState state = statuses[i];
                 var instanceId = new StatusInstanceId(state.InstanceId);
+                if (canonicalStatuses.TryGetValue(instanceId, out var previous) &&
+                    (state.ApplicationRevision < previous.ApplicationRevision ||
+                     (state.ApplicationRevision == previous.ApplicationRevision &&
+                      (state.Version < previous.Version ||
+                       (state.Version == previous.Version && (previous.Removed ||
+                        (!state.Removed && state.CompletedTicks <= previous.CompletedTicks))))))) continue;
                 if (state.Removed)
                 {
                     if (statusTargets.TryGetValue(instanceId, out uint targetId) &&
                         statusControllers.TryGetValue(targetId, out StatusController controller))
                     {
-                        controller.RemoveCanonical(instanceId, state.Version);
+                        controller.RemoveCanonical(instanceId, state.Version, state.ApplicationRevision);
                     }
 
-                    statusTargets.Remove(instanceId);
-                    canonicalStatuses.Remove(instanceId);
+                    // Keep the removal watermark until this entity/world is retired.
+                    if (state.TargetEntityId != 0) statusTargets[instanceId] = state.TargetEntityId;
+                    canonicalStatuses[instanceId] = state;
                 }
                 else
                 {

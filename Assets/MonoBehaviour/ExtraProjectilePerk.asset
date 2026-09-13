@@ -13,11 +13,24 @@ MonoBehaviour:
   m_Name: ExtraProjectilePerk
   m_EditorClassIdentifier: MonsterSupergroup.Gameplay.Combat::AstralShift.HellMaiden.Data.Perks.PerkData
   ID: 28
-  Title: Extra Projectile
-  Description: +1 Projectile to everything
-  hasLocalization: 1
-  TitleKey: PRK_Name_028
-  DescriptionKey: PRK_Desc_028
+  localizedTitle:
+    m_TableReference:
+      m_TableCollectionName: MonsterContent
+    m_TableEntryReference:
+      m_KeyId: 0
+      m_Key: perk.28.name
+    m_FallbackState: 0
+    m_WaitForCompletion: 0
+    m_LocalVariables: []
+  localizedDescription:
+    m_TableReference:
+      m_TableCollectionName: MonsterContent
+    m_TableEntryReference:
+      m_KeyId: 0
+      m_Key: perk.28.description
+    m_FallbackState: 0
+    m_WaitForCompletion: 0
+    m_LocalVariables: []
   icon: {fileID: 0}
   poolWeight: 1
   Dependencies: []

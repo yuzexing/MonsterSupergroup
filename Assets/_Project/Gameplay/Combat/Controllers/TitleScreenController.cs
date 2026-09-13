@@ -1,3 +1,4 @@
+using MonsterSupergroup.Gameplay.Options;
 using System;
 using AstralShift.Cinematics;
 using AstralShift.Control;
@@ -423,7 +424,7 @@ namespace AstralShift.HellMaiden.Controllers
 		private void LaunchNewGamePopup()
 		{
 			string term = newGameWarningKey;
-			LocalizationMediator.GetTranslation(ref term);
+			term = GameLocalization.Menu(term);
 			if (SaveManager.HasSaveFiles())
 			{
 				PopupLauncher.Instance.RequestPopup(PopupLauncher.PopupType.SmallChoice, new PopupContext(term, (Action)delegate

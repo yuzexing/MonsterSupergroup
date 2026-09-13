@@ -40,7 +40,7 @@ namespace AstralShift.HellMaiden.Player.Attacks
         public CombatResolution Resolve(
             LegacyDamageSource source,
             ICombatTarget target,
-            DamageInfo damage)
+            DamageInfo damage, DamageType presentationDamageType = DamageType.Normal)
         {
             if (!ReferenceEquals(source.Execution, this))
             {
@@ -53,7 +53,8 @@ namespace AstralShift.HellMaiden.Player.Attacks
                 source.DamageSourceId != 0u ? source.DamageSourceId : damage.id,
                 Math.Max(0, damage.value),
                 damage.isCritical);
-            return pipeline.ResolvePrecomputedHit(context, target, gasDamage);
+            return pipeline.ResolvePrecomputedHit(context, target, gasDamage,
+                (MonsterSupergroup.GAS.DamageType)presentationDamageType);
         }
     }
 
@@ -98,7 +99,7 @@ namespace AstralShift.HellMaiden.Player.Attacks
                 Tags | tags);
         }
 
-        public CombatResolution Resolve(ICombatTarget target, DamageInfo damage)
+        public CombatResolution Resolve(ICombatTarget target, DamageInfo damage, DamageType presentationDamageType = DamageType.Normal)
         {
             if (!IsValid)
             {
@@ -106,7 +107,7 @@ namespace AstralShift.HellMaiden.Player.Attacks
                     "A valid legacy combat source is required to resolve damage.");
             }
 
-            return Execution.Resolve(this, target, damage);
+            return Execution.Resolve(this, target, damage, presentationDamageType);
         }
     }
 

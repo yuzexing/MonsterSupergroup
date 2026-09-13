@@ -22,7 +22,8 @@ namespace MonsterSupergroup.NetworkCombat
         InvalidAttackRoot = 13,
         InvalidAttackRate = 14,
         StaleAttackBuild = 15,
-        AttackCapacityExceeded = 16
+        AttackCapacityExceeded = 16,
+        RunLoading = 17
     }
 
     public readonly struct CombatApplyResult

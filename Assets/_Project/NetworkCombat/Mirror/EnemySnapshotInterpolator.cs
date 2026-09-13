@@ -90,7 +90,7 @@ namespace MonsterSupergroup.NetworkCombat
                 return;
             }
 
-            double renderTime = NetworkTime.time - interpolationBackTime;
+            double renderTime = EnemySimulationClock.Now - interpolationBackTime;
             if (buffer.TrySample(
                 renderTime,
                 maximumExtrapolation,

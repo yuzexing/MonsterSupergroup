@@ -107,5 +107,12 @@ namespace AstralShift.HellMaiden.AI.Enemy
 		}
 
 		public abstract void CancelAttack();
+
+		public void RestoreSimulationTimers(float warningElapsed, float activeElapsed, float recoveryElapsed)
+		{
+			_warningStartTime = Time.time - warningElapsed;
+			_attackStartTime = Time.time - activeElapsed;
+			_recoveryStartTime = Time.time - recoveryElapsed;
+		}
 	}
 }

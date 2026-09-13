@@ -56,6 +56,7 @@ namespace AstralShift.HellMaiden.AI.Enemy
 		public BaseEnemyController ShooterController { get; set; }
 
 		public Action OnReturn { get; set; }
+        public Action OnDisabled { get; set; }
 
 		protected override void InitializeStateMachine()
 		{
@@ -76,6 +77,7 @@ namespace AstralShift.HellMaiden.AI.Enemy
 
 		private void OnEnable()
 		{
+            _stateMachine = null;
 			fired = false;
 			elapsedTime = 0f;
 			pierced = 0;
@@ -173,7 +175,7 @@ namespace AstralShift.HellMaiden.AI.Enemy
 			}
 			currentPosition = base.transform.position;
 			elapsedTime = Time.time - firedTime;
-			if ((!ProCamera2DHelpers.IsWithinCameraBounds(base.transform.position) || bulletHasTimeOut) && elapsedTime > duration)
+			if ((bulletHasTimeOut || !ProCamera2DHelpers.IsWithinCameraBounds(base.transform.position)) && elapsedTime > duration)
 			{
 				fired = false;
 				TransitionToExpire();
@@ -243,6 +245,11 @@ namespace AstralShift.HellMaiden.AI.Enemy
 
 		private void OnDisable()
 		{
+            OnDisabled?.Invoke();
+            _stateMachine = null;
+            fired = false;
+            damageInteraction?.DiscardPendingCollisions();
+            StopAllCoroutines();
 			if (bulletParticles != null)
 			{
 				bulletParticles.Stop(withChildren: true, ParticleSystemStopBehavior.StopEmittingAndClear);

@@ -1,0 +1,217 @@
+{
+  "weaponId": 2,
+  "sourceProject": "F:\\DecomplieLatest\\HellMaiden\\ExportedProject",
+  "sourceDependencies": [
+    {
+      "source": "Mesh/FX_MS_HeadCylinder.asset",
+      "guid": "57ab0e906b16c304f9ee8caffd9080fe",
+      "destination": [
+        "Assets/Mesh/FX_MS_HeadCylinder.asset"
+      ]
+    },
+    {
+      "source": "Sprite/Shadow (2)_0.asset",
+      "guid": "4b6386413fa147041bfdc918a559fa29",
+      "destination": [
+        "Assets/Sprite/Shadow (2)_0.asset"
+      ]
+    },
+    {
+      "source": "Texture2D/Circle SmallAnim2.png",
+      "guid": "9b519c966b2df4c47b10be28962b6f96",
+      "destination": [
+        "Assets/Texture2D/Circle SmallAnim2.png"
+      ]
+    },
+    {
+      "source": "Texture2D/cloud_2x2_soft_0.png",
+      "guid": "a45898f8ac2e8cd4f8bf210ce35d7c66",
+      "destination": [
+        "Assets/Texture2D/cloud_2x2_soft_0.png"
+      ]
+    },
+    {
+      "source": "Texture2D/fire2_1.png",
+      "guid": "b061642fc7f419e4a82319ecacf3e16f",
+      "destination": [
+        "Assets/_Project/Content/NetworkCombat/Validation/HellMaiden/Texture2D/fire2_1.png"
+      ]
+    },
+    {
+      "source": "Texture2D/fire2_6x3.png",
+      "guid": "72a3a3a3ecdd6e247a44240a58b41204",
+      "destination": [
+        "Assets/Texture2D/fire2_6x3.png"
+      ]
+    },
+    {
+      "source": "Texture2D/Flame_002_Mask_001.png",
+      "guid": "34678b8c3f482174ba061def7945a68e",
+      "destination": [
+        "Assets/Texture2D/Flame_002_Mask_001.png"
+      ]
+    },
+    {
+      "source": "Texture2D/Flame_004pixel.png",
+      "guid": "d757ec01d09b65e42b864b55865f66f5",
+      "destination": [
+        "Assets/Texture2D/Flame_004pixel.png"
+      ]
+    },
+    {
+      "source": "Texture2D/FX_TX_Fire_FirePilar_01_6x4_Blur.png",
+      "guid": "1382a4a0a23b4d44981627ac555b8b02",
+      "destination": [
+        "Assets/Texture2D/FX_TX_Fire_FirePilar_01_6x4_Blur.png"
+      ]
+    },
+    {
+      "source": "Texture2D/glow1_1.png",
+      "guid": "3867ce58eaf7305489456ce9212b3068",
+      "destination": [
+        "Assets/Texture2D/glow1_1.png"
+      ]
+    },
+    {
+      "source": "Texture2D/Glow_001_2.png",
+      "guid": "5ffc63080257a9344b32d9e8f45bb132",
+      "destination": [
+        "Assets/Texture2D/Glow_001_2.png"
+      ]
+    },
+    {
+      "source": "Texture2D/Glow_001_3.png",
+      "guid": "3b393d368aa4bc443aba9e630304a2f7",
+      "destination": [
+        "Assets/Texture2D/Glow_001_3.png"
+      ]
+    },
+    {
+      "source": "Texture2D/Noise 1_0.png",
+      "guid": "7dba7aa575a8a9e49a5509c895599742",
+      "destination": [
+        "Assets/Texture2D/Noise 1_0.png"
+      ]
+    },
+    {
+      "source": "Texture2D/palette-downwell_1.png",
+      "guid": "e1210a1201fd80a4196f2c96d2f0a8c1",
+      "destination": [
+        "Assets/_Project/Content/NetworkCombat/Validation/HellMaiden/Texture2D/palette-downwell_1.png"
+      ]
+    },
+    {
+      "source": "Texture2D/PlayerAttack_Dante_Projectile_Shadow.png",
+      "guid": "ed02a4a1b75109544916d7dffdf1aace",
+      "destination": [
+        "Assets/Texture2D/PlayerAttack_Dante_Projectile_Shadow.png"
+      ]
+    },
+    {
+      "source": "Texture2D/rainbow_1.png",
+      "guid": "3edbdb0c3c5db3744a1b8b6837130220",
+      "destination": [
+        "Assets/_Project/Content/NetworkCombat/Validation/HellMaiden/Texture2D/rainbow_1.png"
+      ]
+    },
+    {
+      "source": "Texture2D/seamlessNoise_1.png",
+      "guid": "f7a0dff928b7d204aaa7887200250e25",
+      "destination": [
+        "Assets/_Project/Content/NetworkCombat/Validation/HellMaiden/Texture2D/seamlessNoise_1.png"
+      ]
+    },
+    {
+      "source": "Texture2D/sparkle2_0.png",
+      "guid": "835192f2ce116fc45aadf3b5bde8cc7e",
+      "destination": [
+        "Assets/Texture2D/sparkle2_0.png"
+      ]
+    },
+    {
+      "source": "Texture2D/white_1.png",
+      "guid": "929e4d5386b6a804fa78a53f3e9a06e8",
+      "destination": [
+        "Assets/_Project/Content/NetworkCombat/Validation/HellMaiden/Texture2D/white_1.png"
+      ]
+    },
+    {
+      "source": "AnimationClip/PlayerAttack_Dante_Projectile_In.anim",
+      "guid": "e2eae1876f245de48827587672ae8fdb",
+      "destination": [
+        "Assets/_Project/Content/HellMaiden/NativeGAS/Dante/Projectile/AnimationClip/PlayerAttack_Dante_Projectile_In.anim"
+      ]
+    }
+  ],
+  "isolatedAssets": [
+    {
+      "guid": "06c6cfee52ddb169781c19a353b70a56",
+      "path": "Assets/_Project/Content/HellMaiden/NativeGAS/Dante/Projectile/Material/PlayerAttack_Dante_Projectile_Shadow_0.mat"
+    },
+    {
+      "guid": "074f8fe059e1ef7b3fbe5f7eb3b0f7da",
+      "path": "Assets/_Project/Content/HellMaiden/NativeGAS/Dante/Projectile/Material/cloud_2x2_soft_AB_1.mat"
+    },
+    {
+      "guid": "3420cf7937daaa3a6af443b7070869b9",
+      "path": "Assets/_Project/Content/HellMaiden/NativeGAS/Dante/Projectile/Material/asCartoonCoffee_Flame_004-Basic-_3.0_.mat"
+    },
+    {
+      "guid": "37f8eaf1085d27441d14f2423c554ce2",
+      "path": "Assets/_Project/Content/HellMaiden/NativeGAS/Dante/Projectile/Material/ASfire_3x6_ADD 1.mat"
+    },
+    {
+      "guid": "3c9d591e7931262602e453e085032d3c",
+      "path": "Assets/_Project/Content/HellMaiden/NativeGAS/Dante/Projectile/Material/ASFX_MT_HeadLoop_01_Cosmic 2Rasto_1.mat"
+    },
+    {
+      "guid": "5aac83faf27d9353e99ea2dcdedc055a",
+      "path": "Assets/_Project/Content/HellMaiden/NativeGAS/Dante/Projectile/Material/CartoonCoffee_Circle_Ring_001-Basic-_2.0__0.mat"
+    },
+    {
+      "guid": "8c6817d6dd87bcc86d829324cc74343a",
+      "path": "Assets/_Project/Content/HellMaiden/NativeGAS/Dante/Projectile/Material/glow1_ADD_3.mat"
+    },
+    {
+      "guid": "9f1f9f7d0458063184cfaa025a7f08d4",
+      "path": "Assets/_Project/Content/HellMaiden/NativeGAS/Dante/Projectile/Material/asCartoonCoffee_Flame_004-Basic-_3.0__1.mat"
+    },
+    {
+      "guid": "ad09d228ecb55f87df9587bf0be21d41",
+      "path": "Assets/_Project/Content/HellMaiden/NativeGAS/Dante/Projectile/Material/ASCartoonCoffee_Glow_001-Basic-_2.0_ 2.mat"
+    },
+    {
+      "guid": "bb00fe07e7bcb97bd79a0b4beec404b7",
+      "path": "Assets/_Project/Content/HellMaiden/NativeGAS/Dante/Projectile/Material/asCartoonCoffee_Flame_004-Basic-_3.0__0.mat"
+    },
+    {
+      "guid": "bc0d54f8c128dc0851abf48c5cf6300a",
+      "path": "Assets/_Project/Content/HellMaiden/NativeGAS/Dante/Projectile/Material/ASFX_MT_HeadLoop_01_Cosmic 2Rasto_0.mat"
+    },
+    {
+      "guid": "bcdba449d7427dc8fa87d5939ca81231",
+      "path": "Assets/_Project/Content/HellMaiden/NativeGAS/Dante/Projectile/Material/sparkle2_ADD 1Pixel_0.mat"
+    },
+    {
+      "guid": "d83f3a66c75978f80b83b47447f7bef3",
+      "path": "Assets/_Project/Content/HellMaiden/NativeGAS/Dante/Projectile/Material/CartoonCoffee_Glow_001-Add-_1.0__2.mat"
+    },
+    {
+      "guid": "da7961a882f6632f00351e0fa076ea52",
+      "path": "Assets/_Project/Content/HellMaiden/NativeGAS/Dante/Projectile/Material/Distortion_0.mat"
+    },
+    {
+      "guid": "e1cf0235004b90941bbbd9c6c516ed3e",
+      "path": "Assets/_Project/Content/HellMaiden/NativeGAS/Dante/Projectile/Material/ASFX_MT_HeadLoop_01_Cosmic 2Rasto.mat"
+    },
+    {
+      "guid": "e2eae1876f245de48827587672ae8fdb",
+      "path": "Assets/_Project/Content/HellMaiden/NativeGAS/Dante/Projectile/AnimationClip/PlayerAttack_Dante_Projectile_In.anim"
+    },
+    {
+      "guid": "e3915bb7186be6a85b1aedd2dedcd858",
+      "path": "Assets/_Project/Content/HellMaiden/NativeGAS/Dante/Projectile/Material/1asCartoonCoffee_Flame_004-Basic-_3.0_ 2.mat"
+    }
+  ],
+  "duplicateOutputGuids": {}
+}

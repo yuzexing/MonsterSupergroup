@@ -249,6 +249,8 @@ namespace MonsterSupergroup.NetworkCombat
 
         private void Update()
         {
+            // The preparation coordinator owns menu sessions, including cancellation and round changes.
+            if (networkManager != null && networkManager.UsePreparationRoom) return;
             if (!IsKcpBackendSelected)
             {
                 return;

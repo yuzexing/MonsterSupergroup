@@ -1,0 +1,130 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 468a46d0ae32c3544b7d98094e6448a9, type: 3}
+  m_Name: AddressableAssetSettings
+  m_EditorClassIdentifier: Unity.Addressables.Editor::UnityEditor.AddressableAssets.Settings.AddressableAssetSettings
+  m_DefaultGroup: 0d41b0ce0884bc34db31d33ef58fabbe
+  m_currentHash:
+    serializedVersion: 2
+    Hash: 00000000000000000000000000000000
+  m_OptimizeCatalogSize: 0
+  m_BuildRemoteCatalog: 0
+  m_CatalogRequestsTimeout: 0
+  m_DisableCatalogUpdateOnStart: 0
+  m_InternalIdNamingMode: 0
+  m_InternalBundleIdMode: 1
+  m_AssetLoadMode: 0
+  m_BundledAssetProviderType:
+    m_AssemblyName: Unity.ResourceManager, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    m_ClassName: UnityEngine.ResourceManagement.ResourceProviders.BundledAssetProvider
+  m_AssetBundleProviderType:
+    m_AssemblyName: Unity.ResourceManager, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    m_ClassName: UnityEngine.ResourceManagement.ResourceProviders.AssetBundleProvider
+  m_IgnoreUnsupportedFilesInBuild: 0
+  m_UniqueBundleIds: 0
+  m_EnableJsonCatalog: 0
+  m_NonRecursiveBuilding: 1
+  m_AllowNestedBundleFolders: 0
+  m_CCDEnabled: 0
+  m_maxConcurrentWebRequests: 3
+  m_UseUWRForLocalBundles: 0
+  m_BundleTimeout: 0
+  m_BundleRetryCount: 0
+  m_BundleRedirectLimit: -1
+  m_SharedBundleSettings: 0
+  m_SharedBundleSettingsCustomGroupIndex: 0
+  m_simulatedLoadDelay: 0.1
+  m_ContiguousBundles: 1
+  m_StripUnityVersionFromBundleBuild: 0
+  m_DisableVisibleSubAssetRepresentations: 0
+  m_BuiltInBundleNaming: 0
+  mBuiltInBundleCustomNaming: 
+  m_MonoScriptBundleNaming: 0
+  m_CheckForContentUpdateRestrictionsOption: 0
+  m_MonoScriptBundleCustomNaming: 
+  m_RemoteCatalogBuildPath:
+    m_Id: 
+  m_RemoteCatalogLoadPath:
+    m_Id: 
+  m_ContentStateBuildPathProfileVariableName: 
+  m_CustomContentStateBuildPath: 
+  m_ContentStateBuildPath: 
+  m_BuildAddressablesWithPlayerBuild: 1
+  m_overridePlayerVersion: '[UnityEditor.PlayerSettings.bundleVersion]'
+  m_GroupAssets:
+  - {fileID: 11400000, guid: 014f9dd227a7bd24ab344226a3a6570d, type: 2}
+  - {fileID: 11400000, guid: afb9f664ccb1886468161b43d461c909, type: 2}
+  - {fileID: 11400000, guid: d6ee63791b68e5a43994af0b87a4a895, type: 2}
+  - {fileID: 11400000, guid: 8f83719a4b007464eb76a8189a91a26c, type: 2}
+  - {fileID: 11400000, guid: 575d5137851da2d418dff0b13654cd2a, type: 2}
+  - {fileID: 11400000, guid: db942267fdae7f04bb2cb319daa37b9a, type: 2}
+  - {fileID: 11400000, guid: 11077e9d59751f446adf8d06aa3ef81b, type: 2}
+  - {fileID: 11400000, guid: 3e930dc946b4d0c4da7e0093a5cf04b1, type: 2}
+  - {fileID: 11400000, guid: 3b4a4ef55cdc71e45aa26bd09b8efb43, type: 2}
+  - {fileID: 11400000, guid: 2e79b7ab61da80e47ac1635ba2093fb0, type: 2}
+  - {fileID: 11400000, guid: 85787a615aea69942abcac22cf1c1730, type: 2}
+  m_BuildSettings:
+    m_LogResourceManagerExceptions: 1
+    m_BundleBuildPath: Temp/com.unity.addressables/AssetBundles
+  m_ProfileSettings:
+    m_Profiles:
+    - m_InheritedParent: 
+      m_Id: 94485e67497454540a4069986d2283ed
+      m_ProfileName: Default
+      m_Values:
+      - m_Id: 5b15c499ae0f36149add70d7a86e9083
+        m_Value: '{UnityEngine.AddressableAssets.Addressables.RuntimePath}/[BuildTarget]'
+      - m_Id: 7fe172c3c3a37f243bd96dcabaaad128
+        m_Value: 'ServerData/[BuildTarget]'
+      - m_Id: 9fa23a8a46bf1324d82c91934565137a
+        m_Value: <undefined>
+      - m_Id: b4321e89a6c46e04db43dc26c49d0751
+        m_Value: '[UnityEditor.EditorUserBuildSettings.activeBuildTarget]'
+      - m_Id: c4ee341d04756394698486dd0206c968
+        m_Value: '[UnityEngine.AddressableAssets.Addressables.BuildPath]/[BuildTarget]'
+    m_ProfileEntryNames:
+    - m_Id: 5b15c499ae0f36149add70d7a86e9083
+      m_Name: Local.LoadPath
+      m_InlineUsage: 0
+    - m_Id: 7fe172c3c3a37f243bd96dcabaaad128
+      m_Name: Remote.BuildPath
+      m_InlineUsage: 0
+    - m_Id: 9fa23a8a46bf1324d82c91934565137a
+      m_Name: Remote.LoadPath
+      m_InlineUsage: 0
+    - m_Id: b4321e89a6c46e04db43dc26c49d0751
+      m_Name: BuildTarget
+      m_InlineUsage: 0
+    - m_Id: c4ee341d04756394698486dd0206c968
+      m_Name: Local.BuildPath
+      m_InlineUsage: 0
+    m_ProfileVersion: 1
+  m_LabelTable:
+    m_LabelNames:
+    - default
+    - Locale
+    - Locale-en
+    - Locale-zh-CN
+    - Preload
+  m_SchemaTemplates: []
+  m_GroupTemplateObjects:
+  - {fileID: 11400000, guid: c610dd008084f69459b941d1ae74fa16, type: 2}
+  m_InitializationObjects: []
+  m_CertificateHandlerType:
+    m_AssemblyName: 
+    m_ClassName: 
+  m_ActivePlayerDataBuilderIndex: 2
+  m_DataBuilders:
+  - {fileID: 11400000, guid: 585d975319d9b24439496ecfa91be0f9, type: 2}
+  - {fileID: 11400000, guid: 7efc9d905abb9ce4f89d0f1f53505e6d, type: 2}
+  - {fileID: 11400000, guid: eff26c4cccdd5c2488fce760f2bbf20b, type: 2}
+  m_ActiveProfileId: 94485e67497454540a4069986d2283ed

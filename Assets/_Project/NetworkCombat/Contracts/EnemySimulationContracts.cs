@@ -81,6 +81,7 @@ namespace MonsterSupergroup.NetworkCombat
         public Vector2 Velocity;
         public Vector2 Facing;
         public EnemySimulationSnapshotFlags Flags;
+        public EnemySimulationRuntimeState Runtime;
 
         public bool IsFinite =>
             IsFiniteValue(SampleNetworkTime) &&
@@ -89,7 +90,7 @@ namespace MonsterSupergroup.NetworkCombat
             IsFiniteValue(Velocity.x) &&
             IsFiniteValue(Velocity.y) &&
             IsFiniteValue(Facing.x) &&
-            IsFiniteValue(Facing.y);
+            IsFiniteValue(Facing.y) && Runtime.IsFinite;
 
         private static bool IsFiniteValue(double value)
         {
@@ -100,6 +101,7 @@ namespace MonsterSupergroup.NetworkCombat
     [Serializable]
     public struct EnemySimulationSnapshotBatch
     {
+        public uint Round;
         public uint BatchSequence;
         public EnemySimulationSnapshot[] Snapshots;
     }
@@ -119,6 +121,8 @@ namespace MonsterSupergroup.NetworkCombat
         public float PhaseDuration;
         public EnemyAttackPresentationPhase Phase;
         public Vector2 Facing;
+
+        public EnemySimulationCheckpoint Checkpoint;
 
         public bool IsFinite =>
             IsFiniteValue(StateStartNetworkTime) &&
@@ -158,7 +162,10 @@ namespace MonsterSupergroup.NetworkCombat
     [Serializable]
     public struct EnemyAttackPresentationBatch
     {
+        public uint Round;
         public uint BatchSequence;
         public EnemyAttackPresentationEdge[] Edges;
+        public EnemyProjectileLaunch[] ProjectileLaunches;
+        public EnemyProjectileTermination[] ProjectileTerminations;
     }
 }

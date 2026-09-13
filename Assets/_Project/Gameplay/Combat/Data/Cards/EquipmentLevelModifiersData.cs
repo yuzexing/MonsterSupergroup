@@ -10,18 +10,9 @@ namespace AstralShift.HellMaiden.Data.Cards
 		[SerializeField]
 		private EquipmentModifierApplication[] nativeModifiers;
 
-		[SerializeField]
-		private bool overrideDescription;
-
-		[SerializeField]
-		protected string descriptionKey;
-
-		public EquipmentModifierApplication[] Modifiers =>
-			nativeModifiers ?? Array.Empty<EquipmentModifierApplication>();
-
-		public bool OverrideDescription => overrideDescription;
-
-		public ref string DescriptionKey => ref descriptionKey;
+        [SerializeField] private UnityEngine.Localization.LocalizedString localizedDescription = new();
+        public UnityEngine.Localization.LocalizedString LocalizedDescription => localizedDescription;
+        public EquipmentModifierApplication[] Modifiers => nativeModifiers ?? Array.Empty<EquipmentModifierApplication>();
 
 		public void ConfigureNative(EquipmentModifierApplication[] applications)
 		{

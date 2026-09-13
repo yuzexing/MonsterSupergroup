@@ -85,11 +85,8 @@ namespace MonsterSupergroup.Gameplay.Combat
         {
             get
             {
-                string localized = Kind == UpgradeRewardKind.Weapon ? Weapon.GetTitle() :
+                return Kind == UpgradeRewardKind.Weapon ? Weapon.GetTitle() :
                     Kind == UpgradeRewardKind.Perk ? Perk.GetTitle() : Equipment.GetTitle();
-                string title = Kind == UpgradeRewardKind.Weapon ? Weapon.Title :
-                    Kind == UpgradeRewardKind.Perk ? Perk.Title : Equipment.Title;
-                return string.IsNullOrWhiteSpace(localized) ? title : localized;
             }
         }
     }

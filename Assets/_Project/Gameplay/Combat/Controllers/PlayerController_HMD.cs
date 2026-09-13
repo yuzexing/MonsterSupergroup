@@ -10,6 +10,7 @@ using AstralShift.HellMaiden.Scenes;
 using AstralShift.HellMaiden.UI;
 using AstralShift.Managers;
 using Rewired;
+using MonsterSupergroup.Gameplay.Combat;
 using UnityEngine;
 
 namespace AstralShift.HellMaiden.Controllers
@@ -218,6 +219,7 @@ namespace AstralShift.HellMaiden.Controllers
 
 		public override void Center1(InputActionEventData data)
 		{
+			if (BoundPlayer != null && BoundPlayer.UsesNetworkLifecycle) return;
 			if (!InBusyState && !InHubState && data.eventType == InputActionEventType.ButtonJustPressed && CombatUIManager.Instance != null)
 			{
 				CombatUIManager.Instance.OpenStatsMenu();
@@ -226,6 +228,11 @@ namespace AstralShift.HellMaiden.Controllers
 
 		public override void Center2(InputActionEventData data)
 		{
+			if (BoundPlayer != null && BoundPlayer.UsesNetworkLifecycle)
+			{
+				if (data.eventType == InputActionEventType.ButtonJustPressed) GameplayMenuInput.RequestToggle();
+				return;
+			}
 			if (!InBusyState && data.eventType == InputActionEventType.ButtonJustPressed && !PauseMenuController.blockOpenAction)
 			{
 				ControllerManager.Instance.OverrideGameController<PauseMenuController>();
@@ -328,6 +335,7 @@ namespace AstralShift.HellMaiden.Controllers
 
 		public override void DebugAction1Pressed(InputActionEventData data)
 		{
+			if (GameplayMenuInput.IsOpen) return;
 			if (DeveloperDebug.devMode)
 			{
 				DeveloperDebug.DebugIncreaseHealth();
@@ -342,6 +350,7 @@ namespace AstralShift.HellMaiden.Controllers
 
 		public override void DebugAction3Pressed(InputActionEventData data)
 		{
+			if (GameplayMenuInput.IsOpen) return;
 			if (DeveloperDebug.devMode)
 			{
 				DeveloperDebug.DebugEnemyDamageSwitch();

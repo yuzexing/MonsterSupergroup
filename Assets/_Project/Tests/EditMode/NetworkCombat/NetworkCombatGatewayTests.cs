@@ -371,6 +371,7 @@ namespace MonsterSupergroup.NetworkCombat.Tests
         {
             return new StatusMutation
             {
+                ApplicationRevision = 1,
                 EventId = eventId,
                 RootEventId = eventId,
                 Sequence = (uint)eventId,

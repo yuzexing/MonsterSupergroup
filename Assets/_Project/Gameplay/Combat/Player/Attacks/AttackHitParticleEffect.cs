@@ -15,6 +15,7 @@ namespace AstralShift.HellMaiden.Player.Attacks
 
 		private Coroutine _checkDeathCoroutine;
 		private bool _stopping;
+		private bool _presentationOnly;
 
 		private const float CheckTimeStep = 0.33f;
 
@@ -40,6 +41,7 @@ namespace AstralShift.HellMaiden.Player.Attacks
 
 		public override void Init(WeaponBehaviour behaviour)
 		{
+			_presentationOnly = false;
 			if ((bool)progressionScaler)
 			{
 				progressionScaler.Apply(behaviour);
@@ -48,10 +50,19 @@ namespace AstralShift.HellMaiden.Player.Attacks
 
 		public override void Init(WeaponBehaviour behaviour, AttackSnapshot attack)
 		{
+			_presentationOnly = false;
 			if ((bool)progressionScaler)
 			{
 				progressionScaler.Apply(attack.Stats);
 			}
+		}
+
+		public void InitPresentation(ProjectilePresentationStats stats)
+		{
+			_presentationOnly = true;
+			hitbox?.ClearCallbacks();
+			hitbox?.Toggle(false);
+			if (progressionScaler != null) progressionScaler.Apply(stats);
 		}
 
 		public override void PlayOnEnable(Action onEnd)
@@ -101,7 +112,7 @@ namespace AstralShift.HellMaiden.Player.Attacks
 				return;
 			}
 			system.Play(withChildren: true);
-			hitbox?.Toggle(state: true);
+			hitbox?.Toggle(state: !_presentationOnly);
 			if (timeToLive > 0f)
 			{
 				if (_checkDeathCoroutine != null)

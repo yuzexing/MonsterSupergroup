@@ -13,11 +13,24 @@ MonoBehaviour:
   m_Name: ExtraWeaponSizePerk
   m_EditorClassIdentifier: MonsterSupergroup.Gameplay.Combat::AstralShift.HellMaiden.Data.Perks.PerkData
   ID: 22
-  Title: Weapon Size
-  Description: Adds {WeaponSize}[0]%  Weapon Size.
-  hasLocalization: 1
-  TitleKey: PRK_Name_022
-  DescriptionKey: PRK_Desc_022
+  localizedTitle:
+    m_TableReference:
+      m_TableCollectionName: MonsterContent
+    m_TableEntryReference:
+      m_KeyId: 0
+      m_Key: perk.22.name
+    m_FallbackState: 0
+    m_WaitForCompletion: 0
+    m_LocalVariables: []
+  localizedDescription:
+    m_TableReference:
+      m_TableCollectionName: MonsterContent
+    m_TableEntryReference:
+      m_KeyId: 0
+      m_Key: perk.22.description
+    m_FallbackState: 0
+    m_WaitForCompletion: 0
+    m_LocalVariables: []
   icon: {fileID: 0}
   poolWeight: 1
   Dependencies: []

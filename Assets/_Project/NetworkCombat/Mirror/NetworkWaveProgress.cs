@@ -34,7 +34,8 @@ namespace MonsterSupergroup.NetworkCombat
             producer = null;
         }
 
-        public override void OnStartServer() { snapshot = default; producer = null; }
+        public void ResetForNextRun() { snapshot = default; producer = null; }
+        public override void OnStartServer() => ResetForNextRun();
         public override void OnStopServer()
         {
             if (producer != null) producer.StopWaveRun();

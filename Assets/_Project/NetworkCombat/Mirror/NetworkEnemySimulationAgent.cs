@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using AstralShift.HellMaiden.AI;
 using AstralShift.HellMaiden.AI.Enemy;
 using AstralShift.HellMaiden.Player;
-using AstralShift.HellMaiden.Interactions;
-using AstralShift.QTI.Triggers;
 using Mirror;
 using MonsterSupergroup.Gameplay.Combat;
 using MonsterSupergroup.Gameplay.Local;
@@ -26,7 +24,8 @@ namespace MonsterSupergroup.NetworkCombat
         [SerializeField] private EnemyController enemyController;
         [SerializeField] private bool productMovementOnly = true;
 
-        [SyncVar(hook = nameof(HandleAssignmentChanged))]
+        [SyncVar(hook = nameof(HandleHandoffChanged))]
+        private EnemySimulationHandoff handoff;
         private EnemySimulationAssignment assignment;
 
         [SyncVar]
@@ -46,8 +45,7 @@ namespace MonsterSupergroup.NetworkCombat
                 new Queue<EnemyAttackPresentationEdge>();
         private EnemyAttackPresentationEdge latestAttackPresentation;
         private bool hasLatestAttackPresentation;
-        private PlayerDamageInteraction[] localDamageInteractions =
-            System.Array.Empty<PlayerDamageInteraction>();
+        private EnemyContactDamage contactDamage;
         private uint initialServerTargetPlayerId;
 
         public EnemySimulationAssignment Assignment => assignment;
@@ -87,8 +85,7 @@ namespace MonsterSupergroup.NetworkCombat
         private void Awake()
         {
             ResolveReferences();
-            localDamageInteractions =
-                GetComponentsInChildren<PlayerDamageInteraction>(true);
+            contactDamage = GetComponent<EnemyContactDamage>();
             if (combatant != null)
             {
                 combatant.HealthChanged += HandleHealthChanged;
@@ -143,7 +140,7 @@ namespace MonsterSupergroup.NetworkCombat
         public override void OnStartClient()
         {
             base.OnStartClient();
-            ApplyAssignment(assignment);
+            ApplyHandoff(handoff);
             TryInitializeProductEnemy();
             // A cached late-join attack edge may be applied by registration.
             // Resolve the replicated role and initialize the product Enemy first
@@ -190,6 +187,9 @@ namespace MonsterSupergroup.NetworkCombat
 
         public override void OnStopClient()
         {
+            NetworkCombatWorld.Instance?.ForgetEnemyHitPresentation(netId);
+            hasPendingFutureSnapshot = false;
+            pendingFutureSnapshot = default;
             CancelNetworkKnockbackState(true);
             SetContinuousContactDamageInteractionsActive(false);
             SetAttackScriptExecutionActive(false);
@@ -215,19 +215,12 @@ namespace MonsterSupergroup.NetworkCombat
                     nameof(newAssignment));
             }
 
-            EnemySimulationAssignment previous = assignment;
-            assignment = newAssignment;
-            if (!previous.Equals(newAssignment))
-            {
-                snapshotSequence = 0u;
-                sequenceEpoch = newAssignment.Epoch;
-                ResetAttackPresentationForAssignment(newAssignment.Epoch);
-            }
-            ApplyAssignment(newAssignment);
-            if (!previous.Equals(newAssignment))
-            {
-                QueueAssignmentAttackPresentationBaseline();
-            }
+            var world = NetworkEnemySimulationWorld.Instance;
+            EnemySimulationSnapshot seed = default;
+            world?.Registry.TryGetLatestSnapshot(netId, out seed);
+            seed.EnemyEntityId = netId;
+            SetServerHandoff(new EnemySimulationHandoff { Assignment = newAssignment,
+                Checkpoint = new EnemySimulationCheckpoint { Movement = seed }, CommittedAt = EnemySimulationClock.Now });
         }
 
         public bool TryCaptureSnapshot(
@@ -273,6 +266,7 @@ namespace MonsterSupergroup.NetworkCombat
                 Position = body != null ? body.position : (Vector2)transform.position,
                 Velocity = velocity,
                 Facing = facing,
+                Runtime = CaptureSimulationRuntime(networkTime),
                 Flags = authority.ConsumeDiscontinuity()
                     ? EnemySimulationSnapshotFlags.Discontinuity
                     : EnemySimulationSnapshotFlags.None
@@ -295,6 +289,15 @@ namespace MonsterSupergroup.NetworkCombat
 
         public void ReceiveRemoteSnapshot(EnemySimulationSnapshot snapshot)
         {
+            if (IsCanonicalAlive && snapshot.EnemyEntityId == netId && snapshot.IsFinite &&
+                (EnemySimulationSequence.IsNewer(snapshot.AssignmentEpoch, assignment.Epoch) ||
+                 snapshot.AssignmentEpoch == assignment.Epoch && appliedHandoffEpoch != assignment.Epoch))
+            {
+                if (!hasPendingFutureSnapshot || EnemySimulationSequence.IsNewer(snapshot.AssignmentEpoch, pendingFutureSnapshot.AssignmentEpoch) ||
+                    (snapshot.AssignmentEpoch == pendingFutureSnapshot.AssignmentEpoch && EnemySimulationSequence.IsNewer(snapshot.Sequence, pendingFutureSnapshot.Sequence)))
+                { pendingFutureSnapshot = snapshot; hasPendingFutureSnapshot = true; }
+                return;
+            }
             if (!IsCanonicalAlive ||
                 snapshot.EnemyEntityId != netId ||
                 snapshot.AssignmentEpoch != assignment.Epoch)
@@ -302,7 +305,7 @@ namespace MonsterSupergroup.NetworkCombat
                 return;
             }
 
-            interpolator.Push(snapshot);
+            if (interpolator.Push(snapshot)) AcceptedRemoteSnapshotCount++;
         }
 
         public bool ReceiveRemoteAttackPresentation(
@@ -354,9 +357,21 @@ namespace MonsterSupergroup.NetworkCombat
             }
         }
 
+        private bool runEndStopped;
+        public void StopForRunEnd()
+        {
+            if (runEndStopped) return;
+            runEndStopped = true;
+            ApplyAssignment(assignment);
+            pendingAttackPresentationEdges.Clear();
+            CancelNetworkKnockbackState();
+            if (body != null) { body.linearVelocity = Vector2.zero; body.angularVelocity = 0; }
+        }
         private void Update()
         {
-            if (AssignmentNeedsLocalRefresh())
+            if (BootGameplayNetworkManager.CombatHasEnded) { StopForRunEnd(); return; }
+            if (appliedHandoffEpoch != assignment.Epoch) ApplyHandoff(handoff);
+            if (appliedHandoffEpoch == assignment.Epoch && AssignmentNeedsLocalRefresh())
             {
                 ApplyAssignment(assignment);
             }
@@ -386,22 +401,6 @@ namespace MonsterSupergroup.NetworkCombat
                 : authority.Role == EnemySimulationRole.ClientOwner;
         }
 
-        private void HandleAssignmentChanged(
-            EnemySimulationAssignment previous,
-            EnemySimulationAssignment current)
-        {
-            snapshotSequence = 0u;
-            sequenceEpoch = current.Epoch;
-            ResetAttackPresentationForAssignment(current.Epoch);
-            ApplyAssignment(current);
-            if (NetworkClient.active)
-            {
-                NetworkEnemySimulationWorld.Instance?
-                    .TryApplyPendingAttackPresentation(this);
-            }
-            QueueAssignmentAttackPresentationBaseline();
-        }
-
         private void ApplyAssignment(EnemySimulationAssignment current)
         {
             if (authority == null)
@@ -410,6 +409,7 @@ namespace MonsterSupergroup.NetworkCombat
             }
 
             bool previouslyRanCombat = authority.RunsCombatDecisions;
+            enemyController?.ConfigureSimulationClock(() => EnemySimulationClock.Now, current.Epoch);
             resolvedTarget = ResolvePlayerTarget(current.AggroTargetPlayerId);
             EnemySimulationRole role = ResolveRole(current, resolvedTarget != null);
             authority.ApplyRole(
@@ -443,7 +443,7 @@ namespace MonsterSupergroup.NetworkCombat
                 }
             }
 
-            if (!previouslyRanCombat && authority.RunsCombatDecisions &&
+            if (!restoringHandoff && !previouslyRanCombat && authority.RunsCombatDecisions &&
                 productEnemyInitialized && !productMovementOnly)
             {
                 QueueCurrentAttackPresentation();
@@ -456,7 +456,7 @@ namespace MonsterSupergroup.NetworkCombat
             EnemySimulationAssignment current,
             bool hasTarget)
         {
-            if (current.Host == EnemySimulationHost.Frozen || !hasTarget)
+            if (BootGameplayNetworkManager.CombatHasEnded || current.Host == EnemySimulationHost.Frozen || !hasTarget)
             {
                 return EnemySimulationRole.Frozen;
             }
@@ -549,6 +549,7 @@ namespace MonsterSupergroup.NetworkCombat
         {
             if (currentHealth > 0)
             {
+                if (restoringHandoff || appliedHandoffEpoch != assignment.Epoch) return;
                 ApplyAssignment(assignment);
                 if (NetworkClient.active)
                 {
@@ -564,6 +565,8 @@ namespace MonsterSupergroup.NetworkCombat
             SetAttackScriptExecutionActive(false);
             pendingAttackPresentationEdges.Clear();
             hasLatestAttackPresentation = false;
+            hasPendingFutureSnapshot = false;
+            pendingFutureSnapshot = default;
             interpolator.ClearSnapshots();
             if (localChase != null)
             {
@@ -578,6 +581,7 @@ namespace MonsterSupergroup.NetworkCombat
 
         private void OnDestroy()
         {
+            NetworkCombatWorld.Instance?.ForgetEnemyHitPresentation(netId);
             CancelNetworkKnockbackState(true);
             if (combatant != null)
             {
@@ -595,7 +599,7 @@ namespace MonsterSupergroup.NetworkCombat
             EnemyAttackPresentationPhase phase,
             Vector2 facing)
         {
-            if (productMovementOnly || authority == null ||
+            if (restoringHandoff || productMovementOnly || authority == null ||
                 !authority.RunsCombatDecisions || !IsCanonicalAlive ||
                 assignment.EnemyEntityId == 0u ||
                 assignment.Host == EnemySimulationHost.Frozen)
@@ -603,11 +607,11 @@ namespace MonsterSupergroup.NetworkCombat
                 return;
             }
 
-            QueueAttackPresentation(
-                phase,
-                facing,
-                NetworkTime.time,
-                enemyController.GetAttackPresentationPhaseDuration(phase));
+            var action = enemyController.CaptureSimulationAction(EnemySimulationClock.Now);
+            bool timed = phase == EnemyAttackPresentationPhase.Warning || phase == EnemyAttackPresentationPhase.Active ||
+                phase == EnemyAttackPresentationPhase.Recovery;
+            QueueAttackPresentation(phase, facing, timed ? action.StartAt(phase) : EnemySimulationClock.Now,
+                timed ? (float)Math.Max(0, action.EndAt(phase) - action.StartAt(phase)) : 0);
         }
 
         private void QueueCurrentAttackPresentation()
@@ -617,15 +621,11 @@ namespace MonsterSupergroup.NetworkCombat
                 return;
             }
 
-            Vector2 facing = enemyController.Movement != null
-                ? enemyController.FacingDirection
-                : Vector2.right;
-            QueueAttackPresentation(
-                enemyController.CurrentAttackPresentationPhase,
-                facing,
-                NetworkTime.time,
-                enemyController.GetAttackPresentationPhaseDuration(
-                    enemyController.CurrentAttackPresentationPhase));
+            var state = enemyController.CaptureSimulationAction(EnemySimulationClock.Now);
+            var phase = state.PhaseAt(EnemySimulationClock.Now);
+            QueueAttackPresentation(phase, state.Facing,
+                phase == EnemyAttackPresentationPhase.Inactive || phase == EnemyAttackPresentationPhase.Cancelled ? EnemySimulationClock.Now : state.StartAt(phase),
+                phase == EnemyAttackPresentationPhase.Inactive || phase == EnemyAttackPresentationPhase.Cancelled ? 0 : (float)(state.EndAt(phase) - state.StartAt(phase)));
         }
 
         private void QueueAssignmentAttackPresentationBaseline()
@@ -664,7 +664,8 @@ namespace MonsterSupergroup.NetworkCombat
                     StateStartNetworkTime = stateStartNetworkTime,
                     PhaseDuration = Mathf.Max(0f, phaseDuration),
                     Phase = phase,
-                    Facing = facing
+                    Facing = facing,
+                    Checkpoint = CaptureCurrentCheckpoint()
                 });
         }
 
@@ -687,56 +688,20 @@ namespace MonsterSupergroup.NetworkCombat
 
         private void ConfigureLocalDamageInteractions()
         {
-            if (enemyController == null)
-            {
-                return;
-            }
-
-            for (int i = 0; i < localDamageInteractions.Length; i++)
-            {
-                PlayerDamageInteraction interaction = localDamageInteractions[i];
-                if (interaction == null)
-                {
-                    continue;
-                }
-
-                interaction.enemyStats = enemyController.stats;
-                InteractionTrigger[] triggers =
-                    interaction.GetComponents<InteractionTrigger>();
-                for (int triggerIndex = 0;
-                     triggerIndex < triggers.Length;
-                     triggerIndex++)
-                {
-                    if (triggers[triggerIndex].interaction == null)
-                    {
-                        triggers[triggerIndex].interaction = interaction;
-                    }
-                }
-            }
+            if (enemyController != null) contactDamage?.Bind(enemyController);
         }
 
         private void RefreshContinuousContactDamageInteractions()
         {
-            bool continuousContactDamage = productEnemyInitialized &&
-                enemyController != null &&
-                enemyController.alwaysAttacking &&
-                !enemyController.hasAttackAnimation;
             bool hasActiveSimulationAssignment = authority != null &&
                 authority.Role != EnemySimulationRole.Frozen;
-            SetContinuousContactDamageInteractionsActive(
-                NetworkClient.active && IsCanonicalAlive &&
-                hasActiveSimulationAssignment && continuousContactDamage);
+            SetContinuousContactDamageInteractionsActive(NetworkClient.active &&
+                productEnemyInitialized && IsCanonicalAlive && hasActiveSimulationAssignment);
         }
 
         private void SetContinuousContactDamageInteractionsActive(bool active)
         {
-            for (int i = 0; i < localDamageInteractions.Length; i++)
-            {
-                if (localDamageInteractions[i] != null)
-                {
-                    localDamageInteractions[i].gameObject.SetActive(active);
-                }
-            }
+            contactDamage?.SetRuntimeReady(active);
         }
 
         private void RefreshAttackScriptExecution()
@@ -768,7 +733,7 @@ namespace MonsterSupergroup.NetworkCombat
             enemyController.ApplyReplicatedAttackPresentation(
                 edge.Phase,
                 edge.Facing,
-                edge.ElapsedAt(NetworkTime.time));
+                edge.ElapsedAt(EnemySimulationClock.Now));
         }
 
         private void TryInitializeProductEnemy()
@@ -799,6 +764,7 @@ namespace MonsterSupergroup.NetworkCombat
             }
             ConfigureLocalDamageInteractions();
             productEnemyInitialized = true;
+            NetworkCombatWorld.Instance?.TryPresentPendingEnemyHit(netId);
             RefreshAttackScriptExecution();
             if (hasLatestAttackPresentation)
             {

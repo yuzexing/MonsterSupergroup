@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 87b90f509596441590f999408d8b7e40, type: 3}
+  m_Name: DamageColorsSO
+  m_EditorClassIdentifier:
+  normalDamage:
+    normal: {fileID: 114884547391421755, guid: 96b6d7c4d41045e8a98d2486a70dfcac, type: 2}
+    critical: {fileID: 114884547391421755, guid: 2dc9a75c93af4581ac6ab004b6d19772, type: 2}
+  fireDamage:
+    normal: {fileID: 114884547391421755, guid: ba410ccf23314332bcfe39faeb9d190b, type: 2}
+    critical: {fileID: 114884547391421755, guid: 2dc9a75c93af4581ac6ab004b6d19772, type: 2}
+  poisonDamage:
+    normal: {fileID: 114884547391421755, guid: 231590d866de43c1b70663e218946857, type: 2}
+    critical: {fileID: 114884547391421755, guid: 2dc9a75c93af4581ac6ab004b6d19772, type: 2}
+  bleedDamage:
+    normal: {fileID: 114884547391421755, guid: 5dc1eb28d9cd49a2bce2a46db70d9ec5, type: 2}
+    critical: {fileID: 114884547391421755, guid: 2dc9a75c93af4581ac6ab004b6d19772, type: 2}
+  lightningDamage:
+    normal: {fileID: 114884547391421755, guid: ebd649bb1c2542df94c4308d2ff10358, type: 2}
+    critical: {fileID: 114884547391421755, guid: 2dc9a75c93af4581ac6ab004b6d19772, type: 2}

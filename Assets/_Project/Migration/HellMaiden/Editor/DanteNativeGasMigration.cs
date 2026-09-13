@@ -25,9 +25,9 @@ namespace MonsterSupergroup.HellMaidenMigration.Editor
 
         private static readonly string[] DanteProjectilePrefabPaths =
         {
-            "Assets/GameObject/PlayerAttack_Dante_Projectile.prefab",
-            "Assets/GameObject/PlayerAttack_Dante_Projectile_Fire Variant.prefab",
-            "Assets/GameObject/PlayerAttack_Dante_Projectile_Poison Variant.prefab"
+            "Assets/_Project/GameObject/PlayerAttack_Dante_Projectile.prefab",
+            "Assets/_Project/GameObject/PlayerAttack_Dante_Projectile_Fire Variant.prefab",
+            "Assets/_Project/GameObject/PlayerAttack_Dante_Projectile_Poison Variant.prefab"
         };
 
         private static readonly EquipmentMigration[] EquipmentMigrations =

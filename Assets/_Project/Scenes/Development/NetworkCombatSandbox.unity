@@ -229,7 +229,10 @@ MonoBehaviour:
   spawnPrefabs:
   - {fileID: 8611941000484548922, guid: 18950f20ace3b6c4c93593c880986aff, type: 3}
   - {fileID: 3911887690903730936, guid: 55ff35e83fff4c74ea6f8f2e82883aa2, type: 3}
-  - {fileID: 642612462740718118, guid: e9b6d6b03e4b1e341a17dcc0618c749f, type: 3}
+  - {fileID: 3963200209637973719, guid: e9b6d6b03e4b1e341a17dcc0618c749f, type: 3}
+  - {fileID: 854596986591058299, guid: c3ef8ee2a3373da498d6d7c2c6d014db, type: 3}
+  - {fileID: 7331318918578544153, guid: 05b4427c6fb40c84fb712ac16d351623, type: 3}
+  - {fileID: 6621018548167738675, guid: d2f06231a6b99b448a2eacb121addd48, type: 3}
   exceptionsDisconnect: 1
   snapshotSettings:
     bufferTimeMultiplier: 2
@@ -396,7 +399,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: MonsterSupergroup.Gameplay.Combat::AstralShift.HellMaiden.Combat.PoolManager
   xpPool: {fileID: 0}
   ItemsPool: {fileID: 0}
-  damageColors: {fileID: 0}
+  damageColors: {fileID: 11400000, guid: 53ecbabaef0c4920b428097997a34c2e, type: 2}
 --- !u!4 &244562063
 Transform:
   m_ObjectHideFlags: 0
@@ -607,7 +610,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: MonsterSupergroup.NetworkCombat::MonsterSupergroup.NetworkCombat.NetworkEnemyProcessValidationBootstrap
   networkManager: {fileID: 118453280}
   sandboxSpawner: {fileID: 829410942}
-  skeletonPrefab: {fileID: 642612462740718118, guid: e9b6d6b03e4b1e341a17dcc0618c749f, type: 3}
+  skeletonPrefab: {fileID: 3963200209637973719, guid: e9b6d6b03e4b1e341a17dcc0618c749f, type: 3}
   minimumObservationSeconds: 6
   quitGraceSeconds: 10
   spawnDistance: 3

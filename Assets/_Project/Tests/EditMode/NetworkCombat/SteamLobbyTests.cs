@@ -30,7 +30,7 @@ namespace MonsterSupergroup.NetworkCombat.Tests
             Assert.That(
                 SteamLobbyMetadata.TryGetReadyHostSteamId(
                     SteamLobbyMetadata.GameValue,
-                    "2",
+                    "unsupported-protocol",
                     SteamLobbyMetadata.ReadyState,
                     ValidHostSteamId.ToString(),
                     out _,

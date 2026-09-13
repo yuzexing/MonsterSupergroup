@@ -1,3 +1,4 @@
+using MonsterSupergroup.Gameplay.Options;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -342,7 +343,7 @@ public class SettingMenuGraphics : SettingsTabContentController
 			ApplySettingsIfDirty();
 			Canvas.ForceUpdateCanvases();
 			string term = "STT_KeepSettings";
-			LocalizationMediator.GetTranslation(ref term);
+			term = GameLocalization.Menu(term);
 			PopupLauncher.Instance.RequestPopup(PopupLauncher.PopupType.SmallChoice, new PopupContext(string.Format(term, 10f), (Action)delegate
 			{
 				StopRollbackSettingsCountdown();
@@ -391,7 +392,7 @@ public class SettingMenuGraphics : SettingsTabContentController
 			yield break;
 		}
 		string text = "STT_KeepSettings";
-		LocalizationMediator.GetTranslation(ref text);
+		text = GameLocalization.Menu(text);
 		PopupWindowText textComponent = window.Components.FirstOrDefault((PopupWindowComponent element) => element is PopupWindowText) as PopupWindowText;
 		int timer = 10;
 		while (timer > 0)

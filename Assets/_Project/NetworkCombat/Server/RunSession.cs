@@ -51,15 +51,38 @@ namespace MonsterSupergroup.NetworkCombat
         private readonly Dictionary<int, RunParticipant> byConnection =
             new Dictionary<int, RunParticipant>();
         private readonly List<RunParticipant> participants = new List<RunParticipant>();
+        private readonly HashSet<ulong> launchRoster = new HashSet<ulong>();
+        private readonly List<RunParticipant> launchParticipants = new List<RunParticipant>();
 
-        public string RunId { get; } = Guid.NewGuid().ToString("N");
+        private ulong nextParticipantId = 1;
+        public string RunId { get; private set; } = Guid.NewGuid().ToString("N");
+        public uint Round { get; private set; } = 1;
+        public bool IsRunEnded { get; private set; }
         public bool IsRosterLocked { get; private set; }
-        public IReadOnlyList<RunParticipant> Participants => participants.AsReadOnly();
+        public bool IsRunStarted { get; private set; }
+        public IReadOnlyList<RunParticipant> Participants =>
+            (IsRosterLocked ? launchParticipants : participants).AsReadOnly();
 
         public void BeginRun()
         {
+            if (IsRunEnded) throw new InvalidOperationException("The run has ended.");
             if (participants.Count == 0)
                 throw new InvalidOperationException("A run requires at least one admitted participant.");
+            if (!IsRosterLocked)
+                SealRoster(participants.FindAll(p => p.ConnectionState == RunConnectionState.Connected).ConvertAll(p => p.Id));
+            IsRunStarted = true;
+        }
+
+        public void SealRoster(IEnumerable<ulong> ids)
+        {
+            if (IsRosterLocked) return;
+            var requested = new HashSet<ulong>(ids ?? throw new ArgumentNullException(nameof(ids)));
+            if (requested.Count == 0) throw new InvalidOperationException("The launch roster is empty.");
+            foreach (ulong id in requested)
+                if (!participants.Exists(p => p.Id == id && p.ConnectionState == RunConnectionState.Connected))
+                    throw new InvalidOperationException("The launch roster contains a missing or disconnected participant.");
+            foreach (var participant in participants)
+                if (requested.Contains(participant.Id)) { launchRoster.Add(participant.Id); launchParticipants.Add(participant); }
             IsRosterLocked = true;
         }
 
@@ -82,6 +105,8 @@ namespace MonsterSupergroup.NetworkCombat
             }
             if (byIdentity.TryGetValue(authenticatedIdentity, out participant))
             {
+                if (IsRosterLocked && !launchRoster.Contains(participant.Id))
+                { participant = null; error = "This participant was not in the launch roster."; return false; }
                 if (participant.ConnectionState == RunConnectionState.Connected)
                 { participant = null; error = "Participant is already connected."; return false; }
                 participant.ConnectionId = connectionId;
@@ -91,7 +116,7 @@ namespace MonsterSupergroup.NetworkCombat
             {
                 if (IsRosterLocked)
                 { error = "This run only accepts its original participants."; return false; }
-                participant = new RunParticipant((ulong)participants.Count + 1, authenticatedIdentity, connectionId);
+                participant = new RunParticipant(nextParticipantId++, authenticatedIdentity, connectionId);
                 participants.Add(participant);
                 byIdentity.Add(authenticatedIdentity, participant);
             }
@@ -111,6 +136,36 @@ namespace MonsterSupergroup.NetworkCombat
                 throw new InvalidOperationException("Participant already has an avatar.");
             participant.AvatarId = avatarId;
             participant.ConnectionEpoch = connectionEpoch;
+        }
+
+        public bool TryEndRun(CombatLedger ledger)
+        {
+            if (!IsRunStarted || IsRunEnded || ledger == null) return false;
+            int online = 0;
+            foreach (var participant in Participants)
+            {
+                if (participant.ConnectionState != RunConnectionState.Connected) continue;
+                online++;
+                // An admitted/reconnecting avatar with no restored baseline is unknown, not dead.
+                if (participant.AvatarId == 0 || !ledger.TryGetState(participant.AvatarId, out var state) || state.Alive)
+                    return false;
+            }
+            if (online == 0) return false;
+            IsRunEnded = true;
+            return true;
+        }
+
+        public void BeginNextRound()
+        {
+            if (!IsRunEnded) throw new InvalidOperationException("Only an ended run can be replaced.");
+            RunId = Guid.NewGuid().ToString("N"); Round++;
+            IsRunStarted = false; IsRunEnded = false; IsRosterLocked = false;
+            launchRoster.Clear(); launchParticipants.Clear();
+            foreach (var participant in participants)
+            {
+                participant.AvatarId = 0; participant.ConnectionEpoch = 0;
+                participant.Checkpoint = null; participant.LifeState = RunPlayerLifeState.Active;
+            }
         }
 
         public void Disconnect(int connectionId, PlayerRuntimeCheckpoint checkpoint)

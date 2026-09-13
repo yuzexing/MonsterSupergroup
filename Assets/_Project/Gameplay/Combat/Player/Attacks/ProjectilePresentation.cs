@@ -9,7 +9,9 @@ namespace AstralShift.HellMaiden.Player.Attacks
 		Spawn = 0,
 		Hit = 1,
 		Expired = 2,
-		Cancelled = 3
+		Cancelled = 3,
+		// A piercing contact keeps the projectile and its attack lease alive.
+		Impact = 4
 	}
 
 	[Serializable]

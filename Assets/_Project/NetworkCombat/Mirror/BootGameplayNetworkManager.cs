@@ -8,7 +8,7 @@ using UnityEngine.SceneManagement;
 namespace MonsterSupergroup.NetworkCombat
 {
     [DisallowMultipleComponent]
-    public sealed class BootGameplayNetworkManager : NetworkManager
+    public sealed partial class BootGameplayNetworkManager : NetworkManager
     {
         [Scene]
         [SerializeField] private string gameplayScene = "Assets/Scenes/Gameplay.unity";
@@ -45,6 +45,7 @@ namespace MonsterSupergroup.NetworkCombat
             if (authenticator == null)
                 authenticator = GetComponent<RunSessionAuthenticator>() ?? gameObject.AddComponent<RunSessionAuthenticator>();
             base.Awake();
+            InitializeMenuFlow();
         }
 
         /// <summary>Called by the server's start-run flow after the intended party has joined.</summary>
@@ -57,7 +58,10 @@ namespace MonsterSupergroup.NetworkCombat
         {
             error = null;
             if (!NetworkServer.active) { error = "Only the server can start a run."; return false; }
-            if (Session.IsRosterLocked) return true;
+            if (Session.IsRunEnded) { error = "The run has ended."; return false; }
+            if (Session.IsRunStarted) return true;
+            if (UsePreparationRoom && (ServerRoom == null || ServerRoom.Phase != PreparationPhase.Loading || !ServerRoom.AllGameplayReady))
+            { error = "Waiting for the preparation room loading barrier."; return false; }
             if (!serverGameplayLoaded || IsGameplayTransitioning)
             { error = "Waiting for Gameplay to finish loading."; return false; }
             var world = NetworkCombatWorld.Instance;
@@ -85,7 +89,7 @@ namespace MonsterSupergroup.NetworkCombat
         public bool TryBeginRun(out string error)
         {
             if (!CanBeginRun(out error)) return false;
-            if (Session.IsRosterLocked) return true;
+            if (Session.IsRunStarted) return true;
             if (!TryGetGameplaySpawner(out var spawner, out error) ||
                 !spawner.BeginWaveRun(Session.RunId, out error)) return false;
             Session.BeginRun();
@@ -130,6 +134,11 @@ namespace MonsterSupergroup.NetworkCombat
             CaptureBootScene();
             serverGameplayLoaded = false;
             serverGameplayScene = default;
+            if (UsePreparationRoom)
+            {
+                StartPreparationServer();
+                return;
+            }
             Debug.Log($"[BootGameplay] Server starting; loading '{gameplayScene}'.", this);
             StartCoroutine(ServerLoadGameplay(generation));
         }
@@ -139,6 +148,7 @@ namespace MonsterSupergroup.NetworkCombat
             ++clientSceneGeneration;
             base.OnStartClient();
             CaptureBootScene();
+            RegisterPreparationClient();
         }
 
         public override void OnClientConnect()
@@ -164,6 +174,13 @@ namespace MonsterSupergroup.NetworkCombat
 
         public override void OnServerReady(NetworkConnectionToClient connection)
         {
+            if (UsePreparationRoom) PublishRoom();
+            if (!CanCreateGameplayAvatar)
+            {
+                base.OnServerReady(connection);
+                PublishRoom();
+                return;
+            }
             if (connection != null &&
                 !(connection is LocalConnectionToClient) &&
                 remoteGameplayLoadRequests.Add(connection.connectionId))
@@ -185,6 +202,7 @@ namespace MonsterSupergroup.NetworkCombat
 
         public override void OnServerAddPlayer(NetworkConnectionToClient connection)
         {
+            if (!CanCreateGameplayAvatar) return;
             // Mirror may send AddPlayer alongside the first Ready from Boot.
             // The post-Gameplay Ready callback will create this avatar instead.
             if (connection != null && !connection.isReady) return;
@@ -195,8 +213,9 @@ namespace MonsterSupergroup.NetworkCombat
         {
             if (connection != null)
             {
+                PreparationDisconnected(connection);
                 // Capture before Mirror destroys the avatar and clears its Build/status registries.
-                PlayerRuntimeCheckpoint checkpoint = CapturePlayer(connection.identity);
+                PlayerRuntimeCheckpoint checkpoint = Session.IsRunEnded ? null : CapturePlayer(connection.identity);
                 Session.Disconnect(connection.connectionId, checkpoint);
                 pendingPlayerConnections.Remove(connection.connectionId);
                 remoteGameplayLoadRequests.Remove(connection.connectionId);
@@ -257,6 +276,7 @@ namespace MonsterSupergroup.NetworkCombat
 
         public override void OnStopServer()
         {
+            StopPreparationServer();
             ++serverSceneGeneration;
             if (NetworkCombatWorld.Instance != null)
                 NetworkCombatWorld.Instance.ServerCanonicalBatchProduced -= UpdateParticipantLife;
@@ -286,6 +306,7 @@ namespace MonsterSupergroup.NetworkCombat
 
         public override void OnStopClient()
         {
+            StopPreparationClient();
             ++clientSceneGeneration;
             Debug.Log(
                 $"[BootGameplay] Client stopping; serverActive={NetworkServer.active}.",
@@ -372,6 +393,7 @@ namespace MonsterSupergroup.NetworkCombat
 
         private void QueuePlayerCreation(NetworkConnectionToClient connection)
         {
+            if (!CanCreateGameplayAvatar) return;
             if (connection == null)
             {
                 Debug.LogWarning(
@@ -412,7 +434,7 @@ namespace MonsterSupergroup.NetworkCombat
                 yield return null;
             }
 
-            if (!IsCurrentServerGeneration(generation) ||
+            if (!CanCreateGameplayAvatar || !IsCurrentServerGeneration(generation) ||
                 !IsCurrentConnection(connection) || connection.identity != null)
             {
                 yield break;
@@ -441,7 +463,7 @@ namespace MonsterSupergroup.NetworkCombat
 
             // Disconnect already removes this request. Never remove a new
             // connection's pending entry when Mirror has reused its numeric ID.
-            if (!IsCurrentServerGeneration(generation) || !IsCurrentConnection(connection)) yield break;
+            if (!CanCreateGameplayAvatar || !IsCurrentServerGeneration(generation) || !IsCurrentConnection(connection)) yield break;
 
             if (connection.identity != null ||
                 !serverGameplayScene.IsValid() || !serverGameplayScene.isLoaded)
@@ -458,7 +480,7 @@ namespace MonsterSupergroup.NetworkCombat
             }
 
             yield return null;
-            if (!IsCurrentServerGeneration(generation) || !IsCurrentConnection(connection)) yield break;
+            if (!CanCreateGameplayAvatar || !IsCurrentServerGeneration(generation) || !IsCurrentConnection(connection)) yield break;
             if (connection.identity != null)
             {
                 pendingPlayerConnections.Remove(connectionId);
@@ -491,6 +513,8 @@ namespace MonsterSupergroup.NetworkCombat
                 yield break;
             }
             runtimeParticipant.Prepare(Session.RunId, participant);
+            if (UsePreparationRoom && ServerRoom?.Launch != null)
+                runtimeParticipant.PrepareInitialWeapon(ServerRoom.Launch.WeaponFor(participant.Id));
             if (participant.Checkpoint != null)
             {
                 player.GetComponent<NetworkModifierSelection>().PrepareServerRestore(
@@ -551,11 +575,11 @@ namespace MonsterSupergroup.NetworkCombat
 
             if (bootCamera != null)
             {
-                bootCamera.enabled = !GameplayRuntimeEnvironment.IsDedicatedServer;
+                bootCamera.enabled = !UsePreparationRoom && !GameplayRuntimeEnvironment.IsDedicatedServer;
             }
             if (bootAudioListener != null)
             {
-                bootAudioListener.enabled = !GameplayRuntimeEnvironment.IsDedicatedServer;
+                bootAudioListener.enabled = !UsePreparationRoom && !GameplayRuntimeEnvironment.IsDedicatedServer;
             }
         }
 

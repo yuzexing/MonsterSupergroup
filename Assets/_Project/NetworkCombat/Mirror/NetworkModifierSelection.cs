@@ -75,6 +75,53 @@ namespace MonsterSupergroup.NetworkCombat
         public bool HasOwnerBaseline => receivedRevision != 0;
         public IReadOnlyList<ModifierOffer> ServerOffers => serverOffers;
 
+        private PlayerProgressionDebugState ownerDebugState, sentDebugState;
+        private NetworkConnectionToClient debugConnection;
+        private bool hasOwnerDebugState, sentDebugStateValid, debugOwnerRequested;
+
+        public bool TryReadDebugState(bool serverView, out PlayerProgressionDebugState snapshot)
+        {
+            snapshot = default;
+            if (!isActiveAndEnabled) return false;
+            if (serverView)
+            {
+                if (!isServer || buildRevision == 0) return false;
+                snapshot = ReadServerDebugState();
+                return true;
+            }
+            if (!isOwned || !HasOwnerBaseline || !hasOwnerDebugState) return false;
+            snapshot = ownerDebugState;
+            return true;
+        }
+
+        private PlayerProgressionDebugState ReadServerDebugState() => new PlayerProgressionDebugState
+        {
+            PendingUpgradeCount = PendingUpgradeCount, Stage = stage, OfferedLevel = OfferedLevel,
+            BuildRevision = buildRevision, BuildReady = build != null && build.IsBuildActive, IsSelecting = selecting
+        };
+
+        private void LateUpdate()
+        {
+            // A changed-value notification independent of UI visibility. This also covers retained
+            // rewards with no legal offers, which do not pass through SendOwnerState.
+            if (!isServer || !debugOwnerRequested || connectionToClient == null || !connectionToClient.isReady ||
+                connectionToClient.identity != netIdentity) return;
+            PlayerProgressionDebugState current = ReadServerDebugState();
+            if (sentDebugStateValid && ReferenceEquals(debugConnection, connectionToClient) && current.Equals(sentDebugState)) return;
+            debugConnection = connectionToClient;
+            sentDebugState = current;
+            sentDebugStateValid = true;
+            TargetReceiveDebugState(connectionToClient, current);
+        }
+
+        [TargetRpc]
+        private void TargetReceiveDebugState(NetworkConnectionToClient target, PlayerProgressionDebugState snapshot)
+        {
+            if (!isOwned || !ownerReady) return;
+            ownerDebugState = snapshot;
+            hasOwnerDebugState = true;
+        }
+
         /// <summary>Called by the server spawn coordinator before AddPlayerForConnection invokes callbacks.</summary>
         public void PrepareServerRestore(PlayerBuildSnapshot buildState, PlayerProgressionSnapshot progressionState)
         {
@@ -263,6 +310,8 @@ namespace MonsterSupergroup.NetworkCombat
         [Command]
         private void CmdRequestCurrentState(bool canSelect)
         {
+            debugOwnerRequested = true;
+            sentDebugStateValid = false;
             ownerCanSelect = canSelect;
             if (!canSelect && PendingEventId != 0) ServerCancelPending();
             else SendOwnerState();
@@ -308,6 +357,7 @@ namespace MonsterSupergroup.NetworkCombat
         [Server]
         public bool TryGrantExperience(float amount)
         {
+            if (BootGameplayNetworkManager.CombatHasEnded) return false;
             if (float.IsNaN(amount) || float.IsInfinity(amount) || amount <= 0 ||
                 !build.IsBuildActive || world == null || !world.Gateway.Ledger.IsAlive(netId)) return false;
             var xpWorld = NetworkExperienceWorld.Current;
@@ -470,7 +520,7 @@ namespace MonsterSupergroup.NetworkCombat
         }
 
         private bool ValidRequest(NetworkConnectionToClient sender, ulong eventId) =>
-            isActiveAndEnabled && ownerCanSelect && sender != null && sender == connectionToClient &&
+            !BootGameplayNetworkManager.CombatHasEnded && isActiveAndEnabled && ownerCanSelect && sender != null && sender == connectionToClient &&
             sender.identity == netIdentity && eventId != 0 && eventId == PendingEventId &&
             build.IsBuildActive && build.InitialWeapon == serverWeapon &&
             (world == null || world.Gateway.Ledger.IsAlive(netId));
@@ -686,9 +736,10 @@ namespace MonsterSupergroup.NetworkCombat
 
         private void Update()
         {
+            if (BootGameplayNetworkManager.CombatHasEnded) return;
             if (isOwned && NetworkClient.active)
             {
-                if (Application.isFocused && Input.GetKeyDown(KeyCode.F5)) RequestDebugLevelUp();
+                if (!MonsterSupergroup.Gameplay.Combat.GameplayMenuInput.IsOpen && Application.isFocused && Input.GetKeyDown(KeyCode.F5)) RequestDebugLevelUp();
                 if (!presentation.isActiveAndEnabled && ownerReady)
                 {
                     CmdSetSelectionAvailable(false);
@@ -768,6 +819,8 @@ namespace MonsterSupergroup.NetworkCombat
 
         private void ReleaseOwner()
         {
+            hasOwnerDebugState = false;
+            ownerDebugState = default;
             ownerReady = false;
             localEventId = 0;
             receivedRevision = 0;
@@ -778,6 +831,8 @@ namespace MonsterSupergroup.NetworkCombat
 
         public override void OnStopServer()
         {
+            debugOwnerRequested = sentDebugStateValid = false;
+            debugConnection = null;
             if (world != null)
             {
                 world.Gateway.ConfirmedKillProduced -= OnConfirmedKill;

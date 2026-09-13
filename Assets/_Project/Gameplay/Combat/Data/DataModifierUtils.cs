@@ -1,3 +1,4 @@
+using MonsterSupergroup.Gameplay.Options;
 using System;
 using System.Globalization;
 using System.Reflection;
@@ -77,7 +78,7 @@ namespace AstralShift.HellMaiden.Data
 				_tempStringBuilder.AppendFormat(CultureInfo.InvariantCulture, "{0:0.##}", value);
 				if (appendUnits)
 				{
-					_tempStringBuilder.AppendFormat(CultureInfo.InvariantCulture, string.Format(" <size={0}>{1}</size>", 25, LocalizationMediator.GetTranslation("STT_ATKs")));
+					_tempStringBuilder.AppendFormat(CultureInfo.InvariantCulture, string.Format(" <size={0}>{1}</size>", 25, GameLocalization.Menu("STT_ATKs")));
 				}
 				break;
 			case AttackStatType.Size:
@@ -129,7 +130,7 @@ namespace AstralShift.HellMaiden.Data
 				_tempStringBuilder.AppendFormat(CultureInfo.InvariantCulture, " {0:0.##}", value);
 				if (appendUnits)
 				{
-					_tempStringBuilder.AppendFormat(CultureInfo.InvariantCulture, string.Format(" <size={0}>{1}</size>", 25, LocalizationMediator.GetTranslation("STT_ATKs")));
+					_tempStringBuilder.AppendFormat(CultureInfo.InvariantCulture, string.Format(" <size={0}>{1}</size>", 25, GameLocalization.Menu("STT_ATKs")));
 				}
 				break;
 			case AttackStatType.Size:

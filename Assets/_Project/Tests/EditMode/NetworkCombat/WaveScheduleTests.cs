@@ -79,16 +79,17 @@ namespace MonsterSupergroup.NetworkCombat.Tests
         [Test]
         public void Rules_AreCaptured_NotLiveReadDuringRun()
         {
-            var rules = ScriptableObject.CreateInstance<GameplayWaveRules>();
+            var rules = UnityEngine.Object.Instantiate(AssetDatabase.LoadAssetAtPath<GameplayWaveRules>(
+                "Assets/_Project/Content/NetworkCombat/GameplayWaveRules.asset"));
             try
             {
                 Assert.That(rules.TryCapture(out var captured, out _), Is.True);
                 var serialized = new SerializedObject(rules);
-                serialized.FindProperty("enemiesPerWave").intValue = 2;
+                serialized.FindProperty("maximumAlive").intValue = 2;
                 serialized.ApplyModifiedPropertiesWithoutUndo();
                 Assert.That(rules.TryCapture(out var changed, out _), Is.True);
-                Assert.That(captured.Count, Is.EqualTo(6));
-                Assert.That(changed.Count, Is.EqualTo(2));
+                Assert.That(captured.Limit, Is.EqualTo(30));
+                Assert.That(changed.Limit, Is.EqualTo(2));
                 Assert.Throws<ArgumentException>(() => new WaveParameters(10, 6, 2, 30));
                 Assert.Throws<ArgumentException>(() => new WaveParameters(double.NaN, 6, 2, 30));
                 Assert.Throws<ArgumentException>(() => new WaveParameters(30, 6, 2, 0));

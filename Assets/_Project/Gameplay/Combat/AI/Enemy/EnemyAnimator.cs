@@ -630,14 +630,21 @@ namespace AstralShift.HellMaiden.AI.Enemy
 
 		public void HurtBlinkAnimation()
 		{
-			if (!(_controller == null) && _controller.isActiveAndEnabled && base.enabled && base.gameObject.activeSelf)
+			TryHurtBlinkAnimation();
+		}
+
+		public bool TryHurtBlinkAnimation()
+		{
+			if (_controller != null && _controller.isActiveAndEnabled && isActiveAndEnabled)
 			{
 				if (_hurtBlinkAnimation != null)
 				{
 					StopCoroutine(_hurtBlinkAnimation);
 				}
 				_hurtBlinkAnimation = StartCoroutine(HurtBlinkAnimationCoroutine());
+				return _hurtBlinkAnimation != null;
 			}
+			return false;
 		}
 
 		protected virtual IEnumerator HurtBlinkAnimationCoroutine()

@@ -17,7 +17,7 @@ using UnityEngine.SceneManagement;
 namespace MonsterSupergroup.Gameplay.Tests
 {
     // Test assemblies only. Files coordinate phases; all hits, admission, handoff and positions use Boot/Mirror.
-    public sealed class OrdinaryKnockbackProcessProbe : MonoBehaviour
+    public sealed partial class OrdinaryKnockbackProcessProbe : MonoBehaviour
     {
         private string role, artifacts;
         private bool dedicated, impaired, capture, finished;
@@ -46,6 +46,8 @@ namespace MonsterSupergroup.Gameplay.Tests
             probe.port = ushort.Parse(args.First(a => a.StartsWith("--m3-port=")).Substring(10));
             probe.dedicated = args.Contains("--m3-dedicated"); probe.impaired = args.Contains("--m3-impaired");
             probe.capture = args.Contains("--m3-capture");
+            probe.validateDamageNumbers = args.Contains("--enemy-damage-numbers");
+            probe.validateHitFlash = args.Contains("--enemy-hit-flash") || probe.validateDamageNumbers;
             DontDestroyOnLoad(probe.gameObject);
         }
         private IEnumerator Start()
@@ -79,22 +81,39 @@ namespace MonsterSupergroup.Gameplay.Tests
             if (enemy != null && enemy != preparedEnemy && enemy.ProductEnemyInitialized)
             {
                 preparedEnemy = enemy;
+                // This fixture measures hit impulses and navigation recovery. Active
+                // enemies must not start an unrelated attack when the weapon is close.
+                if (!enemy.ProductMovementOnly) Controller.attackDistance = 0;
                 Controller.Movement.StopMovement();
                 Body.gravityScale = 0; // Isolate impulses from gravity while the fixture pauses navigation.
                 Body.linearVelocity = Vector2.zero;
             }
+            // Full-FSM enemies resume chasing after a hit. Hold navigation between
+            // impulse samples so the shared position-convergence assertion measures
+            // knockback rather than a continuously moving target. The authoritative
+            // phase explicitly measures real navigation before holding it again.
+            if (enemy != null && preparedEnemy == enemy && !enemy.ProductMovementOnly &&
+                !enemy.HasActiveNetworkKnockback && (!Has("fire-authoritative") || Has("complete-authoritative")))
+                Controller.Movement.StopMovement();
         }
         private void PrepareGameplay(Scene scene, LoadSceneMode mode)
         {
             if (scene.path != "Assets/_Project/Scenes/Gameplay.unity") return;
             foreach (var root in scene.GetRootGameObjects())
                 foreach (var spawner in root.GetComponentsInChildren<NetworkGameplayEnemySpawner>(true))
-                { enemyPrefab = spawner.EnemyPrefab; spawner.Configure(spawner.EnemyPrefab, 5); spawner.enabled = false; }
+                {
+                    const string option = "--m3-enemy-prefab=";
+                    string selected = Environment.GetCommandLineArgs().FirstOrDefault(a => a.StartsWith(option));
+                    enemyPrefab = selected == null ? spawner.EnemyPrefab :
+                        manager.spawnPrefabs.Single(p => p.name == selected.Substring(option.Length));
+                    spawner.Configure(enemyPrefab, 5); spawner.enabled = false;
+                }
         }
         private IEnumerator Run()
         {
             manager = FindFirstObjectByType<BootGameplayNetworkManager>();
             Require(manager != null, "Must start through Boot.");
+            if (validateHitFlash) manager.ConfigurePreparationFlow(false);
             gameObject.AddComponent<WeaponAttackAdmissionFixtureGate>();
             ConfigureFixtureAssets();
             var backend = manager.GetComponent<NetworkBackendBootstrap>();
@@ -123,6 +142,7 @@ namespace MonsterSupergroup.Gameplay.Tests
             }
             while (manager.IsGameplayLoaded || manager.IsGameplayTransitioning || NetworkClient.active || NetworkServer.active) yield return null;
             Require(FindObjectsByType<NetworkEnemySimulationAgent>(FindObjectsSortMode.None).Length == 0, "Enemy survived Gameplay shutdown.");
+            if (validateDamageNumbers) Require(FindObjectsByType<DamageNumbersPro.DamageNumber>(FindObjectsInactive.Include, FindObjectsSortMode.None).Length == 0, "Damage number survived shutdown.");
             Mark("stopped-" + role);
         }
         private IEnumerator RunServer()
@@ -141,6 +161,7 @@ namespace MonsterSupergroup.Gameplay.Tests
             while (!Has("enemy-ready-client") || !Has("enemy-ready-" + Second)) yield return null;
             var gateway = NetworkCombatWorld.Instance.Gateway;
             gateway.CombatResultAccepted += TraceAccepted;
+            if (validateDamageNumbers) NetworkCombatWorld.Instance.ServerCanonicalBatchProduced += RecordAcceptedNumbers;
             World.ServerPlayerUnregistered += departing =>
             {
                 if (enemy != null && enemy.Assignment.SimulationOwnerPlayerId == departing.PlayerEntityId &&
@@ -157,9 +178,14 @@ namespace MonsterSupergroup.Gameplay.Tests
             while (gateway.Metrics.AcceptedCombatResults == accepted) yield return null;
             Mark("disconnect-now");
             while (!Has("disconnected") || NetworkServer.spawned.ContainsKey(primary)) yield return null;
-            Require(enemy.Assignment.Host == EnemySimulationHost.ServerFallback, "A surviving player must cause server fallback.");
+            if (validateHitFlash)
+                Require(enemy.Assignment.Host == EnemySimulationHost.ClientPlayer &&
+                    enemy.Assignment.SimulationOwnerPlayerId == uint.Parse(Read("ready-" + Second)),
+                    "The surviving player must receive the current product handoff.");
+            else Require(enemy.Assignment.Host == EnemySimulationHost.ServerFallback, "A surviving player must cause server fallback.");
             Debug.Log($"[M3Process] handoff lastSnapshot={takeoverPosition} body={Body.position} transform={enemy.transform.position}");
-            Require(Vector2.Distance(Body.position, takeoverPosition) <= .02f, "Server takeover lost the last simulator position before its next attack.");
+            Vector2 handoffPosition = validateHitFlash ? enemy.Handoff.Checkpoint.Movement.Position : Body.position;
+            Require(Vector2.Distance(handoffPosition, takeoverPosition) <= .02f, "Takeover lost the last simulator checkpoint.");
             Require(!gateway.Attacks.RequiresAdmission(primary), "Disconnected source retained old attack roots.");
             yield return ServerPhase("fallback", new[] { Second }, new[] { Second });
             Mark("reconnect");
@@ -170,17 +196,31 @@ namespace MonsterSupergroup.Gameplay.Tests
             Controller.Movement.ResumeMovement();
             Body.gravityScale = enemyPrefab.GetComponent<Rigidbody2D>().gravityScale;
             yield return ServerPhase("authoritative", new[] { Second }, new[] { "client", Second });
+            if (validateHitFlash) yield return ServerFlashDots();
+            if (validateDamageNumbers && role == "server") Require(FindObjectsByType<DamageNumbersPro.DamageNumber>(FindObjectsInactive.Include, FindObjectsSortMode.None).Length == 0, "Dedicated server instantiated damage number objects.");
             Mark("stop");
             while (!Has("client-done-client") || !Has("client-done-" + Second)) yield return null;
         }
         private IEnumerator ServerPhase(string phase, string[] attackers, string[] viewers)
         {
+            // The disconnect case intentionally transfers a still-running impulse.
+            // Independent-hit phases begin only after that inherited impulse finishes.
+            while (enemy.AppliedHandoffEpoch != enemy.Assignment.Epoch || enemy.HasActiveNetworkKnockback) yield return null;
             var gateway = NetworkCombatWorld.Instance.Gateway;
             gateway.Ledger.TryGetState(enemy.netId, out var before);
             int applications = enemy.AppliedOrdinaryKnockbackCount;
+            acceptedNumberIds.Clear();
             Mark("fire-" + phase, enemy.Assignment.Epoch.ToString());
             foreach (string viewer in viewers) while (!Has(phase + "-" + viewer)) yield return null;
             int hits = attackers.Sum(attacker => JsonUtility.FromJson<Observation>(Read(phase + "-" + attacker)).hits);
+            if (validateHitFlash)
+                foreach (string viewer in viewers)
+                    Require(JsonUtility.FromJson<Observation>(Read(phase + "-" + viewer)).flashes == hits,
+                        phase + ": viewer " + viewer + " did not present each hit exactly once.");
+            if (validateDamageNumbers)
+                foreach (string viewer in viewers)
+                    Require(JsonUtility.FromJson<Observation>(Read(phase + "-" + viewer)).numbers == hits,
+                        phase + ": viewer " + viewer + " missed or duplicated damage numbers.");
             if (phase == "authoritative")
             {
                 Require(Controller.Movement.CanMove && !enemy.HasActiveNetworkKnockback, "Ordinary recovery did not restore product navigation.");
@@ -192,12 +232,16 @@ namespace MonsterSupergroup.Gameplay.Tests
             gateway.Ledger.TryGetState(enemy.netId, out var after);
             Require(after.Health == before.Health - hits * 12, $"{phase}: canonical HP {after.Health}, expected {before.Health - hits * 12}; rejectedRoot={gateway.Metrics.GetRejected(CombatRejectionReason.InvalidAttackRoot)} rate={gateway.Metrics.GetRejected(CombatRejectionReason.InvalidAttackRate)}.");
             int totalApplications = enemy.AppliedOrdinaryKnockbackCount - applications;
-            if (enemy.Assignment.Host == EnemySimulationHost.ClientPlayer)
-                totalApplications += JsonUtility.FromJson<Observation>(Read(phase + "-client")).applications;
+            if (enemy.Assignment.Host == EnemySimulationHost.ClientPlayer &&
+                !(role == "host" && enemy.Assignment.SimulationOwnerPlayerId == NetworkClient.localPlayer.netId))
+            {
+                string simulator = enemy.Assignment.SimulationOwnerPlayerId == uint.Parse(Read("ready-" + Second)) ? Second : "client";
+                totalApplications += JsonUtility.FromJson<Observation>(Read(phase + "-" + simulator)).applications;
+            }
             Require(totalApplications >= 3 && totalApplications <= hits, $"{phase}: {totalApplications} applications for {hits} hits.");
             if (phase != "both") Require(totalApplications == hits, $"{phase}: {totalApplications}/{hits} impulses; rejected={World.RejectedOrdinaryKnockbackCount}, epoch={enemy.Assignment.Epoch}.");
             Require(World.Registry.TryGetLatestSnapshot(enemy.netId, out var latest), "Missing simulator snapshot.");
-            Mark("position-" + phase, JsonUtility.ToJson(new Observation { x = latest.Position.x, y = latest.Position.y, health = after.Health }));
+            Mark("position-" + phase, JsonUtility.ToJson(new Observation { x = latest.Position.x, y = latest.Position.y, health = after.Health, ids = acceptedNumberIds.ToArray() }));
             foreach (string viewer in viewers) while (!Has("converged-" + phase + "-" + viewer)) yield return null;
             Debug.Log($"[M3Process] phase={phase} hits={hits} applications={totalApplications} hp={after.Health} host={enemy.Assignment.Host} epoch={enemy.Assignment.Epoch} position={latest.Position}");
             Mark("complete-" + phase);
@@ -205,6 +249,8 @@ namespace MonsterSupergroup.Gameplay.Tests
         private IEnumerator RunClient()
         {
             yield return AwaitOwner();
+            if (validateHitFlash) NetworkCombatWorld.Instance.EnemyHitPresented += RecordFlash;
+            if (validateDamageNumbers) NetworkCombatWorld.Instance.EnemyDamageNumberPresented += RecordNumber;
             Mark("ready-" + role, NetworkClient.localPlayer.netId.ToString());
             while (!Has("enemy-id")) yield return null;
             yield return AwaitEnemy();
@@ -233,6 +279,7 @@ namespace MonsterSupergroup.Gameplay.Tests
             }
             else yield return ClientPhase("fallback", true);
             yield return ClientPhase("authoritative", role == Second);
+            if (validateHitFlash) yield return ClientFlashDots();
             while (!Has("stop")) yield return null;
             Mark("client-done-" + role);
         }
@@ -242,6 +289,15 @@ namespace MonsterSupergroup.Gameplay.Tests
             uint phaseEpoch = uint.Parse(Read("fire-" + phase));
             // Old-epoch requests during handoff are deliberately dropped. Start the next acceptance case only after SyncVar delivery.
             while (enemy.Assignment.Epoch != phaseEpoch) yield return null;
+            while (enemy.AppliedHandoffEpoch != phaseEpoch || enemy.HasActiveNetworkKnockback) yield return null;
+            if (validateHitFlash)
+            {
+                flashIds.Clear();
+                numberIds.Clear();
+                Mark("flash-ready-" + phase + "-" + role);
+                if (phase != "fallback")
+                    while (!Has("flash-ready-" + phase + "-client") || !Has("flash-ready-" + phase + "-" + Second)) yield return null;
+            }
             var bridge = NetworkClient.localPlayer.GetComponent<MirrorNetworkCombatBridge>();
             bridge.Trace.Clear();
             int before = enemy.AppliedOrdinaryKnockbackCount;
@@ -251,6 +307,8 @@ namespace MonsterSupergroup.Gameplay.Tests
             Action<NativeGasHit, CombatResolution> observe = (hit, result) =>
             {
                 notifications++;
+                if (validateHitFlash) Require(flashIds.Contains(result.DamageContext.EventId.Value), "Local flash waited for server confirmation.");
+                if (validateDamageNumbers) Require(numberIds.Contains(result.DamageContext.EventId.Value), "Local damage number waited for server confirmation.");
                 if (phase == "self") Require(enemy.AppliedOrdinaryKnockbackCount - before == notifications, "Simulator waited for network or replayed an echo.");
                 if (!enemy.Authority.RunsNavigation) Require(enemy.AppliedOrdinaryKnockbackCount == before && !enemy.HasActiveNetworkKnockback, "Observer started a real impulse.");
                 if (capture && notifications == 2) ScreenCapture.CaptureScreenshot(Path.Combine(artifacts, phase + "-hit-" + role + ".png"));
@@ -271,12 +329,13 @@ namespace MonsterSupergroup.Gameplay.Tests
             var hits = bridge.Trace.Snapshot().Where(e => e.Kind == CombatTraceKind.DamageResolved && e.TargetEntityId == enemy.netId).ToArray();
             if (attack)
             {
-                Require(hits.Length >= 3 && hits.Length == notifications, phase + ": missing real repeated hits/feedback.");
+                Require(hits.Length >= 3 && hits.Length == notifications,
+                    $"{phase}: missing real repeated hits/feedback: hits={hits.Length}, feedback={notifications}, canAttack={weapon.CanAttack}.");
                 Require(hits.Select(e => e.EventId).Distinct().Count() == hits.Length && hits.Select(e => e.RootEventId).Distinct().Count() == 1, "Repeated hits lost individual event identities.");
             }
             else Require(hits.Length == 0, "Non-attacker ran GAS.");
             int delta = enemy.AppliedOrdinaryKnockbackCount - before;
-            Mark(phase + "-" + role, JsonUtility.ToJson(new Observation { hits = hits.Length, applications = delta }));
+            Mark(phase + "-" + role, JsonUtility.ToJson(new Observation { hits = hits.Length, applications = delta, flashes = flashIds.Count, numbers = numberIds.Count }));
             Debug.Log($"[M3Process] phase={phase} role={role} events={string.Join(",", hits.Select(e => e.EventId.Value))} feedback={notifications} applications={delta} simulator={enemy.Authority.RunsNavigation}");
             while (!Has("position-" + phase)) yield return null;
             var expected = JsonUtility.FromJson<Observation>(Read("position-" + phase));
@@ -284,6 +343,7 @@ namespace MonsterSupergroup.Gameplay.Tests
             while ((Vector2.Distance(Body.position, new Vector2(expected.x, expected.y)) > .02f || Controller.CurrentHealth != expected.health) && Time.realtimeSinceStartup < settle) yield return null;
             Require(Vector2.Distance(Body.position, new Vector2(expected.x, expected.y)) <= .02f, phase + ": observer did not converge within .02 world units.");
             Require(Controller.CurrentHealth == expected.health, phase + ": local and canonical HP did not converge.");
+            if (validateDamageNumbers) Require(numberIds.SetEquals(expected.ids), phase + ": presented number identities differ from accepted damage.");
             Require(!enemy.HasActiveNetworkKnockback, phase + ": impulse did not finish.");
             if (capture) ScreenCapture.CaptureScreenshot(Path.Combine(artifacts, phase + "-settled-" + role + ".png"));
             Mark("converged-" + phase + "-" + role);
@@ -304,7 +364,11 @@ namespace MonsterSupergroup.Gameplay.Tests
         }
         private void KeepContact(CirclingAttackBehaviour weapon)
         {
-            MovePlayer(Controller.hurtBox.GetPosition() - Vector2.right * (weapon.baseRadius * weapon.SizeValue + .15f));
+            // Follow the actual authored collider offset and player scale, as the PlayMode fixture does.
+            Vector2 offset = weapon.transform.TransformPoint(Vector3.right * (weapon.baseRadius * weapon.SizeValue)) - Player.transform.position;
+            var orb = weapon.GetComponentsInChildren<AnimatedAttack>().FirstOrDefault(a => a.hitbox != null && a.hitbox.collider.enabled);
+            if (orb != null) offset = orb.hitbox.collider.bounds.center - Player.transform.position;
+            MovePlayer((Vector2)Controller.hurtBox.GetBounds().center - offset);
         }
         private void MovePlayer(Vector2 position)
         {
@@ -336,7 +400,7 @@ namespace MonsterSupergroup.Gameplay.Tests
             }).ToArray());
             db.ConfigureWeaponDatabase(weapons);
         }
-        [Serializable] private sealed class Observation { public int hits, applications, health; public float x, y; }
+        [Serializable] private sealed class Observation { public int hits, applications, health, flashes, numbers; public float x, y; public ulong[] ids; }
         private void TraceAccepted(CombatResult result, CombatApplyResult applied, double time)
         {
             if (enemy == null || result.TargetEntityId != enemy.netId) return;

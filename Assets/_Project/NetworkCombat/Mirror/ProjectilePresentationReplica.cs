@@ -40,7 +40,7 @@ namespace MonsterSupergroup.NetworkCombat
 
         public bool TrySpawn(
             ProjectilePresentationSpawn spawn,
-            float elapsedSeconds)
+            float elapsedSeconds, bool playLaunchSound = true)
         {
             ThrowIfDisposed();
             if (!spawn.Key.IsValid || activeProjectiles.ContainsKey(spawn.Key) ||
@@ -52,7 +52,7 @@ namespace MonsterSupergroup.NetworkCombat
             ProjectileAttack projectile = emitter.PlayPresentation(
                 spawn,
                 elapsedSeconds,
-                returned => HandleReturned(spawn.Key, returned));
+                returned => HandleReturned(spawn.Key, returned), playLaunchSound);
             activeProjectiles.Add(spawn.Key, projectile);
             return true;
         }

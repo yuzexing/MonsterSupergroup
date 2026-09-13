@@ -8,8 +8,8 @@ using UnityEngine;
 
 namespace MonsterSupergroup.NetworkCombat
 {
-    public struct RunIdentityRequest : NetworkMessage { public string ResumeToken; }
-    public struct RunIdentityResponse : NetworkMessage { public bool Accepted; public string ResumeToken; }
+    public struct RunIdentityRequest : NetworkMessage { public string ResumeToken; public string DisplayName; public string Version; }
+    public struct RunIdentityResponse : NetworkMessage { public bool Accepted; public string ResumeToken; public string Error; }
 
     /// <summary>Steam uses transport peer identity. KCP uses a server-issued, session-scoped bearer token.</summary>
     [DisallowMultipleComponent]
@@ -41,12 +41,22 @@ namespace MonsterSupergroup.NetworkCombat
         public override void OnClientAuthenticate()
         {
             clientTokens.TryGetValue(ClientEndpoint, out string token);
-            NetworkClient.Send(new RunIdentityRequest { ResumeToken = token });
+            var steam = Manager.GetComponent<SteamLobbyService>();
+            string name = steam != null && steam.IsSteamInitialized ? SteamFriends.GetPersonaName() : Environment.UserName;
+            NetworkClient.Send(new RunIdentityRequest { ResumeToken = token, DisplayName = name,
+                Version = SteamLobbyMetadata.ProtocolValue + ":" + Application.version });
         }
 
         private void ReceiveIdentity(NetworkConnectionToClient connection, RunIdentityRequest request)
         {
             if (connection.isAuthenticated) return;
+            if (Manager.UsePreparationRoom && request.Version != SteamLobbyMetadata.ProtocolValue + ":" + Application.version)
+            { RejectWithReason(connection, "游戏版本不兼容，请使用相同版本。"); return; }
+            if (Manager.UsePreparationRoom && (Manager.ServerRoom?.Phase == PreparationPhase.Loading || Manager.ServerRoom?.Phase == PreparationPhase.Transitioning))
+            { RejectWithReason(connection, "房间正在加载，请稍后重连。"); return; }
+            if (Manager.UsePreparationRoom && Manager.ServerRoom?.Phase == PreparationPhase.Preparing &&
+                Manager.ServerRoom.Count >= PreparationRoom.Capacity)
+            { RejectWithReason(connection, "房间已满（最多四人）。"); return; }
             string identity;
             string token = null;
             if (Manager.transport is FizzySteamworks)
@@ -72,8 +82,15 @@ namespace MonsterSupergroup.NetworkCombat
             if (!Manager.Session.TryConnect(identity, connection.connectionId, out RunParticipant participant, out string error))
             {
                 Debug.LogWarning("[RunSession] Connection rejected: " + error, this);
-                ServerReject(connection);
+                RejectWithReason(connection, Manager.Session.IsRosterLocked ? "游戏已经开始，仅允许本局成员重连。" : error);
                 return;
+            }
+            string displayName = (request.DisplayName ?? string.Empty).Replace("<", "").Replace(">", "").Replace("\n", " ").Replace("\r", " ");
+            if (displayName.Length > 32) displayName = displayName.Substring(0, 32);
+            if (!Manager.AdmitPreparation(connection, participant, displayName, out error))
+            {
+                Manager.Session.Disconnect(connection.connectionId, null);
+                RejectWithReason(connection, error); return;
             }
             connection.authenticationData = participant;
             connection.Send(new RunIdentityResponse { Accepted = true, ResumeToken = token });
@@ -82,7 +99,10 @@ namespace MonsterSupergroup.NetworkCombat
 
         private void ReceiveResult(RunIdentityResponse result)
         {
-            if (!result.Accepted) { ClientReject(); return; }
+            var lobby = Manager.GetComponent<SteamLobbyService>();
+            if (lobby != null && lobby.CurrentLobbyId != 0)
+                Debug.Log($"[SteamInvite] stage=authentication lobby={lobby.CurrentLobbyId} host={lobby.HostSteamId64} accepted={result.Accepted} reason={result.Error}");
+            if (!result.Accepted) { Manager.ShowMenuNotice(result.Error); ClientReject(); return; }
             if (!string.IsNullOrEmpty(result.ResumeToken)) clientTokens[ClientEndpoint] = result.ResumeToken;
             ClientAccept();
         }
@@ -104,6 +124,18 @@ namespace MonsterSupergroup.NetworkCombat
             var bytes = new byte[32];
             using (var random = System.Security.Cryptography.RandomNumberGenerator.Create()) random.GetBytes(bytes);
             return BitConverter.ToString(bytes).Replace("-", string.Empty);
+        }
+
+        private void RejectWithReason(NetworkConnectionToClient connection, string reason)
+        {
+            connection.Send(new RunIdentityResponse { Accepted = false, Error = reason });
+            StartCoroutine(RejectAfterDelivery(connection));
+        }
+        private IEnumerator RejectAfterDelivery(NetworkConnectionToClient connection)
+        {
+            yield return new WaitForSecondsRealtime(0.2f);
+            if (NetworkServer.connections.TryGetValue(connection.connectionId, out var current) && ReferenceEquals(current, connection))
+                ServerReject(connection);
         }
     }
 }

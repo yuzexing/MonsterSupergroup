@@ -9,6 +9,7 @@ using AstralShift.HellMaiden.Player;
 using Com.LuisPedroFonseca.ProCamera2D;
 using Mirror;
 using MonsterSupergroup.Gameplay.Combat;
+using MonsterSupergroup.Gameplay.Options;
 using MonsterSupergroup.GAS;
 using MonsterSupergroup.NetworkCombat;
 using NUnit.Framework;
@@ -45,6 +46,38 @@ namespace MonsterSupergroup.Gameplay.Tests
             view = Object.FindFirstObjectByType<GameplayCameraRig>();
             rig = view.GetComponent<ProCamera2D>();
             player = NetworkClient.localPlayer.GetComponent<PlayerMovement>();
+        }
+
+        [UnityTest]
+        public IEnumerator OptionsDisableOwnerDamageAndExplicitShakeAndRestoreImmediately()
+        {
+            var options = GameOptionsService.EnsureInitialized();
+            bool wasEnabled = options.Current.ScreenShake;
+            bool saved = PlayerPrefs.HasKey(GameOptionsService.PreferenceKey);
+            string previous = PlayerPrefs.GetString(GameOptionsService.PreferenceKey);
+            int calls = 0;
+            view.ShakePlayed += _ => calls++;
+            try
+            {
+                options.SetScreenShake(true);
+                view.PlayShake(player, 2); yield return null;
+                Assert.That(calls, Is.EqualTo(1));
+                options.SetScreenShake(false);
+                Assert.That(view.transform.parent.localPosition, Is.EqualTo(Vector3.zero));
+                view.PlayShake(player, 2);
+                player.GetComponent<CombatantBehaviour>().ReceiveDamage(new DamageInfo(1, 1, false));
+                yield return null;
+                Assert.That(calls, Is.EqualTo(1), "Turning off shake must gate damage and explicit presets.");
+                options.SetScreenShake(true); view.PlayShake(player, 2);
+                Assert.That(calls, Is.EqualTo(2));
+            }
+            finally
+            {
+                options.SetScreenShake(wasEnabled);
+                if (saved) PlayerPrefs.SetString(GameOptionsService.PreferenceKey, previous);
+                else PlayerPrefs.DeleteKey(GameOptionsService.PreferenceKey);
+                PlayerPrefs.Save();
+            }
         }
 
         [UnityTest]

@@ -1,3 +1,4 @@
+using MonsterSupergroup.Gameplay.Options;
 using System;
 using System.Collections.Generic;
 using AstralShift.Control;
@@ -203,7 +204,7 @@ public class PauseMenuController : GameMenuController
 		{
 			SetCanvasGroupState(state: false);
 			string term = "GEN_GiveUpMsg";
-			LocalizationMediator.GetTranslation(ref term);
+			term = GameLocalization.Menu(term);
 			PopupLauncher.Instance.RequestPopup(PopupLauncher.PopupType.SmallChoice, new PopupContext(term, (Action)delegate
 			{
 				Close();
@@ -222,7 +223,7 @@ public class PauseMenuController : GameMenuController
 		{
 			SetCanvasGroupState(state: false);
 			string term = "GEN_QuitGameMsg";
-			LocalizationMediator.GetTranslation(ref term);
+			term = GameLocalization.Menu(term);
 			PopupLauncher.Instance.RequestPopup(PopupLauncher.PopupType.SmallChoice, new PopupContext(term, (Action)delegate
 			{
 				Close();

@@ -154,7 +154,7 @@ namespace MonsterSupergroup.NetworkCombat.Editor
 
         private static string GetWeaponName(WeaponData weapon)
         {
-            return string.IsNullOrWhiteSpace(weapon.Title) ? weapon.name : weapon.Title;
+            return string.IsNullOrWhiteSpace(weapon.GetTitle()) ? weapon.name : weapon.GetTitle();
         }
     }
 }

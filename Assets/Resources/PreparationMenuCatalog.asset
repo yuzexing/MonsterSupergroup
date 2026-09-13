@@ -1,0 +1,65 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c4bcb2a7f6694722b3cf32134bfa2051, type: 3}
+  m_Name: PreparationMenuCatalog
+  m_EditorClassIdentifier: MonsterSupergroup.NetworkCombat::MonsterSupergroup.NetworkCombat.PreparationMenuCatalog
+  localizedCharacterName:
+    m_TableReference:
+      m_TableCollectionName: MonsterContent
+    m_TableEntryReference:
+      m_KeyId: 0
+      m_Key: character.1.name
+    m_FallbackState: 0
+    m_WaitForCompletion: 0
+    m_LocalVariables: []
+  CharacterPortrait: {fileID: -2413806693520163455, guid: a86470a33a6bf42c4b3595704624658b, type: 3}
+  UseCharacterMonogram: 1
+  localizedMapName:
+    m_TableReference:
+      m_TableCollectionName: MonsterContent
+    m_TableEntryReference:
+      m_KeyId: 0
+      m_Key: map.1.name
+    m_FallbackState: 0
+    m_WaitForCompletion: 0
+    m_LocalVariables: []
+  localizedMapDescription:
+    m_TableReference:
+      m_TableCollectionName: MonsterContent
+    m_TableEntryReference:
+      m_KeyId: 0
+      m_Key: map.1.description
+    m_FallbackState: 0
+    m_WaitForCompletion: 0
+    m_LocalVariables: []
+  Weapons:
+  - Weapon: {fileID: 11400000, guid: 19a1f908d6ece0f4ab14b32b1e4fb7df, type: 2}
+    Icon: {fileID: 0}
+    IconMark: "\u65A9"
+  - Weapon: {fileID: 11400000, guid: 8cb561745fe92724f9455c7f2d966309, type: 2}
+    Icon: {fileID: 0}
+    IconMark: "\u7130"
+  - Weapon: {fileID: 11400000, guid: 5b7f188c355304243a43a393d9847208, type: 2}
+    Icon: {fileID: 0}
+    IconMark: "\u606F"
+  - Weapon: {fileID: 11400000, guid: 74398ecb43560604ea3616595afc64fe, type: 2}
+    Icon: {fileID: 0}
+    IconMark: "\u73AF"
+  - Weapon: {fileID: 11400000, guid: 29e525d71e073734f89b2f0e9d7da016, type: 2}
+    Icon: {fileID: 0}
+    IconMark: "\u5F84"
+  - Weapon: {fileID: 11400000, guid: e073fc236953b434da458962f6e19ba8, type: 2}
+    Icon: {fileID: 0}
+    IconMark: "\u53EC"
+  references:
+    version: 2
+    RefIds: []

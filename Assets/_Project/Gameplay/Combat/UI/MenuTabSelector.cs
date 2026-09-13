@@ -1,6 +1,7 @@
+using MonsterSupergroup.Gameplay.Options;
 using System.Collections.Generic;
 using DG.Tweening;
-using I2.Loc;
+
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -146,8 +147,8 @@ namespace AstralShift.UI
 				}
 			}
 			EnableAdjacentTabButtons(state: false);
-			LocalizationManager.OnLocalizeEvent += UpdateSelectedTabText;
-			LocalizationManager.OnLocalizeEvent += UpdateAdjacentTabsText;
+			GameLocalization.Changed += UpdateSelectedTabText;
+			GameLocalization.Changed += UpdateAdjacentTabsText;
 		}
 
 		public void SelectIntroTab(bool rememberLastTab = true)
@@ -282,7 +283,7 @@ namespace AstralShift.UI
 		{
 			if (_currentTabIdx >= 0 && _currentTabIdx <= optionsKey.Count - 1)
 			{
-				selectedTabText?.SetText(LocalizationMediator.GetTranslation(CurrentTabLocKey));
+				selectedTabText?.SetText(GameLocalization.Menu(CurrentTabLocKey));
 			}
 		}
 
@@ -299,7 +300,7 @@ namespace AstralShift.UI
 				{
 					PreviousButton.CanvasGroup.alpha = 1f;
 					previousButtonGlyph.gameObject.SetActive(value: true);
-					PreviousButton?.Text?.SetText(LocalizationMediator.GetTranslation(PreviousTabLocKey));
+					PreviousButton?.Text?.SetText(GameLocalization.Menu(PreviousTabLocKey));
 				}
 				if (!_canWrap && IsLastTab)
 				{
@@ -310,7 +311,7 @@ namespace AstralShift.UI
 				{
 					NextButton.CanvasGroup.alpha = 1f;
 					nextButtonGlyph.gameObject.SetActive(value: true);
-					NextButton?.Text?.SetText(LocalizationMediator.GetTranslation(NextTabLocKey));
+					NextButton?.Text?.SetText(GameLocalization.Menu(NextTabLocKey));
 				}
 			}
 		}
@@ -322,8 +323,8 @@ namespace AstralShift.UI
 
 		private void OnDestroy()
 		{
-			LocalizationManager.OnLocalizeEvent -= UpdateSelectedTabText;
-			LocalizationManager.OnLocalizeEvent -= UpdateAdjacentTabsText;
+			GameLocalization.Changed -= UpdateSelectedTabText;
+			GameLocalization.Changed -= UpdateAdjacentTabsText;
 			_introSequence?.Kill();
 		}
 	}

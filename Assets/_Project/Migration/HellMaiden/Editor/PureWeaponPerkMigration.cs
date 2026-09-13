@@ -17,10 +17,6 @@ namespace MonsterSupergroup.HellMaidenMigration.Editor
             new PerkMigration(
                 "Assets/MonoBehaviour/AllDamagePerk.asset",
                 2u,
-                "All Damage",
-                "Adds {PlayerDamage}[0]% more damage to all weapons.",
-                "PRK_Name_002",
-                "PRK_Desc_002",
                 "13877d7b4f7178b498eaec2d14951f3f",
                 "PlayerDamage",
                 LegacyPerkModifierConverter.LegacyWeaponDamageId,
@@ -29,10 +25,6 @@ namespace MonsterSupergroup.HellMaidenMigration.Editor
             new PerkMigration(
                 "Assets/MonoBehaviour/AttackSpeedPerk.asset",
                 3u,
-                "Attack Speed",
-                "Raises Attack Speed by {PlayerAttackSpeed}[0]%.",
-                "PRK_Name_003",
-                "PRK_Desc_003",
                 "db737da432e935044b6e9ac59f2a8aea",
                 "PlayerAttackSpeed",
                 LegacyPerkModifierConverter.LegacyWeaponSpeedId,
@@ -41,10 +33,6 @@ namespace MonsterSupergroup.HellMaidenMigration.Editor
             new PerkMigration(
                 "Assets/MonoBehaviour/ExtraWeaponSizePerk.asset",
                 22u,
-                "Weapon Size",
-                "Adds {WeaponSize}[0]%  Weapon Size.",
-                "PRK_Name_022",
-                "PRK_Desc_022",
                 "7ae278d7d8146fd46aef6f73774a48e6",
                 "WeaponSize",
                 LegacyPerkModifierConverter.LegacyWeaponSizeId,
@@ -53,10 +41,6 @@ namespace MonsterSupergroup.HellMaidenMigration.Editor
             new PerkMigration(
                 "Assets/MonoBehaviour/ExtraWeaponDurationPerk.asset",
                 19u,
-                "Extra Weapon Duration",
-                "Adds {WeaponDuration}[0]%  Weapon Duration.",
-                "PRK_Name_019",
-                "PRK_Desc_019",
                 "165a2185e76b84546bf8efcab5dbaec6",
                 "WeaponDuration",
                 LegacyPerkModifierConverter.LegacyWeaponDurationId,
@@ -65,10 +49,6 @@ namespace MonsterSupergroup.HellMaidenMigration.Editor
             new PerkMigration(
                 "Assets/MonoBehaviour/ExtraCriteRatePerk.asset",
                 18u,
-                "Extra Crit Rate",
-                "Adds {CritRate}[0]% raises crit Rate.",
-                "PRK_Name_018",
-                "PRK_Desc_018",
                 "2bf69392be039864f8ac3d44ca06d298",
                 "CritRate",
                 LegacyPerkModifierConverter.LegacyWeaponCritRateId,
@@ -77,10 +57,6 @@ namespace MonsterSupergroup.HellMaidenMigration.Editor
             new PerkMigration(
                 "Assets/MonoBehaviour/ExtraCritMultiplierPerk.asset",
                 17u,
-                "Extra Crit Multiplier",
-                "Adds {CritMultiplier}[0]% to crit Multiplier.",
-                "PRK_Name_017",
-                "PRK_Desc_017",
                 "e849de5503ed921459971e9ba2920403",
                 "CritMultiplier",
                 LegacyPerkModifierConverter.LegacyWeaponCritMultiplierId,
@@ -89,10 +65,6 @@ namespace MonsterSupergroup.HellMaidenMigration.Editor
             new PerkMigration(
                 "Assets/MonoBehaviour/ExtraProjectilePerk.asset",
                 28u,
-                "Extra Projectile",
-                "+1 Projectile to everything",
-                "PRK_Name_028",
-                "PRK_Desc_028",
                 "f2f93ff876c341b4281e0352d9bf70b5",
                 string.Empty,
                 LegacyPerkModifierConverter.LegacyProjectileCountId,
@@ -157,15 +129,14 @@ namespace MonsterSupergroup.HellMaidenMigration.Editor
             }
 
             perk.ID = migration.ContentId;
-            perk.Title = migration.Title;
-            perk.hasLocalization = true;
+            perk.LocalizedTitle.TableReference = "MonsterContent";
+            perk.LocalizedTitle.TableEntryReference = "perk." + migration.ContentId + ".name";
+            perk.LocalizedDescription.TableReference = "MonsterContent";
+            perk.LocalizedDescription.TableEntryReference = "perk." + migration.ContentId + ".description";
             perk.poolWeight = 1f;
             perk.Dependencies = Array.Empty<AstralShift.HellMaiden.Data.Cards.CardData>();
 
             var serialized = new SerializedObject(perk);
-            serialized.FindProperty("Description").stringValue = migration.Description;
-            serialized.FindProperty("TitleKey").stringValue = migration.TitleKey;
-            serialized.FindProperty("DescriptionKey").stringValue = migration.DescriptionKey;
             string iconPath = AssetDatabase.GUIDToAssetPath(migration.IconGuid);
             serialized.FindProperty("icon").objectReferenceValue =
                 string.IsNullOrEmpty(iconPath)
@@ -215,10 +186,6 @@ namespace MonsterSupergroup.HellMaidenMigration.Editor
             public PerkMigration(
                 string assetPath,
                 uint contentId,
-                string title,
-                string description,
-                string titleKey,
-                string descriptionKey,
                 string iconGuid,
                 string descriptionToken,
                 uint legacyModifierId,
@@ -234,10 +201,6 @@ namespace MonsterSupergroup.HellMaidenMigration.Editor
 
                 AssetPath = assetPath;
                 ContentId = contentId;
-                Title = title;
-                Description = description;
-                TitleKey = titleKey;
-                DescriptionKey = descriptionKey;
                 IconGuid = iconGuid;
                 DescriptionToken = descriptionToken;
                 LegacyModifierId = legacyModifierId;
@@ -247,10 +210,6 @@ namespace MonsterSupergroup.HellMaidenMigration.Editor
 
             public string AssetPath { get; }
             public uint ContentId { get; }
-            public string Title { get; }
-            public string Description { get; }
-            public string TitleKey { get; }
-            public string DescriptionKey { get; }
             public string IconGuid { get; }
             public string DescriptionToken { get; }
             public uint LegacyModifierId { get; }

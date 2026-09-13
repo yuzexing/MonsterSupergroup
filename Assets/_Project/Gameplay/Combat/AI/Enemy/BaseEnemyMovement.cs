@@ -34,6 +34,7 @@ namespace AstralShift.HellMaiden.AI.Enemy
 		private float _knockBackTime;
 
 		private float _elapsedTime;
+		private float _knockbackStartedAt, _staggerDuration;
 
 		public Rigidbody2D Rigidbody => _rigidbody;
 
@@ -137,17 +138,19 @@ namespace AstralShift.HellMaiden.AI.Enemy
 			Vector2 vector = (settings.fixedDirection ? settings.direction.normalized : direction);
 			_endPoint = _startPoint + vector * (settings.distance * (1f + knockbackMultiplier) * enemyController.stats.KnockBackMultiplier);
 			_lastPosition = _startPoint;
+			_elapsedTime = 0;
+			_knockBackTime = _maxKnockbackTime / settings.speedMultiplier;
+			_knockbackStartedAt = Time.time;
+			_staggerDuration = settings.Staggers ? settings.staggerTime : 0;
 			_knockBackCoroutine = StartCoroutine(KnockBackCoroutine(settings, onEnd));
 		}
 
 		protected virtual IEnumerator KnockBackCoroutine(KnockbackSettings settings, Action onEnd)
 		{
 			WaitForFixedUpdate waitInstance = new WaitForFixedUpdate();
-			_elapsedTime = 0f;
-			_knockBackTime = _maxKnockbackTime / settings.speedMultiplier;
 			while (enemyController.stats.KnockBackMultiplier != 0f)
 			{
-				_elapsedTime += Time.deltaTime;
+				_elapsedTime = Time.time - _knockbackStartedAt + Time.deltaTime;
 				float time = _elapsedTime / _knockBackTime;
 				if (_elapsedTime >= _knockBackTime)
 				{
@@ -162,7 +165,8 @@ namespace AstralShift.HellMaiden.AI.Enemy
 			}
 			if (settings.Staggers)
 			{
-				yield return new WaitForSeconds(settings.staggerTime);
+				float remaining = Mathf.Max(0, _knockBackTime + _staggerDuration - (Time.time - _knockbackStartedAt));
+				if (remaining > 0) yield return new WaitForSeconds(remaining);
 			}
 			onEnd?.Invoke();
 			_knockBackCoroutine = null;
@@ -182,6 +186,21 @@ namespace AstralShift.HellMaiden.AI.Enemy
 		{
 			StopKnockBack();
 			if (_rigidbody != null) _rigidbody.linearVelocity = Vector2.zero;
+		}
+
+		public EnemyKnockbackMotionState CaptureSimulationKnockback() => new EnemyKnockbackMotionState
+		{
+			Active = IsKnockbackActive, Start = _startPoint, End = _endPoint, LastPosition = _lastPosition,
+			Elapsed = Mathf.Max(0, Time.time - _knockbackStartedAt), Duration = _knockBackTime, StaggerDuration = _staggerDuration
+		};
+
+		public void RestoreSimulationKnockback(EnemyKnockbackMotionState state, KnockbackSettings settings, Action onEnd)
+		{
+			StopKnockBack();
+			_startPoint = state.Start; _endPoint = state.End; _lastPosition = _rigidbody.position;
+			_elapsedTime = state.Elapsed; _knockBackTime = state.Duration; _staggerDuration = state.StaggerDuration;
+			_knockbackStartedAt = Time.time - state.Elapsed;
+			_knockBackCoroutine = StartCoroutine(KnockBackCoroutine(settings, onEnd));
 		}
 	}
 }

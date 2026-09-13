@@ -1,3 +1,4 @@
+using MonsterSupergroup.Gameplay.Options;
 using System.Text;
 using AstralShift.HellMaiden;
 using AstralShift.HellMaiden.Combat.Hand;
@@ -32,7 +33,7 @@ public class RunStatsPerkEffectsInfo : MonoBehaviour
 			.ModifierIdValue;
 		float atIndexModifierParameterValue = runtimePerk.GetAtIndexModifierParameterValue(modifierIndex);
 		string term = SttPrefix + ModifiersStringHelpers.GetPerkModifierNameLocKey(modifierID);
-		LocalizationMediator.GetTranslation(ref term);
+		term = GameLocalization.Menu(term);
 		stringBuilder.AppendFormat("{0}:{1}", term, $"{atIndexModifierParameterValue * 100f:0.##}");
 		perkIcon.sprite = _perksTemplateLUT.GetModifierIconSprite(modifierID);
 		perkInfoText.text = stringBuilder.ToString();

@@ -45,6 +45,21 @@ namespace MonsterSupergroup.NetworkCombat
         public int ReplicaTerminationCount { get; private set; }
         public bool HasRemotePresentation => remoteAttack != null && remoteAttack.IsPresentationActive;
 
+        public bool TryReadDebugState(bool serverView, out PlayerUltimateDebugState snapshot)
+        {
+            snapshot = default;
+            if (!isActiveAndEnabled || !hasBaseline ||
+                (serverView ? !isServer : !isOwned || lastOwnerStateRevision == 0)) return false;
+            snapshot = new PlayerUltimateDebugState
+            {
+                State = serverView ? serverRuntime.Capture() : ownerView.Capture(),
+                Revision = serverView ? state.Revision : lastOwnerStateRevision,
+                ExecutionEnabled = serverView ? serverExecutionEnabled : !ownerServerExecutionSuspended,
+                PendingUse = !serverView && pendingUseId != 0
+            };
+            return true;
+        }
+
         private void Awake()
         {
             player = GetComponent<PlayerMovement>(); build = GetComponent<PlayerBuildRuntime>();
@@ -115,7 +130,7 @@ namespace MonsterSupergroup.NetworkCombat
             if (!isActiveAndEnabled || !isOwned || !NetworkClient.active || NetworkClient.localPlayer != netIdentity ||
                 !hasBaseline || ownerServerExecutionSuspended || !player.isActiveAndEnabled || !player.IsRuntimeInitialized ||
                 !player.IsLocalOwnerBound || !build.IsBuildActive || !selection.HasOwnerBaseline ||
-                player.IsUpgradeSelectionLocked || !combatant.IsAlive)
+                player.IsUpgradeSelectionLocked || player.IsRunLoadingLocked || !combatant.IsAlive)
             {
                 Debug.Log($"[UltimateDebug] player={netId} result=rejected reason=owner-not-ready", this);
                 return false;
@@ -178,7 +193,7 @@ namespace MonsterSupergroup.NetworkCombat
             if (!isOwned || !NetworkClient.active) return;
             if (hasBaseline) combatant.SetUltimateInvulnerable(!ownerServerExecutionSuspended && ownerView.IsInvulnerable(NetworkTime.time));
             if (ownedAttack == null) TryInitializeOwnerAttack();
-            if ((!build.IsBuildActive || player.IsUpgradeSelectionLocked || !combatant.IsAlive) && ownedAttack != null)
+            if ((!build.IsBuildActive || player.IsUpgradeSelectionLocked || player.IsRunLoadingLocked || !combatant.IsAlive) && ownedAttack != null)
                 ownedAttack.Cancel(ownedAttack.ActiveUseId);
         }
 
@@ -192,7 +207,7 @@ namespace MonsterSupergroup.NetworkCombat
         {
             if (!isActiveAndEnabled || !isOwned || !NetworkClient.active || !hasBaseline || ownerServerExecutionSuspended || pendingUseId != 0 ||
                 !player.isActiveAndEnabled || !player.IsRuntimeInitialized || !player.IsLocalOwnerBound ||
-                !build.IsBuildActive || !selection.HasOwnerBaseline || player.IsUpgradeSelectionLocked || !combatant.IsAlive ||
+                !build.IsBuildActive || !selection.HasOwnerBaseline || player.IsMenuInputBlocked || player.IsUpgradeSelectionLocked || player.IsRunLoadingLocked || !combatant.IsAlive ||
                 (ownedAttack != null && ownedAttack.IsNativeActive) ||
                 !ownerView.CanUse(NetworkTime.time) || !TryInitializeOwnerAttack()) return false;
             ulong id = bridge.EventIds.Next().Value;
@@ -207,7 +222,7 @@ namespace MonsterSupergroup.NetworkCombat
             var world = NetworkCombatWorld.Instance;
             var id = new CombatEventId(rootId);
             var source = ultimateData != null ? ultimateData.ultimateAttackWeaponBehaviour as DanteUltimateAttack : null;
-            if (!isActiveAndEnabled || !serverExecutionEnabled || sender == null || sender != connectionToClient || world == null || source == null ||
+            if (BootGameplayNetworkManager.CombatHasEnded || !isActiveAndEnabled || player.IsRunLoadingLocked || !serverExecutionEnabled || sender == null || sender != connectionToClient || world == null || source == null ||
                 id.Sequence <= lastServerUseSequence || !world.Gateway.ClientIdentities.Validate(netId, rootId, id.Sequence) ||
                 !build.IsBuildActive || buildRevision == 0 || buildRevision != selection.BuildRevision ||
                 !world.Gateway.Ledger.IsAlive(netId) || world.Gateway.Ledger.IsPlayerSelectingUpgrade(netId) ||

@@ -1,3 +1,4 @@
+using MonsterSupergroup.Gameplay.Options;
 using Mirror;
 using MonsterSupergroup.Gameplay.Combat;
 using MonsterSupergroup.Gameplay.UI;
@@ -23,12 +24,11 @@ namespace MonsterSupergroup.NetworkCombat
         }
         public static string Format(WaveProgressSnapshot state)
         {
-            if (state.Phase == WavePhase.Disabled) return "Waiting for wave state";
-            if (state.Phase == WavePhase.Waiting) return "Waiting for host / server to start the run";
-            if (state.Phase == WavePhase.Stopped) return "Run stopped";
-            string phase = state.Phase == WavePhase.Paused ? "Paused - no active players" : "Next wave";
-            return $"Wave {state.Wave}  |  {phase}: {state.Remaining:F1}s\n" +
-                $"Alive {state.Alive}/{state.Limit}  |  Spawned {state.Spawned}/{state.Planned}  |  Skipped {state.Skipped}";
+            if (state.Phase == WavePhase.Disabled) return MenuLocalization.Get("ui.wave.syncing");
+            if (state.Phase == WavePhase.Waiting) return MenuLocalization.Get("ui.wave.waiting");
+            if (state.Phase == WavePhase.Stopped) return MenuLocalization.Get("ui.wave.stopped");
+            string phase = MenuLocalization.Get(state.Phase == WavePhase.Paused ? "ui.wave.paused" : "ui.wave.next");
+            return MenuLocalization.Get("ui.wave.progress", state.Wave, phase, state.Remaining, state.Alive, state.Limit, state.Spawned, state.Planned, state.Skipped);
         }
         private void Clear() { DisplayedSnapshot = default; if (view != null) view.Present(string.Empty); }
         private void OnDisable() => Clear();

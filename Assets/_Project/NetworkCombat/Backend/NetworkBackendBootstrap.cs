@@ -152,7 +152,7 @@ namespace MonsterSupergroup.NetworkCombat
             out string error)
         {
             error = null;
-            if (!IsInitialized || Selection.Backend != NetworkBackendKind.Kcp)
+            if (!IsInitialized)
             {
                 error = "The process did not select the KCP backend.";
                 return false;
@@ -173,6 +173,7 @@ namespace MonsterSupergroup.NetworkCombat
             }
 
             ShutdownTransport(networkManager.transport);
+            Selection = new NetworkBackendSelection(NetworkBackendKind.Kcp, Selection.Purpose, "session-kcp");
             UseSimulation = useSimulation;
             SelectKcpTransport(address.Trim(), port, useSimulation, true);
             if (!networkManager.transport.Available())
@@ -187,7 +188,7 @@ namespace MonsterSupergroup.NetworkCombat
         public bool TryPrepareSteam(out string error)
         {
             error = null;
-            if (!IsInitialized || Selection.Backend != NetworkBackendKind.Steam)
+            if (!IsInitialized)
             {
                 error = "The process did not select the Steam backend.";
                 return false;
@@ -198,6 +199,7 @@ namespace MonsterSupergroup.NetworkCombat
             }
 
             ShutdownTransport(steamTransport);
+            Selection = new NetworkBackendSelection(NetworkBackendKind.Steam, Selection.Purpose, "session-steam");
             SelectSteamTransport(true);
             if (!steamTransport.Available())
             {
@@ -233,6 +235,9 @@ namespace MonsterSupergroup.NetworkCombat
             }
         }
 
+        public bool TryPrepareLocalHost(out string error) =>
+            TryPrepareKcp(DefaultKcpAddress, DefaultKcpPort, false, out error);
+
         public void ShutdownActiveTransport()
         {
             if (!IsInitialized)
@@ -261,7 +266,7 @@ namespace MonsterSupergroup.NetworkCombat
             bool isKcpDevelopmentBuild,
             NetworkBackendKind editorPreference)
         {
-            if (HasArgumentPrefix(arguments, ValidationRolePrefix))
+            if (HasArgumentPrefix(arguments, ValidationRolePrefix) || HasArgumentPrefix(arguments, "--menu-role="))
             {
                 return new NetworkBackendSelection(
                     NetworkBackendKind.Kcp,

@@ -600,11 +600,11 @@ MonoBehaviour:
       _name: Button2
       _type: 1
       _descriptiveName: Ultimate
-      _positiveDescriptiveName:
-      _negativeDescriptiveName:
-      _key:
-      _positiveKey:
-      _negativeKey:
+      _positiveDescriptiveName: 
+      _negativeDescriptiveName: 
+      _key: 
+      _positiveKey: 
+      _negativeKey: 
       _behaviorId: 0
       _userAssignable: 1
       _categoryId: 1
@@ -612,11 +612,11 @@ MonoBehaviour:
       _name: R_Trigger
       _type: 1
       _descriptiveName: Dash
-      _positiveDescriptiveName:
-      _negativeDescriptiveName:
-      _key:
-      _positiveKey:
-      _negativeKey:
+      _positiveDescriptiveName: 
+      _negativeDescriptiveName: 
+      _key: 
+      _positiveKey: 
+      _negativeKey: 
       _behaviorId: 0
       _userAssignable: 1
       _categoryId: 1
@@ -624,11 +624,11 @@ MonoBehaviour:
       _name: DebugAction_2
       _type: 1
       _descriptiveName: Debug Ultimate Charge
-      _positiveDescriptiveName:
-      _negativeDescriptiveName:
-      _key:
-      _positiveKey:
-      _negativeKey:
+      _positiveDescriptiveName: 
+      _negativeDescriptiveName: 
+      _key: 
+      _positiveKey: 
+      _negativeKey: 
       _behaviorId: 0
       _userAssignable: 1
       _categoryId: 1
@@ -1337,23 +1337,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1509369246
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1509369244}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a5302b7c762746408de127146d259ece, type: 3}
-  m_Name:
-  m_EditorClassIdentifier:
-  clientObjects:
-  - {fileID: 61111573}
-  - {fileID: 537941360}
-  - {fileID: 1148884514}
-  - {fileID: 2019481632}
 --- !u!4 &1509369245
 Transform:
   m_ObjectHideFlags: 0
@@ -1374,6 +1357,23 @@ Transform:
   - {fileID: 1601722133}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1509369246
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1509369244}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a5302b7c762746408de127146d259ece, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  clientObjects:
+  - {fileID: 61111573}
+  - {fileID: 537941360}
+  - {fileID: 1148884514}
+  - {fileID: 2019481632}
 --- !u!1 &1601722132
 GameObject:
   m_ObjectHideFlags: 0
@@ -1507,8 +1507,11 @@ MonoBehaviour:
   spawnPrefabs:
   - {fileID: 8611941000484548922, guid: 18950f20ace3b6c4c93593c880986aff, type: 3}
   - {fileID: 3911887690903730936, guid: 55ff35e83fff4c74ea6f8f2e82883aa2, type: 3}
-  - {fileID: 642612462740718118, guid: e9b6d6b03e4b1e341a17dcc0618c749f, type: 3}
+  - {fileID: 3963200209637973719, guid: e9b6d6b03e4b1e341a17dcc0618c749f, type: 3}
   - {fileID: 4732134672994704422, guid: 524e6d24c51203a49b4866144f17e64e, type: 3}
+  - {fileID: 854596986591058299, guid: c3ef8ee2a3373da498d6d7c2c6d014db, type: 3}
+  - {fileID: 7331318918578544153, guid: 05b4427c6fb40c84fb712ac16d351623, type: 3}
+  - {fileID: 6621018548167738675, guid: d2f06231a6b99b448a2eacb121addd48, type: 3}
   exceptionsDisconnect: 1
   snapshotSettings:
     bufferTimeMultiplier: 2
@@ -1618,6 +1621,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: MonsterSupergroup.NetworkCombat::MonsterSupergroup.NetworkCombat.KcpLocalNetworkHud
   service: {fileID: 1601722144}
+  showHud: 1
+  toggleHudKey: 285
+  hudPosition: {x: 10, y: 10}
+  hudSize: {x: 440, y: 300}
 --- !u!1 &1700453218
 GameObject:
   m_ObjectHideFlags: 0

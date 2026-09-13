@@ -1,5 +1,11 @@
 # HellMaiden 音频移植
 
+## 编辑器中所有音效同时消失
+
+先检查 Game 窗口右上角扬声器按钮（Mute Audio）。FMOD 的 `RuntimeManager.ApplyMuteState` 每帧读取 `EditorUtility.audioMasterMute`，开启编辑器静音会同时静音武器、受伤等全部 FMOD 音效。
+
+2026-09-11 排查发现编辑器 `AudioMasterMute` 为 `1`；通过 Game 窗口关闭静音后变为 `0`，进入本地战斗，用户确认武器音效恢复。当天重新核对 13 个音频库和 16 个非空事件引用，全部加载、解析成功。本次属于编辑器静音设置，无需修改音效播放代码。
+
 ## 资源与配置
 
 原工程 `F:/DecomplieLatest/HellMaiden/ExportedProject/Assets/StreamingAssets/Desktop` 的 13 个 FMOD 音频库已复制到 `Assets/_Project/Audio/FMODBanks`，共 297,401,424 字节，保留原始内容和事件 GUID。

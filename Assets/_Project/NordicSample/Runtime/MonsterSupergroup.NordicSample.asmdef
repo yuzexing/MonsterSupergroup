@@ -1,0 +1,6 @@
+{
+  "name": "MonsterSupergroup.NordicSample",
+  "rootNamespace": "MonsterSupergroup.NordicSample",
+  "references": ["ProCamera2D.Runtime", "Unity.RenderPipelines.Universal.Runtime", "Unity.RenderPipelines.Universal.2D.Runtime", "Unity.RenderPipelines.Core.Runtime", "RenderAs2DModule"],
+  "autoReferenced": false
+}

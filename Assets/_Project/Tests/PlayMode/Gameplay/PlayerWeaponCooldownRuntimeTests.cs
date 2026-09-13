@@ -62,6 +62,27 @@ namespace MonsterSupergroup.Gameplay.Tests
         }
 
         [Test]
+        public void DebugCooldownReadAppliesCurrentStatsWithoutRefreshingLiveServerCache()
+        {
+            MeleeAttackBehaviour weapon = EquipMelee();
+            Assert.That(PlayerWeaponCooldownSnapshot.TryAdmit(2, weapon.ID, CombatEventId.Compose(3, 7, 1).Value,
+                100, 100, weapon.GetCooldown(), default, out var saved), Is.True);
+            adapter.PrepareServerRestore(new[] { saved });
+            build.AddEquipment(weapon, LoadEquipment("StatRaise_SpeedRaiseEquipment"), 0);
+            var field = typeof(NetworkWeaponCombatAdapter).GetField("serverCooldowns", BindingFlags.Instance | BindingFlags.NonPublic);
+            var live = (PlayerWeaponCooldownSnapshot[])field.GetValue(adapter);
+            for (int i = 0; i < 5; i++)
+            {
+                Assert.That(adapter.TryReadDebugCooldown(2, out var sample), Is.True);
+                Assert.That(sample.ReadyAt, Is.LessThan(saved.ReadyAt));
+                Assert.That(live[2].ReadyAt, Is.EqualTo(saved.ReadyAt), "Display must not update live cooldown cache.");
+            }
+            build.UnequipWeapon(weapon);
+            Assert.That(adapter.TryReadDebugCooldown(2, out _), Is.False, "An empty slot cannot show the previous weapon's timing.");
+            Assert.That(live[2].ReadyAt, Is.EqualTo(saved.ReadyAt));
+        }
+
+        [Test]
         public void MeleeReconnectRetainsFrozenBurstDelayAfterCurrentCountBecomesOne()
         {
             MeleeAttackBehaviour melee = EquipMelee();

@@ -1,4 +1,5 @@
 using System;
+using Animancer;
 using AstralShift.HellMaiden.Player.Attacks.ProjectileMovement;
 using AstralShift.Helpers;
 using AstralShift.Helpers.Attributes;
@@ -46,6 +47,8 @@ namespace AstralShift.HellMaiden.Player.Attacks
 		[SerializeField]
 		private bool hitEffectOnExpire;
 
+		[SerializeField] private bool playPiercingHitPresentation;
+
 		[SerializeField]
 		public PM_Base projectileMovement;
 
@@ -72,6 +75,9 @@ namespace AstralShift.HellMaiden.Player.Attacks
 		private AnimatedAttackSound expireSound;
 
 		private EventInstance _loopInstance;
+
+		private bool _suppressLaunchSound;
+		private ProjectilePresentationStats _presentationStats;
 
 		private ProjectilePresentationKey _presentationKey;
 
@@ -129,6 +135,8 @@ namespace AstralShift.HellMaiden.Player.Attacks
 					"ProjectileAttack requires an owning PlayerMovement.");
 			}
 
+			_suppressLaunchSound = false;
+			GetComponent<ProjectileVisualState>()?.ResetForSpawn();
 			_direction = direction.normalized;
 			_presentationTerminated = false;
 			_lastPlayerDir = owner.attackDirection.normalized;
@@ -149,7 +157,7 @@ namespace AstralShift.HellMaiden.Player.Attacks
 
 		public void PlayPresentation(
 			ProjectilePresentationSpawn spawn,
-			float elapsedSeconds)
+			float elapsedSeconds, bool playLaunchSound = true)
 		{
 			if (!IsPresentationOnly)
 			{
@@ -164,6 +172,9 @@ namespace AstralShift.HellMaiden.Player.Attacks
 					"Projectile presentation requires an owning PlayerMovement.");
 			}
 
+			_suppressLaunchSound = !playLaunchSound;
+			_presentationStats = spawn.Stats;
+			GetComponent<ProjectileVisualState>()?.ResetForSpawn();
 			_direction = spawn.Direction.normalized;
 			_lastPlayerDir = owner.attackDirection.normalized;
 			speed = spawn.Stats.EffectiveSpeed;
@@ -188,7 +199,7 @@ namespace AstralShift.HellMaiden.Player.Attacks
 
 		protected override void OnHit(IDamageable damageable)
 		{
-			if (IsPresentationOnly)
+			if (IsPresentationOnly || _presentationTerminated)
 			{
 				return;
 			}
@@ -199,6 +210,11 @@ namespace AstralShift.HellMaiden.Player.Attacks
 				if (_hitCount < hitMaxCount)
 				{
 					ResolveDamage(damageable);
+					if (playPiercingHitPresentation)
+					{
+						PlayContactPresentation(transform.position, ProjectilePresentationStats.From(NativeAttackSnapshot.Stats, speed));
+						_presentationTermination?.Invoke(_presentationKey, transform.position, ProjectilePresentationPhase.Impact);
+					}
 					return;
 				}
 				if (base.HitEffectMode != DamageMode.None && base.HitEffectMode != DamageMode.ExplosionHit)
@@ -206,12 +222,10 @@ namespace AstralShift.HellMaiden.Player.Attacks
 					ResolveDamage(damageable);
 				}
 			}
+			_presentationTerminated = true;
 			PublishTermination(ProjectilePresentationPhase.Hit);
 			_fired = false;
-			if (_loopInstance.isValid())
-			{
-				_loopInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
-			}
+			StopProjectileLoop();
 			ResolveHitEffect();
 			PlayEndAnimation();
 		}
@@ -276,6 +290,8 @@ namespace AstralShift.HellMaiden.Player.Attacks
 				return;
 			}
 
+			_presentationTerminated = true;
+			StopProjectileLoop();
 			PublishTermination(ProjectilePresentationPhase.Expired);
 			_fired = false;
 			if (!onlyDespawnOffCamera)
@@ -365,6 +381,12 @@ namespace AstralShift.HellMaiden.Player.Attacks
 
 		private void FastForwardPresentation(float elapsedSeconds)
 		{
+			if (elapsedSeconds > 0f && _startAnimState != null && _startAnimState.IsValid())
+			{
+				_startAnimState.Time = Mathf.Min(elapsedSeconds, attackStartAnim.Clip.length);
+				animancer.Evaluate();
+			}
+			if (elapsedSeconds > 0f) GetComponent<ProjectileVisualState>()?.SeekParticles(elapsedSeconds);
 			if (elapsedSeconds <= 0f || projectileMovement != null ||
 				(attackStartAnim != null && attackStartAnimTransitionAfterFinish))
 			{
@@ -388,13 +410,15 @@ namespace AstralShift.HellMaiden.Player.Attacks
 				return;
 			}
 
+			if (phase == ProjectilePresentationPhase.Impact)
+			{
+				if (playPiercingHitPresentation) PlayContactPresentation(finalPosition, _presentationStats);
+				return;
+			}
 			_presentationTerminated = true;
 			_fired = false;
 			base.transform.position = finalPosition;
-			if (_loopInstance.isValid())
-			{
-				_loopInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
-			}
+			StopProjectileLoop();
 
 			if (phase == ProjectilePresentationPhase.Cancelled)
 			{
@@ -403,10 +427,11 @@ namespace AstralShift.HellMaiden.Player.Attacks
 				return;
 			}
 
-			if (phase == ProjectilePresentationPhase.Hit &&
-				projectileHitSound.automatic)
+			if (phase == ProjectilePresentationPhase.Hit)
 			{
-				PlayHitSound();
+				if (projectileHitSound.automatic) PlayHitSound();
+				if (hitEffectResolver is SpawnableHitEffectResolver resolver)
+					resolver.PlayPresentation(_presentationStats);
 			}
 			else if (phase == ProjectilePresentationPhase.Expired &&
 				expireSound.automatic)
@@ -415,6 +440,12 @@ namespace AstralShift.HellMaiden.Player.Attacks
 			}
 
 			PlayEndAnimation();
+		}
+
+		private void PlayContactPresentation(Vector3 position, ProjectilePresentationStats stats)
+		{
+			if (projectileHitSound.automatic) OptionalAudio.PlayOneShot(projectileHitSound.eventRef, position);
+			if (hitEffectResolver is SpawnableHitEffectResolver resolver) resolver.PlayPresentation(stats, position);
 		}
 
 		private void PublishTermination(ProjectilePresentationPhase phase)
@@ -459,11 +490,20 @@ namespace AstralShift.HellMaiden.Player.Attacks
 			ReleaseNativeAttackSnapshot();
 			base.OnDisable();
 			StopParticleSystem();
-			if (_loopInstance.isValid())
-			{
-				_loopInstance.stop(FMOD.Studio.STOP_MODE.IMMEDIATE);
-				_loopInstance.release();
-			}
+		}
+
+		public override void Dispose()
+		{
+			StopProjectileLoop(true);
+			base.Dispose();
+		}
+
+		private void StopProjectileLoop(bool immediate = false)
+		{
+			if (!_loopInstance.isValid()) return;
+			_loopInstance.stop(immediate ? FMOD.Studio.STOP_MODE.IMMEDIATE : FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+			_loopInstance.release();
+			_loopInstance.clearHandle();
 		}
 
 		public override void PlayAttackAnimation()
@@ -524,7 +564,7 @@ namespace AstralShift.HellMaiden.Player.Attacks
 
 		public void PlayChargeSound()
 		{
-			if (!chargeSound.eventRef.IsNull)
+			if (!_suppressLaunchSound && !chargeSound.eventRef.IsNull)
 			{
 				OptionalAudio.PlayOneShotAttached(chargeSound.eventRef, base.gameObject);
 			}
@@ -532,7 +572,7 @@ namespace AstralShift.HellMaiden.Player.Attacks
 
 		public void PlayLaunchSound()
 		{
-			if (!launchSound.eventRef.IsNull)
+			if (!_suppressLaunchSound && !launchSound.eventRef.IsNull)
 			{
 				OptionalAudio.PlayOneShot(launchSound.eventRef, base.transform.position);
 			}
@@ -542,10 +582,9 @@ namespace AstralShift.HellMaiden.Player.Attacks
 		{
 			if (!projectileLoopSound.eventRef.IsNull)
 			{
-				if (!_loopInstance.isValid())
-				{
-					_loopInstance = OptionalAudio.CreateInstance(projectileLoopSound.eventRef);
-				}
+				if (_loopInstance.isValid()) return;
+				_loopInstance = OptionalAudio.CreateInstance(projectileLoopSound.eventRef);
+				if (!_loopInstance.isValid()) return;
 				OptionalAudio.AttachInstanceToGameObject(_loopInstance, base.gameObject);
 				_loopInstance.start();
 			}

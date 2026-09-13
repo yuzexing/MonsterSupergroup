@@ -1,3 +1,4 @@
+using MonsterSupergroup.Gameplay.Options;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -55,11 +56,11 @@ namespace MonsterSupergroup.Gameplay.UI
         {
             if (label == null) return;
             if (level < 1 || threshold < 1) { Clear(); return; }
-            label.text = $"Lv. {level}     XP {experience:0.##} / {threshold}";
+            MenuLocalization.Bind(label, "ui.hud.experience", level, experience, threshold);
             fill.fillAmount = Mathf.Clamp01(experience / threshold);
             panel.SetActive(isActiveAndEnabled);
         }
-        public void Clear() { if (label != null) label.text = string.Empty; if (panel != null) panel.SetActive(false); }
+        public void Clear() { if (label != null) { var binding = label.GetComponent<LocalizedMenuText>(); if (binding != null) binding.Set("", System.Array.Empty<object>()); label.text = string.Empty; } if (panel != null) panel.SetActive(false); }
         private void OnDisable() => Clear();
         private void OnDestroy()
         {

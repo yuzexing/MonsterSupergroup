@@ -1,3 +1,4 @@
+using MonsterSupergroup.Gameplay.Options;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using AstralShift.HellMaiden.Scenes;
@@ -52,7 +53,7 @@ namespace AstralShift.SceneLoading
 			{
 				return "";
 			}
-			return LocalizationMediator.GetTranslation(list3[Random.Range(0, list3.Count)]);
+			return GameLocalization.Menu(list3[Random.Range(0, list3.Count)]);
 		}
 
 		private static List<string> Combine(List<string> general, List<string> specific)

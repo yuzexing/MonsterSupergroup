@@ -40,6 +40,7 @@ namespace MonsterSupergroup.NetworkCombat
         public int ReceivedPresentationCount { get; private set; }
         public int ReplicaSpawnCount { get; private set; }
         public int ReplicaTerminationCount { get; private set; }
+        public int ReplicaImpactCount { get; private set; }
         public int RejectedPresentationCount { get; private set; }
         public int AcceptedCooldownReportCount { get; private set; }
         public int RejectedAttackCount { get; private set; }
@@ -96,7 +97,7 @@ namespace MonsterSupergroup.NetworkCombat
             lastClientBeamAimSequence = 0u;
             lastClientOrbitSequence = 0u;
             lastClientTrailSequence = 0u;
-            if (!isOwned) CmdRequestSummonViews();
+            if (!isOwned) { CmdRequestSummonViews(); StartCoroutine(RequestProjectileViewsWhenReady()); }
         }
 
         public override void OnStartAuthority()
@@ -172,6 +173,7 @@ namespace MonsterSupergroup.NetworkCombat
             {
                 NetworkCombatWorld.Instance?.Gateway.Attacks.Retire(netId, rootEventId);
                 serverMeleePresentationHistory.RetireAttack(rootEventId);
+                RetireProjectileViews(rootEventId);
                 serverBeamHistory.RetireAttack(rootEventId);
                 serverOrbitHistory.RetireAttack(rootEventId);
                 serverTrailHistory.RetireAttack(rootEventId);
@@ -184,6 +186,8 @@ namespace MonsterSupergroup.NetworkCombat
         private void CmdObserveWeaponAttack(int slotIndex, uint weaponId, ulong attackEventId,
             double ownerAttackTime, uint ownerBuildRevision, NetworkConnectionToClient sender = null)
         {
+            if (NetworkManager.singleton is BootGameplayNetworkManager manager && manager.IsLoadingLocked)
+            { RejectAttack(CombatRejectionReason.RunLoading); return; }
             NetworkCombatWorld world = NetworkCombatWorld.Instance;
             var eventId = new MonsterSupergroup.GAS.CombatEventId(attackEventId);
             if (sender == null || sender != connectionToClient || world == null ||
@@ -227,6 +231,8 @@ namespace MonsterSupergroup.NetworkCombat
         private void CmdObserveDashWeaponAttack(int slotIndex, uint weaponId, ulong attackEventId,
             ulong dashUseId, uint ownerBuildRevision, NetworkConnectionToClient sender = null)
         {
+            if (NetworkManager.singleton is BootGameplayNetworkManager manager && manager.IsLoadingLocked)
+            { RejectAttack(CombatRejectionReason.RunLoading); return; }
             NetworkCombatWorld world = NetworkCombatWorld.Instance;
             var eventId = new MonsterSupergroup.GAS.CombatEventId(attackEventId);
             if (sender == null || sender != connectionToClient || world == null ||
@@ -265,6 +271,22 @@ namespace MonsterSupergroup.NetworkCombat
             if (preset == null || (!preset.HasKnockback && !preset.Staggers)) return default;
             // Copy authored data once per admitted root, without evaluating the source player's GAS again.
             return EnemyKnockbackSettings.From(preset);
+        }
+
+        /// <summary>Read server-observed timing without altering cooldown records or weapon bindings.</summary>
+        public bool TryReadDebugCooldown(int slot, out PlayerWeaponCooldownSnapshot snapshot)
+        {
+            snapshot = default;
+            if ((uint)slot >= serverCooldowns.Length) return false;
+            WeaponBehaviour weapon = playerBuildRuntime != null ? playerBuildRuntime.GetWeaponAtSlot(slot) : null;
+            if (weapon == null || weapon is DashAttackBehaviour || weapon.NativeRuntime == null ||
+                !weapon.NativeRuntime.IsInitialized ||
+                (!ReferenceEquals(serverCooldownWeapons[slot], null) && serverCooldownWeapons[slot] != weapon)) return false;
+            PlayerWeaponCooldownSnapshot recorded = serverCooldowns[slot];
+            if (!recorded.IsValid || recorded.WeaponId != weapon.WeaponData.ID) return false;
+            // Apply the current cooldown to a value copy, never refresh the server cache from UI.
+            snapshot = recorded.WithCooldown(weapon.GetCooldown());
+            return true;
         }
 
         /// <summary>Copy server-observed gameplay timing before the avatar is destroyed.</summary>
@@ -438,7 +460,7 @@ namespace MonsterSupergroup.NetworkCombat
             NetworkCombatWorld world = NetworkCombatWorld.Instance;
             foreach (NetworkProjectilePresentationEdge edge in batch.Edges)
             {
-                if (edge.Phase == ProjectilePresentationPhase.Spawn &&
+                if ((edge.Phase == ProjectilePresentationPhase.Spawn || edge.Phase == ProjectilePresentationPhase.Impact) &&
                     (world == null || !world.Gateway.Attacks.Contains(netId, edge.AttackEventId, edge.WeaponId)))
                     RejectedPresentationCount++;
                 else
@@ -460,6 +482,7 @@ namespace MonsterSupergroup.NetworkCombat
                 if (terminations.Count == 0) return;
                 batch.Edges = terminations.ToArray();
             }
+            RememberProjectileViews(batch.Edges);
             RpcApplyProjectilePresentations(batch);
         }
 
@@ -525,7 +548,8 @@ namespace MonsterSupergroup.NetworkCombat
 
                 if (presentationReplica.TryTerminate(edge.ToTermination()))
                 {
-                    ReplicaTerminationCount++;
+                    if (edge.Phase == ProjectilePresentationPhase.Impact) ReplicaImpactCount++;
+                    else ReplicaTerminationCount++;
                 }
             }
         }
@@ -606,6 +630,7 @@ namespace MonsterSupergroup.NetworkCombat
 
         public override void OnStopServer()
         {
+            serverProjectileViews.Clear();
             ClearServerSummons();
             NetworkCombatWorld.Instance?.Gateway.Attacks.UnregisterPlayer(netId);
             Array.Clear(serverCooldowns, 0, serverCooldowns.Length);

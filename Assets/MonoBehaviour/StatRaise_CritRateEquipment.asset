@@ -13,15 +13,33 @@ MonoBehaviour:
   m_Name: StatRaise_CritRateEquipment
   m_EditorClassIdentifier: 
   ID: 16
-  Title: Escalation
-  Description: Increases weapon <b>critical chance</b> <sprite="CritiicalRate" index=0>
-    by <b>{CritRate}[0]%</b>.
-  HasQuote: 0
-  Quote: 
-  hasLocalization: 1
-  TitleKey: MOD_Name_016
-  DescriptionKey: MOD_Desc_016
-  QuoteKey: 
+  localizedTitle:
+    m_TableReference:
+      m_TableCollectionName: MonsterContent
+    m_TableEntryReference:
+      m_KeyId: 0
+      m_Key: equipment.16.name
+    m_FallbackState: 0
+    m_WaitForCompletion: 0
+    m_LocalVariables: []
+  localizedDescription:
+    m_TableReference:
+      m_TableCollectionName: MonsterContent
+    m_TableEntryReference:
+      m_KeyId: 0
+      m_Key: equipment.16.description
+    m_FallbackState: 0
+    m_WaitForCompletion: 0
+    m_LocalVariables: []
+  localizedQuote:
+    m_TableReference:
+      m_TableCollectionName: 
+    m_TableEntryReference:
+      m_KeyId: 0
+      m_Key: 
+    m_FallbackState: 0
+    m_WaitForCompletion: 0
+    m_LocalVariables: []
   poolID: 0
   poolWeight: 2
   dependencies: []
@@ -29,7 +47,7 @@ MonoBehaviour:
     m_AssetGUID: 0ee8a72ff225e1c49994de89f2d3401f
     m_SubObjectName: 
     m_SubObjectType: 
-    m_SubObjectGUID:
+    m_SubObjectGUID: 
     m_EditorAssetChanged: 0
   cardType: 0
   usedStatsModifiers: 32
@@ -45,8 +63,15 @@ MonoBehaviour:
         isSelfApplied: 0
         leftSlots: 0
         rightSlots: 0
-    overrideDescription: 0
-    descriptionKey: 
+    localizedDescription:
+      m_TableReference:
+        m_TableCollectionName: 
+      m_TableEntryReference:
+        m_KeyId: 0
+        m_Key: 
+      m_FallbackState: 0
+      m_WaitForCompletion: 0
+      m_LocalVariables: []
   - nativeModifiers:
     - modifier:
         modifierId: 16777221
@@ -58,8 +83,15 @@ MonoBehaviour:
         isSelfApplied: 0
         leftSlots: 0
         rightSlots: 0
-    overrideDescription: 0
-    descriptionKey: 
+    localizedDescription:
+      m_TableReference:
+        m_TableCollectionName: 
+      m_TableEntryReference:
+        m_KeyId: 0
+        m_Key: 
+      m_FallbackState: 0
+      m_WaitForCompletion: 0
+      m_LocalVariables: []
   - nativeModifiers:
     - modifier:
         modifierId: 16777221
@@ -71,8 +103,15 @@ MonoBehaviour:
         isSelfApplied: 0
         leftSlots: 0
         rightSlots: 0
-    overrideDescription: 0
-    descriptionKey: 
+    localizedDescription:
+      m_TableReference:
+        m_TableCollectionName: 
+      m_TableEntryReference:
+        m_KeyId: 0
+        m_Key: 
+      m_FallbackState: 0
+      m_WaitForCompletion: 0
+      m_LocalVariables: []
   references:
     version: 2
     RefIds:

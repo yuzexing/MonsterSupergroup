@@ -2,6 +2,7 @@ using System;
 using AstralShift.HellMaiden.Player;
 using Com.LuisPedroFonseca.ProCamera2D;
 using MonsterSupergroup.Gameplay.Combat;
+using MonsterSupergroup.Gameplay.Options;
 using MonsterSupergroup.GAS;
 using UnityEngine;
 
@@ -75,7 +76,7 @@ namespace AstralShift.HellMaiden.CameraFX
 
         public void PlayShake(PlayerMovement player, int presetIndex)
         {
-            if (!isActiveAndEnabled || !shakeEnabled || player == null || player != owner ||
+            if (!isActiveAndEnabled || !shakeEnabled || !GameOptionsService.ScreenShakeEnabled || player == null || player != owner ||
                 !player.IsLocalOwnerBound || !shake.isActiveAndEnabled ||
                 presetIndex < 0 || presetIndex >= shake.ShakePresets.Count) return;
             shake.Shake(presetIndex);
@@ -115,6 +116,17 @@ namespace AstralShift.HellMaiden.CameraFX
             }
         }
 
-        private void OnDisable() => ReleaseOwner(owner);
+        private void OnEnable() => GameOptionsService.Changed += ApplyShakePreference;
+        private void ApplyShakePreference()
+        {
+            if (GameOptionsService.ScreenShakeEnabled || shake == null) return;
+            shake.StopConstantShaking(0f); shake.StopShaking();
+            if (shakeContainer != null) shakeContainer.localPosition = Vector3.zero;
+        }
+        private void OnDisable()
+        {
+            GameOptionsService.Changed -= ApplyShakePreference;
+            ReleaseOwner(owner);
+        }
     }
 }

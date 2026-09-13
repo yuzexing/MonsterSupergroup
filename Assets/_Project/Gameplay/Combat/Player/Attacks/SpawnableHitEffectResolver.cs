@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using AstralShift.HellMaiden.Combat;
 using AstralShift.Pooling;
 using MonsterSupergroup.GAS;
@@ -19,6 +20,7 @@ namespace AstralShift.HellMaiden.Player.Attacks
 
 		private WeaponBehaviour _behaviour;
 		private Transform _checkoutRoot;
+		private readonly HashSet<BaseAttackHitEffect> _presentationEffects = new HashSet<BaseAttackHitEffect>();
 
 		public BaseAttackHitEffect HitEffect => hitEffect;
 
@@ -45,6 +47,9 @@ namespace AstralShift.HellMaiden.Player.Attacks
 
 		private void OnDestroy()
 		{
+			foreach (var effect in new List<BaseAttackHitEffect>(_presentationEffects))
+				if (effect != null) Destroy(effect.gameObject);
+			_presentationEffects.Clear();
 			_hitEffectPooler = null;
 		}
 
@@ -64,7 +69,17 @@ namespace AstralShift.HellMaiden.Player.Attacks
 			}
 		}
 
-		protected virtual void SpawnHitEffect(AttackSnapshot attack)
+		public void PlayPresentation(ProjectilePresentationStats stats, Vector3? position = null)
+		{
+			if (!(hitEffect is AttackHitParticleEffect)) return;
+			_behaviour = null;
+			EnsurePool();
+			SpawnHitEffect(null, stats, position);
+		}
+
+		protected virtual void SpawnHitEffect(AttackSnapshot attack) => SpawnHitEffect(attack, null);
+
+		private void SpawnHitEffect(AttackSnapshot attack, ProjectilePresentationStats? presentation, Vector3? position = null)
 		{
 			if (_hitEffectPooler == null) return;
 
@@ -81,6 +96,7 @@ namespace AstralShift.HellMaiden.Player.Attacks
 				completed = true;
 				attackLease?.Dispose();
 				if (!effect) return;
+				_presentationEffects.Remove(effect);
 				// Unity forbids reparenting from an external OnDisable/OnDestroy stack.
 				// Retire cancelled instances; normal completion still returns to the pool.
 				if (effect.isActiveAndEnabled) pool.Return(effect);
@@ -108,19 +124,24 @@ namespace AstralShift.HellMaiden.Player.Attacks
 				effect = pool.GetOrCreate(_checkoutRoot, activate: false);
 				effect.gameObject.SetActive(false);
 				effect.transform.SetParent(null, false);
-				effect.transform.position = hitEffectSpawnPivot
+				effect.transform.position = position ?? (hitEffectSpawnPivot
 					? new Vector3(hitEffectSpawnPivot.position.x, hitEffectSpawnPivot.position.y, 0f)
-					: transform.position;
+					: transform.position);
 				effect.transform.rotation = hitEffect.transform.rotation;
 				effect.transform.localScale = hitEffect.transform.localScale;
-				if (damageMode == DamageMode.ExplosionHit || damageMode == DamageMode.Both || damageMode == DamageMode.MainHit)
+				if (presentation.HasValue)
+				{
+					((AttackHitParticleEffect)effect).InitPresentation(presentation.Value);
+					_presentationEffects.Add(effect);
+				}
+				else if (damageMode == DamageMode.ExplosionHit || damageMode == DamageMode.Both || damageMode == DamageMode.MainHit)
 				{
 					if (attack != null) effect.Init(source, attack);
 					else effect.Init(source);
 				}
 				// Init precedes OnEnable even when Instantiate receives an active prefab.
 				effect.gameObject.SetActive(true);
-				switch (damageMode)
+				switch (presentation.HasValue ? DamageMode.None : damageMode)
 				{
 				case DamageMode.ExplosionHit:
 				case DamageMode.Both:

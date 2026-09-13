@@ -32,7 +32,9 @@
         "GUID:029c1c1b674aaae47a6841a0b89ad80e",
         "GUID:735c8f008d0ad4caa9cdc4306f1c3042",
         "GUID:7793e5cd8d2e94e21b56de41db6606bb",
-        "GUID:8ef573751495a4f88822a98a88954a0b"
+        "GUID:8ef573751495a4f88822a98a88954a0b",
+        "Unity.Localization",
+        "Unity.ugui"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

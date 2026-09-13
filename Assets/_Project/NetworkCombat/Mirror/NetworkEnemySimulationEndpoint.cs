@@ -20,10 +20,14 @@ namespace MonsterSupergroup.NetworkCombat
         private readonly List<EnemyAttackPresentationEdge>
             attackPresentationBuffer =
                 new List<EnemyAttackPresentationEdge>(64);
+        private readonly List<EnemyProjectileLaunch> projectileLaunchBuffer = new List<EnemyProjectileLaunch>();
+        private readonly List<EnemyProjectileTermination> projectileTerminationBuffer = new List<EnemyProjectileTermination>();
         private double nextSnapshotTime;
         private uint batchSequence;
         private uint attackPresentationBatchSequence;
         private CombatantBehaviour combatant;
+        private readonly List<uint> readyFallbackEnemies = new List<uint>();
+        private double nextReadyReport;
 
         public uint PlayerEntityId => netId;
 
@@ -62,6 +66,12 @@ namespace MonsterSupergroup.NetworkCombat
             }
 
             FlushAttackPresentations();
+            if (NetworkTime.time >= nextReadyReport)
+            {
+                nextReadyReport = NetworkTime.time + .25;
+                NetworkEnemySimulationWorld.Instance?.CollectReadyFallbackEnemies(netId, readyFallbackEnemies);
+                if (readyFallbackEnemies.Count > 0) CmdReportSimulationReady(readyFallbackEnemies.GetRange(0, Math.Min(256, readyFallbackEnemies.Count)).ToArray());
+            }
             if (NetworkTime.time < nextSnapshotTime)
             {
                 return;
@@ -79,6 +89,7 @@ namespace MonsterSupergroup.NetworkCombat
             }
 
             attackPresentationBuffer.Clear();
+            FlushProjectileMessages(world);
             world.CollectClientOwnedAttackPresentations(
                 PlayerEntityId,
                 attackPresentationBuffer);
@@ -94,9 +105,23 @@ namespace MonsterSupergroup.NetworkCombat
                     NextSequence(attackPresentationBatchSequence);
                 CmdSubmitAttackPresentations(new EnemyAttackPresentationBatch
                 {
+                    Round = NetworkEnemySimulationWorld.CurrentRound,
                     BatchSequence = attackPresentationBatchSequence,
                     Edges = edges
                 });
+            }
+        }
+
+        private void FlushProjectileMessages(NetworkEnemySimulationWorld world)
+        {
+            world.CollectClientProjectileLaunches(PlayerEntityId, projectileLaunchBuffer);
+            world.CollectClientProjectileTerminations(projectileTerminationBuffer);
+            int maximum = Math.Max(projectileLaunchBuffer.Count, projectileTerminationBuffer.Count);
+            for (int offset = 0; offset < maximum; offset += maximumAttackPresentationEdgesPerBatch)
+            {
+                var launches = projectileLaunchBuffer.GetRange(Math.Min(offset, projectileLaunchBuffer.Count), Math.Min(maximumAttackPresentationEdgesPerBatch, Math.Max(0, projectileLaunchBuffer.Count - offset))).ToArray();
+                var terminals = projectileTerminationBuffer.GetRange(Math.Min(offset, projectileTerminationBuffer.Count), Math.Min(maximumAttackPresentationEdgesPerBatch, Math.Max(0, projectileTerminationBuffer.Count - offset))).ToArray();
+                CmdSubmitAttackPresentations(new EnemyAttackPresentationBatch { Round = NetworkEnemySimulationWorld.CurrentRound, BatchSequence = attackPresentationBatchSequence = NextSequence(attackPresentationBatchSequence), ProjectileLaunches = launches, ProjectileTerminations = terminals });
             }
         }
 
@@ -111,24 +136,19 @@ namespace MonsterSupergroup.NetworkCombat
             snapshotBuffer.Clear();
             world.CollectClientOwnedSnapshots(
                 PlayerEntityId,
-                NetworkTime.time,
+                EnemySimulationClock.Now,
                 snapshotBuffer);
-            for (int offset = 0; offset < snapshotBuffer.Count;
-                 offset += maximumSnapshotsPerBatch)
+            EnemySimulationWire.SendBatches(snapshotBuffer, maximumSnapshotsPerBatch, (batch, reliable) =>
             {
-                int count = Math.Min(
-                    maximumSnapshotsPerBatch,
-                    snapshotBuffer.Count - offset);
-                var snapshots = new EnemySimulationSnapshot[count];
-                snapshotBuffer.CopyTo(offset, snapshots, 0, count);
-                batchSequence = NextSequence(batchSequence);
-                CmdSubmitSnapshots(new EnemySimulationSnapshotBatch
-                {
-                    BatchSequence = batchSequence,
-                    Snapshots = snapshots
-                });
-            }
+                batch.Round = NetworkEnemySimulationWorld.CurrentRound;
+                batch.BatchSequence = batchSequence = NextSequence(batchSequence);
+                if (reliable) CmdSubmitLargeSnapshot(batch); else CmdSubmitSnapshots(batch);
+            });
         }
+
+        [Command(channel = Channels.Reliable)]
+        private void CmdSubmitLargeSnapshot(EnemySimulationSnapshotBatch batch) =>
+            NetworkEnemySimulationWorld.Instance?.SubmitClientSnapshots(this, batch);
 
         [Command(channel = Channels.Unreliable)]
         private void CmdSubmitSnapshots(
@@ -165,6 +185,13 @@ namespace MonsterSupergroup.NetworkCombat
             value = unchecked(value + 1u);
             return value == 0u ? 1u : value;
         }
+
+        [Command(channel = Channels.Reliable)]
+        private void CmdReportSimulationReady(uint[] ids) => NetworkEnemySimulationWorld.Instance?.ReportSimulationReady(this, ids);
+
+        [Command(channel = Channels.Reliable)]
+        internal void CmdSubmitRuntimeCheckpoint(EnemySimulationCheckpoint checkpoint) =>
+            NetworkEnemySimulationWorld.Instance?.SubmitRuntimeCheckpoint(this, checkpoint);
 
         [TargetRpc(channel = Channels.Reliable)]
         internal void TargetApplyKnockback(NetworkConnectionToClient target, EnemyKnockbackCommand command)

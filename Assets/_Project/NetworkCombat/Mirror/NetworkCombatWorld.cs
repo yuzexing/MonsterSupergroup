@@ -8,7 +8,7 @@ namespace MonsterSupergroup.NetworkCombat
     [DefaultExecutionOrder(-10000)]
     [DisallowMultipleComponent]
     [RequireComponent(typeof(NetworkIdentity))]
-    public sealed class NetworkCombatWorld : NetworkBehaviour
+    public sealed partial class NetworkCombatWorld : NetworkBehaviour
     {
         [SerializeField, Min(0.01f)] private float serverTickInterval = 0.05f;
 
@@ -19,6 +19,7 @@ namespace MonsterSupergroup.NetworkCombat
 
         public ServerCombatGateway Gateway { get; private set; }
         public CanonicalWorldReplica Replica { get; } = new CanonicalWorldReplica();
+        public bool ClientStarted { get; private set; }
 
         public event Action<CanonicalWorldBatch> CanonicalBatchReceived;
         public event Action<CanonicalWorldBatch> ServerCanonicalBatchProduced;
@@ -58,10 +59,14 @@ namespace MonsterSupergroup.NetworkCombat
             // Boot's scene identity survives Stop and is spawned again. Mirror reuses
             // netIds in a new session, so an older death/version must not mask its baseline.
             Replica.Clear();
+            ClientStarted = true;
+            ClearEnemyHitPresentations();
         }
 
         public override void OnStopClient()
         {
+            ClientStarted = false;
+            ClearEnemyHitPresentations();
             // Host can receive a queued death after the enemy's OnStopClient forgot it.
             // Clear the whole session, including such despawned entities and status bindings.
             Replica.Clear();
@@ -106,7 +111,7 @@ namespace MonsterSupergroup.NetworkCombat
                 throw new ArgumentNullException(nameof(connection));
             }
 
-            TargetApplyCanonical(connection, Gateway.CreateSnapshot());
+            TargetApplyCanonical(connection, Gateway.CreateSnapshot(), CurrentRound);
         }
 
         [Server]
@@ -175,26 +180,34 @@ namespace MonsterSupergroup.NetworkCombat
                 return;
             }
 
-            RpcApplyCanonical(batch);
+            CaptureEnemyHitPositions(batch.EnemyHitPresentations);
+            RpcApplyCanonical(batch, CurrentRound);
             ServerCanonicalBatchProduced?.Invoke(batch);
         }
 
         [ClientRpc]
-        private void RpcApplyCanonical(CanonicalWorldBatch batch)
+        private void RpcApplyCanonical(CanonicalWorldBatch batch, uint round)
         {
-            ApplyCanonical(batch);
+            ApplyCanonicalForRound(batch, round);
         }
 
         [TargetRpc]
         private void TargetApplyCanonical(
             NetworkConnectionToClient target,
-            CanonicalWorldBatch batch)
+            CanonicalWorldBatch batch, uint round)
         {
-            ApplyCanonical(batch);
+            ApplyCanonicalForRound(batch, round);
+        }
+
+        private void ApplyCanonicalForRound(CanonicalWorldBatch batch, uint round)
+        {
+            if (round == CurrentRound) ApplyCanonical(batch);
         }
 
         private void ApplyCanonical(CanonicalWorldBatch batch)
         {
+            // Present live damage before applying a lethal state can disable the actor.
+            PresentConfirmedEnemyHits(batch.EnemyHitPresentations);
             Replica.Apply(batch);
             CanonicalBatchReceived?.Invoke(batch);
             // Host may already have despawned these Enemies before this queued RPC.
@@ -210,11 +223,27 @@ namespace MonsterSupergroup.NetworkCombat
         {
             return (batch.Entities == null || batch.Entities.Length == 0) &&
                 (batch.Statuses == null || batch.Statuses.Length == 0) &&
-                (batch.ConfirmedKills == null || batch.ConfirmedKills.Length == 0);
+                (batch.ConfirmedKills == null || batch.ConfirmedKills.Length == 0) &&
+                (batch.EnemyHitPresentations == null || batch.EnemyHitPresentations.Length == 0);
+        }
+
+        private static uint CurrentRound => NetworkManager.singleton is BootGameplayNetworkManager manager && manager.UsePreparationRoom
+            ? (NetworkServer.active ? manager.Session.Round : manager.RoomSnapshot.Round) : 0;
+        public void ResetClientRound()
+        {
+            Replica.Clear(); ClearEnemyHitPresentations();
+        }
+        [Server]
+        public void ResetServerRound()
+        {
+            Gateway.ResetForNextRun(); nextServerTick = NetworkTime.time;
         }
 
         private void OnDestroy()
         {
+            ClearEnemyHitPresentations();
+            EnemyHitPresented = null;
+            EnemyDamageNumberPresented = null;
             Replica.Clear();
             ServerCanonicalBatchProduced = null;
             if (Instance == this)

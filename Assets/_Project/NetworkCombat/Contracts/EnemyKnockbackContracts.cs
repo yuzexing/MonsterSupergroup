@@ -157,5 +157,6 @@ namespace MonsterSupergroup.NetworkCombat
             return true;
         }
         public void Clear() => LastCommandId = 0;
+        public void RestoreHandled(ulong id) { if (id > LastCommandId) LastCommandId = id; }
     }
 }

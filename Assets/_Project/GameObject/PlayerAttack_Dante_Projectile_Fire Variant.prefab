@@ -2439,7 +2439,7 @@ ParticleSystemRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: e4a17982fe63da8409d82b905adf382b, type: 2}
+  - {fileID: 2100000, guid: 8c6817d6dd87bcc86d829324cc74343a, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -2459,7 +2459,7 @@ ParticleSystemRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -2050434577
-  m_SortingLayer: 0
+  m_SortingLayer: 5
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_RenderMode: 0
@@ -4810,7 +4810,7 @@ ParticleSystemRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 51274a1df5bab884db88a61e8932df82, type: 2}
+  - {fileID: 2100000, guid: 37f8eaf1085d27441d14f2423c554ce2, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -4830,7 +4830,7 @@ ParticleSystemRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -2050434577
-  m_SortingLayer: 0
+  m_SortingLayer: 5
   m_SortingOrder: -12
   m_MaskInteraction: 0
   m_RenderMode: 1
@@ -7138,7 +7138,7 @@ ParticleSystemRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 2ba256189edf458468a6a24f6c9f01af, type: 2}
+  - {fileID: 2100000, guid: 074f8fe059e1ef7b3fbe5f7eb3b0f7da, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -7158,7 +7158,7 @@ ParticleSystemRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -2050434577
-  m_SortingLayer: 0
+  m_SortingLayer: 5
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_RenderMode: 0
@@ -7251,7 +7251,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 07199f37ae901674e9e900b4b6c32657, type: 2}
+  - {fileID: 2100000, guid: 06c6cfee52ddb169781c19a353b70a56, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -7271,7 +7271,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 842383085
-  m_SortingLayer: 0
+  m_SortingLayer: 3
   m_SortingOrder: 3
   m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: 4b6386413fa147041bfdc918a559fa29, type: 2}
@@ -9666,7 +9666,7 @@ ParticleSystemRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 95c1f46a1b0b7174280823a50ffd1c80, type: 2}
+  - {fileID: 2100000, guid: bcdba449d7427dc8fa87d5939ca81231, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -9686,7 +9686,7 @@ ParticleSystemRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -2050434577
-  m_SortingLayer: 0
+  m_SortingLayer: 5
   m_SortingOrder: -12
   m_MaskInteraction: 0
   m_RenderMode: 0
@@ -12081,7 +12081,7 @@ ParticleSystemRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 8d0662271647cf44cabde4b7616e3c45, type: 2}
+  - {fileID: 2100000, guid: 3420cf7937daaa3a6af443b7070869b9, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -12101,7 +12101,7 @@ ParticleSystemRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -2050434577
-  m_SortingLayer: 0
+  m_SortingLayer: 5
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_RenderMode: 0
@@ -14427,7 +14427,7 @@ ParticleSystemRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 3c1e88d65fe605847b5cfb9dce53fccf, type: 2}
+  - {fileID: 2100000, guid: da7961a882f6632f00351e0fa076ea52, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -14447,7 +14447,7 @@ ParticleSystemRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -1815233415
-  m_SortingLayer: 0
+  m_SortingLayer: 6
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_RenderMode: 0
@@ -14490,7 +14490,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4581786255902400}
-  - component: {fileID: 114477046003934300}
   m_Layer: 0
   m_Name: Hit
   m_TagString: Untagged
@@ -14513,25 +14512,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 4000955326284023}
   m_LocalEulerAnglesHint: {x: 0, y: -0, z: -0}
---- !u!114 &114477046003934300
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1705390221481576}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 744a208c85da6d04c861d81b992e4ead, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  CollisionTag: 
-  Emitters:
-  - Target: {fileID: 114571718729274231}
-    Params:
-    - Name: Phase
-      Value: 1
-  TriggerEvent: 0
 --- !u!1 &1709254077376921
 GameObject:
   m_ObjectHideFlags: 0
@@ -14547,6 +14527,7 @@ GameObject:
   - component: {fileID: 114002669891404536}
   - component: {fileID: 95470112387431263}
   - component: {fileID: 114313026266067498}
+  - component: {fileID: 4523398253575922097}
   m_Layer: 0
   m_Name: PlayerAttack_Dante_Projectile_Fire Variant
   m_TagString: Untagged
@@ -14596,14 +14577,14 @@ MonoBehaviour:
   invertAngle: 0
   animancer: {fileID: 114002669891404536}
   attackStartAnim:
-    _FadeDuration: 0.25
+    _FadeDuration: 0
     _Speed: 1
     _Events:
       _NormalizedTimes: []
       _Callbacks: []
       _Names: []
-    _Clip: {fileID: 0}
-    _NormalizedStartTime: NaN
+    _Clip: {fileID: 7400000, guid: e2eae1876f245de48827587672ae8fdb, type: 2}
+    _NormalizedStartTime: 0
   startAnimLayer: 0
   attackStartAnimTransitionAfterFinish: 0
   attackAnim:
@@ -14672,6 +14653,7 @@ MonoBehaviour:
   despawnTimeout: 10
   onlyDespawnOffCamera: 1
   hitEffectOnExpire: 0
+  playPiercingHitPresentation: 1
   projectileMovement: {fileID: 0}
   particleSystem: {fileID: 198256069497284392}
   attachedToPlayerWhileStartAnimationPlays: 0
@@ -14687,30 +14669,30 @@ MonoBehaviour:
   launchSound:
     eventRef:
       Guid:
-        Data1: 0
-        Data2: 0
-        Data3: 0
-        Data4: 0
-      Path: 
-    automatic: 0
+        Data1: 305521848
+        Data2: 1139334325
+        Data3: -1555974261
+        Data4: -1191919773
+      Path: event:/sx/plr/Sx_plr_slowprojectile_shot
+    automatic: 1
   projectileLoopSound:
     eventRef:
       Guid:
-        Data1: 0
-        Data2: 0
-        Data3: 0
-        Data4: 0
-      Path: 
-    automatic: 0
+        Data1: -450359305
+        Data2: 1330102086
+        Data3: -2065969494
+        Data4: -435797981
+      Path: event:/sx/plr/Sx_plr_slowprojectile_loop
+    automatic: 1
   projectileHitSound:
     eventRef:
       Guid:
-        Data1: 0
-        Data2: 0
-        Data3: 0
-        Data4: 0
-      Path: 
-    automatic: 0
+        Data1: 997541128
+        Data2: 1077009481
+        Data3: 1909684357
+        Data4: -832539066
+      Path: event:/sx/plr/Sx_plr_slowprojectile_hit
+    automatic: 1
   expireSound:
     eventRef:
       Guid:
@@ -17083,6 +17065,18 @@ MonoBehaviour:
   projectileCountParticleSystemProperties: []
   projectileCountShaderProperties: []
   projectileCountCustomScalers: []
+--- !u!114 &4523398253575922097
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1709254077376921}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 384ac2a392f087d4dbf12205db8c5a9e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: MonsterSupergroup.Gameplay.Combat::AstralShift.HellMaiden.Player.Attacks.ProjectileVisualState
 --- !u!1 &1709867586078768
 GameObject:
   m_ObjectHideFlags: 0
@@ -19363,7 +19357,7 @@ ParticleSystemRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 4d173ba88ed482d49bff48dfc515f624, type: 2}
+  - {fileID: 2100000, guid: e1cf0235004b90941bbbd9c6c516ed3e, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -19383,7 +19377,7 @@ ParticleSystemRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -2050434577
-  m_SortingLayer: 0
+  m_SortingLayer: 5
   m_SortingOrder: 30
   m_MaskInteraction: 0
   m_RenderMode: 4
@@ -26335,7 +26329,7 @@ ParticleSystemRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 8a41e91c9ef992e4f8484aa0c9250726, type: 2}
+  - {fileID: 2100000, guid: e3915bb7186be6a85b1aedd2dedcd858, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -26355,7 +26349,7 @@ ParticleSystemRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -2050434577
-  m_SortingLayer: 0
+  m_SortingLayer: 5
   m_SortingOrder: 1
   m_MaskInteraction: 0
   m_RenderMode: 0
@@ -26398,7 +26392,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4397768327470545}
-  - component: {fileID: 114571718729274231}
   m_Layer: 0
   m_Name: Start
   m_TagString: Untagged
@@ -26421,36 +26414,3 @@ Transform:
   m_Children: []
   m_Father: {fileID: 4000955326284023}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &114571718729274231
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1985305603660343}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  CollisionTag: 
-  EventReference:
-    Guid:
-      Data1: 305521848
-      Data2: 1139334325
-      Data3: -1555974261
-      Data4: -1191919773
-    Path: 
-  Event: 
-  EventPlayTrigger: 0
-  EventStopTrigger: 12
-  AllowFadeout: 1
-  TriggerOnce: 0
-  Preload: 0
-  NonRigidbodyVelocity: 0
-  Params:
-  - Name: Phase
-    Value: 0
-  OverrideAttenuation: 0
-  OverrideMinDistance: 1
-  OverrideMaxDistance: 20

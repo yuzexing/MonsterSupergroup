@@ -303,12 +303,15 @@ namespace MonsterSupergroup.NetworkCombat
             }
 
             var instanceId = new StatusInstanceId(mutation.InstanceId);
+            if (mutation.ApplicationRevision == 0) return StatusMutationResult.Reject(CombatRejectionReason.InvalidStatus);
             if (mutation.Kind == StatusMutationKind.Remove)
             {
                 if (!instances.TryGetValue(instanceId, out StatusInstance removed))
                 {
                     return StatusMutationResult.Reject(CombatRejectionReason.InvalidStatus);
                 }
+                if (mutation.ApplicationRevision != removed.ApplicationRevision)
+                    return StatusMutationResult.Reject(CombatRejectionReason.InvalidStatus);
 
                 uint version = removed.Version + 1;
                 instances.Remove(instanceId);
@@ -316,7 +319,7 @@ namespace MonsterSupergroup.NetworkCombat
                 return new StatusMutationResult(
                     true,
                     CombatRejectionReason.None,
-                    CanonicalStatusState.Removal(instanceId, version));
+                    CanonicalStatusState.Removal(removed, version));
             }
 
             if (!instances.TryGetValue(instanceId, out StatusInstance current))
@@ -345,6 +348,12 @@ namespace MonsterSupergroup.NetworkCombat
             {
                 return StatusMutationResult.Reject(CombatRejectionReason.InvalidStatus);
             }
+            if (mutation.ApplicationRevision < current.ApplicationRevision)
+                return StatusMutationResult.Reject(CombatRejectionReason.InvalidStatus);
+            if (mutation.ApplicationRevision == current.ApplicationRevision &&
+                (mutation.TotalTicks != current.TotalTicks || mutation.TickInterval != current.TickInterval ||
+                 mutation.TickDamage != current.TickDamage || mutation.Duration != current.Duration))
+                return StatusMutationResult.Reject(CombatRejectionReason.InvalidStatus);
 
             int nextStack = current.Stack;
             switch (current.Definition.StackMode)
@@ -375,7 +384,7 @@ namespace MonsterSupergroup.NetworkCombat
                 return new StatusMutationResult(
                     true,
                     CombatRejectionReason.None,
-                    CanonicalStatusState.Removal(instanceId, removedVersion));
+                    CanonicalStatusState.Removal(current, removedVersion));
             }
 
             if (nextStack > current.Definition.MaxStacks)
@@ -388,6 +397,15 @@ namespace MonsterSupergroup.NetworkCombat
                 nextStack,
                 current.Version + 1,
                 serverTime);
+            if (mutation.ApplicationRevision == current.ApplicationRevision)
+            {
+                // Stack corrections do not start another timer or grant another tick budget.
+                updated = new StatusInstance(updated.InstanceId, updated.Definition, updated.SourcePlayerId,
+                    updated.SourceEntityId, updated.TargetEntityId, updated.Stack, current.StartTime,
+                    current.Duration, current.ExecutionAuthority, updated.Version, current.TickDamage,
+                    current.TotalTicks, Math.Max(current.CompletedTicks, mutation.CompletedTicks), current.TickInterval,
+                    current.Priority, current.DamageSourceId, updated.SourceContext, updated.Magnitude, current.ApplicationRevision);
+            }
             instances[instanceId] = updated;
             return new StatusMutationResult(
                 true,
@@ -410,7 +428,8 @@ namespace MonsterSupergroup.NetworkCombat
 
         public IReadOnlyList<CanonicalStatusState> HandleSourceDisconnected(
             uint sourcePlayerId,
-            double serverTime)
+            double serverTime,
+            Func<StatusInstance, int> acceptedTicks = null)
         {
             var changes = new List<CanonicalStatusState>();
             var ids = new List<StatusInstanceId>(instances.Keys);
@@ -423,14 +442,14 @@ namespace MonsterSupergroup.NetworkCombat
                     continue;
                 }
 
-                int completed = CalculateCompletedTicks(current, serverTime);
+                int completed = Math.Max(CalculateCompletedTicks(current, serverTime), acceptedTicks?.Invoke(current) ?? 0);
                 if (completed >= current.TotalTicks)
                 {
                     uint removalVersion = current.Version + 1;
                     instances.Remove(current.InstanceId);
                     RememberRemoval(current, removalVersion);
                     changes.Add(CanonicalStatusState.Removal(
-                        current.InstanceId,
+                        current,
                         removalVersion));
                     continue;
                 }
@@ -463,7 +482,7 @@ namespace MonsterSupergroup.NetworkCombat
                 instances.Remove(current.InstanceId);
                 RememberRemoval(current, removalVersion);
                 changes.Add(CanonicalStatusState.Removal(
-                    current.InstanceId,
+                    current,
                     removalVersion));
             }
 
@@ -505,7 +524,7 @@ namespace MonsterSupergroup.NetworkCombat
                     instances.Remove(current.InstanceId);
                     RememberRemoval(current, removalVersion);
                     result.Changes.Add(CanonicalStatusState.Removal(
-                        current.InstanceId,
+                        current,
                         removalVersion));
                 }
             }
@@ -615,7 +634,8 @@ namespace MonsterSupergroup.NetworkCombat
                 mutation.Priority,
                 mutation.DamageSourceId,
                 sourceContext,
-                mutation.Magnitude);
+                mutation.Magnitude,
+                mutation.ApplicationRevision);
         }
 
         private static int CalculateCompletedTicks(StatusInstance instance, double serverTime)
@@ -667,7 +687,8 @@ namespace MonsterSupergroup.NetworkCombat
                 source.Priority,
                 source.DamageSourceId,
                 source.SourceContext,
-                source.Magnitude);
+                source.Magnitude,
+                source.ApplicationRevision);
         }
     }
 }

@@ -13,14 +13,33 @@ MonoBehaviour:
   m_Name: WeaponData_Dante_SlowProjectile
   m_EditorClassIdentifier: 
   ID: 2
-  Title: Will-o'-the-Wisp
-  Description: Casts a slow-moving fireball.
-  HasQuote: 0
-  Quote: 
-  hasLocalization: 1
-  TitleKey: WPN_Name_02
-  DescriptionKey: WPN_Desc_02
-  QuoteKey: WPN_Quote_02
+  localizedTitle:
+    m_TableReference:
+      m_TableCollectionName: MonsterContent
+    m_TableEntryReference:
+      m_KeyId: 0
+      m_Key: weapon.2.name
+    m_FallbackState: 0
+    m_WaitForCompletion: 0
+    m_LocalVariables: []
+  localizedDescription:
+    m_TableReference:
+      m_TableCollectionName: MonsterContent
+    m_TableEntryReference:
+      m_KeyId: 0
+      m_Key: weapon.2.description
+    m_FallbackState: 0
+    m_WaitForCompletion: 0
+    m_LocalVariables: []
+  localizedQuote:
+    m_TableReference:
+      m_TableCollectionName: 
+    m_TableEntryReference:
+      m_KeyId: 0
+      m_Key: 
+    m_FallbackState: 0
+    m_WaitForCompletion: 0
+    m_LocalVariables: []
   poolID: 0
   poolWeight: 1
   dependencies: []

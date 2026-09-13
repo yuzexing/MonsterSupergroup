@@ -22,6 +22,26 @@ namespace MonsterSupergroup.NetworkCombat.Editor
             Select(NetworkBackendKind.Kcp);
         }
 
+        [MenuItem("Monster Supergroup/Network Combat/Steam/Log Invite Diagnostics")]
+        private static void LogInviteDiagnostics()
+        {
+            Object.FindFirstObjectByType<SteamLobbyService>()?.LogInviteDiagnostics();
+        }
+
+        [MenuItem("Monster Supergroup/Network Combat/Steam/Open Lobby Invite Dialog")]
+        private static void OpenInviteDialog()
+        {
+            Object.FindFirstObjectByType<SteamLobbyService>()?.OpenLobbyInviteOverlay();
+        }
+
+        [MenuItem("Monster Supergroup/Network Combat/Steam/Log Invite Diagnostics", true)]
+        [MenuItem("Monster Supergroup/Network Combat/Steam/Open Lobby Invite Dialog", true)]
+        private static bool ValidateSteamDiagnostics()
+        {
+            return EditorApplication.isPlaying &&
+                Object.FindFirstObjectByType<SteamLobbyService>() != null;
+        }
+
         [MenuItem(SteamMenuPath, true)]
         private static bool ValidateSteam()
         {

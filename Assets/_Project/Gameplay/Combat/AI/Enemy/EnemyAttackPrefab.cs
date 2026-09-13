@@ -2,8 +2,11 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Animancer;
+using AstralShift.HellMaiden.Combat;
 using AstralShift.HellMaiden.Interactions;
+using AstralShift.Pooling;
 using AstralShift.HellMaiden.Player.Attacks;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 namespace AstralShift.HellMaiden.AI.Enemy
@@ -80,14 +83,30 @@ namespace AstralShift.HellMaiden.AI.Enemy
 			damageable.Damage(_stats.Damage, DamageType.Normal);
 		}
 
-		public void Hide()
+        public void Hide()
 		{
 			base.gameObject.SetActive(value: false);
-		}
+        }
+
+        public static void ReturnAfterHierarchyChange(EnemyAttackPrefab instance, GenericPooler<EnemyAttackPrefab> pool)
+        {
+            ReturnAfterHierarchyChangeAsync(instance, pool);
+        }
+
+        private static async UniTaskVoid ReturnAfterHierarchyChangeAsync(EnemyAttackPrefab instance, GenericPooler<EnemyAttackPrefab> pool)
+        {
+            var owner = PoolManager.Instance;
+            // Unity cannot reparent children inside a parent's SetActive callback.
+            // Damage and rendering have already been disabled by the caller.
+            await UniTask.NextFrame();
+            if (instance == null) return;
+            if (owner != null && PoolManager.Instance == owner && pool != null) pool.Return(instance);
+            else Destroy(instance.gameObject);
+        }
 
 		protected void PlayStartAnimation(Action onAttackFiredEnd)
 		{
-			if (!attackStartAnim.Clip)
+			if (attackStartAnim == null || !attackStartAnim.Clip)
 			{
 				PlayAttackAnimation();
 				return;
@@ -106,7 +125,7 @@ namespace AstralShift.HellMaiden.AI.Enemy
 
 		protected virtual void PlayAttackAnimation()
 		{
-			if ((bool)attackAnim.Clip)
+			if (attackAnim != null && (bool)attackAnim.Clip)
 			{
 				List<AnimancerState> list = new List<AnimancerState>();
 				AnimancerState animancerState = animancer.Layers[attackAnimLayer].Play(attackAnim, attackAnim.FadeDuration);
@@ -121,7 +140,7 @@ namespace AstralShift.HellMaiden.AI.Enemy
 
 		protected void PlayEndAnimation(Action onExpireEnd)
 		{
-			if (!attackEndAnim.Clip)
+			if (attackEndAnim == null || !attackEndAnim.Clip)
 			{
 				EndCallback(onExpireEnd);
 				return;
@@ -136,7 +155,7 @@ namespace AstralShift.HellMaiden.AI.Enemy
 
 		protected void PlayHitAnimation(Action onHitEnd)
 		{
-			if (!attackHitAnim.Clip)
+			if (attackHitAnim == null || !attackHitAnim.Clip)
 			{
 				EndCallback(onHitEnd);
 				return;

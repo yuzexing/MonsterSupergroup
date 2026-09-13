@@ -52,7 +52,7 @@ namespace MonsterSupergroup.NetworkCombat
             {
                 foreach (NetworkEnemySimulationEndpoint player in players.Values)
                 {
-                    if (player != null && player.IsEligibleSimulationOwner)
+                    if (IsEligibleEndpoint(player))
                     {
                         return true;
                     }
@@ -98,6 +98,7 @@ namespace MonsterSupergroup.NetworkCombat
 
         private void ClearClientWaitingState()
         {
+            ClearEnemyProjectiles();
             pendingClientAttackPresentations.Clear();
             pendingClientKnockbacks.Clear();
             pendingKnockbackIds.Clear();
@@ -107,6 +108,10 @@ namespace MonsterSupergroup.NetworkCombat
         {
             if (observedCombatGateway != null) observedCombatGateway.CombatResultAccepted -= HandleAcceptedOrdinaryHit;
             observedCombatGateway = null;
+            acceptedProjectiles.Clear(); acceptedTerminations.Clear();
+            pendingServerTerminations.Clear();
+            handoffs.Clear();
+            pendingServerKnockbacks.Clear();
             base.OnStopServer();
         }
 
@@ -124,7 +129,7 @@ namespace MonsterSupergroup.NetworkCombat
                 out NetworkEnemySimulationEndpoint current) ||
                 current != endpoint;
             players[playerId] = endpoint;
-            ResumeFrozenEnemies();
+            UpdateTargetDecisions();
             SendCachedAttackPresentations(endpoint);
             if (changed)
             {
@@ -150,46 +155,7 @@ namespace MonsterSupergroup.NetworkCombat
             players.Remove(playerId);
             ForgetPlayerKnockbackPulses(playerId);
             ServerPlayerUnregistered?.Invoke(endpoint);
-            Registry.GetEnemiesDependingOnPlayer(playerId, enemyIdBuffer);
-            for (int i = 0; i < enemyIdBuffer.Count; i++)
-            {
-                uint enemyId = enemyIdBuffer[i];
-                if (!enemies.TryGetValue(enemyId, out NetworkEnemySimulationAgent enemy) ||
-                    enemy == null)
-                {
-                    continue;
-                }
-
-                if (Registry.TryGetLatestSnapshot(
-                    enemyId,
-                    out EnemySimulationSnapshot latest))
-                {
-                    enemy.SnapServerSimulationTo(latest);
-                }
-
-                NetworkEnemySimulationEndpoint target = FindNearestEligiblePlayer(
-                    Registry.TryGetLatestSnapshot(enemyId, out latest)
-                        ? latest.Position
-                        : (Vector2)enemy.transform.position);
-                EnemySimulationAssignment assignment;
-                if (target == null)
-                {
-                    assignment = Registry.Freeze(enemyId);
-                }
-                else if (enemy.SimulationMode == EnemySimulationMode.BossServer)
-                {
-                    assignment = Registry.AssignServerAuthoritative(
-                        enemyId,
-                        target.PlayerEntityId);
-                }
-                else
-                {
-                    assignment = Registry.AssignServerFallback(
-                        enemyId,
-                        target.PlayerEntityId);
-                }
-                enemy.SetServerAssignment(assignment);
-            }
+            UpdateTargetDecisions();
         }
 
         [Server]
@@ -228,7 +194,7 @@ namespace MonsterSupergroup.NetworkCombat
                 assignment = AssignInitialHost(enemy, target);
             }
 
-            enemy.SetServerAssignment(assignment);
+            PublishHandoff(enemy, assignment, EnemyTargetChangeReason.Spawn);
         }
 
         [Server]
@@ -237,7 +203,7 @@ namespace MonsterSupergroup.NetworkCombat
             out NetworkEnemySimulationEndpoint endpoint)
         {
             return players.TryGetValue(playerEntityId, out endpoint) &&
-                endpoint != null && endpoint.IsEligibleSimulationOwner;
+                IsEligibleEndpoint(endpoint);
         }
 
         [Server]
@@ -252,7 +218,7 @@ namespace MonsterSupergroup.NetworkCombat
             results.Clear();
             foreach (NetworkEnemySimulationEndpoint endpoint in players.Values)
             {
-                if (endpoint != null && endpoint.IsEligibleSimulationOwner)
+                if (IsEligibleEndpoint(endpoint))
                 {
                     results.Add(endpoint);
                 }
@@ -268,6 +234,8 @@ namespace MonsterSupergroup.NetworkCombat
             }
 
             enemies.Remove(enemy.netId);
+            handoffs.Remove(enemy.netId);
+            pendingServerKnockbacks.Remove(enemy.netId);
             pendingClientKnockbacks.Remove(enemy.netId);
             neverAssignedEnemies.Remove(enemy.netId);
             Registry.UnregisterEnemy(enemy.netId);
@@ -289,6 +257,8 @@ namespace MonsterSupergroup.NetworkCombat
                 current == enemy)
             {
                 enemies.Remove(enemy.netId);
+                handoffs.Remove(enemy.netId);
+                pendingServerKnockbacks.Remove(enemy.netId);
                 pendingClientAttackPresentations.Remove(enemy.netId);
                 pendingClientKnockbacks.Remove(enemy.netId);
             }
@@ -375,6 +345,7 @@ namespace MonsterSupergroup.NetworkCombat
             NetworkEnemySimulationEndpoint endpoint,
             EnemySimulationSnapshotBatch batch)
         {
+            if (BootGameplayNetworkManager.CombatHasEnded) return;
             // Batch datagrams may arrive out of order and contain disjoint Enemies.
             // Per-Enemy epoch/sequence validation in the Registry provides idempotency.
             if (endpoint == null ||
@@ -396,15 +367,19 @@ namespace MonsterSupergroup.NetworkCombat
                 if (!enemies.TryGetValue(
                     snapshot.EnemyEntityId,
                     out NetworkEnemySimulationAgent enemy) ||
-                    enemy == null || !enemy.IsCanonicalAlive)
+                    enemy == null || !enemy.IsCanonicalAlive || !IsServerEnemyAlive(enemy.netId))
                 {
                     continue;
                 }
 
-                if (Registry.TryAcceptClientSnapshot(
-                    endpoint.PlayerEntityId,
-                    snapshot) == EnemySnapshotRejectionReason.None)
+                var rejection = Registry.TryAcceptClientSnapshot(endpoint.PlayerEntityId, snapshot);
+                var progress = GetHandoff(snapshot.EnemyEntityId);
+                if (rejection == EnemySnapshotRejectionReason.WrongOwner) progress.Diagnostics.WrongOwner++;
+                if (rejection == EnemySnapshotRejectionReason.WrongEpoch) progress.Diagnostics.WrongEpoch++;
+                if (rejection == EnemySnapshotRejectionReason.None)
                 {
+                    GetHandoff(snapshot.EnemyEntityId).Observe(snapshot.AssignmentEpoch, NetworkTime.time);
+                    AcknowledgeKnockback(snapshot);
                     snapshotBuffer.Add(snapshot);
                 }
             }
@@ -417,26 +392,30 @@ namespace MonsterSupergroup.NetworkCombat
             NetworkEnemySimulationEndpoint endpoint,
             EnemyAttackPresentationBatch batch)
         {
+            if (BootGameplayNetworkManager.CombatHasEnded) return;
             if (endpoint == null ||
                 !players.TryGetValue(
                     endpoint.PlayerEntityId,
                     out NetworkEnemySimulationEndpoint registered) ||
-                registered != endpoint || batch.Edges == null ||
-                batch.Edges.Length == 0 ||
-                batch.Edges.Length > maximumAttackPresentationEdgesPerBatch ||
+                registered != endpoint ||
+                (batch.Edges?.Length ?? 0) > maximumAttackPresentationEdgesPerBatch ||
+                (batch.ProjectileLaunches?.Length ?? 0) > maximumAttackPresentationEdgesPerBatch ||
+                (batch.ProjectileTerminations?.Length ?? 0) > maximumAttackPresentationEdgesPerBatch ||
                 batch.BatchSequence == 0u)
             {
                 return;
             }
 
+            SubmitEnemyProjectiles(endpoint.PlayerEntityId, batch.ProjectileLaunches);
+            SubmitEnemyProjectileTerminations(batch.ProjectileTerminations);
             attackPresentationBuffer.Clear();
-            for (int i = 0; i < batch.Edges.Length; i++)
+            for (int i = 0; i < (batch.Edges?.Length ?? 0); i++)
             {
                 EnemyAttackPresentationEdge edge = batch.Edges[i];
                 if (!enemies.TryGetValue(
                     edge.EnemyEntityId,
                     out NetworkEnemySimulationAgent enemy) ||
-                    enemy == null || !enemy.IsCanonicalAlive)
+                    enemy == null || !enemy.IsCanonicalAlive || !IsServerEnemyAlive(enemy.netId))
                 {
                     continue;
                 }
@@ -455,6 +434,8 @@ namespace MonsterSupergroup.NetworkCombat
         [ServerCallback]
         private void Update()
         {
+            if (BootGameplayNetworkManager.CombatHasEnded) return;
+            UpdateTargetDecisions();
             BroadcastServerAttackPresentations();
             if (NetworkTime.time < nextServerSnapshotTime)
             {
@@ -465,7 +446,7 @@ namespace MonsterSupergroup.NetworkCombat
             snapshotBuffer.Clear();
             foreach (NetworkEnemySimulationAgent enemy in enemies.Values)
             {
-                if (enemy == null || !enemy.IsCanonicalAlive ||
+                if (enemy == null || !enemy.IsCanonicalAlive || !IsServerEnemyAlive(enemy.netId) ||
                     (enemy.Assignment.Host != EnemySimulationHost.ServerFallback &&
                      enemy.Assignment.Host != EnemySimulationHost.ServerAuthoritative))
                 {
@@ -477,6 +458,8 @@ namespace MonsterSupergroup.NetworkCombat
                     out EnemySimulationSnapshot snapshot))
                 {
                     Registry.RecordServerSnapshot(snapshot);
+                    GetHandoff(snapshot.EnemyEntityId).Observe(snapshot.AssignmentEpoch, NetworkTime.time);
+                    AcknowledgeKnockback(snapshot);
                     snapshotBuffer.Add(snapshot);
                 }
             }
@@ -490,7 +473,7 @@ namespace MonsterSupergroup.NetworkCombat
             attackPresentationBuffer.Clear();
             foreach (NetworkEnemySimulationAgent enemy in enemies.Values)
             {
-                if (enemy == null || !enemy.IsCanonicalAlive ||
+                if (enemy == null || !enemy.IsCanonicalAlive || !IsServerEnemyAlive(enemy.netId) ||
                     (enemy.Assignment.Host != EnemySimulationHost.ServerFallback &&
                      enemy.Assignment.Host != EnemySimulationHost.ServerAuthoritative))
                 {
@@ -506,64 +489,6 @@ namespace MonsterSupergroup.NetworkCombat
             }
 
             BroadcastAttackPresentations(attackPresentationBuffer);
-        }
-
-        [Server]
-        private void ResumeFrozenEnemies()
-        {
-            if (!HasEligiblePlayer)
-            {
-                return;
-            }
-
-            enemyIdBuffer.Clear();
-            foreach (KeyValuePair<uint, NetworkEnemySimulationAgent> pair in enemies)
-            {
-                if (pair.Value != null &&
-                    Registry.TryGetAssignment(pair.Key, out EnemySimulationAssignment current) &&
-                    current.Host == EnemySimulationHost.Frozen)
-                {
-                    enemyIdBuffer.Add(pair.Key);
-                }
-            }
-
-            for (int i = 0; i < enemyIdBuffer.Count; i++)
-            {
-                uint enemyId = enemyIdBuffer[i];
-                NetworkEnemySimulationAgent enemy = enemies[enemyId];
-                NetworkEnemySimulationEndpoint target =
-                    FindNearestEligiblePlayer(enemy.transform.position);
-                if (target == null)
-                {
-                    continue;
-                }
-
-                EnemySimulationAssignment assignment;
-                if (enemy.SimulationMode == EnemySimulationMode.BossServer)
-                {
-                    neverAssignedEnemies.Remove(enemyId);
-                    assignment = Registry.AssignServerAuthoritative(
-                        enemyId,
-                        target.PlayerEntityId);
-                }
-                else if (neverAssignedEnemies.Remove(enemyId))
-                {
-                    assignment = AssignInitialHost(enemy, target);
-                }
-                else
-                {
-                    if (Registry.TryGetLatestSnapshot(
-                        enemyId,
-                        out EnemySimulationSnapshot latest))
-                    {
-                        enemy.SnapServerSimulationTo(latest);
-                    }
-                    assignment = Registry.AssignServerFallback(
-                        enemyId,
-                        target.PlayerEntityId);
-                }
-                enemy.SetServerAssignment(assignment);
-            }
         }
 
         [Server]
@@ -584,42 +509,31 @@ namespace MonsterSupergroup.NetworkCombat
         [Server]
         private NetworkEnemySimulationEndpoint FindNearestEligiblePlayer(Vector2 position)
         {
-            NetworkEnemySimulationEndpoint nearest = null;
-            float nearestDistance = float.PositiveInfinity;
+            var nearest = new EnemyNearestTarget();
             foreach (NetworkEnemySimulationEndpoint player in players.Values)
             {
-                if (player == null || !player.IsEligibleSimulationOwner)
+                if (!IsEligibleEndpoint(player))
                 {
                     continue;
                 }
 
-                float distance = ((Vector2)player.transform.position - position).sqrMagnitude;
-                if (distance < nearestDistance)
-                {
-                    nearestDistance = distance;
-                    nearest = player;
-                }
+                nearest.Consider(player.netId, StableParticipantId(player), player.transform.position, position, true);
             }
-            return nearest;
+            return nearest.AvatarId != 0 ? players[nearest.AvatarId] : null;
         }
 
         [Server]
         private void BroadcastSnapshots(List<EnemySimulationSnapshot> snapshots)
         {
-            for (int offset = 0; offset < snapshots.Count;
-                 offset += maximumSnapshotsPerBatch)
+            EnemySimulationWire.SendBatches(snapshots, maximumSnapshotsPerBatch, (batch, reliable) =>
             {
-                int count = Math.Min(
-                    maximumSnapshotsPerBatch,
-                    snapshots.Count - offset);
-                var packet = new EnemySimulationSnapshot[count];
-                snapshots.CopyTo(offset, packet, 0, count);
-                RpcApplySnapshots(new EnemySimulationSnapshotBatch
-                {
-                    Snapshots = packet
-                });
-            }
+                batch.Round = CurrentRound;
+                if (reliable) RpcApplyLargeSnapshot(batch); else RpcApplySnapshots(batch);
+            });
         }
+
+        [ClientRpc(channel = Channels.Reliable)]
+        private void RpcApplyLargeSnapshot(EnemySimulationSnapshotBatch batch) => ApplyMovementSnapshots(batch);
 
         [Server]
         private void BroadcastAttackPresentations(
@@ -634,15 +548,19 @@ namespace MonsterSupergroup.NetworkCombat
                 var packet = new EnemyAttackPresentationEdge[count];
                 edges.CopyTo(offset, packet, 0, count);
                 RpcApplyAttackPresentations(new EnemyAttackPresentationBatch
-                {
+                { Round = CurrentRound,
                     Edges = packet
                 });
             }
         }
 
         [ClientRpc(channel = Channels.Unreliable)]
-        private void RpcApplySnapshots(EnemySimulationSnapshotBatch batch)
+        private void RpcApplySnapshots(EnemySimulationSnapshotBatch batch) => ApplyMovementSnapshots(batch);
+
+        private void ApplyMovementSnapshots(EnemySimulationSnapshotBatch batch)
         {
+            if (batch.Round != CurrentRound) return;
+            if (BootGameplayNetworkManager.CombatHasEnded) return;
             if (batch.Snapshots == null)
             {
                 return;
@@ -680,10 +598,13 @@ namespace MonsterSupergroup.NetworkCombat
         private void ApplyAttackPresentations(
             EnemyAttackPresentationBatch batch)
         {
-            if (batch.Edges == null)
-            {
-                return;
-            }
+            if (batch.Round != CurrentRound) return;
+            if (BootGameplayNetworkManager.CombatHasEnded) return;
+            if (batch.ProjectileTerminations != null)
+                foreach (var terminal in batch.ProjectileTerminations) ApplyEnemyProjectileTermination(terminal);
+            if (batch.ProjectileLaunches != null)
+                foreach (var launch in batch.ProjectileLaunches) PresentEnemyProjectile(launch);
+            if (batch.Edges == null) return;
 
             for (int i = 0; i < batch.Edges.Length; i++)
             {
@@ -764,7 +685,7 @@ namespace MonsterSupergroup.NetworkCombat
                 TargetApplyAttackPresentations(
                     endpoint.connectionToClient,
                     new EnemyAttackPresentationBatch
-                    {
+                    { Round = CurrentRound,
                         Edges = packet
                     });
             }
@@ -774,7 +695,10 @@ namespace MonsterSupergroup.NetworkCombat
         {
             if (observedCombatGateway != null) observedCombatGateway.CombatResultAccepted -= HandleAcceptedOrdinaryHit;
             observedCombatGateway = null;
+            ClearEnemyProjectiles();
             ClearUltimateKnockbackState();
+            handoffs.Clear();
+            pendingServerKnockbacks.Clear();
             players.Clear();
             enemies.Clear();
             neverAssignedEnemies.Clear();

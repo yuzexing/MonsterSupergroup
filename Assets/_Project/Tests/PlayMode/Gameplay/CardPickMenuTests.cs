@@ -77,6 +77,28 @@ namespace MonsterSupergroup.Gameplay.Tests
             PoolManager.Instance = null;
         }
 
+        [Test]
+        public void SuppressionPreservesPendingRequestAndUsesLatestReplyWithoutSubmittingOrCancelling()
+        {
+            menu.Bind(selection); Present();
+            int cancelled = 0; selection.CancelRequested += () => cancelled++;
+            buttons[0].onClick.Invoke();
+            Assert.That(selection.IsRequestPending, Is.True);
+            menu.SetPresentationSuppressed(true);
+            Assert.That(selection.IsRequestPending, Is.True);
+            Assert.That(menu.IsOpen && selection.IsPresentationReady, Is.True);
+            Assert.That(menu.GetComponent<CanvasGroup>().blocksRaycasts, Is.False);
+            foreach (var button in buttons) button.onClick.Invoke();
+            Assert.That(requests, Is.EqualTo(1));
+            Present(200, 2);
+            Assert.That(menu.GetComponent<CanvasGroup>().alpha, Is.Zero);
+            menu.SetPresentationSuppressed(false);
+            Assert.That(cancelled, Is.Zero);
+            Assert.That(menu.GetComponent<CanvasGroup>().blocksRaycasts, Is.True);
+            buttons[1].onClick.Invoke();
+            Assert.That(submitted, Is.EqualTo(201UL));
+        }
+
         private void Present(ulong firstId = 100, int count = 3)
         {
             selection.ReceiveOffers(equipmentDB.Equipments.Take(count)

@@ -1,0 +1,3893 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b11a58205ec3474ca216360e9fa74a8, type: 3}
+  m_Name: MonsterMenus Shared Data
+  m_EditorClassIdentifier: Unity.Localization::UnityEngine.Localization.Tables.SharedTableData
+  m_TableCollectionName: MonsterMenus
+  m_TableCollectionNameGuidString: 62d67febafe785b4c87e874251ddf823
+  m_Entries:
+  - m_Id: 1320148992
+    m_Key: "\u9009\u9879"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1362092032
+    m_Key: "\u5E38\u89C4"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1362092033
+    m_Key: "\u97F3\u9891"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1362092034
+    m_Key: "\u753B\u9762"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286336
+    m_Key: "\u8BED\u8A00"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286337
+    m_Key: "\u7B80\u4F53\u4E2D\u6587"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286338
+    m_Key: English
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286339
+    m_Key: "\u955C\u5934\u9707\u52A8"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286340
+    m_Key: "\u5173\u95ED"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286341
+    m_Key: "\u5F00\u542F"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286342
+    m_Key: "\u5207\u6362\u8BED\u8A00\u540E\uFF0C\u83DC\u5355\u7ACB\u5373\u66F4\u65B0\u3002\u955C\u5934\u9707\u52A8\u4EC5\u5F71\u54CD\u672C\u673A\u753B\u9762\u3002"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286343
+    m_Key: "\u603B\u97F3\u91CF"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286344
+    m_Key: "\u97F3\u4E50"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286345
+    m_Key: "\u97F3\u6548"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286346
+    m_Key: "\u97F3\u6548\u63A7\u5236\u6B66\u5668\u3001\u53D7\u4F24\u3001\u73AF\u5883\u548C\u83DC\u5355\u58F0\u97F3\u3002\u4FEE\u6539\u540E\u7ACB\u5373\u751F\u6548\u3002"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286347
+    m_Key: "\u97F3\u9891\u6B63\u5728\u521D\u59CB\u5316\uFF0C\u5DF2\u4FDD\u5B58\u7684\u97F3\u91CF\u4F1A\u5728\u5C31\u7EEA\u540E\u5E94\u7528\u3002"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286348
+    m_Key: "\u663E\u793A\u6A21\u5F0F"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286349
+    m_Key: "\u7A97\u53E3"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286350
+    m_Key: "\u65E0\u8FB9\u6846\u5168\u5C4F"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286351
+    m_Key: "\u72EC\u5360\u5168\u5C4F"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286352
+    m_Key: "\u5206\u8FA8\u7387"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286353
+    m_Key: "\u5782\u76F4\u540C\u6B65"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286354
+    m_Key: "\u5E27\u7387\u4E0A\u9650"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286355
+    m_Key: "\u4E0D\u9650\u5236"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286356
+    m_Key: "\u6E32\u67D3\u6BD4\u4F8B"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286357
+    m_Key: "\u6297\u952F\u9F7F"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286358
+    m_Key: "\u7EB9\u7406\u8D28\u91CF"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286359
+    m_Key: "\u539F\u59CB"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286360
+    m_Key: "\u4E8C\u5206\u4E4B\u4E00"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286361
+    m_Key: "\u56DB\u5206\u4E4B\u4E00"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286362
+    m_Key: "\u8FD4\u56DE"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286363
+    m_Key: "\u6062\u590D\u6B64\u9875\u9ED8\u8BA4\u503C"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286364
+    m_Key: "\u5E94\u7528"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286365
+    m_Key: "\u6062\u590D\u539F\u8BBE\u7F6E"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286366
+    m_Key: "\u4FDD\u7559\u8BBE\u7F6E"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286367
+    m_Key: "\u4FDD\u7559\u5F53\u524D\u663E\u793A\u8BBE\u7F6E\uFF1F\n{0} \u79D2\u540E\u6062\u590D\u539F\u8BBE\u7F6E\u3002"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286368
+    m_Key: "\u5782\u76F4\u540C\u6B65\u5DF2\u5F00\u542F\uFF0C\u5E27\u7387\u7531\u663E\u793A\u5668\u5237\u65B0\u7387\u63A7\u5236\u3002"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286369
+    m_Key: "\u964D\u4F4E\u6E32\u67D3\u6BD4\u4F8B\u53EF\u63D0\u5347\u6027\u80FD\uFF1B\u7EB9\u7406\u8D28\u91CF\u4EC5\u5F71\u54CD\u652F\u6301
+      mipmap \u7684\u7EB9\u7406\u3002"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286370
+    m_Key: "\u7F16\u8F91\u5668\u4E2D\u65E0\u6CD5\u5207\u6362\u7A97\u53E3\u6A21\u5F0F\u4E0E\u5206\u8FA8\u7387\uFF0C\u8BF7\u5728\u72EC\u7ACB\u8FD0\u884C\u7248\u672C\u4E2D\u8C03\u6574\u3002"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286371
+    m_Key: "\u96C6\u7ED3 \xB7 \u51C6\u5907 \xB7 \u51FA\u53D1"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286372
+    m_Key: "\u53EC\u96C6\u540C\u4F34\uFF0C\u8FCE\u63A5\u4E0B\u4E00\u573A\u6218\u6597\u3002"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286373
+    m_Key: "\u8FDE\u63A5\u4E2D\u2026"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286374
+    m_Key: "\u6E38\u620F"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286375
+    m_Key: "\u53CD\u9988\u610F\u89C1"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286376
+    m_Key: "\u9000\u51FA"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286377
+    m_Key: "\u540C\u4E00\u573A\u6218\u6597 \xB7 \u6700\u591A\u56DB\u4F4D\u540C\u4F34"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286378
+    m_Key: "Steam \u5DF2\u8FDE\u63A5 \xB7 \u652F\u6301\u597D\u53CB\u9080\u8BF7"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286379
+    m_Key: "\u672C\u5730\u5355\u4EBA\u53EF\u7528 \xB7 Steam \u672A\u8FDE\u63A5"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286380
+    m_Key: "Steam \u8FDE\u63A5\u5931\u8D25\uFF0C\u8BF7\u8FD4\u56DE\u540E\u91CD\u8BD5\u3002"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286381
+    m_Key: "\u6B63\u5728\u8FDB\u5165\u6218\u573A"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286382
+    m_Key: "\u51C6\u5907\u623F\u95F4"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286383
+    m_Key: "\u597D\u53CB\u623F\u95F4"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286384
+    m_Key: "\u672C\u5730\u5355\u4EBA"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286385
+    m_Key: '{0}    {1} / 4'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286386
+    m_Key: "    \xB7    \u5927\u5385 {0}"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286387
+    m_Key: "\u7B49\u5F85\u540C\u4F34"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286388
+    m_Key: "\u9080\u8BF7\u670B\u53CB"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286389
+    m_Key: " \xB7 \u623F\u4E3B"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286390
+    m_Key: " \xB7 \u4F60"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286391
+    m_Key: "\u52A0\u8F7D\u5B8C\u6210"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286392
+    m_Key: "\u6B63\u5728\u52A0\u8F7D\u2026"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286393
+    m_Key: "\u5DF2\u51C6\u5907"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286394
+    m_Key: "\u672A\u51C6\u5907"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286395
+    m_Key: "\u672C\u6B21\u8FDC\u5F81"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286396
+    m_Key: "\u5730\u56FE"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286397
+    m_Key: "\u9057\u8FF9\u8FB9\u5883"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286398
+    m_Key: "\u8E0F\u5165\u6218\u573A\uFF0C\u4E0E\u540C\u4F34\u4E00\u8D77\u8FCE\u6218\u4E0D\u65AD\u6D8C\u6765\u7684\u602A\u7269\u3002"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286399
+    m_Key: "\u96BE\u5EA6"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286400
+    m_Key: "\u4E2D\u7B49"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286401
+    m_Key: "\u7B49\u5F85\u6240\u6709\u6210\u5458\u7684\u89D2\u8272\u548C\u521D\u59CB\u6B66\u5668\u51C6\u5907\u5B8C\u6210\u3002"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286402
+    m_Key: "\u9009\u62E9\u521D\u59CB\u6B66\u5668\u5E76\u51C6\u5907\u3002\u591A\u4EBA\u5168\u90E8\u51C6\u5907\u540E\uFF0C\u7531\u623F\u4E3B\u5F00\u59CB\u3002"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286403
+    m_Key: "\u53D6\u6D88\u5F00\u5C40"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286404
+    m_Key: "\u53D6\u6D88\u51C6\u5907"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286405
+    m_Key: "\u51C6\u5907"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286406
+    m_Key: "\u5F00\u59CB\u6E38\u620F"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286407
+    m_Key: "\u7B49\u5F85\u623F\u4E3B\u5F00\u59CB"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286408
+    m_Key: "\u9009\u62E9\u521D\u59CB\u6B66\u5668"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286409
+    m_Key: "{0} \xB7 \u5F53\u524D\u552F\u4E00\u89D2\u8272    /    \u4FEE\u6539\u9009\u62E9\u4F1A\u53D6\u6D88\u81EA\u5DF1\u7684\u51C6\u5907"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286410
+    m_Key: "\u5DF2\u9009\u62E9"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286411
+    m_Key: "\u9009\u62E9"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286412
+    m_Key: "\u8FD4\u56DE\u623F\u95F4"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286413
+    m_Key: "\u91CA\u653E\u8FD1\u8DDD\u79BB\u7684\u707C\u70ED\u65A9\u51FB\u3002"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286414
+    m_Key: "\u53D1\u5C04\u7F13\u6162\u79FB\u52A8\u7684\u706B\u7403\u3002"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286415
+    m_Key: "\u55B7\u51FA\u70BD\u70ED\u7684\u706B\u7130\u3002"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286416
+    m_Key: "\u751F\u6210\u4E24\u9897\u73AF\u7ED5\u89D2\u8272\u65CB\u8F6C\u7684\u6CD5\u7403\u3002"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286417
+    m_Key: "\u51B2\u523A\u540E\u7559\u4E0B\u6301\u7EED\u71C3\u70E7\u7684\u706B\u7130\u8DEF\u5F84\u3002"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286418
+    m_Key: "\u53EC\u5524\u4F19\u4F34\u534F\u52A9\u4F5C\u6218\u3002"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286419
+    m_Key: "\u65A9"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286420
+    m_Key: "\u7130"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286421
+    m_Key: "\u606F"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286422
+    m_Key: "\u73AF"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286423
+    m_Key: "\u5F84"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286424
+    m_Key: "\u53EC"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286425
+    m_Key: "\u9080\u8BF7 Steam \u597D\u53CB"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286426
+    m_Key: "\u5927\u5385 {0}    \xB7    \u9009\u62E9\u4E00\u4F4D\u597D\u53CB\u53D1\u9001\u9080\u8BF7\uFF0C\u63A5\u53D7\u540E\u52A0\u5165\u51C6\u5907\u623F\u95F4\u3002"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286427
+    m_Key: "\u641C\u7D22\u597D\u53CB\u540D\u79F0\u2026"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286428
+    m_Key: "\u5237\u65B0"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286429
+    m_Key: "Tab / \u2191\u2193 \u9009\u62E9 \xB7 Enter \u9080\u8BF7 \xB7 Esc \u8FD4\u56DE"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286430
+    m_Key: "\u5DF2\u63D0\u4EA4 \xB7 {0} \u79D2"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286431
+    m_Key: "\u518D\u6B21\u9080\u8BF7"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286432
+    m_Key: "\u5DF2\u5728\u5927\u5385"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286433
+    m_Key: "\u5DF2\u63D0\u4EA4"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286434
+    m_Key: "\u9080\u8BF7"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286435
+    m_Key: "\u6682\u65E0\u53EF\u663E\u793A\u7684 Steam \u597D\u53CB\uFF0C\u8BF7\u5237\u65B0\u91CD\u8BD5\u3002"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286436
+    m_Key: "\u6CA1\u6709\u627E\u5230\u5339\u914D\u7684\u597D\u53CB\u3002"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286437
+    m_Key: "\u663E\u793A {0} / {1} \u4F4D\u597D\u53CB \xB7 \u6BCF 2 \u79D2\u81EA\u52A8\u5237\u65B0"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286438
+    m_Key: "\u786E\u5B9A\u7ED3\u675F\u672C\u5C40\u5E76\u8FD4\u56DE\u9996\u9875\uFF1F\n\u5176\u4ED6\u73A9\u5BB6\u4E5F\u4F1A\u65AD\u5F00\u8FDE\u63A5\u3002"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286439
+    m_Key: "\u786E\u5B9A\u7ED3\u675F\u672C\u5C40\u5E76\u8FD4\u56DE\u9996\u9875\uFF1F"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286440
+    m_Key: "\u786E\u5B9A\u79BB\u5F00\u672C\u5C40\u5E76\u8FD4\u56DE\u9996\u9875\uFF1F"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286441
+    m_Key: "\u6B63\u5728\u9000\u51FA\u2026"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286442
+    m_Key: "\u83DC\u5355 [Esc]"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286443
+    m_Key: "\u672C\u5C40\u83DC\u5355"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286444
+    m_Key: "{0}    /    \u96BE\u5EA6 \xB7 \u4E2D\u7B49"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286445
+    m_Key: "\u7EE7\u7EED\u6E38\u620F"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286446
+    m_Key: "\u9000\u51FA\u672C\u5C40"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286447
+    m_Key: "\u6218\u6597\u4ECD\u5728\u7EE7\u7EED"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286448
+    m_Key: "\u89D2\u8272\u4ECD\u53EF\u80FD\u53D7\u4F24\uFF0C\u81EA\u52A8\u653B\u51FB\u7EE7\u7EED\u3002"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286449
+    m_Key: "\u89D2\u8272\u7EDF\u8BA1"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286450
+    m_Key: "\u6CD5\u672F\u7EDF\u8BA1"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286451
+    m_Key: "Esc \u8FD4\u56DE    \xB7    \u65B9\u5411\u952E / Tab \u9009\u62E9   
+      \xB7    Enter \u786E\u8BA4    \xB7    \u6EDA\u8F6E\u67E5\u770B\u66F4\u591A"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286452
+    m_Key: "\u79BB\u5F00\u672C\u5C40"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286453
+    m_Key: "\u53D6\u6D88"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286454
+    m_Key: "\u786E\u8BA4\u9000\u51FA"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286455
+    m_Key: "{0}    \xB7    \u5F53\u524D\u5C5E\u6027"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286456
+    m_Key: "\u751F\u547D    {0} / {1}       {2}"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286457
+    m_Key: "\u5B58\u6D3B \xB7 Alive"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286458
+    m_Key: "\u5012\u5730 \xB7 Downed"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286459
+    m_Key: "\u751F\u547D    "
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286460
+    m_Key: "\u7B49\u7EA7    {0}       \u7ECF\u9A8C    {1} / {2}"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286461
+    m_Key: "\u7B49\u7EA7 / \u7ECF\u9A8C    "
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286462
+    m_Key: "\u79FB\u52A8\u901F\u5EA6    {0}"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286463
+    m_Key: "\u56FA\u5B9A\u51CF\u4F24    {0}"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286464
+    m_Key: "\u62FE\u53D6\u8303\u56F4    {0}"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286465
+    m_Key: "\u7ECF\u9A8C\u500D\u7387    \xD7{0}"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286466
+    m_Key: "\u51B2\u523A\u5C5E\u6027"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286467
+    m_Key: "\u8DDD\u79BB    {0}       \u901F\u5EA6    {1}"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286468
+    m_Key: "\u6062\u590D\u95F4\u9694    {0} \u79D2"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286469
+    m_Key: "\u89D2\u8272 / \u51B2\u523A\u5C5E\u6027    "
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286470
+    m_Key: "\u51B2\u523A\u6B21\u6570    "
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286471
+    m_Key: "\u69FD\u4F4D {0}{1}\n{2}"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286472
+    m_Key: " \xB7 \u521D\u59CB"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286473
+    m_Key: " \xB7 \u521D\u59CB\u6B66\u5668"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286474
+    m_Key: "\u5F53\u524D\u5C5E\u6027"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286475
+    m_Key: "\u4F24\u5BB3    {0}       \u653B\u901F\u500D\u7387    {1}"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286476
+    m_Key: "\u66B4\u51FB\u7387    {0}       \u66B4\u51FB\u500D\u7387    {1}"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286477
+    m_Key: "\u4F7F\u7528\u51B2\u523A\u6B21\u6570"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286478
+    m_Key: "\u51B7\u5374\u5269\u4F59    {0} \u79D2"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286479
+    m_Key: "\u6B66\u5668\u88C5\u5907"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286480
+    m_Key: "\u65E0\u88C5\u5907"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286481
+    m_Key: "{0}    \u7B49\u7EA7 {1}"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286482
+    m_Key: "\u6570\u503C\u968F\u5F53\u524D\u6784\u7B51\u53D8\u5316\uFF1B\u4E0D\u5305\u542B\u76EE\u6807\u6761\u4EF6\u548C\u547D\u4E2D\u89E6\u53D1\u6548\u679C\u3002"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286483
+    m_Key: "\u7A7A\u69FD\u4F4D"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286484
+    m_Key: "\u7EC4\u4EF6\u672A\u5C31\u7EEA"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286485
+    m_Key: "\u540C\u6B65\u4E2D"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286486
+    m_Key: "\u89D2\u8272"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286487
+    m_Key: "\u6B66\u5668 #{0}"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286488
+    m_Key: "\u88C5\u5907 #{0}"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286489
+    m_Key: "\u6B63\u5728\u6E05\u7406\u4E0A\u4E00\u5C40\u6E38\u620F\uFF0C\u8BF7\u7A0D\u5019\u3002"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286490
+    m_Key: "\u4E3B\u83DC\u5355\u5C1A\u672A\u5C31\u7EEA\u3002"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286491
+    m_Key: "\u623F\u95F4\u6B63\u5728\u52A0\u8F7D\uFF0C\u8BF7\u7A0D\u540E\u91CD\u8FDE\u3002"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286492
+    m_Key: "\u6218\u6597\u573A\u666F\u65E0\u6CD5\u52A0\u8F7D\uFF0C\u672C\u6B21\u5F00\u5C40\u5DF2\u53D6\u6D88\u3002"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286493
+    m_Key: "Steam \u8054\u673A\u6682\u4E0D\u53EF\u7528\uFF0C\u5DF2\u8FDB\u5165\u672C\u5730\u5355\u4EBA\u623F\u95F4\u3002"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286494
+    m_Key: "\u52A0\u8F7D\u8D85\u8FC7 120 \u79D2\uFF0C\u672C\u6B21\u5F00\u5C40\u5DF2\u53D6\u6D88\u3002\u8BF7\u91CD\u65B0\u521B\u5EFA\u623F\u95F4\u3002"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286495
+    m_Key: "\u6709\u73A9\u5BB6\u5728\u52A0\u8F7D\u671F\u95F4\u65AD\u5F00\u8FDE\u63A5\uFF0C\u672C\u6B21\u5F00\u5C40\u5DF2\u53D6\u6D88\u3002"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286496
+    m_Key: "\u623F\u4E3B\u5DF2\u7ED3\u675F\u4F1A\u8BDD\u3002"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286497
+    m_Key: "\u4E0E\u623F\u4E3B\u7684\u8FDE\u63A5\u5DF2\u65AD\u5F00\uFF0C\u623F\u4E3B\u53EF\u80FD\u5DF2\u7ED3\u675F\u4F1A\u8BDD\u3002"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286498
+    m_Key: "\u8FDE\u63A5\u5931\u8D25\uFF1A{0}"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286499
+    m_Key: "\u79BB\u7EBF"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286500
+    m_Key: "\u5728\u7EBF"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286501
+    m_Key: "\u5FD9\u788C"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286502
+    m_Key: "\u79BB\u5F00"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286503
+    m_Key: "\u4F11\u606F"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286504
+    m_Key: "\u60F3\u4EA4\u6613"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286505
+    m_Key: "\u60F3\u73A9\u6E38\u620F"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286506
+    m_Key: "\u72B6\u6001\u672A\u77E5"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286507
+    m_Key: "Steam \u5C1A\u672A\u8FDE\u63A5\uFF0C\u8BF7\u5148\u767B\u5F55 Steam \u540E\u91CD\u8BD5\u3002"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286508
+    m_Key: "\u5927\u5385\u5DF2\u53D8\u5316\uFF0C\u8BF7\u8FD4\u56DE\u5F53\u524D\u623F\u95F4\u91CD\u65B0\u6253\u5F00\u597D\u53CB\u5217\u8868\u3002"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286509
+    m_Key: "\u5F53\u524D\u5927\u5385\u5DF2\u505C\u6B62\u9080\u8BF7\uFF0C\u8BF7\u8FD4\u56DE\u623F\u95F4\u67E5\u770B\u72B6\u6001\u3002"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286510
+    m_Key: "\u6B63\u5728\u79BB\u5F00\u6216\u5927\u5385\u4FE1\u606F\u65E0\u6548\uFF0C\u65E0\u6CD5\u53D1\u9001\u9080\u8BF7\u3002"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286511
+    m_Key: "\u5927\u5385\u5DF2\u5F00\u59CB\u52A0\u8F7D\u6216\u5173\u95ED\uFF0C\u65E0\u6CD5\u53D1\u9001\u9080\u8BF7\u3002"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286512
+    m_Key: "\u4F60\u5DF2\u4E0D\u5728\u6B64 Steam \u5927\u5385\u4E2D\uFF0C\u8BF7\u8FD4\u56DE\u623F\u95F4\u3002"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286513
+    m_Key: "\u5C1A\u672A\u53D6\u5F97\u5927\u5385\u5143\u6570\u636E\uFF0C\u8BF7\u5237\u65B0\u540E\u91CD\u8BD5\u3002"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286514
+    m_Key: "\u5927\u5385\u4EBA\u6570\u5DF2\u6EE1\uFF0C\u65E0\u6CD5\u53D1\u9001\u9080\u8BF7\u3002"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286515
+    m_Key: "\u65E0\u6CD5\u8BFB\u53D6 Steam \u597D\u53CB\u6216\u6210\u5458\u5217\u8868\uFF0C\u8BF7\u5237\u65B0\u540E\u91CD\u8BD5\u3002"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286516
+    m_Key: "\u5BF9\u65B9\u5DF2\u4E0D\u662F\u6709\u6548\u7684 Steam \u597D\u53CB\uFF0C\u8BF7\u5237\u65B0\u597D\u53CB\u5217\u8868\u3002"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286517
+    m_Key: "\u8FD9\u4F4D\u597D\u53CB\u5DF2\u5728\u5927\u5385\u4E2D\u3002"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286518
+    m_Key: "\u9080\u8BF7\u5DF2\u63D0\u4EA4\uFF0C\u8BF7\u7B49\u5F85 5 \u79D2\u540E\u518D\u8BD5\u3002"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286519
+    m_Key: "\u9080\u8BF7\u5DF2\u63D0\u4EA4\uFF0C\u7B49\u5F85\u597D\u53CB\u63A5\u53D7"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286520
+    m_Key: "Steam \u672A\u80FD\u63D0\u4EA4\u9080\u8BF7\uFF0C\u8BF7\u624B\u52A8\u91CD\u8BD5\u3002"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286521
+    m_Key: "Steam \u597D\u53CB\u9080\u8BF7\u5931\u8D25\uFF0C\u8BF7\u624B\u52A8\u91CD\u8BD5\u3002"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286522
+    m_Key: "\u5DF2\u5EFA\u7ACB\u51C6\u5907\u623F\u95F4\uFF0C\u53EF\u4EE5\u9009\u62E9\u6B66\u5668\u5E76\u51C6\u5907\u3002"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286523
+    m_Key: "\u6B63\u5728\u52A0\u5165\u597D\u53CB\u7684 Steam \u5927\u5385\u2026"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286524
+    m_Key: "\u5DF2\u52A0\u5165 Steam \u5927\u5385\uFF0C\u6B63\u5728\u8FDE\u63A5\u623F\u4E3B\u2026"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286525
+    m_Key: "\u5DF2\u8FDE\u63A5\u623F\u4E3B\uFF0C\u6B63\u5728\u9A8C\u8BC1\u8EAB\u4EFD\u5E76\u540C\u6B65\u51C6\u5907\u623F\u95F4\u2026"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286526
+    m_Key: "\u5927\u5385\u4EBA\u6570\u5DF2\u6EE1\uFF08\u6700\u591A\u56DB\u4EBA\uFF09\u3002"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286527
+    m_Key: "\u6E38\u620F\u7248\u672C\u4E0D\u517C\u5BB9\uFF0C\u8BF7\u4F7F\u7528\u76F8\u540C\u7248\u672C\u3002"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286528
+    m_Key: "\u623F\u4E3B\u5DF2\u7ED3\u675F\u4F1A\u8BDD\uFF0C\u8BF7\u91CD\u65B0\u52A0\u5165\u623F\u95F4\u3002"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286529
+    m_Key: "\u9080\u8BF7\u7684\u5927\u5385\u5DF2\u5173\u95ED\u6216\u5C1A\u672A\u51C6\u5907\u597D\uFF0C\u8BF7\u8BA9\u597D\u53CB\u91CD\u65B0\u9080\u8BF7\u3002"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286530
+    m_Key: "Steam \u5927\u5385\u5931\u8D25\uFF0C\u8BF7\u68C0\u67E5 Steam \u8FDE\u63A5\u540E\u91CD\u8BD5\u3002"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286531
+    m_Key: "\u8BF7\u5148\u521B\u5EFA\u6216\u52A0\u5165\u51C6\u5907\u623F\u95F4\uFF0C\u518D\u9080\u8BF7\u597D\u53CB\u3002"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286532
+    m_Key: "Unity \u7F16\u8F91\u5668\u4E2D\u7684 Steam \u53E0\u52A0\u754C\u9762\u672A\u6FC0\u6D3B\u3002\u8BF7\u5728
+      Steam \u542F\u52A8\u7684\u6E38\u620F\u4E2D\u53D1\u9001\u9080\u8BF7\u3002"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286533
+    m_Key: "Steam \u53E0\u52A0\u754C\u9762\u672A\u6FC0\u6D3B\u3002\u8BF7\u7A0D\u540E\u91CD\u8BD5\uFF1B\u82E5\u6301\u7EED\u4E0D\u53EF\u7528\uFF0C\u8BF7\u542F\u7528\u53E0\u52A0\u754C\u9762\u5E76\u4ECE
+      Steam \u542F\u52A8\u6E38\u620F\u3002"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1366286534
+    m_Key: "\u8BF7\u5148\u79BB\u5F00\u5F53\u524D\u623F\u95F4\uFF0C\u518D\u63A5\u53D7\u53E6\u4E00\u4E2A\u5927\u5385\u7684\u9080\u8BF7\u3002"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2416110985216
+    m_Key: "Esc \u7EE7\u7EED    \xB7    \u65B9\u5411\u952E / Tab \u9009\u62E9   
+      \xB7    Enter \u786E\u8BA4    \xB7    \u6EDA\u8F6E\u67E5\u770B\u5C5E\u6027"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2416148733952
+    m_Key: "\u5DF2\u8FDB\u5165\u51C6\u5907\u623F\u95F4\uFF0C\u53EF\u4EE5\u9009\u62E9\u6B66\u5668\u5E76\u51C6\u5907\u3002"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2416148733953
+    m_Key: "\u6B63\u5728\u6E05\u7406\u4E0A\u4E00\u6B21\u6E38\u620F\uFF0C\u8BF7\u7A0D\u5019\u3002"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2416148733954
+    m_Key: "\u623F\u95F4\u5C1A\u672A\u5C31\u7EEA\u3002"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2416148733955
+    m_Key: "\u6E38\u620F\u5DF2\u7ECF\u5F00\u59CB\uFF0C\u4EC5\u5141\u8BB8\u672C\u5C40\u6210\u5458\u91CD\u8FDE\u3002"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2416148733956
+    m_Key: "\u623F\u95F4\u5DF2\u6EE1\uFF08\u6700\u591A\u56DB\u4EBA\uFF09\u3002"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2416148733957
+    m_Key: "\u8BE5\u89D2\u8272\u6216\u521D\u59CB\u6B66\u5668\u5C1A\u672A\u5F00\u653E\u3002"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2416148733958
+    m_Key: "\u9009\u62E9\u5DF2\u7ECF\u66F4\u65B0\uFF0C\u8BF7\u786E\u8BA4\u5F53\u524D\u914D\u7F6E\u540E\u91CD\u65B0\u51C6\u5907\u3002"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2416148733959
+    m_Key: "\u53EA\u6709\u623F\u4E3B\u53EF\u4EE5\u5F00\u59CB\u6E38\u620F\u3002"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2416148733960
+    m_Key: "\u623F\u95F4\u4FE1\u606F\u5DF2\u66F4\u65B0\uFF0C\u8BF7\u91CD\u65B0\u786E\u8BA4\u5F00\u59CB\u3002"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2416148733961
+    m_Key: "\u7B49\u5F85\u6240\u6709\u73A9\u5BB6\u51C6\u5907\u5B8C\u6210\u3002"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2416148733962
+    m_Key: "\u6B63\u5728\u5F00\u5C40\uFF0C\u65E0\u6CD5\u4FEE\u6539\u914D\u7F6E\u3002"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2416148733963
+    m_Key: "\u5C1A\u672A\u52A0\u5165\u623F\u95F4\u3002"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 8272814792704
+    m_Key: Dante
+    m_Metadata:
+      m_Items: []
+  - m_Id: 8272852541440
+    m_Key: DANTE
+    m_Metadata:
+      m_Items: []
+  - m_Id: 113251252690944
+    m_Key: "\u6E38\u620F\u7ED3\u675F"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 113251294633984
+    m_Key: "\u6240\u6709\u5728\u7EBF\u73A9\u5BB6\u5747\u5DF2\u5012\u5730"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 113251294633985
+    m_Key: "\u6B63\u5728\u6E05\u7406\u6218\u573A\uFF0C\u51C6\u5907\u91CD\u65B0\u5F00\u59CB\u2026"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 113251294633986
+    m_Key: "\u6B63\u5728\u8FD4\u56DE\u51C6\u5907\u623F\u95F4\u2026"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 113251294633987
+    m_Key: "\u786E\u5B9A\u79BB\u5F00\u623F\u95F4\u5E76\u8FD4\u56DE\u9996\u9875\uFF1F"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 113251294633988
+    m_Key: "\u786E\u8BA4\u79BB\u5F00"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 113251294633989
+    m_Key: "\u56DE\u5230\u5927\u5385"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 113251294633990
+    m_Key: "\u91CD\u65B0\u5F00\u59CB"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 113251294633991
+    m_Key: "\u4FDD\u7559\u961F\u4F0D\uFF1B\u91CD\u65B0\u5F00\u59CB\u5C06\u4F7F\u7528\u672C\u5C40\u521D\u59CB\u914D\u7F6E\u3002"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 113251294633992
+    m_Key: "\u7B49\u5F85\u623F\u4E3B\u9009\u62E9\u4E0B\u4E00\u6B65"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 113251294633993
+    m_Key: "\u79BB\u5F00\u623F\u95F4"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 113251294633994
+    m_Key: "\u6B63\u5728\u5904\u7406\u2026"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 113251294633995
+    m_Key: "\u6E05\u7406\u8D85\u8FC7 120 \u79D2\uFF0C\u8BF7\u91CD\u65B0\u521B\u5EFA\u623F\u95F4\u3002"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 113251294633996
+    m_Key: "\u53EA\u6709\u623F\u4E3B\u53EF\u4EE5\u9009\u62E9\u4E0B\u4E00\u6B65\u3002"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 113251294633997
+    m_Key: "\u672C\u6B21\u64CD\u4F5C\u5DF2\u5904\u7406\u6216\u5F53\u524D\u9636\u6BB5\u4E0D\u53EF\u64CD\u4F5C\u3002"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 113251294633998
+    m_Key: "\u672C\u5C40\u5DF2\u7ED3\u675F\u3002"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 119898259841024
+    m_Key: "\u6362\u5C40\u5931\u8D25\uFF0C\u8BF7\u91CD\u65B0\u521B\u5EFA\u623F\u95F4\u3002"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 135909377826816
+    m_Key: "\u672C\u5730\u8054\u673A \xB7 \u5F00\u53D1"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 135909423964160
+    m_Key: "\u56FA\u5B9A\u5730\u5740\uFF1A127.0.0.1"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 135909423964161
+    m_Key: "\u7AEF\u53E3"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 135909423964162
+    m_Key: "\u5176\u4ED6\u8FDB\u7A0B\u4F7F\u7528\u76F8\u540C\u7AEF\u53E3\u52A0\u5165\u3002"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 135909423964163
+    m_Key: "\u521B\u5EFA\u672C\u5730\u4E3B\u673A"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 135909423964164
+    m_Key: "\u52A0\u5165\u672C\u5730\u4E3B\u673A"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 135909423964165
+    m_Key: "\u53D6\u6D88\u8FDE\u63A5"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 135909423964166
+    m_Key: "\u6B63\u5728\u6E05\u7406\u8FDE\u63A5\u2026"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 135909423964167
+    m_Key: "\u6B63\u5728\u521B\u5EFA\u672C\u5730\u4E3B\u673A\u2026"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 135909423964168
+    m_Key: "\u6B63\u5728\u8FDE\u63A5\u5E76\u540C\u6B65\u623F\u95F4\u2026"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 135909423964169
+    m_Key: "\u65E0\u9700 Steam \u597D\u53CB\u9080\u8BF7"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 135909423964170
+    m_Key: "\u5728\u5176\u4ED6\u8FDB\u7A0B\u70B9\u51FB\u201C\u52A0\u5165\u672C\u5730\u4E3B\u673A\u201D"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 135909423964171
+    m_Key: "\u672C\u5730 KCP \xB7 127.0.0.1:{0} \xB7 {1} / 4"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 135909423964172
+    m_Key: "\u672C\u5730\u8054\u673A\u5165\u53E3\u4EC5\u5728\u5F00\u53D1\u73AF\u5883\u53EF\u7528\u3002"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 135909423964173
+    m_Key: "\u7AEF\u53E3\u5FC5\u987B\u662F 1 \u81F3 65535 \u7684\u6574\u6570\u3002"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 135909423964174
+    m_Key: "\u5DF2\u6709\u8FDE\u63A5\u64CD\u4F5C\u6216\u4F1A\u8BDD\u5C1A\u672A\u6E05\u7406\uFF0C\u8BF7\u7A0D\u5019\u3002"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 135909423964175
+    m_Key: "\u672C\u5730\u7F51\u7EDC\u7EC4\u4EF6\u672A\u5C31\u7EEA\u3002"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 135909423964176
+    m_Key: "\u7AEF\u53E3\u5DF2\u88AB\u5360\u7528\uFF0C\u8BF7\u52A0\u5165\u5DF2\u6709\u4E3B\u673A\u6216\u66F4\u6362\u7AEF\u53E3\u3002"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 135909423964177
+    m_Key: "\u672C\u5730\u8FDE\u63A5\u5DF2\u65AD\u5F00\uFF0C\u8BF7\u91CD\u8BD5\u3002"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 135909423964178
+    m_Key: "\u672C\u5730\u8FDE\u63A5\u8D85\u65F6\uFF0C\u8BF7\u786E\u8BA4\u4E3B\u673A\u5DF2\u521B\u5EFA\u4E14\u7AEF\u53E3\u4E00\u81F4\u3002"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 135909423964179
+    m_Key: "\u5DF2\u53D6\u6D88\u672C\u5730\u8FDE\u63A5\u3002"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 135909423964180
+    m_Key: "\u672C\u5730\u8FDE\u63A5\u5DF2\u65AD\u5F00\uFF0C\u8BF7\u786E\u8BA4\u4E3B\u673A\u4E0E\u7AEF\u53E3\u3002"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 135909423964181
+    m_Key: "\u672C\u5730\u8FDE\u63A5\u5931\u8D25\uFF0C\u8BF7\u786E\u8BA4\u4E3B\u673A\u5DF2\u521B\u5EFA\u4E14\u7AEF\u53E3\u4E00\u81F4\u3002"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984013565952
+    m_Key: ImageLocTest
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055508992
+    m_Key: STG_General
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055508993
+    m_Key: STG_Audio
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055508994
+    m_Key: STG_Graphics
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055508995
+    m_Key: STG_Controls
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055508996
+    m_Key: STG_Accessibility
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055508997
+    m_Key: STG_Language
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055508998
+    m_Key: STG_Language_desc
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055508999
+    m_Key: STG_AutoAim
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509000
+    m_Key: STG_AutoAim_desc
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509001
+    m_Key: STG_SkipUlti
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509002
+    m_Key: STG_SkipUlti_desc
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509003
+    m_Key: STG_DamageNumbers
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509004
+    m_Key: STG_DamageNumbers_desc
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509005
+    m_Key: STG_HealthBars
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509006
+    m_Key: STG_HealthBars_desc
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509007
+    m_Key: STG_UIOpacity
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509008
+    m_Key: STG_UIOpacity_desc
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509009
+    m_Key: STG_ATKOpacity
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509010
+    m_Key: STG_ATKOpacity_desc
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509011
+    m_Key: STG_TextSpeed
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509012
+    m_Key: STG_TextSpeed_desc
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509013
+    m_Key: STG_TextWait
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509014
+    m_Key: STG_TextWait_desc
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509015
+    m_Key: STG_Master
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509016
+    m_Key: STG_Master_desc
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509017
+    m_Key: STG_BGM
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509018
+    m_Key: STG_BGM_desc
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509019
+    m_Key: STG_SFX
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509020
+    m_Key: STG_SFX_desc
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509021
+    m_Key: STG_DLG
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509022
+    m_Key: STG_DLG_desc
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509023
+    m_Key: STG_VALang
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509024
+    m_Key: STG_VALang_desc
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509025
+    m_Key: STG_Ambience
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509026
+    m_Key: STG_Ambience_desc
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509027
+    m_Key: STG_ScreenID
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509028
+    m_Key: STG_ScreenID_desc
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509029
+    m_Key: STG_ScreenMode
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509030
+    m_Key: STG_ScreenMode_desc
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509031
+    m_Key: STG_Resolution
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509032
+    m_Key: STG_Resolution_desc
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509033
+    m_Key: STG_FrameCap
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509034
+    m_Key: STG_FrameCap_desc
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509035
+    m_Key: STG_Vsync
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509036
+    m_Key: STG_Vsync_desc
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509037
+    m_Key: STG_HDR
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509038
+    m_Key: STG_HDR_desc
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509039
+    m_Key: STG_Brightness
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509040
+    m_Key: STG_Brightness_desc
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509041
+    m_Key: STG_Gamma
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509042
+    m_Key: STG_Gamma_desc
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509043
+    m_Key: STG_Contrast
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509044
+    m_Key: STG_Contrast_desc
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509045
+    m_Key: STG_Bloom
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509046
+    m_Key: STG_Bloom_desc
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509047
+    m_Key: STG_CameraShake
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509048
+    m_Key: STG_CameraShake_desc
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509049
+    m_Key: STG_ColorBlindMode
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509050
+    m_Key: STG_ColorBlindMode_desc
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509051
+    m_Key: STG_ColorBlindStrength
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509052
+    m_Key: STG_ColorBlindStrength_desc
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509053
+    m_Key: STG_CursorSize
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509054
+    m_Key: STG_CursorSize_desc
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509055
+    m_Key: STG_CursorHue
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509056
+    m_Key: STG_CursorHue_desc
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509057
+    m_Key: STG_CursorSaturation
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509058
+    m_Key: STG_CursorSaturation_desc
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509059
+    m_Key: STG_SaveMessage
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509060
+    m_Key: STG_ResetAllButton
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509061
+    m_Key: STG_ResetGeneralButton
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509062
+    m_Key: STG_ResetAudioButton
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509063
+    m_Key: STG_ResetGraphicsButton
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509064
+    m_Key: STG_ResetControlsButton
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509065
+    m_Key: STG_ResetAccessibilityButton
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509066
+    m_Key: STG_ResetAllMessage
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509067
+    m_Key: STG_ResetCurrentSettingsMessage
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509068
+    m_Key: STT_CardButton
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509069
+    m_Key: STT_CharmButton
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509070
+    m_Key: STT_OnKill
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509071
+    m_Key: STT_OnHit
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509072
+    m_Key: STT_Slow
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509073
+    m_Key: STT_Burn
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509074
+    m_Key: STT_Poison
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509075
+    m_Key: STT_Bleed
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509076
+    m_Key: STT_LifeSteal
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509077
+    m_Key: STT_Explosion
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509078
+    m_Key: STT_XpPullAOE
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509079
+    m_Key: STT_DamageTxt
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509080
+    m_Key: STT_ATKSpeedTxt
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509081
+    m_Key: STT_CritDmgTxt
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509082
+    m_Key: STT_CritRateTxt
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509083
+    m_Key: STT_AtkSizeTxt
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509084
+    m_Key: STT_DurationTxt
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509085
+    m_Key: STT_ProjCountTxt
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509086
+    m_Key: STT_MaxHp
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509087
+    m_Key: STT_XpMod
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509088
+    m_Key: STT_MagArea
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509089
+    m_Key: STT_MoveSpeed
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509090
+    m_Key: STT_ChainLightning
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509091
+    m_Key: STT_Weaken
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509092
+    m_Key: STT_Transform
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509093
+    m_Key: STT_KnockBack
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509094
+    m_Key: STT_Clone
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509095
+    m_Key: STT_Tentacles
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509096
+    m_Key: STT_OnKillSpawnUndead
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509097
+    m_Key: STT_OnStatusIntaKillChance
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509098
+    m_Key: STT_StatSwapChanceModifier
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509099
+    m_Key: STT_StatusStackConsumeChance
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509100
+    m_Key: STT_CloneBoostCardsModifier
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509101
+    m_Key: STT_ExtraDamageBasedOnKnockback
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509102
+    m_Key: STT_ExtraDamageOnLowerHealth
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509103
+    m_Key: STT_OnHItBoot
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509104
+    m_Key: STT_OnKillEnemyToDamageEffectMorph
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509105
+    m_Key: STT_Ultimate
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509106
+    m_Key: SPB_Level
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509107
+    m_Key: WSM_InfoPanel
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509108
+    m_Key: RST_DamageTaken
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509109
+    m_Key: RST_EnemyKills
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509110
+    m_Key: RST_TotalDamage
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509111
+    m_Key: RST_QuestsCleared
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509112
+    m_Key: RST_EliteKills
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509113
+    m_Key: RST_TemplesActivated
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509114
+    m_Key: RST_HpRecovered
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509115
+    m_Key: RST_TotalHits
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509116
+    m_Key: RST_TotalScore
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509117
+    m_Key: RST_WailsCollectedText
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509118
+    m_Key: DLG_Auto
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509119
+    m_Key: DLG_Skip
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509120
+    m_Key: CPM_PickWeaponPlate
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509121
+    m_Key: CPM_PickModPlate
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509122
+    m_Key: CPM_VirgilPlate
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509123
+    m_Key: CPM_HoracePlate
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509124
+    m_Key: CPM_HomerPlate
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509125
+    m_Key: CPM_OvidPlate
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509126
+    m_Key: CPM_LucanPlate
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509127
+    m_Key: CPM_DropToHandSubmit
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509128
+    m_Key: CPM_DropToHandCancel
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509129
+    m_Key: CPM_EquipSubmit
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509130
+    m_Key: CPM_SwapCardSubmit
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509131
+    m_Key: CPM_SwapCardCancel
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509132
+    m_Key: CPM_SwapSlotModeSubmit
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509133
+    m_Key: CPM_SwapSlotModeCancel
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509134
+    m_Key: CPM_SwapSlotSubmit
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509135
+    m_Key: GEN_GiveUp
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509136
+    m_Key: GEN_GiveUpMsg
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509137
+    m_Key: GEN_QuitGame
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509138
+    m_Key: GEN_QuitGameMsg
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509139
+    m_Key: GEN_Continue
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509140
+    m_Key: GEN_Settings
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509141
+    m_Key: GEN_PickPerk
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509142
+    m_Key: GEN_PerkPlate
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509143
+    m_Key: GEN_MetaOffer
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509144
+    m_Key: GEN_NotInDemo
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509145
+    m_Key: GEN_Circle1Limbo
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509146
+    m_Key: GEN_Circle2Lust
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509147
+    m_Key: GEN_BestowalCollect
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509148
+    m_Key: TL_NewGame
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509149
+    m_Key: TL_Credits
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509150
+    m_Key: TL_PressButton
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509151
+    m_Key: IMG_Circle
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509152
+    m_Key: IMG_LimboQuote
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509153
+    m_Key: IMG_LImboText
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509154
+    m_Key: LST_1
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509155
+    m_Key: LST_2
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509156
+    m_Key: LST_3
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509157
+    m_Key: LST_4
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509158
+    m_Key: LST_5
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509159
+    m_Key: LST_6
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509160
+    m_Key: LSM_1
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509161
+    m_Key: LSM_2
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509162
+    m_Key: LSM_3
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509163
+    m_Key: LSM_4
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509164
+    m_Key: LSM_5
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509165
+    m_Key: LSM_6
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509166
+    m_Key: LSM_7
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509167
+    m_Key: END_Text_1
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509168
+    m_Key: END_Text_2
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509169
+    m_Key: END_Text_3
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509170
+    m_Key: END_Text_4
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509171
+    m_Key: END_Text_5
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509172
+    m_Key: END_Text_6
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509173
+    m_Key: END_Text_7
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509174
+    m_Key: END_Text_8
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509175
+    m_Key: END_GameOver
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509176
+    m_Key: WIN_StageClear
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509177
+    m_Key: RS_ComingSoon
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509178
+    m_Key: RS_Next
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509179
+    m_Key: RS_Details
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509180
+    m_Key: SMC_ResetBinds
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509181
+    m_Key: SMC_Move
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509182
+    m_Key: SMC_MoveUp
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509183
+    m_Key: SMC_MoveLeft
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509184
+    m_Key: SMC_MoveDown
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509185
+    m_Key: SMC_MoveRight
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509186
+    m_Key: SMC_Ultimate
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509187
+    m_Key: SMC_Dash
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509188
+    m_Key: SMC_Stats
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509189
+    m_Key: SMC_Interact
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509190
+    m_Key: SMC_Aim
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509191
+    m_Key: CPM_Keyboard
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509192
+    m_Key: CPM_Gameplay
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509193
+    m_Key: CPM_Audio
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509194
+    m_Key: CPM_Graphics
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509195
+    m_Key: CPM_Controls
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509196
+    m_Key: CPM_Accessibility
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509197
+    m_Key: STT_GraphicsTxt
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509198
+    m_Key: STT_NO
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509199
+    m_Key: STT_YES
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509200
+    m_Key: STT_LOW
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509201
+    m_Key: STT_MEDIUM
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509202
+    m_Key: STT_HIGH
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509203
+    m_Key: STT_WINDOWED
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509204
+    m_Key: STT_FULLSCREEN
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509205
+    m_Key: STT_BORDERLESS
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509206
+    m_Key: STT_ENG
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509207
+    m_Key: STT_JPG
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509208
+    m_Key: STT_en
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509209
+    m_Key: STT_pt
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509210
+    m_Key: STT_br
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509211
+    m_Key: STT_ja
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509212
+    m_Key: STT_es
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509213
+    m_Key: STT_kr
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509214
+    m_Key: STT_cnsi
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509215
+    m_Key: STT_cntr
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509216
+    m_Key: STT_None
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509217
+    m_Key: STT_Deuteranomaly
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509218
+    m_Key: STT_Protanomaly
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509219
+    m_Key: STT_Tritanomaly
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509220
+    m_Key: STT_On
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509221
+    m_Key: STT_NewGameWarning
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509222
+    m_Key: STT_KeepSettings
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509223
+    m_Key: STT_ConflictFound
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509224
+    m_Key: STT_LVL
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509225
+    m_Key: Tutorial_Movement_001
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509226
+    m_Key: Tutorial_Movement_002
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509227
+    m_Key: Tutorial_Movement_003
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509228
+    m_Key: Tutorial_Movement_004
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509229
+    m_Key: Tutorial_HUD_001
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509230
+    m_Key: Tutorial_HUD_002
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509231
+    m_Key: Tutorial_HUD_003
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509232
+    m_Key: Tutorial_HUD_004
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509233
+    m_Key: Tutorial_HUD_005
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509234
+    m_Key: Tutorial_HUD_006
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509235
+    m_Key: Tutorial_HUD_007
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509236
+    m_Key: Tutorial_ModCards_001
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509237
+    m_Key: Tutorial_ModCards_002
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509238
+    m_Key: Tutorial_ModCards_003
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509239
+    m_Key: Tutorial_ModCards_004
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509240
+    m_Key: Tutorial_ModCards_005
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509241
+    m_Key: Tutorial_ModCards_006
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509242
+    m_Key: Tutorial_ModCards_007
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509243
+    m_Key: Tutorial_ModCards_008
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509244
+    m_Key: Tutorial_ModCardTypes_001
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509245
+    m_Key: Tutorial_ModCardTypes_002
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509246
+    m_Key: Tutorial_ModCardTypes_003
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509247
+    m_Key: Tutorial_ModCardTypes_004
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509248
+    m_Key: Tutorial_ModCardTypes_006
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509249
+    m_Key: Tutorial_ModCardTypes_007
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509250
+    m_Key: Tutorial_ModCardTypes_008
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509251
+    m_Key: Tutorial_ModCardTypes_009
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509252
+    m_Key: Tutorial_ModCardTypes_011
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509253
+    m_Key: Tutorial_ModCardTypes_012
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509254
+    m_Key: Tutorial_ModCardTypes_013
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509255
+    m_Key: Tutorial_ModCardTypes_014
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509256
+    m_Key: Tutorial_MergingCards_001
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509257
+    m_Key: Tutorial_MergingCards_002
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509258
+    m_Key: Tutorial_ModCardLevels_001
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509259
+    m_Key: Tutorial_ModCardLevels_002
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509260
+    m_Key: Tutorial_WeaponCards_001
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509261
+    m_Key: Tutorial_WeaponCards_002
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509262
+    m_Key: Tutorial_WeaponCards_003
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509263
+    m_Key: Tutorial_WeaponCards_004
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509264
+    m_Key: Tutorial_WeaponCards_005
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509265
+    m_Key: Tutorial_WeaponCards_006
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509266
+    m_Key: Tutorial_WeaponCards_007
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509267
+    m_Key: Tutorial_HandManagement_001
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509268
+    m_Key: Tutorial_HandManagement_002
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509269
+    m_Key: STT_Tutorial_HandManagement_003
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509270
+    m_Key: Tutorial_CardStatus_001
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509271
+    m_Key: STT_Tutorial_CardStatus_002
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509272
+    m_Key: Tutorial_SignatureWeapons_001
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509273
+    m_Key: Tutorial_SignatureWeapons_002
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509274
+    m_Key: Tutorial_SignatureWeapons_003
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509275
+    m_Key: Tutorial_SignatureWeapons_004
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509276
+    m_Key: Tutorial_SignatureWeapons_005
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509277
+    m_Key: Tutorial_SignatureWeapons_006
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509278
+    m_Key: Tutorial_SignatureWeapons_007
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509279
+    m_Key: Tutorial_Spells_001
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509280
+    m_Key: Tutorial_Spells_002
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509281
+    m_Key: Tutorial_Spells_003
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509282
+    m_Key: STT_Tutorial_Spells_003
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509283
+    m_Key: Tutorial_Spells_006
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509284
+    m_Key: Tutorial_Charms_001
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509285
+    m_Key: Tutorial_Charms_002
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509286
+    m_Key: Tutorial_Charms_003
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509287
+    m_Key: Tutorial_Charms_004
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509288
+    m_Key: Tutorial_Charms_005
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509289
+    m_Key: Tutorial_Meta_001
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509290
+    m_Key: Tutorial_Meta_002
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509291
+    m_Key: PoetUnlocked_Ovid_001
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509292
+    m_Key: PoetUnlocked_Ovid_002
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509293
+    m_Key: PoetUnlocked_Scarmi_001
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509294
+    m_Key: PoetUnlocked_Scarmi_002
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509295
+    m_Key: LastResort_Minos
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509296
+    m_Key: LastResort_Libicoco
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509297
+    m_Key: OST_Circle1
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509298
+    m_Key: OST_Forum
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509299
+    m_Key: OST_MinosBoss
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509300
+    m_Key: OST_Prologue
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509301
+    m_Key: OST_Circle2
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509302
+    m_Key: OST_StageClear
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509303
+    m_Key: OST_GameOver
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509304
+    m_Key: OST_MinosPreBattle
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509305
+    m_Key: OST_ScarmiLibiBossBattle
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509306
+    m_Key: OST_EmotionalTheme
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509307
+    m_Key: OST_PlayfulTheme
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509308
+    m_Key: OST_ScarmiLibiPreBattle
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509309
+    m_Key: TPL_Permanent Damage
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509310
+    m_Key: TPL_TemporaryDamage
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509311
+    m_Key: TPL_DashDistance
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509312
+    m_Key: TPL_Health
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509313
+    m_Key: TPL_Speed
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509314
+    m_Key: TPL_PullArea
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509315
+    m_Key: TPL_Xp
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509316
+    m_Key: STT_PickSignature
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509317
+    m_Key: GEN_QuestFailed
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509318
+    m_Key: GEN_QuestTimeout
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509319
+    m_Key: FontTitle CSGrimore-Regular SDFAA Padded
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509320
+    m_Key: FontTitle CSGrimore-Regular Padded
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509321
+    m_Key: FontTitle Alegreya-Medium SDF
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509322
+    m_Key: FontTitle Dante card pick
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509323
+    m_Key: FontTitle Virgil card pick 1
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509324
+    m_Key: FontTitle Horace card pick 2
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509325
+    m_Key: FontTitle Homer card pick
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509326
+    m_Key: FontTitle Ovid card pick
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509327
+    m_Key: FontTitle Alegreya-BoldItalic OUTLINESDFAA 2k padding30 1
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509328
+    m_Key: FontTitle Alegreya-SemiBoldItalic SDFAA 2k padding30
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509329
+    m_Key: FontTitle Alegreya-Medium SDFAA 2k padding30
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509330
+    m_Key: FontTitle Alegreya-Medium SDFAA 2k padding30 Drop Shadow
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509331
+    m_Key: FontTitle Alegreya-Italic SDFAA 2k padding30
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509332
+    m_Key: FontTitle CSGrimore-ItalicSTROKEWHITE SDFAA
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509333
+    m_Key: FontTitle CSGrimore-ItalicGlow
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509334
+    m_Key: FontTitle CSGrimore-ItalicGlowpink
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509335
+    m_Key: STP_PlayerMoveSpeed
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509336
+    m_Key: STP_WeaponDamage
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509337
+    m_Key: STP_WeaponSpeed
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509338
+    m_Key: STP_XPPullRadius
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509339
+    m_Key: STP_PlayerDashDistance
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509340
+    m_Key: STP_XPAmount
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509341
+    m_Key: STP_PristineEnemyDamage
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509342
+    m_Key: STP_PlayerContactBasedDamage
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509343
+    m_Key: STP_Less Projectile Damage
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509344
+    m_Key: STP_OnEliteEnemyDamage
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509345
+    m_Key: STP_OnBurnAfflictedEnemy
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509346
+    m_Key: STP_OnPoisonAfflictedEnemy
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509347
+    m_Key: STP_OnBleedAfflictedEnemy
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509348
+    m_Key: STP_Status Afflicted Enemy Damage
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509349
+    m_Key: STP_PlayerTakenDamage
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509350
+    m_Key: STP_PlayerDashExtraCharges
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509351
+    m_Key: STP_WeaponCritMultiplier
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509352
+    m_Key: STP_WeaponCritRate
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509353
+    m_Key: STP_WeaponDuration
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509354
+    m_Key: STP_OnMeleeEnemyDamage
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509355
+    m_Key: STP_OnRangedEnemyDamage
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509356
+    m_Key: STP_WeaponSize
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509357
+    m_Key: STP_PlayerMaxHealth
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509358
+    m_Key: SavingTxt
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509359
+    m_Key: SplashScreen_Disclaimer_001
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509360
+    m_Key: SplashScreen_Disclaimer_002
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509361
+    m_Key: SplashScreen_ThankYou_001
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509362
+    m_Key: SplashScreen_ThankYou_002
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509363
+    m_Key: ReRollButton
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509364
+    m_Key: DiscartButton
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509365
+    m_Key: MergeButton
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509366
+    m_Key: RS_Previous
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509367
+    m_Key: RS_Confirm
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509368
+    m_Key: UltimateDante
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509369
+    m_Key: STT_ATKs
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509370
+    m_Key: STT_na
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509371
+    m_Key: MTP_Buy
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509372
+    m_Key: MTP_Refund
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509373
+    m_Key: META_HP
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509374
+    m_Key: META_HP_DESC
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509375
+    m_Key: META_MOVESPEED
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509376
+    m_Key: META_MOVESPEED_DESC
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509377
+    m_Key: META_DASHDISTANCE
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509378
+    m_Key: META_DASHDISTANCE_DESC
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509379
+    m_Key: META_DASHCOOLDOWN
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509380
+    m_Key: META_DASHCOOLDOWN_DESC
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509381
+    m_Key: META_DASHCHARGES
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509382
+    m_Key: META_DASHCHARGES_DESC
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509383
+    m_Key: META_PULLAREA
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509384
+    m_Key: META_PULLAREA_DESC
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509385
+    m_Key: META_XPMODIFIER
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509386
+    m_Key: META_XPMODIFIER_DESC
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509387
+    m_Key: META_DMGREDUCTION
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509388
+    m_Key: META_DMGREDUCTION_DESC
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509389
+    m_Key: META_CARDREROLLS
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509390
+    m_Key: META_CARDREROLLS_DESC
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509391
+    m_Key: META_CARDBANISHES
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509392
+    m_Key: META_CARDBANISHES_DESC
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509393
+    m_Key: META_CHARMREROLLS
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509394
+    m_Key: META_CHARMREROLLS_DESC
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509395
+    m_Key: META_DAMAGE
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509396
+    m_Key: META_DAMAGE_DESC
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509397
+    m_Key: META_CRITRATE
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509398
+    m_Key: META_CRITRATE_DESC
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509399
+    m_Key: META_CRITMULTIPLIER
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509400
+    m_Key: META_CRITMULTIPLIER_DESC
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509401
+    m_Key: META_ATKSPEED
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509402
+    m_Key: META_ATKSPEED_DESC
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509403
+    m_Key: META_ATKSIZE
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509404
+    m_Key: META_ATKSIZE_DESC
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509405
+    m_Key: META_ATKDURATION
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509406
+    m_Key: META_ATKDURATION_DESC
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509407
+    m_Key: META_PROJINCREMENT
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509408
+    m_Key: META_PROJINCREMENT_DESC
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509409
+    m_Key: META_MENUTITLE
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509410
+    m_Key: META_MENUTITLE_DESC
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509411
+    m_Key: META_CURRENCY_NAME
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509412
+    m_Key: META_MAXCOST
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509413
+    m_Key: META_NEXTLVL
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509414
+    m_Key: CRD_MAIN CREDITS
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509415
+    m_Key: CRD_ASTRALSHIFT STUDIO
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509416
+    m_Key: CRD_RL_GameConcept
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509417
+    m_Key: CRD_RL_Story
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509418
+    m_Key: CRD_RL_Creative Director
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509419
+    m_Key: CRD_RL_Producer
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509420
+    m_Key: CRD_RL_Creative_Team
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509421
+    m_Key: CRD_RL_Art Director
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509422
+    m_Key: CRD_RL_Character_Art
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509423
+    m_Key: CRD_RL_Environment Art
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509424
+    m_Key: CRD_RL_Pixel Art
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509425
+    m_Key: CRD_RL_2D_Animator
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509426
+    m_Key: CRD_PROGRAMMING
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509427
+    m_Key: CRD_RL_Lead Programmer
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509428
+    m_Key: CRD_RL_VFX_Programmer
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509429
+    m_Key: CRD_RL_Gameplay_Programmer
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509430
+    m_Key: CRD_RL_Programmers
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509431
+    m_Key: CRD_WRITING
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509432
+    m_Key: CRD_RL_LeadWriter
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509433
+    m_Key: CRD_UI
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509434
+    m_Key: CRD_RL_UI_Designer
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509435
+    m_Key: CRD_RL_3D_Modeler
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509436
+    m_Key: CRD_CUTSCENE
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509437
+    m_Key: CRD_RL_Cutscene Artist
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509438
+    m_Key: CRD_RL_Cutscene_Director
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509439
+    m_Key: CRD_AUDIO
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509440
+    m_Key: CRD_RL_Composer
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509441
+    m_Key: CRD_RL_Sound_Designer
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509442
+    m_Key: CRD_VOICE_ACTING
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509443
+    m_Key: CRD_RL_Voice_Director
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509444
+    m_Key: CRD_RL_Dante
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509445
+    m_Key: CRD_RL_Virgil
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509446
+    m_Key: CRD_RL_Beatrice
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509447
+    m_Key: CRD_RL_Horace
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509448
+    m_Key: CRD_RL_Homer
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509449
+    m_Key: CRD_RL_Queen_Minos
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509450
+    m_Key: CRD_RL_Ovid
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509451
+    m_Key: CRD_RL_Scarmiglione
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509452
+    m_Key: CRD_RL_Libicocco
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509453
+    m_Key: CRD_OPENING_ANIMATION
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509454
+    m_Key: CRD_Not_My_Paradiso
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509455
+    m_Key: CRD_RL_Original_Song
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509456
+    m_Key: CRD_RL_2D_Animators
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509457
+    m_Key: CRD_RL_Compositing
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509458
+    m_Key: CRD_RL_Settei
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509459
+    m_Key: CRD_RL_Special_Thanks
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509460
+    m_Key: CRD_RL_Animation_Director
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509461
+    m_Key: CRD_PROOFREADING
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509462
+    m_Key: CRD_English
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509463
+    m_Key: CRD_Spanish
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509464
+    m_Key: CRD_RL_Localizer
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509465
+    m_Key: CRD_PT_BR
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509466
+    m_Key: CRD_PT_BR_Legacy
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509467
+    m_Key: CRD_PT_PT
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509468
+    m_Key: CRD_Japanese
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509469
+    m_Key: CRD_Korean
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509470
+    m_Key: CRD_CN_SI
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509471
+    m_Key: CRD_CN_TR
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509472
+    m_Key: CRD_QA_TESTING
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984055509473
+    m_Key: CRD_RL_QA_Testers
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703296
+    m_Key: CRD_RL_From_AstralShift
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703297
+    m_Key: CRD_GAME DESIGN
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703298
+    m_Key: CRD_RL_Lead Game Designer
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703299
+    m_Key: CRD_RL_Level Designer
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703300
+    m_Key: CRD_RL_Gameplay Designer
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703301
+    m_Key: CRD_RL_Card System Concept Designer
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703302
+    m_Key: CRD_ASIAN PUBLISHING
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703303
+    m_Key: CRD_RL_Publishing Operations
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703304
+    m_Key: CRD_RL_Community Operations
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703305
+    m_Key: CRD_RL_Marketing & Public Relations
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703306
+    m_Key: CRD_RL_Business Development
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703307
+    m_Key: CRD_LOCALIZATION
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703308
+    m_Key: CRD_RL_Korean Linguist
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703309
+    m_Key: CRD_RL_Simplfied Chinese Linguist
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703310
+    m_Key: CRD_RL_Traditional Chinese Linguist
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703311
+    m_Key: CRD_RL_Project Manager
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703312
+    m_Key: CRD_RL_English Proofreading
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703313
+    m_Key: CRD_RL_Legacy Brazilian Portuguese
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703314
+    m_Key: CRD_RL_Legacy Spanish
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703315
+    m_Key: CRD_RL_Legacy Korean
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703316
+    m_Key: CRD_RL_Legacy Traditional Chinese
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703317
+    m_Key: CRD_MARKETING
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703318
+    m_Key: CRD_RL_Marketing Manager
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703319
+    m_Key: CRD_RL_Graphic Designer
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703320
+    m_Key: CRD_TOOLS & ASSETS
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703321
+    m_Key: CRD_FROM ALL OF US
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703322
+    m_Key: CRD_RL_At AstralShift
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703323
+    m_Key: CRD_FONTS
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703324
+    m_Key: CRD_OTHER ASSETS
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703325
+    m_Key: CRD_THANK YOU FOR PLAYING
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703326
+    m_Key: CRD_SPECIAL THANKS
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703327
+    m_Key: CRD_RL_Visual_Effects
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703328
+    m_Key: CRD_RL_Card_Artist
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703329
+    m_Key: CRD_RL_Video Editor
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703330
+    m_Key: CRD_VIDEO
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703331
+    m_Key: CRD_RL_3D_Textures
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703332
+    m_Key: CRD_RL_QA_Tester
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703333
+    m_Key: CRD_RL_Animation_Studio
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703334
+    m_Key: ACH_Achievements_Label
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703335
+    m_Key: ACH_Circle_Number
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703336
+    m_Key: ACH_AchievementTab_Combat
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703337
+    m_Key: ACH_AchievementTab_Story
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703338
+    m_Key: ACH_Circle_Name_Limbo
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703339
+    m_Key: ACH_Circle_Name_Lust
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703340
+    m_Key: ACH_Next_Tab
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703341
+    m_Key: ACH_Previous_Tab
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703342
+    m_Key: ACH_InfoPanel_Archievement_Progression_Complete
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703343
+    m_Key: ACH_HIDDEN_TITLE
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703344
+    m_Key: ACH_HIDDEN_DESCRIPTION
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703345
+    m_Key: ACH_Tab_Chapter_Achievements_Complete
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703346
+    m_Key: ACH_InfoPanel_Achievement_Title_1
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703347
+    m_Key: ACH_InfoPanel_Achievement_Title_2
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703348
+    m_Key: ACH_InfoPanel_Achievement_Title_3
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703349
+    m_Key: ACH_InfoPanel_Achievement_Title_4
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703350
+    m_Key: ACH_InfoPanel_Achievement_Title_5
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703351
+    m_Key: ACH_InfoPanel_Achievement_Title_6
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703352
+    m_Key: ACH_InfoPanel_Achievement_Title_7
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703353
+    m_Key: ACH_InfoPanel_Achievement_Title_8
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703354
+    m_Key: ACH_InfoPanel_Achievement_Title_9
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703355
+    m_Key: ACH_InfoPanel_Achievement_Title_10
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703356
+    m_Key: ACH_InfoPanel_Achievement_Title_11
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703357
+    m_Key: ACH_InfoPanel_Achievement_Title_12
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703358
+    m_Key: ACH_InfoPanel_Achievement_Title_13
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703359
+    m_Key: ACH_InfoPanel_Achievement_Title_14
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703360
+    m_Key: ACH_InfoPanel_Achievement_Title_15
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703361
+    m_Key: ACH_InfoPanel_Achievement_Title_16
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703362
+    m_Key: ACH_InfoPanel_Achievement_Title_17
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703363
+    m_Key: ACH_InfoPanel_Achievement_Title_18
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703364
+    m_Key: ACH_InfoPanel_Achievement_Title_19
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703365
+    m_Key: ACH_InfoPanel_Achievement_Title_20
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703366
+    m_Key: ACH_InfoPanel_Achievement_Title_21
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703367
+    m_Key: ACH_InfoPanel_Achievement_Title_22
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703368
+    m_Key: ACH_InfoPanel_Achievement_Title_23
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703369
+    m_Key: ACH_InfoPanel_Achievement_Title_24
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703370
+    m_Key: ACH_InfoPanel_Achievement_Title_25
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703371
+    m_Key: ACH_InfoPanel_Achievement_Title_26
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703372
+    m_Key: ACH_InfoPanel_Achievement_Title_27
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703373
+    m_Key: ACH_InfoPanel_Achievement_Title_28
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703374
+    m_Key: ACH_InfoPanel_Achievement_Title_29
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703375
+    m_Key: ACH_InfoPanel_Achievement_Title_30
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703376
+    m_Key: ACH_InfoPanel_Achievement_Title_31
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703377
+    m_Key: ACH_InfoPanel_Achievement_Title_32
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703378
+    m_Key: ACH_InfoPanel_Achievement_Title_33
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703379
+    m_Key: ACH_InfoPanel_Achievement_Title_34
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703380
+    m_Key: ACH_InfoPanel_Achievement_Title_35
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703381
+    m_Key: ACH_InfoPanel_Achievement_Title_36
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703382
+    m_Key: ACH_InfoPanel_Achievement_Title_37
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703383
+    m_Key: ACH_InfoPanel_Achievement_Title_38
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703384
+    m_Key: ACH_InfoPanel_Achievement_Title_39
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703385
+    m_Key: ACH_InfoPanel_Achievement_Title_40
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703386
+    m_Key: ACH_InfoPanel_Achievement_Title_41
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703387
+    m_Key: ACH_InfoPanel_Achievement_Title_42
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703388
+    m_Key: ACH_InfoPanel_Achievement_Title_43
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703389
+    m_Key: ACH_InfoPanel_Achievement_Title_44
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703390
+    m_Key: ACH_InfoPanel_Achievement_Title_45
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703391
+    m_Key: ACH_InfoPanel_Achievement_Title_46
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703392
+    m_Key: ACH_InfoPanel_Achievement_Title_47
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703393
+    m_Key: ACH_InfoPanel_Achievement_Title_48
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703394
+    m_Key: ACH_InfoPanel_Achievement_Title_49
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703395
+    m_Key: ACH_InfoPanel_Achievement_Title_50
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703396
+    m_Key: ACH_InfoPanel_Achievement_Title_51
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703397
+    m_Key: ACH_InfoPanel_Achievement_Title_52
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703398
+    m_Key: ACH_InfoPanel_Achievement_Title_53
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703399
+    m_Key: ACH_InfoPanel_Achievement_Title_54
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703400
+    m_Key: ACH_InfoPanel_Achievement_Title_55
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703401
+    m_Key: ACH_InfoPanel_Achievement_Title_56
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703402
+    m_Key: ACH_InfoPanel_Achievement_Title_57
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703403
+    m_Key: ACH_InfoPanel_Achievement_Title_58
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703404
+    m_Key: ACH_InfoPanel_Achievement_Title_59
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703405
+    m_Key: ACH_InfoPanel_Achievement_Title_60
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703406
+    m_Key: ACH_InfoPanel_Achievement_Title_61
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703407
+    m_Key: ACH_InfoPanel_Achievement_Title_62
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703408
+    m_Key: ACH_InfoPanel_Achievement_Title_63
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703409
+    m_Key: ACH_InfoPanel_Achievement_Title_64
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703410
+    m_Key: ACH_InfoPanel_Achievement_Title_65
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703411
+    m_Key: ACH_InfoPanel_Achievement_Title_66
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703412
+    m_Key: ACH_InfoPanel_Achievement_Title_67
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703413
+    m_Key: ACH_InfoPanel_Achievement_Title_68
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703414
+    m_Key: ACH_InfoPanel_Achievement_Title_69
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703415
+    m_Key: ACH_InfoPanel_Achievement_Title_70
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703416
+    m_Key: ACH_InfoPanel_Achievement_Title_71
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703417
+    m_Key: ACH_InfoPanel_Achievement_Title_72
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703418
+    m_Key: ACH_InfoPanel_Achievement_Title_73
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703419
+    m_Key: ACH_InfoPanel_Achievement_Title_74
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703420
+    m_Key: ACH_InfoPanel_Achievement_Title_75
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703421
+    m_Key: ACH_InfoPanel_Achievement_Title_76
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703422
+    m_Key: ACH_InfoPanel_Archievement_Description_1
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703423
+    m_Key: ACH_InfoPanel_Archievement_Description_2
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703424
+    m_Key: ACH_InfoPanel_Archievement_Description_3
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703425
+    m_Key: ACH_InfoPanel_Archievement_Description_4
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703426
+    m_Key: ACH_InfoPanel_Archievement_Description_5
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703427
+    m_Key: ACH_InfoPanel_Archievement_Description_6
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703428
+    m_Key: ACH_InfoPanel_Archievement_Description_7
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703429
+    m_Key: ACH_InfoPanel_Archievement_Description_8
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703430
+    m_Key: ACH_InfoPanel_Archievement_Description_9
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703431
+    m_Key: ACH_InfoPanel_Archievement_Description_10
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703432
+    m_Key: ACH_InfoPanel_Archievement_Description_11
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703433
+    m_Key: ACH_InfoPanel_Archievement_Description_12
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703434
+    m_Key: ACH_InfoPanel_Archievement_Description_13
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703435
+    m_Key: ACH_InfoPanel_Archievement_Description_14
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703436
+    m_Key: ACH_InfoPanel_Archievement_Description_15
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703437
+    m_Key: ACH_InfoPanel_Archievement_Description_16
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703438
+    m_Key: ACH_InfoPanel_Archievement_Description_17
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703439
+    m_Key: ACH_InfoPanel_Archievement_Description_18
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703440
+    m_Key: ACH_InfoPanel_Archievement_Description_19
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703441
+    m_Key: ACH_InfoPanel_Archievement_Description_20
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703442
+    m_Key: ACH_InfoPanel_Archievement_Description_21
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703443
+    m_Key: ACH_InfoPanel_Archievement_Description_22
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703444
+    m_Key: ACH_InfoPanel_Archievement_Description_23
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703445
+    m_Key: ACH_InfoPanel_Archievement_Description_24
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703446
+    m_Key: ACH_InfoPanel_Archievement_Description_25
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703447
+    m_Key: ACH_InfoPanel_Archievement_Description_26
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703448
+    m_Key: ACH_InfoPanel_Archievement_Description_27
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703449
+    m_Key: ACH_InfoPanel_Archievement_Description_28
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703450
+    m_Key: ACH_InfoPanel_Archievement_Description_29
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703451
+    m_Key: ACH_InfoPanel_Archievement_Description_30
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703452
+    m_Key: ACH_InfoPanel_Archievement_Description_31
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703453
+    m_Key: ACH_InfoPanel_Archievement_Description_32
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703454
+    m_Key: ACH_InfoPanel_Archievement_Description_33
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703455
+    m_Key: ACH_InfoPanel_Archievement_Description_34
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703456
+    m_Key: ACH_InfoPanel_Archievement_Description_35
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703457
+    m_Key: ACH_InfoPanel_Archievement_Description_36
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703458
+    m_Key: ACH_InfoPanel_Archievement_Description_37
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703459
+    m_Key: ACH_InfoPanel_Archievement_Description_38
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703460
+    m_Key: ACH_InfoPanel_Archievement_Description_39
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703461
+    m_Key: ACH_InfoPanel_Archievement_Description_40
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703462
+    m_Key: ACH_InfoPanel_Archievement_Description_41
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703463
+    m_Key: ACH_InfoPanel_Archievement_Description_42
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703464
+    m_Key: ACH_InfoPanel_Archievement_Description_43
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703465
+    m_Key: ACH_InfoPanel_Archievement_Description_44
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703466
+    m_Key: ACH_InfoPanel_Archievement_Description_45
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703467
+    m_Key: ACH_InfoPanel_Archievement_Description_46
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703468
+    m_Key: ACH_InfoPanel_Archievement_Description_47
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703469
+    m_Key: ACH_InfoPanel_Archievement_Description_48
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703470
+    m_Key: ACH_InfoPanel_Archievement_Description_49
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703471
+    m_Key: ACH_InfoPanel_Archievement_Description_50
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703472
+    m_Key: ACH_InfoPanel_Archievement_Description_51
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703473
+    m_Key: ACH_InfoPanel_Archievement_Description_52
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703474
+    m_Key: ACH_InfoPanel_Archievement_Description_53
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703475
+    m_Key: ACH_InfoPanel_Archievement_Description_54
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703476
+    m_Key: ACH_InfoPanel_Archievement_Description_55
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703477
+    m_Key: ACH_InfoPanel_Archievement_Description_56
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703478
+    m_Key: ACH_InfoPanel_Archievement_Description_57
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703479
+    m_Key: ACH_InfoPanel_Archievement_Description_58
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703480
+    m_Key: ACH_InfoPanel_Archievement_Description_59
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703481
+    m_Key: ACH_InfoPanel_Archievement_Description_60
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703482
+    m_Key: ACH_InfoPanel_Archievement_Description_61
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703483
+    m_Key: ACH_InfoPanel_Archievement_Description_62
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703484
+    m_Key: ACH_InfoPanel_Archievement_Description_63
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703485
+    m_Key: ACH_InfoPanel_Archievement_Description_64
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703486
+    m_Key: ACH_InfoPanel_Archievement_Description_65
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703487
+    m_Key: ACH_InfoPanel_Archievement_Description_66
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703488
+    m_Key: ACH_InfoPanel_Archievement_Description_67
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703489
+    m_Key: ACH_InfoPanel_Archievement_Description_68
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703490
+    m_Key: ACH_InfoPanel_Archievement_Description_69
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703491
+    m_Key: ACH_InfoPanel_Archievement_Description_70
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703492
+    m_Key: ACH_InfoPanel_Archievement_Description_71
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703493
+    m_Key: ACH_InfoPanel_Archievement_Description_72
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703494
+    m_Key: ACH_InfoPanel_Archievement_Description_73
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703495
+    m_Key: ACH_InfoPanel_Archievement_Description_74
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703496
+    m_Key: ACH_InfoPanel_Archievement_Description_75
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703497
+    m_Key: ACH_InfoPanel_Archievement_Description_76
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703498
+    m_Key: ui.content.unknown
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703499
+    m_Key: ui.content.unavailable
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703500
+    m_Key: ui.card.heading
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703501
+    m_Key: ui.card.choose_weapon
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703502
+    m_Key: ui.card.add_equipment
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703503
+    m_Key: ui.card.upgrade_level
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703504
+    m_Key: ui.card.choose_target_next
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703505
+    m_Key: ui.reward.weapon
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703506
+    m_Key: ui.reward.equipment
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703507
+    m_Key: ui.reward.perk
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703508
+    m_Key: ui.rarity.bronze
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703509
+    m_Key: ui.rarity.silver
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703510
+    m_Key: ui.rarity.gold
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703511
+    m_Key: ui.rarity.crystal
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703512
+    m_Key: ui.hud.experience
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703513
+    m_Key: ui.wave.syncing
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703514
+    m_Key: ui.wave.waiting
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703515
+    m_Key: ui.wave.stopped
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703516
+    m_Key: ui.wave.paused
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703517
+    m_Key: ui.wave.next
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703518
+    m_Key: ui.wave.progress
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343984059703519
+    m_Key: ui.connection.transport_error
+    m_Metadata:
+      m_Items: []
+  m_Metadata:
+    m_Items: []
+  m_KeyGenerator:
+    rid: 8799243398500581400
+  references:
+    version: 2
+    RefIds:
+    - rid: 8799243398500581400
+      type: {class: DistributedUIDGenerator, ns: UnityEngine.Localization.Tables, asm: Unity.Localization}
+      data:
+        m_CustomEpoch: 1789185270259

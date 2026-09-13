@@ -1,3 +1,4 @@
+using MonsterSupergroup.Gameplay.Options;
 using System;
 using System.Text;
 using Animancer;
@@ -197,6 +198,17 @@ namespace AstralShift.HellMaiden.UI.Perks
 			}
 		}
 
+        protected override void OnEnable()
+        { base.OnEnable(); GameLocalization.Changed += RefreshLocalizedText; RefreshLocalizedText(); }
+        protected override void OnDisable()
+        { GameLocalization.Changed -= RefreshLocalizedText; base.OnDisable(); }
+        private void RefreshLocalizedText()
+        {
+            if (_perkData?.Data == null) return;
+            SetTitle(_perkData.Data.GetTitle());
+            SetDescription(_perkData.Data.GetDescription(_perkData.Rarity));
+        }
+
 		private new void Awake()
 		{
 			outerGlowEffect.color = new Color(1f, 1f, 1f, 0f);
@@ -208,6 +220,7 @@ namespace AstralShift.HellMaiden.UI.Perks
 		public void Initialize(RuntimePerkData perkData)
 		{
 			_perkData = perkData;
+            RefreshLocalizedText();
 			if (_perkData.Rarity == PerkRarity.Crystal)
 			{
 				_viewPortPositionReference = shakeParent;
@@ -252,11 +265,13 @@ namespace AstralShift.HellMaiden.UI.Perks
 
 		public void SetTitle(string title)
 		{
+            if (GameLocalization.TMPFont != null) perkTitleText.font = GameLocalization.TMPFont;
 			perkTitleText.text = title;
 		}
 
 		public void SetDescription(string description)
 		{
+            if (GameLocalization.TMPFont != null) this.description.font = GameLocalization.TMPFont;
 			this.description.text = description;
 		}
 
@@ -335,7 +350,7 @@ namespace AstralShift.HellMaiden.UI.Perks
 					color = Color.red;
 				}
 				string term = "STP_" + ModifiersStringHelpers.GetPerkModifierNameLocKey(perkDataModifier.ModifierIdValue);
-				LocalizationMediator.GetTranslation(ref term);
+				term = GameLocalization.Menu(term);
 				stringBuilder.AppendFormat("{0}{1}: {2}% ▶ <color=#{3}>{4}%</color>", ModifiersStringHelpers.GetPerkModifierStringIcon(perkDataModifier.ModifierIdValue), term, DataModifierUtils.FormatMultiplierToPercentage(num) ?? "", ColorUtility.ToHtmlStringRGBA(color), " " + DataModifierUtils.FormatMultiplierToPercentage(num + parameterByIndex));
 				if (i + 1 < rarity.Modifiers.Length)
 				{

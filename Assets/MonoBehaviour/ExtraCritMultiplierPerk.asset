@@ -13,11 +13,24 @@ MonoBehaviour:
   m_Name: ExtraCritMultiplierPerk
   m_EditorClassIdentifier: MonsterSupergroup.Gameplay.Combat::AstralShift.HellMaiden.Data.Perks.PerkData
   ID: 17
-  Title: Extra Crit Multiplier
-  Description: Adds {CritMultiplier}[0]% to crit Multiplier.
-  hasLocalization: 1
-  TitleKey: PRK_Name_017
-  DescriptionKey: PRK_Desc_017
+  localizedTitle:
+    m_TableReference:
+      m_TableCollectionName: MonsterContent
+    m_TableEntryReference:
+      m_KeyId: 0
+      m_Key: perk.17.name
+    m_FallbackState: 0
+    m_WaitForCompletion: 0
+    m_LocalVariables: []
+  localizedDescription:
+    m_TableReference:
+      m_TableCollectionName: MonsterContent
+    m_TableEntryReference:
+      m_KeyId: 0
+      m_Key: perk.17.description
+    m_FallbackState: 0
+    m_WaitForCompletion: 0
+    m_LocalVariables: []
   icon: {fileID: 0}
   poolWeight: 1
   Dependencies: []

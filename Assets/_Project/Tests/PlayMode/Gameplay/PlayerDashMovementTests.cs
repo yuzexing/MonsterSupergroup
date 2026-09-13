@@ -6,6 +6,7 @@ using Assets.Scripts.AstralShift.HellMaiden.Data;
 using AstralShift.Helpers;
 using AstralShift.HellMaiden.Player;
 using MonsterSupergroup.Gameplay.Combat;
+using MonsterSupergroup.GAS;
 using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.TestTools;
@@ -78,6 +79,34 @@ namespace MonsterSupergroup.Gameplay.Tests
             for (int index = objects.Count - 1; index >= 0; index--)
                 if (objects[index] != null) UnityEngine.Object.DestroyImmediate(objects[index]);
             objects.Clear(); committed.Clear(); starts.Clear(); ends.Clear();
+        }
+
+        [TestCase(true)]
+        [TestCase(false)]
+        public void DownedHealthBlocksNormalMovementWithoutReplayingDeath(bool restored)
+        {
+            player.UnbindDashRuntime();
+            player.SetDirection(Vector2.right);
+            Invoke("FixedUpdate");
+            Assert.That(player.body.linearVelocity.x, Is.GreaterThan(0), "Alive movement must still work.");
+            int deaths = 0;
+            player.Died += () => deaths++;
+            if (restored) combatant.ApplyCanonicalHealth(0, 100, 10);
+            else combatant.ReceiveDamage(new DamageInfo(1, 100, false));
+            Assert.That(player.StateMachine.GetState().name, Is.EqualTo("Moving"), "Restore does not replay the damage FSM.");
+            player.SetDirection(Vector2.up);
+            player.SetDirectionImmediate(Vector2.right);
+            player.WindForce = Vector2.one;
+            Invoke("FixedUpdate");
+            Assert.That(player.body.linearVelocity, Is.EqualTo(Vector2.zero), "Downed must block input and external movement even in Moving.");
+            Assert.That(deaths, Is.Zero, "Restoring health must not replay death side effects.");
+            player.WindForce = Vector2.zero;
+            combatant.ApplyCanonicalHealth(100, 100, 11);
+            Invoke("FixedUpdate");
+            Assert.That(player.body.linearVelocity, Is.EqualTo(Vector2.zero), "Blocked input must not resume later.");
+            player.SetDirection(Vector2.right);
+            Invoke("FixedUpdate");
+            Assert.That(player.body.linearVelocity.x, Is.GreaterThan(0));
         }
 
         [UnityTest]
@@ -402,6 +431,33 @@ namespace MonsterSupergroup.Gameplay.Tests
             stats.UpdateMaxDashes();
             Assert.That(runtime.MaxCharges, Is.EqualTo(2));
             Assert.That(ends, Is.EqualTo(new[] { current }));
+        }
+
+        [Test]
+        public void MenuBlocksNewInputWithoutInvulnerabilityOrCancellingCommittedDash()
+        {
+            player.SetMenuInputBlocked(true);
+            player.SetDirection(Vector2.up); player.SetDirectionImmediate(Vector2.up);
+            var aim = player.attackDirection;
+            player.SetAimDirection(Vector2.left); player.SetAimPosition(Vector2.one);
+            player.Dash(); Invoke("FixedUpdate");
+            Assert.That(player.body.linearVelocity, Is.EqualTo(Vector2.zero));
+            Assert.That(player.attackDirection, Is.EqualTo(aim));
+            Assert.That(committed, Is.Empty);
+            Assert.That(combatant.IsInvulnerable, Is.False);
+            Assert.That(player.IsUpgradeSelectionLocked, Is.False);
+            player.SetMenuInputBlocked(false);
+            player.SetDirection(Vector2.right); StartImmediately();
+            ulong id = player.CurrentDashUseId;
+            Assert.That(id, Is.Not.Zero);
+            player.SetMenuInputBlocked(true); Invoke("Update"); Invoke("FixedUpdate");
+            Assert.That(player.CurrentDashUseId, Is.EqualTo(id));
+            Assert.That(ends, Is.Empty);
+            Assert.That(player.body.linearVelocity.sqrMagnitude, Is.GreaterThan(0));
+            player.Dash();
+            Assert.That(committed.Count, Is.EqualTo(1));
+            player.SetMenuInputBlocked(false);
+            Assert.That(player.CurrentDashUseId, Is.EqualTo(id));
         }
 
         private ulong Commit(DashMotionParameters motion)

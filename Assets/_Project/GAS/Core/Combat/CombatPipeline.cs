@@ -185,7 +185,8 @@ namespace MonsterSupergroup.GAS
         public CombatResolution ResolvePrecomputedHit(
             CombatContext attackContext,
             ICombatTarget target,
-            DamageInfo resolvedDamage)
+            DamageInfo resolvedDamage,
+            DamageType presentationDamageType = DamageType.Normal)
         {
             if (!attackContext.IsValid)
             {
@@ -201,7 +202,8 @@ namespace MonsterSupergroup.GAS
                 null,
                 1f,
                 1f,
-                0f);
+                0f,
+                presentationDamageType);
         }
 
         public CombatResolution ResolveHitDetailed(
@@ -209,7 +211,8 @@ namespace MonsterSupergroup.GAS
             ICombatTarget target,
             float onHitChanceMultiplier = 1f,
             float predictedLethalChanceMultiplier = 1f,
-            float burnDamageMultiplier = 0f)
+            float burnDamageMultiplier = 0f,
+            DamageType? presentationDamageType = null)
         {
             if (attack == null)
             {
@@ -278,7 +281,8 @@ namespace MonsterSupergroup.GAS
                 attack,
                 onHitChanceMultiplier,
                 predictedLethalChanceMultiplier,
-                burnDamageMultiplier);
+                burnDamageMultiplier,
+                presentationDamageType ?? attack.Stats.DamageType);
         }
 
         private CombatResolution ResolveDamageCore(
@@ -288,7 +292,8 @@ namespace MonsterSupergroup.GAS
             AttackSnapshot attack,
             float onHitChanceMultiplier,
             float predictedLethalChanceMultiplier,
-            float burnDamageMultiplier)
+            float burnDamageMultiplier,
+            DamageType presentationDamageType)
         {
             if (target == null)
             {
@@ -346,7 +351,8 @@ namespace MonsterSupergroup.GAS
                     CombatEventKind.DamageResolved,
                     damageContext,
                     resolvedDamage,
-                    predictedAppliedDamage));
+                    predictedAppliedDamage,
+                    presentationDamageType: presentationDamageType));
 
                 if (attack != null && predictedAppliedDamage.Value > 0)
                 {
@@ -389,7 +395,8 @@ namespace MonsterSupergroup.GAS
                         CombatEventKind.PredictedLethalHit,
                         predictedLethalContext,
                         resolvedDamage,
-                        predictedAppliedDamage));
+                        predictedAppliedDamage,
+                        presentationDamageType: presentationDamageType));
 
                     if (attack != null)
                     {

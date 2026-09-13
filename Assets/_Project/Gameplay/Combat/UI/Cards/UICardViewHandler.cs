@@ -1,3 +1,4 @@
+using MonsterSupergroup.Gameplay.Options;
 using System;
 using AstralShift.Control;
 using AstralShift.FSM;
@@ -6,7 +7,7 @@ using AstralShift.HellMaiden.UI.Menus;
 using AstralShift.HellMaiden.UI.Menus.Hand;
 using Cysharp.Threading.Tasks;
 using FMODUnity;
-using I2.Loc;
+
 using Rewired;
 using UnityEngine;
 using UnityEngine.UI;
@@ -195,7 +196,7 @@ namespace AstralShift.HellMaiden.UI.Cards
 			_onIdleContainer = Transform.parent;
 			CardView.Init(this);
 			ControllerLifetime.OnBeforeControllerChanged += SwitchInputHandler;
-			LocalizationManager.OnLocalizeEvent += LocalizeText;
+			GameLocalization.Changed += LocalizeText;
 			InitializeStateMachine();
 		}
 
@@ -250,7 +251,7 @@ namespace AstralShift.HellMaiden.UI.Cards
 			this.OnEnterDroppedCallback = null;
 			this.OnExitDroppedCallback = null;
 			ControllerLifetime.OnBeforeControllerChanged -= SwitchInputHandler;
-			LocalizationManager.OnLocalizeEvent -= LocalizeText;
+			GameLocalization.Changed -= LocalizeText;
 			CardView.Dispose();
 		}
 

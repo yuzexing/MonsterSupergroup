@@ -819,7 +819,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: MonsterSupergroup.Gameplay.Combat::AstralShift.HellMaiden.Combat.PoolManager
   xpPool: {fileID: 0}
   ItemsPool: {fileID: 0}
-  damageColors: {fileID: 0}
+  damageColors: {fileID: 11400000, guid: 53ecbabaef0c4920b428097997a34c2e, type: 2}
 --- !u!4 &1081909177
 Transform:
   m_ObjectHideFlags: 0

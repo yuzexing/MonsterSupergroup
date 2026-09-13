@@ -1,9 +1,10 @@
+using MonsterSupergroup.Gameplay.Options;
 using System;
 using System.Collections.Generic;
 using AstralShift.Control;
 using AstralShift.Helpers.Attributes;
 using AstralShift.UI;
-using I2.Loc;
+
 using Rewired;
 using TMPro;
 using UnityEngine;
@@ -44,14 +45,14 @@ public abstract class SettingsTabContentController : TabContentController
 	{
 		base.Init();
 		GenerateButtonNavigation();
-		LocalizationManager.OnLocalizeEvent += LocalizeCurrentTabResetButtonName;
+		GameLocalization.Changed += LocalizeCurrentTabResetButtonName;
 		SettingsManager settingsManager = settings;
 		settingsManager.OnRefresh = (Action)Delegate.Combine(settingsManager.OnRefresh, new Action(SelectFirstSelectable));
 	}
 
 	protected virtual void OnDestroy()
 	{
-		LocalizationManager.OnLocalizeEvent -= LocalizeCurrentTabResetButtonName;
+		GameLocalization.Changed -= LocalizeCurrentTabResetButtonName;
 		SettingsManager settingsManager = settings;
 		settingsManager.OnRefresh = (Action)Delegate.Remove(settingsManager.OnRefresh, new Action(SelectFirstSelectable));
 	}
@@ -68,7 +69,7 @@ public abstract class SettingsTabContentController : TabContentController
 		if (resetCurrentTabButtonText != null)
 		{
 			string term = resetCurrentTabButtonlocalizeId;
-			LocalizationMediator.GetTranslation(ref term);
+			term = GameLocalization.Menu(term);
 			resetCurrentTabButtonText.text = term;
 		}
 		LayoutRebuilder.ForceRebuildLayoutImmediate(resetCurrentTabButtonText.transform.parent.transform as RectTransform);
@@ -79,7 +80,7 @@ public abstract class SettingsTabContentController : TabContentController
 		if (descriptionText != null)
 		{
 			string term = base.Description;
-			LocalizationMediator.GetTranslation(ref term);
+			term = GameLocalization.Menu(term);
 			descriptionText.text = term;
 		}
 	}
@@ -149,7 +150,7 @@ public abstract class SettingsTabContentController : TabContentController
 				if (selectable is SettingsUISelectable settingsUISelectable && descriptionText != null)
 				{
 					string term = settingsUISelectable.Description;
-					LocalizationMediator.GetTranslation(ref term);
+					term = GameLocalization.Menu(term);
 					descriptionText.text = term;
 				}
 				if (autoScroll != null)
@@ -163,7 +164,7 @@ public abstract class SettingsTabContentController : TabContentController
 				if (selectable is SettingsUISelectable settingsUISelectable && descriptionText != null)
 				{
 					string term = settingsUISelectable.Description;
-					LocalizationMediator.GetTranslation(ref term);
+					term = GameLocalization.Menu(term);
 					descriptionText.text = term;
 				}
 			});
@@ -172,7 +173,7 @@ public abstract class SettingsTabContentController : TabContentController
 				if (descriptionText != null)
 				{
 					string term = base.Description;
-					LocalizationMediator.GetTranslation(ref term);
+					term = GameLocalization.Menu(term);
 					descriptionText.text = term;
 				}
 			});
@@ -181,7 +182,7 @@ public abstract class SettingsTabContentController : TabContentController
 				if (descriptionText != null)
 				{
 					string term = base.Description;
-					LocalizationMediator.GetTranslation(ref term);
+					term = GameLocalization.Menu(term);
 					descriptionText.text = term;
 				}
 			});

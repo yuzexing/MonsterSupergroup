@@ -17,6 +17,10 @@ namespace MonsterSupergroup.GAS
             new Dictionary<EnemyStatusID, List<ActiveStatus>>();
         private readonly Dictionary<StatusInstanceId, uint> removalVersions =
             new Dictionary<StatusInstanceId, uint>();
+        // Expiry ends gameplay, not the identity of a prediction awaiting confirmation.
+        private readonly Dictionary<StatusInstanceId, ActiveStatus> completedStatuses =
+            new Dictionary<StatusInstanceId, ActiveStatus>();
+        private readonly Dictionary<StatusInstanceId, uint> removedApplications = new Dictionary<StatusInstanceId, uint>();
         private readonly List<StatusTick> pendingTicks = new List<StatusTick>();
         private readonly List<StatusChange> pendingChanges = new List<StatusChange>();
         private readonly List<EnemyStatusID> emptyStatusIds = new List<EnemyStatusID>();
@@ -209,6 +213,8 @@ namespace MonsterSupergroup.GAS
             {
                 return RefreshExistingPrediction(sameInstance, application);
             }
+            uint applicationRevision = completedStatuses.TryGetValue(incomingId, out var completed)
+                ? checked(completed.Instance.ApplicationRevision + 1u) : 1u;
 
             switch (application.Definition.StackMode)
             {
@@ -221,7 +227,7 @@ namespace MonsterSupergroup.GAS
                     ActiveStatus added = ActiveStatus.FromPredictedApplication(
                         application,
                         incomingId,
-                        ResolveStartTime(application));
+                        ResolveStartTime(application), applicationRevision);
                     statuses.Add(added);
                     Publish(StatusChangeKind.Added, StatusStateOrigin.Predicted, added);
                     return StatusApplicationResult.Added;
@@ -231,7 +237,7 @@ namespace MonsterSupergroup.GAS
                     ActiveStatus replacement = ActiveStatus.FromPredictedApplication(
                         application,
                         incomingId,
-                        ResolveStartTime(application));
+                        ResolveStartTime(application), applicationRevision);
                     statuses.Add(replacement);
                     Publish(StatusChangeKind.Added, StatusStateOrigin.Predicted, replacement);
                     return StatusApplicationResult.Replaced;
@@ -243,7 +249,7 @@ namespace MonsterSupergroup.GAS
                         ActiveStatus first = ActiveStatus.FromPredictedApplication(
                             application,
                             incomingId,
-                            ResolveStartTime(application));
+                            ResolveStartTime(application), applicationRevision);
                         statuses.Add(first);
                         Publish(StatusChangeKind.Added, StatusStateOrigin.Predicted, first);
                         return StatusApplicationResult.Added;
@@ -312,19 +318,44 @@ namespace MonsterSupergroup.GAS
         public bool UpsertCanonical(StatusInstance snapshot)
         {
             if (removalVersions.TryGetValue(snapshot.InstanceId, out uint removalVersion) &&
-                snapshot.Version <= removalVersion)
+                snapshot.ApplicationRevision <= removedApplications[snapshot.InstanceId] && snapshot.Version <= removalVersion)
             {
                 return false;
             }
 
-            if (TryFind(snapshot.InstanceId, out List<ActiveStatus> existingList, out ActiveStatus existing))
+            bool live = TryFind(snapshot.InstanceId, out List<ActiveStatus> existingList, out ActiveStatus existing);
+            if (!live) completedStatuses.TryGetValue(snapshot.InstanceId, out existing);
+            if (existing != null)
             {
-                if (existing.CanonicalVersion > snapshot.Version)
+                if (snapshot.ApplicationRevision < existing.Instance.ApplicationRevision ||
+                    (snapshot.ApplicationRevision == existing.Instance.ApplicationRevision && existing.CanonicalVersion > snapshot.Version) ||
+                    (existing.CanonicalVersion == snapshot.Version && snapshot.ApplicationRevision == existing.Instance.ApplicationRevision &&
+                     snapshot.CompletedTicks <= existing.CompletedTicks))
                 {
                     return false;
                 }
 
                 existing.ApplyCanonical(snapshot);
+                if (existing.RemainingHits == 0)
+                {
+                    completedStatuses[snapshot.InstanceId] = existing;
+                    if (live)
+                    {
+                        existingList.Remove(existing);
+                        RemoveEmptyList(snapshot.DefinitionId, existingList);
+                        Changed?.Invoke(new StatusChange(StatusChangeKind.Removed, StatusStateOrigin.Canonical,
+                            existing.EffectiveInstance, StatusRemovalReason.Expired));
+                    }
+                    return true;
+                }
+                completedStatuses.Remove(snapshot.InstanceId);
+                if (!live)
+                {
+                    if (!activeStatuses.TryGetValue(snapshot.DefinitionId, out existingList))
+                        activeStatuses.Add(snapshot.DefinitionId, existingList = new List<ActiveStatus>());
+                    ValidateCompatibleDefinition(existingList, snapshot.Definition);
+                    existingList.Add(existing);
+                }
                 Publish(StatusChangeKind.Updated, StatusStateOrigin.Canonical, existing);
                 return true;
             }
@@ -337,12 +368,18 @@ namespace MonsterSupergroup.GAS
 
             ValidateCompatibleDefinition(statuses, snapshot.Definition);
             var added = ActiveStatus.FromCanonical(snapshot);
+            if (added.RemainingHits == 0)
+            {
+                completedStatuses[snapshot.InstanceId] = added;
+                RemoveEmptyList(snapshot.DefinitionId, statuses);
+                return true;
+            }
             statuses.Add(added);
             Publish(StatusChangeKind.Added, StatusStateOrigin.Canonical, added);
             return true;
         }
 
-        public bool RemoveCanonical(StatusInstanceId instanceId, uint version)
+        public bool RemoveCanonical(StatusInstanceId instanceId, uint version, uint applicationRevision = 0u)
         {
             if (version == 0u)
             {
@@ -350,26 +387,30 @@ namespace MonsterSupergroup.GAS
             }
 
             if (removalVersions.TryGetValue(instanceId, out uint knownVersion) &&
-                version <= knownVersion)
+                version <= knownVersion && (applicationRevision == 0 || applicationRevision <= removedApplications[instanceId]))
             {
                 return false;
             }
 
+            bool live = TryFind(instanceId, out List<ActiveStatus> statuses, out ActiveStatus active);
+            if (!live) completedStatuses.TryGetValue(instanceId, out active);
+            if (active != null && ((active.CanonicalVersion > version &&
+                (applicationRevision == 0 || applicationRevision == active.Instance.ApplicationRevision)) ||
+                (applicationRevision != 0 && applicationRevision < active.Instance.ApplicationRevision))) return false;
             removalVersions[instanceId] = version;
-            if (!TryFind(instanceId, out List<ActiveStatus> statuses, out ActiveStatus active))
+            removedApplications[instanceId] = applicationRevision != 0 ? applicationRevision : active?.Instance.ApplicationRevision ?? 1u;
+            if (!live)
             {
                 return true;
-            }
-
-            if (active.CanonicalVersion > version)
-            {
-                return false;
             }
 
             StatusInstance removed = active.EffectiveStack > 0
                 ? active.EffectiveInstance
                 : active.Instance;
             statuses.Remove(active);
+            active.CompletedTicks = active.Instance.TotalTicks;
+            active.RemainingHits = 0;
+            completedStatuses[instanceId] = active;
             RemoveEmptyList(active.Instance.DefinitionId, statuses);
             Changed?.Invoke(new StatusChange(
                 StatusChangeKind.Removed,
@@ -456,6 +497,7 @@ namespace MonsterSupergroup.GAS
                                 : StatusStateOrigin.Predicted,
                             expired,
                             StatusRemovalReason.Expired));
+                        completedStatuses[status.Instance.InstanceId] = status;
                         statuses.RemoveAt(i);
                         i--;
                     }
@@ -632,6 +674,7 @@ namespace MonsterSupergroup.GAS
 
             target.Clear();
             activeStatuses.Clear();
+            completedStatuses.Clear();
             for (int i = 0; i < removals.Count; i++)
             {
                 Changed?.Invoke(removals[i]);
@@ -677,6 +720,8 @@ namespace MonsterSupergroup.GAS
 
             activeStatuses.Clear();
             removalVersions.Clear();
+            removedApplications.Clear();
+            completedStatuses.Clear();
             for (int i = 0; i < changes.Count; i++)
             {
                 Changed?.Invoke(changes[i]);
@@ -830,7 +875,8 @@ namespace MonsterSupergroup.GAS
                 source.Priority,
                 source.DamageSourceId,
                 source.SourceContext.WithTarget(targetEntityId),
-                source.Magnitude);
+                source.Magnitude,
+                source.ApplicationRevision);
             ActiveStatus active = ActiveStatus.FromTransfer(instance, transfer.Elapsed);
             statuses.Add(active);
             Publish(StatusChangeKind.Added, StatusStateOrigin.Predicted, active);
@@ -896,14 +942,16 @@ namespace MonsterSupergroup.GAS
             public static ActiveStatus FromPredictedApplication(
                 StatusApplication application,
                 StatusInstanceId instanceId,
-                double startTime)
+                double startTime,
+                uint applicationRevision = 1u)
             {
                 StatusInstance instance = CreateInstance(
                     application,
                     instanceId,
                     startTime,
                     version: 1,
-                    completedTicks: 0);
+                    completedTicks: 0,
+                    applicationRevision: applicationRevision);
                 return new ActiveStatus(instance, 0, application.Stack, 0);
             }
 
@@ -929,7 +977,8 @@ namespace MonsterSupergroup.GAS
                     Instance.InstanceId,
                     startTime,
                     CanonicalVersion > 0 ? CanonicalVersion : 1,
-                    completedTicks: 0);
+                    completedTicks: 0,
+                    applicationRevision: checked(Instance.ApplicationRevision + 1u));
                 PredictedStackDelta = predictedStack;
                 RemainingHits = application.NumberOfHits;
                 CompletedTicks = 0;
@@ -938,13 +987,15 @@ namespace MonsterSupergroup.GAS
 
             public void ApplyCanonical(StatusInstance snapshot)
             {
+                bool sameApplication = Instance.ApplicationRevision == snapshot.ApplicationRevision;
+                int completed = sameApplication ? Math.Max(CompletedTicks, snapshot.CompletedTicks) : snapshot.CompletedTicks;
+                if (!sameApplication || snapshot.CompletedTicks > CompletedTicks) Elapsed = 0f;
                 Instance = snapshot;
                 CanonicalStack = snapshot.Stack;
                 PredictedStackDelta = 0;
                 CanonicalVersion = snapshot.Version;
-                CompletedTicks = snapshot.CompletedTicks;
-                RemainingHits = snapshot.RemainingTicks;
-                Elapsed = 0f;
+                CompletedTicks = Math.Min(completed, snapshot.TotalTicks);
+                RemainingHits = snapshot.TotalTicks - CompletedTicks;
             }
 
             private static StatusInstance CreateInstance(
@@ -952,7 +1003,8 @@ namespace MonsterSupergroup.GAS
                 StatusInstanceId instanceId,
                 double startTime,
                 uint version,
-                int completedTicks)
+                int completedTicks,
+                uint applicationRevision)
             {
                 return new StatusInstance(
                     instanceId,
@@ -972,7 +1024,8 @@ namespace MonsterSupergroup.GAS
                     application.Priority,
                     application.DamageSourceId,
                     application.SourceContext,
-                    application.Magnitude);
+                    application.Magnitude,
+                    applicationRevision);
             }
         }
     }

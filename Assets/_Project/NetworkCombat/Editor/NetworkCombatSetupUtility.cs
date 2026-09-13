@@ -25,8 +25,8 @@ namespace MonsterSupergroup.NetworkCombat.Editor
             "Assets/_Project/Content/NetworkCombat/NetworkCombatWorld.prefab";
         public const string SandboxScenePath =
             "Assets/_Project/Scenes/Development/NetworkCombatSandbox.unity";
-        public const string BootScenePath = "Assets/Scenes/Boot.unity";
-        public const string GameplayScenePath = "Assets/Scenes/Gameplay.unity";
+        public const string BootScenePath = "Assets/_Project/Scenes/Boot.unity";
+        public const string GameplayScenePath = "Assets/_Project/Scenes/Gameplay.unity";
 
         private const string NetworkPlayerStartsRootName =
             "Network Player Starts";
@@ -58,6 +58,11 @@ namespace MonsterSupergroup.NetworkCombat.Editor
 
         public static void BuildBootGameplayAssets()
         {
+            if (System.IO.File.Exists(BootScenePath) && System.IO.File.Exists(GameplayScenePath))
+            {
+                EnemySimulationPrefabMigrator.Migrate();
+                return;
+            }
             BuildSandboxAssets();
             ConfigureProductScenes();
             AssetDatabase.SaveAssets();
@@ -91,6 +96,11 @@ namespace MonsterSupergroup.NetworkCombat.Editor
 
         public static void BuildSandboxAssets()
         {
+            if (System.IO.File.Exists(SandboxScenePath))
+            {
+                EnemySimulationPrefabMigrator.Migrate();
+                return;
+            }
             EnsureFolder("Assets/_Project/Content", "NetworkCombat");
             PlayerRuntimeCombatPrefabMigrator.Run();
             GameObject player = AssetDatabase.LoadAssetAtPath<GameObject>(

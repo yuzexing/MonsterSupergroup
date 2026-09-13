@@ -3,6 +3,17 @@
 This folder adapts the existing `_Project/GAS` and Gameplay Combat runtime to
 Mirror. It is not a second GAS implementation.
 
+## Main menu and preparation
+
+Interactive Boot now opens MainMenu with a home page and a four-seat preparation
+room. Creating a Host no longer loads Gameplay immediately. Authenticated room
+messages seal the online roster and initial loadouts, then a scene/runtime
+baseline barrier starts combat. Offline Host opens no external listener. Steam
+uses private invitations and keeps original-member reconnection available.
+See [the menu implementation and acceptance guide](../../../docs/plans/preparation-menu.md).
+The explicit `--boot-gameplay-role` validation entry point retains direct
+Gameplay loading; the legacy Steam/KCP HUD is hidden in the normal menu flow.
+
 ## Dependency boundary
 
 - `MonsterSupergroup.GAS.Core` and `MonsterSupergroup.Gameplay.Combat.Runtime`
@@ -81,3 +92,7 @@ Assign `NetworkPlayer.prefab` to the Mirror NetworkManager player prefab and
 register `NetworkEnemy.prefab` as a spawn prefab. Replace the sandbox spawner
 with the production server wave/spawn system; keep the gateway, adapters and
 authority rules unchanged.
+
+## Target selection and simulation handoff
+
+Gameplay uses server-confirmed player eligibility and a reliable assignment/checkpoint handoff. Normal and elite enemies follow their target client; Boss mode stays on the server. See [the implementation and acceptance guide](../../../docs/plans/enemy-aggro-handoff.md) for `RequestTargetChange`, Host-only test controls, and reproducible three-process pressure scenarios.

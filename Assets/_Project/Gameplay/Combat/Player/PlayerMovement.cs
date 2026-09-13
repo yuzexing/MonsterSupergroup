@@ -208,6 +208,27 @@ namespace AstralShift.HellMaiden.Player
 
 		public bool IsUpgradeSelectionLocked { get; private set; }
 
+		public bool IsMenuInputBlocked { get; private set; }
+
+		public void SetMenuInputBlocked(bool blocked)
+		{
+			IsMenuInputBlocked = blocked;
+			if (!blocked) return;
+			ResetInputDirection();
+			// Preserve a dash, knockback or other action already in progress.
+			if (body != null && _stateMachine != null && _stateMachine.GetState() == Moving)
+				body.linearVelocity = Vector2.zero;
+		}
+
+		public bool IsRunLoadingLocked { get; private set; }
+		public void SetRunLoadingLocked(bool value)
+		{
+			IsRunLoadingLocked = value;
+			if (!value) return;
+			CancelDash();
+			if (body != null) body.linearVelocity = Vector2.zero;
+		}
+
 		public void SetUpgradeSelectionLocked(bool value)
 		{
 			combatantBinding?.Combatant?.SetUpgradeSelectionInvulnerable(value);
@@ -259,7 +280,7 @@ namespace AstralShift.HellMaiden.Player
 		}
 
 		public bool RequestDebugUltimateCharge() =>
-			isActiveAndEnabled && IsRuntimeInitialized && IsLocalOwnerBound && !IsUpgradeSelectionLocked &&
+			isActiveAndEnabled && IsRuntimeInitialized && IsLocalOwnerBound && !IsMenuInputBlocked && !IsUpgradeSelectionLocked && !IsRunLoadingLocked &&
 			combatantBinding.Combatant.IsAlive && (_requestDebugUltimateCharge?.Invoke() ?? false);
 
 		public void UnbindUltimateInput()
@@ -290,6 +311,7 @@ namespace AstralShift.HellMaiden.Player
 			IsLocalOwnerBound = value;
 			if (!value)
 			{
+				IsMenuInputBlocked = false;
 				CancelDash();
 				ResetInputDirection();
 				DisableInteractor();
@@ -389,10 +411,10 @@ namespace AstralShift.HellMaiden.Player
 		}
 
 		private bool CanExecuteDash => isActiveAndEnabled && IsRuntimeInitialized && !_cancellingDash &&
-			_dashRuntime != null && _tryCommitDashUse != null && !IsUpgradeSelectionLocked &&
+			_dashRuntime != null && _tryCommitDashUse != null && !IsUpgradeSelectionLocked && !IsRunLoadingLocked &&
 			combatantBinding != null && combatantBinding.IsAlive && (!UsesNetworkLifecycle || IsLocalOwnerBound);
 
-		private bool CanCommitDash => CanExecuteDash && RefreshDashRuntime(out double now) &&
+		private bool CanCommitDash => !IsMenuInputBlocked && CanExecuteDash && RefreshDashRuntime(out double now) &&
 			_dashRuntime.AvailableCharges > 0 && now >= _dashRuntime.NextUseAt;
 
 		public void CancelDash(ulong expectedUseId = 0)
@@ -603,7 +625,8 @@ namespace AstralShift.HellMaiden.Player
 		{
 			if (_stateMachine != null && _stateMachine.GetState() == Dashing && !CanExecuteDash) CancelDash();
 			if (!IsRuntimeInitialized) return;
-			if (IsUpgradeSelectionLocked)
+			// Restored/canonical Downed health does not enter the local damage FSM.
+			if (PlayerState.IsBusy(this))
 			{
 				if (body != null) StopMovement();
 				return;
@@ -619,7 +642,7 @@ namespace AstralShift.HellMaiden.Player
 
 		public override void SetDirection(Vector2 value)
 		{
-			if (IsUpgradeSelectionLocked) return;
+			if (IsMenuInputBlocked || PlayerState.IsBusy(this)) return;
 			if (value.sqrMagnitude > 0f)
 			{
 				_previousInputDirection = _currentInputDirection;
@@ -631,7 +654,7 @@ namespace AstralShift.HellMaiden.Player
 
 		public override void SetDirectionImmediate(Vector2 value)
 		{
-			if (IsUpgradeSelectionLocked) return;
+			if (IsMenuInputBlocked || PlayerState.IsBusy(this)) return;
 			Debug.Log("SetDirectionImmediate");
 			if (value.sqrMagnitude > 0f)
 			{
@@ -863,11 +886,11 @@ namespace AstralShift.HellMaiden.Player
 			FinishDashUse();
 		}
 
-		private void OnDisable() => CancelDash();
+		private void OnDisable() { IsMenuInputBlocked = false; CancelDash(); }
 
 		public void BruteforceKnockBack(Vector2 attackPosition, KnockbackSettings settings)
 		{
-			if (IsUpgradeSelectionLocked) return;
+			if (IsUpgradeSelectionLocked || IsRunLoadingLocked) return;
 			Vector2 attackDirection;
 			if (!(settings == null) && (settings.HasKnockback || settings.Staggers))
 			{
@@ -907,6 +930,7 @@ namespace AstralShift.HellMaiden.Player
 
 		public void SetAimDirection(Vector2 direction)
 		{
+			if (IsMenuInputBlocked) return;
 			if (direction.magnitude < 0.2f)
 			{
 				if (_autoAim)
@@ -937,6 +961,7 @@ namespace AstralShift.HellMaiden.Player
 
 		public void SetAimPosition(Vector2 position)
 		{
+			if (IsMenuInputBlocked) return;
 			if (!_autoAim && _inputCamera != null)
 			{
 				Vector2 vector = position;
@@ -1220,7 +1245,7 @@ namespace AstralShift.HellMaiden.Player
 
 		public void UltimateAction()
 		{
-			if (IsUpgradeSelectionLocked) return;
+			if (IsMenuInputBlocked || IsUpgradeSelectionLocked || IsRunLoadingLocked) return;
 			if (_tryUseNativeUltimate != null)
 			{
 				if (isActiveAndEnabled && IsRuntimeInitialized && (!UsesNetworkLifecycle || IsLocalOwnerBound) &&
@@ -1249,7 +1274,7 @@ namespace AstralShift.HellMaiden.Player
 
 		public void Interact()
 		{
-			if (IsUpgradeSelectionLocked || interactionFinder == null) return;
+			if (IsMenuInputBlocked || IsUpgradeSelectionLocked || IsRunLoadingLocked || interactionFinder == null) return;
 			interactionFinder.TryInteract();
 		}
 

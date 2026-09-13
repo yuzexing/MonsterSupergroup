@@ -1,3 +1,4 @@
+using MonsterSupergroup.Gameplay.Options;
 using System.Collections.Generic;
 using AstralShift.Control;
 using AstralShift.HellMaiden.Data;
@@ -135,7 +136,7 @@ namespace AstralShift.HellMaiden.Controllers
 					num++;
 				}
 			}
-			string text = LocalizationMediator.GetTranslation("ACH_Tab_Chapter_Achievements_Complete");
+			string text = GameLocalization.Menu("ACH_Tab_Chapter_Achievements_Complete");
 			if (string.IsNullOrEmpty(text))
 			{
 				text = "Chapter Achievements: <color=blue>{unlocked}</color> / {total}";

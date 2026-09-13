@@ -34,6 +34,7 @@ namespace MonsterSupergroup.NetworkCombat
         public float Duration;
         public byte ExecutionAuthority;
         public uint BaseVersion;
+        public uint ApplicationRevision;
         public int TickDamage;
         public int TotalTicks;
         public int CompletedTicks;
@@ -84,6 +85,7 @@ namespace MonsterSupergroup.NetworkCombat
                 Duration = instance.Duration,
                 ExecutionAuthority = (byte)instance.ExecutionAuthority,
                 BaseVersion = instance.Version,
+                ApplicationRevision = instance.ApplicationRevision,
                 TickDamage = instance.TickDamage,
                 TotalTicks = instance.TotalTicks,
                 CompletedTicks = instance.CompletedTicks,

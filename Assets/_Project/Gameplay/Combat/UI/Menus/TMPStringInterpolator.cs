@@ -1,6 +1,7 @@
+using MonsterSupergroup.Gameplay.Options;
 using System.Collections;
 using System.Text;
-using I2.Loc;
+
 using TMPro;
 using UnityEngine;
 
@@ -49,7 +50,7 @@ public class TMPStringInterpolator : MonoBehaviour
 
 	private void OnEnable()
 	{
-		LocalizationManager.OnLocalizeEvent += UpdateLocalization;
+		GameLocalization.Changed += UpdateLocalization;
 		UpdateLocalization();
 		ResetQuote();
 		UpdateCharSet();
@@ -57,13 +58,13 @@ public class TMPStringInterpolator : MonoBehaviour
 
 	private void OnDisable()
 	{
-		LocalizationManager.OnLocalizeEvent -= UpdateLocalization;
+		GameLocalization.Changed -= UpdateLocalization;
 	}
 
 	private void UpdateLocalization()
 	{
-		_startText = LocalizationMediator.GetTranslation(firstTextLocalizationKey);
-		_endText = LocalizationMediator.GetTranslation(secondTextLocalizationKey);
+		_startText = GameLocalization.Menu(firstTextLocalizationKey);
+		_endText = GameLocalization.Menu(secondTextLocalizationKey);
 		NormalizeStrings();
 	}
 

@@ -1,3 +1,4 @@
+using MonsterSupergroup.Gameplay.Options;
 using System;
 using System.Linq;
 using System.Text;
@@ -227,7 +228,7 @@ namespace AstralShift.HellMaiden.UI.Menus.PauseMenu
 				SetInvalidStatsText(weaponData);
 				if (weaponData.IsSignature && (bool)weaponData.UltimateData)
 				{
-					ultimateLabelTxt.text = LocalizationMediator.GetTranslation(ultimateLabelKey);
+					ultimateLabelTxt.text = GameLocalization.Menu(ultimateLabelKey);
 					ultimateNameTxt.text = weaponData.UltimateData.GetTitle();
 					ultimateDescriptionTxt.text = weaponData.UltimateData.GetDescription();
 				}
@@ -570,7 +571,7 @@ namespace AstralShift.HellMaiden.UI.Menus.PauseMenu
 		private void SetInvalidStatsText(ModifierFlags modifierFlags)
 		{
 			string term = naKey;
-			LocalizationMediator.GetTranslation(ref term);
+			term = GameLocalization.Menu(term);
 			if (!modifierFlags.HasFlag(ModifierFlags.Damage))
 			{
 				SetInvalidStatText(damageStat, ref term);
@@ -604,7 +605,7 @@ namespace AstralShift.HellMaiden.UI.Menus.PauseMenu
 		private void SetInvalidStatsText(WeaponData data)
 		{
 			string term = naKey;
-			LocalizationMediator.GetTranslation(ref term);
+			term = GameLocalization.Menu(term);
 			ModifierFlags modifierFlags = data.modifierFlags;
 			if (data.ID == 302)
 			{
@@ -661,8 +662,8 @@ namespace AstralShift.HellMaiden.UI.Menus.PauseMenu
 
 		private void SetOnHitAndKillModifierIcons(EquipmentLevelModifiersData levelModifiersData)
 		{
-			string translation = LocalizationMediator.GetTranslation(onHitStringKey);
-			string translation2 = LocalizationMediator.GetTranslation(onKillStringKey);
+			string translation = GameLocalization.Menu(onHitStringKey);
+			string translation2 = GameLocalization.Menu(onKillStringKey);
 			translation += ": {0} {1} {2 }%";
 			translation2 += ": {0} {1} {2} %";
 			StringBuilder stringBuilder = new StringBuilder();
@@ -675,7 +676,7 @@ namespace AstralShift.HellMaiden.UI.Menus.PauseMenu
 			{
 				num++;
 				EquipmentModifierApplication equipmentDataModifier = onHitModifiers[i];
-				string translation3 = LocalizationMediator.GetTranslation("STT_" + ModifiersStringHelpers.GetEquipmentModifierNameLocKey(equipmentDataModifier.ModifierIdValue));
+				string translation3 = GameLocalization.Menu("STT_" + ModifiersStringHelpers.GetEquipmentModifierNameLocKey(equipmentDataModifier.ModifierIdValue));
 				string arg = DataModifierUtils.FormatMultiplierToPercentage(equipmentDataModifier.GetParameterByIndex(0));
 				stringBuilder.AppendFormat(translation, ModifiersStringHelpers.GetEquipmentModifierStringIcon(equipmentDataModifier.ModifierIdValue), translation3, arg);
 				if (num == 3)
@@ -696,7 +697,7 @@ namespace AstralShift.HellMaiden.UI.Menus.PauseMenu
 			{
 				num++;
 				EquipmentModifierApplication equipmentDataModifier2 = onKillModifiers[j];
-				string translation4 = LocalizationMediator.GetTranslation("STT_" + ModifiersStringHelpers.GetEquipmentModifierNameLocKey(equipmentDataModifier2.ModifierIdValue));
+				string translation4 = GameLocalization.Menu("STT_" + ModifiersStringHelpers.GetEquipmentModifierNameLocKey(equipmentDataModifier2.ModifierIdValue));
 				string arg2 = DataModifierUtils.FormatMultiplierToPercentage(equipmentDataModifier2.GetParameterByIndex(0));
 				stringBuilder.AppendFormat(translation2, ModifiersStringHelpers.GetEquipmentModifierStringIcon(equipmentDataModifier2.ModifierIdValue), translation4, arg2);
 				if (num == 3)
@@ -715,8 +716,8 @@ namespace AstralShift.HellMaiden.UI.Menus.PauseMenu
 		private void SetOnHitAndKillModifierIcons(WeaponBehaviour weaponBehaviour)
 		{
 			StringBuilder stringBuilder = new StringBuilder();
-			string translation = LocalizationMediator.GetTranslation(onHitStringKey);
-			string translation2 = LocalizationMediator.GetTranslation(onKillStringKey);
+			string translation = GameLocalization.Menu(onHitStringKey);
+			string translation2 = GameLocalization.Menu(onKillStringKey);
 			translation += ": {0} {1} {2 }%";
 			translation2 += ": {0} {1} {2} %";
 			RuntimeEquipmentModifiers equipmentModifiers = weaponBehaviour.EquipmentModifiers;
@@ -725,7 +726,7 @@ namespace AstralShift.HellMaiden.UI.Menus.PauseMenu
 			{
 				num++;
 				OnHitModifier onHitModifier = equipmentModifiers.OnHitModifiers[i];
-				string translation3 = LocalizationMediator.GetTranslation("STT_" + ModifiersStringHelpers.GetEquipmentModifierNameLocKey(onHitModifier.ID));
+				string translation3 = GameLocalization.Menu("STT_" + ModifiersStringHelpers.GetEquipmentModifierNameLocKey(onHitModifier.ID));
 				float num2 = onHitModifier.GetRollChance() * 100f;
 				stringBuilder.AppendFormat(translation, ModifiersStringHelpers.GetEquipmentModifierStringIcon(onHitModifier.ID), translation3, num2);
 				if (num == 3)
@@ -746,7 +747,7 @@ namespace AstralShift.HellMaiden.UI.Menus.PauseMenu
 			{
 				num++;
 				OnKillModifier onKillModifier = equipmentModifiers.OnKillModifiers[j];
-				string translation4 = LocalizationMediator.GetTranslation("STT_" + ModifiersStringHelpers.GetEquipmentModifierNameLocKey(onKillModifier.ID));
+				string translation4 = GameLocalization.Menu("STT_" + ModifiersStringHelpers.GetEquipmentModifierNameLocKey(onKillModifier.ID));
 				float num3 = onKillModifier.GetRollChance() * 100f;
 				stringBuilder.AppendFormat(translation2, ModifiersStringHelpers.GetEquipmentModifierStringIcon(onKillModifier.ID), translation4, num3);
 				if (num == 3)

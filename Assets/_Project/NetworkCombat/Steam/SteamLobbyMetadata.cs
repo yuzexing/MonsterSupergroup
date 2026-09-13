@@ -32,11 +32,18 @@ namespace MonsterSupergroup.NetworkCombat
         public const string GameKey = "game";
         public const string GameValue = "monster_supergroup";
         public const string ProtocolKey = "protocol";
-        public const string ProtocolValue = "1";
+        public const string ProtocolValue = "3";
         public const string StateKey = "state";
         public const string StartingState = "starting";
         public const string ReadyState = "ready";
         public const string ClosedState = "closed";
+        public const string PreparingState = "preparing";
+        public const string LoadingState = "loading";
+        public const string InGameState = "in_game";
+        public const string GameOverState = "game_over";
+        public const string TransitioningState = "transitioning";
+        public static bool IsActiveSession(string state) => state == ReadyState || state == PreparingState ||
+            state == LoadingState || state == InGameState || state == GameOverState || state == TransitioningState;
         public const string HostSteamIdKey = "host_steam_id";
         public const string NameKey = "name";
 
@@ -61,7 +68,7 @@ namespace MonsterSupergroup.NetworkCombat
                 error = "Lobby protocol is incompatible.";
                 return false;
             }
-            if (!string.Equals(state, ReadyState, StringComparison.Ordinal))
+            if (!IsActiveSession(state))
             {
                 error = "Lobby host is not ready.";
                 return false;
@@ -94,6 +101,7 @@ namespace MonsterSupergroup.NetworkCombat
         {
             summary = default;
             if (lobbyId == 0ul || memberCount < 0 || memberLimit <= 0 ||
+                (state != ReadyState && state != PreparingState) ||
                 memberCount >= memberLimit ||
                 !TryGetReadyHostSteamId(
                     game,

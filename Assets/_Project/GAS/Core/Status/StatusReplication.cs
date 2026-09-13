@@ -171,7 +171,8 @@ namespace MonsterSupergroup.GAS
             float priority,
             uint damageSourceId,
             CombatContext sourceContext = default,
-            float magnitude = 0f)
+            float magnitude = 0f,
+            uint applicationRevision = 1u)
         {
             if (!instanceId.IsValid)
             {
@@ -207,6 +208,7 @@ namespace MonsterSupergroup.GAS
             {
                 throw new ArgumentOutOfRangeException(nameof(version));
             }
+            if (applicationRevision == 0u) throw new ArgumentOutOfRangeException(nameof(applicationRevision));
 
             if (tickDamage < 0)
             {
@@ -243,6 +245,7 @@ namespace MonsterSupergroup.GAS
             Duration = duration;
             ExecutionAuthority = executionAuthority;
             Version = version;
+            ApplicationRevision = applicationRevision;
             TickDamage = tickDamage;
             TotalTicks = totalTicks;
             CompletedTicks = completedTicks;
@@ -265,6 +268,7 @@ namespace MonsterSupergroup.GAS
         public double EndTime => StartTime + Duration;
         public StatusExecutionAuthority ExecutionAuthority { get; }
         public uint Version { get; }
+        public uint ApplicationRevision { get; }
         public int TickDamage { get; }
         public int TotalTicks { get; }
         public int CompletedTicks { get; }
@@ -295,7 +299,8 @@ namespace MonsterSupergroup.GAS
                 Priority,
                 DamageSourceId,
                 SourceContext,
-                Magnitude);
+                Magnitude,
+                ApplicationRevision);
         }
 
         public StatusInstance WithStack(int stack)
@@ -318,7 +323,8 @@ namespace MonsterSupergroup.GAS
                 Priority,
                 DamageSourceId,
                 SourceContext,
-                Magnitude);
+                Magnitude,
+                ApplicationRevision);
         }
     }
 

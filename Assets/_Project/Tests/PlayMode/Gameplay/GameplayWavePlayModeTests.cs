@@ -13,6 +13,7 @@ using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.TestTools;
+using UnityEngine.Timeline;
 #if UNITY_EDITOR
 using UnityEditor.SceneManagement;
 #endif
@@ -20,12 +21,13 @@ using Object = UnityEngine.Object;
 
 namespace MonsterSupergroup.Gameplay.Tests
 {
-    public sealed class GameplayWavePlayModeTests
+    public sealed partial class GameplayWavePlayModeTests
     {
         private BootGameplayNetworkManager manager;
         private GameObject[] bootRoots;
         private GameObject gate;
         private GameplayWaveRules rulesCopy;
+        private readonly List<Object> timelineAssets = new List<Object>();
         private NetworkGameplayEnemySpawner Spawner => Object.FindFirstObjectByType<NetworkGameplayEnemySpawner>();
         private NetworkIdentity Owner => NetworkClient.localPlayer;
         private NetworkWaveProgress Progress => NetworkCombatWorld.Instance.GetComponent<NetworkWaveProgress>();
@@ -192,6 +194,7 @@ namespace MonsterSupergroup.Gameplay.Tests
                 CombatEventId id = ids.Next();
                 var result = world.Gateway.Statuses.Apply(Owner.netId, new StatusMutation
                 {
+                    ApplicationRevision = 1,
                     EventId = id.Value, RootEventId = id.Value, Sequence = id.Sequence,
                     InstanceId = id.Value, Kind = StatusMutationKind.ApplyOrRefresh,
                     SourcePlayerId = Owner.netId, SourceEntityId = Owner.netId, TargetEntityId = enemyId,
@@ -448,7 +451,10 @@ namespace MonsterSupergroup.Gameplay.Tests
         {
             rulesCopy = Object.Instantiate((GameplayWaveRules)typeof(NetworkGameplayEnemySpawner)
                 .GetField("waveRules", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(Spawner));
-            Set(rulesCopy, "waveDuration", duration); Set(rulesCopy, "spawnInterval", interval); Set(rulesCopy, "maximumAlive", limit);
+            var timeline = ScriptableObject.CreateInstance<TimelineAsset>(); timelineAssets.Add(timeline);
+            timeline.durationMode = TimelineAsset.DurationMode.FixedLength; timeline.fixedDuration = duration;
+            AddFixtureSpawn(timeline, Spawner.EnemyPrefab, 0, interval * 6, 6);
+            Set(rulesCopy, "timeline", timeline); Set(rulesCopy, "waveDuration", duration); Set(rulesCopy, "maximumAlive", limit);
             Set(Spawner, "waveRules", rulesCopy);
         }
         private static void Set(object target, string name, object value) => target.GetType()
@@ -480,6 +486,8 @@ namespace MonsterSupergroup.Gameplay.Tests
             BootSceneFixtureObjects.Destroy(bootRoots);
             if (gate != null) Object.Destroy(gate);
             if (rulesCopy != null) Object.Destroy(rulesCopy);
+            foreach (var asset in timelineAssets) if (asset != null) Object.Destroy(asset);
+            timelineAssets.Clear();
             yield return null;
             NetworkManager.ResetStatics();
         }

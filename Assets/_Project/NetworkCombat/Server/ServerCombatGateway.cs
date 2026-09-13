@@ -54,16 +54,29 @@ namespace MonsterSupergroup.NetworkCombat
             this.trace = trace;
         }
 
-        public CombatLedger Ledger { get; }
-        public ServerStatusRegistry Statuses { get; }
-        public ServerAttackRegistry Attacks { get; } = new ServerAttackRegistry();
-        public ServerStatusDamageAdmissions StatusDamageAdmissions { get; } = new ServerStatusDamageAdmissions();
-        public CombatGatewayMetrics Metrics { get; } = new CombatGatewayMetrics();
-        public ProcessedEventCache ProcessedEvents { get; } = new ProcessedEventCache();
-        public ClientEventIdentityRegistry ClientIdentities { get; } =
+        public CombatLedger Ledger { get; private set; }
+        public ServerStatusRegistry Statuses { get; private set; }
+        public ServerAttackRegistry Attacks { get; private set; } = new ServerAttackRegistry();
+        public ServerStatusDamageAdmissions StatusDamageAdmissions { get; private set; } = new ServerStatusDamageAdmissions();
+        public CombatGatewayMetrics Metrics { get; private set; } = new CombatGatewayMetrics();
+        public ProcessedEventCache ProcessedEvents { get; private set; } = new ProcessedEventCache();
+        public ClientEventIdentityRegistry ClientIdentities { get; private set; } =
             new ClientEventIdentityRegistry();
-        public ClientBatchSequenceTracker BatchSequences { get; } =
+        public ClientBatchSequenceTracker BatchSequences { get; private set; } =
             new ClientBatchSequenceTracker();
+
+        public bool CombatStopped { get; private set; }
+        public void StopCombat() => CombatStopped = true;
+        public void ResetForNextRun()
+        {
+            Statuses.Clear();
+            Ledger = new CombatLedger(); Statuses = new ServerStatusRegistry(Ledger);
+            Attacks = new ServerAttackRegistry(); StatusDamageAdmissions = new ServerStatusDamageAdmissions();
+            Metrics = new CombatGatewayMetrics(); ProcessedEvents = new ProcessedEventCache();
+            ClientIdentities = new ClientEventIdentityRegistry(); BatchSequences = new ClientBatchSequenceTracker();
+            // Keep event IDs monotonic across rounds, along with the event subscriptions.
+            CombatStopped = false;
+        }
 
         public int MaximumResultsPerBatch { get; set; } = 512;
         public int MaximumStatusMutationsPerBatch { get; set; } = 256;
@@ -94,10 +107,13 @@ namespace MonsterSupergroup.NetworkCombat
             CombatSubmissionBatch batch,
             double serverTime)
         {
+            if (CombatStopped) return default;
             ValidateServerTime(serverTime);
             var entities = new Dictionary<uint, CanonicalEntityState>();
             var statuses = new List<CanonicalStatusState>();
             var kills = new List<ConfirmedKill>();
+
+            var hits = new List<EnemyHitPresentation>();
 
             CombatResult[] results = batch.Results ?? Array.Empty<CombatResult>();
             StatusMutation[] mutations = batch.StatusMutations ?? Array.Empty<StatusMutation>();
@@ -165,6 +181,7 @@ namespace MonsterSupergroup.NetworkCombat
                 ProcessedEvents.MarkProcessed(result.EventId, serverTime);
                 entities[applied.State.EntityId] = applied.State;
                 RecordDamage(result);
+                AddEnemyHit(result, applied, hits);
                 CombatResultAccepted?.Invoke(result, applied, serverTime);
                 if (applied.IsConfirmedKill)
                 {
@@ -263,14 +280,16 @@ namespace MonsterSupergroup.NetworkCombat
                 }
             }
 
-            return CreateBatch(entities.Values, statuses, kills);
+            return CreateBatch(entities.Values, statuses, kills, hits);
         }
 
         public CanonicalWorldBatch Advance(double serverTime)
         {
+            if (CombatStopped) return default;
             StatusDamageAdmissions.Prune(serverTime);
             var entities = new Dictionary<uint, CanonicalEntityState>();
             var kills = new List<ConfirmedKill>();
+            var hits = new List<EnemyHitPresentation>();
             StatusAdvanceResult statusAdvance = Statuses.Advance(serverTime);
             for (int i = 0; i < statusAdvance.Ticks.Count; i++)
             {
@@ -294,6 +313,12 @@ namespace MonsterSupergroup.NetworkCombat
                 }
 
                 entities[applied.State.EntityId] = applied.State;
+                AddEnemyHit(new CombatResult
+                {
+                    EventId = eventId.Value, Damage = tick.Instance.TickDamage,
+                    SourcePlayerId = tick.Instance.SourcePlayerId, DamageSourceId = tick.Instance.DamageSourceId,
+                    PresentationDamageType = (byte)DamageTypeUtility.FromStatus(tick.Instance.DefinitionId)
+                }, applied, hits);
                 if (applied.IsConfirmedKill)
                 {
                     AddConfirmedKill(applied.Kill, kills);
@@ -301,16 +326,35 @@ namespace MonsterSupergroup.NetworkCombat
                 }
             }
 
-            return CreateBatch(entities.Values, statusAdvance.Changes, kills);
+            return CreateBatch(entities.Values, statusAdvance.Changes, kills, hits);
+        }
+
+        private static void AddEnemyHit(CombatResult result, CombatApplyResult applied,
+            ICollection<EnemyHitPresentation> hits)
+        {
+            if (applied.AppliedDamage > 0 && applied.State.Kind == (byte)CombatEntityKind.Enemy)
+            {
+                hits.Add(new EnemyHitPresentation
+                {
+                    DamageEventId = result.EventId,
+                    Damage = result.Damage,
+                    PresentationDamageType = result.PresentationDamageType,
+                    IsCritical = result.IsCritical,
+                    SourcePlayerId = result.SourcePlayerId,
+                    DamageSourceId = result.DamageSourceId,
+                    TargetEntityId = applied.State.EntityId,
+                    TargetStateVersion = applied.State.StateVersion
+                });
+            }
         }
 
         public CanonicalWorldBatch HandleSourceDisconnected(
             uint sourcePlayerId,
             double serverTime)
         {
-            StatusDamageAdmissions.RemovePlayer(sourcePlayerId);
             IReadOnlyList<CanonicalStatusState> changes =
-                Statuses.HandleSourceDisconnected(sourcePlayerId, serverTime);
+                Statuses.HandleSourceDisconnected(sourcePlayerId, serverTime, StatusDamageAdmissions.GetAcceptedTicks);
+            StatusDamageAdmissions.RemovePlayer(sourcePlayerId);
             return CreateBatch(
                 Array.Empty<CanonicalEntityState>(),
                 changes,
@@ -406,7 +450,8 @@ namespace MonsterSupergroup.NetworkCombat
         private CanonicalWorldBatch CreateBatch(
             IEnumerable<CanonicalEntityState> entities,
             IEnumerable<CanonicalStatusState> statuses,
-            IEnumerable<ConfirmedKill> kills)
+            IEnumerable<ConfirmedKill> kills,
+            IEnumerable<EnemyHitPresentation> hits = null)
         {
             serverSequence = unchecked(serverSequence + 1u);
             if (serverSequence == 0u)
@@ -419,7 +464,8 @@ namespace MonsterSupergroup.NetworkCombat
                 ServerSequence = serverSequence,
                 Entities = ToArray(entities),
                 Statuses = ToArray(statuses),
-                ConfirmedKills = ToArray(kills)
+                ConfirmedKills = ToArray(kills),
+                EnemyHitPresentations = hits != null ? ToArray(hits) : Array.Empty<EnemyHitPresentation>()
             };
         }
 

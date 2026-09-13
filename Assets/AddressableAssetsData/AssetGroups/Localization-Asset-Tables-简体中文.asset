@@ -10,29 +10,21 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
-  m_Name: Localization-String-Tables-English
+  m_Name: "Localization-Asset-Tables-\u7B80\u4F53\u4E2D\u6587"
   m_EditorClassIdentifier: Unity.Addressables.Editor::UnityEditor.AddressableAssets.Settings.AddressableAssetGroup
-  m_GroupName: Localization-String-Tables-English
-  m_GUID: 326b8a6d59a9210489f608700d4e46a3
+  m_GroupName: "Localization-Asset-Tables-\u7B80\u4F53\u4E2D\u6587"
+  m_GUID: fabb17f9aa36fc64093e3bb27a9929d8
   m_SerializeEntries:
-  - m_GUID: a9181d3d4c6ab974f97e2126d13e4289
-    m_Address: MonsterMenus_en
+  - m_GUID: 5930162e323fcc845b079a371619e60a
+    m_Address: MonsterFonts_zh-CN
     m_ReadOnly: 1
     m_SerializedLabels:
-    - Locale-en
-    - Preload
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: ffe48c78d1487c443b13ce5f66b04a1f
-    m_Address: MonsterContent_en
-    m_ReadOnly: 1
-    m_SerializedLabels:
-    - Locale-en
-    - Preload
+    - Locale-zh-CN
     FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 1
   m_Settings: {fileID: 11400000, guid: 16ced2ee9fdab8549b205ec3061a501a, type: 2}
   m_SchemaSet:
     m_Schemas:
-    - {fileID: 11400000, guid: 11c1a26758ebc2b428c785d9ff46f9cc, type: 2}
-    - {fileID: 11400000, guid: 382d4c17df9966641af76445ef2c5e6c, type: 2}
-    - {fileID: 11400000, guid: 607c8194310cc31458c58ae548401f7f, type: 2}
+    - {fileID: 11400000, guid: 55e1eef6ab65a164f9964593bec35a31, type: 2}
+    - {fileID: 11400000, guid: 8f846f6a7a924e64880e8275503ca234, type: 2}
+    - {fileID: 11400000, guid: 26be98da5818c1c4d97287e50923b0fc, type: 2}

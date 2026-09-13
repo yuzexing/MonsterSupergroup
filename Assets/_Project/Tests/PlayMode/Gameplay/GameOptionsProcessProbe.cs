@@ -81,7 +81,9 @@ namespace MonsterSupergroup.Gameplay.Tests
             }
             var saved = new SavedPreference { Exists = PlayerPrefs.HasKey(GameOptionsService.PreferenceKey), Json = PlayerPrefs.GetString(GameOptionsService.PreferenceKey) };
             File.WriteAllText(Path.Combine(directory, "preference-backup.json"), JsonUtility.ToJson(saved));
-            options.SetLanguage("zh-CN"); options.SetAudio(1, 1, 1); options.SetScreenShake(true);
+            options.SetLanguage("zh-CN");
+            yield return Wait(() => GameLocalization.Language == "zh-CN", "initial Chinese locale");
+            options.SetAudio(1, 1, 1); options.SetScreenShake(true);
             yield return Wait(() => NetworkManager.singleton is BootGameplayNetworkManager, "network manager");
             manager = (BootGameplayNetworkManager)NetworkManager.singleton;
             manager.ConfigurePreparationFlow(true); yield return manager.EnsureMainMenu();
@@ -90,7 +92,7 @@ namespace MonsterSupergroup.Gameplay.Tests
             Click("选项"); yield return null;
             Check(GameOptionsPanel.IsOpen && !NetworkClient.active, "Main menu options started a network session");
             yield return Shot("options-general-zh");
-            options.SetLanguage("en"); yield return null;
+            options.SetLanguage("en"); yield return Wait(() => GameLocalization.Language == "en", "English locale");
             Check(MenuLocalization.Get("选项") == "Options", "English table was released during locale switching");
             yield return Shot("options-general-en");
             Click("Options.Tab.1"); yield return null;
@@ -120,7 +122,7 @@ namespace MonsterSupergroup.Gameplay.Tests
             slow.FrameLimit = 120; options.ApplyGraphics(slow);
             yield return VerifyDisplay();
             GameOptionsPanel.HandleBack(); yield return null;
-            options.SetLanguage("en"); yield return null;
+            options.SetLanguage("en"); yield return Wait(() => GameLocalization.Language == "en", "English home locale");
             yield return Shot("home-en");
             Check(manager.TryStartOfflineRoom(out var error), error);
             yield return Wait(() => manager.RoomSnapshot.Phase == PreparationPhase.Preparing, "solo room");
@@ -136,7 +138,7 @@ namespace MonsterSupergroup.Gameplay.Tests
             Click("CombatMenu.SpellTab"); yield return Shot("combat-spells-en"); Click("CombatMenu.CharacterTab");
             Click("CombatMenu.Options"); yield return null;
             Check(GameOptionsPanel.IsOpen && NetworkClient.localPlayer.GetComponent<PlayerMovement>().IsMenuInputBlocked, "Combat options lost the owner input gate");
-            options.SetLanguage("zh-CN"); yield return null;
+            options.SetLanguage("zh-CN"); yield return Wait(() => GameLocalization.Language == "zh-CN", "Chinese combat locale");
             yield return Shot("combat-options-zh");
             var camera = FindFirstObjectByType<GameplayCameraRig>();
             int shakes = 0; camera.ShakePlayed += _ => shakes++;
@@ -150,7 +152,8 @@ namespace MonsterSupergroup.Gameplay.Tests
             Click("CombatMenu.SpellTab"); yield return Shot("combat-spells-zh");
             combat.CloseMenu(); manager.LeavePreparationRoom();
             yield return Wait(() => !NetworkClient.active && !manager.IsGameplayLoaded && !manager.IsLeavingRoom, "return to menu");
-            options.SetLanguage("en"); options.SetAudio(.7f, .3f, .4f); options.SetScreenShake(false);
+            options.SetLanguage("en"); yield return Wait(() => GameLocalization.Language == "en", "saved English locale");
+            options.SetAudio(.7f, .3f, .4f); options.SetScreenShake(false);
             File.WriteAllText(Path.Combine(directory, "expected.json"), JsonUtility.ToJson(options.Current));
         }
 

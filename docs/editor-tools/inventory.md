@@ -100,6 +100,7 @@
 | migrate.nordic-gameplay | 接入 Nordic 正式地图：正式 Gameplay 的地图、导航、Axeldor 与镜头适配。 | 维护与样例 / 人工 / AI | Apply | edit | 迁移 Gameplay 场景及 NetworkPlayer；保留玩法配置；Logs/ProjectTools |
 | validate.nordic-gameplay | 校验 Nordic 正式地图：正式 Gameplay 的地图、导航、Axeldor 与镜头适配。 | 维护与样例 / 人工 / AI | — | edit | 只读校验正式场景；Logs/ProjectTools |
 | test.nordic-gameplay | Nordic 正式玩法验收：正式地图、人物、镜头、冲刺与边界验收；FullSuite 追加多人、专服、六波次、敌人交接、升级和换局回归。 | 自动验收 / 人工 / AI | Executable、OutputDirectory、FullSuite、FullPerformance | — | 只读；不修改玩法资产；原场景日志目录及 Logs/ProjectTools |
+| test.player-exit | Windows 退出验证：记录人工或 UI Automation 操作后的真实进程退出及 Windows 崩溃事件 | 构建与验收 / 人工 / AI | Executable、Mode、Scenario、Graphics、Iterations、InteractionTimeoutSeconds、ArtifactDirectory、AllowValidationBuild | external, 图形设备 | 启动指定包；操作员执行真实 UI，超时清理判失败；不修改玩法资产；Logs/PlayerExit/<时间>/result.json |
 
 ## 构建配置
 
@@ -140,6 +141,8 @@
 | ultimate | True | True | Assets/_Project/Scenes/Boot.unity、Assets/_Project/Scenes/MainMenu.unity、Assets/_Project/Scenes/Gameplay.unity | MONSTER_KCP_DEVELOPMENT_BUILD、MONSTER_MENU_VALIDATION | Builds/Phase02/UltimateValidation.exe |
 | runtime-boundary | True | True | Assets/_Project/Scenes/Boot.unity、Assets/_Project/Scenes/MainMenu.unity、Assets/_Project/Scenes/Gameplay.unity | MONSTER_KCP_DEVELOPMENT_BUILD、MONSTER_MENU_VALIDATION | Builds/Phase01/RuntimeBoundaryValidation.exe |
 | nordic-gameplay | True | True | Assets/_Project/Scenes/Boot.unity、Assets/_Project/Scenes/MainMenu.unity、Assets/_Project/Scenes/Gameplay.unity | MONSTER_KCP_DEVELOPMENT_BUILD、MONSTER_MENU_VALIDATION | Builds/NordicGameplay/MonsterSupergroup.exe |
+| player-development | True | — | Assets/_Project/Scenes/Boot.unity、Assets/_Project/Scenes/MainMenu.unity、Assets/_Project/Scenes/Gameplay.unity | — | Builds/PlayerDevelopment/MonsterSupergroup.exe |
+| player-release | — | — | Assets/_Project/Scenes/Boot.unity、Assets/_Project/Scenes/MainMenu.unity、Assets/_Project/Scenes/Gameplay.unity | — | Builds/PlayerRelease/MonsterSupergroup.exe |
 
 ## 59 个旧菜单的去向
 

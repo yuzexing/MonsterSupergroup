@@ -14,21 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Unity.Addressables.Editor::UnityEditor.AddressableAssets.Settings.AddressableAssetGroup
   m_GroupName: Localization-String-Tables-en
   m_GUID: 154b67053a7288c4c9882a0a1cc34c46
-  m_SerializeEntries:
-  - m_GUID: a9181d3d4c6ab974f97e2126d13e4289
-    m_Address: MonsterMenus_en
-    m_ReadOnly: 1
-    m_SerializedLabels:
-    - Locale-en
-    - Preload
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: ffe48c78d1487c443b13ce5f66b04a1f
-    m_Address: MonsterContent_en
-    m_ReadOnly: 1
-    m_SerializedLabels:
-    - Locale-en
-    - Preload
-    FlaggedDuringContentUpdateRestriction: 0
+  m_SerializeEntries: []
   m_ReadOnly: 1
   m_Settings: {fileID: 11400000, guid: 16ced2ee9fdab8549b205ec3061a501a, type: 2}
   m_SchemaSet:

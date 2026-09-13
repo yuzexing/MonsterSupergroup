@@ -66,6 +66,9 @@ PlayerSettings:
   useOSAutorotation: 1
   use32BitDisplayBuffer: 1
   preserveFramebufferAlpha: 0
+  adjustIOSFPSUsingThermalState: 1
+  thermalStateSeriousIOSFPS: 30
+  thermalStateCriticalIOSFPS: 15
   disableDepthAndStencilBuffers: 0
   androidStartInFullscreen: 1
   androidRenderOutsideSafeArea: 1
@@ -593,24 +596,24 @@ PlayerSettings:
   webWasm2023: 0
   webEnableSubmoduleStrippingCompatibility: 0
   scriptingDefineSymbols:
-    Android: DOTWEEN_UITOOLKIT;TextMeshPro
-    EmbeddedLinux: DOTWEEN_UITOOLKIT;TextMeshPro
-    GameCoreScarlett: DOTWEEN_UITOOLKIT;TextMeshPro
-    GameCoreXboxOne: DOTWEEN_UITOOLKIT;TextMeshPro
-    Kepler: DOTWEEN_UITOOLKIT;TextMeshPro
-    LinuxHeadlessSimulation: DOTWEEN_UITOOLKIT;TextMeshPro
-    Nintendo Switch: DOTWEEN_UITOOLKIT;TextMeshPro
-    Nintendo Switch 2: DOTWEEN_UITOOLKIT;TextMeshPro
-    PS4: DOTWEEN_UITOOLKIT;TextMeshPro
-    PS5: DOTWEEN_UITOOLKIT;TextMeshPro
-    QNX: DOTWEEN_UITOOLKIT;TextMeshPro
-    Standalone: MIRROR;MIRROR_89_OR_NEWER;MIRROR_90_OR_NEWER;MIRROR_93_OR_NEWER;MIRROR_96_OR_NEWER;EDGEGAP_PLUGIN_SERVERS;DOTWEEN_UITOOLKIT;ODIN_INSPECTOR;ODIN_INSPECTOR_3;ODIN_INSPECTOR_3_1;ODIN_INSPECTOR_3_2;ODIN_INSPECTOR_3_3;UNITASK_DOTWEEN_SUPPORT;USING_URP;TextMeshPro;STEAMWORKS_NET
-    VisionOS: DOTWEEN_UITOOLKIT;TextMeshPro
-    WebGL: DOTWEEN_UITOOLKIT;TextMeshPro
-    Windows Store Apps: DOTWEEN_UITOOLKIT
-    XboxOne: DOTWEEN_UITOOLKIT;TextMeshPro
-    iPhone: DOTWEEN_UITOOLKIT;TextMeshPro
-    tvOS: DOTWEEN_UITOOLKIT;TextMeshPro
+    Android: DOTWEEN_UITOOLKIT;TextMeshPro;DOTWEEN
+    EmbeddedLinux: DOTWEEN_UITOOLKIT;TextMeshPro;DOTWEEN
+    GameCoreScarlett: DOTWEEN_UITOOLKIT;TextMeshPro;DOTWEEN
+    GameCoreXboxOne: DOTWEEN_UITOOLKIT;TextMeshPro;DOTWEEN
+    Kepler: DOTWEEN_UITOOLKIT;TextMeshPro;DOTWEEN
+    LinuxHeadlessSimulation: DOTWEEN_UITOOLKIT;TextMeshPro;DOTWEEN
+    Nintendo Switch: DOTWEEN_UITOOLKIT;TextMeshPro;DOTWEEN
+    Nintendo Switch 2: DOTWEEN_UITOOLKIT;TextMeshPro;DOTWEEN
+    PS4: DOTWEEN_UITOOLKIT;TextMeshPro;DOTWEEN
+    PS5: DOTWEEN_UITOOLKIT;TextMeshPro;DOTWEEN
+    QNX: DOTWEEN_UITOOLKIT;TextMeshPro;DOTWEEN
+    Standalone: MIRROR;MIRROR_89_OR_NEWER;MIRROR_90_OR_NEWER;MIRROR_93_OR_NEWER;MIRROR_96_OR_NEWER;EDGEGAP_PLUGIN_SERVERS;DOTWEEN_UITOOLKIT;ODIN_INSPECTOR;ODIN_INSPECTOR_3;ODIN_INSPECTOR_3_1;ODIN_INSPECTOR_3_2;ODIN_INSPECTOR_3_3;UNITASK_DOTWEEN_SUPPORT;USING_URP;TextMeshPro;STEAMWORKS_NET;DOTWEEN
+    VisionOS: DOTWEEN_UITOOLKIT;TextMeshPro;DOTWEEN
+    WebGL: DOTWEEN_UITOOLKIT;TextMeshPro;DOTWEEN
+    Windows Store Apps: DOTWEEN_UITOOLKIT;DOTWEEN
+    XboxOne: DOTWEEN_UITOOLKIT;TextMeshPro;DOTWEEN
+    iPhone: DOTWEEN_UITOOLKIT;TextMeshPro;DOTWEEN
+    tvOS: DOTWEEN_UITOOLKIT;TextMeshPro;DOTWEEN
   additionalCompilerArguments: {}
   platformArchitecture: {}
   scriptingBackend:

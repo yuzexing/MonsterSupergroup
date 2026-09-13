@@ -40,6 +40,17 @@ namespace MonsterSupergroup.EditorTools.Tests
             Assert.That(ProjectToolCatalog.Load().builds.Single(b => b.id == "sandbox").scenes.Length, Is.EqualTo(1));
         }
 
+        [Test] public void PlayerDeliveryProfilesDoNotContainValidationCode()
+        {
+            foreach (string id in new[] { "player-development", "player-release" })
+            {
+                var profile = ProjectToolCatalog.Load().builds.Single(b => b.id == id);
+                Assert.That(profile.testAssemblies, Is.False, id);
+                Assert.That(profile.defines, Is.Empty, id);
+                Assert.That(profile.development, Is.EqualTo(id == "player-development"));
+            }
+        }
+
         [Test] public void UnattendedBatchNeverRunsInteractiveDiagnostics()
         {
             if (!UnityEngine.Application.isBatchMode) Assert.Ignore("Batch-specific contract");

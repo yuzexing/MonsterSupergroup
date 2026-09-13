@@ -1757,6 +1757,32 @@
         "FullPerformance"
       ],
       "script": "Tools/Run-NordicGameplayValidation.ps1"
+    },
+    {
+      "id": "test.player-exit",
+      "name": "Windows 退出验证",
+      "category": "构建与验收",
+      "description": "记录人工或 UI Automation 操作后的真实进程退出及 Windows 崩溃事件",
+      "script": "Tools/Scenarios/Run-PlayerExitValidation.ps1",
+      "audience": "人工 / AI",
+      "impact": "启动指定包；操作员执行真实 UI，超时清理判失败；不修改玩法资产",
+      "output": "Logs/PlayerExit/<时间>/result.json",
+      "condition": "external",
+      "parameters": [
+        "Executable",
+        "Mode",
+        "Scenario",
+        "Graphics",
+        "Iterations",
+        "InteractionTimeoutSeconds",
+        "ArtifactDirectory",
+        "AllowValidationBuild"
+      ],
+      "writesAssets": false,
+      "graphics": true,
+      "asynchronous": false,
+      "source": "Tools/Scenarios/Run-PlayerExitValidation.ps1",
+      "oldMenus": []
     }
   ],
   "builds": [
@@ -2373,6 +2399,38 @@
       "validations": [
         "validate.all",
         "validate.nordic-gameplay"
+      ]
+    },
+    {
+      "id": "player-development",
+      "name": "正式开发包",
+      "output": "Builds/PlayerDevelopment/MonsterSupergroup.exe",
+      "defines": [],
+      "development": true,
+      "testAssemblies": false,
+      "scenes": [
+        "Assets/_Project/Scenes/Boot.unity",
+        "Assets/_Project/Scenes/MainMenu.unity",
+        "Assets/_Project/Scenes/Gameplay.unity"
+      ],
+      "validations": [
+        "validate.all"
+      ]
+    },
+    {
+      "id": "player-release",
+      "name": "正式发布包",
+      "output": "Builds/PlayerRelease/MonsterSupergroup.exe",
+      "defines": [],
+      "development": false,
+      "testAssemblies": false,
+      "scenes": [
+        "Assets/_Project/Scenes/Boot.unity",
+        "Assets/_Project/Scenes/MainMenu.unity",
+        "Assets/_Project/Scenes/Gameplay.unity"
+      ],
+      "validations": [
+        "validate.all"
       ]
     }
   ]

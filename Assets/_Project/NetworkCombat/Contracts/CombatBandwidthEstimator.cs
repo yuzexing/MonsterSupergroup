@@ -13,6 +13,7 @@ namespace MonsterSupergroup.NetworkCombat
         public const int BatchAndArrayHeadersBytes = 16;
         public const int EnemyActionProjectileProgressBytes = 9;
         public const int EnemyActionDashProgressBytes = 33; // Boolean plus four Vector2 values in the existing checkpoint.
+        public const int EnemyActionExplosionProgressBytes = 11; // Three booleans and the world-space explosion center.
 
         // Projectile-only batches. Mirror uses variable-length integer and array writers.
         // Checkpoints contain a variable number of knockback receipts, measured separately.

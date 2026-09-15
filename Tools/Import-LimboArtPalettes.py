@@ -2,10 +2,14 @@
 import hashlib
 import json
 import re
+import argparse
 from pathlib import Path
 
 P = Path(__file__).resolve().parents[1]
 ROOT = P / 'Assets/_Project/Content/NetworkCombat/Limbo/Art'
+parser = argparse.ArgumentParser()
+parser.add_argument('--capture-prefix', default='original-palette-')
+args = parser.parse_args()
 plan = json.loads((ROOT / 'ArtSource.json').read_text(encoding='utf-8'))
 index = {}
 for meta in (P / 'Assets').rglob('*.meta'):
@@ -14,7 +18,7 @@ for meta in (P / 'Assets').rglob('*.meta'):
         index[m[1]] = Path(str(meta)[:-5])
 pairs = []
 for entry in plan['bakes']:
-    captures = [P / 'Logs/LimboArt' / ('original-palette-' + key) / entry['file'] for key in ['a', 'b']]
+    captures = [P / 'Logs/LimboArt' / (args.capture_prefix + key) / entry['file'] for key in ['a', 'b']]
     if captures[0].read_bytes() != captures[1].read_bytes():
         raise ValueError('Independent original captures differ: ' + entry['file'])
     source = Path(entry['sourceTexture'])

@@ -71,7 +71,7 @@ namespace AstralShift.HellMaiden.AI.Enemy
 
         public override async void AttackExit()
         {
-            if (controller != null && controller.IsAlive) _attack?.damageInteraction?.SettlePendingCollisions();
+            if (controller != null && controller.IsAlive && !controller.DeathRequested) _attack?.damageInteraction?.SettlePendingCollisions();
             else _attack?.damageInteraction?.DiscardPendingCollisions();
             if (_collidersGameObject != null) _collidersGameObject.SetActive(false);
             if (_hitBox != null) _hitBox.Toggle(false);

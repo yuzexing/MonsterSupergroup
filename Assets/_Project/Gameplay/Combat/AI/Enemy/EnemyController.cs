@@ -174,6 +174,7 @@ namespace AstralShift.HellMaiden.AI.Enemy
 
 		private bool _deathPresentationComplete;
         public bool DeathPresentationComplete => _deathPresentationComplete;
+        public bool DeathRequested => _predictedDeath;
         [SerializeField] private bool animateMovementOnlyDeath;
         private bool movementDeathPresentationStarted;
 
@@ -497,7 +498,7 @@ namespace AstralShift.HellMaiden.AI.Enemy
 			Dead.onEnter = delegate
 			{
 				ActivateColliders(activate: false);
-				if (attackScript != null && (StateMachine.PreviousState == Attacking || StateMachine.PreviousState == Warning || alwaysAttacking))
+                if (attackScript != null && (StateMachine.PreviousState == Attacking || StateMachine.PreviousState == Warning || alwaysAttacking || attackScript is EnemyAttackExplosion))
 				{
 					attackScript.CancelAttack();
 				}
@@ -513,7 +514,7 @@ namespace AstralShift.HellMaiden.AI.Enemy
 			InstantDead.onEnter = delegate
 			{
 				ActivateColliders(activate: false);
-				if (attackScript != null && (StateMachine.PreviousState == Attacking || StateMachine.PreviousState == Warning || alwaysAttacking))
+                if (attackScript != null && (StateMachine.PreviousState == Attacking || StateMachine.PreviousState == Warning || alwaysAttacking || attackScript is EnemyAttackExplosion))
 				{
 					attackScript.CancelAttack();
 				}
@@ -530,7 +531,7 @@ namespace AstralShift.HellMaiden.AI.Enemy
 				{
 					Debug.Log("Enemy deactivated in Knockback state!");
 				}
-				if (attackScript != null && (StateMachine.PreviousState == Attacking || StateMachine.PreviousState == Warning || alwaysAttacking))
+                if (attackScript != null && (StateMachine.PreviousState == Attacking || StateMachine.PreviousState == Warning || alwaysAttacking || attackScript is EnemyAttackExplosion))
 				{
 					attackScript.CancelAttack();
 				}

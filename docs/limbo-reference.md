@@ -2,9 +2,9 @@
 
 **美术状态更新（2026-09-15）：** 七套参考身体及八组提示已接入来源资源；本页下方的红点、普通 Skeleton 替代精英、橙色线条描述属于当时构建。最新美术验证、保留差异与待验项见 [序列帧美术恢复](limbo-art-restoration.md)。本页已有的数值／行为证据继续保留，不能自动视为新美术构建的运行证据。
 
-当前交付已扩展为 **Limbo 0–389.6 秒技术预览**：B／围栏和全员屏外机制已完成本轮技术矩阵，Dash v0／v1 已接入并通过双端机制验证；单人 Host、Host／Client 连续流程及结算界面重开已有记录。详见 [Dash 接入与连续技术验证](limbo-dash-integration.md) 和 [空间机制收尾](limbo-spatial-closure.md)。当前共接入6类来源身份，LostSoul／Ghoul 及完整720.9秒仍未放行。人工压力留待整体接入完成，尚未完成同条件原游戏压力对照。
+当前交付已扩展为 **Limbo [0,449.9166666666667) 技术预览**：LostSoul v0/v1 的原始身体、换色、预警、九边形爆炸与服务端无经验自毁已接入并完成本轮技术验证。同一最终构建已完成单人 Host、Host/Client 连续流程及结算界面重开。详见 [LostSoul 接入与验收](limbo-lostsoul-integration.md)；此前 [Dash 验证](limbo-dash-integration.md) 和 [空间机制收尾](limbo-spatial-closure.md) 保留历史证据。当前共接入7类来源身份、8套身体、16种外观/变体组合；Ghoul及完整720.9秒仍未放行。Spine、人工压力暂缓，尚未完成同条件原游戏正常流程压力对照。
 
-下文保留此前0–60秒阶段的实施与验收历史（其中Imp数据缺失门槛是当时状态）。当前原始序列帧美术入口是 `-Profile dash -BuildDirectory Builds/LimboArtFinal4_20260915`（本轮验证状态见美术报告）；此前占位构建为 `Builds/LimboDashRelease20260915`；`dash-validation` 含明确测试辅助，不能当作人工压力结果。旧 opening／imp／stage2 入口保留，默认仍为60秒开场。单人技术局发现的现有Ovid材质显示提示已列入Dash报告，未隐去。
+下文保留此前0–60秒阶段的实施与验收历史（其中Imp数据缺失门槛是当时状态）。当前入口是 `-Profile lostsoul -BuildDirectory Builds/LimboLostSoul20260915`；`lostsoul-validation` 含明确测试保护、自动选卡，添加 `-AutoWalk` 提供普通移动输入，不能当作人工压力结果。此前美术构建 `Builds/LimboArtFinal4_20260915` 与占位构建 `Builds/LimboDashRelease20260915` 保留。旧 opening／imp／stage2／dash 入口保留，启动脚本默认仍为60秒开场。现有Ovid材质提示及其他Shader差异继续保留记录。
 
 ## 启动、修改与证据
 

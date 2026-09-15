@@ -1,6 +1,6 @@
 param(
     [ValidateSet('host', 'client')][string]$Role = 'host',
-    [ValidateSet('opening', 'full', 'imp', 'imp-validation', 'imp-v0', 'imp-v1','stage2','stage2-validation','stage2-fixture','spatial-b','spatial-barrier','spatial-overlap','spatial-reposition','dash','dash-fixture','dash-validation','art-effects')][string]$Profile = 'opening',
+    [ValidateSet('opening', 'full', 'imp', 'imp-validation', 'imp-v0', 'imp-v1','stage2','stage2-validation','stage2-fixture','spatial-b','spatial-barrier','spatial-overlap','spatial-reposition','dash','dash-fixture','dash-validation','art-effects','lostsoul','lostsoul-fixture','lostsoul-validation')][string]$Profile = 'opening',
     [ValidateSet('d3d11', 'd3d12')][string]$GraphicsApi = 'd3d11',
     [int]$Port = 7993,
     [ValidateRange(1,4)][int]$WaitFor = 1,
@@ -15,6 +15,8 @@ param(
     [ValidateSet('timeout','distance','placement-failure','expiry','framing')][string]$RepositionCase = 'timeout',
     [ValidateRange(0,1)][int]$DashVariant = 0,
     [ValidateSet("main","boundary","reuse")][string]$DashCase="main",
+    [ValidateRange(0,1)][int]$LostSoulVariant = 0,
+    [ValidateSet("main","burst","limited","boundary","reuse","expiry","barrier")][string]$LostSoulCase="main",
     [string]$RunName = (Get-Date -Format 'yyyyMMdd-HHmmss')
 )
 $ErrorActionPreference = 'Stop'
@@ -42,7 +44,7 @@ if ($ArtObserve) {
 }
 $launchArgs = @("-force-$GraphicsApi", '-screen-fullscreen', '0', '-screen-width', '1100', '-screen-height', '700',
     '-logFile', ('"' + (Join-Path $outputDirectory 'player.log') + '"'),
-    "--limbo-role=$Role", "--limbo-profile=$Profile", "--limbo-port=$Port", "--limbo-wait-for=$WaitFor", "--limbo-fixture-target=$FixtureTarget", "--limbo-fixture-enemy=$FixtureEnemy", "--limbo-fixture-mode=$FixtureMode", "--limbo-spatial-case=$SpatialCase", "--limbo-reposition-case=$RepositionCase", "--limbo-dash-variant=$DashVariant", "--limbo-dash-case=$DashCase",
+    "--limbo-role=$Role", "--limbo-profile=$Profile", "--limbo-port=$Port", "--limbo-wait-for=$WaitFor", "--limbo-fixture-target=$FixtureTarget", "--limbo-fixture-enemy=$FixtureEnemy", "--limbo-fixture-mode=$FixtureMode", "--limbo-spatial-case=$SpatialCase", "--limbo-reposition-case=$RepositionCase", "--limbo-dash-variant=$DashVariant", "--limbo-dash-case=$DashCase", "--limbo-lostsoul-variant=$LostSoulVariant", "--limbo-lostsoul-case=$LostSoulCase",
     ('"--limbo-output=' + $outputDirectory + '"'), "--limbo-art-observe=$($ArtObserve.IsPresent.ToString().ToLowerInvariant())", "--limbo-autowalk=$($AutoWalk.IsPresent.ToString().ToLowerInvariant())", "--limbo-windowed=$($Windowed.IsPresent.ToString().ToLowerInvariant())")
 # Visible by design: this scenario is for rendered Host/Client verification.
 $gameProcess = Start-Process -FilePath $executable -ArgumentList $launchArgs -WindowStyle Normal -PassThru

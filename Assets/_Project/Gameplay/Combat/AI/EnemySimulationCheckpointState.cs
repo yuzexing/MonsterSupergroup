@@ -14,6 +14,8 @@ namespace AstralShift.HellMaiden.AI
         public bool ProjectileEmitted;
         public bool Dash;
         public Vector2 DashStart, DashEnd, DashLastPosition, DashWarningOrigin;
+        public bool Explosion, ExplosionTriggered, SelfDestructPending;
+        public Vector2 ExplosionPosition;
 
         public EnemyAttackPresentationPhase PhaseAt(double now)
         {

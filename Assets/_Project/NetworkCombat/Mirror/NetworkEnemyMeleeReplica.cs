@@ -35,6 +35,9 @@ namespace MonsterSupergroup.NetworkCombat
         private Vector2 dashWarningOrigin;
         private bool ownsDashWindow;
         private EnemyAttackDash DashAttack => meleeAttack as EnemyAttackDash;
+        private EnemyAttackExplosion explosionAttack;
+        private EnemyActionState explosionState;
+        private bool ownsExplosionPresentation;
         public EnemyAttackPrefab ReplicaAttackInstance => attackInstance;
 
         public bool HasReplicaAttackInstance => attackInstance != null;
@@ -71,6 +74,14 @@ namespace MonsterSupergroup.NetworkCombat
 
         private void Update()
         {
+            if (explosionAttack != null)
+            {
+                if (simulationAgent == null || !simulationAgent.IsCanonicalAlive || simulationAuthority == null || !simulationAuthority.ConsumesSnapshots)
+                { if (ownsExplosionPresentation) ReleaseAttackInstance(); return; }
+                if (explosionState.Explosion && EnemySimulationClock.CombatNow >= explosionState.ActiveUntil)
+                    explosionAttack.CloseExpiredWindow();
+                return;
+            }
             if (attackInstance != null && DashAttack != null) attackInstance.transform.position = dashWarningOrigin;
             if (attackInstance != null &&
                 (simulationAgent == null || !simulationAgent.IsCanonicalAlive ||
@@ -126,6 +137,13 @@ namespace MonsterSupergroup.NetworkCombat
             lastAppliedSequence = edge.StateSequence;
             lastAppliedAssignmentEpoch = edge.AssignmentEpoch;
             lastAppliedPhase = edge.Phase;
+            if (explosionAttack != null)
+            {
+                explosionState = edge.Checkpoint.Movement.Runtime.Action;
+                ownsExplosionPresentation = true;
+                explosionAttack.RestoreExplosion(explosionState, explosionState.PhaseAt(EnemySimulationClock.CombatNow), EnemySimulationClock.CombatNow, false);
+                return;
+            }
             if (DashAttack != null) dashWarningOrigin = edge.Checkpoint.Movement.Runtime.Action.DashWarningOrigin;
             switch (edge.Phase)
             {
@@ -290,6 +308,9 @@ namespace MonsterSupergroup.NetworkCombat
 
         private void ReleaseAttackInstance()
         {
+            if (ownsExplosionPresentation) explosionAttack?.SuspendExplosion();
+            ownsExplosionPresentation = false;
+            explosionState = default;
             instanceGeneration++;
             if (ownsDashWindow) { DashAttack.SetDashDamageEnabled(false); ownsDashWindow = false; }
             // Epoch/role changes invalidate deferred contacts from the old window.
@@ -322,6 +343,7 @@ namespace MonsterSupergroup.NetworkCombat
 
         private void ResolveReferences()
         {
+            if (explosionAttack == null) explosionAttack = GetComponent<EnemyAttackExplosion>();
             if (simulationAgent == null)
             {
                 simulationAgent = GetComponent<NetworkEnemySimulationAgent>();

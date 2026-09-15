@@ -84,7 +84,7 @@ namespace MonsterSupergroup.NetworkCombat.Tests
         public void AllApprovedBodiesBindSourceTransitionsAndKeepGameplayGeometry()
         {
             var data=JsonUtility.FromJson<LimboArtAssets.Source>(File.ReadAllText(LimboArtAssets.Root+"/ArtSource.json"));
-            Assert.That(data.bodies.Length,Is.EqualTo(7));
+            Assert.That(data.bodies.Length,Is.EqualTo(8));
             foreach(var body in data.bodies)
             {
                 var root=AssetDatabase.LoadAssetAtPath<GameObject>(body.target);

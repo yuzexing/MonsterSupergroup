@@ -25,6 +25,7 @@ namespace MonsterSupergroup.NetworkCombat
             EnemyKnockbackSettings.Finite(Action.WarningStartedAt) && EnemyKnockbackSettings.Finite(Action.WarningUntil) &&
             EnemyKnockbackSettings.Finite(Action.ActiveUntil) && EnemyKnockbackSettings.Finite(Action.RecoveryUntil) &&
             EnemyKnockbackSettings.Finite(Action.NextAttackAt) && Finite(Action.Facing) && Finite(Action.TargetPosition) && Finite(Action.ProjectileDirection) &&
+            Finite(Action.ExplosionPosition) && (!Action.SelfDestructPending || Action.Explosion && Action.ExplosionTriggered) &&
             (!Action.Dash || (Finite(Action.DashStart) && Finite(Action.DashEnd) && Finite(Action.DashLastPosition) && Finite(Action.DashWarningOrigin) &&
                 Action.WarningUntil > Action.WarningStartedAt && Action.ActiveUntil > Action.WarningUntil && Action.RecoveryUntil >= Action.ActiveUntil)) && ValidReceipts &&
             (!Knockback.Active || (KnockbackSettings.IsValid && Finite(Knockback.Start) && Finite(Knockback.End) &&

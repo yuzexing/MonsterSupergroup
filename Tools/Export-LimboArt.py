@@ -22,6 +22,7 @@ BODIES = [
     ('E5', 'Elite_Skeleton', 'Elite_Skeleton', 'Stage2/ReferenceElite_Skeleton.prefab', False),
     ('E6', 'Enemy_Slime', 'Slime', 'Stage2/ReferenceSlime.prefab', True),
     ('E7', 'Enemy_Slime Rusher', 'Slime', 'Stage2/ReferenceRusher.prefab', True),
+    ('E8', 'Enemy_LostSoul', 'LostSoul', 'LostSoul/ReferenceLostSoul.prefab', False),
 ]
 EFFECTS = [('V1', 'Arrow'), ('V2', 'Skeleton_Warning'), ('V3', 'Skeleton_Warning_Elite Variant'),
            ('V4', 'EnemyBulletAttackImp'), ('V5', 'soul enemy warning'), ('V5', 'Enemy_Bomb_ExplosionAttack 1'),
@@ -179,7 +180,7 @@ def main():
         effects.append(dict(group=group, name=name, template=p.relative_to(PROJECT).as_posix()))
     for name in sorted(warning_names):
         import_asset(SOURCE / 'AnimationClip' / (name + '.anim'), 'warnings')
-    used = {'Brotchi': [0, 1], 'Brotchi_Dash': [0, 1], 'Imp': [0, 1], 'Skeleton': [0, 2], 'Elite_Skeleton': [0, 1], 'Slime': [0, 1, 2]}
+    used = {'Brotchi': [0, 1], 'Brotchi_Dash': [0, 1], 'Imp': [0, 1], 'Skeleton': [0, 2], 'Elite_Skeleton': [0, 1], 'Slime': [0, 1, 2], 'LostSoul': [0, 1]}
     for aggregate in field(objects[data['enemyDatabase']['reference']]['data'], 'enemies'):
         name = field(aggregate, 'enemyName')
         for variant in used.get(name, []):
@@ -214,7 +215,7 @@ def main():
     ROOT.mkdir(parents=True, exist_ok=True)
     manifest = dict(schemaVersion=1, sourceEvidence=str(EVIDENCE), sourceSha256=sha(EVIDENCE), bodies=bodies, effects=effects,
                     palettes=palettes, bakes=list(bakes.values()), entries=sorted(entries.values(), key=lambda x: x['source']),
-                    deferred=['E8 LostSoul body', 'E9 Ghoul body'], excluded=['audio', 'UI', 'loot', 'player', 'weapons', 'maps', 'gameplay scripts'])
+                    deferred=['E9 Ghoul body'], excluded=['audio', 'UI', 'loot', 'player', 'weapons', 'maps', 'gameplay scripts'])
     (ROOT / 'ArtSource.json').write_text(json.dumps(manifest, ensure_ascii=False, indent=2), encoding='utf-8')
     print(json.dumps(dict(bodies=len(bodies), effectRoots=len(effects), dependencies=len(entries), sourceSha256=manifest['sourceSha256'])))
 

@@ -446,7 +446,7 @@ MonoBehaviour:
           speedMultiplier: 1
       rubberbandMaxDistance: 20
       colorLUT: {fileID: 0}
-      hueColor: {r: 0, g: 0, b: 0, a: 0}
+      hueColor: {r: 1, g: 1, b: 1, a: 1}
     - variantName: lvl2
       overrideGlobalLootSettings: 0
       lootSettings: {fileID: 0}
@@ -473,8 +473,8 @@ MonoBehaviour:
           xpMultiplier: 1
           speedMultiplier: 1
       rubberbandMaxDistance: 20
-      colorLUT: {fileID: 0}
-      hueColor: {r: 0, g: 0, b: 0, a: 0}
+      colorLUT: {fileID: 2800000, guid: 43367521d23f18449bd45b0922a9df06, type: 3}
+      hueColor: {r: 1, g: 1, b: 1, a: 1}
   - enemyName: Ghoul
     enemyData:
     - variantName: lvl1

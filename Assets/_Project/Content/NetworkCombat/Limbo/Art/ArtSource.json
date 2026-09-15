@@ -1977,6 +1977,348 @@
         }
       ],
       "contact": true
+    },
+    {
+      "group": "E8",
+      "name": "Enemy_LostSoul",
+      "identity": "LostSoul",
+      "target": "Assets/_Project/Content/NetworkCombat/Limbo/LostSoul/ReferenceLostSoul.prefab",
+      "template": "Assets/_Project/Content/NetworkCombat/Limbo/Art/Imported/GameObject/Enemy_LostSoul.prefab",
+      "bindings": [
+        {
+          "field": "attackLeftDown",
+          "path": "Assets/_Project/Content/NetworkCombat/Limbo/Art/Imported/AnimationClip/LostSoul_attack_left.anim",
+          "length": 0.146666661,
+          "speed": 1.0,
+          "fade": 0.25,
+          "normalizedStart": "NaN",
+          "eventTimes": [
+            "0.0",
+            "NaN"
+          ],
+          "visualCallbacks": []
+        },
+        {
+          "field": "attackLeftUp",
+          "path": "Assets/_Project/Content/NetworkCombat/Limbo/Art/Imported/AnimationClip/LostSoul_attack_left.anim",
+          "length": 0.146666661,
+          "speed": 1.0,
+          "fade": 0.25,
+          "normalizedStart": "NaN",
+          "eventTimes": [
+            "0.0",
+            "NaN"
+          ],
+          "visualCallbacks": []
+        },
+        {
+          "field": "attackRightDown",
+          "path": "Assets/_Project/Content/NetworkCombat/Limbo/Art/Imported/AnimationClip/LostSoul_attack_right.anim",
+          "length": 0.146666661,
+          "speed": 1.0,
+          "fade": 0.25,
+          "normalizedStart": "NaN",
+          "eventTimes": [
+            "0.0",
+            "NaN"
+          ],
+          "visualCallbacks": []
+        },
+        {
+          "field": "attackRightUp",
+          "path": "Assets/_Project/Content/NetworkCombat/Limbo/Art/Imported/AnimationClip/LostSoul_attack_right.anim",
+          "length": 0.146666661,
+          "speed": 1.0,
+          "fade": 0.25,
+          "normalizedStart": "NaN",
+          "eventTimes": [
+            "0.0",
+            "NaN"
+          ],
+          "visualCallbacks": []
+        },
+        {
+          "field": "attackWarningLeftDown",
+          "path": "Assets/_Project/Content/NetworkCombat/Limbo/Art/Imported/AnimationClip/LostSoul_attackWarning_left.anim",
+          "length": 1.0333333,
+          "speed": 1.0,
+          "fade": 0.25,
+          "normalizedStart": "NaN",
+          "eventTimes": [
+            "0.0",
+            "NaN"
+          ],
+          "visualCallbacks": []
+        },
+        {
+          "field": "attackWarningLeftUp",
+          "path": "Assets/_Project/Content/NetworkCombat/Limbo/Art/Imported/AnimationClip/LostSoul_attackWarning_left.anim",
+          "length": 1.0333333,
+          "speed": 1.0,
+          "fade": 0.25,
+          "normalizedStart": "NaN",
+          "eventTimes": [
+            "0.0",
+            "NaN"
+          ],
+          "visualCallbacks": []
+        },
+        {
+          "field": "attackWarningRightDown",
+          "path": "Assets/_Project/Content/NetworkCombat/Limbo/Art/Imported/AnimationClip/LostSoul_attackWarning_right.anim",
+          "length": 1.0333333,
+          "speed": 1.0,
+          "fade": 0.25,
+          "normalizedStart": "NaN",
+          "eventTimes": [
+            "0.0",
+            "NaN"
+          ],
+          "visualCallbacks": []
+        },
+        {
+          "field": "attackWarningRightUp",
+          "path": "Assets/_Project/Content/NetworkCombat/Limbo/Art/Imported/AnimationClip/LostSoul_attackWarning_right.anim",
+          "length": 1.0333333,
+          "speed": 1.0,
+          "fade": 0.25,
+          "normalizedStart": "NaN",
+          "eventTimes": [
+            "0.0",
+            "NaN"
+          ],
+          "visualCallbacks": []
+        },
+        {
+          "field": "deadLeftDown",
+          "path": "Assets/_Project/Content/NetworkCombat/Limbo/Art/Imported/AnimationClip/LostSoul_death_left.anim",
+          "length": 0.5733333,
+          "speed": 1.0,
+          "fade": 0.25,
+          "normalizedStart": "NaN",
+          "eventTimes": [
+            "0.0",
+            "0.6065949",
+            "NaN"
+          ],
+          "visualCallbacks": [
+            {
+              "index": 1,
+              "method": "DeathAnimationShadowFade"
+            }
+          ]
+        },
+        {
+          "field": "deadLeftUp",
+          "path": "Assets/_Project/Content/NetworkCombat/Limbo/Art/Imported/AnimationClip/LostSoul_death_left.anim",
+          "length": 0.5733333,
+          "speed": 1.0,
+          "fade": 0.25,
+          "normalizedStart": "NaN",
+          "eventTimes": [
+            "0.0",
+            "0.606594861",
+            "NaN"
+          ],
+          "visualCallbacks": [
+            {
+              "index": 1,
+              "method": "DeathAnimationShadowFade"
+            }
+          ]
+        },
+        {
+          "field": "deadRightDown",
+          "path": "Assets/_Project/Content/NetworkCombat/Limbo/Art/Imported/AnimationClip/LostSoul_death_right.anim",
+          "length": 0.566666663,
+          "speed": 1.0,
+          "fade": 0.25,
+          "normalizedStart": "NaN",
+          "eventTimes": [
+            "0.0",
+            "0.6065949",
+            "NaN"
+          ],
+          "visualCallbacks": [
+            {
+              "index": 1,
+              "method": "DeathAnimationShadowFade"
+            }
+          ]
+        },
+        {
+          "field": "deadRightUp",
+          "path": "Assets/_Project/Content/NetworkCombat/Limbo/Art/Imported/AnimationClip/LostSoul_death_right.anim",
+          "length": 0.566666663,
+          "speed": 1.0,
+          "fade": 0.25,
+          "normalizedStart": "NaN",
+          "eventTimes": [
+            "0.0",
+            "0.6065949",
+            "NaN"
+          ],
+          "visualCallbacks": [
+            {
+              "index": 1,
+              "method": "DeathAnimationShadowFade"
+            }
+          ]
+        },
+        {
+          "field": "hurtLeftDown",
+          "path": "Assets/_Project/Content/NetworkCombat/Limbo/Art/Imported/AnimationClip/LostSoul_walk_left.anim",
+          "length": 0.566666663,
+          "speed": 1.0,
+          "fade": 0.25,
+          "normalizedStart": "NaN",
+          "eventTimes": [
+            "0.0",
+            "NaN"
+          ],
+          "visualCallbacks": []
+        },
+        {
+          "field": "hurtLeftUp",
+          "path": "Assets/_Project/Content/NetworkCombat/Limbo/Art/Imported/AnimationClip/LostSoul_walk_left.anim",
+          "length": 0.566666663,
+          "speed": 1.0,
+          "fade": 0.25,
+          "normalizedStart": "NaN",
+          "eventTimes": [
+            "0.0",
+            "NaN"
+          ],
+          "visualCallbacks": []
+        },
+        {
+          "field": "hurtRightDown",
+          "path": "Assets/_Project/Content/NetworkCombat/Limbo/Art/Imported/AnimationClip/LostSoul_walk_right.anim",
+          "length": 0.566666663,
+          "speed": 1.0,
+          "fade": 0.25,
+          "normalizedStart": "NaN",
+          "eventTimes": [
+            "0.0",
+            "NaN"
+          ],
+          "visualCallbacks": []
+        },
+        {
+          "field": "hurtRightUp",
+          "path": "Assets/_Project/Content/NetworkCombat/Limbo/Art/Imported/AnimationClip/LostSoul_walk_right.anim",
+          "length": 0.566666663,
+          "speed": 1.0,
+          "fade": 0.25,
+          "normalizedStart": "NaN",
+          "eventTimes": [
+            "0.0",
+            "NaN"
+          ],
+          "visualCallbacks": []
+        },
+        {
+          "field": "moveLeftDown",
+          "path": "Assets/_Project/Content/NetworkCombat/Limbo/Art/Imported/AnimationClip/LostSoul_walk_left.anim",
+          "length": 0.566666663,
+          "speed": 1.0,
+          "fade": 0.25,
+          "normalizedStart": "NaN",
+          "eventTimes": [],
+          "visualCallbacks": []
+        },
+        {
+          "field": "moveLeftUp",
+          "path": "Assets/_Project/Content/NetworkCombat/Limbo/Art/Imported/AnimationClip/LostSoul_walk_left.anim",
+          "length": 0.566666663,
+          "speed": 1.0,
+          "fade": 0.25,
+          "normalizedStart": "NaN",
+          "eventTimes": [],
+          "visualCallbacks": []
+        },
+        {
+          "field": "moveRightDown",
+          "path": "Assets/_Project/Content/NetworkCombat/Limbo/Art/Imported/AnimationClip/LostSoul_walk_right.anim",
+          "length": 0.566666663,
+          "speed": 1.0,
+          "fade": 0.25,
+          "normalizedStart": "NaN",
+          "eventTimes": [],
+          "visualCallbacks": []
+        },
+        {
+          "field": "moveRightUp",
+          "path": "Assets/_Project/Content/NetworkCombat/Limbo/Art/Imported/AnimationClip/LostSoul_walk_right.anim",
+          "length": 0.566666663,
+          "speed": 1.0,
+          "fade": 0.25,
+          "normalizedStart": "NaN",
+          "eventTimes": [],
+          "visualCallbacks": []
+        },
+        {
+          "field": "recoveryLeftDown",
+          "path": "Assets/_Project/Content/NetworkCombat/Limbo/Art/Imported/AnimationClip/LostSoul_attackRecovery_left.anim",
+          "length": 0.75333333,
+          "speed": 1.0,
+          "fade": 0.25,
+          "normalizedStart": "NaN",
+          "eventTimes": [],
+          "visualCallbacks": []
+        },
+        {
+          "field": "recoveryLeftUp",
+          "path": "Assets/_Project/Content/NetworkCombat/Limbo/Art/Imported/AnimationClip/LostSoul_attackRecovery_left.anim",
+          "length": 0.75333333,
+          "speed": 1.0,
+          "fade": 0.25,
+          "normalizedStart": "NaN",
+          "eventTimes": [],
+          "visualCallbacks": []
+        },
+        {
+          "field": "recoveryRightDown",
+          "path": "Assets/_Project/Content/NetworkCombat/Limbo/Art/Imported/AnimationClip/LostSoul_attackRecovery_right.anim",
+          "length": 0.75333333,
+          "speed": 1.0,
+          "fade": 0.25,
+          "normalizedStart": "NaN",
+          "eventTimes": [],
+          "visualCallbacks": []
+        },
+        {
+          "field": "recoveryRightUp",
+          "path": "Assets/_Project/Content/NetworkCombat/Limbo/Art/Imported/AnimationClip/LostSoul_attackRecovery_right.anim",
+          "length": 0.75333333,
+          "speed": 1.0,
+          "fade": 0.25,
+          "normalizedStart": "NaN",
+          "eventTimes": [],
+          "visualCallbacks": []
+        },
+        {
+          "field": "shadowFadeout",
+          "path": "Assets/_Project/Content/NetworkCombat/Limbo/Art/Imported/AnimationClip/Shadow_Fadeout.anim",
+          "length": 1.0,
+          "speed": 1.0,
+          "fade": 0.0,
+          "normalizedStart": "NaN",
+          "eventTimes": [],
+          "visualCallbacks": []
+        },
+        {
+          "field": "shadowIdle",
+          "path": "Assets/_Project/Content/NetworkCombat/Limbo/Art/Imported/AnimationClip/Shadow_Idle.anim",
+          "length": 0.0,
+          "speed": 1.0,
+          "fade": 0.0,
+          "normalizedStart": "NaN",
+          "eventTimes": [],
+          "visualCallbacks": []
+        }
+      ],
+      "contact": false
     }
   ],
   "effects": [
@@ -2164,6 +2506,28 @@
         1.0,
         1.0
       ]
+    },
+    {
+      "identity": "LostSoul",
+      "variant": 0,
+      "texture": "",
+      "hue": [
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "identity": "LostSoul",
+      "variant": 1,
+      "texture": "Assets/_Project/Content/NetworkCombat/Limbo/Art/Imported/Texture2D/Enemy_LostSoul_Level_02_LUT.png",
+      "hue": [
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ]
     }
   ],
   "bakes": [
@@ -2236,6 +2600,13 @@
       "lutName": "Enemy_Slime_Level_02_LUT",
       "sourceTexture": "F:\\DecomplieLatest\\HellMaiden\\ExportedProject\\Assets\\Texture2D\\sactx-0-1024x2048-Uncompressed-Igni Slime-f85a3a1d.png",
       "lut": "Assets/_Project/Content/NetworkCombat/Limbo/Art/Imported/Texture2D/Enemy_Slime_Level_02_LUT.png"
+    },
+    {
+      "file": "2856ef3cf10adfa8ed15.png",
+      "textureName": "sactx-0-4096x2048-Uncompressed-Lost Soul-6a01df10",
+      "lutName": "Enemy_LostSoul_Level_02_LUT",
+      "sourceTexture": "F:\\DecomplieLatest\\HellMaiden\\ExportedProject\\Assets\\Texture2D\\sactx-0-4096x2048-Uncompressed-Lost Soul-6a01df10.png",
+      "lut": "Assets/_Project/Content/NetworkCombat/Limbo/Art/Imported/Texture2D/Enemy_LostSoul_Level_02_LUT.png"
     }
   ],
   "entries": [
@@ -2938,6 +3309,170 @@
       "sourceSize": 6358
     },
     {
+      "source": "F:\\DecomplieLatest\\HellMaiden\\ExportedProject\\Assets\\AnimationClip\\LostSoul_attackRecovery_left.anim",
+      "sourceGuid": "f691dad32c54ffe4ab713fba57896b0a",
+      "sourceSha256": "3c13a7c3a8b18190c0694c93bb793e44995daad581fb50e581831be8580831fe",
+      "destination": "Assets/_Project/Content/NetworkCombat/Limbo/Art/Imported/AnimationClip/LostSoul_attackRecovery_left.anim",
+      "destinationGuid": "f691dad32c54ffe4ab713fba57896b0a",
+      "groups": [
+        "E8"
+      ],
+      "referencedBy": [
+        "Enemy_LostSoul[0]/Sprite[0]/recoveryLeftDown",
+        "Enemy_LostSoul[0]/Sprite[0]/recoveryLeftUp"
+      ],
+      "treatment": "import",
+      "sourceSize": 3872
+    },
+    {
+      "source": "F:\\DecomplieLatest\\HellMaiden\\ExportedProject\\Assets\\AnimationClip\\LostSoul_attackRecovery_right.anim",
+      "sourceGuid": "5cb27b5d525197d40b009b65237bf453",
+      "sourceSha256": "3dcd6c5074bd71d8b10a804e15fc377ef086101561849007cbb1717c00ea173b",
+      "destination": "Assets/_Project/Content/NetworkCombat/Limbo/Art/Imported/AnimationClip/LostSoul_attackRecovery_right.anim",
+      "destinationGuid": "5cb27b5d525197d40b009b65237bf453",
+      "groups": [
+        "E8"
+      ],
+      "referencedBy": [
+        "Enemy_LostSoul[0]/Sprite[0]/recoveryRightDown",
+        "Enemy_LostSoul[0]/Sprite[0]/recoveryRightUp"
+      ],
+      "treatment": "import",
+      "sourceSize": 3873
+    },
+    {
+      "source": "F:\\DecomplieLatest\\HellMaiden\\ExportedProject\\Assets\\AnimationClip\\LostSoul_attackWarning_left.anim",
+      "sourceGuid": "7b5b6485ff241174a81d62c80e147db2",
+      "sourceSha256": "88d66dc7f23128efff9a5e991583471aec476512a4c30949b503962ef4256a3a",
+      "destination": "Assets/_Project/Content/NetworkCombat/Limbo/Art/Imported/AnimationClip/LostSoul_attackWarning_left.anim",
+      "destinationGuid": "7b5b6485ff241174a81d62c80e147db2",
+      "groups": [
+        "E8"
+      ],
+      "referencedBy": [
+        "Enemy_LostSoul[0]/Sprite[0]/attackWarningLeftDown",
+        "Enemy_LostSoul[0]/Sprite[0]/attackWarningLeftUp"
+      ],
+      "treatment": "import",
+      "sourceSize": 4569
+    },
+    {
+      "source": "F:\\DecomplieLatest\\HellMaiden\\ExportedProject\\Assets\\AnimationClip\\LostSoul_attackWarning_right.anim",
+      "sourceGuid": "e1b31dec520e48941b343b3b05d92b96",
+      "sourceSha256": "65ed24b674e70fac53596f58f1760ba0d56b0fb7788c5dd56709094be9c56727",
+      "destination": "Assets/_Project/Content/NetworkCombat/Limbo/Art/Imported/AnimationClip/LostSoul_attackWarning_right.anim",
+      "destinationGuid": "e1b31dec520e48941b343b3b05d92b96",
+      "groups": [
+        "E8"
+      ],
+      "referencedBy": [
+        "Enemy_LostSoul[0]/Sprite[0]/attackWarningRightDown",
+        "Enemy_LostSoul[0]/Sprite[0]/attackWarningRightUp"
+      ],
+      "treatment": "import",
+      "sourceSize": 4570
+    },
+    {
+      "source": "F:\\DecomplieLatest\\HellMaiden\\ExportedProject\\Assets\\AnimationClip\\LostSoul_attack_left.anim",
+      "sourceGuid": "309f53be00c189647a4cd53d47ff40c8",
+      "sourceSha256": "9a87ddc5fae92cf251a1eb0f3e128db829e7d44ad8275cf9cf105cc8b66e74dc",
+      "destination": "Assets/_Project/Content/NetworkCombat/Limbo/Art/Imported/AnimationClip/LostSoul_attack_left.anim",
+      "destinationGuid": "309f53be00c189647a4cd53d47ff40c8",
+      "groups": [
+        "E8"
+      ],
+      "referencedBy": [
+        "Enemy_LostSoul[0]/Sprite[0]/attackLeftDown",
+        "Enemy_LostSoul[0]/Sprite[0]/attackLeftUp"
+      ],
+      "treatment": "import",
+      "sourceSize": 2803
+    },
+    {
+      "source": "F:\\DecomplieLatest\\HellMaiden\\ExportedProject\\Assets\\AnimationClip\\LostSoul_attack_right.anim",
+      "sourceGuid": "01babd70cc179ed4b85e501b03b9e649",
+      "sourceSha256": "7ba87f212607c2ca7871d29ecce41188eb7b7be8017fe393fcaf5f05ab2c4add",
+      "destination": "Assets/_Project/Content/NetworkCombat/Limbo/Art/Imported/AnimationClip/LostSoul_attack_right.anim",
+      "destinationGuid": "01babd70cc179ed4b85e501b03b9e649",
+      "groups": [
+        "E8"
+      ],
+      "referencedBy": [
+        "Enemy_LostSoul[0]/Sprite[0]/attackRightDown",
+        "Enemy_LostSoul[0]/Sprite[0]/attackRightUp"
+      ],
+      "treatment": "import",
+      "sourceSize": 2804
+    },
+    {
+      "source": "F:\\DecomplieLatest\\HellMaiden\\ExportedProject\\Assets\\AnimationClip\\LostSoul_death_left.anim",
+      "sourceGuid": "e7b30b0e854630547b4cfc11777b1603",
+      "sourceSha256": "22134abbae6f6c9ee4adec53424beee2fe99b056a980f0a21c25eb0a2b7362a0",
+      "destination": "Assets/_Project/Content/NetworkCombat/Limbo/Art/Imported/AnimationClip/LostSoul_death_left.anim",
+      "destinationGuid": "e7b30b0e854630547b4cfc11777b1603",
+      "groups": [
+        "E8"
+      ],
+      "referencedBy": [
+        "Enemy_LostSoul[0]/Sprite[0]/deadLeftDown",
+        "Enemy_LostSoul[0]/Sprite[0]/deadLeftUp"
+      ],
+      "treatment": "import",
+      "sourceSize": 7105
+    },
+    {
+      "source": "F:\\DecomplieLatest\\HellMaiden\\ExportedProject\\Assets\\AnimationClip\\LostSoul_death_right.anim",
+      "sourceGuid": "f00337bf88641b14aac41a7ef6379829",
+      "sourceSha256": "9e88e5be8d0d17268b33bd2652a8880caa645e7ceed3582536caded0d2d78b6f",
+      "destination": "Assets/_Project/Content/NetworkCombat/Limbo/Art/Imported/AnimationClip/LostSoul_death_right.anim",
+      "destinationGuid": "f00337bf88641b14aac41a7ef6379829",
+      "groups": [
+        "E8"
+      ],
+      "referencedBy": [
+        "Enemy_LostSoul[0]/Sprite[0]/deadRightDown",
+        "Enemy_LostSoul[0]/Sprite[0]/deadRightUp"
+      ],
+      "treatment": "import",
+      "sourceSize": 7076
+    },
+    {
+      "source": "F:\\DecomplieLatest\\HellMaiden\\ExportedProject\\Assets\\AnimationClip\\LostSoul_walk_left.anim",
+      "sourceGuid": "4023155c0181e1643adc168a82598785",
+      "sourceSha256": "5821b05930bb36ca5e42eff0e1c76ef04ad9b3d13afb04e8ffce4f49ef3008c7",
+      "destination": "Assets/_Project/Content/NetworkCombat/Limbo/Art/Imported/AnimationClip/LostSoul_walk_left.anim",
+      "destinationGuid": "4023155c0181e1643adc168a82598785",
+      "groups": [
+        "E8"
+      ],
+      "referencedBy": [
+        "Enemy_LostSoul[0]/Sprite[0]/hurtLeftDown",
+        "Enemy_LostSoul[0]/Sprite[0]/hurtLeftUp",
+        "Enemy_LostSoul[0]/Sprite[0]/moveLeftDown",
+        "Enemy_LostSoul[0]/Sprite[0]/moveLeftUp"
+      ],
+      "treatment": "import",
+      "sourceSize": 3507
+    },
+    {
+      "source": "F:\\DecomplieLatest\\HellMaiden\\ExportedProject\\Assets\\AnimationClip\\LostSoul_walk_right.anim",
+      "sourceGuid": "34325f2e38949704da500e5e84292e0d",
+      "sourceSha256": "978d34e21ef4122fe30d6ef57953fb7ae30b21689812aea1f30880ad42bea08b",
+      "destination": "Assets/_Project/Content/NetworkCombat/Limbo/Art/Imported/AnimationClip/LostSoul_walk_right.anim",
+      "destinationGuid": "34325f2e38949704da500e5e84292e0d",
+      "groups": [
+        "E8"
+      ],
+      "referencedBy": [
+        "Enemy_LostSoul[0]/Sprite[0]/hurtRightDown",
+        "Enemy_LostSoul[0]/Sprite[0]/hurtRightUp",
+        "Enemy_LostSoul[0]/Sprite[0]/moveRightDown",
+        "Enemy_LostSoul[0]/Sprite[0]/moveRightUp"
+      ],
+      "treatment": "import",
+      "sourceSize": 3508
+    },
+    {
       "source": "F:\\DecomplieLatest\\HellMaiden\\ExportedProject\\Assets\\AnimationClip\\MeleeWarning_BuildDown.anim",
       "sourceGuid": "f999acf1f96e3f649a370b590605f8d4",
       "sourceSha256": "f45daa2c2ac465aa34393b899ef80b61980960dc05bffa948a876dbfd380283a",
@@ -2976,7 +3511,8 @@
         "E4",
         "E5",
         "E6",
-        "E7"
+        "E7",
+        "E8"
       ],
       "referencedBy": [
         "Enemy_Brotchi[0]/Sprite[0]/shadowFadeout",
@@ -2985,7 +3521,8 @@
         "Enemy_Skeleton[0]/Sprite[0]/shadowFadeout",
         "Elite_Skeleton[0]/Sprite[0]/shadowFadeout",
         "Enemy_Slime[0]/Sprite[0]/shadowFadeout",
-        "Enemy_Slime Rusher[0]/Sprite[0]/shadowFadeout"
+        "Enemy_Slime Rusher[0]/Sprite[0]/shadowFadeout",
+        "Enemy_LostSoul[0]/Sprite[0]/shadowFadeout"
       ],
       "treatment": "import",
       "sourceSize": 4840
@@ -3003,7 +3540,8 @@
         "E4",
         "E5",
         "E6",
-        "E7"
+        "E7",
+        "E8"
       ],
       "referencedBy": [
         "Enemy_Brotchi[0]/Sprite[0]/shadowIdle",
@@ -3012,7 +3550,8 @@
         "Enemy_Skeleton[0]/Sprite[0]/shadowIdle",
         "Elite_Skeleton[0]/Sprite[0]/shadowIdle",
         "Enemy_Slime[0]/Sprite[0]/shadowIdle",
-        "Enemy_Slime Rusher[0]/Sprite[0]/shadowIdle"
+        "Enemy_Slime Rusher[0]/Sprite[0]/shadowIdle",
+        "Enemy_LostSoul[0]/Sprite[0]/shadowIdle"
       ],
       "treatment": "import",
       "sourceSize": 1977
@@ -3519,6 +4058,19 @@
       "sourceSize": 43007
     },
     {
+      "source": "F:\\DecomplieLatest\\HellMaiden\\ExportedProject\\Assets\\GameObject\\Enemy_LostSoul.prefab",
+      "sourceGuid": "88174f6714225bc4ebaba3d40091777f",
+      "sourceSha256": "38971ca2f351c8623e4aa80b134a72b551308af3b221cd8d904c67fdad7e6bad",
+      "destination": "Assets/_Project/Content/NetworkCombat/Limbo/Art/Imported/GameObject/Enemy_LostSoul.prefab",
+      "destinationGuid": "bc00cdf4125c6e5c26dddfe1ab39d5ee",
+      "groups": [
+        "E8"
+      ],
+      "referencedBy": [],
+      "treatment": "independent-adaptation",
+      "sourceSize": 40477
+    },
+    {
       "source": "F:\\DecomplieLatest\\HellMaiden\\ExportedProject\\Assets\\GameObject\\Enemy_Skeleton.prefab",
       "sourceGuid": "1f50b21657b09fe4da2ff79e2195cf1e",
       "sourceSha256": "76cf7fa1f39cc88cb380aea0a0a854b9b63ad604c991240e6d7b7b408938c129",
@@ -3770,7 +4322,8 @@
         "E4",
         "E5",
         "E6",
-        "E7"
+        "E7",
+        "E8"
       ],
       "referencedBy": [
         "GameObject/Enemy_Brotchi.prefab",
@@ -3779,7 +4332,8 @@
         "GameObject/Enemy_Skeleton.prefab",
         "GameObject/Elite_Skeleton.prefab",
         "GameObject/Enemy_Slime.prefab",
-        "GameObject/Enemy_Slime Rusher.prefab"
+        "GameObject/Enemy_Slime Rusher.prefab",
+        "GameObject/Enemy_LostSoul.prefab"
       ],
       "treatment": "independent-adaptation",
       "sourceSize": 8379
@@ -4334,10 +4888,12 @@
       "destination": "Assets/_Project/Content/HellMaiden/Enemies/LustSinner/Sprite/Enemy_Brotchi_Shadow.asset",
       "destinationGuid": "a12c5157dd264e34a8784ac8858fb37c",
       "groups": [
-        "E1"
+        "E1",
+        "E8"
       ],
       "referencedBy": [
-        "GameObject/Enemy_Brotchi.prefab"
+        "GameObject/Enemy_Brotchi.prefab",
+        "GameObject/Enemy_LostSoul.prefab"
       ],
       "treatment": "reuse",
       "sourceSize": 3863
@@ -6416,6 +6972,537 @@
       "sourceSize": 13015
     },
     {
+      "source": "F:\\DecomplieLatest\\HellMaiden\\ExportedProject\\Assets\\Sprite\\lostsoul_attack_test_0.asset",
+      "sourceGuid": "ac36e9831f3dc2049ba076571e108c73",
+      "sourceSha256": "afe3ad6050af962240458d81d821af8644a7d6c98c707b2e59c60b7aa7369b17",
+      "destination": "Assets/_Project/Content/NetworkCombat/Limbo/Art/Imported/Sprite/lostsoul_attack_test_0.asset",
+      "destinationGuid": "ac36e9831f3dc2049ba076571e108c73",
+      "groups": [
+        "E8"
+      ],
+      "referencedBy": [
+        "AnimationClip/LostSoul_attackWarning_left.anim",
+        "AnimationClip/LostSoul_attackWarning_right.anim"
+      ],
+      "treatment": "import",
+      "sourceSize": 4235
+    },
+    {
+      "source": "F:\\DecomplieLatest\\HellMaiden\\ExportedProject\\Assets\\Sprite\\lostsoul_attack_test_1.asset",
+      "sourceGuid": "dd063a74642044642b83b8b0fcccc775",
+      "sourceSha256": "421a5b684f10fd53129fc4e46e653539875ed3e487d8f8b6e0808ff086a6730d",
+      "destination": "Assets/_Project/Content/NetworkCombat/Limbo/Art/Imported/Sprite/lostsoul_attack_test_1.asset",
+      "destinationGuid": "dd063a74642044642b83b8b0fcccc775",
+      "groups": [
+        "E8"
+      ],
+      "referencedBy": [
+        "AnimationClip/LostSoul_attackWarning_left.anim",
+        "AnimationClip/LostSoul_attackWarning_right.anim"
+      ],
+      "treatment": "import",
+      "sourceSize": 4376
+    },
+    {
+      "source": "F:\\DecomplieLatest\\HellMaiden\\ExportedProject\\Assets\\Sprite\\lostsoul_attack_test_10.asset",
+      "sourceGuid": "cd700a0c89640374598ad5791821926f",
+      "sourceSha256": "214b5afe3a2f41d705f583e12cce899b8c6717f06ae6cc2a8999f1dbdceb3c75",
+      "destination": "Assets/_Project/Content/NetworkCombat/Limbo/Art/Imported/Sprite/lostsoul_attack_test_10.asset",
+      "destinationGuid": "cd700a0c89640374598ad5791821926f",
+      "groups": [
+        "E8"
+      ],
+      "referencedBy": [
+        "AnimationClip/LostSoul_attackRecovery_left.anim",
+        "AnimationClip/LostSoul_attackRecovery_right.anim"
+      ],
+      "treatment": "import",
+      "sourceSize": 9902
+    },
+    {
+      "source": "F:\\DecomplieLatest\\HellMaiden\\ExportedProject\\Assets\\Sprite\\lostsoul_attack_test_11.asset",
+      "sourceGuid": "0b28e9d264e837440b361f666d519b88",
+      "sourceSha256": "86f766a2602cc81fe8d3331234a82cb41c1effcddf9f8c93cc34984a21816b8d",
+      "destination": "Assets/_Project/Content/NetworkCombat/Limbo/Art/Imported/Sprite/lostsoul_attack_test_11.asset",
+      "destinationGuid": "0b28e9d264e837440b361f666d519b88",
+      "groups": [
+        "E8"
+      ],
+      "referencedBy": [
+        "AnimationClip/LostSoul_attackRecovery_left.anim",
+        "AnimationClip/LostSoul_attackRecovery_right.anim"
+      ],
+      "treatment": "import",
+      "sourceSize": 10154
+    },
+    {
+      "source": "F:\\DecomplieLatest\\HellMaiden\\ExportedProject\\Assets\\Sprite\\lostsoul_attack_test_12.asset",
+      "sourceGuid": "5d67a0c5674e52247972faf5f87f74b3",
+      "sourceSha256": "595e2a0248b3584e04f67b272eeea2c127431d8b33d28fe7a19d234cd94ed0b3",
+      "destination": "Assets/_Project/Content/NetworkCombat/Limbo/Art/Imported/Sprite/lostsoul_attack_test_12.asset",
+      "destinationGuid": "5d67a0c5674e52247972faf5f87f74b3",
+      "groups": [
+        "E8"
+      ],
+      "referencedBy": [
+        "AnimationClip/LostSoul_attackRecovery_left.anim",
+        "AnimationClip/LostSoul_attackRecovery_right.anim"
+      ],
+      "treatment": "import",
+      "sourceSize": 10846
+    },
+    {
+      "source": "F:\\DecomplieLatest\\HellMaiden\\ExportedProject\\Assets\\Sprite\\lostsoul_attack_test_13.asset",
+      "sourceGuid": "b573f10b08ec8ce488d3c0a87a47e916",
+      "sourceSha256": "dc16353c0656c547c85d700b2fec475be8e1e66968edfb3e4ad61b80c873c701",
+      "destination": "Assets/_Project/Content/NetworkCombat/Limbo/Art/Imported/Sprite/lostsoul_attack_test_13.asset",
+      "destinationGuid": "b573f10b08ec8ce488d3c0a87a47e916",
+      "groups": [
+        "E8"
+      ],
+      "referencedBy": [
+        "AnimationClip/LostSoul_attackRecovery_left.anim",
+        "AnimationClip/LostSoul_attackRecovery_right.anim"
+      ],
+      "treatment": "import",
+      "sourceSize": 7107
+    },
+    {
+      "source": "F:\\DecomplieLatest\\HellMaiden\\ExportedProject\\Assets\\Sprite\\lostsoul_attack_test_14.asset",
+      "sourceGuid": "159653b24dddef14ca57edce61613f3e",
+      "sourceSha256": "4b62e6105a2f7daa5a465559bdbec2d901108179c61664fd407252dee147a349",
+      "destination": "Assets/_Project/Content/NetworkCombat/Limbo/Art/Imported/Sprite/lostsoul_attack_test_14.asset",
+      "destinationGuid": "159653b24dddef14ca57edce61613f3e",
+      "groups": [
+        "E8"
+      ],
+      "referencedBy": [
+        "AnimationClip/LostSoul_attackRecovery_left.anim",
+        "AnimationClip/LostSoul_attackRecovery_right.anim"
+      ],
+      "treatment": "import",
+      "sourceSize": 5991
+    },
+    {
+      "source": "F:\\DecomplieLatest\\HellMaiden\\ExportedProject\\Assets\\Sprite\\lostsoul_attack_test_2.asset",
+      "sourceGuid": "d7a558b4ddeed124b973ff7e4e9928b6",
+      "sourceSha256": "569f2f47003915966d4f65f6747744561edc361bf9094540fcb97438939600ef",
+      "destination": "Assets/_Project/Content/NetworkCombat/Limbo/Art/Imported/Sprite/lostsoul_attack_test_2.asset",
+      "destinationGuid": "d7a558b4ddeed124b973ff7e4e9928b6",
+      "groups": [
+        "E8"
+      ],
+      "referencedBy": [
+        "AnimationClip/LostSoul_attackWarning_left.anim",
+        "AnimationClip/LostSoul_attackWarning_right.anim"
+      ],
+      "treatment": "import",
+      "sourceSize": 4064
+    },
+    {
+      "source": "F:\\DecomplieLatest\\HellMaiden\\ExportedProject\\Assets\\Sprite\\lostsoul_attack_test_3.asset",
+      "sourceGuid": "d2bbe29ef1367c04db3394bdac09fd7a",
+      "sourceSha256": "c3c0afc0a56bc94f580cf034503f7a36910883cea4a6e8efb77dd2a300e9e872",
+      "destination": "Assets/_Project/Content/NetworkCombat/Limbo/Art/Imported/Sprite/lostsoul_attack_test_3.asset",
+      "destinationGuid": "d2bbe29ef1367c04db3394bdac09fd7a",
+      "groups": [
+        "E8"
+      ],
+      "referencedBy": [
+        "AnimationClip/LostSoul_attackWarning_left.anim",
+        "AnimationClip/LostSoul_attackWarning_right.anim"
+      ],
+      "treatment": "import",
+      "sourceSize": 4958
+    },
+    {
+      "source": "F:\\DecomplieLatest\\HellMaiden\\ExportedProject\\Assets\\Sprite\\lostsoul_attack_test_4.asset",
+      "sourceGuid": "45c722447a714944d847083afb7e8563",
+      "sourceSha256": "05b7d2a38fdfd03ef316b3d573d6a69097d01df9de9c6e644c0cb2087dcba780",
+      "destination": "Assets/_Project/Content/NetworkCombat/Limbo/Art/Imported/Sprite/lostsoul_attack_test_4.asset",
+      "destinationGuid": "45c722447a714944d847083afb7e8563",
+      "groups": [
+        "E8"
+      ],
+      "referencedBy": [
+        "AnimationClip/LostSoul_attackWarning_left.anim",
+        "AnimationClip/LostSoul_attackWarning_right.anim"
+      ],
+      "treatment": "import",
+      "sourceSize": 4275
+    },
+    {
+      "source": "F:\\DecomplieLatest\\HellMaiden\\ExportedProject\\Assets\\Sprite\\lostsoul_attack_test_5.asset",
+      "sourceGuid": "2c55393d0e340554e8419485813026bf",
+      "sourceSha256": "7db6bacd38d72473de95ef2b61b023175277e0cf165971fd2d24e6354fa25d2e",
+      "destination": "Assets/_Project/Content/NetworkCombat/Limbo/Art/Imported/Sprite/lostsoul_attack_test_5.asset",
+      "destinationGuid": "2c55393d0e340554e8419485813026bf",
+      "groups": [
+        "E8"
+      ],
+      "referencedBy": [
+        "AnimationClip/LostSoul_attackWarning_left.anim",
+        "AnimationClip/LostSoul_attackWarning_right.anim"
+      ],
+      "treatment": "import",
+      "sourceSize": 3895
+    },
+    {
+      "source": "F:\\DecomplieLatest\\HellMaiden\\ExportedProject\\Assets\\Sprite\\lostsoul_attack_test_6.asset",
+      "sourceGuid": "ed7733b2eeb32f74ea46908e3b58ae42",
+      "sourceSha256": "2654ec3af962e921677013708df6ac0d38be4825155f30955800e4b27749eecd",
+      "destination": "Assets/_Project/Content/NetworkCombat/Limbo/Art/Imported/Sprite/lostsoul_attack_test_6.asset",
+      "destinationGuid": "ed7733b2eeb32f74ea46908e3b58ae42",
+      "groups": [
+        "E8"
+      ],
+      "referencedBy": [
+        "AnimationClip/LostSoul_attack_left.anim",
+        "AnimationClip/LostSoul_attack_right.anim"
+      ],
+      "treatment": "import",
+      "sourceSize": 4701
+    },
+    {
+      "source": "F:\\DecomplieLatest\\HellMaiden\\ExportedProject\\Assets\\Sprite\\lostsoul_attack_test_7.asset",
+      "sourceGuid": "17063dca6a4d2a04d8132008b78d5936",
+      "sourceSha256": "915d1a18793eed88f4fc115bfc41fad234b609d575709b1ee8d4de1c925741ba",
+      "destination": "Assets/_Project/Content/NetworkCombat/Limbo/Art/Imported/Sprite/lostsoul_attack_test_7.asset",
+      "destinationGuid": "17063dca6a4d2a04d8132008b78d5936",
+      "groups": [
+        "E8"
+      ],
+      "referencedBy": [
+        "AnimationClip/LostSoul_attack_left.anim",
+        "AnimationClip/LostSoul_attack_right.anim",
+        "AnimationClip/LostSoul_attackRecovery_left.anim",
+        "AnimationClip/LostSoul_attackRecovery_right.anim"
+      ],
+      "treatment": "import",
+      "sourceSize": 4890
+    },
+    {
+      "source": "F:\\DecomplieLatest\\HellMaiden\\ExportedProject\\Assets\\Sprite\\lostsoul_attack_test_8.asset",
+      "sourceGuid": "d763a2ebd8f2b0e4498b9175c891e2e0",
+      "sourceSha256": "c35a06e51bf3d97606ce33286540c6adea05e77e18e8d0bf091ed5cbf1007745",
+      "destination": "Assets/_Project/Content/NetworkCombat/Limbo/Art/Imported/Sprite/lostsoul_attack_test_8.asset",
+      "destinationGuid": "d763a2ebd8f2b0e4498b9175c891e2e0",
+      "groups": [
+        "E8"
+      ],
+      "referencedBy": [
+        "AnimationClip/LostSoul_attackRecovery_left.anim",
+        "AnimationClip/LostSoul_attackRecovery_right.anim"
+      ],
+      "treatment": "import",
+      "sourceSize": 5452
+    },
+    {
+      "source": "F:\\DecomplieLatest\\HellMaiden\\ExportedProject\\Assets\\Sprite\\lostsoul_attack_test_9.asset",
+      "sourceGuid": "c077fea16575a5f4ea51c8cef8ace8fa",
+      "sourceSha256": "73773f349502cddb115c3e3eb7f063192411a9b3a93cec8f56909adb912581b5",
+      "destination": "Assets/_Project/Content/NetworkCombat/Limbo/Art/Imported/Sprite/lostsoul_attack_test_9.asset",
+      "destinationGuid": "c077fea16575a5f4ea51c8cef8ace8fa",
+      "groups": [
+        "E8"
+      ],
+      "referencedBy": [
+        "AnimationClip/LostSoul_attackRecovery_left.anim",
+        "AnimationClip/LostSoul_attackRecovery_right.anim"
+      ],
+      "treatment": "import",
+      "sourceSize": 6141
+    },
+    {
+      "source": "F:\\DecomplieLatest\\HellMaiden\\ExportedProject\\Assets\\Sprite\\lostsoul_death_0.asset",
+      "sourceGuid": "796f16808a7feb142b44647822828328",
+      "sourceSha256": "20e52fda66cb422769c6772c61cce729ea1538471895c764acb3457db359c275",
+      "destination": "Assets/_Project/Content/NetworkCombat/Limbo/Art/Imported/Sprite/lostsoul_death_0.asset",
+      "destinationGuid": "796f16808a7feb142b44647822828328",
+      "groups": [
+        "E8"
+      ],
+      "referencedBy": [
+        "AnimationClip/LostSoul_death_left.anim",
+        "AnimationClip/LostSoul_death_right.anim"
+      ],
+      "treatment": "import",
+      "sourceSize": 4235
+    },
+    {
+      "source": "F:\\DecomplieLatest\\HellMaiden\\ExportedProject\\Assets\\Sprite\\lostsoul_death_1.asset",
+      "sourceGuid": "faa08223c03235a4fb1be29b17789072",
+      "sourceSha256": "e2bd00861e86578d745d5018482c51d2f717486ea26a3e52c0aed6ebaa98c044",
+      "destination": "Assets/_Project/Content/NetworkCombat/Limbo/Art/Imported/Sprite/lostsoul_death_1.asset",
+      "destinationGuid": "faa08223c03235a4fb1be29b17789072",
+      "groups": [
+        "E8"
+      ],
+      "referencedBy": [
+        "AnimationClip/LostSoul_death_left.anim",
+        "AnimationClip/LostSoul_death_right.anim"
+      ],
+      "treatment": "import",
+      "sourceSize": 4375
+    },
+    {
+      "source": "F:\\DecomplieLatest\\HellMaiden\\ExportedProject\\Assets\\Sprite\\lostsoul_death_2.asset",
+      "sourceGuid": "8f69b88d91cc3334a93959659c7c0de9",
+      "sourceSha256": "2b454de424820c22ef7649443c81c19b523524eead2f592fad9e6458248f5ac2",
+      "destination": "Assets/_Project/Content/NetworkCombat/Limbo/Art/Imported/Sprite/lostsoul_death_2.asset",
+      "destinationGuid": "8f69b88d91cc3334a93959659c7c0de9",
+      "groups": [
+        "E8"
+      ],
+      "referencedBy": [
+        "AnimationClip/LostSoul_death_left.anim",
+        "AnimationClip/LostSoul_death_right.anim"
+      ],
+      "treatment": "import",
+      "sourceSize": 4061
+    },
+    {
+      "source": "F:\\DecomplieLatest\\HellMaiden\\ExportedProject\\Assets\\Sprite\\lostsoul_death_3.asset",
+      "sourceGuid": "3a530d8975140af4b8cf4065d92e4a4a",
+      "sourceSha256": "99afe0698124cefdbc4b6745fa21f311919100b7227e9dd3ec7a0d79dd5f7151",
+      "destination": "Assets/_Project/Content/NetworkCombat/Limbo/Art/Imported/Sprite/lostsoul_death_3.asset",
+      "destinationGuid": "3a530d8975140af4b8cf4065d92e4a4a",
+      "groups": [
+        "E8"
+      ],
+      "referencedBy": [
+        "AnimationClip/LostSoul_death_left.anim",
+        "AnimationClip/LostSoul_death_right.anim"
+      ],
+      "treatment": "import",
+      "sourceSize": 4103
+    },
+    {
+      "source": "F:\\DecomplieLatest\\HellMaiden\\ExportedProject\\Assets\\Sprite\\lostsoul_death_4.asset",
+      "sourceGuid": "9ae4606237195d64c95140a719fb1afe",
+      "sourceSha256": "73fe085db35d008ed78c845aa54dd0514b1f0ed5ecc74386c5bfb0c4b583946a",
+      "destination": "Assets/_Project/Content/NetworkCombat/Limbo/Art/Imported/Sprite/lostsoul_death_4.asset",
+      "destinationGuid": "9ae4606237195d64c95140a719fb1afe",
+      "groups": [
+        "E8"
+      ],
+      "referencedBy": [
+        "AnimationClip/LostSoul_death_left.anim",
+        "AnimationClip/LostSoul_death_right.anim"
+      ],
+      "treatment": "import",
+      "sourceSize": 4244
+    },
+    {
+      "source": "F:\\DecomplieLatest\\HellMaiden\\ExportedProject\\Assets\\Sprite\\lostsoul_death_5.asset",
+      "sourceGuid": "30cb036f61d2f6346bbd37222b73f6b2",
+      "sourceSha256": "b09848d67f6f3e2f0183e955aa0dc9ce7005c1b486d2eb671d00cf646c389de5",
+      "destination": "Assets/_Project/Content/NetworkCombat/Limbo/Art/Imported/Sprite/lostsoul_death_5.asset",
+      "destinationGuid": "30cb036f61d2f6346bbd37222b73f6b2",
+      "groups": [
+        "E8"
+      ],
+      "referencedBy": [
+        "AnimationClip/LostSoul_death_left.anim",
+        "AnimationClip/LostSoul_death_right.anim"
+      ],
+      "treatment": "import",
+      "sourceSize": 11726
+    },
+    {
+      "source": "F:\\DecomplieLatest\\HellMaiden\\ExportedProject\\Assets\\Sprite\\lostsoul_preattack_0.asset",
+      "sourceGuid": "f87d09b836d78f848b427f1cf4e1712b",
+      "sourceSha256": "97240f6a6e7973dccc042e602ea4ced387a8fab945102e057a09008631bb60fa",
+      "destination": "Assets/_Project/Content/NetworkCombat/Limbo/Art/Imported/Sprite/lostsoul_preattack_0.asset",
+      "destinationGuid": "f87d09b836d78f848b427f1cf4e1712b",
+      "groups": [
+        "E8"
+      ],
+      "referencedBy": [
+        "AnimationClip/LostSoul_attackWarning_left.anim",
+        "AnimationClip/LostSoul_attackWarning_right.anim"
+      ],
+      "treatment": "import",
+      "sourceSize": 4237
+    },
+    {
+      "source": "F:\\DecomplieLatest\\HellMaiden\\ExportedProject\\Assets\\Sprite\\lostsoul_preattack_1.asset",
+      "sourceGuid": "2ec4ff9d47059fa4ebe96c3c6ab5c8eb",
+      "sourceSha256": "e4f5fa27fac979f9aa89750ee374dec926159086fc6cbfc71c22986890e38afd",
+      "destination": "Assets/_Project/Content/NetworkCombat/Limbo/Art/Imported/Sprite/lostsoul_preattack_1.asset",
+      "destinationGuid": "2ec4ff9d47059fa4ebe96c3c6ab5c8eb",
+      "groups": [
+        "E8"
+      ],
+      "referencedBy": [
+        "AnimationClip/LostSoul_attackWarning_left.anim",
+        "AnimationClip/LostSoul_attackWarning_right.anim"
+      ],
+      "treatment": "import",
+      "sourceSize": 4306
+    },
+    {
+      "source": "F:\\DecomplieLatest\\HellMaiden\\ExportedProject\\Assets\\Sprite\\lostsoul_preattack_2.asset",
+      "sourceGuid": "df387c0f5ae9a4847b07ecffa22a90ee",
+      "sourceSha256": "473ca248090ffe67e36bd011687045332440014b32f66f1d6b518b6905eb9a4b",
+      "destination": "Assets/_Project/Content/NetworkCombat/Limbo/Art/Imported/Sprite/lostsoul_preattack_2.asset",
+      "destinationGuid": "df387c0f5ae9a4847b07ecffa22a90ee",
+      "groups": [
+        "E8"
+      ],
+      "referencedBy": [
+        "AnimationClip/LostSoul_attackWarning_left.anim",
+        "AnimationClip/LostSoul_attackWarning_right.anim"
+      ],
+      "treatment": "import",
+      "sourceSize": 4259
+    },
+    {
+      "source": "F:\\DecomplieLatest\\HellMaiden\\ExportedProject\\Assets\\Sprite\\lostsoul_preattack_3.asset",
+      "sourceGuid": "1f58868b0a9b95347973fd40018d8bd9",
+      "sourceSha256": "f97bf14e0df93248274915fc85543bd7133c26dcbf39ff0c1e64351ffb2bc5b6",
+      "destination": "Assets/_Project/Content/NetworkCombat/Limbo/Art/Imported/Sprite/lostsoul_preattack_3.asset",
+      "destinationGuid": "1f58868b0a9b95347973fd40018d8bd9",
+      "groups": [
+        "E8"
+      ],
+      "referencedBy": [
+        "AnimationClip/LostSoul_attackWarning_left.anim",
+        "AnimationClip/LostSoul_attackWarning_right.anim"
+      ],
+      "treatment": "import",
+      "sourceSize": 4458
+    },
+    {
+      "source": "F:\\DecomplieLatest\\HellMaiden\\ExportedProject\\Assets\\Sprite\\lostsoul_preattack_4.asset",
+      "sourceGuid": "0dd177b5ca983bb4caf72a3dd5a81d0a",
+      "sourceSha256": "569c3bb25f1c32b99e611f8364046935e7d305c5feeb4f0ad1d2b77f7f12da24",
+      "destination": "Assets/_Project/Content/NetworkCombat/Limbo/Art/Imported/Sprite/lostsoul_preattack_4.asset",
+      "destinationGuid": "0dd177b5ca983bb4caf72a3dd5a81d0a",
+      "groups": [
+        "E8"
+      ],
+      "referencedBy": [
+        "AnimationClip/LostSoul_attackWarning_left.anim",
+        "AnimationClip/LostSoul_attackWarning_right.anim"
+      ],
+      "treatment": "import",
+      "sourceSize": 4428
+    },
+    {
+      "source": "F:\\DecomplieLatest\\HellMaiden\\ExportedProject\\Assets\\Sprite\\lostsoul_preattack_5.asset",
+      "sourceGuid": "b01fa7d50b29538479fe7d2a7909ebf5",
+      "sourceSha256": "5c87bd7f6c7bf5a90300c5251ce60ecd6611bdb3aba491f26819d884717f27df",
+      "destination": "Assets/_Project/Content/NetworkCombat/Limbo/Art/Imported/Sprite/lostsoul_preattack_5.asset",
+      "destinationGuid": "b01fa7d50b29538479fe7d2a7909ebf5",
+      "groups": [
+        "E8"
+      ],
+      "referencedBy": [
+        "AnimationClip/LostSoul_attackWarning_left.anim",
+        "AnimationClip/LostSoul_attackWarning_right.anim"
+      ],
+      "treatment": "import",
+      "sourceSize": 4253
+    },
+    {
+      "source": "F:\\DecomplieLatest\\HellMaiden\\ExportedProject\\Assets\\Sprite\\lostsoul_walk_test_0.asset",
+      "sourceGuid": "ea4972c646ac1d746afe6d882f64f560",
+      "sourceSha256": "e1653a7d31e86a9d80bab412d029dbc99f8c15bb3d668eb026c0cebb97940d19",
+      "destination": "Assets/_Project/Content/NetworkCombat/Limbo/Art/Imported/Sprite/lostsoul_walk_test_0.asset",
+      "destinationGuid": "ea4972c646ac1d746afe6d882f64f560",
+      "groups": [
+        "E8"
+      ],
+      "referencedBy": [
+        "AnimationClip/LostSoul_walk_left.anim",
+        "AnimationClip/LostSoul_walk_right.anim",
+        "GameObject/Enemy_LostSoul.prefab"
+      ],
+      "treatment": "import",
+      "sourceSize": 4236
+    },
+    {
+      "source": "F:\\DecomplieLatest\\HellMaiden\\ExportedProject\\Assets\\Sprite\\lostsoul_walk_test_1.asset",
+      "sourceGuid": "3d1c210045515c544a3ecad3462f1fc4",
+      "sourceSha256": "6e7c2d37808984fba8e576c4661a53c6701da65d312835f37c54c6007cf2fa76",
+      "destination": "Assets/_Project/Content/NetworkCombat/Limbo/Art/Imported/Sprite/lostsoul_walk_test_1.asset",
+      "destinationGuid": "3d1c210045515c544a3ecad3462f1fc4",
+      "groups": [
+        "E8"
+      ],
+      "referencedBy": [
+        "AnimationClip/LostSoul_walk_left.anim",
+        "AnimationClip/LostSoul_walk_right.anim"
+      ],
+      "treatment": "import",
+      "sourceSize": 4314
+    },
+    {
+      "source": "F:\\DecomplieLatest\\HellMaiden\\ExportedProject\\Assets\\Sprite\\lostsoul_walk_test_2.asset",
+      "sourceGuid": "4a3cc823aee674c4bb0211fd249bc9d7",
+      "sourceSha256": "c9f29759c4746f64ca946e67620ca83e4de532688e48a56613a24be772b63281",
+      "destination": "Assets/_Project/Content/NetworkCombat/Limbo/Art/Imported/Sprite/lostsoul_walk_test_2.asset",
+      "destinationGuid": "4a3cc823aee674c4bb0211fd249bc9d7",
+      "groups": [
+        "E8"
+      ],
+      "referencedBy": [
+        "AnimationClip/LostSoul_walk_left.anim",
+        "AnimationClip/LostSoul_walk_right.anim"
+      ],
+      "treatment": "import",
+      "sourceSize": 4245
+    },
+    {
+      "source": "F:\\DecomplieLatest\\HellMaiden\\ExportedProject\\Assets\\Sprite\\lostsoul_walk_test_3.asset",
+      "sourceGuid": "26f686497fbbab747ac4acac58cbb591",
+      "sourceSha256": "7156280507b8aca8c4b7f4fbe70407d90f9e4216dc35c1713fb16abc6d0e716b",
+      "destination": "Assets/_Project/Content/NetworkCombat/Limbo/Art/Imported/Sprite/lostsoul_walk_test_3.asset",
+      "destinationGuid": "26f686497fbbab747ac4acac58cbb591",
+      "groups": [
+        "E8"
+      ],
+      "referencedBy": [
+        "AnimationClip/LostSoul_walk_left.anim",
+        "AnimationClip/LostSoul_walk_right.anim"
+      ],
+      "treatment": "import",
+      "sourceSize": 4458
+    },
+    {
+      "source": "F:\\DecomplieLatest\\HellMaiden\\ExportedProject\\Assets\\Sprite\\lostsoul_walk_test_4.asset",
+      "sourceGuid": "c3f51d5998019ba47be605513e782610",
+      "sourceSha256": "c7d39d7dfd52d1f978ea3aeda901d94b08b0a171a89a795ebdd7413996153549",
+      "destination": "Assets/_Project/Content/NetworkCombat/Limbo/Art/Imported/Sprite/lostsoul_walk_test_4.asset",
+      "destinationGuid": "c3f51d5998019ba47be605513e782610",
+      "groups": [
+        "E8"
+      ],
+      "referencedBy": [
+        "AnimationClip/LostSoul_walk_left.anim",
+        "AnimationClip/LostSoul_walk_right.anim"
+      ],
+      "treatment": "import",
+      "sourceSize": 4437
+    },
+    {
+      "source": "F:\\DecomplieLatest\\HellMaiden\\ExportedProject\\Assets\\Sprite\\lostsoul_walk_test_5.asset",
+      "sourceGuid": "878bbf7c02d611c459e34b428b1df692",
+      "sourceSha256": "544e4e726181c169afd91f0bbbb7b00fac5f33da8c437c06f8d955516c5d5666",
+      "destination": "Assets/_Project/Content/NetworkCombat/Limbo/Art/Imported/Sprite/lostsoul_walk_test_5.asset",
+      "destinationGuid": "878bbf7c02d611c459e34b428b1df692",
+      "groups": [
+        "E8"
+      ],
+      "referencedBy": [
+        "AnimationClip/LostSoul_walk_left.anim",
+        "AnimationClip/LostSoul_walk_right.anim"
+      ],
+      "treatment": "import",
+      "sourceSize": 4250
+    },
+    {
       "source": "F:\\DecomplieLatest\\HellMaiden\\ExportedProject\\Assets\\Sprite\\skeleton_death_0.asset",
       "sourceGuid": "c5dc3149416eae841b0f13648748420c",
       "sourceSha256": "3e81cb67bfa710faefa8e818cc65d11139139bcd702339f40b1c42820d3ec3a4",
@@ -6661,6 +7748,21 @@
       ],
       "treatment": "import",
       "sourceSize": 45377
+    },
+    {
+      "source": "F:\\DecomplieLatest\\HellMaiden\\ExportedProject\\Assets\\Texture2D\\Enemy_LostSoul_Level_02_LUT.png",
+      "sourceGuid": "43367521d23f18449bd45b0922a9df06",
+      "sourceSha256": "c122c8cb2be84ea377e459c028d6fcbb1cd8408c93c86f764514a0e9583463b7",
+      "destination": "Assets/_Project/Content/NetworkCombat/Limbo/Art/Imported/Texture2D/Enemy_LostSoul_Level_02_LUT.png",
+      "destinationGuid": "43367521d23f18449bd45b0922a9df06",
+      "groups": [
+        "palettes"
+      ],
+      "referencedBy": [
+        "LostSoul/1"
+      ],
+      "treatment": "import",
+      "sourceSize": 49925
     },
     {
       "source": "F:\\DecomplieLatest\\HellMaiden\\ExportedProject\\Assets\\Texture2D\\Enemy_Skeleton_Dark_LUT.png",
@@ -7496,6 +8598,53 @@
       "sourceSize": 415646
     },
     {
+      "source": "F:\\DecomplieLatest\\HellMaiden\\ExportedProject\\Assets\\Texture2D\\sactx-0-4096x2048-Uncompressed-Lost Soul-6a01df10.png",
+      "sourceGuid": "f22235fc0be84f7419101d1cc30420ae",
+      "sourceSha256": "84eecfcb0a26a5b081b6814a4c698cfbce34cce4bf4bcdd2b881b0e7d4da7391",
+      "destination": "Assets/_Project/Content/NetworkCombat/Limbo/Art/Imported/Texture2D/sactx-0-4096x2048-Uncompressed-Lost Soul-6a01df10.png",
+      "destinationGuid": "f22235fc0be84f7419101d1cc30420ae",
+      "groups": [
+        "E8"
+      ],
+      "referencedBy": [
+        "Sprite/lostsoul_attack_test_6.asset",
+        "Sprite/lostsoul_attack_test_7.asset",
+        "Sprite/lostsoul_preattack_0.asset",
+        "Sprite/lostsoul_preattack_1.asset",
+        "Sprite/lostsoul_preattack_2.asset",
+        "Sprite/lostsoul_preattack_3.asset",
+        "Sprite/lostsoul_preattack_4.asset",
+        "Sprite/lostsoul_preattack_5.asset",
+        "Sprite/lostsoul_attack_test_0.asset",
+        "Sprite/lostsoul_attack_test_1.asset",
+        "Sprite/lostsoul_attack_test_2.asset",
+        "Sprite/lostsoul_attack_test_3.asset",
+        "Sprite/lostsoul_attack_test_4.asset",
+        "Sprite/lostsoul_attack_test_5.asset",
+        "Sprite/lostsoul_death_0.asset",
+        "Sprite/lostsoul_death_1.asset",
+        "Sprite/lostsoul_death_2.asset",
+        "Sprite/lostsoul_death_3.asset",
+        "Sprite/lostsoul_death_4.asset",
+        "Sprite/lostsoul_death_5.asset",
+        "Sprite/lostsoul_walk_test_0.asset",
+        "Sprite/lostsoul_walk_test_1.asset",
+        "Sprite/lostsoul_walk_test_2.asset",
+        "Sprite/lostsoul_walk_test_3.asset",
+        "Sprite/lostsoul_walk_test_4.asset",
+        "Sprite/lostsoul_walk_test_5.asset",
+        "Sprite/lostsoul_attack_test_8.asset",
+        "Sprite/lostsoul_attack_test_9.asset",
+        "Sprite/lostsoul_attack_test_10.asset",
+        "Sprite/lostsoul_attack_test_11.asset",
+        "Sprite/lostsoul_attack_test_12.asset",
+        "Sprite/lostsoul_attack_test_13.asset",
+        "Sprite/lostsoul_attack_test_14.asset"
+      ],
+      "treatment": "import",
+      "sourceSize": 405023
+    },
+    {
       "source": "F:\\DecomplieLatest\\HellMaiden\\ExportedProject\\Assets\\Texture2D\\sactx-0-512x512-DXT5_BC3-BarrierTrap_FireParticles-5c48d25f.png",
       "sourceGuid": "17fb7d74d9b873f4c88fb676c7d06817",
       "sourceSha256": "214881abc3ca75d140289e47d275446c405e1e2ac233457c56bbb1f655769832",
@@ -7613,7 +8762,6 @@
     }
   ],
   "deferred": [
-    "E8 LostSoul body",
     "E9 Ghoul body"
   ],
   "excluded": [

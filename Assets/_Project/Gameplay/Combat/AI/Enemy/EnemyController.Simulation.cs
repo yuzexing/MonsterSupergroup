@@ -49,6 +49,7 @@ namespace AstralShift.HellMaiden.AI.Enemy
         {
             var state = simulationAction;
             if (attackScript is EnemyAttackDash dash) dash.CaptureDashState(ref state);
+            if (attackScript is EnemyAttackExplosion explosion) explosion.CaptureExplosion(ref state);
             if (attackScript is EnemyProjectileAttack projectile && projectile.NetworkExecution != null)
             {
                 state.ProjectileDirection = projectile.LockedDirection;
@@ -68,6 +69,7 @@ namespace AstralShift.HellMaiden.AI.Enemy
         public void SuspendSimulationExecution()
         {
             if (attackScript is EnemyAttackMelee melee) melee.SuspendSimulation();
+            if (attackScript is EnemyAttackExplosion explosion) explosion.SuspendExplosion();
             if (attackScript is EnemyProjectileAttack projectile) projectile.NetworkExecution?.CancelCharge();
             // Do not execute Knockback.onExit or a deferred melee collision when giving up a lease.
             if (_networkKnockbackMovement != null) _networkKnockbackMovement.CancelKnockback();
@@ -91,9 +93,11 @@ namespace AstralShift.HellMaiden.AI.Enemy
             simulationAction.Phase = phase;
             CurrentAttackPresentationPhase = phase;
             lastAttackTime = (float)(Time.time + Math.Max(0, state.NextAttackAt - now) - attackCooldown);
+            bool awaitingExplosionDisposal = attackScript is EnemyAttackExplosion && state.Explosion && state.ActionId != 0 &&
+                phase == EnemyAttackPresentationPhase.Inactive && (state.SelfDestructPending || state.Phase == EnemyAttackPresentationPhase.Warning);
             var fsmState = phase == EnemyAttackPresentationPhase.Warning ? Warning :
                 phase == EnemyAttackPresentationPhase.Active ? Attacking :
-                phase == EnemyAttackPresentationPhase.Recovery ? Recovery : Moving;
+                phase == EnemyAttackPresentationPhase.Recovery || awaitingExplosionDisposal ? Recovery : Moving;
             _stateMachine.RestoreStateNoCallbacks(fsmState);
             previousFacingDirection = state.Facing.sqrMagnitude > .0001f ? state.Facing : Vector2.right;
             Movement.SetFacingDirection(previousFacingDirection);
@@ -105,6 +109,7 @@ namespace AstralShift.HellMaiden.AI.Enemy
             attackScript.RestoreSimulationTimers((float)(now - state.WarningStartedAt),
                 (float)(now - state.WarningUntil), (float)(now - state.ActiveUntil));
             if (attackScript is EnemyAttackDash dash) dash.RestoreDashState(state);
+            if (attackScript is EnemyAttackExplosion explosion) explosion.RestoreExplosion(state, phase, now, true);
             if (attackScript is EnemyAttackMelee melee)
                 melee.RestoreSimulation(phase, previousFacingDirection, (float)Math.Max(0, state.EndAt(phase) - now));
             if (attackScript is EnemyProjectileAttack projectile) projectile.RestoreProjectileSimulation(state, phase);

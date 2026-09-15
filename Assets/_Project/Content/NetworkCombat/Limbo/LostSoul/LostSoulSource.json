@@ -1,0 +1,409 @@
+{
+  "schemaVersion": 1,
+  "sourceSha256": "4dcefbcae22fb6e8cd067618cd0ba782eb5a23d07b20a31a3ecf3323cd6d5c38",
+  "identity": "LostSoul",
+  "controllerId": "o00037",
+  "attackId": "o00188",
+  "animatorId": "o00192",
+  "cooldown": 1.0,
+  "triggerDistance": 2.0,
+  "chaseSpeed": 6.2,
+  "extraStageTimes": {
+    "warningTime": 0.0,
+    "attackTime": 0.0,
+    "recoveryTime": 0.0
+  },
+  "bindings": [
+    {
+      "field": "attackLeftDown",
+      "sourceClip": "LostSoul_attack_left",
+      "length": 0.146666661,
+      "speed": 1.0,
+      "fade": 0.25,
+      "normalizedStart": "NaN",
+      "eventTimes": [
+        "0.0",
+        "NaN"
+      ]
+    },
+    {
+      "field": "attackLeftUp",
+      "sourceClip": "LostSoul_attack_left",
+      "length": 0.146666661,
+      "speed": 1.0,
+      "fade": 0.25,
+      "normalizedStart": "NaN",
+      "eventTimes": [
+        "0.0",
+        "NaN"
+      ]
+    },
+    {
+      "field": "attackRightDown",
+      "sourceClip": "LostSoul_attack_right",
+      "length": 0.146666661,
+      "speed": 1.0,
+      "fade": 0.25,
+      "normalizedStart": "NaN",
+      "eventTimes": [
+        "0.0",
+        "NaN"
+      ]
+    },
+    {
+      "field": "attackRightUp",
+      "sourceClip": "LostSoul_attack_right",
+      "length": 0.146666661,
+      "speed": 1.0,
+      "fade": 0.25,
+      "normalizedStart": "NaN",
+      "eventTimes": [
+        "0.0",
+        "NaN"
+      ]
+    },
+    {
+      "field": "attackWarningLeftDown",
+      "sourceClip": "LostSoul_attackWarning_left",
+      "length": 1.0333333,
+      "speed": 1.0,
+      "fade": 0.25,
+      "normalizedStart": "NaN",
+      "eventTimes": [
+        "0.0",
+        "NaN"
+      ]
+    },
+    {
+      "field": "attackWarningLeftUp",
+      "sourceClip": "LostSoul_attackWarning_left",
+      "length": 1.0333333,
+      "speed": 1.0,
+      "fade": 0.25,
+      "normalizedStart": "NaN",
+      "eventTimes": [
+        "0.0",
+        "NaN"
+      ]
+    },
+    {
+      "field": "attackWarningRightDown",
+      "sourceClip": "LostSoul_attackWarning_right",
+      "length": 1.0333333,
+      "speed": 1.0,
+      "fade": 0.25,
+      "normalizedStart": "NaN",
+      "eventTimes": [
+        "0.0",
+        "NaN"
+      ]
+    },
+    {
+      "field": "attackWarningRightUp",
+      "sourceClip": "LostSoul_attackWarning_right",
+      "length": 1.0333333,
+      "speed": 1.0,
+      "fade": 0.25,
+      "normalizedStart": "NaN",
+      "eventTimes": [
+        "0.0",
+        "NaN"
+      ]
+    },
+    {
+      "field": "recoveryLeftDown",
+      "sourceClip": "LostSoul_attackRecovery_left",
+      "length": 0.75333333,
+      "speed": 1.0,
+      "fade": 0.25,
+      "normalizedStart": "NaN",
+      "eventTimes": []
+    },
+    {
+      "field": "recoveryLeftUp",
+      "sourceClip": "LostSoul_attackRecovery_left",
+      "length": 0.75333333,
+      "speed": 1.0,
+      "fade": 0.25,
+      "normalizedStart": "NaN",
+      "eventTimes": []
+    },
+    {
+      "field": "recoveryRightDown",
+      "sourceClip": "LostSoul_attackRecovery_right",
+      "length": 0.75333333,
+      "speed": 1.0,
+      "fade": 0.25,
+      "normalizedStart": "NaN",
+      "eventTimes": []
+    },
+    {
+      "field": "recoveryRightUp",
+      "sourceClip": "LostSoul_attackRecovery_right",
+      "length": 0.75333333,
+      "speed": 1.0,
+      "fade": 0.25,
+      "normalizedStart": "NaN",
+      "eventTimes": []
+    }
+  ],
+  "geometry": [
+    {
+      "group": "body",
+      "path": "Collider",
+      "type": "CircleCollider2D",
+      "objectId": "o00189",
+      "enabled": true,
+      "trigger": false,
+      "offset": [
+        0.0,
+        0.3
+      ],
+      "radius": 0.34,
+      "size": null,
+      "polygons": []
+    },
+    {
+      "group": "body",
+      "path": "ExplosionPosition",
+      "type": "Transform",
+      "objectId": "o00521",
+      "localPosition": [
+        0.0,
+        1.74000025,
+        0.0
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    },
+    {
+      "group": "body",
+      "path": "HurtBox",
+      "type": "BoxCollider2D",
+      "objectId": "o00543",
+      "enabled": true,
+      "trigger": false,
+      "offset": [
+        0.0,
+        0.72
+      ],
+      "radius": null,
+      "size": [
+        1.2,
+        1.5
+      ],
+      "polygons": []
+    },
+    {
+      "group": "body",
+      "path": "",
+      "type": "Transform",
+      "objectId": "o00551",
+      "localPosition": [
+        -12.69,
+        2.65,
+        0.0
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    },
+    {
+      "group": "body",
+      "path": "Collider",
+      "type": "Transform",
+      "objectId": "o00744",
+      "localPosition": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    },
+    {
+      "group": "body",
+      "path": "HurtBox",
+      "type": "Transform",
+      "objectId": "o00754",
+      "localPosition": [
+        0.0,
+        1.6500001,
+        0.0
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    },
+    {
+      "group": "explosion",
+      "path": "Collider",
+      "type": "Transform",
+      "objectId": "o00867",
+      "localPosition": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "localScale": [
+        0.5,
+        0.5,
+        0.5
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    },
+    {
+      "group": "explosion",
+      "path": "Collider",
+      "type": "PolygonCollider2D",
+      "objectId": "o00868",
+      "enabled": true,
+      "trigger": true,
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "radius": null,
+      "size": null,
+      "polygons": [
+        {
+          "points": [
+            {
+              "x": 2.92970228,
+              "y": -0.10877271
+            },
+            {
+              "x": 2.156255,
+              "y": 0.4715116
+            },
+            {
+              "x": 0.06630516,
+              "y": 1.12535381
+            },
+            {
+              "x": -2.43032217,
+              "y": 0.30802083
+            },
+            {
+              "x": -4.01883554,
+              "y": -1.73886919
+            },
+            {
+              "x": -3.34620976,
+              "y": -3.64212656
+            },
+            {
+              "x": -0.0563068464,
+              "y": -5.04151535
+            },
+            {
+              "x": 2.75006223,
+              "y": -4.08770943
+            },
+            {
+              "x": 4.177516,
+              "y": -1.90998375
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "group": "explosion",
+      "path": "",
+      "type": "Transform",
+      "objectId": "o00871",
+      "localPosition": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  ],
+  "variants": [
+    {
+      "variant": 0,
+      "variantName": "lvl1",
+      "baseValues": {
+        "damage": 50,
+        "hp": 150,
+        "knockbackMultiplier": 1.0,
+        "speed": 3.6,
+        "stunTime": 0.0,
+        "windMultiplier": 1.0,
+        "xp": 7.0
+      },
+      "sourceDatabase": "o00041"
+    },
+    {
+      "variant": 1,
+      "variantName": "lvl2",
+      "baseValues": {
+        "damage": 50,
+        "hp": 250,
+        "knockbackMultiplier": 1.0,
+        "speed": 3.6,
+        "stunTime": 0.0,
+        "windMultiplier": 1.0,
+        "xp": 7.0
+      },
+      "sourceDatabase": "o00041"
+    }
+  ],
+  "previewEnd": 449.9166666666667,
+  "differences": [
+    "Server-authoritative no-reward disposal replaces local Kill(true,false).",
+    "Current Stats rebound on every borrow/reset/restore; cancellation cleans resources without entering another attack.",
+    "Original visual dependencies with existing AllIn1 shader adaptation; no original audio."
+  ]
+}

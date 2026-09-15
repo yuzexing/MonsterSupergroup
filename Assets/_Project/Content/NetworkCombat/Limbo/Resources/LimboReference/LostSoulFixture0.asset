@@ -1,0 +1,109 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0194c331ab8b4f459eb7364cb9c36838, type: 3}
+  m_Name: LostSoulFixture0
+  m_EditorClassIdentifier: MonsterSupergroup.NetworkCombat::MonsterSupergroup.NetworkCombat.GameplayWaveRules
+  waveDuration: 30
+  timeline: {fileID: 11400000, guid: 53b44c67451030443b59d3db0134ff8f, type: 2}
+  maximumAlive: 1000
+  spawnRadius: 5
+  minimumPlayerDistance: 2
+  positionAttempts: 100
+  referenceStage: 1
+  referenceValidationOnly: 1
+  referenceEnemies: {fileID: 11400000, guid: 9c334089fb87dee41bbfd5eb1b05b3b9, type: 2}
+  referenceEndTime: 155
+  referenceSourceDuration: 841.5766649882
+  referenceXpCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 1.9692848
+      outSlope: 1.9692848
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 0.04986681
+      value: 0.105
+      inSlope: 2.4374697
+      outSlope: 2.4374697
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 0.100357614
+      value: 0.27111122
+      inSlope: 1.9552935
+      outSlope: 1.9552935
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 0.25001281
+      value: 0.42674306
+      inSlope: 0.8306871
+      outSlope: 0.8306871
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 0.5000348
+      value: 0.5960963
+      inSlope: 0.72148335
+      outSlope: 0.72148335
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 0.75143737
+      value: 0.7815832
+      inSlope: 0.81638145
+      outSlope: 0.81638145
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  referenceXpAmplitude: 1.5
+  referenceSeed: 14301
+  offscreenDistance: 2
+  repositionDistance: 1.5
+  repositionGrace: 30
+  offscreenTimeout: 5
+  maximumOffscreenDistance: 20
+  burstRadius: 6
+  burstAspect: 1.41
+  effectsDelay: 1
+  activationDelay: 1
+  barriers: []
+  referenceFormationWarning: {fileID: 3045355958693970700, guid: b06ee00771d73cc4283d615ea00ab698, type: 3}
+  referenceBarrier: {fileID: 1194541754668854216, guid: f1088dc4d55ee1b499163bc181513510, type: 3}
+  referenceBarrierEntryScale: 0.25

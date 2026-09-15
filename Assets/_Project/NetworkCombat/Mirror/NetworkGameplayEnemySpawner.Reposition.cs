@@ -12,6 +12,15 @@ namespace MonsterSupergroup.NetworkCombat
         private readonly List<NetworkEnemySimulationAgent> repositionCandidates = new List<NetworkEnemySimulationAgent>();
         private readonly List<Bounds> referenceParticipantViews = new List<Bounds>();
 
+        [Server]
+        public void RecordReferenceSelfDestruct(NetworkEnemySimulationAgent enemy)
+        {
+            if (enemy == null || !enemy.Birth.Enabled) return;
+            var birth = enemy.Birth;
+            referenceTrace?.WriteLine(FormattableString.Invariant($"{schedule.State.Elapsed:R},self-destruct,{birth.ClipIndex},{birth.SourceEnemy},{birth.Variant},,,{enemy.netId},NoXp,,,,,,,,"));
+            referenceObserved.Remove(enemy.netId); offscreenSince.Remove(enemy.netId);
+        }
+
         private void UpdateReferenceReposition()
         {
             var reference = settings.Reference;

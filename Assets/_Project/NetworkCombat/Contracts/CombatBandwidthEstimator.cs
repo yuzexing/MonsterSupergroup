@@ -12,6 +12,7 @@ namespace MonsterSupergroup.NetworkCombat
         public const int PlayerHealthReportBytes = 33;
         public const int BatchAndArrayHeadersBytes = 16;
         public const int EnemyActionProjectileProgressBytes = 9;
+        public const int EnemyActionDashProgressBytes = 33; // Boolean plus four Vector2 values in the existing checkpoint.
 
         // Projectile-only batches. Mirror uses variable-length integer and array writers.
         // Checkpoints contain a variable number of knockback receipts, measured separately.
@@ -22,11 +23,11 @@ namespace MonsterSupergroup.NetworkCombat
                 Mirror.Compression.VarUIntSize(batch.ProjectileTerminations == null ? 0 : (ulong)batch.ProjectileTerminations.Length + 1) + totalCheckpointBytes;
             if (batch.ProjectileLaunches != null)
                 foreach (var launch in batch.ProjectileLaunches)
-                    bytes += 34 + Mirror.Compression.VarUIntSize(launch.Key.EnemyEntityId) + Mirror.Compression.VarUIntSize(launch.Key.ActionId) +
-                        Mirror.Compression.VarUIntSize(launch.AssignmentEpoch) + Mirror.Compression.VarUIntSize(launch.EnemyPrefabAssetId) + Mirror.Compression.VarIntSize(launch.Damage);
+                    bytes += 43 + Mirror.Compression.VarUIntSize(launch.Key.EnemyEntityId) + Mirror.Compression.VarUIntSize(launch.Key.ActionId) +
+                        Mirror.Compression.VarUIntSize(launch.AssignmentEpoch) + Mirror.Compression.VarUIntSize(launch.EnemyPrefabAssetId) + Mirror.Compression.VarIntSize(launch.Damage) + Mirror.Compression.VarUIntSize(launch.ViewTargetPlayerId);
             if (batch.ProjectileTerminations != null)
                 foreach (var terminal in batch.ProjectileTerminations)
-                    bytes += 3 + Mirror.Compression.VarUIntSize(terminal.Key.EnemyEntityId) + Mirror.Compression.VarUIntSize(terminal.Key.ActionId);
+                    bytes += 3 + Mirror.Compression.VarUIntSize(terminal.Key.EnemyEntityId) + Mirror.Compression.VarUIntSize(terminal.Key.ActionId) + Mirror.Compression.VarUIntSize(terminal.TargetPlayerId);
             return bytes;
         }
 

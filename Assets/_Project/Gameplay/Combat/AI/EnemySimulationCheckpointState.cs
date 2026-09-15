@@ -12,6 +12,8 @@ namespace AstralShift.HellMaiden.AI
         public Vector2 Facing, TargetPosition;
         public Vector2 ProjectileDirection;
         public bool ProjectileEmitted;
+        public bool Dash;
+        public Vector2 DashStart, DashEnd, DashLastPosition, DashWarningOrigin;
 
         public EnemyAttackPresentationPhase PhaseAt(double now)
         {

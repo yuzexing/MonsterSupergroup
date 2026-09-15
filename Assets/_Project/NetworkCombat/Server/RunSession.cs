@@ -155,6 +155,13 @@ namespace MonsterSupergroup.NetworkCombat
             return true;
         }
 
+        public bool TryCompleteStage()
+        {
+            if (!IsRunStarted || IsRunEnded) return false;
+            IsRunEnded = true;
+            return true;
+        }
+
         public void BeginNextRound()
         {
             if (!IsRunEnded) throw new InvalidOperationException("Only an ended run can be replaced.");

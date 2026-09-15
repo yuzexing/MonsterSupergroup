@@ -25,10 +25,12 @@ namespace AstralShift.HellMaiden.Interactions
 		public EnemyStats enemyStats;
 
 		public DamageType damageType;
+        public static event System.Action<PlayerDamageInteraction, PlayerMovement, int> DamageAttempted;
         private bool localProjectileMode, localProjectileConsumed;
         private System.Action localProjectileHit;
+        private System.Action<PlayerHitbox> requestProjectileHit;
 
-        public void ConfigureLocalProjectile(int amount, float stun, System.Action onHit)
+        public void ConfigureLocalProjectile(int amount, float stun, System.Action onHit, System.Action<PlayerHitbox> requestHit = null)
         {
             DiscardPendingCollisions();
             localProjectileMode = true;
@@ -36,6 +38,7 @@ namespace AstralShift.HellMaiden.Interactions
             directDamage = true; damage = amount; stunTime = stun; enemyStats = null;
             damageType = DamageType.Projectile;
             localProjectileHit = onHit;
+            requestProjectileHit = requestHit;
             FlushPendingCollisionsOnDisable = false;
         }
 
@@ -59,6 +62,7 @@ namespace AstralShift.HellMaiden.Interactions
                 if (!isActiveAndEnabled || localProjectileConsumed ||
                     !interactor.Transform.TryGetComponent<PlayerHitbox>(out var localHitbox) || !localHitbox.IsLocallyControlled) return;
                 localProjectileConsumed = true;
+                if (requestProjectileHit != null) { requestProjectileHit(localHitbox); return; }
                 DamagePlayer(localHitbox);
                 // Remote hitboxes never reach OnEnd (which consumes the legacy bullet).
                 localProjectileHit?.Invoke();
@@ -137,6 +141,7 @@ namespace AstralShift.HellMaiden.Interactions
 				{
 					resolvedDamage = (int)((float)resolvedDamage * enemyStats.DamageMultiplier);
 				}
+                DamageAttempted?.Invoke(this, player, resolvedDamage);
 				player.Damage(resolvedDamage, damageType);
 				if (stunTime != 0f)
 				{
@@ -149,6 +154,7 @@ namespace AstralShift.HellMaiden.Interactions
 			}
 			else
 			{
+                DamageAttempted?.Invoke(this, player, enemyStats.Damage);
 				player.Damage(enemyStats.Damage, damageType);
 				if (enemyStats.StunTime != 0f)
 				{
@@ -178,6 +184,15 @@ namespace AstralShift.HellMaiden.Interactions
 			_collidedPlayerHitboxes.Clear();
 			_collidedTransforms.Clear();
 		}
+
+        // A normal window boundary settles contacts that occurred while the window was open.
+        // Death, authority loss and cancellation must continue to call DiscardPendingCollisions.
+        public void SettlePendingCollisions()
+        {
+            if (_collisionCheckCoroutine != null) StopCoroutine(_collisionCheckCoroutine);
+            _collisionCheckCoroutine = null;
+            if (_collidedPlayerHitboxes.Count > 0 || _collidedTransforms.Count > 0) VerifyCollisions();
+        }
 
 		private void VerifyCollisions()
 		{

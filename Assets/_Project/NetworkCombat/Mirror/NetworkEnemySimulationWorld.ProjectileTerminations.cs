@@ -17,7 +17,8 @@ namespace MonsterSupergroup.NetworkCombat
 
         private void EndLocalEnemyProjectile(EnemyProjectileKey key, EnemyProjectileEndReason reason, bool unexpectedDisable = false)
         {
-            if (!NetworkClient.active || endedProjectiles.Contains(key, NetworkTime.time)) return;
+            if (!NetworkClient.active || endedProjectiles.Contains(key, EnemySimulationClock.CombatNow)) return;
+            if (clientReferenceFlights.ContainsKey(key)) return; // Server owns reference termination.
             var terminal = new EnemyProjectileTermination { Key = key, Reason = reason };
             if (unexpectedDisable && liveProjectiles.TryGetValue(key, out var disabled))
             {
@@ -31,22 +32,26 @@ namespace MonsterSupergroup.NetworkCombat
         internal void CollectClientProjectileTerminations(List<EnemyProjectileTermination> output)
         { output.Clear(); output.AddRange(pendingClientTerminations); pendingClientTerminations.Clear(); }
 
-        private void SubmitEnemyProjectileTerminations(EnemyProjectileTermination[] values)
+        private void SubmitEnemyProjectileTerminations(uint sender, EnemyProjectileTermination[] values)
         {
             if (values == null) return;
             var expired = new List<EnemyProjectileKey>();
-            foreach (var item in pendingServerTerminations) if (item.Value.expires <= NetworkTime.time) expired.Add(item.Key);
+            foreach (var item in pendingServerTerminations) if (item.Value.expires <= EnemySimulationClock.CombatNow) expired.Add(item.Key);
             foreach (var key in expired) pendingServerTerminations.Remove(key);
             foreach (var value in values)
             {
-                if (!value.IsValid || acceptedTerminations.Contains(value.Key, NetworkTime.time)) continue;
-                if (acceptedProjectiles.Contains(value.Key, NetworkTime.time)) ConfirmEnemyProjectileTermination(value);
-                else if (pendingServerTerminations.Count < 4096) pendingServerTerminations[value.Key] = (value, NetworkTime.time + 5);
+                if (!value.IsValid || acceptedTerminations.Contains(value.Key, EnemySimulationClock.CombatNow) ||
+                    value.TargetPlayerId != 0 && value.TargetPlayerId != sender) continue;
+                if (serverReferenceFlights.ContainsKey(value.Key) || referenceLaunchHistory.Contains(value.Key, EnemySimulationClock.CombatNow))
+                { AcceptReferenceProjectileHit(value); continue; }
+                if (acceptedProjectiles.Contains(value.Key, EnemySimulationClock.CombatNow)) ConfirmEnemyProjectileTermination(value);
+                else if (pendingServerTerminations.Count < 4096) pendingServerTerminations[value.Key] = (value, EnemySimulationClock.CombatNow + 5);
             }
         }
         private void ConfirmEnemyProjectileTermination(EnemyProjectileTermination value)
         {
-            if (!acceptedTerminations.Add(value.Key, NetworkTime.time)) return;
+            if (!acceptedTerminations.Add(value.Key, EnemySimulationClock.CombatNow)) return;
+            serverReferenceFlights.Remove(value.Key);
             AcceptedProjectileTerminationCount++;
             RpcApplyAttackPresentations(new EnemyAttackPresentationBatch { Round = CurrentRound, ProjectileTerminations = new[] { value } });
         }
@@ -55,12 +60,17 @@ namespace MonsterSupergroup.NetworkCombat
             if (pendingServerTerminations.TryGetValue(key, out var pending))
             {
                 pendingServerTerminations.Remove(key);
-                if (pending.expires > NetworkTime.time) ConfirmEnemyProjectileTermination(pending.value);
+                if (pending.expires > EnemySimulationClock.CombatNow)
+                {
+                    if (referenceLaunchHistory.Contains(key, EnemySimulationClock.CombatNow)) AcceptReferenceProjectileHit(pending.value);
+                    else ConfirmEnemyProjectileTermination(pending.value);
+                }
             }
         }
         public bool ApplyEnemyProjectileTermination(EnemyProjectileTermination value)
         {
-            if (!value.IsValid || !endedProjectiles.Add(value.Key, NetworkTime.time)) return false;
+            if (!value.IsValid || !endedProjectiles.Add(value.Key, EnemySimulationClock.CombatNow)) return false;
+            clientReferenceFlights.Remove(value.Key);
             if (liveProjectiles.TryGetValue(value.Key, out var bullet))
             {
                 liveProjectiles.Remove(value.Key);

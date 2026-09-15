@@ -12,6 +12,31 @@ namespace MonsterSupergroup.HellMaidenMigration.Tests
 {
     public sealed class OvidSummonNativeGasMigrationTests
     {
+        [Test]
+        public void BirthGlowColorUsesFourColorChannelsInsteadOfExportedScalarPlaceholders()
+        {
+            var clip = AssetDatabase.LoadAssetAtPath<AnimationClip>(OvidSummonNativeGasMigration.BirthClipPath);
+            var bindings = AnimationUtility.GetCurveBindings(clip);
+            foreach (string channel in new[] { "r", "g", "b", "a" })
+            {
+                Assert.That(bindings.Count(binding => binding.path == "Caccon/CacoonSort/cacoon" &&
+                    binding.propertyName == "material._GlowColor." + channel), Is.EqualTo(1), channel);
+            }
+            Assert.That(bindings.Any(binding => binding.propertyName.Contains("C4EFF0C")), Is.False);
+        }
+
+        [Test]
+        public void RepairingBirthMaterialBindingsAgainPreservesTheSerializedClipAndGuid()
+        {
+            string path = OvidSummonNativeGasMigration.BirthClipPath;
+            byte[] before = System.IO.File.ReadAllBytes(path);
+            string guid = AssetDatabase.AssetPathToGUID(path);
+            OvidSummonNativeGasMigration.RepairBirthMaterialBindings();
+            OvidSummonNativeGasMigration.RepairBirthMaterialBindings();
+            Assert.That(System.IO.File.ReadAllBytes(path), Is.EqualTo(before));
+            Assert.That(AssetDatabase.AssetPathToGUID(path), Is.EqualTo(guid));
+        }
+
         [TestCase(OvidSummonNativeGasMigration.DefaultAttackPath)]
         [TestCase(OvidSummonNativeGasMigration.FireAttackPath)]
         [TestCase(OvidSummonNativeGasMigration.PoisonAttackPath)]

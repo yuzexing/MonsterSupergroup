@@ -1,0 +1,715 @@
+{
+  "schemaVersion": 1,
+  "sourceSha256": "4dcefbcae22fb6e8cd067618cd0ba782eb5a23d07b20a31a3ecf3323cd6d5c38",
+  "identity": "Brotchi_Dash",
+  "controllerId": "o00004",
+  "attackId": "o00061",
+  "animatorId": "o00065",
+  "cooldown": 0.5,
+  "triggerDistance": 5.0,
+  "stopForAttack": true,
+  "extraStageTimes": {
+    "warningTime": 0.5,
+    "attackTime": 0.0,
+    "recoveryTime": 0.0
+  },
+  "bindings": [
+    {
+      "field": "attackLeftDown",
+      "sourceClip": "brochipink_attackmoment_left",
+      "length": 0.429999948,
+      "speed": 1.0,
+      "fade": 0.25,
+      "normalizedStart": "NaN",
+      "eventTimes": [
+        "0.0",
+        "NaN"
+      ]
+    },
+    {
+      "field": "attackLeftUp",
+      "sourceClip": "brochipink_attackmoment_left",
+      "length": 0.429999948,
+      "speed": 1.0,
+      "fade": 0.25,
+      "normalizedStart": "NaN",
+      "eventTimes": [
+        "0.0",
+        "NaN"
+      ]
+    },
+    {
+      "field": "attackRightDown",
+      "sourceClip": "brochipink_attackmoment_rigth",
+      "length": 0.429999948,
+      "speed": 1.0,
+      "fade": 0.25,
+      "normalizedStart": "NaN",
+      "eventTimes": [
+        "0.0",
+        "NaN"
+      ]
+    },
+    {
+      "field": "attackRightUp",
+      "sourceClip": "brochipink_attackmoment_rigth",
+      "length": 0.429999948,
+      "speed": 1.0,
+      "fade": 0.25,
+      "normalizedStart": "NaN",
+      "eventTimes": [
+        "0.0",
+        "NaN"
+      ]
+    },
+    {
+      "field": "attackWarningLeftDown",
+      "sourceClip": "brochipink_warning_left",
+      "length": 0.28,
+      "speed": 1.0,
+      "fade": 0.25,
+      "normalizedStart": "NaN",
+      "eventTimes": [
+        "0.0",
+        "NaN"
+      ]
+    },
+    {
+      "field": "attackWarningLeftUp",
+      "sourceClip": "brochipink_warning_left",
+      "length": 0.28,
+      "speed": 1.0,
+      "fade": 0.25,
+      "normalizedStart": "NaN",
+      "eventTimes": [
+        "0.0",
+        "NaN"
+      ]
+    },
+    {
+      "field": "attackWarningRightDown",
+      "sourceClip": "brochipink_Warning_right",
+      "length": 0.28,
+      "speed": 1.0,
+      "fade": 0.25,
+      "normalizedStart": "NaN",
+      "eventTimes": [
+        "0.0",
+        "NaN"
+      ]
+    },
+    {
+      "field": "attackWarningRightUp",
+      "sourceClip": "brochipink_Warning_right",
+      "length": 0.28,
+      "speed": 1.0,
+      "fade": 0.25,
+      "normalizedStart": "NaN",
+      "eventTimes": [
+        "0.0",
+        "NaN"
+      ]
+    },
+    {
+      "field": "recoveryLeftDown",
+      "sourceClip": "brochipink_recovery_left",
+      "length": 0.08,
+      "speed": 1.0,
+      "fade": 0.25,
+      "normalizedStart": "NaN",
+      "eventTimes": []
+    },
+    {
+      "field": "recoveryLeftUp",
+      "sourceClip": "brochipink_recovery_left",
+      "length": 0.08,
+      "speed": 1.0,
+      "fade": 0.25,
+      "normalizedStart": "NaN",
+      "eventTimes": []
+    },
+    {
+      "field": "recoveryRightDown",
+      "sourceClip": "brochipink_recovery_right",
+      "length": 0.08,
+      "speed": 1.0,
+      "fade": 0.25,
+      "normalizedStart": "NaN",
+      "eventTimes": []
+    },
+    {
+      "field": "recoveryRightUp",
+      "sourceClip": "brochipink_recovery_right",
+      "length": 0.08,
+      "speed": 1.0,
+      "fade": 0.25,
+      "normalizedStart": "NaN",
+      "eventTimes": []
+    }
+  ],
+  "distance": 6.0,
+  "homing": false,
+  "returnToStart": false,
+  "movementCurve": [
+    {
+      "time": 0.0,
+      "value": 0.0,
+      "inTangent": 2.0,
+      "outTangent": 2.0,
+      "inWeight": 0.0,
+      "outWeight": 0.0,
+      "weightedMode": "None"
+    },
+    {
+      "time": 1.0,
+      "value": 1.0,
+      "inTangent": 0.0,
+      "outTangent": 0.0,
+      "inWeight": 0.0,
+      "outWeight": 0.0,
+      "weightedMode": "None"
+    }
+  ],
+  "exclusionMask": 64,
+  "exclusionMaskSource": {
+    "path": "F:\\DecomplieLatest\\HellMaiden\\ExportedProject\\Assets\\GameObject\\Enemy_Brotchi_LVL2.prefab",
+    "sha256": "928ac4706e6e941ddc2e0852aba799cf6bcdb99c01aa5c83e725dfb52fba48b9"
+  },
+  "variants": [
+    {
+      "variant": 0,
+      "variantName": "lvl1",
+      "baseValues": {
+        "damage": 50,
+        "hp": 70,
+        "knockbackMultiplier": 1.0,
+        "speed": 6.0,
+        "stunTime": 0.0,
+        "windMultiplier": 1.0,
+        "xp": 7.0
+      },
+      "sourceDatabase": "o00041"
+    },
+    {
+      "variant": 1,
+      "variantName": "lvl2",
+      "baseValues": {
+        "damage": 80,
+        "hp": 180,
+        "knockbackMultiplier": 1.0,
+        "speed": 6.0,
+        "stunTime": 0.0,
+        "windMultiplier": 1.0,
+        "xp": 7.0
+      },
+      "sourceDatabase": "o00041"
+    }
+  ],
+  "geometry": [
+    {
+      "objectId": "o00062",
+      "arrow": false,
+      "path": "Collider",
+      "type": "CircleCollider2D",
+      "enabled": true,
+      "trigger": false,
+      "offset": [
+        0.0,
+        0.3
+      ],
+      "radius": 0.46,
+      "size": null,
+      "paths": []
+    },
+    {
+      "objectId": "o00269",
+      "arrow": false,
+      "path": "AttackCollider",
+      "type": "CircleCollider2D",
+      "enabled": true,
+      "trigger": true,
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "radius": 0.55,
+      "size": null,
+      "paths": []
+    },
+    {
+      "objectId": "o00295",
+      "arrow": false,
+      "path": "HurtBox",
+      "type": "BoxCollider2D",
+      "enabled": true,
+      "trigger": false,
+      "offset": [
+        0.0,
+        0.72
+      ],
+      "radius": null,
+      "size": [
+        1.2,
+        1.5
+      ],
+      "paths": []
+    },
+    {
+      "objectId": "o00303",
+      "arrow": false,
+      "path": "",
+      "type": "Transform",
+      "localPosition": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    },
+    {
+      "objectId": "o00583",
+      "arrow": false,
+      "path": "Collider",
+      "type": "Transform",
+      "localPosition": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    },
+    {
+      "objectId": "o00592",
+      "arrow": false,
+      "path": "HurtBox",
+      "type": "Transform",
+      "localPosition": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    },
+    {
+      "objectId": "o00596",
+      "arrow": false,
+      "path": "AttackCollider",
+      "type": "Transform",
+      "localPosition": [
+        0.0,
+        0.46,
+        0.0
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    },
+    {
+      "objectId": "o00774",
+      "arrow": true,
+      "path": "",
+      "type": "Transform",
+      "localPosition": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    },
+    {
+      "objectId": "o00884",
+      "arrow": true,
+      "path": "Collider",
+      "type": "Transform",
+      "localPosition": [
+        -0.2,
+        0.0,
+        0.0
+      ],
+      "localScale": [
+        1.5,
+        1.5,
+        1.5
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    },
+    {
+      "objectId": "o00885",
+      "arrow": true,
+      "path": "Collider",
+      "type": "PolygonCollider2D",
+      "enabled": false,
+      "trigger": true,
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "radius": null,
+      "size": null,
+      "paths": [
+        [
+          [
+            -2.5306344,
+            0.00717391074
+          ],
+          [
+            -2.61824346,
+            0.0637535751
+          ],
+          [
+            -3.0876236,
+            -0.00575497746
+          ],
+          [
+            -2.61358571,
+            -0.101730138
+          ]
+        ]
+      ]
+    },
+    {
+      "objectId": "o00887",
+      "arrow": true,
+      "path": "SlimePath",
+      "type": "Transform",
+      "localPosition": [
+        -1.26,
+        0.0,
+        0.0
+      ],
+      "localScale": [
+        1.5,
+        1.5,
+        1.5
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    },
+    {
+      "objectId": "o00951",
+      "arrow": true,
+      "path": "SlimePath/Arrow_Indicator_V3/Arrow",
+      "type": "Transform",
+      "localPosition": [
+        -0.682,
+        0.0,
+        0.0
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    },
+    {
+      "objectId": "o00953",
+      "arrow": true,
+      "path": "SlimePath/Collider",
+      "type": "Transform",
+      "localPosition": [
+        3.139,
+        0.0,
+        0.0
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    },
+    {
+      "objectId": "o00954",
+      "arrow": true,
+      "path": "SlimePath/Collider",
+      "type": "PolygonCollider2D",
+      "enabled": false,
+      "trigger": true,
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "radius": null,
+      "size": null,
+      "paths": [
+        [
+          [
+            -2.5306344,
+            0.00717391074
+          ],
+          [
+            -2.61824346,
+            0.0637535751
+          ],
+          [
+            -3.0876236,
+            -0.00575497746
+          ],
+          [
+            -2.61358571,
+            -0.101730138
+          ]
+        ]
+      ]
+    },
+    {
+      "objectId": "o00957",
+      "arrow": true,
+      "path": "SlimePath/Arrow_Indicator_V3",
+      "type": "Transform",
+      "localPosition": [
+        1.353,
+        0.046,
+        0.0
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    },
+    {
+      "objectId": "o00960",
+      "arrow": true,
+      "path": "SlimePath/AOEwarningFMA",
+      "type": "Transform",
+      "localPosition": [
+        -0.460999846,
+        0.048,
+        0.0
+      ],
+      "localScale": [
+        0.9875,
+        0.913437545,
+        0.9875
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    },
+    {
+      "objectId": "o00965",
+      "arrow": true,
+      "path": "SlimePath/arrow white fleur de lis",
+      "type": "Transform",
+      "localPosition": [
+        0.985,
+        0.033,
+        -1.0
+      ],
+      "localScale": [
+        -0.2662,
+        -0.2662,
+        -0.2662
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    },
+    {
+      "objectId": "o00967",
+      "arrow": true,
+      "path": "SlimePath/arrow white fleur de lis (1)",
+      "type": "Transform",
+      "localPosition": [
+        0.985,
+        0.033,
+        -1.0
+      ],
+      "localScale": [
+        -0.2662,
+        -0.2662,
+        -0.2662
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    },
+    {
+      "objectId": "o00969",
+      "arrow": true,
+      "path": "SlimePath/arrow white fleur de lis (2)",
+      "type": "Transform",
+      "localPosition": [
+        0.985,
+        0.033,
+        -1.0
+      ],
+      "localScale": [
+        -0.2662,
+        -0.2662,
+        -0.2662
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    },
+    {
+      "objectId": "o01032",
+      "arrow": true,
+      "path": "SlimePath/AOEwarningFMA/Fill",
+      "type": "Transform",
+      "localPosition": [
+        3.04,
+        0.0,
+        0.0
+      ],
+      "localScale": [
+        0.61109,
+        0.61109,
+        0.61109
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    },
+    {
+      "objectId": "o01034",
+      "arrow": true,
+      "path": "SlimePath/AOEwarningFMA/Fill (1)",
+      "type": "Transform",
+      "localPosition": [
+        3.04,
+        0.0,
+        0.0
+      ],
+      "localScale": [
+        0.61109,
+        0.61109,
+        0.61109
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    },
+    {
+      "objectId": "o01036",
+      "arrow": true,
+      "path": "SlimePath/AOEwarningFMA/Particles",
+      "type": "Transform",
+      "localPosition": [
+        3.02499962,
+        0.0,
+        0.0
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  ],
+  "warningStartLength": 1.0,
+  "warningEndLength": 0.166666672,
+  "differences": [
+    "Existing Brotchi reference appearance; independent retimed movement clips visualize source attack phases. Original Dash sprites/audio are not migrated.",
+    "Directional orange arrow uses current project warning material; source arrow has disabled polygons, never enabled as a damage area.",
+    "Current Stats rebound on initialization, reset, attack reuse and lease restoration; source stale Stats reference defect is corrected.",
+    "Source arrow fade callbacks are replaced by existing explicit warning lifecycle cleanup; no FMOD events are copied."
+  ],
+  "physics": {
+    "mass": 20.0,
+    "linearDamping": 10.0,
+    "angularDamping": 0.0,
+    "gravityScale": 0.0,
+    "constraints": 4
+  }
+}

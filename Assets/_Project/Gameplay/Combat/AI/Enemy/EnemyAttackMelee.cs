@@ -18,6 +18,7 @@ namespace AstralShift.HellMaiden.AI.Enemy
 
 		private uint simulationGeneration;
         public bool HasSimulationAttackInstance => _attack != null;
+        public EnemyAttackPrefab SimulationAttackInstance => _attack;
 
         private void OnDisable()
         {
@@ -70,7 +71,8 @@ namespace AstralShift.HellMaiden.AI.Enemy
 
         public override async void AttackExit()
         {
-            _attack?.damageInteraction?.DiscardPendingCollisions();
+            if (controller != null && controller.IsAlive) _attack?.damageInteraction?.SettlePendingCollisions();
+            else _attack?.damageInteraction?.DiscardPendingCollisions();
             if (_collidersGameObject != null) _collidersGameObject.SetActive(false);
             if (_hitBox != null) _hitBox.Toggle(false);
             var instance = _attack;
@@ -86,7 +88,7 @@ namespace AstralShift.HellMaiden.AI.Enemy
             SuspendSimulation();
         }
 
-        public void SuspendSimulation()
+        public virtual void SuspendSimulation()
         {
             simulationGeneration++;
             if (_attack == null) return;
@@ -100,7 +102,7 @@ namespace AstralShift.HellMaiden.AI.Enemy
             else _attackPooler?.Return(released);
         }
 
-        public void RestoreSimulation(EnemyAttackPresentationPhase phase, Vector2 facing, float remaining)
+        public virtual void RestoreSimulation(EnemyAttackPresentationPhase phase, Vector2 facing, float remaining)
         {
             SuspendSimulation();
             if ((phase != EnemyAttackPresentationPhase.Warning && phase != EnemyAttackPresentationPhase.Active) || remaining <= 0) return;

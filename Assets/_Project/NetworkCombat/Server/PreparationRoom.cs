@@ -97,10 +97,10 @@ namespace MonsterSupergroup.NetworkCombat
             Revision = Revision, SelfId = self, Phase = Phase, Online = Online,
             Map = Map, Difficulty = Difficulty, Members = OrderedMembers() };
         private PreparationMember[] OrderedMembers() => members.Values.OrderBy(m => m.Seat).ToArray();
-        public void EndRun()
+        public void EndRun(string reason = null)
         {
             if (Phase != PreparationPhase.InGame) return;
-            Phase = PreparationPhase.GameOver; EndReason = "所有在线玩家均已倒地"; Revision++;
+            Phase = PreparationPhase.GameOver; EndReason = reason ?? "所有在线玩家均已倒地"; Revision++;
         }
         public bool RequestEndAction(ulong actor, RunEndAction action, out string error)
         {

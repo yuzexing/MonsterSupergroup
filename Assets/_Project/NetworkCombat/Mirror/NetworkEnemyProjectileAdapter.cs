@@ -28,7 +28,7 @@ namespace MonsterSupergroup.NetworkCombat
         private void OnRemotePhase(EnemyAttackPresentationEdge edge)
         {
             if (agent.Authority == null || !agent.Authority.ConsumesSnapshots) return;
-            if (edge.Phase == EnemyAttackPresentationPhase.Warning && !edge.IsExpiredAt(EnemySimulationClock.Now))
+            if (edge.Phase == EnemyAttackPresentationPhase.Warning && !edge.IsExpiredAt(EnemySimulationClock.CombatNow))
             {
                 attack.AlignProjectileOrigin(edge.Facing);
                 ShowCharge();
@@ -72,6 +72,12 @@ namespace MonsterSupergroup.NetworkCombat
                 Speed = attack.bulletPrefab.speed, Lifetime = attack.bulletPrefab.duration,
                 Damage = controller.stats.Damage, StunTime = controller.stats.StunTime, Checkpoint = checkpoint
             };
+            if (agent.Birth.Enabled)
+            {
+                launch.ExpiryMode = EnemyProjectileExpiryMode.ReferenceOutsideView;
+                launch.FiredAt = EnemySimulationClock.CombatNow;
+                launch.ViewTargetPlayerId = agent.Assignment.AggroTargetPlayerId;
+            }
             NetworkEnemySimulationWorld.Instance?.EmitEnemyProjectile(agent, launch);
         }
         public void CancelCharge()

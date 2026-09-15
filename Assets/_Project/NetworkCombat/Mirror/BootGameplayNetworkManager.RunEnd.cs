@@ -49,6 +49,20 @@ namespace MonsterSupergroup.NetworkCombat
             NetworkClient.Send(new RequestRunEndAction { RunId = RoomSnapshot.RunId, Round = RoomSnapshot.Round, Action = action });
         }
 
+        [Server]
+        internal void CompleteReferenceStage(string reason)
+        {
+            if (!Session.TryCompleteStage()) return;
+            ServerRoom?.EndRun(reason);
+            pendingPlayerConnections.Clear(); remoteGameplayLoadRequests.Clear();
+            NetworkCombatWorld.Instance.Gateway.StopCombat();
+            NetworkEnemySimulationWorld.Instance?.StopRunSimulation();
+            foreach (var connection in NetworkServer.connections.Values)
+                connection.identity?.GetComponent<NetworkModifierSelection>()?.ServerCancelPending();
+            if (ServerRoom != null) PublishRoom();
+            Debug.Log("[RunEnd] reference-stage-complete " + reason);
+        }
+
         private void ReceiveRunEndAction(NetworkConnectionToClient connection, RequestRunEndAction request)
         {
             if (!RequestActor(connection, request.RunId, out ulong id) || request.Round != Session.Round) return;

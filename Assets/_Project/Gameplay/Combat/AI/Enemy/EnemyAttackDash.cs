@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace AstralShift.HellMaiden.AI.Enemy
 {
-	public class EnemyAttackDash : EnemyAttackMelee
+	public partial class EnemyAttackDash : EnemyAttackMelee
 	{
 		public float distance;
 
@@ -46,12 +46,7 @@ namespace AstralShift.HellMaiden.AI.Enemy
 
 		private void Start()
 		{
-			if (damageInteraction != null)
-			{
-				damageInteraction.enemyStats = base.controller.stats;
-			}
-			collider = base.controller.collider;
-			defaultLayerMask = collider.excludeLayers;
+			BindCurrentStats();
 		}
 
 		public override void AttackWarningEnter()
@@ -66,10 +61,13 @@ namespace AstralShift.HellMaiden.AI.Enemy
 				base.controller.direction = Direction.Right;
 			}
 			startPoint = rb.position;
+			lastPosition = startPoint;
 			_direction = (Vector2)base.Target.position - startPoint;
 			_direction.Normalize();
 			_direction *= distance;
 			endPoint = startPoint + _direction;
+			attackStartPosition = startPoint;
+			hasDashState = true;
 		}
 
 		public override void AttackWarningTick()
@@ -86,20 +84,18 @@ namespace AstralShift.HellMaiden.AI.Enemy
 
 		public override void AttackEnter()
 		{
-			rb.constraints = RigidbodyConstraints2D.FreezeRotation;
+			BindCurrentStats();
+			BeginDashMotion();
 			lastPosition = rb.position;
-			if ((bool)attackCollider)
-			{
-				attackCollider.enabled = true;
-			}
-			collider.excludeLayers = dashExclusionLayerMask;
+			SetDashDamageEnabled(true);
 			attackStartPosition = base.transform.position;
 			base.AttackEnter();
 		}
 
 		public override void AttackTick()
 		{
-			float num = Time.time - _attackStartTime;
+			bool networkClock = controller.TryReadSimulationAction(out var action, out var now);
+			float num = networkClock ? (float)(now - action.WarningUntil) : Time.time - _attackStartTime;
 			if ((bool)_warning)
 			{
 				_warning.transform.position = attackStartPosition;
@@ -118,12 +114,11 @@ namespace AstralShift.HellMaiden.AI.Enemy
 					float t = movementCurve.Evaluate(time);
 					vector = Vector2.Lerp(startPoint, endPoint, t);
 				}
-				Vector2 linearVelocity = (vector - lastPosition) / Time.deltaTime;
-				if (Time.deltaTime != 0f)
+				if (Time.deltaTime > 0f)
 				{
-					rb.linearVelocity = linearVelocity;
+					rb.linearVelocity = (vector - lastPosition) / Time.deltaTime;
+					lastPosition = vector;
 				}
-				lastPosition = vector;
 			}
 			else
 			{
@@ -134,18 +129,16 @@ namespace AstralShift.HellMaiden.AI.Enemy
 					_attackStartTime = Time.time;
 				}
 			}
-			base.AttackTick();
+			if (networkClock) { if (num > AttackTime) onAttackEnd?.Invoke(); }
+			else base.AttackTick();
 		}
 
 		public override void AttackExit()
 		{
-			base.AttackExit();
 			_returning = false;
-			collider.excludeLayers = defaultLayerMask;
-			if ((bool)attackCollider)
-			{
-				attackCollider.enabled = false;
-			}
+			SetDashDamageEnabled(false, controller != null && controller.IsAlive);
+			EndDashMotion();
+			base.AttackExit();
 		}
 	}
 }

@@ -9,6 +9,21 @@ namespace MonsterSupergroup.NetworkCombat
     {
         public GameObject enemyPrefab;
         [Min(1)] public int count = 6;
+        public ReferenceSpawnMode referenceMode;
+        public string sourceEnemy;
+        public int sourceVariant;
+        public string sourceLocation;
+        [TextArea] public string missingEvidence;
+        public ReferenceEnemyReadiness referenceReadiness;
+        public ReferenceEnemyReadiness referenceSpawnReadiness;
+        [TextArea] public string spawnReadinessNote;
+        public string recoveredEvidence;
+        public AnimationCurve spawnCurve = AnimationCurve.Linear(0, 1, 1, 1);
+        public float spawnCooldown;
+        public Vector2 speedMultipliers = new Vector2(.9f, 1.1f);
+        public float contactRadius;
+        public bool expiresOffscreen = true;
+        public bool resetOnReposition = true;
         public ClipCaps clipCaps => ClipCaps.None;
         public override double duration => 12;
         public override Playable CreatePlayable(PlayableGraph graph, GameObject owner) => Playable.Create(graph);

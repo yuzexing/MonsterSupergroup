@@ -380,6 +380,17 @@ namespace MonsterSupergroup.NetworkCombat
                 Array.Empty<ConfirmedKill>());
         }
 
+        public CanonicalWorldBatch ResetEnemyCondition(uint entityId)
+        {
+            var saved = Ledger.CaptureEntityState(entityId);
+            var state = saved.State;
+            if (!state.Alive || state.Kind != (byte)CombatEntityKind.Enemy)
+                throw new InvalidOperationException("Only a living enemy can reset its condition.");
+            state.Health = state.MaxHealth;
+            state = Ledger.RestoreEntityState(entityId, new ServerEntityCheckpoint(state, saved.AbsoluteInvulnerable));
+            return CreateBatch(new[] { state }, Statuses.RemoveTarget(entityId), Array.Empty<ConfirmedKill>());
+        }
+
         /// <summary>Wraps one newly registered entity in the normal sequence stream.</summary>
         public CanonicalWorldBatch CreateEntityUpdate(CanonicalEntityState state)
         {

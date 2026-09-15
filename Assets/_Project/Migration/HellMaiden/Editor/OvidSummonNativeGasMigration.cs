@@ -149,10 +149,58 @@ namespace MonsterSupergroup.HellMaidenMigration.Editor
             AssetDatabase.Refresh(ImportAssetOptions.ForceSynchronousImport);
             foreach (string path in VariantPaths()) RepairModules(path);
             ConfigureMaterials(sourceRoot);
+            RepairBirthMaterialBindings();
             ConfigureWeaponAndDatabase();
             AssetDatabase.SaveAssets();
             ValidateImportedAssets();
             Debug.Log("Ovid Summon ID 402 imported; existing weapons and player default preserved. " + RestorationLimits);
+        }
+
+        public static void RepairBirthMaterialBindings()
+        {
+            var channels = new Dictionary<string, string>
+            {
+                { "material.path_0x4C4EFF0C_IUsrjIN", "r" },
+                { "material.path_0x5C4EFF0C_UIKhIqH", "g" },
+                { "material.path_0x6C4EFF0C_sQKuHIJ", "b" },
+                { "material.path_0x7C4EFF0C_oMsokqL", "a" }
+            };
+            // CRC32(_GlowColor) & 0x0fffffff = 0x0c4eff0c. The export lost the RGBA
+            // channel syntax, so Unity treats these names as scalar material properties.
+            // Patch only binding names: resaving through SetEditorCurve also rewrites unrelated
+            // rotation/editor curves. Reimport rebuilds Unity's cached runtime bindings.
+            string original = File.ReadAllText(BirthClipPath);
+            string repaired = original;
+            foreach (var channel in channels)
+                repaired = repaired.Replace("attribute: " + channel.Key, "attribute: material._GlowColor." + channel.Value);
+            if (repaired != original)
+            {
+                File.WriteAllText(BirthClipPath, repaired, new UTF8Encoding(false));
+                AssetDatabase.ImportAsset(BirthClipPath, ImportAssetOptions.ForceUpdate | ImportAssetOptions.ForceSynchronousImport);
+            }
+            ValidateBirthMaterialBindings();
+            Debug.Log("Ovid Birth glow color bindings validated (RGBA); source keys, timing and material preserved.");
+        }
+
+        private static void ValidateBirthMaterialBindings()
+        {
+            AnimationClip clip = RequireAsset<AnimationClip>(BirthClipPath);
+            EditorCurveBinding[] bindings = AnimationUtility.GetCurveBindings(clip);
+            Require(!bindings.Any(binding => binding.propertyName.Contains("C4EFF0C") ||
+                binding.propertyName == "material._GlowColor"), "Ovid Birth still contains scalar GlowColor bindings.");
+            foreach (string channel in new[] { "r", "g", "b", "a" })
+                Require(bindings.Count(binding => binding.path == "Caccon/CacoonSort/cacoon" &&
+                    binding.propertyName == "material._GlowColor." + channel && binding.type == typeof(MeshRenderer)) == 1,
+                    "Ovid Birth needs exactly one GlowColor channel: " + channel);
+            foreach (string path in VariantPaths())
+            {
+                var renderer = RequireAsset<GameObject>(path).transform.Find(VisualRootPath + "/Caccon/CacoonSort/cacoon")
+                    .GetComponent<MeshRenderer>();
+                Shader shader = renderer.sharedMaterial.shader;
+                int index = shader.FindPropertyIndex("_GlowColor");
+                Require(index >= 0 && shader.GetPropertyType(index) == UnityEngine.Rendering.ShaderPropertyType.Color,
+                    "Ovid cocoon GlowColor must remain a Color property: " + path);
+            }
         }
 
         private static void CopyIfMissing(string sourceRoot, string relativePath, string spriteGuid, string vfxGuid)
@@ -470,6 +518,7 @@ namespace MonsterSupergroup.HellMaidenMigration.Editor
                 Require(Mathf.Abs(clip.length - lengths[i]) < 0.0001f && clip.isLooping == (i == 0 || i == 2),
                     "Source summon clip timing/looping changed: " + clips[i]);
             }
+            ValidateBirthMaterialBindings();
             foreach (string path in AssetDatabase.FindAssets(string.Empty, new[] { OutputFolder }).Select(AssetDatabase.GUIDToAssetPath))
             {
                 if (AssetDatabase.IsValidFolder(path) || path.EndsWith(".png", StringComparison.Ordinal) || path.EndsWith(".ogg", StringComparison.Ordinal)) continue;

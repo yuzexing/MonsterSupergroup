@@ -10,7 +10,7 @@ namespace MonsterSupergroup.NetworkCombat
     public enum GameplayEnemySpawnMode : byte { PerMember, Waves }
 
     [DisallowMultipleComponent]
-    public sealed class NetworkGameplayEnemySpawner : MonoBehaviour
+    public sealed partial class NetworkGameplayEnemySpawner : MonoBehaviour
     {
         [SerializeField] private GameObject enemyPrefab;
         [SerializeField, Min(0.1f)] private float spawnDistance = 5f;
@@ -33,6 +33,10 @@ namespace MonsterSupergroup.NetworkCombat
         private readonly Dictionary<GameObject, (Vector2 offset, float radius)> spawnFootprints = new Dictionary<GameObject, (Vector2, float)>();
         private int runtimeMinimumSpawnHealth;
         private bool legacySubscribed;
+        private void Awake()
+        {
+            if (LimboReferenceLaunch.Enabled) ConfigureWaveRules(LimboReferenceLaunch.Rules);
+        }
 
         public GameObject EnemyPrefab => enemyPrefab;
         public int SpawnedPlayerCount => spawnedForPlayers.Count;
@@ -40,6 +44,12 @@ namespace MonsterSupergroup.NetworkCombat
         public WaveProgressSnapshot ServerProgress => schedule != null ? schedule.State : WaitingSnapshot();
         public SpriteRenderer BoundaryGround => boundaryGround;
         public event System.Action<WaveSpawnOpportunity, uint> WaveEnemySpawned;
+        public void ConfigureWaveRules(GameplayWaveRules rules)
+        {
+            if (schedule != null) throw new System.InvalidOperationException("Cannot replace active wave rules.");
+            waveRules = rules != null ? rules : throw new System.ArgumentNullException(nameof(rules));
+            spawnMode = GameplayEnemySpawnMode.Waves;
+        }
 
         internal void ConfigureRuntimeMinimumSpawnHealth(int minimumHealth) => runtimeMinimumSpawnHealth = Mathf.Max(0, minimumHealth);
 
@@ -81,7 +91,9 @@ namespace MonsterSupergroup.NetworkCombat
             }
             if (!BindProgress()) return;
             double now = NetworkTime.time;
-            if (schedule != null && schedule.State.Phase != WavePhase.Stopped)
+            if (schedule != null && settings.Reference != null)
+                UpdateReferenceStage(now);
+            else if (schedule != null && schedule.State.Phase != WavePhase.Stopped)
             {
                 CollectActiveParticipants();
                 int alive = CountCanonicalEnemies();
@@ -140,6 +152,8 @@ namespace MonsterSupergroup.NetworkCombat
             if (stoppedRunId != null) { error = "This wave run was stopped; stop the session before starting a new run."; return false; }
             if (waveRules == null) { error = "Gameplay wave rules are missing."; return false; }
             if (!waveRules.TryCapture(out var captured, out error)) return false;
+            if (captured.Reference?.ReadinessError() is string readinessError)
+            { error = readinessError; return false; }
             if (boundaryGround == null || boundaryGround.bounds.size.x <= 0 || boundaryGround.bounds.size.y <= 0)
             { error = "Gameplay requires the approved Ground boundary."; return false; }
             foreach (var prefab in captured.Prefabs)
@@ -173,10 +187,13 @@ namespace MonsterSupergroup.NetworkCombat
             }
             groundBounds = boundaryGround.bounds;
             schedule = new ServerWaveSchedule(runId, settings, NetworkTime.time);
+            if (settings.Reference != null) BeginReferenceStage();
             lastTargetParticipant = 0;
             progress.Publish(this, schedule.State);
             nextPublish = NetworkTime.time + 0.2;
-            Debug.Log($"[Waves] run={runId} begin waveDuration={settings.Duration} authoredWaves={settings.Program.WaveCount} events={settings.Program.EventCount} cap={settings.Limit}", this);
+            Debug.Log(settings.Reference != null
+                ? $"[Waves] run={runId} reference clips={settings.Reference.Clips.Length} end={settings.Reference.EndTime} cap={settings.Limit}"
+                : $"[Waves] run={runId} begin waveDuration={settings.Duration} authoredWaves={settings.Program.WaveCount} events={settings.Program.EventCount} cap={settings.Limit}", this);
             return true;
         }
 
@@ -258,12 +275,13 @@ namespace MonsterSupergroup.NetworkCombat
             SpawnEnemy((Vector2)endpoint.transform.position + DirectionFor(endpoint.PlayerEntityId) * spawnDistance, endpoint.PlayerEntityId, enemyPrefab);
         }
 
-        private uint SpawnEnemy(Vector2 position, uint targetId, GameObject prefab)
+        private uint SpawnEnemy(Vector2 position, uint targetId, GameObject prefab, EnemyBirthParameters birth = default)
         {
             GameObject enemy = Instantiate(prefab, position, Quaternion.identity);
             var agent = enemy.GetComponent<NetworkEnemySimulationAgent>();
             if (agent == null) { Destroy(enemy); return 0; }
             agent.ConfigureRuntimeMinimumHealthOverride(runtimeMinimumSpawnHealth);
+            if (birth.Enabled) agent.ConfigureBirth(birth);
             agent.ConfigureInitialServerTarget(targetId);
             SceneManager.MoveGameObjectToScene(enemy, gameObject.scene);
             NetworkServer.Spawn(enemy);
@@ -276,6 +294,7 @@ namespace MonsterSupergroup.NetworkCombat
         }
         internal void StopWaveRun()
         {
+            EndReferenceTrace();
             if (boundRunId != null) stoppedRunId = boundRunId;
             schedule?.Stop();
             activeParticipants.Clear();

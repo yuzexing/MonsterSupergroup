@@ -1,0 +1,13 @@
+{
+  "identical": true,
+  "ignoredFields": [
+    "objects[].runtimeId"
+  ],
+  "clips": 31,
+  "objects": 1038,
+  "issues": [],
+  "files": {
+    "Logs\\EnemyRecovery\\capture-a\\assets.json": "6c9cb8b828e67acbe1ef53b528461348a530e964d90dad21ad032b69a4845717",
+    "Logs\\EnemyRecovery\\capture-b\\assets.json": "6c9cb8b828e67acbe1ef53b528461348a530e964d90dad21ad032b69a4845717"
+  }
+}

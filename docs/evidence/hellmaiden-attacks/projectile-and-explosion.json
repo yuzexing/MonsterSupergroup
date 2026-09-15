@@ -1,0 +1,249 @@
+[
+  {
+    "id": "o00309",
+    "runtimeId": 95362,
+    "type": "AstralShift.HellMaiden.AI.Enemy.BulletProjectile",
+    "name": "EnemyBulletAttackImp",
+    "path": "EnemyBulletAttackImp[0]",
+    "data": {
+      "AstralShift.HellMaiden.AI.Enemy.BulletProjectile::attachedWhileCharging": false,
+      "AstralShift.HellMaiden.AI.Enemy.BulletProjectile::bulletHasTimeOut": false,
+      "AstralShift.HellMaiden.AI.Enemy.BulletProjectile::bulletParticles": {
+        "reference": "o00602",
+        "type": "UnityEngine.ParticleSystem",
+        "name": "Imp_Attack",
+        "path": "EnemyBulletAttackImp[0]/BulletVisual[0]/Imp_Attack[0]"
+      },
+      "AstralShift.HellMaiden.AI.Enemy.BulletProjectile::bulletVisual": {
+        "reference": "o00603",
+        "type": "UnityEngine.GameObject",
+        "name": "BulletVisual",
+        "path": "EnemyBulletAttackImp[0]/BulletVisual[0]"
+      },
+      "AstralShift.HellMaiden.AI.Enemy.BulletProjectile::duration": 3.0,
+      "AstralShift.HellMaiden.AI.Enemy.BulletProjectile::fired": false,
+      "AstralShift.HellMaiden.AI.Enemy.BulletProjectile::hitEffectOnExpire": true,
+      "AstralShift.HellMaiden.AI.Enemy.BulletProjectile::hitEffectResolver": null,
+      "AstralShift.HellMaiden.AI.Enemy.BulletProjectile::onAttackFiredEnd": null,
+      "AstralShift.HellMaiden.AI.Enemy.BulletProjectile::pierce": 1,
+      "AstralShift.HellMaiden.AI.Enemy.BulletProjectile::pierced": 0,
+      "AstralShift.HellMaiden.AI.Enemy.BulletProjectile::projectileMovement": null,
+      "AstralShift.HellMaiden.AI.Enemy.BulletProjectile::rotationTransform": null,
+      "AstralShift.HellMaiden.AI.Enemy.BulletProjectile::speed": 5.0,
+      "AstralShift.HellMaiden.AI.Enemy.EnemyAttackStateMachineController::Charging": null,
+      "AstralShift.HellMaiden.AI.Enemy.EnemyAttackStateMachineController::End": null,
+      "AstralShift.HellMaiden.AI.Enemy.EnemyAttackStateMachineController::Expire": null,
+      "AstralShift.HellMaiden.AI.Enemy.EnemyAttackStateMachineController::Fired": null,
+      "AstralShift.HellMaiden.AI.Enemy.EnemyAttackStateMachineController::Hit": null,
+      "AstralShift.HellMaiden.AI.Enemy.EnemyAttackPrefab::animancer": null,
+      "AstralShift.HellMaiden.AI.Enemy.EnemyAttackPrefab::attackAnim": {
+        "managedType": "Animancer.ClipTransition",
+        "fields": {
+          "Animancer.ClipTransition::_Clip": null,
+          "Animancer.ClipTransition::_NormalizedStartTime": "NaN",
+          "Animancer.Transition`1[[Animancer.ClipState, Kybernetik.Animancer, Version=8.0.1.28, Culture=neutral, PublicKeyToken=null]]::_Events": {
+            "managedType": "Animancer.AnimancerEvent+Sequence+Serializable",
+            "fields": {
+              "Animancer.AnimancerEvent+Sequence+Serializable::_Callbacks": [],
+              "Animancer.AnimancerEvent+Sequence+Serializable::_Names": [],
+              "Animancer.AnimancerEvent+Sequence+Serializable::_NormalizedTimes": []
+            }
+          },
+          "Animancer.Transition`1[[Animancer.ClipState, Kybernetik.Animancer, Version=8.0.1.28, Culture=neutral, PublicKeyToken=null]]::_FadeDuration": 0.25,
+          "Animancer.Transition`1[[Animancer.ClipState, Kybernetik.Animancer, Version=8.0.1.28, Culture=neutral, PublicKeyToken=null]]::_Speed": 1.0
+        }
+      },
+      "AstralShift.HellMaiden.AI.Enemy.EnemyAttackPrefab::attackAnimLayer": 0,
+      "AstralShift.HellMaiden.AI.Enemy.EnemyAttackPrefab::attackAnimTransitionAfterFinish": false,
+      "AstralShift.HellMaiden.AI.Enemy.EnemyAttackPrefab::attackEndAnim": {
+        "managedType": "Animancer.ClipTransition",
+        "fields": {
+          "Animancer.ClipTransition::_Clip": null,
+          "Animancer.ClipTransition::_NormalizedStartTime": "NaN",
+          "Animancer.Transition`1[[Animancer.ClipState, Kybernetik.Animancer, Version=8.0.1.28, Culture=neutral, PublicKeyToken=null]]::_Events": {
+            "managedType": "Animancer.AnimancerEvent+Sequence+Serializable",
+            "fields": {
+              "Animancer.AnimancerEvent+Sequence+Serializable::_Callbacks": [],
+              "Animancer.AnimancerEvent+Sequence+Serializable::_Names": [],
+              "Animancer.AnimancerEvent+Sequence+Serializable::_NormalizedTimes": []
+            }
+          },
+          "Animancer.Transition`1[[Animancer.ClipState, Kybernetik.Animancer, Version=8.0.1.28, Culture=neutral, PublicKeyToken=null]]::_FadeDuration": 0.25,
+          "Animancer.Transition`1[[Animancer.ClipState, Kybernetik.Animancer, Version=8.0.1.28, Culture=neutral, PublicKeyToken=null]]::_Speed": 1.0
+        }
+      },
+      "AstralShift.HellMaiden.AI.Enemy.EnemyAttackPrefab::attackEndAnimLayer": 0,
+      "AstralShift.HellMaiden.AI.Enemy.EnemyAttackPrefab::attackHitAnim": {
+        "managedType": "Animancer.ClipTransition",
+        "fields": {
+          "Animancer.ClipTransition::_Clip": null,
+          "Animancer.ClipTransition::_NormalizedStartTime": "NaN",
+          "Animancer.Transition`1[[Animancer.ClipState, Kybernetik.Animancer, Version=8.0.1.28, Culture=neutral, PublicKeyToken=null]]::_Events": {
+            "managedType": "Animancer.AnimancerEvent+Sequence+Serializable",
+            "fields": {
+              "Animancer.AnimancerEvent+Sequence+Serializable::_Callbacks": [],
+              "Animancer.AnimancerEvent+Sequence+Serializable::_Names": [],
+              "Animancer.AnimancerEvent+Sequence+Serializable::_NormalizedTimes": []
+            }
+          },
+          "Animancer.Transition`1[[Animancer.ClipState, Kybernetik.Animancer, Version=8.0.1.28, Culture=neutral, PublicKeyToken=null]]::_FadeDuration": 0.25,
+          "Animancer.Transition`1[[Animancer.ClipState, Kybernetik.Animancer, Version=8.0.1.28, Culture=neutral, PublicKeyToken=null]]::_Speed": 1.0
+        }
+      },
+      "AstralShift.HellMaiden.AI.Enemy.EnemyAttackPrefab::attackStartAnim": {
+        "managedType": "Animancer.ClipTransition",
+        "fields": {
+          "Animancer.ClipTransition::_Clip": null,
+          "Animancer.ClipTransition::_NormalizedStartTime": "NaN",
+          "Animancer.Transition`1[[Animancer.ClipState, Kybernetik.Animancer, Version=8.0.1.28, Culture=neutral, PublicKeyToken=null]]::_Events": {
+            "managedType": "Animancer.AnimancerEvent+Sequence+Serializable",
+            "fields": {
+              "Animancer.AnimancerEvent+Sequence+Serializable::_Callbacks": [],
+              "Animancer.AnimancerEvent+Sequence+Serializable::_Names": [],
+              "Animancer.AnimancerEvent+Sequence+Serializable::_NormalizedTimes": []
+            }
+          },
+          "Animancer.Transition`1[[Animancer.ClipState, Kybernetik.Animancer, Version=8.0.1.28, Culture=neutral, PublicKeyToken=null]]::_FadeDuration": 0.25,
+          "Animancer.Transition`1[[Animancer.ClipState, Kybernetik.Animancer, Version=8.0.1.28, Culture=neutral, PublicKeyToken=null]]::_Speed": 1.0
+        }
+      },
+      "AstralShift.HellMaiden.AI.Enemy.EnemyAttackPrefab::attackStartAnimTransitionAfterFinish": false,
+      "AstralShift.HellMaiden.AI.Enemy.EnemyAttackPrefab::attackWarning": null,
+      "AstralShift.HellMaiden.AI.Enemy.EnemyAttackPrefab::damageApplyMode": {
+        "enumType": "AstralShift.HellMaiden.AI.Enemy.EnemyAttackPrefab+DamageApplyMode",
+        "name": "Interaction",
+        "value": 0
+      },
+      "AstralShift.HellMaiden.AI.Enemy.EnemyAttackPrefab::damageInteraction": {
+        "reference": "o00604",
+        "type": "AstralShift.HellMaiden.Interactions.PlayerDamageInteraction",
+        "name": "EnemyBulletAttackImp",
+        "path": "EnemyBulletAttackImp[0]"
+      },
+      "AstralShift.HellMaiden.AI.Enemy.EnemyAttackPrefab::hitAnimLayer": 0,
+      "AstralShift.HellMaiden.AI.Enemy.EnemyAttackPrefab::hitBox": null,
+      "AstralShift.HellMaiden.AI.Enemy.EnemyAttackPrefab::startAnimLayer": 0,
+      "$gameObject": {
+        "reference": "o00605",
+        "type": "UnityEngine.GameObject",
+        "name": "EnemyBulletAttackImp",
+        "path": "EnemyBulletAttackImp[0]"
+      }
+    }
+  },
+  {
+    "id": "o00519",
+    "runtimeId": 96270,
+    "type": "AstralShift.HellMaiden.AI.Enemy.EnemyExplosionAttackVFX",
+    "name": "Enemy_Bomb_ExplosionAttack 1",
+    "path": "Enemy_Bomb_ExplosionAttack 1[0]",
+    "data": {
+      "AstralShift.HellMaiden.AI.Enemy.EnemyExplosionAttackVFX::colliders": {
+        "reference": "o00736",
+        "type": "UnityEngine.GameObject",
+        "name": "Collider",
+        "path": "Enemy_Bomb_ExplosionAttack 1[0]/Collider[1]"
+      },
+      "AstralShift.HellMaiden.AI.Enemy.EnemyExplosionAttackVFX::particleSystem": {
+        "reference": "o00737",
+        "type": "UnityEngine.ParticleSystem",
+        "name": "Sparks",
+        "path": "Enemy_Bomb_ExplosionAttack 1[0]/Sparks[0]"
+      },
+      "AstralShift.HellMaiden.AI.Enemy.EnemyAttackPrefab::animancer": null,
+      "AstralShift.HellMaiden.AI.Enemy.EnemyAttackPrefab::attackAnim": {
+        "managedType": "Animancer.ClipTransition",
+        "fields": {
+          "Animancer.ClipTransition::_Clip": null,
+          "Animancer.ClipTransition::_NormalizedStartTime": "NaN",
+          "Animancer.Transition`1[[Animancer.ClipState, Kybernetik.Animancer, Version=8.0.1.28, Culture=neutral, PublicKeyToken=null]]::_Events": {
+            "managedType": "Animancer.AnimancerEvent+Sequence+Serializable",
+            "fields": {
+              "Animancer.AnimancerEvent+Sequence+Serializable::_Callbacks": [],
+              "Animancer.AnimancerEvent+Sequence+Serializable::_Names": [],
+              "Animancer.AnimancerEvent+Sequence+Serializable::_NormalizedTimes": []
+            }
+          },
+          "Animancer.Transition`1[[Animancer.ClipState, Kybernetik.Animancer, Version=8.0.1.28, Culture=neutral, PublicKeyToken=null]]::_FadeDuration": 0.25,
+          "Animancer.Transition`1[[Animancer.ClipState, Kybernetik.Animancer, Version=8.0.1.28, Culture=neutral, PublicKeyToken=null]]::_Speed": 1.0
+        }
+      },
+      "AstralShift.HellMaiden.AI.Enemy.EnemyAttackPrefab::attackAnimLayer": 0,
+      "AstralShift.HellMaiden.AI.Enemy.EnemyAttackPrefab::attackAnimTransitionAfterFinish": false,
+      "AstralShift.HellMaiden.AI.Enemy.EnemyAttackPrefab::attackEndAnim": {
+        "managedType": "Animancer.ClipTransition",
+        "fields": {
+          "Animancer.ClipTransition::_Clip": null,
+          "Animancer.ClipTransition::_NormalizedStartTime": "NaN",
+          "Animancer.Transition`1[[Animancer.ClipState, Kybernetik.Animancer, Version=8.0.1.28, Culture=neutral, PublicKeyToken=null]]::_Events": {
+            "managedType": "Animancer.AnimancerEvent+Sequence+Serializable",
+            "fields": {
+              "Animancer.AnimancerEvent+Sequence+Serializable::_Callbacks": [],
+              "Animancer.AnimancerEvent+Sequence+Serializable::_Names": [],
+              "Animancer.AnimancerEvent+Sequence+Serializable::_NormalizedTimes": []
+            }
+          },
+          "Animancer.Transition`1[[Animancer.ClipState, Kybernetik.Animancer, Version=8.0.1.28, Culture=neutral, PublicKeyToken=null]]::_FadeDuration": 0.25,
+          "Animancer.Transition`1[[Animancer.ClipState, Kybernetik.Animancer, Version=8.0.1.28, Culture=neutral, PublicKeyToken=null]]::_Speed": 1.0
+        }
+      },
+      "AstralShift.HellMaiden.AI.Enemy.EnemyAttackPrefab::attackEndAnimLayer": 0,
+      "AstralShift.HellMaiden.AI.Enemy.EnemyAttackPrefab::attackHitAnim": {
+        "managedType": "Animancer.ClipTransition",
+        "fields": {
+          "Animancer.ClipTransition::_Clip": null,
+          "Animancer.ClipTransition::_NormalizedStartTime": "NaN",
+          "Animancer.Transition`1[[Animancer.ClipState, Kybernetik.Animancer, Version=8.0.1.28, Culture=neutral, PublicKeyToken=null]]::_Events": {
+            "managedType": "Animancer.AnimancerEvent+Sequence+Serializable",
+            "fields": {
+              "Animancer.AnimancerEvent+Sequence+Serializable::_Callbacks": [],
+              "Animancer.AnimancerEvent+Sequence+Serializable::_Names": [],
+              "Animancer.AnimancerEvent+Sequence+Serializable::_NormalizedTimes": []
+            }
+          },
+          "Animancer.Transition`1[[Animancer.ClipState, Kybernetik.Animancer, Version=8.0.1.28, Culture=neutral, PublicKeyToken=null]]::_FadeDuration": 0.25,
+          "Animancer.Transition`1[[Animancer.ClipState, Kybernetik.Animancer, Version=8.0.1.28, Culture=neutral, PublicKeyToken=null]]::_Speed": 1.0
+        }
+      },
+      "AstralShift.HellMaiden.AI.Enemy.EnemyAttackPrefab::attackStartAnim": {
+        "managedType": "Animancer.ClipTransition",
+        "fields": {
+          "Animancer.ClipTransition::_Clip": null,
+          "Animancer.ClipTransition::_NormalizedStartTime": "NaN",
+          "Animancer.Transition`1[[Animancer.ClipState, Kybernetik.Animancer, Version=8.0.1.28, Culture=neutral, PublicKeyToken=null]]::_Events": {
+            "managedType": "Animancer.AnimancerEvent+Sequence+Serializable",
+            "fields": {
+              "Animancer.AnimancerEvent+Sequence+Serializable::_Callbacks": [],
+              "Animancer.AnimancerEvent+Sequence+Serializable::_Names": [],
+              "Animancer.AnimancerEvent+Sequence+Serializable::_NormalizedTimes": []
+            }
+          },
+          "Animancer.Transition`1[[Animancer.ClipState, Kybernetik.Animancer, Version=8.0.1.28, Culture=neutral, PublicKeyToken=null]]::_FadeDuration": 0.25,
+          "Animancer.Transition`1[[Animancer.ClipState, Kybernetik.Animancer, Version=8.0.1.28, Culture=neutral, PublicKeyToken=null]]::_Speed": 1.0
+        }
+      },
+      "AstralShift.HellMaiden.AI.Enemy.EnemyAttackPrefab::attackStartAnimTransitionAfterFinish": false,
+      "AstralShift.HellMaiden.AI.Enemy.EnemyAttackPrefab::attackWarning": null,
+      "AstralShift.HellMaiden.AI.Enemy.EnemyAttackPrefab::damageApplyMode": {
+        "enumType": "AstralShift.HellMaiden.AI.Enemy.EnemyAttackPrefab+DamageApplyMode",
+        "name": "Interaction",
+        "value": 0
+      },
+      "AstralShift.HellMaiden.AI.Enemy.EnemyAttackPrefab::damageInteraction": {
+        "reference": "o00738",
+        "type": "AstralShift.HellMaiden.Interactions.PlayerDamageInteraction",
+        "name": "Collider",
+        "path": "Enemy_Bomb_ExplosionAttack 1[0]/Collider[1]"
+      },
+      "AstralShift.HellMaiden.AI.Enemy.EnemyAttackPrefab::hitAnimLayer": 0,
+      "AstralShift.HellMaiden.AI.Enemy.EnemyAttackPrefab::hitBox": null,
+      "AstralShift.HellMaiden.AI.Enemy.EnemyAttackPrefab::startAnimLayer": 0,
+      "$gameObject": {
+        "reference": "o00739",
+        "type": "UnityEngine.GameObject",
+        "name": "Enemy_Bomb_ExplosionAttack 1",
+        "path": "Enemy_Bomb_ExplosionAttack 1[0]"
+      }
+    }
+  }
+]

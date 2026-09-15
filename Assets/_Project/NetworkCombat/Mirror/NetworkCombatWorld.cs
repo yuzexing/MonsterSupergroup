@@ -93,6 +93,10 @@ namespace MonsterSupergroup.NetworkCombat
             CombatEntityAuthority authority,
             uint ownerPlayerId = 0)
         {
+            if (NetworkServer.spawned.TryGetValue(entityId, out var identity) && identity != null &&
+                identity.TryGetComponent<NetworkEnemySimulationAgent>(out var referenceEnemy) && referenceEnemy.Birth.Enabled &&
+                maximumHealth != referenceEnemy.Birth.Health)
+                throw new InvalidOperationException("Reference enemy must register its birth maximum health on the first canonical update.");
             CanonicalEntityState state = Gateway.Ledger.RegisterEntity(
                 entityId,
                 maximumHealth,
@@ -142,6 +146,15 @@ namespace MonsterSupergroup.NetworkCombat
         }
 
         [Server]
+        public void SetPlayerTrapInvulnerable(uint playerId, bool value)
+        {
+            if (!Gateway.Ledger.TryGetState(playerId, out var previous) ||
+                !Gateway.Ledger.SetPlayerTrapInvulnerable(playerId, value)) return;
+            if (Gateway.Ledger.TryGetState(playerId, out var current) && current.StateVersion != previous.StateVersion)
+                Broadcast(Gateway.CreateEntityUpdate(current));
+        }
+
+        [Server]
         public void HandleSourceDisconnected(uint sourcePlayerId)
         {
             Broadcast(Gateway.HandleSourceDisconnected(sourcePlayerId, NetworkTime.time));
@@ -158,6 +171,14 @@ namespace MonsterSupergroup.NetworkCombat
 
         [Server]
         public void UnregisterEntity(uint entityId) => Broadcast(Gateway.UnregisterEntity(entityId));
+
+        [Server]
+        internal void ResetReferenceEnemy(NetworkEnemySimulationAgent enemy)
+        {
+            if (enemy == null || !enemy.Birth.Enabled || !enemy.Birth.ResetOnReposition) return;
+            Broadcast(Gateway.ResetEnemyCondition(enemy.netId));
+            enemy.ResetReferenceCondition();
+        }
 
         [ServerCallback]
         private void Update()

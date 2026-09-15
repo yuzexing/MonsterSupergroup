@@ -24,6 +24,41 @@ namespace MonsterSupergroup.Gameplay.Tests
         private const string WeaponPath = "Assets/_Project/Content/HellMaiden/NativeGAS/Ovid/Summon/MonoBehaviour/WeaponData_Ovid_Summon.asset";
 
         [UnityTest]
+        public IEnumerator BirthGlowColorAnimatesOnFirstSpawnAndResetsOnPoolReuseForAllVariants()
+        {
+            using (var fixture = new Fixture())
+            {
+                foreach (AttackElement element in new[] { AttackElement.Default, AttackElement.Fire, AttackElement.Poison })
+                {
+                    ulong id = (ulong)(950 + (int)element * 2);
+                    SummonAIBehaviour first = fixture.Apply(State(id, SummonPhase.Birth, 1, element), 1f);
+                    AssertBirthGlow(first, new Color(.46698105f, .98875374f, 1f, 1f));
+                    Assert.That(fixture.Replica.TryTerminate(402, id), Is.True);
+                    SummonAIBehaviour reused = fixture.Apply(State(id + 1, SummonPhase.Birth, 1, element), 0f);
+                    Assert.That(reused, Is.SameAs(first));
+                    AssertBirthGlow(reused, Color.white);
+                }
+                yield return null;
+                LogAssert.NoUnexpectedReceived();
+            }
+        }
+
+        private static void AssertBirthGlow(SummonAIBehaviour pet, Color expected)
+        {
+            pet.Animancer.Evaluate(0f);
+            var renderer = pet.transform.Find(VisualRoot + "/Caccon/CacoonSort/cacoon").GetComponent<Renderer>();
+            var block = new MaterialPropertyBlock();
+            renderer.GetPropertyBlock(block);
+            int property = Shader.PropertyToID("_GlowColor");
+            Assert.That(block.HasProperty(property), Is.True, "Birth must animate the renderer's color property.");
+            Color actual = block.GetColor(property);
+            Assert.That(actual.r, Is.EqualTo(expected.r).Within(.0001f));
+            Assert.That(actual.g, Is.EqualTo(expected.g).Within(.0001f));
+            Assert.That(actual.b, Is.EqualTo(expected.b).Within(.0001f));
+            Assert.That(actual.a, Is.EqualTo(expected.a).Within(.0001f));
+        }
+
+        [UnityTest]
         public IEnumerator ThreeSourceVariantsRemainIndependentAndNeverCreateGameplayOrNetworkBodies()
         {
             using (var fixture = new Fixture())

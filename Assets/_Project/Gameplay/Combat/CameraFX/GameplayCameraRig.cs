@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using AstralShift.HellMaiden.Player;
 using Com.LuisPedroFonseca.ProCamera2D;
 using MonsterSupergroup.Gameplay.Combat;
@@ -24,6 +25,36 @@ namespace AstralShift.HellMaiden.CameraFX
         private Transform shakeContainer;
         private PlayerMovement owner;
         private CombatantBehaviour ownerCombatant;
+        private bool referenceFraming;
+        private Vector2 referenceFrameCenter, referenceFrameOrigin;
+        private float referenceFrameWidth, referenceFrameProgress;
+        private readonly Dictionary<uint, Vector2> referenceRemoteOrigins = new Dictionary<uint, Vector2>();
+
+        public void SetReferenceTrapFraming(Vector2 center, float halfWidth, float progress)
+        {
+            if (!referenceFraming) { referenceFrameOrigin = transform.position; referenceRemoteOrigins.Clear(); }
+            referenceFraming = true; referenceFrameCenter = center;
+            referenceFrameWidth = halfWidth; referenceFrameProgress = Mathf.Clamp01(progress);
+        }
+
+        public void ClearReferenceTrapFraming() { referenceFraming = false; referenceRemoteOrigins.Clear(); ConstrainView(); }
+
+        public Bounds ReferenceFollowView(uint participant, Vector2 position, Bounds map)
+        {
+            var view = GameplayCameraGeometry.ViewBounds(GameCamera);
+            view.center = position;
+            if (referenceFraming)
+            {
+                if (!referenceRemoteOrigins.TryGetValue(participant, out var origin))
+                {
+                    float height = 20 * Mathf.Tan(40 * Mathf.Deg2Rad);
+                    origin = GameplayCameraGeometry.ClampView(new Bounds(position, new Vector3(height * GameCamera.aspect, height, 0)), map).center;
+                    referenceRemoteOrigins.Add(participant, origin);
+                }
+                view.center = Vector2.Lerp(origin, referenceFrameCenter, referenceFrameProgress);
+            }
+            return GameplayCameraGeometry.ClampView(view, map);
+        }
 
         public PlayerMovement BoundPlayer => owner;
         public Camera GameCamera => rig.GameCamera;
@@ -103,6 +134,7 @@ namespace AstralShift.HellMaiden.CameraFX
             if (!ReferenceEquals(owner, expectedOwner) || rig == null) return;
             if (ownerCombatant != null) ownerCombatant.DamageReceived -= OnOwnerDamage;
             ownerCombatant = null;
+            referenceFraming = false;
             owner = null;
             rig.RemoveAllCameraTargets(); // Plugin RemoveCameraTarget dereferences destroyed transforms.
             rig.enabled = false;
@@ -133,7 +165,16 @@ namespace AstralShift.HellMaiden.CameraFX
                 Vector3 p = shakeContainer.localPosition; p.z = 0;
                 shakeContainer.localPosition = p; shakeContainer.localRotation = Quaternion.identity;
             }
-            GameplayCameraGeometry.ConstrainNordic(GetComponent<Camera>(), rig, boundaryGround.bounds);
+            var camera = GetComponent<Camera>();
+            float distance = 10;
+            if (referenceFraming)
+            {
+                var center = Vector2.Lerp(referenceFrameOrigin, referenceFrameCenter, referenceFrameProgress);
+                transform.position = new Vector3(center.x, center.y, transform.position.z);
+                float fit = referenceFrameWidth / (Mathf.Max(.1f, camera.aspect) * Mathf.Tan(40 * Mathf.Deg2Rad));
+                distance = Mathf.Lerp(10, Mathf.Max(10, fit), referenceFrameProgress);
+            }
+            GameplayCameraGeometry.ConstrainNordic(camera, rig, boundaryGround.bounds, distance);
         }
 
         private void OnEnable() => GameOptionsService.Changed += ApplyShakePreference;

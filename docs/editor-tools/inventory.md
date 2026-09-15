@@ -6,6 +6,7 @@
 
 | ID | 名称 / 用途 | 分类 / 使用者 | 参数 | 运行条件 | 影响 / 产物 |
 | --- | --- | --- | --- | --- | --- |
+| validate.checkout | Git 检出完整性：在启动 Unity 前检查 Git LFS 实体、资源与 meta 配对、FMOD 平台设置及 Rewired 安装定位。 | 校验 / 人工 / AI | ProjectRoot、ReportPath | — | 只读检查；不下载、不恢复、不修改插件或玩法资产。；Logs/RepositoryIntegrity/checkout.json |
 | sample.gas-rebuild | 重建 GAS Vertical Slice：创建/重建 GAS 样例场景和配置 | 维护与样例 / 人工 / AI | Apply | edit | 创建/重建 GAS 样例场景和配置；Logs/ProjectTools |
 | validate.gas | 校验 GAS：检查 Modifier 配置与生成注册表 | 校验 / 人工 / AI | — | edit | 只读；不修改玩法资产；Logs/ProjectTools |
 | generate.gas-registry | 生成 GAS 注册表：扫描 Modifier 类型，更新 GeneratedModifierRegistry.g.cs | 制作 / 人工 / AI | Apply | edit | 扫描 Modifier 类型，更新 GeneratedModifierRegistry.g.cs；Logs/ProjectTools |

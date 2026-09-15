@@ -12,6 +12,7 @@
 
 | 要做的事 | 人工入口 | AI / 自动化 |
 | --- | --- | --- |
+| 换电脑、首次克隆或插件找不到 | 打开 Unity 前按 [检出说明](../project-checkout.md) 检查 | `validate.checkout`；不启动 Unity，不自动修复 |
 | 修改波次 | 制作 → 波次时间轴 | 修改明确资产路径后运行 `validate.waves` |
 | 修改准备房间角色和初始武器范围 | 制作 → 准备房间配置 | 编辑 `Assets/Resources/PreparationMenuCatalog.asset`，然后 `validate.all` |
 | 修改翻译 | 制作 → 本地化表格，使用 Unity Localization 的表格编辑器 | `validate.localization`、`export.localization-csv` |

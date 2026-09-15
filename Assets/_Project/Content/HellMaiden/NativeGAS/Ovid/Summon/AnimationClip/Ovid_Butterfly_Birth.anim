@@ -2813,7 +2813,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    attribute: material.path_0x4C4EFF0C_IUsrjIN
+    attribute: material._GlowColor.r
     path: Caccon/CacoonSort/cacoon
     classID: 23
     script: {fileID: 0}
@@ -2843,7 +2843,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    attribute: material.path_0x5C4EFF0C_UIKhIqH
+    attribute: material._GlowColor.g
     path: Caccon/CacoonSort/cacoon
     classID: 23
     script: {fileID: 0}
@@ -2993,7 +2993,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    attribute: material.path_0x6C4EFF0C_sQKuHIJ
+    attribute: material._GlowColor.b
     path: Caccon/CacoonSort/cacoon
     classID: 23
     script: {fileID: 0}
@@ -3023,7 +3023,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    attribute: material.path_0x7C4EFF0C_oMsokqL
+    attribute: material._GlowColor.a
     path: Caccon/CacoonSort/cacoon
     classID: 23
     script: {fileID: 0}

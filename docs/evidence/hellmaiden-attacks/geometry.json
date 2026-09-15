@@ -1,0 +1,8463 @@
+[
+  {
+    "id": "o00044",
+    "runtimeId": 82338,
+    "type": "UnityEngine.CircleCollider2D",
+    "name": "Collider",
+    "path": "Enemy_Brotchi[0]/Collider[2]",
+    "data": {
+      "gameObject": {
+        "reference": "o00232",
+        "type": "UnityEngine.GameObject",
+        "name": "Collider",
+        "path": "Enemy_Brotchi[0]/Collider[2]"
+      },
+      "enabled": true,
+      "trigger": false,
+      "offset": [
+        0.0,
+        0.3
+      ],
+      "radius": 0.46,
+      "size": null,
+      "paths": []
+    }
+  },
+  {
+    "id": "o00045",
+    "runtimeId": 80542,
+    "type": "UnityEngine.Transform",
+    "name": "DamagePosition",
+    "path": "Enemy_Brotchi[0]/DamagePosition[3]",
+    "data": {
+      "gameObject": {
+        "reference": "o00233",
+        "type": "UnityEngine.GameObject",
+        "name": "DamagePosition",
+        "path": "Enemy_Brotchi[0]/DamagePosition[3]"
+      },
+      "localPosition": [
+        0.124,
+        1.7,
+        0.0
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00050",
+    "runtimeId": 81732,
+    "type": "UnityEngine.Transform",
+    "name": "OnHitEffectBottom",
+    "path": "Enemy_Brotchi[0]/Sprite[0]/OnHitEffectBottom[2]",
+    "data": {
+      "gameObject": {
+        "reference": "o00258",
+        "type": "UnityEngine.GameObject",
+        "name": "OnHitEffectBottom",
+        "path": "Enemy_Brotchi[0]/Sprite[0]/OnHitEffectBottom[2]"
+      },
+      "localPosition": [
+        -0.04,
+        -0.03,
+        -0.006448106
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00051",
+    "runtimeId": 80666,
+    "type": "UnityEngine.Transform",
+    "name": "OnHitEffectCenterPivot",
+    "path": "Enemy_Brotchi[0]/Sprite[0]/OnHitEffectCenterPivot[0]",
+    "data": {
+      "gameObject": {
+        "reference": "o00259",
+        "type": "UnityEngine.GameObject",
+        "name": "OnHitEffectCenterPivot",
+        "path": "Enemy_Brotchi[0]/Sprite[0]/OnHitEffectCenterPivot[0]"
+      },
+      "localPosition": [
+        0.115,
+        1.086,
+        0.0
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00052",
+    "runtimeId": 79838,
+    "type": "UnityEngine.Transform",
+    "name": "OnHitEffectCenterPivot1",
+    "path": "Enemy_Brotchi[0]/Sprite[0]/OnHitEffectCenterPivot1[3]",
+    "data": {
+      "gameObject": {
+        "reference": "o00260",
+        "type": "UnityEngine.GameObject",
+        "name": "OnHitEffectCenterPivot1",
+        "path": "Enemy_Brotchi[0]/Sprite[0]/OnHitEffectCenterPivot1[3]"
+      },
+      "localPosition": [
+        0.19,
+        -0.74,
+        -0.004089997
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00053",
+    "runtimeId": 81980,
+    "type": "UnityEngine.Transform",
+    "name": "OnHitEffectCenterPivot2",
+    "path": "Enemy_Brotchi[0]/Sprite[0]/OnHitEffectCenterPivot2[4]",
+    "data": {
+      "gameObject": {
+        "reference": "o00261",
+        "type": "UnityEngine.GameObject",
+        "name": "OnHitEffectCenterPivot2",
+        "path": "Enemy_Brotchi[0]/Sprite[0]/OnHitEffectCenterPivot2[4]"
+      },
+      "localPosition": [
+        0.083,
+        0.08,
+        -0.004089997
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00054",
+    "runtimeId": 81792,
+    "type": "UnityEngine.Transform",
+    "name": "OnHitEffectCenterPivot3",
+    "path": "Enemy_Brotchi[0]/Sprite[0]/OnHitEffectCenterPivot3[5]",
+    "data": {
+      "gameObject": {
+        "reference": "o00262",
+        "type": "UnityEngine.GameObject",
+        "name": "OnHitEffectCenterPivot3",
+        "path": "Enemy_Brotchi[0]/Sprite[0]/OnHitEffectCenterPivot3[5]"
+      },
+      "localPosition": [
+        0.02,
+        0.04,
+        -0.004089997
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00055",
+    "runtimeId": 79864,
+    "type": "UnityEngine.Transform",
+    "name": "OnHitEffectTopPivot",
+    "path": "Enemy_Brotchi[0]/Sprite[0]/OnHitEffectTopPivot[1]",
+    "data": {
+      "gameObject": {
+        "reference": "o00263",
+        "type": "UnityEngine.GameObject",
+        "name": "OnHitEffectTopPivot",
+        "path": "Enemy_Brotchi[0]/Sprite[0]/OnHitEffectTopPivot[1]"
+      },
+      "localPosition": [
+        -0.181,
+        1.994,
+        0.0
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00062",
+    "runtimeId": 82310,
+    "type": "UnityEngine.CircleCollider2D",
+    "name": "Collider",
+    "path": "Enemy_Brotchi_LVL2[0]/Collider[2]",
+    "data": {
+      "gameObject": {
+        "reference": "o00273",
+        "type": "UnityEngine.GameObject",
+        "name": "Collider",
+        "path": "Enemy_Brotchi_LVL2[0]/Collider[2]"
+      },
+      "enabled": true,
+      "trigger": false,
+      "offset": [
+        0.0,
+        0.3
+      ],
+      "radius": 0.46,
+      "size": null,
+      "paths": []
+    }
+  },
+  {
+    "id": "o00063",
+    "runtimeId": 79858,
+    "type": "UnityEngine.Transform",
+    "name": "DamagePosition",
+    "path": "Enemy_Brotchi_LVL2[0]/DamagePosition[3]",
+    "data": {
+      "gameObject": {
+        "reference": "o00274",
+        "type": "UnityEngine.GameObject",
+        "name": "DamagePosition",
+        "path": "Enemy_Brotchi_LVL2[0]/DamagePosition[3]"
+      },
+      "localPosition": [
+        0.124,
+        1.7,
+        0.0
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00068",
+    "runtimeId": 81160,
+    "type": "UnityEngine.Transform",
+    "name": "OnHitEffectBottom",
+    "path": "Enemy_Brotchi_LVL2[0]/Sprite[0]/OnHitEffectBottom[2]",
+    "data": {
+      "gameObject": {
+        "reference": "o00297",
+        "type": "UnityEngine.GameObject",
+        "name": "OnHitEffectBottom",
+        "path": "Enemy_Brotchi_LVL2[0]/Sprite[0]/OnHitEffectBottom[2]"
+      },
+      "localPosition": [
+        -0.04,
+        -0.03,
+        -0.006448106
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00069",
+    "runtimeId": 80114,
+    "type": "UnityEngine.Transform",
+    "name": "OnHitEffectCenterPivot",
+    "path": "Enemy_Brotchi_LVL2[0]/Sprite[0]/OnHitEffectCenterPivot[0]",
+    "data": {
+      "gameObject": {
+        "reference": "o00298",
+        "type": "UnityEngine.GameObject",
+        "name": "OnHitEffectCenterPivot",
+        "path": "Enemy_Brotchi_LVL2[0]/Sprite[0]/OnHitEffectCenterPivot[0]"
+      },
+      "localPosition": [
+        0.115,
+        1.086,
+        0.0
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00070",
+    "runtimeId": 80554,
+    "type": "UnityEngine.Transform",
+    "name": "OnHitEffectCenterPivot1",
+    "path": "Enemy_Brotchi_LVL2[0]/Sprite[0]/OnHitEffectCenterPivot1[3]",
+    "data": {
+      "gameObject": {
+        "reference": "o00299",
+        "type": "UnityEngine.GameObject",
+        "name": "OnHitEffectCenterPivot1",
+        "path": "Enemy_Brotchi_LVL2[0]/Sprite[0]/OnHitEffectCenterPivot1[3]"
+      },
+      "localPosition": [
+        0.19,
+        -0.74,
+        -0.004089997
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00071",
+    "runtimeId": 81244,
+    "type": "UnityEngine.Transform",
+    "name": "OnHitEffectCenterPivot2",
+    "path": "Enemy_Brotchi_LVL2[0]/Sprite[0]/OnHitEffectCenterPivot2[4]",
+    "data": {
+      "gameObject": {
+        "reference": "o00300",
+        "type": "UnityEngine.GameObject",
+        "name": "OnHitEffectCenterPivot2",
+        "path": "Enemy_Brotchi_LVL2[0]/Sprite[0]/OnHitEffectCenterPivot2[4]"
+      },
+      "localPosition": [
+        0.083,
+        0.08,
+        -0.004089997
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00072",
+    "runtimeId": 81106,
+    "type": "UnityEngine.Transform",
+    "name": "OnHitEffectCenterPivot3",
+    "path": "Enemy_Brotchi_LVL2[0]/Sprite[0]/OnHitEffectCenterPivot3[5]",
+    "data": {
+      "gameObject": {
+        "reference": "o00301",
+        "type": "UnityEngine.GameObject",
+        "name": "OnHitEffectCenterPivot3",
+        "path": "Enemy_Brotchi_LVL2[0]/Sprite[0]/OnHitEffectCenterPivot3[5]"
+      },
+      "localPosition": [
+        0.02,
+        0.04,
+        -0.004089997
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00073",
+    "runtimeId": 80544,
+    "type": "UnityEngine.Transform",
+    "name": "OnHitEffectTopPivot",
+    "path": "Enemy_Brotchi_LVL2[0]/Sprite[0]/OnHitEffectTopPivot[1]",
+    "data": {
+      "gameObject": {
+        "reference": "o00302",
+        "type": "UnityEngine.GameObject",
+        "name": "OnHitEffectTopPivot",
+        "path": "Enemy_Brotchi_LVL2[0]/Sprite[0]/OnHitEffectTopPivot[1]"
+      },
+      "localPosition": [
+        -0.181,
+        1.994,
+        0.0
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00080",
+    "runtimeId": 82336,
+    "type": "UnityEngine.CircleCollider2D",
+    "name": "Collider",
+    "path": "Enemy_Imp[0]/Collider[2]",
+    "data": {
+      "gameObject": {
+        "reference": "o00310",
+        "type": "UnityEngine.GameObject",
+        "name": "Collider",
+        "path": "Enemy_Imp[0]/Collider[2]"
+      },
+      "enabled": true,
+      "trigger": false,
+      "offset": [
+        0.0,
+        0.3
+      ],
+      "radius": 0.46,
+      "size": null,
+      "paths": []
+    }
+  },
+  {
+    "id": "o00081",
+    "runtimeId": 80380,
+    "type": "UnityEngine.Transform",
+    "name": "DamagePosition",
+    "path": "Enemy_Imp[0]/DamagePosition[3]",
+    "data": {
+      "gameObject": {
+        "reference": "o00311",
+        "type": "UnityEngine.GameObject",
+        "name": "DamagePosition",
+        "path": "Enemy_Imp[0]/DamagePosition[3]"
+      },
+      "localPosition": [
+        0.0,
+        3.03,
+        0.0
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00086",
+    "runtimeId": 81666,
+    "type": "UnityEngine.Transform",
+    "name": "OnHitEffectBottom",
+    "path": "Enemy_Imp[0]/Sprite[0]/OnHitEffectBottom[2]",
+    "data": {
+      "gameObject": {
+        "reference": "o00336",
+        "type": "UnityEngine.GameObject",
+        "name": "OnHitEffectBottom",
+        "path": "Enemy_Imp[0]/Sprite[0]/OnHitEffectBottom[2]"
+      },
+      "localPosition": [
+        0.0,
+        -0.01,
+        -0.006448106
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00087",
+    "runtimeId": 80838,
+    "type": "UnityEngine.Transform",
+    "name": "OnHitEffectCenterPivot",
+    "path": "Enemy_Imp[0]/Sprite[0]/OnHitEffectCenterPivot[0]",
+    "data": {
+      "gameObject": {
+        "reference": "o00337",
+        "type": "UnityEngine.GameObject",
+        "name": "OnHitEffectCenterPivot",
+        "path": "Enemy_Imp[0]/Sprite[0]/OnHitEffectCenterPivot[0]"
+      },
+      "localPosition": [
+        0.02,
+        2.17,
+        0.0
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00088",
+    "runtimeId": 79806,
+    "type": "UnityEngine.Transform",
+    "name": "OnHitEffectCenterPivot1",
+    "path": "Enemy_Imp[0]/Sprite[0]/OnHitEffectCenterPivot1[3]",
+    "data": {
+      "gameObject": {
+        "reference": "o00338",
+        "type": "UnityEngine.GameObject",
+        "name": "OnHitEffectCenterPivot1",
+        "path": "Enemy_Imp[0]/Sprite[0]/OnHitEffectCenterPivot1[3]"
+      },
+      "localPosition": [
+        -0.09,
+        0.8,
+        -0.004089997
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00089",
+    "runtimeId": 82032,
+    "type": "UnityEngine.Transform",
+    "name": "OnHitEffectCenterPivot2",
+    "path": "Enemy_Imp[0]/Sprite[0]/OnHitEffectCenterPivot2[4]",
+    "data": {
+      "gameObject": {
+        "reference": "o00339",
+        "type": "UnityEngine.GameObject",
+        "name": "OnHitEffectCenterPivot2",
+        "path": "Enemy_Imp[0]/Sprite[0]/OnHitEffectCenterPivot2[4]"
+      },
+      "localPosition": [
+        0.083,
+        0.08,
+        -0.004089997
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00090",
+    "runtimeId": 81622,
+    "type": "UnityEngine.Transform",
+    "name": "OnHitEffectCenterPivot3",
+    "path": "Enemy_Imp[0]/Sprite[0]/OnHitEffectCenterPivot3[5]",
+    "data": {
+      "gameObject": {
+        "reference": "o00340",
+        "type": "UnityEngine.GameObject",
+        "name": "OnHitEffectCenterPivot3",
+        "path": "Enemy_Imp[0]/Sprite[0]/OnHitEffectCenterPivot3[5]"
+      },
+      "localPosition": [
+        -0.016,
+        0.026,
+        -0.004089997
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00091",
+    "runtimeId": 79794,
+    "type": "UnityEngine.Transform",
+    "name": "OnHitEffectTopPivot",
+    "path": "Enemy_Imp[0]/Sprite[0]/OnHitEffectTopPivot[1]",
+    "data": {
+      "gameObject": {
+        "reference": "o00341",
+        "type": "UnityEngine.GameObject",
+        "name": "OnHitEffectTopPivot",
+        "path": "Enemy_Imp[0]/Sprite[0]/OnHitEffectTopPivot[1]"
+      },
+      "localPosition": [
+        -0.06,
+        4.17,
+        0.0
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00098",
+    "runtimeId": 82368,
+    "type": "UnityEngine.CircleCollider2D",
+    "name": "Collider",
+    "path": "Enemy_Skeleton[0]/Collider[2]",
+    "data": {
+      "gameObject": {
+        "reference": "o00348",
+        "type": "UnityEngine.GameObject",
+        "name": "Collider",
+        "path": "Enemy_Skeleton[0]/Collider[2]"
+      },
+      "enabled": true,
+      "trigger": false,
+      "offset": [
+        0.0,
+        0.3
+      ],
+      "radius": 0.46,
+      "size": null,
+      "paths": []
+    }
+  },
+  {
+    "id": "o00099",
+    "runtimeId": 81620,
+    "type": "UnityEngine.Transform",
+    "name": "DamagePosition",
+    "path": "Enemy_Skeleton[0]/DamagePosition[3]",
+    "data": {
+      "gameObject": {
+        "reference": "o00349",
+        "type": "UnityEngine.GameObject",
+        "name": "DamagePosition",
+        "path": "Enemy_Skeleton[0]/DamagePosition[3]"
+      },
+      "localPosition": [
+        0.124,
+        1.7,
+        0.0
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00104",
+    "runtimeId": 80430,
+    "type": "UnityEngine.Transform",
+    "name": "OnHitEffectBottom",
+    "path": "Enemy_Skeleton[0]/Sprite[0]/OnHitEffectBottom[2]",
+    "data": {
+      "gameObject": {
+        "reference": "o00372",
+        "type": "UnityEngine.GameObject",
+        "name": "OnHitEffectBottom",
+        "path": "Enemy_Skeleton[0]/Sprite[0]/OnHitEffectBottom[2]"
+      },
+      "localPosition": [
+        0.0,
+        -0.01,
+        -0.006448106
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00105",
+    "runtimeId": 82098,
+    "type": "UnityEngine.Transform",
+    "name": "OnHitEffectCenterPivot",
+    "path": "Enemy_Skeleton[0]/Sprite[0]/OnHitEffectCenterPivot[0]",
+    "data": {
+      "gameObject": {
+        "reference": "o00373",
+        "type": "UnityEngine.GameObject",
+        "name": "OnHitEffectCenterPivot",
+        "path": "Enemy_Skeleton[0]/Sprite[0]/OnHitEffectCenterPivot[0]"
+      },
+      "localPosition": [
+        0.115,
+        0.934,
+        0.0
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00106",
+    "runtimeId": 81054,
+    "type": "UnityEngine.Transform",
+    "name": "OnHitEffectCenterPivot1",
+    "path": "Enemy_Skeleton[0]/Sprite[0]/OnHitEffectCenterPivot1[3]",
+    "data": {
+      "gameObject": {
+        "reference": "o00374",
+        "type": "UnityEngine.GameObject",
+        "name": "OnHitEffectCenterPivot1",
+        "path": "Enemy_Skeleton[0]/Sprite[0]/OnHitEffectCenterPivot1[3]"
+      },
+      "localPosition": [
+        0.19,
+        -0.24,
+        -0.004089997
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00107",
+    "runtimeId": 80796,
+    "type": "UnityEngine.Transform",
+    "name": "OnHitEffectCenterPivot2",
+    "path": "Enemy_Skeleton[0]/Sprite[0]/OnHitEffectCenterPivot2[4]",
+    "data": {
+      "gameObject": {
+        "reference": "o00375",
+        "type": "UnityEngine.GameObject",
+        "name": "OnHitEffectCenterPivot2",
+        "path": "Enemy_Skeleton[0]/Sprite[0]/OnHitEffectCenterPivot2[4]"
+      },
+      "localPosition": [
+        0.083,
+        0.08,
+        -0.004089997
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00108",
+    "runtimeId": 80384,
+    "type": "UnityEngine.Transform",
+    "name": "OnHitEffectCenterPivot3",
+    "path": "Enemy_Skeleton[0]/Sprite[0]/OnHitEffectCenterPivot3[5]",
+    "data": {
+      "gameObject": {
+        "reference": "o00376",
+        "type": "UnityEngine.GameObject",
+        "name": "OnHitEffectCenterPivot3",
+        "path": "Enemy_Skeleton[0]/Sprite[0]/OnHitEffectCenterPivot3[5]"
+      },
+      "localPosition": [
+        0.083,
+        0.08,
+        -0.004089997
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00109",
+    "runtimeId": 81042,
+    "type": "UnityEngine.Transform",
+    "name": "OnHitEffectTopPivot",
+    "path": "Enemy_Skeleton[0]/Sprite[0]/OnHitEffectTopPivot[1]",
+    "data": {
+      "gameObject": {
+        "reference": "o00377",
+        "type": "UnityEngine.GameObject",
+        "name": "OnHitEffectTopPivot",
+        "path": "Enemy_Skeleton[0]/Sprite[0]/OnHitEffectTopPivot[1]"
+      },
+      "localPosition": [
+        0.02,
+        2.93,
+        0.0
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00116",
+    "runtimeId": 82332,
+    "type": "UnityEngine.CircleCollider2D",
+    "name": "Collider",
+    "path": "Elite_Skeleton[0]/Collider[2]",
+    "data": {
+      "gameObject": {
+        "reference": "o00383",
+        "type": "UnityEngine.GameObject",
+        "name": "Collider",
+        "path": "Elite_Skeleton[0]/Collider[2]"
+      },
+      "enabled": true,
+      "trigger": false,
+      "offset": [
+        0.0,
+        0.3
+      ],
+      "radius": 0.5,
+      "size": null,
+      "paths": []
+    }
+  },
+  {
+    "id": "o00117",
+    "runtimeId": 80944,
+    "type": "UnityEngine.Transform",
+    "name": "DamagePosition",
+    "path": "Elite_Skeleton[0]/DamagePosition[4]",
+    "data": {
+      "gameObject": {
+        "reference": "o00384",
+        "type": "UnityEngine.GameObject",
+        "name": "DamagePosition",
+        "path": "Elite_Skeleton[0]/DamagePosition[4]"
+      },
+      "localPosition": [
+        0.124,
+        1.7,
+        0.0
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00123",
+    "runtimeId": 81126,
+    "type": "UnityEngine.Transform",
+    "name": "OnHitEffectBottom",
+    "path": "Elite_Skeleton[0]/Sprite[0]/OnHitEffectBottom[2]",
+    "data": {
+      "gameObject": {
+        "reference": "o00407",
+        "type": "UnityEngine.GameObject",
+        "name": "OnHitEffectBottom",
+        "path": "Elite_Skeleton[0]/Sprite[0]/OnHitEffectBottom[2]"
+      },
+      "localPosition": [
+        0.0,
+        -0.01,
+        -0.006448106
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00124",
+    "runtimeId": 81564,
+    "type": "UnityEngine.Transform",
+    "name": "OnHitEffectCenterPivot",
+    "path": "Elite_Skeleton[0]/Sprite[0]/OnHitEffectCenterPivot[0]",
+    "data": {
+      "gameObject": {
+        "reference": "o00408",
+        "type": "UnityEngine.GameObject",
+        "name": "OnHitEffectCenterPivot",
+        "path": "Elite_Skeleton[0]/Sprite[0]/OnHitEffectCenterPivot[0]"
+      },
+      "localPosition": [
+        0.07,
+        0.96,
+        0.0
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00125",
+    "runtimeId": 81248,
+    "type": "UnityEngine.Transform",
+    "name": "OnHitEffectCenterPivot1",
+    "path": "Elite_Skeleton[0]/Sprite[0]/OnHitEffectCenterPivot1[3]",
+    "data": {
+      "gameObject": {
+        "reference": "o00409",
+        "type": "UnityEngine.GameObject",
+        "name": "OnHitEffectCenterPivot1",
+        "path": "Elite_Skeleton[0]/Sprite[0]/OnHitEffectCenterPivot1[3]"
+      },
+      "localPosition": [
+        0.19,
+        -0.24,
+        -0.004089997
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00126",
+    "runtimeId": 80588,
+    "type": "UnityEngine.Transform",
+    "name": "OnHitEffectCenterPivot2",
+    "path": "Elite_Skeleton[0]/Sprite[0]/OnHitEffectCenterPivot2[4]",
+    "data": {
+      "gameObject": {
+        "reference": "o00410",
+        "type": "UnityEngine.GameObject",
+        "name": "OnHitEffectCenterPivot2",
+        "path": "Elite_Skeleton[0]/Sprite[0]/OnHitEffectCenterPivot2[4]"
+      },
+      "localPosition": [
+        0.083,
+        0.08,
+        -0.004089997
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00127",
+    "runtimeId": 81746,
+    "type": "UnityEngine.Transform",
+    "name": "OnHitEffectCenterPivot3",
+    "path": "Elite_Skeleton[0]/Sprite[0]/OnHitEffectCenterPivot3[5]",
+    "data": {
+      "gameObject": {
+        "reference": "o00411",
+        "type": "UnityEngine.GameObject",
+        "name": "OnHitEffectCenterPivot3",
+        "path": "Elite_Skeleton[0]/Sprite[0]/OnHitEffectCenterPivot3[5]"
+      },
+      "localPosition": [
+        0.083,
+        0.08,
+        -0.004089997
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00128",
+    "runtimeId": 81932,
+    "type": "UnityEngine.Transform",
+    "name": "OnHitEffectTopPivot",
+    "path": "Elite_Skeleton[0]/Sprite[0]/OnHitEffectTopPivot[1]",
+    "data": {
+      "gameObject": {
+        "reference": "o00412",
+        "type": "UnityEngine.GameObject",
+        "name": "OnHitEffectTopPivot",
+        "path": "Elite_Skeleton[0]/Sprite[0]/OnHitEffectTopPivot[1]"
+      },
+      "localPosition": [
+        0.107,
+        4.74,
+        0.0
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00135",
+    "runtimeId": 82376,
+    "type": "UnityEngine.CircleCollider2D",
+    "name": "Collider",
+    "path": "Enemy_Ghoul[0]/Collider[2]",
+    "data": {
+      "gameObject": {
+        "reference": "o00421",
+        "type": "UnityEngine.GameObject",
+        "name": "Collider",
+        "path": "Enemy_Ghoul[0]/Collider[2]"
+      },
+      "enabled": true,
+      "trigger": false,
+      "offset": [
+        0.0,
+        0.3
+      ],
+      "radius": 0.46,
+      "size": null,
+      "paths": []
+    }
+  },
+  {
+    "id": "o00136",
+    "runtimeId": 81784,
+    "type": "UnityEngine.Transform",
+    "name": "DamagePosition",
+    "path": "Enemy_Ghoul[0]/DamagePosition[3]",
+    "data": {
+      "gameObject": {
+        "reference": "o00422",
+        "type": "UnityEngine.GameObject",
+        "name": "DamagePosition",
+        "path": "Enemy_Ghoul[0]/DamagePosition[3]"
+      },
+      "localPosition": [
+        0.124,
+        0.34,
+        0.0
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00141",
+    "runtimeId": 80490,
+    "type": "UnityEngine.Transform",
+    "name": "OnHitEffectBottom",
+    "path": "Enemy_Ghoul[0]/Sprite[0]/OnHitEffectBottom[2]",
+    "data": {
+      "gameObject": {
+        "reference": "o00448",
+        "type": "UnityEngine.GameObject",
+        "name": "OnHitEffectBottom",
+        "path": "Enemy_Ghoul[0]/Sprite[0]/OnHitEffectBottom[2]"
+      },
+      "localPosition": [
+        0.0,
+        -0.01,
+        -0.006448106
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00142",
+    "runtimeId": 81926,
+    "type": "UnityEngine.Transform",
+    "name": "OnHitEffectCenterPivot",
+    "path": "Enemy_Ghoul[0]/Sprite[0]/OnHitEffectCenterPivot[0]",
+    "data": {
+      "gameObject": {
+        "reference": "o00449",
+        "type": "UnityEngine.GameObject",
+        "name": "OnHitEffectCenterPivot",
+        "path": "Enemy_Ghoul[0]/Sprite[0]/OnHitEffectCenterPivot[0]"
+      },
+      "localPosition": [
+        0.115,
+        0.934,
+        0.0
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00143",
+    "runtimeId": 81080,
+    "type": "UnityEngine.Transform",
+    "name": "OnHitEffectCenterPivot1",
+    "path": "Enemy_Ghoul[0]/Sprite[0]/OnHitEffectCenterPivot1[3]",
+    "data": {
+      "gameObject": {
+        "reference": "o00450",
+        "type": "UnityEngine.GameObject",
+        "name": "OnHitEffectCenterPivot1",
+        "path": "Enemy_Ghoul[0]/Sprite[0]/OnHitEffectCenterPivot1[3]"
+      },
+      "localPosition": [
+        0.19,
+        -0.24,
+        -0.004089997
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00144",
+    "runtimeId": 80710,
+    "type": "UnityEngine.Transform",
+    "name": "OnHitEffectCenterPivot2",
+    "path": "Enemy_Ghoul[0]/Sprite[0]/OnHitEffectCenterPivot2[4]",
+    "data": {
+      "gameObject": {
+        "reference": "o00451",
+        "type": "UnityEngine.GameObject",
+        "name": "OnHitEffectCenterPivot2",
+        "path": "Enemy_Ghoul[0]/Sprite[0]/OnHitEffectCenterPivot2[4]"
+      },
+      "localPosition": [
+        0.083,
+        0.08,
+        -0.004089997
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00145",
+    "runtimeId": 80548,
+    "type": "UnityEngine.Transform",
+    "name": "OnHitEffectCenterPivot3",
+    "path": "Enemy_Ghoul[0]/Sprite[0]/OnHitEffectCenterPivot3[5]",
+    "data": {
+      "gameObject": {
+        "reference": "o00452",
+        "type": "UnityEngine.GameObject",
+        "name": "OnHitEffectCenterPivot3",
+        "path": "Enemy_Ghoul[0]/Sprite[0]/OnHitEffectCenterPivot3[5]"
+      },
+      "localPosition": [
+        0.083,
+        0.08,
+        -0.004089997
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00146",
+    "runtimeId": 81114,
+    "type": "UnityEngine.Transform",
+    "name": "OnHitEffectTopPivot",
+    "path": "Enemy_Ghoul[0]/Sprite[0]/OnHitEffectTopPivot[1]",
+    "data": {
+      "gameObject": {
+        "reference": "o00453",
+        "type": "UnityEngine.GameObject",
+        "name": "OnHitEffectTopPivot",
+        "path": "Enemy_Ghoul[0]/Sprite[0]/OnHitEffectTopPivot[1]"
+      },
+      "localPosition": [
+        0.02,
+        2.93,
+        0.0
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00153",
+    "runtimeId": 82320,
+    "type": "UnityEngine.CircleCollider2D",
+    "name": "Collider",
+    "path": "Enemy_Slime Rusher[0]/Collider[2]",
+    "data": {
+      "gameObject": {
+        "reference": "o00460",
+        "type": "UnityEngine.GameObject",
+        "name": "Collider",
+        "path": "Enemy_Slime Rusher[0]/Collider[2]"
+      },
+      "enabled": true,
+      "trigger": false,
+      "offset": [
+        0.0,
+        0.3
+      ],
+      "radius": 0.46,
+      "size": null,
+      "paths": []
+    }
+  },
+  {
+    "id": "o00154",
+    "runtimeId": 80242,
+    "type": "UnityEngine.Transform",
+    "name": "DamagePosition",
+    "path": "Enemy_Slime Rusher[0]/DamagePosition[3]",
+    "data": {
+      "gameObject": {
+        "reference": "o00461",
+        "type": "UnityEngine.GameObject",
+        "name": "DamagePosition",
+        "path": "Enemy_Slime Rusher[0]/DamagePosition[3]"
+      },
+      "localPosition": [
+        0.0,
+        1.574,
+        0.0
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00159",
+    "runtimeId": 81512,
+    "type": "UnityEngine.Transform",
+    "name": "OnHitEffectBottom",
+    "path": "Enemy_Slime Rusher[0]/Sprite[0]/OnHitEffectBottom[2]",
+    "data": {
+      "gameObject": {
+        "reference": "o00478",
+        "type": "UnityEngine.GameObject",
+        "name": "OnHitEffectBottom",
+        "path": "Enemy_Slime Rusher[0]/Sprite[0]/OnHitEffectBottom[2]"
+      },
+      "localPosition": [
+        0.0,
+        -0.01,
+        -0.006448106
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00160",
+    "runtimeId": 79760,
+    "type": "UnityEngine.Transform",
+    "name": "OnHitEffectCenterPivot",
+    "path": "Enemy_Slime Rusher[0]/Sprite[0]/OnHitEffectCenterPivot[0]",
+    "data": {
+      "gameObject": {
+        "reference": "o00479",
+        "type": "UnityEngine.GameObject",
+        "name": "OnHitEffectCenterPivot",
+        "path": "Enemy_Slime Rusher[0]/Sprite[0]/OnHitEffectCenterPivot[0]"
+      },
+      "localPosition": [
+        0.09,
+        1.04,
+        0.0
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00161",
+    "runtimeId": 80882,
+    "type": "UnityEngine.Transform",
+    "name": "OnHitEffectCenterPivot1",
+    "path": "Enemy_Slime Rusher[0]/Sprite[0]/OnHitEffectCenterPivot1[3]",
+    "data": {
+      "gameObject": {
+        "reference": "o00480",
+        "type": "UnityEngine.GameObject",
+        "name": "OnHitEffectCenterPivot1",
+        "path": "Enemy_Slime Rusher[0]/Sprite[0]/OnHitEffectCenterPivot1[3]"
+      },
+      "localPosition": [
+        -0.03,
+        -0.69,
+        -0.004089997
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00162",
+    "runtimeId": 80966,
+    "type": "UnityEngine.Transform",
+    "name": "OnHitEffectCenterPivot2",
+    "path": "Enemy_Slime Rusher[0]/Sprite[0]/OnHitEffectCenterPivot2[4]",
+    "data": {
+      "gameObject": {
+        "reference": "o00481",
+        "type": "UnityEngine.GameObject",
+        "name": "OnHitEffectCenterPivot2",
+        "path": "Enemy_Slime Rusher[0]/Sprite[0]/OnHitEffectCenterPivot2[4]"
+      },
+      "localPosition": [
+        0.083,
+        0.08,
+        -0.004089997
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00163",
+    "runtimeId": 81430,
+    "type": "UnityEngine.Transform",
+    "name": "OnHitEffectCenterPivot3",
+    "path": "Enemy_Slime Rusher[0]/Sprite[0]/OnHitEffectCenterPivot3[5]",
+    "data": {
+      "gameObject": {
+        "reference": "o00482",
+        "type": "UnityEngine.GameObject",
+        "name": "OnHitEffectCenterPivot3",
+        "path": "Enemy_Slime Rusher[0]/Sprite[0]/OnHitEffectCenterPivot3[5]"
+      },
+      "localPosition": [
+        0.029,
+        -0.018,
+        -0.004089997
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00164",
+    "runtimeId": 80850,
+    "type": "UnityEngine.Transform",
+    "name": "OnHitEffectTopPivot",
+    "path": "Enemy_Slime Rusher[0]/Sprite[0]/OnHitEffectTopPivot[1]",
+    "data": {
+      "gameObject": {
+        "reference": "o00483",
+        "type": "UnityEngine.GameObject",
+        "name": "OnHitEffectTopPivot",
+        "path": "Enemy_Slime Rusher[0]/Sprite[0]/OnHitEffectTopPivot[1]"
+      },
+      "localPosition": [
+        0.0,
+        2.17,
+        0.0
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00171",
+    "runtimeId": 40326,
+    "type": "UnityEngine.CircleCollider2D",
+    "name": "Collider",
+    "path": "Enemy_Slime[0]/Collider[2]",
+    "data": {
+      "gameObject": {
+        "reference": "o00490",
+        "type": "UnityEngine.GameObject",
+        "name": "Collider",
+        "path": "Enemy_Slime[0]/Collider[2]"
+      },
+      "enabled": true,
+      "trigger": false,
+      "offset": [
+        0.0,
+        0.3
+      ],
+      "radius": 0.46,
+      "size": null,
+      "paths": []
+    }
+  },
+  {
+    "id": "o00172",
+    "runtimeId": 36026,
+    "type": "UnityEngine.Transform",
+    "name": "DamagePosition",
+    "path": "Enemy_Slime[0]/DamagePosition[3]",
+    "data": {
+      "gameObject": {
+        "reference": "o00491",
+        "type": "UnityEngine.GameObject",
+        "name": "DamagePosition",
+        "path": "Enemy_Slime[0]/DamagePosition[3]"
+      },
+      "localPosition": [
+        0.0,
+        1.574,
+        0.0
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00177",
+    "runtimeId": 38654,
+    "type": "UnityEngine.Transform",
+    "name": "OnHitEffectBottom",
+    "path": "Enemy_Slime[0]/Sprite[0]/OnHitEffectBottom[2]",
+    "data": {
+      "gameObject": {
+        "reference": "o00508",
+        "type": "UnityEngine.GameObject",
+        "name": "OnHitEffectBottom",
+        "path": "Enemy_Slime[0]/Sprite[0]/OnHitEffectBottom[2]"
+      },
+      "localPosition": [
+        0.0,
+        -0.01,
+        -0.006448106
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00178",
+    "runtimeId": 37058,
+    "type": "UnityEngine.Transform",
+    "name": "OnHitEffectCenterPivot",
+    "path": "Enemy_Slime[0]/Sprite[0]/OnHitEffectCenterPivot[0]",
+    "data": {
+      "gameObject": {
+        "reference": "o00509",
+        "type": "UnityEngine.GameObject",
+        "name": "OnHitEffectCenterPivot",
+        "path": "Enemy_Slime[0]/Sprite[0]/OnHitEffectCenterPivot[0]"
+      },
+      "localPosition": [
+        0.09,
+        1.04,
+        0.0
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00179",
+    "runtimeId": 34864,
+    "type": "UnityEngine.Transform",
+    "name": "OnHitEffectCenterPivot1",
+    "path": "Enemy_Slime[0]/Sprite[0]/OnHitEffectCenterPivot1[3]",
+    "data": {
+      "gameObject": {
+        "reference": "o00510",
+        "type": "UnityEngine.GameObject",
+        "name": "OnHitEffectCenterPivot1",
+        "path": "Enemy_Slime[0]/Sprite[0]/OnHitEffectCenterPivot1[3]"
+      },
+      "localPosition": [
+        -0.03,
+        -0.69,
+        -0.004089997
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00180",
+    "runtimeId": 39456,
+    "type": "UnityEngine.Transform",
+    "name": "OnHitEffectCenterPivot2",
+    "path": "Enemy_Slime[0]/Sprite[0]/OnHitEffectCenterPivot2[4]",
+    "data": {
+      "gameObject": {
+        "reference": "o00511",
+        "type": "UnityEngine.GameObject",
+        "name": "OnHitEffectCenterPivot2",
+        "path": "Enemy_Slime[0]/Sprite[0]/OnHitEffectCenterPivot2[4]"
+      },
+      "localPosition": [
+        0.083,
+        0.08,
+        -0.004089997
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00181",
+    "runtimeId": 38486,
+    "type": "UnityEngine.Transform",
+    "name": "OnHitEffectCenterPivot3",
+    "path": "Enemy_Slime[0]/Sprite[0]/OnHitEffectCenterPivot3[5]",
+    "data": {
+      "gameObject": {
+        "reference": "o00512",
+        "type": "UnityEngine.GameObject",
+        "name": "OnHitEffectCenterPivot3",
+        "path": "Enemy_Slime[0]/Sprite[0]/OnHitEffectCenterPivot3[5]"
+      },
+      "localPosition": [
+        0.029,
+        -0.018,
+        -0.004089997
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00182",
+    "runtimeId": 34940,
+    "type": "UnityEngine.Transform",
+    "name": "OnHitEffectTopPivot",
+    "path": "Enemy_Slime[0]/Sprite[0]/OnHitEffectTopPivot[1]",
+    "data": {
+      "gameObject": {
+        "reference": "o00513",
+        "type": "UnityEngine.GameObject",
+        "name": "OnHitEffectTopPivot",
+        "path": "Enemy_Slime[0]/Sprite[0]/OnHitEffectTopPivot[1]"
+      },
+      "localPosition": [
+        0.0,
+        2.197,
+        0.0
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00189",
+    "runtimeId": 82314,
+    "type": "UnityEngine.CircleCollider2D",
+    "name": "Collider",
+    "path": "Enemy_LostSoul[0]/Collider[2]",
+    "data": {
+      "gameObject": {
+        "reference": "o00522",
+        "type": "UnityEngine.GameObject",
+        "name": "Collider",
+        "path": "Enemy_LostSoul[0]/Collider[2]"
+      },
+      "enabled": true,
+      "trigger": false,
+      "offset": [
+        0.0,
+        0.3
+      ],
+      "radius": 0.34,
+      "size": null,
+      "paths": []
+    }
+  },
+  {
+    "id": "o00190",
+    "runtimeId": 80042,
+    "type": "UnityEngine.Transform",
+    "name": "DamagePosition",
+    "path": "Enemy_LostSoul[0]/DamagePosition[3]",
+    "data": {
+      "gameObject": {
+        "reference": "o00523",
+        "type": "UnityEngine.GameObject",
+        "name": "DamagePosition",
+        "path": "Enemy_LostSoul[0]/DamagePosition[3]"
+      },
+      "localPosition": [
+        0.0,
+        3.38999987,
+        0.0
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00195",
+    "runtimeId": 81266,
+    "type": "UnityEngine.Transform",
+    "name": "OnHitEffectBottom",
+    "path": "Enemy_LostSoul[0]/Sprite[0]/OnHitEffectBottom[2]",
+    "data": {
+      "gameObject": {
+        "reference": "o00545",
+        "type": "UnityEngine.GameObject",
+        "name": "OnHitEffectBottom",
+        "path": "Enemy_LostSoul[0]/Sprite[0]/OnHitEffectBottom[2]"
+      },
+      "localPosition": [
+        0.0,
+        -0.01,
+        -0.006448106
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00196",
+    "runtimeId": 79892,
+    "type": "UnityEngine.Transform",
+    "name": "OnHitEffectCenterPivot",
+    "path": "Enemy_LostSoul[0]/Sprite[0]/OnHitEffectCenterPivot[0]",
+    "data": {
+      "gameObject": {
+        "reference": "o00546",
+        "type": "UnityEngine.GameObject",
+        "name": "OnHitEffectCenterPivot",
+        "path": "Enemy_LostSoul[0]/Sprite[0]/OnHitEffectCenterPivot[0]"
+      },
+      "localPosition": [
+        0.01,
+        2.41,
+        0.0
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00197",
+    "runtimeId": 80606,
+    "type": "UnityEngine.Transform",
+    "name": "OnHitEffectCenterPivot1",
+    "path": "Enemy_LostSoul[0]/Sprite[0]/OnHitEffectCenterPivot1[3]",
+    "data": {
+      "gameObject": {
+        "reference": "o00547",
+        "type": "UnityEngine.GameObject",
+        "name": "OnHitEffectCenterPivot1",
+        "path": "Enemy_LostSoul[0]/Sprite[0]/OnHitEffectCenterPivot1[3]"
+      },
+      "localPosition": [
+        -0.002,
+        0.37,
+        -0.004089997
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00198",
+    "runtimeId": 81174,
+    "type": "UnityEngine.Transform",
+    "name": "OnHitEffectCenterPivot2",
+    "path": "Enemy_LostSoul[0]/Sprite[0]/OnHitEffectCenterPivot2[4]",
+    "data": {
+      "gameObject": {
+        "reference": "o00548",
+        "type": "UnityEngine.GameObject",
+        "name": "OnHitEffectCenterPivot2",
+        "path": "Enemy_LostSoul[0]/Sprite[0]/OnHitEffectCenterPivot2[4]"
+      },
+      "localPosition": [
+        -0.01,
+        0.029,
+        -0.004089997
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00199",
+    "runtimeId": 81336,
+    "type": "UnityEngine.Transform",
+    "name": "OnHitEffectCenterPivot3",
+    "path": "Enemy_LostSoul[0]/Sprite[0]/OnHitEffectCenterPivot3[5]",
+    "data": {
+      "gameObject": {
+        "reference": "o00549",
+        "type": "UnityEngine.GameObject",
+        "name": "OnHitEffectCenterPivot3",
+        "path": "Enemy_LostSoul[0]/Sprite[0]/OnHitEffectCenterPivot3[5]"
+      },
+      "localPosition": [
+        0.016,
+        0.005,
+        -0.004089997
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00200",
+    "runtimeId": 80648,
+    "type": "UnityEngine.Transform",
+    "name": "OnHitEffectTopPivot",
+    "path": "Enemy_LostSoul[0]/Sprite[0]/OnHitEffectTopPivot[1]",
+    "data": {
+      "gameObject": {
+        "reference": "o00550",
+        "type": "UnityEngine.GameObject",
+        "name": "OnHitEffectTopPivot",
+        "path": "Enemy_LostSoul[0]/Sprite[0]/OnHitEffectTopPivot[1]"
+      },
+      "localPosition": [
+        -0.05,
+        4.32,
+        0.0
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00256",
+    "runtimeId": 82624,
+    "type": "UnityEngine.BoxCollider2D",
+    "name": "HurtBox",
+    "path": "Enemy_Brotchi[0]/HurtBox[4]",
+    "data": {
+      "gameObject": {
+        "reference": "o00257",
+        "type": "UnityEngine.GameObject",
+        "name": "HurtBox",
+        "path": "Enemy_Brotchi[0]/HurtBox[4]"
+      },
+      "enabled": true,
+      "trigger": false,
+      "offset": [
+        0.0,
+        0.72
+      ],
+      "radius": null,
+      "size": [
+        1.2,
+        1.5
+      ],
+      "paths": []
+    }
+  },
+  {
+    "id": "o00264",
+    "runtimeId": 81802,
+    "type": "UnityEngine.Transform",
+    "name": "Enemy_Brotchi",
+    "path": "Enemy_Brotchi[0]",
+    "data": {
+      "gameObject": {
+        "reference": "o00058",
+        "type": "UnityEngine.GameObject",
+        "name": "Enemy_Brotchi",
+        "path": "Enemy_Brotchi[0]"
+      },
+      "localPosition": [
+        3.27,
+        0.0,
+        0.0
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00269",
+    "runtimeId": 82352,
+    "type": "UnityEngine.CircleCollider2D",
+    "name": "AttackCollider",
+    "path": "Enemy_Brotchi_LVL2[0]/AttackCollider[6]",
+    "data": {
+      "gameObject": {
+        "reference": "o00306",
+        "type": "UnityEngine.GameObject",
+        "name": "AttackCollider",
+        "path": "Enemy_Brotchi_LVL2[0]/AttackCollider[6]"
+      },
+      "enabled": true,
+      "trigger": true,
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "radius": 0.55,
+      "size": null,
+      "paths": []
+    }
+  },
+  {
+    "id": "o00271",
+    "runtimeId": 81420,
+    "type": "UnityEngine.Transform",
+    "name": "Sprite",
+    "path": "Enemy_Brotchi_LVL2[0]/Sprite[0]",
+    "data": {
+      "gameObject": {
+        "reference": "o00294",
+        "type": "UnityEngine.GameObject",
+        "name": "Sprite",
+        "path": "Enemy_Brotchi_LVL2[0]/Sprite[0]"
+      },
+      "localPosition": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00295",
+    "runtimeId": 82674,
+    "type": "UnityEngine.BoxCollider2D",
+    "name": "HurtBox",
+    "path": "Enemy_Brotchi_LVL2[0]/HurtBox[4]",
+    "data": {
+      "gameObject": {
+        "reference": "o00296",
+        "type": "UnityEngine.GameObject",
+        "name": "HurtBox",
+        "path": "Enemy_Brotchi_LVL2[0]/HurtBox[4]"
+      },
+      "enabled": true,
+      "trigger": false,
+      "offset": [
+        0.0,
+        0.72
+      ],
+      "radius": null,
+      "size": [
+        1.2,
+        1.5
+      ],
+      "paths": []
+    }
+  },
+  {
+    "id": "o00303",
+    "runtimeId": 81112,
+    "type": "UnityEngine.Transform",
+    "name": "Enemy_Brotchi_LVL2",
+    "path": "Enemy_Brotchi_LVL2[0]",
+    "data": {
+      "gameObject": {
+        "reference": "o00076",
+        "type": "UnityEngine.GameObject",
+        "name": "Enemy_Brotchi_LVL2",
+        "path": "Enemy_Brotchi_LVL2[0]"
+      },
+      "localPosition": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00308",
+    "runtimeId": 80364,
+    "type": "UnityEngine.Transform",
+    "name": "BulletPosition",
+    "path": "Enemy_Imp[0]/BulletPositionParent[6]/BulletPosition[0]",
+    "data": {
+      "gameObject": {
+        "reference": "o00601",
+        "type": "UnityEngine.GameObject",
+        "name": "BulletPosition",
+        "path": "Enemy_Imp[0]/BulletPositionParent[6]/BulletPosition[0]"
+      },
+      "localPosition": [
+        -0.38,
+        0.0,
+        0.0
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00334",
+    "runtimeId": 82626,
+    "type": "UnityEngine.BoxCollider2D",
+    "name": "HurtBox",
+    "path": "Enemy_Imp[0]/HurtBox[4]",
+    "data": {
+      "gameObject": {
+        "reference": "o00335",
+        "type": "UnityEngine.GameObject",
+        "name": "HurtBox",
+        "path": "Enemy_Imp[0]/HurtBox[4]"
+      },
+      "enabled": true,
+      "trigger": false,
+      "offset": [
+        0.05939734,
+        2.23463178
+      ],
+      "radius": null,
+      "size": [
+        1.73457575,
+        1.826685
+      ],
+      "paths": []
+    }
+  },
+  {
+    "id": "o00342",
+    "runtimeId": 81630,
+    "type": "UnityEngine.Transform",
+    "name": "Enemy_Imp",
+    "path": "Enemy_Imp[0]",
+    "data": {
+      "gameObject": {
+        "reference": "o00094",
+        "type": "UnityEngine.GameObject",
+        "name": "Enemy_Imp",
+        "path": "Enemy_Imp[0]"
+      },
+      "localPosition": [
+        -6.67,
+        0.0,
+        0.0
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00370",
+    "runtimeId": 82742,
+    "type": "UnityEngine.BoxCollider2D",
+    "name": "HurtBox",
+    "path": "Enemy_Skeleton[0]/HurtBox[4]",
+    "data": {
+      "gameObject": {
+        "reference": "o00371",
+        "type": "UnityEngine.GameObject",
+        "name": "HurtBox",
+        "path": "Enemy_Skeleton[0]/HurtBox[4]"
+      },
+      "enabled": true,
+      "trigger": false,
+      "offset": [
+        0.0,
+        0.72
+      ],
+      "radius": null,
+      "size": [
+        1.2,
+        1.5
+      ],
+      "paths": []
+    }
+  },
+  {
+    "id": "o00378",
+    "runtimeId": 80390,
+    "type": "UnityEngine.Transform",
+    "name": "Enemy_Skeleton",
+    "path": "Enemy_Skeleton[0]",
+    "data": {
+      "gameObject": {
+        "reference": "o00112",
+        "type": "UnityEngine.GameObject",
+        "name": "Enemy_Skeleton",
+        "path": "Enemy_Skeleton[0]"
+      },
+      "localPosition": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00405",
+    "runtimeId": 82734,
+    "type": "UnityEngine.BoxCollider2D",
+    "name": "HurtBox",
+    "path": "Elite_Skeleton[0]/HurtBox[5]",
+    "data": {
+      "gameObject": {
+        "reference": "o00406",
+        "type": "UnityEngine.GameObject",
+        "name": "HurtBox",
+        "path": "Elite_Skeleton[0]/HurtBox[5]"
+      },
+      "enabled": true,
+      "trigger": false,
+      "offset": [
+        0.0,
+        0.72
+      ],
+      "radius": null,
+      "size": [
+        1.2,
+        1.5
+      ],
+      "paths": []
+    }
+  },
+  {
+    "id": "o00413",
+    "runtimeId": 81076,
+    "type": "UnityEngine.Transform",
+    "name": "Elite_Skeleton",
+    "path": "Elite_Skeleton[0]",
+    "data": {
+      "gameObject": {
+        "reference": "o00131",
+        "type": "UnityEngine.GameObject",
+        "name": "Elite_Skeleton",
+        "path": "Elite_Skeleton[0]"
+      },
+      "localPosition": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00446",
+    "runtimeId": 82736,
+    "type": "UnityEngine.BoxCollider2D",
+    "name": "HurtBox",
+    "path": "Enemy_Ghoul[0]/HurtBox[4]",
+    "data": {
+      "gameObject": {
+        "reference": "o00447",
+        "type": "UnityEngine.GameObject",
+        "name": "HurtBox",
+        "path": "Enemy_Ghoul[0]/HurtBox[4]"
+      },
+      "enabled": true,
+      "trigger": false,
+      "offset": [
+        0.0,
+        0.72
+      ],
+      "radius": null,
+      "size": [
+        1.2,
+        1.5
+      ],
+      "paths": []
+    }
+  },
+  {
+    "id": "o00454",
+    "runtimeId": 80546,
+    "type": "UnityEngine.Transform",
+    "name": "Enemy_Ghoul",
+    "path": "Enemy_Ghoul[0]",
+    "data": {
+      "gameObject": {
+        "reference": "o00149",
+        "type": "UnityEngine.GameObject",
+        "name": "Enemy_Ghoul",
+        "path": "Enemy_Ghoul[0]"
+      },
+      "localPosition": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00476",
+    "runtimeId": 82694,
+    "type": "UnityEngine.BoxCollider2D",
+    "name": "HurtBox",
+    "path": "Enemy_Slime Rusher[0]/HurtBox[4]",
+    "data": {
+      "gameObject": {
+        "reference": "o00477",
+        "type": "UnityEngine.GameObject",
+        "name": "HurtBox",
+        "path": "Enemy_Slime Rusher[0]/HurtBox[4]"
+      },
+      "enabled": true,
+      "trigger": false,
+      "offset": [
+        0.0,
+        0.72
+      ],
+      "radius": null,
+      "size": [
+        1.2,
+        1.5
+      ],
+      "paths": []
+    }
+  },
+  {
+    "id": "o00484",
+    "runtimeId": 81448,
+    "type": "UnityEngine.Transform",
+    "name": "Enemy_Slime Rusher",
+    "path": "Enemy_Slime Rusher[0]",
+    "data": {
+      "gameObject": {
+        "reference": "o00167",
+        "type": "UnityEngine.GameObject",
+        "name": "Enemy_Slime Rusher",
+        "path": "Enemy_Slime Rusher[0]"
+      },
+      "localPosition": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00506",
+    "runtimeId": 40396,
+    "type": "UnityEngine.BoxCollider2D",
+    "name": "HurtBox",
+    "path": "Enemy_Slime[0]/HurtBox[4]",
+    "data": {
+      "gameObject": {
+        "reference": "o00507",
+        "type": "UnityEngine.GameObject",
+        "name": "HurtBox",
+        "path": "Enemy_Slime[0]/HurtBox[4]"
+      },
+      "enabled": true,
+      "trigger": false,
+      "offset": [
+        0.0,
+        0.72
+      ],
+      "radius": null,
+      "size": [
+        1.2,
+        1.5
+      ],
+      "paths": []
+    }
+  },
+  {
+    "id": "o00514",
+    "runtimeId": 38504,
+    "type": "UnityEngine.Transform",
+    "name": "Enemy_Slime",
+    "path": "Enemy_Slime[0]",
+    "data": {
+      "gameObject": {
+        "reference": "o00185",
+        "type": "UnityEngine.GameObject",
+        "name": "Enemy_Slime",
+        "path": "Enemy_Slime[0]"
+      },
+      "localPosition": [
+        -18.948,
+        2.65,
+        0.0
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00521",
+    "runtimeId": 81056,
+    "type": "UnityEngine.Transform",
+    "name": "ExplosionPosition",
+    "path": "Enemy_LostSoul[0]/ExplosionPosition[6]",
+    "data": {
+      "gameObject": {
+        "reference": "o00554",
+        "type": "UnityEngine.GameObject",
+        "name": "ExplosionPosition",
+        "path": "Enemy_LostSoul[0]/ExplosionPosition[6]"
+      },
+      "localPosition": [
+        0.0,
+        1.74000025,
+        0.0
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00543",
+    "runtimeId": 82720,
+    "type": "UnityEngine.BoxCollider2D",
+    "name": "HurtBox",
+    "path": "Enemy_LostSoul[0]/HurtBox[4]",
+    "data": {
+      "gameObject": {
+        "reference": "o00544",
+        "type": "UnityEngine.GameObject",
+        "name": "HurtBox",
+        "path": "Enemy_LostSoul[0]/HurtBox[4]"
+      },
+      "enabled": true,
+      "trigger": false,
+      "offset": [
+        0.0,
+        0.72
+      ],
+      "radius": null,
+      "size": [
+        1.2,
+        1.5
+      ],
+      "paths": []
+    }
+  },
+  {
+    "id": "o00551",
+    "runtimeId": 81334,
+    "type": "UnityEngine.Transform",
+    "name": "Enemy_LostSoul",
+    "path": "Enemy_LostSoul[0]",
+    "data": {
+      "gameObject": {
+        "reference": "o00203",
+        "type": "UnityEngine.GameObject",
+        "name": "Enemy_LostSoul",
+        "path": "Enemy_LostSoul[0]"
+      },
+      "localPosition": [
+        -12.69,
+        2.65,
+        0.0
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00555",
+    "runtimeId": 79848,
+    "type": "UnityEngine.Transform",
+    "name": "AILerpMovement",
+    "path": "Enemy_Brotchi[0]/Movement[1]/AILerpMovement[1]",
+    "data": {
+      "gameObject": {
+        "reference": "o00230",
+        "type": "UnityEngine.GameObject",
+        "name": "AILerpMovement",
+        "path": "Enemy_Brotchi[0]/Movement[1]/AILerpMovement[1]"
+      },
+      "localPosition": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00559",
+    "runtimeId": 80718,
+    "type": "UnityEngine.Transform",
+    "name": "Collider",
+    "path": "Enemy_Brotchi[0]/Collider[2]",
+    "data": {
+      "gameObject": {
+        "reference": "o00232",
+        "type": "UnityEngine.GameObject",
+        "name": "Collider",
+        "path": "Enemy_Brotchi[0]/Collider[2]"
+      },
+      "localPosition": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00560",
+    "runtimeId": 80258,
+    "type": "UnityEngine.Transform",
+    "name": "DefaultMovement",
+    "path": "Enemy_Brotchi[0]/Movement[1]/DefaultMovement[0]",
+    "data": {
+      "gameObject": {
+        "reference": "o00234",
+        "type": "UnityEngine.GameObject",
+        "name": "DefaultMovement",
+        "path": "Enemy_Brotchi[0]/Movement[1]/DefaultMovement[0]"
+      },
+      "localPosition": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00566",
+    "runtimeId": 82140,
+    "type": "UnityEngine.Transform",
+    "name": "Sprite",
+    "path": "Enemy_Brotchi[0]/Sprite[0]",
+    "data": {
+      "gameObject": {
+        "reference": "o00255",
+        "type": "UnityEngine.GameObject",
+        "name": "Sprite",
+        "path": "Enemy_Brotchi[0]/Sprite[0]"
+      },
+      "localPosition": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00569",
+    "runtimeId": 80658,
+    "type": "UnityEngine.Transform",
+    "name": "HurtBox",
+    "path": "Enemy_Brotchi[0]/HurtBox[4]",
+    "data": {
+      "gameObject": {
+        "reference": "o00257",
+        "type": "UnityEngine.GameObject",
+        "name": "HurtBox",
+        "path": "Enemy_Brotchi[0]/HurtBox[4]"
+      },
+      "localPosition": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00570",
+    "runtimeId": 81724,
+    "type": "UnityEngine.Transform",
+    "name": "Movement",
+    "path": "Enemy_Brotchi[0]/Movement[1]",
+    "data": {
+      "gameObject": {
+        "reference": "o00265",
+        "type": "UnityEngine.GameObject",
+        "name": "Movement",
+        "path": "Enemy_Brotchi[0]/Movement[1]"
+      },
+      "localPosition": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00571",
+    "runtimeId": 80852,
+    "type": "UnityEngine.Transform",
+    "name": "Audio",
+    "path": "Enemy_Brotchi[0]/Audio[5]",
+    "data": {
+      "gameObject": {
+        "reference": "o00266",
+        "type": "UnityEngine.GameObject",
+        "name": "Audio",
+        "path": "Enemy_Brotchi[0]/Audio[5]"
+      },
+      "localPosition": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00573",
+    "runtimeId": 81082,
+    "type": "UnityEngine.Transform",
+    "name": "AttackCollider",
+    "path": "Enemy_Brotchi[0]/AttackCollider[6]",
+    "data": {
+      "gameObject": {
+        "reference": "o00267",
+        "type": "UnityEngine.GameObject",
+        "name": "AttackCollider",
+        "path": "Enemy_Brotchi[0]/AttackCollider[6]"
+      },
+      "localPosition": [
+        0.0,
+        0.46,
+        0.0
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00574",
+    "runtimeId": 82370,
+    "type": "UnityEngine.CircleCollider2D",
+    "name": "AttackCollider",
+    "path": "Enemy_Brotchi[0]/AttackCollider[6]",
+    "data": {
+      "gameObject": {
+        "reference": "o00267",
+        "type": "UnityEngine.GameObject",
+        "name": "AttackCollider",
+        "path": "Enemy_Brotchi[0]/AttackCollider[6]"
+      },
+      "enabled": true,
+      "trigger": true,
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "radius": 0.55,
+      "size": null,
+      "paths": []
+    }
+  },
+  {
+    "id": "o00577",
+    "runtimeId": 80558,
+    "type": "UnityEngine.Transform",
+    "name": "AILerpMovement",
+    "path": "Enemy_Brotchi_LVL2[0]/Movement[1]/AILerpMovement[1]",
+    "data": {
+      "gameObject": {
+        "reference": "o00268",
+        "type": "UnityEngine.GameObject",
+        "name": "AILerpMovement",
+        "path": "Enemy_Brotchi_LVL2[0]/Movement[1]/AILerpMovement[1]"
+      },
+      "localPosition": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00583",
+    "runtimeId": 79976,
+    "type": "UnityEngine.Transform",
+    "name": "Collider",
+    "path": "Enemy_Brotchi_LVL2[0]/Collider[2]",
+    "data": {
+      "gameObject": {
+        "reference": "o00273",
+        "type": "UnityEngine.GameObject",
+        "name": "Collider",
+        "path": "Enemy_Brotchi_LVL2[0]/Collider[2]"
+      },
+      "localPosition": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00584",
+    "runtimeId": 80784,
+    "type": "UnityEngine.Transform",
+    "name": "DefaultMovement",
+    "path": "Enemy_Brotchi_LVL2[0]/Movement[1]/DefaultMovement[0]",
+    "data": {
+      "gameObject": {
+        "reference": "o00275",
+        "type": "UnityEngine.GameObject",
+        "name": "DefaultMovement",
+        "path": "Enemy_Brotchi_LVL2[0]/Movement[1]/DefaultMovement[0]"
+      },
+      "localPosition": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00592",
+    "runtimeId": 80116,
+    "type": "UnityEngine.Transform",
+    "name": "HurtBox",
+    "path": "Enemy_Brotchi_LVL2[0]/HurtBox[4]",
+    "data": {
+      "gameObject": {
+        "reference": "o00296",
+        "type": "UnityEngine.GameObject",
+        "name": "HurtBox",
+        "path": "Enemy_Brotchi_LVL2[0]/HurtBox[4]"
+      },
+      "localPosition": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00593",
+    "runtimeId": 81154,
+    "type": "UnityEngine.Transform",
+    "name": "Movement",
+    "path": "Enemy_Brotchi_LVL2[0]/Movement[1]",
+    "data": {
+      "gameObject": {
+        "reference": "o00304",
+        "type": "UnityEngine.GameObject",
+        "name": "Movement",
+        "path": "Enemy_Brotchi_LVL2[0]/Movement[1]"
+      },
+      "localPosition": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00594",
+    "runtimeId": 80234,
+    "type": "UnityEngine.Transform",
+    "name": "Audio",
+    "path": "Enemy_Brotchi_LVL2[0]/Audio[5]",
+    "data": {
+      "gameObject": {
+        "reference": "o00305",
+        "type": "UnityEngine.GameObject",
+        "name": "Audio",
+        "path": "Enemy_Brotchi_LVL2[0]/Audio[5]"
+      },
+      "localPosition": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00596",
+    "runtimeId": 81824,
+    "type": "UnityEngine.Transform",
+    "name": "AttackCollider",
+    "path": "Enemy_Brotchi_LVL2[0]/AttackCollider[6]",
+    "data": {
+      "gameObject": {
+        "reference": "o00306",
+        "type": "UnityEngine.GameObject",
+        "name": "AttackCollider",
+        "path": "Enemy_Brotchi_LVL2[0]/AttackCollider[6]"
+      },
+      "localPosition": [
+        0.0,
+        0.46,
+        0.0
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00598",
+    "runtimeId": 79820,
+    "type": "UnityEngine.Transform",
+    "name": "AILerpMovement",
+    "path": "Enemy_Imp[0]/Movement[1]/AILerpMovement[1]",
+    "data": {
+      "gameObject": {
+        "reference": "o00307",
+        "type": "UnityEngine.GameObject",
+        "name": "AILerpMovement",
+        "path": "Enemy_Imp[0]/Movement[1]/AILerpMovement[1]"
+      },
+      "localPosition": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00606",
+    "runtimeId": 80802,
+    "type": "UnityEngine.Transform",
+    "name": "Collider",
+    "path": "Enemy_Imp[0]/Collider[2]",
+    "data": {
+      "gameObject": {
+        "reference": "o00310",
+        "type": "UnityEngine.GameObject",
+        "name": "Collider",
+        "path": "Enemy_Imp[0]/Collider[2]"
+      },
+      "localPosition": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00608",
+    "runtimeId": 80026,
+    "type": "UnityEngine.Transform",
+    "name": "DefaultMovement",
+    "path": "Enemy_Imp[0]/Movement[1]/DefaultMovement[0]",
+    "data": {
+      "gameObject": {
+        "reference": "o00312",
+        "type": "UnityEngine.GameObject",
+        "name": "DefaultMovement",
+        "path": "Enemy_Imp[0]/Movement[1]/DefaultMovement[0]"
+      },
+      "localPosition": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00614",
+    "runtimeId": 81876,
+    "type": "UnityEngine.Transform",
+    "name": "Sprite",
+    "path": "Enemy_Imp[0]/Sprite[0]",
+    "data": {
+      "gameObject": {
+        "reference": "o00333",
+        "type": "UnityEngine.GameObject",
+        "name": "Sprite",
+        "path": "Enemy_Imp[0]/Sprite[0]"
+      },
+      "localPosition": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00617",
+    "runtimeId": 80836,
+    "type": "UnityEngine.Transform",
+    "name": "HurtBox",
+    "path": "Enemy_Imp[0]/HurtBox[4]",
+    "data": {
+      "gameObject": {
+        "reference": "o00335",
+        "type": "UnityEngine.GameObject",
+        "name": "HurtBox",
+        "path": "Enemy_Imp[0]/HurtBox[4]"
+      },
+      "localPosition": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00619",
+    "runtimeId": 81656,
+    "type": "UnityEngine.Transform",
+    "name": "Movement",
+    "path": "Enemy_Imp[0]/Movement[1]",
+    "data": {
+      "gameObject": {
+        "reference": "o00343",
+        "type": "UnityEngine.GameObject",
+        "name": "Movement",
+        "path": "Enemy_Imp[0]/Movement[1]"
+      },
+      "localPosition": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00620",
+    "runtimeId": 80630,
+    "type": "UnityEngine.Transform",
+    "name": "Audio",
+    "path": "Enemy_Imp[0]/Audio[5]",
+    "data": {
+      "gameObject": {
+        "reference": "o00344",
+        "type": "UnityEngine.GameObject",
+        "name": "Audio",
+        "path": "Enemy_Imp[0]/Audio[5]"
+      },
+      "localPosition": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00621",
+    "runtimeId": 79800,
+    "type": "UnityEngine.Transform",
+    "name": "BulletPositionParent",
+    "path": "Enemy_Imp[0]/BulletPositionParent[6]",
+    "data": {
+      "gameObject": {
+        "reference": "o00345",
+        "type": "UnityEngine.GameObject",
+        "name": "BulletPositionParent",
+        "path": "Enemy_Imp[0]/BulletPositionParent[6]"
+      },
+      "localPosition": [
+        0.0,
+        1.78,
+        0.0
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00623",
+    "runtimeId": 81064,
+    "type": "UnityEngine.Transform",
+    "name": "AILerpMovement",
+    "path": "Enemy_Skeleton[0]/Movement[1]/AILerpMovement[1]",
+    "data": {
+      "gameObject": {
+        "reference": "o00346",
+        "type": "UnityEngine.GameObject",
+        "name": "AILerpMovement",
+        "path": "Enemy_Skeleton[0]/Movement[1]/AILerpMovement[1]"
+      },
+      "localPosition": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00629",
+    "runtimeId": 82038,
+    "type": "UnityEngine.Transform",
+    "name": "Collider",
+    "path": "Enemy_Skeleton[0]/Collider[2]",
+    "data": {
+      "gameObject": {
+        "reference": "o00348",
+        "type": "UnityEngine.GameObject",
+        "name": "Collider",
+        "path": "Enemy_Skeleton[0]/Collider[2]"
+      },
+      "localPosition": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00630",
+    "runtimeId": 81320,
+    "type": "UnityEngine.Transform",
+    "name": "DefaultMovement",
+    "path": "Enemy_Skeleton[0]/Movement[1]/DefaultMovement[0]",
+    "data": {
+      "gameObject": {
+        "reference": "o00350",
+        "type": "UnityEngine.GameObject",
+        "name": "DefaultMovement",
+        "path": "Enemy_Skeleton[0]/Movement[1]/DefaultMovement[0]"
+      },
+      "localPosition": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00636",
+    "runtimeId": 80594,
+    "type": "UnityEngine.Transform",
+    "name": "Sprite",
+    "path": "Enemy_Skeleton[0]/Sprite[0]",
+    "data": {
+      "gameObject": {
+        "reference": "o00369",
+        "type": "UnityEngine.GameObject",
+        "name": "Sprite",
+        "path": "Enemy_Skeleton[0]/Sprite[0]"
+      },
+      "localPosition": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00639",
+    "runtimeId": 82108,
+    "type": "UnityEngine.Transform",
+    "name": "HurtBox",
+    "path": "Enemy_Skeleton[0]/HurtBox[4]",
+    "data": {
+      "gameObject": {
+        "reference": "o00371",
+        "type": "UnityEngine.GameObject",
+        "name": "HurtBox",
+        "path": "Enemy_Skeleton[0]/HurtBox[4]"
+      },
+      "localPosition": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00640",
+    "runtimeId": 80424,
+    "type": "UnityEngine.Transform",
+    "name": "Movement",
+    "path": "Enemy_Skeleton[0]/Movement[1]",
+    "data": {
+      "gameObject": {
+        "reference": "o00379",
+        "type": "UnityEngine.GameObject",
+        "name": "Movement",
+        "path": "Enemy_Skeleton[0]/Movement[1]"
+      },
+      "localPosition": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00641",
+    "runtimeId": 81894,
+    "type": "UnityEngine.Transform",
+    "name": "Audio",
+    "path": "Enemy_Skeleton[0]/Audio[5]",
+    "data": {
+      "gameObject": {
+        "reference": "o00380",
+        "type": "UnityEngine.GameObject",
+        "name": "Audio",
+        "path": "Enemy_Skeleton[0]/Audio[5]"
+      },
+      "localPosition": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00642",
+    "runtimeId": 81748,
+    "type": "UnityEngine.Transform",
+    "name": "AILerpMovement",
+    "path": "Elite_Skeleton[0]/Movement[1]/AILerpMovement[1]",
+    "data": {
+      "gameObject": {
+        "reference": "o00381",
+        "type": "UnityEngine.GameObject",
+        "name": "AILerpMovement",
+        "path": "Elite_Skeleton[0]/Movement[1]/AILerpMovement[1]"
+      },
+      "localPosition": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00648",
+    "runtimeId": 79824,
+    "type": "UnityEngine.Transform",
+    "name": "Collider",
+    "path": "Elite_Skeleton[0]/Collider[2]",
+    "data": {
+      "gameObject": {
+        "reference": "o00383",
+        "type": "UnityEngine.GameObject",
+        "name": "Collider",
+        "path": "Elite_Skeleton[0]/Collider[2]"
+      },
+      "localPosition": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00649",
+    "runtimeId": 80782,
+    "type": "UnityEngine.Transform",
+    "name": "DefaultMovement",
+    "path": "Elite_Skeleton[0]/Movement[1]/DefaultMovement[0]",
+    "data": {
+      "gameObject": {
+        "reference": "o00385",
+        "type": "UnityEngine.GameObject",
+        "name": "DefaultMovement",
+        "path": "Elite_Skeleton[0]/Movement[1]/DefaultMovement[0]"
+      },
+      "localPosition": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00655",
+    "runtimeId": 81200,
+    "type": "UnityEngine.Transform",
+    "name": "Sprite",
+    "path": "Elite_Skeleton[0]/Sprite[0]",
+    "data": {
+      "gameObject": {
+        "reference": "o00404",
+        "type": "UnityEngine.GameObject",
+        "name": "Sprite",
+        "path": "Elite_Skeleton[0]/Sprite[0]"
+      },
+      "localPosition": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00658",
+    "runtimeId": 80596,
+    "type": "UnityEngine.Transform",
+    "name": "HurtBox",
+    "path": "Elite_Skeleton[0]/HurtBox[5]",
+    "data": {
+      "gameObject": {
+        "reference": "o00406",
+        "type": "UnityEngine.GameObject",
+        "name": "HurtBox",
+        "path": "Elite_Skeleton[0]/HurtBox[5]"
+      },
+      "localPosition": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00660",
+    "runtimeId": 79762,
+    "type": "UnityEngine.Transform",
+    "name": "Movement",
+    "path": "Elite_Skeleton[0]/Movement[1]",
+    "data": {
+      "gameObject": {
+        "reference": "o00415",
+        "type": "UnityEngine.GameObject",
+        "name": "Movement",
+        "path": "Elite_Skeleton[0]/Movement[1]"
+      },
+      "localPosition": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00661",
+    "runtimeId": 80620,
+    "type": "UnityEngine.Transform",
+    "name": "ObstacleDetector",
+    "path": "Elite_Skeleton[0]/ObstacleDetector[3]",
+    "data": {
+      "gameObject": {
+        "reference": "o00416",
+        "type": "UnityEngine.GameObject",
+        "name": "ObstacleDetector",
+        "path": "Elite_Skeleton[0]/ObstacleDetector[3]"
+      },
+      "localPosition": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00663",
+    "runtimeId": 82296,
+    "type": "UnityEngine.CircleCollider2D",
+    "name": "ObstacleDetector",
+    "path": "Elite_Skeleton[0]/ObstacleDetector[3]",
+    "data": {
+      "gameObject": {
+        "reference": "o00416",
+        "type": "UnityEngine.GameObject",
+        "name": "ObstacleDetector",
+        "path": "Elite_Skeleton[0]/ObstacleDetector[3]"
+      },
+      "enabled": true,
+      "trigger": true,
+      "offset": [
+        0.0,
+        0.3
+      ],
+      "radius": 1.0,
+      "size": null,
+      "paths": []
+    }
+  },
+  {
+    "id": "o00664",
+    "runtimeId": 80046,
+    "type": "UnityEngine.Transform",
+    "name": "Audio",
+    "path": "Elite_Skeleton[0]/Audio[6]",
+    "data": {
+      "gameObject": {
+        "reference": "o00417",
+        "type": "UnityEngine.GameObject",
+        "name": "Audio",
+        "path": "Elite_Skeleton[0]/Audio[6]"
+      },
+      "localPosition": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00672",
+    "runtimeId": 81086,
+    "type": "UnityEngine.Transform",
+    "name": "AILerpMovement",
+    "path": "Enemy_Ghoul[0]/Movement[1]/AILerpMovement[1]",
+    "data": {
+      "gameObject": {
+        "reference": "o00419",
+        "type": "UnityEngine.GameObject",
+        "name": "AILerpMovement",
+        "path": "Enemy_Ghoul[0]/Movement[1]/AILerpMovement[1]"
+      },
+      "localPosition": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00678",
+    "runtimeId": 81988,
+    "type": "UnityEngine.Transform",
+    "name": "Collider",
+    "path": "Enemy_Ghoul[0]/Collider[2]",
+    "data": {
+      "gameObject": {
+        "reference": "o00421",
+        "type": "UnityEngine.GameObject",
+        "name": "Collider",
+        "path": "Enemy_Ghoul[0]/Collider[2]"
+      },
+      "localPosition": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00679",
+    "runtimeId": 81464,
+    "type": "UnityEngine.Transform",
+    "name": "DefaultMovement",
+    "path": "Enemy_Ghoul[0]/Movement[1]/DefaultMovement[0]",
+    "data": {
+      "gameObject": {
+        "reference": "o00423",
+        "type": "UnityEngine.GameObject",
+        "name": "DefaultMovement",
+        "path": "Enemy_Ghoul[0]/Movement[1]/DefaultMovement[0]"
+      },
+      "localPosition": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00681",
+    "runtimeId": 80880,
+    "type": "UnityEngine.Transform",
+    "name": "Sprite",
+    "path": "Enemy_Ghoul[0]/Sprite[0]",
+    "data": {
+      "gameObject": {
+        "reference": "o00445",
+        "type": "UnityEngine.GameObject",
+        "name": "Sprite",
+        "path": "Enemy_Ghoul[0]/Sprite[0]"
+      },
+      "localPosition": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00684",
+    "runtimeId": 81924,
+    "type": "UnityEngine.Transform",
+    "name": "HurtBox",
+    "path": "Enemy_Ghoul[0]/HurtBox[4]",
+    "data": {
+      "gameObject": {
+        "reference": "o00447",
+        "type": "UnityEngine.GameObject",
+        "name": "HurtBox",
+        "path": "Enemy_Ghoul[0]/HurtBox[4]"
+      },
+      "localPosition": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00685",
+    "runtimeId": 80494,
+    "type": "UnityEngine.Transform",
+    "name": "Movement",
+    "path": "Enemy_Ghoul[0]/Movement[1]",
+    "data": {
+      "gameObject": {
+        "reference": "o00456",
+        "type": "UnityEngine.GameObject",
+        "name": "Movement",
+        "path": "Enemy_Ghoul[0]/Movement[1]"
+      },
+      "localPosition": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00686",
+    "runtimeId": 82122,
+    "type": "UnityEngine.Transform",
+    "name": "Audio",
+    "path": "Enemy_Ghoul[0]/Audio[5]",
+    "data": {
+      "gameObject": {
+        "reference": "o00457",
+        "type": "UnityEngine.GameObject",
+        "name": "Audio",
+        "path": "Enemy_Ghoul[0]/Audio[5]"
+      },
+      "localPosition": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00691",
+    "runtimeId": 80876,
+    "type": "UnityEngine.Transform",
+    "name": "AILerpMovement",
+    "path": "Enemy_Slime Rusher[0]/Movement[1]/AILerpMovement[1]",
+    "data": {
+      "gameObject": {
+        "reference": "o00458",
+        "type": "UnityEngine.GameObject",
+        "name": "AILerpMovement",
+        "path": "Enemy_Slime Rusher[0]/Movement[1]/AILerpMovement[1]"
+      },
+      "localPosition": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00695",
+    "runtimeId": 79676,
+    "type": "UnityEngine.Transform",
+    "name": "Collider",
+    "path": "Enemy_Slime Rusher[0]/Collider[2]",
+    "data": {
+      "gameObject": {
+        "reference": "o00460",
+        "type": "UnityEngine.GameObject",
+        "name": "Collider",
+        "path": "Enemy_Slime Rusher[0]/Collider[2]"
+      },
+      "localPosition": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00696",
+    "runtimeId": 80522,
+    "type": "UnityEngine.Transform",
+    "name": "DefaultMovement",
+    "path": "Enemy_Slime Rusher[0]/Movement[1]/DefaultMovement[0]",
+    "data": {
+      "gameObject": {
+        "reference": "o00462",
+        "type": "UnityEngine.GameObject",
+        "name": "DefaultMovement",
+        "path": "Enemy_Slime Rusher[0]/Movement[1]/DefaultMovement[0]"
+      },
+      "localPosition": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00702",
+    "runtimeId": 81084,
+    "type": "UnityEngine.Transform",
+    "name": "Sprite",
+    "path": "Enemy_Slime Rusher[0]/Sprite[0]",
+    "data": {
+      "gameObject": {
+        "reference": "o00475",
+        "type": "UnityEngine.GameObject",
+        "name": "Sprite",
+        "path": "Enemy_Slime Rusher[0]/Sprite[0]"
+      },
+      "localPosition": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00705",
+    "runtimeId": 79758,
+    "type": "UnityEngine.Transform",
+    "name": "HurtBox",
+    "path": "Enemy_Slime Rusher[0]/HurtBox[4]",
+    "data": {
+      "gameObject": {
+        "reference": "o00477",
+        "type": "UnityEngine.GameObject",
+        "name": "HurtBox",
+        "path": "Enemy_Slime Rusher[0]/HurtBox[4]"
+      },
+      "localPosition": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00706",
+    "runtimeId": 81504,
+    "type": "UnityEngine.Transform",
+    "name": "Movement",
+    "path": "Enemy_Slime Rusher[0]/Movement[1]",
+    "data": {
+      "gameObject": {
+        "reference": "o00485",
+        "type": "UnityEngine.GameObject",
+        "name": "Movement",
+        "path": "Enemy_Slime Rusher[0]/Movement[1]"
+      },
+      "localPosition": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00707",
+    "runtimeId": 79866,
+    "type": "UnityEngine.Transform",
+    "name": "Audio",
+    "path": "Enemy_Slime Rusher[0]/Audio[5]",
+    "data": {
+      "gameObject": {
+        "reference": "o00486",
+        "type": "UnityEngine.GameObject",
+        "name": "Audio",
+        "path": "Enemy_Slime Rusher[0]/Audio[5]"
+      },
+      "localPosition": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00708",
+    "runtimeId": 80228,
+    "type": "UnityEngine.Transform",
+    "name": "Hitbox",
+    "path": "Enemy_Slime Rusher[0]/Hitbox[6]",
+    "data": {
+      "gameObject": {
+        "reference": "o00487",
+        "type": "UnityEngine.GameObject",
+        "name": "Hitbox",
+        "path": "Enemy_Slime Rusher[0]/Hitbox[6]"
+      },
+      "localPosition": [
+        0.0,
+        0.61,
+        0.0
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00709",
+    "runtimeId": 82308,
+    "type": "UnityEngine.CircleCollider2D",
+    "name": "Hitbox",
+    "path": "Enemy_Slime Rusher[0]/Hitbox[6]",
+    "data": {
+      "gameObject": {
+        "reference": "o00487",
+        "type": "UnityEngine.GameObject",
+        "name": "Hitbox",
+        "path": "Enemy_Slime Rusher[0]/Hitbox[6]"
+      },
+      "enabled": true,
+      "trigger": true,
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "radius": 0.72,
+      "size": null,
+      "paths": []
+    }
+  },
+  {
+    "id": "o00712",
+    "runtimeId": 34896,
+    "type": "UnityEngine.Transform",
+    "name": "AILerpMovement",
+    "path": "Enemy_Slime[0]/Movement[1]/AILerpMovement[1]",
+    "data": {
+      "gameObject": {
+        "reference": "o00488",
+        "type": "UnityEngine.GameObject",
+        "name": "AILerpMovement",
+        "path": "Enemy_Slime[0]/Movement[1]/AILerpMovement[1]"
+      },
+      "localPosition": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00716",
+    "runtimeId": 37006,
+    "type": "UnityEngine.Transform",
+    "name": "Collider",
+    "path": "Enemy_Slime[0]/Collider[2]",
+    "data": {
+      "gameObject": {
+        "reference": "o00490",
+        "type": "UnityEngine.GameObject",
+        "name": "Collider",
+        "path": "Enemy_Slime[0]/Collider[2]"
+      },
+      "localPosition": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00717",
+    "runtimeId": 35350,
+    "type": "UnityEngine.Transform",
+    "name": "DefaultMovement",
+    "path": "Enemy_Slime[0]/Movement[1]/DefaultMovement[0]",
+    "data": {
+      "gameObject": {
+        "reference": "o00492",
+        "type": "UnityEngine.GameObject",
+        "name": "DefaultMovement",
+        "path": "Enemy_Slime[0]/Movement[1]/DefaultMovement[0]"
+      },
+      "localPosition": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00723",
+    "runtimeId": 39012,
+    "type": "UnityEngine.Transform",
+    "name": "Sprite",
+    "path": "Enemy_Slime[0]/Sprite[0]",
+    "data": {
+      "gameObject": {
+        "reference": "o00505",
+        "type": "UnityEngine.GameObject",
+        "name": "Sprite",
+        "path": "Enemy_Slime[0]/Sprite[0]"
+      },
+      "localPosition": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00726",
+    "runtimeId": 37052,
+    "type": "UnityEngine.Transform",
+    "name": "HurtBox",
+    "path": "Enemy_Slime[0]/HurtBox[4]",
+    "data": {
+      "gameObject": {
+        "reference": "o00507",
+        "type": "UnityEngine.GameObject",
+        "name": "HurtBox",
+        "path": "Enemy_Slime[0]/HurtBox[4]"
+      },
+      "localPosition": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00727",
+    "runtimeId": 38644,
+    "type": "UnityEngine.Transform",
+    "name": "Movement",
+    "path": "Enemy_Slime[0]/Movement[1]",
+    "data": {
+      "gameObject": {
+        "reference": "o00515",
+        "type": "UnityEngine.GameObject",
+        "name": "Movement",
+        "path": "Enemy_Slime[0]/Movement[1]"
+      },
+      "localPosition": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00728",
+    "runtimeId": 36582,
+    "type": "UnityEngine.Transform",
+    "name": "Audio",
+    "path": "Enemy_Slime[0]/Audio[5]",
+    "data": {
+      "gameObject": {
+        "reference": "o00516",
+        "type": "UnityEngine.GameObject",
+        "name": "Audio",
+        "path": "Enemy_Slime[0]/Audio[5]"
+      },
+      "localPosition": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00729",
+    "runtimeId": 36056,
+    "type": "UnityEngine.Transform",
+    "name": "Hitbox",
+    "path": "Enemy_Slime[0]/Hitbox[6]",
+    "data": {
+      "gameObject": {
+        "reference": "o00517",
+        "type": "UnityEngine.GameObject",
+        "name": "Hitbox",
+        "path": "Enemy_Slime[0]/Hitbox[6]"
+      },
+      "localPosition": [
+        0.0,
+        0.61,
+        0.0
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00730",
+    "runtimeId": 40328,
+    "type": "UnityEngine.CircleCollider2D",
+    "name": "Hitbox",
+    "path": "Enemy_Slime[0]/Hitbox[6]",
+    "data": {
+      "gameObject": {
+        "reference": "o00517",
+        "type": "UnityEngine.GameObject",
+        "name": "Hitbox",
+        "path": "Enemy_Slime[0]/Hitbox[6]"
+      },
+      "enabled": true,
+      "trigger": true,
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "radius": 0.72,
+      "size": null,
+      "paths": []
+    }
+  },
+  {
+    "id": "o00733",
+    "runtimeId": 80616,
+    "type": "UnityEngine.Transform",
+    "name": "AILerpMovement",
+    "path": "Enemy_LostSoul[0]/Movement[1]/AILerpMovement[1]",
+    "data": {
+      "gameObject": {
+        "reference": "o00518",
+        "type": "UnityEngine.GameObject",
+        "name": "AILerpMovement",
+        "path": "Enemy_LostSoul[0]/Movement[1]/AILerpMovement[1]"
+      },
+      "localPosition": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00744",
+    "runtimeId": 79938,
+    "type": "UnityEngine.Transform",
+    "name": "Collider",
+    "path": "Enemy_LostSoul[0]/Collider[2]",
+    "data": {
+      "gameObject": {
+        "reference": "o00522",
+        "type": "UnityEngine.GameObject",
+        "name": "Collider",
+        "path": "Enemy_LostSoul[0]/Collider[2]"
+      },
+      "localPosition": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00746",
+    "runtimeId": 80400,
+    "type": "UnityEngine.Transform",
+    "name": "DefaultMovement",
+    "path": "Enemy_LostSoul[0]/Movement[1]/DefaultMovement[0]",
+    "data": {
+      "gameObject": {
+        "reference": "o00524",
+        "type": "UnityEngine.GameObject",
+        "name": "DefaultMovement",
+        "path": "Enemy_LostSoul[0]/Movement[1]/DefaultMovement[0]"
+      },
+      "localPosition": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00751",
+    "runtimeId": 81058,
+    "type": "UnityEngine.Transform",
+    "name": "Sprite",
+    "path": "Enemy_LostSoul[0]/Sprite[0]",
+    "data": {
+      "gameObject": {
+        "reference": "o00542",
+        "type": "UnityEngine.GameObject",
+        "name": "Sprite",
+        "path": "Enemy_LostSoul[0]/Sprite[0]"
+      },
+      "localPosition": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00754",
+    "runtimeId": 79894,
+    "type": "UnityEngine.Transform",
+    "name": "HurtBox",
+    "path": "Enemy_LostSoul[0]/HurtBox[4]",
+    "data": {
+      "gameObject": {
+        "reference": "o00544",
+        "type": "UnityEngine.GameObject",
+        "name": "HurtBox",
+        "path": "Enemy_LostSoul[0]/HurtBox[4]"
+      },
+      "localPosition": [
+        0.0,
+        1.6500001,
+        0.0
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00756",
+    "runtimeId": 81272,
+    "type": "UnityEngine.Transform",
+    "name": "Movement",
+    "path": "Enemy_LostSoul[0]/Movement[1]",
+    "data": {
+      "gameObject": {
+        "reference": "o00552",
+        "type": "UnityEngine.GameObject",
+        "name": "Movement",
+        "path": "Enemy_LostSoul[0]/Movement[1]"
+      },
+      "localPosition": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00757",
+    "runtimeId": 79784,
+    "type": "UnityEngine.Transform",
+    "name": "Audio",
+    "path": "Enemy_LostSoul[0]/Audio[5]",
+    "data": {
+      "gameObject": {
+        "reference": "o00553",
+        "type": "UnityEngine.GameObject",
+        "name": "Audio",
+        "path": "Enemy_LostSoul[0]/Audio[5]"
+      },
+      "localPosition": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00759",
+    "runtimeId": 81358,
+    "type": "UnityEngine.Transform",
+    "name": "Attack",
+    "path": "Enemy_Brotchi[0]/Audio[5]/Attack[0]",
+    "data": {
+      "gameObject": {
+        "reference": "o00562",
+        "type": "UnityEngine.GameObject",
+        "name": "Attack",
+        "path": "Enemy_Brotchi[0]/Audio[5]/Attack[0]"
+      },
+      "localPosition": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00760",
+    "runtimeId": 81800,
+    "type": "UnityEngine.Transform",
+    "name": "Warning",
+    "path": "Enemy_Brotchi[0]/Audio[5]/Warning[4]",
+    "data": {
+      "gameObject": {
+        "reference": "o00563",
+        "type": "UnityEngine.GameObject",
+        "name": "Warning",
+        "path": "Enemy_Brotchi[0]/Audio[5]/Warning[4]"
+      },
+      "localPosition": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00761",
+    "runtimeId": 80356,
+    "type": "UnityEngine.Transform",
+    "name": "Death",
+    "path": "Enemy_Brotchi[0]/Audio[5]/Death[1]",
+    "data": {
+      "gameObject": {
+        "reference": "o00564",
+        "type": "UnityEngine.GameObject",
+        "name": "Death",
+        "path": "Enemy_Brotchi[0]/Audio[5]/Death[1]"
+      },
+      "localPosition": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00762",
+    "runtimeId": 81286,
+    "type": "UnityEngine.Transform",
+    "name": "Hurt",
+    "path": "Enemy_Brotchi[0]/Audio[5]/Hurt[2]",
+    "data": {
+      "gameObject": {
+        "reference": "o00565",
+        "type": "UnityEngine.GameObject",
+        "name": "Hurt",
+        "path": "Enemy_Brotchi[0]/Audio[5]/Hurt[2]"
+      },
+      "localPosition": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00763",
+    "runtimeId": 81698,
+    "type": "UnityEngine.Transform",
+    "name": "ShadowCircle",
+    "path": "Enemy_Brotchi[0]/Sprite[0]/ShadowCircle[6]",
+    "data": {
+      "gameObject": {
+        "reference": "o00568",
+        "type": "UnityEngine.GameObject",
+        "name": "ShadowCircle",
+        "path": "Enemy_Brotchi[0]/Sprite[0]/ShadowCircle[6]"
+      },
+      "localPosition": [
+        0.0690002441,
+        0.0189991,
+        0.0
+      ],
+      "localScale": [
+        0.65,
+        0.325,
+        0.65
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00767",
+    "runtimeId": 81648,
+    "type": "UnityEngine.Transform",
+    "name": "Warning",
+    "path": "Enemy_Brotchi[0]/Audio[5]/Warning[3]",
+    "data": {
+      "gameObject": {
+        "reference": "o00572",
+        "type": "UnityEngine.GameObject",
+        "name": "Warning",
+        "path": "Enemy_Brotchi[0]/Audio[5]/Warning[3]"
+      },
+      "localPosition": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00774",
+    "runtimeId": 80210,
+    "type": "UnityEngine.Transform",
+    "name": "Arrow",
+    "path": "Arrow[0]",
+    "data": {
+      "gameObject": {
+        "reference": "o00582",
+        "type": "UnityEngine.GameObject",
+        "name": "Arrow",
+        "path": "Arrow[0]"
+      },
+      "localPosition": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00776",
+    "runtimeId": 81938,
+    "type": "UnityEngine.Transform",
+    "name": "Attack",
+    "path": "Enemy_Brotchi_LVL2[0]/Audio[5]/Attack[0]",
+    "data": {
+      "gameObject": {
+        "reference": "o00586",
+        "type": "UnityEngine.GameObject",
+        "name": "Attack",
+        "path": "Enemy_Brotchi_LVL2[0]/Audio[5]/Attack[0]"
+      },
+      "localPosition": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00777",
+    "runtimeId": 81110,
+    "type": "UnityEngine.Transform",
+    "name": "Warning",
+    "path": "Enemy_Brotchi_LVL2[0]/Audio[5]/Warning[4]",
+    "data": {
+      "gameObject": {
+        "reference": "o00587",
+        "type": "UnityEngine.GameObject",
+        "name": "Warning",
+        "path": "Enemy_Brotchi_LVL2[0]/Audio[5]/Warning[4]"
+      },
+      "localPosition": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00778",
+    "runtimeId": 79754,
+    "type": "UnityEngine.Transform",
+    "name": "Death",
+    "path": "Enemy_Brotchi_LVL2[0]/Audio[5]/Death[1]",
+    "data": {
+      "gameObject": {
+        "reference": "o00588",
+        "type": "UnityEngine.GameObject",
+        "name": "Death",
+        "path": "Enemy_Brotchi_LVL2[0]/Audio[5]/Death[1]"
+      },
+      "localPosition": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00779",
+    "runtimeId": 81966,
+    "type": "UnityEngine.Transform",
+    "name": "Hurt",
+    "path": "Enemy_Brotchi_LVL2[0]/Audio[5]/Hurt[2]",
+    "data": {
+      "gameObject": {
+        "reference": "o00589",
+        "type": "UnityEngine.GameObject",
+        "name": "Hurt",
+        "path": "Enemy_Brotchi_LVL2[0]/Audio[5]/Hurt[2]"
+      },
+      "localPosition": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00780",
+    "runtimeId": 80950,
+    "type": "UnityEngine.Transform",
+    "name": "ShadowCircle",
+    "path": "Enemy_Brotchi_LVL2[0]/Sprite[0]/ShadowCircle[6]",
+    "data": {
+      "gameObject": {
+        "reference": "o00591",
+        "type": "UnityEngine.GameObject",
+        "name": "ShadowCircle",
+        "path": "Enemy_Brotchi_LVL2[0]/Sprite[0]/ShadowCircle[6]"
+      },
+      "localPosition": [
+        0.0690002441,
+        0.0189991,
+        0.0
+      ],
+      "localScale": [
+        0.65,
+        0.325,
+        0.65
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00784",
+    "runtimeId": 80928,
+    "type": "UnityEngine.Transform",
+    "name": "Warning",
+    "path": "Enemy_Brotchi_LVL2[0]/Audio[5]/Warning[3]",
+    "data": {
+      "gameObject": {
+        "reference": "o00595",
+        "type": "UnityEngine.GameObject",
+        "name": "Warning",
+        "path": "Enemy_Brotchi_LVL2[0]/Audio[5]/Warning[3]"
+      },
+      "localPosition": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00787",
+    "runtimeId": 81398,
+    "type": "UnityEngine.Transform",
+    "name": "BulletVisual",
+    "path": "EnemyBulletAttackImp[0]/BulletVisual[0]",
+    "data": {
+      "gameObject": {
+        "reference": "o00603",
+        "type": "UnityEngine.GameObject",
+        "name": "BulletVisual",
+        "path": "EnemyBulletAttackImp[0]/BulletVisual[0]"
+      },
+      "localPosition": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00790",
+    "runtimeId": 79686,
+    "type": "UnityEngine.Transform",
+    "name": "EnemyBulletAttackImp",
+    "path": "EnemyBulletAttackImp[0]",
+    "data": {
+      "gameObject": {
+        "reference": "o00605",
+        "type": "UnityEngine.GameObject",
+        "name": "EnemyBulletAttackImp",
+        "path": "EnemyBulletAttackImp[0]"
+      },
+      "localPosition": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00791",
+    "runtimeId": 82302,
+    "type": "UnityEngine.CircleCollider2D",
+    "name": "EnemyBulletAttackImp",
+    "path": "EnemyBulletAttackImp[0]",
+    "data": {
+      "gameObject": {
+        "reference": "o00605",
+        "type": "UnityEngine.GameObject",
+        "name": "EnemyBulletAttackImp",
+        "path": "EnemyBulletAttackImp[0]"
+      },
+      "enabled": true,
+      "trigger": true,
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "radius": 0.37,
+      "size": null,
+      "paths": []
+    }
+  },
+  {
+    "id": "o00793",
+    "runtimeId": 81778,
+    "type": "UnityEngine.Transform",
+    "name": "Warning",
+    "path": "Enemy_Imp[0]/Audio[5]/Warning[3]",
+    "data": {
+      "gameObject": {
+        "reference": "o00609",
+        "type": "UnityEngine.GameObject",
+        "name": "Warning",
+        "path": "Enemy_Imp[0]/Audio[5]/Warning[3]"
+      },
+      "localPosition": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00794",
+    "runtimeId": 80576,
+    "type": "UnityEngine.Transform",
+    "name": "Death",
+    "path": "Enemy_Imp[0]/Audio[5]/Death[1]",
+    "data": {
+      "gameObject": {
+        "reference": "o00610",
+        "type": "UnityEngine.GameObject",
+        "name": "Death",
+        "path": "Enemy_Imp[0]/Audio[5]/Death[1]"
+      },
+      "localPosition": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00795",
+    "runtimeId": 81510,
+    "type": "UnityEngine.Transform",
+    "name": "Hurt",
+    "path": "Enemy_Imp[0]/Audio[5]/Hurt[2]",
+    "data": {
+      "gameObject": {
+        "reference": "o00611",
+        "type": "UnityEngine.GameObject",
+        "name": "Hurt",
+        "path": "Enemy_Imp[0]/Audio[5]/Hurt[2]"
+      },
+      "localPosition": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00796",
+    "runtimeId": 81478,
+    "type": "UnityEngine.Transform",
+    "name": "Movement",
+    "path": "Enemy_Imp[0]/Audio[5]/Movement[4]",
+    "data": {
+      "gameObject": {
+        "reference": "o00612",
+        "type": "UnityEngine.GameObject",
+        "name": "Movement",
+        "path": "Enemy_Imp[0]/Audio[5]/Movement[4]"
+      },
+      "localPosition": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00797",
+    "runtimeId": 81410,
+    "type": "UnityEngine.Transform",
+    "name": "Attack",
+    "path": "Enemy_Imp[0]/Audio[5]/Attack[0]",
+    "data": {
+      "gameObject": {
+        "reference": "o00613",
+        "type": "UnityEngine.GameObject",
+        "name": "Attack",
+        "path": "Enemy_Imp[0]/Audio[5]/Attack[0]"
+      },
+      "localPosition": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00798",
+    "runtimeId": 81982,
+    "type": "UnityEngine.Transform",
+    "name": "ShadowCircle",
+    "path": "Enemy_Imp[0]/Sprite[0]/ShadowCircle[6]",
+    "data": {
+      "gameObject": {
+        "reference": "o00616",
+        "type": "UnityEngine.GameObject",
+        "name": "ShadowCircle",
+        "path": "Enemy_Imp[0]/Sprite[0]/ShadowCircle[6]"
+      },
+      "localPosition": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "localScale": [
+        0.44,
+        0.22,
+        0.44
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00806",
+    "runtimeId": 80534,
+    "type": "UnityEngine.Transform",
+    "name": "Skeleton_Warning",
+    "path": "Skeleton_Warning[0]",
+    "data": {
+      "gameObject": {
+        "reference": "o00628",
+        "type": "UnityEngine.GameObject",
+        "name": "Skeleton_Warning",
+        "path": "Skeleton_Warning[0]"
+      },
+      "localPosition": [
+        92.9,
+        25.27,
+        0.0
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00807",
+    "runtimeId": 80174,
+    "type": "UnityEngine.Transform",
+    "name": "Attack",
+    "path": "Enemy_Skeleton[0]/Audio[5]/Attack[0]",
+    "data": {
+      "gameObject": {
+        "reference": "o00632",
+        "type": "UnityEngine.GameObject",
+        "name": "Attack",
+        "path": "Enemy_Skeleton[0]/Audio[5]/Attack[0]"
+      },
+      "localPosition": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00808",
+    "runtimeId": 80532,
+    "type": "UnityEngine.Transform",
+    "name": "Warning",
+    "path": "Enemy_Skeleton[0]/Audio[5]/Warning[3]",
+    "data": {
+      "gameObject": {
+        "reference": "o00633",
+        "type": "UnityEngine.GameObject",
+        "name": "Warning",
+        "path": "Enemy_Skeleton[0]/Audio[5]/Warning[3]"
+      },
+      "localPosition": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00809",
+    "runtimeId": 81840,
+    "type": "UnityEngine.Transform",
+    "name": "Death",
+    "path": "Enemy_Skeleton[0]/Audio[5]/Death[1]",
+    "data": {
+      "gameObject": {
+        "reference": "o00634",
+        "type": "UnityEngine.GameObject",
+        "name": "Death",
+        "path": "Enemy_Skeleton[0]/Audio[5]/Death[1]"
+      },
+      "localPosition": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00810",
+    "runtimeId": 80304,
+    "type": "UnityEngine.Transform",
+    "name": "Hurt",
+    "path": "Enemy_Skeleton[0]/Audio[5]/Hurt[2]",
+    "data": {
+      "gameObject": {
+        "reference": "o00635",
+        "type": "UnityEngine.GameObject",
+        "name": "Hurt",
+        "path": "Enemy_Skeleton[0]/Audio[5]/Hurt[2]"
+      },
+      "localPosition": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00811",
+    "runtimeId": 80480,
+    "type": "UnityEngine.Transform",
+    "name": "ShadowCircle",
+    "path": "Enemy_Skeleton[0]/Sprite[0]/ShadowCircle[6]",
+    "data": {
+      "gameObject": {
+        "reference": "o00638",
+        "type": "UnityEngine.GameObject",
+        "name": "ShadowCircle",
+        "path": "Enemy_Skeleton[0]/Sprite[0]/ShadowCircle[6]"
+      },
+      "localPosition": [
+        0.0690002441,
+        0.0189991,
+        0.0
+      ],
+      "localScale": [
+        0.65,
+        0.325,
+        0.65
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00818",
+    "runtimeId": 80978,
+    "type": "UnityEngine.Transform",
+    "name": "Skeleton_Warning_Elite Variant",
+    "path": "Skeleton_Warning_Elite Variant[0]",
+    "data": {
+      "gameObject": {
+        "reference": "o00647",
+        "type": "UnityEngine.GameObject",
+        "name": "Skeleton_Warning_Elite Variant",
+        "path": "Skeleton_Warning_Elite Variant[0]"
+      },
+      "localPosition": [
+        92.9,
+        25.27,
+        0.0
+      ],
+      "localScale": [
+        1.5,
+        1.5,
+        1.5
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00819",
+    "runtimeId": 79940,
+    "type": "UnityEngine.Transform",
+    "name": "Attack",
+    "path": "Elite_Skeleton[0]/Audio[6]/Attack[0]",
+    "data": {
+      "gameObject": {
+        "reference": "o00651",
+        "type": "UnityEngine.GameObject",
+        "name": "Attack",
+        "path": "Elite_Skeleton[0]/Audio[6]/Attack[0]"
+      },
+      "localPosition": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00820",
+    "runtimeId": 81816,
+    "type": "UnityEngine.Transform",
+    "name": "Warning",
+    "path": "Elite_Skeleton[0]/Audio[6]/Warning[3]",
+    "data": {
+      "gameObject": {
+        "reference": "o00652",
+        "type": "UnityEngine.GameObject",
+        "name": "Warning",
+        "path": "Elite_Skeleton[0]/Audio[6]/Warning[3]"
+      },
+      "localPosition": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00821",
+    "runtimeId": 80080,
+    "type": "UnityEngine.Transform",
+    "name": "Death",
+    "path": "Elite_Skeleton[0]/Audio[6]/Death[2]",
+    "data": {
+      "gameObject": {
+        "reference": "o00653",
+        "type": "UnityEngine.GameObject",
+        "name": "Death",
+        "path": "Elite_Skeleton[0]/Audio[6]/Death[2]"
+      },
+      "localPosition": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00822",
+    "runtimeId": 80586,
+    "type": "UnityEngine.Transform",
+    "name": "Hurt",
+    "path": "Elite_Skeleton[0]/Audio[6]/Hurt[1]",
+    "data": {
+      "gameObject": {
+        "reference": "o00654",
+        "type": "UnityEngine.GameObject",
+        "name": "Hurt",
+        "path": "Elite_Skeleton[0]/Audio[6]/Hurt[1]"
+      },
+      "localPosition": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00823",
+    "runtimeId": 81758,
+    "type": "UnityEngine.Transform",
+    "name": "ShadowCircle",
+    "path": "Elite_Skeleton[0]/Sprite[0]/ShadowCircle[6]",
+    "data": {
+      "gameObject": {
+        "reference": "o00657",
+        "type": "UnityEngine.GameObject",
+        "name": "ShadowCircle",
+        "path": "Elite_Skeleton[0]/Sprite[0]/ShadowCircle[6]"
+      },
+      "localPosition": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "localScale": [
+        0.903793633,
+        0.451896816,
+        0.903793633
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00838",
+    "runtimeId": 80008,
+    "type": "UnityEngine.Transform",
+    "name": "Ghoul_Warning",
+    "path": "Ghoul_Warning[0]",
+    "data": {
+      "gameObject": {
+        "reference": "o00677",
+        "type": "UnityEngine.GameObject",
+        "name": "Ghoul_Warning",
+        "path": "Ghoul_Warning[0]"
+      },
+      "localPosition": [
+        -0.26,
+        2.0,
+        0.0
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00839",
+    "runtimeId": 80458,
+    "type": "UnityEngine.Transform",
+    "name": "ShadowCircle",
+    "path": "Enemy_Ghoul[0]/Sprite[0]/ShadowCircle[6]",
+    "data": {
+      "gameObject": {
+        "reference": "o00683",
+        "type": "UnityEngine.GameObject",
+        "name": "ShadowCircle",
+        "path": "Enemy_Ghoul[0]/Sprite[0]/ShadowCircle[6]"
+      },
+      "localPosition": [
+        0.0690002441,
+        0.0189991,
+        0.0
+      ],
+      "localScale": [
+        0.65,
+        0.325,
+        0.65
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00843",
+    "runtimeId": 80084,
+    "type": "UnityEngine.Transform",
+    "name": "Attack",
+    "path": "Enemy_Ghoul[0]/Audio[5]/Attack[0]",
+    "data": {
+      "gameObject": {
+        "reference": "o00687",
+        "type": "UnityEngine.GameObject",
+        "name": "Attack",
+        "path": "Enemy_Ghoul[0]/Audio[5]/Attack[0]"
+      },
+      "localPosition": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00845",
+    "runtimeId": 81572,
+    "type": "UnityEngine.Transform",
+    "name": "Death",
+    "path": "Enemy_Ghoul[0]/Audio[5]/Death[1]",
+    "data": {
+      "gameObject": {
+        "reference": "o00688",
+        "type": "UnityEngine.GameObject",
+        "name": "Death",
+        "path": "Enemy_Ghoul[0]/Audio[5]/Death[1]"
+      },
+      "localPosition": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00847",
+    "runtimeId": 79988,
+    "type": "UnityEngine.Transform",
+    "name": "Hurt",
+    "path": "Enemy_Ghoul[0]/Audio[5]/Hurt[2]",
+    "data": {
+      "gameObject": {
+        "reference": "o00689",
+        "type": "UnityEngine.GameObject",
+        "name": "Hurt",
+        "path": "Enemy_Ghoul[0]/Audio[5]/Hurt[2]"
+      },
+      "localPosition": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00849",
+    "runtimeId": 80408,
+    "type": "UnityEngine.Transform",
+    "name": "Warning",
+    "path": "Enemy_Ghoul[0]/Audio[5]/Warning[3]",
+    "data": {
+      "gameObject": {
+        "reference": "o00690",
+        "type": "UnityEngine.GameObject",
+        "name": "Warning",
+        "path": "Enemy_Ghoul[0]/Audio[5]/Warning[3]"
+      },
+      "localPosition": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00851",
+    "runtimeId": 81578,
+    "type": "UnityEngine.Transform",
+    "name": "Attack",
+    "path": "Enemy_Slime Rusher[0]/Audio[5]/Attack[0]",
+    "data": {
+      "gameObject": {
+        "reference": "o00698",
+        "type": "UnityEngine.GameObject",
+        "name": "Attack",
+        "path": "Enemy_Slime Rusher[0]/Audio[5]/Attack[0]"
+      },
+      "localPosition": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00852",
+    "runtimeId": 81316,
+    "type": "UnityEngine.Transform",
+    "name": "Warning",
+    "path": "Enemy_Slime Rusher[0]/Audio[5]/Warning[3]",
+    "data": {
+      "gameObject": {
+        "reference": "o00699",
+        "type": "UnityEngine.GameObject",
+        "name": "Warning",
+        "path": "Enemy_Slime Rusher[0]/Audio[5]/Warning[3]"
+      },
+      "localPosition": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00853",
+    "runtimeId": 80086,
+    "type": "UnityEngine.Transform",
+    "name": "Death",
+    "path": "Enemy_Slime Rusher[0]/Audio[5]/Death[1]",
+    "data": {
+      "gameObject": {
+        "reference": "o00700",
+        "type": "UnityEngine.GameObject",
+        "name": "Death",
+        "path": "Enemy_Slime Rusher[0]/Audio[5]/Death[1]"
+      },
+      "localPosition": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00854",
+    "runtimeId": 81664,
+    "type": "UnityEngine.Transform",
+    "name": "Hurt",
+    "path": "Enemy_Slime Rusher[0]/Audio[5]/Hurt[2]",
+    "data": {
+      "gameObject": {
+        "reference": "o00701",
+        "type": "UnityEngine.GameObject",
+        "name": "Hurt",
+        "path": "Enemy_Slime Rusher[0]/Audio[5]/Hurt[2]"
+      },
+      "localPosition": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00855",
+    "runtimeId": 81258,
+    "type": "UnityEngine.Transform",
+    "name": "ShadowCircle",
+    "path": "Enemy_Slime Rusher[0]/Sprite[0]/ShadowCircle[6]",
+    "data": {
+      "gameObject": {
+        "reference": "o00704",
+        "type": "UnityEngine.GameObject",
+        "name": "ShadowCircle",
+        "path": "Enemy_Slime Rusher[0]/Sprite[0]/ShadowCircle[6]"
+      },
+      "localPosition": [
+        0.0690002441,
+        0.0189991,
+        0.0
+      ],
+      "localScale": [
+        0.65,
+        0.325,
+        0.65
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00859",
+    "runtimeId": 38080,
+    "type": "UnityEngine.Transform",
+    "name": "Attack",
+    "path": "Enemy_Slime[0]/Audio[5]/Attack[0]",
+    "data": {
+      "gameObject": {
+        "reference": "o00719",
+        "type": "UnityEngine.GameObject",
+        "name": "Attack",
+        "path": "Enemy_Slime[0]/Audio[5]/Attack[0]"
+      },
+      "localPosition": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00860",
+    "runtimeId": 38786,
+    "type": "UnityEngine.Transform",
+    "name": "Warning",
+    "path": "Enemy_Slime[0]/Audio[5]/Warning[3]",
+    "data": {
+      "gameObject": {
+        "reference": "o00720",
+        "type": "UnityEngine.GameObject",
+        "name": "Warning",
+        "path": "Enemy_Slime[0]/Audio[5]/Warning[3]"
+      },
+      "localPosition": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00861",
+    "runtimeId": 36568,
+    "type": "UnityEngine.Transform",
+    "name": "Death",
+    "path": "Enemy_Slime[0]/Audio[5]/Death[1]",
+    "data": {
+      "gameObject": {
+        "reference": "o00721",
+        "type": "UnityEngine.GameObject",
+        "name": "Death",
+        "path": "Enemy_Slime[0]/Audio[5]/Death[1]"
+      },
+      "localPosition": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00862",
+    "runtimeId": 38366,
+    "type": "UnityEngine.Transform",
+    "name": "Hurt",
+    "path": "Enemy_Slime[0]/Audio[5]/Hurt[2]",
+    "data": {
+      "gameObject": {
+        "reference": "o00722",
+        "type": "UnityEngine.GameObject",
+        "name": "Hurt",
+        "path": "Enemy_Slime[0]/Audio[5]/Hurt[2]"
+      },
+      "localPosition": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00863",
+    "runtimeId": 38742,
+    "type": "UnityEngine.Transform",
+    "name": "ShadowCircle",
+    "path": "Enemy_Slime[0]/Sprite[0]/ShadowCircle[6]",
+    "data": {
+      "gameObject": {
+        "reference": "o00725",
+        "type": "UnityEngine.GameObject",
+        "name": "ShadowCircle",
+        "path": "Enemy_Slime[0]/Sprite[0]/ShadowCircle[6]"
+      },
+      "localPosition": [
+        0.0690002441,
+        0.0189991,
+        0.0
+      ],
+      "localScale": [
+        0.65,
+        0.325,
+        0.65
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00867",
+    "runtimeId": 80578,
+    "type": "UnityEngine.Transform",
+    "name": "Collider",
+    "path": "Enemy_Bomb_ExplosionAttack 1[0]/Collider[1]",
+    "data": {
+      "gameObject": {
+        "reference": "o00736",
+        "type": "UnityEngine.GameObject",
+        "name": "Collider",
+        "path": "Enemy_Bomb_ExplosionAttack 1[0]/Collider[1]"
+      },
+      "localPosition": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "localScale": [
+        0.5,
+        0.5,
+        0.5
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00868",
+    "runtimeId": 82448,
+    "type": "UnityEngine.PolygonCollider2D",
+    "name": "Collider",
+    "path": "Enemy_Bomb_ExplosionAttack 1[0]/Collider[1]",
+    "data": {
+      "gameObject": {
+        "reference": "o00736",
+        "type": "UnityEngine.GameObject",
+        "name": "Collider",
+        "path": "Enemy_Bomb_ExplosionAttack 1[0]/Collider[1]"
+      },
+      "enabled": true,
+      "trigger": true,
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "radius": null,
+      "size": null,
+      "paths": [
+        [
+          [
+            2.92970228,
+            -0.10877271
+          ],
+          [
+            2.156255,
+            0.4715116
+          ],
+          [
+            0.06630516,
+            1.12535381
+          ],
+          [
+            -2.43032217,
+            0.30802083
+          ],
+          [
+            -4.01883554,
+            -1.73886919
+          ],
+          [
+            -3.34620976,
+            -3.64212656
+          ],
+          [
+            -0.0563068464,
+            -5.04151535
+          ],
+          [
+            2.75006223,
+            -4.08770943
+          ],
+          [
+            4.177516,
+            -1.90998375
+          ]
+        ]
+      ]
+    }
+  },
+  {
+    "id": "o00871",
+    "runtimeId": 82144,
+    "type": "UnityEngine.Transform",
+    "name": "Enemy_Bomb_ExplosionAttack 1",
+    "path": "Enemy_Bomb_ExplosionAttack 1[0]",
+    "data": {
+      "gameObject": {
+        "reference": "o00739",
+        "type": "UnityEngine.GameObject",
+        "name": "Enemy_Bomb_ExplosionAttack 1",
+        "path": "Enemy_Bomb_ExplosionAttack 1[0]"
+      },
+      "localPosition": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00873",
+    "runtimeId": 81616,
+    "type": "UnityEngine.Transform",
+    "name": "soul enemy warning",
+    "path": "soul enemy warning[0]",
+    "data": {
+      "gameObject": {
+        "reference": "o00743",
+        "type": "UnityEngine.GameObject",
+        "name": "soul enemy warning",
+        "path": "soul enemy warning[0]"
+      },
+      "localPosition": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00875",
+    "runtimeId": 81834,
+    "type": "UnityEngine.Transform",
+    "name": "Attack",
+    "path": "Enemy_LostSoul[0]/Audio[5]/Attack[0]",
+    "data": {
+      "gameObject": {
+        "reference": "o00747",
+        "type": "UnityEngine.GameObject",
+        "name": "Attack",
+        "path": "Enemy_LostSoul[0]/Audio[5]/Attack[0]"
+      },
+      "localPosition": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00876",
+    "runtimeId": 81472,
+    "type": "UnityEngine.Transform",
+    "name": "Warning",
+    "path": "Enemy_LostSoul[0]/Audio[5]/Warning[3]",
+    "data": {
+      "gameObject": {
+        "reference": "o00748",
+        "type": "UnityEngine.GameObject",
+        "name": "Warning",
+        "path": "Enemy_LostSoul[0]/Audio[5]/Warning[3]"
+      },
+      "localPosition": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00877",
+    "runtimeId": 80182,
+    "type": "UnityEngine.Transform",
+    "name": "Death",
+    "path": "Enemy_LostSoul[0]/Audio[5]/Death[1]",
+    "data": {
+      "gameObject": {
+        "reference": "o00749",
+        "type": "UnityEngine.GameObject",
+        "name": "Death",
+        "path": "Enemy_LostSoul[0]/Audio[5]/Death[1]"
+      },
+      "localPosition": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00878",
+    "runtimeId": 81738,
+    "type": "UnityEngine.Transform",
+    "name": "Hurt",
+    "path": "Enemy_LostSoul[0]/Audio[5]/Hurt[2]",
+    "data": {
+      "gameObject": {
+        "reference": "o00750",
+        "type": "UnityEngine.GameObject",
+        "name": "Hurt",
+        "path": "Enemy_LostSoul[0]/Audio[5]/Hurt[2]"
+      },
+      "localPosition": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00879",
+    "runtimeId": 80104,
+    "type": "UnityEngine.Transform",
+    "name": "ShadowCircle",
+    "path": "Enemy_LostSoul[0]/Sprite[0]/ShadowCircle[6]",
+    "data": {
+      "gameObject": {
+        "reference": "o00753",
+        "type": "UnityEngine.GameObject",
+        "name": "ShadowCircle",
+        "path": "Enemy_LostSoul[0]/Sprite[0]/ShadowCircle[6]"
+      },
+      "localPosition": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "localScale": [
+        0.44,
+        0.22,
+        0.44
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00884",
+    "runtimeId": 79840,
+    "type": "UnityEngine.Transform",
+    "name": "Collider",
+    "path": "Arrow[0]/Collider[0]",
+    "data": {
+      "gameObject": {
+        "reference": "o00773",
+        "type": "UnityEngine.GameObject",
+        "name": "Collider",
+        "path": "Arrow[0]/Collider[0]"
+      },
+      "localPosition": [
+        -0.2,
+        0.0,
+        0.0
+      ],
+      "localScale": [
+        1.5,
+        1.5,
+        1.5
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00885",
+    "runtimeId": 82566,
+    "type": "UnityEngine.PolygonCollider2D",
+    "name": "Collider",
+    "path": "Arrow[0]/Collider[0]",
+    "data": {
+      "gameObject": {
+        "reference": "o00773",
+        "type": "UnityEngine.GameObject",
+        "name": "Collider",
+        "path": "Arrow[0]/Collider[0]"
+      },
+      "enabled": false,
+      "trigger": true,
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "radius": null,
+      "size": null,
+      "paths": [
+        [
+          [
+            -2.5306344,
+            0.00717391074
+          ],
+          [
+            -2.61824346,
+            0.0637535751
+          ],
+          [
+            -3.0876236,
+            -0.00575497746
+          ],
+          [
+            -2.61358571,
+            -0.101730138
+          ]
+        ]
+      ]
+    }
+  },
+  {
+    "id": "o00887",
+    "runtimeId": 80044,
+    "type": "UnityEngine.Transform",
+    "name": "SlimePath",
+    "path": "Arrow[0]/SlimePath[1]",
+    "data": {
+      "gameObject": {
+        "reference": "o00775",
+        "type": "UnityEngine.GameObject",
+        "name": "SlimePath",
+        "path": "Arrow[0]/SlimePath[1]"
+      },
+      "localPosition": [
+        -1.26,
+        0.0,
+        0.0
+      ],
+      "localScale": [
+        1.5,
+        1.5,
+        1.5
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00894",
+    "runtimeId": 81010,
+    "type": "UnityEngine.Transform",
+    "name": "Imp_Attack",
+    "path": "EnemyBulletAttackImp[0]/BulletVisual[0]/Imp_Attack[0]",
+    "data": {
+      "gameObject": {
+        "reference": "o00786",
+        "type": "UnityEngine.GameObject",
+        "name": "Imp_Attack",
+        "path": "EnemyBulletAttackImp[0]/BulletVisual[0]/Imp_Attack[0]"
+      },
+      "localPosition": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        -0.7071068,
+        0.0,
+        0.0,
+        0.7071068
+      ]
+    }
+  },
+  {
+    "id": "o00906",
+    "runtimeId": 80842,
+    "type": "UnityEngine.Transform",
+    "name": "ShadowCircle",
+    "path": "EnemyBulletAttackImp[0]/BulletVisual[0]/ShadowCircle[1]",
+    "data": {
+      "gameObject": {
+        "reference": "o00788",
+        "type": "UnityEngine.GameObject",
+        "name": "ShadowCircle",
+        "path": "EnemyBulletAttackImp[0]/BulletVisual[0]/ShadowCircle[1]"
+      },
+      "localPosition": [
+        0.02,
+        -1.48,
+        0.0
+      ],
+      "localScale": [
+        0.55,
+        0.275,
+        0.55
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00910",
+    "runtimeId": 81376,
+    "type": "UnityEngine.Transform",
+    "name": "AttackWarning",
+    "path": "Skeleton_Warning[0]/AttackWarning[0]",
+    "data": {
+      "gameObject": {
+        "reference": "o00804",
+        "type": "UnityEngine.GameObject",
+        "name": "AttackWarning",
+        "path": "Skeleton_Warning[0]/AttackWarning[0]"
+      },
+      "localPosition": [
+        0.91,
+        0.0,
+        0.0
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        -0.7071068,
+        0.7071068
+      ]
+    }
+  },
+  {
+    "id": "o00914",
+    "runtimeId": 82126,
+    "type": "UnityEngine.Transform",
+    "name": "Collider",
+    "path": "Skeleton_Warning[0]/AttackWarning[0]/Collider[3]",
+    "data": {
+      "gameObject": {
+        "reference": "o00805",
+        "type": "UnityEngine.GameObject",
+        "name": "Collider",
+        "path": "Skeleton_Warning[0]/AttackWarning[0]/Collider[3]"
+      },
+      "localPosition": [
+        0.0,
+        -0.5800001,
+        0.0
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.7071068,
+        0.7071068
+      ]
+    }
+  },
+  {
+    "id": "o00915",
+    "runtimeId": 82540,
+    "type": "UnityEngine.PolygonCollider2D",
+    "name": "Collider",
+    "path": "Skeleton_Warning[0]/AttackWarning[0]/Collider[3]",
+    "data": {
+      "gameObject": {
+        "reference": "o00805",
+        "type": "UnityEngine.GameObject",
+        "name": "Collider",
+        "path": "Skeleton_Warning[0]/AttackWarning[0]/Collider[3]"
+      },
+      "enabled": true,
+      "trigger": true,
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "radius": null,
+      "size": null,
+      "paths": [
+        [
+          [
+            1.415054,
+            1.0
+          ],
+          [
+            0.0,
+            1.74
+          ],
+          [
+            0.0,
+            -1.74
+          ],
+          [
+            1.41505408,
+            -1.0
+          ],
+          [
+            1.73587084,
+            0.017290324
+          ]
+        ]
+      ]
+    }
+  },
+  {
+    "id": "o00918",
+    "runtimeId": 80856,
+    "type": "UnityEngine.Transform",
+    "name": "AttackWarning",
+    "path": "Skeleton_Warning_Elite Variant[0]/AttackWarning[0]",
+    "data": {
+      "gameObject": {
+        "reference": "o00816",
+        "type": "UnityEngine.GameObject",
+        "name": "AttackWarning",
+        "path": "Skeleton_Warning_Elite Variant[0]/AttackWarning[0]"
+      },
+      "localPosition": [
+        0.91,
+        0.0,
+        0.0
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        -0.7071068,
+        0.7071068
+      ]
+    }
+  },
+  {
+    "id": "o00922",
+    "runtimeId": 80082,
+    "type": "UnityEngine.Transform",
+    "name": "Collider",
+    "path": "Skeleton_Warning_Elite Variant[0]/AttackWarning[0]/Collider[3]",
+    "data": {
+      "gameObject": {
+        "reference": "o00817",
+        "type": "UnityEngine.GameObject",
+        "name": "Collider",
+        "path": "Skeleton_Warning_Elite Variant[0]/AttackWarning[0]/Collider[3]"
+      },
+      "localPosition": [
+        0.0,
+        -0.5800001,
+        0.0
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.7071068,
+        0.7071068
+      ]
+    }
+  },
+  {
+    "id": "o00923",
+    "runtimeId": 82472,
+    "type": "UnityEngine.PolygonCollider2D",
+    "name": "Collider",
+    "path": "Skeleton_Warning_Elite Variant[0]/AttackWarning[0]/Collider[3]",
+    "data": {
+      "gameObject": {
+        "reference": "o00817",
+        "type": "UnityEngine.GameObject",
+        "name": "Collider",
+        "path": "Skeleton_Warning_Elite Variant[0]/AttackWarning[0]/Collider[3]"
+      },
+      "enabled": true,
+      "trigger": true,
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "radius": null,
+      "size": null,
+      "paths": [
+        [
+          [
+            1.415054,
+            1.0
+          ],
+          [
+            0.0,
+            1.74
+          ],
+          [
+            0.0,
+            -1.74
+          ],
+          [
+            1.41505408,
+            -1.0
+          ],
+          [
+            1.73587084,
+            0.017290324
+          ]
+        ]
+      ]
+    }
+  },
+  {
+    "id": "o00935",
+    "runtimeId": 81832,
+    "type": "UnityEngine.Transform",
+    "name": "AttackWarning",
+    "path": "Ghoul_Warning[0]/AttackWarning[0]",
+    "data": {
+      "gameObject": {
+        "reference": "o00836",
+        "type": "UnityEngine.GameObject",
+        "name": "AttackWarning",
+        "path": "Ghoul_Warning[0]/AttackWarning[0]"
+      },
+      "localPosition": [
+        0.5,
+        0.01,
+        0.0
+      ],
+      "localScale": [
+        1.03736818,
+        1.03736818,
+        1.03736818
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        -0.7071068,
+        0.7071068
+      ]
+    }
+  },
+  {
+    "id": "o00939",
+    "runtimeId": 81040,
+    "type": "UnityEngine.Transform",
+    "name": "Collider",
+    "path": "Ghoul_Warning[0]/AttackWarning[0]/Collider[3]",
+    "data": {
+      "gameObject": {
+        "reference": "o00837",
+        "type": "UnityEngine.GameObject",
+        "name": "Collider",
+        "path": "Ghoul_Warning[0]/AttackWarning[0]/Collider[3]"
+      },
+      "localPosition": [
+        0.97,
+        -0.58,
+        0.0
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.7071068,
+        0.7071068
+      ]
+    }
+  },
+  {
+    "id": "o00940",
+    "runtimeId": 82558,
+    "type": "UnityEngine.PolygonCollider2D",
+    "name": "Collider",
+    "path": "Ghoul_Warning[0]/AttackWarning[0]/Collider[3]",
+    "data": {
+      "gameObject": {
+        "reference": "o00837",
+        "type": "UnityEngine.GameObject",
+        "name": "Collider",
+        "path": "Ghoul_Warning[0]/AttackWarning[0]/Collider[3]"
+      },
+      "enabled": true,
+      "trigger": true,
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "radius": null,
+      "size": null,
+      "paths": [
+        [
+          [
+            1.56064153,
+            2.31846976
+          ],
+          [
+            0.369967461,
+            3.0231564
+          ],
+          [
+            -0.115253419,
+            1.00355375
+          ],
+          [
+            0.40137732,
+            -1.11760235
+          ],
+          [
+            1.48993111,
+            -0.472918957
+          ],
+          [
+            2.03416538,
+            0.9762179
+          ]
+        ]
+      ]
+    }
+  },
+  {
+    "id": "o00942",
+    "runtimeId": 82054,
+    "type": "UnityEngine.Transform",
+    "name": "Sparks",
+    "path": "Enemy_Bomb_ExplosionAttack 1[0]/Sparks[0]",
+    "data": {
+      "gameObject": {
+        "reference": "o00870",
+        "type": "UnityEngine.GameObject",
+        "name": "Sparks",
+        "path": "Enemy_Bomb_ExplosionAttack 1[0]/Sparks[0]"
+      },
+      "localPosition": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.7071066,
+        0.0,
+        0.0,
+        -0.707106948
+      ]
+    }
+  },
+  {
+    "id": "o00944",
+    "runtimeId": 81230,
+    "type": "UnityEngine.Transform",
+    "name": "Angle",
+    "path": "soul enemy warning[0]/Angle[0]",
+    "data": {
+      "gameObject": {
+        "reference": "o00874",
+        "type": "UnityEngine.GameObject",
+        "name": "Angle",
+        "path": "soul enemy warning[0]/Angle[0]"
+      },
+      "localPosition": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.382683426,
+        0.0,
+        0.0,
+        0.923879564
+      ]
+    }
+  },
+  {
+    "id": "o00951",
+    "runtimeId": 80068,
+    "type": "UnityEngine.Transform",
+    "name": "Arrow",
+    "path": "Arrow[0]/SlimePath[1]/Arrow_Indicator_V3[1]/Arrow[0]",
+    "data": {
+      "gameObject": {
+        "reference": "o00883",
+        "type": "UnityEngine.GameObject",
+        "name": "Arrow",
+        "path": "Arrow[0]/SlimePath[1]/Arrow_Indicator_V3[1]/Arrow[0]"
+      },
+      "localPosition": [
+        -0.682,
+        0.0,
+        0.0
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00953",
+    "runtimeId": 81020,
+    "type": "UnityEngine.Transform",
+    "name": "Collider",
+    "path": "Arrow[0]/SlimePath[1]/Collider[0]",
+    "data": {
+      "gameObject": {
+        "reference": "o00888",
+        "type": "UnityEngine.GameObject",
+        "name": "Collider",
+        "path": "Arrow[0]/SlimePath[1]/Collider[0]"
+      },
+      "localPosition": [
+        3.139,
+        0.0,
+        0.0
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00954",
+    "runtimeId": 82500,
+    "type": "UnityEngine.PolygonCollider2D",
+    "name": "Collider",
+    "path": "Arrow[0]/SlimePath[1]/Collider[0]",
+    "data": {
+      "gameObject": {
+        "reference": "o00888",
+        "type": "UnityEngine.GameObject",
+        "name": "Collider",
+        "path": "Arrow[0]/SlimePath[1]/Collider[0]"
+      },
+      "enabled": false,
+      "trigger": true,
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "radius": null,
+      "size": null,
+      "paths": [
+        [
+          [
+            -2.5306344,
+            0.00717391074
+          ],
+          [
+            -2.61824346,
+            0.0637535751
+          ],
+          [
+            -3.0876236,
+            -0.00575497746
+          ],
+          [
+            -2.61358571,
+            -0.101730138
+          ]
+        ]
+      ]
+    }
+  },
+  {
+    "id": "o00957",
+    "runtimeId": 80974,
+    "type": "UnityEngine.Transform",
+    "name": "Arrow_Indicator_V3",
+    "path": "Arrow[0]/SlimePath[1]/Arrow_Indicator_V3[1]",
+    "data": {
+      "gameObject": {
+        "reference": "o00889",
+        "type": "UnityEngine.GameObject",
+        "name": "Arrow_Indicator_V3",
+        "path": "Arrow[0]/SlimePath[1]/Arrow_Indicator_V3[1]"
+      },
+      "localPosition": [
+        1.353,
+        0.046,
+        0.0
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00960",
+    "runtimeId": 80180,
+    "type": "UnityEngine.Transform",
+    "name": "AOEwarningFMA",
+    "path": "Arrow[0]/SlimePath[1]/AOEwarningFMA[2]",
+    "data": {
+      "gameObject": {
+        "reference": "o00890",
+        "type": "UnityEngine.GameObject",
+        "name": "AOEwarningFMA",
+        "path": "Arrow[0]/SlimePath[1]/AOEwarningFMA[2]"
+      },
+      "localPosition": [
+        -0.460999846,
+        0.048,
+        0.0
+      ],
+      "localScale": [
+        0.9875,
+        0.913437545,
+        0.9875
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00965",
+    "runtimeId": 80478,
+    "type": "UnityEngine.Transform",
+    "name": "arrow white fleur de lis",
+    "path": "Arrow[0]/SlimePath[1]/arrow white fleur de lis[3]",
+    "data": {
+      "gameObject": {
+        "reference": "o00891",
+        "type": "UnityEngine.GameObject",
+        "name": "arrow white fleur de lis",
+        "path": "Arrow[0]/SlimePath[1]/arrow white fleur de lis[3]"
+      },
+      "localPosition": [
+        0.985,
+        0.033,
+        -1.0
+      ],
+      "localScale": [
+        -0.2662,
+        -0.2662,
+        -0.2662
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00967",
+    "runtimeId": 81560,
+    "type": "UnityEngine.Transform",
+    "name": "arrow white fleur de lis (1)",
+    "path": "Arrow[0]/SlimePath[1]/arrow white fleur de lis (1)[4]",
+    "data": {
+      "gameObject": {
+        "reference": "o00892",
+        "type": "UnityEngine.GameObject",
+        "name": "arrow white fleur de lis (1)",
+        "path": "Arrow[0]/SlimePath[1]/arrow white fleur de lis (1)[4]"
+      },
+      "localPosition": [
+        0.985,
+        0.033,
+        -1.0
+      ],
+      "localScale": [
+        -0.2662,
+        -0.2662,
+        -0.2662
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00969",
+    "runtimeId": 79900,
+    "type": "UnityEngine.Transform",
+    "name": "arrow white fleur de lis (2)",
+    "path": "Arrow[0]/SlimePath[1]/arrow white fleur de lis (2)[5]",
+    "data": {
+      "gameObject": {
+        "reference": "o00893",
+        "type": "UnityEngine.GameObject",
+        "name": "arrow white fleur de lis (2)",
+        "path": "Arrow[0]/SlimePath[1]/arrow white fleur de lis (2)[5]"
+      },
+      "localPosition": [
+        0.985,
+        0.033,
+        -1.0
+      ],
+      "localScale": [
+        -0.2662,
+        -0.2662,
+        -0.2662
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00971",
+    "runtimeId": 79772,
+    "type": "UnityEngine.Transform",
+    "name": "Glow_In",
+    "path": "EnemyBulletAttackImp[0]/BulletVisual[0]/Imp_Attack[0]/Glow_In[0]",
+    "data": {
+      "gameObject": {
+        "reference": "o00896",
+        "type": "UnityEngine.GameObject",
+        "name": "Glow_In",
+        "path": "EnemyBulletAttackImp[0]/BulletVisual[0]/Imp_Attack[0]/Glow_In[0]"
+      },
+      "localPosition": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "localScale": [
+        0.45,
+        0.45,
+        0.45
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00974",
+    "runtimeId": 81012,
+    "type": "UnityEngine.Transform",
+    "name": "Main_In",
+    "path": "EnemyBulletAttackImp[0]/BulletVisual[0]/Imp_Attack[0]/Main_In[1]",
+    "data": {
+      "gameObject": {
+        "reference": "o00897",
+        "type": "UnityEngine.GameObject",
+        "name": "Main_In",
+        "path": "EnemyBulletAttackImp[0]/BulletVisual[0]/Imp_Attack[0]/Main_In[1]"
+      },
+      "localPosition": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00977",
+    "runtimeId": 81492,
+    "type": "UnityEngine.Transform",
+    "name": "Main_Loop",
+    "path": "EnemyBulletAttackImp[0]/BulletVisual[0]/Imp_Attack[0]/Main_Loop[2]",
+    "data": {
+      "gameObject": {
+        "reference": "o00898",
+        "type": "UnityEngine.GameObject",
+        "name": "Main_Loop",
+        "path": "EnemyBulletAttackImp[0]/BulletVisual[0]/Imp_Attack[0]/Main_Loop[2]"
+      },
+      "localPosition": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00980",
+    "runtimeId": 81014,
+    "type": "UnityEngine.Transform",
+    "name": "Nova_In",
+    "path": "EnemyBulletAttackImp[0]/BulletVisual[0]/Imp_Attack[0]/Nova_In[3]",
+    "data": {
+      "gameObject": {
+        "reference": "o00899",
+        "type": "UnityEngine.GameObject",
+        "name": "Nova_In",
+        "path": "EnemyBulletAttackImp[0]/BulletVisual[0]/Imp_Attack[0]/Nova_In[3]"
+      },
+      "localPosition": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00983",
+    "runtimeId": 79810,
+    "type": "UnityEngine.Transform",
+    "name": "Nova_loop",
+    "path": "EnemyBulletAttackImp[0]/BulletVisual[0]/Imp_Attack[0]/Nova_loop[4]",
+    "data": {
+      "gameObject": {
+        "reference": "o00900",
+        "type": "UnityEngine.GameObject",
+        "name": "Nova_loop",
+        "path": "EnemyBulletAttackImp[0]/BulletVisual[0]/Imp_Attack[0]/Nova_loop[4]"
+      },
+      "localPosition": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o00986",
+    "runtimeId": 80738,
+    "type": "UnityEngine.Transform",
+    "name": "Charge",
+    "path": "EnemyBulletAttackImp[0]/BulletVisual[0]/Imp_Attack[0]/Charge[5]",
+    "data": {
+      "gameObject": {
+        "reference": "o00901",
+        "type": "UnityEngine.GameObject",
+        "name": "Charge",
+        "path": "EnemyBulletAttackImp[0]/BulletVisual[0]/Imp_Attack[0]/Charge[5]"
+      },
+      "localPosition": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        -0.7071068,
+        0.0,
+        0.0,
+        0.7071068
+      ]
+    }
+  },
+  {
+    "id": "o00989",
+    "runtimeId": 81820,
+    "type": "UnityEngine.Transform",
+    "name": "Ghost",
+    "path": "EnemyBulletAttackImp[0]/BulletVisual[0]/Imp_Attack[0]/Ghost[6]",
+    "data": {
+      "gameObject": {
+        "reference": "o00902",
+        "type": "UnityEngine.GameObject",
+        "name": "Ghost",
+        "path": "EnemyBulletAttackImp[0]/BulletVisual[0]/Imp_Attack[0]/Ghost[6]"
+      },
+      "localPosition": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "localScale": [
+        0.79,
+        0.79,
+        0.79
+      ],
+      "localRotation": [
+        0.7071068,
+        0.0,
+        0.0,
+        0.7071068
+      ]
+    }
+  },
+  {
+    "id": "o00993",
+    "runtimeId": 80422,
+    "type": "UnityEngine.Transform",
+    "name": "Embers",
+    "path": "EnemyBulletAttackImp[0]/BulletVisual[0]/Imp_Attack[0]/Embers[7]",
+    "data": {
+      "gameObject": {
+        "reference": "o00903",
+        "type": "UnityEngine.GameObject",
+        "name": "Embers",
+        "path": "EnemyBulletAttackImp[0]/BulletVisual[0]/Imp_Attack[0]/Embers[7]"
+      },
+      "localPosition": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "localScale": [
+        1.42858183,
+        1.42858171,
+        0.9999897
+      ],
+      "localRotation": [
+        0.7071068,
+        0.0,
+        0.0,
+        0.7071068
+      ]
+    }
+  },
+  {
+    "id": "o00996",
+    "runtimeId": 81360,
+    "type": "UnityEngine.Transform",
+    "name": "Embers",
+    "path": "EnemyBulletAttackImp[0]/BulletVisual[0]/Imp_Attack[0]/Embers[8]",
+    "data": {
+      "gameObject": {
+        "reference": "o00904",
+        "type": "UnityEngine.GameObject",
+        "name": "Embers",
+        "path": "EnemyBulletAttackImp[0]/BulletVisual[0]/Imp_Attack[0]/Embers[8]"
+      },
+      "localPosition": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "localScale": [
+        1.42858183,
+        1.42858171,
+        0.9999897
+      ],
+      "localRotation": [
+        0.7071068,
+        0.0,
+        0.0,
+        0.7071068
+      ]
+    }
+  },
+  {
+    "id": "o00999",
+    "runtimeId": 81386,
+    "type": "UnityEngine.Transform",
+    "name": "Audio",
+    "path": "EnemyBulletAttackImp[0]/BulletVisual[0]/Imp_Attack[0]/Audio[9]",
+    "data": {
+      "gameObject": {
+        "reference": "o00905",
+        "type": "UnityEngine.GameObject",
+        "name": "Audio",
+        "path": "EnemyBulletAttackImp[0]/BulletVisual[0]/Imp_Attack[0]/Audio[9]"
+      },
+      "localPosition": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.7071068,
+        0.0,
+        0.0,
+        0.7071068
+      ]
+    }
+  },
+  {
+    "id": "o01001",
+    "runtimeId": 80626,
+    "type": "UnityEngine.Transform",
+    "name": "area skeletton_0",
+    "path": "Skeleton_Warning[0]/AttackWarning[0]/area skeletton_0[0]",
+    "data": {
+      "gameObject": {
+        "reference": "o00911",
+        "type": "UnityEngine.GameObject",
+        "name": "area skeletton_0",
+        "path": "Skeleton_Warning[0]/AttackWarning[0]/area skeletton_0[0]"
+      },
+      "localPosition": [
+        0.0,
+        0.36,
+        0.0
+      ],
+      "localScale": [
+        0.46967,
+        0.46967,
+        0.46967
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.7071068,
+        0.7071068
+      ]
+    }
+  },
+  {
+    "id": "o01005",
+    "runtimeId": 81928,
+    "type": "UnityEngine.Transform",
+    "name": "arrow skeleton_0",
+    "path": "Skeleton_Warning[0]/AttackWarning[0]/arrow skeleton_0[2]",
+    "data": {
+      "gameObject": {
+        "reference": "o00913",
+        "type": "UnityEngine.GameObject",
+        "name": "arrow skeleton_0",
+        "path": "Skeleton_Warning[0]/AttackWarning[0]/arrow skeleton_0[2]"
+      },
+      "localPosition": [
+        -0.01,
+        0.668,
+        0.0
+      ],
+      "localScale": [
+        0.4411733,
+        0.4411733,
+        0.4411733
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.7071068,
+        0.7071068
+      ]
+    }
+  },
+  {
+    "id": "o01007",
+    "runtimeId": 81412,
+    "type": "UnityEngine.Transform",
+    "name": "area skeletton_0",
+    "path": "Skeleton_Warning_Elite Variant[0]/AttackWarning[0]/area skeletton_0[0]",
+    "data": {
+      "gameObject": {
+        "reference": "o00919",
+        "type": "UnityEngine.GameObject",
+        "name": "area skeletton_0",
+        "path": "Skeleton_Warning_Elite Variant[0]/AttackWarning[0]/area skeletton_0[0]"
+      },
+      "localPosition": [
+        0.0,
+        0.36,
+        0.0
+      ],
+      "localScale": [
+        0.46967,
+        0.46967,
+        0.46967
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.7071068,
+        0.7071068
+      ]
+    }
+  },
+  {
+    "id": "o01011",
+    "runtimeId": 80220,
+    "type": "UnityEngine.Transform",
+    "name": "arrow skeleton_0",
+    "path": "Skeleton_Warning_Elite Variant[0]/AttackWarning[0]/arrow skeleton_0[2]",
+    "data": {
+      "gameObject": {
+        "reference": "o00921",
+        "type": "UnityEngine.GameObject",
+        "name": "arrow skeleton_0",
+        "path": "Skeleton_Warning_Elite Variant[0]/AttackWarning[0]/arrow skeleton_0[2]"
+      },
+      "localPosition": [
+        -0.01,
+        0.668,
+        0.0
+      ],
+      "localScale": [
+        0.4411733,
+        0.4411733,
+        0.4411733
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.7071068,
+        0.7071068
+      ]
+    }
+  },
+  {
+    "id": "o01014",
+    "runtimeId": 79870,
+    "type": "UnityEngine.Transform",
+    "name": "area skeletton_0",
+    "path": "Ghoul_Warning[0]/AttackWarning[0]/area skeletton_0[0]",
+    "data": {
+      "gameObject": {
+        "reference": "o00936",
+        "type": "UnityEngine.GameObject",
+        "name": "area skeletton_0",
+        "path": "Ghoul_Warning[0]/AttackWarning[0]/area skeletton_0[0]"
+      },
+      "localPosition": [
+        0.0,
+        0.36,
+        0.0
+      ],
+      "localScale": [
+        0.46967,
+        0.46967,
+        0.46967
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.7071068,
+        0.7071068
+      ]
+    }
+  },
+  {
+    "id": "o01018",
+    "runtimeId": 81120,
+    "type": "UnityEngine.Transform",
+    "name": "arrow skeleton_0",
+    "path": "Ghoul_Warning[0]/AttackWarning[0]/arrow skeleton_0[2]",
+    "data": {
+      "gameObject": {
+        "reference": "o00938",
+        "type": "UnityEngine.GameObject",
+        "name": "arrow skeleton_0",
+        "path": "Ghoul_Warning[0]/AttackWarning[0]/arrow skeleton_0[2]"
+      },
+      "localPosition": [
+        -0.01,
+        0.668,
+        0.0
+      ],
+      "localScale": [
+        0.4411733,
+        0.4411733,
+        0.4411733
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.7071068,
+        0.7071068
+      ]
+    }
+  },
+  {
+    "id": "o01020",
+    "runtimeId": 82026,
+    "type": "UnityEngine.Transform",
+    "name": "Circle1_0",
+    "path": "soul enemy warning[0]/Angle[0]/Circle1_0[0]",
+    "data": {
+      "gameObject": {
+        "reference": "o00945",
+        "type": "UnityEngine.GameObject",
+        "name": "Circle1_0",
+        "path": "soul enemy warning[0]/Angle[0]/Circle1_0[0]"
+      },
+      "localPosition": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "localScale": [
+        1.6,
+        1.6,
+        1.6
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o01022",
+    "runtimeId": 79912,
+    "type": "UnityEngine.Transform",
+    "name": "Circle3",
+    "path": "soul enemy warning[0]/Angle[0]/Circle3[1]",
+    "data": {
+      "gameObject": {
+        "reference": "o00946",
+        "type": "UnityEngine.GameObject",
+        "name": "Circle3",
+        "path": "soul enemy warning[0]/Angle[0]/Circle3[1]"
+      },
+      "localPosition": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "localScale": [
+        1.6,
+        1.6,
+        1.6
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o01024",
+    "runtimeId": 81444,
+    "type": "UnityEngine.Transform",
+    "name": "circle enemy attack_0",
+    "path": "soul enemy warning[0]/Angle[0]/circle enemy attack_0[2]",
+    "data": {
+      "gameObject": {
+        "reference": "o00947",
+        "type": "UnityEngine.GameObject",
+        "name": "circle enemy attack_0",
+        "path": "soul enemy warning[0]/Angle[0]/circle enemy attack_0[2]"
+      },
+      "localPosition": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "localScale": [
+        0.483945727,
+        0.483945727,
+        0.483945727
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o01026",
+    "runtimeId": 80002,
+    "type": "UnityEngine.Transform",
+    "name": "circle enemy attack_0 (1)",
+    "path": "soul enemy warning[0]/Angle[0]/circle enemy attack_0 (1)[3]",
+    "data": {
+      "gameObject": {
+        "reference": "o00948",
+        "type": "UnityEngine.GameObject",
+        "name": "circle enemy attack_0 (1)",
+        "path": "soul enemy warning[0]/Angle[0]/circle enemy attack_0 (1)[3]"
+      },
+      "localPosition": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "localScale": [
+        0.483945727,
+        0.483945727,
+        0.483945727
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o01028",
+    "runtimeId": 80366,
+    "type": "UnityEngine.Transform",
+    "name": "indicator circle attack_0",
+    "path": "soul enemy warning[0]/Angle[0]/indicator circle attack_0[4]",
+    "data": {
+      "gameObject": {
+        "reference": "o00949",
+        "type": "UnityEngine.GameObject",
+        "name": "indicator circle attack_0",
+        "path": "soul enemy warning[0]/Angle[0]/indicator circle attack_0[4]"
+      },
+      "localPosition": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "localScale": [
+        0.484557152,
+        0.484557152,
+        0.484557152
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o01030",
+    "runtimeId": 81646,
+    "type": "UnityEngine.Transform",
+    "name": "indicator circle small_0",
+    "path": "soul enemy warning[0]/Angle[0]/indicator circle small_0[5]",
+    "data": {
+      "gameObject": {
+        "reference": "o00950",
+        "type": "UnityEngine.GameObject",
+        "name": "indicator circle small_0",
+        "path": "soul enemy warning[0]/Angle[0]/indicator circle small_0[5]"
+      },
+      "localPosition": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "localScale": [
+        0.643007457,
+        0.643007457,
+        0.643007457
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o01032",
+    "runtimeId": 80520,
+    "type": "UnityEngine.Transform",
+    "name": "Fill",
+    "path": "Arrow[0]/SlimePath[1]/AOEwarningFMA[2]/Fill[0]",
+    "data": {
+      "gameObject": {
+        "reference": "o00962",
+        "type": "UnityEngine.GameObject",
+        "name": "Fill",
+        "path": "Arrow[0]/SlimePath[1]/AOEwarningFMA[2]/Fill[0]"
+      },
+      "localPosition": [
+        3.04,
+        0.0,
+        0.0
+      ],
+      "localScale": [
+        0.61109,
+        0.61109,
+        0.61109
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o01034",
+    "runtimeId": 81766,
+    "type": "UnityEngine.Transform",
+    "name": "Fill (1)",
+    "path": "Arrow[0]/SlimePath[1]/AOEwarningFMA[2]/Fill (1)[1]",
+    "data": {
+      "gameObject": {
+        "reference": "o00963",
+        "type": "UnityEngine.GameObject",
+        "name": "Fill (1)",
+        "path": "Arrow[0]/SlimePath[1]/AOEwarningFMA[2]/Fill (1)[1]"
+      },
+      "localPosition": [
+        3.04,
+        0.0,
+        0.0
+      ],
+      "localScale": [
+        0.61109,
+        0.61109,
+        0.61109
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  {
+    "id": "o01036",
+    "runtimeId": 81134,
+    "type": "UnityEngine.Transform",
+    "name": "Particles",
+    "path": "Arrow[0]/SlimePath[1]/AOEwarningFMA[2]/Particles[2]",
+    "data": {
+      "gameObject": {
+        "reference": "o00964",
+        "type": "UnityEngine.GameObject",
+        "name": "Particles",
+        "path": "Arrow[0]/SlimePath[1]/AOEwarningFMA[2]/Particles[2]"
+      },
+      "localPosition": [
+        3.02499962,
+        0.0,
+        0.0
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  }
+]

@@ -1,0 +1,429 @@
+{
+  "schemaVersion": 1,
+  "sourceSha256": "4dcefbcae22fb6e8cd067618cd0ba782eb5a23d07b20a31a3ecf3323cd6d5c38",
+  "animatorId": "o00083",
+  "projectileId": "o00309",
+  "bindings": [
+    {
+      "field": "attackLeftDown",
+      "clip": "Enemy_Imp_AttackMoment_LeftDown",
+      "length": 0.29,
+      "speed": 1.0,
+      "fade": 0.25,
+      "normalizedStart": "NaN",
+      "eventTimes": [
+        "0.0",
+        "NaN"
+      ]
+    },
+    {
+      "field": "attackLeftUp",
+      "clip": "Enemy_Imp_AttackMoment_LeftDown",
+      "length": 0.29,
+      "speed": 1.0,
+      "fade": 0.25,
+      "normalizedStart": "NaN",
+      "eventTimes": [
+        "0.0",
+        "NaN"
+      ]
+    },
+    {
+      "field": "attackRightDown",
+      "clip": "Enemy_Imp_AttackMoment_RightDown",
+      "length": 0.29,
+      "speed": 1.0,
+      "fade": 0.25,
+      "normalizedStart": "NaN",
+      "eventTimes": [
+        "0.0",
+        "NaN"
+      ]
+    },
+    {
+      "field": "attackRightUp",
+      "clip": "Enemy_Imp_AttackMoment_RightDown",
+      "length": 0.29,
+      "speed": 1.0,
+      "fade": 0.25,
+      "normalizedStart": "NaN",
+      "eventTimes": [
+        "0.0",
+        "NaN"
+      ]
+    },
+    {
+      "field": "attackWarningLeftDown",
+      "clip": "Enemy_Imp_WarningLeftDown",
+      "length": 0.849999964,
+      "speed": 1.0,
+      "fade": 0.25,
+      "normalizedStart": "NaN",
+      "eventTimes": [
+        "0.0",
+        "NaN"
+      ]
+    },
+    {
+      "field": "attackWarningLeftUp",
+      "clip": "Enemy_Imp_WarningLeftDown",
+      "length": 0.849999964,
+      "speed": 1.0,
+      "fade": 0.25,
+      "normalizedStart": "NaN",
+      "eventTimes": [
+        "0.0",
+        "NaN"
+      ]
+    },
+    {
+      "field": "attackWarningRightDown",
+      "clip": "Enemy_Imp_WarningRightDown",
+      "length": 0.849999964,
+      "speed": 1.0,
+      "fade": 0.25,
+      "normalizedStart": "NaN",
+      "eventTimes": [
+        "0.0",
+        "NaN"
+      ]
+    },
+    {
+      "field": "attackWarningRightUp",
+      "clip": "Enemy_Imp_WarningRightDown",
+      "length": 0.849999964,
+      "speed": 1.0,
+      "fade": 0.25,
+      "normalizedStart": "NaN",
+      "eventTimes": [
+        "0.0",
+        "NaN"
+      ]
+    },
+    {
+      "field": "recoveryLeftDown",
+      "clip": "Enemy_Imp_Recovery_LeftDown",
+      "length": 0.429999977,
+      "speed": 1.0,
+      "fade": 0.25,
+      "normalizedStart": "NaN",
+      "eventTimes": [
+        "0.0",
+        "NaN"
+      ]
+    },
+    {
+      "field": "recoveryLeftUp",
+      "clip": "Enemy_Imp_Recovery_LeftDown",
+      "length": 0.429999977,
+      "speed": 1.0,
+      "fade": 0.25,
+      "normalizedStart": "NaN",
+      "eventTimes": [
+        "0.0",
+        "NaN"
+      ]
+    },
+    {
+      "field": "recoveryRightDown",
+      "clip": "Enemy_Imp_Recovery_RightDown",
+      "length": 0.429999977,
+      "speed": 1.0,
+      "fade": 0.25,
+      "normalizedStart": "NaN",
+      "eventTimes": [
+        "NaN"
+      ]
+    },
+    {
+      "field": "recoveryRightUp",
+      "clip": "Enemy_Imp_Recovery_RightDown",
+      "length": 0.429999977,
+      "speed": 1.0,
+      "fade": 0.25,
+      "normalizedStart": "NaN",
+      "eventTimes": [
+        "0.5",
+        "NaN"
+      ]
+    }
+  ],
+  "geometry": [
+    {
+      "objectId": "o00080",
+      "bullet": false,
+      "path": "Collider",
+      "type": "CircleCollider2D",
+      "gameObject": {
+        "reference": "o00310",
+        "type": "UnityEngine.GameObject",
+        "name": "Collider",
+        "path": "Enemy_Imp[0]/Collider[2]"
+      },
+      "enabled": true,
+      "trigger": false,
+      "offset": [
+        0.0,
+        0.3
+      ],
+      "radius": 0.46,
+      "size": null,
+      "paths": []
+    },
+    {
+      "objectId": "o00308",
+      "bullet": false,
+      "path": "BulletPositionParent/BulletPosition",
+      "type": "Transform",
+      "gameObject": {
+        "reference": "o00601",
+        "type": "UnityEngine.GameObject",
+        "name": "BulletPosition",
+        "path": "Enemy_Imp[0]/BulletPositionParent[6]/BulletPosition[0]"
+      },
+      "localPosition": [
+        -0.38,
+        0.0,
+        0.0
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    },
+    {
+      "objectId": "o00334",
+      "bullet": false,
+      "path": "HurtBox",
+      "type": "BoxCollider2D",
+      "gameObject": {
+        "reference": "o00335",
+        "type": "UnityEngine.GameObject",
+        "name": "HurtBox",
+        "path": "Enemy_Imp[0]/HurtBox[4]"
+      },
+      "enabled": true,
+      "trigger": false,
+      "offset": [
+        0.05939734,
+        2.23463178
+      ],
+      "radius": null,
+      "size": [
+        1.73457575,
+        1.826685
+      ],
+      "paths": []
+    },
+    {
+      "objectId": "o00342",
+      "bullet": false,
+      "path": "",
+      "type": "Transform",
+      "gameObject": {
+        "reference": "o00094",
+        "type": "UnityEngine.GameObject",
+        "name": "Enemy_Imp",
+        "path": "Enemy_Imp[0]"
+      },
+      "localPosition": [
+        -6.67,
+        0.0,
+        0.0
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    },
+    {
+      "objectId": "o00606",
+      "bullet": false,
+      "path": "Collider",
+      "type": "Transform",
+      "gameObject": {
+        "reference": "o00310",
+        "type": "UnityEngine.GameObject",
+        "name": "Collider",
+        "path": "Enemy_Imp[0]/Collider[2]"
+      },
+      "localPosition": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    },
+    {
+      "objectId": "o00617",
+      "bullet": false,
+      "path": "HurtBox",
+      "type": "Transform",
+      "gameObject": {
+        "reference": "o00335",
+        "type": "UnityEngine.GameObject",
+        "name": "HurtBox",
+        "path": "Enemy_Imp[0]/HurtBox[4]"
+      },
+      "localPosition": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    },
+    {
+      "objectId": "o00621",
+      "bullet": false,
+      "path": "BulletPositionParent",
+      "type": "Transform",
+      "gameObject": {
+        "reference": "o00345",
+        "type": "UnityEngine.GameObject",
+        "name": "BulletPositionParent",
+        "path": "Enemy_Imp[0]/BulletPositionParent[6]"
+      },
+      "localPosition": [
+        0.0,
+        1.78,
+        0.0
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    },
+    {
+      "objectId": "o00787",
+      "bullet": true,
+      "path": "BulletVisual",
+      "type": "Transform",
+      "gameObject": {
+        "reference": "o00603",
+        "type": "UnityEngine.GameObject",
+        "name": "BulletVisual",
+        "path": "EnemyBulletAttackImp[0]/BulletVisual[0]"
+      },
+      "localPosition": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    },
+    {
+      "objectId": "o00790",
+      "bullet": true,
+      "path": "",
+      "type": "Transform",
+      "gameObject": {
+        "reference": "o00605",
+        "type": "UnityEngine.GameObject",
+        "name": "EnemyBulletAttackImp",
+        "path": "EnemyBulletAttackImp[0]"
+      },
+      "localPosition": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    },
+    {
+      "objectId": "o00791",
+      "bullet": true,
+      "path": "",
+      "type": "CircleCollider2D",
+      "gameObject": {
+        "reference": "o00605",
+        "type": "UnityEngine.GameObject",
+        "name": "EnemyBulletAttackImp",
+        "path": "EnemyBulletAttackImp[0]"
+      },
+      "enabled": true,
+      "trigger": true,
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "radius": 0.37,
+      "size": null,
+      "paths": []
+    }
+  ],
+  "warningExtra": 0.0,
+  "activeExtra": 0.0,
+  "recoveryExtra": 0.0,
+  "cooldown": 2.0,
+  "distance": 10.0,
+  "bulletSpeed": 5.0,
+  "bulletDuration": 3.0,
+  "bulletTimeout": false,
+  "bulletPierce": 1,
+  "differences": [
+    "Current appearance retained. Empty-method source audio callbacks are not bound; event times are retained.",
+    "Damage binds current birth Stats. Source pooled stale Stats references are not reproduced.",
+    "Reference projectile lifetime and single-pierce collision are confirmed by the server."
+  ]
+}

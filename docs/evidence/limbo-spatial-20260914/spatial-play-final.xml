@@ -1,0 +1,265 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="17" result="Passed" total="17" passed="17" failed="0" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-09-14 14:28:43Z" end-time="2026-09-14 14:29:30Z" duration="46.6970248">
+  <test-suite type="TestSuite" id="1604" name="Monster Supergroup" fullname="Monster Supergroup" runstate="Runnable" testcasecount="504" result="Passed" start-time="2026-09-14 14:28:43Z" end-time="2026-09-14 14:29:30Z" duration="46.697025" total="17" passed="17" failed="0" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="PlayMode" />
+    </properties>
+    <test-suite type="Assembly" id="1588" name="MonsterSupergroup.Gameplay.Tests.PlayMode.dll" fullname="F:/UnityStore/MonsterSupergroup/Logs/LimboStage2/ValidationProject/Library/ScriptAssemblies/MonsterSupergroup.Gameplay.Tests.PlayMode.dll" runstate="Runnable" testcasecount="500" result="Passed" start-time="2026-09-14 14:28:43Z" end-time="2026-09-14 14:29:30Z" duration="46.683653" total="17" passed="17" failed="0" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="67180" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="PlayMode" />
+        <property name="EditorOnly" value="False" />
+      </properties>
+      <test-suite type="TestSuite" id="1589" name="MonsterSupergroup" fullname="MonsterSupergroup" runstate="Runnable" testcasecount="500" result="Passed" start-time="2026-09-14 14:28:43Z" end-time="2026-09-14 14:29:30Z" duration="46.680216" total="17" passed="17" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-suite type="TestSuite" id="1590" name="Gameplay" fullname="MonsterSupergroup.Gameplay" runstate="Runnable" testcasecount="500" result="Passed" start-time="2026-09-14 14:28:43Z" end-time="2026-09-14 14:29:30Z" duration="46.667288" total="17" passed="17" failed="0" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <test-suite type="TestSuite" id="1591" name="Tests" fullname="MonsterSupergroup.Gameplay.Tests" runstate="Runnable" testcasecount="500" result="Passed" start-time="2026-09-14 14:28:43Z" end-time="2026-09-14 14:29:30Z" duration="46.659964" total="17" passed="17" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-suite type="TestFixture" id="1146" name="EnemyHandoffGameplayTests" fullname="MonsterSupergroup.Gameplay.Tests.EnemyHandoffGameplayTests" classname="MonsterSupergroup.Gameplay.Tests.EnemyHandoffGameplayTests" runstate="Runnable" testcasecount="3" result="Passed" start-time="2026-09-14 14:28:43Z" end-time="2026-09-14 14:28:51Z" duration="7.919005" total="3" passed="3" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1148" name="CanonicalEnemyDeathRejectsItsFirstSnapshotBeforeTheBodyReceivesTheDeathBatch" fullname="MonsterSupergroup.Gameplay.Tests.EnemyHandoffGameplayTests.CanonicalEnemyDeathRejectsItsFirstSnapshotBeforeTheBodyReceivesTheDeathBatch" methodname="CanonicalEnemyDeathRejectsItsFirstSnapshotBeforeTheBodyReceivesTheDeathBatch" classname="MonsterSupergroup.Gameplay.Tests.EnemyHandoffGameplayTests" runstate="Runnable" seed="331905790" result="Passed" start-time="2026-09-14 14:28:43Z" end-time="2026-09-14 14:28:47Z" duration="4.322386" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[[Localization] Applied locale=zh-CN revision=2
+[NetworkBackend] backend=Kcp purpose=Test source=test-runner transport=KcpTransport.
+--- Hardware Info ---
+CPU Model: 13th Gen Intel(R) Core(TM) i7-13700KF
+GPU Model: NVIDIA GeForce RTX 4080
+RAM: 65375 MB
+Install Disk Model: JZ-SSD4T-XW
+Main Monitor Model: Unknown Monitor
+---------------------
+Normal : True
+UI : False
+AstralShift.HellMaiden.Controllers.PlayerController_HMD
+<color=yellow><b>► Controllers: </b></color>Controller type AstralShift.Control.Controllers.NoInputGameController not available
+[BootGameplay] Server starting; loading 'Assets/_Project/Scenes/Gameplay.unity'.
+[BootGameplay] Server connection 0 is ready.
+[BootGameplay] Queued Player for connection 0.
+[BootGameplay] Gameplay scene ready: 'Assets/_Project/Scenes/Gameplay.unity'.
+[BootGameplay] Spawned Player NetworkPlayer [connId=0] in 'Assets/_Project/Scenes/Gameplay.unity'.
+<color=yellow><b>► Controllers: </b></color>Overrode <color=yellow><b></b></color> with <color=yellow><b>PlayerController_HMD</b></color>.
+Normal : True
+UI : False
+[BootGameplay] Client stopping; serverActive=True.
+[BootGameplay] Server stopping.
+[BootGameplay] Gameplay unload requested.
+There are 2 audio listeners in the scene. Please ensure there is always exactly one audio listener in the scene.
+[SteamInvite] stage=cleanup lobby=0 host=0 phase=Disabled reason=
+]]></output>
+              </test-case>
+              <test-case id="1147" name="HostFirstFrameIsAcknowledgedAndDownedTargetFreezesThenRestores" fullname="MonsterSupergroup.Gameplay.Tests.EnemyHandoffGameplayTests.HostFirstFrameIsAcknowledgedAndDownedTargetFreezesThenRestores" methodname="HostFirstFrameIsAcknowledgedAndDownedTargetFreezesThenRestores" classname="MonsterSupergroup.Gameplay.Tests.EnemyHandoffGameplayTests" runstate="Runnable" seed="148408098" result="Passed" start-time="2026-09-14 14:28:47Z" end-time="2026-09-14 14:28:49Z" duration="1.856346" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[[NetworkBackend] backend=Kcp purpose=Test source=test-runner transport=KcpTransport.
+--- Hardware Info ---
+CPU Model: 13th Gen Intel(R) Core(TM) i7-13700KF
+GPU Model: NVIDIA GeForce RTX 4080
+RAM: 65375 MB
+Install Disk Model: JZ-SSD4T-XW
+Main Monitor Model: Unknown Monitor
+---------------------
+Normal : True
+UI : False
+AstralShift.HellMaiden.Controllers.PlayerController_HMD
+<color=yellow><b>► Controllers: </b></color>Controller type AstralShift.Control.Controllers.NoInputGameController not available
+[BootGameplay] Server starting; loading 'Assets/_Project/Scenes/Gameplay.unity'.
+[BootGameplay] Server connection 0 is ready.
+[BootGameplay] Queued Player for connection 0.
+[BootGameplay] Gameplay scene ready: 'Assets/_Project/Scenes/Gameplay.unity'.
+[BootGameplay] Spawned Player NetworkPlayer [connId=0] in 'Assets/_Project/Scenes/Gameplay.unity'.
+<color=yellow><b>► Controllers: </b></color>Overrode <color=yellow><b></b></color> with <color=yellow><b>PlayerController_HMD</b></color>.
+Normal : True
+UI : False
+[BootGameplay] Client stopping; serverActive=True.
+[BootGameplay] Server stopping.
+[BootGameplay] Gameplay unload requested.
+There are 2 audio listeners in the scene. Please ensure there is always exactly one audio listener in the scene.
+[SteamInvite] stage=cleanup lobby=0 host=0 phase=Disabled reason=
+]]></output>
+              </test-case>
+              <test-case id="1149" name="MeleeCheckpointRestoresEveryPhaseWithoutRestartingActionAndSeeksExpiredAttack" fullname="MonsterSupergroup.Gameplay.Tests.EnemyHandoffGameplayTests.MeleeCheckpointRestoresEveryPhaseWithoutRestartingActionAndSeeksExpiredAttack" methodname="MeleeCheckpointRestoresEveryPhaseWithoutRestartingActionAndSeeksExpiredAttack" classname="MonsterSupergroup.Gameplay.Tests.EnemyHandoffGameplayTests" runstate="Runnable" seed="233743898" result="Passed" start-time="2026-09-14 14:28:49Z" end-time="2026-09-14 14:28:51Z" duration="1.727567" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[[NetworkBackend] backend=Kcp purpose=Test source=test-runner transport=KcpTransport.
+--- Hardware Info ---
+CPU Model: 13th Gen Intel(R) Core(TM) i7-13700KF
+GPU Model: NVIDIA GeForce RTX 4080
+RAM: 65375 MB
+Install Disk Model: JZ-SSD4T-XW
+Main Monitor Model: Unknown Monitor
+---------------------
+Normal : True
+UI : False
+AstralShift.HellMaiden.Controllers.PlayerController_HMD
+<color=yellow><b>► Controllers: </b></color>Controller type AstralShift.Control.Controllers.NoInputGameController not available
+[BootGameplay] Server starting; loading 'Assets/_Project/Scenes/Gameplay.unity'.
+[BootGameplay] Server connection 0 is ready.
+[BootGameplay] Queued Player for connection 0.
+[BootGameplay] Gameplay scene ready: 'Assets/_Project/Scenes/Gameplay.unity'.
+[BootGameplay] Spawned Player NetworkPlayer [connId=0] in 'Assets/_Project/Scenes/Gameplay.unity'.
+<color=yellow><b>► Controllers: </b></color>Overrode <color=yellow><b></b></color> with <color=yellow><b>PlayerController_HMD</b></color>.
+Normal : True
+UI : False
+[BootGameplay] Client stopping; serverActive=True.
+[BootGameplay] Server stopping.
+[BootGameplay] Gameplay unload requested.
+OptionalWarning.AnimatorSpeed - Possible Issue Detected: Animator.speed doesn't affect Animancer. Use AnimancerGraph.Speed instead.
+
+This warning can be disabled via 'Edit/Project Settings/Animancer' or by calling Animancer.OptionalWarning.AnimatorSpeed.Disable() and it will automatically be compiled out of Runtime Builds (except for Development Builds). More information can be found at <a href="https://kybernetik.com.au/animancer/api/Animancer/OptionalWarning">https://kybernetik.com.au/animancer/api/Animancer/OptionalWarning</a>
+
+There are 2 audio listeners in the scene. Please ensure there is always exactly one audio listener in the scene.
+[SteamInvite] stage=cleanup lobby=0 host=0 phase=Disabled reason=
+]]></output>
+              </test-case>
+            </test-suite>
+            <test-suite type="TestFixture" id="1270" name="LimboCoroutineTimingTests" fullname="MonsterSupergroup.Gameplay.Tests.LimboCoroutineTimingTests" classname="MonsterSupergroup.Gameplay.Tests.LimboCoroutineTimingTests" runstate="Runnable" testcasecount="1" result="Passed" start-time="2026-09-14 14:28:51Z" end-time="2026-09-14 14:28:51Z" duration="0.130208" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1271" name="ZeroIntervalCurveAndLimitedSpawnsMatchRealUnityYieldSpacing" fullname="MonsterSupergroup.Gameplay.Tests.LimboCoroutineTimingTests.ZeroIntervalCurveAndLimitedSpawnsMatchRealUnityYieldSpacing" methodname="ZeroIntervalCurveAndLimitedSpawnsMatchRealUnityYieldSpacing" classname="MonsterSupergroup.Gameplay.Tests.LimboCoroutineTimingTests" runstate="Runnable" seed="671950735" result="Passed" start-time="2026-09-14 14:28:51Z" end-time="2026-09-14 14:28:51Z" duration="0.124960" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+            </test-suite>
+            <test-suite type="TestFixture" id="1272" name="LimboTrapLifecycleTests" fullname="MonsterSupergroup.Gameplay.Tests.LimboTrapLifecycleTests" classname="MonsterSupergroup.Gameplay.Tests.LimboTrapLifecycleTests" runstate="Runnable" testcasecount="2" result="Passed" start-time="2026-09-14 14:28:51Z" end-time="2026-09-14 14:29:28Z" duration="36.716830" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1273" name="NativeBarrierShrinksDuringEntryAndReleasesOnlyAfterParticlesFinish" fullname="MonsterSupergroup.Gameplay.Tests.LimboTrapLifecycleTests.NativeBarrierShrinksDuringEntryAndReleasesOnlyAfterParticlesFinish" methodname="NativeBarrierShrinksDuringEntryAndReleasesOnlyAfterParticlesFinish" classname="MonsterSupergroup.Gameplay.Tests.LimboTrapLifecycleTests" runstate="Runnable" seed="373752070" result="Passed" start-time="2026-09-14 14:28:51Z" end-time="2026-09-14 14:29:26Z" duration="35.008201" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[Starting slow mo
+Game <color=pink>Paused</color>
+Game <color=pink>Resumed</color>
+]]></output>
+              </test-case>
+              <test-case id="1274" name="ReplicaDoesNotShrinkOrChangeClockAndCancellationPreservesPause" fullname="MonsterSupergroup.Gameplay.Tests.LimboTrapLifecycleTests.ReplicaDoesNotShrinkOrChangeClockAndCancellationPreservesPause" methodname="ReplicaDoesNotShrinkOrChangeClockAndCancellationPreservesPause" classname="MonsterSupergroup.Gameplay.Tests.LimboTrapLifecycleTests" runstate="Runnable" seed="1802324884" result="Passed" start-time="2026-09-14 14:29:26Z" end-time="2026-09-14 14:29:28Z" duration="1.701464" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[Starting slow mo
+Game <color=pink>Paused</color>
+Game <color=pink>Resumed</color>
+]]></output>
+              </test-case>
+            </test-suite>
+            <test-suite type="TestFixture" id="1277" name="MeleeNativeAttackLifetimeTests" fullname="MonsterSupergroup.Gameplay.Tests.MeleeNativeAttackLifetimeTests" classname="MonsterSupergroup.Gameplay.Tests.MeleeNativeAttackLifetimeTests" runstate="Runnable" testcasecount="8" result="Passed" start-time="2026-09-14 14:29:28Z" end-time="2026-09-14 14:29:29Z" duration="1.032897" total="8" passed="8" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1278" name="ActivePrefabEnablesOnlyAfterBindingOnceForFreshAndReusedSlash" fullname="MonsterSupergroup.Gameplay.Tests.MeleeNativeAttackLifetimeTests.ActivePrefabEnablesOnlyAfterBindingOnceForFreshAndReusedSlash" methodname="ActivePrefabEnablesOnlyAfterBindingOnceForFreshAndReusedSlash" classname="MonsterSupergroup.Gameplay.Tests.MeleeNativeAttackLifetimeTests" runstate="Runnable" seed="946361475" result="Passed" start-time="2026-09-14 14:29:28Z" end-time="2026-09-14 14:29:28Z" duration="0.016784" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1284" name="AnimatedAttackReuseCancelsOldTimeoutAndReleasesOldSnapshot" fullname="MonsterSupergroup.Gameplay.Tests.MeleeNativeAttackLifetimeTests.AnimatedAttackReuseCancelsOldTimeoutAndReleasesOldSnapshot" methodname="AnimatedAttackReuseCancelsOldTimeoutAndReleasesOldSnapshot" classname="MonsterSupergroup.Gameplay.Tests.MeleeNativeAttackLifetimeTests" runstate="Runnable" seed="2024461455" result="Passed" start-time="2026-09-14 14:29:28Z" end-time="2026-09-14 14:29:28Z" duration="0.424401" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[OptionalWarning.DynamicAnimation - Possible Issue Detected: Attempted to set ClipTransition.Clip using an AnimationClip '' which is not an asset. Unity doesn't support dynamically creating animations for Animancer in runtime builds. This warning should be disabled if you're loading animations from Asset Bundles or Addressables or if you only intend to use the animation in the Unity Editor.
+
+This warning can be disabled via 'Edit/Project Settings/Animancer' or by calling Animancer.OptionalWarning.DynamicAnimation.Disable() and it will automatically be compiled out of Runtime Builds (except for Development Builds). More information can be found at <a href="https://kybernetik.com.au/animancer/api/Animancer/OptionalWarning">https://kybernetik.com.au/animancer/api/Animancer/OptionalWarning</a>
+
+<color=magenta><b>► Player Attacks: </b></color>No Hitbox found: make sure this attack doesn't need it!
+OptionalWarning.DynamicAnimation - Possible Issue Detected: Attempted to create ClipState using an AnimationClip '' which is not an asset. Unity doesn't support dynamically creating animations for Animancer in runtime builds. This warning should be disabled if you're loading animations from Asset Bundles or Addressables or if you only intend to use the animation in the Unity Editor.
+
+This warning can be disabled via 'Edit/Project Settings/Animancer' or by calling Animancer.OptionalWarning.DynamicAnimation.Disable() and it will automatically be compiled out of Runtime Builds (except for Development Builds). More information can be found at <a href="https://kybernetik.com.au/animancer/api/Animancer/OptionalWarning">https://kybernetik.com.au/animancer/api/Animancer/OptionalWarning</a>
+
+<color=magenta><b>► Player Attacks: </b></color>No Hitbox found: make sure this attack doesn't need it!
+]]></output>
+              </test-case>
+              <test-case id="1281" name="BuildChangeAndDisabledAutomaticExecutionKeepFrozenDamageAndPerSlashDedup" fullname="MonsterSupergroup.Gameplay.Tests.MeleeNativeAttackLifetimeTests.BuildChangeAndDisabledAutomaticExecutionKeepFrozenDamageAndPerSlashDedup" methodname="BuildChangeAndDisabledAutomaticExecutionKeepFrozenDamageAndPerSlashDedup" classname="MonsterSupergroup.Gameplay.Tests.MeleeNativeAttackLifetimeTests" runstate="Runnable" seed="1873549136" result="Passed" start-time="2026-09-14 14:29:28Z" end-time="2026-09-14 14:29:28Z" duration="0.146709" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1280" name="BurstLeaseKeepsRootAliveBetweenSlashesAndCompletesAfterFinalSlash" fullname="MonsterSupergroup.Gameplay.Tests.MeleeNativeAttackLifetimeTests.BurstLeaseKeepsRootAliveBetweenSlashesAndCompletesAfterFinalSlash" methodname="BurstLeaseKeepsRootAliveBetweenSlashesAndCompletesAfterFinalSlash" classname="MonsterSupergroup.Gameplay.Tests.MeleeNativeAttackLifetimeTests" runstate="Runnable" seed="74344989" result="Passed" start-time="2026-09-14 14:29:28Z" end-time="2026-09-14 14:29:28Z" duration="0.145494" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1283" name="DeactivatingWeaponCancelsBurstWhileRepeatedCleanupIsSafe" fullname="MonsterSupergroup.Gameplay.Tests.MeleeNativeAttackLifetimeTests.DeactivatingWeaponCancelsBurstWhileRepeatedCleanupIsSafe" methodname="DeactivatingWeaponCancelsBurstWhileRepeatedCleanupIsSafe" classname="MonsterSupergroup.Gameplay.Tests.MeleeNativeAttackLifetimeTests" runstate="Runnable" seed="1474656551" result="Passed" start-time="2026-09-14 14:29:28Z" end-time="2026-09-14 14:29:29Z" duration="0.145717" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1285" name="PresentationAttackCannotDealDamageAndPoolReuseRestoresNativeHitCallback" fullname="MonsterSupergroup.Gameplay.Tests.MeleeNativeAttackLifetimeTests.PresentationAttackCannotDealDamageAndPoolReuseRestoresNativeHitCallback" methodname="PresentationAttackCannotDealDamageAndPoolReuseRestoresNativeHitCallback" classname="MonsterSupergroup.Gameplay.Tests.MeleeNativeAttackLifetimeTests" runstate="Runnable" seed="699036812" result="Passed" start-time="2026-09-14 14:29:29Z" end-time="2026-09-14 14:29:29Z" duration="0.004079" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[OptionalWarning.DynamicAnimation - Possible Issue Detected: Attempted to set ClipTransition.Clip using an AnimationClip '' which is not an asset. Unity doesn't support dynamically creating animations for Animancer in runtime builds. This warning should be disabled if you're loading animations from Asset Bundles or Addressables or if you only intend to use the animation in the Unity Editor.
+
+This warning can be disabled via 'Edit/Project Settings/Animancer' or by calling Animancer.OptionalWarning.DynamicAnimation.Disable() and it will automatically be compiled out of Runtime Builds (except for Development Builds). More information can be found at <a href="https://kybernetik.com.au/animancer/api/Animancer/OptionalWarning">https://kybernetik.com.au/animancer/api/Animancer/OptionalWarning</a>
+
+]]></output>
+              </test-case>
+              <test-case id="1279" name="SingleSlashCanAttackAgainAfterSynchronousBurstCompletionAndPoolReuse" fullname="MonsterSupergroup.Gameplay.Tests.MeleeNativeAttackLifetimeTests.SingleSlashCanAttackAgainAfterSynchronousBurstCompletionAndPoolReuse" methodname="SingleSlashCanAttackAgainAfterSynchronousBurstCompletionAndPoolReuse" classname="MonsterSupergroup.Gameplay.Tests.MeleeNativeAttackLifetimeTests" runstate="Runnable" seed="330604494" result="Passed" start-time="2026-09-14 14:29:29Z" end-time="2026-09-14 14:29:29Z" duration="0.001456" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1282" name="WeaponRemovalStopsFutureSlashesAndReleasesEveryLeaseOnce" fullname="MonsterSupergroup.Gameplay.Tests.MeleeNativeAttackLifetimeTests.WeaponRemovalStopsFutureSlashesAndReleasesEveryLeaseOnce" methodname="WeaponRemovalStopsFutureSlashesAndReleasesEveryLeaseOnce" classname="MonsterSupergroup.Gameplay.Tests.MeleeNativeAttackLifetimeTests" runstate="Runnable" seed="1118919077" result="Passed" start-time="2026-09-14 14:29:29Z" end-time="2026-09-14 14:29:29Z" duration="0.139834" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+            </test-suite>
+            <test-suite type="TestFixture" id="1286" name="MeleePresentationReplicaPlayModeTests" fullname="MonsterSupergroup.Gameplay.Tests.MeleePresentationReplicaPlayModeTests" classname="MonsterSupergroup.Gameplay.Tests.MeleePresentationReplicaPlayModeTests" runstate="Runnable" testcasecount="3" result="Passed" start-time="2026-09-14 14:29:29Z" end-time="2026-09-14 14:29:30Z" duration="0.800638" total="3" passed="3" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1289" name="Dispose_ReturnsAllSlashesAndDestroysOnlyReplicaEmitters" fullname="MonsterSupergroup.Gameplay.Tests.MeleePresentationReplicaPlayModeTests.Dispose_ReturnsAllSlashesAndDestroysOnlyReplicaEmitters" methodname="Dispose_ReturnsAllSlashesAndDestroysOnlyReplicaEmitters" classname="MonsterSupergroup.Gameplay.Tests.MeleePresentationReplicaPlayModeTests" runstate="Runnable" seed="212182139" result="Passed" start-time="2026-09-14 14:29:29Z" end-time="2026-09-14 14:29:29Z" duration="0.029932" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1288" name="NaturalExpiryAndLateReplay_LeaveNoActiveEntry" fullname="MonsterSupergroup.Gameplay.Tests.MeleePresentationReplicaPlayModeTests.NaturalExpiryAndLateReplay_LeaveNoActiveEntry" methodname="NaturalExpiryAndLateReplay_LeaveNoActiveEntry" classname="MonsterSupergroup.Gameplay.Tests.MeleePresentationReplicaPlayModeTests" runstate="Runnable" seed="454312099" result="Passed" start-time="2026-09-14 14:29:29Z" end-time="2026-09-14 14:29:30Z" duration="0.721354" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1287" name="RemoteSlash_FollowsPlayerAndCannotDamageOrCreateGasRuntime" fullname="MonsterSupergroup.Gameplay.Tests.MeleePresentationReplicaPlayModeTests.RemoteSlash_FollowsPlayerAndCannotDamageOrCreateGasRuntime" methodname="RemoteSlash_FollowsPlayerAndCannotDamageOrCreateGasRuntime" classname="MonsterSupergroup.Gameplay.Tests.MeleePresentationReplicaPlayModeTests" runstate="Runnable" seed="1343520738" result="Passed" start-time="2026-09-14 14:29:30Z" end-time="2026-09-14 14:29:30Z" duration="0.042018" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[Saving results to: C:/Users/ADMIN/AppData/LocalLow/DefaultCompany/Monster Supergroup\TestResults.xml
+]]></output>
+              </test-case>
+            </test-suite>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

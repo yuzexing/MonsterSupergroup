@@ -48,6 +48,7 @@ namespace AstralShift.HellMaiden.AI.Enemy
         public EnemyActionState CaptureSimulationAction(double now)
         {
             var state = simulationAction;
+            if (attackScript is EnemyAttackDash dash) dash.CaptureDashState(ref state);
             if (attackScript is EnemyProjectileAttack projectile && projectile.NetworkExecution != null)
             {
                 state.ProjectileDirection = projectile.LockedDirection;
@@ -56,6 +57,12 @@ namespace AstralShift.HellMaiden.AI.Enemy
             if (state.Phase == EnemyAttackPresentationPhase.Inactive)
                 state.NextAttackAt = float.IsNegativeInfinity(lastAttackTime) ? 0 : now + Math.Max(0, attackCooldown - (Time.time - lastAttackTime));
             return state;
+        }
+
+        public bool TryReadSimulationAction(out EnemyActionState action, out double now)
+        {
+            action = simulationAction; now = simulationClock != null ? simulationClock() : Time.timeAsDouble;
+            return simulationClock != null;
         }
 
         public void SuspendSimulationExecution()
@@ -97,6 +104,7 @@ namespace AstralShift.HellMaiden.AI.Enemy
             Movement.FreezeRigidbody(attacking && stopForAttack);
             attackScript.RestoreSimulationTimers((float)(now - state.WarningStartedAt),
                 (float)(now - state.WarningUntil), (float)(now - state.ActiveUntil));
+            if (attackScript is EnemyAttackDash dash) dash.RestoreDashState(state);
             if (attackScript is EnemyAttackMelee melee)
                 melee.RestoreSimulation(phase, previousFacingDirection, (float)Math.Max(0, state.EndAt(phase) - now));
             if (attackScript is EnemyProjectileAttack projectile) projectile.RestoreProjectileSimulation(state, phase);

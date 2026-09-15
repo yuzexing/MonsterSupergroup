@@ -345,7 +345,7 @@ namespace AstralShift.HellMaiden.AI.Enemy
 		/// without starting the attack FSM. Presentation and hit feedback remain
 		/// available independently of combat decision simulation.
 		/// </summary>
-		public void InitNetworkMovementOnly(int id)
+		public void InitNetworkMovementOnly(int id, Action<EnemyStats> configureStatsBeforeCombatant = null)
 		{
 			base.ID = id;
 			try
@@ -355,7 +355,7 @@ namespace AstralShift.HellMaiden.AI.Enemy
 			catch (Exception)
 			{
 			}
-			InitValues(null);
+			InitValues(configureStatsBeforeCombatant);
 			enemyAnimator.Init(this);
 			direction = Direction.None;
 			angle = 0f;

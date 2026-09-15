@@ -26,7 +26,7 @@ namespace MonsterSupergroup.NetworkCombat
             if (BootGameplayNetworkManager.CombatHasEnded) return;
             if (!launch.IsValid) throw new InvalidOperationException("Invalid local enemy projectile launch.");
             projectileDefinitions[launch.EnemyPrefabAssetId] = agent.GetComponent<EnemyProjectileAttack>().bulletPrefab;
-            if (NetworkClient.active) PresentEnemyProjectile(launch);
+            if (NetworkClient.active && launch.ExpiryMode == EnemyProjectileExpiryMode.FixedLifetime) PresentEnemyProjectile(launch);
             if (isServer && agent.Assignment.Host != EnemySimulationHost.ClientPlayer)
             {
                 if (TryAcceptEnemyProjectile(0, launch)) BroadcastEnemyProjectiles(new[] { launch });
@@ -63,9 +63,14 @@ namespace MonsterSupergroup.NetworkCombat
                 pose.EnemyEntityId != launch.Key.EnemyEntityId || pose.AssignmentEpoch != assignment.Epoch || !pose.IsFinite ||
                 pose.Runtime.Action.ActionId != launch.Key.ActionId || !pose.Runtime.Action.ProjectileEmitted ||
                 pose.Runtime.Action.Phase != AstralShift.HellMaiden.AI.EnemyAttackPresentationPhase.Active ||
-                acceptedProjectiles.Contains(launch.Key, NetworkTime.time)) return false;
+                acceptedProjectiles.Contains(launch.Key, EnemySimulationClock.CombatNow) || serverReferenceFlights.ContainsKey(launch.Key)) return false;
+            bool reference = enemy.Birth.Enabled;
+            if (reference != (launch.ExpiryMode == EnemyProjectileExpiryMode.ReferenceOutsideView) ||
+                reference && (launch.ViewTargetPlayerId != assignment.AggroTargetPlayerId ||
+                launch.FiredAt > EnemySimulationClock.CombatNow + .25 || EnemySimulationClock.CombatNow - launch.FiredAt > 5)) return false;
             Registry.ConfirmProjectileLaunch(launch);
-            acceptedProjectiles.Add(launch.Key, NetworkTime.time);
+            RegisterReferenceFlight(launch);
+            acceptedProjectiles.Add(launch.Key, EnemySimulationClock.CombatNow);
             AcceptPendingTermination(launch.Key);
             AcceptedProjectileCount++;
             EnemyProjectileAccepted?.Invoke(launch);
@@ -84,14 +89,20 @@ namespace MonsterSupergroup.NetworkCombat
 
         public bool PresentEnemyProjectile(EnemyProjectileLaunch launch)
         {
-            if (!NetworkClient.active || !launch.IsValid || endedProjectiles.Contains(launch.Key, NetworkTime.time) || presentedProjectiles.Contains(launch.Key, NetworkTime.time)) return false;
+            if (!NetworkClient.active || !launch.IsValid || endedProjectiles.Contains(launch.Key, EnemySimulationClock.CombatNow) || presentedProjectiles.Contains(launch.Key, EnemySimulationClock.CombatNow)) return false;
             var prefab = ResolveEnemyBullet(launch.EnemyPrefabAssetId);
             if (prefab == null) { Debug.LogError("Unregistered enemy projectile asset " + launch.EnemyPrefabAssetId); return false; }
             var bullet = BorrowEnemyBullet(launch.EnemyPrefabAssetId, prefab);
             bullet.transform.SetPositionAndRotation(launch.Origin, Quaternion.identity);
             bullet.speed = launch.Speed; bullet.duration = launch.Lifetime; bullet.pierce = 1; bullet.bulletHasTimeOut = true;
             bullet.ShooterController = null;
-            bullet.damageInteraction.ConfigureLocalProjectile(launch.Damage, launch.StunTime, () => EndLocalEnemyProjectile(launch.Key, EnemyProjectileEndReason.Hit));
+            bool reference = launch.ExpiryMode == EnemyProjectileExpiryMode.ReferenceOutsideView;
+            if (reference) clientReferenceFlights[launch.Key] = launch;
+            bullet.bulletHasTimeOut = !reference;
+            bullet.NetworkFlightPosition = reference ? () => launch.PositionAt(EnemySimulationClock.CombatNow) : null;
+            bullet.damageInteraction.ConfigureLocalProjectile(launch.Damage, launch.StunTime,
+                () => EndLocalEnemyProjectile(launch.Key, EnemyProjectileEndReason.Hit),
+                reference ? _ => ClaimReferenceProjectileHit(launch.Key) : null);
             bullet.damageInteraction.enabled = true;
             foreach (var c in bullet.GetComponentsInChildren<Collider2D>(true)) c.enabled = true;
             bullet.OnReturn = () => EndLocalEnemyProjectile(launch.Key, EnemyProjectileEndReason.Expired);
@@ -99,7 +110,7 @@ namespace MonsterSupergroup.NetworkCombat
             liveProjectiles.Add(launch.Key, bullet);
             bullet.gameObject.SetActive(true);
             bullet.Fire(launch.Direction);
-            presentedProjectiles.Add(launch.Key, NetworkTime.time);
+            presentedProjectiles.Add(launch.Key, EnemySimulationClock.CombatNow);
             PresentedProjectileCount++;
             EnemyProjectilePresented?.Invoke(launch, bullet);
             return true;
@@ -138,6 +149,7 @@ namespace MonsterSupergroup.NetworkCombat
         {
             if (bullet == null || !borrowedProjectiles.TryGetValue(bullet, out uint asset)) return;
             borrowedProjectiles.Remove(bullet);
+            bullet.NetworkFlightPosition = null;
             bullet.OnReturn = null; bullet.OnDisabled = null; bullet.onAttackFiredEnd = null; bullet.ShooterController = null;
             bullet.damageInteraction?.DiscardPendingCollisions();
             bullet.gameObject.SetActive(false);
@@ -152,6 +164,7 @@ namespace MonsterSupergroup.NetworkCombat
             if (projectilePoolRoot != null) Destroy(projectilePoolRoot.gameObject);
             projectileFlightRoot = projectilePoolRoot = null;
             pendingProjectileLaunches.Clear(); presentedProjectiles.Clear();
+            ClearReferenceProjectiles();
             liveProjectiles.Clear(); endedProjectiles.Clear(); pendingClientTerminations.Clear();
             PresentedProjectileCount = 0;
         }

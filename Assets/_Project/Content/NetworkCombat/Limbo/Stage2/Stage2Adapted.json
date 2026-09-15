@@ -1,0 +1,1356 @@
+{
+  "schemaVersion": 1,
+  "sourceSha256": "4dcefbcae22fb6e8cd067618cd0ba782eb5a23d07b20a31a3ecf3323cd6d5c38",
+  "enemies": [
+    {
+      "key": "Skeleton",
+      "identity": "Skeleton",
+      "controllerId": "o00015",
+      "animatorId": "o00101",
+      "cooldown": 0.5,
+      "distance": 1.75,
+      "stopForAttack": true,
+      "elite": false,
+      "warningExtra": 0.0,
+      "activeExtra": 0.0,
+      "recoveryExtra": 0.0,
+      "bindings": [
+        {
+          "field": "attackLeftDown",
+          "sourceClip": "Enemy_Skeleton_AttackMomentLeft",
+          "length": 0.08,
+          "speed": 1.0,
+          "fade": 0.25,
+          "normalizedStart": "NaN",
+          "eventTimes": [
+            "0.0",
+            "NaN"
+          ]
+        },
+        {
+          "field": "attackLeftUp",
+          "sourceClip": "Enemy_Skeleton_AttackMomentLeft",
+          "length": 0.08,
+          "speed": 1.0,
+          "fade": 0.25,
+          "normalizedStart": "NaN",
+          "eventTimes": [
+            "0.0",
+            "NaN"
+          ]
+        },
+        {
+          "field": "attackRightDown",
+          "sourceClip": "Enemy_Skeleton_AttackMomentRight",
+          "length": 0.08,
+          "speed": 1.0,
+          "fade": 0.25,
+          "normalizedStart": "NaN",
+          "eventTimes": [
+            "0.0",
+            "NaN"
+          ]
+        },
+        {
+          "field": "attackRightUp",
+          "sourceClip": "Enemy_Skeleton_AttackMomentRight",
+          "length": 0.08,
+          "speed": 1.0,
+          "fade": 0.25,
+          "normalizedStart": "NaN",
+          "eventTimes": [
+            "0.0",
+            "NaN"
+          ]
+        },
+        {
+          "field": "attackWarningLeftDown",
+          "sourceClip": "Enemy_Skeleton_WarningLeftDown",
+          "length": 0.57,
+          "speed": 1.0,
+          "fade": 0.25,
+          "normalizedStart": "NaN",
+          "eventTimes": [
+            "0.0",
+            "NaN"
+          ]
+        },
+        {
+          "field": "attackWarningLeftUp",
+          "sourceClip": "Enemy_Skeleton_WarningLeftDown",
+          "length": 0.57,
+          "speed": 1.0,
+          "fade": 0.25,
+          "normalizedStart": "NaN",
+          "eventTimes": [
+            "0.0",
+            "NaN"
+          ]
+        },
+        {
+          "field": "attackWarningRightDown",
+          "sourceClip": "Enemy_Skeleton_WarningRightDown",
+          "length": 0.57,
+          "speed": 1.0,
+          "fade": 0.25,
+          "normalizedStart": "NaN",
+          "eventTimes": [
+            "0.0",
+            "NaN"
+          ]
+        },
+        {
+          "field": "attackWarningRightUp",
+          "sourceClip": "Enemy_Skeleton_WarningRightDown",
+          "length": 0.57,
+          "speed": 1.0,
+          "fade": 0.25,
+          "normalizedStart": "NaN",
+          "eventTimes": [
+            "0.0",
+            "NaN"
+          ]
+        },
+        {
+          "field": "recoveryLeftDown",
+          "sourceClip": "Enemy_Skeleton_AttackRecoveryLeft",
+          "length": 0.29,
+          "speed": 1.0,
+          "fade": 0.25,
+          "normalizedStart": "NaN",
+          "eventTimes": []
+        },
+        {
+          "field": "recoveryLeftUp",
+          "sourceClip": "Enemy_Skeleton_AttackRecoveryLeft",
+          "length": 0.29,
+          "speed": 1.0,
+          "fade": 0.25,
+          "normalizedStart": "NaN",
+          "eventTimes": []
+        },
+        {
+          "field": "recoveryRightDown",
+          "sourceClip": "Enemy_Skeleton_AttackRecoveryRight",
+          "length": 0.29,
+          "speed": 1.0,
+          "fade": 0.25,
+          "normalizedStart": "NaN",
+          "eventTimes": []
+        },
+        {
+          "field": "recoveryRightUp",
+          "sourceClip": "Enemy_Skeleton_AttackRecoveryRight",
+          "length": 0.29,
+          "speed": 1.0,
+          "fade": 0.25,
+          "normalizedStart": "NaN",
+          "eventTimes": []
+        }
+      ],
+      "geometry": [
+        {
+          "objectId": "o00098",
+          "attack": false,
+          "path": "Collider",
+          "type": "CircleCollider2D",
+          "enabled": true,
+          "trigger": false,
+          "offset": [
+            0.0,
+            0.3
+          ],
+          "radius": 0.46
+        },
+        {
+          "objectId": "o00370",
+          "attack": false,
+          "path": "HurtBox",
+          "type": "BoxCollider2D",
+          "enabled": true,
+          "trigger": false,
+          "offset": [
+            0.0,
+            0.72
+          ],
+          "radius": null,
+          "size": [
+            1.2,
+            1.5
+          ]
+        },
+        {
+          "objectId": "o00378",
+          "attack": false,
+          "path": "",
+          "type": "Transform",
+          "localPosition": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "localScale": [
+            1.0,
+            1.0,
+            1.0
+          ],
+          "localRotation": [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        },
+        {
+          "objectId": "o00629",
+          "attack": false,
+          "path": "Collider",
+          "type": "Transform",
+          "localPosition": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "localScale": [
+            1.0,
+            1.0,
+            1.0
+          ],
+          "localRotation": [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        },
+        {
+          "objectId": "o00639",
+          "attack": false,
+          "path": "HurtBox",
+          "type": "Transform",
+          "localPosition": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "localScale": [
+            1.0,
+            1.0,
+            1.0
+          ],
+          "localRotation": [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        },
+        {
+          "objectId": "o00806",
+          "attack": true,
+          "path": "",
+          "type": "Transform",
+          "localPosition": [
+            92.9,
+            25.27,
+            0.0
+          ],
+          "localScale": [
+            1.0,
+            1.0,
+            1.0
+          ],
+          "localRotation": [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        },
+        {
+          "objectId": "o00910",
+          "attack": true,
+          "path": "AttackWarning",
+          "type": "Transform",
+          "localPosition": [
+            0.91,
+            0.0,
+            0.0
+          ],
+          "localScale": [
+            1.0,
+            1.0,
+            1.0
+          ],
+          "localRotation": [
+            0.0,
+            0.0,
+            -0.7071068,
+            0.7071068
+          ]
+        },
+        {
+          "objectId": "o00914",
+          "attack": true,
+          "path": "AttackWarning/Collider",
+          "type": "Transform",
+          "localPosition": [
+            0.0,
+            -0.5800001,
+            0.0
+          ],
+          "localScale": [
+            1.0,
+            1.0,
+            1.0
+          ],
+          "localRotation": [
+            0.0,
+            0.0,
+            0.7071068,
+            0.7071068
+          ]
+        },
+        {
+          "objectId": "o00915",
+          "attack": true,
+          "path": "AttackWarning/Collider",
+          "type": "PolygonCollider2D",
+          "enabled": true,
+          "trigger": true,
+          "offset": [
+            0.0,
+            0.0
+          ],
+          "radius": null,
+          "points": [
+            1.415054,
+            1.0,
+            0.0,
+            1.74,
+            0.0,
+            -1.74,
+            1.41505408,
+            -1.0,
+            1.73587084,
+            0.017290324
+          ]
+        },
+        {
+          "objectId": "o01001",
+          "attack": true,
+          "path": "AttackWarning/area skeletton_0",
+          "type": "Transform",
+          "localPosition": [
+            0.0,
+            0.36,
+            0.0
+          ],
+          "localScale": [
+            0.46967,
+            0.46967,
+            0.46967
+          ],
+          "localRotation": [
+            0.0,
+            0.0,
+            0.7071068,
+            0.7071068
+          ]
+        },
+        {
+          "objectId": "o01005",
+          "attack": true,
+          "path": "AttackWarning/arrow skeleton_0",
+          "type": "Transform",
+          "localPosition": [
+            -0.01,
+            0.668,
+            0.0
+          ],
+          "localScale": [
+            0.4411733,
+            0.4411733,
+            0.4411733
+          ],
+          "localRotation": [
+            0.0,
+            0.0,
+            0.7071068,
+            0.7071068
+          ]
+        }
+      ]
+    },
+    {
+      "key": "Elite_Skeleton",
+      "identity": "Elite_Skeleton",
+      "controllerId": "o00018",
+      "animatorId": "o00119",
+      "cooldown": 0.5,
+      "distance": 3.0,
+      "stopForAttack": true,
+      "elite": true,
+      "warningExtra": 0.0,
+      "activeExtra": 0.0,
+      "recoveryExtra": 0.0,
+      "bindings": [
+        {
+          "field": "attackLeftDown",
+          "sourceClip": "ElSkeleton_AttackMomentDownLeft",
+          "length": 0.08,
+          "speed": 1.0,
+          "fade": 0.25,
+          "normalizedStart": "NaN",
+          "eventTimes": [
+            "0.0",
+            "NaN"
+          ]
+        },
+        {
+          "field": "attackLeftUp",
+          "sourceClip": "ElSkeleton_AttackMomentDownLeft",
+          "length": 0.08,
+          "speed": 1.0,
+          "fade": 0.25,
+          "normalizedStart": "NaN",
+          "eventTimes": [
+            "0.0",
+            "NaN"
+          ]
+        },
+        {
+          "field": "attackRightDown",
+          "sourceClip": "ElSkeleton_AttackMomentDownRight",
+          "length": 0.08,
+          "speed": 1.0,
+          "fade": 0.25,
+          "normalizedStart": "NaN",
+          "eventTimes": [
+            "0.0",
+            "NaN"
+          ]
+        },
+        {
+          "field": "attackRightUp",
+          "sourceClip": "ElSkeleton_AttackMomentDownRight",
+          "length": 0.08,
+          "speed": 1.0,
+          "fade": 0.25,
+          "normalizedStart": "NaN",
+          "eventTimes": [
+            "0.0",
+            "NaN"
+          ]
+        },
+        {
+          "field": "attackWarningLeftDown",
+          "sourceClip": "ElSkeleton_AttackWarningDownLeft",
+          "length": 0.57,
+          "speed": 1.0,
+          "fade": 0.25,
+          "normalizedStart": "NaN",
+          "eventTimes": [
+            "0.0",
+            "NaN"
+          ]
+        },
+        {
+          "field": "attackWarningLeftUp",
+          "sourceClip": "ElSkeleton_AttackWarningDownLeft",
+          "length": 0.57,
+          "speed": 1.0,
+          "fade": 0.25,
+          "normalizedStart": "NaN",
+          "eventTimes": [
+            "0.0",
+            "NaN"
+          ]
+        },
+        {
+          "field": "attackWarningRightDown",
+          "sourceClip": "ElSkeleton_AttackWarningDownRight",
+          "length": 0.57,
+          "speed": 1.0,
+          "fade": 0.25,
+          "normalizedStart": "NaN",
+          "eventTimes": [
+            "0.0",
+            "NaN"
+          ]
+        },
+        {
+          "field": "attackWarningRightUp",
+          "sourceClip": "ElSkeleton_AttackWarningDownRight",
+          "length": 0.57,
+          "speed": 1.0,
+          "fade": 0.25,
+          "normalizedStart": "NaN",
+          "eventTimes": [
+            "0.0",
+            "NaN"
+          ]
+        },
+        {
+          "field": "recoveryLeftDown",
+          "sourceClip": "ElSkeleton_AttackRecoveryDownLeft",
+          "length": 0.429999977,
+          "speed": 1.0,
+          "fade": 0.25,
+          "normalizedStart": "NaN",
+          "eventTimes": []
+        },
+        {
+          "field": "recoveryLeftUp",
+          "sourceClip": "ElSkeleton_AttackRecoveryDownLeft",
+          "length": 0.429999977,
+          "speed": 1.0,
+          "fade": 0.25,
+          "normalizedStart": "NaN",
+          "eventTimes": []
+        },
+        {
+          "field": "recoveryRightDown",
+          "sourceClip": "ElSkeleton_AttackRecoveryDownRight",
+          "length": 0.28,
+          "speed": 1.0,
+          "fade": 0.25,
+          "normalizedStart": "NaN",
+          "eventTimes": []
+        },
+        {
+          "field": "recoveryRightUp",
+          "sourceClip": "ElSkeleton_AttackRecoveryDownRight",
+          "length": 0.28,
+          "speed": 1.0,
+          "fade": 0.25,
+          "normalizedStart": "NaN",
+          "eventTimes": []
+        }
+      ],
+      "geometry": [
+        {
+          "objectId": "o00116",
+          "attack": false,
+          "path": "Collider",
+          "type": "CircleCollider2D",
+          "enabled": true,
+          "trigger": false,
+          "offset": [
+            0.0,
+            0.3
+          ],
+          "radius": 0.5
+        },
+        {
+          "objectId": "o00405",
+          "attack": false,
+          "path": "HurtBox",
+          "type": "BoxCollider2D",
+          "enabled": true,
+          "trigger": false,
+          "offset": [
+            0.0,
+            0.72
+          ],
+          "radius": null,
+          "size": [
+            1.2,
+            1.5
+          ]
+        },
+        {
+          "objectId": "o00413",
+          "attack": false,
+          "path": "",
+          "type": "Transform",
+          "localPosition": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "localScale": [
+            1.0,
+            1.0,
+            1.0
+          ],
+          "localRotation": [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        },
+        {
+          "objectId": "o00648",
+          "attack": false,
+          "path": "Collider",
+          "type": "Transform",
+          "localPosition": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "localScale": [
+            1.0,
+            1.0,
+            1.0
+          ],
+          "localRotation": [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        },
+        {
+          "objectId": "o00658",
+          "attack": false,
+          "path": "HurtBox",
+          "type": "Transform",
+          "localPosition": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "localScale": [
+            1.0,
+            1.0,
+            1.0
+          ],
+          "localRotation": [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        },
+        {
+          "objectId": "o00818",
+          "attack": true,
+          "path": "",
+          "type": "Transform",
+          "localPosition": [
+            92.9,
+            25.27,
+            0.0
+          ],
+          "localScale": [
+            1.5,
+            1.5,
+            1.5
+          ],
+          "localRotation": [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        },
+        {
+          "objectId": "o00918",
+          "attack": true,
+          "path": "AttackWarning",
+          "type": "Transform",
+          "localPosition": [
+            0.91,
+            0.0,
+            0.0
+          ],
+          "localScale": [
+            1.0,
+            1.0,
+            1.0
+          ],
+          "localRotation": [
+            0.0,
+            0.0,
+            -0.7071068,
+            0.7071068
+          ]
+        },
+        {
+          "objectId": "o00922",
+          "attack": true,
+          "path": "AttackWarning/Collider",
+          "type": "Transform",
+          "localPosition": [
+            0.0,
+            -0.5800001,
+            0.0
+          ],
+          "localScale": [
+            1.0,
+            1.0,
+            1.0
+          ],
+          "localRotation": [
+            0.0,
+            0.0,
+            0.7071068,
+            0.7071068
+          ]
+        },
+        {
+          "objectId": "o00923",
+          "attack": true,
+          "path": "AttackWarning/Collider",
+          "type": "PolygonCollider2D",
+          "enabled": true,
+          "trigger": true,
+          "offset": [
+            0.0,
+            0.0
+          ],
+          "radius": null,
+          "points": [
+            1.415054,
+            1.0,
+            0.0,
+            1.74,
+            0.0,
+            -1.74,
+            1.41505408,
+            -1.0,
+            1.73587084,
+            0.017290324
+          ]
+        },
+        {
+          "objectId": "o01007",
+          "attack": true,
+          "path": "AttackWarning/area skeletton_0",
+          "type": "Transform",
+          "localPosition": [
+            0.0,
+            0.36,
+            0.0
+          ],
+          "localScale": [
+            0.46967,
+            0.46967,
+            0.46967
+          ],
+          "localRotation": [
+            0.0,
+            0.0,
+            0.7071068,
+            0.7071068
+          ]
+        },
+        {
+          "objectId": "o01011",
+          "attack": true,
+          "path": "AttackWarning/arrow skeleton_0",
+          "type": "Transform",
+          "localPosition": [
+            -0.01,
+            0.668,
+            0.0
+          ],
+          "localScale": [
+            0.4411733,
+            0.4411733,
+            0.4411733
+          ],
+          "localRotation": [
+            0.0,
+            0.0,
+            0.7071068,
+            0.7071068
+          ]
+        }
+      ]
+    },
+    {
+      "key": "Brotchi",
+      "identity": "Brotchi",
+      "controllerId": "o00001",
+      "animatorId": "o00047",
+      "cooldown": 0.5,
+      "distance": 0.0,
+      "stopForAttack": true,
+      "elite": false,
+      "warningExtra": 0.0,
+      "activeExtra": 0.0,
+      "recoveryExtra": 0.0,
+      "bindings": [],
+      "geometry": [
+        {
+          "objectId": "o00044",
+          "attack": false,
+          "path": "Collider",
+          "type": "CircleCollider2D",
+          "enabled": true,
+          "trigger": false,
+          "offset": [
+            0.0,
+            0.3
+          ],
+          "radius": 0.46
+        },
+        {
+          "objectId": "o00256",
+          "attack": false,
+          "path": "HurtBox",
+          "type": "BoxCollider2D",
+          "enabled": true,
+          "trigger": false,
+          "offset": [
+            0.0,
+            0.72
+          ],
+          "radius": null,
+          "size": [
+            1.2,
+            1.5
+          ]
+        },
+        {
+          "objectId": "o00264",
+          "attack": false,
+          "path": "",
+          "type": "Transform",
+          "localPosition": [
+            3.27,
+            0.0,
+            0.0
+          ],
+          "localScale": [
+            1.0,
+            1.0,
+            1.0
+          ],
+          "localRotation": [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        },
+        {
+          "objectId": "o00559",
+          "attack": false,
+          "path": "Collider",
+          "type": "Transform",
+          "localPosition": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "localScale": [
+            1.0,
+            1.0,
+            1.0
+          ],
+          "localRotation": [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        },
+        {
+          "objectId": "o00569",
+          "attack": false,
+          "path": "HurtBox",
+          "type": "Transform",
+          "localPosition": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "localScale": [
+            1.0,
+            1.0,
+            1.0
+          ],
+          "localRotation": [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        },
+        {
+          "objectId": "o00573",
+          "attack": false,
+          "path": "AttackCollider",
+          "type": "Transform",
+          "localPosition": [
+            0.0,
+            0.46,
+            0.0
+          ],
+          "localScale": [
+            1.0,
+            1.0,
+            1.0
+          ],
+          "localRotation": [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        },
+        {
+          "objectId": "o00574",
+          "attack": false,
+          "path": "AttackCollider",
+          "type": "CircleCollider2D",
+          "enabled": true,
+          "trigger": true,
+          "offset": [
+            0.0,
+            0.0
+          ],
+          "radius": 0.55
+        }
+      ]
+    },
+    {
+      "key": "Rusher",
+      "identity": "Slime",
+      "controllerId": "o00026",
+      "animatorId": "o00156",
+      "cooldown": 0.0,
+      "distance": 0.0,
+      "stopForAttack": true,
+      "elite": false,
+      "warningExtra": 0.0,
+      "activeExtra": 0.0,
+      "recoveryExtra": 0.0,
+      "bindings": [],
+      "geometry": [
+        {
+          "objectId": "o00153",
+          "attack": false,
+          "path": "Collider",
+          "type": "CircleCollider2D",
+          "enabled": true,
+          "trigger": false,
+          "offset": [
+            0.0,
+            0.3
+          ],
+          "radius": 0.46
+        },
+        {
+          "objectId": "o00476",
+          "attack": false,
+          "path": "HurtBox",
+          "type": "BoxCollider2D",
+          "enabled": true,
+          "trigger": false,
+          "offset": [
+            0.0,
+            0.72
+          ],
+          "radius": null,
+          "size": [
+            1.2,
+            1.5
+          ]
+        },
+        {
+          "objectId": "o00484",
+          "attack": false,
+          "path": "",
+          "type": "Transform",
+          "localPosition": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "localScale": [
+            1.0,
+            1.0,
+            1.0
+          ],
+          "localRotation": [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        },
+        {
+          "objectId": "o00695",
+          "attack": false,
+          "path": "Collider",
+          "type": "Transform",
+          "localPosition": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "localScale": [
+            1.0,
+            1.0,
+            1.0
+          ],
+          "localRotation": [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        },
+        {
+          "objectId": "o00705",
+          "attack": false,
+          "path": "HurtBox",
+          "type": "Transform",
+          "localPosition": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "localScale": [
+            1.0,
+            1.0,
+            1.0
+          ],
+          "localRotation": [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        },
+        {
+          "objectId": "o00708",
+          "attack": false,
+          "path": "AttackCollider",
+          "type": "Transform",
+          "localPosition": [
+            0.0,
+            0.61,
+            0.0
+          ],
+          "localScale": [
+            1.0,
+            1.0,
+            1.0
+          ],
+          "localRotation": [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        },
+        {
+          "objectId": "o00709",
+          "attack": false,
+          "path": "AttackCollider",
+          "type": "CircleCollider2D",
+          "enabled": true,
+          "trigger": true,
+          "offset": [
+            0.0,
+            0.0
+          ],
+          "radius": 0.72
+        }
+      ]
+    },
+    {
+      "key": "Slime",
+      "identity": "Slime",
+      "controllerId": "o00028",
+      "animatorId": "o00174",
+      "cooldown": 0.0,
+      "distance": 0.0,
+      "stopForAttack": true,
+      "elite": false,
+      "warningExtra": 0.0,
+      "activeExtra": 0.0,
+      "recoveryExtra": 0.0,
+      "bindings": [],
+      "geometry": [
+        {
+          "objectId": "o00171",
+          "attack": false,
+          "path": "Collider",
+          "type": "CircleCollider2D",
+          "enabled": true,
+          "trigger": false,
+          "offset": [
+            0.0,
+            0.3
+          ],
+          "radius": 0.46
+        },
+        {
+          "objectId": "o00506",
+          "attack": false,
+          "path": "HurtBox",
+          "type": "BoxCollider2D",
+          "enabled": true,
+          "trigger": false,
+          "offset": [
+            0.0,
+            0.72
+          ],
+          "radius": null,
+          "size": [
+            1.2,
+            1.5
+          ]
+        },
+        {
+          "objectId": "o00514",
+          "attack": false,
+          "path": "",
+          "type": "Transform",
+          "localPosition": [
+            -18.948,
+            2.65,
+            0.0
+          ],
+          "localScale": [
+            1.0,
+            1.0,
+            1.0
+          ],
+          "localRotation": [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        },
+        {
+          "objectId": "o00716",
+          "attack": false,
+          "path": "Collider",
+          "type": "Transform",
+          "localPosition": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "localScale": [
+            1.0,
+            1.0,
+            1.0
+          ],
+          "localRotation": [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        },
+        {
+          "objectId": "o00726",
+          "attack": false,
+          "path": "HurtBox",
+          "type": "Transform",
+          "localPosition": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "localScale": [
+            1.0,
+            1.0,
+            1.0
+          ],
+          "localRotation": [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        },
+        {
+          "objectId": "o00729",
+          "attack": false,
+          "path": "AttackCollider",
+          "type": "Transform",
+          "localPosition": [
+            0.0,
+            0.61,
+            0.0
+          ],
+          "localScale": [
+            1.0,
+            1.0,
+            1.0
+          ],
+          "localRotation": [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        },
+        {
+          "objectId": "o00730",
+          "attack": false,
+          "path": "AttackCollider",
+          "type": "CircleCollider2D",
+          "enabled": true,
+          "trigger": true,
+          "offset": [
+            0.0,
+            0.0
+          ],
+          "radius": 0.72
+        }
+      ]
+    }
+  ],
+  "warning": [
+    {
+      "name": "MeleeWarning_BuildUp",
+      "length": 1.0,
+      "curves": [
+        {
+          "path": "area skeletton_0 (1)",
+          "attribute": "m_Color.a",
+          "keys": [
+            {
+              "time": "0",
+              "value": "0",
+              "inSlope": "0",
+              "outSlope": "0"
+            },
+            {
+              "time": "0.06666667",
+              "value": "0.5882353",
+              "inSlope": "-4.3887017E-06",
+              "outSlope": "-Infinity"
+            },
+            {
+              "time": "1",
+              "value": "0.5882353",
+              "inSlope": "0",
+              "outSlope": "0"
+            }
+          ]
+        },
+        {
+          "path": "arrow skeleton_0",
+          "attribute": "m_Color.a",
+          "keys": [
+            {
+              "time": "0",
+              "value": "0",
+              "inSlope": "0",
+              "outSlope": "0"
+            },
+            {
+              "time": "0.06666667",
+              "value": "0.18431373",
+              "inSlope": "0.6196074",
+              "outSlope": "0.61960787"
+            },
+            {
+              "time": "1",
+              "value": "0.61960787",
+              "inSlope": "4.8723457E-08",
+              "outSlope": "0"
+            }
+          ]
+        },
+        {
+          "path": "area skeletton_0",
+          "attribute": "m_Color.a",
+          "keys": [
+            {
+              "time": "0.06666667",
+              "value": "0",
+              "inSlope": "0",
+              "outSlope": "-Infinity"
+            },
+            {
+              "time": "0.16666667",
+              "value": "0",
+              "inSlope": "0",
+              "outSlope": "0"
+            },
+            {
+              "time": "1",
+              "value": "0.44705883",
+              "inSlope": "-2.29167E-07",
+              "outSlope": "0"
+            }
+          ]
+        }
+      ],
+      "source": "F:\\DecomplieLatest\\HellMaiden\\ExportedProject\\Assets\\AnimationClip\\MeleeWarning_BuildUp.anim",
+      "sha256": "70c3d5a722c20af24b90e1f2fd3a5b697e9754d28602ce07d3b087d2e467c2a8"
+    },
+    {
+      "name": "MeleeWarning_BuildDown",
+      "length": 0.16666667,
+      "curves": [
+        {
+          "path": "arrow skeleton_0",
+          "attribute": "m_Color.a",
+          "keys": [
+            {
+              "time": "0",
+              "value": "0.18431373",
+              "inSlope": "0",
+              "outSlope": "0"
+            },
+            {
+              "time": "0.16666667",
+              "value": "0",
+              "inSlope": "1.977472E-07",
+              "outSlope": "0"
+            }
+          ]
+        },
+        {
+          "path": "area skeletton_0",
+          "attribute": "m_Color.a",
+          "keys": [
+            {
+              "time": "0",
+              "value": "0.4117647",
+              "inSlope": "0",
+              "outSlope": "0"
+            },
+            {
+              "time": "0.16666667",
+              "value": "0.4117647",
+              "inSlope": "0",
+              "outSlope": "0"
+            }
+          ]
+        },
+        {
+          "path": "area skeletton_0 (1)",
+          "attribute": "m_Color.a",
+          "keys": [
+            {
+              "time": "0",
+              "value": "0.5882353",
+              "inSlope": "0",
+              "outSlope": "0"
+            },
+            {
+              "time": "0.16666667",
+              "value": "0.5882353",
+              "inSlope": "0",
+              "outSlope": "0"
+            }
+          ]
+        }
+      ],
+      "source": "F:\\DecomplieLatest\\HellMaiden\\ExportedProject\\Assets\\AnimationClip\\MeleeWarning_BuildDown.anim",
+      "sha256": "f45daa2c2ac465aa34393b899ef80b61980960dc05bffa948a876dbfd380283a"
+    }
+  ],
+  "differences": [
+    "Elite animations retime existing Skeleton sprite curves. Source directional lengths retained; original elite art is not restored.",
+    "Contact enemies reuse current Base appearance. Current Stats rebound after each reset.",
+    "Warning opacity curves retained; source shader-specific material properties and FMOD audio omitted."
+  ]
+}

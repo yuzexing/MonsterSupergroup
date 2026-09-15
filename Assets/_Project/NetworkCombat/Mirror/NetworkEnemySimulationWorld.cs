@@ -88,6 +88,8 @@ namespace MonsterSupergroup.NetworkCombat
         {
             base.OnStartClient();
             ClearClientWaitingState();
+            // This cleanup precedes the first running round; it must not suppress its trap replicas.
+            stoppedTrapRound = uint.MaxValue;
         }
 
         public override void OnStopClient()
@@ -98,6 +100,7 @@ namespace MonsterSupergroup.NetworkCombat
 
         private void ClearClientWaitingState()
         {
+            ClearReferenceTraps();
             ClearEnemyProjectiles();
             pendingClientAttackPresentations.Clear();
             pendingClientKnockbacks.Clear();
@@ -106,6 +109,7 @@ namespace MonsterSupergroup.NetworkCombat
 
         public override void OnStopServer()
         {
+            ClearReferenceTraps();
             if (observedCombatGateway != null) observedCombatGateway.CombatResultAccepted -= HandleAcceptedOrdinaryHit;
             observedCombatGateway = null;
             acceptedProjectiles.Clear(); acceptedTerminations.Clear();
@@ -372,6 +376,7 @@ namespace MonsterSupergroup.NetworkCombat
                     continue;
                 }
 
+                if (!enemy.ValidateDashAction(snapshot.Runtime.Action)) continue;
                 var rejection = Registry.TryAcceptClientSnapshot(endpoint.PlayerEntityId, snapshot);
                 var progress = GetHandoff(snapshot.EnemyEntityId);
                 if (rejection == EnemySnapshotRejectionReason.WrongOwner) progress.Diagnostics.WrongOwner++;
@@ -407,7 +412,7 @@ namespace MonsterSupergroup.NetworkCombat
             }
 
             SubmitEnemyProjectiles(endpoint.PlayerEntityId, batch.ProjectileLaunches);
-            SubmitEnemyProjectileTerminations(batch.ProjectileTerminations);
+            SubmitEnemyProjectileTerminations(endpoint.PlayerEntityId, batch.ProjectileTerminations);
             attackPresentationBuffer.Clear();
             for (int i = 0; i < (batch.Edges?.Length ?? 0); i++)
             {
@@ -420,6 +425,7 @@ namespace MonsterSupergroup.NetworkCombat
                     continue;
                 }
 
+                if (!enemy.ValidateDashAction(edge.Checkpoint.Movement.Runtime.Action)) continue;
                 if (Registry.TryAcceptClientAttackPresentation(
                     endpoint.PlayerEntityId,
                     edge) == EnemyAttackPresentationRejectionReason.None)
@@ -434,7 +440,9 @@ namespace MonsterSupergroup.NetworkCombat
         [ServerCallback]
         private void Update()
         {
+            UpdateReferenceClock();
             if (BootGameplayNetworkManager.CombatHasEnded) return;
+            UpdateReferenceProjectiles();
             UpdateTargetDecisions();
             BroadcastServerAttackPresentations();
             if (NetworkTime.time < nextServerSnapshotTime)
@@ -673,6 +681,7 @@ namespace MonsterSupergroup.NetworkCombat
                 return;
             }
 
+            SendReferenceFlights(endpoint);
             Registry.GetLatestAttackPresentations(attackPresentationBuffer);
             for (int offset = 0; offset < attackPresentationBuffer.Count;
                  offset += maximumAttackPresentationEdgesPerBatch)
@@ -693,6 +702,7 @@ namespace MonsterSupergroup.NetworkCombat
 
         private void OnDestroy()
         {
+            ClearReferenceTraps();
             if (observedCombatGateway != null) observedCombatGateway.CombatResultAccepted -= HandleAcceptedOrdinaryHit;
             observedCombatGateway = null;
             ClearEnemyProjectiles();
@@ -705,6 +715,7 @@ namespace MonsterSupergroup.NetworkCombat
             pendingClientAttackPresentations.Clear();
             ServerPlayerRegistered = null;
             ServerPlayerUnregistered = null;
+            ClearReferenceClock();
             if (Instance == this)
             {
                 Instance = null;

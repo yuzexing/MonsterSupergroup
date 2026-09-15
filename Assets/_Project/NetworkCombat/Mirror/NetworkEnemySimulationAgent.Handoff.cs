@@ -15,7 +15,7 @@ namespace MonsterSupergroup.NetworkCombat
         public float LastHandoffCorrection { get; private set; }
         public int AcceptedRemoteSnapshotCount { get; private set; }
         public ulong CurrentActionId => authority != null && authority.RunsNavigation && enemyController != null
-            ? enemyController.CaptureSimulationAction(EnemySimulationClock.Now).ActionId
+            ? enemyController.CaptureSimulationAction(EnemySimulationClock.CombatNow).ActionId
             : hasLatestAttackPresentation ? latestAttackPresentation.Checkpoint.Movement.Runtime.Action.ActionId
             : handoff.Checkpoint.Movement.Runtime.Action.ActionId;
 
@@ -32,7 +32,7 @@ namespace MonsterSupergroup.NetworkCombat
         {
             if (current.Assignment.Epoch == 0 || current.Assignment.EnemyEntityId != netId ||
                 (appliedHandoffEpoch != 0 && !EnemySimulationSequence.IsNewer(current.Assignment.Epoch, appliedHandoffEpoch))) return;
-            bool keepServerAction = isServer && appliedHandoffEpoch != 0 &&
+            bool keepServerAction = current.Reason != EnemyTargetChangeReason.ReferenceReposition && isServer && appliedHandoffEpoch != 0 &&
                 assignment.Host == EnemySimulationHost.ServerAuthoritative && current.Assignment.Host == EnemySimulationHost.ServerAuthoritative;
             assignment = current.Assignment;
             resolvedTarget = ResolvePlayerTarget(assignment.AggroTargetPlayerId);
@@ -64,7 +64,7 @@ namespace MonsterSupergroup.NetworkCombat
                 body.position = pose.Position;
                 body.linearVelocity = pose.Velocity;
                 if (pose.Facing.sqrMagnitude > .0001f) enemyController?.Movement?.SetFacingDirection(pose.Facing);
-                enemyController?.RestoreSimulationAction(pose.Runtime.Action, EnemySimulationClock.Now);
+                enemyController?.RestoreSimulationAction(pose.Runtime.Action, EnemySimulationClock.CombatNow);
                 RestoreSimulationKnockback(pose.Runtime, pose.SampleNetworkTime);
                 authority.MarkDiscontinuity();
             }
@@ -75,7 +75,7 @@ namespace MonsterSupergroup.NetworkCombat
                 pose.AssignmentEpoch = assignment.Epoch; pose.Sequence = 0;
                 interpolator.Push(pose);
                 var action = pose.Runtime.Action;
-                var phase = action.PhaseAt(EnemySimulationClock.Now);
+                var phase = action.PhaseAt(EnemySimulationClock.CombatNow);
                 ReceiveRemoteAttackPresentation(new EnemyAttackPresentationEdge
                 {
                     EnemyEntityId = netId, AssignmentEpoch = assignment.Epoch, StateSequence = 1,
@@ -104,7 +104,7 @@ namespace MonsterSupergroup.NetworkCombat
             var motion = enemyController != null ? enemyController.CaptureSimulationKnockback() : default;
             return new EnemySimulationRuntimeState
             {
-                Action = enemyController != null ? enemyController.CaptureSimulationAction(now) : default,
+                Action = enemyController != null ? enemyController.CaptureSimulationAction(EnemySimulationClock.CombatNow) : default,
                 Knockback = motion,
                 KnockbackSettings = motion.Active && activeKnockbackPreset != null ? EnemyKnockbackSettings.From(activeKnockbackPreset) : default,
                 KnockbackCommandId = activeKnockbackCommandId, KnockbackDamageEventId = activeKnockbackDamageEventId,

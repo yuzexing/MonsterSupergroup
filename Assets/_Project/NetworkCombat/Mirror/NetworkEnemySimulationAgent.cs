@@ -140,6 +140,7 @@ namespace MonsterSupergroup.NetworkCombat
         public override void OnStartClient()
         {
             base.OnStartClient();
+            PrepareBirthForRegistration();
             ApplyHandoff(handoff);
             TryInitializeProductEnemy();
             // A cached late-join attack edge may be applied by registration.
@@ -409,7 +410,7 @@ namespace MonsterSupergroup.NetworkCombat
             }
 
             bool previouslyRanCombat = authority.RunsCombatDecisions;
-            enemyController?.ConfigureSimulationClock(() => EnemySimulationClock.Now, current.Epoch);
+            enemyController?.ConfigureSimulationClock(() => EnemySimulationClock.CombatNow, current.Epoch);
             resolvedTarget = ResolvePlayerTarget(current.AggroTargetPlayerId);
             EnemySimulationRole role = ResolveRole(current, resolvedTarget != null);
             authority.ApplyRole(
@@ -607,10 +608,10 @@ namespace MonsterSupergroup.NetworkCombat
                 return;
             }
 
-            var action = enemyController.CaptureSimulationAction(EnemySimulationClock.Now);
+            var action = enemyController.CaptureSimulationAction(EnemySimulationClock.CombatNow);
             bool timed = phase == EnemyAttackPresentationPhase.Warning || phase == EnemyAttackPresentationPhase.Active ||
                 phase == EnemyAttackPresentationPhase.Recovery;
-            QueueAttackPresentation(phase, facing, timed ? action.StartAt(phase) : EnemySimulationClock.Now,
+            QueueAttackPresentation(phase, facing, timed ? action.StartAt(phase) : EnemySimulationClock.CombatNow,
                 timed ? (float)Math.Max(0, action.EndAt(phase) - action.StartAt(phase)) : 0);
         }
 
@@ -621,10 +622,10 @@ namespace MonsterSupergroup.NetworkCombat
                 return;
             }
 
-            var state = enemyController.CaptureSimulationAction(EnemySimulationClock.Now);
-            var phase = state.PhaseAt(EnemySimulationClock.Now);
+            var state = enemyController.CaptureSimulationAction(EnemySimulationClock.CombatNow);
+            var phase = state.PhaseAt(EnemySimulationClock.CombatNow);
             QueueAttackPresentation(phase, state.Facing,
-                phase == EnemyAttackPresentationPhase.Inactive || phase == EnemyAttackPresentationPhase.Cancelled ? EnemySimulationClock.Now : state.StartAt(phase),
+                phase == EnemyAttackPresentationPhase.Inactive || phase == EnemyAttackPresentationPhase.Cancelled ? EnemySimulationClock.CombatNow : state.StartAt(phase),
                 phase == EnemyAttackPresentationPhase.Inactive || phase == EnemyAttackPresentationPhase.Cancelled ? 0 : (float)(state.EndAt(phase) - state.StartAt(phase)));
         }
 
@@ -733,7 +734,7 @@ namespace MonsterSupergroup.NetworkCombat
             enemyController.ApplyReplicatedAttackPresentation(
                 edge.Phase,
                 edge.Facing,
-                edge.ElapsedAt(EnemySimulationClock.Now));
+                edge.ElapsedAt(EnemySimulationClock.CombatNow));
         }
 
         private void TryInitializeProductEnemy()
@@ -750,11 +751,11 @@ namespace MonsterSupergroup.NetworkCombat
             enemyController.Target = resolvedTarget;
             if (productMovementOnly)
             {
-                enemyController.InitNetworkMovementOnly(unchecked((int)netId));
+                enemyController.InitNetworkMovementOnly(unchecked((int)netId), ApplyBirthAfterReset);
             }
             else
             {
-                enemyController.Init(unchecked((int)netId));
+                enemyController.Init(unchecked((int)netId), ApplyBirthAfterReset);
             }
             if (combatant != null &&
                 combatant.MaxHealth < runtimeMinimumHealthOverride)
@@ -763,6 +764,7 @@ namespace MonsterSupergroup.NetworkCombat
                     runtimeMinimumHealthOverride);
             }
             ConfigureLocalDamageInteractions();
+            RestoreCanonicalAfterBirthInitialization();
             productEnemyInitialized = true;
             NetworkCombatWorld.Instance?.TryPresentPendingEnemyHit(netId);
             RefreshAttackScriptExecution();

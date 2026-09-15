@@ -1,0 +1,80 @@
+{
+  "createdUtc": "2026-09-14T10:43:32.528714+00:00",
+  "originalRoot": "F:/BaiduNetdiskDownload/d-地狱公主/Hell Maiden-v0.2.31",
+  "originalFiles": {
+    "Hell Maiden_Data\\data.unity3d": {
+      "size": 1359021435,
+      "mtime_ns": 1784219896760012700,
+      "sha256": "a4497eef9dc84990e50ca528a504dc51a99d9c47369ab6798bfa06e2b4f84395"
+    },
+    "Hell Maiden_Data\\Managed\\Assembly-CSharp.dll": {
+      "size": 3037696,
+      "mtime_ns": 1784219896760012700,
+      "sha256": "97014f8388f08f45f281abdf3f21616e78980122e62bdd68d5d06eb7fad2e928"
+    },
+    "Hell Maiden_Data\\Managed\\Kybernetik.Animancer.dll": {
+      "size": 271360,
+      "mtime_ns": 1784219896764022100,
+      "sha256": "cf4cf88aba9c7c9000d11024449eff67e8c4c0d937acb022f83799633ab74a40"
+    }
+  },
+  "inputInventorySha256": "029ee56df7aa35c120311ce1c2c3f71711173a2d04f70bbb04480ee2cfcf20ba",
+  "data": {
+    "capture-comparison.json": {
+      "bytes": 392,
+      "sha256": "7dd1de451b90eb339ef8885910d6989b850c672fbd0368612dee54599d769c49"
+    },
+    "geometry.json": {
+      "bytes": 178882,
+      "sha256": "20a3f58ec7f5848388d1286f6cdb6b7a0744958d7bb9eb6fec4d58e34ab03abe"
+    },
+    "imp-v1-observation.jpg": {
+      "bytes": 319915,
+      "sha256": "fa7a9c0a2eaf265972da4c199299e0b01a192b0f61a981eaf2f038d9d5eacadb"
+    },
+    "input-verification.json": {
+      "bytes": 47,
+      "sha256": "27fdac8705814504081e7ca06d33189ac23ef0532a80d66c0b7c00fce5130240"
+    },
+    "observations.json": {
+      "bytes": 515290,
+      "sha256": "a5d2aef972a58b7be15fde19b7bbc912ff46f127a938fc6b0408aebbca52ed6f"
+    },
+    "original-attack-il.txt": {
+      "bytes": 418372,
+      "sha256": "1416c900feac3cecddbb3c521800e38386cc2dcdc97503ae9df2b6493a86584d"
+    },
+    "projectile-and-explosion.json": {
+      "bytes": 14859,
+      "sha256": "4c03d3357d9391cd6083e708767b334b9f2a87fe708016f608a32c092541195a"
+    },
+    "raw-evidence.zip": {
+      "bytes": 1489704,
+      "sha256": "2803f5c8badf4ff0d2523ae3f82e53799a34f31c7d8118cccf84dc375a6ddfed"
+    },
+    "recovered-enemies.json": {
+      "bytes": 352179,
+      "sha256": "361017a057c91867398362dd752f820a5d8a29557f4f6bf68e73f25c194ad880"
+    },
+    "runtime-assets.json": {
+      "bytes": 2094380,
+      "sha256": "4dcefbcae22fb6e8cd067618cd0ba782eb5a23d07b20a31a3ecf3323cd6d5c38"
+    },
+    "verification.json": {
+      "bytes": 85829,
+      "sha256": "cfb29fde42e7ca11426254cbd0e20b584293f3a057238f8b52e57cfe7cf019f1"
+    }
+  },
+  "tools": {
+    "Tools\\EnemyRecovery\\Analyze.py": "9e851f4816291e8d914e04c53e68baac4f0836db2302adf0acad962e0a11d8c2",
+    "Tools\\EnemyRecovery\\Build.ps1": "998f89e22a3f9ece1c11b6dd3f6c6a6e2c6f42741772ff46cdd8c2de8c26cc1a",
+    "Tools\\EnemyRecovery\\DumpOriginalIL.cs": "61052589031dcf6228868514294dbbfb6e34a0d6893064d37801030d818b7aa5",
+    "Tools\\EnemyRecovery\\PatchRuntime.cs": "19e6bb5b59aa8e315edff6a94069d52cac1e64d6ce4a3ef357fe12220b598d2e",
+    "Tools\\EnemyRecovery\\ProtectInputs.py": "508bc745586f4a9191ab530c9c636167899d6c040db44f5b3d1734c2824dbd6e",
+    "Tools\\EnemyRecovery\\RecoveryProbe.cs": "a3cfb72398215aa6fdd825bd2fe6176020da0be6477c3c0a32bbb4cd414d2f02",
+    "Tools\\EnemyRecovery\\Run.ps1": "07100b1a5cf4088cf9c4ee5f411e1b8786da5e0a2b0237b22f6e1247e47b3e7c",
+    "Tools\\EnemyRecovery\\Verify.py": "3508243f8d51f3a86ea79a293497a4f4c2289f954538ef0b96209e7ea75a47a8"
+  },
+  "runtimeManifest": "raw-evidence.zip/observe-final/run-manifest.json",
+  "scope": "Runtime evidence recovery only; production enablement gates unchanged."
+}

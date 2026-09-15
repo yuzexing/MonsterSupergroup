@@ -50,7 +50,8 @@ namespace MonsterSupergroup.NetworkCombat
         {
             bool transitioning = manager.RoomSnapshot.Phase == PreparationPhase.Transitioning;
             Label(content, "游戏结束", new Rect(200, 158, 880, 80), 52, Cream, TextAnchor.MiddleCenter);
-            Label(content, "所有在线玩家均已倒地", new Rect(200, 260, 880, 40), 24, Muted, TextAnchor.MiddleCenter);
+            Label(content, string.IsNullOrEmpty(manager.RoomSnapshot.EndReason) ? "本局已结束" : manager.RoomSnapshot.EndReason,
+                new Rect(140, 260, 1000, 40), 24, Muted, TextAnchor.MiddleCenter);
             if (transitioning)
             {
                 confirmLeaveEnded = false;

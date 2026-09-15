@@ -2,6 +2,7 @@
   "name": "MonsterSupergroup.NetworkCombat",
   "rootNamespace": "MonsterSupergroup.NetworkCombat",
   "references": [
+    "UniTask",
     "Unity.Timeline",
     "GUID:a7c8997642ef4acb9c3b5bb6f2af8b51",
     "GUID:30817c1a0e6d646d99c048fc403f5979",
@@ -12,7 +13,8 @@
     "GUID:bd78bb22ae3a60443a865fb2d7dfdafa",
     "GUID:72872094b21c16e48b631b2224833d49",
     "Unity.ugui",
-    "Unity.Localization"
+    "Unity.Localization",
+    "Kybernetik.Animancer"
   ],
   "includePlatforms": [],
   "excludePlatforms": [],

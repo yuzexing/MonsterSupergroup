@@ -1,0 +1,3477 @@
+{
+  "checks": {
+    "independent-static-snapshots-identical": true,
+    "31-timeline-clips": true,
+    "all-field-reads-and-references-resolved": true,
+    "8-identities-16-variants": true,
+    "original-run-completed": true,
+    "no-probe-errors": true,
+    "all-variant-mechanism-coverage": true,
+    "all-birth-attributes-match-original-database": true,
+    "original-export-and-save-files-unchanged": true,
+    "phase-times-within-observed-frame-boundaries": true,
+    "imp-measured-projectile-speed-5": true,
+    "imp-v0-v1-hit-damage-50-70": true
+  },
+  "coverage": [
+    {
+      "key": "Brotchi:0",
+      "episodes": 2,
+      "completeCycles": 0,
+      "completeCombos": 0,
+      "naturalEnemyEnds": 0,
+      "contact": true,
+      "passed": true
+    },
+    {
+      "key": "Brotchi:1",
+      "episodes": 2,
+      "completeCycles": 0,
+      "completeCombos": 0,
+      "naturalEnemyEnds": 0,
+      "contact": true,
+      "passed": true
+    },
+    {
+      "key": "Brotchi_Dash:0",
+      "episodes": 2,
+      "completeCycles": 8,
+      "completeCombos": 0,
+      "naturalEnemyEnds": 0,
+      "contact": false,
+      "passed": true
+    },
+    {
+      "key": "Brotchi_Dash:1",
+      "episodes": 2,
+      "completeCycles": 8,
+      "completeCombos": 0,
+      "naturalEnemyEnds": 0,
+      "contact": false,
+      "passed": true
+    },
+    {
+      "key": "Imp:0",
+      "episodes": 2,
+      "completeCycles": 8,
+      "completeCombos": 0,
+      "naturalEnemyEnds": 0,
+      "contact": false,
+      "passed": true
+    },
+    {
+      "key": "Imp:1",
+      "episodes": 2,
+      "completeCycles": 8,
+      "completeCombos": 0,
+      "naturalEnemyEnds": 0,
+      "contact": false,
+      "passed": true
+    },
+    {
+      "key": "Skeleton:0",
+      "episodes": 2,
+      "completeCycles": 8,
+      "completeCombos": 0,
+      "naturalEnemyEnds": 0,
+      "contact": false,
+      "passed": true
+    },
+    {
+      "key": "Skeleton:2",
+      "episodes": 2,
+      "completeCycles": 8,
+      "completeCombos": 0,
+      "naturalEnemyEnds": 0,
+      "contact": false,
+      "passed": true
+    },
+    {
+      "key": "Elite_Skeleton:0",
+      "episodes": 2,
+      "completeCycles": 8,
+      "completeCombos": 0,
+      "naturalEnemyEnds": 0,
+      "contact": false,
+      "passed": true
+    },
+    {
+      "key": "Elite_Skeleton:1",
+      "episodes": 2,
+      "completeCycles": 8,
+      "completeCombos": 0,
+      "naturalEnemyEnds": 0,
+      "contact": false,
+      "passed": true
+    },
+    {
+      "key": "Ghoul:0",
+      "episodes": 2,
+      "completeCycles": 8,
+      "completeCombos": 8,
+      "naturalEnemyEnds": 0,
+      "contact": false,
+      "passed": true
+    },
+    {
+      "key": "Slime:0",
+      "episodes": 2,
+      "completeCycles": 0,
+      "completeCombos": 0,
+      "naturalEnemyEnds": 0,
+      "contact": true,
+      "passed": true
+    },
+    {
+      "key": "Slime:1",
+      "episodes": 4,
+      "completeCycles": 0,
+      "completeCombos": 0,
+      "naturalEnemyEnds": 0,
+      "contact": true,
+      "passed": true
+    },
+    {
+      "key": "Slime:2",
+      "episodes": 2,
+      "completeCycles": 0,
+      "completeCombos": 0,
+      "naturalEnemyEnds": 0,
+      "contact": true,
+      "passed": true
+    },
+    {
+      "key": "LostSoul:0",
+      "episodes": 4,
+      "completeCycles": 4,
+      "completeCombos": 0,
+      "naturalEnemyEnds": 4,
+      "contact": false,
+      "passed": true
+    },
+    {
+      "key": "LostSoul:1",
+      "episodes": 4,
+      "completeCycles": 4,
+      "completeCombos": 0,
+      "naturalEnemyEnds": 4,
+      "contact": false,
+      "passed": true
+    }
+  ],
+  "birthChecks": [
+    {
+      "identity": "Imp",
+      "variant": 0,
+      "id": -57828,
+      "reuse": 1,
+      "hp": 50,
+      "damage": 50,
+      "speed": 1.82050061,
+      "xp": 7.05132961,
+      "passed": true
+    },
+    {
+      "identity": "Imp",
+      "variant": 0,
+      "id": -57828,
+      "reuse": 2,
+      "hp": 50,
+      "damage": 50,
+      "speed": 2.15842414,
+      "xp": 7.05132961,
+      "passed": true
+    },
+    {
+      "identity": "Imp",
+      "variant": 1,
+      "id": -57828,
+      "reuse": 3,
+      "hp": 150,
+      "damage": 70,
+      "speed": 2.04088974,
+      "xp": 6.043997,
+      "passed": true
+    },
+    {
+      "identity": "Imp",
+      "variant": 1,
+      "id": -57828,
+      "reuse": 4,
+      "hp": 150,
+      "damage": 70,
+      "speed": 1.8490572,
+      "xp": 6.043997,
+      "passed": true
+    },
+    {
+      "identity": "Brotchi",
+      "variant": 0,
+      "id": -57536,
+      "reuse": 2,
+      "hp": 20,
+      "damage": 50,
+      "speed": 3.11707783,
+      "xp": 5.036664,
+      "passed": true
+    },
+    {
+      "identity": "Brotchi",
+      "variant": 0,
+      "id": -57256,
+      "reuse": 2,
+      "hp": 20,
+      "damage": 50,
+      "speed": 2.895163,
+      "xp": 5.036664,
+      "passed": true
+    },
+    {
+      "identity": "Elite_Skeleton",
+      "variant": 0,
+      "id": -60416,
+      "reuse": 1,
+      "hp": 1200,
+      "damage": 200,
+      "speed": 6.523161,
+      "xp": 25.18332,
+      "passed": true
+    },
+    {
+      "identity": "Elite_Skeleton",
+      "variant": 0,
+      "id": -60416,
+      "reuse": 2,
+      "hp": 1200,
+      "damage": 200,
+      "speed": 5.408774,
+      "xp": 25.18332,
+      "passed": true
+    },
+    {
+      "identity": "Skeleton",
+      "variant": 0,
+      "id": -60698,
+      "reuse": 1,
+      "hp": 50,
+      "damage": 50,
+      "speed": 2.08429074,
+      "xp": 7.05132961,
+      "passed": true
+    },
+    {
+      "identity": "Skeleton",
+      "variant": 0,
+      "id": -60698,
+      "reuse": 2,
+      "hp": 50,
+      "damage": 50,
+      "speed": 2.17200446,
+      "xp": 7.05132961,
+      "passed": true
+    },
+    {
+      "identity": "Slime",
+      "variant": 2,
+      "id": -60894,
+      "reuse": 1,
+      "hp": 8,
+      "damage": 30,
+      "speed": 4.905263,
+      "xp": 4.029331,
+      "passed": true
+    },
+    {
+      "identity": "Slime",
+      "variant": 2,
+      "id": -60894,
+      "reuse": 2,
+      "hp": 8,
+      "damage": 30,
+      "speed": 4.786362,
+      "xp": 4.029331,
+      "passed": true
+    },
+    {
+      "identity": "Brotchi_Dash",
+      "variant": 0,
+      "id": -61052,
+      "reuse": 1,
+      "hp": 70,
+      "damage": 50,
+      "speed": 5.70843029,
+      "xp": 7.05132961,
+      "passed": true
+    },
+    {
+      "identity": "Brotchi_Dash",
+      "variant": 0,
+      "id": -61052,
+      "reuse": 2,
+      "hp": 70,
+      "damage": 50,
+      "speed": 6.229761,
+      "xp": 7.05132961,
+      "passed": true
+    },
+    {
+      "identity": "Skeleton",
+      "variant": 2,
+      "id": -60698,
+      "reuse": 3,
+      "hp": 250,
+      "damage": 50,
+      "speed": 3.10013938,
+      "xp": 7.05132961,
+      "passed": true
+    },
+    {
+      "identity": "Skeleton",
+      "variant": 2,
+      "id": -60698,
+      "reuse": 4,
+      "hp": 250,
+      "damage": 50,
+      "speed": 3.17378855,
+      "xp": 7.05132961,
+      "passed": true
+    },
+    {
+      "identity": "Slime",
+      "variant": 0,
+      "id": -61356,
+      "reuse": 1,
+      "hp": 50,
+      "damage": 40,
+      "speed": 4.1103673,
+      "xp": 7.05132961,
+      "passed": true
+    },
+    {
+      "identity": "Slime",
+      "variant": 0,
+      "id": -61356,
+      "reuse": 2,
+      "hp": 50,
+      "damage": 40,
+      "speed": 4.116,
+      "xp": 7.05132961,
+      "passed": true
+    },
+    {
+      "identity": "Brotchi",
+      "variant": 1,
+      "id": -57536,
+      "reuse": 3,
+      "hp": 60,
+      "damage": 60,
+      "speed": 4.24370337,
+      "xp": 6.043997,
+      "passed": true
+    },
+    {
+      "identity": "Brotchi",
+      "variant": 1,
+      "id": -57256,
+      "reuse": 3,
+      "hp": 60,
+      "damage": 60,
+      "speed": 3.78577423,
+      "xp": 6.043997,
+      "passed": true
+    },
+    {
+      "identity": "LostSoul",
+      "variant": 0,
+      "id": -61542,
+      "reuse": 1,
+      "hp": 150,
+      "damage": 50,
+      "speed": 3.77272081,
+      "xp": 7.05132961,
+      "passed": true
+    },
+    {
+      "identity": "LostSoul",
+      "variant": 0,
+      "id": -61542,
+      "reuse": 2,
+      "hp": 150,
+      "damage": 50,
+      "speed": 3.55890727,
+      "xp": 7.05132961,
+      "passed": true
+    },
+    {
+      "identity": "LostSoul",
+      "variant": 0,
+      "id": -61542,
+      "reuse": 3,
+      "hp": 150,
+      "damage": 50,
+      "speed": 3.81134248,
+      "xp": 7.05132961,
+      "passed": true
+    },
+    {
+      "identity": "LostSoul",
+      "variant": 0,
+      "id": -61542,
+      "reuse": 4,
+      "hp": 150,
+      "damage": 50,
+      "speed": 3.90524864,
+      "xp": 7.05132961,
+      "passed": true
+    },
+    {
+      "identity": "Brotchi_Dash",
+      "variant": 1,
+      "id": -61052,
+      "reuse": 3,
+      "hp": 180,
+      "damage": 80,
+      "speed": 5.59648,
+      "xp": 7.05132961,
+      "passed": true
+    },
+    {
+      "identity": "Brotchi_Dash",
+      "variant": 1,
+      "id": -61052,
+      "reuse": 4,
+      "hp": 180,
+      "damage": 80,
+      "speed": 6.26512051,
+      "xp": 7.05132961,
+      "passed": true
+    },
+    {
+      "identity": "Ghoul",
+      "variant": 0,
+      "id": -61808,
+      "reuse": 1,
+      "hp": 50,
+      "damage": 50,
+      "speed": 6.24630976,
+      "xp": 9.065995,
+      "passed": true
+    },
+    {
+      "identity": "Ghoul",
+      "variant": 0,
+      "id": -61808,
+      "reuse": 2,
+      "hp": 50,
+      "damage": 50,
+      "speed": 5.665937,
+      "xp": 9.065995,
+      "passed": true
+    },
+    {
+      "identity": "Slime",
+      "variant": 1,
+      "id": -60894,
+      "reuse": 3,
+      "hp": 150,
+      "damage": 50,
+      "speed": 3.63342381,
+      "xp": 7.05132961,
+      "passed": true
+    },
+    {
+      "identity": "Slime",
+      "variant": 1,
+      "id": -60894,
+      "reuse": 4,
+      "hp": 150,
+      "damage": 50,
+      "speed": 3.78928661,
+      "xp": 7.05132961,
+      "passed": true
+    },
+    {
+      "identity": "LostSoul",
+      "variant": 1,
+      "id": -61542,
+      "reuse": 5,
+      "hp": 250,
+      "damage": 50,
+      "speed": 3.272292,
+      "xp": 7.05132961,
+      "passed": true
+    },
+    {
+      "identity": "LostSoul",
+      "variant": 1,
+      "id": -61542,
+      "reuse": 6,
+      "hp": 250,
+      "damage": 50,
+      "speed": 3.75851464,
+      "xp": 7.05132961,
+      "passed": true
+    },
+    {
+      "identity": "LostSoul",
+      "variant": 1,
+      "id": -61542,
+      "reuse": 7,
+      "hp": 250,
+      "damage": 50,
+      "speed": 3.783136,
+      "xp": 7.05132961,
+      "passed": true
+    },
+    {
+      "identity": "LostSoul",
+      "variant": 1,
+      "id": -61542,
+      "reuse": 8,
+      "hp": 250,
+      "damage": 50,
+      "speed": 3.55613947,
+      "xp": 7.05132961,
+      "passed": true
+    },
+    {
+      "identity": "Elite_Skeleton",
+      "variant": 1,
+      "id": -60416,
+      "reuse": 3,
+      "hp": 2600,
+      "damage": 200,
+      "speed": 5.545016,
+      "xp": 25.18332,
+      "passed": true
+    },
+    {
+      "identity": "Elite_Skeleton",
+      "variant": 1,
+      "id": -60416,
+      "reuse": 4,
+      "hp": 2600,
+      "damage": 200,
+      "speed": 5.84046268,
+      "xp": 25.18332,
+      "passed": true
+    },
+    {
+      "identity": "Slime",
+      "variant": 1,
+      "id": -61356,
+      "reuse": 3,
+      "hp": 150,
+      "damage": 50,
+      "speed": 3.93001175,
+      "xp": 7.05132961,
+      "passed": true
+    },
+    {
+      "identity": "Slime",
+      "variant": 1,
+      "id": -61356,
+      "reuse": 4,
+      "hp": 150,
+      "damage": 50,
+      "speed": 3.93984938,
+      "xp": 7.05132961,
+      "passed": true
+    }
+  ],
+  "observedStaleDamageBindings": [
+    {
+      "frame": 4187,
+      "id": -57536,
+      "controllerDamage": 50,
+      "binding": {
+        "path": "Loaders[0]/SceneManagers[0]/Pooler[2]/Pool: Enemy_Brotchi (ID: 97014)[13]/Enemy_Brotchi(Clone)[1]/AttackCollider[6]",
+        "damage": 50,
+        "sameStats": false
+      }
+    },
+    {
+      "frame": 4488,
+      "id": -57256,
+      "controllerDamage": 50,
+      "binding": {
+        "path": "Loaders[0]/SceneManagers[0]/Pooler[2]/Pool: Enemy_Brotchi (ID: 97014)[13]/Enemy_Brotchi(Clone)[0]/AttackCollider[6]",
+        "damage": 50,
+        "sameStats": false
+      }
+    },
+    {
+      "frame": 7001,
+      "id": -60894,
+      "controllerDamage": 30,
+      "binding": {
+        "path": "Loaders[0]/SceneManagers[0]/Pooler[2]/Pool: Enemy_Slime Rusher (ID: 97920)[20]/Enemy_Slime Rusher(Clone)[0]/Hitbox[6]",
+        "damage": 30,
+        "sameStats": false
+      }
+    },
+    {
+      "frame": 7302,
+      "id": -61052,
+      "controllerDamage": 50,
+      "binding": {
+        "path": "Loaders[0]/SceneManagers[0]/Pooler[2]/Pool: Enemy_Brotchi_LVL2 (ID: 98780)[21]/Enemy_Brotchi_LVL2(Clone)[0]/Arrow(Clone)[7]/SlimePath[1]/Collider[0]",
+        "damage": 0,
+        "sameStats": false
+      }
+    },
+    {
+      "frame": 7826,
+      "id": -61052,
+      "controllerDamage": 50,
+      "binding": {
+        "path": "Loaders[0]/SceneManagers[0]/Pooler[2]/Pool: Enemy_Brotchi_LVL2 (ID: 98780)[21]/Enemy_Brotchi_LVL2(Clone)[0]/AttackCollider[6]",
+        "damage": 50,
+        "sameStats": false
+      }
+    },
+    {
+      "frame": 7826,
+      "id": -61052,
+      "controllerDamage": 50,
+      "binding": {
+        "path": "Loaders[0]/SceneManagers[0]/Pooler[2]/Pool: Enemy_Brotchi_LVL2 (ID: 98780)[21]/Enemy_Brotchi_LVL2(Clone)[0]/Arrow(Clone)[7]/SlimePath[1]/Collider[0]",
+        "damage": 0,
+        "sameStats": false
+      }
+    },
+    {
+      "frame": 9579,
+      "id": -61356,
+      "controllerDamage": 40,
+      "binding": {
+        "path": "Loaders[0]/SceneManagers[0]/Pooler[2]/Pool: Enemy_Slime (ID: 52000)[23]/Enemy_Slime(Clone)[0]/Hitbox[6]",
+        "damage": 40,
+        "sameStats": false
+      }
+    },
+    {
+      "frame": 9880,
+      "id": -57536,
+      "controllerDamage": 60,
+      "binding": {
+        "path": "Loaders[0]/SceneManagers[0]/Pooler[2]/Pool: Enemy_Brotchi (ID: 97014)[13]/Enemy_Brotchi(Clone)[1]/AttackCollider[6]",
+        "damage": 50,
+        "sameStats": false
+      }
+    },
+    {
+      "frame": 10180,
+      "id": -57256,
+      "controllerDamage": 60,
+      "binding": {
+        "path": "Loaders[0]/SceneManagers[0]/Pooler[2]/Pool: Enemy_Brotchi (ID: 97014)[13]/Enemy_Brotchi(Clone)[0]/AttackCollider[6]",
+        "damage": 50,
+        "sameStats": false
+      }
+    },
+    {
+      "frame": 11497,
+      "id": -61052,
+      "controllerDamage": 80,
+      "binding": {
+        "path": "Loaders[0]/SceneManagers[0]/Pooler[2]/Pool: Enemy_Brotchi_LVL2 (ID: 98780)[21]/Enemy_Brotchi_LVL2(Clone)[0]/AttackCollider[6]",
+        "damage": 50,
+        "sameStats": false
+      }
+    },
+    {
+      "frame": 11497,
+      "id": -61052,
+      "controllerDamage": 80,
+      "binding": {
+        "path": "Loaders[0]/SceneManagers[0]/Pooler[2]/Pool: Enemy_Brotchi_LVL2 (ID: 98780)[21]/Enemy_Brotchi_LVL2(Clone)[0]/Arrow(Clone)[7]/SlimePath[1]/Collider[0]",
+        "damage": 0,
+        "sameStats": false
+      }
+    },
+    {
+      "frame": 12019,
+      "id": -61052,
+      "controllerDamage": 80,
+      "binding": {
+        "path": "Loaders[0]/SceneManagers[0]/Pooler[2]/Pool: Enemy_Brotchi_LVL2 (ID: 98780)[21]/Enemy_Brotchi_LVL2(Clone)[0]/AttackCollider[6]",
+        "damage": 50,
+        "sameStats": false
+      }
+    },
+    {
+      "frame": 12019,
+      "id": -61052,
+      "controllerDamage": 80,
+      "binding": {
+        "path": "Loaders[0]/SceneManagers[0]/Pooler[2]/Pool: Enemy_Brotchi_LVL2 (ID: 98780)[21]/Enemy_Brotchi_LVL2(Clone)[0]/Arrow(Clone)[7]/SlimePath[1]/Collider[0]",
+        "damage": 0,
+        "sameStats": false
+      }
+    },
+    {
+      "frame": 13791,
+      "id": -60894,
+      "controllerDamage": 50,
+      "binding": {
+        "path": "Loaders[0]/SceneManagers[0]/Pooler[2]/Pool: Enemy_Slime Rusher (ID: 97920)[20]/Enemy_Slime Rusher(Clone)[0]/Hitbox[6]",
+        "damage": 30,
+        "sameStats": false
+      }
+    },
+    {
+      "frame": 14090,
+      "id": -60894,
+      "controllerDamage": 50,
+      "binding": {
+        "path": "Loaders[0]/SceneManagers[0]/Pooler[2]/Pool: Enemy_Slime Rusher (ID: 97920)[20]/Enemy_Slime Rusher(Clone)[0]/Hitbox[6]",
+        "damage": 50,
+        "sameStats": false
+      }
+    },
+    {
+      "frame": 16349,
+      "id": -61356,
+      "controllerDamage": 50,
+      "binding": {
+        "path": "Loaders[0]/SceneManagers[0]/Pooler[2]/Pool: Enemy_Slime (ID: 52000)[23]/Enemy_Slime(Clone)[0]/Hitbox[6]",
+        "damage": 40,
+        "sameStats": false
+      }
+    },
+    {
+      "frame": 16649,
+      "id": -61356,
+      "controllerDamage": 50,
+      "binding": {
+        "path": "Loaders[0]/SceneManagers[0]/Pooler[2]/Pool: Enemy_Slime (ID: 52000)[23]/Enemy_Slime(Clone)[0]/Hitbox[6]",
+        "damage": 50,
+        "sameStats": false
+      }
+    }
+  ],
+  "timingChecks": [
+    {
+      "identity": "Imp",
+      "variant": 0,
+      "phase": "recovery",
+      "start": 4.982098,
+      "expected": 0.429999977,
+      "observed": 0.4337680000000006,
+      "frameAllowance": 0.016984799999999998,
+      "passed": true
+    },
+    {
+      "identity": "Imp",
+      "variant": 0,
+      "phase": "warning",
+      "start": 3.82816935,
+      "expected": 0.849999964,
+      "observed": 0.8527906499999998,
+      "frameAllowance": 0.038001997600000004,
+      "passed": true
+    },
+    {
+      "identity": "Imp",
+      "variant": 0,
+      "phase": "active",
+      "start": 4.68096,
+      "expected": 0.29,
+      "observed": 0.3011379999999999,
+      "frameAllowance": 0.0171644,
+      "passed": true
+    },
+    {
+      "identity": "Imp",
+      "variant": 0,
+      "phase": "recovery",
+      "start": 8.56787,
+      "expected": 0.429999977,
+      "observed": 0.43342800000000103,
+      "frameAllowance": 0.0167672971,
+      "passed": true
+    },
+    {
+      "identity": "Imp",
+      "variant": 0,
+      "phase": "warning",
+      "start": 7.41747952,
+      "expected": 0.849999964,
+      "observed": 0.8503904800000006,
+      "frameAllowance": 0.0168259984,
+      "passed": true
+    },
+    {
+      "identity": "Imp",
+      "variant": 0,
+      "phase": "active",
+      "start": 8.26787,
+      "expected": 0.29,
+      "observed": 0.29999999999999893,
+      "frameAllowance": 0.016767999999999998,
+      "passed": true
+    },
+    {
+      "identity": "Imp",
+      "variant": 0,
+      "phase": "recovery",
+      "start": 12.1591711,
+      "expected": 0.429999977,
+      "observed": 0.43474579999999996,
+      "frameAllowance": 0.0171620047,
+      "passed": true
+    },
+    {
+      "identity": "Imp",
+      "variant": 0,
+      "phase": "warning",
+      "start": 11.00698,
+      "expected": 0.849999964,
+      "observed": 0.8521880999999993,
+      "frameAllowance": 0.0171634985,
+      "passed": true
+    },
+    {
+      "identity": "Imp",
+      "variant": 0,
+      "phase": "active",
+      "start": 11.8591681,
+      "expected": 0.29,
+      "observed": 0.30000300000000024,
+      "frameAllowance": 0.0167675951,
+      "passed": true
+    },
+    {
+      "identity": "Imp",
+      "variant": 0,
+      "phase": "recovery",
+      "start": 15.75258,
+      "expected": 0.429999977,
+      "observed": 0.4341722999999984,
+      "frameAllowance": 0.0169341976,
+      "passed": true
+    },
+    {
+      "identity": "Imp",
+      "variant": 0,
+      "phase": "warning",
+      "start": 14.6011486,
+      "expected": 0.849999964,
+      "observed": 0.850697499999999,
+      "frameAllowance": 0.0171303,
+      "passed": true
+    },
+    {
+      "identity": "Imp",
+      "variant": 0,
+      "phase": "active",
+      "start": 15.4518461,
+      "expected": 0.29,
+      "observed": 0.3007339000000009,
+      "frameAllowance": 0.0171311015,
+      "passed": true
+    },
+    {
+      "identity": "Imp",
+      "variant": 0,
+      "phase": "recovery",
+      "start": 19.3766155,
+      "expected": 0.429999977,
+      "observed": 0.4336833999999996,
+      "frameAllowance": 0.016902296,
+      "passed": true
+    },
+    {
+      "identity": "Imp",
+      "variant": 0,
+      "phase": "warning",
+      "start": 18.2246246,
+      "expected": 0.849999964,
+      "observed": 0.8519898000000019,
+      "frameAllowance": 0.0171428,
+      "passed": true
+    },
+    {
+      "identity": "Imp",
+      "variant": 0,
+      "phase": "active",
+      "start": 19.0766144,
+      "expected": 0.29,
+      "observed": 0.30000109999999935,
+      "frameAllowance": 0.016767999999999998,
+      "passed": true
+    },
+    {
+      "identity": "Imp",
+      "variant": 0,
+      "phase": "recovery",
+      "start": 22.9688854,
+      "expected": 0.429999977,
+      "observed": 0.43338009999999727,
+      "frameAllowance": 0.016768098,
+      "passed": true
+    },
+    {
+      "identity": "Imp",
+      "variant": 0,
+      "phase": "warning",
+      "start": 21.8153763,
+      "expected": 0.849999964,
+      "observed": 0.8516978999999978,
+      "frameAllowance": 0.0171031041,
+      "passed": true
+    },
+    {
+      "identity": "Imp",
+      "variant": 0,
+      "phase": "active",
+      "start": 22.6670742,
+      "expected": 0.29,
+      "observed": 0.30181120000000305,
+      "frameAllowance": 0.0184819011,
+      "passed": true
+    },
+    {
+      "identity": "Imp",
+      "variant": 0,
+      "phase": "recovery",
+      "start": 26.5604534,
+      "expected": 0.429999977,
+      "observed": 0.4351729999999989,
+      "frameAllowance": 0.0170869978,
+      "passed": true
+    },
+    {
+      "identity": "Imp",
+      "variant": 0,
+      "phase": "warning",
+      "start": 25.4080257,
+      "expected": 0.849999964,
+      "observed": 0.8515943000000021,
+      "frameAllowance": 0.0170844031,
+      "passed": true
+    },
+    {
+      "identity": "Imp",
+      "variant": 0,
+      "phase": "active",
+      "start": 26.25962,
+      "expected": 0.29,
+      "observed": 0.30083339999999836,
+      "frameAllowance": 0.016767304599999998,
+      "passed": true
+    },
+    {
+      "identity": "Imp",
+      "variant": 0,
+      "phase": "recovery",
+      "start": 30.1538277,
+      "expected": 0.429999977,
+      "observed": 0.4345092000000008,
+      "frameAllowance": 0.0171252975,
+      "passed": true
+    },
+    {
+      "identity": "Imp",
+      "variant": 0,
+      "phase": "warning",
+      "start": 29.00112,
+      "expected": 0.849999964,
+      "observed": 0.8519599999999983,
+      "frameAllowance": 0.017021103,
+      "passed": true
+    },
+    {
+      "identity": "Imp",
+      "variant": 0,
+      "phase": "active",
+      "start": 29.85308,
+      "expected": 0.29,
+      "observed": 0.3007477000000023,
+      "frameAllowance": 0.0171252975,
+      "passed": true
+    },
+    {
+      "identity": "Imp",
+      "variant": 1,
+      "phase": "recovery",
+      "start": 33.8016663,
+      "expected": 0.429999977,
+      "observed": 0.43391799999999847,
+      "frameAllowance": 0.016768601,
+      "passed": true
+    },
+    {
+      "identity": "Imp",
+      "variant": 1,
+      "phase": "warning",
+      "start": 32.64987,
+      "expected": 0.849999964,
+      "observed": 0.8513700000000028,
+      "frameAllowance": 0.0912096,
+      "passed": true
+    },
+    {
+      "identity": "Imp",
+      "variant": 1,
+      "phase": "active",
+      "start": 33.50124,
+      "expected": 0.29,
+      "observed": 0.30042629999999804,
+      "frameAllowance": 0.016767496399999998,
+      "passed": true
+    },
+    {
+      "identity": "Imp",
+      "variant": 1,
+      "phase": "recovery",
+      "start": 37.3928261,
+      "expected": 0.429999977,
+      "observed": 0.43406389999999817,
+      "frameAllowance": 0.0170868972,
+      "passed": true
+    },
+    {
+      "identity": "Imp",
+      "variant": 1,
+      "phase": "warning",
+      "start": 36.23854,
+      "expected": 0.849999964,
+      "observed": 0.8522200000000026,
+      "frameAllowance": 0.017091099999999998,
+      "passed": true
+    },
+    {
+      "identity": "Imp",
+      "variant": 1,
+      "phase": "active",
+      "start": 37.09076,
+      "expected": 0.29,
+      "observed": 0.30206609999999756,
+      "frameAllowance": 0.017146202,
+      "passed": true
+    },
+    {
+      "identity": "Imp",
+      "variant": 1,
+      "phase": "recovery",
+      "start": 40.9841728,
+      "expected": 0.429999977,
+      "observed": 0.4340133999999978,
+      "frameAllowance": 0.0170741,
+      "passed": true
+    },
+    {
+      "identity": "Imp",
+      "variant": 1,
+      "phase": "warning",
+      "start": 39.83287,
+      "expected": 0.849999964,
+      "observed": 0.8508420000000001,
+      "frameAllowance": 0.017047299999999998,
+      "passed": true
+    },
+    {
+      "identity": "Imp",
+      "variant": 1,
+      "phase": "active",
+      "start": 40.683712,
+      "expected": 0.29,
+      "observed": 0.3004608000000033,
+      "frameAllowance": 0.016950303899999998,
+      "passed": true
+    },
+    {
+      "identity": "Imp",
+      "variant": 1,
+      "phase": "recovery",
+      "start": 44.5762634,
+      "expected": 0.429999977,
+      "observed": 0.4339027999999985,
+      "frameAllowance": 0.0168678,
+      "passed": true
+    },
+    {
+      "identity": "Imp",
+      "variant": 1,
+      "phase": "warning",
+      "start": 43.4236641,
+      "expected": 0.849999964,
+      "observed": 0.8511580999999993,
+      "frameAllowance": 0.0169599989,
+      "passed": true
+    },
+    {
+      "identity": "Imp",
+      "variant": 1,
+      "phase": "active",
+      "start": 44.2748222,
+      "expected": 0.29,
+      "observed": 0.3014411999999993,
+      "frameAllowance": 0.0167767016,
+      "passed": true
+    },
+    {
+      "identity": "Imp",
+      "variant": 1,
+      "phase": "recovery",
+      "start": 48.20097,
+      "expected": 0.429999977,
+      "observed": 0.4337459999999993,
+      "frameAllowance": 0.0167675951,
+      "passed": true
+    },
+    {
+      "identity": "Imp",
+      "variant": 1,
+      "phase": "warning",
+      "start": 47.04925,
+      "expected": 0.849999964,
+      "observed": 0.8511062999999979,
+      "frameAllowance": 0.016965002,
+      "passed": true
+    },
+    {
+      "identity": "Imp",
+      "variant": 1,
+      "phase": "active",
+      "start": 47.9003563,
+      "expected": 0.29,
+      "observed": 0.30061369999999954,
+      "frameAllowance": 0.0168257022,
+      "passed": true
+    },
+    {
+      "identity": "Imp",
+      "variant": 1,
+      "phase": "recovery",
+      "start": 51.7943764,
+      "expected": 0.429999977,
+      "observed": 0.43597030000000103,
+      "frameAllowance": 0.017015597,
+      "passed": true
+    },
+    {
+      "identity": "Imp",
+      "variant": 1,
+      "phase": "warning",
+      "start": 50.6400948,
+      "expected": 0.849999964,
+      "observed": 0.8536070999999978,
+      "frameAllowance": 0.0171645062,
+      "passed": true
+    },
+    {
+      "identity": "Imp",
+      "variant": 1,
+      "phase": "active",
+      "start": 51.4937019,
+      "expected": 0.29,
+      "observed": 0.3006744999999995,
+      "frameAllowance": 0.017130598599999998,
+      "passed": true
+    },
+    {
+      "identity": "Imp",
+      "variant": 1,
+      "phase": "recovery",
+      "start": 55.38674,
+      "expected": 0.429999977,
+      "observed": 0.4350144999999941,
+      "frameAllowance": 0.017174801,
+      "passed": true
+    },
+    {
+      "identity": "Imp",
+      "variant": 1,
+      "phase": "warning",
+      "start": 54.2335548,
+      "expected": 0.849999964,
+      "observed": 0.8520151999999968,
+      "frameAllowance": 0.017070301,
+      "passed": true
+    },
+    {
+      "identity": "Imp",
+      "variant": 1,
+      "phase": "active",
+      "start": 55.08557,
+      "expected": 0.29,
+      "observed": 0.30117000000000616,
+      "frameAllowance": 0.0170858988,
+      "passed": true
+    },
+    {
+      "identity": "Imp",
+      "variant": 1,
+      "phase": "recovery",
+      "start": 58.9814034,
+      "expected": 0.429999977,
+      "observed": 0.4343065999999993,
+      "frameAllowance": 0.0170982,
+      "passed": true
+    },
+    {
+      "identity": "Imp",
+      "variant": 1,
+      "phase": "warning",
+      "start": 57.82777,
+      "expected": 0.849999964,
+      "observed": 0.8531267999999983,
+      "frameAllowance": 0.0171754958,
+      "passed": true
+    },
+    {
+      "identity": "Imp",
+      "variant": 1,
+      "phase": "active",
+      "start": 58.6808968,
+      "expected": 0.29,
+      "observed": 0.3005065999999985,
+      "frameAllowance": 0.0169512966,
+      "passed": true
+    },
+    {
+      "identity": "Elite_Skeleton",
+      "variant": 0,
+      "phase": "recovery",
+      "start": 72.1831741,
+      "expected": 0.429999977,
+      "observed": 0.4341201999999953,
+      "frameAllowance": 0.017090399,
+      "passed": true
+    },
+    {
+      "identity": "Elite_Skeleton",
+      "variant": 0,
+      "phase": "warning",
+      "start": 71.5151749,
+      "expected": 0.57,
+      "observed": 0.5841650999999928,
+      "frameAllowance": 0.0167676026,
+      "passed": true
+    },
+    {
+      "identity": "Elite_Skeleton",
+      "variant": 0,
+      "phase": "active",
+      "start": 72.09934,
+      "expected": 0.08,
+      "observed": 0.08383410000000424,
+      "frameAllowance": 0.017090399,
+      "passed": true
+    },
+    {
+      "identity": "Elite_Skeleton",
+      "variant": 0,
+      "phase": "recovery",
+      "start": 73.78603,
+      "expected": 0.429999977,
+      "observed": 0.4340700000000055,
+      "frameAllowance": 0.0171319024,
+      "passed": true
+    },
+    {
+      "identity": "Elite_Skeleton",
+      "variant": 0,
+      "phase": "warning",
+      "start": 73.1184,
+      "expected": 0.57,
+      "observed": 0.5838900000000109,
+      "frameAllowance": 0.0170509,
+      "passed": true
+    },
+    {
+      "identity": "Elite_Skeleton",
+      "variant": 0,
+      "phase": "active",
+      "start": 73.70229,
+      "expected": 0.08,
+      "observed": 0.08373999999999171,
+      "frameAllowance": 0.0171733,
+      "passed": true
+    },
+    {
+      "identity": "Elite_Skeleton",
+      "variant": 0,
+      "phase": "recovery",
+      "start": 75.38983,
+      "expected": 0.429999977,
+      "observed": 0.43374000000000024,
+      "frameAllowance": 0.0167680068,
+      "passed": true
+    },
+    {
+      "identity": "Elite_Skeleton",
+      "variant": 0,
+      "phase": "warning",
+      "start": 74.72197,
+      "expected": 0.57,
+      "observed": 0.584495099999998,
+      "frameAllowance": 0.0169692954,
+      "passed": true
+    },
+    {
+      "identity": "Elite_Skeleton",
+      "variant": 0,
+      "phase": "active",
+      "start": 75.3064651,
+      "expected": 0.08,
+      "observed": 0.08336490000000651,
+      "frameAllowance": 0.0167672971,
+      "passed": true
+    },
+    {
+      "identity": "Elite_Skeleton",
+      "variant": 0,
+      "phase": "recovery",
+      "start": 76.99435,
+      "expected": 0.429999977,
+      "observed": 0.43506999999999607,
+      "frameAllowance": 0.0170468038,
+      "passed": true
+    },
+    {
+      "identity": "Elite_Skeleton",
+      "variant": 0,
+      "phase": "warning",
+      "start": 76.32621,
+      "expected": 0.57,
+      "observed": 0.5848099999999903,
+      "frameAllowance": 0.0171912985,
+      "passed": true
+    },
+    {
+      "identity": "Elite_Skeleton",
+      "variant": 0,
+      "phase": "active",
+      "start": 76.91102,
+      "expected": 0.08,
+      "observed": 0.08333000000000368,
+      "frameAllowance": 0.0167676026,
+      "passed": true
+    },
+    {
+      "identity": "Elite_Skeleton",
+      "variant": 0,
+      "phase": "recovery",
+      "start": 80.1367,
+      "expected": 0.429999977,
+      "observed": 0.434669999999997,
+      "frameAllowance": 0.0170874,
+      "passed": true
+    },
+    {
+      "identity": "Elite_Skeleton",
+      "variant": 0,
+      "phase": "warning",
+      "start": 79.46888,
+      "expected": 0.57,
+      "observed": 0.5844900000000024,
+      "frameAllowance": 0.017167098999999998,
+      "passed": true
+    },
+    {
+      "identity": "Elite_Skeleton",
+      "variant": 0,
+      "phase": "active",
+      "start": 80.05337,
+      "expected": 0.08,
+      "observed": 0.08333000000000368,
+      "frameAllowance": 0.0167671,
+      "passed": true
+    },
+    {
+      "identity": "Elite_Skeleton",
+      "variant": 0,
+      "phase": "recovery",
+      "start": 81.74051,
+      "expected": 0.429999977,
+      "observed": 0.43370000000000175,
+      "frameAllowance": 0.0168906955,
+      "passed": true
+    },
+    {
+      "identity": "Elite_Skeleton",
+      "variant": 0,
+      "phase": "warning",
+      "start": 81.07314,
+      "expected": 0.57,
+      "observed": 0.5839300000000094,
+      "frameAllowance": 0.0171566048,
+      "passed": true
+    },
+    {
+      "identity": "Elite_Skeleton",
+      "variant": 0,
+      "phase": "active",
+      "start": 81.65707,
+      "expected": 0.08,
+      "observed": 0.08343999999999596,
+      "frameAllowance": 0.0168817026,
+      "passed": true
+    },
+    {
+      "identity": "Elite_Skeleton",
+      "variant": 0,
+      "phase": "recovery",
+      "start": 83.34331,
+      "expected": 0.429999977,
+      "observed": 0.4336799999999954,
+      "frameAllowance": 0.016870897399999998,
+      "passed": true
+    },
+    {
+      "identity": "Elite_Skeleton",
+      "variant": 0,
+      "phase": "warning",
+      "start": 82.67567,
+      "expected": 0.57,
+      "observed": 0.583910000000003,
+      "frameAllowance": 0.0167678,
+      "passed": true
+    },
+    {
+      "identity": "Elite_Skeleton",
+      "variant": 0,
+      "phase": "active",
+      "start": 83.25958,
+      "expected": 0.08,
+      "observed": 0.08373000000000275,
+      "frameAllowance": 0.0171567036,
+      "passed": true
+    },
+    {
+      "identity": "Elite_Skeleton",
+      "variant": 0,
+      "phase": "recovery",
+      "start": 84.9494553,
+      "expected": 0.429999977,
+      "observed": 0.4351501000000013,
+      "frameAllowance": 0.0172555057,
+      "passed": true
+    },
+    {
+      "identity": "Elite_Skeleton",
+      "variant": 0,
+      "phase": "warning",
+      "start": 84.2801743,
+      "expected": 0.57,
+      "observed": 0.5858056999999945,
+      "frameAllowance": 0.0171198977,
+      "passed": true
+    },
+    {
+      "identity": "Elite_Skeleton",
+      "variant": 0,
+      "phase": "active",
+      "start": 84.86598,
+      "expected": 0.08,
+      "observed": 0.08347530000000347,
+      "frameAllowance": 0.0169081988,
+      "passed": true
+    },
+    {
+      "identity": "Skeleton",
+      "variant": 0,
+      "phase": "recovery",
+      "start": 88.6906052,
+      "expected": 0.29,
+      "observed": 0.30104060000000743,
+      "frameAllowance": 0.0171211941,
+      "passed": true
+    },
+    {
+      "identity": "Skeleton",
+      "variant": 0,
+      "phase": "warning",
+      "start": 88.02268,
+      "expected": 0.57,
+      "observed": 0.5844400000000007,
+      "frameAllowance": 0.0167671984,
+      "passed": true
+    },
+    {
+      "identity": "Skeleton",
+      "variant": 0,
+      "phase": "active",
+      "start": 88.60712,
+      "expected": 0.08,
+      "observed": 0.08348519999999837,
+      "frameAllowance": 0.016850695199999998,
+      "passed": true
+    },
+    {
+      "identity": "Skeleton",
+      "variant": 0,
+      "phase": "recovery",
+      "start": 90.16212,
+      "expected": 0.29,
+      "observed": 0.3012054999999947,
+      "frameAllowance": 0.0171401,
+      "passed": true
+    },
+    {
+      "identity": "Skeleton",
+      "variant": 0,
+      "phase": "warning",
+      "start": 89.49323,
+      "expected": 0.57,
+      "observed": 0.5854199999999992,
+      "frameAllowance": 0.0170693027,
+      "passed": true
+    },
+    {
+      "identity": "Skeleton",
+      "variant": 0,
+      "phase": "active",
+      "start": 90.07865,
+      "expected": 0.08,
+      "observed": 0.08347000000000548,
+      "frameAllowance": 0.0170125,
+      "passed": true
+    },
+    {
+      "identity": "Skeleton",
+      "variant": 0,
+      "phase": "recovery",
+      "start": 91.63303,
+      "expected": 0.29,
+      "observed": 0.3011199999999974,
+      "frameAllowance": 0.016767502,
+      "passed": true
+    },
+    {
+      "identity": "Skeleton",
+      "variant": 0,
+      "phase": "warning",
+      "start": 90.96439,
+      "expected": 0.57,
+      "observed": 0.5851248000000027,
+      "frameAllowance": 0.0170455986,
+      "passed": true
+    },
+    {
+      "identity": "Skeleton",
+      "variant": 0,
+      "phase": "active",
+      "start": 91.5495148,
+      "expected": 0.08,
+      "observed": 0.0835152000000079,
+      "frameAllowance": 0.016767502,
+      "passed": true
+    },
+    {
+      "identity": "Skeleton",
+      "variant": 0,
+      "phase": "recovery",
+      "start": 93.10365,
+      "expected": 0.29,
+      "observed": 0.30060000000000286,
+      "frameAllowance": 0.017015199999999998,
+      "passed": true
+    },
+    {
+      "identity": "Skeleton",
+      "variant": 0,
+      "phase": "warning",
+      "start": 92.43588,
+      "expected": 0.57,
+      "observed": 0.5841599999999971,
+      "frameAllowance": 0.0169625,
+      "passed": true
+    },
+    {
+      "identity": "Skeleton",
+      "variant": 0,
+      "phase": "active",
+      "start": 93.02004,
+      "expected": 0.08,
+      "observed": 0.08361000000000729,
+      "frameAllowance": 0.0170435013,
+      "passed": true
+    },
+    {
+      "identity": "Skeleton",
+      "variant": 0,
+      "phase": "recovery",
+      "start": 96.69594,
+      "expected": 0.29,
+      "observed": 0.300760000000011,
+      "frameAllowance": 0.0168185012,
+      "passed": true
+    },
+    {
+      "identity": "Skeleton",
+      "variant": 0,
+      "phase": "warning",
+      "start": 96.02684,
+      "expected": 0.57,
+      "observed": 0.5854341999999946,
+      "frameAllowance": 0.0170957988,
+      "passed": true
+    },
+    {
+      "identity": "Skeleton",
+      "variant": 0,
+      "phase": "active",
+      "start": 96.6122742,
+      "expected": 0.08,
+      "observed": 0.08366579999999146,
+      "frameAllowance": 0.0171033015,
+      "passed": true
+    },
+    {
+      "identity": "Skeleton",
+      "variant": 0,
+      "phase": "recovery",
+      "start": 98.16596,
+      "expected": 0.29,
+      "observed": 0.3009500000000003,
+      "frameAllowance": 0.017159205099999998,
+      "passed": true
+    },
+    {
+      "identity": "Skeleton",
+      "variant": 0,
+      "phase": "warning",
+      "start": 97.4979,
+      "expected": 0.57,
+      "observed": 0.5843500000000006,
+      "frameAllowance": 0.0173278062,
+      "passed": true
+    },
+    {
+      "identity": "Skeleton",
+      "variant": 0,
+      "phase": "active",
+      "start": 98.08225,
+      "expected": 0.08,
+      "observed": 0.0837099999999964,
+      "frameAllowance": 0.0171394,
+      "passed": true
+    },
+    {
+      "identity": "Skeleton",
+      "variant": 0,
+      "phase": "recovery",
+      "start": 99.63545,
+      "expected": 0.29,
+      "observed": 0.29999999999999716,
+      "frameAllowance": 0.016768601,
+      "passed": true
+    },
+    {
+      "identity": "Skeleton",
+      "variant": 0,
+      "phase": "warning",
+      "start": 98.96771,
+      "expected": 0.57,
+      "observed": 0.5844100000000054,
+      "frameAllowance": 0.0171320924,
+      "passed": true
+    },
+    {
+      "identity": "Skeleton",
+      "variant": 0,
+      "phase": "active",
+      "start": 99.55212,
+      "expected": 0.08,
+      "observed": 0.08333000000000368,
+      "frameAllowance": 0.0167671984,
+      "passed": true
+    },
+    {
+      "identity": "Skeleton",
+      "variant": 0,
+      "phase": "recovery",
+      "start": 101.104942,
+      "expected": 0.29,
+      "observed": 0.3002780000000058,
+      "frameAllowance": 0.016852203899999998,
+      "passed": true
+    },
+    {
+      "identity": "Skeleton",
+      "variant": 0,
+      "phase": "warning",
+      "start": 100.435738,
+      "expected": 0.57,
+      "observed": 0.5858680000000049,
+      "frameAllowance": 0.017137103,
+      "passed": true
+    },
+    {
+      "identity": "Skeleton",
+      "variant": 0,
+      "phase": "active",
+      "start": 101.021606,
+      "expected": 0.08,
+      "observed": 0.08333599999998853,
+      "frameAllowance": 0.0168318955,
+      "passed": true
+    },
+    {
+      "identity": "Brotchi_Dash",
+      "variant": 0,
+      "phase": "recovery",
+      "start": 114.714531,
+      "expected": 0.08,
+      "observed": 0.08340400000000159,
+      "frameAllowance": 0.0170518,
+      "passed": true
+    },
+    {
+      "identity": "Brotchi_Dash",
+      "variant": 0,
+      "phase": "warning",
+      "start": 113.495171,
+      "expected": 0.78,
+      "observed": 0.7845530000000025,
+      "frameAllowance": 0.0169396961,
+      "passed": true
+    },
+    {
+      "identity": "Brotchi_Dash",
+      "variant": 0,
+      "phase": "active",
+      "start": 114.279724,
+      "expected": 0.429999948,
+      "observed": 0.43480699999999217,
+      "frameAllowance": 0.0170518,
+      "passed": true
+    },
+    {
+      "identity": "Brotchi_Dash",
+      "variant": 0,
+      "phase": "recovery",
+      "start": 116.517563,
+      "expected": 0.08,
+      "observed": 0.0836180000000013,
+      "frameAllowance": 0.0168554,
+      "passed": true
+    },
+    {
+      "identity": "Brotchi_Dash",
+      "variant": 0,
+      "phase": "warning",
+      "start": 115.298737,
+      "expected": 0.78,
+      "observed": 0.7844159999999931,
+      "frameAllowance": 0.0169260988,
+      "passed": true
+    },
+    {
+      "identity": "Brotchi_Dash",
+      "variant": 0,
+      "phase": "active",
+      "start": 116.083153,
+      "expected": 0.429999948,
+      "observed": 0.43440999999999974,
+      "frameAllowance": 0.0168972017,
+      "passed": true
+    },
+    {
+      "identity": "Brotchi_Dash",
+      "variant": 0,
+      "phase": "recovery",
+      "start": 118.322525,
+      "expected": 0.08,
+      "observed": 0.08338899999999683,
+      "frameAllowance": 0.016767304599999998,
+      "passed": true
+    },
+    {
+      "identity": "Brotchi_Dash",
+      "variant": 0,
+      "phase": "warning",
+      "start": 117.103226,
+      "expected": 0.78,
+      "observed": 0.7844999999999942,
+      "frameAllowance": 0.0171637053,
+      "passed": true
+    },
+    {
+      "identity": "Brotchi_Dash",
+      "variant": 0,
+      "phase": "active",
+      "start": 117.887726,
+      "expected": 0.429999948,
+      "observed": 0.43479899999999816,
+      "frameAllowance": 0.0175152981,
+      "passed": true
+    },
+    {
+      "identity": "Brotchi_Dash",
+      "variant": 0,
+      "phase": "recovery",
+      "start": 120.124817,
+      "expected": 0.08,
+      "observed": 0.08379400000001169,
+      "frameAllowance": 0.0169796983,
+      "passed": true
+    },
+    {
+      "identity": "Brotchi_Dash",
+      "variant": 0,
+      "phase": "warning",
+      "start": 118.90609,
+      "expected": 0.78,
+      "observed": 0.783820999999989,
+      "frameAllowance": 0.0167677013,
+      "passed": true
+    },
+    {
+      "identity": "Brotchi_Dash",
+      "variant": 0,
+      "phase": "active",
+      "start": 119.689911,
+      "expected": 0.429999948,
+      "observed": 0.434905999999998,
+      "frameAllowance": 0.016987294099999998,
+      "passed": true
+    },
+    {
+      "identity": "Brotchi_Dash",
+      "variant": 0,
+      "phase": "recovery",
+      "start": 123.46653,
+      "expected": 0.08,
+      "observed": 0.08348099999999192,
+      "frameAllowance": 0.0170118,
+      "passed": true
+    },
+    {
+      "identity": "Brotchi_Dash",
+      "variant": 0,
+      "phase": "warning",
+      "start": 122.24781,
+      "expected": 0.78,
+      "observed": 0.7843560000000025,
+      "frameAllowance": 0.016939506099999998,
+      "passed": true
+    },
+    {
+      "identity": "Brotchi_Dash",
+      "variant": 0,
+      "phase": "active",
+      "start": 123.032166,
+      "expected": 0.429999948,
+      "observed": 0.4343640000000022,
+      "frameAllowance": 0.0170118,
+      "passed": true
+    },
+    {
+      "identity": "Brotchi_Dash",
+      "variant": 0,
+      "phase": "recovery",
+      "start": 125.2694,
+      "expected": 0.08,
+      "observed": 0.08360399999999402,
+      "frameAllowance": 0.0170546977,
+      "passed": true
+    },
+    {
+      "identity": "Brotchi_Dash",
+      "variant": 0,
+      "phase": "warning",
+      "start": 124.050919,
+      "expected": 0.78,
+      "observed": 0.7846450000000118,
+      "frameAllowance": 0.0170859063,
+      "passed": true
+    },
+    {
+      "identity": "Brotchi_Dash",
+      "variant": 0,
+      "phase": "active",
+      "start": 124.835564,
+      "expected": 0.429999948,
+      "observed": 0.43383599999999944,
+      "frameAllowance": 0.0170546977,
+      "passed": true
+    },
+    {
+      "identity": "Brotchi_Dash",
+      "variant": 0,
+      "phase": "recovery",
+      "start": 127.075966,
+      "expected": 0.08,
+      "observed": 0.08405300000001148,
+      "frameAllowance": 0.0169732,
+      "passed": true
+    },
+    {
+      "identity": "Brotchi_Dash",
+      "variant": 0,
+      "phase": "warning",
+      "start": 125.854813,
+      "expected": 0.78,
+      "observed": 0.7855870000000067,
+      "frameAllowance": 0.0172001,
+      "passed": true
+    },
+    {
+      "identity": "Brotchi_Dash",
+      "variant": 0,
+      "phase": "active",
+      "start": 126.6404,
+      "expected": 0.429999948,
+      "observed": 0.43556599999999435,
+      "frameAllowance": 0.0173673035,
+      "passed": true
+    },
+    {
+      "identity": "Brotchi_Dash",
+      "variant": 0,
+      "phase": "recovery",
+      "start": 128.881454,
+      "expected": 0.08,
+      "observed": 0.08348100000000613,
+      "frameAllowance": 0.0168825967,
+      "passed": true
+    },
+    {
+      "identity": "Brotchi_Dash",
+      "variant": 0,
+      "phase": "warning",
+      "start": 127.661377,
+      "expected": 0.78,
+      "observed": 0.7854770000000002,
+      "frameAllowance": 0.0171494039,
+      "passed": true
+    },
+    {
+      "identity": "Brotchi_Dash",
+      "variant": 0,
+      "phase": "active",
+      "start": 128.446854,
+      "expected": 0.429999948,
+      "observed": 0.434599999999989,
+      "frameAllowance": 0.017179804099999998,
+      "passed": true
+    },
+    {
+      "identity": "Skeleton",
+      "variant": 2,
+      "phase": "recovery",
+      "start": 132.07312,
+      "expected": 0.29,
+      "observed": 0.30113200000002394,
+      "frameAllowance": 0.0171744974,
+      "passed": true
+    },
+    {
+      "identity": "Skeleton",
+      "variant": 2,
+      "phase": "warning",
+      "start": 131.4058,
+      "expected": 0.57,
+      "observed": 0.5838999999999999,
+      "frameAllowance": 0.0170177018,
+      "passed": true
+    },
+    {
+      "identity": "Skeleton",
+      "variant": 2,
+      "phase": "active",
+      "start": 131.9897,
+      "expected": 0.08,
+      "observed": 0.08341999999998961,
+      "frameAllowance": 0.0168392,
+      "passed": true
+    },
+    {
+      "identity": "Skeleton",
+      "variant": 2,
+      "phase": "recovery",
+      "start": 133.545349,
+      "expected": 0.29,
+      "observed": 0.30043000000000575,
+      "frameAllowance": 0.016908602999999998,
+      "passed": true
+    },
+    {
+      "identity": "Skeleton",
+      "variant": 2,
+      "phase": "warning",
+      "start": 132.874817,
+      "expected": 0.57,
+      "observed": 0.5860439999999869,
+      "frameAllowance": 0.0171211028,
+      "passed": true
+    },
+    {
+      "identity": "Skeleton",
+      "variant": 2,
+      "phase": "active",
+      "start": 133.460861,
+      "expected": 0.08,
+      "observed": 0.08448799999999324,
+      "frameAllowance": 0.017166702199999998,
+      "passed": true
+    },
+    {
+      "identity": "Skeleton",
+      "variant": 2,
+      "phase": "recovery",
+      "start": 135.016708,
+      "expected": 0.29,
+      "observed": 0.3002480000000105,
+      "frameAllowance": 0.0168674962,
+      "passed": true
+    },
+    {
+      "identity": "Skeleton",
+      "variant": 2,
+      "phase": "warning",
+      "start": 134.3483,
+      "expected": 0.57,
+      "observed": 0.5850800000000049,
+      "frameAllowance": 0.0170987958,
+      "passed": true
+    },
+    {
+      "identity": "Skeleton",
+      "variant": 2,
+      "phase": "active",
+      "start": 134.93338,
+      "expected": 0.08,
+      "observed": 0.08332799999999452,
+      "frameAllowance": 0.0167672971,
+      "passed": true
+    },
+    {
+      "identity": "Skeleton",
+      "variant": 2,
+      "phase": "recovery",
+      "start": 136.485519,
+      "expected": 0.29,
+      "observed": 0.30048099999999067,
+      "frameAllowance": 0.0170927012,
+      "passed": true
+    },
+    {
+      "identity": "Skeleton",
+      "variant": 2,
+      "phase": "warning",
+      "start": 135.817856,
+      "expected": 0.57,
+      "observed": 0.5843349999999816,
+      "frameAllowance": 0.0167874,
+      "passed": true
+    },
+    {
+      "identity": "Skeleton",
+      "variant": 2,
+      "phase": "active",
+      "start": 136.402191,
+      "expected": 0.08,
+      "observed": 0.08332800000002294,
+      "frameAllowance": 0.016767502,
+      "passed": true
+    },
+    {
+      "identity": "Skeleton",
+      "variant": 2,
+      "phase": "recovery",
+      "start": 139.893936,
+      "expected": 0.29,
+      "observed": 0.30001799999999434,
+      "frameAllowance": 0.016767502,
+      "passed": true
+    },
+    {
+      "identity": "Skeleton",
+      "variant": 2,
+      "phase": "warning",
+      "start": 139.225479,
+      "expected": 0.57,
+      "observed": 0.5849759999999833,
+      "frameAllowance": 0.0170853028,
+      "passed": true
+    },
+    {
+      "identity": "Skeleton",
+      "variant": 2,
+      "phase": "active",
+      "start": 139.810455,
+      "expected": 0.08,
+      "observed": 0.08348100000000613,
+      "frameAllowance": 0.0169038979,
+      "passed": true
+    },
+    {
+      "identity": "Skeleton",
+      "variant": 2,
+      "phase": "recovery",
+      "start": 141.363037,
+      "expected": 0.29,
+      "observed": 0.300705000000022,
+      "frameAllowance": 0.016864201199999998,
+      "passed": true
+    },
+    {
+      "identity": "Skeleton",
+      "variant": 2,
+      "phase": "warning",
+      "start": 140.694885,
+      "expected": 0.57,
+      "observed": 0.5842150000000004,
+      "frameAllowance": 0.016768098,
+      "passed": true
+    },
+    {
+      "identity": "Skeleton",
+      "variant": 2,
+      "phase": "active",
+      "start": 141.2791,
+      "expected": 0.08,
+      "observed": 0.08393699999999171,
+      "frameAllowance": 0.0173075052,
+      "passed": true
+    },
+    {
+      "identity": "Skeleton",
+      "variant": 2,
+      "phase": "recovery",
+      "start": 142.831787,
+      "expected": 0.29,
+      "observed": 0.3008130000000051,
+      "frameAllowance": 0.0174065048,
+      "passed": true
+    },
+    {
+      "identity": "Skeleton",
+      "variant": 2,
+      "phase": "warning",
+      "start": 142.164185,
+      "expected": 0.57,
+      "observed": 0.5840910000000008,
+      "frameAllowance": 0.0168074054,
+      "passed": true
+    },
+    {
+      "identity": "Skeleton",
+      "variant": 2,
+      "phase": "active",
+      "start": 142.748276,
+      "expected": 0.08,
+      "observed": 0.08351099999998723,
+      "frameAllowance": 0.0169459956,
+      "passed": true
+    },
+    {
+      "identity": "Skeleton",
+      "variant": 2,
+      "phase": "recovery",
+      "start": 144.301346,
+      "expected": 0.29,
+      "observed": 0.30017100000000596,
+      "frameAllowance": 0.016991703,
+      "passed": true
+    },
+    {
+      "identity": "Skeleton",
+      "variant": 2,
+      "phase": "warning",
+      "start": 143.6333,
+      "expected": 0.57,
+      "observed": 0.5844730000000027,
+      "frameAllowance": 0.0171893986,
+      "passed": true
+    },
+    {
+      "identity": "Skeleton",
+      "variant": 2,
+      "phase": "active",
+      "start": 144.217773,
+      "expected": 0.08,
+      "observed": 0.08357300000000123,
+      "frameAllowance": 0.016991703,
+      "passed": true
+    },
+    {
+      "identity": "LostSoul",
+      "variant": 0,
+      "phase": "recovery",
+      "start": 168.228928,
+      "expected": 0.75333333,
+      "observed": 0.7680970000000116,
+      "frameAllowance": 0.0169156046,
+      "passed": true
+    },
+    {
+      "identity": "LostSoul",
+      "variant": 0,
+      "phase": "warning",
+      "start": 167.044174,
+      "expected": 1.0333333,
+      "observed": 1.0342259999999897,
+      "frameAllowance": 0.0171480013,
+      "passed": true
+    },
+    {
+      "identity": "LostSoul",
+      "variant": 0,
+      "phase": "active",
+      "start": 168.0784,
+      "expected": 0.146666661,
+      "observed": 0.15052800000000843,
+      "frameAllowance": 0.0171529969,
+      "passed": true
+    },
+    {
+      "identity": "LostSoul",
+      "variant": 0,
+      "phase": "recovery",
+      "start": 172.472885,
+      "expected": 0.75333333,
+      "observed": 0.7685850000000016,
+      "frameAllowance": 0.0171439985,
+      "passed": true
+    },
+    {
+      "identity": "LostSoul",
+      "variant": 0,
+      "phase": "warning",
+      "start": 171.28656,
+      "expected": 1.0333333,
+      "observed": 1.035995999999983,
+      "frameAllowance": 0.0171625,
+      "passed": true
+    },
+    {
+      "identity": "LostSoul",
+      "variant": 0,
+      "phase": "active",
+      "start": 172.322556,
+      "expected": 0.146666661,
+      "observed": 0.15032899999999927,
+      "frameAllowance": 0.0170895981,
+      "passed": true
+    },
+    {
+      "identity": "LostSoul",
+      "variant": 0,
+      "phase": "recovery",
+      "start": 176.734619,
+      "expected": 0.75333333,
+      "observed": 0.7681809999999984,
+      "frameAllowance": 0.017088301599999998,
+      "passed": true
+    },
+    {
+      "identity": "LostSoul",
+      "variant": 0,
+      "phase": "warning",
+      "start": 175.549942,
+      "expected": 1.0333333,
+      "observed": 1.0346830000000011,
+      "frameAllowance": 0.0169442037,
+      "passed": true
+    },
+    {
+      "identity": "LostSoul",
+      "variant": 0,
+      "phase": "active",
+      "start": 176.584625,
+      "expected": 0.146666661,
+      "observed": 0.14999400000002083,
+      "frameAllowance": 0.0167685022,
+      "passed": true
+    },
+    {
+      "identity": "LostSoul",
+      "variant": 0,
+      "phase": "recovery",
+      "start": 180.966,
+      "expected": 0.75333333,
+      "observed": 0.7698089999999809,
+      "frameAllowance": 0.0171107987,
+      "passed": true
+    },
+    {
+      "identity": "LostSoul",
+      "variant": 0,
+      "phase": "warning",
+      "start": 179.780167,
+      "expected": 1.0333333,
+      "observed": 1.035460999999998,
+      "frameAllowance": 0.0171071,
+      "passed": true
+    },
+    {
+      "identity": "LostSoul",
+      "variant": 0,
+      "phase": "active",
+      "start": 180.815628,
+      "expected": 0.146666661,
+      "observed": 0.1503720000000044,
+      "frameAllowance": 0.0167682042,
+      "passed": true
+    },
+    {
+      "identity": "Brotchi_Dash",
+      "variant": 1,
+      "phase": "recovery",
+      "start": 185.041245,
+      "expected": 0.08,
+      "observed": 0.08334299999998507,
+      "frameAllowance": 0.0167676026,
+      "passed": true
+    },
+    {
+      "identity": "Brotchi_Dash",
+      "variant": 1,
+      "phase": "warning",
+      "start": 183.816925,
+      "expected": 0.78,
+      "observed": 0.7901459999999929,
+      "frameAllowance": 0.0601205,
+      "passed": true
+    },
+    {
+      "identity": "Brotchi_Dash",
+      "variant": 1,
+      "phase": "active",
+      "start": 184.607071,
+      "expected": 0.429999948,
+      "observed": 0.43417400000001294,
+      "frameAllowance": 0.0168483985,
+      "passed": true
+    },
+    {
+      "identity": "Brotchi_Dash",
+      "variant": 1,
+      "phase": "recovery",
+      "start": 186.845963,
+      "expected": 0.08,
+      "observed": 0.08357199999997533,
+      "frameAllowance": 0.0168434029,
+      "passed": true
+    },
+    {
+      "identity": "Brotchi_Dash",
+      "variant": 1,
+      "phase": "warning",
+      "start": 185.625977,
+      "expected": 0.78,
+      "observed": 0.786438000000004,
+      "frameAllowance": 0.0169481,
+      "passed": true
+    },
+    {
+      "identity": "Brotchi_Dash",
+      "variant": 1,
+      "phase": "active",
+      "start": 186.412415,
+      "expected": 0.429999948,
+      "observed": 0.4335480000000018,
+      "frameAllowance": 0.0169323,
+      "passed": true
+    },
+    {
+      "identity": "Brotchi_Dash",
+      "variant": 1,
+      "phase": "recovery",
+      "start": 188.651062,
+      "expected": 0.08,
+      "observed": 0.08342000000001804,
+      "frameAllowance": 0.016862103899999998,
+      "passed": true
+    },
+    {
+      "identity": "Brotchi_Dash",
+      "variant": 1,
+      "phase": "warning",
+      "start": 187.430267,
+      "expected": 0.78,
+      "observed": 0.7862550000000113,
+      "frameAllowance": 0.0170854034,
+      "passed": true
+    },
+    {
+      "identity": "Brotchi_Dash",
+      "variant": 1,
+      "phase": "active",
+      "start": 188.216522,
+      "expected": 0.429999948,
+      "observed": 0.43453999999999837,
+      "frameAllowance": 0.0170206988,
+      "passed": true
+    },
+    {
+      "identity": "Brotchi_Dash",
+      "variant": 1,
+      "phase": "recovery",
+      "start": 190.455154,
+      "expected": 0.08,
+      "observed": 0.08407600000001025,
+      "frameAllowance": 0.0170850048,
+      "passed": true
+    },
+    {
+      "identity": "Brotchi_Dash",
+      "variant": 1,
+      "phase": "warning",
+      "start": 189.235077,
+      "expected": 0.78,
+      "observed": 0.7845920000000035,
+      "frameAllowance": 0.0167734,
+      "passed": true
+    },
+    {
+      "identity": "Brotchi_Dash",
+      "variant": 1,
+      "phase": "active",
+      "start": 190.019669,
+      "expected": 0.429999948,
+      "observed": 0.4354849999999999,
+      "frameAllowance": 0.0171545988,
+      "passed": true
+    },
+    {
+      "identity": "Brotchi_Dash",
+      "variant": 1,
+      "phase": "recovery",
+      "start": 193.7977,
+      "expected": 0.08,
+      "observed": 0.08367800000002035,
+      "frameAllowance": 0.0170878043,
+      "passed": true
+    },
+    {
+      "identity": "Brotchi_Dash",
+      "variant": 1,
+      "phase": "warning",
+      "start": 192.57756,
+      "expected": 0.78,
+      "observed": 0.7849889999999959,
+      "frameAllowance": 0.0170454012,
+      "passed": true
+    },
+    {
+      "identity": "Brotchi_Dash",
+      "variant": 1,
+      "phase": "active",
+      "start": 193.362549,
+      "expected": 0.429999948,
+      "observed": 0.4351509999999905,
+      "frameAllowance": 0.0171634985,
+      "passed": true
+    },
+    {
+      "identity": "Brotchi_Dash",
+      "variant": 1,
+      "phase": "recovery",
+      "start": 195.6008,
+      "expected": 0.08,
+      "observed": 0.08370000000002165,
+      "frameAllowance": 0.0170049036,
+      "passed": true
+    },
+    {
+      "identity": "Brotchi_Dash",
+      "variant": 1,
+      "phase": "warning",
+      "start": 194.382126,
+      "expected": 0.78,
+      "observed": 0.7847439999999892,
+      "frameAllowance": 0.017173201,
+      "passed": true
+    },
+    {
+      "identity": "Brotchi_Dash",
+      "variant": 1,
+      "phase": "active",
+      "start": 195.16687,
+      "expected": 0.429999948,
+      "observed": 0.4339300000000037,
+      "frameAllowance": 0.0170816036,
+      "passed": true
+    },
+    {
+      "identity": "Brotchi_Dash",
+      "variant": 1,
+      "phase": "recovery",
+      "start": 197.401825,
+      "expected": 0.08,
+      "observed": 0.08334299999998507,
+      "frameAllowance": 0.0167674033,
+      "passed": true
+    },
+    {
+      "identity": "Brotchi_Dash",
+      "variant": 1,
+      "phase": "warning",
+      "start": 196.184555,
+      "expected": 0.78,
+      "observed": 0.7834630000000118,
+      "frameAllowance": 0.0167677013,
+      "passed": true
+    },
+    {
+      "identity": "Brotchi_Dash",
+      "variant": 1,
+      "phase": "active",
+      "start": 196.968018,
+      "expected": 0.429999948,
+      "observed": 0.4338070000000016,
+      "frameAllowance": 0.0170739015,
+      "passed": true
+    },
+    {
+      "identity": "Brotchi_Dash",
+      "variant": 1,
+      "phase": "recovery",
+      "start": 199.206177,
+      "expected": 0.08,
+      "observed": 0.08334300000001349,
+      "frameAllowance": 0.0167672971,
+      "passed": true
+    },
+    {
+      "identity": "Brotchi_Dash",
+      "variant": 1,
+      "phase": "warning",
+      "start": 197.9861,
+      "expected": 0.78,
+      "observed": 0.786500000000018,
+      "frameAllowance": 0.0171594957,
+      "passed": true
+    },
+    {
+      "identity": "Brotchi_Dash",
+      "variant": 1,
+      "phase": "active",
+      "start": 198.7726,
+      "expected": 0.429999948,
+      "observed": 0.43357699999998545,
+      "frameAllowance": 0.017071202599999998,
+      "passed": true
+    },
+    {
+      "identity": "Ghoul",
+      "variant": 0,
+      "phase": "recovery",
+      "start": 202.967133,
+      "expected": 0.121428572,
+      "observed": 0.13334600000001728,
+      "frameAllowance": 0.016767502,
+      "passed": true
+    },
+    {
+      "identity": "Ghoul",
+      "variant": 0,
+      "phase": "warning",
+      "start": 201.396515,
+      "expected": 0.29285717,
+      "observed": 0.30155899999999747,
+      "frameAllowance": 0.0170767011,
+      "passed": true
+    },
+    {
+      "identity": "Ghoul",
+      "variant": 0,
+      "phase": "active",
+      "start": 201.698074,
+      "expected": 0.235714287,
+      "observed": 0.2504729999999995,
+      "frameAllowance": 0.0170767011,
+      "passed": true
+    },
+    {
+      "identity": "Ghoul",
+      "variant": 0,
+      "phase": "warning",
+      "start": 201.948547,
+      "expected": 0.378571451,
+      "observed": 0.38417100000000914,
+      "frameAllowance": 0.0168725,
+      "passed": true
+    },
+    {
+      "identity": "Ghoul",
+      "variant": 0,
+      "phase": "active",
+      "start": 202.332718,
+      "expected": 0.2,
+      "observed": 0.20039399999998864,
+      "frameAllowance": 0.0168725,
+      "passed": true
+    },
+    {
+      "identity": "Ghoul",
+      "variant": 0,
+      "phase": "warning",
+      "start": 202.533112,
+      "expected": 0.20714286,
+      "observed": 0.21704100000002313,
+      "frameAllowance": 0.0168124011,
+      "passed": true
+    },
+    {
+      "identity": "Ghoul",
+      "variant": 0,
+      "phase": "active",
+      "start": 202.750153,
+      "expected": 0.20714286,
+      "observed": 0.2169799999999782,
+      "frameAllowance": 0.017062301,
+      "passed": true
+    },
+    {
+      "identity": "Ghoul",
+      "variant": 0,
+      "phase": "recovery",
+      "start": 205.174484,
+      "expected": 0.121428572,
+      "observed": 0.13388100000000236,
+      "frameAllowance": 0.0170624016,
+      "passed": true
+    },
+    {
+      "identity": "Ghoul",
+      "variant": 0,
+      "phase": "warning",
+      "start": 203.601,
+      "expected": 0.29285717,
+      "observed": 0.3008399999999938,
+      "frameAllowance": 0.017326899,
+      "passed": true
+    },
+    {
+      "identity": "Ghoul",
+      "variant": 0,
+      "phase": "active",
+      "start": 203.90184,
+      "expected": 0.235714287,
+      "observed": 0.25067200000000867,
+      "frameAllowance": 0.017326899,
+      "passed": true
+    },
+    {
+      "identity": "Ghoul",
+      "variant": 0,
+      "phase": "warning",
+      "start": 204.152512,
+      "expected": 0.378571451,
+      "observed": 0.3859249999999861,
+      "frameAllowance": 0.0171617979,
+      "passed": true
+    },
+    {
+      "identity": "Ghoul",
+      "variant": 0,
+      "phase": "active",
+      "start": 204.538437,
+      "expected": 0.2,
+      "observed": 0.20046300000001338,
+      "frameAllowance": 0.017171101799999998,
+      "passed": true
+    },
+    {
+      "identity": "Ghoul",
+      "variant": 0,
+      "phase": "warning",
+      "start": 204.7389,
+      "expected": 0.20714286,
+      "observed": 0.21710899999999356,
+      "frameAllowance": 0.0168202018,
+      "passed": true
+    },
+    {
+      "identity": "Ghoul",
+      "variant": 0,
+      "phase": "active",
+      "start": 204.956009,
+      "expected": 0.20714286,
+      "observed": 0.2184750000000122,
+      "frameAllowance": 0.0170939976,
+      "passed": true
+    },
+    {
+      "identity": "Ghoul",
+      "variant": 0,
+      "phase": "recovery",
+      "start": 207.39682,
+      "expected": 0.121428572,
+      "observed": 0.13418000000001484,
+      "frameAllowance": 0.0171107987,
+      "passed": true
+    },
+    {
+      "identity": "Ghoul",
+      "variant": 0,
+      "phase": "warning",
+      "start": 205.80983,
+      "expected": 0.29285717,
+      "observed": 0.3011009999999885,
+      "frameAllowance": 0.0171477964,
+      "passed": true
+    },
+    {
+      "identity": "Ghoul",
+      "variant": 0,
+      "phase": "active",
+      "start": 206.110931,
+      "expected": 0.235714287,
+      "observed": 0.25066900000001624,
+      "frameAllowance": 0.0171159,
+      "passed": true
+    },
+    {
+      "identity": "Ghoul",
+      "variant": 0,
+      "phase": "warning",
+      "start": 206.3616,
+      "expected": 0.378571451,
+      "observed": 0.38437199999998484,
+      "frameAllowance": 0.0171286,
+      "passed": true
+    },
+    {
+      "identity": "Ghoul",
+      "variant": 0,
+      "phase": "active",
+      "start": 206.745972,
+      "expected": 0.2,
+      "observed": 0.21690300000000207,
+      "frameAllowance": 0.017001997799999998,
+      "passed": true
+    },
+    {
+      "identity": "Ghoul",
+      "variant": 0,
+      "phase": "warning",
+      "start": 206.962875,
+      "expected": 0.20714286,
+      "observed": 0.21681300000000192,
+      "frameAllowance": 0.017001997799999998,
+      "passed": true
+    },
+    {
+      "identity": "Ghoul",
+      "variant": 0,
+      "phase": "active",
+      "start": 207.179688,
+      "expected": 0.20714286,
+      "observed": 0.21713199999999233,
+      "frameAllowance": 0.0171468036,
+      "passed": true
+    },
+    {
+      "identity": "Ghoul",
+      "variant": 0,
+      "phase": "recovery",
+      "start": 209.601227,
+      "expected": 0.121428572,
+      "observed": 0.1338959999999929,
+      "frameAllowance": 0.0168789962,
+      "passed": true
+    },
+    {
+      "identity": "Ghoul",
+      "variant": 0,
+      "phase": "warning",
+      "start": 208.032654,
+      "expected": 0.29285717,
+      "observed": 0.30052200000000084,
+      "frameAllowance": 0.0170339,
+      "passed": true
+    },
+    {
+      "identity": "Ghoul",
+      "variant": 0,
+      "phase": "active",
+      "start": 208.333176,
+      "expected": 0.235714287,
+      "observed": 0.2505639999999971,
+      "frameAllowance": 0.0171699041,
+      "passed": true
+    },
+    {
+      "identity": "Ghoul",
+      "variant": 0,
+      "phase": "warning",
+      "start": 208.58374,
+      "expected": 0.378571451,
+      "observed": 0.38346899999999096,
+      "frameAllowance": 0.0168974,
+      "passed": true
+    },
+    {
+      "identity": "Ghoul",
+      "variant": 0,
+      "phase": "active",
+      "start": 208.967209,
+      "expected": 0.2,
+      "observed": 0.2004090000000076,
+      "frameAllowance": 0.016768098,
+      "passed": true
+    },
+    {
+      "identity": "Ghoul",
+      "variant": 0,
+      "phase": "warning",
+      "start": 209.167618,
+      "expected": 0.20714286,
+      "observed": 0.21694899999999961,
+      "frameAllowance": 0.016768098,
+      "passed": true
+    },
+    {
+      "identity": "Ghoul",
+      "variant": 0,
+      "phase": "active",
+      "start": 209.384567,
+      "expected": 0.20714286,
+      "observed": 0.2166599999999903,
+      "frameAllowance": 0.0167671984,
+      "passed": true
+    },
+    {
+      "identity": "Ghoul",
+      "variant": 0,
+      "phase": "recovery",
+      "start": 213.395844,
+      "expected": 0.121428572,
+      "observed": 0.13452099999997813,
+      "frameAllowance": 0.0171317963,
+      "passed": true
+    },
+    {
+      "identity": "Ghoul",
+      "variant": 0,
+      "phase": "warning",
+      "start": 211.823441,
+      "expected": 0.29285717,
+      "observed": 0.3005059999999844,
+      "frameAllowance": 0.0171036983,
+      "passed": true
+    },
+    {
+      "identity": "Ghoul",
+      "variant": 0,
+      "phase": "active",
+      "start": 212.123947,
+      "expected": 0.235714287,
+      "observed": 0.25122100000001524,
+      "frameAllowance": 0.0170164054,
+      "passed": true
+    },
+    {
+      "identity": "Ghoul",
+      "variant": 0,
+      "phase": "warning",
+      "start": 212.375168,
+      "expected": 0.378571451,
+      "observed": 0.3843689999999924,
+      "frameAllowance": 0.016822399999999998,
+      "passed": true
+    },
+    {
+      "identity": "Ghoul",
+      "variant": 0,
+      "phase": "active",
+      "start": 212.759537,
+      "expected": 0.2,
+      "observed": 0.20106300000000488,
+      "frameAllowance": 0.0169312,
+      "passed": true
+    },
+    {
+      "identity": "Ghoul",
+      "variant": 0,
+      "phase": "warning",
+      "start": 212.9606,
+      "expected": 0.20714286,
+      "observed": 0.21740900000000352,
+      "frameAllowance": 0.0171712937,
+      "passed": true
+    },
+    {
+      "identity": "Ghoul",
+      "variant": 0,
+      "phase": "active",
+      "start": 213.178009,
+      "expected": 0.20714286,
+      "observed": 0.217835000000008,
+      "frameAllowance": 0.0171050021,
+      "passed": true
+    },
+    {
+      "identity": "Ghoul",
+      "variant": 0,
+      "phase": "recovery",
+      "start": 215.601334,
+      "expected": 0.121428572,
+      "observed": 0.13376599999998007,
+      "frameAllowance": 0.017210494899999998,
+      "passed": true
+    },
+    {
+      "identity": "Ghoul",
+      "variant": 0,
+      "phase": "warning",
+      "start": 214.032211,
+      "expected": 0.29285717,
+      "observed": 0.300389000000024,
+      "frameAllowance": 0.0170040039,
+      "passed": true
+    },
+    {
+      "identity": "Ghoul",
+      "variant": 0,
+      "phase": "active",
+      "start": 214.3326,
+      "expected": 0.235714287,
+      "observed": 0.2508499999999856,
+      "frameAllowance": 0.0169584045,
+      "passed": true
+    },
+    {
+      "identity": "Ghoul",
+      "variant": 0,
+      "phase": "warning",
+      "start": 214.58345,
+      "expected": 0.378571451,
+      "observed": 0.3840639999999951,
+      "frameAllowance": 0.0170279967,
+      "passed": true
+    },
+    {
+      "identity": "Ghoul",
+      "variant": 0,
+      "phase": "active",
+      "start": 214.967514,
+      "expected": 0.2,
+      "observed": 0.20036300000001006,
+      "frameAllowance": 0.017133504299999998,
+      "passed": true
+    },
+    {
+      "identity": "Ghoul",
+      "variant": 0,
+      "phase": "warning",
+      "start": 215.167877,
+      "expected": 0.20714286,
+      "observed": 0.21679699999998547,
+      "frameAllowance": 0.017133504299999998,
+      "passed": true
+    },
+    {
+      "identity": "Ghoul",
+      "variant": 0,
+      "phase": "active",
+      "start": 215.384674,
+      "expected": 0.20714286,
+      "observed": 0.21666000000001873,
+      "frameAllowance": 0.0167670065,
+      "passed": true
+    },
+    {
+      "identity": "Ghoul",
+      "variant": 0,
+      "phase": "recovery",
+      "start": 217.807266,
+      "expected": 0.121428572,
+      "observed": 0.13333399999999074,
+      "frameAllowance": 0.0167683029,
+      "passed": true
+    },
+    {
+      "identity": "Ghoul",
+      "variant": 0,
+      "phase": "warning",
+      "start": 216.236115,
+      "expected": 0.29285717,
+      "observed": 0.3006849999999872,
+      "frameAllowance": 0.0171995034,
+      "passed": true
+    },
+    {
+      "identity": "Ghoul",
+      "variant": 0,
+      "phase": "active",
+      "start": 216.5368,
+      "expected": 0.235714287,
+      "observed": 0.25111799999999107,
+      "frameAllowance": 0.0170902,
+      "passed": true
+    },
+    {
+      "identity": "Ghoul",
+      "variant": 0,
+      "phase": "warning",
+      "start": 216.787918,
+      "expected": 0.378571451,
+      "observed": 0.3843230000000233,
+      "frameAllowance": 0.0170902,
+      "passed": true
+    },
+    {
+      "identity": "Ghoul",
+      "variant": 0,
+      "phase": "active",
+      "start": 217.172241,
+      "expected": 0.2,
+      "observed": 0.20063799999999787,
+      "frameAllowance": 0.017054897,
+      "passed": true
+    },
+    {
+      "identity": "Ghoul",
+      "variant": 0,
+      "phase": "warning",
+      "start": 217.372879,
+      "expected": 0.20714286,
+      "observed": 0.21699499999999716,
+      "frameAllowance": 0.017054897,
+      "passed": true
+    },
+    {
+      "identity": "Ghoul",
+      "variant": 0,
+      "phase": "active",
+      "start": 217.589874,
+      "expected": 0.20714286,
+      "observed": 0.2173919999999896,
+      "frameAllowance": 0.016770202799999998,
+      "passed": true
+    },
+    {
+      "identity": "Ghoul",
+      "variant": 0,
+      "phase": "recovery",
+      "start": 220.012833,
+      "expected": 0.121428572,
+      "observed": 0.1333309999999983,
+      "frameAllowance": 0.0176701026,
+      "passed": true
+    },
+    {
+      "identity": "Ghoul",
+      "variant": 0,
+      "phase": "warning",
+      "start": 218.441574,
+      "expected": 0.29285717,
+      "observed": 0.3001859999999965,
+      "frameAllowance": 0.016767496399999998,
+      "passed": true
+    },
+    {
+      "identity": "Ghoul",
+      "variant": 0,
+      "phase": "active",
+      "start": 218.74176,
+      "expected": 0.235714287,
+      "observed": 0.2508239999999944,
+      "frameAllowance": 0.0167732,
+      "passed": true
+    },
+    {
+      "identity": "Ghoul",
+      "variant": 0,
+      "phase": "warning",
+      "start": 218.992584,
+      "expected": 0.378571451,
+      "observed": 0.38455200000001355,
+      "frameAllowance": 0.0171254968,
+      "passed": true
+    },
+    {
+      "identity": "Ghoul",
+      "variant": 0,
+      "phase": "active",
+      "start": 219.377136,
+      "expected": 0.2,
+      "observed": 0.20092800000000466,
+      "frameAllowance": 0.0173998011,
+      "passed": true
+    },
+    {
+      "identity": "Ghoul",
+      "variant": 0,
+      "phase": "warning",
+      "start": 219.578064,
+      "expected": 0.20714286,
+      "observed": 0.21708699999999226,
+      "frameAllowance": 0.0170956069,
+      "passed": true
+    },
+    {
+      "identity": "Ghoul",
+      "variant": 0,
+      "phase": "active",
+      "start": 219.795151,
+      "expected": 0.20714286,
+      "observed": 0.21768199999999638,
+      "frameAllowance": 0.0176701026,
+      "passed": true
+    },
+    {
+      "identity": "LostSoul",
+      "variant": 1,
+      "phase": "recovery",
+      "start": 233.755585,
+      "expected": 0.75333333,
+      "observed": 0.7673149999999964,
+      "frameAllowance": 0.0168259984,
+      "passed": true
+    },
+    {
+      "identity": "LostSoul",
+      "variant": 1,
+      "phase": "warning",
+      "start": 232.569229,
+      "expected": 1.0333333,
+      "observed": 1.0357970000000023,
+      "frameAllowance": 0.0171603953,
+      "passed": true
+    },
+    {
+      "identity": "LostSoul",
+      "variant": 1,
+      "phase": "active",
+      "start": 233.605026,
+      "expected": 0.146666661,
+      "observed": 0.150558999999987,
+      "frameAllowance": 0.0168259984,
+      "passed": true
+    },
+    {
+      "identity": "LostSoul",
+      "variant": 1,
+      "phase": "recovery",
+      "start": 238.016449,
+      "expected": 0.75333333,
+      "observed": 0.7680970000000116,
+      "frameAllowance": 0.0170280041,
+      "passed": true
+    },
+    {
+      "identity": "LostSoul",
+      "variant": 1,
+      "phase": "warning",
+      "start": 236.831818,
+      "expected": 1.0333333,
+      "observed": 1.0343469999999968,
+      "frameAllowance": 0.0171158017,
+      "passed": true
+    },
+    {
+      "identity": "LostSoul",
+      "variant": 1,
+      "phase": "active",
+      "start": 237.866165,
+      "expected": 0.146666661,
+      "observed": 0.1502839999999992,
+      "frameAllowance": 0.0170122033,
+      "passed": true
+    },
+    {
+      "identity": "LostSoul",
+      "variant": 1,
+      "phase": "recovery",
+      "start": 242.2803,
+      "expected": 0.75333333,
+      "observed": 0.7688639999999793,
+      "frameAllowance": 0.0171714,
+      "passed": true
+    },
+    {
+      "identity": "LostSoul",
+      "variant": 1,
+      "phase": "warning",
+      "start": 241.092255,
+      "expected": 1.0333333,
+      "observed": 1.0371240000000057,
+      "frameAllowance": 0.0172868969,
+      "passed": true
+    },
+    {
+      "identity": "LostSoul",
+      "variant": 1,
+      "phase": "active",
+      "start": 242.129379,
+      "expected": 0.146666661,
+      "observed": 0.15092100000001096,
+      "frameAllowance": 0.017174099999999998,
+      "passed": true
+    },
+    {
+      "identity": "LostSoul",
+      "variant": 1,
+      "phase": "recovery",
+      "start": 246.539749,
+      "expected": 0.75333333,
+      "observed": 0.768462999999997,
+      "frameAllowance": 0.017175801299999998,
+      "passed": true
+    },
+    {
+      "identity": "LostSoul",
+      "variant": 1,
+      "phase": "warning",
+      "start": 245.354858,
+      "expected": 1.0333333,
+      "observed": 1.034561999999994,
+      "frameAllowance": 0.0170614013,
+      "passed": true
+    },
+    {
+      "identity": "LostSoul",
+      "variant": 1,
+      "phase": "active",
+      "start": 246.38942,
+      "expected": 0.146666661,
+      "observed": 0.15032899999999927,
+      "frameAllowance": 0.0170982,
+      "passed": true
+    },
+    {
+      "identity": "Elite_Skeleton",
+      "variant": 1,
+      "phase": "recovery",
+      "start": 250.04451,
+      "expected": 0.429999977,
+      "observed": 0.4343409999999892,
+      "frameAllowance": 0.0170040952,
+      "passed": true
+    },
+    {
+      "identity": "Elite_Skeleton",
+      "variant": 1,
+      "phase": "warning",
+      "start": 249.378159,
+      "expected": 0.57,
+      "observed": 0.5824409999999887,
+      "frameAllowance": 0.046867205,
+      "passed": true
+    },
+    {
+      "identity": "Elite_Skeleton",
+      "variant": 1,
+      "phase": "active",
+      "start": 249.9606,
+      "expected": 0.08,
+      "observed": 0.08391000000000304,
+      "frameAllowance": 0.017093898899999998,
+      "passed": true
+    },
+    {
+      "identity": "Elite_Skeleton",
+      "variant": 1,
+      "phase": "recovery",
+      "start": 251.649109,
+      "expected": 0.429999977,
+      "observed": 0.43441799999999375,
+      "frameAllowance": 0.0170599,
+      "passed": true
+    },
+    {
+      "identity": "Elite_Skeleton",
+      "variant": 1,
+      "phase": "warning",
+      "start": 250.97998,
+      "expected": 0.57,
+      "observed": 0.5856330000000014,
+      "frameAllowance": 0.0171825962,
+      "passed": true
+    },
+    {
+      "identity": "Elite_Skeleton",
+      "variant": 1,
+      "phase": "active",
+      "start": 251.565613,
+      "expected": 0.08,
+      "observed": 0.08349599999999668,
+      "frameAllowance": 0.0169252978,
+      "passed": true
+    },
+    {
+      "identity": "Elite_Skeleton",
+      "variant": 1,
+      "phase": "recovery",
+      "start": 253.254181,
+      "expected": 0.429999977,
+      "observed": 0.43400600000001077,
+      "frameAllowance": 0.017166999999999998,
+      "passed": true
+    },
+    {
+      "identity": "Elite_Skeleton",
+      "variant": 1,
+      "phase": "warning",
+      "start": 252.585266,
+      "expected": 0.57,
+      "observed": 0.5853340000000173,
+      "frameAllowance": 0.0171471016,
+      "passed": true
+    },
+    {
+      "identity": "Elite_Skeleton",
+      "variant": 1,
+      "phase": "active",
+      "start": 253.1706,
+      "expected": 0.08,
+      "observed": 0.08358099999998103,
+      "frameAllowance": 0.0169406963,
+      "passed": true
+    },
+    {
+      "identity": "Elite_Skeleton",
+      "variant": 1,
+      "phase": "recovery",
+      "start": 254.855682,
+      "expected": 0.429999977,
+      "observed": 0.4334570000000042,
+      "frameAllowance": 0.0168925023,
+      "passed": true
+    },
+    {
+      "identity": "Elite_Skeleton",
+      "variant": 1,
+      "phase": "warning",
+      "start": 254.1889,
+      "expected": 0.57,
+      "observed": 0.5834000000000117,
+      "frameAllowance": 0.0167687,
+      "passed": true
+    },
+    {
+      "identity": "Elite_Skeleton",
+      "variant": 1,
+      "phase": "active",
+      "start": 254.7723,
+      "expected": 0.08,
+      "observed": 0.08338200000000029,
+      "frameAllowance": 0.0168297982,
+      "passed": true
+    },
+    {
+      "identity": "Elite_Skeleton",
+      "variant": 1,
+      "phase": "recovery",
+      "start": 257.996552,
+      "expected": 0.429999977,
+      "observed": 0.4350279999999884,
+      "frameAllowance": 0.0171676019,
+      "passed": true
+    },
+    {
+      "identity": "Elite_Skeleton",
+      "variant": 1,
+      "phase": "warning",
+      "start": 257.328522,
+      "expected": 0.57,
+      "observed": 0.5843199999999911,
+      "frameAllowance": 0.0167676026,
+      "passed": true
+    },
+    {
+      "identity": "Elite_Skeleton",
+      "variant": 1,
+      "phase": "active",
+      "start": 257.912842,
+      "expected": 0.08,
+      "observed": 0.0837099999999964,
+      "frameAllowance": 0.0171676019,
+      "passed": true
+    },
+    {
+      "identity": "Elite_Skeleton",
+      "variant": 1,
+      "phase": "recovery",
+      "start": 259.600922,
+      "expected": 0.429999977,
+      "observed": 0.4345779999999877,
+      "frameAllowance": 0.0174916034,
+      "passed": true
+    },
+    {
+      "identity": "Elite_Skeleton",
+      "variant": 1,
+      "phase": "warning",
+      "start": 258.9325,
+      "expected": 0.57,
+      "observed": 0.5849999999999795,
+      "frameAllowance": 0.0171299951,
+      "passed": true
+    },
+    {
+      "identity": "Elite_Skeleton",
+      "variant": 1,
+      "phase": "active",
+      "start": 259.5175,
+      "expected": 0.08,
+      "observed": 0.08342200000004141,
+      "frameAllowance": 0.0168554,
+      "passed": true
+    },
+    {
+      "identity": "Elite_Skeleton",
+      "variant": 1,
+      "phase": "recovery",
+      "start": 261.2053,
+      "expected": 0.429999977,
+      "observed": 0.4339999999999691,
+      "frameAllowance": 0.0170734973,
+      "passed": true
+    },
+    {
+      "identity": "Elite_Skeleton",
+      "variant": 1,
+      "phase": "warning",
+      "start": 260.536743,
+      "expected": 0.57,
+      "observed": 0.5852049999999736,
+      "frameAllowance": 0.0170762969,
+      "passed": true
+    },
+    {
+      "identity": "Elite_Skeleton",
+      "variant": 1,
+      "phase": "active",
+      "start": 261.121948,
+      "expected": 0.08,
+      "observed": 0.08335200000004761,
+      "frameAllowance": 0.0167677013,
+      "passed": true
+    },
+    {
+      "identity": "Elite_Skeleton",
+      "variant": 1,
+      "phase": "recovery",
+      "start": 262.809174,
+      "expected": 0.429999977,
+      "observed": 0.4344260000000304,
+      "frameAllowance": 0.017134998199999998,
+      "passed": true
+    },
+    {
+      "identity": "Elite_Skeleton",
+      "variant": 1,
+      "phase": "warning",
+      "start": 262.141541,
+      "expected": 0.57,
+      "observed": 0.5836589999999546,
+      "frameAllowance": 0.0169317035,
+      "passed": true
+    },
+    {
+      "identity": "Elite_Skeleton",
+      "variant": 1,
+      "phase": "active",
+      "start": 262.7252,
+      "expected": 0.08,
+      "observed": 0.08397400000001198,
+      "frameAllowance": 0.0171583054,
+      "passed": true
+    }
+  ],
+  "scope": "Original instrumented runtime mechanism evidence. Not MonsterSupergroup integration acceptance; not a full unmodified-game comparison."
+}

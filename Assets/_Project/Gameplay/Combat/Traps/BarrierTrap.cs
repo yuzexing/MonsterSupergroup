@@ -11,7 +11,7 @@ using UnityEngine;
 
 namespace AstralShift.HellMaiden.Combat.Traps
 {
-	public class BarrierTrap : Trap
+	public partial class BarrierTrap : Trap
 	{
 		[SerializeField]
 		protected Transform trapTransform;
@@ -152,6 +152,7 @@ namespace AstralShift.HellMaiden.Combat.Traps
 
 		private IEnumerator InitializeCoroutine()
 		{
+			NetworkPhase = BarrierPhase.Framing;
 			if (targetPlayer)
 			{
 				base.transform.position = GameDirector.Instance.Player.transform.position;
@@ -164,20 +165,24 @@ namespace AstralShift.HellMaiden.Combat.Traps
 			{
 				trapTransform.rotation = Quaternion.Euler(45f, 0f, 0f);
 			}
-			if (hasSlowMo)
+			if (hasSlowMo && !networkAuthority)
 			{
 				SetTrapAsCameraTarget();
 			}
 			yield return new WaitForSeconds(onSpawnCameraTargetDuration + onSpawnCameraFramingTimeout);
-			float slowMoTimeScale = PauseManager.Instance.SlowMoTimeScaleValue;
-			if (hasSlowMo)
+			float slowMoTimeScale = networkAuthority ? networkEntryScale : PauseManager.Instance.SlowMoTimeScaleValue;
+			if (networkAuthority) networkEntryEffects?.Invoke(true);
+			else if (hasSlowMo)
 			{
 				slowMoRequestId = PauseManager.Instance.StartSlowMo(immediate: true);
 				GameDirector.Instance.Player.SetInvulnerable(state: true);
 				_isSlowMoActive = true;
 			}
 			GenerateCollider();
+			_collider.enabled = true;
 			CreateParticleSystems();
+			NetworkPhase = BarrierPhase.Building;
+			NetworkVisibleGroups = 0;
 			trapStartSoundInstance = OptionalAudio.CreateInstance(trapStartSound);
 			trapStartSoundInstance.set3DAttributes(GetFlattenedPosition(_allParticleSystems[0][0].transform.localPosition).To3DAttributes());
 			trapStartSoundInstance.start();
@@ -187,6 +192,7 @@ namespace AstralShift.HellMaiden.Combat.Traps
 			{
 				for (int i = _allParticleSystems.Count - 1; i >= 0; i--)
 				{
+					NetworkVisibleGroups++;
 					for (int num2 = _allParticleSystems[i].Length - 1; num2 >= 0; num2--)
 					{
 						ParticleSystem.MainModule main = _allParticleSystems[i][num2].main;
@@ -201,6 +207,7 @@ namespace AstralShift.HellMaiden.Combat.Traps
 			{
 				for (int i = 0; i < _allParticleSystems.Count; i++)
 				{
+					NetworkVisibleGroups++;
 					for (int j = 0; j < _allParticleSystems[i].Length; j++)
 					{
 						ParticleSystem.MainModule main2 = _allParticleSystems[i][j].main;
@@ -211,13 +218,15 @@ namespace AstralShift.HellMaiden.Combat.Traps
 					yield return spawnWaitInstance;
 				}
 			}
-			if (hasSlowMo)
+			if (networkAuthority) networkEntryEffects?.Invoke(false);
+			else if (hasSlowMo)
 			{
 				SetPlayerAsCameraTarget();
 				PauseManager.Instance.StopSlowMo(immediate: true, slowMoRequestId);
 				GameDirector.Instance.Player.SetInvulnerable(state: false);
 				_isSlowMoActive = false;
 			}
+			NetworkPhase = BarrierPhase.Shrinking;
 			onSpawnFinished?.Invoke();
 			for (int k = 0; k < _allParticleSystems.Count; k++)
 			{
@@ -238,6 +247,9 @@ namespace AstralShift.HellMaiden.Combat.Traps
 
 		public override void Stop()
 		{
+			if (networkReplica) { CancelNetworkLifecycle(); return; }
+			NetworkPhase = BarrierPhase.Stopping;
+			if (networkAuthority) networkEntryEffects?.Invoke(false);
 			if (_inOutCoroutine != null)
 			{
 				StopCoroutine(_inOutCoroutine);
@@ -270,6 +282,7 @@ namespace AstralShift.HellMaiden.Combat.Traps
 				yield return null;
 			}
 			_inOutCoroutine = null;
+			NetworkPhase = BarrierPhase.Complete;
 			onTrapEnd?.Invoke();
 			if (_allParticleSystems != null)
 			{
@@ -285,6 +298,7 @@ namespace AstralShift.HellMaiden.Combat.Traps
 
 		private void OnDestroy()
 		{
+			if (networkAuthority || networkReplica) CancelNetworkLifecycle();
 			trapStartSoundInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
 			trapStartSoundInstance.release();
 			ClearAllLoopInstances();
@@ -346,7 +360,7 @@ namespace AstralShift.HellMaiden.Combat.Traps
 
 		private void FixedUpdate()
 		{
-			if (Time.timeScale == 0f || _allParticleSystems == null || _points == null)
+			if (networkReplica || NetworkPhase == BarrierPhase.Stopping || NetworkPhase == BarrierPhase.Complete || Time.timeScale == 0f || _allParticleSystems == null || _points == null)
 			{
 				return;
 			}
@@ -424,7 +438,7 @@ namespace AstralShift.HellMaiden.Combat.Traps
 		protected virtual void CreateParticleSystems()
 		{
 			float num = _currentRadius - _collider.edgeRadius;
-			int num2 = Mathf.CeilToInt(MathF.PI * 2f * num / (particleSystemRadius * 2f));
+			int num2 = networkReplica ? networkReplicaGroups : Mathf.CeilToInt(MathF.PI * 2f * num / (particleSystemRadius * 2f));
 			float num3 = 360f / (float)num2;
 			if (_allParticleSystems == null)
 			{
@@ -435,7 +449,7 @@ namespace AstralShift.HellMaiden.Combat.Traps
 			{
 				_particleLoopSoundInstances = new List<EventInstance>();
 			}
-			trapTransform.position = new Vector3(trapTransform.position.x, trapTransform.position.y, 100f);
+			trapTransform.position = new Vector3(trapTransform.position.x, trapTransform.position.y, networkAuthority || networkReplica ? 0f : 100f);
 			for (int i = 0; i < num2; i++)
 			{
 				float f = MathF.PI / 180f * num3 * (float)i;
@@ -510,7 +524,7 @@ namespace AstralShift.HellMaiden.Combat.Traps
 
 		protected virtual void UpdateParticleSystemsPositions()
 		{
-			if (_allParticleSystems == null || _allParticleSystems[0][0].transform.localPosition.magnitude <= minRadius)
+			if (_allParticleSystems == null || _allParticleSystems.Count == 0 || _allParticleSystems[0][0].transform.localPosition.magnitude <= minRadius)
 			{
 				return;
 			}

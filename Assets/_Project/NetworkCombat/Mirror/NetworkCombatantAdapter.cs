@@ -66,6 +66,7 @@ namespace MonsterSupergroup.NetworkCombat
         public override void OnStartServer()
         {
             base.OnStartServer();
+            GetComponent<NetworkEnemySimulationAgent>()?.PrepareBirthForRegistration();
             GetComponent<NetworkPlayerBootstrap>()?.EnsurePlayerRuntimeInitialized();
             NetworkCombatWorld world = NetworkCombatWorld.Instance;
             if (world == null)
@@ -97,6 +98,7 @@ namespace MonsterSupergroup.NetworkCombat
         public override void OnStartClient()
         {
             base.OnStartClient();
+            GetComponent<NetworkEnemySimulationAgent>()?.PrepareBirthForRegistration();
             GetComponent<NetworkPlayerBootstrap>()?.EnsurePlayerRuntimeInitialized();
             combatant.ConfigureEntityId(netId);
             combatant.ConfigureCanonicalConsequenceExecution(NetworkServer.active);

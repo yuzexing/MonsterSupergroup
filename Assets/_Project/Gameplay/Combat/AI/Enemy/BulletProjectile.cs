@@ -57,6 +57,8 @@ namespace AstralShift.HellMaiden.AI.Enemy
 
 		public Action OnReturn { get; set; }
         public Action OnDisabled { get; set; }
+        // Optional network flight: local camera bounds must not terminate a shared projectile.
+        public Func<Vector3> NetworkFlightPosition { get; set; }
 
 		protected override void InitializeStateMachine()
 		{
@@ -166,6 +168,12 @@ namespace AstralShift.HellMaiden.AI.Enemy
 				return;
 			}
 			previousPosition = base.transform.position;
+			if (NetworkFlightPosition != null)
+            {
+                transform.position = NetworkFlightPosition();
+                currentPosition = transform.position;
+                return;
+            }
 			if (projectileMovement != null)
 			{
 				projectileMovement.MovementUpdate(_direction, rotationTransform, speed);

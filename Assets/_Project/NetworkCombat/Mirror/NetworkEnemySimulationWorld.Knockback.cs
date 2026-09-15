@@ -96,6 +96,7 @@ namespace MonsterSupergroup.NetworkCombat
 
         private void LateUpdate()
         {
+            UpdateReferenceTrapPresentation();
             if (isServer) PruneUltimateKnockbackPulses();
             if (!NetworkClient.active) { pendingClientKnockbacks.Clear(); return; }
             pendingKnockbackIds.Clear();

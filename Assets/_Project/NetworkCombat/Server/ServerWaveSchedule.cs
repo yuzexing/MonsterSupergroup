@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace MonsterSupergroup.NetworkCombat
 {
-    public enum WavePhase : byte { Disabled, Waiting, Running, Paused, Stopped }
+    public enum WavePhase : byte { Disabled, Waiting, Running, Paused, Stopped, Completed }
 
     [Serializable]
     public struct WaveProgressSnapshot
@@ -16,7 +16,11 @@ namespace MonsterSupergroup.NetworkCombat
         public double WaveDuration;
         public int Planned, Spawned, Skipped, Alive, Limit;
         public long TotalSpawned, TotalSkipped;
-        public double Remaining => Wave > 0 ? Math.Max(0, Wave * WaveDuration - Elapsed) : WaveDuration;
+        public bool ReferenceStage;
+        public double StageEndTime;
+        public int CountedAlive, ActiveClips, EvidenceBlocked;
+        public long TotalAttempts, AbandonedBudget;
+        public double Remaining => ReferenceStage ? Math.Max(0, StageEndTime - Elapsed) : Wave > 0 ? Math.Max(0, Wave * WaveDuration - Elapsed) : WaveDuration;
     }
 
     /// <summary>Immutable settings captured once at the server's start-run boundary.</summary>
@@ -26,6 +30,7 @@ namespace MonsterSupergroup.NetworkCombat
         public readonly int Count, Limit, Attempts;
         public readonly float Radius, PlayerClearance;
         public readonly WaveSpawnProgram Program;
+        public readonly ReferenceWaveProgram Reference;
         public IReadOnlyList<GameObject> Prefabs { get; }
 
         public WaveParameters(double duration, int count, double interval, int limit,
@@ -50,6 +55,12 @@ namespace MonsterSupergroup.NetworkCombat
             Program = program; Count = program.CountInWave(1); Interval = 0;
             Prefabs = Array.AsReadOnly((GameObject[])(prefabs ?? throw new ArgumentNullException(nameof(prefabs))).Clone());
         }
+        public WaveParameters(ReferenceWaveProgram reference, GameObject[] prefabs, int limit, int attempts)
+            : this(30, 1, 30, limit, 5, 2, attempts)
+        {
+            Reference = reference ?? throw new ArgumentNullException(nameof(reference));
+            Prefabs = Array.AsReadOnly((GameObject[])prefabs.Clone());
+        }
         private static bool FinitePositive(double value) => value > 0 && !double.IsInfinity(value) && !double.IsNaN(value);
     }
 
@@ -59,14 +70,17 @@ namespace MonsterSupergroup.NetworkCombat
         public readonly int Wave, Index;
         public readonly int PrefabIndex;
         public readonly double ScheduledTime;
+        public readonly int ClipIndex, FormationIndex;
         public WaveSpawnOpportunity(long sequence, int wave, int index)
             : this(sequence, wave, index, 0, 0) { }
         public WaveSpawnOpportunity(long sequence, int wave, int index, int prefabIndex, double time)
-        { Sequence = sequence; Wave = wave; Index = index; PrefabIndex = prefabIndex; ScheduledTime = time; }
+            : this(sequence, wave, index, prefabIndex, time, -1, -1) { }
+        public WaveSpawnOpportunity(long sequence, int wave, int index, int prefabIndex, double time, int clipIndex, int formationIndex)
+        { Sequence = sequence; Wave = wave; Index = index; PrefabIndex = prefabIndex; ScheduledTime = time; ClipIndex = clipIndex; FormationIndex = formationIndex; }
     }
 
     /// <summary>Server clock only. No Unity coroutines, enemies, player registry or network transport.</summary>
-    public sealed class ServerWaveSchedule
+    public sealed partial class ServerWaveSchedule
     {
         private readonly WaveParameters settings;
         private WaveProgressSnapshot state;
@@ -83,10 +97,12 @@ namespace MonsterSupergroup.NetworkCombat
             lastTime = now;
             state = new WaveProgressSnapshot { RunId = runId, Phase = WavePhase.Running, Wave = 1,
                 WaveDuration = parameters.Duration, Planned = parameters.Count, Limit = parameters.Limit };
+            if (settings.Reference != null) InitializeReference();
         }
 
         public bool Tick(double now, bool hasActivePlayer, int alive, out WaveSpawnOpportunity opportunity)
         {
+            if (settings.Reference != null) throw new InvalidOperationException("Reference stages require per-clip alive counts.");
             opportunity = default;
             if (state.Phase == WavePhase.Stopped) return false;
             if (pendingSequence != 0) throw new InvalidOperationException("Resolve the previous spawn decision first.");
@@ -129,6 +145,7 @@ namespace MonsterSupergroup.NetworkCombat
 
         public bool Resolve(WaveSpawnOpportunity opportunity, bool spawned)
         {
+            if (settings.Reference != null) return ResolveReference(opportunity, spawned);
             if (state.Phase == WavePhase.Stopped || pendingSequence == 0 || opportunity.Sequence != pendingSequence)
                 return false;
             pendingSequence = 0;
@@ -138,6 +155,6 @@ namespace MonsterSupergroup.NetworkCombat
             return true;
         }
 
-        public void Stop() { pendingSequence = groupEnd = 0; state.Phase = WavePhase.Stopped; }
+        public void Stop() { pendingSequence = groupEnd = 0; state.Phase = WavePhase.Stopped; CancelReferenceTraps(); }
     }
 }

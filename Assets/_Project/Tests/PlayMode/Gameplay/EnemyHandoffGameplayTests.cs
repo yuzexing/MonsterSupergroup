@@ -126,6 +126,69 @@ namespace MonsterSupergroup.Gameplay.Tests
             yield break;
         }
 
+        [UnityTest]
+        public IEnumerator DashCheckpointRestoresMotionOnlyInsideRemainingActiveWindow()
+        {
+#if UNITY_EDITOR
+            var prefab=AssetDatabase.LoadAssetAtPath<GameObject>("Assets/_Project/Content/NetworkCombat/Limbo/Dash/ReferenceBrotchiDash.prefab");
+            var agent=Spawn(prefab);
+            yield return WaitFor(()=>agent.ProductEnemyInitialized&&agent.Authority.RunsCombatDecisions,"Dash ready");
+            var enemy=agent.GetComponent<EnemyController>();var dash=agent.GetComponent<EnemyAttackDash>();
+            Vector2 pose=enemy.rigidBody.position;
+            double start=EnemySimulationClock.CombatNow;
+            var action=new EnemyActionState{Dash=true,ActionId=77,Phase=EnemyAttackPresentationPhase.Warning,
+                WarningStartedAt=start,WarningUntil=start+.78,ActiveUntil=start+1.209999948,RecoveryUntil=start+1.289999948,NextAttackAt=start+1.789999948,
+                Facing=Vector2.right,TargetPosition=pose+Vector2.right*3,DashStart=pose-Vector2.right*2,DashEnd=pose+Vector2.right*4,
+                DashLastPosition=pose,DashWarningOrigin=pose-Vector2.right*2};
+            int originalMask=enemy.collider.excludeLayers;
+            foreach(double age in new[]{.2,.95,1.25,2.0})
+            {
+                enemy.SuspendSimulationExecution();enemy.RestoreSimulationAction(action,start+age);
+                var restored=enemy.CaptureSimulationAction(start+age);
+                Assert.That(restored.ActionId,Is.EqualTo(77));Assert.That(restored.DashStart,Is.EqualTo(action.DashStart));
+                Assert.That(restored.DashLastPosition,Is.EqualTo(pose));Assert.That(enemy.rigidBody.position,Is.EqualTo(pose),"Restoring state must not jump back to the dash origin.");
+                bool active=age>.78&&age<1.21;
+                Assert.That(dash.attackCollider.enabled&&dash.damageInteraction.enabled,Is.EqualTo(active));
+                if(active){Assert.That(enemy.rigidBody.simulated,Is.True);Assert.That(enemy.rigidBody.constraints,Is.EqualTo(RigidbodyConstraints2D.FreezeRotation));Assert.That(enemy.collider.excludeLayers.value,Is.EqualTo(64));}
+                enemy.SuspendSimulationExecution();Assert.That(dash.attackCollider.enabled||dash.damageInteraction.enabled,Is.False);
+                Assert.That(enemy.collider.excludeLayers.value,Is.EqualTo(originalMask));
+            }
+#endif
+            yield break;
+        }
+
+        [UnityTest]
+        public IEnumerator ReferenceRepositionAppliesPoseEvenWhenServerRemainsSimulator()
+        {
+#if UNITY_EDITOR
+            var prefab = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/_Project/Content/NetworkCombat/Limbo/Stage2/ReferenceSkeleton.prefab");
+            var instance = Object.Instantiate(prefab, Owner.transform.position + Vector3.right * 8, Quaternion.identity);
+            var agent = instance.GetComponent<NetworkEnemySimulationAgent>();
+            agent.ConfigureBirth(new EnemyBirthParameters { Enabled = true, SourceEnemy = "Skeleton", Variant = 0,
+                Health = 50, Damage = 50, Speed = 2, SpeedMultiplier = 1.1f, Xp = 7, Knockback = 1,
+                Wind = 1, Counted = true, ResetOnReposition = true });
+            agent.ConfigureInitialServerTarget(Owner.netId); NetworkServer.Spawn(instance);
+            yield return WaitFor(() => agent.ProductEnemyInitialized && agent.Authority.RunsCombatDecisions, "reference ready");
+            World.Registry.TryGetLatestSnapshot(agent.netId, out var pose);
+            var assignment = World.Registry.AssignServerAuthoritative(agent.netId, Owner.netId);
+            pose.AssignmentEpoch = assignment.Epoch;
+            agent.SetServerHandoff(new EnemySimulationHandoff { Assignment = assignment,
+                Checkpoint = new EnemySimulationCheckpoint { Movement = pose }, Reason = EnemyTargetChangeReason.Forced });
+            Vector2 destination = (Vector2)agent.transform.position + Vector2.up * 9;
+            uint epoch = agent.Assignment.Epoch;
+            var reposition = typeof(NetworkEnemySimulationWorld).GetMethod("RepositionReferenceEnemy",
+                System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic);
+            Assert.That((bool)reposition.Invoke(World, new object[] { agent, destination }), Is.True);
+            Assert.That(Vector2.Distance(agent.transform.position, destination), Is.LessThan(.001f), "Handoff must apply the new pose, not only renew the registry epoch.");
+            Assert.That(Vector2.Distance(agent.GetComponent<Rigidbody2D>().position, destination), Is.LessThan(.001f));
+            Assert.That(agent.Assignment.Epoch, Is.GreaterThan(epoch));
+            Assert.That(agent.Assignment.Host, Is.EqualTo(EnemySimulationHost.ServerAuthoritative));
+            Assert.That(agent.ReferenceResetVersion, Is.EqualTo(1));
+            Assert.That(agent.GetComponent<EnemyController>().stats.SpeedMultiplier, Is.EqualTo(1));
+#endif
+            yield break;
+        }
+
         private NetworkEnemySimulationAgent Spawn(GameObject prefab)
         {
             var instance = Object.Instantiate(prefab, Owner.transform.position + Vector3.right * 8, Quaternion.identity);

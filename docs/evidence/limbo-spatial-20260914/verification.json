@@ -1,0 +1,67 @@
+{
+  "meaning": "Background implementation and automated verification only; no new rendered spatial Host/Client run.",
+  "originalClipsMatched": 31,
+  "enemyCurvesMatched": true,
+  "sourceHashes": [
+    {
+      "path": "F:\\DecomplieLatest\\HellMaiden\\ExportedProject\\Assets\\MonoBehaviour\\Progression_Limbo.playable",
+      "sha256": "2059eb4fa53911de7330f74d210b4bda71f7a4340ce6358e74d4438a5c6074f6",
+      "unchanged": true
+    },
+    {
+      "path": "F:\\DecomplieLatest\\HellMaiden\\ExportedProject\\Assets\\MonoBehaviour\\EnemyDB.asset",
+      "sha256": "8552b0dc21300ea9651c2c57e8c143deb83be5bf86dd5c14ab3f37ccacb8c300",
+      "unchanged": true
+    },
+    {
+      "path": "F:\\DecomplieLatest\\HellMaiden\\ExportedProject\\Assets\\Scenes\\Game Scenes\\Circle 1 - Limbo\\Level_Limbo.unity",
+      "sha256": "a5b5b0a09a5171fbbbe9c85aeebdf9d41681e8d0681369d672c5404cfd353456",
+      "unchanged": true
+    },
+    {
+      "path": "F:\\DecomplieLatest\\HellMaiden\\ExportedProject\\Assets\\GameObject\\BarrierTrap.prefab",
+      "sha256": "1fa3753be77fbc713c252ff61dd57df7a399d88a1667c6a2b2c7811c0e03e3a9",
+      "unchanged": true
+    },
+    {
+      "path": "F:\\DecomplieLatest\\HellMaiden\\ExportedProject\\Assets\\GameObject\\FireParticles.prefab",
+      "sha256": "4947173cf992da79f98c2dee3c1c4c453f0d106344b32da178ae47efa584ff57",
+      "unchanged": true
+    },
+    {
+      "path": "F:\\DecomplieLatest\\HellMaiden\\ExportedProject\\Assets\\GameObject\\Burst Spawner.prefab",
+      "sha256": "6f6452d1d67a52111d077e299a6392921acda00626d4678102b07339b4edd1dc",
+      "unchanged": true
+    },
+    {
+      "path": "F:\\DecomplieLatest\\HellMaiden\\ExportedProject\\Assets\\Scripts\\Assembly-CSharp\\AstralShift\\HellMaiden\\Combat\\Spawners\\BarrierTrapSpawner.cs",
+      "sha256": "1be4584376f65a740550780480bd4671f45c7ab9ae47fb81ca7fb8731e1ec97e",
+      "unchanged": true
+    },
+    {
+      "path": "F:\\DecomplieLatest\\HellMaiden\\ExportedProject\\Assets\\Scripts\\Assembly-CSharp\\AstralShift\\HellMaiden\\Combat\\Spawners\\TrapSpawner.cs",
+      "sha256": "ef93b62e3a23c50ce102b5df762785890c9355f588892931649a8c01629a379e",
+      "unchanged": true
+    }
+  ],
+  "tests": [
+    {
+      "file": "spatial-edit-release.xml",
+      "total": 30,
+      "passed": 30,
+      "result": "Passed"
+    },
+    {
+      "file": "spatial-play-final.xml",
+      "total": 17,
+      "passed": 17,
+      "result": "Passed"
+    }
+  ],
+  "identicalHostClientFiles": 489,
+  "networkCombatDllSha256": "d8e2d9480aaaec3e00e37f0b35979ecbeafef5aacade72e23d0b0ec4e61dbbd5",
+  "previousObservedStage2Build": "Builds/LimboStage2Observed-20260914",
+  "fullEnabled": false,
+  "graphicalSpatialValidation": "pending",
+  "stage2PairContinuous": "pending"
+}

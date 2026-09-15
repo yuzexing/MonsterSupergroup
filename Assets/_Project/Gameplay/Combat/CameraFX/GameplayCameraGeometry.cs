@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections.Generic;
 using Com.LuisPedroFonseca.ProCamera2D;
 
 namespace MonsterSupergroup.Gameplay.Combat
@@ -16,12 +17,34 @@ namespace MonsterSupergroup.Gameplay.Combat
             bounds.Encapsulate(OnGround(camera.ViewportPointToRay(Vector3.one)));
             return bounds;
         }
-        public static void ConstrainNordic(Camera camera, ProCamera2D rig, Bounds map)
+        public static Bounds ClampView(Bounds view, Bounds map)
+        {
+            var center = view.center;
+            center.x = Mathf.Clamp(center.x, map.min.x + view.extents.x, map.max.x - view.extents.x);
+            center.y = Mathf.Clamp(center.y, map.min.y + view.extents.y, map.max.y - view.extents.y);
+            view.center = center;
+            return view;
+        }
+
+        // Zero means at least one participant still sees the enemy. No views means no decision.
+        public static float MinimumOutsideDistance(Vector2 position, IReadOnlyList<Bounds> views)
+        {
+            float result = float.PositiveInfinity;
+            foreach (var view in views)
+            {
+                var outside = new Vector2(Mathf.Max(0, Mathf.Abs(position.x - view.center.x) - view.extents.x),
+                    Mathf.Max(0, Mathf.Abs(position.y - view.center.y) - view.extents.y));
+                result = Mathf.Min(result, outside.magnitude);
+            }
+            return result;
+        }
+
+        public static void ConstrainNordic(Camera camera, ProCamera2D rig, Bounds map, float distance = 10)
         {
             camera.orthographic = false; camera.fieldOfView = 80;
-            var position = camera.transform.position; position.z = -10;
+            var position = camera.transform.position; position.z = -distance;
             camera.transform.SetPositionAndRotation(position, Quaternion.identity);
-            float halfHeight = 10 * Mathf.Tan(40 * Mathf.Deg2Rad);
+            float halfHeight = distance * Mathf.Tan(40 * Mathf.Deg2Rad);
             int height = camera.targetTexture != null ? camera.targetTexture.height : Screen.height;
             float displayAspect = camera.targetTexture != null ? (float)camera.targetTexture.width / height : (float)Screen.width / Mathf.Max(1, height);
             float pixel = 2 * halfHeight / Mathf.Max(1, height);
@@ -31,8 +54,9 @@ namespace MonsterSupergroup.Gameplay.Combat
             if (Application.isPlaying && rig.GameCamera != null && Mathf.Abs(rig.ScreenSizeInWorldCoordinates.x - 2 * halfHeight * aspect) > .001f)
             { rig.CalculateScreenSize(); camera.aspect = aspect; }
             Bounds view = ViewBounds(camera);
-            position.x += Mathf.Clamp(view.center.x, map.min.x + view.extents.x, map.max.x - view.extents.x) - view.center.x;
-            position.y += Mathf.Clamp(view.center.y, map.min.y + view.extents.y, map.max.y - view.extents.y) - view.center.y;
+            var clamped = ClampView(view, map);
+            position.x += clamped.center.x - view.center.x;
+            position.y += clamped.center.y - view.center.y;
             camera.transform.position = position;
         }
     }

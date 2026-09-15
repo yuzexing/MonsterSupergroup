@@ -2,6 +2,24 @@
   "version": 1,
   "tools": [
     {
+      "id": "validate.checkout",
+      "name": "Git 检出完整性",
+      "category": "校验",
+      "description": "在启动 Unity 前检查 Git LFS 实体、资源与 meta 配对、FMOD 平台设置及 Rewired 安装定位。",
+      "audience": "人工 / AI",
+      "impact": "只读检查；不下载、不恢复、不修改插件或玩法资产。",
+      "output": "Logs/RepositoryIntegrity/checkout.json",
+      "condition": "",
+      "parameters": [
+        "ProjectRoot",
+        "ReportPath"
+      ],
+      "writesAssets": false,
+      "maintenance": false,
+      "script": "Tools/Scenarios/Check-ProjectCheckout.ps1",
+      "source": "Tools/Scenarios/Check-ProjectCheckout.ps1"
+    },
+    {
       "id": "sample.gas-rebuild",
       "name": "重建 GAS Vertical Slice",
       "category": "维护与样例",

@@ -6,7 +6,7 @@ using UnityEngine.Timeline;
 
 namespace MonsterSupergroup.NetworkCombat
 {
-    public static class NetworkWaveTimelineCompiler
+    public static partial class NetworkWaveTimelineCompiler
     {
         public static WaveSpawnProgram Compile(TimelineAsset timeline, double waveDuration, out GameObject[] prefabs)
         {

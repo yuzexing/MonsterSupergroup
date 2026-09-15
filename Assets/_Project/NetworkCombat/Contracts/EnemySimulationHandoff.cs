@@ -3,7 +3,7 @@ using AstralShift.HellMaiden.AI;
 
 namespace MonsterSupergroup.NetworkCombat
 {
-    public enum EnemyTargetChangeReason : byte { Spawn, TargetDowned, TargetDisconnected, TargetUnavailable, Forced, Resume, Timeout, SimulatorReady }
+    public enum EnemyTargetChangeReason : byte { Spawn, TargetDowned, TargetDisconnected, TargetUnavailable, Forced, Resume, Timeout, SimulatorReady, ReferenceReposition }
     public enum EnemyTargetChangeResult : byte { Accepted, Unchanged, UnknownEnemy, EnemyDead, InvalidTarget, NotServer }
 
     [Serializable]
@@ -24,7 +24,9 @@ namespace MonsterSupergroup.NetworkCombat
         public bool IsFinite => (byte)Action.Phase <= (byte)EnemyAttackPresentationPhase.Cancelled &&
             EnemyKnockbackSettings.Finite(Action.WarningStartedAt) && EnemyKnockbackSettings.Finite(Action.WarningUntil) &&
             EnemyKnockbackSettings.Finite(Action.ActiveUntil) && EnemyKnockbackSettings.Finite(Action.RecoveryUntil) &&
-            EnemyKnockbackSettings.Finite(Action.NextAttackAt) && Finite(Action.Facing) && Finite(Action.TargetPosition) && Finite(Action.ProjectileDirection) && ValidReceipts &&
+            EnemyKnockbackSettings.Finite(Action.NextAttackAt) && Finite(Action.Facing) && Finite(Action.TargetPosition) && Finite(Action.ProjectileDirection) &&
+            (!Action.Dash || (Finite(Action.DashStart) && Finite(Action.DashEnd) && Finite(Action.DashLastPosition) && Finite(Action.DashWarningOrigin) &&
+                Action.WarningUntil > Action.WarningStartedAt && Action.ActiveUntil > Action.WarningUntil && Action.RecoveryUntil >= Action.ActiveUntil)) && ValidReceipts &&
             (!Knockback.Active || (KnockbackSettings.IsValid && Finite(Knockback.Start) && Finite(Knockback.End) &&
             Finite(Knockback.LastPosition) && EnemyKnockbackSettings.Finite(Knockback.Elapsed) && Knockback.Elapsed >= 0 &&
             EnemyKnockbackSettings.Finite(Knockback.Duration) && Knockback.Duration > 0 &&

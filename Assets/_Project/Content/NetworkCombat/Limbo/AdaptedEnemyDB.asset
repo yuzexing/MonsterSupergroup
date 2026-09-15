@@ -1,0 +1,507 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 27fa8e8dbf604c1a9522808b3c4d5cde, type: 3}
+  m_Name: AdaptedEnemyDB
+  m_EditorClassIdentifier: MonsterSupergroup.Gameplay.Combat::EnemyDatabase
+  enemies:
+  - enemyName: Skeleton
+    enemyData:
+    - variantName: lvl1
+      overrideGlobalLootSettings: 0
+      lootSettings: {fileID: 0}
+      stats:
+        baseStats:
+          hp: 50
+          damage: 50
+          xp: 7
+          speed: 2
+          knockbackMultiplier: 1
+          stunTime: 0
+          windMultiplier: 1
+        currentStats:
+          hp: 0
+          damage: 0
+          xp: 0
+          speed: 0
+          knockbackMultiplier: 0
+          stunTime: 0
+          windMultiplier: 0
+        multipliers:
+          hpMultiplier: 1
+          damageMultiplier: 1
+          xpMultiplier: 1
+          speedMultiplier: 1
+      rubberbandMaxDistance: 20
+      colorLUT: {fileID: 0}
+      hueColor: {r: 0, g: 0, b: 0, a: 0}
+    - variantName: fast
+      overrideGlobalLootSettings: 0
+      lootSettings: {fileID: 0}
+      stats:
+        baseStats:
+          hp: 50
+          damage: 50
+          xp: 6
+          speed: 6
+          knockbackMultiplier: 1
+          stunTime: 0
+          windMultiplier: 1
+        currentStats:
+          hp: 0
+          damage: 0
+          xp: 0
+          speed: 0
+          knockbackMultiplier: 0
+          stunTime: 0
+          windMultiplier: 0
+        multipliers:
+          hpMultiplier: 1
+          damageMultiplier: 1
+          xpMultiplier: 1
+          speedMultiplier: 1
+      rubberbandMaxDistance: 20
+      colorLUT: {fileID: 0}
+      hueColor: {r: 0, g: 0, b: 0, a: 0}
+    - variantName: lvl2
+      overrideGlobalLootSettings: 0
+      lootSettings: {fileID: 0}
+      stats:
+        baseStats:
+          hp: 250
+          damage: 50
+          xp: 7
+          speed: 3
+          knockbackMultiplier: 1
+          stunTime: 0
+          windMultiplier: 1
+        currentStats:
+          hp: 0
+          damage: 0
+          xp: 0
+          speed: 0
+          knockbackMultiplier: 0
+          stunTime: 0
+          windMultiplier: 0
+        multipliers:
+          hpMultiplier: 1
+          damageMultiplier: 1
+          xpMultiplier: 1
+          speedMultiplier: 1
+      rubberbandMaxDistance: 20
+      colorLUT: {fileID: 0}
+      hueColor: {r: 0, g: 0, b: 0, a: 0}
+  - enemyName: Brotchi
+    enemyData:
+    - variantName: lvl1
+      overrideGlobalLootSettings: 0
+      lootSettings: {fileID: 0}
+      stats:
+        baseStats:
+          hp: 20
+          damage: 50
+          xp: 5
+          speed: 3
+          knockbackMultiplier: 1
+          stunTime: 0
+          windMultiplier: 1
+        currentStats:
+          hp: 0
+          damage: 0
+          xp: 0
+          speed: 0
+          knockbackMultiplier: 0
+          stunTime: 0
+          windMultiplier: 0
+        multipliers:
+          hpMultiplier: 1
+          damageMultiplier: 1
+          xpMultiplier: 1
+          speedMultiplier: 1
+      rubberbandMaxDistance: 20
+      colorLUT: {fileID: 0}
+      hueColor: {r: 0, g: 0, b: 0, a: 0}
+    - variantName: lvl2
+      overrideGlobalLootSettings: 0
+      lootSettings: {fileID: 0}
+      stats:
+        baseStats:
+          hp: 60
+          damage: 60
+          xp: 6
+          speed: 4
+          knockbackMultiplier: 1
+          stunTime: 0
+          windMultiplier: 1
+        currentStats:
+          hp: 0
+          damage: 0
+          xp: 0
+          speed: 0
+          knockbackMultiplier: 0
+          stunTime: 0
+          windMultiplier: 0
+        multipliers:
+          hpMultiplier: 1
+          damageMultiplier: 1
+          xpMultiplier: 1
+          speedMultiplier: 1
+      rubberbandMaxDistance: 20
+      colorLUT: {fileID: 0}
+      hueColor: {r: 0, g: 0, b: 0, a: 0}
+  - enemyName: Elite_Skeleton
+    enemyData:
+    - variantName: lvl1
+      overrideGlobalLootSettings: 0
+      lootSettings: {fileID: 0}
+      stats:
+        baseStats:
+          hp: 1200
+          damage: 200
+          xp: 25
+          speed: 6
+          knockbackMultiplier: 0
+          stunTime: 0
+          windMultiplier: 1
+        currentStats:
+          hp: 0
+          damage: 0
+          xp: 0
+          speed: 0
+          knockbackMultiplier: 0
+          stunTime: 0
+          windMultiplier: 0
+        multipliers:
+          hpMultiplier: 1
+          damageMultiplier: 1
+          xpMultiplier: 1
+          speedMultiplier: 1
+      rubberbandMaxDistance: 20
+      colorLUT: {fileID: 0}
+      hueColor: {r: 0, g: 0, b: 0, a: 0}
+    - variantName: lvl2
+      overrideGlobalLootSettings: 0
+      lootSettings: {fileID: 0}
+      stats:
+        baseStats:
+          hp: 2600
+          damage: 200
+          xp: 25
+          speed: 6
+          knockbackMultiplier: 0
+          stunTime: 0
+          windMultiplier: 1
+        currentStats:
+          hp: 0
+          damage: 0
+          xp: 0
+          speed: 0
+          knockbackMultiplier: 0
+          stunTime: 0
+          windMultiplier: 0
+        multipliers:
+          hpMultiplier: 1
+          damageMultiplier: 1
+          xpMultiplier: 1
+          speedMultiplier: 1
+      rubberbandMaxDistance: 20
+      colorLUT: {fileID: 0}
+      hueColor: {r: 0, g: 0, b: 0, a: 0}
+  - enemyName: Imp
+    enemyData:
+    - variantName: lvl1
+      overrideGlobalLootSettings: 0
+      lootSettings: {fileID: 0}
+      stats:
+        baseStats:
+          hp: 50
+          damage: 50
+          xp: 7
+          speed: 2
+          knockbackMultiplier: 1
+          stunTime: 0
+          windMultiplier: 1
+        currentStats:
+          hp: 0
+          damage: 0
+          xp: 0
+          speed: 0
+          knockbackMultiplier: 0
+          stunTime: 0
+          windMultiplier: 0
+        multipliers:
+          hpMultiplier: 1
+          damageMultiplier: 1
+          xpMultiplier: 1
+          speedMultiplier: 1
+      rubberbandMaxDistance: 20
+      colorLUT: {fileID: 0}
+      hueColor: {r: 0, g: 0, b: 0, a: 0}
+    - variantName: lvl2
+      overrideGlobalLootSettings: 0
+      lootSettings: {fileID: 0}
+      stats:
+        baseStats:
+          hp: 150
+          damage: 70
+          xp: 6
+          speed: 2
+          knockbackMultiplier: 1
+          stunTime: 0
+          windMultiplier: 1
+        currentStats:
+          hp: 0
+          damage: 0
+          xp: 0
+          speed: 0
+          knockbackMultiplier: 0
+          stunTime: 0
+          windMultiplier: 0
+        multipliers:
+          hpMultiplier: 1
+          damageMultiplier: 1
+          xpMultiplier: 1
+          speedMultiplier: 1
+      rubberbandMaxDistance: 20
+      colorLUT: {fileID: 0}
+      hueColor: {r: 0, g: 0, b: 0, a: 0}
+  - enemyName: Brotchi_Dash
+    enemyData:
+    - variantName: lvl1
+      overrideGlobalLootSettings: 0
+      lootSettings: {fileID: 0}
+      stats:
+        baseStats:
+          hp: 70
+          damage: 50
+          xp: 7
+          speed: 6
+          knockbackMultiplier: 1
+          stunTime: 0
+          windMultiplier: 1
+        currentStats:
+          hp: 0
+          damage: 0
+          xp: 0
+          speed: 0
+          knockbackMultiplier: 0
+          stunTime: 0
+          windMultiplier: 0
+        multipliers:
+          hpMultiplier: 1
+          damageMultiplier: 1
+          xpMultiplier: 1
+          speedMultiplier: 1
+      rubberbandMaxDistance: 20
+      colorLUT: {fileID: 0}
+      hueColor: {r: 0, g: 0, b: 0, a: 0}
+    - variantName: lvl2
+      overrideGlobalLootSettings: 0
+      lootSettings: {fileID: 0}
+      stats:
+        baseStats:
+          hp: 180
+          damage: 80
+          xp: 7
+          speed: 6
+          knockbackMultiplier: 1
+          stunTime: 0
+          windMultiplier: 1
+        currentStats:
+          hp: 0
+          damage: 0
+          xp: 0
+          speed: 0
+          knockbackMultiplier: 0
+          stunTime: 0
+          windMultiplier: 0
+        multipliers:
+          hpMultiplier: 1
+          damageMultiplier: 1
+          xpMultiplier: 1
+          speedMultiplier: 1
+      rubberbandMaxDistance: 20
+      colorLUT: {fileID: 0}
+      hueColor: {r: 0, g: 0, b: 0, a: 0}
+  - enemyName: Slime
+    enemyData:
+    - variantName: lvl1
+      overrideGlobalLootSettings: 0
+      lootSettings: {fileID: 0}
+      stats:
+        baseStats:
+          hp: 50
+          damage: 40
+          xp: 7
+          speed: 4
+          knockbackMultiplier: 1
+          stunTime: 0
+          windMultiplier: 1
+        currentStats:
+          hp: 0
+          damage: 0
+          xp: 0
+          speed: 0
+          knockbackMultiplier: 0
+          stunTime: 0
+          windMultiplier: 0
+        multipliers:
+          hpMultiplier: 1
+          damageMultiplier: 1
+          xpMultiplier: 1
+          speedMultiplier: 1
+      rubberbandMaxDistance: 20
+      colorLUT: {fileID: 0}
+      hueColor: {r: 0, g: 0, b: 0, a: 0}
+    - variantName: lvl2
+      overrideGlobalLootSettings: 0
+      lootSettings: {fileID: 0}
+      stats:
+        baseStats:
+          hp: 150
+          damage: 50
+          xp: 7
+          speed: 4
+          knockbackMultiplier: 1
+          stunTime: 0
+          windMultiplier: 1
+        currentStats:
+          hp: 0
+          damage: 0
+          xp: 0
+          speed: 0
+          knockbackMultiplier: 0
+          stunTime: 0
+          windMultiplier: 0
+        multipliers:
+          hpMultiplier: 1
+          damageMultiplier: 1
+          xpMultiplier: 1
+          speedMultiplier: 1
+      rubberbandMaxDistance: 20
+      colorLUT: {fileID: 0}
+      hueColor: {r: 0, g: 0, b: 0, a: 0}
+    - variantName: rusher
+      overrideGlobalLootSettings: 0
+      lootSettings: {fileID: 0}
+      stats:
+        baseStats:
+          hp: 8
+          damage: 30
+          xp: 4
+          speed: 5
+          knockbackMultiplier: 1
+          stunTime: 0
+          windMultiplier: 1
+        currentStats:
+          hp: 0
+          damage: 0
+          xp: 0
+          speed: 0
+          knockbackMultiplier: 0
+          stunTime: 0
+          windMultiplier: 0
+        multipliers:
+          hpMultiplier: 1
+          damageMultiplier: 1
+          xpMultiplier: 1
+          speedMultiplier: 1
+      rubberbandMaxDistance: 20
+      colorLUT: {fileID: 0}
+      hueColor: {r: 0, g: 0, b: 0, a: 0}
+  - enemyName: LostSoul
+    enemyData:
+    - variantName: lvl1
+      overrideGlobalLootSettings: 0
+      lootSettings: {fileID: 0}
+      stats:
+        baseStats:
+          hp: 150
+          damage: 50
+          xp: 7
+          speed: 3.6
+          knockbackMultiplier: 1
+          stunTime: 0
+          windMultiplier: 1
+        currentStats:
+          hp: 0
+          damage: 0
+          xp: 0
+          speed: 0
+          knockbackMultiplier: 0
+          stunTime: 0
+          windMultiplier: 0
+        multipliers:
+          hpMultiplier: 1
+          damageMultiplier: 1
+          xpMultiplier: 1
+          speedMultiplier: 1
+      rubberbandMaxDistance: 20
+      colorLUT: {fileID: 0}
+      hueColor: {r: 0, g: 0, b: 0, a: 0}
+    - variantName: lvl2
+      overrideGlobalLootSettings: 0
+      lootSettings: {fileID: 0}
+      stats:
+        baseStats:
+          hp: 250
+          damage: 50
+          xp: 7
+          speed: 3.6
+          knockbackMultiplier: 1
+          stunTime: 0
+          windMultiplier: 1
+        currentStats:
+          hp: 0
+          damage: 0
+          xp: 0
+          speed: 0
+          knockbackMultiplier: 0
+          stunTime: 0
+          windMultiplier: 0
+        multipliers:
+          hpMultiplier: 1
+          damageMultiplier: 1
+          xpMultiplier: 1
+          speedMultiplier: 1
+      rubberbandMaxDistance: 20
+      colorLUT: {fileID: 0}
+      hueColor: {r: 0, g: 0, b: 0, a: 0}
+  - enemyName: Ghoul
+    enemyData:
+    - variantName: lvl1
+      overrideGlobalLootSettings: 0
+      lootSettings: {fileID: 0}
+      stats:
+        baseStats:
+          hp: 50
+          damage: 50
+          xp: 9
+          speed: 6
+          knockbackMultiplier: 1
+          stunTime: 0
+          windMultiplier: 1
+        currentStats:
+          hp: 0
+          damage: 0
+          xp: 0
+          speed: 0
+          knockbackMultiplier: 0
+          stunTime: 0
+          windMultiplier: 0
+        multipliers:
+          hpMultiplier: 1
+          damageMultiplier: 1
+          xpMultiplier: 1
+          speedMultiplier: 1
+      rubberbandMaxDistance: 20
+      colorLUT: {fileID: 0}
+      hueColor: {r: 0, g: 0, b: 0, a: 0}

@@ -1,0 +1,26 @@
+[
+  {
+    "path": "Assets/_Project/Content/NetworkCombat/Limbo/Spatial/SpatialSource.json",
+    "sha256": "2053B46D8B64761D3C5116AC6CB494554C159B4B780F60841F140F978A8B55AA"
+  },
+  {
+    "path": "Assets/_Project/Content/NetworkCombat/Limbo/Spatial/SpatialAdapted.json",
+    "sha256": "C7FB9991326C50BA71D63BB2348921206F6D5572E11C91F45EC818473B3C92AB"
+  },
+  {
+    "path": "Assets/_Project/Content/NetworkCombat/Limbo/Spatial/ReferenceBarrier.prefab",
+    "sha256": "239D75AF5D019150C0BD68DEAD9C4D2291AD3F8D380C9FCA4AD57A86F8BE44FD"
+  },
+  {
+    "path": "Assets/_Project/Content/NetworkCombat/Limbo/Spatial/ReferenceTrapWarning.prefab",
+    "sha256": "75DB70D57E42CF98E81A7B4CCA3A954B6C2957B37754B1F55D6E85E8CB11D69B"
+  },
+  {
+    "path": "Assets/_Project/Content/NetworkCombat/Limbo/Stage2/Stage2Adapted.json",
+    "sha256": "DD18F27E8465FCE78B0A235E6C678229EB31C94457388786E16A9A8896F9E3AB"
+  },
+  {
+    "path": "Assets/_Project/Content/NetworkCombat/Limbo/Imp/ImpAdapted.json",
+    "sha256": "2A672A7C395E31C1DD1E117CC5D4AB497711A97A845231B659074B7AED84E67D"
+  }
+]

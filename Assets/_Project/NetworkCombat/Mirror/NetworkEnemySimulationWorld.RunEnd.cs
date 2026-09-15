@@ -10,6 +10,7 @@ namespace MonsterSupergroup.NetworkCombat
         [Server]
         public void StopRunSimulation()
         {
+            ClearReferenceTraps();
             foreach (var enemy in enemies.Values)
                 if (enemy != null) enemy.StopForRunEnd();
             handoffs.Clear(); pendingServerKnockbacks.Clear();
@@ -18,7 +19,7 @@ namespace MonsterSupergroup.NetworkCombat
         public void StopClientRun() => ClearClientWaitingState();
         public void ResetClientRound()
         {
-            ClearClientWaitingState(); ClearUltimateKnockbackState();
+            ClearClientWaitingState(); ClearUltimateKnockbackState(); ClearReferenceClock();
             snapshotBuffer.Clear(); attackPresentationBuffer.Clear();
         }
         [Server]

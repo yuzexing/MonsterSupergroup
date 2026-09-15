@@ -153,7 +153,7 @@ namespace AstralShift.Managers
 			Debug.Log("Starting slow mo");
 			if (immediate)
 			{
-				Time.timeScale = slowMoTimescale;
+				ApplyImmediateSlowMoScale(slowMoTimescale);
 			}
 			else
 			{
@@ -164,19 +164,16 @@ namespace AstralShift.Managers
 
 		public void StopSlowMo(bool immediate, uint id)
 		{
-			if (!ActiveSlowMotionDict.Remove(id))
-			{
-				if (ActiveSlowMotionDict.Count == 0)
-				{
-					Time.timeScale = 1f;
-				}
-			}
-			else
-			{
-				float timeScale = ((ActiveSlowMotionDict.Count == 0) ? 1f : ActiveSlowMotionDict.ElementAt(ActiveSlowMotionDict.Count - 1).Value.timeScale);
-				Time.timeScale = timeScale;
-				Debug.Log("Stopping slow mo, timescale reverted to " + Time.timeScale);
-			}
+			if (!ActiveSlowMotionDict.Remove(id)) return;
+			float timeScale = ActiveSlowMotionDict.Count == 0 ? 1f : ActiveSlowMotionDict.Last().Value.timeScale;
+			ApplyImmediateSlowMoScale(timeScale);
+		}
+
+		private void ApplyImmediateSlowMoScale(float value)
+		{
+			// Removing a trap's request while a menu holds pause must not resume the game.
+			if (pauseCounter > 0) _previousTimeScale = value;
+			else Time.timeScale = value;
 		}
 
 		public void SetTimeScale(float timeScale)

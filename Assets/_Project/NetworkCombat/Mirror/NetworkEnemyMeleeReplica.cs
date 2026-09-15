@@ -31,6 +31,11 @@ namespace MonsterSupergroup.NetworkCombat
         private uint lastAppliedAssignmentEpoch;
         private EnemyAttackPresentationPhase lastAppliedPhase;
         private bool unsupportedAttackLogged;
+        private uint instanceGeneration;
+        private Vector2 dashWarningOrigin;
+        private bool ownsDashWindow;
+        private EnemyAttackDash DashAttack => meleeAttack as EnemyAttackDash;
+        public EnemyAttackPrefab ReplicaAttackInstance => attackInstance;
 
         public bool HasReplicaAttackInstance => attackInstance != null;
 
@@ -66,6 +71,7 @@ namespace MonsterSupergroup.NetworkCombat
 
         private void Update()
         {
+            if (attackInstance != null && DashAttack != null) attackInstance.transform.position = dashWarningOrigin;
             if (attackInstance != null &&
                 (simulationAgent == null || !simulationAgent.IsCanonicalAlive ||
                  simulationAuthority == null ||
@@ -76,9 +82,9 @@ namespace MonsterSupergroup.NetworkCombat
             }
 
             if (damageWindowActive &&
-                EnemySimulationClock.Now >= damageWindowEndNetworkTime)
+                EnemySimulationClock.CombatNow >= damageWindowEndNetworkTime)
             {
-                SetDamageEnabled(false);
+                FinishWindowAndPresentation();
             }
         }
 
@@ -120,6 +126,7 @@ namespace MonsterSupergroup.NetworkCombat
             lastAppliedSequence = edge.StateSequence;
             lastAppliedAssignmentEpoch = edge.AssignmentEpoch;
             lastAppliedPhase = edge.Phase;
+            if (DashAttack != null) dashWarningOrigin = edge.Checkpoint.Movement.Runtime.Action.DashWarningOrigin;
             switch (edge.Phase)
             {
             case EnemyAttackPresentationPhase.Warning:
@@ -129,6 +136,8 @@ namespace MonsterSupergroup.NetworkCombat
                 ApplyActive(edge);
                 break;
             case EnemyAttackPresentationPhase.Recovery:
+                FinishWindowAndPresentation();
+                break;
             case EnemyAttackPresentationPhase.Inactive:
             case EnemyAttackPresentationPhase.Cancelled:
                 ReleaseAttackInstance();
@@ -152,10 +161,10 @@ namespace MonsterSupergroup.NetworkCombat
             }
 
             warning.SetWarningTime(
-                (float)edge.RemainingAt(EnemySimulationClock.Now),
+                (float)edge.RemainingAt(EnemySimulationClock.CombatNow),
                 meleeAttack.AttackTime);
             warning.Show();
-            if (edge.IsExpiredAt(EnemySimulationClock.Now))
+            if (edge.IsExpiredAt(EnemySimulationClock.CombatNow))
             {
                 warning.Hide();
             }
@@ -171,7 +180,7 @@ namespace MonsterSupergroup.NetworkCombat
             PositionAttack(edge.Facing);
             attackInstance.attackWarning?.Hide();
 
-            double remaining = edge.RemainingAt(EnemySimulationClock.Now);
+            double remaining = edge.RemainingAt(EnemySimulationClock.CombatNow);
             if (remaining <= 0d)
             {
                 // Presentation has already been fast-forwarded by EnemyAnimator.
@@ -180,8 +189,19 @@ namespace MonsterSupergroup.NetworkCombat
                 return;
             }
 
-            damageWindowEndNetworkTime = EnemySimulationClock.Now + remaining;
+            damageWindowEndNetworkTime = EnemySimulationClock.CombatNow + remaining;
             SetDamageEnabled(true);
+        }
+
+        private async void FinishWindowAndPresentation()
+        {
+            if (ownsDashWindow) DashAttack.SetDashDamageEnabled(false, true);
+            attackInstance?.damageInteraction?.SettlePendingCollisions();
+            SetDamageEnabled(false);
+            var instance = attackInstance;
+            uint generation = instanceGeneration;
+            if (instance != null && instance.attackWarning != null) await instance.attackWarning.AwaitableHide();
+            if (generation == instanceGeneration && instance == attackInstance) ReleaseAttackInstance();
         }
 
         private bool TryAcquireAttackInstance()
@@ -198,7 +218,7 @@ namespace MonsterSupergroup.NetworkCombat
                     "its attackPrefab, and EnemyController.");
                 return false;
             }
-            if (meleeAttack.attackPrefab.damageInteraction == null)
+            if (meleeAttack.attackPrefab.damageInteraction == null && DashAttack == null)
             {
                 LogUnsupportedAttackOnce(
                     "The first network melee slice supports the " +
@@ -220,9 +240,10 @@ namespace MonsterSupergroup.NetworkCombat
             }
 
             attackInstance.SetStats(controller.stats);
+            instanceGeneration++;
             MonsterSupergroup.Gameplay.Combat.GameplayMapPresentation.Warning(attackInstance.gameObject);
             PlayerDamageInteraction interaction = attackInstance.damageInteraction;
-            interaction.enemyStats = controller.stats;
+            if (interaction != null) interaction.enemyStats = controller.stats;
             SetDamageEnabled(false);
             return true;
         }
@@ -237,7 +258,7 @@ namespace MonsterSupergroup.NetworkCombat
             }
 
             attackInstance.transform.SetParent(transform, true);
-            attackInstance.transform.position = transform.position;
+            attackInstance.transform.position = DashAttack != null ? (Vector3)dashWarningOrigin : transform.position;
             float angle = Mathf.Atan2(facing.y, facing.x) * Mathf.Rad2Deg;
             attackInstance.transform.rotation = Quaternion.Euler(0f, 0f, angle);
         }
@@ -245,6 +266,11 @@ namespace MonsterSupergroup.NetworkCombat
         private void SetDamageEnabled(bool enabled)
         {
             damageWindowActive = enabled;
+            if (DashAttack != null)
+            {
+                if (enabled || ownsDashWindow) DashAttack.SetDashDamageEnabled(enabled);
+                ownsDashWindow = enabled;
+            }
             if (attackInstance == null)
             {
                 return;
@@ -264,6 +290,8 @@ namespace MonsterSupergroup.NetworkCombat
 
         private void ReleaseAttackInstance()
         {
+            instanceGeneration++;
+            if (ownsDashWindow) { DashAttack.SetDashDamageEnabled(false); ownsDashWindow = false; }
             // Epoch/role changes invalidate deferred contacts from the old window.
             attackInstance?.damageInteraction?.DiscardPendingCollisions();
             if (attackInstance == null)

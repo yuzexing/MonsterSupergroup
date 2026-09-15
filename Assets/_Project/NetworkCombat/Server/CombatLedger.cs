@@ -263,6 +263,13 @@ namespace MonsterSupergroup.NetworkCombat
             return true;
         }
 
+        public bool SetPlayerTrapInvulnerable(uint playerId, bool value)
+        {
+            if (!entities.TryGetValue(playerId, out EntityEntry entry) || entry.Kind != CombatEntityKind.Player) return false;
+            if (entry.TrapInvulnerable != value) { entry.TrapInvulnerable = value; entry.Version++; }
+            return true;
+        }
+
         public bool SetPlayerUpgradeSelectionState(uint playerId, bool value)
         {
             if (!entities.TryGetValue(playerId, out EntityEntry entry) ||
@@ -476,8 +483,9 @@ namespace MonsterSupergroup.NetworkCombat
             public bool Alive;
             public bool AbsoluteInvulnerable;
             public bool UltimateInvulnerable;
+            public bool TrapInvulnerable;
             public bool UpgradeSelectionActive;
-            public bool IsInvulnerable => AbsoluteInvulnerable || UpgradeSelectionActive || UltimateInvulnerable;
+            public bool IsInvulnerable => AbsoluteInvulnerable || UpgradeSelectionActive || UltimateInvulnerable || TrapInvulnerable;
             public uint Version;
             public uint KillerPlayerId;
 

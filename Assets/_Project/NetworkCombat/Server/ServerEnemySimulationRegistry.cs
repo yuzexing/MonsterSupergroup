@@ -434,13 +434,20 @@ namespace MonsterSupergroup.NetworkCombat
             return entry;
         }
 
+        public EnemySimulationAssignment RenewAssignment(uint enemyEntityId)
+        {
+            var entry = RequireEntry(enemyEntityId);
+            var current = entry.Assignment;
+            return SetAssignment(entry, current.Host, current.SimulationOwnerPlayerId, current.AggroTargetPlayerId, true);
+        }
+
         private static EnemySimulationAssignment SetAssignment(
             Entry entry,
             EnemySimulationHost host,
             uint ownerPlayerId,
-            uint targetPlayerId)
+            uint targetPlayerId, bool forceNewEpoch = false)
         {
-            if (entry.Assignment.Host == host && entry.Assignment.SimulationOwnerPlayerId == ownerPlayerId &&
+            if (!forceNewEpoch && entry.Assignment.Host == host && entry.Assignment.SimulationOwnerPlayerId == ownerPlayerId &&
                 entry.Assignment.AggroTargetPlayerId == targetPlayerId && entry.Assignment.Epoch != 0)
                 return entry.Assignment;
             uint epoch = unchecked(entry.Assignment.Epoch + 1u);

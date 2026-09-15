@@ -27,6 +27,10 @@ namespace MonsterSupergroup.NetworkCombat
             if (state.Phase == WavePhase.Disabled) return MenuLocalization.Get("ui.wave.syncing");
             if (state.Phase == WavePhase.Waiting) return MenuLocalization.Get("ui.wave.waiting");
             if (state.Phase == WavePhase.Stopped) return MenuLocalization.Get("ui.wave.stopped");
+            if (state.ReferenceStage)
+                return $"Limbo  {state.Elapsed:F1} / {state.StageEndTime:F1} s" +
+                    (state.Phase == WavePhase.Completed ? "  —  预览完成" : state.Phase == WavePhase.Paused ? "  —  暂停" : "") +
+                    $"\n存活 {state.Alive}（计入上限 {state.CountedAlive}/{state.Limit}）  已生成 {state.TotalSpawned}  尝试 {state.TotalAttempts}";
             string phase = MenuLocalization.Get(state.Phase == WavePhase.Paused ? "ui.wave.paused" : "ui.wave.next");
             return MenuLocalization.Get("ui.wave.progress", state.Wave, phase, state.Remaining, state.Alive, state.Limit, state.Spawned, state.Planned, state.Skipped);
         }

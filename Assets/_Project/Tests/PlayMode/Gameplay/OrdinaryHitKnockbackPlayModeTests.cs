@@ -180,18 +180,42 @@ namespace MonsterSupergroup.Gameplay.Tests
             var inFlight = Command();
             Assert.That(Apply(inFlight), Is.True);
             yield return new WaitForFixedUpdate();
-            world.Registry.TryGetLatestSnapshot(agent.netId, out var last);
-            agent.SetServerAssignment(world.Registry.AssignServerFallback(agent.netId, bridge.OwnerPlayerId));
-            Assert.That(agent.HasActiveNetworkKnockback, Is.False);
-            Assert.That(body.linearVelocity, Is.EqualTo(Vector2.zero));
+            EnemySimulationCheckpoint Capture() => (EnemySimulationCheckpoint)typeof(NetworkEnemySimulationAgent)
+                .GetMethod("CaptureCurrentCheckpoint", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic)
+                .Invoke(agent, null);
+            void Handoff(EnemySimulationAssignment assignment)
+            {
+                var checkpoint = Capture();
+                checkpoint.Movement.AssignmentEpoch = assignment.Epoch;
+                world.Registry.RecordCheckpoint(checkpoint);
+                agent.SetServerHandoff(new EnemySimulationHandoff { Assignment = assignment, Checkpoint = checkpoint,
+                    Reason = EnemyTargetChangeReason.Forced, CommittedAt = NetworkTime.time });
+                Assert.That(agent.AppliedHandoffEpoch, Is.EqualTo(assignment.Epoch));
+            }
+            var before = Capture();
+            Assert.That(before.Movement.Runtime.Knockback.Active, Is.True);
+            Handoff(world.Registry.AssignServerFallback(agent.netId, bridge.OwnerPlayerId));
+            var after = Capture();
+            Assert.That(agent.HasActiveNetworkKnockback, Is.True, "Ordinary handoff inherits the remaining impulse and stagger.");
+            Assert.That(after.Movement.Runtime.Knockback.Start, Is.EqualTo(before.Movement.Runtime.Knockback.Start));
+            Assert.That(after.Movement.Runtime.Knockback.End, Is.EqualTo(before.Movement.Runtime.Knockback.End));
+            Assert.That(after.Movement.Runtime.Knockback.Elapsed, Is.GreaterThanOrEqualTo(before.Movement.Runtime.Knockback.Elapsed));
+            Assert.That(after.Movement.Runtime.LastHandledKnockbackId, Is.EqualTo(before.Movement.Runtime.LastHandledKnockbackId));
+            double expectedEnd = before.Movement.SampleNetworkTime + before.Movement.Runtime.Knockback.Duration +
+                before.Movement.Runtime.Knockback.StaggerDuration - before.Movement.Runtime.Knockback.Elapsed;
             inFlight.CommandId = ++serial;
             Assert.That(Apply(inFlight, true), Is.False, "Old epoch cannot be replayed by the new simulator.");
-            var takeover = Command();
-            Assert.That(Apply(takeover, true), Is.True);
-            agent.SetServerAssignment(world.Registry.Freeze(agent.netId));
+            Assert.That(Apply(Command(), true), Is.False, "Handoff does not open another impulse during the inherited stagger.");
+            yield return WaitFor(() => !agent.HasActiveNetworkKnockback, "Inherited impulse must finish.");
+            Assert.That(EnemySimulationClock.Now, Is.EqualTo(expectedEnd).Within(.1), "Handoff must not restart the full stagger.");
+            var replay = inFlight; replay.AssignmentEpoch = agent.Assignment.Epoch; replay.CommandId = ++serial;
+            Assert.That(Apply(replay, true), Is.False, "A handled damage event cannot replay under the new epoch.");
+            Assert.That(Apply(Command(), true), Is.True);
+            Handoff(world.Registry.Freeze(agent.netId));
             Assert.That(agent.HasActiveNetworkKnockback, Is.False);
+            Assert.That(body.linearVelocity, Is.EqualTo(Vector2.zero));
             Assert.That(Apply(Command(), true), Is.False, "Frozen enemy does not move.");
-            agent.SetServerAssignment(world.Registry.AssignServerAuthoritative(agent.netId, bridge.OwnerPlayerId));
+            Handoff(world.Registry.AssignServerAuthoritative(agent.netId, bridge.OwnerPlayerId));
             var expired = Command(); expired.IssuedAt -= 3;
             Assert.That(Apply(expired, true), Is.False);
             Assert.That(Apply(Command(), true), Is.True);

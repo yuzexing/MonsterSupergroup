@@ -26,6 +26,7 @@ namespace MonsterSupergroup.Gameplay.Tests
         private BootGameplayNetworkManager manager;
         private GameObject[] bootRoots;
         private GameObject gate;
+        private string originalLanguage;
         private GameplayWaveRules rulesCopy;
         private readonly List<Object> timelineAssets = new List<Object>();
         private NetworkGameplayEnemySpawner Spawner => Object.FindFirstObjectByType<NetworkGameplayEnemySpawner>();
@@ -41,6 +42,9 @@ namespace MonsterSupergroup.Gameplay.Tests
             yield return SceneManager.LoadSceneAsync(path, LoadSceneMode.Single);
 #endif
             bootRoots = BootSceneFixtureObjects.Capture(path);
+            originalLanguage = MonsterSupergroup.Gameplay.Options.GameLocalization.Language;
+            MonsterSupergroup.Gameplay.Options.GameLocalization.Select("en");
+            yield return WaitFor(() => MonsterSupergroup.Gameplay.Options.GameLocalization.Language == "en");
             manager = Object.FindFirstObjectByType<BootGameplayNetworkManager>();
             Assert.That(manager.TryBeginRun(out _), Is.False);
             gate = new GameObject("M5 runtime attack gate");
@@ -476,6 +480,7 @@ namespace MonsterSupergroup.Gameplay.Tests
         [UnityTearDown]
         public IEnumerator TearDown()
         {
+            if (originalLanguage != null) MonsterSupergroup.Gameplay.Options.GameLocalization.Select(originalLanguage);
             SceneManager.sceneLoaded -= ConfigureLegacy;
             if (manager != null)
             {

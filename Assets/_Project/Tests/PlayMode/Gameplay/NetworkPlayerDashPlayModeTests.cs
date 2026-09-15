@@ -37,8 +37,7 @@ namespace MonsterSupergroup.Gameplay.Tests
             int starts = 0, ends = 0;
             movement.OnDashStart += () => starts++;
             movement.OnDashEnd += () => ends++;
-            movement.body.position = new Vector2(1000, 1000);
-            movement.transform.position = new Vector3(1000, 1000, 0);
+            yield return CombatFixtureMapPlacement.PlacePlayer(movement, 10f);
             movement.SetDirection(Vector2.right);
             Physics2D.SyncTransforms();
             movement.Dash();
@@ -83,9 +82,7 @@ namespace MonsterSupergroup.Gameplay.Tests
             var movement = identity.GetComponent<PlayerMovement>();
             var bridge = identity.GetComponent<MirrorNetworkCombatBridge>();
             uint revision = identity.GetComponent<NetworkModifierSelection>().OwnerBuildRevision;
-            movement.body.position = new Vector2(1000, 1000);
-            movement.transform.position = new Vector3(1000, 1000, 0);
-            Physics2D.SyncTransforms();
+            yield return CombatFixtureMapPlacement.PlacePlayer(movement, 10f);
             Assert.That(movement.TryGetDashMotionParameters(Vector2.right, movement.transform.position, out var motion), Is.True);
             var invalid = motion; invalid.Duration = float.NaN;
             SendDashCommand(dash, bridge.EventIds.Next().Value, revision, invalid);
@@ -94,6 +91,12 @@ namespace MonsterSupergroup.Gameplay.Tests
             yield return WaitFor(() => dash.RejectedUseCount == 2, "A stale Build cannot authorize a dash.");
             Assert.That(dash.CaptureServerState().RechargeReadyAt, Is.Empty);
             Assert.That(dash.OwnerRuntime.AvailableCharges, Is.EqualTo(2));
+
+            var outside = motion;
+            outside.StartPosition = new Vector2(1000, 1000);
+            SendDashCommand(dash, bridge.EventIds.Next().Value, revision, outside);
+            yield return WaitFor(() => dash.RejectedUseCount == 3, "An out-of-map origin cannot authorize a remote dash.");
+            Assert.That(dash.CaptureServerState().RechargeReadyAt, Is.Empty);
 
             ulong legalId = bridge.EventIds.Next().Value;
             var approximate = motion; approximate.Duration -= 0.009f;
@@ -105,9 +108,9 @@ namespace MonsterSupergroup.Gameplay.Tests
                 "Tolerance is a reception bound, not permission to shorten the authoritative duration.");
             Assert.That(accepted.RechargeReadyAt.Length, Is.EqualTo(1));
             SendDashCommand(dash, legalId, revision, motion);
-            yield return WaitFor(() => dash.RejectedUseCount == 3, "Duplicate use identity must not consume twice.");
+            yield return WaitFor(() => dash.RejectedUseCount == 4, "Duplicate use identity must not consume twice.");
             SendDashCommand(dash, bridge.EventIds.Next().Value, revision, motion);
-            yield return WaitFor(() => dash.RejectedUseCount == 4, "A fresh ID cannot bypass the active chain delay.");
+            yield return WaitFor(() => dash.RejectedUseCount == 5, "A fresh ID cannot bypass the active chain delay.");
             Assert.That(dash.CaptureServerState().RechargeReadyAt, Is.EqualTo(accepted.RechargeReadyAt));
             Assert.That(dash.OwnerRuntime.AvailableCharges, Is.EqualTo(1));
         }

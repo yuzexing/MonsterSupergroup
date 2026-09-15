@@ -61,6 +61,16 @@ public sealed class MeleeAttackWarning : AstralShift.HellMaiden.AI.Enemy.EnemyAt
 		}
 	}
 
+    public override void RestoreProgress(float warningTime, float attackTime, float elapsed)
+    {
+        SetWarningTime(warningTime, attackTime); Show();
+        if (animancer != null && warningStart?.Clip != null)
+        {
+            var state = animancer.Layers[0].CurrentState;
+            if (state != null) state.Time = Mathf.Clamp(elapsed * warningStart.Speed, 0, warningStart.Length);
+        }
+    }
+
 	private void ResolveAnimancer()
 	{
 		if (animancer == null)

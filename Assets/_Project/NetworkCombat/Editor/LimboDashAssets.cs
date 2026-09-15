@@ -269,9 +269,9 @@ namespace MonsterSupergroup.NetworkCombat.Editor
             if(!preview.TryCapture(out var playable,out var previewError) || playable.Reference.ReadinessError()!=null)
                 throw new InvalidDataException("Dash preview must be ready after acceptance: "+previewError+" / "+playable.Reference?.ReadinessError());
             var full=AssetDatabase.LoadAssetAtPath<GameplayWaveRules>(LimboReferenceAssets.ResourcesRoot+"/Full.asset");
-            if(!full.TryCapture(out var captured,out var error)||captured.Reference.ReadinessError()==null)
-                throw new InvalidDataException("Full must retain the unimplemented enemy gate: "+error);
-            Debug.Log("[LimboDash] reviewed behavior gates accepted; Full remains disabled. See docs/limbo-dash-integration.md.");
+            if(!full.TryCapture(out var captured,out var error)) throw new InvalidDataException(error);
+            LimboFullAssets.VerifyIndependentFlowGate(captured.Reference);
+            Debug.Log("[LimboDash] reviewed behavior gates accepted; independent Full flow readiness preserved. See docs/limbo-dash-integration.md.");
         }
     }
 }

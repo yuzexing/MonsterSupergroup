@@ -1,0 +1,205 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!213 &21300000
+Sprite:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Ghoul_attack_7
+  m_Rect:
+    serializedVersion: 2
+    x: 479.4095
+    y: 337.40942
+    width: 136.84776
+    height: 198.84775
+  m_Offset: {x: -18.766687, y: -87.103325}
+  m_Border: {x: 0, y: 0, z: 0, w: 0}
+  m_PixelsToUnits: 59.23611
+  m_Pivot: {x: 0.3628645, y: 0.06195971}
+  m_Extrude: 1
+  m_IsPolygon: 0
+  m_PackingTag:
+  m_RenderDataKey:
+    78e3f0ce593b6604dba5fa28fa19cbe8: -8417539221818512384
+  m_AtlasTags: []
+  m_SpriteAtlas: {fileID: 0}
+  m_RD:
+    serializedVersion: 3
+    texture: {fileID: 2800000, guid: ae395fb18410ec44c8d60ec05451a85f, type: 3}
+    alphaTexture: {fileID: 0}
+    secondaryTextures: []
+    m_SubMeshes:
+    - serializedVersion: 2
+      firstByte: 0
+      indexCount: 27
+      topology: 0
+      baseVertex: 0
+      firstVertex: 0
+      vertexCount: 11
+      localAABB:
+        m_Center: {x: 0, y: 0, z: 0}
+        m_Extent: {x: 0, y: 0, z: 0}
+    m_IndexBuffer: 0a0009000700080007000900000007000800060007000000050006000000040005000000030004000000010003000000020001000000
+    m_VertexData:
+      serializedVersion: 3
+      m_VertexCount: 11
+      m_Channels:
+      - stream: 0
+        offset: 0
+        format: 0
+        dimension: 3
+      - stream: 0
+        offset: 0
+        format: 0
+        dimension: 0
+      - stream: 0
+        offset: 0
+        format: 0
+        dimension: 0
+      - stream: 0
+        offset: 0
+        format: 0
+        dimension: 0
+      - stream: 1
+        offset: 0
+        format: 0
+        dimension: 2
+      - stream: 0
+        offset: 0
+        format: 0
+        dimension: 0
+      - stream: 0
+        offset: 0
+        format: 0
+        dimension: 0
+      - stream: 0
+        offset: 0
+        format: 0
+        dimension: 0
+      - stream: 0
+        offset: 0
+        format: 0
+        dimension: 0
+      - stream: 0
+        offset: 0
+        format: 0
+        dimension: 0
+      - stream: 0
+        offset: 0
+        format: 0
+        dimension: 0
+      - stream: 0
+        offset: 0
+        format: 0
+        dimension: 0
+      - stream: 0
+        offset: 0
+        format: 0
+        dimension: 0
+      - stream: 0
+        offset: 0
+        format: 0
+        dimension: 0
+      m_DataSize: 232
+      _typelessdata: d991bc3f3e9c4940000000009e71ad3f754c56be00000000d991bc3f5bdfff3e000000005fe1613f754c56be00000000aa3c593f0c0345be00000000d651f43e6d5ec33e00000000b963da3e9bcba03e00000000210d543e9bcba03e00000000339c52bf3e9c4940000000008dee56bfb8641e40000000008dee56bfc334a13f0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+    m_Bindpose: []
+    textureRect:
+      serializedVersion: 2
+      x: 479.4095
+      y: 337.40942
+      width: 136.84776
+      height: 198.84775
+    textureRectOffset: {x: 0, y: 0}
+    atlasRectOffset: {x: -1, y: -1}
+    settingsRaw: 64
+    uvTransform: {x: 59.23611, y: 529.06665, z: 59.23611, w: 349.73}
+    downscaleMultiplier: 1
+  m_AtlasRD:
+    serializedVersion: 3
+    texture: {fileID: 0}
+    alphaTexture: {fileID: 0}
+    secondaryTextures: []
+    m_SubMeshes: []
+    m_IndexBuffer:
+    m_VertexData:
+      serializedVersion: 3
+      m_VertexCount: 0
+      m_Channels: []
+      m_DataSize: 0
+      _typelessdata:
+    m_Bindpose: []
+    textureRect:
+      serializedVersion: 2
+      x: 0
+      y: 0
+      width: 0
+      height: 0
+    textureRectOffset: {x: 0, y: 0}
+    atlasRectOffset: {x: 0, y: 0}
+    settingsRaw: 0
+    uvTransform: {x: 0, y: 0, z: 0, w: 0}
+    downscaleMultiplier: 0
+  m_PhysicsShape:
+  - - {x: 1.0342795, y: 1.0061988}
+    - {x: 0.8654635, y: 1.2256595}
+    - {x: 0.73041075, y: 1.6983441}
+    - {x: 0.56159484, y: 2.069739}
+    - {x: 0.71352917, y: 2.120384}
+    - {x: 0.9836347, y: 2.4242527}
+    - {x: 1.2875034, y: 2.4242527}
+    - {x: 1.4563193, y: 2.5255423}
+    - {x: 1.4563193, y: 2.9475822}
+    - {x: 1.3550297, y: 3.116398}
+    - {x: 1.304385, y: 3.082635}
+    - {x: 1.2875034, y: 2.9813454}
+    - {x: 1.2537402, y: 3.0657532}
+    - {x: 1.1862139, y: 3.1332796}
+    - {x: 1.1186874, y: 3.116398}
+    - {x: 1.1186874, y: 2.7787662}
+    - {x: 1.1186874, y: 2.9475822}
+    - {x: 1.1018058, y: 2.998227}
+    - {x: 0.9329899, y: 2.9644637}
+    - {x: 0.78105557, y: 2.8462925}
+    - {x: 0.679766, y: 2.5761871}
+    - {x: 0.46030524, y: 2.8462925}
+    - {x: 0.24084453, y: 3.082635}
+    - {x: 0.19019975, y: 3.1332796}
+    - {x: 0.12267336, y: 3.1332796}
+    - {x: 0.05514699, y: 3.116398}
+    - {x: 0.0213838, y: 3.1332796}
+    - {x: -0.14743215, y: 3.1332796}
+    - {x: -0.16431373, y: 3.0995164}
+    - {x: -0.48506403, y: 3.0657532}
+    - {x: -0.569472, y: 3.1332796}
+    - {x: -0.70452476, y: 3.1332796}
+    - {x: -0.63699836, y: 2.660595}
+    - {x: -0.65388, y: 2.5255423}
+    - {x: -0.6201168, y: 2.2554367}
+    - {x: -0.5019456, y: 2.204792}
+    - {x: -0.5188272, y: 1.9853313}
+    - {x: -0.40065607, y: 1.7658706}
+    - {x: -0.6032352, y: 1.9684497}
+    - {x: -0.8226959, y: 1.6983441}
+    - {x: -0.8226959, y: 1.3269491}
+    - {x: -0.6876432, y: 1.2594227}
+    - {x: -0.3162481, y: 1.0906067}
+    - {x: -0.14743215, y: 0.9217908}
+    - {x: 0.038265392, y: 0.871146}
+    - {x: 0.08891018, y: 0.6685669}
+    - {x: 0.13955496, y: 0.51663256}
+    - {x: 0.22396293, y: 0.3478166}
+    - {x: 0.30837092, y: 0.3478166}
+    - {x: 0.40966046, y: 0.3815798}
+    - {x: 0.44342366, y: 0.41534296}
+    - {x: 0.46030524, y: 0.6516853}
+    - {x: 0.8654635, y: 0.3478166}
+    - {x: 0.88234514, y: -0.15863125}
+    - {x: 0.9161083, y: -0.19239444}
+    - {x: 0.9498715, y: -0.19239444}
+    - {x: 1.2368586, y: -0.14174965}
+    - {x: 1.304385, y: 0.060829483}
+    - {x: 1.2706218, y: 0.26340863}
+  m_Bones: []
+  m_ScriptableObjects: []
+  m_SpriteID:

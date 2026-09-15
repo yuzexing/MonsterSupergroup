@@ -1,0 +1,409 @@
+{
+  "end-repro": {
+    "counts": {
+      "id": "2",
+      "testcasecount": "1",
+      "result": "Failed(Child)",
+      "total": "1",
+      "passed": "0",
+      "failed": "1",
+      "inconclusive": "0",
+      "skipped": "0",
+      "asserts": "0",
+      "engine-version": "3.5.0.0",
+      "clr-version": "4.0.30319.42000",
+      "start-time": "2026-09-15 14:36:50Z",
+      "end-time": "2026-09-15 14:36:50Z",
+      "duration": "0.2001862"
+    },
+    "failures": [
+      {
+        "test": "MonsterSupergroup.NetworkCombat.Tests.LimboFullTests.FullBoundaryMustWaitForParticipantDecisionInsteadOfCompleting",
+        "message": "  A timestamp alone must not trigger CompleteReferenceStage/ServerCancelPending before the server checks participants.\n  Expected: not equal to Completed\n  But was:  Completed\n",
+        "stack": "at MonsterSupergroup.NetworkCombat.Tests.LimboFullTests.FullBoundaryMustWaitForParticipantDecisionInsteadOfCompleting () [0x00075] in F:\\UnityStore\\MonsterSupergroup\\Assets\\_Project\\Tests\\EditMode\\NetworkCombat\\LimboFullTests.cs:19\n"
+      }
+    ]
+  },
+  "previous16-repro": {
+    "counts": {
+      "id": "2",
+      "testcasecount": "16",
+      "result": "Failed(Child)",
+      "total": "16",
+      "passed": "1",
+      "failed": "15",
+      "inconclusive": "0",
+      "skipped": "0",
+      "asserts": "0",
+      "engine-version": "3.5.0.0",
+      "clr-version": "4.0.30319.42000",
+      "start-time": "2026-09-15 14:37:57Z",
+      "end-time": "2026-09-15 14:39:16Z",
+      "duration": "79.2053851"
+    },
+    "failures": [
+      {
+        "test": "MonsterSupergroup.Gameplay.Tests.BootGameplaySceneLifecycleTests.RemoteDisconnectDuringMirrorLoad_UnloadsTheCompletedOrphan",
+        "message": "Unhandled log message: '[Exception] ArgumentException: Destination scene is being unloaded'. Use UnityEngine.TestTools.LogAssert.Expect",
+        "stack": "UnityEngine.SceneManagement.SceneManager.MoveGameObjectToScene (UnityEngine.GameObject go, UnityEngine.SceneManagement.Scene scene) (at <048e1259bbea40078e5d4fad1c7a86a5>:0)\nMonsterSupergroup.NetworkCombat.NetworkGameplayMenuController.BuildView () (at Assets/_Project/NetworkCombat/Mirror/NetworkGameplayMenuController.View.cs:36)\nMonsterSupergroup.NetworkCombat.NetworkGameplayMenuController.Awake () (at Assets/_Project/NetworkCombat/Mirror/NetworkGameplayMenuController.cs:40)\nUnityEngine.Object:Instantiate(GameplayUIRoot, Transform, Boolean)\nMonsterSupergroup.Gameplay.UI.GameplayUILoader:Start() (at Assets/_Project/Gameplay/Combat/UI/GameplayUILoader.cs:27)\n\n"
+      },
+      {
+        "test": "MonsterSupergroup.Gameplay.Tests.BootGameplaySceneLifecycleTests.RemoteReconnectDuringMirrorLoad_ReadiesOnlyAfterOldSceneCleanup",
+        "message": "Unhandled log message: '[Exception] ArgumentException: Destination scene is being unloaded'. Use UnityEngine.TestTools.LogAssert.Expect\nTearDown : Unhandled log message: '[Exception] ArgumentException: Destination scene is being unloaded'. Use UnityEngine.TestTools.LogAssert.Expect",
+        "stack": "UnityEngine.SceneManagement.SceneManager.MoveGameObjectToScene (UnityEngine.GameObject go, UnityEngine.SceneManagement.Scene scene) (at <048e1259bbea40078e5d4fad1c7a86a5>:0)\nMonsterSupergroup.NetworkCombat.NetworkGameplayMenuController.BuildView () (at Assets/_Project/NetworkCombat/Mirror/NetworkGameplayMenuController.View.cs:36)\nMonsterSupergroup.NetworkCombat.NetworkGameplayMenuController.Awake () (at Assets/_Project/NetworkCombat/Mirror/NetworkGameplayMenuController.cs:40)\nUnityEngine.Object:Instantiate(GameplayUIRoot, Transform, Boolean)\nMonsterSupergroup.Gameplay.UI.GameplayUILoader:Start() (at Assets/_Project/Gameplay/Combat/UI/GameplayUILoader.cs:27)\n\n"
+      },
+      {
+        "test": "MonsterSupergroup.Gameplay.Tests.GameplayExperiencePlayModeTests.PickupCommitsOnce_AppliesMultiplierOnce_AndHudShowsOwnerBaseline",
+        "message": "  Expected: String containing \"XP 4 / 19\"\n  But was:  \"等级 1    经验 4 / 19\"\n",
+        "stack": "at MonsterSupergroup.Gameplay.Tests.GameplayExperiencePlayModeTests+<PickupCommitsOnce_AppliesMultiplierOnce_AndHudShowsOwnerBaseline>d__14.MoveNext () [0x00246] in F:\\UnityStore\\MonsterSupergroup\\Assets\\_Project\\Tests\\PlayMode\\Gameplay\\GameplayExperiencePlayModeTests.cs:114\nat UnityEngine.TestTools.TestEnumerator+<Execute>d__7.MoveNext () [0x0004e] in .\\Library\\PackageCache\\com.unity.test-framework@bd7f943e9647\\UnityEngine.TestRunner\\NUnitExtensions\\Attributes\\TestEnumerator.cs:44\n"
+      },
+      {
+        "test": "MonsterSupergroup.Gameplay.Tests.GameplayWavePlayModeTests.FormalBoot_WaitsForStart_UsesOneSchedule_AndRendersAuthoritativeState",
+        "message": "  Expected: String containing \"Wave 1\"\n  But was:  \"第 1 波  |  下一波：29.8 秒\n存活 1/30  |  已生成 1/6  |  跳过 0\"\n",
+        "stack": "at MonsterSupergroup.Gameplay.Tests.GameplayWavePlayModeTests+<FormalBoot_WaitsForStart_UsesOneSchedule_AndRendersAuthoritativeState>d__15.MoveNext () [0x0023e] in F:\\UnityStore\\MonsterSupergroup\\Assets\\_Project\\Tests\\PlayMode\\Gameplay\\GameplayWavePlayModeTests.cs:75\nat UnityEngine.TestTools.TestEnumerator+<Execute>d__7.MoveNext () [0x0004e] in .\\Library\\PackageCache\\com.unity.test-framework@bd7f943e9647\\UnityEngine.TestRunner\\NUnitExtensions\\Attributes\\TestEnumerator.cs:44\n"
+      },
+      {
+        "test": "MonsterSupergroup.Gameplay.Tests.GameplayWavePlayModeTests.SelectingUpgrade_DoesNotPauseWaveClock_AndBothStagesRemainUsable",
+        "message": "  Expected: String containing \"Wave\"\n  But was:  \"第 1 波  |  下一波：1.1 秒\n存活 3/30  |  已生成 3/6  |  跳过 0\"\n",
+        "stack": "at MonsterSupergroup.Gameplay.Tests.GameplayWavePlayModeTests+<SelectingUpgrade_DoesNotPauseWaveClock_AndBothStagesRemainUsable>d__29.MoveNext () [0x001a8] in F:\\UnityStore\\MonsterSupergroup\\Assets\\_Project\\Tests\\PlayMode\\Gameplay\\GameplayWavePlayModeTests.cs:423\nat UnityEngine.TestTools.TestEnumerator+<Execute>d__7.MoveNext () [0x0004e] in .\\Library\\PackageCache\\com.unity.test-framework@bd7f943e9647\\UnityEngine.TestRunner\\NUnitExtensions\\Attributes\\TestEnumerator.cs:44\n"
+      },
+      {
+        "test": "MonsterSupergroup.Gameplay.Tests.NetworkCombatSandboxPlayModeTests.DedicatedServer_BossModeNeverBecomesClientSimulation",
+        "message": "  Expected: ServerAuthoritative\n  But was:  Frozen\n",
+        "stack": "at MonsterSupergroup.Gameplay.Tests.NetworkCombatSandboxPlayModeTests+<DedicatedServer_BossModeNeverBecomesClientSimulation>d__9.MoveNext () [0x0029b] in F:\\UnityStore\\MonsterSupergroup\\Assets\\_Project\\Tests\\PlayMode\\Gameplay\\NetworkCombatSandboxPlayModeTests.cs:1524\nat UnityEngine.TestTools.TestEnumerator+<Execute>d__7.MoveNext () [0x0004e] in .\\Library\\PackageCache\\com.unity.test-framework@bd7f943e9647\\UnityEngine.TestRunner\\NUnitExtensions\\Attributes\\TestEnumerator.cs:44\n"
+      },
+      {
+        "test": "MonsterSupergroup.Gameplay.Tests.NetworkCombatSandboxPlayModeTests.DedicatedServer_ClientOwnedEnemiesWaitThenFallbackRuns",
+        "message": "  Expected: property Length equal to 120\n  But was:  0\n",
+        "stack": "at MonsterSupergroup.Gameplay.Tests.NetworkCombatSandboxPlayModeTests+<DedicatedServer_ClientOwnedEnemiesWaitThenFallbackRuns>d__8.MoveNext () [0x001eb] in F:\\UnityStore\\MonsterSupergroup\\Assets\\_Project\\Tests\\PlayMode\\Gameplay\\NetworkCombatSandboxPlayModeTests.cs:1360\nat UnityEngine.TestTools.TestEnumerator+<Execute>d__7.MoveNext () [0x0004e] in .\\Library\\PackageCache\\com.unity.test-framework@bd7f943e9647\\UnityEngine.TestRunner\\NUnitExtensions\\Attributes\\TestEnumerator.cs:44\n"
+      },
+      {
+        "test": "MonsterSupergroup.Gameplay.Tests.NetworkCombatSandboxPlayModeTests.Host_ObserverRelayAndServerFallbackConverge",
+        "message": "  Expected: 1\n  But was:  0\n",
+        "stack": "at MonsterSupergroup.Gameplay.Tests.NetworkCombatSandboxPlayModeTests+<Host_ObserverRelayAndServerFallbackConverge>d__7.MoveNext () [0x005ea] in F:\\UnityStore\\MonsterSupergroup\\Assets\\_Project\\Tests\\PlayMode\\Gameplay\\NetworkCombatSandboxPlayModeTests.cs:1035\nat UnityEngine.TestTools.TestEnumerator+<Execute>d__7.MoveNext () [0x0004e] in .\\Library\\PackageCache\\com.unity.test-framework@bd7f943e9647\\UnityEngine.TestRunner\\NUnitExtensions\\Attributes\\TestEnumerator.cs:44\n"
+      },
+      {
+        "test": "MonsterSupergroup.Gameplay.Tests.NetworkCombatSandboxPlayModeTests.ProductEnemyBase_ClientOwnerRunsNavigationWithoutServerTransform",
+        "message": "System.NullReferenceException : Object reference not set to an instance of an object",
+        "stack": "  at MonsterSupergroup.Gameplay.Tests.NetworkCombatSandboxPlayModeTests+<ProductEnemyBase_ClientOwnerRunsNavigationWithoutServerTransform>d__5.MoveNext () [0x003f9] in F:\\UnityStore\\MonsterSupergroup\\Assets\\_Project\\Tests\\PlayMode\\Gameplay\\NetworkCombatSandboxPlayModeTests.cs:301 \n  at UnityEngine.TestTools.TestEnumerator+<Execute>d__7.MoveNext () [0x0004e] in .\\Library\\PackageCache\\com.unity.test-framework@bd7f943e9647\\UnityEngine.TestRunner\\NUnitExtensions\\Attributes\\TestEnumerator.cs:44 "
+      },
+      {
+        "test": "MonsterSupergroup.Gameplay.Tests.NetworkPlayerDashPlayModeTests.Host_CommandRejectsInvalidMotionAndRevisionAndUsesCanonicalDuration",
+        "message": "  A within-tolerance motion must be accepted.\n  Expected: True\n  But was:  False\n",
+        "stack": "at MonsterSupergroup.Gameplay.Tests.NetworkPlayerDashPlayModeTests+<WaitFor>d__9.MoveNext () [0x0006b] in F:\\UnityStore\\MonsterSupergroup\\Assets\\_Project\\Tests\\PlayMode\\Gameplay\\NetworkPlayerDashPlayModeTests.cs:153\nat UnityEngine.TestTools.TestEnumerator+<Execute>d__7.MoveNext () [0x0004e] in .\\Library\\PackageCache\\com.unity.test-framework@bd7f943e9647\\UnityEngine.TestRunner\\NUnitExtensions\\Attributes\\TestEnumerator.cs:44\n"
+      },
+      {
+        "test": "MonsterSupergroup.Gameplay.Tests.OrdinaryHitKnockbackPlayModeTests.SingleCirclingOrbRepeatedPhysicsHitsMoveTheRealProductEnemyUnderOneRoot",
+        "message": "  Expected: (0.00, 0.00)\n  But was:  (-1.95, 0.44)\n",
+        "stack": "at MonsterSupergroup.Gameplay.Tests.OrdinaryHitKnockbackPlayModeTests+<VerifyCommandReplayAndHandoff>d__7.MoveNext () [0x00364] in F:\\UnityStore\\MonsterSupergroup\\Assets\\_Project\\Tests\\PlayMode\\Gameplay\\OrdinaryHitKnockbackPlayModeTests.cs:186\nat UnityEngine.TestTools.TestEnumerator+<Execute>d__7.MoveNext () [0x0004e] in .\\Library\\PackageCache\\com.unity.test-framework@bd7f943e9647\\UnityEngine.TestRunner\\NUnitExtensions\\Attributes\\TestEnumerator.cs:44\n"
+      },
+      {
+        "test": "MonsterSupergroup.Gameplay.Tests.UltimateStartupKnockbackPlayModeTests.Host_AssignmentEpochChangeCancelsTheLiveCoroutineAndRejectsAnOldReliablePulse",
+        "message": "  The source movement coroutine must be active before reassignment.\n  Expected: True\n  But was:  False\n",
+        "stack": "at MonsterSupergroup.Gameplay.Tests.UltimateStartupKnockbackPlayModeTests+<WaitFor>d__32.MoveNext () [0x0006b] in F:\\UnityStore\\MonsterSupergroup\\Assets\\_Project\\Tests\\PlayMode\\Gameplay\\UltimateStartupKnockbackPlayModeTests.cs:245\nat UnityEngine.TestTools.TestEnumerator+<Execute>d__7.MoveNext () [0x0004e] in .\\Library\\PackageCache\\com.unity.test-framework@bd7f943e9647\\UnityEngine.TestRunner\\NUnitExtensions\\Attributes\\TestEnumerator.cs:44\n"
+      },
+      {
+        "test": "MonsterSupergroup.Gameplay.Tests.UltimateStartupKnockbackPlayModeTests.Host_ClientAssignedProductEnemyMovesOnceThroughReliableEndpointWithoutAnyHealthMutation",
+        "message": "  Expected: 1\n  But was:  0\n",
+        "stack": "at MonsterSupergroup.Gameplay.Tests.UltimateStartupKnockbackPlayModeTests+<Host_ClientAssignedProductEnemyMovesOnceThroughReliableEndpointWithoutAnyHealthMutation>d__18.MoveNext () [0x001e1] in F:\\UnityStore\\MonsterSupergroup\\Assets\\_Project\\Tests\\PlayMode\\Gameplay\\UltimateStartupKnockbackPlayModeTests.cs:54\nat UnityEngine.TestTools.TestEnumerator+<Execute>d__7.MoveNext () [0x0004e] in .\\Library\\PackageCache\\com.unity.test-framework@bd7f943e9647\\UnityEngine.TestRunner\\NUnitExtensions\\Attributes\\TestEnumerator.cs:44\n"
+      },
+      {
+        "test": "MonsterSupergroup.Gameplay.Tests.UltimateStartupKnockbackPlayModeTests.Host_ServerFallbackAndAuthoritativeRoutesMoveOnlyTheirServerBodiesAndSkipFrozenEnemy",
+        "message": "  Expected: 2\n  But was:  0\n",
+        "stack": "at MonsterSupergroup.Gameplay.Tests.UltimateStartupKnockbackPlayModeTests+<Host_ServerFallbackAndAuthoritativeRoutesMoveOnlyTheirServerBodiesAndSkipFrozenEnemy>d__19.MoveNext () [0x00312] in F:\\UnityStore\\MonsterSupergroup\\Assets\\_Project\\Tests\\PlayMode\\Gameplay\\UltimateStartupKnockbackPlayModeTests.cs:103\nat UnityEngine.TestTools.TestEnumerator+<Execute>d__7.MoveNext () [0x0004e] in .\\Library\\PackageCache\\com.unity.test-framework@bd7f943e9647\\UnityEngine.TestRunner\\NUnitExtensions\\Attributes\\TestEnumerator.cs:44\n"
+      },
+      {
+        "test": "MonsterSupergroup.Gameplay.Tests.UpgradeSelectionLockTests.PlayerLockStopsInputPhysicsAndAttacks_UnlockPreservesOtherInvulnerability",
+        "message": "  Expected: (0.00, 1.00)\n  But was:  (0.00, 0.00)\n",
+        "stack": "at MonsterSupergroup.Gameplay.Tests.UpgradeSelectionLockTests.PlayerLockStopsInputPhysicsAndAttacks_UnlockPreservesOtherInvulnerability () [0x0022c] in F:\\UnityStore\\MonsterSupergroup\\Assets\\_Project\\Tests\\PlayMode\\Gameplay\\UpgradeSelectionLockTests.cs:58\n"
+      }
+    ]
+  },
+  "edit-broad": {
+    "counts": {
+      "id": "2",
+      "testcasecount": "753",
+      "result": "Failed(Child)",
+      "total": "753",
+      "passed": "749",
+      "failed": "4",
+      "inconclusive": "0",
+      "skipped": "0",
+      "asserts": "0",
+      "engine-version": "3.5.0.0",
+      "clr-version": "4.0.30319.42000",
+      "start-time": "2026-09-15 14:56:29Z",
+      "end-time": "2026-09-15 14:56:35Z",
+      "duration": "6.88216"
+    },
+    "failures": [
+      {
+        "test": "MonsterSupergroup.HellMaidenMigration.Tests.DanteCirclingNativeGasMigrationTests.NativeDatabaseKeepsExistingWeaponsAndAddsCirclingOnce",
+        "message": "  Expected: 2\n  But was:  6\n",
+        "stack": "at MonsterSupergroup.HellMaidenMigration.Tests.DanteCirclingNativeGasMigrationTests.NativeDatabaseKeepsExistingWeaponsAndAddsCirclingOnce () [0x0015d] in F:\\UnityStore\\MonsterSupergroup\\Assets\\_Project\\Tests\\EditMode\\HellMaidenMigration\\DanteCirclingNativeGasMigrationTests.cs:215\n"
+      },
+      {
+        "test": "MonsterSupergroup.HellMaidenMigration.Tests.DanteDashNativeGasMigrationTests.DatabaseAddsDashOnceAndKeepsEarlierPhasesAndDefaultWeapon",
+        "message": "  Expected: 2\n  But was:  6\n",
+        "stack": "at MonsterSupergroup.HellMaidenMigration.Tests.DanteDashNativeGasMigrationTests.DatabaseAddsDashOnceAndKeepsEarlierPhasesAndDefaultWeapon () [0x00106] in F:\\UnityStore\\MonsterSupergroup\\Assets\\_Project\\Tests\\EditMode\\HellMaidenMigration\\DanteDashNativeGasMigrationTests.cs:132\n"
+      },
+      {
+        "test": "MonsterSupergroup.HellMaidenMigration.Tests.DanteNativeGasMigrationTests.NetworkPlayerPrefab_OwnsOnePlayerBuildRuntime",
+        "message": "  Expected: 2\n  But was:  6\n",
+        "stack": "at MonsterSupergroup.HellMaidenMigration.Tests.DanteNativeGasMigrationTests.NetworkPlayerPrefab_OwnsOnePlayerBuildRuntime () [0x0002c] in F:\\UnityStore\\MonsterSupergroup\\Assets\\_Project\\Tests\\EditMode\\HellMaidenMigration\\DanteNativeGasMigrationTests.cs:366\n"
+      },
+      {
+        "test": "MonsterSupergroup.HellMaidenMigration.Tests.DanteUltimateAssetMigrationTests.DefinitionRetainsSourceUltimateIdentityAndStatsWithoutCreatingAWeaponDefinition",
+        "message": "System.NullReferenceException : Object reference not set to an instance of an object",
+        "stack": "  at MonsterSupergroup.HellMaidenMigration.Tests.DanteUltimateAssetMigrationTests.DefinitionRetainsSourceUltimateIdentityAndStatsWithoutCreatingAWeaponDefinition () [0x00024] in F:\\UnityStore\\MonsterSupergroup\\Assets\\_Project\\Tests\\EditMode\\HellMaidenMigration\\DanteUltimateAssetMigrationTests.cs:20 \n  at (wrapper managed-to-native) System.Reflection.RuntimeMethodInfo.InternalInvoke(System.Reflection.RuntimeMethodInfo,object,object[],System.Exception&)\n  at System.Reflection.RuntimeMethodInfo.Invoke (System.Object obj, System.Reflection.BindingFlags invokeAttr, System.Reflection.Binder binder, System.Object[] parameters, System.Globalization.CultureInfo culture) [0x0006a] in <41d29b352f6a475ab1bf7c6628b82790>:0 "
+      }
+    ]
+  },
+  "play-broad": {
+    "counts": {
+      "id": "2",
+      "testcasecount": "523",
+      "result": "Failed(Child)",
+      "total": "523",
+      "passed": "513",
+      "failed": "10",
+      "inconclusive": "0",
+      "skipped": "0",
+      "asserts": "0",
+      "engine-version": "3.5.0.0",
+      "clr-version": "4.0.30319.42000",
+      "start-time": "2026-09-15 15:00:27Z",
+      "end-time": "2026-09-15 15:07:57Z",
+      "duration": "450.7910668"
+    },
+    "failures": [
+      {
+        "test": "MonsterSupergroup.Gameplay.Tests.GameplayCameraTests.Axeldor_DeathHoldsAndCanonicalLifeRestorationReversesClip",
+        "message": "  Expected: Dead\n  But was:  Idle\n",
+        "stack": "at MonsterSupergroup.Gameplay.Tests.GameplayCameraTests+<Axeldor_DeathHoldsAndCanonicalLifeRestorationReversesClip>d__12.MoveNext () [0x000da] in F:\\UnityStore\\MonsterSupergroup\\Assets\\_Project\\Tests\\PlayMode\\Gameplay\\GameplayCameraTests.cs:235\nat UnityEngine.TestTools.TestEnumerator+<Execute>d__7.MoveNext () [0x0004e] in .\\Library\\PackageCache\\com.unity.test-framework@bd7f943e9647\\UnityEngine.TestRunner\\NUnitExtensions\\Attributes\\TestEnumerator.cs:44\n"
+      },
+      {
+        "test": "MonsterSupergroup.Gameplay.Tests.NetworkCombatSandboxPlayModeTests.DedicatedServer_BossModeNeverBecomesClientSimulation",
+        "message": "  Expected: ServerAuthoritative\n  But was:  Frozen\n",
+        "stack": "at MonsterSupergroup.Gameplay.Tests.NetworkCombatSandboxPlayModeTests+<DedicatedServer_BossModeNeverBecomesClientSimulation>d__9.MoveNext () [0x0029b] in F:\\UnityStore\\MonsterSupergroup\\Assets\\_Project\\Tests\\PlayMode\\Gameplay\\NetworkCombatSandboxPlayModeTests.cs:1524\nat UnityEngine.TestTools.TestEnumerator+<Execute>d__7.MoveNext () [0x0004e] in .\\Library\\PackageCache\\com.unity.test-framework@bd7f943e9647\\UnityEngine.TestRunner\\NUnitExtensions\\Attributes\\TestEnumerator.cs:44\n"
+      },
+      {
+        "test": "MonsterSupergroup.Gameplay.Tests.NetworkCombatSandboxPlayModeTests.DedicatedServer_ClientOwnedEnemiesWaitThenFallbackRuns",
+        "message": "  Expected: property Length equal to 120\n  But was:  0\n",
+        "stack": "at MonsterSupergroup.Gameplay.Tests.NetworkCombatSandboxPlayModeTests+<DedicatedServer_ClientOwnedEnemiesWaitThenFallbackRuns>d__8.MoveNext () [0x001eb] in F:\\UnityStore\\MonsterSupergroup\\Assets\\_Project\\Tests\\PlayMode\\Gameplay\\NetworkCombatSandboxPlayModeTests.cs:1360\nat UnityEngine.TestTools.TestEnumerator+<Execute>d__7.MoveNext () [0x0004e] in .\\Library\\PackageCache\\com.unity.test-framework@bd7f943e9647\\UnityEngine.TestRunner\\NUnitExtensions\\Attributes\\TestEnumerator.cs:44\n"
+      },
+      {
+        "test": "MonsterSupergroup.Gameplay.Tests.NetworkCombatSandboxPlayModeTests.Host_ObserverRelayAndServerFallbackConverge",
+        "message": "  Expected: 1\n  But was:  0\n",
+        "stack": "at MonsterSupergroup.Gameplay.Tests.NetworkCombatSandboxPlayModeTests+<Host_ObserverRelayAndServerFallbackConverge>d__7.MoveNext () [0x005ea] in F:\\UnityStore\\MonsterSupergroup\\Assets\\_Project\\Tests\\PlayMode\\Gameplay\\NetworkCombatSandboxPlayModeTests.cs:1035\nat UnityEngine.TestTools.TestEnumerator+<Execute>d__7.MoveNext () [0x0004e] in .\\Library\\PackageCache\\com.unity.test-framework@bd7f943e9647\\UnityEngine.TestRunner\\NUnitExtensions\\Attributes\\TestEnumerator.cs:44\n"
+      },
+      {
+        "test": "MonsterSupergroup.Gameplay.Tests.NetworkCombatSandboxPlayModeTests.ProductEnemyBase_ClientOwnerRunsNavigationWithoutServerTransform",
+        "message": "System.NullReferenceException : Object reference not set to an instance of an object",
+        "stack": "  at MonsterSupergroup.Gameplay.Tests.NetworkCombatSandboxPlayModeTests+<ProductEnemyBase_ClientOwnerRunsNavigationWithoutServerTransform>d__5.MoveNext () [0x003f9] in F:\\UnityStore\\MonsterSupergroup\\Assets\\_Project\\Tests\\PlayMode\\Gameplay\\NetworkCombatSandboxPlayModeTests.cs:301 \n  at UnityEngine.TestTools.TestEnumerator+<Execute>d__7.MoveNext () [0x0004e] in .\\Library\\PackageCache\\com.unity.test-framework@bd7f943e9647\\UnityEngine.TestRunner\\NUnitExtensions\\Attributes\\TestEnumerator.cs:44 "
+      },
+      {
+        "test": "MonsterSupergroup.Gameplay.Tests.NetworkPlayerDashPlayModeTests.Host_CommandRejectsInvalidMotionAndRevisionAndUsesCanonicalDuration",
+        "message": "  A within-tolerance motion must be accepted.\n  Expected: True\n  But was:  False\n",
+        "stack": "at MonsterSupergroup.Gameplay.Tests.NetworkPlayerDashPlayModeTests+<WaitFor>d__9.MoveNext () [0x0006b] in F:\\UnityStore\\MonsterSupergroup\\Assets\\_Project\\Tests\\PlayMode\\Gameplay\\NetworkPlayerDashPlayModeTests.cs:153\nat UnityEngine.TestTools.TestEnumerator+<Execute>d__7.MoveNext () [0x0004e] in .\\Library\\PackageCache\\com.unity.test-framework@bd7f943e9647\\UnityEngine.TestRunner\\NUnitExtensions\\Attributes\\TestEnumerator.cs:44\n"
+      },
+      {
+        "test": "MonsterSupergroup.Gameplay.Tests.NetworkPlayerSummonPlayModeTests.Host_FreshEquipmentReceivesSixtySecondDeadlineAndCannotSkipCocoonOrBirth",
+        "message": "System.InvalidOperationException : Sequence contains no elements",
+        "stack": "  at System.Linq.Enumerable.Single[TSource] (System.Collections.Generic.IEnumerable`1[T] source) [0x0002d] in <80564d689e48448fa2a7101993ee7201>:0 \n  at MonsterSupergroup.Gameplay.Tests.NetworkPlayerSummonPlayModeTests+<Host_FreshEquipmentReceivesSixtySecondDeadlineAndCannotSkipCocoonOrBirth>d__17.MoveNext () [0x002bd] in F:\\UnityStore\\MonsterSupergroup\\Assets\\_Project\\Tests\\PlayMode\\Gameplay\\NetworkPlayerSummonPlayModeTests.cs:57 \n  at UnityEngine.TestTools.TestEnumerator+<Execute>d__7.MoveNext () [0x0004e] in .\\Library\\PackageCache\\com.unity.test-framework@bd7f943e9647\\UnityEngine.TestRunner\\NUnitExtensions\\Attributes\\TestEnumerator.cs:44 "
+      },
+      {
+        "test": "MonsterSupergroup.Gameplay.Tests.OrdinaryHitKnockbackPlayModeTests.SingleCirclingOrbRepeatedPhysicsHitsMoveTheRealProductEnemyUnderOneRoot",
+        "message": "  Expected: (0.00, 0.00)\n  But was:  (-1.95, 0.44)\n",
+        "stack": "at MonsterSupergroup.Gameplay.Tests.OrdinaryHitKnockbackPlayModeTests+<VerifyCommandReplayAndHandoff>d__7.MoveNext () [0x00364] in F:\\UnityStore\\MonsterSupergroup\\Assets\\_Project\\Tests\\PlayMode\\Gameplay\\OrdinaryHitKnockbackPlayModeTests.cs:186\nat UnityEngine.TestTools.TestEnumerator+<Execute>d__7.MoveNext () [0x0004e] in .\\Library\\PackageCache\\com.unity.test-framework@bd7f943e9647\\UnityEngine.TestRunner\\NUnitExtensions\\Attributes\\TestEnumerator.cs:44\n"
+      },
+      {
+        "test": "MonsterSupergroup.Gameplay.Tests.UltimateStartupKnockbackPlayModeTests.Host_ClientAssignedProductEnemyMovesOnceThroughReliableEndpointWithoutAnyHealthMutation",
+        "message": "  The original knockback coroutine must move the product Rigidbody away from the pulse origin.\n  Expected: greater than 1002.0f\n  But was:  59.6826897f\n",
+        "stack": "at MonsterSupergroup.Gameplay.Tests.UltimateStartupKnockbackPlayModeTests+<Host_ClientAssignedProductEnemyMovesOnceThroughReliableEndpointWithoutAnyHealthMutation>d__18.MoveNext () [0x00345] in F:\\UnityStore\\MonsterSupergroup\\Assets\\_Project\\Tests\\PlayMode\\Gameplay\\UltimateStartupKnockbackPlayModeTests.cs:64\nat UnityEngine.TestTools.TestEnumerator+<Execute>d__7.MoveNext () [0x0004e] in .\\Library\\PackageCache\\com.unity.test-framework@bd7f943e9647\\UnityEngine.TestRunner\\NUnitExtensions\\Attributes\\TestEnumerator.cs:44\n"
+      },
+      {
+        "test": "MonsterSupergroup.Gameplay.Tests.UltimateStartupKnockbackPlayModeTests.Host_ServerFallbackAndAuthoritativeRoutesMoveOnlyTheirServerBodiesAndSkipFrozenEnemy",
+        "message": "  Expected: 2\n  But was:  0\n",
+        "stack": "at MonsterSupergroup.Gameplay.Tests.UltimateStartupKnockbackPlayModeTests+<Host_ServerFallbackAndAuthoritativeRoutesMoveOnlyTheirServerBodiesAndSkipFrozenEnemy>d__19.MoveNext () [0x00312] in F:\\UnityStore\\MonsterSupergroup\\Assets\\_Project\\Tests\\PlayMode\\Gameplay\\UltimateStartupKnockbackPlayModeTests.cs:103\nat UnityEngine.TestTools.TestEnumerator+<Execute>d__7.MoveNext () [0x0004e] in .\\Library\\PackageCache\\com.unity.test-framework@bd7f943e9647\\UnityEngine.TestRunner\\NUnitExtensions\\Attributes\\TestEnumerator.cs:44\n"
+      }
+    ]
+  },
+  "camera-order": {
+    "counts": {
+      "id": "2",
+      "testcasecount": "14",
+      "result": "Failed(Child)",
+      "total": "14",
+      "passed": "13",
+      "failed": "1",
+      "inconclusive": "0",
+      "skipped": "0",
+      "asserts": "0",
+      "engine-version": "3.5.0.0",
+      "clr-version": "4.0.30319.42000",
+      "start-time": "2026-09-15 15:09:55Z",
+      "end-time": "2026-09-15 15:10:31Z",
+      "duration": "35.9699764"
+    },
+    "failures": [
+      {
+        "test": "MonsterSupergroup.Gameplay.Tests.GameplayCameraTests.Axeldor_DeathHoldsAndCanonicalLifeRestorationReversesClip",
+        "message": "  health=500 version=2 initialized=True scale=1\n  Expected: Dead\n  But was:  Idle\n",
+        "stack": "at MonsterSupergroup.Gameplay.Tests.GameplayCameraTests+<Axeldor_DeathHoldsAndCanonicalLifeRestorationReversesClip>d__12.MoveNext () [0x000da] in F:\\UnityStore\\MonsterSupergroup\\Assets\\_Project\\Tests\\PlayMode\\Gameplay\\GameplayCameraTests.cs:235\nat UnityEngine.TestTools.TestEnumerator+<Execute>d__7.MoveNext () [0x0004e] in .\\Library\\PackageCache\\com.unity.test-framework@bd7f943e9647\\UnityEngine.TestRunner\\NUnitExtensions\\Attributes\\TestEnumerator.cs:44\n"
+      }
+    ]
+  },
+  "camera-order-fixed": {
+    "counts": {
+      "id": "2",
+      "testcasecount": "14",
+      "result": "Passed",
+      "total": "14",
+      "passed": "14",
+      "failed": "0",
+      "inconclusive": "0",
+      "skipped": "0",
+      "asserts": "0",
+      "engine-version": "3.5.0.0",
+      "clr-version": "4.0.30319.42000",
+      "start-time": "2026-09-15 15:12:00Z",
+      "end-time": "2026-09-15 15:12:36Z",
+      "duration": "35.9356557"
+    },
+    "failures": []
+  },
+  "edit-final-focused": {
+    "counts": {
+      "id": "2",
+      "testcasecount": "99",
+      "result": "Passed",
+      "total": "99",
+      "passed": "99",
+      "failed": "0",
+      "inconclusive": "0",
+      "skipped": "0",
+      "asserts": "0",
+      "engine-version": "3.5.0.0",
+      "clr-version": "4.0.30319.42000",
+      "start-time": "2026-09-15 15:16:54Z",
+      "end-time": "2026-09-15 15:16:55Z",
+      "duration": "0.5699949"
+    },
+    "failures": []
+  },
+  "play-lifecycle": {
+    "counts": {
+      "id": "2",
+      "testcasecount": "32",
+      "result": "Passed",
+      "total": "32",
+      "passed": "32",
+      "failed": "0",
+      "inconclusive": "0",
+      "skipped": "0",
+      "asserts": "0",
+      "engine-version": "3.5.0.0",
+      "clr-version": "4.0.30319.42000",
+      "start-time": "2026-09-15 14:46:48Z",
+      "end-time": "2026-09-15 14:48:16Z",
+      "duration": "87.9288847"
+    },
+    "failures": []
+  },
+  "edit-final": {
+    "counts": {
+      "id": "2",
+      "testcasecount": "100",
+      "result": "Passed",
+      "total": "100",
+      "passed": "100",
+      "failed": "0",
+      "inconclusive": "0",
+      "skipped": "0",
+      "asserts": "0",
+      "engine-version": "3.5.0.0",
+      "clr-version": "4.0.30319.42000",
+      "start-time": "2026-09-15 15:23:44Z",
+      "end-time": "2026-09-15 15:23:44Z",
+      "duration": "0.6368117"
+    },
+    "failures": []
+  },
+  "play-final-flow": {
+    "counts": {
+      "id": "2",
+      "testcasecount": "39",
+      "result": "Passed",
+      "total": "39",
+      "passed": "39",
+      "failed": "0",
+      "inconclusive": "0",
+      "skipped": "0",
+      "asserts": "0",
+      "engine-version": "3.5.0.0",
+      "clr-version": "4.0.30319.42000",
+      "start-time": "2026-09-15 15:20:03Z",
+      "end-time": "2026-09-15 15:21:57Z",
+      "duration": "113.9001216"
+    },
+    "failures": []
+  },
+  "camera-repro": {
+    "counts": {
+      "id": "2",
+      "testcasecount": "1",
+      "result": "Passed",
+      "total": "1",
+      "passed": "1",
+      "failed": "0",
+      "inconclusive": "0",
+      "skipped": "0",
+      "asserts": "0",
+      "engine-version": "3.5.0.0",
+      "clr-version": "4.0.30319.42000",
+      "start-time": "2026-09-15 14:57:25Z",
+      "end-time": "2026-09-15 14:57:32Z",
+      "duration": "6.6884499"
+    },
+    "failures": []
+  },
+  "edit-initial": {
+    "counts": {
+      "id": "2",
+      "testcasecount": "35",
+      "result": "Passed",
+      "total": "35",
+      "passed": "35",
+      "failed": "0",
+      "inconclusive": "0",
+      "skipped": "0",
+      "asserts": "0",
+      "engine-version": "3.5.0.0",
+      "clr-version": "4.0.30319.42000",
+      "start-time": "2026-09-15 14:44:19Z",
+      "end-time": "2026-09-15 14:44:20Z",
+      "duration": "0.4207081"
+    },
+    "failures": []
+  },
+  "edit-ready": {
+    "counts": {
+      "id": "2",
+      "testcasecount": "100",
+      "result": "Passed",
+      "total": "100",
+      "passed": "100",
+      "failed": "0",
+      "inconclusive": "0",
+      "skipped": "0",
+      "asserts": "0",
+      "engine-version": "3.5.0.0",
+      "clr-version": "4.0.30319.42000",
+      "start-time": "2026-09-15 15:27:15Z",
+      "end-time": "2026-09-15 15:27:16Z",
+      "duration": "0.6473294"
+    },
+    "failures": []
+  }
+}

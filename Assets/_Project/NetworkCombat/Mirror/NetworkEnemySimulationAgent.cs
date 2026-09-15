@@ -314,7 +314,7 @@ namespace MonsterSupergroup.NetworkCombat
         {
             if (!IsCanonicalAlive || edge.EnemyEntityId != netId ||
                 edge.AssignmentEpoch != assignment.Epoch ||
-                !edge.IsFinite || !edge.HasKnownPhase)
+                !edge.IsFinite || !edge.HasKnownPhase || !edge.Checkpoint.Movement.Runtime.IsFinite || !ValidateSequenceAction(edge.Checkpoint.Movement.Runtime.Action))
             {
                 return false;
             }
@@ -332,6 +332,7 @@ namespace MonsterSupergroup.NetworkCombat
             }
 
             receivedAttackStateSequence = edge.StateSequence;
+            RememberSequenceCancellation(edge.Checkpoint.Movement.Runtime.Action);
             latestAttackPresentation = edge;
             hasLatestAttackPresentation = true;
             ApplyReplicaAttackPresentation(edge);
@@ -726,6 +727,8 @@ namespace MonsterSupergroup.NetworkCombat
         private void ApplyReplicaAttackPresentation(
             EnemyAttackPresentationEdge edge)
         {
+            // Sequence replicas advance their whole absolute timeline, including the presentation index.
+            if (enemyController != null && enemyController.attackScript is SequenceEnemyAttack) return;
             if (productMovementOnly || !productEnemyInitialized ||
                 enemyController == null || authority == null ||
                 !authority.ConsumesSnapshots)

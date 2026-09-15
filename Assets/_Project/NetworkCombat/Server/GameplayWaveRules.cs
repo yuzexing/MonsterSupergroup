@@ -16,6 +16,9 @@ namespace MonsterSupergroup.NetworkCombat
         [Header("Optional reference stage (uses the same server spawner)")]
         [SerializeField] private bool referenceStage;
         [SerializeField] private bool referenceValidationOnly;
+        [SerializeField] private ReferenceEnemyReadiness referenceFlowReadiness;
+        [SerializeField] private string referenceFlowReadinessNote;
+        [SerializeField] private ReferenceEndPolicy referenceEndPolicy;
         [SerializeField] private EnemyDatabase referenceEnemies;
         [SerializeField] private double referenceEndTime = 60;
         [SerializeField] private double referenceSourceDuration = 841.5766649882;
@@ -44,6 +47,9 @@ namespace MonsterSupergroup.NetworkCombat
                         referenceSeed, offscreenDistance, repositionDistance, repositionGrace, offscreenTimeout,
                         maximumOffscreenDistance, burstRadius, burstAspect, effectsDelay, activationDelay,
                         barriers, out var referencePrefabs, referenceValidationOnly);
+                    reference.FlowReadiness = referenceFlowReadiness;
+                    reference.FlowReadinessNote = referenceFlowReadinessNote;
+                    reference.EndPolicy = referenceEndPolicy;
                     parameters = new WaveParameters(reference, referencePrefabs, maximumAlive, positionAttempts);
                     error = null; return true;
                 }

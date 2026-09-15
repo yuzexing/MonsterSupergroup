@@ -298,9 +298,9 @@ namespace MonsterSupergroup.Gameplay.Tests
                 Assert.That(agent.Authority.Role, Is.EqualTo(EnemySimulationRole.ClientOwner));
                 Assert.That(agent.Authority.RunsNavigation, Is.True);
                 Assert.That(agent.Authority.RunsCombatDecisions, Is.False);
-                Assert.That(controller.attackScript.enabled, Is.False,
-                    "Movement-only network Enemies must not run standalone " +
-                    "EnemyAttack lifecycle methods outside EnemyAIManager.");
+                Assert.That(controller.attackScript, Is.Null,
+                    "EnemyBase uses continuous contact, not a standalone active attack.");
+                Assert.That(spawnedEnemy.GetComponent<EnemyContactDamage>().enabled, Is.True);
                 Assert.That(
                     spawnedEnemy.GetComponents<NetworkBehaviour>().All(component =>
                         component.GetType().Name != "NetworkTransformReliable"),
@@ -957,13 +957,7 @@ namespace MonsterSupergroup.Gameplay.Tests
                 Assert.That(localEndpoint, Is.Not.Null);
                 Assert.That(agents.Length, Is.GreaterThanOrEqualTo(3));
 
-                remotePlayer = new GameObject("Remote Simulation Endpoint");
-                remotePlayer.SetActive(false);
-                remotePlayer.transform.position = new Vector3(100f, 100f, 0f);
-                remotePlayer.AddComponent<NetworkIdentity>();
-                remotePlayer.AddComponent<NetworkEnemySimulationEndpoint>();
-                remotePlayer.SetActive(true);
-                NetworkServer.Spawn(remotePlayer);
+                remotePlayer = AddConnectedFixturePlayer(manager, 4201, new Vector2(100f, 100f));
                 NetworkEnemySimulationEndpoint remoteEndpoint =
                     remotePlayer.GetComponent<NetworkEnemySimulationEndpoint>();
                 float remoteDeadline = Time.realtimeSinceStartup + 3f;
@@ -978,12 +972,8 @@ namespace MonsterSupergroup.Gameplay.Tests
                 Assert.That(remoteEndpoint.isOwned, Is.False);
 
                 NetworkEnemySimulationAgent observerAgent = agents[0];
-                EnemySimulationAssignment observerAssignment =
-                    world.Registry.AssignClientOwner(
-                        observerAgent.netId,
-                        remoteEndpoint.PlayerEntityId,
-                        remoteEndpoint.PlayerEntityId);
-                observerAgent.SetServerAssignment(observerAssignment);
+                Assert.That(world.RequestTargetChange(observerAgent.netId, remoteEndpoint.netId,
+                    EnemyTargetChangeReason.Forced), Is.EqualTo(EnemyTargetChangeResult.Accepted));
                 float roleDeadline = Time.realtimeSinceStartup + 2f;
                 while (observerAgent.Authority.Role != EnemySimulationRole.Replica &&
                        Time.realtimeSinceStartup < roleDeadline)
@@ -994,10 +984,17 @@ namespace MonsterSupergroup.Gameplay.Tests
                 Assert.That(
                     observerAgent.Authority.Role,
                     Is.EqualTo(EnemySimulationRole.Replica));
+                EnemySimulationAssignment observerAssignment = observerAgent.Assignment;
+                Assert.That(observerAssignment.SimulationOwnerPlayerId, Is.EqualTo(remoteEndpoint.netId));
                 Assert.That(observerAgent.Authority.RunsNavigation, Is.False);
                 Assert.That(
                     observerAgent.GetComponent<LocalEnemyChase>().enabled,
                     Is.False);
+
+                // A reliable handoff checkpoint wins a same-time movement sample.
+                // This sample represents a later producer frame, not the transfer frame.
+                while (NetworkTime.time <= observerAgent.Handoff.Checkpoint.Movement.SampleNetworkTime)
+                    yield return null;
 
                 Vector2 firstRelayPosition =
                     (Vector2)observerAgent.transform.position + Vector2.right * 4f;
@@ -1019,6 +1016,12 @@ namespace MonsterSupergroup.Gameplay.Tests
                         BatchSequence = 100u,
                         Snapshots = new[] { firstSnapshot }
                     });
+                world.Registry.TryGetLatestSnapshot(observerAgent.netId, out var immediate);
+                NetworkCombatWorld.Instance.Gateway.Ledger.TryGetState(observerAgent.netId, out var immediateLife);
+                Debug.Log($"[RelayFixture] immediate seq={immediate.Sequence} epoch={immediate.AssignmentEpoch}/{observerAssignment.Epoch} " +
+                    $"host={observerAgent.Assignment.Host} owner={observerAgent.Assignment.SimulationOwnerPlayerId}/{remoteEndpoint.netId} " +
+                    $"alive={observerAgent.IsCanonicalAlive}/{immediateLife.Alive} sample={firstSnapshot.SampleNetworkTime:R}/{immediate.SampleNetworkTime:R} " +
+                    $"position={observerAgent.transform.position}/{firstRelayPosition}");
                 float relayDeadline = Time.realtimeSinceStartup + 2f;
                 while (((Vector2)observerAgent.transform.position - firstRelayPosition)
                            .sqrMagnitude >= 0.0001f &&
@@ -1033,6 +1036,8 @@ namespace MonsterSupergroup.Gameplay.Tests
                         out EnemySimulationSnapshot acceptedFirst),
                     Is.True);
                 Assert.That(acceptedFirst.Sequence, Is.EqualTo(1u));
+                Assert.That(world.TryReadHandoff(observerAgent.netId, out var acknowledged) &&
+                    !acknowledged.AwaitingFirstSnapshot, Is.True, "The first valid snapshot acknowledges the handoff.");
                 Assert.That(
                     ((Vector2)observerAgent.transform.position - firstRelayPosition)
                         .sqrMagnitude,
@@ -1049,7 +1054,8 @@ namespace MonsterSupergroup.Gameplay.Tests
                     StateStartNetworkTime = sharedPhaseTime,
                     PhaseDuration = 1f,
                     Phase = EnemyAttackPresentationPhase.Warning,
-                    Facing = Vector2.left
+                    Facing = Vector2.left,
+                    Checkpoint = new EnemySimulationCheckpoint { Movement = firstSnapshot }
                 };
                 var activeEdge = warningEdge;
                 activeEdge.StateSequence = 2u;
@@ -1130,13 +1136,15 @@ namespace MonsterSupergroup.Gameplay.Tests
                 Assert.That(receivedAttackEdges, Is.EqualTo(3));
 
                 NetworkEnemySimulationAgent reorderedAgent = agents[1];
-                EnemySimulationAssignment reorderedAssignment =
-                    world.Registry.AssignClientOwner(
-                        reorderedAgent.netId,
-                        remoteEndpoint.PlayerEntityId,
-                        remoteEndpoint.PlayerEntityId);
-                reorderedAgent.SetServerAssignment(reorderedAssignment);
-                yield return null;
+                Assert.That(world.RequestTargetChange(reorderedAgent.netId, remoteEndpoint.netId,
+                    EnemyTargetChangeReason.Forced), Is.EqualTo(EnemyTargetChangeResult.Accepted));
+                float reorderDeadline = Time.realtimeSinceStartup + 2f;
+                while (reorderedAgent.Assignment.SimulationOwnerPlayerId != remoteEndpoint.netId &&
+                    Time.realtimeSinceStartup < reorderDeadline) yield return null;
+                EnemySimulationAssignment reorderedAssignment = reorderedAgent.Assignment;
+                Assert.That(reorderedAssignment.SimulationOwnerPlayerId, Is.EqualTo(remoteEndpoint.netId));
+                while (NetworkTime.time <= reorderedAgent.Handoff.Checkpoint.Movement.SampleNetworkTime)
+                    yield return null;
                 var reorderedSnapshot = new EnemySimulationSnapshot
                 {
                     EnemyEntityId = reorderedAgent.netId,
@@ -1166,7 +1174,7 @@ namespace MonsterSupergroup.Gameplay.Tests
                 Vector2 secondRelayPosition = firstRelayPosition + Vector2.right * 2f;
                 EnemySimulationSnapshot secondSnapshot = firstSnapshot;
                 secondSnapshot.Sequence = 2u;
-                secondSnapshot.SampleNetworkTime += 0.05d;
+                secondSnapshot.SampleNetworkTime = NetworkTime.time;
                 secondSnapshot.Position = secondRelayPosition;
                 world.SubmitClientSnapshots(
                     remoteEndpoint,
@@ -1343,6 +1351,15 @@ namespace MonsterSupergroup.Gameplay.Tests
                 NetworkEnemySimulationEndpoint ownerEndpoint =
                     ownerEndpointObject.GetComponent<NetworkEnemySimulationEndpoint>();
 
+                // A spawned but unowned endpoint is deliberately not a participant.
+                yield return null;
+                yield return null;
+                Assert.That(NetworkEnemySimulationWorld.Instance.TryGetEligiblePlayer(ownerEndpoint.netId, out _), Is.False);
+                Assert.That(Object.FindObjectsByType<NetworkEnemySimulationAgent>(FindObjectsSortMode.None), Is.Empty);
+                NetworkServer.Destroy(ownerEndpointObject);
+                ownerEndpointObject = AddConnectedFixturePlayer(manager, 4202, Vector2.zero);
+                ownerEndpoint = ownerEndpointObject.GetComponent<NetworkEnemySimulationEndpoint>();
+
                 float spawnDeadline = Time.realtimeSinceStartup + 8f;
                 while (Object.FindObjectsByType<NetworkEnemySimulationAgent>(
                            FindObjectsSortMode.None).Length < 120 &&
@@ -1376,14 +1393,7 @@ namespace MonsterSupergroup.Gameplay.Tests
                         .sqrMagnitude,
                     Is.LessThan(0.0001f));
 
-                fallbackTargetObject = new GameObject("Server Fallback Target");
-                fallbackTargetObject.SetActive(false);
-                fallbackTargetObject.transform.position =
-                    new Vector3(100f, 100f, 0f);
-                fallbackTargetObject.AddComponent<NetworkIdentity>();
-                fallbackTargetObject.AddComponent<NetworkEnemySimulationEndpoint>();
-                fallbackTargetObject.SetActive(true);
-                NetworkServer.Spawn(fallbackTargetObject);
+                fallbackTargetObject = AddConnectedFixturePlayer(manager, 4203, new Vector2(100f, 100f));
                 NetworkEnemySimulationEndpoint fallbackTarget =
                     fallbackTargetObject.GetComponent<NetworkEnemySimulationEndpoint>();
 
@@ -1484,27 +1494,20 @@ namespace MonsterSupergroup.Gameplay.Tests
                     prefab => prefab != null && prefab.name == "NetworkEnemy");
                 spawner.Configure(lightweightEnemy, 0, 1, 1f, Vector2.zero);
 
-                endpointObject = new GameObject("Boss Target Endpoint");
-                endpointObject.SetActive(false);
-                endpointObject.AddComponent<NetworkIdentity>();
-                endpointObject.AddComponent<NetworkEnemySimulationEndpoint>();
-                endpointObject.SetActive(true);
-                NetworkServer.Spawn(endpointObject);
+                endpointObject = AddConnectedFixturePlayer(manager, 4204, Vector2.zero);
                 NetworkEnemySimulationEndpoint endpoint =
                     endpointObject.GetComponent<NetworkEnemySimulationEndpoint>();
 
-                bossObject = new GameObject("Server Authoritative Boss Probe");
+                bossObject = Object.Instantiate(lightweightEnemy, Vector3.right * 5f, Quaternion.identity);
+                bossObject.name = "Server Authoritative Boss Probe";
                 bossObject.SetActive(false);
-                bossObject.AddComponent<NetworkIdentity>();
-                bossObject.AddComponent<Rigidbody2D>();
                 EnemySimulationAuthority bossAuthority =
-                    bossObject.AddComponent<EnemySimulationAuthority>();
+                    bossObject.GetComponent<EnemySimulationAuthority>();
                 bossAuthority.ConfigureNetworkManaged(
                     EnemySimulationMode.BossServer,
                     enableCombatDecisions: true);
-                bossObject.AddComponent<EnemySnapshotInterpolator>();
                 NetworkEnemySimulationAgent bossAgent =
-                    bossObject.AddComponent<NetworkEnemySimulationAgent>();
+                    bossObject.GetComponent<NetworkEnemySimulationAgent>();
                 bossObject.SetActive(true);
                 NetworkServer.Spawn(bossObject);
 
@@ -1577,6 +1580,30 @@ namespace MonsterSupergroup.Gameplay.Tests
             }
             Assert.That(NetworkServer.active, Is.False);
             Assert.That(NetworkClient.active, Is.False);
+        }
+
+        // Uses Mirror registration and the real avatar/health initialization. Packets are
+        // intentionally not answered so dedicated-server timeout/fallback can be tested.
+        // Socket transport and real remote execution are covered separately by process tests.
+        private sealed class FixtureConnection : NetworkConnectionToClient
+        {
+            public FixtureConnection(int id) : base(id) { isAuthenticated = true; }
+            protected override void SendToTransport(System.ArraySegment<byte> data, int channelId = Channels.Reliable) { }
+            public override void Disconnect() { isReady = false; }
+        }
+
+        private static GameObject AddConnectedFixturePlayer(NetworkManager manager, int connectionId, Vector2 position)
+        {
+            var connection = new FixtureConnection(connectionId);
+            Assert.That(NetworkServer.AddConnection(connection), Is.True);
+            GameObject player = Object.Instantiate(manager.playerPrefab, position, Quaternion.identity);
+            Assert.That(NetworkServer.AddPlayerForConnection(connection, player), Is.True);
+            var endpoint = player.GetComponent<NetworkEnemySimulationEndpoint>();
+            Assert.That(connection.isReady && connection.identity == endpoint.netIdentity, Is.True);
+            Assert.That(NetworkCombatWorld.Instance.Gateway.Ledger.TryGetState(endpoint.netId, out var health) && health.Alive, Is.True);
+            Assert.That(NetworkEnemySimulationWorld.Instance.TryGetEligiblePlayer(endpoint.netId, out _), Is.True);
+            player.GetComponent<PlayerBuildRuntime>()?.SetWeaponExecutionEnabled(false);
+            return player;
         }
 
         private static void AssertDanteFmodEventAvailable()

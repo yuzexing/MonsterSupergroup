@@ -15,6 +15,8 @@ namespace MonsterSupergroup.Gameplay.Tests
         public void PlayerLockStopsInputPhysicsAndAttacks_UnlockPreservesOtherInvulnerability()
         {
             var owner = new GameObject("Selecting player");
+            var definition = ScriptableObject.CreateInstance<Assets.Scripts.AstralShift.HellMaiden.Data.PlayerBaseStatsDatabase>();
+            definition.values.maxHP = 100;
             owner.SetActive(false);
             try
             {
@@ -23,6 +25,9 @@ namespace MonsterSupergroup.Gameplay.Tests
                 var player = owner.AddComponent<PlayerMovement>();
                 player.Awake();
                 player.CombatantBinding.Configure(player, combatant);
+                typeof(PlayerMovement).GetField("playerStats", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(player,
+                    new PlayerStats { playerBaseStatsDatabase = definition });
+                player.EnsureRuntimeInitialized();
                 player.body = owner.AddComponent<Rigidbody2D>();
                 player.body.constraints = RigidbodyConstraints2D.FreezeRotation;
                 var weapon = owner.AddComponent<ProjectileAttackBehaviour>();
@@ -58,7 +63,7 @@ namespace MonsterSupergroup.Gameplay.Tests
                 Assert.That(player.CurrentInputDirection, Is.EqualTo(Vector2.up));
                 Assert.That(combatant.ReceiveDamage(new DamageInfo(1, 40, false)).Value, Is.EqualTo(40));
             }
-            finally { Object.DestroyImmediate(owner); }
+            finally { Object.DestroyImmediate(owner); Object.DestroyImmediate(definition); }
         }
 
         [Test]

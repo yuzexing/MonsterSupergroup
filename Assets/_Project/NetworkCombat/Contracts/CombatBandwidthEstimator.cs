@@ -6,7 +6,7 @@ namespace MonsterSupergroup.NetworkCombat
     /// </summary>
     public static class CombatBandwidthEstimator
     {
-        public const int CombatResultBytes = 109; // Base 66 + knockback 25 + status instance/round 12 + presentation 6.
+        public const int CombatResultBytes = 117; // Base 66 + knockback/combination 33 + status instance/round 12 + presentation 6.
         public const int EnemyHitPresentationBytes = 43; // Identity/version 16 + damage/style/source 14 + position 13.
         public const int StatusMutationBytes = 133; // Includes magnitude and application revision.
         public const int PlayerHealthReportBytes = 33;
@@ -14,6 +14,7 @@ namespace MonsterSupergroup.NetworkCombat
         public const int EnemyActionProjectileProgressBytes = 9;
         public const int EnemyActionDashProgressBytes = 33; // Boolean plus four Vector2 values in the existing checkpoint.
         public const int EnemyActionExplosionProgressBytes = 11; // Three booleans and the world-space explosion center.
+        public const int EnemyActionSequenceProgressBytes = 43; // bool, double, two Vector3, two int, two byte (uncompressed).
 
         // Projectile-only batches. Mirror uses variable-length integer and array writers.
         // Checkpoints contain a variable number of knockback receipts, measured separately.

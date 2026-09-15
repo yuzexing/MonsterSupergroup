@@ -20,6 +20,9 @@ MonoBehaviour:
   positionAttempts: 100
   referenceStage: 1
   referenceValidationOnly: 0
+  referenceFlowReadiness: 0
+  referenceFlowReadinessNote: 
+  referenceEndPolicy: 1
   referenceEnemies: {fileID: 11400000, guid: 9c334089fb87dee41bbfd5eb1b05b3b9, type: 2}
   referenceEndTime: 720.9
   referenceSourceDuration: 841.5766649882

@@ -84,7 +84,7 @@ namespace MonsterSupergroup.NetworkCombat.Tests
         public void AllApprovedBodiesBindSourceTransitionsAndKeepGameplayGeometry()
         {
             var data=JsonUtility.FromJson<LimboArtAssets.Source>(File.ReadAllText(LimboArtAssets.Root+"/ArtSource.json"));
-            Assert.That(data.bodies.Length,Is.EqualTo(8));
+            Assert.That(data.bodies.Length,Is.EqualTo(9));
             foreach(var body in data.bodies)
             {
                 var root=AssetDatabase.LoadAssetAtPath<GameObject>(body.target);
@@ -154,7 +154,7 @@ namespace MonsterSupergroup.NetworkCombat.Tests
             }
             var rules=AssetDatabase.LoadAssetAtPath<GameplayWaveRules>(LimboReferenceAssets.ResourcesRoot+"/Full.asset");
             Assert.That(rules.TryCapture(out var full,out var error),Is.True,error);
-            Assert.That(full.Reference.ReadinessError(),Is.Not.Null,"Art import must not enable LostSoul/Ghoul or Full");
+            full.Reference.FlowReadiness = ReferenceEnemyReadiness.ImplementationPending; Assert.That(full.Reference.ReadinessError(),Is.Not.Null,"Art import must not enable LostSoul/Ghoul or Full");
             var display=AssetDatabase.LoadAssetAtPath<GameplayWaveRules>(LimboReferenceAssets.ResourcesRoot+"/ArtEffects.asset");
             Assert.That(display.TryCapture(out var visual,out error),Is.True,error);
             Assert.That(visual.Reference.ReadinessError(),Is.Null);

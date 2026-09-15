@@ -363,7 +363,11 @@ namespace MonsterSupergroup.HellMaidenMigration.Tests
                 PlayerBuildRuntime[] runtimes =
                     root.GetComponentsInChildren<PlayerBuildRuntime>(true);
                 Assert.That(runtimes, Has.Length.EqualTo(1));
-                Assert.That(runtimes[0].InitialWeaponId, Is.EqualTo(2u));
+                WeaponDB database = AssetDatabase.LoadAssetAtPath<WeaponDB>(
+                    DanteNativeGasMigration.NativeWeaponDatabasePath);
+                Assert.That(System.Array.Exists(database.Weapons,
+                    weapon => weapon != null && weapon.ID == runtimes[0].InitialWeaponId), Is.True,
+                    "The retained player choice must resolve in the migrated database.");
                 Assert.That(root.GetComponent("PlayerHandBehaviour"), Is.Null);
                 Assert.That(root.GetComponent("PlayerLoader"), Is.Null);
             }

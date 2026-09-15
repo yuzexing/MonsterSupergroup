@@ -306,9 +306,9 @@ namespace MonsterSupergroup.HellMaidenMigration.Editor
                 if (build == null)
                 {
                     build = player.gameObject.AddComponent<PlayerBuildRuntime>();
+                    build.ConfigureInitialWeapon(2u);
                 }
 
-                build.ConfigureInitialWeapon(2u);
                 PrefabUtility.SaveAsPrefabAsset(root, prefabPath);
             }
             finally

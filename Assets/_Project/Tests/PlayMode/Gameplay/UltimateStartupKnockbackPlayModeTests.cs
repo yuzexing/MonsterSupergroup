@@ -226,10 +226,7 @@ namespace MonsterSupergroup.Gameplay.Tests
                 "Boot must create the owned Ultimate and enemy simulation endpoint before this fixture runs.");
             Assert.That(enemyPrefab, Is.Not.Null, "The fixture must use Gameplay's configured product Enemy prefab.");
             var movement = Player.GetComponent<PlayerMovement>();
-            movement.body.position = new Vector2(1000, 1000);
-            movement.transform.position = new Vector3(1000, 1000, 0);
-            movement.SetDirection(Vector2.zero);
-            Physics2D.SyncTransforms();
+            yield return CombatFixtureMapPlacement.PlacePlayer(movement, 8f);
         }
         private void PrepareGameplay(Scene scene, LoadSceneMode mode)
         {

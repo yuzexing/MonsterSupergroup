@@ -1,0 +1,50 @@
+{
+  "completedUtc": "2026-09-15T16:56:43.856932+00:00",
+  "editMode": {
+    "passed": 763,
+    "total": 763,
+    "failed": 0,
+    "skipped": 0
+  },
+  "playMode": {
+    "passed": 523,
+    "total": 523,
+    "failed": 0,
+    "skipped": 0
+  },
+  "graphicalRuns": [
+    "host-client-5",
+    "dedicated-1"
+  ],
+  "build": [
+    {
+      "path": "Builds\\RegressionClosure20260916\\RegressionClosure.exe",
+      "sha256": "c8b0d73dc40e4f2cddbf656cfb7257fcb8273da22e44e12a8694cd8e275c6fb2"
+    },
+    {
+      "path": "Builds\\RegressionClosure20260916\\RegressionClosure_Data\\Managed\\MonsterSupergroup.Gameplay.Tests.PlayMode.dll",
+      "sha256": "458e4e8600cebba2d0742e607c21ebd18683f55777c8de727063539da78f48b7"
+    },
+    {
+      "path": "Builds\\RegressionClosure20260916\\RegressionClosure_Data\\Managed\\MonsterSupergroup.NetworkCombat.dll",
+      "sha256": "489b61a2acdfb075451d5e915c93662aa65f7ff9ef88606ee0457e2df6182cbc"
+    }
+  ],
+  "originalPhase5FailuresSha256": "d58ebcd8c4f701966c6b2df9cd24fa2482a73922b125ab9cd94674553851c144",
+  "archive": {
+    "path": "Logs/RegressionClosureEvidence-20260916.zip",
+    "bytes": 41409995,
+    "files": 133,
+    "crc": "PASS",
+    "sha256": "87ec3d49cf6d1da4a92ba0c3e5f03779b78d1888eabd4f8780615822bce06521"
+  },
+  "screenshots": {
+    "pair-client-cocoon.png": "host-client-5/client-cocoon.png",
+    "pair-client-ultimate.png": "host-client-5/client-ultimate.png",
+    "pair-host-handoff.png": "host-client-5/host-handoff.png",
+    "dedicated-client-boss.png": "dedicated-1/client-boss.png",
+    "dedicated-client-takeover.png": "dedicated-1/client-takeover.png"
+  },
+  "notPressureTest": true,
+  "runtimeCombatChangesInThisRepair": false
+}

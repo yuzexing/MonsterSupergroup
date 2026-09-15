@@ -1,0 +1,762 @@
+{
+  "runs": [
+    {
+      "path": "Logs/RegressionClosure20260916/edit-all.xml",
+      "sha256": "e905451794a25d809e97a97d997703f2ac21fb10e5fe274ad58fe2fd69c44df9",
+      "result": "Passed",
+      "total": "763",
+      "passed": "763",
+      "failed": "0",
+      "skipped": "0",
+      "duration": "6.7344599",
+      "start-time": "2026-09-15 16:35:44Z",
+      "end-time": "2026-09-15 16:35:50Z",
+      "failures": []
+    },
+    {
+      "path": "Logs/RegressionClosure20260916/edit-broad.xml",
+      "sha256": "4356f2d975519fdb4b8887a8dfaf907c7e2e7cb3a74472a95932c705f6fff229",
+      "result": "Passed",
+      "total": "762",
+      "passed": "762",
+      "failed": "0",
+      "skipped": "0",
+      "duration": "6.8206553",
+      "start-time": "2026-09-15 16:26:57Z",
+      "end-time": "2026-09-15 16:27:04Z",
+      "failures": []
+    },
+    {
+      "path": "Logs/RegressionClosure20260916/edit-focused-3.xml",
+      "sha256": "c63e14478eee3034d8a78554ff0b281dde93de1b8b467a7d995da86929c73652",
+      "result": "Passed",
+      "total": "53",
+      "passed": "53",
+      "failed": "0",
+      "skipped": "0",
+      "duration": "3.6846406",
+      "start-time": "2026-09-15 16:13:48Z",
+      "end-time": "2026-09-15 16:13:52Z",
+      "failures": []
+    },
+    {
+      "path": "Logs/RegressionClosure20260916/edit-migration-before.xml",
+      "sha256": "a12bad49babd34ced2e44a87d07b95be874eebc71b410f9d2a07fde98702ac51",
+      "result": "Failed(Child)",
+      "total": "6",
+      "passed": "0",
+      "failed": "6",
+      "skipped": "0",
+      "duration": "3.4454821",
+      "start-time": "2026-09-15 16:09:48Z",
+      "end-time": "2026-09-15 16:09:51Z",
+      "failures": [
+        {
+          "name": "MonsterSupergroup.HellMaidenMigration.Tests.PlayerInitialWeaponMigrationTests.FocusedMigrationPreservesExistingChoiceAndIsIdempotent(False,6)",
+          "message": "  pass 0: only a newly added component receives the migration default\n  Expected: 6\n  But was:  2\n",
+          "stack": "at MonsterSupergroup.HellMaidenMigration.Tests.PlayerInitialWeaponMigrationTests.FocusedMigrationPreservesExistingChoiceAndIsIdempotent (System.Boolean networkMigration, System.UInt32 existingChoice) [0x00110] in F:\\UnityStore\\MonsterSupergroup\\Assets\\_Project\\Tests\\EditMode\\HellMaidenMigration\\PlayerInitialWeaponMigrationTests.cs:49\n"
+        },
+        {
+          "name": "MonsterSupergroup.HellMaidenMigration.Tests.PlayerInitialWeaponMigrationTests.FocusedMigrationPreservesExistingChoiceAndIsIdempotent(False,1)",
+          "message": "  pass 0: only a newly added component receives the migration default\n  Expected: 1\n  But was:  2\n",
+          "stack": "at MonsterSupergroup.HellMaidenMigration.Tests.PlayerInitialWeaponMigrationTests.FocusedMigrationPreservesExistingChoiceAndIsIdempotent (System.Boolean networkMigration, System.UInt32 existingChoice) [0x00110] in F:\\UnityStore\\MonsterSupergroup\\Assets\\_Project\\Tests\\EditMode\\HellMaidenMigration\\PlayerInitialWeaponMigrationTests.cs:49\n"
+        },
+        {
+          "name": "MonsterSupergroup.HellMaidenMigration.Tests.PlayerInitialWeaponMigrationTests.FocusedMigrationPreservesExistingChoiceAndIsIdempotent(False,uint.MinValue)",
+          "message": "Unhandled log message: '[Error] Can't remove PlayerBuildRuntime (Script) because NetworkWeaponCombatAdapter (Script), NetworkModifierSelection (Script), NetworkPlayerUltimate (Script) depends on it'. Use UnityEngine.TestTools.LogAssert.Expect",
+          "stack": "UnityEngine.Object:DestroyImmediate (UnityEngine.Object)\nMonsterSupergroup.HellMaidenMigration.Tests.PlayerInitialWeaponMigrationTests/<>c__DisplayClass0_0:<FocusedMigrationPreservesExistingChoiceAndIsIdempotent>b__0 (UnityEngine.GameObject) (at Assets/_Project/Tests/EditMode/HellMaidenMigration/PlayerInitialWeaponMigrationTests.cs:35)\nMonsterSupergroup.HellMaidenMigration.Tests.PlayerInitialWeaponMigrationTests:Edit (string,System.Action`1<UnityEngine.GameObject>) (at Assets/_Project/Tests/EditMode/HellMaidenMigration/PlayerInitialWeaponMigrationTests.cs:65)\nMonsterSupergroup.HellMaidenMigration.Tests.PlayerInitialWeaponMigrationTests:FocusedMigrationPreservesExistingChoiceAndIsIdempotent (bool,uint) (at Assets/_Project/Tests/EditMode/HellMaidenMigration/PlayerInitialWeaponMigrationTests.cs:31)\nSystem.Reflection.MethodBase:Invoke (object,object[])\nNUnit.Framework.Internal.Reflect:InvokeMethod (System.Reflection.MethodInfo,object,object[])\nNUnit.Framework.Internal.MethodWrapper:Invoke (object,object[])\nNUnit.Framework.Internal.Commands.TestMethodCommand:RunNonAsyncTestMethod (NUnit.Framework.Internal.ITestExecutionContext)\nNUnit.Framework.Internal.Commands.TestMethodCommand:RunTestMethod (NUnit.Framework.Internal.ITestExecutionContext)\nNUnit.Framework.Internal.Commands.TestMethodCommand:Execute (NUnit.Framework.Internal.ITestExecutionContext)\nUnityEditor.EditorApplication:Internal_CallUpdateFunctions ()\n[./Library/PackageCache/com.unity.test-framework@bd7f943e9647/UnityEditor.TestRunner/TestRunner/EditModeRunner.cs l\n\n"
+        },
+        {
+          "name": "MonsterSupergroup.HellMaidenMigration.Tests.PlayerInitialWeaponMigrationTests.FocusedMigrationPreservesExistingChoiceAndIsIdempotent(True,6)",
+          "message": "  pass 0: only a newly added component receives the migration default\n  Expected: 6\n  But was:  2\n",
+          "stack": "at MonsterSupergroup.HellMaidenMigration.Tests.PlayerInitialWeaponMigrationTests.FocusedMigrationPreservesExistingChoiceAndIsIdempotent (System.Boolean networkMigration, System.UInt32 existingChoice) [0x00110] in F:\\UnityStore\\MonsterSupergroup\\Assets\\_Project\\Tests\\EditMode\\HellMaidenMigration\\PlayerInitialWeaponMigrationTests.cs:49\n"
+        },
+        {
+          "name": "MonsterSupergroup.HellMaidenMigration.Tests.PlayerInitialWeaponMigrationTests.FocusedMigrationPreservesExistingChoiceAndIsIdempotent(True,1)",
+          "message": "  pass 0: only a newly added component receives the migration default\n  Expected: 1\n  But was:  2\n",
+          "stack": "at MonsterSupergroup.HellMaidenMigration.Tests.PlayerInitialWeaponMigrationTests.FocusedMigrationPreservesExistingChoiceAndIsIdempotent (System.Boolean networkMigration, System.UInt32 existingChoice) [0x00110] in F:\\UnityStore\\MonsterSupergroup\\Assets\\_Project\\Tests\\EditMode\\HellMaidenMigration\\PlayerInitialWeaponMigrationTests.cs:49\n"
+        },
+        {
+          "name": "MonsterSupergroup.HellMaidenMigration.Tests.PlayerInitialWeaponMigrationTests.FocusedMigrationPreservesExistingChoiceAndIsIdempotent(True,uint.MinValue)",
+          "message": "Unhandled log message: '[Error] Can't remove PlayerBuildRuntime (Script) because NetworkWeaponCombatAdapter (Script), NetworkModifierSelection (Script), NetworkPlayerUltimate (Script) depends on it'. Use UnityEngine.TestTools.LogAssert.Expect",
+          "stack": "UnityEngine.Object:DestroyImmediate (UnityEngine.Object)\nMonsterSupergroup.HellMaidenMigration.Tests.PlayerInitialWeaponMigrationTests/<>c__DisplayClass0_0:<FocusedMigrationPreservesExistingChoiceAndIsIdempotent>b__0 (UnityEngine.GameObject) (at Assets/_Project/Tests/EditMode/HellMaidenMigration/PlayerInitialWeaponMigrationTests.cs:35)\nMonsterSupergroup.HellMaidenMigration.Tests.PlayerInitialWeaponMigrationTests:Edit (string,System.Action`1<UnityEngine.GameObject>) (at Assets/_Project/Tests/EditMode/HellMaidenMigration/PlayerInitialWeaponMigrationTests.cs:65)\nMonsterSupergroup.HellMaidenMigration.Tests.PlayerInitialWeaponMigrationTests:FocusedMigrationPreservesExistingChoiceAndIsIdempotent (bool,uint) (at Assets/_Project/Tests/EditMode/HellMaidenMigration/PlayerInitialWeaponMigrationTests.cs:31)\nSystem.Reflection.MethodBase:Invoke (object,object[])\nNUnit.Framework.Internal.Reflect:InvokeMethod (System.Reflection.MethodInfo,object,object[])\nNUnit.Framework.Internal.MethodWrapper:Invoke (object,object[])\nNUnit.Framework.Internal.Commands.TestMethodCommand:RunNonAsyncTestMethod (NUnit.Framework.Internal.ITestExecutionContext)\nNUnit.Framework.Internal.Commands.TestMethodCommand:RunTestMethod (NUnit.Framework.Internal.ITestExecutionContext)\nNUnit.Framework.Internal.Commands.TestMethodCommand:Execute (NUnit.Framework.Internal.ITestExecutionContext)\nUnityEditor.EditorApplication:Internal_CallUpdateFunctions ()\n[./Library/PackageCache/com.unity.test-framework@bd7f943e9647/UnityEditor.TestRunner/TestRunner/EditModeRunner.cs l\n\n"
+        }
+      ]
+    },
+    {
+      "path": "Logs/RegressionClosure20260916/play-broad.xml",
+      "sha256": "6498ec172b2708fc2bec96512549f25ca58703fa6d5a51b104a1334b75d43ab4",
+      "result": "Passed",
+      "total": "523",
+      "passed": "523",
+      "failed": "0",
+      "skipped": "0",
+      "duration": "359.6606254",
+      "start-time": "2026-09-15 16:27:54Z",
+      "end-time": "2026-09-15 16:33:54Z",
+      "failures": []
+    },
+    {
+      "path": "Logs/RegressionClosure20260916/play-fixtures-1.xml",
+      "sha256": "d5ae8a702b2510e61aa067136bcb0fc861d2f4731eb7daf4e315817135d89b8c",
+      "result": "Failed(Child)",
+      "total": "10",
+      "passed": "8",
+      "failed": "2",
+      "skipped": "0",
+      "duration": "21.021875",
+      "start-time": "2026-09-15 16:15:31Z",
+      "end-time": "2026-09-15 16:15:52Z",
+      "failures": [
+        {
+          "name": "MonsterSupergroup.Gameplay.Tests.NetworkCombatSandboxPlayModeTests.Host_ObserverRelayAndServerFallbackConverge",
+          "message": "  Expected: 1\n  But was:  0\n",
+          "stack": "at MonsterSupergroup.Gameplay.Tests.NetworkCombatSandboxPlayModeTests+<Host_ObserverRelayAndServerFallbackConverge>d__7.MoveNext () [0x005bc] in F:\\UnityStore\\MonsterSupergroup\\Assets\\_Project\\Tests\\PlayMode\\Gameplay\\NetworkCombatSandboxPlayModeTests.cs:1027\nat UnityEngine.TestTools.TestEnumerator+<Execute>d__7.MoveNext () [0x0004e] in .\\Library\\PackageCache\\com.unity.test-framework@bd7f943e9647\\UnityEngine.TestRunner\\NUnitExtensions\\Attributes\\TestEnumerator.cs:44\n"
+        },
+        {
+          "name": "MonsterSupergroup.Gameplay.Tests.NetworkPlayerSummonPlayModeTests.Host_FreshEquipmentReceivesSixtySecondDeadlineAndCannotSkipCocoonOrBirth",
+          "message": "System.InvalidOperationException : Sequence contains no elements",
+          "stack": "  at System.Linq.Enumerable.Single[TSource] (System.Collections.Generic.IEnumerable`1[T] source) [0x0002d] in <80564d689e48448fa2a7101993ee7201>:0 \n  at MonsterSupergroup.Gameplay.Tests.NetworkPlayerSummonPlayModeTests+<Host_FreshEquipmentReceivesSixtySecondDeadlineAndCannotSkipCocoonOrBirth>d__17.MoveNext () [0x002df] in F:\\UnityStore\\MonsterSupergroup\\Assets\\_Project\\Tests\\PlayMode\\Gameplay\\NetworkPlayerSummonPlayModeTests.cs:59 \n  at UnityEngine.TestTools.TestEnumerator+<Execute>d__7.MoveNext () [0x0004e] in .\\Library\\PackageCache\\com.unity.test-framework@bd7f943e9647\\UnityEngine.TestRunner\\NUnitExtensions\\Attributes\\TestEnumerator.cs:44 "
+        }
+      ]
+    },
+    {
+      "path": "Logs/RegressionClosure20260916/play-focused-final.xml",
+      "sha256": "eaae53a363ee9a020740a84140299046eba7f46feac307ffbbeabb23169a4d39",
+      "result": "Passed",
+      "total": "16",
+      "passed": "16",
+      "failed": "0",
+      "skipped": "0",
+      "duration": "37.0383838",
+      "start-time": "2026-09-15 16:22:07Z",
+      "end-time": "2026-09-15 16:22:44Z",
+      "failures": []
+    },
+    {
+      "path": "Logs/RegressionClosure20260916/play-lifetimes-1.xml",
+      "sha256": "8cb3815fd2037fd4e6e90c375965355d50e45d987e0115eaa6b0f57026fba9ee",
+      "result": "Failed(Child)",
+      "total": "6",
+      "passed": "5",
+      "failed": "1",
+      "skipped": "0",
+      "duration": "18.9491099",
+      "start-time": "2026-09-15 16:18:04Z",
+      "end-time": "2026-09-15 16:18:23Z",
+      "failures": [
+        {
+          "name": "MonsterSupergroup.Gameplay.Tests.NetworkCombatSandboxPlayModeTests.Host_ObserverRelayAndServerFallbackConverge",
+          "message": "  Expected: 1\n  But was:  0\n",
+          "stack": "at MonsterSupergroup.Gameplay.Tests.NetworkCombatSandboxPlayModeTests+<Host_ObserverRelayAndServerFallbackConverge>d__7.MoveNext () [0x00713] in F:\\UnityStore\\MonsterSupergroup\\Assets\\_Project\\Tests\\PlayMode\\Gameplay\\NetworkCombatSandboxPlayModeTests.cs:1033\nat UnityEngine.TestTools.TestEnumerator+<Execute>d__7.MoveNext () [0x0004e] in .\\Library\\PackageCache\\com.unity.test-framework@bd7f943e9647\\UnityEngine.TestRunner\\NUnitExtensions\\Attributes\\TestEnumerator.cs:44\n"
+        }
+      ]
+    },
+    {
+      "path": "Logs/RegressionClosure20260916/play-lifetimes-2.xml",
+      "sha256": "43bfbe6217e5c0aa5291753ba85e035c2b0c215e1c65949a839773b9535a6413",
+      "result": "Failed(Child)",
+      "total": "6",
+      "passed": "5",
+      "failed": "1",
+      "skipped": "0",
+      "duration": "42.4246189",
+      "start-time": "2026-09-15 16:20:31Z",
+      "end-time": "2026-09-15 16:21:13Z",
+      "failures": [
+        {
+          "name": "MonsterSupergroup.Gameplay.Tests.NetworkPlayerSummonPlayModeTests.Host_FreshEquipmentReceivesAuthoredDeadlineAndCannotSkipCocoonOrBirth",
+          "message": "  Rebind must deliver a canonical baseline.\n  Expected: True\n  But was:  False\n",
+          "stack": "at MonsterSupergroup.Gameplay.Tests.NetworkPlayerSummonPlayModeTests+<WaitFor>d__33.MoveNext () [0x0006b] in F:\\UnityStore\\MonsterSupergroup\\Assets\\_Project\\Tests\\PlayMode\\Gameplay\\NetworkPlayerSummonPlayModeTests.cs:345\nat UnityEngine.TestTools.TestEnumerator+<Execute>d__7.MoveNext () [0x0004e] in .\\Library\\PackageCache\\com.unity.test-framework@bd7f943e9647\\UnityEngine.TestRunner\\NUnitExtensions\\Attributes\\TestEnumerator.cs:44\n"
+        }
+      ]
+    }
+  ],
+  "processes": [
+    {
+      "path": "Logs\\RegressionClosure20260916\\dedicated-1\\client-result",
+      "result": "PASS"
+    },
+    {
+      "path": "Logs\\RegressionClosure20260916\\dedicated-1\\server-result",
+      "result": "PASS"
+    },
+    {
+      "path": "Logs\\RegressionClosure20260916\\host-client-1\\client-result",
+      "result": "FAIL"
+    },
+    {
+      "path": "Logs\\RegressionClosure20260916\\host-client-1\\host-result",
+      "result": "FAIL"
+    },
+    {
+      "path": "Logs\\RegressionClosure20260916\\host-client-2\\client-result",
+      "result": "FAIL"
+    },
+    {
+      "path": "Logs\\RegressionClosure20260916\\host-client-2\\host-result",
+      "result": "FAIL"
+    },
+    {
+      "path": "Logs\\RegressionClosure20260916\\host-client-3\\launch-result",
+      "result": "LAUNCH_FAIL: PowerShell array concatenation split role/port/artifact arguments; game probe did not initialize."
+    },
+    {
+      "path": "Logs\\RegressionClosure20260916\\host-client-4\\client-result",
+      "result": "FAIL"
+    },
+    {
+      "path": "Logs\\RegressionClosure20260916\\host-client-4\\host-result",
+      "result": "FAIL"
+    },
+    {
+      "path": "Logs\\RegressionClosure20260916\\host-client-5\\client-result",
+      "result": "PASS"
+    },
+    {
+      "path": "Logs\\RegressionClosure20260916\\host-client-5\\host-result",
+      "result": "PASS"
+    }
+  ],
+  "renderedRuns": [
+    {
+      "folder": "Logs/RegressionClosure20260916/dedicated-1",
+      "logs": [
+        {
+          "path": "Logs/RegressionClosure20260916/dedicated-1/client.log",
+          "sha256": "e8a4e4b25db1783852b27da256fa18b35f1a725f4be7ab8aae1ac8542e5644a5",
+          "observations": [
+            "[RegressionClosure] role=client frame=1 time=0 helpers: authored Ovid initial weapon 402, local invulnerability, legal map placement, per-member spawns, probe enemy minimum HP 10000, pulse target navigation held/gravity zero, explicit cleanup; no pressure conclusions",
+            "[RegressionClosure] role=client frame=14 time=8.2935130760163922 passed owner baseline and completed scene load",
+            "[RegressionClosure] role=client frame=14 time=8.2935130760163922 fixture presentation: preparation overlay and debug panels hidden; gameplay camera retained",
+            "[RegressionClosure] role=client frame=14 time=8.2935130760163922 passed map",
+            "[RegressionClosure] role=client frame=14 time=8.2935130760163922 passed fresh pet",
+            "[RegressionClosure] role=client frame=14 time=8.2935130760163922 fresh pet=562954248388610 phase=Cocoon sourceDelay=3 maturity=11.019165695861677",
+            "[RegressionClosure] role=client frame=14 time=8.2935130760163922 capture cocoon",
+            "[RegressionClosure] role=client frame=45 time=8.8844394782959686 pet terminated id=562954248388610 enabled=False",
+            "[RegressionClosure] role=client frame=45 time=8.8844394782959686 passed dash baseline",
+            "[RegressionClosure] role=client frame=54 time=9.0287760566803232 passed owner dash prediction acknowledged",
+            "[RegressionClosure] role=client frame=54 time=9.0287760566803232 capture dash",
+            "[RegressionClosure] role=client frame=55 time=9.1149802160204025 passed dash moves inside map",
+            "[RegressionClosure] role=client frame=55 time=9.1149802160204025 dash start=(7.00, 0.99) end=(11.68, 0.99) ownerCharges=1 pending=0 rejected=0",
+            "[RegressionClosure] role=client frame=57 time=9.1469835418701777 passed Boss spawned",
+            "[RegressionClosure] role=client frame=57 time=9.1469835418701777 passed Boss replication",
+            "[RegressionClosure] role=client frame=57 time=9.1469835418701777 capture boss",
+            "[RegressionClosure] role=client frame=63 time=9.3182682849810927 passed Ultimate charge grant",
+            "[RegressionClosure] role=client frame=63 time=9.3182682849810927 passed client owns pulse target",
+            "[RegressionClosure] role=client frame=63 time=9.3182682849810927 passed owner received canonical Ultimate charge",
+            "[RegressionClosure] role=client frame=65 time=9.3502689250455724 passed one pulse execution",
+            "[RegressionClosure] role=client frame=65 time=9.3502689250455724 capture ultimate",
+            "[RegressionClosure] role=client frame=67 time=9.5364860908578262 passed fallback phase",
+            "[RegressionClosure] role=client frame=67 time=9.5364860908578262 test helper: endpoint disabled on Client only to exercise real server timeout",
+            "[RegressionClosure] role=client frame=118 time=10.602440831012599 passed server fallback",
+            "[RegressionClosure] role=client frame=118 time=10.602440831012599 passed replicated fallback",
+            "[RegressionClosure] role=client frame=118 time=10.602440831012599 capture fallback",
+            "[RegressionClosure] role=client frame=121 time=10.72469136005807 passed resume",
+            "[RegressionClosure] role=client frame=144 time=11.093729374813689 passed server completion",
+            "[RegressionClosure] role=client frame=144 time=11.093729374813689 capture takeover",
+            "[RegressionClosure] role=client frame=146 time=0 passed scene cleanup",
+            "[RegressionClosure] role=client frame=146 time=0 result=PASS"
+          ],
+          "exceptions": []
+        },
+        {
+          "path": "Logs/RegressionClosure20260916/dedicated-1/server.log",
+          "sha256": "083c82e19c316ca3cbd9338259f16b5d6f996f647e8519a182d52d2df55ae765",
+          "observations": [
+            "[RegressionClosure] role=server frame=1 time=0 helpers: authored Ovid initial weapon 402, local invulnerability, legal map placement, per-member spawns, probe enemy minimum HP 10000, pulse target navigation held/gravity zero, explicit cleanup; no pressure conclusions",
+            "[RegressionClosure] role=server frame=3 time=1.2273596938775511 passed server world",
+            "[RegressionClosure] role=server frame=19 time=1.7008758999433107 dedicated: no eligible players -> zero generated",
+            "[RegressionClosure] role=server frame=462 time=9.1496914965986385 passed real Client ready",
+            "[RegressionClosure] role=server frame=462 time=9.1496914965986385 Client dash canonical accepted=1 rejected=0",
+            "[RegressionClosure] role=server frame=462 time=9.1496914965986385 passed one server spawn per connected participant",
+            "[RegressionClosure] role=server frame=462 time=9.1496914965986385 spawned=1 participants=1",
+            "[RegressionClosure] role=server frame=462 time=9.1496914965986385 passed Boss server role",
+            "[RegressionClosure] role=server frame=466 time=9.219130598072562 passed Boss server navigation",
+            "[RegressionClosure] role=server frame=469 time=9.26950279903628 passed Client sees Boss replica",
+            "[RegressionClosure] role=server frame=469 time=9.26950279903628 boss id=4 host=ServerAuthoritative owner=0 movement=0.2194268",
+            "[RegressionClosure] role=server frame=473 time=9.336486196145124 passed Client simulation acknowledged",
+            "[RegressionClosure] role=server frame=479 time=9.436753493480726 passed real Ultimate impulse checkpoint",
+            "[RegressionClosure] role=server frame=479 time=9.436753493480726 ultimate id=5 start=(13.35, 0.99) end=(17.35, 0.98) elapsed=0",
+            "[RegressionClosure] role=server frame=484 time=9.5204831986961445 passed Client pulse evidence",
+            "[RegressionClosure] role=server frame=485 time=9.5371887967687066 passed Client intentionally stops simulation endpoint",
+            "[RegressionClosure] role=server frame=545 time=10.538466397392289 passed missing first snapshot causes server fallback",
+            "[RegressionClosure] role=server frame=549 time=10.605626197562358 passed fallback moves on server",
+            "[RegressionClosure] role=server frame=549 time=10.605626197562358 fallback id=6 epoch=2 role=ServerFallback",
+            "[RegressionClosure] role=server frame=556 time=10.722418799603174 passed Client sees fallback position",
+            "[RegressionClosure] role=server frame=579 time=11.106736897675736 passed Client recovers simulation through readiness handshake",
+            "[RegressionClosure] role=server frame=579 time=11.106736897675736 takeover id=6 epoch=3 owner=2",
+            "[RegressionClosure] role=server frame=586 time=11.223532596371882 passed Client completed observations",
+            "[RegressionClosure] role=server frame=587 time=0 passed scene cleanup",
+            "[RegressionClosure] role=server frame=587 time=0 result=PASS"
+          ],
+          "exceptions": []
+        }
+      ],
+      "screenshots": [
+        {
+          "path": "Logs/RegressionClosure20260916/dedicated-1/client-boss.png",
+          "sha256": "2424fa8dfa37716fd0d0323a455dddf0ce9be624fa50b8e998285c306ea72871"
+        },
+        {
+          "path": "Logs/RegressionClosure20260916/dedicated-1/client-cocoon.png",
+          "sha256": "c2c6defa44205e33ec256279875739e224d713600b586ddeb059a165723204ae"
+        },
+        {
+          "path": "Logs/RegressionClosure20260916/dedicated-1/client-dash.png",
+          "sha256": "b15686f9ef751f37aeb3aa217058540eb9bdc869d90fa3c086c4e4374886af2b"
+        },
+        {
+          "path": "Logs/RegressionClosure20260916/dedicated-1/client-fallback.png",
+          "sha256": "8224ff55a3bb0dce83ae6134713b94720e6977d500f3770473c1732842e835e6"
+        },
+        {
+          "path": "Logs/RegressionClosure20260916/dedicated-1/client-takeover.png",
+          "sha256": "bb62a3e375c4b723fc61dff4ee0890b50cd3468f8fc383241283dbaa7ba4ccf3"
+        },
+        {
+          "path": "Logs/RegressionClosure20260916/dedicated-1/client-ultimate.png",
+          "sha256": "9b23229c556afea4dbcca705f802c0491cb3ec7cdecd73fea5c460d39e96c76f"
+        }
+      ],
+      "buildHashes": [
+        {
+          "Algorithm": "SHA256",
+          "Hash": "C8B0D73DC40E4F2CDDBF656CFB7257FCB8273DA22E44E12A8694CD8E275C6FB2",
+          "Path": "F:\\UnityStore\\MonsterSupergroup\\Builds\\RegressionClosure20260916\\RegressionClosure.exe"
+        },
+        {
+          "Algorithm": "SHA256",
+          "Hash": "458E4E8600CEBBA2D0742E607C21EBD18683F55777C8DE727063539DA78F48B7",
+          "Path": "F:\\UnityStore\\MonsterSupergroup\\Builds\\RegressionClosure20260916\\RegressionClosure_Data\\Managed\\MonsterSupergroup.Gameplay.Tests.PlayMode.dll"
+        },
+        {
+          "Algorithm": "SHA256",
+          "Hash": "489B61A2ACDFB075451D5E915C93662AA65F7FF9EF88606EE0457E2DF6182CBC",
+          "Path": "F:\\UnityStore\\MonsterSupergroup\\Builds\\RegressionClosure20260916\\RegressionClosure_Data\\Managed\\MonsterSupergroup.NetworkCombat.dll"
+        }
+      ]
+    },
+    {
+      "folder": "Logs/RegressionClosure20260916/host-client-1",
+      "logs": [
+        {
+          "path": "Logs/RegressionClosure20260916/host-client-1/client.log",
+          "sha256": "0b1f02a2e11c41b0831101d5383689b925c60f639413b222b155e3f501c724b7",
+          "observations": [
+            "[RegressionClosure] role=client frame=1 time=0 helpers: authored Ovid initial weapon 402, local invulnerability, legal map placement, per-member spawns, probe enemy minimum HP 10000, pulse target navigation held/gravity zero, explicit cleanup; no pressure conclusions",
+            "[RegressionClosure] role=client frame=15 time=21.747265036919167 passed owner baseline",
+            "[RegressionClosure] role=client frame=15 time=21.747265036919167 passed map",
+            "[RegressionClosure] role=client frame=15 time=21.747265036919167 passed fresh pet",
+            "[RegressionClosure] role=client frame=15 time=21.747265036919167 fresh pet=1125908496777218 phase=Cocoon sourceDelay=3 maturity=24.419402593537413",
+            "[RegressionClosure] role=client frame=15 time=21.747265036919167 capture cocoon",
+            "[RegressionClosure] role=client frame=45 time=22.25595420350923 pet terminated id=1125908496777218 enabled=False",
+            "[RegressionClosure] role=client frame=45 time=22.25595420350923 passed dash baseline",
+            "[RegressionClosure] role=client frame=2137 time=0 result=FAIL"
+          ],
+          "exceptions": [
+            "InvalidOperationException: legal real dash admitted"
+          ]
+        },
+        {
+          "path": "Logs/RegressionClosure20260916/host-client-1/host.log",
+          "sha256": "a0a39198b4c9423e51752ca71455aaf5fe8aaaaf4b63c3c78ae69e3c3ddc952c",
+          "observations": [
+            "[RegressionClosure] role=host frame=1 time=0 helpers: authored Ovid initial weapon 402, local invulnerability, legal map placement, per-member spawns, probe enemy minimum HP 10000, pulse target navigation held/gravity zero, explicit cleanup; no pressure conclusions",
+            "[RegressionClosure] role=host frame=5 time=5.1307234977324265 passed server world",
+            "[RegressionClosure] role=host frame=7 time=5.6339680980725619 passed owner baseline",
+            "[RegressionClosure] role=host frame=7 time=5.6339680980725619 passed map",
+            "[RegressionClosure] role=host frame=7 time=5.6339680980725619 passed fresh pet",
+            "[RegressionClosure] role=host frame=7 time=5.6339680980725619 fresh pet=562954248388610 phase=Cocoon sourceDelay=3 maturity=8.5298010983560086",
+            "[RegressionClosure] role=host frame=7 time=5.6339680980725619 capture cocoon",
+            "[RegressionClosure] role=host frame=37 time=6.26332899659864 pet terminated id=562954248388610 enabled=False",
+            "[RegressionClosure] role=host frame=37 time=6.26332899659864 passed dash baseline",
+            "[RegressionClosure] role=host frame=45 time=6.3966604946145118 passed legal real dash admitted",
+            "[RegressionClosure] role=host frame=45 time=6.3966604946145118 capture dash",
+            "[RegressionClosure] role=host frame=46 time=6.4384332979024936 passed dash moves inside map",
+            "[RegressionClosure] role=host frame=46 time=6.4384332979024936 dash start=(-8.75, 3.99) end=(-6.43, 3.99) accepted=1 rejected=0",
+            "[RegressionClosure] role=host frame=2139 time=41.455409899376413 result=FAIL"
+          ],
+          "exceptions": [
+            "InvalidOperationException: real Client ready"
+          ]
+        }
+      ],
+      "screenshots": [
+        {
+          "path": "Logs/RegressionClosure20260916/host-client-1/client-cocoon.png",
+          "sha256": "055c818547a2f047a8b716a1d744075686820ed28c21bda48c42c886c4c7dee2"
+        },
+        {
+          "path": "Logs/RegressionClosure20260916/host-client-1/host-cocoon.png",
+          "sha256": "2b56e251ebd8738544ea794f5b3b610a0a0e9a06d18c7d129e8e45aa90200b46"
+        },
+        {
+          "path": "Logs/RegressionClosure20260916/host-client-1/host-dash.png",
+          "sha256": "68476795e8a666184c985c409ce878df68c3095c51103123742b45c090d7b478"
+        }
+      ],
+      "buildHashes": [
+        {
+          "Algorithm": "SHA256",
+          "Hash": "C8B0D73DC40E4F2CDDBF656CFB7257FCB8273DA22E44E12A8694CD8E275C6FB2",
+          "Path": "F:\\UnityStore\\MonsterSupergroup\\Builds\\RegressionClosure20260916\\RegressionClosure.exe"
+        },
+        {
+          "Algorithm": "SHA256",
+          "Hash": "0B3FC62D1A19021AC39B7E5A295C5550812290F4C1EE9307E074BCB49813703E",
+          "Path": "F:\\UnityStore\\MonsterSupergroup\\Builds\\RegressionClosure20260916\\RegressionClosure_Data\\Managed\\MonsterSupergroup.Gameplay.Tests.PlayMode.dll"
+        }
+      ]
+    },
+    {
+      "folder": "Logs/RegressionClosure20260916/host-client-2",
+      "logs": [
+        {
+          "path": "Logs/RegressionClosure20260916/host-client-2/client.log",
+          "sha256": "2b12d42ee62f859dfde5dd5b381c806f6bb3293fced9218845c8b24ab8102f87",
+          "observations": [
+            "[RegressionClosure] role=client frame=1 time=0 helpers: authored Ovid initial weapon 402, local invulnerability, legal map placement, per-member spawns, probe enemy minimum HP 10000, pulse target navigation held/gravity zero, explicit cleanup; no pressure conclusions",
+            "[RegressionClosure] role=client frame=15 time=12.31937544386002 passed owner baseline",
+            "[RegressionClosure] role=client frame=15 time=12.31937544386002 passed map",
+            "[RegressionClosure] role=client frame=15 time=12.31937544386002 passed fresh pet",
+            "[RegressionClosure] role=client frame=15 time=12.31937544386002 fresh pet=1125908496777218 phase=Cocoon sourceDelay=3 maturity=14.994474397675736",
+            "[RegressionClosure] role=client frame=15 time=12.31937544386002 capture cocoon",
+            "[RegressionClosure] role=client frame=46 time=12.838357706785814 pet terminated id=1125908496777218 enabled=False",
+            "[RegressionClosure] role=client frame=46 time=12.838357706785814 passed dash baseline",
+            "[RegressionClosure] role=client frame=55 time=12.990829898976843 passed owner dash prediction acknowledged",
+            "[RegressionClosure] role=client frame=55 time=12.990829898976843 capture dash",
+            "[RegressionClosure] role=client frame=56 time=13.038779306122176 passed dash moves inside map",
+            "[RegressionClosure] role=client frame=56 time=13.038779306122176 dash start=(7.00, 0.99) end=(10.10, 0.99) ownerCharges=1 pending=0 rejected=0",
+            "[RegressionClosure] role=client frame=2134 time=0 result=FAIL"
+          ],
+          "exceptions": [
+            "InvalidOperationException: Boss spawned"
+          ]
+        },
+        {
+          "path": "Logs/RegressionClosure20260916/host-client-2/host.log",
+          "sha256": "4b926d3c9640275128b2fa72f2b829d483d37b65b81761995977387acefeb13a",
+          "observations": [
+            "[RegressionClosure] role=host frame=1 time=0 helpers: authored Ovid initial weapon 402, local invulnerability, legal map placement, per-member spawns, probe enemy minimum HP 10000, pulse target navigation held/gravity zero, explicit cleanup; no pressure conclusions",
+            "[RegressionClosure] role=host frame=5 time=5.2313551020408164 passed server world",
+            "[RegressionClosure] role=host frame=7 time=5.732797399376417 passed owner baseline",
+            "[RegressionClosure] role=host frame=7 time=5.732797399376417 passed map",
+            "[RegressionClosure] role=host frame=7 time=5.732797399376417 passed fresh pet",
+            "[RegressionClosure] role=host frame=7 time=5.732797399376417 fresh pet=562954248388610 phase=Cocoon sourceDelay=3 maturity=8.62532899659864",
+            "[RegressionClosure] role=host frame=7 time=5.732797399376417 capture cocoon",
+            "[RegressionClosure] role=host frame=37 time=6.36542789824263 pet terminated id=562954248388610 enabled=False",
+            "[RegressionClosure] role=host frame=37 time=6.36542789824263 passed dash baseline",
+            "[RegressionClosure] role=host frame=45 time=6.5005508007369608 passed owner dash prediction acknowledged",
+            "[RegressionClosure] role=host frame=45 time=6.5005508007369608 capture dash",
+            "[RegressionClosure] role=host frame=46 time=6.5413949971655327 passed dash moves inside map",
+            "[RegressionClosure] role=host frame=46 time=6.5413949971655327 dash start=(-8.75, 3.99) end=(-7.16, 3.99) ownerCharges=1 pending=0 rejected=0",
+            "[RegressionClosure] role=host frame=436 time=13.063108999433107 passed real Client ready",
+            "[RegressionClosure] role=host frame=436 time=13.063108999433107 result=FAIL"
+          ],
+          "exceptions": [
+            "IOException: Sharing violation on path F:\\UnityStore\\MonsterSupergroup\\Logs\\RegressionClosure20260916\\host-client-2\\ready-client"
+          ]
+        }
+      ],
+      "screenshots": [
+        {
+          "path": "Logs/RegressionClosure20260916/host-client-2/client-cocoon.png",
+          "sha256": "e868e8f0e6c0ed3b78c079591b550f42e6c05d6a9c8df552d56646b7eb8cb822"
+        },
+        {
+          "path": "Logs/RegressionClosure20260916/host-client-2/client-dash.png",
+          "sha256": "8910c15197f6c6156e631a6298c94b1f6b38592d1163b418a1d8863ba2df465b"
+        },
+        {
+          "path": "Logs/RegressionClosure20260916/host-client-2/host-cocoon.png",
+          "sha256": "9ace6cbf0764c172fbc209c8363798d563eaaaeed8a2ee514fcff5316c753ddf"
+        },
+        {
+          "path": "Logs/RegressionClosure20260916/host-client-2/host-dash.png",
+          "sha256": "8fc8d05f947f7c83ee6ff9e8bbab09674b4a8775870c413a38a5211a8967021c"
+        }
+      ],
+      "buildHashes": [
+        {
+          "Algorithm": "SHA256",
+          "Hash": "C8B0D73DC40E4F2CDDBF656CFB7257FCB8273DA22E44E12A8694CD8E275C6FB2",
+          "Path": "F:\\UnityStore\\MonsterSupergroup\\Builds\\RegressionClosure20260916\\RegressionClosure.exe"
+        },
+        {
+          "Algorithm": "SHA256",
+          "Hash": "7DD7BE7B78DFA46C620122BD068DEE796A69F08610356DC955B52847389961C4",
+          "Path": "F:\\UnityStore\\MonsterSupergroup\\Builds\\RegressionClosure20260916\\RegressionClosure_Data\\Managed\\MonsterSupergroup.Gameplay.Tests.PlayMode.dll"
+        },
+        {
+          "Algorithm": "SHA256",
+          "Hash": "489B61A2ACDFB075451D5E915C93662AA65F7FF9EF88606EE0457E2DF6182CBC",
+          "Path": "F:\\UnityStore\\MonsterSupergroup\\Builds\\RegressionClosure20260916\\RegressionClosure_Data\\Managed\\MonsterSupergroup.NetworkCombat.dll"
+        }
+      ]
+    },
+    {
+      "folder": "Logs/RegressionClosure20260916/host-client-3",
+      "logs": [
+        {
+          "path": "Logs/RegressionClosure20260916/host-client-3/host.log",
+          "sha256": "94199046bf49406b12fcb54b8cd2d37789ba9f0f7b79db502e4ce52d451fc683",
+          "observations": [],
+          "exceptions": [
+            "FormatException: Input string was not in a correct format.",
+            "ArgumentException: Path cannot be the empty string or all whitespace."
+          ]
+        }
+      ],
+      "screenshots": [],
+      "buildHashes": null
+    },
+    {
+      "folder": "Logs/RegressionClosure20260916/host-client-4",
+      "logs": [
+        {
+          "path": "Logs/RegressionClosure20260916/host-client-4/client.log",
+          "sha256": "b2c5060f8b15d4afc4d727553faf8bef068ed114c442e2aa89d7ff34d2241b18",
+          "observations": [
+            "[RegressionClosure] role=client frame=1 time=0 helpers: authored Ovid initial weapon 402, local invulnerability, legal map placement, per-member spawns, probe enemy minimum HP 10000, pulse target navigation held/gravity zero, explicit cleanup; no pressure conclusions",
+            "[RegressionClosure] role=client frame=15 time=12.182424243735024 passed owner baseline",
+            "[RegressionClosure] role=client frame=15 time=12.182424243735024 passed map",
+            "[RegressionClosure] role=client frame=15 time=12.182424243735024 passed fresh pet",
+            "[RegressionClosure] role=client frame=15 time=12.182424243735024 fresh pet=1125908496777218 phase=Cocoon sourceDelay=3 maturity=14.827295996315192",
+            "[RegressionClosure] role=client frame=15 time=12.182424243735024 capture cocoon",
+            "[RegressionClosure] role=client frame=46 time=12.705956394628513 pet terminated id=1125908496777218 enabled=False",
+            "[RegressionClosure] role=client frame=46 time=12.705956394628513 passed dash baseline",
+            "[RegressionClosure] role=client frame=54 time=12.834451624826881 passed owner dash prediction acknowledged",
+            "[RegressionClosure] role=client frame=54 time=12.834451624826881 capture dash",
+            "[RegressionClosure] role=client frame=55 time=12.87288052391243 passed dash moves inside map",
+            "[RegressionClosure] role=client frame=55 time=12.87288052391243 dash start=(7.00, 0.99) end=(9.32, 0.99) ownerCharges=1 pending=0 rejected=0",
+            "[RegressionClosure] role=client frame=2147 time=0 result=FAIL"
+          ],
+          "exceptions": [
+            "InvalidOperationException: Boss spawned"
+          ]
+        },
+        {
+          "path": "Logs/RegressionClosure20260916/host-client-4/host.log",
+          "sha256": "7e9e0b30e05125699ec109e1cf64905c755f9b6e16886f1b6522394a039bfabd",
+          "observations": [
+            "[RegressionClosure] role=host frame=1 time=0 helpers: authored Ovid initial weapon 402, local invulnerability, legal map placement, per-member spawns, probe enemy minimum HP 10000, pulse target navigation held/gravity zero, explicit cleanup; no pressure conclusions",
+            "[RegressionClosure] role=host frame=5 time=5.0845496952947844 passed server world",
+            "[RegressionClosure] role=host frame=7 time=5.5749679988662129 passed owner baseline",
+            "[RegressionClosure] role=host frame=7 time=5.5749679988662129 passed map",
+            "[RegressionClosure] role=host frame=7 time=5.5749679988662129 passed fresh pet",
+            "[RegressionClosure] role=host frame=7 time=5.5749679988662129 fresh pet=562954248388610 phase=Cocoon sourceDelay=3 maturity=8.470886394557823",
+            "[RegressionClosure] role=host frame=7 time=5.5749679988662129 capture cocoon",
+            "[RegressionClosure] role=host frame=37 time=6.1957549957482989 pet terminated id=562954248388610 enabled=False",
+            "[RegressionClosure] role=host frame=37 time=6.1957549957482989 passed dash baseline",
+            "[RegressionClosure] role=host frame=46 time=6.3463965986394557 passed owner dash prediction acknowledged",
+            "[RegressionClosure] role=host frame=46 time=6.3463965986394557 capture dash",
+            "[RegressionClosure] role=host frame=47 time=6.3872371952947846 passed dash moves inside map",
+            "[RegressionClosure] role=host frame=47 time=6.3872371952947846 dash start=(-8.75, 3.99) end=(-6.43, 3.99) ownerCharges=1 pending=0 rejected=0",
+            "[RegressionClosure] role=host frame=436 time=12.895380300453514 passed real Client ready",
+            "[RegressionClosure] role=host frame=436 time=12.895380300453514 Client dash canonical accepted=1 rejected=0",
+            "[RegressionClosure] role=host frame=436 time=12.895380300453514 passed one server spawn per connected participant",
+            "[RegressionClosure] role=host frame=436 time=12.895380300453514 spawned=2 participants=2",
+            "[RegressionClosure] role=host frame=436 time=12.895380300453514 result=FAIL"
+          ],
+          "exceptions": [
+            "NullReferenceException: Object reference not set to an instance of an object"
+          ]
+        }
+      ],
+      "screenshots": [
+        {
+          "path": "Logs/RegressionClosure20260916/host-client-4/client-cocoon.png",
+          "sha256": "f133bb4b577c5efde0c92282641214ec23efae56c8787f26f089f39aecab4757"
+        },
+        {
+          "path": "Logs/RegressionClosure20260916/host-client-4/client-dash.png",
+          "sha256": "10b14b4678e73edbb183b274f5cdcd1b2d92c3e89a0256b487418c8858638d3a"
+        },
+        {
+          "path": "Logs/RegressionClosure20260916/host-client-4/host-cocoon.png",
+          "sha256": "2b56e251ebd8738544ea794f5b3b610a0a0e9a06d18c7d129e8e45aa90200b46"
+        },
+        {
+          "path": "Logs/RegressionClosure20260916/host-client-4/host-dash.png",
+          "sha256": "8fc8d05f947f7c83ee6ff9e8bbab09674b4a8775870c413a38a5211a8967021c"
+        }
+      ],
+      "buildHashes": [
+        {
+          "Algorithm": "SHA256",
+          "Hash": "C8B0D73DC40E4F2CDDBF656CFB7257FCB8273DA22E44E12A8694CD8E275C6FB2",
+          "Path": "F:\\UnityStore\\MonsterSupergroup\\Builds\\RegressionClosure20260916\\RegressionClosure.exe"
+        },
+        {
+          "Algorithm": "SHA256",
+          "Hash": "D9E450A413C22495ADADE96CF76DF4AF4ECF9C3BC3E963F872F9FF8C6ED084D2",
+          "Path": "F:\\UnityStore\\MonsterSupergroup\\Builds\\RegressionClosure20260916\\RegressionClosure_Data\\Managed\\MonsterSupergroup.Gameplay.Tests.PlayMode.dll"
+        },
+        {
+          "Algorithm": "SHA256",
+          "Hash": "489B61A2ACDFB075451D5E915C93662AA65F7FF9EF88606EE0457E2DF6182CBC",
+          "Path": "F:\\UnityStore\\MonsterSupergroup\\Builds\\RegressionClosure20260916\\RegressionClosure_Data\\Managed\\MonsterSupergroup.NetworkCombat.dll"
+        }
+      ]
+    },
+    {
+      "folder": "Logs/RegressionClosure20260916/host-client-5",
+      "logs": [
+        {
+          "path": "Logs/RegressionClosure20260916/host-client-5/client.log",
+          "sha256": "8abf31dcd5f4a91fc7b6dc5425b7cf6f410b312eacb6782c7ec0da70f4fa5df7",
+          "observations": [
+            "[RegressionClosure] role=client frame=1 time=0 helpers: authored Ovid initial weapon 402, local invulnerability, legal map placement, per-member spawns, probe enemy minimum HP 10000, pulse target navigation held/gravity zero, explicit cleanup; no pressure conclusions",
+            "[RegressionClosure] role=client frame=14 time=11.936982977733797 passed owner baseline and completed scene load",
+            "[RegressionClosure] role=client frame=14 time=11.936982977733797 fixture presentation: preparation overlay and debug panels hidden; gameplay camera retained",
+            "[RegressionClosure] role=client frame=14 time=11.936982977733797 passed map",
+            "[RegressionClosure] role=client frame=14 time=11.936982977733797 passed fresh pet",
+            "[RegressionClosure] role=client frame=14 time=11.936982977733797 fresh pet=1125908496777218 phase=Cocoon sourceDelay=3 maturity=14.631784197845805",
+            "[RegressionClosure] role=client frame=14 time=11.936982977733797 capture cocoon",
+            "[RegressionClosure] role=client frame=45 time=12.503294997537433 pet terminated id=1125908496777218 enabled=False",
+            "[RegressionClosure] role=client frame=45 time=12.503294997537433 passed dash baseline",
+            "[RegressionClosure] role=client frame=54 time=12.647978235344031 passed owner dash prediction acknowledged",
+            "[RegressionClosure] role=client frame=54 time=12.647978235344031 capture dash",
+            "[RegressionClosure] role=client frame=55 time=12.747907322599115 passed dash moves inside map",
+            "[RegressionClosure] role=client frame=55 time=12.747907322599115 dash start=(7.00, 0.99) end=(12.40, 0.99) ownerCharges=1 pending=0 rejected=0",
+            "[RegressionClosure] role=client frame=57 time=12.779909881337112 passed Boss spawned",
+            "[RegressionClosure] role=client frame=57 time=12.779909881337112 passed Boss replication",
+            "[RegressionClosure] role=client frame=57 time=12.779909881337112 capture boss",
+            "[RegressionClosure] role=client frame=63 time=12.952483222032997 passed Ultimate charge grant",
+            "[RegressionClosure] role=client frame=63 time=12.952483222032997 passed client owns pulse target",
+            "[RegressionClosure] role=client frame=63 time=12.952483222032997 passed owner received canonical Ultimate charge",
+            "[RegressionClosure] role=client frame=64 time=12.968482677499864 passed one pulse execution",
+            "[RegressionClosure] role=client frame=64 time=12.968482677499864 capture ultimate",
+            "[RegressionClosure] role=client frame=70 time=13.23358820204361 passed fallback phase",
+            "[RegressionClosure] role=client frame=70 time=13.23358820204361 test helper: endpoint disabled on Client only to exercise real server timeout",
+            "[RegressionClosure] role=client frame=121 time=14.270411625918015 passed server fallback",
+            "[RegressionClosure] role=client frame=121 time=14.270411625918015 passed replicated fallback",
+            "[RegressionClosure] role=client frame=121 time=14.270411625918015 capture fallback",
+            "[RegressionClosure] role=client frame=123 time=14.3771415453318 passed resume",
+            "[RegressionClosure] role=client frame=144 time=14.716796150512021 passed server completion",
+            "[RegressionClosure] role=client frame=144 time=14.716796150512021 capture takeover",
+            "[RegressionClosure] role=client frame=146 time=0 passed scene cleanup",
+            "[RegressionClosure] role=client frame=146 time=0 result=PASS"
+          ],
+          "exceptions": []
+        },
+        {
+          "path": "Logs/RegressionClosure20260916/host-client-5/host.log",
+          "sha256": "c6cf154bc6d154bdf2844f2d2a31852e5ff773e8ffc11956d0b5377a2de32200",
+          "observations": [
+            "[RegressionClosure] role=host frame=1 time=0 helpers: authored Ovid initial weapon 402, local invulnerability, legal map placement, per-member spawns, probe enemy minimum HP 10000, pulse target navigation held/gravity zero, explicit cleanup; no pressure conclusions",
+            "[RegressionClosure] role=host frame=5 time=5.0831715986394554 passed server world",
+            "[RegressionClosure] role=host frame=7 time=5.5656078018707484 passed owner baseline and completed scene load",
+            "[RegressionClosure] role=host frame=7 time=5.5656078018707484 fixture presentation: preparation overlay and debug panels hidden; gameplay camera retained",
+            "[RegressionClosure] role=host frame=7 time=5.5656078018707484 passed map",
+            "[RegressionClosure] role=host frame=7 time=5.5656078018707484 passed fresh pet",
+            "[RegressionClosure] role=host frame=7 time=5.5656078018707484 fresh pet=562954248388610 phase=Cocoon sourceDelay=3 maturity=8.4627839994331069",
+            "[RegressionClosure] role=host frame=7 time=5.5656078018707484 capture cocoon",
+            "[RegressionClosure] role=host frame=37 time=6.2246243976757363 pet terminated id=562954248388610 enabled=False",
+            "[RegressionClosure] role=host frame=37 time=6.2246243976757363 passed dash baseline",
+            "[RegressionClosure] role=host frame=45 time=6.3581653982426305 passed owner dash prediction acknowledged",
+            "[RegressionClosure] role=host frame=45 time=6.3581653982426305 capture dash",
+            "[RegressionClosure] role=host frame=46 time=6.4508514030612245 passed dash moves inside map",
+            "[RegressionClosure] role=host frame=46 time=6.4508514030612245 dash start=(-8.75, 3.99) end=(-4.07, 3.99) ownerCharges=1 pending=0 rejected=0",
+            "[RegressionClosure] role=host frame=425 time=12.784554598922902 passed real Client ready",
+            "[RegressionClosure] role=host frame=425 time=12.784554598922902 Client dash canonical accepted=1 rejected=0",
+            "[RegressionClosure] role=host frame=425 time=12.784554598922902 passed one server spawn per connected participant",
+            "[RegressionClosure] role=host frame=425 time=12.784554598922902 spawned=2 participants=2",
+            "[RegressionClosure] role=host frame=425 time=12.784554598922902 passed Boss server role",
+            "[RegressionClosure] role=host frame=429 time=12.855180300453513 passed Boss server navigation",
+            "[RegressionClosure] role=host frame=432 time=12.905742098922902 passed Client sees Boss replica",
+            "[RegressionClosure] role=host frame=432 time=12.905742098922902 boss id=6 host=ServerAuthoritative owner=0 movement=0.2182629",
+            "[RegressionClosure] role=host frame=436 time=12.972412103174603 passed Client simulation acknowledged",
+            "[RegressionClosure] role=host frame=441 time=13.056080498866212 passed real Ultimate impulse checkpoint",
+            "[RegressionClosure] role=host frame=441 time=13.056080498866212 ultimate id=7 start=(14.13, 0.99) end=(18.13, 0.98) elapsed=0",
+            "[RegressionClosure] role=host frame=444 time=13.126650701530611 passed impulse handoff acknowledged",
+            "[RegressionClosure] role=host frame=444 time=13.126650701530611 handoff id=7 epoch=2 inheritedElapsed=0",
+            "[RegressionClosure] role=host frame=444 time=13.126650701530611 capture handoff",
+            "[RegressionClosure] role=host frame=445 time=13.2169248015873 passed Client pulse evidence",
+            "[RegressionClosure] role=host frame=446 time=13.233855598072562 passed Client intentionally stops simulation endpoint",
+            "[RegressionClosure] role=host frame=489 time=14.238378798185941 passed missing first snapshot causes server fallback",
+            "[RegressionClosure] role=host frame=492 time=14.288379797335601 passed fallback moves on server",
+            "[RegressionClosure] role=host frame=492 time=14.288379797335601 fallback id=8 epoch=2 role=ServerFallback",
+            "[RegressionClosure] role=host frame=499 time=14.40544990079365 passed Client sees fallback position",
+            "[RegressionClosure] role=host frame=520 time=14.756081597222222 passed Client recovers simulation through readiness handshake",
+            "[RegressionClosure] role=host frame=520 time=14.756081597222222 takeover id=8 epoch=3 owner=4",
+            "[RegressionClosure] role=host frame=527 time=14.873203103741496 passed Client completed observations",
+            "[RegressionClosure] role=host frame=528 time=0 passed scene cleanup",
+            "[RegressionClosure] role=host frame=528 time=0 result=PASS"
+          ],
+          "exceptions": []
+        }
+      ],
+      "screenshots": [
+        {
+          "path": "Logs/RegressionClosure20260916/host-client-5/client-boss.png",
+          "sha256": "149360f15af544acbca3da3f1cf11fdcc785c87065f357dfce38336a347aa137"
+        },
+        {
+          "path": "Logs/RegressionClosure20260916/host-client-5/client-cocoon.png",
+          "sha256": "6956d304489bf162395b4ca7c65aa83de47bde64c02f188437c21886b6ba5f87"
+        },
+        {
+          "path": "Logs/RegressionClosure20260916/host-client-5/client-dash.png",
+          "sha256": "d95bc12a2f35e5d963e78a04f5062a2a3df9002ea55894590557b137fd6dc8d8"
+        },
+        {
+          "path": "Logs/RegressionClosure20260916/host-client-5/client-fallback.png",
+          "sha256": "2e4383a6199fcbddab3fd0da50ac5921380eb86600d2d0cd7a007cdd2453d718"
+        },
+        {
+          "path": "Logs/RegressionClosure20260916/host-client-5/client-takeover.png",
+          "sha256": "44195d2613baa87ef73d324d1926c1467ffde63084b28e08e97425378cb396ea"
+        },
+        {
+          "path": "Logs/RegressionClosure20260916/host-client-5/client-ultimate.png",
+          "sha256": "5c049dc607bc46cb45722530e96db6ab52a4c7d3c46a9e0ec2efcd6a13897088"
+        },
+        {
+          "path": "Logs/RegressionClosure20260916/host-client-5/host-cocoon.png",
+          "sha256": "51685476b1b8d5dd291055d7e38fe9e0551352e7ca908cbc78ed1bd70a28d0d5"
+        },
+        {
+          "path": "Logs/RegressionClosure20260916/host-client-5/host-dash.png",
+          "sha256": "bdabb92f5572f59e39015e289753d4076029fc6f3b1686e97e92ce7c022bcfd0"
+        },
+        {
+          "path": "Logs/RegressionClosure20260916/host-client-5/host-handoff.png",
+          "sha256": "a7a8e3980d7803139f5d42d698b785b7920f4f46465bf8dcaf8d2d004073cafa"
+        }
+      ],
+      "buildHashes": [
+        {
+          "Algorithm": "SHA256",
+          "Hash": "C8B0D73DC40E4F2CDDBF656CFB7257FCB8273DA22E44E12A8694CD8E275C6FB2",
+          "Path": "F:\\UnityStore\\MonsterSupergroup\\Builds\\RegressionClosure20260916\\RegressionClosure.exe"
+        },
+        {
+          "Algorithm": "SHA256",
+          "Hash": "458E4E8600CEBBA2D0742E607C21EBD18683F55777C8DE727063539DA78F48B7",
+          "Path": "F:\\UnityStore\\MonsterSupergroup\\Builds\\RegressionClosure20260916\\RegressionClosure_Data\\Managed\\MonsterSupergroup.Gameplay.Tests.PlayMode.dll"
+        },
+        {
+          "Algorithm": "SHA256",
+          "Hash": "489B61A2ACDFB075451D5E915C93662AA65F7FF9EF88606EE0457E2DF6182CBC",
+          "Path": "F:\\UnityStore\\MonsterSupergroup\\Builds\\RegressionClosure20260916\\RegressionClosure_Data\\Managed\\MonsterSupergroup.NetworkCombat.dll"
+        }
+      ]
+    }
+  ],
+  "build": [
+    {
+      "path": "Builds\\RegressionClosure20260916\\RegressionClosure.exe",
+      "sha256": "c8b0d73dc40e4f2cddbf656cfb7257fcb8273da22e44e12a8694cd8e275c6fb2"
+    },
+    {
+      "path": "Builds\\RegressionClosure20260916\\RegressionClosure_Data\\Managed\\MonsterSupergroup.Gameplay.Tests.PlayMode.dll",
+      "sha256": "458e4e8600cebba2d0742e607c21ebd18683f55777c8de727063539da78f48b7"
+    },
+    {
+      "path": "Builds\\RegressionClosure20260916\\RegressionClosure_Data\\Managed\\MonsterSupergroup.NetworkCombat.dll",
+      "sha256": "489b61a2acdfb075451d5e915c93662aa65f7ff9ef88606ee0457e2df6182cbc"
+    }
+  ]
+}

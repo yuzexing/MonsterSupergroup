@@ -19,7 +19,7 @@ namespace MonsterSupergroup.NetworkCombat
         // Configured end controls probability, not an unconditional despawn deadline.
         public void TickReferenceBarriers(int frame, Func<float> percentRoll, Func<int, bool> spawn)
         {
-            if (state.Phase != WavePhase.Running || settings.Reference == null || barrierFrame == frame) return;
+            if ((state.Phase != WavePhase.Running && state.Phase != WavePhase.TransitionPending) || referencePaused || settings.Reference == null || barrierFrame == frame) return;
             barrierFrame = frame;
             var definitions = settings.Reference.Barriers;
             if (barrierClocks == null)
@@ -30,7 +30,8 @@ namespace MonsterSupergroup.NetworkCombat
             for (int i = 0; i < definitions.Length; i++)
             {
                 var data = definitions[i]; var clock = barrierClocks[i];
-                if (data.start >= settings.Reference.EndTime || state.Elapsed <= data.start || clock.Spawned) continue;
+                if (data.start >= settings.Reference.EndTime || state.Elapsed <= data.start || clock.Spawned ||
+                    state.TransitionRequestedAt > 0 && !clock.Started) continue;
                 float increment = 100f / (float)(data.end - data.start - data.shrinkDuration);
                 if (!clock.Started)
                 {

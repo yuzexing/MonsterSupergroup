@@ -23,6 +23,7 @@ BODIES = [
     ('E6', 'Enemy_Slime', 'Slime', 'Stage2/ReferenceSlime.prefab', True),
     ('E7', 'Enemy_Slime Rusher', 'Slime', 'Stage2/ReferenceRusher.prefab', True),
     ('E8', 'Enemy_LostSoul', 'LostSoul', 'LostSoul/ReferenceLostSoul.prefab', False),
+    ('E9', 'Enemy_Ghoul', 'Ghoul', 'Ghoul/ReferenceGhoul.prefab', False),
 ]
 EFFECTS = [('V1', 'Arrow'), ('V2', 'Skeleton_Warning'), ('V3', 'Skeleton_Warning_Elite Variant'),
            ('V4', 'EnemyBulletAttackImp'), ('V5', 'soul enemy warning'), ('V5', 'Enemy_Bomb_ExplosionAttack 1'),
@@ -143,9 +144,12 @@ def main():
     warning_names = {'Slime Path Show', 'Slime Path fadeout', 'MeleeWarning_BuildUp', 'MeleeWarning_BuildDown', 'Buildup Lost Soul', 'Fadeout2'}
     bodies, effects, palettes = [], [], []
     for group, name, identity, target, contact in BODIES:
-        animator = next(o for o in objects.values() if o['type'].endswith('EnemyAnimator') and o['path'] == name + '[0]/Sprite[0]')
+        animator = next(o for o in objects.values() if o['type'].split('.')[-1] in ('EnemyAnimator', 'MultipleAttackAnimator') and o['path'] == name + '[0]/Sprite[0]')
         bindings = []
-        for key, value in animator['data'].items():
+        values = list(animator['data'].items())
+        for i, attack_set in enumerate(field(animator['data'], 'attackSets') or []):
+            values.extend(('attackSets.Array.data['+str(i)+'].'+key.split('::')[-1], value) for key, value in attack_set['fields'].items())
+        for key, value in values:
             prop = key.split('::')[-1]
             if contact and prop.startswith(('attack', 'recovery')):
                 continue
@@ -180,7 +184,7 @@ def main():
         effects.append(dict(group=group, name=name, template=p.relative_to(PROJECT).as_posix()))
     for name in sorted(warning_names):
         import_asset(SOURCE / 'AnimationClip' / (name + '.anim'), 'warnings')
-    used = {'Brotchi': [0, 1], 'Brotchi_Dash': [0, 1], 'Imp': [0, 1], 'Skeleton': [0, 2], 'Elite_Skeleton': [0, 1], 'Slime': [0, 1, 2], 'LostSoul': [0, 1]}
+    used = {'Brotchi': [0, 1], 'Brotchi_Dash': [0, 1], 'Imp': [0, 1], 'Skeleton': [0, 2], 'Elite_Skeleton': [0, 1], 'Slime': [0, 1, 2], 'LostSoul': [0, 1], 'Ghoul': [0]}
     for aggregate in field(objects[data['enemyDatabase']['reference']]['data'], 'enemies'):
         name = field(aggregate, 'enemyName')
         for variant in used.get(name, []):
@@ -215,7 +219,7 @@ def main():
     ROOT.mkdir(parents=True, exist_ok=True)
     manifest = dict(schemaVersion=1, sourceEvidence=str(EVIDENCE), sourceSha256=sha(EVIDENCE), bodies=bodies, effects=effects,
                     palettes=palettes, bakes=list(bakes.values()), entries=sorted(entries.values(), key=lambda x: x['source']),
-                    deferred=['E9 Ghoul body'], excluded=['audio', 'UI', 'loot', 'player', 'weapons', 'maps', 'gameplay scripts'])
+                    deferred=[], excluded=['audio', 'UI', 'loot', 'player', 'weapons', 'maps', 'gameplay scripts'])
     (ROOT / 'ArtSource.json').write_text(json.dumps(manifest, ensure_ascii=False, indent=2), encoding='utf-8')
     print(json.dumps(dict(bodies=len(bodies), effectRoots=len(effects), dependencies=len(entries), sourceSha256=manifest['sourceSha256'])))
 

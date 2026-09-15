@@ -7,6 +7,7 @@ namespace MonsterSupergroup.NetworkCombat
 {
     public enum ReferenceSpawnMode : byte { None, CurveBudget, AliveTarget, FormationBurst }
     public enum ReferenceEnemyReadiness : byte { Ready, EvidenceMissing, ImplementationPending, ValidationPending }
+    public enum ReferenceEndPolicy : byte { ImmediatePreview, WaitForParticipants }
 
     /// <summary>Captured authoring data, not an enemy registry or a second combat state.</summary>
     public sealed class ReferenceSpawnDefinition
@@ -39,6 +40,9 @@ namespace MonsterSupergroup.NetworkCombat
 
     public sealed class ReferenceWaveProgram
     {
+        public ReferenceEnemyReadiness FlowReadiness;
+        public string FlowReadinessNote;
+        public ReferenceEndPolicy EndPolicy;
         public readonly ReferenceSpawnDefinition[] Clips;
         public readonly ReferenceBarrierDefinition[] Barriers;
         public readonly double EndTime, SourceDuration;
@@ -72,6 +76,10 @@ namespace MonsterSupergroup.NetworkCombat
 
         public string ReadinessError()
         {
+            if (FlowReadiness == ReferenceEnemyReadiness.EvidenceMissing || FlowReadiness == ReferenceEnemyReadiness.ImplementationPending ||
+                FlowReadiness == ReferenceEnemyReadiness.ValidationPending && !ValidationOnly ||
+                FlowReadiness == ReferenceEnemyReadiness.Ready && !string.IsNullOrWhiteSpace(FlowReadinessNote))
+                return "Reference flow gate: " + FlowReadiness + ": " + FlowReadinessNote;
             foreach (var clip in Clips)
                 if (clip.Start < EndTime &&
                     (clip.SpawnReadiness == ReferenceEnemyReadiness.EvidenceMissing ||

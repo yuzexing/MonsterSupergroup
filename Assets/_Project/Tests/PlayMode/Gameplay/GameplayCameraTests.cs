@@ -226,13 +226,18 @@ namespace MonsterSupergroup.Gameplay.Tests
         [UnityTest]
         public IEnumerator Axeldor_DeathHoldsAndCanonicalLifeRestorationReversesClip()
         {
-            player.enabled=false;
             var visual=player.GetComponentInChildren<NordicPlayerAnimator>();
             var health=player.GetComponent<CombatantBehaviour>(); int before=health.CurrentHealth;
+            // The initial owner health report (version 2) must reach the canonical receive path
+            // before this presentation-only edit. Otherwise its queued alive baseline replaces
+            // the synthetic death, depending on test order/frame timing.
+            yield return WaitFor(() => health.StateVersion > 1 &&
+                player.GetComponent<MirrorNetworkCombatBridge>().Collector.PendingPlayerHealthReportCount == 0);
+            player.enabled=false;
             NordicGameplayProcessProbe.ApplyPresentationHealth(health,0);
             yield return new WaitForSeconds(1.2f);
             var state=visual.GetComponent<Animancer.AnimancerComponent>().States.Current;
-            Assert.That(visual.Motion,Is.EqualTo(NordicMotion.Dead));
+            Assert.That(visual.Motion,Is.EqualTo(NordicMotion.Dead), "health="+health.CurrentHealth+" version="+health.StateVersion+" initialized="+player.IsRuntimeInitialized+" scale="+Time.timeScale);
             Assert.That(state.Time,Is.EqualTo(state.Length).Within(.001f));
             Assert.That(state.Speed,Is.Zero);
             NordicGameplayProcessProbe.ApplyPresentationHealth(health,before);

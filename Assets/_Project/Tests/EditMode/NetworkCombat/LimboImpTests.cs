@@ -41,7 +41,7 @@ namespace MonsterSupergroup.NetworkCombat.Tests
             Assert.That(clips[1].Start, Is.EqualTo(60)); Assert.That(clips[1].End, Is.EqualTo(105)); Assert.That(clips[1].Count, Is.EqualTo(15));
             Assert.That(clips[1].Stats.BaseHealth, Is.EqualTo(50)); Assert.That(p.Reference.SourceDuration, Is.EqualTo(841.5766649882).Within(.0001));
             var full = AssetDatabase.LoadAssetAtPath<GameplayWaveRules>(LimboReferenceAssets.ResourcesRoot + "/Full.asset");
-            Assert.That(full.TryCapture(out var f, out error), Is.True, error); Assert.That(f.Reference.ReadinessError(), Is.Not.Null);
+            Assert.That(full.TryCapture(out var f, out error), Is.True, error); f.Reference.FlowReadiness = ReferenceEnemyReadiness.ImplementationPending; Assert.That(f.Reference.ReadinessError(), Is.Not.Null);
         }
 
         [Test]

@@ -25,6 +25,7 @@ namespace MonsterSupergroup.Gameplay.Tests
         private const BindingFlags Private = BindingFlags.Instance | BindingFlags.NonPublic;
         private BootGameplayNetworkManager manager;
         private GameObject[] bootRoots;
+        private WeaponAttackAdmissionFixtureGate executionGate;
         private readonly List<GameObject> objects = new List<GameObject>();
         private NetworkIdentity Player => NetworkClient.localPlayer;
         private PlayerBuildRuntime Build => Player.GetComponent<PlayerBuildRuntime>();
@@ -34,16 +35,29 @@ namespace MonsterSupergroup.Gameplay.Tests
         private SummonPresentationHistory ServerHistory => Field<SummonPresentationHistory>(Adapter, "serverSummonHistory");
 
         [UnityTest]
-        public IEnumerator Host_FreshEquipmentReceivesSixtySecondDeadlineAndCannotSkipCocoonOrBirth()
+        public IEnumerator Host_FreshEquipmentReceivesAuthoredDeadlineAndCannotSkipCocoonOrBirth()
         {
             yield return StartHostFixture();
             double equippedAt = NetworkTime.time;
             SummonAttackBehaviour weapon = Equip(1);
+            int terminations = 0;
+            string operation = "baseline-and-rejected-attack";
+            weapon.PresentationTerminated += state =>
+            {
+                terminations++;
+                Debug.Log($"[SummonFixture] terminated pet={state.PetId} operation={operation} enabled={weapon.enabled} " +
+                    $"revision={Selection.OwnerBuildRevision} frame={Time.frameCount}");
+            };
             var saved = Adapter.CaptureSummonMaturities().Single();
             Assert.That(saved.MaturityAt, Is.EqualTo(equippedAt + weapon.InitialMaturityDelay).Within(0.15d));
             SendBaseline();
             yield return WaitFor(() => weapon.HasSimulationBinding, "The real Build TargetRpc must configure the owned pet clock.");
             Assert.That(weapon.MaturityAt, Is.EqualTo(saved.MaturityAt));
+            // Drain the real baseline, then hand execution to this test once. A per-frame
+            // gate must not cancel a pet created by a manual Tick after the baseline enables it.
+            yield return null;
+            Build.SetWeaponExecutionEnabled(false);
+            executionGate.enabled = false;
             weapon.TickNative(0f, 0f);
             Assert.That(weapon.ActiveSummon.Phase, Is.EqualTo(SummonPhase.Cocoon));
             Assert.That(weapon.CurrentSnapshot, Is.Null);
@@ -64,6 +78,34 @@ namespace MonsterSupergroup.Gameplay.Tests
                 "A reliable phase message cannot skip the server's source Cocoon deadline.");
             Assert.That(ServerHistory.CaptureStates().Single().State.Phase, Is.EqualTo(SummonPhase.Cocoon));
             Assert.That(Adapter.AcceptedCooldownReportCount, Is.Zero);
+            Assert.That(terminations, Is.Zero, "A rejected attack/presentation must not terminate the real Cocoon.");
+
+            ulong originalPet = weapon.PetId;
+            operation = "duplicate-baseline";
+            SendBaseline();
+            yield return WaitFor(() => weapon.enabled, "The repeated baseline must reach the owner.");
+            Assert.That(weapon.PetId, Is.EqualTo(originalPet));
+            Assert.That(weapon.MaturityAt, Is.EqualTo(saved.MaturityAt));
+            Assert.That(ServerHistory.PetCount, Is.EqualTo(1));
+            Assert.That(terminations, Is.Zero);
+
+            operation = "explicit-disable";
+            Build.SetWeaponExecutionEnabled(false);
+            yield return WaitFor(() => ServerHistory.PetCount == 0, "A real disable must still terminate the pet through Mirror.");
+            Assert.That(terminations, Is.EqualTo(1));
+            Assert.That(weapon.ActiveSummon, Is.Null);
+            operation = "adapter-rebind";
+            Adapter.enabled = false;
+            Adapter.enabled = true;
+            yield return WaitFor(() => weapon.HasSimulationBinding, "Rebind must deliver a canonical baseline without changing the execution lock.");
+            Assert.That(weapon.enabled, Is.False);
+            weapon.TickNative(0f, 0f);
+            yield return WaitFor(() => weapon.ActiveSummon != null && ServerHistory.PetCount == 1, "The rebound emitter creates one new pet.");
+            Assert.That(weapon.PetId, Is.Not.EqualTo(originalPet));
+            Assert.That(weapon.MaturityAt, Is.EqualTo(saved.MaturityAt), "Rebind must not grant a new maturity deadline.");
+            Assert.That(terminations, Is.EqualTo(1));
+            Debug.Log($"[SummonFixture] passed oldPet={originalPet} newPet={weapon.PetId} maturity={saved.MaturityAt:R} sourceDelay={weapon.InitialMaturityDelay}");
+            operation = "fixture-shutdown";
         }
 
         [UnityTest]
@@ -286,7 +328,7 @@ namespace MonsterSupergroup.Gameplay.Tests
             manager = Object.FindFirstObjectByType<BootGameplayNetworkManager>();
             Assert.That(manager, Is.Not.Null);
             Assert.That(manager.GetComponent<NetworkBackendBootstrap>().TryPrepareKcp("127.0.0.1", 7952, false, out string error), Is.True, error);
-            Create("Summon protocol fixture gate").AddComponent<WeaponAttackAdmissionFixtureGate>();
+            executionGate = Create("Summon protocol fixture gate").AddComponent<WeaponAttackAdmissionFixtureGate>();
             SceneManager.sceneLoaded += PrepareGameplay;
             manager.StartHost();
             yield return WaitFor(() => manager.IsGameplayLoaded && Player != null && Selection.HasOwnerBaseline,

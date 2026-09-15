@@ -13,6 +13,7 @@ namespace MonsterSupergroup.NetworkCombat
         private ClipClock[] clipClocks;
         private int referenceFrame = -1, referenceCursor, pendingClip = -1, trapCount;
         private int[] clipAlive;
+        private bool referencePaused;
         public event Action<int> FormationCaptured;
         public event Action<int> FormationReleased;
         public event Action<int> FormationSkipped;
@@ -50,23 +51,35 @@ namespace MonsterSupergroup.NetworkCombat
             {
                 referenceFrame = frame; referenceCursor = 0;
                 double delta = Math.Max(0, now - lastTime); lastTime = Math.Max(now, lastTime);
-                if (!active) { state.Phase = WavePhase.Paused; return false; }
-                if (state.Phase != WavePhase.Paused) state.Elapsed += delta;
-                state.Phase = WavePhase.Running;
+                if (!active)
+                {
+                    referencePaused = true;
+                    if (state.TransitionRequestedAt == 0) state.Phase = WavePhase.Paused;
+                    return false;
+                }
+                if (!referencePaused) state.Elapsed += delta;
+                referencePaused = false;
+                state.Phase = state.TransitionRequestedAt > 0 ? WavePhase.TransitionPending : WavePhase.Running;
                 for (int index = 0; index < clipClocks.Length; index++)
                 {
                     var clock = clipClocks[index];
                     if (clock.ReleaseTrapAt > 0 && state.Elapsed >= clock.ReleaseTrapAt)
                     { trapCount--; clock.ReleaseTrapAt = 0; FormationReleased?.Invoke(index); }
                 }
-                if (state.Elapsed >= settings.Reference.EndTime)
-                { state.Elapsed = settings.Reference.EndTime; state.Phase = WavePhase.Completed; return false; }
+                if (state.Elapsed >= settings.Reference.EndTime && state.TransitionRequestedAt == 0)
+                {
+                    if (settings.Reference.EndPolicy == ReferenceEndPolicy.ImmediatePreview)
+                    { state.Elapsed = settings.Reference.EndTime; state.Phase = WavePhase.Completed; }
+                    else { state.TransitionRequestedAt = state.Elapsed; state.Phase = WavePhase.TransitionPending; }
+                    return false;
+                }
             }
             if (!active) return false;
             for (; referenceCursor < clipClocks.Length; referenceCursor++)
             {
                 int i = referenceCursor; var clock = clipClocks[i]; var clip = settings.Reference.Clips[i];
-                if (clock.Ended || state.Elapsed <= clip.Start) continue;
+                if (clock.Ended || state.Elapsed <= clip.Start || clip.Start >= settings.Reference.EndTime ||
+                    state.TransitionRequestedAt > 0 && !clock.Started) continue;
                 if (!clock.Started)
                 {
                     clock.Started = true; state.ActiveClips++;
@@ -159,6 +172,17 @@ namespace MonsterSupergroup.NetworkCombat
         }
 
         public bool TryAcquireBarrierSlot() { if (trapCount == 1) return false; trapCount++; return true; }
+        public void SetReferenceWait(int count, string reason)
+        {
+            if (state.Phase != WavePhase.TransitionPending) return;
+            state.TransitionWaitCount = count; state.TransitionWaitReason = reason;
+        }
+        public bool CompleteReferenceTransition(string runId)
+        {
+            if (state.RunId != runId || state.Phase != WavePhase.TransitionPending || pendingSequence != 0) return false;
+            state.Phase = WavePhase.Completed; state.TransitionWaitCount = 0; state.TransitionWaitReason = "";
+            return true;
+        }
         public void ReleaseBarrierSlot() { if (trapCount > 0) trapCount--; }
         public double FormationReleaseTime(int clip) => clipClocks[clip].ReleaseTrapAt;
         public void CancelReferenceTraps()

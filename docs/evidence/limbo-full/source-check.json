@@ -1,0 +1,780 @@
+{
+  "source": "Assets\\_Project\\Content\\NetworkCombat\\Limbo\\limbo-source.json",
+  "sha256": "40e2832cf56b9c6fa3ff690404d1a7dfde70d5e05c2f7613aef28fb94d0c1aaa",
+  "runtimeEvidenceSha256": "4dcefbcae22fb6e8cd067618cd0ba782eb5a23d07b20a31a3ecf3323cd6d5c38",
+  "sourceDuration": 841.5766649882,
+  "stageEnd": 720.9,
+  "clipCount": 31,
+  "clips": [
+    {
+      "start": 1.0,
+      "duration": 135.0,
+      "mode": 1,
+      "enemy": "Brotchi",
+      "variant": 0,
+      "count": 250,
+      "cooldown": 0.0,
+      "keys": [
+        {
+          "time": 0.0,
+          "value": 0.22921753,
+          "inSlope": 2.0,
+          "outSlope": 2.0
+        },
+        {
+          "time": 0.3875122,
+          "value": 0.45518875,
+          "inSlope": 0.0,
+          "outSlope": 0.0
+        }
+      ],
+      "sourcePrefab": "Enemy_Brotchi.prefab",
+      "sourceFile": "MonoBehaviour/Progression_Limbo.playable",
+      "sourceId": "114730242686860875",
+      "sourceLine": 198,
+      "missingEvidence": "",
+      "contactRadius": 0.55,
+      "expiresOffscreen": true,
+      "resetOnReposition": true
+    },
+    {
+      "start": 60.0,
+      "duration": 45.0,
+      "mode": 1,
+      "enemy": "Imp",
+      "variant": 0,
+      "count": 15,
+      "cooldown": 0.0,
+      "keys": [
+        {
+          "time": -0.1875,
+          "value": 1.0166931,
+          "inSlope": -0.11448733,
+          "outSlope": -0.11448733
+        },
+        {
+          "time": 0.50418544,
+          "value": 0.0067520738,
+          "inSlope": 0.01496044,
+          "outSlope": 0.01496044
+        },
+        {
+          "time": 1.0,
+          "value": 1.0,
+          "inSlope": 0.0,
+          "outSlope": 0.0
+        }
+      ],
+      "sourcePrefab": "Enemy_Imp.prefab",
+      "sourceFile": "MonoBehaviour/Progression_Limbo.playable",
+      "sourceId": "114587765826080250",
+      "sourceLine": 1015,
+      "missingEvidence": "Original attack animation bindings/timings are missing. Original bullet movement parameters are missing.",
+      "contactRadius": 0,
+      "expiresOffscreen": true,
+      "resetOnReposition": true
+    },
+    {
+      "start": 105.0,
+      "duration": 10.0,
+      "mode": 1,
+      "enemy": "Elite_Skeleton",
+      "variant": 0,
+      "count": 1,
+      "cooldown": 0.0,
+      "keys": [
+        {
+          "time": 0.0,
+          "value": 1.0,
+          "inSlope": 0.0,
+          "outSlope": 0.0
+        },
+        {
+          "time": 1.0,
+          "value": 1.0,
+          "inSlope": 0.0,
+          "outSlope": 0.0
+        }
+      ],
+      "sourcePrefab": "Elite_Skeleton.prefab",
+      "sourceFile": "MonoBehaviour/Progression_Limbo.playable",
+      "sourceId": "114161607090078389",
+      "sourceLine": 1958,
+      "missingEvidence": "Original attack animation bindings/timings are missing.",
+      "contactRadius": 0,
+      "expiresOffscreen": false,
+      "resetOnReposition": false
+    },
+    {
+      "start": 135.0,
+      "duration": 45.0,
+      "mode": 1,
+      "enemy": "Skeleton",
+      "variant": 0,
+      "count": 150,
+      "cooldown": 0.0,
+      "keys": [
+        {
+          "time": 0.000667572,
+          "value": 0.9972229,
+          "inSlope": 0.029505584,
+          "outSlope": 0.029505584
+        },
+        {
+          "time": 0.09478872,
+          "value": 1.0,
+          "inSlope": 0.0026882337,
+          "outSlope": 0.0026882337
+        },
+        {
+          "time": 0.3114993,
+          "value": 0.8148759,
+          "inSlope": -0.2926829,
+          "outSlope": -0.2926829
+        },
+        {
+          "time": 1.0,
+          "value": 1.0,
+          "inSlope": 0.26888004,
+          "outSlope": 0.26888004
+        }
+      ],
+      "sourcePrefab": "Enemy_Skeleton.prefab",
+      "sourceFile": "MonoBehaviour/Progression_Limbo.playable",
+      "sourceId": "114985305603660343",
+      "sourceLine": 1378,
+      "missingEvidence": "Original attack animation bindings/timings are missing.",
+      "contactRadius": 0,
+      "expiresOffscreen": true,
+      "resetOnReposition": true
+    },
+    {
+      "start": 180.0,
+      "duration": 20.083333333333343,
+      "mode": 2,
+      "enemy": "Slime",
+      "variant": 2,
+      "count": 100,
+      "cooldown": 0.0,
+      "keys": [],
+      "sourcePrefab": "Enemy_Slime Rusher.prefab",
+      "sourceFile": "MonoBehaviour/Progression_Limbo.playable",
+      "sourceId": "114632457200066912",
+      "sourceLine": 2604,
+      "missingEvidence": "",
+      "contactRadius": 0.72,
+      "expiresOffscreen": true,
+      "resetOnReposition": true
+    },
+    {
+      "start": 209.05,
+      "duration": 100.35,
+      "mode": 2,
+      "enemy": "Brotchi_Dash",
+      "variant": 0,
+      "count": 30,
+      "cooldown": 1.0,
+      "keys": [],
+      "sourcePrefab": "Enemy_Brotchi_LVL2.prefab",
+      "sourceFile": "MonoBehaviour/Progression_Limbo.playable",
+      "sourceId": "114243736805655561",
+      "sourceLine": 717,
+      "missingEvidence": "Original attack animation bindings/timings are missing.",
+      "contactRadius": 0,
+      "expiresOffscreen": true,
+      "resetOnReposition": true
+    },
+    {
+      "start": 240.0,
+      "duration": 150.0,
+      "mode": 1,
+      "enemy": "Skeleton",
+      "variant": 2,
+      "count": 200,
+      "cooldown": 0.0,
+      "keys": [
+        {
+          "time": 0.000667572,
+          "value": 0.9972229,
+          "inSlope": 0.029505584,
+          "outSlope": 0.029505584
+        },
+        {
+          "time": 0.09478872,
+          "value": 1.0,
+          "inSlope": 0.0026882337,
+          "outSlope": 0.0026882337
+        },
+        {
+          "time": 0.3114993,
+          "value": 0.8148759,
+          "inSlope": -0.2926829,
+          "outSlope": -0.2926829
+        },
+        {
+          "time": 1.0,
+          "value": 1.0,
+          "inSlope": 0.26888004,
+          "outSlope": 0.26888004
+        }
+      ],
+      "sourcePrefab": "Enemy_Skeleton.prefab",
+      "sourceFile": "MonoBehaviour/Progression_Limbo.playable",
+      "sourceId": "114705390221481576",
+      "sourceLine": 1440,
+      "missingEvidence": "Original attack animation bindings/timings are missing.",
+      "contactRadius": 0,
+      "expiresOffscreen": true,
+      "resetOnReposition": true
+    },
+    {
+      "start": 285.0,
+      "duration": 0.016666666666666666,
+      "mode": 1,
+      "enemy": "Slime",
+      "variant": 0,
+      "count": 60,
+      "cooldown": 0.0,
+      "keys": [
+        {
+          "time": 0.0,
+          "value": 0.0,
+          "inSlope": 2.0,
+          "outSlope": 2.0
+        },
+        {
+          "time": 0.3875122,
+          "value": 0.45518875,
+          "inSlope": 0.0,
+          "outSlope": 0.0
+        }
+      ],
+      "sourcePrefab": "Enemy_Slime.prefab",
+      "sourceFile": "MonoBehaviour/Progression_Limbo.playable",
+      "sourceId": "114634108722742392",
+      "sourceLine": 2624,
+      "missingEvidence": "",
+      "contactRadius": 0.72,
+      "expiresOffscreen": true,
+      "resetOnReposition": true
+    },
+    {
+      "start": 285.0167,
+      "duration": 47.983299999999986,
+      "mode": 1,
+      "enemy": "Slime",
+      "variant": 0,
+      "count": 90,
+      "cooldown": 0.0,
+      "keys": [
+        {
+          "time": 0.0,
+          "value": 0.0,
+          "inSlope": 2.0,
+          "outSlope": 2.0
+        },
+        {
+          "time": 1.0,
+          "value": 1.0,
+          "inSlope": 0.0,
+          "outSlope": 0.0
+        }
+      ],
+      "sourcePrefab": "Enemy_Slime.prefab",
+      "sourceFile": "MonoBehaviour/Progression_Limbo.playable",
+      "sourceId": "114302127217294661",
+      "sourceLine": 2668,
+      "missingEvidence": "",
+      "contactRadius": 0.72,
+      "expiresOffscreen": true,
+      "resetOnReposition": true
+    },
+    {
+      "start": 330.0,
+      "duration": 30.3099983215332,
+      "mode": 1,
+      "enemy": "Elite_Skeleton",
+      "variant": 1,
+      "count": 1,
+      "cooldown": 0.0,
+      "keys": [
+        {
+          "time": 0.0,
+          "value": 1.0,
+          "inSlope": 0.0,
+          "outSlope": 0.0
+        },
+        {
+          "time": 1.0,
+          "value": 1.0,
+          "inSlope": 0.0,
+          "outSlope": 0.0
+        }
+      ],
+      "sourcePrefab": "Elite_Skeleton.prefab",
+      "sourceFile": "MonoBehaviour/Progression_Limbo.playable",
+      "sourceId": "114256069497284392",
+      "sourceLine": 1914,
+      "missingEvidence": "Original attack animation bindings/timings are missing.",
+      "contactRadius": 0,
+      "expiresOffscreen": false,
+      "resetOnReposition": false
+    },
+    {
+      "start": 360.3099983215332,
+      "duration": 59.690001678466786,
+      "mode": 1,
+      "enemy": "Brotchi",
+      "variant": 1,
+      "count": 150,
+      "cooldown": 0.0,
+      "keys": [
+        {
+          "time": 0.0,
+          "value": 0.0,
+          "inSlope": 2.0,
+          "outSlope": 2.0
+        },
+        {
+          "time": 0.3875122,
+          "value": 0.45518875,
+          "inSlope": 0.0,
+          "outSlope": 0.0
+        }
+      ],
+      "sourcePrefab": "Enemy_Brotchi.prefab",
+      "sourceFile": "MonoBehaviour/Progression_Limbo.playable",
+      "sourceId": "114724804207875695",
+      "sourceLine": 242,
+      "missingEvidence": "",
+      "contactRadius": 0.55,
+      "expiresOffscreen": true,
+      "resetOnReposition": true
+    },
+    {
+      "start": 389.6,
+      "duration": 30.0,
+      "mode": 2,
+      "enemy": "LostSoul",
+      "variant": 0,
+      "count": 46,
+      "cooldown": 0.0,
+      "keys": [],
+      "sourcePrefab": "Enemy_LostSoul.prefab",
+      "sourceFile": "MonoBehaviour/Progression_Limbo.playable",
+      "sourceId": "114733206282342372",
+      "sourceLine": 3217,
+      "missingEvidence": "Original attack animation bindings/timings are missing. Original explosion component references/window are missing.",
+      "contactRadius": 0,
+      "expiresOffscreen": true,
+      "resetOnReposition": true
+    },
+    {
+      "start": 419.6,
+      "duration": 30.316666666666663,
+      "mode": 2,
+      "enemy": "Imp",
+      "variant": 1,
+      "count": 10,
+      "cooldown": 0.0,
+      "keys": [],
+      "sourcePrefab": "Enemy_Imp.prefab",
+      "sourceFile": "MonoBehaviour/Progression_Limbo.playable",
+      "sourceId": "114589667821646929",
+      "sourceLine": 1108,
+      "missingEvidence": "Original attack animation bindings/timings are missing. Original bullet movement parameters are missing.",
+      "contactRadius": 0,
+      "expiresOffscreen": true,
+      "resetOnReposition": true
+    },
+    {
+      "start": 420.0,
+      "duration": 29.916666666666686,
+      "mode": 1,
+      "enemy": "Brotchi_Dash",
+      "variant": 1,
+      "count": 50,
+      "cooldown": 0.0,
+      "keys": [
+        {
+          "time": 0.0,
+          "value": 1.0,
+          "inSlope": 0.0,
+          "outSlope": 0.0
+        },
+        {
+          "time": 1.0,
+          "value": 1.0,
+          "inSlope": 0.0,
+          "outSlope": 0.0
+        }
+      ],
+      "sourcePrefab": "Enemy_Brotchi_LVL2.prefab",
+      "sourceFile": "MonoBehaviour/Progression_Limbo.playable",
+      "sourceId": "114703437598541787",
+      "sourceLine": 585,
+      "missingEvidence": "Original attack animation bindings/timings are missing.",
+      "contactRadius": 0,
+      "expiresOffscreen": true,
+      "resetOnReposition": true
+    },
+    {
+      "start": 449.9166666666667,
+      "duration": 30.0,
+      "mode": 2,
+      "enemy": "Ghoul",
+      "variant": 0,
+      "count": 30,
+      "cooldown": 0.0,
+      "keys": [],
+      "sourcePrefab": "Enemy_Ghoul.prefab",
+      "sourceFile": "MonoBehaviour/Progression_Limbo.playable",
+      "sourceId": "114470112387431263",
+      "sourceLine": 2046,
+      "missingEvidence": "Original attack animation bindings/timings are missing. Original MultipleAttackAnimator list is missing.",
+      "contactRadius": 0,
+      "expiresOffscreen": true,
+      "resetOnReposition": true
+    },
+    {
+      "start": 479.9166666666667,
+      "duration": 30.0,
+      "mode": 1,
+      "enemy": "Ghoul",
+      "variant": 0,
+      "count": 50,
+      "cooldown": 0.0,
+      "keys": [
+        {
+          "time": 0.0,
+          "value": 0.0,
+          "inSlope": 1.0,
+          "outSlope": 1.0
+        },
+        {
+          "time": 1.0,
+          "value": 1.0,
+          "inSlope": 1.0,
+          "outSlope": 1.0
+        }
+      ],
+      "sourcePrefab": "Enemy_Ghoul.prefab",
+      "sourceFile": "MonoBehaviour/Progression_Limbo.playable",
+      "sourceId": "114002669891404536",
+      "sourceLine": 2002,
+      "missingEvidence": "Original attack animation bindings/timings are missing. Original MultipleAttackAnimator list is missing.",
+      "contactRadius": 0,
+      "expiresOffscreen": true,
+      "resetOnReposition": true
+    },
+    {
+      "start": 480.5,
+      "duration": 15.0,
+      "mode": 3,
+      "enemy": "Imp",
+      "variant": 1,
+      "count": 10,
+      "cooldown": 0.0,
+      "keys": [],
+      "sourcePrefab": "Enemy_Imp.prefab",
+      "sourceFile": "MonoBehaviour/Progression_Limbo.playable",
+      "sourceId": "114372920208702427",
+      "sourceLine": 1128,
+      "missingEvidence": "Original attack animation bindings/timings are missing. Original bullet movement parameters are missing.",
+      "contactRadius": 0,
+      "expiresOffscreen": true,
+      "resetOnReposition": true
+    },
+    {
+      "start": 495.5,
+      "duration": 164.06666666666672,
+      "mode": 2,
+      "enemy": "Imp",
+      "variant": 1,
+      "count": 15,
+      "cooldown": 0.0,
+      "keys": [],
+      "sourcePrefab": "Enemy_Imp.prefab",
+      "sourceFile": "MonoBehaviour/Progression_Limbo.playable",
+      "sourceId": "114709867586078768",
+      "sourceLine": 1068,
+      "missingEvidence": "Original attack animation bindings/timings are missing. Original bullet movement parameters are missing.",
+      "contactRadius": 0,
+      "expiresOffscreen": true,
+      "resetOnReposition": true
+    },
+    {
+      "start": 509.65,
+      "duration": 30.0,
+      "mode": 2,
+      "enemy": "Slime",
+      "variant": 1,
+      "count": 80,
+      "cooldown": 0.0,
+      "keys": [],
+      "sourcePrefab": "Enemy_Slime Rusher.prefab",
+      "sourceFile": "MonoBehaviour/Progression_Limbo.playable",
+      "sourceId": "114969106005120503",
+      "sourceLine": 2712,
+      "missingEvidence": "",
+      "contactRadius": 0.72,
+      "expiresOffscreen": true,
+      "resetOnReposition": true
+    },
+    {
+      "start": 540.2833333333333,
+      "duration": 15.0,
+      "mode": 3,
+      "enemy": "LostSoul",
+      "variant": 1,
+      "count": 10,
+      "cooldown": 0.0,
+      "keys": [],
+      "sourcePrefab": "Enemy_LostSoul.prefab",
+      "sourceFile": "MonoBehaviour/Progression_Limbo.playable",
+      "sourceId": "114217368724061974",
+      "sourceLine": 3237,
+      "missingEvidence": "Original attack animation bindings/timings are missing. Original explosion component references/window are missing.",
+      "contactRadius": 0,
+      "expiresOffscreen": true,
+      "resetOnReposition": true
+    },
+    {
+      "start": 555.2833333333333,
+      "duration": 164.7166666666667,
+      "mode": 2,
+      "enemy": "LostSoul",
+      "variant": 1,
+      "count": 46,
+      "cooldown": 0.0,
+      "keys": [],
+      "sourcePrefab": "Enemy_LostSoul.prefab",
+      "sourceFile": "MonoBehaviour/Progression_Limbo.playable",
+      "sourceId": "114017697238300914",
+      "sourceLine": 3197,
+      "missingEvidence": "Original attack animation bindings/timings are missing. Original explosion component references/window are missing.",
+      "contactRadius": 0,
+      "expiresOffscreen": true,
+      "resetOnReposition": true
+    },
+    {
+      "start": 569.9666666666667,
+      "duration": 30.0,
+      "mode": 1,
+      "enemy": "Brotchi_Dash",
+      "variant": 1,
+      "count": 60,
+      "cooldown": 0.0,
+      "keys": [
+        {
+          "time": 0.0,
+          "value": 0.0,
+          "inSlope": 2.0,
+          "outSlope": 2.0
+        },
+        {
+          "time": 1.0,
+          "value": 1.0,
+          "inSlope": 0.0,
+          "outSlope": 0.0
+        }
+      ],
+      "sourcePrefab": "Enemy_Brotchi_LVL2.prefab",
+      "sourceFile": "MonoBehaviour/Progression_Limbo.playable",
+      "sourceId": "114884547391421755",
+      "sourceLine": 629,
+      "missingEvidence": "Original attack animation bindings/timings are missing.",
+      "contactRadius": 0,
+      "expiresOffscreen": true,
+      "resetOnReposition": true
+    },
+    {
+      "start": 599.9666666666667,
+      "duration": 30.3099983215332,
+      "mode": 1,
+      "enemy": "Elite_Skeleton",
+      "variant": 1,
+      "count": 2,
+      "cooldown": 0.0,
+      "keys": [
+        {
+          "time": 0.0,
+          "value": 1.0,
+          "inSlope": 0.0,
+          "outSlope": 0.0
+        },
+        {
+          "time": 1.0,
+          "value": 1.0,
+          "inSlope": 0.0,
+          "outSlope": 0.0
+        }
+      ],
+      "sourcePrefab": "Elite_Skeleton.prefab",
+      "sourceFile": "MonoBehaviour/Progression_Limbo.playable",
+      "sourceId": "114977153420339851",
+      "sourceLine": 1502,
+      "missingEvidence": "Original attack animation bindings/timings are missing.",
+      "contactRadius": 0,
+      "expiresOffscreen": false,
+      "resetOnReposition": false
+    },
+    {
+      "start": 620.8,
+      "duration": 99.20000000000005,
+      "mode": 2,
+      "enemy": "Ghoul",
+      "variant": 0,
+      "count": 20,
+      "cooldown": 0.0,
+      "keys": [],
+      "sourcePrefab": "Enemy_Ghoul.prefab",
+      "sourceFile": "MonoBehaviour/Progression_Limbo.playable",
+      "sourceId": "114313026266067498",
+      "sourceLine": 2066,
+      "missingEvidence": "Original attack animation bindings/timings are missing. Original MultipleAttackAnimator list is missing.",
+      "contactRadius": 0,
+      "expiresOffscreen": true,
+      "resetOnReposition": true
+    },
+    {
+      "start": 630.2766649881999,
+      "duration": 89.72333501180015,
+      "mode": 1,
+      "enemy": "Brotchi_Dash",
+      "variant": 1,
+      "count": 60,
+      "cooldown": 0.0,
+      "keys": [
+        {
+          "time": 0.0,
+          "value": 0.0,
+          "inSlope": 2.0,
+          "outSlope": 2.0
+        },
+        {
+          "time": 1.0,
+          "value": 1.0,
+          "inSlope": 0.0,
+          "outSlope": 0.0
+        }
+      ],
+      "sourcePrefab": "Enemy_Brotchi_LVL2.prefab",
+      "sourceFile": "MonoBehaviour/Progression_Limbo.playable",
+      "sourceId": "114099118695303065",
+      "sourceLine": 673,
+      "missingEvidence": "Original attack animation bindings/timings are missing.",
+      "contactRadius": 0,
+      "expiresOffscreen": true,
+      "resetOnReposition": true
+    },
+    {
+      "start": 635.6666666666667,
+      "duration": 4.999999999999886,
+      "mode": 3,
+      "enemy": "Slime",
+      "variant": 1,
+      "count": 5,
+      "cooldown": 0.0,
+      "keys": [],
+      "sourcePrefab": "Enemy_Slime.prefab",
+      "sourceFile": "MonoBehaviour/Progression_Limbo.playable",
+      "sourceId": "114642988549198181",
+      "sourceLine": 2732,
+      "missingEvidence": "",
+      "contactRadius": 0.72,
+      "expiresOffscreen": true,
+      "resetOnReposition": true
+    },
+    {
+      "start": 654.8666666666667,
+      "duration": 5.0,
+      "mode": 3,
+      "enemy": "Slime",
+      "variant": 1,
+      "count": 5,
+      "cooldown": 0.0,
+      "keys": [],
+      "sourcePrefab": "Enemy_Slime.prefab",
+      "sourceFile": "MonoBehaviour/Progression_Limbo.playable",
+      "sourceId": "114946936116752871",
+      "sourceLine": 2752,
+      "missingEvidence": "",
+      "contactRadius": 0.72,
+      "expiresOffscreen": true,
+      "resetOnReposition": true
+    },
+    {
+      "start": 659.5666666666667,
+      "duration": 60.43333333333328,
+      "mode": 2,
+      "enemy": "Imp",
+      "variant": 1,
+      "count": 18,
+      "cooldown": 0.0,
+      "keys": [],
+      "sourcePrefab": "Enemy_Imp.prefab",
+      "sourceFile": "MonoBehaviour/Progression_Limbo.playable",
+      "sourceId": "114044625135789424",
+      "sourceLine": 1088,
+      "missingEvidence": "Original attack animation bindings/timings are missing. Original bullet movement parameters are missing.",
+      "contactRadius": 0,
+      "expiresOffscreen": true,
+      "resetOnReposition": true
+    },
+    {
+      "start": 675.0833333333334,
+      "duration": 5.0,
+      "mode": 3,
+      "enemy": "Slime",
+      "variant": 1,
+      "count": 10,
+      "cooldown": 0.0,
+      "keys": [],
+      "sourcePrefab": "Enemy_Slime.prefab",
+      "sourceFile": "MonoBehaviour/Progression_Limbo.playable",
+      "sourceId": "114711914853252429",
+      "sourceLine": 2772,
+      "missingEvidence": "",
+      "contactRadius": 0.72,
+      "expiresOffscreen": true,
+      "resetOnReposition": true
+    },
+    {
+      "start": 695.1,
+      "duration": 5.0,
+      "mode": 3,
+      "enemy": "Slime",
+      "variant": 1,
+      "count": 10,
+      "cooldown": 0.0,
+      "keys": [],
+      "sourcePrefab": "Enemy_Slime.prefab",
+      "sourceFile": "MonoBehaviour/Progression_Limbo.playable",
+      "sourceId": "114918264173551851",
+      "sourceLine": 2792,
+      "missingEvidence": "",
+      "contactRadius": 0.72,
+      "expiresOffscreen": true,
+      "resetOnReposition": true
+    },
+    {
+      "start": 714.7166666666667,
+      "duration": 5.0,
+      "mode": 3,
+      "enemy": "Slime",
+      "variant": 1,
+      "count": 10,
+      "cooldown": 0.0,
+      "keys": [],
+      "sourcePrefab": "Enemy_Slime.prefab",
+      "sourceFile": "MonoBehaviour/Progression_Limbo.playable",
+      "sourceId": "114587397909062814",
+      "sourceLine": 2812,
+      "missingEvidence": "",
+      "contactRadius": 0.72,
+      "expiresOffscreen": true,
+      "resetOnReposition": true
+    }
+  ]
+}

@@ -1,0 +1,1062 @@
+{
+  "schemaVersion": 1,
+  "sourceSha256": "4dcefbcae22fb6e8cd067618cd0ba782eb5a23d07b20a31a3ecf3323cd6d5c38",
+  "identity": "Ghoul",
+  "controllerId": "o00022",
+  "attackId": "o00134",
+  "animatorId": "o00138",
+  "cooldown": 0.5,
+  "triggerDistance": 2.5,
+  "consecutiveAttacks": 2,
+  "areaSideWarpDistance": {
+    "x": 0.0,
+    "y": 0.5,
+    "z": 0.0
+  },
+  "extraStageTimes": {
+    "warningTime": 0.0,
+    "attackTime": 0.0,
+    "recoveryTime": 0.0
+  },
+  "bindings": {
+    "attackLeftDown": {
+      "clipId": "o00424",
+      "clip": "Enemy_Ghoul_Attack_Left",
+      "length": 0.235714287,
+      "frameRate": 140.0,
+      "speed": 1.0,
+      "normalizedStartTime": "NaN",
+      "fadeDuration": 0.25,
+      "events": {
+        "managedType": "Animancer.AnimancerEvent+Sequence+Serializable",
+        "fields": {
+          "Animancer.AnimancerEvent+Sequence+Serializable::_Callbacks": [],
+          "Animancer.AnimancerEvent+Sequence+Serializable::_Names": [],
+          "Animancer.AnimancerEvent+Sequence+Serializable::_NormalizedTimes": []
+        }
+      },
+      "animationEvents": []
+    },
+    "attackLeftUp": {
+      "clipId": "o00424",
+      "clip": "Enemy_Ghoul_Attack_Left",
+      "length": 0.235714287,
+      "frameRate": 140.0,
+      "speed": 1.0,
+      "normalizedStartTime": "NaN",
+      "fadeDuration": 0.25,
+      "events": {
+        "managedType": "Animancer.AnimancerEvent+Sequence+Serializable",
+        "fields": {
+          "Animancer.AnimancerEvent+Sequence+Serializable::_Callbacks": [],
+          "Animancer.AnimancerEvent+Sequence+Serializable::_Names": [],
+          "Animancer.AnimancerEvent+Sequence+Serializable::_NormalizedTimes": []
+        }
+      },
+      "animationEvents": []
+    },
+    "attackRightDown": {
+      "clipId": "o00425",
+      "clip": "Enemy_Ghoul_Attack_Right",
+      "length": 0.25,
+      "frameRate": 140.0,
+      "speed": 1.0,
+      "normalizedStartTime": "NaN",
+      "fadeDuration": 0.25,
+      "events": {
+        "managedType": "Animancer.AnimancerEvent+Sequence+Serializable",
+        "fields": {
+          "Animancer.AnimancerEvent+Sequence+Serializable::_Callbacks": [],
+          "Animancer.AnimancerEvent+Sequence+Serializable::_Names": [],
+          "Animancer.AnimancerEvent+Sequence+Serializable::_NormalizedTimes": []
+        }
+      },
+      "animationEvents": []
+    },
+    "attackRightUp": {
+      "clipId": "o00425",
+      "clip": "Enemy_Ghoul_Attack_Right",
+      "length": 0.25,
+      "frameRate": 140.0,
+      "speed": 1.0,
+      "normalizedStartTime": "NaN",
+      "fadeDuration": 0.25,
+      "events": {
+        "managedType": "Animancer.AnimancerEvent+Sequence+Serializable",
+        "fields": {
+          "Animancer.AnimancerEvent+Sequence+Serializable::_Callbacks": [],
+          "Animancer.AnimancerEvent+Sequence+Serializable::_Names": [],
+          "Animancer.AnimancerEvent+Sequence+Serializable::_NormalizedTimes": []
+        }
+      },
+      "animationEvents": []
+    },
+    "attackWarningLeftDown": {
+      "clipId": "o00426",
+      "clip": "Enemy_Ghoul_Warning_Left",
+      "length": 0.29285717,
+      "frameRate": 140.0,
+      "speed": 1.0,
+      "normalizedStartTime": "NaN",
+      "fadeDuration": 0.25,
+      "events": {
+        "managedType": "Animancer.AnimancerEvent+Sequence+Serializable",
+        "fields": {
+          "Animancer.AnimancerEvent+Sequence+Serializable::_Callbacks": [],
+          "Animancer.AnimancerEvent+Sequence+Serializable::_Names": [],
+          "Animancer.AnimancerEvent+Sequence+Serializable::_NormalizedTimes": []
+        }
+      },
+      "animationEvents": []
+    },
+    "attackWarningLeftUp": {
+      "clipId": "o00426",
+      "clip": "Enemy_Ghoul_Warning_Left",
+      "length": 0.29285717,
+      "frameRate": 140.0,
+      "speed": 1.0,
+      "normalizedStartTime": "NaN",
+      "fadeDuration": 0.25,
+      "events": {
+        "managedType": "Animancer.AnimancerEvent+Sequence+Serializable",
+        "fields": {
+          "Animancer.AnimancerEvent+Sequence+Serializable::_Callbacks": [],
+          "Animancer.AnimancerEvent+Sequence+Serializable::_Names": [],
+          "Animancer.AnimancerEvent+Sequence+Serializable::_NormalizedTimes": []
+        }
+      },
+      "animationEvents": []
+    },
+    "attackWarningRightDown": {
+      "clipId": "o00427",
+      "clip": "Enemy_Ghoul_Warning_Right",
+      "length": 0.29285717,
+      "frameRate": 140.0,
+      "speed": 1.0,
+      "normalizedStartTime": "NaN",
+      "fadeDuration": 0.25,
+      "events": {
+        "managedType": "Animancer.AnimancerEvent+Sequence+Serializable",
+        "fields": {
+          "Animancer.AnimancerEvent+Sequence+Serializable::_Callbacks": [],
+          "Animancer.AnimancerEvent+Sequence+Serializable::_Names": [],
+          "Animancer.AnimancerEvent+Sequence+Serializable::_NormalizedTimes": []
+        }
+      },
+      "animationEvents": []
+    },
+    "attackWarningRightUp": {
+      "clipId": "o00427",
+      "clip": "Enemy_Ghoul_Warning_Right",
+      "length": 0.29285717,
+      "frameRate": 140.0,
+      "speed": 1.0,
+      "normalizedStartTime": "NaN",
+      "fadeDuration": 0.25,
+      "events": {
+        "managedType": "Animancer.AnimancerEvent+Sequence+Serializable",
+        "fields": {
+          "Animancer.AnimancerEvent+Sequence+Serializable::_Callbacks": [],
+          "Animancer.AnimancerEvent+Sequence+Serializable::_Names": [],
+          "Animancer.AnimancerEvent+Sequence+Serializable::_NormalizedTimes": []
+        }
+      },
+      "animationEvents": []
+    },
+    "recoveryLeftDown": {
+      "clipId": "o00443",
+      "clip": "Enemy_Ghoul_Recovery_Left",
+      "length": 0.121428572,
+      "frameRate": 140.0,
+      "speed": 1.0,
+      "normalizedStartTime": "NaN",
+      "fadeDuration": 0.0,
+      "events": {
+        "managedType": "Animancer.AnimancerEvent+Sequence+Serializable",
+        "fields": {
+          "Animancer.AnimancerEvent+Sequence+Serializable::_Callbacks": [],
+          "Animancer.AnimancerEvent+Sequence+Serializable::_Names": [],
+          "Animancer.AnimancerEvent+Sequence+Serializable::_NormalizedTimes": []
+        }
+      },
+      "animationEvents": []
+    },
+    "recoveryLeftUp": {
+      "clipId": "o00443",
+      "clip": "Enemy_Ghoul_Recovery_Left",
+      "length": 0.121428572,
+      "frameRate": 140.0,
+      "speed": 1.0,
+      "normalizedStartTime": "NaN",
+      "fadeDuration": 0.0,
+      "events": {
+        "managedType": "Animancer.AnimancerEvent+Sequence+Serializable",
+        "fields": {
+          "Animancer.AnimancerEvent+Sequence+Serializable::_Callbacks": [],
+          "Animancer.AnimancerEvent+Sequence+Serializable::_Names": [],
+          "Animancer.AnimancerEvent+Sequence+Serializable::_NormalizedTimes": []
+        }
+      },
+      "animationEvents": []
+    },
+    "recoveryRightDown": {
+      "clipId": "o00444",
+      "clip": "Enemy_Ghoul_Recovery_Right",
+      "length": 0.128571436,
+      "frameRate": 140.0,
+      "speed": 1.0,
+      "normalizedStartTime": "NaN",
+      "fadeDuration": 0.0,
+      "events": {
+        "managedType": "Animancer.AnimancerEvent+Sequence+Serializable",
+        "fields": {
+          "Animancer.AnimancerEvent+Sequence+Serializable::_Callbacks": [],
+          "Animancer.AnimancerEvent+Sequence+Serializable::_Names": [],
+          "Animancer.AnimancerEvent+Sequence+Serializable::_NormalizedTimes": []
+        }
+      },
+      "animationEvents": []
+    },
+    "recoveryRightUp": {
+      "clipId": "o00444",
+      "clip": "Enemy_Ghoul_Recovery_Right",
+      "length": 0.128571436,
+      "frameRate": 140.0,
+      "speed": 1.0,
+      "normalizedStartTime": "NaN",
+      "fadeDuration": 0.0,
+      "events": {
+        "managedType": "Animancer.AnimancerEvent+Sequence+Serializable",
+        "fields": {
+          "Animancer.AnimancerEvent+Sequence+Serializable::_Callbacks": [],
+          "Animancer.AnimancerEvent+Sequence+Serializable::_Names": [],
+          "Animancer.AnimancerEvent+Sequence+Serializable::_NormalizedTimes": []
+        }
+      },
+      "animationEvents": []
+    }
+  },
+  "attackSets": [
+    {
+      "managedType": "AstralShift.HellMaiden.AI.Enemy.ClipQuad",
+      "fields": {
+        "AstralShift.HellMaiden.AI.Enemy.ClipQuad::attackLeftDown": {
+          "managedType": "Animancer.ClipTransition",
+          "fields": {
+            "Animancer.ClipTransition::_Clip": {
+              "reference": "o00424",
+              "type": "UnityEngine.AnimationClip",
+              "name": "Enemy_Ghoul_Attack_Left",
+              "path": "Enemy_Ghoul_Attack_Left"
+            },
+            "Animancer.ClipTransition::_NormalizedStartTime": "NaN",
+            "Animancer.Transition`1[[Animancer.ClipState, Kybernetik.Animancer, Version=8.0.1.28, Culture=neutral, PublicKeyToken=null]]::_Events": {
+              "managedType": "Animancer.AnimancerEvent+Sequence+Serializable",
+              "fields": {
+                "Animancer.AnimancerEvent+Sequence+Serializable::_Callbacks": [],
+                "Animancer.AnimancerEvent+Sequence+Serializable::_Names": [],
+                "Animancer.AnimancerEvent+Sequence+Serializable::_NormalizedTimes": []
+              }
+            },
+            "Animancer.Transition`1[[Animancer.ClipState, Kybernetik.Animancer, Version=8.0.1.28, Culture=neutral, PublicKeyToken=null]]::_FadeDuration": 0.0,
+            "Animancer.Transition`1[[Animancer.ClipState, Kybernetik.Animancer, Version=8.0.1.28, Culture=neutral, PublicKeyToken=null]]::_Speed": 1.0
+          }
+        },
+        "AstralShift.HellMaiden.AI.Enemy.ClipQuad::attackLeftUp": {
+          "managedType": "Animancer.ClipTransition",
+          "fields": {
+            "Animancer.ClipTransition::_Clip": {
+              "reference": "o00424",
+              "type": "UnityEngine.AnimationClip",
+              "name": "Enemy_Ghoul_Attack_Left",
+              "path": "Enemy_Ghoul_Attack_Left"
+            },
+            "Animancer.ClipTransition::_NormalizedStartTime": "NaN",
+            "Animancer.Transition`1[[Animancer.ClipState, Kybernetik.Animancer, Version=8.0.1.28, Culture=neutral, PublicKeyToken=null]]::_Events": {
+              "managedType": "Animancer.AnimancerEvent+Sequence+Serializable",
+              "fields": {
+                "Animancer.AnimancerEvent+Sequence+Serializable::_Callbacks": [],
+                "Animancer.AnimancerEvent+Sequence+Serializable::_Names": [],
+                "Animancer.AnimancerEvent+Sequence+Serializable::_NormalizedTimes": []
+              }
+            },
+            "Animancer.Transition`1[[Animancer.ClipState, Kybernetik.Animancer, Version=8.0.1.28, Culture=neutral, PublicKeyToken=null]]::_FadeDuration": 0.0,
+            "Animancer.Transition`1[[Animancer.ClipState, Kybernetik.Animancer, Version=8.0.1.28, Culture=neutral, PublicKeyToken=null]]::_Speed": 1.0
+          }
+        },
+        "AstralShift.HellMaiden.AI.Enemy.ClipQuad::attackRightDown": {
+          "managedType": "Animancer.ClipTransition",
+          "fields": {
+            "Animancer.ClipTransition::_Clip": {
+              "reference": "o00425",
+              "type": "UnityEngine.AnimationClip",
+              "name": "Enemy_Ghoul_Attack_Right",
+              "path": "Enemy_Ghoul_Attack_Right"
+            },
+            "Animancer.ClipTransition::_NormalizedStartTime": "NaN",
+            "Animancer.Transition`1[[Animancer.ClipState, Kybernetik.Animancer, Version=8.0.1.28, Culture=neutral, PublicKeyToken=null]]::_Events": {
+              "managedType": "Animancer.AnimancerEvent+Sequence+Serializable",
+              "fields": {
+                "Animancer.AnimancerEvent+Sequence+Serializable::_Callbacks": [],
+                "Animancer.AnimancerEvent+Sequence+Serializable::_Names": [],
+                "Animancer.AnimancerEvent+Sequence+Serializable::_NormalizedTimes": []
+              }
+            },
+            "Animancer.Transition`1[[Animancer.ClipState, Kybernetik.Animancer, Version=8.0.1.28, Culture=neutral, PublicKeyToken=null]]::_FadeDuration": 0.0,
+            "Animancer.Transition`1[[Animancer.ClipState, Kybernetik.Animancer, Version=8.0.1.28, Culture=neutral, PublicKeyToken=null]]::_Speed": 1.0
+          }
+        },
+        "AstralShift.HellMaiden.AI.Enemy.ClipQuad::attackRightUp": {
+          "managedType": "Animancer.ClipTransition",
+          "fields": {
+            "Animancer.ClipTransition::_Clip": {
+              "reference": "o00425",
+              "type": "UnityEngine.AnimationClip",
+              "name": "Enemy_Ghoul_Attack_Right",
+              "path": "Enemy_Ghoul_Attack_Right"
+            },
+            "Animancer.ClipTransition::_NormalizedStartTime": "NaN",
+            "Animancer.Transition`1[[Animancer.ClipState, Kybernetik.Animancer, Version=8.0.1.28, Culture=neutral, PublicKeyToken=null]]::_Events": {
+              "managedType": "Animancer.AnimancerEvent+Sequence+Serializable",
+              "fields": {
+                "Animancer.AnimancerEvent+Sequence+Serializable::_Callbacks": [],
+                "Animancer.AnimancerEvent+Sequence+Serializable::_Names": [],
+                "Animancer.AnimancerEvent+Sequence+Serializable::_NormalizedTimes": []
+              }
+            },
+            "Animancer.Transition`1[[Animancer.ClipState, Kybernetik.Animancer, Version=8.0.1.28, Culture=neutral, PublicKeyToken=null]]::_FadeDuration": 0.0,
+            "Animancer.Transition`1[[Animancer.ClipState, Kybernetik.Animancer, Version=8.0.1.28, Culture=neutral, PublicKeyToken=null]]::_Speed": 1.0
+          }
+        },
+        "AstralShift.HellMaiden.AI.Enemy.ClipQuad::attackWarningLeftDown": {
+          "managedType": "Animancer.ClipTransition",
+          "fields": {
+            "Animancer.ClipTransition::_Clip": {
+              "reference": "o00426",
+              "type": "UnityEngine.AnimationClip",
+              "name": "Enemy_Ghoul_Warning_Left",
+              "path": "Enemy_Ghoul_Warning_Left"
+            },
+            "Animancer.ClipTransition::_NormalizedStartTime": "NaN",
+            "Animancer.Transition`1[[Animancer.ClipState, Kybernetik.Animancer, Version=8.0.1.28, Culture=neutral, PublicKeyToken=null]]::_Events": {
+              "managedType": "Animancer.AnimancerEvent+Sequence+Serializable",
+              "fields": {
+                "Animancer.AnimancerEvent+Sequence+Serializable::_Callbacks": [],
+                "Animancer.AnimancerEvent+Sequence+Serializable::_Names": [],
+                "Animancer.AnimancerEvent+Sequence+Serializable::_NormalizedTimes": []
+              }
+            },
+            "Animancer.Transition`1[[Animancer.ClipState, Kybernetik.Animancer, Version=8.0.1.28, Culture=neutral, PublicKeyToken=null]]::_FadeDuration": 0.25,
+            "Animancer.Transition`1[[Animancer.ClipState, Kybernetik.Animancer, Version=8.0.1.28, Culture=neutral, PublicKeyToken=null]]::_Speed": 1.0
+          }
+        },
+        "AstralShift.HellMaiden.AI.Enemy.ClipQuad::attackWarningLeftUp": {
+          "managedType": "Animancer.ClipTransition",
+          "fields": {
+            "Animancer.ClipTransition::_Clip": {
+              "reference": "o00426",
+              "type": "UnityEngine.AnimationClip",
+              "name": "Enemy_Ghoul_Warning_Left",
+              "path": "Enemy_Ghoul_Warning_Left"
+            },
+            "Animancer.ClipTransition::_NormalizedStartTime": "NaN",
+            "Animancer.Transition`1[[Animancer.ClipState, Kybernetik.Animancer, Version=8.0.1.28, Culture=neutral, PublicKeyToken=null]]::_Events": {
+              "managedType": "Animancer.AnimancerEvent+Sequence+Serializable",
+              "fields": {
+                "Animancer.AnimancerEvent+Sequence+Serializable::_Callbacks": [],
+                "Animancer.AnimancerEvent+Sequence+Serializable::_Names": [],
+                "Animancer.AnimancerEvent+Sequence+Serializable::_NormalizedTimes": []
+              }
+            },
+            "Animancer.Transition`1[[Animancer.ClipState, Kybernetik.Animancer, Version=8.0.1.28, Culture=neutral, PublicKeyToken=null]]::_FadeDuration": 0.25,
+            "Animancer.Transition`1[[Animancer.ClipState, Kybernetik.Animancer, Version=8.0.1.28, Culture=neutral, PublicKeyToken=null]]::_Speed": 1.0
+          }
+        },
+        "AstralShift.HellMaiden.AI.Enemy.ClipQuad::attackWarningRightDown": {
+          "managedType": "Animancer.ClipTransition",
+          "fields": {
+            "Animancer.ClipTransition::_Clip": {
+              "reference": "o00427",
+              "type": "UnityEngine.AnimationClip",
+              "name": "Enemy_Ghoul_Warning_Right",
+              "path": "Enemy_Ghoul_Warning_Right"
+            },
+            "Animancer.ClipTransition::_NormalizedStartTime": "NaN",
+            "Animancer.Transition`1[[Animancer.ClipState, Kybernetik.Animancer, Version=8.0.1.28, Culture=neutral, PublicKeyToken=null]]::_Events": {
+              "managedType": "Animancer.AnimancerEvent+Sequence+Serializable",
+              "fields": {
+                "Animancer.AnimancerEvent+Sequence+Serializable::_Callbacks": [],
+                "Animancer.AnimancerEvent+Sequence+Serializable::_Names": [],
+                "Animancer.AnimancerEvent+Sequence+Serializable::_NormalizedTimes": []
+              }
+            },
+            "Animancer.Transition`1[[Animancer.ClipState, Kybernetik.Animancer, Version=8.0.1.28, Culture=neutral, PublicKeyToken=null]]::_FadeDuration": 0.25,
+            "Animancer.Transition`1[[Animancer.ClipState, Kybernetik.Animancer, Version=8.0.1.28, Culture=neutral, PublicKeyToken=null]]::_Speed": 1.0
+          }
+        },
+        "AstralShift.HellMaiden.AI.Enemy.ClipQuad::attackWarningRightUp": {
+          "managedType": "Animancer.ClipTransition",
+          "fields": {
+            "Animancer.ClipTransition::_Clip": {
+              "reference": "o00427",
+              "type": "UnityEngine.AnimationClip",
+              "name": "Enemy_Ghoul_Warning_Right",
+              "path": "Enemy_Ghoul_Warning_Right"
+            },
+            "Animancer.ClipTransition::_NormalizedStartTime": "NaN",
+            "Animancer.Transition`1[[Animancer.ClipState, Kybernetik.Animancer, Version=8.0.1.28, Culture=neutral, PublicKeyToken=null]]::_Events": {
+              "managedType": "Animancer.AnimancerEvent+Sequence+Serializable",
+              "fields": {
+                "Animancer.AnimancerEvent+Sequence+Serializable::_Callbacks": [],
+                "Animancer.AnimancerEvent+Sequence+Serializable::_Names": [],
+                "Animancer.AnimancerEvent+Sequence+Serializable::_NormalizedTimes": []
+              }
+            },
+            "Animancer.Transition`1[[Animancer.ClipState, Kybernetik.Animancer, Version=8.0.1.28, Culture=neutral, PublicKeyToken=null]]::_FadeDuration": 0.25,
+            "Animancer.Transition`1[[Animancer.ClipState, Kybernetik.Animancer, Version=8.0.1.28, Culture=neutral, PublicKeyToken=null]]::_Speed": 1.0
+          }
+        }
+      }
+    },
+    {
+      "managedType": "AstralShift.HellMaiden.AI.Enemy.ClipQuad",
+      "fields": {
+        "AstralShift.HellMaiden.AI.Enemy.ClipQuad::attackLeftDown": {
+          "managedType": "Animancer.ClipTransition",
+          "fields": {
+            "Animancer.ClipTransition::_Clip": {
+              "reference": "o00428",
+              "type": "UnityEngine.AnimationClip",
+              "name": "Enemy_Ghoul_Attack_Left 1",
+              "path": "Enemy_Ghoul_Attack_Left 1"
+            },
+            "Animancer.ClipTransition::_NormalizedStartTime": "NaN",
+            "Animancer.Transition`1[[Animancer.ClipState, Kybernetik.Animancer, Version=8.0.1.28, Culture=neutral, PublicKeyToken=null]]::_Events": {
+              "managedType": "Animancer.AnimancerEvent+Sequence+Serializable",
+              "fields": {
+                "Animancer.AnimancerEvent+Sequence+Serializable::_Callbacks": [],
+                "Animancer.AnimancerEvent+Sequence+Serializable::_Names": [],
+                "Animancer.AnimancerEvent+Sequence+Serializable::_NormalizedTimes": []
+              }
+            },
+            "Animancer.Transition`1[[Animancer.ClipState, Kybernetik.Animancer, Version=8.0.1.28, Culture=neutral, PublicKeyToken=null]]::_FadeDuration": 0.0,
+            "Animancer.Transition`1[[Animancer.ClipState, Kybernetik.Animancer, Version=8.0.1.28, Culture=neutral, PublicKeyToken=null]]::_Speed": 1.0
+          }
+        },
+        "AstralShift.HellMaiden.AI.Enemy.ClipQuad::attackLeftUp": {
+          "managedType": "Animancer.ClipTransition",
+          "fields": {
+            "Animancer.ClipTransition::_Clip": {
+              "reference": "o00428",
+              "type": "UnityEngine.AnimationClip",
+              "name": "Enemy_Ghoul_Attack_Left 1",
+              "path": "Enemy_Ghoul_Attack_Left 1"
+            },
+            "Animancer.ClipTransition::_NormalizedStartTime": "NaN",
+            "Animancer.Transition`1[[Animancer.ClipState, Kybernetik.Animancer, Version=8.0.1.28, Culture=neutral, PublicKeyToken=null]]::_Events": {
+              "managedType": "Animancer.AnimancerEvent+Sequence+Serializable",
+              "fields": {
+                "Animancer.AnimancerEvent+Sequence+Serializable::_Callbacks": [],
+                "Animancer.AnimancerEvent+Sequence+Serializable::_Names": [],
+                "Animancer.AnimancerEvent+Sequence+Serializable::_NormalizedTimes": []
+              }
+            },
+            "Animancer.Transition`1[[Animancer.ClipState, Kybernetik.Animancer, Version=8.0.1.28, Culture=neutral, PublicKeyToken=null]]::_FadeDuration": 0.0,
+            "Animancer.Transition`1[[Animancer.ClipState, Kybernetik.Animancer, Version=8.0.1.28, Culture=neutral, PublicKeyToken=null]]::_Speed": 1.0
+          }
+        },
+        "AstralShift.HellMaiden.AI.Enemy.ClipQuad::attackRightDown": {
+          "managedType": "Animancer.ClipTransition",
+          "fields": {
+            "Animancer.ClipTransition::_Clip": {
+              "reference": "o00429",
+              "type": "UnityEngine.AnimationClip",
+              "name": "Enemy_Ghoul_Attack_Right 1",
+              "path": "Enemy_Ghoul_Attack_Right 1"
+            },
+            "Animancer.ClipTransition::_NormalizedStartTime": "NaN",
+            "Animancer.Transition`1[[Animancer.ClipState, Kybernetik.Animancer, Version=8.0.1.28, Culture=neutral, PublicKeyToken=null]]::_Events": {
+              "managedType": "Animancer.AnimancerEvent+Sequence+Serializable",
+              "fields": {
+                "Animancer.AnimancerEvent+Sequence+Serializable::_Callbacks": [],
+                "Animancer.AnimancerEvent+Sequence+Serializable::_Names": [],
+                "Animancer.AnimancerEvent+Sequence+Serializable::_NormalizedTimes": []
+              }
+            },
+            "Animancer.Transition`1[[Animancer.ClipState, Kybernetik.Animancer, Version=8.0.1.28, Culture=neutral, PublicKeyToken=null]]::_FadeDuration": 0.0,
+            "Animancer.Transition`1[[Animancer.ClipState, Kybernetik.Animancer, Version=8.0.1.28, Culture=neutral, PublicKeyToken=null]]::_Speed": 1.0
+          }
+        },
+        "AstralShift.HellMaiden.AI.Enemy.ClipQuad::attackRightUp": {
+          "managedType": "Animancer.ClipTransition",
+          "fields": {
+            "Animancer.ClipTransition::_Clip": {
+              "reference": "o00429",
+              "type": "UnityEngine.AnimationClip",
+              "name": "Enemy_Ghoul_Attack_Right 1",
+              "path": "Enemy_Ghoul_Attack_Right 1"
+            },
+            "Animancer.ClipTransition::_NormalizedStartTime": "NaN",
+            "Animancer.Transition`1[[Animancer.ClipState, Kybernetik.Animancer, Version=8.0.1.28, Culture=neutral, PublicKeyToken=null]]::_Events": {
+              "managedType": "Animancer.AnimancerEvent+Sequence+Serializable",
+              "fields": {
+                "Animancer.AnimancerEvent+Sequence+Serializable::_Callbacks": [],
+                "Animancer.AnimancerEvent+Sequence+Serializable::_Names": [],
+                "Animancer.AnimancerEvent+Sequence+Serializable::_NormalizedTimes": []
+              }
+            },
+            "Animancer.Transition`1[[Animancer.ClipState, Kybernetik.Animancer, Version=8.0.1.28, Culture=neutral, PublicKeyToken=null]]::_FadeDuration": 0.0,
+            "Animancer.Transition`1[[Animancer.ClipState, Kybernetik.Animancer, Version=8.0.1.28, Culture=neutral, PublicKeyToken=null]]::_Speed": 1.0
+          }
+        },
+        "AstralShift.HellMaiden.AI.Enemy.ClipQuad::attackWarningLeftDown": {
+          "managedType": "Animancer.ClipTransition",
+          "fields": {
+            "Animancer.ClipTransition::_Clip": {
+              "reference": "o00430",
+              "type": "UnityEngine.AnimationClip",
+              "name": "Enemy_Ghoul_Warning_Left 1",
+              "path": "Enemy_Ghoul_Warning_Left 1"
+            },
+            "Animancer.ClipTransition::_NormalizedStartTime": "NaN",
+            "Animancer.Transition`1[[Animancer.ClipState, Kybernetik.Animancer, Version=8.0.1.28, Culture=neutral, PublicKeyToken=null]]::_Events": {
+              "managedType": "Animancer.AnimancerEvent+Sequence+Serializable",
+              "fields": {
+                "Animancer.AnimancerEvent+Sequence+Serializable::_Callbacks": [],
+                "Animancer.AnimancerEvent+Sequence+Serializable::_Names": [],
+                "Animancer.AnimancerEvent+Sequence+Serializable::_NormalizedTimes": []
+              }
+            },
+            "Animancer.Transition`1[[Animancer.ClipState, Kybernetik.Animancer, Version=8.0.1.28, Culture=neutral, PublicKeyToken=null]]::_FadeDuration": 0.0,
+            "Animancer.Transition`1[[Animancer.ClipState, Kybernetik.Animancer, Version=8.0.1.28, Culture=neutral, PublicKeyToken=null]]::_Speed": 1.0
+          }
+        },
+        "AstralShift.HellMaiden.AI.Enemy.ClipQuad::attackWarningLeftUp": {
+          "managedType": "Animancer.ClipTransition",
+          "fields": {
+            "Animancer.ClipTransition::_Clip": {
+              "reference": "o00430",
+              "type": "UnityEngine.AnimationClip",
+              "name": "Enemy_Ghoul_Warning_Left 1",
+              "path": "Enemy_Ghoul_Warning_Left 1"
+            },
+            "Animancer.ClipTransition::_NormalizedStartTime": "NaN",
+            "Animancer.Transition`1[[Animancer.ClipState, Kybernetik.Animancer, Version=8.0.1.28, Culture=neutral, PublicKeyToken=null]]::_Events": {
+              "managedType": "Animancer.AnimancerEvent+Sequence+Serializable",
+              "fields": {
+                "Animancer.AnimancerEvent+Sequence+Serializable::_Callbacks": [],
+                "Animancer.AnimancerEvent+Sequence+Serializable::_Names": [],
+                "Animancer.AnimancerEvent+Sequence+Serializable::_NormalizedTimes": []
+              }
+            },
+            "Animancer.Transition`1[[Animancer.ClipState, Kybernetik.Animancer, Version=8.0.1.28, Culture=neutral, PublicKeyToken=null]]::_FadeDuration": 0.0,
+            "Animancer.Transition`1[[Animancer.ClipState, Kybernetik.Animancer, Version=8.0.1.28, Culture=neutral, PublicKeyToken=null]]::_Speed": 1.0
+          }
+        },
+        "AstralShift.HellMaiden.AI.Enemy.ClipQuad::attackWarningRightDown": {
+          "managedType": "Animancer.ClipTransition",
+          "fields": {
+            "Animancer.ClipTransition::_Clip": {
+              "reference": "o00431",
+              "type": "UnityEngine.AnimationClip",
+              "name": "Enemy_Ghoul_Warning_Right 1",
+              "path": "Enemy_Ghoul_Warning_Right 1"
+            },
+            "Animancer.ClipTransition::_NormalizedStartTime": "NaN",
+            "Animancer.Transition`1[[Animancer.ClipState, Kybernetik.Animancer, Version=8.0.1.28, Culture=neutral, PublicKeyToken=null]]::_Events": {
+              "managedType": "Animancer.AnimancerEvent+Sequence+Serializable",
+              "fields": {
+                "Animancer.AnimancerEvent+Sequence+Serializable::_Callbacks": [],
+                "Animancer.AnimancerEvent+Sequence+Serializable::_Names": [],
+                "Animancer.AnimancerEvent+Sequence+Serializable::_NormalizedTimes": []
+              }
+            },
+            "Animancer.Transition`1[[Animancer.ClipState, Kybernetik.Animancer, Version=8.0.1.28, Culture=neutral, PublicKeyToken=null]]::_FadeDuration": 0.0,
+            "Animancer.Transition`1[[Animancer.ClipState, Kybernetik.Animancer, Version=8.0.1.28, Culture=neutral, PublicKeyToken=null]]::_Speed": 1.0
+          }
+        },
+        "AstralShift.HellMaiden.AI.Enemy.ClipQuad::attackWarningRightUp": {
+          "managedType": "Animancer.ClipTransition",
+          "fields": {
+            "Animancer.ClipTransition::_Clip": {
+              "reference": "o00431",
+              "type": "UnityEngine.AnimationClip",
+              "name": "Enemy_Ghoul_Warning_Right 1",
+              "path": "Enemy_Ghoul_Warning_Right 1"
+            },
+            "Animancer.ClipTransition::_NormalizedStartTime": "NaN",
+            "Animancer.Transition`1[[Animancer.ClipState, Kybernetik.Animancer, Version=8.0.1.28, Culture=neutral, PublicKeyToken=null]]::_Events": {
+              "managedType": "Animancer.AnimancerEvent+Sequence+Serializable",
+              "fields": {
+                "Animancer.AnimancerEvent+Sequence+Serializable::_Callbacks": [],
+                "Animancer.AnimancerEvent+Sequence+Serializable::_Names": [],
+                "Animancer.AnimancerEvent+Sequence+Serializable::_NormalizedTimes": []
+              }
+            },
+            "Animancer.Transition`1[[Animancer.ClipState, Kybernetik.Animancer, Version=8.0.1.28, Culture=neutral, PublicKeyToken=null]]::_FadeDuration": 0.0,
+            "Animancer.Transition`1[[Animancer.ClipState, Kybernetik.Animancer, Version=8.0.1.28, Culture=neutral, PublicKeyToken=null]]::_Speed": 1.0
+          }
+        }
+      }
+    },
+    {
+      "managedType": "AstralShift.HellMaiden.AI.Enemy.ClipQuad",
+      "fields": {
+        "AstralShift.HellMaiden.AI.Enemy.ClipQuad::attackLeftDown": {
+          "managedType": "Animancer.ClipTransition",
+          "fields": {
+            "Animancer.ClipTransition::_Clip": {
+              "reference": "o00432",
+              "type": "UnityEngine.AnimationClip",
+              "name": "Enemy_Ghoul_Attack_Left 2",
+              "path": "Enemy_Ghoul_Attack_Left 2"
+            },
+            "Animancer.ClipTransition::_NormalizedStartTime": "NaN",
+            "Animancer.Transition`1[[Animancer.ClipState, Kybernetik.Animancer, Version=8.0.1.28, Culture=neutral, PublicKeyToken=null]]::_Events": {
+              "managedType": "Animancer.AnimancerEvent+Sequence+Serializable",
+              "fields": {
+                "Animancer.AnimancerEvent+Sequence+Serializable::_Callbacks": [],
+                "Animancer.AnimancerEvent+Sequence+Serializable::_Names": [],
+                "Animancer.AnimancerEvent+Sequence+Serializable::_NormalizedTimes": []
+              }
+            },
+            "Animancer.Transition`1[[Animancer.ClipState, Kybernetik.Animancer, Version=8.0.1.28, Culture=neutral, PublicKeyToken=null]]::_FadeDuration": 0.0,
+            "Animancer.Transition`1[[Animancer.ClipState, Kybernetik.Animancer, Version=8.0.1.28, Culture=neutral, PublicKeyToken=null]]::_Speed": 1.0
+          }
+        },
+        "AstralShift.HellMaiden.AI.Enemy.ClipQuad::attackLeftUp": {
+          "managedType": "Animancer.ClipTransition",
+          "fields": {
+            "Animancer.ClipTransition::_Clip": {
+              "reference": "o00432",
+              "type": "UnityEngine.AnimationClip",
+              "name": "Enemy_Ghoul_Attack_Left 2",
+              "path": "Enemy_Ghoul_Attack_Left 2"
+            },
+            "Animancer.ClipTransition::_NormalizedStartTime": "NaN",
+            "Animancer.Transition`1[[Animancer.ClipState, Kybernetik.Animancer, Version=8.0.1.28, Culture=neutral, PublicKeyToken=null]]::_Events": {
+              "managedType": "Animancer.AnimancerEvent+Sequence+Serializable",
+              "fields": {
+                "Animancer.AnimancerEvent+Sequence+Serializable::_Callbacks": [],
+                "Animancer.AnimancerEvent+Sequence+Serializable::_Names": [],
+                "Animancer.AnimancerEvent+Sequence+Serializable::_NormalizedTimes": []
+              }
+            },
+            "Animancer.Transition`1[[Animancer.ClipState, Kybernetik.Animancer, Version=8.0.1.28, Culture=neutral, PublicKeyToken=null]]::_FadeDuration": 0.0,
+            "Animancer.Transition`1[[Animancer.ClipState, Kybernetik.Animancer, Version=8.0.1.28, Culture=neutral, PublicKeyToken=null]]::_Speed": 1.0
+          }
+        },
+        "AstralShift.HellMaiden.AI.Enemy.ClipQuad::attackRightDown": {
+          "managedType": "Animancer.ClipTransition",
+          "fields": {
+            "Animancer.ClipTransition::_Clip": {
+              "reference": "o00433",
+              "type": "UnityEngine.AnimationClip",
+              "name": "Enemy_Ghoul_Attack_Right 2",
+              "path": "Enemy_Ghoul_Attack_Right 2"
+            },
+            "Animancer.ClipTransition::_NormalizedStartTime": "NaN",
+            "Animancer.Transition`1[[Animancer.ClipState, Kybernetik.Animancer, Version=8.0.1.28, Culture=neutral, PublicKeyToken=null]]::_Events": {
+              "managedType": "Animancer.AnimancerEvent+Sequence+Serializable",
+              "fields": {
+                "Animancer.AnimancerEvent+Sequence+Serializable::_Callbacks": [],
+                "Animancer.AnimancerEvent+Sequence+Serializable::_Names": [],
+                "Animancer.AnimancerEvent+Sequence+Serializable::_NormalizedTimes": []
+              }
+            },
+            "Animancer.Transition`1[[Animancer.ClipState, Kybernetik.Animancer, Version=8.0.1.28, Culture=neutral, PublicKeyToken=null]]::_FadeDuration": 0.0,
+            "Animancer.Transition`1[[Animancer.ClipState, Kybernetik.Animancer, Version=8.0.1.28, Culture=neutral, PublicKeyToken=null]]::_Speed": 1.0
+          }
+        },
+        "AstralShift.HellMaiden.AI.Enemy.ClipQuad::attackRightUp": {
+          "managedType": "Animancer.ClipTransition",
+          "fields": {
+            "Animancer.ClipTransition::_Clip": {
+              "reference": "o00433",
+              "type": "UnityEngine.AnimationClip",
+              "name": "Enemy_Ghoul_Attack_Right 2",
+              "path": "Enemy_Ghoul_Attack_Right 2"
+            },
+            "Animancer.ClipTransition::_NormalizedStartTime": "NaN",
+            "Animancer.Transition`1[[Animancer.ClipState, Kybernetik.Animancer, Version=8.0.1.28, Culture=neutral, PublicKeyToken=null]]::_Events": {
+              "managedType": "Animancer.AnimancerEvent+Sequence+Serializable",
+              "fields": {
+                "Animancer.AnimancerEvent+Sequence+Serializable::_Callbacks": [],
+                "Animancer.AnimancerEvent+Sequence+Serializable::_Names": [],
+                "Animancer.AnimancerEvent+Sequence+Serializable::_NormalizedTimes": []
+              }
+            },
+            "Animancer.Transition`1[[Animancer.ClipState, Kybernetik.Animancer, Version=8.0.1.28, Culture=neutral, PublicKeyToken=null]]::_FadeDuration": 0.0,
+            "Animancer.Transition`1[[Animancer.ClipState, Kybernetik.Animancer, Version=8.0.1.28, Culture=neutral, PublicKeyToken=null]]::_Speed": 1.0
+          }
+        },
+        "AstralShift.HellMaiden.AI.Enemy.ClipQuad::attackWarningLeftDown": {
+          "managedType": "Animancer.ClipTransition",
+          "fields": {
+            "Animancer.ClipTransition::_Clip": {
+              "reference": "o00433",
+              "type": "UnityEngine.AnimationClip",
+              "name": "Enemy_Ghoul_Attack_Right 2",
+              "path": "Enemy_Ghoul_Attack_Right 2"
+            },
+            "Animancer.ClipTransition::_NormalizedStartTime": "NaN",
+            "Animancer.Transition`1[[Animancer.ClipState, Kybernetik.Animancer, Version=8.0.1.28, Culture=neutral, PublicKeyToken=null]]::_Events": {
+              "managedType": "Animancer.AnimancerEvent+Sequence+Serializable",
+              "fields": {
+                "Animancer.AnimancerEvent+Sequence+Serializable::_Callbacks": [],
+                "Animancer.AnimancerEvent+Sequence+Serializable::_Names": [],
+                "Animancer.AnimancerEvent+Sequence+Serializable::_NormalizedTimes": []
+              }
+            },
+            "Animancer.Transition`1[[Animancer.ClipState, Kybernetik.Animancer, Version=8.0.1.28, Culture=neutral, PublicKeyToken=null]]::_FadeDuration": 0.0,
+            "Animancer.Transition`1[[Animancer.ClipState, Kybernetik.Animancer, Version=8.0.1.28, Culture=neutral, PublicKeyToken=null]]::_Speed": 1.0
+          }
+        },
+        "AstralShift.HellMaiden.AI.Enemy.ClipQuad::attackWarningLeftUp": {
+          "managedType": "Animancer.ClipTransition",
+          "fields": {
+            "Animancer.ClipTransition::_Clip": {
+              "reference": "o00433",
+              "type": "UnityEngine.AnimationClip",
+              "name": "Enemy_Ghoul_Attack_Right 2",
+              "path": "Enemy_Ghoul_Attack_Right 2"
+            },
+            "Animancer.ClipTransition::_NormalizedStartTime": "NaN",
+            "Animancer.Transition`1[[Animancer.ClipState, Kybernetik.Animancer, Version=8.0.1.28, Culture=neutral, PublicKeyToken=null]]::_Events": {
+              "managedType": "Animancer.AnimancerEvent+Sequence+Serializable",
+              "fields": {
+                "Animancer.AnimancerEvent+Sequence+Serializable::_Callbacks": [],
+                "Animancer.AnimancerEvent+Sequence+Serializable::_Names": [],
+                "Animancer.AnimancerEvent+Sequence+Serializable::_NormalizedTimes": []
+              }
+            },
+            "Animancer.Transition`1[[Animancer.ClipState, Kybernetik.Animancer, Version=8.0.1.28, Culture=neutral, PublicKeyToken=null]]::_FadeDuration": 0.0,
+            "Animancer.Transition`1[[Animancer.ClipState, Kybernetik.Animancer, Version=8.0.1.28, Culture=neutral, PublicKeyToken=null]]::_Speed": 1.0
+          }
+        },
+        "AstralShift.HellMaiden.AI.Enemy.ClipQuad::attackWarningRightDown": {
+          "managedType": "Animancer.ClipTransition",
+          "fields": {
+            "Animancer.ClipTransition::_Clip": {
+              "reference": "o00434",
+              "type": "UnityEngine.AnimationClip",
+              "name": "Enemy_Ghoul_Warning_Right 2",
+              "path": "Enemy_Ghoul_Warning_Right 2"
+            },
+            "Animancer.ClipTransition::_NormalizedStartTime": "NaN",
+            "Animancer.Transition`1[[Animancer.ClipState, Kybernetik.Animancer, Version=8.0.1.28, Culture=neutral, PublicKeyToken=null]]::_Events": {
+              "managedType": "Animancer.AnimancerEvent+Sequence+Serializable",
+              "fields": {
+                "Animancer.AnimancerEvent+Sequence+Serializable::_Callbacks": [],
+                "Animancer.AnimancerEvent+Sequence+Serializable::_Names": [],
+                "Animancer.AnimancerEvent+Sequence+Serializable::_NormalizedTimes": []
+              }
+            },
+            "Animancer.Transition`1[[Animancer.ClipState, Kybernetik.Animancer, Version=8.0.1.28, Culture=neutral, PublicKeyToken=null]]::_FadeDuration": 0.0,
+            "Animancer.Transition`1[[Animancer.ClipState, Kybernetik.Animancer, Version=8.0.1.28, Culture=neutral, PublicKeyToken=null]]::_Speed": 1.0
+          }
+        },
+        "AstralShift.HellMaiden.AI.Enemy.ClipQuad::attackWarningRightUp": {
+          "managedType": "Animancer.ClipTransition",
+          "fields": {
+            "Animancer.ClipTransition::_Clip": {
+              "reference": "o00434",
+              "type": "UnityEngine.AnimationClip",
+              "name": "Enemy_Ghoul_Warning_Right 2",
+              "path": "Enemy_Ghoul_Warning_Right 2"
+            },
+            "Animancer.ClipTransition::_NormalizedStartTime": "NaN",
+            "Animancer.Transition`1[[Animancer.ClipState, Kybernetik.Animancer, Version=8.0.1.28, Culture=neutral, PublicKeyToken=null]]::_Events": {
+              "managedType": "Animancer.AnimancerEvent+Sequence+Serializable",
+              "fields": {
+                "Animancer.AnimancerEvent+Sequence+Serializable::_Callbacks": [],
+                "Animancer.AnimancerEvent+Sequence+Serializable::_Names": [],
+                "Animancer.AnimancerEvent+Sequence+Serializable::_NormalizedTimes": []
+              }
+            },
+            "Animancer.Transition`1[[Animancer.ClipState, Kybernetik.Animancer, Version=8.0.1.28, Culture=neutral, PublicKeyToken=null]]::_FadeDuration": 0.0,
+            "Animancer.Transition`1[[Animancer.ClipState, Kybernetik.Animancer, Version=8.0.1.28, Culture=neutral, PublicKeyToken=null]]::_Speed": 1.0
+          }
+        }
+      }
+    }
+  ],
+  "geometry": [
+    {
+      "group": "body",
+      "path": "Collider",
+      "type": "CircleCollider2D",
+      "objectId": "o00135",
+      "enabled": true,
+      "trigger": false,
+      "offset": [
+        0.0,
+        0.3
+      ],
+      "radius": 0.46,
+      "size": null,
+      "polygons": []
+    },
+    {
+      "group": "body",
+      "path": "HurtBox",
+      "type": "BoxCollider2D",
+      "objectId": "o00446",
+      "enabled": true,
+      "trigger": false,
+      "offset": [
+        0.0,
+        0.72
+      ],
+      "radius": null,
+      "size": [
+        1.2,
+        1.5
+      ],
+      "polygons": []
+    },
+    {
+      "group": "body",
+      "path": "",
+      "type": "Transform",
+      "objectId": "o00454",
+      "localPosition": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    },
+    {
+      "group": "body",
+      "path": "Collider",
+      "type": "Transform",
+      "objectId": "o00678",
+      "localPosition": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    },
+    {
+      "group": "body",
+      "path": "HurtBox",
+      "type": "Transform",
+      "objectId": "o00684",
+      "localPosition": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    },
+    {
+      "group": "attack",
+      "path": "",
+      "type": "Transform",
+      "objectId": "o00838",
+      "localPosition": [
+        -0.26,
+        2.0,
+        0.0
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    },
+    {
+      "group": "attack",
+      "path": "AttackWarning",
+      "type": "Transform",
+      "objectId": "o00935",
+      "localPosition": [
+        0.5,
+        0.01,
+        0.0
+      ],
+      "localScale": [
+        1.03736818,
+        1.03736818,
+        1.03736818
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        -0.7071068,
+        0.7071068
+      ]
+    },
+    {
+      "group": "attack",
+      "path": "AttackWarning/Collider",
+      "type": "Transform",
+      "objectId": "o00939",
+      "localPosition": [
+        0.97,
+        -0.58,
+        0.0
+      ],
+      "localScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.7071068,
+        0.7071068
+      ]
+    },
+    {
+      "group": "attack",
+      "path": "AttackWarning/Collider",
+      "type": "PolygonCollider2D",
+      "objectId": "o00940",
+      "enabled": true,
+      "trigger": true,
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "radius": null,
+      "size": null,
+      "polygons": [
+        {
+          "points": [
+            {
+              "x": 1.56064153,
+              "y": 2.31846976
+            },
+            {
+              "x": 0.369967461,
+              "y": 3.0231564
+            },
+            {
+              "x": -0.115253419,
+              "y": 1.00355375
+            },
+            {
+              "x": 0.40137732,
+              "y": -1.11760235
+            },
+            {
+              "x": 1.48993111,
+              "y": -0.472918957
+            },
+            {
+              "x": 2.03416538,
+              "y": 0.9762179
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "group": "attack",
+      "path": "AttackWarning/area skeletton_0",
+      "type": "Transform",
+      "objectId": "o01014",
+      "localPosition": [
+        0.0,
+        0.36,
+        0.0
+      ],
+      "localScale": [
+        0.46967,
+        0.46967,
+        0.46967
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.7071068,
+        0.7071068
+      ]
+    },
+    {
+      "group": "attack",
+      "path": "AttackWarning/arrow skeleton_0",
+      "type": "Transform",
+      "objectId": "o01018",
+      "localPosition": [
+        -0.01,
+        0.668,
+        0.0
+      ],
+      "localScale": [
+        0.4411733,
+        0.4411733,
+        0.4411733
+      ],
+      "localRotation": [
+        0.0,
+        0.0,
+        0.7071068,
+        0.7071068
+      ]
+    }
+  ],
+  "variants": [
+    {
+      "variant": 0,
+      "variantName": "lvl1",
+      "baseValues": {
+        "damage": 50,
+        "hp": 50,
+        "knockbackMultiplier": 1.0,
+        "speed": 6.0,
+        "stunTime": 0.0,
+        "windMultiplier": 1.0,
+        "xp": 9.0
+      },
+      "sourceDatabase": "o00041"
+    }
+  ],
+  "previewEnd": 599.9666666666667,
+  "differences": [
+    "Whole combo uses absolute combat time; elapsed strikes are not replayed.",
+    "Existing GAS/Mirror validates interrupts and routes them to the current simulator and replicas.",
+    "Source third left warning uses right attack 2; logical duration follows source left bindings.",
+    "Existing shader adaptation and Stats rebind; no source audio."
+  ]
+}

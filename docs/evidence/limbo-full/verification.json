@@ -1,0 +1,286 @@
+{
+  "status": "Phase 5 technical verification complete",
+  "build": {
+    "root": "Builds\\LimboFull20260915",
+    "status": "final rendered solo and pair verified; GUI restart verified",
+    "files": [
+      {
+        "path": "MonsterSupergroupLimbo.exe",
+        "sha256": "c8b0d73dc40e4f2cddbf656cfb7257fcb8273da22e44e12a8694cd8e275c6fb2",
+        "bytes": 667136
+      },
+      {
+        "path": "MonsterSupergroupLimbo_Data/Managed/MonsterSupergroup.NetworkCombat.dll",
+        "sha256": "8ae830a93bdd90b773e014b7e1dfe02d3409aebc0b7d4c96676686679ed4b97a",
+        "bytes": 936960
+      },
+      {
+        "path": "MonsterSupergroupLimbo_Data/resources.assets",
+        "sha256": "5cff7389fff217a45b174a2aab30d6a511fcdd92cb55ff9bd8faace7030ddf2a",
+        "bytes": 23015928
+      }
+    ]
+  },
+  "rawSourceHashesUnchanged": true,
+  "scope": "31 source clips; request at 720.9 then server participant readiness; no Minos, pressure or Spine",
+  "finalRuns": {
+    "full-final-solo": {
+      "run": "852a39d40fb0458bbc944ab9d90a4088",
+      "request": 720.9100996134803,
+      "complete": 720.9100996134803,
+      "waitStageSeconds": 0.0,
+      "counting": {
+        "successful": 3366,
+        "confirmedKills": 3045,
+        "selfDestructs": 15,
+        "retired": 217,
+        "alive": 89,
+        "sourceCount": 87,
+        "conservationDelta": 0
+      },
+      "roles": {
+        "host": {
+          "birthsIncludingRestart": 3404,
+          "birthMismatches": 0,
+          "errors": [],
+          "helpersFirstRun": {
+            "test-card": 86,
+            "test-heal": 18
+          },
+          "nextRun": "ff507cf4f3b54d7391fcb9e9710860d5",
+          "cleanup": [
+            {
+              "kind": "completed-cleanup",
+              "detail": "852a39d40fb0458bbc944ab9d90a4088",
+              "payload": "{\"damageAreas\":0,\"warnings\":0}",
+              "realtime": 737.4277218020975,
+              "combat": 728.5342030895424,
+              "elapsed": 720.9100996134803
+            }
+          ],
+          "trapCleanup": [
+            {
+              "kind": "completed-cleanup",
+              "role": "host",
+              "run": "852a39d40fb0458bbc944ab9d90a4088",
+              "elapsed": 720.9100996134803,
+              "combat": 728.2014410959107,
+              "realtime": 737.1185925020975,
+              "id": 0,
+              "state": {
+                "Round": 0,
+                "Target": 0,
+                "Barrier": false,
+                "Occupied": false,
+                "Collision": false,
+                "Phase": 0,
+                "Center": {
+                  "x": 0.0,
+                  "y": 0.0
+                },
+                "BeganAt": 0.0,
+                "ReleaseAt": 0.0,
+                "Radius": 0.0,
+                "Aspect": 0.0,
+                "EntryScale": 0.0,
+                "CameraOffset": 0.0,
+                "CameraDuration": 0.0,
+                "Count": 0,
+                "Visible": 0
+              },
+              "worldEdgePoints": [],
+              "edgeRadius": 0.0,
+              "localPlayer": 2,
+              "localPosition": {
+                "x": 5.519580364227295,
+                "y": 13.221402168273926
+              },
+              "localVelocity": {
+                "x": 0.0,
+                "y": 0.0
+              },
+              "localPlayerTouchesBarrier": false,
+              "timeScale": 1.0,
+              "slots": 0,
+              "states": 0,
+              "collisionAreas": 0,
+              "livingWarningRoots": 0
+            }
+          ]
+        }
+      },
+      "sameBuildAndBirths": null
+    },
+    "full-final-pair": {
+      "run": "d471cbc04dc34319af5dc6cb16beff78",
+      "request": 720.918629847467,
+      "complete": 729.4348406419158,
+      "waitStageSeconds": 8.516210794448853,
+      "counting": {
+        "successful": 3610,
+        "confirmedKills": 3511,
+        "selfDestructs": 37,
+        "retired": 6,
+        "alive": 56,
+        "sourceCount": 56,
+        "conservationDelta": 0
+      },
+      "roles": {
+        "host": {
+          "birthsIncludingRestart": 3653,
+          "birthMismatches": 0,
+          "errors": [],
+          "helpersFirstRun": {
+            "test-card": 67,
+            "test-heal": 7,
+            "test-queue": 1
+          },
+          "nextRun": "8c3ccf4d1dec4bbb890ace781fbf4271",
+          "cleanup": [
+            {
+              "kind": "completed-cleanup",
+              "detail": "d471cbc04dc34319af5dc6cb16beff78",
+              "payload": "{\"damageAreas\":0,\"warnings\":0}",
+              "realtime": 777.1958314064625,
+              "combat": 773.8829440414452,
+              "elapsed": 729.4348406419158
+            }
+          ],
+          "trapCleanup": [
+            {
+              "kind": "completed-cleanup",
+              "role": "host",
+              "run": "d471cbc04dc34319af5dc6cb16beff78",
+              "elapsed": 729.4348406419158,
+              "combat": 773.5651285383396,
+              "realtime": 776.8948867064626,
+              "id": 0,
+              "state": {
+                "Round": 0,
+                "Target": 0,
+                "Barrier": false,
+                "Occupied": false,
+                "Collision": false,
+                "Phase": 0,
+                "Center": {
+                  "x": 0.0,
+                  "y": 0.0
+                },
+                "BeganAt": 0.0,
+                "ReleaseAt": 0.0,
+                "Radius": 0.0,
+                "Aspect": 0.0,
+                "EntryScale": 0.0,
+                "CameraOffset": 0.0,
+                "CameraDuration": 0.0,
+                "Count": 0,
+                "Visible": 0
+              },
+              "worldEdgePoints": [],
+              "edgeRadius": 0.0,
+              "localPlayer": 2,
+              "localPosition": {
+                "x": -0.5077803730964661,
+                "y": 12.01236343383789
+              },
+              "localVelocity": {
+                "x": 0.0,
+                "y": 0.0
+              },
+              "localPlayerTouchesBarrier": false,
+              "timeScale": 1.0,
+              "slots": 0,
+              "states": 0,
+              "collisionAreas": 0,
+              "livingWarningRoots": 0
+            }
+          ]
+        },
+        "client": {
+          "birthsIncludingRestart": 3653,
+          "birthMismatches": 0,
+          "errors": [],
+          "helpersFirstRun": {
+            "test-card": 68,
+            "test-heal": 16
+          },
+          "nextRun": "8c3ccf4d1dec4bbb890ace781fbf4271",
+          "cleanup": [
+            {
+              "kind": "completed-cleanup",
+              "detail": "d471cbc04dc34319af5dc6cb16beff78",
+              "payload": "{\"damageAreas\":0,\"warnings\":0}",
+              "realtime": 739.3871330052722,
+              "combat": 773.9069451352527,
+              "elapsed": 729.4348406419158
+            }
+          ],
+          "trapCleanup": [
+            {
+              "kind": "completed-cleanup",
+              "role": "client",
+              "run": "d471cbc04dc34319af5dc6cb16beff78",
+              "elapsed": 729.4348406419158,
+              "combat": 773.590660938859,
+              "realtime": 739.0884826052721,
+              "id": 0,
+              "state": {
+                "Round": 0,
+                "Target": 0,
+                "Barrier": false,
+                "Occupied": false,
+                "Collision": false,
+                "Phase": 0,
+                "Center": {
+                  "x": 0.0,
+                  "y": 0.0
+                },
+                "BeganAt": 0.0,
+                "ReleaseAt": 0.0,
+                "Radius": 0.0,
+                "Aspect": 0.0,
+                "EntryScale": 0.0,
+                "CameraOffset": 0.0,
+                "CameraDuration": 0.0,
+                "Count": 0,
+                "Visible": 0
+              },
+              "worldEdgePoints": [],
+              "edgeRadius": 0.0,
+              "localPlayer": 3,
+              "localPosition": {
+                "x": 26.317962646484375,
+                "y": -20.313213348388672
+              },
+              "localVelocity": {
+                "x": 0.0,
+                "y": 0.0
+              },
+              "localPlayerTouchesBarrier": false,
+              "timeScale": 1.0,
+              "slots": 0,
+              "states": 0,
+              "collisionAreas": 0,
+              "livingWarningRoots": 0
+            }
+          ]
+        }
+      },
+      "sameBuildAndBirths": {
+        "missingClientBirthIds": [],
+        "extraClientBirthIds": [],
+        "differentBirths": [],
+        "sameBuild": true
+      }
+    }
+  },
+  "focusedTests": {
+    "EditMode": "100/100 (edit-ready.xml)",
+    "PlayMode": "39/39 (play-final-flow.xml)"
+  },
+  "broadRegression": {
+    "EditMode": "749/753, 4 weapon migration failures unresolved",
+    "PlayMode": "513/523; ordered camera regression subsequently fixed and retested; 9 other failures retained"
+  },
+  "auditNote": "Raw reconnect comparison retained; knownRunBirthComparison carries the last nonempty RunId during restoration. Three birth keys originally had empty RunId, same IDs/attributes now verified; no runtime data fabricated."
+}

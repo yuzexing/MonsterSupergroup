@@ -27,6 +27,7 @@ namespace MonsterSupergroup.NetworkCombat
                 !IsServerEnemyAlive(pose.EnemyEntityId) || !pose.IsFinite ||
                 !Registry.TryGetAssignment(pose.EnemyEntityId, out var assignment) || assignment.Host != EnemySimulationHost.ClientPlayer ||
                 assignment.SimulationOwnerPlayerId != endpoint.netId || assignment.Epoch != pose.AssignmentEpoch) return;
+            if(!enemies.TryGetValue(pose.EnemyEntityId,out var enemy)||enemy==null||!enemy.ValidateSequenceAction(pose.Runtime.Action))return;
             Registry.RecordCheckpoint(checkpoint);
             AcknowledgeKnockback(pose);
         }
@@ -60,6 +61,7 @@ namespace MonsterSupergroup.NetworkCombat
                 enemy.TryApplyKnockback(command, 0, true);
                 NotifyRuntimeChanged(enemy);
             }
+            BroadcastAcceptedSequenceInterrupt(enemy, command);
         }
 
         private void ReroutePendingKnockback(NetworkEnemySimulationAgent enemy)

@@ -504,4 +504,4 @@ MonoBehaviour:
           speedMultiplier: 1
       rubberbandMaxDistance: 20
       colorLUT: {fileID: 0}
-      hueColor: {r: 0, g: 0, b: 0, a: 0}
+      hueColor: {r: 1, g: 1, b: 1, a: 1}

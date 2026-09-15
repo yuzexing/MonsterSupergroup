@@ -1,10 +1,10 @@
 # Limbo 参考基线实施记录
 
-**美术状态更新（2026-09-15）：** 七套参考身体及八组提示已接入来源资源；本页下方的红点、普通 Skeleton 替代精英、橙色线条描述属于当时构建。最新美术验证、保留差异与待验项见 [序列帧美术恢复](limbo-art-restoration.md)。本页已有的数值／行为证据继续保留，不能自动视为新美术构建的运行证据。
+**美术状态更新（2026-09-15）：** 九套参考身体及八组提示已接入来源资源；本页下方的红点、普通 Skeleton 替代精英、橙色线条描述属于历史构建。最新美术验证、保留差异与待验项见 [序列帧美术恢复](limbo-art-restoration.md) 和 [Ghoul 接入](limbo-ghoul-integration.md)。历史数值／行为证据继续保留，不能自动视为新构建的运行证据。
 
-当前交付已扩展为 **Limbo [0,449.9166666666667) 技术预览**：LostSoul v0/v1 的原始身体、换色、预警、九边形爆炸与服务端无经验自毁已接入并完成本轮技术验证。同一最终构建已完成单人 Host、Host/Client 连续流程及结算界面重开。详见 [LostSoul 接入与验收](limbo-lostsoul-integration.md)；此前 [Dash 验证](limbo-dash-integration.md) 和 [空间机制收尾](limbo-spatial-closure.md) 保留历史证据。当前共接入7类来源身份、8套身体、16种外观/变体组合；Ghoul及完整720.9秒仍未放行。Spine、人工压力暂缓，尚未完成同条件原游戏正常流程压力对照。
+当前交付为 **全部 31 片段的完整 Limbo 参考流程**：720.9 秒请求转场，等待已连接、存活玩家结束选卡等忙碌后进入现有结算，不要求清怪。最终构建已完成单人 Host、Host/Client 有画面完整运行及界面重开，Full 已 Ready。详见 [Phase 5 实现与验收](limbo-full-integration.md)。当前共接入 8 类来源身份、9 套身体、17 种外观/变体组合（16 个数据库变体）；[Ghoul](limbo-ghoul-integration.md)、[LostSoul](limbo-lostsoul-integration.md)、[Dash](limbo-dash-integration.md) 和 [空间机制](limbo-spatial-closure.md) 保留历史证据。Minos、Spine、人工压力和同条件原游戏正常流程对照尚未完成；本阶段定向回归通过，广域保留失败及分类见 Phase 5 报告。
 
-下文保留此前0–60秒阶段的实施与验收历史（其中Imp数据缺失门槛是当时状态）。当前入口是 `-Profile lostsoul -BuildDirectory Builds/LimboLostSoul20260915`；`lostsoul-validation` 含明确测试保护、自动选卡，添加 `-AutoWalk` 提供普通移动输入，不能当作人工压力结果。此前美术构建 `Builds/LimboArtFinal4_20260915` 与占位构建 `Builds/LimboDashRelease20260915` 保留。旧 opening／imp／stage2／dash 入口保留，启动脚本默认仍为60秒开场。现有Ovid材质提示及其他Shader差异继续保留记录。
+下文保留此前 0–60 秒阶段的实施与验收历史（数据缺失、占位外观和待接入描述均为当时状态）。当前无辅助入口是 `-Profile full -BuildDirectory Builds/LimboFull20260915`；`full-validation` 含明确测试保护、自动选卡，添加 `-AutoWalk` 提供普通移动输入，不能当作人工压力结果。此前构建和 opening／imp／stage2／dash／lostsoul／ghoul 入口保留，启动脚本默认仍为 60 秒开场。现有 Ovid 材质提示及其他 Shader 差异继续保留记录。
 
 ## 启动、修改与证据
 
@@ -45,7 +45,7 @@
 | 原始／适配敌人数据 | `Content/NetworkCombat/Limbo/SourceEnemyDB.asset` 与 `AdaptedEnemyDB.asset`，均为既有 EnemyDatabase 类型；运行只读适配数据。当前 HP、伤害、速度、基础 XP 为 1:1 |
 | 时间轴 | `Content/NetworkCombat/Limbo/Limbo.playable`，31 个独立来源片段；不把 250 预算压缩到预览时间 |
 | 开场规则 | `Content/NetworkCombat/Limbo/Resources/LimboReference/Opening.asset`；终点 60、来源时长 841.5766649882、上限 1000 |
-| 完整规则草案 | 同目录 `Full.asset`，终点 720.9；LostSoul／Ghoul 行为适配和完整流程未完成，启动门槛继续拒绝 |
+| 完整规则 | 同目录 `Full.asset`，请求点 720.9；独立 `referenceFlowReadiness` 为 Ready，`referenceEndPolicy` 明确选择等待参与者。无辅助入口与 FullValidation/FullFixture 分开 |
 | 扩展现有调度 | `NetworkCombat/Timeline/NetworkEnemySpawnClip.cs`、`NetworkWaveTimelineCompiler.Reference.cs`、`NetworkCombat/Server/ServerWaveSchedule.Reference.cs` |
 | 联网出生与生命周期 | `NetworkCombat/Mirror/NetworkGameplayEnemySpawner.Reference.cs`、`.Reposition.cs`、`NetworkEnemySimulationAgent.Birth.cs`、`NetworkEnemySimulationWorld.Reference.cs` |
 | 启动和审计 | `NetworkCombat/Mirror/LimboReferenceLaunch.cs`；仅显式命令行启用 |

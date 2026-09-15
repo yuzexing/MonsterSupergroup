@@ -12,14 +12,20 @@ namespace AstralShift.HellMaiden.AI.Enemy
 		[Header("Enemy Consecutive Attack Animation")]
 		[SerializeField]
 		private List<ClipQuad> attackSets = new List<ClipQuad>();
+        private int presentationIndex = -1;
+        public void SetSequencePresentationIndex(int index) => presentationIndex = index;
+        private int PresentationIndex => presentationIndex >= 0 ? presentationIndex : attack.currentAttackCount;
 
 		public override float AttackTime => attackSets[attack.currentAttackCount].attackLeftUp.Length;
 
 		public override float AttackWarningTime => attackSets[attack.currentAttackCount].attackWarningLeftUp.Length;
 
+        public Vector3 SequenceWarnings => new Vector3(attackSets[0].attackWarningLeftUp.Length, attackSets[1].attackWarningLeftUp.Length, attackSets[2].attackWarningLeftUp.Length);
+        public Vector3 SequenceActives => new Vector3(attackSets[0].attackLeftUp.Length, attackSets[1].attackLeftUp.Length, attackSets[2].attackLeftUp.Length);
+
 		public override void Attack(float x, float y)
 		{
-			int currentAttackCount = attack.currentAttackCount;
+			int currentAttackCount = PresentationIndex;
 			if (x > 0f)
 			{
 				animancer.Layers[0].Play((y > 0f) ? attackSets[currentAttackCount].attackRightUp : attackSets[currentAttackCount].attackRightDown, 0f);
@@ -32,7 +38,7 @@ namespace AstralShift.HellMaiden.AI.Enemy
 
 		public override void AttackWarning(float x, float y)
 		{
-			int currentAttackCount = attack.currentAttackCount;
+			int currentAttackCount = PresentationIndex;
 			if (x > 0f)
 			{
 				animancer.Layers[0].Play((y > 0f) ? attackSets[currentAttackCount].attackWarningRightUp : attackSets[currentAttackCount].attackWarningRightDown, 0f);
@@ -45,7 +51,7 @@ namespace AstralShift.HellMaiden.AI.Enemy
 
 		public override void Recovery(float x, float y)
 		{
-			if (attack.currentAttackCount == attackSets.Count - 1)
+			if (PresentationIndex == attackSets.Count - 1)
 			{
 				if (x > 0f)
 				{

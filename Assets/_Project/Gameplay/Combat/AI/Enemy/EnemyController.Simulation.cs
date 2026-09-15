@@ -24,6 +24,18 @@ namespace AstralShift.HellMaiden.AI.Enemy
         {
             if (simulationClock == null) return;
             double now = simulationClock();
+            if (attackScript is SequenceEnemyAttack sequence)
+            {
+                if (phase == EnemyAttackPresentationPhase.Warning &&
+                    (!simulationAction.Sequence || simulationAction.Phase == EnemyAttackPresentationPhase.Inactive || simulationAction.Phase == EnemyAttackPresentationPhase.Cancelled))
+                    BeginSequenceAction(now, sequence);
+                if (phase == EnemyAttackPresentationPhase.Cancelled || phase == EnemyAttackPresentationPhase.Inactive)
+                {
+                    simulationAction.Phase = phase;
+                    if (phase == EnemyAttackPresentationPhase.Cancelled) simulationAction.NextAttackAt = now + Math.Max(0, attackCooldown - (Time.time-lastAttackTime));
+                }
+                return;
+            }
             if (phase == EnemyAttackPresentationPhase.Warning)
             {
                 simulationActionSequence++;
@@ -89,6 +101,8 @@ namespace AstralShift.HellMaiden.AI.Enemy
         {
             simulationAction = state;
             if (_stateMachine == null || attackScript == null) return;
+            if (state.Sequence && attackScript is SequenceEnemyAttack)
+            { ApplySequenceFrame(state, now, false); return; }
             var phase = state.PhaseAt(now);
             simulationAction.Phase = phase;
             CurrentAttackPresentationPhase = phase;

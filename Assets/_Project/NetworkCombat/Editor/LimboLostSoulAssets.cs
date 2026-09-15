@@ -193,7 +193,7 @@ namespace MonsterSupergroup.NetworkCombat.Editor
             }
             finally{PrefabUtility.UnloadPrefabContents(root);}
         }
-        private static void ApplyGeometry(GameObject root,Geometry g)
+        internal static void ApplyGeometry(GameObject root,Geometry g)
         {
             var t=g.path==""?root.transform:root.transform.Find(g.path);
             if(t==null)throw new InvalidDataException("LostSoul geometry path missing: "+g.path);
@@ -228,9 +228,9 @@ namespace MonsterSupergroup.NetworkCombat.Editor
             if(!preview.TryCapture(out var p,out var error)||p.Reference.ReadinessError()!=null)
                 throw new InvalidDataException("LostSoul preview gate: "+error+" / "+p.Reference?.ReadinessError());
             var full=AssetDatabase.LoadAssetAtPath<GameplayWaveRules>(LimboReferenceAssets.ResourcesRoot+"/Full.asset");
-            if(!full.TryCapture(out var f,out error)||f.Reference.ReadinessError()==null)
-                throw new InvalidDataException("Full must retain Ghoul's gate: "+error);
-            Debug.Log("[LimboLostSoul] Reviewed LostSoul behavior accepted; Full remains gated. See docs/limbo-lostsoul-integration.md.");
+            if(!full.TryCapture(out var f,out error)) throw new InvalidDataException(error);
+            LimboFullAssets.VerifyIndependentFlowGate(f.Reference);
+            Debug.Log("[LimboLostSoul] Reviewed LostSoul behavior accepted; independent Full flow readiness preserved. See docs/limbo-lostsoul-integration.md.");
         }
         public static void AcceptBatch(){int code=0;try{MarkValidated();}catch(Exception e){Debug.LogException(e);code=1;}finally{EditorApplication.Exit(code);}}
         public static void CreateBatch(){int code=0;try{Create();}catch(Exception e){Debug.LogException(e);code=1;}finally{EditorApplication.Exit(code);}}

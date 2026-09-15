@@ -212,7 +212,8 @@ namespace MonsterSupergroup.HellMaidenMigration.Tests
             Assert.That(player, Is.Not.Null);
             Component build = player.GetComponent("PlayerBuildRuntime");
             Assert.That(build, Is.Not.Null);
-            Assert.That(new SerializedObject(build).FindProperty("initialWeaponId").intValue, Is.EqualTo(2));
+            uint selected = (uint)new SerializedObject(build).FindProperty("initialWeaponId").intValue;
+            Assert.That(database.Weapons.Count(entry => entry != null && entry.ID == selected), Is.EqualTo(1));
         }
 
         private static WeaponData Weapon()

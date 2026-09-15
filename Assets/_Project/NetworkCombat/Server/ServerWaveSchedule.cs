@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace MonsterSupergroup.NetworkCombat
 {
-    public enum WavePhase : byte { Disabled, Waiting, Running, Paused, Stopped, Completed }
+    public enum WavePhase : byte { Disabled, Waiting, Running, Paused, Stopped, Completed, TransitionPending }
 
     [Serializable]
     public struct WaveProgressSnapshot
@@ -20,6 +20,9 @@ namespace MonsterSupergroup.NetworkCombat
         public double StageEndTime;
         public int CountedAlive, ActiveClips, EvidenceBlocked;
         public long TotalAttempts, AbandonedBudget;
+        public double TransitionRequestedAt;
+        public int TransitionWaitCount;
+        public string TransitionWaitReason;
         public double Remaining => ReferenceStage ? Math.Max(0, StageEndTime - Elapsed) : Wave > 0 ? Math.Max(0, Wave * WaveDuration - Elapsed) : WaveDuration;
     }
 

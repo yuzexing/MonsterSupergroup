@@ -376,7 +376,7 @@ namespace MonsterSupergroup.NetworkCombat
                     continue;
                 }
 
-                if (!enemy.ValidateDashAction(snapshot.Runtime.Action) || !enemy.ValidateExplosionAction(snapshot.Runtime.Action, snapshot.Position)) continue;
+                if (!enemy.ValidateSequenceAction(snapshot.Runtime.Action) || !enemy.ValidateDashAction(snapshot.Runtime.Action) || !enemy.ValidateExplosionAction(snapshot.Runtime.Action, snapshot.Position)) continue;
                 var rejection = Registry.TryAcceptClientSnapshot(endpoint.PlayerEntityId, snapshot);
                 var progress = GetHandoff(snapshot.EnemyEntityId);
                 if (rejection == EnemySnapshotRejectionReason.WrongOwner) progress.Diagnostics.WrongOwner++;
@@ -425,12 +425,13 @@ namespace MonsterSupergroup.NetworkCombat
                     continue;
                 }
 
-                if (!enemy.ValidateDashAction(edge.Checkpoint.Movement.Runtime.Action) || !enemy.ValidateExplosionAction(edge.Checkpoint.Movement.Runtime.Action, edge.Checkpoint.Movement.Position)) continue;
+                if (!enemy.ValidateSequenceAction(edge.Checkpoint.Movement.Runtime.Action) || !enemy.ValidateDashAction(edge.Checkpoint.Movement.Runtime.Action) || !enemy.ValidateExplosionAction(edge.Checkpoint.Movement.Runtime.Action, edge.Checkpoint.Movement.Position)) continue;
                 if (Registry.TryAcceptClientAttackPresentation(
                     endpoint.PlayerEntityId,
                     edge) == EnemyAttackPresentationRejectionReason.None)
                 {
                     attackPresentationBuffer.Add(edge);
+                    enemy.RememberSequenceCancellation(edge.Checkpoint.Movement.Runtime.Action);
                 }
             }
 

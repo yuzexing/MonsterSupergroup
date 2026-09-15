@@ -64,7 +64,9 @@ namespace MonsterSupergroup.NetworkCombat
                 body.position = pose.Position;
                 body.linearVelocity = pose.Velocity;
                 if (pose.Facing.sqrMagnitude > .0001f) enemyController?.Movement?.SetFacingDirection(pose.Facing);
-                enemyController?.RestoreSimulationAction(pose.Runtime.Action, EnemySimulationClock.CombatNow);
+                var restoredAction = pose.Runtime.Action;
+                if(restoredAction.Sequence && restoredAction.ActionId == cancelledSequenceActionId)restoredAction.Phase=EnemyAttackPresentationPhase.Cancelled;
+                enemyController?.RestoreSimulationAction(restoredAction, EnemySimulationClock.CombatNow);
                 RestoreSimulationKnockback(pose.Runtime, pose.SampleNetworkTime);
                 authority.MarkDiscontinuity();
             }

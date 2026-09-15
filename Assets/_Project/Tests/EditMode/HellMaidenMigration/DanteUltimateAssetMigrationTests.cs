@@ -6,6 +6,7 @@ using NUnit.Framework;
 using UnityEditor;
 using UnityEditor.Animations;
 using UnityEngine;
+using UnityEngine.Localization.Tables;
 
 namespace MonsterSupergroup.HellMaidenMigration.Tests
 {
@@ -17,7 +18,12 @@ namespace MonsterSupergroup.HellMaidenMigration.Tests
             UltimateData definition = Asset<UltimateData>(DanteUltimateAssetMigration.DefinitionPath);
             var serialized = new SerializedObject(definition);
             Assert.That(definition.Id, Is.Zero);
-            Assert.That(serialized.FindProperty("title").stringValue, Is.EqualTo("Dante's Inferno"));
+            Assert.That(definition.LocalizedTitle.IsEmpty, Is.False);
+            StringTable english = Asset<StringTable>("Assets/_Project/Localization/Tables/MonsterContent_en.asset");
+            Assert.That(definition.LocalizedTitle.TableReference.TableCollectionName, Is.EqualTo(english.TableCollectionName));
+            Assert.That(definition.LocalizedTitle.TableEntryReference.Key, Is.EqualTo("ultimate.0.name"));
+            Assert.That(english.GetEntry(definition.LocalizedTitle.TableEntryReference.Key).LocalizedValue,
+                Is.EqualTo("Dante's Inferno"));
             Assert.That(serialized.FindProperty("baseStats.damage").intValue, Is.EqualTo(100));
             Assert.That(serialized.FindProperty("baseStats.critRate").floatValue, Is.Zero);
             Assert.That(serialized.FindProperty("baseStats.critMultiplier").floatValue, Is.EqualTo(1f));

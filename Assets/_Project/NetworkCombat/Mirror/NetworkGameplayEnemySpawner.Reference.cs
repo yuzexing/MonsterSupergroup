@@ -19,12 +19,17 @@ namespace MonsterSupergroup.NetworkCombat
         private readonly Dictionary<int, Vector2> formationCenters = new Dictionary<int, Vector2>();
         private StreamWriter referenceTrace;
         private bool referenceCompletionPublished;
+        private bool referenceRequestPublished;
+        private bool referenceCancellationPublished;
+        private string referenceWaitDescription;
         private double referenceNow;
         private readonly Dictionary<uint, EnemyBirthParameters> referenceObserved = new Dictionary<uint, EnemyBirthParameters>();
         private readonly HashSet<uint> referenceAliveIds = new HashSet<uint>();
         private readonly List<uint> removedReferenceIds = new List<uint>();
         private PauseManager referenceUpgradePause;
         public event Action ReferenceStageCompleted;
+        public event Action ReferenceTransitionRequested;
+        public bool IsReferenceTransitionPending => schedule?.State.Phase == WavePhase.TransitionPending;
         public string ReferenceTracePath { get; private set; }
         public ReferenceWaveProgram ReferenceProgram => settings?.Reference;
 
@@ -34,7 +39,7 @@ namespace MonsterSupergroup.NetworkCombat
             world.BeginReferenceTraps(waveRules);
             referenceAlive = new int[settings.Reference.Clips.Length];
             referenceRandom = new System.Random(settings.Reference.Seed);
-            formationCenters.Clear(); referenceCompletionPublished = false;
+            formationCenters.Clear(); referenceCompletionPublished = false; referenceRequestPublished = false; referenceCancellationPublished = false; referenceWaitDescription = null;
             referenceNow = NetworkTime.time;
             referenceObserved.Clear();
             offscreenSince.Clear();
@@ -120,6 +125,38 @@ namespace MonsterSupergroup.NetworkCombat
                     target.AvatarId, settings.Reference.Barriers[i], () => trapSchedule.ReleaseBarrierSlot());
             });
             world.TickReferenceTrapAuthority();
+            if (IsReferenceTransitionPending && !referenceRequestPublished)
+            {
+                referenceRequestPublished = true;
+                referenceTrace?.WriteLine(FormattableString.Invariant($"{schedule.State.Elapsed:R},transition-request,,,,,,,,{total},{counted},,,,,,"));
+                Debug.Log($"[LimboTransition] requested run={boundRunId} round={manager.Session.Round} threshold={settings.Reference.EndTime:R} actual={schedule.State.Elapsed:R} frame={Time.frameCount}");
+                progress.Publish(this, schedule.State);
+                ReferenceTransitionRequested?.Invoke();
+            }
+            PublishReferenceCompletion(total, counted);
+        }
+
+        internal void UpdateReferenceTransitionWait(int count, string reason)
+        {
+            if (!IsReferenceTransitionPending) return;
+            schedule.SetReferenceWait(count, reason);
+            if (reason == referenceWaitDescription) return;
+            referenceWaitDescription = reason;
+            Debug.Log($"[LimboTransition] waiting run={boundRunId} round={manager.Session.Round} elapsed={schedule.State.Elapsed:R} count={count} reason={reason}");
+            progress.Publish(this, schedule.State);
+        }
+
+        internal bool CompletePendingReferenceTransition(string runId, uint round)
+        {
+            if (!IsReferenceTransitionPending || manager == null || manager.Session.IsRunEnded || manager.Session.RunId != runId || manager.Session.Round != round ||
+                !schedule.CompleteReferenceTransition(runId)) return false;
+            CountReferenceEnemies(out int total, out int counted);
+            PublishReferenceCompletion(total, counted);
+            return true;
+        }
+
+        private void PublishReferenceCompletion(int total, int counted)
+        {
             if (schedule.State.Phase == WavePhase.Completed && !referenceCompletionPublished)
             {
                 referenceCompletionPublished = true;
@@ -128,7 +165,7 @@ namespace MonsterSupergroup.NetworkCombat
                 progress.Publish(this, schedule.State);
                 ReferenceStageCompleted?.Invoke();
                 if (NetworkManager.singleton is BootGameplayNetworkManager manager)
-                    manager.CompleteReferenceStage(settings.Reference.EndTime < 720 ? $"Limbo 参考预览完成（0–{settings.Reference.EndTime:0.##} 秒）" : "Limbo 转场点已到达；Minos 战未实现");
+                    manager.CompleteReferenceStage(settings.Reference.EndPolicy == ReferenceEndPolicy.ImmediatePreview ? $"Limbo 参考预览完成（0–{settings.Reference.EndTime:0.##} 秒）" : "Limbo 参考流程完成；Minos 战未实现");
                 EndReferenceTrace();
             }
         }
@@ -217,6 +254,11 @@ namespace MonsterSupergroup.NetworkCombat
         }
         private void EndReferenceTrace()
         {
+            if (referenceRequestPublished && !referenceCompletionPublished && !referenceCancellationPublished)
+            {
+                referenceCancellationPublished = true;
+                Debug.Log($"[LimboTransition] cancelled run={boundRunId} elapsed={schedule?.State.Elapsed:R}");
+            }
             ReleaseReferenceUpgradePause();
             if (settings?.Reference != null && world != null) world.ClearReferenceTraps();
             schedule?.CancelReferenceTraps();

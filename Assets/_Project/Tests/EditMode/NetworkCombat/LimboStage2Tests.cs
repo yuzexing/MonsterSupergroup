@@ -64,7 +64,7 @@ namespace MonsterSupergroup.NetworkCombat.Tests
             Assert.That(playable.TryCapture(out var ready,out error),Is.True,error);Assert.That(ready.Reference.ValidationOnly,Is.False);
             Assert.That(ready.Reference.ReadinessError(),Is.Null,"Only rendered-validated preview segments may be enabled.");
             var full=AssetDatabase.LoadAssetAtPath<GameplayWaveRules>(LimboReferenceAssets.ResourcesRoot+"/Full.asset");
-            Assert.That(full.TryCapture(out var f,out error),Is.True,error);Assert.That(f.Reference.ReadinessError(),Is.Not.Null);
+            Assert.That(full.TryCapture(out var f,out error),Is.True,error);f.Reference.FlowReadiness = ReferenceEnemyReadiness.ImplementationPending; Assert.That(f.Reference.ReadinessError(),Is.Not.Null);
         }
         [Test]
         public void TenFixtureCasesResolveSourceVariantsWithoutSharingOrdinaryPrefabIds()

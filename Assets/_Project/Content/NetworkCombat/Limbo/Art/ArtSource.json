@@ -2319,6 +2319,516 @@
         }
       ],
       "contact": false
+    },
+    {
+      "group": "E9",
+      "name": "Enemy_Ghoul",
+      "identity": "Ghoul",
+      "target": "Assets/_Project/Content/NetworkCombat/Limbo/Ghoul/ReferenceGhoul.prefab",
+      "template": "Assets/_Project/Content/NetworkCombat/Limbo/Art/Imported/GameObject/Enemy_Ghoul.prefab",
+      "bindings": [
+        {
+          "field": "attackLeftDown",
+          "path": "Assets/_Project/Content/NetworkCombat/Limbo/Art/Imported/AnimationClip/Enemy_Ghoul_Attack_Left.anim",
+          "length": 0.235714287,
+          "speed": 1.0,
+          "fade": 0.25,
+          "normalizedStart": "NaN",
+          "eventTimes": [],
+          "visualCallbacks": []
+        },
+        {
+          "field": "attackLeftUp",
+          "path": "Assets/_Project/Content/NetworkCombat/Limbo/Art/Imported/AnimationClip/Enemy_Ghoul_Attack_Left.anim",
+          "length": 0.235714287,
+          "speed": 1.0,
+          "fade": 0.25,
+          "normalizedStart": "NaN",
+          "eventTimes": [],
+          "visualCallbacks": []
+        },
+        {
+          "field": "attackRightDown",
+          "path": "Assets/_Project/Content/NetworkCombat/Limbo/Art/Imported/AnimationClip/Enemy_Ghoul_Attack_Right.anim",
+          "length": 0.25,
+          "speed": 1.0,
+          "fade": 0.25,
+          "normalizedStart": "NaN",
+          "eventTimes": [],
+          "visualCallbacks": []
+        },
+        {
+          "field": "attackRightUp",
+          "path": "Assets/_Project/Content/NetworkCombat/Limbo/Art/Imported/AnimationClip/Enemy_Ghoul_Attack_Right.anim",
+          "length": 0.25,
+          "speed": 1.0,
+          "fade": 0.25,
+          "normalizedStart": "NaN",
+          "eventTimes": [],
+          "visualCallbacks": []
+        },
+        {
+          "field": "attackWarningLeftDown",
+          "path": "Assets/_Project/Content/NetworkCombat/Limbo/Art/Imported/AnimationClip/Enemy_Ghoul_Warning_Left.anim",
+          "length": 0.29285717,
+          "speed": 1.0,
+          "fade": 0.25,
+          "normalizedStart": "NaN",
+          "eventTimes": [],
+          "visualCallbacks": []
+        },
+        {
+          "field": "attackWarningLeftUp",
+          "path": "Assets/_Project/Content/NetworkCombat/Limbo/Art/Imported/AnimationClip/Enemy_Ghoul_Warning_Left.anim",
+          "length": 0.29285717,
+          "speed": 1.0,
+          "fade": 0.25,
+          "normalizedStart": "NaN",
+          "eventTimes": [],
+          "visualCallbacks": []
+        },
+        {
+          "field": "attackWarningRightDown",
+          "path": "Assets/_Project/Content/NetworkCombat/Limbo/Art/Imported/AnimationClip/Enemy_Ghoul_Warning_Right.anim",
+          "length": 0.29285717,
+          "speed": 1.0,
+          "fade": 0.25,
+          "normalizedStart": "NaN",
+          "eventTimes": [],
+          "visualCallbacks": []
+        },
+        {
+          "field": "attackWarningRightUp",
+          "path": "Assets/_Project/Content/NetworkCombat/Limbo/Art/Imported/AnimationClip/Enemy_Ghoul_Warning_Right.anim",
+          "length": 0.29285717,
+          "speed": 1.0,
+          "fade": 0.25,
+          "normalizedStart": "NaN",
+          "eventTimes": [],
+          "visualCallbacks": []
+        },
+        {
+          "field": "deadLeftDown",
+          "path": "Assets/_Project/Content/NetworkCombat/Limbo/Art/Imported/AnimationClip/Enemy_Ghoul_Death_Left.anim",
+          "length": 0.9142857,
+          "speed": 1.0,
+          "fade": 0.25,
+          "normalizedStart": "NaN",
+          "eventTimes": [],
+          "visualCallbacks": []
+        },
+        {
+          "field": "deadLeftUp",
+          "path": "Assets/_Project/Content/NetworkCombat/Limbo/Art/Imported/AnimationClip/Enemy_Ghoul_Death_Left.anim",
+          "length": 0.9142857,
+          "speed": 1.0,
+          "fade": 0.25,
+          "normalizedStart": "NaN",
+          "eventTimes": [],
+          "visualCallbacks": []
+        },
+        {
+          "field": "deadRightDown",
+          "path": "Assets/_Project/Content/NetworkCombat/Limbo/Art/Imported/AnimationClip/Enemy_Ghoul_Death_Right.anim",
+          "length": 0.9142857,
+          "speed": 1.0,
+          "fade": 0.25,
+          "normalizedStart": "NaN",
+          "eventTimes": [],
+          "visualCallbacks": []
+        },
+        {
+          "field": "deadRightUp",
+          "path": "Assets/_Project/Content/NetworkCombat/Limbo/Art/Imported/AnimationClip/Enemy_Ghoul_Death_Right.anim",
+          "length": 0.9142857,
+          "speed": 1.0,
+          "fade": 0.25,
+          "normalizedStart": "NaN",
+          "eventTimes": [],
+          "visualCallbacks": []
+        },
+        {
+          "field": "hurtLeftDown",
+          "path": "Assets/_Project/Content/NetworkCombat/Limbo/Art/Imported/AnimationClip/Enemy_Ghoul_Hurt_Left.anim",
+          "length": 0.2,
+          "speed": 1.0,
+          "fade": 0.25,
+          "normalizedStart": "NaN",
+          "eventTimes": [],
+          "visualCallbacks": []
+        },
+        {
+          "field": "hurtLeftUp",
+          "path": "Assets/_Project/Content/NetworkCombat/Limbo/Art/Imported/AnimationClip/Enemy_Ghoul_Hurt_Left.anim",
+          "length": 0.2,
+          "speed": 1.0,
+          "fade": 0.25,
+          "normalizedStart": "NaN",
+          "eventTimes": [],
+          "visualCallbacks": []
+        },
+        {
+          "field": "hurtRightDown",
+          "path": "Assets/_Project/Content/NetworkCombat/Limbo/Art/Imported/AnimationClip/Enemy_Ghoul_Hurt_Right.anim",
+          "length": 0.2,
+          "speed": 1.0,
+          "fade": 0.25,
+          "normalizedStart": "NaN",
+          "eventTimes": [],
+          "visualCallbacks": []
+        },
+        {
+          "field": "hurtRightUp",
+          "path": "Assets/_Project/Content/NetworkCombat/Limbo/Art/Imported/AnimationClip/Enemy_Ghoul_Hurt_Right.anim",
+          "length": 0.2,
+          "speed": 1.0,
+          "fade": 0.25,
+          "normalizedStart": "NaN",
+          "eventTimes": [],
+          "visualCallbacks": []
+        },
+        {
+          "field": "moveLeftDown",
+          "path": "Assets/_Project/Content/NetworkCombat/Limbo/Art/Imported/AnimationClip/Enemy_Ghoul_Walk_Left.anim",
+          "length": 0.442857146,
+          "speed": 1.0,
+          "fade": 0.25,
+          "normalizedStart": "NaN",
+          "eventTimes": [],
+          "visualCallbacks": []
+        },
+        {
+          "field": "moveLeftUp",
+          "path": "Assets/_Project/Content/NetworkCombat/Limbo/Art/Imported/AnimationClip/Enemy_Ghoul_Walk_Left.anim",
+          "length": 0.442857146,
+          "speed": 1.0,
+          "fade": 0.25,
+          "normalizedStart": "NaN",
+          "eventTimes": [],
+          "visualCallbacks": []
+        },
+        {
+          "field": "moveRightDown",
+          "path": "Assets/_Project/Content/NetworkCombat/Limbo/Art/Imported/AnimationClip/Enemy_Ghoul_Walk_Right.anim",
+          "length": 0.442857146,
+          "speed": 1.0,
+          "fade": 0.25,
+          "normalizedStart": "NaN",
+          "eventTimes": [],
+          "visualCallbacks": []
+        },
+        {
+          "field": "moveRightUp",
+          "path": "Assets/_Project/Content/NetworkCombat/Limbo/Art/Imported/AnimationClip/Enemy_Ghoul_Walk_Right.anim",
+          "length": 0.442857146,
+          "speed": 1.0,
+          "fade": 0.25,
+          "normalizedStart": "NaN",
+          "eventTimes": [],
+          "visualCallbacks": []
+        },
+        {
+          "field": "recoveryLeftDown",
+          "path": "Assets/_Project/Content/NetworkCombat/Limbo/Art/Imported/AnimationClip/Enemy_Ghoul_Recovery_Left.anim",
+          "length": 0.121428572,
+          "speed": 1.0,
+          "fade": 0.0,
+          "normalizedStart": "NaN",
+          "eventTimes": [],
+          "visualCallbacks": []
+        },
+        {
+          "field": "recoveryLeftUp",
+          "path": "Assets/_Project/Content/NetworkCombat/Limbo/Art/Imported/AnimationClip/Enemy_Ghoul_Recovery_Left.anim",
+          "length": 0.121428572,
+          "speed": 1.0,
+          "fade": 0.0,
+          "normalizedStart": "NaN",
+          "eventTimes": [],
+          "visualCallbacks": []
+        },
+        {
+          "field": "recoveryRightDown",
+          "path": "Assets/_Project/Content/NetworkCombat/Limbo/Art/Imported/AnimationClip/Enemy_Ghoul_Recovery_Right.anim",
+          "length": 0.128571436,
+          "speed": 1.0,
+          "fade": 0.0,
+          "normalizedStart": "NaN",
+          "eventTimes": [],
+          "visualCallbacks": []
+        },
+        {
+          "field": "recoveryRightUp",
+          "path": "Assets/_Project/Content/NetworkCombat/Limbo/Art/Imported/AnimationClip/Enemy_Ghoul_Recovery_Right.anim",
+          "length": 0.128571436,
+          "speed": 1.0,
+          "fade": 0.0,
+          "normalizedStart": "NaN",
+          "eventTimes": [],
+          "visualCallbacks": []
+        },
+        {
+          "field": "shadowFadeout",
+          "path": "Assets/_Project/Content/NetworkCombat/Limbo/Art/Imported/AnimationClip/Shadow_Fadeout.anim",
+          "length": 1.0,
+          "speed": 1.0,
+          "fade": 0.25,
+          "normalizedStart": "NaN",
+          "eventTimes": [],
+          "visualCallbacks": []
+        },
+        {
+          "field": "shadowIdle",
+          "path": "Assets/_Project/Content/NetworkCombat/Limbo/Art/Imported/AnimationClip/Shadow_Idle.anim",
+          "length": 0.0,
+          "speed": 1.0,
+          "fade": 0.25,
+          "normalizedStart": "NaN",
+          "eventTimes": [],
+          "visualCallbacks": []
+        },
+        {
+          "field": "attackSets.Array.data[0].attackLeftDown",
+          "path": "Assets/_Project/Content/NetworkCombat/Limbo/Art/Imported/AnimationClip/Enemy_Ghoul_Attack_Left.anim",
+          "length": 0.235714287,
+          "speed": 1.0,
+          "fade": 0.0,
+          "normalizedStart": "NaN",
+          "eventTimes": [],
+          "visualCallbacks": []
+        },
+        {
+          "field": "attackSets.Array.data[0].attackLeftUp",
+          "path": "Assets/_Project/Content/NetworkCombat/Limbo/Art/Imported/AnimationClip/Enemy_Ghoul_Attack_Left.anim",
+          "length": 0.235714287,
+          "speed": 1.0,
+          "fade": 0.0,
+          "normalizedStart": "NaN",
+          "eventTimes": [],
+          "visualCallbacks": []
+        },
+        {
+          "field": "attackSets.Array.data[0].attackRightDown",
+          "path": "Assets/_Project/Content/NetworkCombat/Limbo/Art/Imported/AnimationClip/Enemy_Ghoul_Attack_Right.anim",
+          "length": 0.25,
+          "speed": 1.0,
+          "fade": 0.0,
+          "normalizedStart": "NaN",
+          "eventTimes": [],
+          "visualCallbacks": []
+        },
+        {
+          "field": "attackSets.Array.data[0].attackRightUp",
+          "path": "Assets/_Project/Content/NetworkCombat/Limbo/Art/Imported/AnimationClip/Enemy_Ghoul_Attack_Right.anim",
+          "length": 0.25,
+          "speed": 1.0,
+          "fade": 0.0,
+          "normalizedStart": "NaN",
+          "eventTimes": [],
+          "visualCallbacks": []
+        },
+        {
+          "field": "attackSets.Array.data[0].attackWarningLeftDown",
+          "path": "Assets/_Project/Content/NetworkCombat/Limbo/Art/Imported/AnimationClip/Enemy_Ghoul_Warning_Left.anim",
+          "length": 0.29285717,
+          "speed": 1.0,
+          "fade": 0.25,
+          "normalizedStart": "NaN",
+          "eventTimes": [],
+          "visualCallbacks": []
+        },
+        {
+          "field": "attackSets.Array.data[0].attackWarningLeftUp",
+          "path": "Assets/_Project/Content/NetworkCombat/Limbo/Art/Imported/AnimationClip/Enemy_Ghoul_Warning_Left.anim",
+          "length": 0.29285717,
+          "speed": 1.0,
+          "fade": 0.25,
+          "normalizedStart": "NaN",
+          "eventTimes": [],
+          "visualCallbacks": []
+        },
+        {
+          "field": "attackSets.Array.data[0].attackWarningRightDown",
+          "path": "Assets/_Project/Content/NetworkCombat/Limbo/Art/Imported/AnimationClip/Enemy_Ghoul_Warning_Right.anim",
+          "length": 0.29285717,
+          "speed": 1.0,
+          "fade": 0.25,
+          "normalizedStart": "NaN",
+          "eventTimes": [],
+          "visualCallbacks": []
+        },
+        {
+          "field": "attackSets.Array.data[0].attackWarningRightUp",
+          "path": "Assets/_Project/Content/NetworkCombat/Limbo/Art/Imported/AnimationClip/Enemy_Ghoul_Warning_Right.anim",
+          "length": 0.29285717,
+          "speed": 1.0,
+          "fade": 0.25,
+          "normalizedStart": "NaN",
+          "eventTimes": [],
+          "visualCallbacks": []
+        },
+        {
+          "field": "attackSets.Array.data[1].attackLeftDown",
+          "path": "Assets/_Project/Content/NetworkCombat/Limbo/Art/Imported/AnimationClip/Enemy_Ghoul_Attack_Left 1.anim",
+          "length": 0.2,
+          "speed": 1.0,
+          "fade": 0.0,
+          "normalizedStart": "NaN",
+          "eventTimes": [],
+          "visualCallbacks": []
+        },
+        {
+          "field": "attackSets.Array.data[1].attackLeftUp",
+          "path": "Assets/_Project/Content/NetworkCombat/Limbo/Art/Imported/AnimationClip/Enemy_Ghoul_Attack_Left 1.anim",
+          "length": 0.2,
+          "speed": 1.0,
+          "fade": 0.0,
+          "normalizedStart": "NaN",
+          "eventTimes": [],
+          "visualCallbacks": []
+        },
+        {
+          "field": "attackSets.Array.data[1].attackRightDown",
+          "path": "Assets/_Project/Content/NetworkCombat/Limbo/Art/Imported/AnimationClip/Enemy_Ghoul_Attack_Right 1.anim",
+          "length": 0.2,
+          "speed": 1.0,
+          "fade": 0.0,
+          "normalizedStart": "NaN",
+          "eventTimes": [],
+          "visualCallbacks": []
+        },
+        {
+          "field": "attackSets.Array.data[1].attackRightUp",
+          "path": "Assets/_Project/Content/NetworkCombat/Limbo/Art/Imported/AnimationClip/Enemy_Ghoul_Attack_Right 1.anim",
+          "length": 0.2,
+          "speed": 1.0,
+          "fade": 0.0,
+          "normalizedStart": "NaN",
+          "eventTimes": [],
+          "visualCallbacks": []
+        },
+        {
+          "field": "attackSets.Array.data[1].attackWarningLeftDown",
+          "path": "Assets/_Project/Content/NetworkCombat/Limbo/Art/Imported/AnimationClip/Enemy_Ghoul_Warning_Left 1.anim",
+          "length": 0.378571451,
+          "speed": 1.0,
+          "fade": 0.0,
+          "normalizedStart": "NaN",
+          "eventTimes": [],
+          "visualCallbacks": []
+        },
+        {
+          "field": "attackSets.Array.data[1].attackWarningLeftUp",
+          "path": "Assets/_Project/Content/NetworkCombat/Limbo/Art/Imported/AnimationClip/Enemy_Ghoul_Warning_Left 1.anim",
+          "length": 0.378571451,
+          "speed": 1.0,
+          "fade": 0.0,
+          "normalizedStart": "NaN",
+          "eventTimes": [],
+          "visualCallbacks": []
+        },
+        {
+          "field": "attackSets.Array.data[1].attackWarningRightDown",
+          "path": "Assets/_Project/Content/NetworkCombat/Limbo/Art/Imported/AnimationClip/Enemy_Ghoul_Warning_Right 1.anim",
+          "length": 0.378571451,
+          "speed": 1.0,
+          "fade": 0.0,
+          "normalizedStart": "NaN",
+          "eventTimes": [],
+          "visualCallbacks": []
+        },
+        {
+          "field": "attackSets.Array.data[1].attackWarningRightUp",
+          "path": "Assets/_Project/Content/NetworkCombat/Limbo/Art/Imported/AnimationClip/Enemy_Ghoul_Warning_Right 1.anim",
+          "length": 0.378571451,
+          "speed": 1.0,
+          "fade": 0.0,
+          "normalizedStart": "NaN",
+          "eventTimes": [],
+          "visualCallbacks": []
+        },
+        {
+          "field": "attackSets.Array.data[2].attackLeftDown",
+          "path": "Assets/_Project/Content/NetworkCombat/Limbo/Art/Imported/AnimationClip/Enemy_Ghoul_Attack_Left 2.anim",
+          "length": 0.20714286,
+          "speed": 1.0,
+          "fade": 0.0,
+          "normalizedStart": "NaN",
+          "eventTimes": [],
+          "visualCallbacks": []
+        },
+        {
+          "field": "attackSets.Array.data[2].attackLeftUp",
+          "path": "Assets/_Project/Content/NetworkCombat/Limbo/Art/Imported/AnimationClip/Enemy_Ghoul_Attack_Left 2.anim",
+          "length": 0.20714286,
+          "speed": 1.0,
+          "fade": 0.0,
+          "normalizedStart": "NaN",
+          "eventTimes": [],
+          "visualCallbacks": []
+        },
+        {
+          "field": "attackSets.Array.data[2].attackRightDown",
+          "path": "Assets/_Project/Content/NetworkCombat/Limbo/Art/Imported/AnimationClip/Enemy_Ghoul_Attack_Right 2.anim",
+          "length": 0.20714286,
+          "speed": 1.0,
+          "fade": 0.0,
+          "normalizedStart": "NaN",
+          "eventTimes": [],
+          "visualCallbacks": []
+        },
+        {
+          "field": "attackSets.Array.data[2].attackRightUp",
+          "path": "Assets/_Project/Content/NetworkCombat/Limbo/Art/Imported/AnimationClip/Enemy_Ghoul_Attack_Right 2.anim",
+          "length": 0.20714286,
+          "speed": 1.0,
+          "fade": 0.0,
+          "normalizedStart": "NaN",
+          "eventTimes": [],
+          "visualCallbacks": []
+        },
+        {
+          "field": "attackSets.Array.data[2].attackWarningLeftDown",
+          "path": "Assets/_Project/Content/NetworkCombat/Limbo/Art/Imported/AnimationClip/Enemy_Ghoul_Attack_Right 2.anim",
+          "length": 0.20714286,
+          "speed": 1.0,
+          "fade": 0.0,
+          "normalizedStart": "NaN",
+          "eventTimes": [],
+          "visualCallbacks": []
+        },
+        {
+          "field": "attackSets.Array.data[2].attackWarningLeftUp",
+          "path": "Assets/_Project/Content/NetworkCombat/Limbo/Art/Imported/AnimationClip/Enemy_Ghoul_Attack_Right 2.anim",
+          "length": 0.20714286,
+          "speed": 1.0,
+          "fade": 0.0,
+          "normalizedStart": "NaN",
+          "eventTimes": [],
+          "visualCallbacks": []
+        },
+        {
+          "field": "attackSets.Array.data[2].attackWarningRightDown",
+          "path": "Assets/_Project/Content/NetworkCombat/Limbo/Art/Imported/AnimationClip/Enemy_Ghoul_Warning_Right 2.anim",
+          "length": 0.242857143,
+          "speed": 1.0,
+          "fade": 0.0,
+          "normalizedStart": "NaN",
+          "eventTimes": [],
+          "visualCallbacks": []
+        },
+        {
+          "field": "attackSets.Array.data[2].attackWarningRightUp",
+          "path": "Assets/_Project/Content/NetworkCombat/Limbo/Art/Imported/AnimationClip/Enemy_Ghoul_Warning_Right 2.anim",
+          "length": 0.242857143,
+          "speed": 1.0,
+          "fade": 0.0,
+          "normalizedStart": "NaN",
+          "eventTimes": [],
+          "visualCallbacks": []
+        }
+      ],
+      "contact": false
     }
   ],
   "effects": [
@@ -2522,6 +3032,17 @@
       "identity": "LostSoul",
       "variant": 1,
       "texture": "Assets/_Project/Content/NetworkCombat/Limbo/Art/Imported/Texture2D/Enemy_LostSoul_Level_02_LUT.png",
+      "hue": [
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "identity": "Ghoul",
+      "variant": 0,
+      "texture": "",
       "hue": [
         1.0,
         1.0,
@@ -2910,6 +3431,320 @@
       ],
       "treatment": "import",
       "sourceSize": 3482
+    },
+    {
+      "source": "F:\\DecomplieLatest\\HellMaiden\\ExportedProject\\Assets\\AnimationClip\\Enemy_Ghoul_Attack_Left 1.anim",
+      "sourceGuid": "3263e1ffeed73854aa7db73ad22b8b4b",
+      "sourceSha256": "85a416ae39a49c3742681b7ec71e77701bd0534361ac42b71589f71ce1c5bf1a",
+      "destination": "Assets/_Project/Content/NetworkCombat/Limbo/Art/Imported/AnimationClip/Enemy_Ghoul_Attack_Left 1.anim",
+      "destinationGuid": "3263e1ffeed73854aa7db73ad22b8b4b",
+      "groups": [
+        "E9"
+      ],
+      "referencedBy": [
+        "Enemy_Ghoul[0]/Sprite[0]/attackSets.Array.data[1].attackLeftDown",
+        "Enemy_Ghoul[0]/Sprite[0]/attackSets.Array.data[1].attackLeftUp"
+      ],
+      "treatment": "import",
+      "sourceSize": 2984
+    },
+    {
+      "source": "F:\\DecomplieLatest\\HellMaiden\\ExportedProject\\Assets\\AnimationClip\\Enemy_Ghoul_Attack_Left 2.anim",
+      "sourceGuid": "8e13af4c5ed553f488cd2aa7fbd1fc63",
+      "sourceSha256": "769b22a23ec4e7c31a737a5e5fac4ce9921e05eb0b8c7872f12d5d4b5ac84788",
+      "destination": "Assets/_Project/Content/NetworkCombat/Limbo/Art/Imported/AnimationClip/Enemy_Ghoul_Attack_Left 2.anim",
+      "destinationGuid": "8e13af4c5ed553f488cd2aa7fbd1fc63",
+      "groups": [
+        "E9"
+      ],
+      "referencedBy": [
+        "Enemy_Ghoul[0]/Sprite[0]/attackSets.Array.data[2].attackLeftDown",
+        "Enemy_Ghoul[0]/Sprite[0]/attackSets.Array.data[2].attackLeftUp"
+      ],
+      "treatment": "import",
+      "sourceSize": 2806
+    },
+    {
+      "source": "F:\\DecomplieLatest\\HellMaiden\\ExportedProject\\Assets\\AnimationClip\\Enemy_Ghoul_Attack_Left.anim",
+      "sourceGuid": "db193eb03d9a8b54487fa2d2c4694ab4",
+      "sourceSha256": "24a136b30675a7eec2bf92bf4ae0881e7562595bad0f9d30f9157ab859061b1e",
+      "destination": "Assets/_Project/Content/NetworkCombat/Limbo/Art/Imported/AnimationClip/Enemy_Ghoul_Attack_Left.anim",
+      "destinationGuid": "db193eb03d9a8b54487fa2d2c4694ab4",
+      "groups": [
+        "E9"
+      ],
+      "referencedBy": [
+        "Enemy_Ghoul[0]/Sprite[0]/attackLeftDown",
+        "Enemy_Ghoul[0]/Sprite[0]/attackLeftUp",
+        "Enemy_Ghoul[0]/Sprite[0]/attackSets.Array.data[0].attackLeftDown",
+        "Enemy_Ghoul[0]/Sprite[0]/attackSets.Array.data[0].attackLeftUp"
+      ],
+      "treatment": "import",
+      "sourceSize": 2990
+    },
+    {
+      "source": "F:\\DecomplieLatest\\HellMaiden\\ExportedProject\\Assets\\AnimationClip\\Enemy_Ghoul_Attack_Right 1.anim",
+      "sourceGuid": "d3e78daed3ae7bd4f92a6d87c86f4cdd",
+      "sourceSha256": "47f4c3ce8af32280f57d70ae04bd9fafc0aebc4f436ff0c6521a9d2406c35dfd",
+      "destination": "Assets/_Project/Content/NetworkCombat/Limbo/Art/Imported/AnimationClip/Enemy_Ghoul_Attack_Right 1.anim",
+      "destinationGuid": "d3e78daed3ae7bd4f92a6d87c86f4cdd",
+      "groups": [
+        "E9"
+      ],
+      "referencedBy": [
+        "Enemy_Ghoul[0]/Sprite[0]/attackSets.Array.data[1].attackRightDown",
+        "Enemy_Ghoul[0]/Sprite[0]/attackSets.Array.data[1].attackRightUp"
+      ],
+      "treatment": "import",
+      "sourceSize": 2985
+    },
+    {
+      "source": "F:\\DecomplieLatest\\HellMaiden\\ExportedProject\\Assets\\AnimationClip\\Enemy_Ghoul_Attack_Right 2.anim",
+      "sourceGuid": "ed6abaa6efab17c4a8336d188e917643",
+      "sourceSha256": "95290ea34144dffb9ce57689b0723f3436986f79af164eeddc6582c9da202a88",
+      "destination": "Assets/_Project/Content/NetworkCombat/Limbo/Art/Imported/AnimationClip/Enemy_Ghoul_Attack_Right 2.anim",
+      "destinationGuid": "ed6abaa6efab17c4a8336d188e917643",
+      "groups": [
+        "E9"
+      ],
+      "referencedBy": [
+        "Enemy_Ghoul[0]/Sprite[0]/attackSets.Array.data[2].attackRightDown",
+        "Enemy_Ghoul[0]/Sprite[0]/attackSets.Array.data[2].attackRightUp",
+        "Enemy_Ghoul[0]/Sprite[0]/attackSets.Array.data[2].attackWarningLeftDown",
+        "Enemy_Ghoul[0]/Sprite[0]/attackSets.Array.data[2].attackWarningLeftUp"
+      ],
+      "treatment": "import",
+      "sourceSize": 2807
+    },
+    {
+      "source": "F:\\DecomplieLatest\\HellMaiden\\ExportedProject\\Assets\\AnimationClip\\Enemy_Ghoul_Attack_Right.anim",
+      "sourceGuid": "d19de61b6631e334b82a9c77e06ada5c",
+      "sourceSha256": "c983fbd4edde0b23039aa3e35fe15bdb70553b83ebfa536819ed03f38a22372e",
+      "destination": "Assets/_Project/Content/NetworkCombat/Limbo/Art/Imported/AnimationClip/Enemy_Ghoul_Attack_Right.anim",
+      "destinationGuid": "d19de61b6631e334b82a9c77e06ada5c",
+      "groups": [
+        "E9"
+      ],
+      "referencedBy": [
+        "Enemy_Ghoul[0]/Sprite[0]/attackRightDown",
+        "Enemy_Ghoul[0]/Sprite[0]/attackRightUp",
+        "Enemy_Ghoul[0]/Sprite[0]/attackSets.Array.data[0].attackRightDown",
+        "Enemy_Ghoul[0]/Sprite[0]/attackSets.Array.data[0].attackRightUp"
+      ],
+      "treatment": "import",
+      "sourceSize": 2984
+    },
+    {
+      "source": "F:\\DecomplieLatest\\HellMaiden\\ExportedProject\\Assets\\AnimationClip\\Enemy_Ghoul_Death_Left.anim",
+      "sourceGuid": "e778be041090faf4aabc34fe01eb9644",
+      "sourceSha256": "9aeb8444adca135efe0627c3610b3b207b08ca862c044a2713597b26e45220db",
+      "destination": "Assets/_Project/Content/NetworkCombat/Limbo/Art/Imported/AnimationClip/Enemy_Ghoul_Death_Left.anim",
+      "destinationGuid": "e778be041090faf4aabc34fe01eb9644",
+      "groups": [
+        "E9"
+      ],
+      "referencedBy": [
+        "Enemy_Ghoul[0]/Sprite[0]/deadLeftDown",
+        "Enemy_Ghoul[0]/Sprite[0]/deadLeftUp"
+      ],
+      "treatment": "import",
+      "sourceSize": 4618
+    },
+    {
+      "source": "F:\\DecomplieLatest\\HellMaiden\\ExportedProject\\Assets\\AnimationClip\\Enemy_Ghoul_Death_Right.anim",
+      "sourceGuid": "967614465b480c444aa69f7f448a03b6",
+      "sourceSha256": "b8a3a9c6cb705d38985af60cdb27aed64048155a8acd87845cf8c015a8ca4fcc",
+      "destination": "Assets/_Project/Content/NetworkCombat/Limbo/Art/Imported/AnimationClip/Enemy_Ghoul_Death_Right.anim",
+      "destinationGuid": "967614465b480c444aa69f7f448a03b6",
+      "groups": [
+        "E9"
+      ],
+      "referencedBy": [
+        "Enemy_Ghoul[0]/Sprite[0]/deadRightDown",
+        "Enemy_Ghoul[0]/Sprite[0]/deadRightUp"
+      ],
+      "treatment": "import",
+      "sourceSize": 4404
+    },
+    {
+      "source": "F:\\DecomplieLatest\\HellMaiden\\ExportedProject\\Assets\\AnimationClip\\Enemy_Ghoul_Hurt_Left.anim",
+      "sourceGuid": "678b59a306d0faf439fcd6644eb94565",
+      "sourceSha256": "39387799e9a45fa8003a4fec7d3c78361f795b288ac6d39e778ca86de8acf33f",
+      "destination": "Assets/_Project/Content/NetworkCombat/Limbo/Art/Imported/AnimationClip/Enemy_Ghoul_Hurt_Left.anim",
+      "destinationGuid": "678b59a306d0faf439fcd6644eb94565",
+      "groups": [
+        "E9"
+      ],
+      "referencedBy": [
+        "Enemy_Ghoul[0]/Sprite[0]/hurtLeftDown",
+        "Enemy_Ghoul[0]/Sprite[0]/hurtLeftUp"
+      ],
+      "treatment": "import",
+      "sourceSize": 2802
+    },
+    {
+      "source": "F:\\DecomplieLatest\\HellMaiden\\ExportedProject\\Assets\\AnimationClip\\Enemy_Ghoul_Hurt_Right.anim",
+      "sourceGuid": "7fa19d4636d27c244bee7ed56d36797f",
+      "sourceSha256": "c917924e154c6ac6450f82d0491fc512e77b37097de0cf210566bc39ef20666b",
+      "destination": "Assets/_Project/Content/NetworkCombat/Limbo/Art/Imported/AnimationClip/Enemy_Ghoul_Hurt_Right.anim",
+      "destinationGuid": "7fa19d4636d27c244bee7ed56d36797f",
+      "groups": [
+        "E9"
+      ],
+      "referencedBy": [
+        "Enemy_Ghoul[0]/Sprite[0]/hurtRightDown",
+        "Enemy_Ghoul[0]/Sprite[0]/hurtRightUp"
+      ],
+      "treatment": "import",
+      "sourceSize": 2803
+    },
+    {
+      "source": "F:\\DecomplieLatest\\HellMaiden\\ExportedProject\\Assets\\AnimationClip\\Enemy_Ghoul_Recovery_Left.anim",
+      "sourceGuid": "862cf2eb03cbbea418a925acbbf5a36e",
+      "sourceSha256": "2167dd91961718012260400a6b5ac8dce9c68b427fdc0eebb68ba418f59874e2",
+      "destination": "Assets/_Project/Content/NetworkCombat/Limbo/Art/Imported/AnimationClip/Enemy_Ghoul_Recovery_Left.anim",
+      "destinationGuid": "862cf2eb03cbbea418a925acbbf5a36e",
+      "groups": [
+        "E9"
+      ],
+      "referencedBy": [
+        "Enemy_Ghoul[0]/Sprite[0]/recoveryLeftDown",
+        "Enemy_Ghoul[0]/Sprite[0]/recoveryLeftUp"
+      ],
+      "treatment": "import",
+      "sourceSize": 2808
+    },
+    {
+      "source": "F:\\DecomplieLatest\\HellMaiden\\ExportedProject\\Assets\\AnimationClip\\Enemy_Ghoul_Recovery_Right.anim",
+      "sourceGuid": "87221ce53b6520744af0654b39db9be1",
+      "sourceSha256": "87f3f7ae23313d704dec0b6f39e90d578b596feb3743f5972b3fc14769b3fdb9",
+      "destination": "Assets/_Project/Content/NetworkCombat/Limbo/Art/Imported/AnimationClip/Enemy_Ghoul_Recovery_Right.anim",
+      "destinationGuid": "87221ce53b6520744af0654b39db9be1",
+      "groups": [
+        "E9"
+      ],
+      "referencedBy": [
+        "Enemy_Ghoul[0]/Sprite[0]/recoveryRightDown",
+        "Enemy_Ghoul[0]/Sprite[0]/recoveryRightUp"
+      ],
+      "treatment": "import",
+      "sourceSize": 2815
+    },
+    {
+      "source": "F:\\DecomplieLatest\\HellMaiden\\ExportedProject\\Assets\\AnimationClip\\Enemy_Ghoul_Walk_Left.anim",
+      "sourceGuid": "513deebc0e6fa6741b29b44b2b59dffb",
+      "sourceSha256": "2b7a3295e504e1489d6c55c750eb957f8ccb908b06f84522c10ec3aeb3715513",
+      "destination": "Assets/_Project/Content/NetworkCombat/Limbo/Art/Imported/AnimationClip/Enemy_Ghoul_Walk_Left.anim",
+      "destinationGuid": "513deebc0e6fa6741b29b44b2b59dffb",
+      "groups": [
+        "E9"
+      ],
+      "referencedBy": [
+        "Enemy_Ghoul[0]/Sprite[0]/moveLeftDown",
+        "Enemy_Ghoul[0]/Sprite[0]/moveLeftUp"
+      ],
+      "treatment": "import",
+      "sourceSize": 3336
+    },
+    {
+      "source": "F:\\DecomplieLatest\\HellMaiden\\ExportedProject\\Assets\\AnimationClip\\Enemy_Ghoul_Walk_Right.anim",
+      "sourceGuid": "9b038eb4d467d6e439e03b058d392a32",
+      "sourceSha256": "b89e88f312e8a6e9acceeee24b135cf0f03d1fa7e2ec248e48d145e40a8da9ef",
+      "destination": "Assets/_Project/Content/NetworkCombat/Limbo/Art/Imported/AnimationClip/Enemy_Ghoul_Walk_Right.anim",
+      "destinationGuid": "9b038eb4d467d6e439e03b058d392a32",
+      "groups": [
+        "E9"
+      ],
+      "referencedBy": [
+        "Enemy_Ghoul[0]/Sprite[0]/moveRightDown",
+        "Enemy_Ghoul[0]/Sprite[0]/moveRightUp"
+      ],
+      "treatment": "import",
+      "sourceSize": 3337
+    },
+    {
+      "source": "F:\\DecomplieLatest\\HellMaiden\\ExportedProject\\Assets\\AnimationClip\\Enemy_Ghoul_Warning_Left 1.anim",
+      "sourceGuid": "6b319def6a9723749ba5efa33c1de246",
+      "sourceSha256": "b1fe520781d8ba8407167593b35b8be0a76feff6bfd7e6926ccd80a4f298fcd1",
+      "destination": "Assets/_Project/Content/NetworkCombat/Limbo/Art/Imported/AnimationClip/Enemy_Ghoul_Warning_Left 1.anim",
+      "destinationGuid": "6b319def6a9723749ba5efa33c1de246",
+      "groups": [
+        "E9"
+      ],
+      "referencedBy": [
+        "Enemy_Ghoul[0]/Sprite[0]/attackSets.Array.data[1].attackWarningLeftDown",
+        "Enemy_Ghoul[0]/Sprite[0]/attackSets.Array.data[1].attackWarningLeftUp"
+      ],
+      "treatment": "import",
+      "sourceSize": 3163
+    },
+    {
+      "source": "F:\\DecomplieLatest\\HellMaiden\\ExportedProject\\Assets\\AnimationClip\\Enemy_Ghoul_Warning_Left.anim",
+      "sourceGuid": "0fd6261dc98aa22438a132d25299c1df",
+      "sourceSha256": "548ef7465ad692d15afae6f2863b90c2fdf003ed9c51c87897464176422672ab",
+      "destination": "Assets/_Project/Content/NetworkCombat/Limbo/Art/Imported/AnimationClip/Enemy_Ghoul_Warning_Left.anim",
+      "destinationGuid": "0fd6261dc98aa22438a132d25299c1df",
+      "groups": [
+        "E9"
+      ],
+      "referencedBy": [
+        "Enemy_Ghoul[0]/Sprite[0]/attackWarningLeftDown",
+        "Enemy_Ghoul[0]/Sprite[0]/attackWarningLeftUp",
+        "Enemy_Ghoul[0]/Sprite[0]/attackSets.Array.data[0].attackWarningLeftDown",
+        "Enemy_Ghoul[0]/Sprite[0]/attackSets.Array.data[0].attackWarningLeftUp"
+      ],
+      "treatment": "import",
+      "sourceSize": 2811
+    },
+    {
+      "source": "F:\\DecomplieLatest\\HellMaiden\\ExportedProject\\Assets\\AnimationClip\\Enemy_Ghoul_Warning_Right 1.anim",
+      "sourceGuid": "b7808b05c15144942836c0de58dccd6e",
+      "sourceSha256": "f3ad3f53a1dddd5a7e7139b231775606efbfa4cfcdcca176b450d0ffeda95a4d",
+      "destination": "Assets/_Project/Content/NetworkCombat/Limbo/Art/Imported/AnimationClip/Enemy_Ghoul_Warning_Right 1.anim",
+      "destinationGuid": "b7808b05c15144942836c0de58dccd6e",
+      "groups": [
+        "E9"
+      ],
+      "referencedBy": [
+        "Enemy_Ghoul[0]/Sprite[0]/attackSets.Array.data[1].attackWarningRightDown",
+        "Enemy_Ghoul[0]/Sprite[0]/attackSets.Array.data[1].attackWarningRightUp"
+      ],
+      "treatment": "import",
+      "sourceSize": 3164
+    },
+    {
+      "source": "F:\\DecomplieLatest\\HellMaiden\\ExportedProject\\Assets\\AnimationClip\\Enemy_Ghoul_Warning_Right 2.anim",
+      "sourceGuid": "b884bb3548f7e8543a589cfe7d649301",
+      "sourceSha256": "06096aee16ecdd6a5dea60d4b73b17eec8646ebf32e9cd8a6645fab7498f1725",
+      "destination": "Assets/_Project/Content/NetworkCombat/Limbo/Art/Imported/AnimationClip/Enemy_Ghoul_Warning_Right 2.anim",
+      "destinationGuid": "b884bb3548f7e8543a589cfe7d649301",
+      "groups": [
+        "E9"
+      ],
+      "referencedBy": [
+        "Enemy_Ghoul[0]/Sprite[0]/attackSets.Array.data[2].attackWarningRightDown",
+        "Enemy_Ghoul[0]/Sprite[0]/attackSets.Array.data[2].attackWarningRightUp"
+      ],
+      "treatment": "import",
+      "sourceSize": 2809
+    },
+    {
+      "source": "F:\\DecomplieLatest\\HellMaiden\\ExportedProject\\Assets\\AnimationClip\\Enemy_Ghoul_Warning_Right.anim",
+      "sourceGuid": "6b525f93da74c3b41acaf0274624799b",
+      "sourceSha256": "4f63e1bd5dce31af76aa6471874fcfefac9628048ac0614f6ae46ebfae63fa22",
+      "destination": "Assets/_Project/Content/NetworkCombat/Limbo/Art/Imported/AnimationClip/Enemy_Ghoul_Warning_Right.anim",
+      "destinationGuid": "6b525f93da74c3b41acaf0274624799b",
+      "groups": [
+        "E9"
+      ],
+      "referencedBy": [
+        "Enemy_Ghoul[0]/Sprite[0]/attackWarningRightDown",
+        "Enemy_Ghoul[0]/Sprite[0]/attackWarningRightUp",
+        "Enemy_Ghoul[0]/Sprite[0]/attackSets.Array.data[0].attackWarningRightDown",
+        "Enemy_Ghoul[0]/Sprite[0]/attackSets.Array.data[0].attackWarningRightUp"
+      ],
+      "treatment": "import",
+      "sourceSize": 2812
     },
     {
       "source": "F:\\DecomplieLatest\\HellMaiden\\ExportedProject\\Assets\\AnimationClip\\Enemy_Imp_AttackMoment_LeftDown.anim",
@@ -3512,7 +4347,8 @@
         "E5",
         "E6",
         "E7",
-        "E8"
+        "E8",
+        "E9"
       ],
       "referencedBy": [
         "Enemy_Brotchi[0]/Sprite[0]/shadowFadeout",
@@ -3522,7 +4358,8 @@
         "Elite_Skeleton[0]/Sprite[0]/shadowFadeout",
         "Enemy_Slime[0]/Sprite[0]/shadowFadeout",
         "Enemy_Slime Rusher[0]/Sprite[0]/shadowFadeout",
-        "Enemy_LostSoul[0]/Sprite[0]/shadowFadeout"
+        "Enemy_LostSoul[0]/Sprite[0]/shadowFadeout",
+        "Enemy_Ghoul[0]/Sprite[0]/shadowFadeout"
       ],
       "treatment": "import",
       "sourceSize": 4840
@@ -3541,7 +4378,8 @@
         "E5",
         "E6",
         "E7",
-        "E8"
+        "E8",
+        "E9"
       ],
       "referencedBy": [
         "Enemy_Brotchi[0]/Sprite[0]/shadowIdle",
@@ -3551,7 +4389,8 @@
         "Elite_Skeleton[0]/Sprite[0]/shadowIdle",
         "Enemy_Slime[0]/Sprite[0]/shadowIdle",
         "Enemy_Slime Rusher[0]/Sprite[0]/shadowIdle",
-        "Enemy_LostSoul[0]/Sprite[0]/shadowIdle"
+        "Enemy_LostSoul[0]/Sprite[0]/shadowIdle",
+        "Enemy_Ghoul[0]/Sprite[0]/shadowIdle"
       ],
       "treatment": "import",
       "sourceSize": 1977
@@ -4045,6 +4884,19 @@
       "sourceSize": 43439
     },
     {
+      "source": "F:\\DecomplieLatest\\HellMaiden\\ExportedProject\\Assets\\GameObject\\Enemy_Ghoul.prefab",
+      "sourceGuid": "5f941271937eb4e4c82e568c0de6a183",
+      "sourceSha256": "707ab2bf79339193ae04ced1fea388df0374d3d32d0a45e2e7a9be858dc0caef",
+      "destination": "Assets/_Project/Content/NetworkCombat/Limbo/Art/Imported/GameObject/Enemy_Ghoul.prefab",
+      "destinationGuid": "9ff31d902dc1124faaee01cce566d004",
+      "groups": [
+        "E9"
+      ],
+      "referencedBy": [],
+      "treatment": "independent-adaptation",
+      "sourceSize": 38169
+    },
+    {
       "source": "F:\\DecomplieLatest\\HellMaiden\\ExportedProject\\Assets\\GameObject\\Enemy_Imp.prefab",
       "sourceGuid": "dcc0dbaa0d012604eb46216a6e3c48db",
       "sourceSha256": "22b2d1495a721fc1465344b750554e7fa55a566d47982841a5a62cf68307d494",
@@ -4323,7 +5175,8 @@
         "E5",
         "E6",
         "E7",
-        "E8"
+        "E8",
+        "E9"
       ],
       "referencedBy": [
         "GameObject/Enemy_Brotchi.prefab",
@@ -4333,10 +5186,26 @@
         "GameObject/Elite_Skeleton.prefab",
         "GameObject/Enemy_Slime.prefab",
         "GameObject/Enemy_Slime Rusher.prefab",
-        "GameObject/Enemy_LostSoul.prefab"
+        "GameObject/Enemy_LostSoul.prefab",
+        "GameObject/Enemy_Ghoul.prefab"
       ],
       "treatment": "independent-adaptation",
       "sourceSize": 8379
+    },
+    {
+      "source": "F:\\DecomplieLatest\\HellMaiden\\ExportedProject\\Assets\\Material\\EnemyGhoul.mat",
+      "sourceGuid": "a832d11f127e5c145a291b8d9fcd45fe",
+      "sourceSha256": "a99177f4c751c681ea0099b4bc9155c7d4ad136c40cdae84c5f1c0a79b0f5344",
+      "destination": "Assets/_Project/Content/NetworkCombat/Limbo/Art/Imported/Material/EnemyGhoul.mat",
+      "destinationGuid": "5bea4ebaee59e1ea3ae832369ad4c990",
+      "groups": [
+        "E9"
+      ],
+      "referencedBy": [
+        "GameObject/Enemy_Ghoul.prefab"
+      ],
+      "treatment": "independent-adaptation",
+      "sourceSize": 8455
     },
     {
       "source": "F:\\DecomplieLatest\\HellMaiden\\ExportedProject\\Assets\\Material\\Enemy_Bomb_Attack_Particle_Sparks.mat",
@@ -4581,6 +5450,7 @@
       "destinationGuid": "a36b7719ff0465b42ab1407d67672c5f",
       "groups": [
         "E1",
+        "E9",
         "V1",
         "V2",
         "V4",
@@ -4589,6 +5459,7 @@
       ],
       "referencedBy": [
         "Material/Enemy.mat",
+        "Material/EnemyGhoul.mat",
         "Material/AOE_Enemy.mat",
         "Material/AOE_Enemy_Fill.mat",
         "Material/AOE_Enemy_Fill2.mat",
@@ -5019,10 +5890,12 @@
       "destination": "Assets/_Project/Content/NetworkCombat/Validation/HellMaiden/Sprite/Enemy_Skeleton_Shadow.asset",
       "destinationGuid": "74f8b6844092a0c45b05f3c6962d76e1",
       "groups": [
-        "E4"
+        "E4",
+        "E9"
       ],
       "referencedBy": [
-        "GameObject/Enemy_Skeleton.prefab"
+        "GameObject/Enemy_Skeleton.prefab",
+        "GameObject/Enemy_Ghoul.prefab"
       ],
       "treatment": "reuse",
       "sourceSize": 3864
@@ -5137,6 +6010,475 @@
       ],
       "treatment": "import",
       "sourceSize": 3861
+    },
+    {
+      "source": "F:\\DecomplieLatest\\HellMaiden\\ExportedProject\\Assets\\Sprite\\Ghoul_attack_0.asset",
+      "sourceGuid": "cec5fcb874c4ad243972178d3928ab39",
+      "sourceSha256": "ab29be7c77899ee7e884f20233095996d6e6fc6a874d6c26a96506c49a34fb82",
+      "destination": "Assets/_Project/Content/NetworkCombat/Limbo/Art/Imported/Sprite/Ghoul_attack_0.asset",
+      "destinationGuid": "cec5fcb874c4ad243972178d3928ab39",
+      "groups": [
+        "E9"
+      ],
+      "referencedBy": [
+        "AnimationClip/Enemy_Ghoul_Warning_Left.anim",
+        "AnimationClip/Enemy_Ghoul_Warning_Right.anim"
+      ],
+      "treatment": "import",
+      "sourceSize": 5957
+    },
+    {
+      "source": "F:\\DecomplieLatest\\HellMaiden\\ExportedProject\\Assets\\Sprite\\Ghoul_attack_1.asset",
+      "sourceGuid": "99a37ca7f56bed7418f6a71d491b2155",
+      "sourceSha256": "b1e2e946cee90d92d498b5ba262ebdc4270f47dfda92233fa994a4faaedaade5",
+      "destination": "Assets/_Project/Content/NetworkCombat/Limbo/Art/Imported/Sprite/Ghoul_attack_1.asset",
+      "destinationGuid": "99a37ca7f56bed7418f6a71d491b2155",
+      "groups": [
+        "E9"
+      ],
+      "referencedBy": [
+        "AnimationClip/Enemy_Ghoul_Warning_Left.anim",
+        "AnimationClip/Enemy_Ghoul_Warning_Right.anim"
+      ],
+      "treatment": "import",
+      "sourceSize": 6422
+    },
+    {
+      "source": "F:\\DecomplieLatest\\HellMaiden\\ExportedProject\\Assets\\Sprite\\Ghoul_attack_10.asset",
+      "sourceGuid": "638cc0b2cdad28747aea38a328b29320",
+      "sourceSha256": "8716b5b03d05c9e52fd5c61766730ee6639f3f2f52bd187a9fb9485e38b2cacf",
+      "destination": "Assets/_Project/Content/NetworkCombat/Limbo/Art/Imported/Sprite/Ghoul_attack_10.asset",
+      "destinationGuid": "638cc0b2cdad28747aea38a328b29320",
+      "groups": [
+        "E9"
+      ],
+      "referencedBy": [
+        "AnimationClip/Enemy_Ghoul_Warning_Right 2.anim"
+      ],
+      "treatment": "import",
+      "sourceSize": 7307
+    },
+    {
+      "source": "F:\\DecomplieLatest\\HellMaiden\\ExportedProject\\Assets\\Sprite\\Ghoul_attack_11.asset",
+      "sourceGuid": "617da220ade2ce441a48e92553c19f1a",
+      "sourceSha256": "e58f47c1a2c4a60af7153edc275f5880afdcd200f39aede60ebd3ddac89c19eb",
+      "destination": "Assets/_Project/Content/NetworkCombat/Limbo/Art/Imported/Sprite/Ghoul_attack_11.asset",
+      "destinationGuid": "617da220ade2ce441a48e92553c19f1a",
+      "groups": [
+        "E9"
+      ],
+      "referencedBy": [
+        "AnimationClip/Enemy_Ghoul_Warning_Right 2.anim"
+      ],
+      "treatment": "import",
+      "sourceSize": 6114
+    },
+    {
+      "source": "F:\\DecomplieLatest\\HellMaiden\\ExportedProject\\Assets\\Sprite\\Ghoul_attack_12.asset",
+      "sourceGuid": "19190710cdc912a458b339b3b1c7a782",
+      "sourceSha256": "8e7d96c1caaf5393279b892d7edcd7f958e8c82d5f250c2029e351026a2af437",
+      "destination": "Assets/_Project/Content/NetworkCombat/Limbo/Art/Imported/Sprite/Ghoul_attack_12.asset",
+      "destinationGuid": "19190710cdc912a458b339b3b1c7a782",
+      "groups": [
+        "E9"
+      ],
+      "referencedBy": [
+        "AnimationClip/Enemy_Ghoul_Attack_Left 2.anim",
+        "AnimationClip/Enemy_Ghoul_Attack_Right 2.anim"
+      ],
+      "treatment": "import",
+      "sourceSize": 8982
+    },
+    {
+      "source": "F:\\DecomplieLatest\\HellMaiden\\ExportedProject\\Assets\\Sprite\\Ghoul_attack_13.asset",
+      "sourceGuid": "e5726a4975716aa4ebc52b5a5eb21975",
+      "sourceSha256": "5f69db14787b19581dc733dc8ca7293f5a8ef29252ef34f8d4d3c3e1617a3f7b",
+      "destination": "Assets/_Project/Content/NetworkCombat/Limbo/Art/Imported/Sprite/Ghoul_attack_13.asset",
+      "destinationGuid": "e5726a4975716aa4ebc52b5a5eb21975",
+      "groups": [
+        "E9"
+      ],
+      "referencedBy": [
+        "AnimationClip/Enemy_Ghoul_Attack_Left 2.anim",
+        "AnimationClip/Enemy_Ghoul_Attack_Right 2.anim"
+      ],
+      "treatment": "import",
+      "sourceSize": 6176
+    },
+    {
+      "source": "F:\\DecomplieLatest\\HellMaiden\\ExportedProject\\Assets\\Sprite\\Ghoul_attack_14.asset",
+      "sourceGuid": "9aae575933f8b0e4fbc9ca99d5d6809c",
+      "sourceSha256": "af50013f2ba24562b851d58362106eb49ccbf0f69a236d9a18e607d95b7b796b",
+      "destination": "Assets/_Project/Content/NetworkCombat/Limbo/Art/Imported/Sprite/Ghoul_attack_14.asset",
+      "destinationGuid": "9aae575933f8b0e4fbc9ca99d5d6809c",
+      "groups": [
+        "E9"
+      ],
+      "referencedBy": [
+        "AnimationClip/Enemy_Ghoul_Recovery_Left.anim",
+        "AnimationClip/Enemy_Ghoul_Recovery_Right.anim"
+      ],
+      "treatment": "import",
+      "sourceSize": 5334
+    },
+    {
+      "source": "F:\\DecomplieLatest\\HellMaiden\\ExportedProject\\Assets\\Sprite\\Ghoul_attack_15.asset",
+      "sourceGuid": "ebdfe26e4ec5a4447821027697baa682",
+      "sourceSha256": "622e67589943623f42bfa5704ac90201ea82d231edc068a710d852be7947a95c",
+      "destination": "Assets/_Project/Content/NetworkCombat/Limbo/Art/Imported/Sprite/Ghoul_attack_15.asset",
+      "destinationGuid": "ebdfe26e4ec5a4447821027697baa682",
+      "groups": [
+        "E9"
+      ],
+      "referencedBy": [
+        "AnimationClip/Enemy_Ghoul_Recovery_Left.anim",
+        "AnimationClip/Enemy_Ghoul_Recovery_Right.anim"
+      ],
+      "treatment": "import",
+      "sourceSize": 7026
+    },
+    {
+      "source": "F:\\DecomplieLatest\\HellMaiden\\ExportedProject\\Assets\\Sprite\\Ghoul_attack_16.asset",
+      "sourceGuid": "35cdd2dac88d8854a9b62e750e5f9335",
+      "sourceSha256": "1f0bdfd80debd99191c0992ae618e4547e9b1e061e612379192bf3b9fb9f5898",
+      "destination": "Assets/_Project/Content/NetworkCombat/Limbo/Art/Imported/Sprite/Ghoul_attack_16.asset",
+      "destinationGuid": "35cdd2dac88d8854a9b62e750e5f9335",
+      "groups": [
+        "E9"
+      ],
+      "referencedBy": [
+        "AnimationClip/Enemy_Ghoul_Recovery_Left.anim",
+        "AnimationClip/Enemy_Ghoul_Recovery_Right.anim"
+      ],
+      "treatment": "import",
+      "sourceSize": 5688
+    },
+    {
+      "source": "F:\\DecomplieLatest\\HellMaiden\\ExportedProject\\Assets\\Sprite\\Ghoul_attack_2.asset",
+      "sourceGuid": "992f140d9b4eebc49abcd16df414640d",
+      "sourceSha256": "355d4cf520530b6efeb0cfe136aba59b5e2e478dcd51667bcd3f32b84aef71f8",
+      "destination": "Assets/_Project/Content/NetworkCombat/Limbo/Art/Imported/Sprite/Ghoul_attack_2.asset",
+      "destinationGuid": "992f140d9b4eebc49abcd16df414640d",
+      "groups": [
+        "E9"
+      ],
+      "referencedBy": [
+        "AnimationClip/Enemy_Ghoul_Attack_Left.anim",
+        "AnimationClip/Enemy_Ghoul_Attack_Right.anim"
+      ],
+      "treatment": "import",
+      "sourceSize": 9529
+    },
+    {
+      "source": "F:\\DecomplieLatest\\HellMaiden\\ExportedProject\\Assets\\Sprite\\Ghoul_attack_3.asset",
+      "sourceGuid": "7dcef56eefc60584082b5a367860150f",
+      "sourceSha256": "9ea7f0122133ac276e01b3b366f0d275fb1fdf0693bbf57da19d2a533d9b1dce",
+      "destination": "Assets/_Project/Content/NetworkCombat/Limbo/Art/Imported/Sprite/Ghoul_attack_3.asset",
+      "destinationGuid": "7dcef56eefc60584082b5a367860150f",
+      "groups": [
+        "E9"
+      ],
+      "referencedBy": [
+        "AnimationClip/Enemy_Ghoul_Attack_Left.anim",
+        "AnimationClip/Enemy_Ghoul_Attack_Right.anim"
+      ],
+      "treatment": "import",
+      "sourceSize": 6585
+    },
+    {
+      "source": "F:\\DecomplieLatest\\HellMaiden\\ExportedProject\\Assets\\Sprite\\Ghoul_attack_4.asset",
+      "sourceGuid": "9e0fa7ed06926e44aa9fe083a3c467bc",
+      "sourceSha256": "ec3c00db9374ea610c1acd911fb7bffffbfd86b2e73523cececbbc79fd3ec9a9",
+      "destination": "Assets/_Project/Content/NetworkCombat/Limbo/Art/Imported/Sprite/Ghoul_attack_4.asset",
+      "destinationGuid": "9e0fa7ed06926e44aa9fe083a3c467bc",
+      "groups": [
+        "E9"
+      ],
+      "referencedBy": [
+        "AnimationClip/Enemy_Ghoul_Attack_Left.anim",
+        "AnimationClip/Enemy_Ghoul_Attack_Right.anim",
+        "AnimationClip/Enemy_Ghoul_Warning_Left 1.anim",
+        "AnimationClip/Enemy_Ghoul_Warning_Right 1.anim"
+      ],
+      "treatment": "import",
+      "sourceSize": 6201
+    },
+    {
+      "source": "F:\\DecomplieLatest\\HellMaiden\\ExportedProject\\Assets\\Sprite\\Ghoul_attack_5.asset",
+      "sourceGuid": "728906cba57afc546b299a224f50b21e",
+      "sourceSha256": "78eb1d5e8689de784fa08b5dcd23cdc578c92ef5717968b78b855c09cf788192",
+      "destination": "Assets/_Project/Content/NetworkCombat/Limbo/Art/Imported/Sprite/Ghoul_attack_5.asset",
+      "destinationGuid": "728906cba57afc546b299a224f50b21e",
+      "groups": [
+        "E9"
+      ],
+      "referencedBy": [
+        "AnimationClip/Enemy_Ghoul_Warning_Left 1.anim",
+        "AnimationClip/Enemy_Ghoul_Warning_Right 1.anim"
+      ],
+      "treatment": "import",
+      "sourceSize": 5871
+    },
+    {
+      "source": "F:\\DecomplieLatest\\HellMaiden\\ExportedProject\\Assets\\Sprite\\Ghoul_attack_6.asset",
+      "sourceGuid": "ce588355c82531e4fb50dedd60ef655b",
+      "sourceSha256": "f7a8948c425b19e5a68841c7e615edebefb31d6314cceb9eb561987e79b3c465",
+      "destination": "Assets/_Project/Content/NetworkCombat/Limbo/Art/Imported/Sprite/Ghoul_attack_6.asset",
+      "destinationGuid": "ce588355c82531e4fb50dedd60ef655b",
+      "groups": [
+        "E9"
+      ],
+      "referencedBy": [
+        "AnimationClip/Enemy_Ghoul_Warning_Left 1.anim",
+        "AnimationClip/Enemy_Ghoul_Warning_Right 1.anim"
+      ],
+      "treatment": "import",
+      "sourceSize": 5893
+    },
+    {
+      "source": "F:\\DecomplieLatest\\HellMaiden\\ExportedProject\\Assets\\Sprite\\Ghoul_attack_7.asset",
+      "sourceGuid": "030175309d40bff40b4bd6f4c9c03ef1",
+      "sourceSha256": "f792d8ef0abb02b2b65949ebfb12acace9d79ae159666a76e17c267eb0b214f6",
+      "destination": "Assets/_Project/Content/NetworkCombat/Limbo/Art/Imported/Sprite/Ghoul_attack_7.asset",
+      "destinationGuid": "030175309d40bff40b4bd6f4c9c03ef1",
+      "groups": [
+        "E9"
+      ],
+      "referencedBy": [
+        "AnimationClip/Enemy_Ghoul_Warning_Left 1.anim",
+        "AnimationClip/Enemy_Ghoul_Warning_Right 1.anim"
+      ],
+      "treatment": "import",
+      "sourceSize": 5926
+    },
+    {
+      "source": "F:\\DecomplieLatest\\HellMaiden\\ExportedProject\\Assets\\Sprite\\Ghoul_attack_8.asset",
+      "sourceGuid": "a628ec23974779f449874f3e8d746ea8",
+      "sourceSha256": "762184e0a5c722fa83bce82e3877a3b9393b7318d39d566a15b6c30532f4d8f4",
+      "destination": "Assets/_Project/Content/NetworkCombat/Limbo/Art/Imported/Sprite/Ghoul_attack_8.asset",
+      "destinationGuid": "a628ec23974779f449874f3e8d746ea8",
+      "groups": [
+        "E9"
+      ],
+      "referencedBy": [
+        "AnimationClip/Enemy_Ghoul_Attack_Left 1.anim",
+        "AnimationClip/Enemy_Ghoul_Attack_Right 1.anim"
+      ],
+      "treatment": "import",
+      "sourceSize": 11858
+    },
+    {
+      "source": "F:\\DecomplieLatest\\HellMaiden\\ExportedProject\\Assets\\Sprite\\Ghoul_attack_9.asset",
+      "sourceGuid": "da66c81f38d76994c825291e1cf5127c",
+      "sourceSha256": "6c235b71c28bc4282d22e106fc19d80026b83738e4e162a2448972c269acc263",
+      "destination": "Assets/_Project/Content/NetworkCombat/Limbo/Art/Imported/Sprite/Ghoul_attack_9.asset",
+      "destinationGuid": "da66c81f38d76994c825291e1cf5127c",
+      "groups": [
+        "E9"
+      ],
+      "referencedBy": [
+        "AnimationClip/Enemy_Ghoul_Attack_Left 1.anim",
+        "AnimationClip/Enemy_Ghoul_Attack_Right 1.anim"
+      ],
+      "treatment": "import",
+      "sourceSize": 7662
+    },
+    {
+      "source": "F:\\DecomplieLatest\\HellMaiden\\ExportedProject\\Assets\\Sprite\\Ghoul_death_0.asset",
+      "sourceGuid": "3916501bed585894d9e73582400336b8",
+      "sourceSha256": "10453a4614a582e17f685041395a19d1a2bbae2c0bc117a3c5108e85d76cac9b",
+      "destination": "Assets/_Project/Content/NetworkCombat/Limbo/Art/Imported/Sprite/Ghoul_death_0.asset",
+      "destinationGuid": "3916501bed585894d9e73582400336b8",
+      "groups": [
+        "E9"
+      ],
+      "referencedBy": [
+        "AnimationClip/Enemy_Ghoul_Death_Left.anim",
+        "AnimationClip/Enemy_Ghoul_Death_Right.anim",
+        "AnimationClip/Enemy_Ghoul_Hurt_Left.anim",
+        "AnimationClip/Enemy_Ghoul_Hurt_Right.anim"
+      ],
+      "treatment": "import",
+      "sourceSize": 8510
+    },
+    {
+      "source": "F:\\DecomplieLatest\\HellMaiden\\ExportedProject\\Assets\\Sprite\\Ghoul_death_1.asset",
+      "sourceGuid": "d56d75707f0a9154ea0e6eb8b45daaa2",
+      "sourceSha256": "ad3c392c549e00998eadb3aa03ce7282d3323b2b5a314795b9f8f1a1a2c802c4",
+      "destination": "Assets/_Project/Content/NetworkCombat/Limbo/Art/Imported/Sprite/Ghoul_death_1.asset",
+      "destinationGuid": "d56d75707f0a9154ea0e6eb8b45daaa2",
+      "groups": [
+        "E9"
+      ],
+      "referencedBy": [
+        "AnimationClip/Enemy_Ghoul_Death_Left.anim",
+        "AnimationClip/Enemy_Ghoul_Death_Right.anim",
+        "AnimationClip/Enemy_Ghoul_Hurt_Left.anim",
+        "AnimationClip/Enemy_Ghoul_Hurt_Right.anim"
+      ],
+      "treatment": "import",
+      "sourceSize": 8278
+    },
+    {
+      "source": "F:\\DecomplieLatest\\HellMaiden\\ExportedProject\\Assets\\Sprite\\Ghoul_death_2.asset",
+      "sourceGuid": "f9c737635efb6744994a639fffac3109",
+      "sourceSha256": "6487a343b7e1d9643a1a6446945cabd920f90a133828790e92b301b4da45f0d1",
+      "destination": "Assets/_Project/Content/NetworkCombat/Limbo/Art/Imported/Sprite/Ghoul_death_2.asset",
+      "destinationGuid": "f9c737635efb6744994a639fffac3109",
+      "groups": [
+        "E9"
+      ],
+      "referencedBy": [
+        "AnimationClip/Enemy_Ghoul_Death_Left.anim",
+        "AnimationClip/Enemy_Ghoul_Death_Right.anim"
+      ],
+      "treatment": "import",
+      "sourceSize": 9844
+    },
+    {
+      "source": "F:\\DecomplieLatest\\HellMaiden\\ExportedProject\\Assets\\Sprite\\Ghoul_death_3.asset",
+      "sourceGuid": "662d983ef18795a43b83acdcace2df36",
+      "sourceSha256": "a9d82318b3c2636d044b43bec925c68b5596c7033d3e64c2d60e5f8ff72e480d",
+      "destination": "Assets/_Project/Content/NetworkCombat/Limbo/Art/Imported/Sprite/Ghoul_death_3.asset",
+      "destinationGuid": "662d983ef18795a43b83acdcace2df36",
+      "groups": [
+        "E9"
+      ],
+      "referencedBy": [
+        "AnimationClip/Enemy_Ghoul_Death_Left.anim",
+        "AnimationClip/Enemy_Ghoul_Death_Right.anim"
+      ],
+      "treatment": "import",
+      "sourceSize": 7644
+    },
+    {
+      "source": "F:\\DecomplieLatest\\HellMaiden\\ExportedProject\\Assets\\Sprite\\Ghoul_death_4.asset",
+      "sourceGuid": "2ae022310471cd84db8f40c00907d289",
+      "sourceSha256": "1312802233f82b03a311530275b4ef19eb0542045518b5cbe574bc6e945e7fcb",
+      "destination": "Assets/_Project/Content/NetworkCombat/Limbo/Art/Imported/Sprite/Ghoul_death_4.asset",
+      "destinationGuid": "2ae022310471cd84db8f40c00907d289",
+      "groups": [
+        "E9"
+      ],
+      "referencedBy": [
+        "AnimationClip/Enemy_Ghoul_Death_Left.anim",
+        "AnimationClip/Enemy_Ghoul_Death_Right.anim"
+      ],
+      "treatment": "import",
+      "sourceSize": 6408
+    },
+    {
+      "source": "F:\\DecomplieLatest\\HellMaiden\\ExportedProject\\Assets\\Sprite\\Ghoul_death_5.asset",
+      "sourceGuid": "6a3d030fa98d4994db53f34a43e55b40",
+      "sourceSha256": "92b3b6e21ad1d4042c21315141b8d9d4558437e6f12e394707213fe6addd445e",
+      "destination": "Assets/_Project/Content/NetworkCombat/Limbo/Art/Imported/Sprite/Ghoul_death_5.asset",
+      "destinationGuid": "6a3d030fa98d4994db53f34a43e55b40",
+      "groups": [
+        "E9"
+      ],
+      "referencedBy": [
+        "AnimationClip/Enemy_Ghoul_Death_Left.anim",
+        "AnimationClip/Enemy_Ghoul_Death_Right.anim"
+      ],
+      "treatment": "import",
+      "sourceSize": 5879
+    },
+    {
+      "source": "F:\\DecomplieLatest\\HellMaiden\\ExportedProject\\Assets\\Sprite\\Ghoul_walk_0.asset",
+      "sourceGuid": "d7ebd1b14856d7646a594d062e2c7c73",
+      "sourceSha256": "38c9858e854ffa2c8d9414691d018e2970fb3a76978765023e2c68674cc25694",
+      "destination": "Assets/_Project/Content/NetworkCombat/Limbo/Art/Imported/Sprite/Ghoul_walk_0.asset",
+      "destinationGuid": "d7ebd1b14856d7646a594d062e2c7c73",
+      "groups": [
+        "E9"
+      ],
+      "referencedBy": [
+        "AnimationClip/Enemy_Ghoul_Walk_Left.anim",
+        "AnimationClip/Enemy_Ghoul_Walk_Right.anim",
+        "GameObject/Enemy_Ghoul.prefab"
+      ],
+      "treatment": "import",
+      "sourceSize": 7793
+    },
+    {
+      "source": "F:\\DecomplieLatest\\HellMaiden\\ExportedProject\\Assets\\Sprite\\Ghoul_walk_1.asset",
+      "sourceGuid": "ab52eff40a3aafd45870d121eb792be7",
+      "sourceSha256": "bdcf252e88964634e586639416bb44e06b70b81a0be07aff98145ff6ec49d2bf",
+      "destination": "Assets/_Project/Content/NetworkCombat/Limbo/Art/Imported/Sprite/Ghoul_walk_1.asset",
+      "destinationGuid": "ab52eff40a3aafd45870d121eb792be7",
+      "groups": [
+        "E9"
+      ],
+      "referencedBy": [
+        "AnimationClip/Enemy_Ghoul_Walk_Left.anim",
+        "AnimationClip/Enemy_Ghoul_Walk_Right.anim"
+      ],
+      "treatment": "import",
+      "sourceSize": 7735
+    },
+    {
+      "source": "F:\\DecomplieLatest\\HellMaiden\\ExportedProject\\Assets\\Sprite\\Ghoul_walk_2.asset",
+      "sourceGuid": "2a8dc34f90369b841b1691b2fb7fe752",
+      "sourceSha256": "48bc601cfe04bc6fc52f8bfe8fe7f7181a92cf53caa98d04795a457e80220291",
+      "destination": "Assets/_Project/Content/NetworkCombat/Limbo/Art/Imported/Sprite/Ghoul_walk_2.asset",
+      "destinationGuid": "2a8dc34f90369b841b1691b2fb7fe752",
+      "groups": [
+        "E9"
+      ],
+      "referencedBy": [
+        "AnimationClip/Enemy_Ghoul_Walk_Left.anim",
+        "AnimationClip/Enemy_Ghoul_Walk_Right.anim"
+      ],
+      "treatment": "import",
+      "sourceSize": 8687
+    },
+    {
+      "source": "F:\\DecomplieLatest\\HellMaiden\\ExportedProject\\Assets\\Sprite\\Ghoul_walk_3.asset",
+      "sourceGuid": "34797df7dec7dd84d967366cb5c8f4ba",
+      "sourceSha256": "03fcd941059c34aa6d4bc7021ba4fd2f58b56fdc70a689866f69d0d2c12d08b9",
+      "destination": "Assets/_Project/Content/NetworkCombat/Limbo/Art/Imported/Sprite/Ghoul_walk_3.asset",
+      "destinationGuid": "34797df7dec7dd84d967366cb5c8f4ba",
+      "groups": [
+        "E9"
+      ],
+      "referencedBy": [
+        "AnimationClip/Enemy_Ghoul_Walk_Left.anim",
+        "AnimationClip/Enemy_Ghoul_Walk_Right.anim"
+      ],
+      "treatment": "import",
+      "sourceSize": 8417
+    },
+    {
+      "source": "F:\\DecomplieLatest\\HellMaiden\\ExportedProject\\Assets\\Sprite\\Ghoul_walk_4.asset",
+      "sourceGuid": "dc6c6b775c5786843be871bd8df590b2",
+      "sourceSha256": "1b94209b998cb0715997f7831b05d5e28c6b508b556aabcea4c7d356cc7636b7",
+      "destination": "Assets/_Project/Content/NetworkCombat/Limbo/Art/Imported/Sprite/Ghoul_walk_4.asset",
+      "destinationGuid": "dc6c6b775c5786843be871bd8df590b2",
+      "groups": [
+        "E9"
+      ],
+      "referencedBy": [
+        "AnimationClip/Enemy_Ghoul_Walk_Left.anim",
+        "AnimationClip/Enemy_Ghoul_Walk_Right.anim"
+      ],
+      "treatment": "import",
+      "sourceSize": 7204
+    },
+    {
+      "source": "F:\\DecomplieLatest\\HellMaiden\\ExportedProject\\Assets\\Sprite\\Ghoul_walk_5.asset",
+      "sourceGuid": "b9681afb07dbd5e468175ecfdc842e8a",
+      "sourceSha256": "475ccf67c18a8d2395d14a3e6df4fb35e47f2eea6d70f847fdae92a41a7ce0da",
+      "destination": "Assets/_Project/Content/NetworkCombat/Limbo/Art/Imported/Sprite/Ghoul_walk_5.asset",
+      "destinationGuid": "b9681afb07dbd5e468175ecfdc842e8a",
+      "groups": [
+        "E9"
+      ],
+      "referencedBy": [
+        "AnimationClip/Enemy_Ghoul_Walk_Left.anim",
+        "AnimationClip/Enemy_Ghoul_Walk_Right.anim"
+      ],
+      "treatment": "import",
+      "sourceSize": 7529
     },
     {
       "source": "F:\\DecomplieLatest\\HellMaiden\\ExportedProject\\Assets\\Sprite\\aquaslime_death_0.asset",
@@ -7780,6 +9122,21 @@
       "sourceSize": 54154
     },
     {
+      "source": "F:\\DecomplieLatest\\HellMaiden\\ExportedProject\\Assets\\Texture2D\\Enemy_Skeleton_pllaceholder_LUT.png",
+      "sourceGuid": "3cd873345bacdd744a498f0803e14b31",
+      "sourceSha256": "fd313f077975ef811da83f717f9c526ca8b3ac7a240f0a4c1d144787a36e35a0",
+      "destination": "Assets/_Project/Content/NetworkCombat/Limbo/Art/Imported/Texture2D/Enemy_Skeleton_pllaceholder_LUT.png",
+      "destinationGuid": "3cd873345bacdd744a498f0803e14b31",
+      "groups": [
+        "E9"
+      ],
+      "referencedBy": [
+        "Material/EnemyGhoul.mat"
+      ],
+      "treatment": "import",
+      "sourceSize": 53811
+    },
+    {
       "source": "F:\\DecomplieLatest\\HellMaiden\\ExportedProject\\Assets\\Texture2D\\Enemy_Slime_Level_02_LUT.png",
       "sourceGuid": "0663fa69de74e7043b9d3d7f591cabfa",
       "sourceSha256": "5246efc28a71c2a0a5f41926b002889c021c10f6ef930bac5fadaf425e3128e3",
@@ -7823,6 +9180,77 @@
       ],
       "treatment": "reuse",
       "sourceSize": 9585
+    },
+    {
+      "source": "F:\\DecomplieLatest\\HellMaiden\\ExportedProject\\Assets\\Texture2D\\Ghoul_attack.png",
+      "sourceGuid": "ae395fb18410ec44c8d60ec05451a85f",
+      "sourceSha256": "be1336b9201455fd3ac08f6e45ed07e332f26014f733edab378b31528f040022",
+      "destination": "Assets/_Project/Content/NetworkCombat/Limbo/Art/Imported/Texture2D/Ghoul_attack.png",
+      "destinationGuid": "ae395fb18410ec44c8d60ec05451a85f",
+      "groups": [
+        "E9"
+      ],
+      "referencedBy": [
+        "Sprite/Ghoul_attack_2.asset",
+        "Sprite/Ghoul_attack_3.asset",
+        "Sprite/Ghoul_attack_4.asset",
+        "Sprite/Ghoul_attack_0.asset",
+        "Sprite/Ghoul_attack_1.asset",
+        "Sprite/Ghoul_attack_14.asset",
+        "Sprite/Ghoul_attack_15.asset",
+        "Sprite/Ghoul_attack_16.asset",
+        "Sprite/Ghoul_attack_8.asset",
+        "Sprite/Ghoul_attack_9.asset",
+        "Sprite/Ghoul_attack_5.asset",
+        "Sprite/Ghoul_attack_6.asset",
+        "Sprite/Ghoul_attack_7.asset",
+        "Sprite/Ghoul_attack_12.asset",
+        "Sprite/Ghoul_attack_13.asset",
+        "Sprite/Ghoul_attack_10.asset",
+        "Sprite/Ghoul_attack_11.asset"
+      ],
+      "treatment": "import",
+      "sourceSize": 1137876
+    },
+    {
+      "source": "F:\\DecomplieLatest\\HellMaiden\\ExportedProject\\Assets\\Texture2D\\Ghoul_death.png",
+      "sourceGuid": "40b8b137e44cde44aac7d509d36c3c27",
+      "sourceSha256": "ae02b180ee09c6d7b5d331cb5a3717595ba82c2b336a8c7cdcc81df75bc53b0a",
+      "destination": "Assets/_Project/Content/NetworkCombat/Limbo/Art/Imported/Texture2D/Ghoul_death.png",
+      "destinationGuid": "40b8b137e44cde44aac7d509d36c3c27",
+      "groups": [
+        "E9"
+      ],
+      "referencedBy": [
+        "Sprite/Ghoul_death_0.asset",
+        "Sprite/Ghoul_death_1.asset",
+        "Sprite/Ghoul_death_2.asset",
+        "Sprite/Ghoul_death_3.asset",
+        "Sprite/Ghoul_death_4.asset",
+        "Sprite/Ghoul_death_5.asset"
+      ],
+      "treatment": "import",
+      "sourceSize": 128287
+    },
+    {
+      "source": "F:\\DecomplieLatest\\HellMaiden\\ExportedProject\\Assets\\Texture2D\\Ghoul_walk.png",
+      "sourceGuid": "4a92eb9ed0f3bf5409903c54c7443e3e",
+      "sourceSha256": "9854be5dc483e924f4f9bc897607445c826ab5225f1c7e76fe579f3a7c9bf771",
+      "destination": "Assets/_Project/Content/NetworkCombat/Limbo/Art/Imported/Texture2D/Ghoul_walk.png",
+      "destinationGuid": "4a92eb9ed0f3bf5409903c54c7443e3e",
+      "groups": [
+        "E9"
+      ],
+      "referencedBy": [
+        "Sprite/Ghoul_walk_0.asset",
+        "Sprite/Ghoul_walk_1.asset",
+        "Sprite/Ghoul_walk_2.asset",
+        "Sprite/Ghoul_walk_3.asset",
+        "Sprite/Ghoul_walk_4.asset",
+        "Sprite/Ghoul_walk_5.asset"
+      ],
+      "treatment": "import",
+      "sourceSize": 141384
     },
     {
       "source": "F:\\DecomplieLatest\\HellMaiden\\ExportedProject\\Assets\\Texture2D\\LightningSheet_1.png",
@@ -8013,10 +9441,12 @@
       "destination": "Assets/_Project/Content/NetworkCombat/Validation/HellMaiden/Texture2D/black_1.png",
       "destinationGuid": "2f1bd237d6d2be442b35ca092c48ef87",
       "groups": [
-        "E1"
+        "E1",
+        "E9"
       ],
       "referencedBy": [
-        "Material/Enemy.mat"
+        "Material/Enemy.mat",
+        "Material/EnemyGhoul.mat"
       ],
       "treatment": "reuse",
       "sourceSize": 153
@@ -8120,6 +9550,7 @@
       "destinationGuid": "b061642fc7f419e4a82319ecacf3e16f",
       "groups": [
         "E1",
+        "E9",
         "V1",
         "V2",
         "V4",
@@ -8128,6 +9559,7 @@
       ],
       "referencedBy": [
         "Material/Enemy.mat",
+        "Material/EnemyGhoul.mat",
         "Material/ArrowBrotchi.mat",
         "Material/AOE_Enemy.mat",
         "Material/AOE_Enemy_Fill.mat",
@@ -8296,6 +9728,7 @@
       "destinationGuid": "e1210a1201fd80a4196f2c96d2f0a8c1",
       "groups": [
         "E1",
+        "E9",
         "V1",
         "V2",
         "V4",
@@ -8304,6 +9737,7 @@
       ],
       "referencedBy": [
         "Material/Enemy.mat",
+        "Material/EnemyGhoul.mat",
         "Material/ArrowBrotchi.mat",
         "Material/AOE_Enemy.mat",
         "Material/AOE_Enemy_Fill.mat",
@@ -8335,6 +9769,7 @@
       "destinationGuid": "3edbdb0c3c5db3744a1b8b6837130220",
       "groups": [
         "E1",
+        "E9",
         "V1",
         "V2",
         "V4",
@@ -8343,6 +9778,7 @@
       ],
       "referencedBy": [
         "Material/Enemy.mat",
+        "Material/EnemyGhoul.mat",
         "Material/ArrowBrotchi.mat",
         "Material/AOE_Enemy.mat",
         "Material/AOE_Enemy_Fill.mat",
@@ -8694,6 +10130,7 @@
       "destinationGuid": "f7a0dff928b7d204aaa7887200250e25",
       "groups": [
         "E1",
+        "E9",
         "V1",
         "V2",
         "V4",
@@ -8702,6 +10139,7 @@
       ],
       "referencedBy": [
         "Material/Enemy.mat",
+        "Material/EnemyGhoul.mat",
         "Material/ArrowBrotchi.mat",
         "Material/AOE_Enemy.mat",
         "Material/AOE_Enemy_Fill.mat",
@@ -8761,9 +10199,7 @@
       "sourceSize": 153
     }
   ],
-  "deferred": [
-    "E9 Ghoul body"
-  ],
+  "deferred": [],
   "excluded": [
     "audio",
     "UI",

@@ -35,7 +35,8 @@ namespace MonsterSupergroup.NetworkCombat.Tests
             Assert.That(rusher.Variant, Is.EqualTo(1)); Assert.That(rusher.Stats.BaseHealth, Is.EqualTo(150));
             Assert.That(rusher.Stats.BaseSpeed, Is.EqualTo(4));
             Assert.That(reference.SourceDuration, Is.EqualTo(841.5766649882).Within(.0001));
-            Assert.Throws<ArgumentException>(() => new ServerWaveSchedule("blocked", parameters, 0), "Missing attack data cannot silently become enabled.");
+            reference.FlowReadiness = ReferenceEnemyReadiness.ImplementationPending; // Captured fixture, not the accepted asset.
+            Assert.Throws<ArgumentException>(() => new ServerWaveSchedule("blocked", parameters, 0), "An unapproved flow cannot silently become enabled.");
         }
 
         [Test]

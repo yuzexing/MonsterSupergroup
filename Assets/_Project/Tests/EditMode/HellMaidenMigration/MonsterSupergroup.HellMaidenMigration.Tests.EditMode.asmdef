@@ -6,7 +6,10 @@
     "GUID:56ce3ffcd5ef4c55962a309f4c4d55f1",
     "GUID:d52c3e9fa06b4c8fb412e7d90385216a",
     "GUID:ea6d6a2b82e94894889b4ddde4117081",
-    "MonsterSupergroup.EditorTools"
+    "MonsterSupergroup.EditorTools",
+    "MonsterSupergroup.NetworkCombat.Editor",
+    "MonsterSupergroup.Gameplay.Combat.Runtime",
+    "Unity.Localization"
   ],
   "includePlatforms": [
     "Editor"

@@ -36,6 +36,9 @@ namespace MonsterSupergroup.NetworkCombat
                 PublishRoom();
                 Debug.Log($"[RunEnd] ended run={Session.RunId} round={Session.Round} reason=all-online-downed");
             }
+            if (ServerRoom.Phase == PreparationPhase.InGame && !Session.IsRunEnded &&
+                TryGetGameplaySpawner(out var referenceSpawner, out _) && referenceSpawner.IsReferenceTransitionPending)
+                UpdateReferenceTransition(referenceSpawner);
             if (cleanupRunning && Time.realtimeSinceStartupAsDouble >= cleanupDeadline)
             {
                 cleanupRunning = false;
@@ -47,6 +50,29 @@ namespace MonsterSupergroup.NetworkCombat
         {
             if (!NetworkClient.isConnected || RoomSnapshot.Phase != PreparationPhase.GameOver) return;
             NetworkClient.Send(new RequestRunEndAction { RunId = RoomSnapshot.RunId, Round = RoomSnapshot.Round, Action = action });
+        }
+
+        private void UpdateReferenceTransition(NetworkGameplayEnemySpawner spawner)
+        {
+            var ledger = NetworkCombatWorld.Instance?.Gateway.Ledger;
+            var reasons = new List<string>();
+            var status = Session.EvaluateReferenceTransition(ledger, id =>
+            {
+                if (!NetworkServer.spawned.TryGetValue(id, out var avatar) || avatar == null ||
+                    avatar.connectionToClient == null || !avatar.connectionToClient.isReady ||
+                    avatar.GetComponent<AstralShift.HellMaiden.Player.PlayerMovement>() is not { IsRuntimeInitialized: true, IsRunLoadingLocked: false } ||
+                    avatar.GetComponent<NetworkModifierSelection>() is not { isActiveAndEnabled: true } selection)
+                { reasons.Add($"玩家 {id} 状态恢复中"); return ReferenceParticipantReadiness.Unready; }
+                if (selection.IsSelecting || selection.PendingEventId != 0 || ledger.IsPlayerSelectingUpgrade(id))
+                { reasons.Add($"玩家 {id} 选卡中"); return ReferenceParticipantReadiness.Selecting; }
+                // A retained reward with no legal offers is explicitly unlocked and must not deadlock completion.
+                return ReferenceParticipantReadiness.Ready;
+            });
+            string note = status.Connected == 0 ? "等待已连接玩家" : status.Alive == 0 && status.Unready == 0 ? "等待失败结算" :
+                status.Waiting == 0 ? "玩家已就绪" : string.Join("；", reasons);
+            if (status.Unready > 0 && reasons.Count == 0) note = "等待角色与生命基线恢复";
+            spawner.UpdateReferenceTransitionWait(status.Waiting, note);
+            if (status.CanComplete) spawner.CompletePendingReferenceTransition(Session.RunId, Session.Round);
         }
 
         [Server]

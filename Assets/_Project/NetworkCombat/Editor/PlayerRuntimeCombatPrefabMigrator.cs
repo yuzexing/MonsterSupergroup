@@ -114,8 +114,8 @@ namespace MonsterSupergroup.NetworkCombat.Editor
             GetOrAdd<MirrorNetworkCombatBridge>(root);
             GetOrAdd<NetworkEnemySimulationEndpoint>(root);
             GetOrAdd<NetworkPlayerAutoTargeting>(root);
-            PlayerBuildRuntime build = GetOrAdd<PlayerBuildRuntime>(root);
-            build.ConfigureInitialWeapon(2u);
+            if (root.GetComponent<PlayerBuildRuntime>() == null)
+                root.AddComponent<PlayerBuildRuntime>().ConfigureInitialWeapon(2u);
             GetOrAdd<NetworkWeaponCombatAdapter>(root);
             NetworkCombatantAdapter combatantAdapter = GetOrAdd<NetworkCombatantAdapter>(root);
             combatantAdapter.Configure(

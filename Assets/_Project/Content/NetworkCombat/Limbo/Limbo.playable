@@ -172,7 +172,7 @@ MonoBehaviour:
   sourceEnemy: LostSoul
   sourceVariant: 0
   sourceLocation: MonoBehaviour/Progression_Limbo.playable:3217 fileID=114733206282342372
-  missingEvidence:
+  missingEvidence: 
   referenceReadiness: 0
   referenceSpawnReadiness: 0
   spawnReadinessNote: 
@@ -838,7 +838,7 @@ MonoBehaviour:
   sourceEnemy: LostSoul
   sourceVariant: 1
   sourceLocation: MonoBehaviour/Progression_Limbo.playable:3237 fileID=114217368724061974
-  missingEvidence:
+  missingEvidence: 
   referenceReadiness: 0
   referenceSpawnReadiness: 0
   spawnReadinessNote: 
@@ -1384,7 +1384,7 @@ MonoBehaviour:
   sourceEnemy: LostSoul
   sourceVariant: 1
   sourceLocation: MonoBehaviour/Progression_Limbo.playable:3197 fileID=114017697238300914
-  missingEvidence:
+  missingEvidence: 
   referenceReadiness: 0
   referenceSpawnReadiness: 0
   spawnReadinessNote: 
@@ -2956,17 +2956,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f6739ebf33d162242825e5945dc580be, type: 3}
   m_Name: NetworkEnemySpawnClip
   m_EditorClassIdentifier: MonsterSupergroup.NetworkCombat::MonsterSupergroup.NetworkCombat.NetworkEnemySpawnClip
-  enemyPrefab: {fileID: 0}
+  enemyPrefab: {fileID: 3963200209637973719, guid: 86e55309607377b4291451635184ffa4, type: 3}
   count: 30
   referenceMode: 2
   sourceEnemy: Ghoul
   sourceVariant: 0
   sourceLocation: MonoBehaviour/Progression_Limbo.playable:2046 fileID=114470112387431263
-  missingEvidence: "\u539F\u59CB\u653B\u51FB\u6570\u636E\u5DF2\u6062\u590D\uFF1B\u5BF9\u5E94\u884C\u4E3A\u5C1A\u672A\u63A5\u5165\u548C\u9A8C\u8BC1\u3002"
-  referenceReadiness: 2
+  missingEvidence: 
+  referenceReadiness: 0
   referenceSpawnReadiness: 0
   spawnReadinessNote: 
-  recoveredEvidence: docs/evidence/hellmaiden-attacks/recovered-enemies.json#Ghoul
+  recoveredEvidence: docs/evidence/hellmaiden-attacks/runtime-assets.json#o00138
   spawnCurve:
     serializedVersion: 2
     m_Curve: []
@@ -3244,17 +3244,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f6739ebf33d162242825e5945dc580be, type: 3}
   m_Name: NetworkEnemySpawnClip
   m_EditorClassIdentifier: MonsterSupergroup.NetworkCombat::MonsterSupergroup.NetworkCombat.NetworkEnemySpawnClip
-  enemyPrefab: {fileID: 0}
+  enemyPrefab: {fileID: 3963200209637973719, guid: 86e55309607377b4291451635184ffa4, type: 3}
   count: 20
   referenceMode: 2
   sourceEnemy: Ghoul
   sourceVariant: 0
   sourceLocation: MonoBehaviour/Progression_Limbo.playable:2066 fileID=114313026266067498
-  missingEvidence: "\u539F\u59CB\u653B\u51FB\u6570\u636E\u5DF2\u6062\u590D\uFF1B\u5BF9\u5E94\u884C\u4E3A\u5C1A\u672A\u63A5\u5165\u548C\u9A8C\u8BC1\u3002"
-  referenceReadiness: 2
+  missingEvidence: 
+  referenceReadiness: 0
   referenceSpawnReadiness: 0
   spawnReadinessNote: 
-  recoveredEvidence: docs/evidence/hellmaiden-attacks/recovered-enemies.json#Ghoul
+  recoveredEvidence: docs/evidence/hellmaiden-attacks/runtime-assets.json#o00138
   spawnCurve:
     serializedVersion: 2
     m_Curve: []
@@ -3962,17 +3962,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f6739ebf33d162242825e5945dc580be, type: 3}
   m_Name: NetworkEnemySpawnClip
   m_EditorClassIdentifier: MonsterSupergroup.NetworkCombat::MonsterSupergroup.NetworkCombat.NetworkEnemySpawnClip
-  enemyPrefab: {fileID: 0}
+  enemyPrefab: {fileID: 3963200209637973719, guid: 86e55309607377b4291451635184ffa4, type: 3}
   count: 50
   referenceMode: 1
   sourceEnemy: Ghoul
   sourceVariant: 0
   sourceLocation: MonoBehaviour/Progression_Limbo.playable:2002 fileID=114002669891404536
-  missingEvidence: "\u539F\u59CB\u653B\u51FB\u6570\u636E\u5DF2\u6062\u590D\uFF1B\u5BF9\u5E94\u884C\u4E3A\u5C1A\u672A\u63A5\u5165\u548C\u9A8C\u8BC1\u3002"
-  referenceReadiness: 2
+  missingEvidence: 
+  referenceReadiness: 0
   referenceSpawnReadiness: 0
   spawnReadinessNote: 
-  recoveredEvidence: docs/evidence/hellmaiden-attacks/recovered-enemies.json#Ghoul
+  recoveredEvidence: docs/evidence/hellmaiden-attacks/runtime-assets.json#o00138
   spawnCurve:
     serializedVersion: 2
     m_Curve:

@@ -38,9 +38,13 @@ namespace MonsterSupergroup.NetworkCombat
         private EnemyAttackExplosion explosionAttack;
         private EnemyActionState explosionState;
         private bool ownsExplosionPresentation;
-        public EnemyAttackPrefab ReplicaAttackInstance => attackInstance;
+        private SequenceEnemyAttack sequenceAttack;
+        private EnemyActionState sequenceState, appliedSequenceState;
+        private bool ownsSequencePresentation;
+        public EnemyAttackPrefab ReplicaAttackInstance => ownsSequencePresentation ? sequenceAttack.SimulationAttackInstance : attackInstance;
+        internal EnemyActionState AppliedSequenceState => appliedSequenceState;
 
-        public bool HasReplicaAttackInstance => attackInstance != null;
+        public bool HasReplicaAttackInstance => ReplicaAttackInstance != null;
 
         public bool DamageWindowActive => damageWindowActive;
 
@@ -74,6 +78,13 @@ namespace MonsterSupergroup.NetworkCombat
 
         private void Update()
         {
+            if (sequenceAttack != null)
+            {
+                if (simulationAgent == null || !simulationAgent.IsCanonicalAlive || simulationAuthority == null || !simulationAuthority.ConsumesSnapshots)
+                { if (ownsSequencePresentation) ReleaseAttackInstance(); return; }
+                if (ownsSequencePresentation) UpdateSequencePresentation(false);
+                return;
+            }
             if (explosionAttack != null)
             {
                 if (simulationAgent == null || !simulationAgent.IsCanonicalAlive || simulationAuthority == null || !simulationAuthority.ConsumesSnapshots)
@@ -137,6 +148,13 @@ namespace MonsterSupergroup.NetworkCombat
             lastAppliedSequence = edge.StateSequence;
             lastAppliedAssignmentEpoch = edge.AssignmentEpoch;
             lastAppliedPhase = edge.Phase;
+            if (sequenceAttack != null)
+            {
+                sequenceState = edge.Checkpoint.Movement.Runtime.Action;
+                ownsSequencePresentation = true;
+                UpdateSequencePresentation(true);
+                return;
+            }
             if (explosionAttack != null)
             {
                 explosionState = edge.Checkpoint.Movement.Runtime.Action;
@@ -308,6 +326,8 @@ namespace MonsterSupergroup.NetworkCombat
 
         private void ReleaseAttackInstance()
         {
+            if (ownsSequencePresentation) sequenceAttack?.SuspendSimulation();
+            ownsSequencePresentation = false; sequenceState = appliedSequenceState = default;
             if (ownsExplosionPresentation) explosionAttack?.SuspendExplosion();
             ownsExplosionPresentation = false;
             explosionState = default;
@@ -343,6 +363,7 @@ namespace MonsterSupergroup.NetworkCombat
 
         private void ResolveReferences()
         {
+            if (sequenceAttack == null) sequenceAttack = GetComponent<SequenceEnemyAttack>();
             if (explosionAttack == null) explosionAttack = GetComponent<EnemyAttackExplosion>();
             if (simulationAgent == null)
             {
@@ -360,6 +381,32 @@ namespace MonsterSupergroup.NetworkCombat
             {
                 meleeAttack = GetComponent<EnemyAttackMelee>();
             }
+        }
+
+        private void UpdateSequencePresentation(bool received)
+        {
+            double now = EnemySimulationClock.CombatNow;
+            var frame = EnemySequenceTimeline.Resolve(sequenceState, now);
+            if(frame.ActionId==appliedSequenceState.ActionId&&EnemySequenceTimeline.Order(frame)<EnemySequenceTimeline.Order(appliedSequenceState))
+                frame=appliedSequenceState;
+            if (!received && frame.Phase == appliedSequenceState.Phase && frame.StrikeIndex == appliedSequenceState.StrikeIndex) return;
+            // Reliable phase edges can repeat a locally advanced phase. Do not reopen its collider.
+            if (frame.ActionId == appliedSequenceState.ActionId && frame.Phase == appliedSequenceState.Phase &&
+                frame.StrikeIndex == appliedSequenceState.StrikeIndex && frame.PoseStrikeIndex == appliedSequenceState.PoseStrikeIndex &&
+                frame.LockedStrikeMask == appliedSequenceState.LockedStrikeMask) return;
+            bool settle = frame.Phase != EnemyAttackPresentationPhase.Cancelled &&
+                frame.ActionId == appliedSequenceState.ActionId && lastAppliedAssignmentEpoch == simulationAgent.Assignment.Epoch;
+            sequenceAttack.controller = controller; sequenceAttack.enemyAnimator = controller.enemyAnimator;
+            sequenceAttack.RestoreSequence(frame, now, settle);
+            controller.ApplyReplicatedAttackPresentation(frame.Phase, frame.Facing, System.Math.Max(0,now-frame.StartAt(frame.Phase)));
+            appliedSequenceState = frame; lastAppliedPhase = frame.Phase;
+            damageWindowActive = frame.Phase == EnemyAttackPresentationPhase.Active && EnemySequenceTimeline.HasPose(frame) && sequenceAttack.HasSimulationAttackInstance;
+        }
+
+        internal void CancelSequencePresentation(ulong actionId)
+        {
+            if(!ownsSequencePresentation||sequenceState.ActionId!=actionId)return;
+            sequenceState.Phase=EnemyAttackPresentationPhase.Cancelled;UpdateSequencePresentation(true);
         }
 
         private void LogUnsupportedAttackOnce(string message)

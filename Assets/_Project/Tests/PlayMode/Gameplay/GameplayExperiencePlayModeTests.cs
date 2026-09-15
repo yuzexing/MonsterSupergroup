@@ -26,6 +26,7 @@ namespace MonsterSupergroup.Gameplay.Tests
         private BootGameplayNetworkManager manager;
         private GameObject[] roots;
         private GameObject fixture;
+        private string originalLanguage;
         private NetworkIdentity Owner => NetworkClient.localPlayer;
         private NetworkModifierSelection Progression => Owner.GetComponent<NetworkModifierSelection>();
         private NetworkExperienceWorld World => NetworkExperienceWorld.Current;
@@ -38,6 +39,9 @@ namespace MonsterSupergroup.Gameplay.Tests
             yield return SceneManager.LoadSceneAsync(boot, LoadSceneMode.Single);
 #endif
             roots = BootSceneFixtureObjects.Capture(boot);
+            originalLanguage = MonsterSupergroup.Gameplay.Options.GameLocalization.Language;
+            MonsterSupergroup.Gameplay.Options.GameLocalization.Select("en");
+            yield return WaitFor(() => MonsterSupergroup.Gameplay.Options.GameLocalization.Language == "en", "Fixed English HUD fixture locale");
             manager = Object.FindFirstObjectByType<BootGameplayNetworkManager>();
             fixture = new GameObject("M6 runtime fixture"); fixture.AddComponent<WeaponAttackAdmissionFixtureGate>();
             Assert.That(manager.GetComponent<NetworkBackendBootstrap>().TryPrepareKcp("127.0.0.1", 7972, false, out string error), Is.True, error);
@@ -259,6 +263,7 @@ namespace MonsterSupergroup.Gameplay.Tests
         [UnityTearDown]
         public IEnumerator TearDown()
         {
+            if (originalLanguage != null) MonsterSupergroup.Gameplay.Options.GameLocalization.Select(originalLanguage);
             if (manager != null && NetworkServer.active)
             { manager.StopHost(); yield return WaitFor(() => !manager.IsGameplayLoaded && !manager.IsGameplayTransitioning, "teardown"); }
             BootSceneFixtureObjects.Destroy(roots);

@@ -79,8 +79,8 @@ namespace MonsterSupergroup.NetworkCombat.Tests
             Assert.That(clips.Any(c=>c.SourceEnemy=="Ghoul"),Is.False);Assert.That(clips.Single(c=>c.SourceEnemy=="LostSoul").Count,Is.EqualTo(46));
             Assert.That(p.Reference.SourceDuration,Is.EqualTo(841.5766649882).Within(.00001));
             var full=AssetDatabase.LoadAssetAtPath<GameplayWaveRules>(LimboReferenceAssets.ResourcesRoot+"/Full.asset");
-            Assert.That(full.TryCapture(out var f,out error),Is.True,error);Assert.That(f.Reference.ReadinessError(),Is.Not.Null);
-            Assert.That(f.Reference.Clips.Where(c=>c.SourceEnemy=="Ghoul").All(c=>c.Readiness==ReferenceEnemyReadiness.ImplementationPending),Is.True);
+            Assert.That(full.TryCapture(out var f,out error),Is.True,error);f.Reference.FlowReadiness = ReferenceEnemyReadiness.ImplementationPending; Assert.That(f.Reference.ReadinessError(),Is.Not.Null);
+            Assert.That(f.Reference.FlowReadiness,Is.EqualTo(ReferenceEnemyReadiness.ImplementationPending));
         }
         private static EnemyActionState Action()=>new(){ActionId=1,Explosion=true,ExplosionTriggered=true,SelfDestructPending=true,
             Phase=EnemyAttackPresentationPhase.Recovery,WarningStartedAt=1,WarningUntil=2.0333333,ActiveUntil=2.179999961,RecoveryUntil=2.933333291,NextAttackAt=3.933333291,ExplosionPosition=new(0,1.74000025f)};

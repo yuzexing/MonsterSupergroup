@@ -16,9 +16,15 @@ namespace AstralShift.HellMaiden.AI
         public Vector2 DashStart, DashEnd, DashLastPosition, DashWarningOrigin;
         public bool Explosion, ExplosionTriggered, SelfDestructPending;
         public Vector2 ExplosionPosition;
+        public bool Sequence;
+        public double ComboStartedAt;
+        public Vector3 SequenceWarnings, SequenceActives;
+        public int StrikeIndex, PoseStrikeIndex;
+        public byte LockedStrikeMask, ExecutedStrikeMask;
 
         public EnemyAttackPresentationPhase PhaseAt(double now)
         {
+            if (Sequence) return EnemySequenceTimeline.Resolve(this, now).Phase;
             if (Phase == EnemyAttackPresentationPhase.Cancelled || Phase == EnemyAttackPresentationPhase.Inactive) return Phase;
             // Small inter-client clock differences cannot rewind an accepted phase.
             if (Phase == EnemyAttackPresentationPhase.Warning && now < WarningUntil) return EnemyAttackPresentationPhase.Warning;

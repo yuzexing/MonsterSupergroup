@@ -88,6 +88,7 @@ namespace MonsterSupergroup.NetworkCombat
     [Serializable]
     public struct OrdinaryHitKnockback
     {
+        public ulong InterruptedActionId;
         public bool Requested;
         public uint AssignmentEpoch;
         public Vector2 Origin;
@@ -106,6 +107,7 @@ namespace MonsterSupergroup.NetworkCombat
     [Serializable]
     public struct EnemyKnockbackCommand
     {
+        public ulong InterruptedActionId;
         public EnemyKnockbackKind Kind;
         public ulong DamageEventId;
         public float MultiplierSum;

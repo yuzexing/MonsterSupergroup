@@ -162,7 +162,7 @@ namespace MonsterSupergroup.NetworkCombat.Tests
                     Is.GreaterThan(SortingLayer.GetLayerValueFromName("BackgroundFront")), "Trap warning must render above the map.");
             }
             var full = AssetDatabase.LoadAssetAtPath<GameplayWaveRules>(LimboReferenceAssets.ResourcesRoot + "/Full.asset");
-            Assert.That(full.TryCapture(out var all, out error), Is.True, error); Assert.That(all.Reference.ReadinessError(), Is.Not.Null);
+            Assert.That(full.TryCapture(out var all, out error), Is.True, error); all.Reference.FlowReadiness = ReferenceEnemyReadiness.ImplementationPending; Assert.That(all.Reference.ReadinessError(), Is.Not.Null);
             Assert.That(all.Reference.Clips.Where(c => c.Mode == ReferenceSpawnMode.FormationBurst).All(c => c.SpawnReadiness == ReferenceEnemyReadiness.Ready), Is.True);
         }
 

@@ -12,5 +12,8 @@ namespace AstralShift.HellMaiden.AI.Enemy
 		public abstract UniTask AwaitableHide();
 
 		public abstract void SetWarningTime(float warningTime, float attackTime);
+
+        public virtual void RestoreProgress(float warningTime, float attackTime, float elapsed)
+        { SetWarningTime(warningTime, attackTime); Show(); }
 	}
 }

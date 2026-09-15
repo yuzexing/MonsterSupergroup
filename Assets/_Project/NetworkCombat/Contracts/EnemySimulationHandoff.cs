@@ -25,7 +25,7 @@ namespace MonsterSupergroup.NetworkCombat
             EnemyKnockbackSettings.Finite(Action.WarningStartedAt) && EnemyKnockbackSettings.Finite(Action.WarningUntil) &&
             EnemyKnockbackSettings.Finite(Action.ActiveUntil) && EnemyKnockbackSettings.Finite(Action.RecoveryUntil) &&
             EnemyKnockbackSettings.Finite(Action.NextAttackAt) && Finite(Action.Facing) && Finite(Action.TargetPosition) && Finite(Action.ProjectileDirection) &&
-            Finite(Action.ExplosionPosition) && (!Action.SelfDestructPending || Action.Explosion && Action.ExplosionTriggered) &&
+            Finite(Action.ExplosionPosition) && (!Action.SelfDestructPending || Action.Explosion && Action.ExplosionTriggered) && ValidSequence &&
             (!Action.Dash || (Finite(Action.DashStart) && Finite(Action.DashEnd) && Finite(Action.DashLastPosition) && Finite(Action.DashWarningOrigin) &&
                 Action.WarningUntil > Action.WarningStartedAt && Action.ActiveUntil > Action.WarningUntil && Action.RecoveryUntil >= Action.ActiveUntil)) && ValidReceipts &&
             (!Knockback.Active || (KnockbackSettings.IsValid && Finite(Knockback.Start) && Finite(Knockback.End) &&
@@ -33,6 +33,12 @@ namespace MonsterSupergroup.NetworkCombat
             EnemyKnockbackSettings.Finite(Knockback.Duration) && Knockback.Duration > 0 &&
             EnemyKnockbackSettings.Finite(Knockback.StaggerDuration) && Knockback.StaggerDuration >= 0));
         private static bool Finite(UnityEngine.Vector2 value) => EnemyKnockbackSettings.Finite(value.x) && EnemyKnockbackSettings.Finite(value.y);
+        private bool ValidSequence => !Action.Sequence ||
+            (EnemyKnockbackSettings.Finite(Action.ComboStartedAt) && Action.StrikeIndex>=0 && Action.StrikeIndex<3 &&
+             Action.PoseStrikeIndex>=0 && Action.PoseStrikeIndex<3 && Action.LockedStrikeMask<=7 && Action.ExecutedStrikeMask<=7 &&
+             Positive(Action.SequenceWarnings) && Positive(Action.SequenceActives) && Action.RecoveryUntil>=Action.ActiveUntil);
+        private static bool Positive(UnityEngine.Vector3 value) =>
+            EnemyKnockbackSettings.Finite(value.x) && EnemyKnockbackSettings.Finite(value.y) && EnemyKnockbackSettings.Finite(value.z) && value.x>0 && value.y>0 && value.z>0;
         private bool ValidReceipts
         {
             get

@@ -44,7 +44,7 @@ namespace MonsterSupergroup.NetworkCombat
     }
 
     /// <summary>One server run. Identity is supplied by the authenticated transport boundary.</summary>
-    public sealed class RunSession
+    public sealed partial class RunSession
     {
         private readonly Dictionary<string, RunParticipant> byIdentity =
             new Dictionary<string, RunParticipant>(StringComparer.Ordinal);

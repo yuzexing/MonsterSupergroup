@@ -1,0 +1,21 @@
+{
+  "root": "Builds\\LimboFull20260915",
+  "status": "final rendered solo and pair verified; GUI restart verified",
+  "files": [
+    {
+      "path": "MonsterSupergroupLimbo.exe",
+      "sha256": "c8b0d73dc40e4f2cddbf656cfb7257fcb8273da22e44e12a8694cd8e275c6fb2",
+      "bytes": 667136
+    },
+    {
+      "path": "MonsterSupergroupLimbo_Data/Managed/MonsterSupergroup.NetworkCombat.dll",
+      "sha256": "8ae830a93bdd90b773e014b7e1dfe02d3409aebc0b7d4c96676686679ed4b97a",
+      "bytes": 936960
+    },
+    {
+      "path": "MonsterSupergroupLimbo_Data/resources.assets",
+      "sha256": "5cff7389fff217a45b174a2aab30d6a511fcdd92cb55ff9bd8faace7030ddf2a",
+      "bytes": 23015928
+    }
+  ]
+}

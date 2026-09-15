@@ -1,0 +1,5178 @@
+{
+  "runs": [
+    "full-barrier-first",
+    "full-burst-first",
+    "full-cancel",
+    "full-cancel-held",
+    "full-candidate-pair",
+    "full-candidate-solo",
+    "full-disconnect",
+    "full-disconnect-r2",
+    "full-downed",
+    "full-downed-fixed",
+    "full-final-cancel",
+    "full-final-pair",
+    "full-final-solo",
+    "full-normal-smoke",
+    "full-probe-chain",
+    "full-probe-reconnect",
+    "full-probe-solo-busy",
+    "full-probe-unavailable",
+    "full-slime-b"
+  ],
+  "files": [
+    {
+      "path": "Assets/_Project/Content/NetworkCombat/Limbo/Full/FullBarrierFirst.playable",
+      "bytes": 4099
+    },
+    {
+      "path": "Assets/_Project/Content/NetworkCombat/Limbo/Full/FullBarrierFirst.playable.meta",
+      "bytes": 189
+    },
+    {
+      "path": "Assets/_Project/Content/NetworkCombat/Limbo/Full/FullBurstFirst.playable",
+      "bytes": 4094
+    },
+    {
+      "path": "Assets/_Project/Content/NetworkCombat/Limbo/Full/FullBurstFirst.playable.meta",
+      "bytes": 189
+    },
+    {
+      "path": "Assets/_Project/Content/NetworkCombat/Limbo/Full/FullSlimeBurst.playable",
+      "bytes": 4096
+    },
+    {
+      "path": "Assets/_Project/Content/NetworkCombat/Limbo/Full/FullSlimeBurst.playable.meta",
+      "bytes": 189
+    },
+    {
+      "path": "Assets/_Project/Content/NetworkCombat/Limbo/limbo-source.json",
+      "bytes": 28351
+    },
+    {
+      "path": "docs/evidence/hellmaiden-attacks/runtime-assets.json",
+      "bytes": 2094380
+    },
+    {
+      "path": "docs/evidence/limbo-full/31-clips.csv",
+      "bytes": 2466
+    },
+    {
+      "path": "docs/evidence/limbo-full/final-build.json",
+      "bytes": 709
+    },
+    {
+      "path": "docs/evidence/limbo-full/full-final-pair.json",
+      "bytes": 685297
+    },
+    {
+      "path": "docs/evidence/limbo-full/full-final-solo.json",
+      "bytes": 320896
+    },
+    {
+      "path": "docs/evidence/limbo-full/source-check.json",
+      "bytes": 22306
+    },
+    {
+      "path": "docs/evidence/limbo-full/test-results.json",
+      "bytes": 30459
+    },
+    {
+      "path": "docs/evidence/limbo-full/verification.json",
+      "bytes": 9424
+    },
+    {
+      "path": "docs/limbo-full-integration.md",
+      "bytes": 12024
+    },
+    {
+      "path": "docs/limbo-reference.md",
+      "bytes": 14999
+    },
+    {
+      "path": "Logs/LimboFull/accept.log",
+      "bytes": 40259
+    },
+    {
+      "path": "Logs/LimboFull/build-candidate.log",
+      "bytes": 1091265
+    },
+    {
+      "path": "Logs/LimboFull/build-final.log",
+      "bytes": 1085541
+    },
+    {
+      "path": "Logs/LimboFull/build-probe.log",
+      "bytes": 1088361
+    },
+    {
+      "path": "Logs/LimboFull/build-probe2.log",
+      "bytes": 1086384
+    },
+    {
+      "path": "Logs/LimboFull/build-probe3.log",
+      "bytes": 1090042
+    },
+    {
+      "path": "Logs/LimboFull/camera-order-fixed.log",
+      "bytes": 403959
+    },
+    {
+      "path": "Logs/LimboFull/camera-order-fixed.xml",
+      "bytes": 26222
+    },
+    {
+      "path": "Logs/LimboFull/camera-order.log",
+      "bytes": 407814
+    },
+    {
+      "path": "Logs/LimboFull/camera-order.xml",
+      "bytes": 27732
+    },
+    {
+      "path": "Logs/LimboFull/camera-repro.log",
+      "bytes": 94206
+    },
+    {
+      "path": "Logs/LimboFull/camera-repro.xml",
+      "bytes": 5415
+    },
+    {
+      "path": "Logs/LimboFull/create.log",
+      "bytes": 50613
+    },
+    {
+      "path": "Logs/LimboFull/create2.log",
+      "bytes": 75350
+    },
+    {
+      "path": "Logs/LimboFull/create3.log",
+      "bytes": 46602
+    },
+    {
+      "path": "Logs/LimboFull/edit-broad.log",
+      "bytes": 474746
+    },
+    {
+      "path": "Logs/LimboFull/edit-broad.xml",
+      "bytes": 562879
+    },
+    {
+      "path": "Logs/LimboFull/edit-final-focused.log",
+      "bytes": 64732
+    },
+    {
+      "path": "Logs/LimboFull/edit-final-focused.xml",
+      "bytes": 87122
+    },
+    {
+      "path": "Logs/LimboFull/edit-final.log",
+      "bytes": 69704
+    },
+    {
+      "path": "Logs/LimboFull/edit-final.xml",
+      "bytes": 87948
+    },
+    {
+      "path": "Logs/LimboFull/edit-initial.log",
+      "bytes": 44756
+    },
+    {
+      "path": "Logs/LimboFull/edit-initial.xml",
+      "bytes": 31380
+    },
+    {
+      "path": "Logs/LimboFull/edit-ready.log",
+      "bytes": 68772
+    },
+    {
+      "path": "Logs/LimboFull/edit-ready.xml",
+      "bytes": 87958
+    },
+    {
+      "path": "Logs/LimboFull/end-repro.log",
+      "bytes": 57055
+    },
+    {
+      "path": "Logs/LimboFull/end-repro.xml",
+      "bytes": 5320
+    },
+    {
+      "path": "Logs/LimboFull/full-barrier-first.json",
+      "bytes": 22222
+    },
+    {
+      "path": "Logs/LimboFull/full-burst-first.json",
+      "bytes": 23395
+    },
+    {
+      "path": "Logs/LimboFull/full-candidate-pair.json",
+      "bytes": 781330
+    },
+    {
+      "path": "Logs/LimboFull/full-candidate-solo.json",
+      "bytes": 390373
+    },
+    {
+      "path": "Logs/LimboFull/full-disconnect-r2.json",
+      "bytes": 19427
+    },
+    {
+      "path": "Logs/LimboFull/full-downed-fixed.json",
+      "bytes": 16992
+    },
+    {
+      "path": "Logs/LimboFull/full-final-cancel.json",
+      "bytes": 9638
+    },
+    {
+      "path": "Logs/LimboFull/full-final-pair.json",
+      "bytes": 685297
+    },
+    {
+      "path": "Logs/LimboFull/full-final-solo.json",
+      "bytes": 320896
+    },
+    {
+      "path": "Logs/LimboFull/full-normal-smoke.json",
+      "bytes": 7723
+    },
+    {
+      "path": "Logs/LimboFull/full-probe-reconnect.json",
+      "bytes": 32680
+    },
+    {
+      "path": "Logs/LimboFull/full-probe-solo-busy.json",
+      "bytes": 12907
+    },
+    {
+      "path": "Logs/LimboFull/full-probe-unavailable.json",
+      "bytes": 12348
+    },
+    {
+      "path": "Logs/LimboFull/full-slime-b.json",
+      "bytes": 22185
+    },
+    {
+      "path": "Logs/LimboFull/play-broad.log",
+      "bytes": 11590564
+    },
+    {
+      "path": "Logs/LimboFull/play-broad.xml",
+      "bytes": 1228952
+    },
+    {
+      "path": "Logs/LimboFull/play-final-flow.log",
+      "bytes": 2532286
+    },
+    {
+      "path": "Logs/LimboFull/play-final-flow.xml",
+      "bytes": 163076
+    },
+    {
+      "path": "Logs/LimboFull/play-lifecycle.log",
+      "bytes": 2206259
+    },
+    {
+      "path": "Logs/LimboFull/play-lifecycle.xml",
+      "bytes": 146549
+    },
+    {
+      "path": "Logs/LimboFull/previous16-repro.log",
+      "bytes": 589340
+    },
+    {
+      "path": "Logs/LimboFull/previous16-repro.xml",
+      "bytes": 55721
+    },
+    {
+      "path": "Logs/LimboFull/probe-chain.json",
+      "bytes": 45705
+    },
+    {
+      "path": "Logs/LimboReference/full-barrier-first/client/art-build.json",
+      "bytes": 1612
+    },
+    {
+      "path": "Logs/LimboReference/full-barrier-first/client/art-observation.jsonl",
+      "bytes": 16678
+    },
+    {
+      "path": "Logs/LimboReference/full-barrier-first/client/client-audit.jsonl",
+      "bytes": 56388
+    },
+    {
+      "path": "Logs/LimboReference/full-barrier-first/client/full-46e9ec0034ee4252ba13788cba116d03-end.png",
+      "bytes": 87425
+    },
+    {
+      "path": "Logs/LimboReference/full-barrier-first/client/full-46e9ec0034ee4252ba13788cba116d03-request.png",
+      "bytes": 1365841
+    },
+    {
+      "path": "Logs/LimboReference/full-barrier-first/client/full-46e9ec0034ee4252ba13788cba116d03-time10.png",
+      "bytes": 1451132
+    },
+    {
+      "path": "Logs/LimboReference/full-barrier-first/client/full-46e9ec0034ee4252ba13788cba116d03-time20.png",
+      "bytes": 1290992
+    },
+    {
+      "path": "Logs/LimboReference/full-barrier-first/client/full-46e9ec0034ee4252ba13788cba116d03-time25.png",
+      "bytes": 1428595
+    },
+    {
+      "path": "Logs/LimboReference/full-barrier-first/client/full-46e9ec0034ee4252ba13788cba116d03-time35.png",
+      "bytes": 1491701
+    },
+    {
+      "path": "Logs/LimboReference/full-barrier-first/client/full.jsonl",
+      "bytes": 72247
+    },
+    {
+      "path": "Logs/LimboReference/full-barrier-first/client/ghoul.jsonl",
+      "bytes": 333
+    },
+    {
+      "path": "Logs/LimboReference/full-barrier-first/client/player.log",
+      "bytes": 40769
+    },
+    {
+      "path": "Logs/LimboReference/full-barrier-first/client/process.pid",
+      "bytes": 7
+    },
+    {
+      "path": "Logs/LimboReference/full-barrier-first/client/render-46e9ec0034ee4252ba13788cba116d03-30.png",
+      "bytes": 1280772
+    },
+    {
+      "path": "Logs/LimboReference/full-barrier-first/client/render-46e9ec0034ee4252ba13788cba116d03-60.png",
+      "bytes": 1309433
+    },
+    {
+      "path": "Logs/LimboReference/full-barrier-first/client/spatial-completed-46e9ec0034ee4252ba13788cba116d03.png",
+      "bytes": 77202
+    },
+    {
+      "path": "Logs/LimboReference/full-barrier-first/client/spatial-observation.jsonl",
+      "bytes": 483008
+    },
+    {
+      "path": "Logs/LimboReference/full-barrier-first/client/stage2-observation.jsonl",
+      "bytes": 853
+    },
+    {
+      "path": "Logs/LimboReference/full-barrier-first/client/trap-46e9ec0034ee4252ba13788cba116d03-2147483649-Building-settled.png",
+      "bytes": 1536241
+    },
+    {
+      "path": "Logs/LimboReference/full-barrier-first/client/trap-46e9ec0034ee4252ba13788cba116d03-2147483649-Building.png",
+      "bytes": 1498740
+    },
+    {
+      "path": "Logs/LimboReference/full-barrier-first/client/trap-46e9ec0034ee4252ba13788cba116d03-2147483649-Framing-settled.png",
+      "bytes": 1454844
+    },
+    {
+      "path": "Logs/LimboReference/full-barrier-first/client/trap-46e9ec0034ee4252ba13788cba116d03-2147483649-Framing.png",
+      "bytes": 1209405
+    },
+    {
+      "path": "Logs/LimboReference/full-barrier-first/client/trap-46e9ec0034ee4252ba13788cba116d03-2147483649-Shrinking-settled.png",
+      "bytes": 1295197
+    },
+    {
+      "path": "Logs/LimboReference/full-barrier-first/client/trap-46e9ec0034ee4252ba13788cba116d03-2147483649-Shrinking.png",
+      "bytes": 1273804
+    },
+    {
+      "path": "Logs/LimboReference/full-barrier-first/client/trap-46e9ec0034ee4252ba13788cba116d03-2147483649-Stopping-settled.png",
+      "bytes": 1290198
+    },
+    {
+      "path": "Logs/LimboReference/full-barrier-first/client/trap-46e9ec0034ee4252ba13788cba116d03-2147483649-Stopping.png",
+      "bytes": 1322929
+    },
+    {
+      "path": "Logs/LimboReference/full-barrier-first/host/art-build.json",
+      "bytes": 1610
+    },
+    {
+      "path": "Logs/LimboReference/full-barrier-first/host/art-observation.jsonl",
+      "bytes": 16690
+    },
+    {
+      "path": "Logs/LimboReference/full-barrier-first/host/full-46e9ec0034ee4252ba13788cba116d03-end.png",
+      "bytes": 1399383
+    },
+    {
+      "path": "Logs/LimboReference/full-barrier-first/host/full-46e9ec0034ee4252ba13788cba116d03-request.png",
+      "bytes": 1399383
+    },
+    {
+      "path": "Logs/LimboReference/full-barrier-first/host/full-46e9ec0034ee4252ba13788cba116d03-time10.png",
+      "bytes": 1440568
+    },
+    {
+      "path": "Logs/LimboReference/full-barrier-first/host/full-46e9ec0034ee4252ba13788cba116d03-time20.png",
+      "bytes": 1422159
+    },
+    {
+      "path": "Logs/LimboReference/full-barrier-first/host/full-46e9ec0034ee4252ba13788cba116d03-time25.png",
+      "bytes": 1455831
+    },
+    {
+      "path": "Logs/LimboReference/full-barrier-first/host/full-46e9ec0034ee4252ba13788cba116d03-time35.png",
+      "bytes": 1520606
+    },
+    {
+      "path": "Logs/LimboReference/full-barrier-first/host/full.jsonl",
+      "bytes": 71513
+    },
+    {
+      "path": "Logs/LimboReference/full-barrier-first/host/ghoul.jsonl",
+      "bytes": 333
+    },
+    {
+      "path": "Logs/LimboReference/full-barrier-first/host/host-audit.jsonl",
+      "bytes": 56842
+    },
+    {
+      "path": "Logs/LimboReference/full-barrier-first/host/player.log",
+      "bytes": 82825
+    },
+    {
+      "path": "Logs/LimboReference/full-barrier-first/host/process.pid",
+      "bytes": 7
+    },
+    {
+      "path": "Logs/LimboReference/full-barrier-first/host/render-46e9ec0034ee4252ba13788cba116d03-30.png",
+      "bytes": 1320682
+    },
+    {
+      "path": "Logs/LimboReference/full-barrier-first/host/render-46e9ec0034ee4252ba13788cba116d03-60.png",
+      "bytes": 1325513
+    },
+    {
+      "path": "Logs/LimboReference/full-barrier-first/host/spatial-completed-46e9ec0034ee4252ba13788cba116d03.png",
+      "bytes": 1227358
+    },
+    {
+      "path": "Logs/LimboReference/full-barrier-first/host/spatial-observation.jsonl",
+      "bytes": 482756
+    },
+    {
+      "path": "Logs/LimboReference/full-barrier-first/host/spawns-20260915-150243-288.csv",
+      "bytes": 698
+    },
+    {
+      "path": "Logs/LimboReference/full-barrier-first/host/stage2-observation.jsonl",
+      "bytes": 850
+    },
+    {
+      "path": "Logs/LimboReference/full-barrier-first/host/trap-46e9ec0034ee4252ba13788cba116d03-2147483649-Building-settled.png",
+      "bytes": 1536877
+    },
+    {
+      "path": "Logs/LimboReference/full-barrier-first/host/trap-46e9ec0034ee4252ba13788cba116d03-2147483649-Building.png",
+      "bytes": 1499840
+    },
+    {
+      "path": "Logs/LimboReference/full-barrier-first/host/trap-46e9ec0034ee4252ba13788cba116d03-2147483649-Framing-settled.png",
+      "bytes": 1442752
+    },
+    {
+      "path": "Logs/LimboReference/full-barrier-first/host/trap-46e9ec0034ee4252ba13788cba116d03-2147483649-Framing.png",
+      "bytes": 1208403
+    },
+    {
+      "path": "Logs/LimboReference/full-barrier-first/host/trap-46e9ec0034ee4252ba13788cba116d03-2147483649-Shrinking-settled.png",
+      "bytes": 1320478
+    },
+    {
+      "path": "Logs/LimboReference/full-barrier-first/host/trap-46e9ec0034ee4252ba13788cba116d03-2147483649-Shrinking.png",
+      "bytes": 1295152
+    },
+    {
+      "path": "Logs/LimboReference/full-barrier-first/host/trap-46e9ec0034ee4252ba13788cba116d03-2147483649-Stopping-settled.png",
+      "bytes": 1329123
+    },
+    {
+      "path": "Logs/LimboReference/full-barrier-first/host/trap-46e9ec0034ee4252ba13788cba116d03-2147483649-Stopping.png",
+      "bytes": 1335912
+    },
+    {
+      "path": "Logs/LimboReference/full-burst-first/client/art-build.json",
+      "bytes": 1612
+    },
+    {
+      "path": "Logs/LimboReference/full-burst-first/client/art-observation.jsonl",
+      "bytes": 470891
+    },
+    {
+      "path": "Logs/LimboReference/full-burst-first/client/client-audit.jsonl",
+      "bytes": 76359
+    },
+    {
+      "path": "Logs/LimboReference/full-burst-first/client/full-b0cb9c814b9c45c0b584791ba30d36e0-end.png",
+      "bytes": 87213
+    },
+    {
+      "path": "Logs/LimboReference/full-burst-first/client/full-b0cb9c814b9c45c0b584791ba30d36e0-request.png",
+      "bytes": 1531619
+    },
+    {
+      "path": "Logs/LimboReference/full-burst-first/client/full-b0cb9c814b9c45c0b584791ba30d36e0-time10.png",
+      "bytes": 1760154
+    },
+    {
+      "path": "Logs/LimboReference/full-burst-first/client/full-b0cb9c814b9c45c0b584791ba30d36e0-time20.png",
+      "bytes": 1461404
+    },
+    {
+      "path": "Logs/LimboReference/full-burst-first/client/full-b0cb9c814b9c45c0b584791ba30d36e0-time25.png",
+      "bytes": 1436457
+    },
+    {
+      "path": "Logs/LimboReference/full-burst-first/client/full-b0cb9c814b9c45c0b584791ba30d36e0-time35.png",
+      "bytes": 1476002
+    },
+    {
+      "path": "Logs/LimboReference/full-burst-first/client/full.jsonl",
+      "bytes": 85082
+    },
+    {
+      "path": "Logs/LimboReference/full-burst-first/client/ghoul.jsonl",
+      "bytes": 332
+    },
+    {
+      "path": "Logs/LimboReference/full-burst-first/client/player.log",
+      "bytes": 450233
+    },
+    {
+      "path": "Logs/LimboReference/full-burst-first/client/process.pid",
+      "bytes": 7
+    },
+    {
+      "path": "Logs/LimboReference/full-burst-first/client/render-b0cb9c814b9c45c0b584791ba30d36e0-30.png",
+      "bytes": 1173003
+    },
+    {
+      "path": "Logs/LimboReference/full-burst-first/client/render-b0cb9c814b9c45c0b584791ba30d36e0-60.png",
+      "bytes": 1255580
+    },
+    {
+      "path": "Logs/LimboReference/full-burst-first/client/spatial-completed-b0cb9c814b9c45c0b584791ba30d36e0.png",
+      "bytes": 77135
+    },
+    {
+      "path": "Logs/LimboReference/full-burst-first/client/spatial-observation.jsonl",
+      "bytes": 495353
+    },
+    {
+      "path": "Logs/LimboReference/full-burst-first/client/stage2-observation.jsonl",
+      "bytes": 1235851
+    },
+    {
+      "path": "Logs/LimboReference/full-burst-first/client/trap-b0cb9c814b9c45c0b584791ba30d36e0-1-Building-settled.png",
+      "bytes": 1240000
+    },
+    {
+      "path": "Logs/LimboReference/full-burst-first/client/trap-b0cb9c814b9c45c0b584791ba30d36e0-1-Building.png",
+      "bytes": 1262579
+    },
+    {
+      "path": "Logs/LimboReference/full-burst-first/client/trap-b0cb9c814b9c45c0b584791ba30d36e0-1-Stopping-settled.png",
+      "bytes": 1229510
+    },
+    {
+      "path": "Logs/LimboReference/full-burst-first/client/trap-b0cb9c814b9c45c0b584791ba30d36e0-1-Stopping.png",
+      "bytes": 1213404
+    },
+    {
+      "path": "Logs/LimboReference/full-burst-first/client/trap-b0cb9c814b9c45c0b584791ba30d36e0-2147483649-Building-settled.png",
+      "bytes": 1567360
+    },
+    {
+      "path": "Logs/LimboReference/full-burst-first/client/trap-b0cb9c814b9c45c0b584791ba30d36e0-2147483649-Building.png",
+      "bytes": 1535120
+    },
+    {
+      "path": "Logs/LimboReference/full-burst-first/client/trap-b0cb9c814b9c45c0b584791ba30d36e0-2147483649-Framing-settled.png",
+      "bytes": 1488854
+    },
+    {
+      "path": "Logs/LimboReference/full-burst-first/client/trap-b0cb9c814b9c45c0b584791ba30d36e0-2147483649-Framing.png",
+      "bytes": 1280990
+    },
+    {
+      "path": "Logs/LimboReference/full-burst-first/client/trap-b0cb9c814b9c45c0b584791ba30d36e0-2147483649-Shrinking-settled.png",
+      "bytes": 1256750
+    },
+    {
+      "path": "Logs/LimboReference/full-burst-first/client/trap-b0cb9c814b9c45c0b584791ba30d36e0-2147483649-Shrinking.png",
+      "bytes": 1259726
+    },
+    {
+      "path": "Logs/LimboReference/full-burst-first/client/trap-b0cb9c814b9c45c0b584791ba30d36e0-2147483649-Stopping-settled.png",
+      "bytes": 1271710
+    },
+    {
+      "path": "Logs/LimboReference/full-burst-first/client/trap-b0cb9c814b9c45c0b584791ba30d36e0-2147483649-Stopping.png",
+      "bytes": 1282626
+    },
+    {
+      "path": "Logs/LimboReference/full-burst-first/host/art-build.json",
+      "bytes": 1610
+    },
+    {
+      "path": "Logs/LimboReference/full-burst-first/host/art-observation.jsonl",
+      "bytes": 469981
+    },
+    {
+      "path": "Logs/LimboReference/full-burst-first/host/full-b0cb9c814b9c45c0b584791ba30d36e0-end.png",
+      "bytes": 1440162
+    },
+    {
+      "path": "Logs/LimboReference/full-burst-first/host/full-b0cb9c814b9c45c0b584791ba30d36e0-request.png",
+      "bytes": 1440162
+    },
+    {
+      "path": "Logs/LimboReference/full-burst-first/host/full-b0cb9c814b9c45c0b584791ba30d36e0-time10.png",
+      "bytes": 1760415
+    },
+    {
+      "path": "Logs/LimboReference/full-burst-first/host/full-b0cb9c814b9c45c0b584791ba30d36e0-time20.png",
+      "bytes": 1463632
+    },
+    {
+      "path": "Logs/LimboReference/full-burst-first/host/full-b0cb9c814b9c45c0b584791ba30d36e0-time25.png",
+      "bytes": 1515001
+    },
+    {
+      "path": "Logs/LimboReference/full-burst-first/host/full-b0cb9c814b9c45c0b584791ba30d36e0-time35.png",
+      "bytes": 1469436
+    },
+    {
+      "path": "Logs/LimboReference/full-burst-first/host/full.jsonl",
+      "bytes": 83999
+    },
+    {
+      "path": "Logs/LimboReference/full-burst-first/host/ghoul.jsonl",
+      "bytes": 328
+    },
+    {
+      "path": "Logs/LimboReference/full-burst-first/host/host-audit.jsonl",
+      "bytes": 73780
+    },
+    {
+      "path": "Logs/LimboReference/full-burst-first/host/player.log",
+      "bytes": 421914
+    },
+    {
+      "path": "Logs/LimboReference/full-burst-first/host/process.pid",
+      "bytes": 7
+    },
+    {
+      "path": "Logs/LimboReference/full-burst-first/host/render-b0cb9c814b9c45c0b584791ba30d36e0-30.png",
+      "bytes": 1280635
+    },
+    {
+      "path": "Logs/LimboReference/full-burst-first/host/render-b0cb9c814b9c45c0b584791ba30d36e0-60.png",
+      "bytes": 1273274
+    },
+    {
+      "path": "Logs/LimboReference/full-burst-first/host/spatial-completed-b0cb9c814b9c45c0b584791ba30d36e0.png",
+      "bytes": 1262002
+    },
+    {
+      "path": "Logs/LimboReference/full-burst-first/host/spatial-observation.jsonl",
+      "bytes": 498679
+    },
+    {
+      "path": "Logs/LimboReference/full-burst-first/host/spawns-20260915-150042-468.csv",
+      "bytes": 1582
+    },
+    {
+      "path": "Logs/LimboReference/full-burst-first/host/stage2-observation.jsonl",
+      "bytes": 566165
+    },
+    {
+      "path": "Logs/LimboReference/full-burst-first/host/trap-b0cb9c814b9c45c0b584791ba30d36e0-1-Building-settled.png",
+      "bytes": 1227754
+    },
+    {
+      "path": "Logs/LimboReference/full-burst-first/host/trap-b0cb9c814b9c45c0b584791ba30d36e0-1-Building.png",
+      "bytes": 1233736
+    },
+    {
+      "path": "Logs/LimboReference/full-burst-first/host/trap-b0cb9c814b9c45c0b584791ba30d36e0-1-Stopping-settled.png",
+      "bytes": 1234630
+    },
+    {
+      "path": "Logs/LimboReference/full-burst-first/host/trap-b0cb9c814b9c45c0b584791ba30d36e0-1-Stopping.png",
+      "bytes": 1221338
+    },
+    {
+      "path": "Logs/LimboReference/full-burst-first/host/trap-b0cb9c814b9c45c0b584791ba30d36e0-2147483649-Building-settled.png",
+      "bytes": 1565800
+    },
+    {
+      "path": "Logs/LimboReference/full-burst-first/host/trap-b0cb9c814b9c45c0b584791ba30d36e0-2147483649-Building.png",
+      "bytes": 1534877
+    },
+    {
+      "path": "Logs/LimboReference/full-burst-first/host/trap-b0cb9c814b9c45c0b584791ba30d36e0-2147483649-Framing-settled.png",
+      "bytes": 1480724
+    },
+    {
+      "path": "Logs/LimboReference/full-burst-first/host/trap-b0cb9c814b9c45c0b584791ba30d36e0-2147483649-Framing.png",
+      "bytes": 1233892
+    },
+    {
+      "path": "Logs/LimboReference/full-burst-first/host/trap-b0cb9c814b9c45c0b584791ba30d36e0-2147483649-Shrinking-settled.png",
+      "bytes": 1261748
+    },
+    {
+      "path": "Logs/LimboReference/full-burst-first/host/trap-b0cb9c814b9c45c0b584791ba30d36e0-2147483649-Shrinking.png",
+      "bytes": 1268290
+    },
+    {
+      "path": "Logs/LimboReference/full-burst-first/host/trap-b0cb9c814b9c45c0b584791ba30d36e0-2147483649-Stopping-settled.png",
+      "bytes": 1273094
+    },
+    {
+      "path": "Logs/LimboReference/full-burst-first/host/trap-b0cb9c814b9c45c0b584791ba30d36e0-2147483649-Stopping.png",
+      "bytes": 1283805
+    },
+    {
+      "path": "Logs/LimboReference/full-cancel/host/art-build.json",
+      "bytes": 1615
+    },
+    {
+      "path": "Logs/LimboReference/full-cancel/host/art-observation.jsonl",
+      "bytes": 1564840
+    },
+    {
+      "path": "Logs/LimboReference/full-cancel/host/full-0c7c705fe30c4d0382d5759a2d8be124-end.png",
+      "bytes": 1470932
+    },
+    {
+      "path": "Logs/LimboReference/full-cancel/host/full-0c7c705fe30c4d0382d5759a2d8be124-request.png",
+      "bytes": 1163926
+    },
+    {
+      "path": "Logs/LimboReference/full-cancel/host/full-0c7c705fe30c4d0382d5759a2d8be124-time10.png",
+      "bytes": 1421135
+    },
+    {
+      "path": "Logs/LimboReference/full-cancel/host/full-0c7c705fe30c4d0382d5759a2d8be124-time20.png",
+      "bytes": 1163926
+    },
+    {
+      "path": "Logs/LimboReference/full-cancel/host/full.jsonl",
+      "bytes": 61715
+    },
+    {
+      "path": "Logs/LimboReference/full-cancel/host/ghoul.jsonl",
+      "bytes": 333
+    },
+    {
+      "path": "Logs/LimboReference/full-cancel/host/host-audit.jsonl",
+      "bytes": 51429
+    },
+    {
+      "path": "Logs/LimboReference/full-cancel/host/player.log",
+      "bytes": 114458
+    },
+    {
+      "path": "Logs/LimboReference/full-cancel/host/process.pid",
+      "bytes": 7
+    },
+    {
+      "path": "Logs/LimboReference/full-cancel/host/spatial-completed-0c7c705fe30c4d0382d5759a2d8be124.png",
+      "bytes": 1288961
+    },
+    {
+      "path": "Logs/LimboReference/full-cancel/host/spatial-observation.jsonl",
+      "bytes": 693
+    },
+    {
+      "path": "Logs/LimboReference/full-cancel/host/spawns-20260915-151642-567.csv",
+      "bytes": 3135
+    },
+    {
+      "path": "Logs/LimboReference/full-cancel/host/stage2-observation.jsonl",
+      "bytes": 42074
+    },
+    {
+      "path": "Logs/LimboReference/full-cancel-held/host/art-build.json",
+      "bytes": 1615
+    },
+    {
+      "path": "Logs/LimboReference/full-cancel-held/host/art-observation.jsonl",
+      "bytes": 1152361
+    },
+    {
+      "path": "Logs/LimboReference/full-cancel-held/host/full-2e3bd957ec864170ac915282708f25dc-request.png",
+      "bytes": 1159881
+    },
+    {
+      "path": "Logs/LimboReference/full-cancel-held/host/full-2e3bd957ec864170ac915282708f25dc-time10.png",
+      "bytes": 1422046
+    },
+    {
+      "path": "Logs/LimboReference/full-cancel-held/host/full-2e3bd957ec864170ac915282708f25dc-time20.png",
+      "bytes": 1159881
+    },
+    {
+      "path": "Logs/LimboReference/full-cancel-held/host/full.jsonl",
+      "bytes": 48838
+    },
+    {
+      "path": "Logs/LimboReference/full-cancel-held/host/host-audit.jsonl",
+      "bytes": 40990
+    },
+    {
+      "path": "Logs/LimboReference/full-cancel-held/host/player.log",
+      "bytes": 112268
+    },
+    {
+      "path": "Logs/LimboReference/full-cancel-held/host/process.pid",
+      "bytes": 7
+    },
+    {
+      "path": "Logs/LimboReference/full-cancel-held/host/spatial-observation.jsonl",
+      "bytes": 0
+    },
+    {
+      "path": "Logs/LimboReference/full-cancel-held/host/spawns-20260915-151945-428.csv",
+      "bytes": 3101
+    },
+    {
+      "path": "Logs/LimboReference/full-cancel-held/host/stage2-observation.jsonl",
+      "bytes": 42017
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/client/art-build.json",
+      "bytes": 1615
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/client/art-observation.jsonl",
+      "bytes": 41272906
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/client/client-audit.jsonl",
+      "bytes": 1144496
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/client/death-ReferenceBrotchi(Clone)-0-0.png",
+      "bytes": 1311389
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/client/death-ReferenceBrotchi(Clone)-0-1.png",
+      "bytes": 1282121
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/client/death-ReferenceBrotchi(Clone)-0-2.png",
+      "bytes": 1305624
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/client/death-ReferenceBrotchi(Clone)-0-3.png",
+      "bytes": 1310178
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/client/death-ReferenceBrotchi(Clone)-1-0.png",
+      "bytes": 1438935
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/client/death-ReferenceBrotchi(Clone)-1-1.png",
+      "bytes": 1465008
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/client/death-ReferenceBrotchi(Clone)-1-2.png",
+      "bytes": 1438535
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/client/death-ReferenceBrotchi(Clone)-1-3.png",
+      "bytes": 1464380
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/client/death-ReferenceBrotchiDash(Clone)-0-0.png",
+      "bytes": 1324374
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/client/death-ReferenceBrotchiDash(Clone)-0-1.png",
+      "bytes": 1298437
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/client/death-ReferenceBrotchiDash(Clone)-0-2.png",
+      "bytes": 1304282
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/client/death-ReferenceBrotchiDash(Clone)-0-3.png",
+      "bytes": 1407080
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/client/death-ReferenceBrotchiDash(Clone)-1-0.png",
+      "bytes": 1409344
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/client/death-ReferenceBrotchiDash(Clone)-1-1.png",
+      "bytes": 1406968
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/client/death-ReferenceBrotchiDash(Clone)-1-2.png",
+      "bytes": 1466605
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/client/death-ReferenceBrotchiDash(Clone)-1-3.png",
+      "bytes": 1495135
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/client/death-ReferenceElite_Skeleton(Clone)-0-0.png",
+      "bytes": 1341775
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/client/death-ReferenceElite_Skeleton(Clone)-0-1.png",
+      "bytes": 1334492
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/client/death-ReferenceElite_Skeleton(Clone)-0-2.png",
+      "bytes": 1344918
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/client/death-ReferenceElite_Skeleton(Clone)-1-0.png",
+      "bytes": 1457679
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/client/death-ReferenceElite_Skeleton(Clone)-1-1.png",
+      "bytes": 1458574
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/client/death-ReferenceElite_Skeleton(Clone)-1-2.png",
+      "bytes": 1447150
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/client/death-ReferenceElite_Skeleton(Clone)-1-3.png",
+      "bytes": 1477230
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/client/death-ReferenceGhoul(Clone)-0-0.png",
+      "bytes": 1295746
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/client/death-ReferenceGhoul(Clone)-0-1.png",
+      "bytes": 1254511
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/client/death-ReferenceGhoul(Clone)-0-2.png",
+      "bytes": 1279288
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/client/death-ReferenceGhoul(Clone)-0-3.png",
+      "bytes": 1271447
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/client/death-ReferenceImp(Clone)-0-0.png",
+      "bytes": 1329006
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/client/death-ReferenceImp(Clone)-0-1.png",
+      "bytes": 1289109
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/client/death-ReferenceImp(Clone)-0-2.png",
+      "bytes": 1283001
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/client/death-ReferenceImp(Clone)-0-3.png",
+      "bytes": 1263181
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/client/death-ReferenceImp(Clone)-1-0.png",
+      "bytes": 1397107
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/client/death-ReferenceImp(Clone)-1-1.png",
+      "bytes": 1401836
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/client/death-ReferenceImp(Clone)-1-2.png",
+      "bytes": 1457492
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/client/death-ReferenceImp(Clone)-1-3.png",
+      "bytes": 1435520
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/client/death-ReferenceLostSoul(Clone)-0-0.png",
+      "bytes": 1438976
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/client/death-ReferenceLostSoul(Clone)-0-1.png",
+      "bytes": 1390801
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/client/death-ReferenceLostSoul(Clone)-0-2.png",
+      "bytes": 1397076
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/client/death-ReferenceLostSoul(Clone)-0-3.png",
+      "bytes": 1401322
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/client/death-ReferenceLostSoul(Clone)-1-0.png",
+      "bytes": 1508803
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/client/death-ReferenceLostSoul(Clone)-1-1.png",
+      "bytes": 1500704
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/client/death-ReferenceLostSoul(Clone)-1-2.png",
+      "bytes": 1492064
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/client/death-ReferenceLostSoul(Clone)-1-3.png",
+      "bytes": 1508110
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/client/death-ReferenceRusher(Clone)-1-0.png",
+      "bytes": 1453077
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/client/death-ReferenceRusher(Clone)-1-1.png",
+      "bytes": 1419131
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/client/death-ReferenceRusher(Clone)-1-2.png",
+      "bytes": 1439748
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/client/death-ReferenceRusher(Clone)-1-3.png",
+      "bytes": 1520290
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/client/death-ReferenceRusher(Clone)-2-0.png",
+      "bytes": 1451685
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/client/death-ReferenceRusher(Clone)-2-1.png",
+      "bytes": 1429532
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/client/death-ReferenceRusher(Clone)-2-2.png",
+      "bytes": 1477499
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/client/death-ReferenceRusher(Clone)-2-3.png",
+      "bytes": 1495793
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/client/death-ReferenceSkeleton(Clone)-0-0.png",
+      "bytes": 1372930
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/client/death-ReferenceSkeleton(Clone)-0-1.png",
+      "bytes": 1407469
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/client/death-ReferenceSkeleton(Clone)-0-2.png",
+      "bytes": 1387983
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/client/death-ReferenceSkeleton(Clone)-0-3.png",
+      "bytes": 1404313
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/client/death-ReferenceSkeleton(Clone)-2-0.png",
+      "bytes": 1444251
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/client/death-ReferenceSkeleton(Clone)-2-1.png",
+      "bytes": 1441769
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/client/death-ReferenceSkeleton(Clone)-2-2.png",
+      "bytes": 1398263
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/client/death-ReferenceSkeleton(Clone)-2-3.png",
+      "bytes": 1325438
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/client/death-ReferenceSlime(Clone)-0-0.png",
+      "bytes": 1352701
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/client/death-ReferenceSlime(Clone)-0-1.png",
+      "bytes": 1346506
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/client/death-ReferenceSlime(Clone)-0-2.png",
+      "bytes": 1394373
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/client/death-ReferenceSlime(Clone)-0-3.png",
+      "bytes": 1497166
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/client/death-ReferenceSlime(Clone)-1-0.png",
+      "bytes": 1549337
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/client/death-ReferenceSlime(Clone)-1-1.png",
+      "bytes": 1576355
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/client/death-ReferenceSlime(Clone)-1-2.png",
+      "bytes": 1561984
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/client/death-ReferenceSlime(Clone)-1-3.png",
+      "bytes": 1534145
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/client/full-e336b5bc5a564b98a895eefa52eeb5b0-end.png",
+      "bytes": 89256
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/client/full-e336b5bc5a564b98a895eefa52eeb5b0-request.png",
+      "bytes": 1225437
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/client/full-e336b5bc5a564b98a895eefa52eeb5b0-time599.png",
+      "bytes": 1567119
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/client/full-e336b5bc5a564b98a895eefa52eeb5b0-time605.png",
+      "bytes": 1595828
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/client/full-e336b5bc5a564b98a895eefa52eeb5b0-time621.png",
+      "bytes": 1601967
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/client/full-e336b5bc5a564b98a895eefa52eeb5b0-time635.png",
+      "bytes": 1744581
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/client/full-e336b5bc5a564b98a895eefa52eeb5b0-time640.png",
+      "bytes": 1790460
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/client/full-e336b5bc5a564b98a895eefa52eeb5b0-time655.png",
+      "bytes": 1783853
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/client/full-e336b5bc5a564b98a895eefa52eeb5b0-time660.png",
+      "bytes": 1762929
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/client/full-e336b5bc5a564b98a895eefa52eeb5b0-time676.png",
+      "bytes": 1787264
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/client/full-e336b5bc5a564b98a895eefa52eeb5b0-time696.png",
+      "bytes": 1540284
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/client/full-e336b5bc5a564b98a895eefa52eeb5b0-time715.png",
+      "bytes": 1558820
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/client/full-e336b5bc5a564b98a895eefa52eeb5b0-time720.png",
+      "bytes": 1564274
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/client/full.jsonl",
+      "bytes": 633390
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/client/ghoul-e336b5bc5a564b98a895eefa52eeb5b0-time450.png",
+      "bytes": 1398945
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/client/ghoul-e336b5bc5a564b98a895eefa52eeb5b0-time480.png",
+      "bytes": 1413287
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/client/ghoul-e336b5bc5a564b98a895eefa52eeb5b0-time510.png",
+      "bytes": 1406468
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/client/ghoul-e336b5bc5a564b98a895eefa52eeb5b0-time541.png",
+      "bytes": 1461483
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/client/ghoul-e336b5bc5a564b98a895eefa52eeb5b0-time555.png",
+      "bytes": 1451711
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/client/ghoul-e336b5bc5a564b98a895eefa52eeb5b0-time580.png",
+      "bytes": 1467633
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/client/ghoul-e336b5bc5a564b98a895eefa52eeb5b0-time599.png",
+      "bytes": 1372583
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/client/ghoul.jsonl",
+      "bytes": 1679676
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/client/player.log",
+      "bytes": 108387917
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/client/process.pid",
+      "bytes": 7
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/client/render-63d22706ff304bec9f344e6b1300cd8c-30.png",
+      "bytes": 1241465
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/client/render-63d22706ff304bec9f344e6b1300cd8c-60.png",
+      "bytes": 1219946
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/client/render-e336b5bc5a564b98a895eefa52eeb5b0-100.png",
+      "bytes": 1337166
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/client/render-e336b5bc5a564b98a895eefa52eeb5b0-110.png",
+      "bytes": 1436803
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/client/render-e336b5bc5a564b98a895eefa52eeb5b0-150.png",
+      "bytes": 1369670
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/client/render-e336b5bc5a564b98a895eefa52eeb5b0-180.png",
+      "bytes": 1451300
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/client/render-e336b5bc5a564b98a895eefa52eeb5b0-200.png",
+      "bytes": 1398453
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/client/render-e336b5bc5a564b98a895eefa52eeb5b0-209.png",
+      "bytes": 1428076
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/client/render-e336b5bc5a564b98a895eefa52eeb5b0-30.png",
+      "bytes": 1334462
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/client/render-e336b5bc5a564b98a895eefa52eeb5b0-60.png",
+      "bytes": 1234010
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/client/spatial-completed-e336b5bc5a564b98a895eefa52eeb5b0.png",
+      "bytes": 78786
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/client/spatial-observation.jsonl",
+      "bytes": 1108297
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/client/stage2-observation.jsonl",
+      "bytes": 74766705
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/client/trap-e336b5bc5a564b98a895eefa52eeb5b0-17-Building-settled.png",
+      "bytes": 1369175
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/client/trap-e336b5bc5a564b98a895eefa52eeb5b0-17-Building.png",
+      "bytes": 1366543
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/client/trap-e336b5bc5a564b98a895eefa52eeb5b0-17-Stopping-settled.png",
+      "bytes": 1323505
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/client/trap-e336b5bc5a564b98a895eefa52eeb5b0-17-Stopping.png",
+      "bytes": 1350461
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/client/trap-e336b5bc5a564b98a895eefa52eeb5b0-20-Building-settled.png",
+      "bytes": 1496555
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/client/trap-e336b5bc5a564b98a895eefa52eeb5b0-20-Building.png",
+      "bytes": 1489343
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/client/trap-e336b5bc5a564b98a895eefa52eeb5b0-20-Stopping-settled.png",
+      "bytes": 1501086
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/client/trap-e336b5bc5a564b98a895eefa52eeb5b0-20-Stopping.png",
+      "bytes": 1493219
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/client/trap-e336b5bc5a564b98a895eefa52eeb5b0-2147483649-Building-settled.png",
+      "bytes": 1655096
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/client/trap-e336b5bc5a564b98a895eefa52eeb5b0-2147483649-Building.png",
+      "bytes": 1642097
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/client/trap-e336b5bc5a564b98a895eefa52eeb5b0-2147483649-Framing-settled.png",
+      "bytes": 1598799
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/client/trap-e336b5bc5a564b98a895eefa52eeb5b0-2147483649-Framing.png",
+      "bytes": 1430713
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/client/trap-e336b5bc5a564b98a895eefa52eeb5b0-2147483649-Shrinking-settled.png",
+      "bytes": 1524269
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/client/trap-e336b5bc5a564b98a895eefa52eeb5b0-2147483649-Shrinking.png",
+      "bytes": 1512651
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/client/trap-e336b5bc5a564b98a895eefa52eeb5b0-2147483649-Stopping-settled.png",
+      "bytes": 1447565
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/client/trap-e336b5bc5a564b98a895eefa52eeb5b0-2147483649-Stopping.png",
+      "bytes": 1450506
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/client/trap-e336b5bc5a564b98a895eefa52eeb5b0-2147483650-Building-settled.png",
+      "bytes": 1649300
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/client/trap-e336b5bc5a564b98a895eefa52eeb5b0-2147483650-Building.png",
+      "bytes": 1613681
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/client/trap-e336b5bc5a564b98a895eefa52eeb5b0-2147483650-Framing-settled.png",
+      "bytes": 1585465
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/client/trap-e336b5bc5a564b98a895eefa52eeb5b0-2147483650-Framing.png",
+      "bytes": 1502415
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/client/trap-e336b5bc5a564b98a895eefa52eeb5b0-2147483650-Shrinking-settled.png",
+      "bytes": 1453327
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/client/trap-e336b5bc5a564b98a895eefa52eeb5b0-2147483650-Shrinking.png",
+      "bytes": 1486928
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/client/trap-e336b5bc5a564b98a895eefa52eeb5b0-2147483650-Stopping-settled.png",
+      "bytes": 1464654
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/client/trap-e336b5bc5a564b98a895eefa52eeb5b0-2147483650-Stopping.png",
+      "bytes": 1500267
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/client/trap-e336b5bc5a564b98a895eefa52eeb5b0-26-Building-settled.png",
+      "bytes": 1543002
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/client/trap-e336b5bc5a564b98a895eefa52eeb5b0-26-Building.png",
+      "bytes": 1522959
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/client/trap-e336b5bc5a564b98a895eefa52eeb5b0-26-Stopping-settled.png",
+      "bytes": 1512944
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/client/trap-e336b5bc5a564b98a895eefa52eeb5b0-26-Stopping.png",
+      "bytes": 1517829
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/client/trap-e336b5bc5a564b98a895eefa52eeb5b0-27-Building-settled.png",
+      "bytes": 1504483
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/client/trap-e336b5bc5a564b98a895eefa52eeb5b0-27-Building.png",
+      "bytes": 1522060
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/client/trap-e336b5bc5a564b98a895eefa52eeb5b0-27-Stopping-settled.png",
+      "bytes": 1505779
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/client/trap-e336b5bc5a564b98a895eefa52eeb5b0-27-Stopping.png",
+      "bytes": 1545618
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/client/trap-e336b5bc5a564b98a895eefa52eeb5b0-29-Building-settled.png",
+      "bytes": 1587715
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/client/trap-e336b5bc5a564b98a895eefa52eeb5b0-29-Building.png",
+      "bytes": 1564895
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/client/trap-e336b5bc5a564b98a895eefa52eeb5b0-29-Stopping-settled.png",
+      "bytes": 1562969
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/client/trap-e336b5bc5a564b98a895eefa52eeb5b0-29-Stopping.png",
+      "bytes": 1566056
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/client/trap-e336b5bc5a564b98a895eefa52eeb5b0-30-Building-settled.png",
+      "bytes": 1411055
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/client/trap-e336b5bc5a564b98a895eefa52eeb5b0-30-Building.png",
+      "bytes": 1350024
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/client/trap-e336b5bc5a564b98a895eefa52eeb5b0-30-Stopping-settled.png",
+      "bytes": 1410805
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/client/trap-e336b5bc5a564b98a895eefa52eeb5b0-30-Stopping.png",
+      "bytes": 1434960
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/client/trap-e336b5bc5a564b98a895eefa52eeb5b0-31-Building-settled.png",
+      "bytes": 1430662
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/client/trap-e336b5bc5a564b98a895eefa52eeb5b0-31-Building.png",
+      "bytes": 1444738
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/client/trap-e336b5bc5a564b98a895eefa52eeb5b0-31-Stopping-settled.png",
+      "bytes": 1427348
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/client/trap-e336b5bc5a564b98a895eefa52eeb5b0-31-Stopping.png",
+      "bytes": 1401258
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/host/art-build.json",
+      "bytes": 1613
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/host/art-observation.jsonl",
+      "bytes": 40549882
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/host/death-ReferenceBrotchi(Clone)-0-0.png",
+      "bytes": 1303635
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/host/death-ReferenceBrotchi(Clone)-0-1.png",
+      "bytes": 1268975
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/host/death-ReferenceBrotchi(Clone)-0-2.png",
+      "bytes": 1280499
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/host/death-ReferenceBrotchi(Clone)-0-3.png",
+      "bytes": 1366932
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/host/death-ReferenceBrotchi(Clone)-1-0.png",
+      "bytes": 1422608
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/host/death-ReferenceBrotchi(Clone)-1-1.png",
+      "bytes": 1451429
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/host/death-ReferenceBrotchi(Clone)-1-2.png",
+      "bytes": 1427337
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/host/death-ReferenceBrotchiDash(Clone)-0-0.png",
+      "bytes": 1409068
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/host/death-ReferenceBrotchiDash(Clone)-0-1.png",
+      "bytes": 1397850
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/host/death-ReferenceBrotchiDash(Clone)-0-2.png",
+      "bytes": 1401711
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/host/death-ReferenceBrotchiDash(Clone)-0-3.png",
+      "bytes": 1445738
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/host/death-ReferenceBrotchiDash(Clone)-1-0.png",
+      "bytes": 1428455
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/host/death-ReferenceBrotchiDash(Clone)-1-1.png",
+      "bytes": 1375784
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/host/death-ReferenceBrotchiDash(Clone)-1-2.png",
+      "bytes": 1395225
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/host/death-ReferenceBrotchiDash(Clone)-1-3.png",
+      "bytes": 1418273
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/host/death-ReferenceElite_Skeleton(Clone)-0-0.png",
+      "bytes": 1357421
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/host/death-ReferenceElite_Skeleton(Clone)-0-1.png",
+      "bytes": 1335589
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/host/death-ReferenceElite_Skeleton(Clone)-0-2.png",
+      "bytes": 1324586
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/host/death-ReferenceElite_Skeleton(Clone)-1-0.png",
+      "bytes": 1440480
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/host/death-ReferenceElite_Skeleton(Clone)-1-1.png",
+      "bytes": 1442411
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/host/death-ReferenceElite_Skeleton(Clone)-1-2.png",
+      "bytes": 1439770
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/host/death-ReferenceGhoul(Clone)-0-0.png",
+      "bytes": 1184148
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/host/death-ReferenceGhoul(Clone)-0-1.png",
+      "bytes": 1440687
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/host/death-ReferenceGhoul(Clone)-0-2.png",
+      "bytes": 1433585
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/host/death-ReferenceGhoul(Clone)-0-3.png",
+      "bytes": 1391675
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/host/death-ReferenceImp(Clone)-0-0.png",
+      "bytes": 1358339
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/host/death-ReferenceImp(Clone)-0-1.png",
+      "bytes": 1337549
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/host/death-ReferenceImp(Clone)-0-2.png",
+      "bytes": 1329774
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/host/death-ReferenceImp(Clone)-1-0.png",
+      "bytes": 1404023
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/host/death-ReferenceImp(Clone)-1-1.png",
+      "bytes": 1424770
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/host/death-ReferenceImp(Clone)-1-2.png",
+      "bytes": 1448332
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/host/death-ReferenceImp(Clone)-1-3.png",
+      "bytes": 1477197
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/host/death-ReferenceLostSoul(Clone)-0-0.png",
+      "bytes": 1419123
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/host/death-ReferenceLostSoul(Clone)-0-1.png",
+      "bytes": 1382765
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/host/death-ReferenceLostSoul(Clone)-0-2.png",
+      "bytes": 1396312
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/host/death-ReferenceLostSoul(Clone)-1-0.png",
+      "bytes": 1493528
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/host/death-ReferenceLostSoul(Clone)-1-1.png",
+      "bytes": 1529810
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/host/death-ReferenceLostSoul(Clone)-1-2.png",
+      "bytes": 1507097
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/host/death-ReferenceLostSoul(Clone)-1-3.png",
+      "bytes": 1435975
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/host/death-ReferenceRusher(Clone)-1-0.png",
+      "bytes": 1335363
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/host/death-ReferenceRusher(Clone)-1-1.png",
+      "bytes": 1336105
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/host/death-ReferenceRusher(Clone)-1-2.png",
+      "bytes": 1351681
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/host/death-ReferenceRusher(Clone)-1-3.png",
+      "bytes": 1474835
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/host/death-ReferenceRusher(Clone)-2-0.png",
+      "bytes": 1448338
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/host/death-ReferenceRusher(Clone)-2-1.png",
+      "bytes": 1430337
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/host/death-ReferenceRusher(Clone)-2-2.png",
+      "bytes": 1458165
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/host/death-ReferenceRusher(Clone)-2-3.png",
+      "bytes": 1456365
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/host/death-ReferenceSkeleton(Clone)-0-0.png",
+      "bytes": 1328167
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/host/death-ReferenceSkeleton(Clone)-0-1.png",
+      "bytes": 1370840
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/host/death-ReferenceSkeleton(Clone)-0-2.png",
+      "bytes": 1383771
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/host/death-ReferenceSkeleton(Clone)-2-0.png",
+      "bytes": 1326860
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/host/death-ReferenceSkeleton(Clone)-2-1.png",
+      "bytes": 1369278
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/host/death-ReferenceSkeleton(Clone)-2-2.png",
+      "bytes": 1361746
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/host/death-ReferenceSkeleton(Clone)-2-3.png",
+      "bytes": 1489883
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/host/death-ReferenceSlime(Clone)-0-0.png",
+      "bytes": 1405758
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/host/death-ReferenceSlime(Clone)-0-1.png",
+      "bytes": 1386459
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/host/death-ReferenceSlime(Clone)-0-2.png",
+      "bytes": 1379781
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/host/death-ReferenceSlime(Clone)-0-3.png",
+      "bytes": 1463839
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/host/death-ReferenceSlime(Clone)-1-0.png",
+      "bytes": 1529792
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/host/death-ReferenceSlime(Clone)-1-1.png",
+      "bytes": 1485140
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/host/death-ReferenceSlime(Clone)-1-2.png",
+      "bytes": 1487541
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/host/full-e336b5bc5a564b98a895eefa52eeb5b0-end.png",
+      "bytes": 1480331
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/host/full-e336b5bc5a564b98a895eefa52eeb5b0-request.png",
+      "bytes": 1599862
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/host/full-e336b5bc5a564b98a895eefa52eeb5b0-time599.png",
+      "bytes": 1471941
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/host/full-e336b5bc5a564b98a895eefa52eeb5b0-time605.png",
+      "bytes": 1658173
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/host/full-e336b5bc5a564b98a895eefa52eeb5b0-time621.png",
+      "bytes": 1591269
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/host/full-e336b5bc5a564b98a895eefa52eeb5b0-time635.png",
+      "bytes": 1735293
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/host/full-e336b5bc5a564b98a895eefa52eeb5b0-time640.png",
+      "bytes": 1752060
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/host/full-e336b5bc5a564b98a895eefa52eeb5b0-time655.png",
+      "bytes": 1777046
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/host/full-e336b5bc5a564b98a895eefa52eeb5b0-time660.png",
+      "bytes": 1763599
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/host/full-e336b5bc5a564b98a895eefa52eeb5b0-time676.png",
+      "bytes": 1811686
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/host/full-e336b5bc5a564b98a895eefa52eeb5b0-time696.png",
+      "bytes": 1618939
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/host/full-e336b5bc5a564b98a895eefa52eeb5b0-time715.png",
+      "bytes": 1598353
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/host/full-e336b5bc5a564b98a895eefa52eeb5b0-time720.png",
+      "bytes": 1577933
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/host/full.jsonl",
+      "bytes": 630200
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/host/ghoul-e336b5bc5a564b98a895eefa52eeb5b0-time450.png",
+      "bytes": 1355102
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/host/ghoul-e336b5bc5a564b98a895eefa52eeb5b0-time480.png",
+      "bytes": 1382012
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/host/ghoul-e336b5bc5a564b98a895eefa52eeb5b0-time510.png",
+      "bytes": 1383714
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/host/ghoul-e336b5bc5a564b98a895eefa52eeb5b0-time541.png",
+      "bytes": 1474499
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/host/ghoul-e336b5bc5a564b98a895eefa52eeb5b0-time555.png",
+      "bytes": 1477100
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/host/ghoul-e336b5bc5a564b98a895eefa52eeb5b0-time580.png",
+      "bytes": 1469917
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/host/ghoul-e336b5bc5a564b98a895eefa52eeb5b0-time599.png",
+      "bytes": 1287589
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/host/ghoul.jsonl",
+      "bytes": 1662678
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/host/host-audit.jsonl",
+      "bytes": 1130573
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/host/player.log",
+      "bytes": 139516080
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/host/process.pid",
+      "bytes": 7
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/host/render-63d22706ff304bec9f344e6b1300cd8c-30.png",
+      "bytes": 1292739
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/host/render-63d22706ff304bec9f344e6b1300cd8c-60.png",
+      "bytes": 1281697
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/host/render-e336b5bc5a564b98a895eefa52eeb5b0-100.png",
+      "bytes": 1287802
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/host/render-e336b5bc5a564b98a895eefa52eeb5b0-110.png",
+      "bytes": 1334024
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/host/render-e336b5bc5a564b98a895eefa52eeb5b0-150.png",
+      "bytes": 1410079
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/host/render-e336b5bc5a564b98a895eefa52eeb5b0-180.png",
+      "bytes": 1453052
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/host/render-e336b5bc5a564b98a895eefa52eeb5b0-200.png",
+      "bytes": 1446708
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/host/render-e336b5bc5a564b98a895eefa52eeb5b0-209.png",
+      "bytes": 1404758
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/host/render-e336b5bc5a564b98a895eefa52eeb5b0-30.png",
+      "bytes": 1269420
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/host/render-e336b5bc5a564b98a895eefa52eeb5b0-60.png",
+      "bytes": 1182430
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/host/spatial-completed-e336b5bc5a564b98a895eefa52eeb5b0.png",
+      "bytes": 1300315
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/host/spatial-observation.jsonl",
+      "bytes": 1088573
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/host/spawns-20260915-150008-304.csv",
+      "bytes": 716236
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/host/spawns-20260915-151313-227.csv",
+      "bytes": 17028
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/host/stage2-observation.jsonl",
+      "bytes": 75435377
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/host/trap-e336b5bc5a564b98a895eefa52eeb5b0-17-Building-settled.png",
+      "bytes": 1465498
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/host/trap-e336b5bc5a564b98a895eefa52eeb5b0-17-Building.png",
+      "bytes": 1427404
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/host/trap-e336b5bc5a564b98a895eefa52eeb5b0-17-Stopping-settled.png",
+      "bytes": 1194358
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/host/trap-e336b5bc5a564b98a895eefa52eeb5b0-17-Stopping.png",
+      "bytes": 1405627
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/host/trap-e336b5bc5a564b98a895eefa52eeb5b0-20-Building-settled.png",
+      "bytes": 1483012
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/host/trap-e336b5bc5a564b98a895eefa52eeb5b0-20-Building.png",
+      "bytes": 1481057
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/host/trap-e336b5bc5a564b98a895eefa52eeb5b0-20-Stopping-settled.png",
+      "bytes": 1508143
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/host/trap-e336b5bc5a564b98a895eefa52eeb5b0-20-Stopping.png",
+      "bytes": 1500310
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/host/trap-e336b5bc5a564b98a895eefa52eeb5b0-2147483649-Building-settled.png",
+      "bytes": 1656369
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/host/trap-e336b5bc5a564b98a895eefa52eeb5b0-2147483649-Building.png",
+      "bytes": 1642981
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/host/trap-e336b5bc5a564b98a895eefa52eeb5b0-2147483649-Framing-settled.png",
+      "bytes": 1581527
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/host/trap-e336b5bc5a564b98a895eefa52eeb5b0-2147483649-Framing.png",
+      "bytes": 1386116
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/host/trap-e336b5bc5a564b98a895eefa52eeb5b0-2147483649-Shrinking-settled.png",
+      "bytes": 1479729
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/host/trap-e336b5bc5a564b98a895eefa52eeb5b0-2147483649-Shrinking.png",
+      "bytes": 1454522
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/host/trap-e336b5bc5a564b98a895eefa52eeb5b0-2147483649-Stopping-settled.png",
+      "bytes": 1467203
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/host/trap-e336b5bc5a564b98a895eefa52eeb5b0-2147483649-Stopping.png",
+      "bytes": 1439764
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/host/trap-e336b5bc5a564b98a895eefa52eeb5b0-2147483650-Building-settled.png",
+      "bytes": 1649404
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/host/trap-e336b5bc5a564b98a895eefa52eeb5b0-2147483650-Building.png",
+      "bytes": 1616662
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/host/trap-e336b5bc5a564b98a895eefa52eeb5b0-2147483650-Framing-settled.png",
+      "bytes": 1589997
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/host/trap-e336b5bc5a564b98a895eefa52eeb5b0-2147483650-Framing.png",
+      "bytes": 1345552
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/host/trap-e336b5bc5a564b98a895eefa52eeb5b0-2147483650-Shrinking-settled.png",
+      "bytes": 1426181
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/host/trap-e336b5bc5a564b98a895eefa52eeb5b0-2147483650-Shrinking.png",
+      "bytes": 1439947
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/host/trap-e336b5bc5a564b98a895eefa52eeb5b0-2147483650-Stopping-settled.png",
+      "bytes": 1429254
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/host/trap-e336b5bc5a564b98a895eefa52eeb5b0-2147483650-Stopping.png",
+      "bytes": 1488599
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/host/trap-e336b5bc5a564b98a895eefa52eeb5b0-26-Building-settled.png",
+      "bytes": 1511839
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/host/trap-e336b5bc5a564b98a895eefa52eeb5b0-26-Building.png",
+      "bytes": 1505704
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/host/trap-e336b5bc5a564b98a895eefa52eeb5b0-26-Stopping-settled.png",
+      "bytes": 1500564
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/host/trap-e336b5bc5a564b98a895eefa52eeb5b0-26-Stopping.png",
+      "bytes": 1507156
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/host/trap-e336b5bc5a564b98a895eefa52eeb5b0-27-Building-settled.png",
+      "bytes": 1516400
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/host/trap-e336b5bc5a564b98a895eefa52eeb5b0-27-Building.png",
+      "bytes": 1526373
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/host/trap-e336b5bc5a564b98a895eefa52eeb5b0-27-Stopping-settled.png",
+      "bytes": 1511356
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/host/trap-e336b5bc5a564b98a895eefa52eeb5b0-27-Stopping.png",
+      "bytes": 1529720
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/host/trap-e336b5bc5a564b98a895eefa52eeb5b0-29-Building-settled.png",
+      "bytes": 1554517
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/host/trap-e336b5bc5a564b98a895eefa52eeb5b0-29-Building.png",
+      "bytes": 1565014
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/host/trap-e336b5bc5a564b98a895eefa52eeb5b0-29-Stopping-settled.png",
+      "bytes": 1552384
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/host/trap-e336b5bc5a564b98a895eefa52eeb5b0-29-Stopping.png",
+      "bytes": 1553988
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/host/trap-e336b5bc5a564b98a895eefa52eeb5b0-30-Building-settled.png",
+      "bytes": 1463634
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/host/trap-e336b5bc5a564b98a895eefa52eeb5b0-30-Building.png",
+      "bytes": 1398845
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/host/trap-e336b5bc5a564b98a895eefa52eeb5b0-30-Stopping-settled.png",
+      "bytes": 1460399
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/host/trap-e336b5bc5a564b98a895eefa52eeb5b0-30-Stopping.png",
+      "bytes": 1477057
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/host/trap-e336b5bc5a564b98a895eefa52eeb5b0-31-Building-settled.png",
+      "bytes": 1434309
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/host/trap-e336b5bc5a564b98a895eefa52eeb5b0-31-Building.png",
+      "bytes": 1458503
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/host/trap-e336b5bc5a564b98a895eefa52eeb5b0-31-Stopping-settled.png",
+      "bytes": 1432545
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-pair/host/trap-e336b5bc5a564b98a895eefa52eeb5b0-31-Stopping.png",
+      "bytes": 1387417
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-solo/host/art-build.json",
+      "bytes": 1613
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-solo/host/art-observation.jsonl",
+      "bytes": 53501965
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-solo/host/death-ReferenceBrotchi(Clone)-0-0.png",
+      "bytes": 1248840
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-solo/host/death-ReferenceBrotchi(Clone)-0-1.png",
+      "bytes": 1274819
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-solo/host/death-ReferenceBrotchi(Clone)-0-2.png",
+      "bytes": 1302296
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-solo/host/death-ReferenceBrotchi(Clone)-1-0.png",
+      "bytes": 1383777
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-solo/host/death-ReferenceBrotchi(Clone)-1-1.png",
+      "bytes": 1322427
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-solo/host/death-ReferenceBrotchi(Clone)-1-2.png",
+      "bytes": 1379484
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-solo/host/death-ReferenceBrotchiDash(Clone)-0-0.png",
+      "bytes": 1333718
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-solo/host/death-ReferenceBrotchiDash(Clone)-0-1.png",
+      "bytes": 1282463
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-solo/host/death-ReferenceBrotchiDash(Clone)-0-2.png",
+      "bytes": 1308384
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-solo/host/death-ReferenceBrotchiDash(Clone)-1-0.png",
+      "bytes": 1364140
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-solo/host/death-ReferenceBrotchiDash(Clone)-1-1.png",
+      "bytes": 1337104
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-solo/host/death-ReferenceBrotchiDash(Clone)-1-2.png",
+      "bytes": 1346856
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-solo/host/death-ReferenceElite_Skeleton(Clone)-0-0.png",
+      "bytes": 1353525
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-solo/host/death-ReferenceElite_Skeleton(Clone)-0-1.png",
+      "bytes": 1370435
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-solo/host/death-ReferenceElite_Skeleton(Clone)-0-2.png",
+      "bytes": 1423916
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-solo/host/death-ReferenceElite_Skeleton(Clone)-1-0.png",
+      "bytes": 1384470
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-solo/host/death-ReferenceElite_Skeleton(Clone)-1-1.png",
+      "bytes": 1361271
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-solo/host/death-ReferenceElite_Skeleton(Clone)-1-2.png",
+      "bytes": 1372638
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-solo/host/death-ReferenceGhoul(Clone)-0-0.png",
+      "bytes": 1444932
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-solo/host/death-ReferenceGhoul(Clone)-0-1.png",
+      "bytes": 1425527
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-solo/host/death-ReferenceGhoul(Clone)-0-2.png",
+      "bytes": 1416327
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-solo/host/death-ReferenceImp(Clone)-0-0.png",
+      "bytes": 1371791
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-solo/host/death-ReferenceImp(Clone)-0-1.png",
+      "bytes": 1338840
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-solo/host/death-ReferenceImp(Clone)-0-2.png",
+      "bytes": 1313214
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-solo/host/death-ReferenceImp(Clone)-1-0.png",
+      "bytes": 1321467
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-solo/host/death-ReferenceImp(Clone)-1-1.png",
+      "bytes": 1369529
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-solo/host/death-ReferenceImp(Clone)-1-2.png",
+      "bytes": 1388347
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-solo/host/death-ReferenceLostSoul(Clone)-0-0.png",
+      "bytes": 1393438
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-solo/host/death-ReferenceLostSoul(Clone)-0-1.png",
+      "bytes": 1386991
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-solo/host/death-ReferenceLostSoul(Clone)-0-2.png",
+      "bytes": 1353237
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-solo/host/death-ReferenceLostSoul(Clone)-1-0.png",
+      "bytes": 1388564
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-solo/host/death-ReferenceLostSoul(Clone)-1-1.png",
+      "bytes": 1378105
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-solo/host/death-ReferenceLostSoul(Clone)-1-2.png",
+      "bytes": 1365067
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-solo/host/death-ReferenceRusher(Clone)-1-0.png",
+      "bytes": 1378519
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-solo/host/death-ReferenceRusher(Clone)-1-1.png",
+      "bytes": 1433381
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-solo/host/death-ReferenceRusher(Clone)-1-2.png",
+      "bytes": 1409779
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-solo/host/death-ReferenceRusher(Clone)-2-0.png",
+      "bytes": 1517049
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-solo/host/death-ReferenceRusher(Clone)-2-1.png",
+      "bytes": 1479542
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-solo/host/death-ReferenceRusher(Clone)-2-2.png",
+      "bytes": 1526503
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-solo/host/death-ReferenceSkeleton(Clone)-0-0.png",
+      "bytes": 1418987
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-solo/host/death-ReferenceSkeleton(Clone)-0-1.png",
+      "bytes": 1418125
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-solo/host/death-ReferenceSkeleton(Clone)-0-2.png",
+      "bytes": 1440304
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-solo/host/death-ReferenceSkeleton(Clone)-2-0.png",
+      "bytes": 1354739
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-solo/host/death-ReferenceSkeleton(Clone)-2-1.png",
+      "bytes": 1330734
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-solo/host/death-ReferenceSkeleton(Clone)-2-2.png",
+      "bytes": 1334280
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-solo/host/death-ReferenceSlime(Clone)-0-0.png",
+      "bytes": 1393655
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-solo/host/death-ReferenceSlime(Clone)-0-1.png",
+      "bytes": 1374725
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-solo/host/death-ReferenceSlime(Clone)-0-2.png",
+      "bytes": 1397910
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-solo/host/death-ReferenceSlime(Clone)-1-0.png",
+      "bytes": 1456186
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-solo/host/death-ReferenceSlime(Clone)-1-1.png",
+      "bytes": 1499181
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-solo/host/death-ReferenceSlime(Clone)-1-2.png",
+      "bytes": 1455955
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-solo/host/full-89040ce5c7f64cbaa2b844f4c91e7d9b-end.png",
+      "bytes": 1572153
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-solo/host/full-89040ce5c7f64cbaa2b844f4c91e7d9b-request.png",
+      "bytes": 1572153
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-solo/host/full-89040ce5c7f64cbaa2b844f4c91e7d9b-time599.png",
+      "bytes": 1554069
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-solo/host/full-89040ce5c7f64cbaa2b844f4c91e7d9b-time605.png",
+      "bytes": 1560749
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-solo/host/full-89040ce5c7f64cbaa2b844f4c91e7d9b-time621.png",
+      "bytes": 1537020
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-solo/host/full-89040ce5c7f64cbaa2b844f4c91e7d9b-time635.png",
+      "bytes": 1686083
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-solo/host/full-89040ce5c7f64cbaa2b844f4c91e7d9b-time640.png",
+      "bytes": 1689292
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-solo/host/full-89040ce5c7f64cbaa2b844f4c91e7d9b-time655.png",
+      "bytes": 1602464
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-solo/host/full-89040ce5c7f64cbaa2b844f4c91e7d9b-time660.png",
+      "bytes": 1641691
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-solo/host/full-89040ce5c7f64cbaa2b844f4c91e7d9b-time676.png",
+      "bytes": 1753914
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-solo/host/full-89040ce5c7f64cbaa2b844f4c91e7d9b-time696.png",
+      "bytes": 1642350
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-solo/host/full-89040ce5c7f64cbaa2b844f4c91e7d9b-time715.png",
+      "bytes": 1663118
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-solo/host/full-89040ce5c7f64cbaa2b844f4c91e7d9b-time720.png",
+      "bytes": 1629858
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-solo/host/full.jsonl",
+      "bytes": 662111
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-solo/host/ghoul-89040ce5c7f64cbaa2b844f4c91e7d9b-time450.png",
+      "bytes": 1413446
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-solo/host/ghoul-89040ce5c7f64cbaa2b844f4c91e7d9b-time480.png",
+      "bytes": 1379422
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-solo/host/ghoul-89040ce5c7f64cbaa2b844f4c91e7d9b-time510.png",
+      "bytes": 1386731
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-solo/host/ghoul-89040ce5c7f64cbaa2b844f4c91e7d9b-time541.png",
+      "bytes": 1438062
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-solo/host/ghoul-89040ce5c7f64cbaa2b844f4c91e7d9b-time555.png",
+      "bytes": 1349443
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-solo/host/ghoul-89040ce5c7f64cbaa2b844f4c91e7d9b-time580.png",
+      "bytes": 1355389
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-solo/host/ghoul-89040ce5c7f64cbaa2b844f4c91e7d9b-time599.png",
+      "bytes": 1363394
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-solo/host/ghoul.jsonl",
+      "bytes": 2382568
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-solo/host/host-audit.jsonl",
+      "bytes": 1132421
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-solo/host/player.log",
+      "bytes": 174277147
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-solo/host/process.pid",
+      "bytes": 7
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-solo/host/render-05606ab957de4cbbb2d23331b33cdea6-30.png",
+      "bytes": 1292367
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-solo/host/render-89040ce5c7f64cbaa2b844f4c91e7d9b-100.png",
+      "bytes": 1427327
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-solo/host/render-89040ce5c7f64cbaa2b844f4c91e7d9b-110.png",
+      "bytes": 1342381
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-solo/host/render-89040ce5c7f64cbaa2b844f4c91e7d9b-150.png",
+      "bytes": 1456170
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-solo/host/render-89040ce5c7f64cbaa2b844f4c91e7d9b-180.png",
+      "bytes": 1531805
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-solo/host/render-89040ce5c7f64cbaa2b844f4c91e7d9b-200.png",
+      "bytes": 1471771
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-solo/host/render-89040ce5c7f64cbaa2b844f4c91e7d9b-209.png",
+      "bytes": 1393080
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-solo/host/render-89040ce5c7f64cbaa2b844f4c91e7d9b-30.png",
+      "bytes": 1273302
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-solo/host/render-89040ce5c7f64cbaa2b844f4c91e7d9b-60.png",
+      "bytes": 1348333
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-solo/host/spatial-completed-89040ce5c7f64cbaa2b844f4c91e7d9b.png",
+      "bytes": 1379478
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-solo/host/spatial-observation.jsonl",
+      "bytes": 1093061
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-solo/host/spawns-20260915-150007-901.csv",
+      "bytes": 707746
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-solo/host/spawns-20260915-151343-927.csv",
+      "bytes": 6726
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-solo/host/stage2-observation.jsonl",
+      "bytes": 67926376
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-solo/host/trap-89040ce5c7f64cbaa2b844f4c91e7d9b-17-Building-settled.png",
+      "bytes": 1370717
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-solo/host/trap-89040ce5c7f64cbaa2b844f4c91e7d9b-17-Building.png",
+      "bytes": 1364256
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-solo/host/trap-89040ce5c7f64cbaa2b844f4c91e7d9b-17-Stopping-settled.png",
+      "bytes": 1455258
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-solo/host/trap-89040ce5c7f64cbaa2b844f4c91e7d9b-17-Stopping.png",
+      "bytes": 1423310
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-solo/host/trap-89040ce5c7f64cbaa2b844f4c91e7d9b-20-Building-settled.png",
+      "bytes": 1466713
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-solo/host/trap-89040ce5c7f64cbaa2b844f4c91e7d9b-20-Building.png",
+      "bytes": 1443527
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-solo/host/trap-89040ce5c7f64cbaa2b844f4c91e7d9b-20-Stopping-settled.png",
+      "bytes": 1464609
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-solo/host/trap-89040ce5c7f64cbaa2b844f4c91e7d9b-20-Stopping.png",
+      "bytes": 1444218
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-solo/host/trap-89040ce5c7f64cbaa2b844f4c91e7d9b-2147483649-Building-settled.png",
+      "bytes": 1617354
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-solo/host/trap-89040ce5c7f64cbaa2b844f4c91e7d9b-2147483649-Building.png",
+      "bytes": 1602113
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-solo/host/trap-89040ce5c7f64cbaa2b844f4c91e7d9b-2147483649-Framing-settled.png",
+      "bytes": 1579601
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-solo/host/trap-89040ce5c7f64cbaa2b844f4c91e7d9b-2147483649-Framing.png",
+      "bytes": 1354931
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-solo/host/trap-89040ce5c7f64cbaa2b844f4c91e7d9b-2147483649-Shrinking-settled.png",
+      "bytes": 1356376
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-solo/host/trap-89040ce5c7f64cbaa2b844f4c91e7d9b-2147483649-Shrinking.png",
+      "bytes": 1355839
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-solo/host/trap-89040ce5c7f64cbaa2b844f4c91e7d9b-2147483649-Stopping-settled.png",
+      "bytes": 1415315
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-solo/host/trap-89040ce5c7f64cbaa2b844f4c91e7d9b-2147483649-Stopping.png",
+      "bytes": 1432630
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-solo/host/trap-89040ce5c7f64cbaa2b844f4c91e7d9b-2147483650-Building-settled.png",
+      "bytes": 1661675
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-solo/host/trap-89040ce5c7f64cbaa2b844f4c91e7d9b-2147483650-Building.png",
+      "bytes": 1637715
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-solo/host/trap-89040ce5c7f64cbaa2b844f4c91e7d9b-2147483650-Framing-settled.png",
+      "bytes": 1607251
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-solo/host/trap-89040ce5c7f64cbaa2b844f4c91e7d9b-2147483650-Framing.png",
+      "bytes": 1310182
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-solo/host/trap-89040ce5c7f64cbaa2b844f4c91e7d9b-2147483650-Shrinking-settled.png",
+      "bytes": 1380919
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-solo/host/trap-89040ce5c7f64cbaa2b844f4c91e7d9b-2147483650-Shrinking.png",
+      "bytes": 1402712
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-solo/host/trap-89040ce5c7f64cbaa2b844f4c91e7d9b-2147483650-Stopping-settled.png",
+      "bytes": 1478092
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-solo/host/trap-89040ce5c7f64cbaa2b844f4c91e7d9b-2147483650-Stopping.png",
+      "bytes": 1437201
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-solo/host/trap-89040ce5c7f64cbaa2b844f4c91e7d9b-26-Building-settled.png",
+      "bytes": 1496277
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-solo/host/trap-89040ce5c7f64cbaa2b844f4c91e7d9b-26-Building.png",
+      "bytes": 1465436
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-solo/host/trap-89040ce5c7f64cbaa2b844f4c91e7d9b-26-Stopping-settled.png",
+      "bytes": 1516655
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-solo/host/trap-89040ce5c7f64cbaa2b844f4c91e7d9b-26-Stopping.png",
+      "bytes": 1462041
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-solo/host/trap-89040ce5c7f64cbaa2b844f4c91e7d9b-27-Building-settled.png",
+      "bytes": 1470167
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-solo/host/trap-89040ce5c7f64cbaa2b844f4c91e7d9b-27-Building.png",
+      "bytes": 1410757
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-solo/host/trap-89040ce5c7f64cbaa2b844f4c91e7d9b-27-Stopping-settled.png",
+      "bytes": 1416667
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-solo/host/trap-89040ce5c7f64cbaa2b844f4c91e7d9b-27-Stopping.png",
+      "bytes": 1423584
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-solo/host/trap-89040ce5c7f64cbaa2b844f4c91e7d9b-29-Building-settled.png",
+      "bytes": 1539120
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-solo/host/trap-89040ce5c7f64cbaa2b844f4c91e7d9b-29-Building.png",
+      "bytes": 1552629
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-solo/host/trap-89040ce5c7f64cbaa2b844f4c91e7d9b-29-Stopping-settled.png",
+      "bytes": 1510656
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-solo/host/trap-89040ce5c7f64cbaa2b844f4c91e7d9b-29-Stopping.png",
+      "bytes": 1215987
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-solo/host/trap-89040ce5c7f64cbaa2b844f4c91e7d9b-30-Building-settled.png",
+      "bytes": 1427590
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-solo/host/trap-89040ce5c7f64cbaa2b844f4c91e7d9b-30-Building.png",
+      "bytes": 1437920
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-solo/host/trap-89040ce5c7f64cbaa2b844f4c91e7d9b-30-Stopping-settled.png",
+      "bytes": 1431235
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-solo/host/trap-89040ce5c7f64cbaa2b844f4c91e7d9b-30-Stopping.png",
+      "bytes": 1451521
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-solo/host/trap-89040ce5c7f64cbaa2b844f4c91e7d9b-31-Building-settled.png",
+      "bytes": 1444119
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-solo/host/trap-89040ce5c7f64cbaa2b844f4c91e7d9b-31-Building.png",
+      "bytes": 1433515
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-solo/host/trap-89040ce5c7f64cbaa2b844f4c91e7d9b-31-Stopping-settled.png",
+      "bytes": 1467751
+    },
+    {
+      "path": "Logs/LimboReference/full-candidate-solo/host/trap-89040ce5c7f64cbaa2b844f4c91e7d9b-31-Stopping.png",
+      "bytes": 1441858
+    },
+    {
+      "path": "Logs/LimboReference/full-disconnect/client/art-build.json",
+      "bytes": 1612
+    },
+    {
+      "path": "Logs/LimboReference/full-disconnect/client/art-observation.jsonl",
+      "bytes": 9660
+    },
+    {
+      "path": "Logs/LimboReference/full-disconnect/client/client-audit.jsonl",
+      "bytes": 0
+    },
+    {
+      "path": "Logs/LimboReference/full-disconnect/client/full.jsonl",
+      "bytes": 227
+    },
+    {
+      "path": "Logs/LimboReference/full-disconnect/client/ghoul.jsonl",
+      "bytes": 147
+    },
+    {
+      "path": "Logs/LimboReference/full-disconnect/client/player.log",
+      "bytes": 25768
+    },
+    {
+      "path": "Logs/LimboReference/full-disconnect/client/process.pid",
+      "bytes": 7
+    },
+    {
+      "path": "Logs/LimboReference/full-disconnect/client/stage2-observation.jsonl",
+      "bytes": 137
+    },
+    {
+      "path": "Logs/LimboReference/full-disconnect/host/art-build.json",
+      "bytes": 1610
+    },
+    {
+      "path": "Logs/LimboReference/full-disconnect/host/art-observation.jsonl",
+      "bytes": 9646
+    },
+    {
+      "path": "Logs/LimboReference/full-disconnect/host/full.jsonl",
+      "bytes": 227
+    },
+    {
+      "path": "Logs/LimboReference/full-disconnect/host/ghoul.jsonl",
+      "bytes": 147
+    },
+    {
+      "path": "Logs/LimboReference/full-disconnect/host/host-audit.jsonl",
+      "bytes": 0
+    },
+    {
+      "path": "Logs/LimboReference/full-disconnect/host/player.log",
+      "bytes": 93251
+    },
+    {
+      "path": "Logs/LimboReference/full-disconnect/host/process.pid",
+      "bytes": 7
+    },
+    {
+      "path": "Logs/LimboReference/full-disconnect/host/stage2-observation.jsonl",
+      "bytes": 137
+    },
+    {
+      "path": "Logs/LimboReference/full-disconnect-r2/client/art-build.json",
+      "bytes": 1612
+    },
+    {
+      "path": "Logs/LimboReference/full-disconnect-r2/client/art-observation.jsonl",
+      "bytes": 273468
+    },
+    {
+      "path": "Logs/LimboReference/full-disconnect-r2/client/client-audit.jsonl",
+      "bytes": 18393
+    },
+    {
+      "path": "Logs/LimboReference/full-disconnect-r2/client/full-ff3e47563c664069b9753eebc3d11bf2-request.png",
+      "bytes": 1082888
+    },
+    {
+      "path": "Logs/LimboReference/full-disconnect-r2/client/full-ff3e47563c664069b9753eebc3d11bf2-time10.png",
+      "bytes": 1425120
+    },
+    {
+      "path": "Logs/LimboReference/full-disconnect-r2/client/full-ff3e47563c664069b9753eebc3d11bf2-time20.png",
+      "bytes": 1082888
+    },
+    {
+      "path": "Logs/LimboReference/full-disconnect-r2/client/full.jsonl",
+      "bytes": 18560
+    },
+    {
+      "path": "Logs/LimboReference/full-disconnect-r2/client/ghoul.jsonl",
+      "bytes": 531
+    },
+    {
+      "path": "Logs/LimboReference/full-disconnect-r2/client/player.log",
+      "bytes": 51373
+    },
+    {
+      "path": "Logs/LimboReference/full-disconnect-r2/client/process.pid",
+      "bytes": 7
+    },
+    {
+      "path": "Logs/LimboReference/full-disconnect-r2/client/spatial-observation.jsonl",
+      "bytes": 0
+    },
+    {
+      "path": "Logs/LimboReference/full-disconnect-r2/client/stage2-observation.jsonl",
+      "bytes": 91587
+    },
+    {
+      "path": "Logs/LimboReference/full-disconnect-r2/host/art-build.json",
+      "bytes": 1610
+    },
+    {
+      "path": "Logs/LimboReference/full-disconnect-r2/host/art-observation.jsonl",
+      "bytes": 809969
+    },
+    {
+      "path": "Logs/LimboReference/full-disconnect-r2/host/full-ff3e47563c664069b9753eebc3d11bf2-end.png",
+      "bytes": 1381431
+    },
+    {
+      "path": "Logs/LimboReference/full-disconnect-r2/host/full-ff3e47563c664069b9753eebc3d11bf2-request.png",
+      "bytes": 1463918
+    },
+    {
+      "path": "Logs/LimboReference/full-disconnect-r2/host/full-ff3e47563c664069b9753eebc3d11bf2-time10.png",
+      "bytes": 1426344
+    },
+    {
+      "path": "Logs/LimboReference/full-disconnect-r2/host/full-ff3e47563c664069b9753eebc3d11bf2-time20.png",
+      "bytes": 1463918
+    },
+    {
+      "path": "Logs/LimboReference/full-disconnect-r2/host/full.jsonl",
+      "bytes": 35417
+    },
+    {
+      "path": "Logs/LimboReference/full-disconnect-r2/host/ghoul.jsonl",
+      "bytes": 332
+    },
+    {
+      "path": "Logs/LimboReference/full-disconnect-r2/host/host-audit.jsonl",
+      "bytes": 30915
+    },
+    {
+      "path": "Logs/LimboReference/full-disconnect-r2/host/player.log",
+      "bytes": 111052
+    },
+    {
+      "path": "Logs/LimboReference/full-disconnect-r2/host/process.pid",
+      "bytes": 7
+    },
+    {
+      "path": "Logs/LimboReference/full-disconnect-r2/host/spatial-completed-ff3e47563c664069b9753eebc3d11bf2.png",
+      "bytes": 1210275
+    },
+    {
+      "path": "Logs/LimboReference/full-disconnect-r2/host/spatial-observation.jsonl",
+      "bytes": 695
+    },
+    {
+      "path": "Logs/LimboReference/full-disconnect-r2/host/spawns-20260915-150649-146.csv",
+      "bytes": 3482
+    },
+    {
+      "path": "Logs/LimboReference/full-disconnect-r2/host/stage2-observation.jsonl",
+      "bytes": 60913
+    },
+    {
+      "path": "Logs/LimboReference/full-downed/client/art-build.json",
+      "bytes": 1612
+    },
+    {
+      "path": "Logs/LimboReference/full-downed/client/art-observation.jsonl",
+      "bytes": 4185
+    },
+    {
+      "path": "Logs/LimboReference/full-downed/client/client-audit.jsonl",
+      "bytes": 12634
+    },
+    {
+      "path": "Logs/LimboReference/full-downed/client/full.jsonl",
+      "bytes": 16516
+    },
+    {
+      "path": "Logs/LimboReference/full-downed/client/ghoul.jsonl",
+      "bytes": 332
+    },
+    {
+      "path": "Logs/LimboReference/full-downed/client/player.log",
+      "bytes": 40100
+    },
+    {
+      "path": "Logs/LimboReference/full-downed/client/process.pid",
+      "bytes": 7
+    },
+    {
+      "path": "Logs/LimboReference/full-downed/client/spatial-observation.jsonl",
+      "bytes": 0
+    },
+    {
+      "path": "Logs/LimboReference/full-downed/client/stage2-observation.jsonl",
+      "bytes": 283
+    },
+    {
+      "path": "Logs/LimboReference/full-downed/host/art-build.json",
+      "bytes": 1610
+    },
+    {
+      "path": "Logs/LimboReference/full-downed/host/art-observation.jsonl",
+      "bytes": 4162
+    },
+    {
+      "path": "Logs/LimboReference/full-downed/host/full.jsonl",
+      "bytes": 16480
+    },
+    {
+      "path": "Logs/LimboReference/full-downed/host/ghoul.jsonl",
+      "bytes": 333
+    },
+    {
+      "path": "Logs/LimboReference/full-downed/host/host-audit.jsonl",
+      "bytes": 12407
+    },
+    {
+      "path": "Logs/LimboReference/full-downed/host/player.log",
+      "bytes": 58946
+    },
+    {
+      "path": "Logs/LimboReference/full-downed/host/process.pid",
+      "bytes": 8
+    },
+    {
+      "path": "Logs/LimboReference/full-downed/host/spatial-observation.jsonl",
+      "bytes": 0
+    },
+    {
+      "path": "Logs/LimboReference/full-downed/host/stage2-observation.jsonl",
+      "bytes": 280
+    },
+    {
+      "path": "Logs/LimboReference/full-downed-fixed/client/art-build.json",
+      "bytes": 1617
+    },
+    {
+      "path": "Logs/LimboReference/full-downed-fixed/client/art-observation.jsonl",
+      "bytes": 1254070
+    },
+    {
+      "path": "Logs/LimboReference/full-downed-fixed/client/client-audit.jsonl",
+      "bytes": 42283
+    },
+    {
+      "path": "Logs/LimboReference/full-downed-fixed/client/full-4a935586f3644307b7c2001f8ddbb134-end.png",
+      "bytes": 83589
+    },
+    {
+      "path": "Logs/LimboReference/full-downed-fixed/client/full-4a935586f3644307b7c2001f8ddbb134-time10.png",
+      "bytes": 1425543
+    },
+    {
+      "path": "Logs/LimboReference/full-downed-fixed/client/full.jsonl",
+      "bytes": 48489
+    },
+    {
+      "path": "Logs/LimboReference/full-downed-fixed/client/ghoul.jsonl",
+      "bytes": 333
+    },
+    {
+      "path": "Logs/LimboReference/full-downed-fixed/client/player.log",
+      "bytes": 42823
+    },
+    {
+      "path": "Logs/LimboReference/full-downed-fixed/client/process.pid",
+      "bytes": 7
+    },
+    {
+      "path": "Logs/LimboReference/full-downed-fixed/client/spatial-completed-4a935586f3644307b7c2001f8ddbb134.png",
+      "bytes": 73741
+    },
+    {
+      "path": "Logs/LimboReference/full-downed-fixed/client/spatial-observation.jsonl",
+      "bytes": 698
+    },
+    {
+      "path": "Logs/LimboReference/full-downed-fixed/client/stage2-observation.jsonl",
+      "bytes": 67551
+    },
+    {
+      "path": "Logs/LimboReference/full-downed-fixed/host/art-build.json",
+      "bytes": 1615
+    },
+    {
+      "path": "Logs/LimboReference/full-downed-fixed/host/art-observation.jsonl",
+      "bytes": 1260797
+    },
+    {
+      "path": "Logs/LimboReference/full-downed-fixed/host/full-4a935586f3644307b7c2001f8ddbb134-end.png",
+      "bytes": 1462443
+    },
+    {
+      "path": "Logs/LimboReference/full-downed-fixed/host/full-4a935586f3644307b7c2001f8ddbb134-time10.png",
+      "bytes": 1427840
+    },
+    {
+      "path": "Logs/LimboReference/full-downed-fixed/host/full.jsonl",
+      "bytes": 48472
+    },
+    {
+      "path": "Logs/LimboReference/full-downed-fixed/host/ghoul.jsonl",
+      "bytes": 334
+    },
+    {
+      "path": "Logs/LimboReference/full-downed-fixed/host/host-audit.jsonl",
+      "bytes": 42472
+    },
+    {
+      "path": "Logs/LimboReference/full-downed-fixed/host/player.log",
+      "bytes": 101397
+    },
+    {
+      "path": "Logs/LimboReference/full-downed-fixed/host/process.pid",
+      "bytes": 7
+    },
+    {
+      "path": "Logs/LimboReference/full-downed-fixed/host/spatial-completed-4a935586f3644307b7c2001f8ddbb134.png",
+      "bytes": 1282146
+    },
+    {
+      "path": "Logs/LimboReference/full-downed-fixed/host/spatial-observation.jsonl",
+      "bytes": 694
+    },
+    {
+      "path": "Logs/LimboReference/full-downed-fixed/host/spawns-20260915-151530-300.csv",
+      "bytes": 3039
+    },
+    {
+      "path": "Logs/LimboReference/full-downed-fixed/host/stage2-observation.jsonl",
+      "bytes": 67536
+    },
+    {
+      "path": "Logs/LimboReference/full-final-cancel/host/art-build.json",
+      "bytes": 1610
+    },
+    {
+      "path": "Logs/LimboReference/full-final-cancel/host/art-observation.jsonl",
+      "bytes": 1716129
+    },
+    {
+      "path": "Logs/LimboReference/full-final-cancel/host/full-ee288fe5ff9243dcbcdfcaaa16625728-request.png",
+      "bytes": 1161765
+    },
+    {
+      "path": "Logs/LimboReference/full-final-cancel/host/full-ee288fe5ff9243dcbcdfcaaa16625728-time10.png",
+      "bytes": 1420308
+    },
+    {
+      "path": "Logs/LimboReference/full-final-cancel/host/full-ee288fe5ff9243dcbcdfcaaa16625728-time20.png",
+      "bytes": 1161765
+    },
+    {
+      "path": "Logs/LimboReference/full-final-cancel/host/full.jsonl",
+      "bytes": 67533
+    },
+    {
+      "path": "Logs/LimboReference/full-final-cancel/host/host-audit.jsonl",
+      "bytes": 55579
+    },
+    {
+      "path": "Logs/LimboReference/full-final-cancel/host/player.log",
+      "bytes": 109334
+    },
+    {
+      "path": "Logs/LimboReference/full-final-cancel/host/process.pid",
+      "bytes": 8
+    },
+    {
+      "path": "Logs/LimboReference/full-final-cancel/host/spatial-observation.jsonl",
+      "bytes": 0
+    },
+    {
+      "path": "Logs/LimboReference/full-final-cancel/host/spawns-20260915-152706-476.csv",
+      "bytes": 3089
+    },
+    {
+      "path": "Logs/LimboReference/full-final-cancel/host/stage2-observation.jsonl",
+      "bytes": 41999
+    },
+    {
+      "path": "Logs/LimboReference/full-final-cancel/host/ui-after-cancel.png",
+      "bytes": 35033
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/client/art-build.json",
+      "bytes": 1615
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/client/art-observation.jsonl",
+      "bytes": 44158711
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/client/client-audit.jsonl",
+      "bytes": 1058410
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/client/death-ReferenceBrotchi(Clone)-0-0.png",
+      "bytes": 1320477
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/client/death-ReferenceBrotchi(Clone)-0-1.png",
+      "bytes": 1282101
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/client/death-ReferenceBrotchi(Clone)-0-2.png",
+      "bytes": 1299290
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/client/death-ReferenceBrotchi(Clone)-0-3.png",
+      "bytes": 1242673
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/client/death-ReferenceBrotchi(Clone)-1-0.png",
+      "bytes": 1382328
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/client/death-ReferenceBrotchi(Clone)-1-1.png",
+      "bytes": 1389041
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/client/death-ReferenceBrotchi(Clone)-1-2.png",
+      "bytes": 1389671
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/client/death-ReferenceBrotchi(Clone)-1-3.png",
+      "bytes": 1368176
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/client/death-ReferenceBrotchiDash(Clone)-0-0.png",
+      "bytes": 1308527
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/client/death-ReferenceBrotchiDash(Clone)-0-1.png",
+      "bytes": 1282546
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/client/death-ReferenceBrotchiDash(Clone)-0-2.png",
+      "bytes": 1285017
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/client/death-ReferenceBrotchiDash(Clone)-0-3.png",
+      "bytes": 1296409
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/client/death-ReferenceBrotchiDash(Clone)-1-0.png",
+      "bytes": 1391974
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/client/death-ReferenceBrotchiDash(Clone)-1-1.png",
+      "bytes": 1417299
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/client/death-ReferenceBrotchiDash(Clone)-1-2.png",
+      "bytes": 1442300
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/client/death-ReferenceBrotchiDash(Clone)-1-3.png",
+      "bytes": 1295123
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/client/death-ReferenceElite_Skeleton(Clone)-0-0.png",
+      "bytes": 1427535
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/client/death-ReferenceElite_Skeleton(Clone)-0-1.png",
+      "bytes": 1431141
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/client/death-ReferenceElite_Skeleton(Clone)-0-2.png",
+      "bytes": 1424000
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/client/death-ReferenceElite_Skeleton(Clone)-1-0.png",
+      "bytes": 1427184
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/client/death-ReferenceElite_Skeleton(Clone)-1-1.png",
+      "bytes": 1428443
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/client/death-ReferenceElite_Skeleton(Clone)-1-2.png",
+      "bytes": 1436443
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/client/death-ReferenceGhoul(Clone)-0-0.png",
+      "bytes": 1386415
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/client/death-ReferenceGhoul(Clone)-0-1.png",
+      "bytes": 1350565
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/client/death-ReferenceGhoul(Clone)-0-2.png",
+      "bytes": 1360834
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/client/death-ReferenceGhoul(Clone)-0-3.png",
+      "bytes": 1346462
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/client/death-ReferenceImp(Clone)-0-0.png",
+      "bytes": 1337006
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/client/death-ReferenceImp(Clone)-0-1.png",
+      "bytes": 1309304
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/client/death-ReferenceImp(Clone)-0-2.png",
+      "bytes": 1325416
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/client/death-ReferenceImp(Clone)-1-0.png",
+      "bytes": 1426887
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/client/death-ReferenceImp(Clone)-1-1.png",
+      "bytes": 1401540
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/client/death-ReferenceImp(Clone)-1-2.png",
+      "bytes": 1410777
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/client/death-ReferenceImp(Clone)-1-3.png",
+      "bytes": 1423493
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/client/death-ReferenceLostSoul(Clone)-0-0.png",
+      "bytes": 1365771
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/client/death-ReferenceLostSoul(Clone)-0-1.png",
+      "bytes": 1352732
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/client/death-ReferenceLostSoul(Clone)-0-2.png",
+      "bytes": 1343828
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/client/death-ReferenceLostSoul(Clone)-0-3.png",
+      "bytes": 1352194
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/client/death-ReferenceLostSoul(Clone)-1-0.png",
+      "bytes": 1284473
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/client/death-ReferenceLostSoul(Clone)-1-1.png",
+      "bytes": 1333073
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/client/death-ReferenceLostSoul(Clone)-1-2.png",
+      "bytes": 1321354
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/client/death-ReferenceLostSoul(Clone)-1-3.png",
+      "bytes": 1364751
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/client/death-ReferenceRusher(Clone)-1-0.png",
+      "bytes": 1339130
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/client/death-ReferenceRusher(Clone)-1-1.png",
+      "bytes": 1344492
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/client/death-ReferenceRusher(Clone)-1-2.png",
+      "bytes": 1348077
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/client/death-ReferenceRusher(Clone)-1-3.png",
+      "bytes": 1309830
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/client/death-ReferenceRusher(Clone)-2-0.png",
+      "bytes": 1437338
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/client/death-ReferenceRusher(Clone)-2-1.png",
+      "bytes": 1429999
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/client/death-ReferenceRusher(Clone)-2-2.png",
+      "bytes": 1454957
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/client/death-ReferenceRusher(Clone)-2-3.png",
+      "bytes": 1483769
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/client/death-ReferenceSkeleton(Clone)-0-0.png",
+      "bytes": 1362437
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/client/death-ReferenceSkeleton(Clone)-0-1.png",
+      "bytes": 1262662
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/client/death-ReferenceSkeleton(Clone)-0-2.png",
+      "bytes": 1267880
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/client/death-ReferenceSkeleton(Clone)-0-3.png",
+      "bytes": 1323054
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/client/death-ReferenceSkeleton(Clone)-2-0.png",
+      "bytes": 1381964
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/client/death-ReferenceSkeleton(Clone)-2-1.png",
+      "bytes": 1376342
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/client/death-ReferenceSkeleton(Clone)-2-2.png",
+      "bytes": 1301674
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/client/death-ReferenceSkeleton(Clone)-2-3.png",
+      "bytes": 1292928
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/client/death-ReferenceSlime(Clone)-0-0.png",
+      "bytes": 1300627
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/client/death-ReferenceSlime(Clone)-0-1.png",
+      "bytes": 1339802
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/client/death-ReferenceSlime(Clone)-0-2.png",
+      "bytes": 1369253
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/client/death-ReferenceSlime(Clone)-0-3.png",
+      "bytes": 1389112
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/client/death-ReferenceSlime(Clone)-1-0.png",
+      "bytes": 1423493
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/client/death-ReferenceSlime(Clone)-1-1.png",
+      "bytes": 1412148
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/client/death-ReferenceSlime(Clone)-1-2.png",
+      "bytes": 1415050
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/client/death-ReferenceSlime(Clone)-1-3.png",
+      "bytes": 1379091
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/client/full-d471cbc04dc34319af5dc6cb16beff78-end.png",
+      "bytes": 89303
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/client/full-d471cbc04dc34319af5dc6cb16beff78-request.png",
+      "bytes": 1274831
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/client/full-d471cbc04dc34319af5dc6cb16beff78-time599.png",
+      "bytes": 1510402
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/client/full-d471cbc04dc34319af5dc6cb16beff78-time605.png",
+      "bytes": 1654888
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/client/full-d471cbc04dc34319af5dc6cb16beff78-time621.png",
+      "bytes": 1660972
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/client/full-d471cbc04dc34319af5dc6cb16beff78-time635.png",
+      "bytes": 1662283
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/client/full-d471cbc04dc34319af5dc6cb16beff78-time640.png",
+      "bytes": 1600769
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/client/full-d471cbc04dc34319af5dc6cb16beff78-time655.png",
+      "bytes": 1497653
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/client/full-d471cbc04dc34319af5dc6cb16beff78-time660.png",
+      "bytes": 1600175
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/client/full-d471cbc04dc34319af5dc6cb16beff78-time676.png",
+      "bytes": 1680173
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/client/full-d471cbc04dc34319af5dc6cb16beff78-time696.png",
+      "bytes": 1636213
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/client/full-d471cbc04dc34319af5dc6cb16beff78-time715.png",
+      "bytes": 1391430
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/client/full-d471cbc04dc34319af5dc6cb16beff78-time720.png",
+      "bytes": 1629822
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/client/full.jsonl",
+      "bytes": 604654
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/client/player.log",
+      "bytes": 102938868
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/client/process.pid",
+      "bytes": 7
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/client/render-d471cbc04dc34319af5dc6cb16beff78-100.png",
+      "bytes": 1288472
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/client/render-d471cbc04dc34319af5dc6cb16beff78-110.png",
+      "bytes": 1212301
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/client/render-d471cbc04dc34319af5dc6cb16beff78-150.png",
+      "bytes": 1346520
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/client/render-d471cbc04dc34319af5dc6cb16beff78-180.png",
+      "bytes": 1390132
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/client/render-d471cbc04dc34319af5dc6cb16beff78-200.png",
+      "bytes": 1322733
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/client/render-d471cbc04dc34319af5dc6cb16beff78-209.png",
+      "bytes": 1322668
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/client/render-d471cbc04dc34319af5dc6cb16beff78-30.png",
+      "bytes": 1274861
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/client/render-d471cbc04dc34319af5dc6cb16beff78-60.png",
+      "bytes": 1326728
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/client/spatial-completed-d471cbc04dc34319af5dc6cb16beff78.png",
+      "bytes": 78822
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/client/spatial-observation.jsonl",
+      "bytes": 1113467
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/client/stage2-observation.jsonl",
+      "bytes": 65411019
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/client/trap-d471cbc04dc34319af5dc6cb16beff78-17-Building-settled.png",
+      "bytes": 1370339
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/client/trap-d471cbc04dc34319af5dc6cb16beff78-17-Building.png",
+      "bytes": 1378340
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/client/trap-d471cbc04dc34319af5dc6cb16beff78-17-Stopping-settled.png",
+      "bytes": 1387149
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/client/trap-d471cbc04dc34319af5dc6cb16beff78-17-Stopping.png",
+      "bytes": 1373147
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/client/trap-d471cbc04dc34319af5dc6cb16beff78-20-Building-settled.png",
+      "bytes": 1296794
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/client/trap-d471cbc04dc34319af5dc6cb16beff78-20-Building.png",
+      "bytes": 1324675
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/client/trap-d471cbc04dc34319af5dc6cb16beff78-20-Stopping-settled.png",
+      "bytes": 1291934
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/client/trap-d471cbc04dc34319af5dc6cb16beff78-20-Stopping.png",
+      "bytes": 1279757
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/client/trap-d471cbc04dc34319af5dc6cb16beff78-2147483649-Building-settled.png",
+      "bytes": 1589862
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/client/trap-d471cbc04dc34319af5dc6cb16beff78-2147483649-Building.png",
+      "bytes": 1564279
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/client/trap-d471cbc04dc34319af5dc6cb16beff78-2147483649-Framing-settled.png",
+      "bytes": 1575083
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/client/trap-d471cbc04dc34319af5dc6cb16beff78-2147483649-Framing.png",
+      "bytes": 1412897
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/client/trap-d471cbc04dc34319af5dc6cb16beff78-2147483649-Shrinking-settled.png",
+      "bytes": 1455155
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/client/trap-d471cbc04dc34319af5dc6cb16beff78-2147483649-Shrinking.png",
+      "bytes": 1490620
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/client/trap-d471cbc04dc34319af5dc6cb16beff78-2147483649-Stopping-settled.png",
+      "bytes": 1438816
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/client/trap-d471cbc04dc34319af5dc6cb16beff78-2147483649-Stopping.png",
+      "bytes": 1446201
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/client/trap-d471cbc04dc34319af5dc6cb16beff78-2147483650-Building-settled.png",
+      "bytes": 1642727
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/client/trap-d471cbc04dc34319af5dc6cb16beff78-2147483650-Building.png",
+      "bytes": 1623071
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/client/trap-d471cbc04dc34319af5dc6cb16beff78-2147483650-Framing-settled.png",
+      "bytes": 1591955
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/client/trap-d471cbc04dc34319af5dc6cb16beff78-2147483650-Framing.png",
+      "bytes": 1392599
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/client/trap-d471cbc04dc34319af5dc6cb16beff78-2147483650-Shrinking-settled.png",
+      "bytes": 1457806
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/client/trap-d471cbc04dc34319af5dc6cb16beff78-2147483650-Shrinking.png",
+      "bytes": 1455951
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/client/trap-d471cbc04dc34319af5dc6cb16beff78-2147483650-Stopping-settled.png",
+      "bytes": 1479759
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/client/trap-d471cbc04dc34319af5dc6cb16beff78-2147483650-Stopping.png",
+      "bytes": 1459482
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/client/trap-d471cbc04dc34319af5dc6cb16beff78-26-Building-settled.png",
+      "bytes": 1399769
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/client/trap-d471cbc04dc34319af5dc6cb16beff78-26-Building.png",
+      "bytes": 1385711
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/client/trap-d471cbc04dc34319af5dc6cb16beff78-26-Stopping-settled.png",
+      "bytes": 1419010
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/client/trap-d471cbc04dc34319af5dc6cb16beff78-26-Stopping.png",
+      "bytes": 1379101
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/client/trap-d471cbc04dc34319af5dc6cb16beff78-27-Building-settled.png",
+      "bytes": 1383892
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/client/trap-d471cbc04dc34319af5dc6cb16beff78-27-Building.png",
+      "bytes": 1377004
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/client/trap-d471cbc04dc34319af5dc6cb16beff78-27-Stopping-settled.png",
+      "bytes": 1356302
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/client/trap-d471cbc04dc34319af5dc6cb16beff78-27-Stopping.png",
+      "bytes": 1353089
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/client/trap-d471cbc04dc34319af5dc6cb16beff78-29-Building-settled.png",
+      "bytes": 1477204
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/client/trap-d471cbc04dc34319af5dc6cb16beff78-29-Building.png",
+      "bytes": 1475551
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/client/trap-d471cbc04dc34319af5dc6cb16beff78-29-Stopping-settled.png",
+      "bytes": 1472705
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/client/trap-d471cbc04dc34319af5dc6cb16beff78-29-Stopping.png",
+      "bytes": 1485189
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/client/trap-d471cbc04dc34319af5dc6cb16beff78-30-Building-settled.png",
+      "bytes": 1442234
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/client/trap-d471cbc04dc34319af5dc6cb16beff78-30-Building.png",
+      "bytes": 1445432
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/client/trap-d471cbc04dc34319af5dc6cb16beff78-30-Stopping-settled.png",
+      "bytes": 1412869
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/client/trap-d471cbc04dc34319af5dc6cb16beff78-30-Stopping.png",
+      "bytes": 1424644
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/client/trap-d471cbc04dc34319af5dc6cb16beff78-31-Building-settled.png",
+      "bytes": 1468319
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/client/trap-d471cbc04dc34319af5dc6cb16beff78-31-Building.png",
+      "bytes": 1441042
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/client/trap-d471cbc04dc34319af5dc6cb16beff78-31-Stopping-settled.png",
+      "bytes": 1460608
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/client/trap-d471cbc04dc34319af5dc6cb16beff78-31-Stopping.png",
+      "bytes": 1418235
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/client/ui-restart.png",
+      "bytes": 65901
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/client/ui-second-barrier.png",
+      "bytes": 88923
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/client/ui-settlement.png",
+      "bytes": 22198
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/host/art-build.json",
+      "bytes": 1613
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/host/art-observation.jsonl",
+      "bytes": 43797434
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/host/death-ReferenceBrotchi(Clone)-0-0.png",
+      "bytes": 1314698
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/host/death-ReferenceBrotchi(Clone)-0-1.png",
+      "bytes": 1271864
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/host/death-ReferenceBrotchi(Clone)-0-2.png",
+      "bytes": 1281342
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/host/death-ReferenceBrotchi(Clone)-0-3.png",
+      "bytes": 1314537
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/host/death-ReferenceBrotchi(Clone)-1-0.png",
+      "bytes": 1386007
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/host/death-ReferenceBrotchi(Clone)-1-1.png",
+      "bytes": 1379856
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/host/death-ReferenceBrotchi(Clone)-1-2.png",
+      "bytes": 1374594
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/host/death-ReferenceBrotchiDash(Clone)-0-0.png",
+      "bytes": 1358311
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/host/death-ReferenceBrotchiDash(Clone)-0-1.png",
+      "bytes": 1337493
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/host/death-ReferenceBrotchiDash(Clone)-0-2.png",
+      "bytes": 1361424
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/host/death-ReferenceBrotchiDash(Clone)-0-3.png",
+      "bytes": 1438688
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/host/death-ReferenceBrotchiDash(Clone)-1-0.png",
+      "bytes": 1313878
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/host/death-ReferenceBrotchiDash(Clone)-1-1.png",
+      "bytes": 1270396
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/host/death-ReferenceBrotchiDash(Clone)-1-2.png",
+      "bytes": 1267637
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/host/death-ReferenceElite_Skeleton(Clone)-0-0.png",
+      "bytes": 1369523
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/host/death-ReferenceElite_Skeleton(Clone)-0-1.png",
+      "bytes": 1389892
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/host/death-ReferenceElite_Skeleton(Clone)-0-2.png",
+      "bytes": 1422353
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/host/death-ReferenceElite_Skeleton(Clone)-1-0.png",
+      "bytes": 1418824
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/host/death-ReferenceElite_Skeleton(Clone)-1-1.png",
+      "bytes": 1417715
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/host/death-ReferenceElite_Skeleton(Clone)-1-2.png",
+      "bytes": 1432694
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/host/death-ReferenceGhoul(Clone)-0-0.png",
+      "bytes": 1410732
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/host/death-ReferenceGhoul(Clone)-0-1.png",
+      "bytes": 1396520
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/host/death-ReferenceGhoul(Clone)-0-2.png",
+      "bytes": 1388500
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/host/death-ReferenceGhoul(Clone)-0-3.png",
+      "bytes": 1415708
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/host/death-ReferenceImp(Clone)-0-0.png",
+      "bytes": 1317928
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/host/death-ReferenceImp(Clone)-0-1.png",
+      "bytes": 1309221
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/host/death-ReferenceImp(Clone)-0-2.png",
+      "bytes": 1305759
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/host/death-ReferenceImp(Clone)-1-0.png",
+      "bytes": 1441198
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/host/death-ReferenceImp(Clone)-1-1.png",
+      "bytes": 1384787
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/host/death-ReferenceImp(Clone)-1-2.png",
+      "bytes": 1355993
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/host/death-ReferenceImp(Clone)-1-3.png",
+      "bytes": 1410892
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/host/death-ReferenceLostSoul(Clone)-0-0.png",
+      "bytes": 1407178
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/host/death-ReferenceLostSoul(Clone)-0-1.png",
+      "bytes": 1402094
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/host/death-ReferenceLostSoul(Clone)-0-2.png",
+      "bytes": 1176661
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/host/death-ReferenceLostSoul(Clone)-0-3.png",
+      "bytes": 1425759
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/host/death-ReferenceLostSoul(Clone)-1-0.png",
+      "bytes": 1314622
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/host/death-ReferenceLostSoul(Clone)-1-1.png",
+      "bytes": 1334529
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/host/death-ReferenceLostSoul(Clone)-1-2.png",
+      "bytes": 1346293
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/host/death-ReferenceLostSoul(Clone)-1-3.png",
+      "bytes": 1339104
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/host/death-ReferenceRusher(Clone)-1-0.png",
+      "bytes": 1381843
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/host/death-ReferenceRusher(Clone)-1-1.png",
+      "bytes": 1339940
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/host/death-ReferenceRusher(Clone)-1-2.png",
+      "bytes": 1364393
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/host/death-ReferenceRusher(Clone)-1-3.png",
+      "bytes": 1454427
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/host/death-ReferenceRusher(Clone)-2-0.png",
+      "bytes": 1427683
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/host/death-ReferenceRusher(Clone)-2-1.png",
+      "bytes": 1442887
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/host/death-ReferenceRusher(Clone)-2-2.png",
+      "bytes": 1464526
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/host/death-ReferenceSkeleton(Clone)-0-0.png",
+      "bytes": 1345910
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/host/death-ReferenceSkeleton(Clone)-0-1.png",
+      "bytes": 1363416
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/host/death-ReferenceSkeleton(Clone)-0-2.png",
+      "bytes": 1342557
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/host/death-ReferenceSkeleton(Clone)-2-0.png",
+      "bytes": 1283003
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/host/death-ReferenceSkeleton(Clone)-2-1.png",
+      "bytes": 1293496
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/host/death-ReferenceSkeleton(Clone)-2-2.png",
+      "bytes": 1297551
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/host/death-ReferenceSkeleton(Clone)-2-3.png",
+      "bytes": 1430469
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/host/death-ReferenceSlime(Clone)-0-0.png",
+      "bytes": 1280084
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/host/death-ReferenceSlime(Clone)-0-1.png",
+      "bytes": 1347196
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/host/death-ReferenceSlime(Clone)-0-2.png",
+      "bytes": 1351217
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/host/death-ReferenceSlime(Clone)-1-0.png",
+      "bytes": 1411776
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/host/death-ReferenceSlime(Clone)-1-1.png",
+      "bytes": 1414461
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/host/death-ReferenceSlime(Clone)-1-2.png",
+      "bytes": 1419653
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/host/full-d471cbc04dc34319af5dc6cb16beff78-end.png",
+      "bytes": 1488262
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/host/full-d471cbc04dc34319af5dc6cb16beff78-request.png",
+      "bytes": 1612953
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/host/full-d471cbc04dc34319af5dc6cb16beff78-time599.png",
+      "bytes": 1646874
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/host/full-d471cbc04dc34319af5dc6cb16beff78-time605.png",
+      "bytes": 1735599
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/host/full-d471cbc04dc34319af5dc6cb16beff78-time621.png",
+      "bytes": 1613017
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/host/full-d471cbc04dc34319af5dc6cb16beff78-time635.png",
+      "bytes": 1672655
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/host/full-d471cbc04dc34319af5dc6cb16beff78-time640.png",
+      "bytes": 1590673
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/host/full-d471cbc04dc34319af5dc6cb16beff78-time655.png",
+      "bytes": 1530746
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/host/full-d471cbc04dc34319af5dc6cb16beff78-time660.png",
+      "bytes": 1606381
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/host/full-d471cbc04dc34319af5dc6cb16beff78-time676.png",
+      "bytes": 1683608
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/host/full-d471cbc04dc34319af5dc6cb16beff78-time696.png",
+      "bytes": 1560829
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/host/full-d471cbc04dc34319af5dc6cb16beff78-time715.png",
+      "bytes": 1377917
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/host/full-d471cbc04dc34319af5dc6cb16beff78-time720.png",
+      "bytes": 1642895
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/host/full.jsonl",
+      "bytes": 600594
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/host/host-audit.jsonl",
+      "bytes": 1037153
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/host/player.log",
+      "bytes": 123961548
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/host/process.pid",
+      "bytes": 7
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/host/render-d471cbc04dc34319af5dc6cb16beff78-100.png",
+      "bytes": 1229286
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/host/render-d471cbc04dc34319af5dc6cb16beff78-110.png",
+      "bytes": 1250894
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/host/render-d471cbc04dc34319af5dc6cb16beff78-150.png",
+      "bytes": 1426868
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/host/render-d471cbc04dc34319af5dc6cb16beff78-180.png",
+      "bytes": 1438430
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/host/render-d471cbc04dc34319af5dc6cb16beff78-200.png",
+      "bytes": 1353876
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/host/render-d471cbc04dc34319af5dc6cb16beff78-209.png",
+      "bytes": 1308923
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/host/render-d471cbc04dc34319af5dc6cb16beff78-30.png",
+      "bytes": 1266817
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/host/render-d471cbc04dc34319af5dc6cb16beff78-60.png",
+      "bytes": 1325146
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/host/spatial-completed-d471cbc04dc34319af5dc6cb16beff78.png",
+      "bytes": 1303961
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/host/spatial-observation.jsonl",
+      "bytes": 1100027
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/host/spawns-20260915-152744-419.csv",
+      "bytes": 643252
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/host/spawns-20260915-154041-256.csv",
+      "bytes": 5726
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/host/stage2-observation.jsonl",
+      "bytes": 65180272
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/host/trap-d471cbc04dc34319af5dc6cb16beff78-17-Building-settled.png",
+      "bytes": 1411405
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/host/trap-d471cbc04dc34319af5dc6cb16beff78-17-Building.png",
+      "bytes": 1401935
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/host/trap-d471cbc04dc34319af5dc6cb16beff78-17-Stopping-settled.png",
+      "bytes": 1285988
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/host/trap-d471cbc04dc34319af5dc6cb16beff78-17-Stopping.png",
+      "bytes": 1323736
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/host/trap-d471cbc04dc34319af5dc6cb16beff78-20-Building-settled.png",
+      "bytes": 1440402
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/host/trap-d471cbc04dc34319af5dc6cb16beff78-20-Building.png",
+      "bytes": 1442057
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/host/trap-d471cbc04dc34319af5dc6cb16beff78-20-Stopping-settled.png",
+      "bytes": 1387435
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/host/trap-d471cbc04dc34319af5dc6cb16beff78-20-Stopping.png",
+      "bytes": 1422958
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/host/trap-d471cbc04dc34319af5dc6cb16beff78-2147483649-Building-settled.png",
+      "bytes": 1601445
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/host/trap-d471cbc04dc34319af5dc6cb16beff78-2147483649-Building.png",
+      "bytes": 1575303
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/host/trap-d471cbc04dc34319af5dc6cb16beff78-2147483649-Framing-settled.png",
+      "bytes": 1568461
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/host/trap-d471cbc04dc34319af5dc6cb16beff78-2147483649-Framing.png",
+      "bytes": 1351771
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/host/trap-d471cbc04dc34319af5dc6cb16beff78-2147483649-Shrinking-settled.png",
+      "bytes": 1471712
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/host/trap-d471cbc04dc34319af5dc6cb16beff78-2147483649-Shrinking.png",
+      "bytes": 1531333
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/host/trap-d471cbc04dc34319af5dc6cb16beff78-2147483649-Stopping-settled.png",
+      "bytes": 1428855
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/host/trap-d471cbc04dc34319af5dc6cb16beff78-2147483649-Stopping.png",
+      "bytes": 1451223
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/host/trap-d471cbc04dc34319af5dc6cb16beff78-2147483650-Building-settled.png",
+      "bytes": 1648931
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/host/trap-d471cbc04dc34319af5dc6cb16beff78-2147483650-Building.png",
+      "bytes": 1624608
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/host/trap-d471cbc04dc34319af5dc6cb16beff78-2147483650-Framing-settled.png",
+      "bytes": 1596345
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/host/trap-d471cbc04dc34319af5dc6cb16beff78-2147483650-Framing.png",
+      "bytes": 1502993
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/host/trap-d471cbc04dc34319af5dc6cb16beff78-2147483650-Shrinking-settled.png",
+      "bytes": 1382751
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/host/trap-d471cbc04dc34319af5dc6cb16beff78-2147483650-Shrinking.png",
+      "bytes": 1502957
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/host/trap-d471cbc04dc34319af5dc6cb16beff78-2147483650-Stopping-settled.png",
+      "bytes": 1409305
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/host/trap-d471cbc04dc34319af5dc6cb16beff78-2147483650-Stopping.png",
+      "bytes": 1428971
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/host/trap-d471cbc04dc34319af5dc6cb16beff78-26-Building-settled.png",
+      "bytes": 1448699
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/host/trap-d471cbc04dc34319af5dc6cb16beff78-26-Building.png",
+      "bytes": 1476051
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/host/trap-d471cbc04dc34319af5dc6cb16beff78-26-Stopping-settled.png",
+      "bytes": 1416747
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/host/trap-d471cbc04dc34319af5dc6cb16beff78-26-Stopping.png",
+      "bytes": 1363684
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/host/trap-d471cbc04dc34319af5dc6cb16beff78-27-Building-settled.png",
+      "bytes": 1397819
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/host/trap-d471cbc04dc34319af5dc6cb16beff78-27-Building.png",
+      "bytes": 1395521
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/host/trap-d471cbc04dc34319af5dc6cb16beff78-27-Stopping-settled.png",
+      "bytes": 1370633
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/host/trap-d471cbc04dc34319af5dc6cb16beff78-27-Stopping.png",
+      "bytes": 1386612
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/host/trap-d471cbc04dc34319af5dc6cb16beff78-29-Building-settled.png",
+      "bytes": 1488889
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/host/trap-d471cbc04dc34319af5dc6cb16beff78-29-Building.png",
+      "bytes": 1476194
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/host/trap-d471cbc04dc34319af5dc6cb16beff78-29-Stopping-settled.png",
+      "bytes": 1502623
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/host/trap-d471cbc04dc34319af5dc6cb16beff78-29-Stopping.png",
+      "bytes": 1537747
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/host/trap-d471cbc04dc34319af5dc6cb16beff78-30-Building-settled.png",
+      "bytes": 1377871
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/host/trap-d471cbc04dc34319af5dc6cb16beff78-30-Building.png",
+      "bytes": 1375830
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/host/trap-d471cbc04dc34319af5dc6cb16beff78-30-Stopping-settled.png",
+      "bytes": 1386427
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/host/trap-d471cbc04dc34319af5dc6cb16beff78-30-Stopping.png",
+      "bytes": 1387984
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/host/trap-d471cbc04dc34319af5dc6cb16beff78-31-Building-settled.png",
+      "bytes": 1479180
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/host/trap-d471cbc04dc34319af5dc6cb16beff78-31-Building.png",
+      "bytes": 1391353
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/host/trap-d471cbc04dc34319af5dc6cb16beff78-31-Stopping-settled.png",
+      "bytes": 1452350
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/host/trap-d471cbc04dc34319af5dc6cb16beff78-31-Stopping.png",
+      "bytes": 1439201
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/host/ui-restart.png",
+      "bytes": 65682
+    },
+    {
+      "path": "Logs/LimboReference/full-final-pair/host/ui-settlement.png",
+      "bytes": 23784
+    },
+    {
+      "path": "Logs/LimboReference/full-final-solo/host/art-build.json",
+      "bytes": 1613
+    },
+    {
+      "path": "Logs/LimboReference/full-final-solo/host/art-observation.jsonl",
+      "bytes": 57504850
+    },
+    {
+      "path": "Logs/LimboReference/full-final-solo/host/death-ReferenceBrotchi(Clone)-0-0.png",
+      "bytes": 1249547
+    },
+    {
+      "path": "Logs/LimboReference/full-final-solo/host/death-ReferenceBrotchi(Clone)-0-1.png",
+      "bytes": 1276258
+    },
+    {
+      "path": "Logs/LimboReference/full-final-solo/host/death-ReferenceBrotchi(Clone)-0-2.png",
+      "bytes": 1303329
+    },
+    {
+      "path": "Logs/LimboReference/full-final-solo/host/death-ReferenceBrotchi(Clone)-1-0.png",
+      "bytes": 1331029
+    },
+    {
+      "path": "Logs/LimboReference/full-final-solo/host/death-ReferenceBrotchi(Clone)-1-1.png",
+      "bytes": 1346532
+    },
+    {
+      "path": "Logs/LimboReference/full-final-solo/host/death-ReferenceBrotchi(Clone)-1-2.png",
+      "bytes": 1366986
+    },
+    {
+      "path": "Logs/LimboReference/full-final-solo/host/death-ReferenceBrotchiDash(Clone)-0-0.png",
+      "bytes": 1334964
+    },
+    {
+      "path": "Logs/LimboReference/full-final-solo/host/death-ReferenceBrotchiDash(Clone)-0-1.png",
+      "bytes": 1354369
+    },
+    {
+      "path": "Logs/LimboReference/full-final-solo/host/death-ReferenceBrotchiDash(Clone)-0-2.png",
+      "bytes": 1379859
+    },
+    {
+      "path": "Logs/LimboReference/full-final-solo/host/death-ReferenceBrotchiDash(Clone)-1-0.png",
+      "bytes": 1422232
+    },
+    {
+      "path": "Logs/LimboReference/full-final-solo/host/death-ReferenceBrotchiDash(Clone)-1-1.png",
+      "bytes": 1458491
+    },
+    {
+      "path": "Logs/LimboReference/full-final-solo/host/death-ReferenceBrotchiDash(Clone)-1-2.png",
+      "bytes": 1446514
+    },
+    {
+      "path": "Logs/LimboReference/full-final-solo/host/death-ReferenceBrotchiDash(Clone)-1-3.png",
+      "bytes": 1428244
+    },
+    {
+      "path": "Logs/LimboReference/full-final-solo/host/death-ReferenceElite_Skeleton(Clone)-0-0.png",
+      "bytes": 1479131
+    },
+    {
+      "path": "Logs/LimboReference/full-final-solo/host/death-ReferenceElite_Skeleton(Clone)-0-1.png",
+      "bytes": 1474251
+    },
+    {
+      "path": "Logs/LimboReference/full-final-solo/host/death-ReferenceElite_Skeleton(Clone)-0-2.png",
+      "bytes": 1475696
+    },
+    {
+      "path": "Logs/LimboReference/full-final-solo/host/death-ReferenceElite_Skeleton(Clone)-1-0.png",
+      "bytes": 1461952
+    },
+    {
+      "path": "Logs/LimboReference/full-final-solo/host/death-ReferenceElite_Skeleton(Clone)-1-1.png",
+      "bytes": 1463143
+    },
+    {
+      "path": "Logs/LimboReference/full-final-solo/host/death-ReferenceElite_Skeleton(Clone)-1-2.png",
+      "bytes": 1439674
+    },
+    {
+      "path": "Logs/LimboReference/full-final-solo/host/death-ReferenceGhoul(Clone)-0-0.png",
+      "bytes": 1456784
+    },
+    {
+      "path": "Logs/LimboReference/full-final-solo/host/death-ReferenceGhoul(Clone)-0-1.png",
+      "bytes": 1429051
+    },
+    {
+      "path": "Logs/LimboReference/full-final-solo/host/death-ReferenceGhoul(Clone)-0-2.png",
+      "bytes": 1408079
+    },
+    {
+      "path": "Logs/LimboReference/full-final-solo/host/death-ReferenceGhoul(Clone)-0-3.png",
+      "bytes": 1430052
+    },
+    {
+      "path": "Logs/LimboReference/full-final-solo/host/death-ReferenceImp(Clone)-0-0.png",
+      "bytes": 1365507
+    },
+    {
+      "path": "Logs/LimboReference/full-final-solo/host/death-ReferenceImp(Clone)-0-1.png",
+      "bytes": 1329343
+    },
+    {
+      "path": "Logs/LimboReference/full-final-solo/host/death-ReferenceImp(Clone)-0-2.png",
+      "bytes": 1321019
+    },
+    {
+      "path": "Logs/LimboReference/full-final-solo/host/death-ReferenceImp(Clone)-1-0.png",
+      "bytes": 1340948
+    },
+    {
+      "path": "Logs/LimboReference/full-final-solo/host/death-ReferenceImp(Clone)-1-1.png",
+      "bytes": 1313995
+    },
+    {
+      "path": "Logs/LimboReference/full-final-solo/host/death-ReferenceImp(Clone)-1-2.png",
+      "bytes": 1338319
+    },
+    {
+      "path": "Logs/LimboReference/full-final-solo/host/death-ReferenceImp(Clone)-1-3.png",
+      "bytes": 1431646
+    },
+    {
+      "path": "Logs/LimboReference/full-final-solo/host/death-ReferenceLostSoul(Clone)-0-0.png",
+      "bytes": 1393546
+    },
+    {
+      "path": "Logs/LimboReference/full-final-solo/host/death-ReferenceLostSoul(Clone)-0-1.png",
+      "bytes": 1381386
+    },
+    {
+      "path": "Logs/LimboReference/full-final-solo/host/death-ReferenceLostSoul(Clone)-0-2.png",
+      "bytes": 1401573
+    },
+    {
+      "path": "Logs/LimboReference/full-final-solo/host/death-ReferenceLostSoul(Clone)-1-0.png",
+      "bytes": 1337649
+    },
+    {
+      "path": "Logs/LimboReference/full-final-solo/host/death-ReferenceLostSoul(Clone)-1-1.png",
+      "bytes": 1322631
+    },
+    {
+      "path": "Logs/LimboReference/full-final-solo/host/death-ReferenceLostSoul(Clone)-1-2.png",
+      "bytes": 1325899
+    },
+    {
+      "path": "Logs/LimboReference/full-final-solo/host/death-ReferenceLostSoul(Clone)-1-3.png",
+      "bytes": 1415456
+    },
+    {
+      "path": "Logs/LimboReference/full-final-solo/host/death-ReferenceRusher(Clone)-1-0.png",
+      "bytes": 1466945
+    },
+    {
+      "path": "Logs/LimboReference/full-final-solo/host/death-ReferenceRusher(Clone)-1-1.png",
+      "bytes": 1487596
+    },
+    {
+      "path": "Logs/LimboReference/full-final-solo/host/death-ReferenceRusher(Clone)-1-2.png",
+      "bytes": 1498565
+    },
+    {
+      "path": "Logs/LimboReference/full-final-solo/host/death-ReferenceRusher(Clone)-1-3.png",
+      "bytes": 1454311
+    },
+    {
+      "path": "Logs/LimboReference/full-final-solo/host/death-ReferenceRusher(Clone)-2-0.png",
+      "bytes": 1494270
+    },
+    {
+      "path": "Logs/LimboReference/full-final-solo/host/death-ReferenceRusher(Clone)-2-1.png",
+      "bytes": 1484419
+    },
+    {
+      "path": "Logs/LimboReference/full-final-solo/host/death-ReferenceRusher(Clone)-2-2.png",
+      "bytes": 1490635
+    },
+    {
+      "path": "Logs/LimboReference/full-final-solo/host/death-ReferenceSkeleton(Clone)-0-0.png",
+      "bytes": 1362367
+    },
+    {
+      "path": "Logs/LimboReference/full-final-solo/host/death-ReferenceSkeleton(Clone)-0-1.png",
+      "bytes": 1363862
+    },
+    {
+      "path": "Logs/LimboReference/full-final-solo/host/death-ReferenceSkeleton(Clone)-0-2.png",
+      "bytes": 1377322
+    },
+    {
+      "path": "Logs/LimboReference/full-final-solo/host/death-ReferenceSkeleton(Clone)-2-0.png",
+      "bytes": 1430931
+    },
+    {
+      "path": "Logs/LimboReference/full-final-solo/host/death-ReferenceSkeleton(Clone)-2-1.png",
+      "bytes": 1436745
+    },
+    {
+      "path": "Logs/LimboReference/full-final-solo/host/death-ReferenceSkeleton(Clone)-2-2.png",
+      "bytes": 1448205
+    },
+    {
+      "path": "Logs/LimboReference/full-final-solo/host/death-ReferenceSlime(Clone)-0-0.png",
+      "bytes": 1479280
+    },
+    {
+      "path": "Logs/LimboReference/full-final-solo/host/death-ReferenceSlime(Clone)-0-1.png",
+      "bytes": 1448686
+    },
+    {
+      "path": "Logs/LimboReference/full-final-solo/host/death-ReferenceSlime(Clone)-0-2.png",
+      "bytes": 1423091
+    },
+    {
+      "path": "Logs/LimboReference/full-final-solo/host/death-ReferenceSlime(Clone)-1-0.png",
+      "bytes": 1403596
+    },
+    {
+      "path": "Logs/LimboReference/full-final-solo/host/death-ReferenceSlime(Clone)-1-1.png",
+      "bytes": 1383463
+    },
+    {
+      "path": "Logs/LimboReference/full-final-solo/host/death-ReferenceSlime(Clone)-1-2.png",
+      "bytes": 1355899
+    },
+    {
+      "path": "Logs/LimboReference/full-final-solo/host/death-ReferenceSlime(Clone)-1-3.png",
+      "bytes": 1359458
+    },
+    {
+      "path": "Logs/LimboReference/full-final-solo/host/full-852a39d40fb0458bbc944ab9d90a4088-end.png",
+      "bytes": 1660000
+    },
+    {
+      "path": "Logs/LimboReference/full-final-solo/host/full-852a39d40fb0458bbc944ab9d90a4088-request.png",
+      "bytes": 1660000
+    },
+    {
+      "path": "Logs/LimboReference/full-final-solo/host/full-852a39d40fb0458bbc944ab9d90a4088-time599.png",
+      "bytes": 1736619
+    },
+    {
+      "path": "Logs/LimboReference/full-final-solo/host/full-852a39d40fb0458bbc944ab9d90a4088-time605.png",
+      "bytes": 1735602
+    },
+    {
+      "path": "Logs/LimboReference/full-final-solo/host/full-852a39d40fb0458bbc944ab9d90a4088-time621.png",
+      "bytes": 1597277
+    },
+    {
+      "path": "Logs/LimboReference/full-final-solo/host/full-852a39d40fb0458bbc944ab9d90a4088-time635.png",
+      "bytes": 1622091
+    },
+    {
+      "path": "Logs/LimboReference/full-final-solo/host/full-852a39d40fb0458bbc944ab9d90a4088-time640.png",
+      "bytes": 1587215
+    },
+    {
+      "path": "Logs/LimboReference/full-final-solo/host/full-852a39d40fb0458bbc944ab9d90a4088-time655.png",
+      "bytes": 1633020
+    },
+    {
+      "path": "Logs/LimboReference/full-final-solo/host/full-852a39d40fb0458bbc944ab9d90a4088-time660.png",
+      "bytes": 1590470
+    },
+    {
+      "path": "Logs/LimboReference/full-final-solo/host/full-852a39d40fb0458bbc944ab9d90a4088-time676.png",
+      "bytes": 1563835
+    },
+    {
+      "path": "Logs/LimboReference/full-final-solo/host/full-852a39d40fb0458bbc944ab9d90a4088-time696.png",
+      "bytes": 1625212
+    },
+    {
+      "path": "Logs/LimboReference/full-final-solo/host/full-852a39d40fb0458bbc944ab9d90a4088-time715.png",
+      "bytes": 1684539
+    },
+    {
+      "path": "Logs/LimboReference/full-final-solo/host/full-852a39d40fb0458bbc944ab9d90a4088-time720.png",
+      "bytes": 1676835
+    },
+    {
+      "path": "Logs/LimboReference/full-final-solo/host/full.jsonl",
+      "bytes": 619830
+    },
+    {
+      "path": "Logs/LimboReference/full-final-solo/host/host-audit.jsonl",
+      "bytes": 1014466
+    },
+    {
+      "path": "Logs/LimboReference/full-final-solo/host/player.log",
+      "bytes": 157954394
+    },
+    {
+      "path": "Logs/LimboReference/full-final-solo/host/process.pid",
+      "bytes": 7
+    },
+    {
+      "path": "Logs/LimboReference/full-final-solo/host/render-852a39d40fb0458bbc944ab9d90a4088-100.png",
+      "bytes": 1387040
+    },
+    {
+      "path": "Logs/LimboReference/full-final-solo/host/render-852a39d40fb0458bbc944ab9d90a4088-110.png",
+      "bytes": 1379637
+    },
+    {
+      "path": "Logs/LimboReference/full-final-solo/host/render-852a39d40fb0458bbc944ab9d90a4088-150.png",
+      "bytes": 1308351
+    },
+    {
+      "path": "Logs/LimboReference/full-final-solo/host/render-852a39d40fb0458bbc944ab9d90a4088-180.png",
+      "bytes": 1446790
+    },
+    {
+      "path": "Logs/LimboReference/full-final-solo/host/render-852a39d40fb0458bbc944ab9d90a4088-200.png",
+      "bytes": 1294547
+    },
+    {
+      "path": "Logs/LimboReference/full-final-solo/host/render-852a39d40fb0458bbc944ab9d90a4088-209.png",
+      "bytes": 1354504
+    },
+    {
+      "path": "Logs/LimboReference/full-final-solo/host/render-852a39d40fb0458bbc944ab9d90a4088-30.png",
+      "bytes": 1259240
+    },
+    {
+      "path": "Logs/LimboReference/full-final-solo/host/render-852a39d40fb0458bbc944ab9d90a4088-60.png",
+      "bytes": 1343087
+    },
+    {
+      "path": "Logs/LimboReference/full-final-solo/host/spatial-completed-852a39d40fb0458bbc944ab9d90a4088.png",
+      "bytes": 1456353
+    },
+    {
+      "path": "Logs/LimboReference/full-final-solo/host/spatial-observation.jsonl",
+      "bytes": 1083144
+    },
+    {
+      "path": "Logs/LimboReference/full-final-solo/host/spawns-20260915-152706-425.csv",
+      "bytes": 612148
+    },
+    {
+      "path": "Logs/LimboReference/full-final-solo/host/spawns-20260915-153954-833.csv",
+      "bytes": 4849
+    },
+    {
+      "path": "Logs/LimboReference/full-final-solo/host/stage2-observation.jsonl",
+      "bytes": 65912684
+    },
+    {
+      "path": "Logs/LimboReference/full-final-solo/host/trap-852a39d40fb0458bbc944ab9d90a4088-17-Building-settled.png",
+      "bytes": 1495261
+    },
+    {
+      "path": "Logs/LimboReference/full-final-solo/host/trap-852a39d40fb0458bbc944ab9d90a4088-17-Building.png",
+      "bytes": 1535446
+    },
+    {
+      "path": "Logs/LimboReference/full-final-solo/host/trap-852a39d40fb0458bbc944ab9d90a4088-17-Stopping-settled.png",
+      "bytes": 1511272
+    },
+    {
+      "path": "Logs/LimboReference/full-final-solo/host/trap-852a39d40fb0458bbc944ab9d90a4088-17-Stopping.png",
+      "bytes": 1508806
+    },
+    {
+      "path": "Logs/LimboReference/full-final-solo/host/trap-852a39d40fb0458bbc944ab9d90a4088-20-Building-settled.png",
+      "bytes": 1485041
+    },
+    {
+      "path": "Logs/LimboReference/full-final-solo/host/trap-852a39d40fb0458bbc944ab9d90a4088-20-Building.png",
+      "bytes": 1474859
+    },
+    {
+      "path": "Logs/LimboReference/full-final-solo/host/trap-852a39d40fb0458bbc944ab9d90a4088-20-Stopping-settled.png",
+      "bytes": 1436020
+    },
+    {
+      "path": "Logs/LimboReference/full-final-solo/host/trap-852a39d40fb0458bbc944ab9d90a4088-20-Stopping.png",
+      "bytes": 1433834
+    },
+    {
+      "path": "Logs/LimboReference/full-final-solo/host/trap-852a39d40fb0458bbc944ab9d90a4088-2147483649-Building-settled.png",
+      "bytes": 1654462
+    },
+    {
+      "path": "Logs/LimboReference/full-final-solo/host/trap-852a39d40fb0458bbc944ab9d90a4088-2147483649-Building.png",
+      "bytes": 1623566
+    },
+    {
+      "path": "Logs/LimboReference/full-final-solo/host/trap-852a39d40fb0458bbc944ab9d90a4088-2147483649-Framing-settled.png",
+      "bytes": 1575849
+    },
+    {
+      "path": "Logs/LimboReference/full-final-solo/host/trap-852a39d40fb0458bbc944ab9d90a4088-2147483649-Framing.png",
+      "bytes": 1284417
+    },
+    {
+      "path": "Logs/LimboReference/full-final-solo/host/trap-852a39d40fb0458bbc944ab9d90a4088-2147483649-Shrinking-settled.png",
+      "bytes": 1425696
+    },
+    {
+      "path": "Logs/LimboReference/full-final-solo/host/trap-852a39d40fb0458bbc944ab9d90a4088-2147483649-Shrinking.png",
+      "bytes": 1395944
+    },
+    {
+      "path": "Logs/LimboReference/full-final-solo/host/trap-852a39d40fb0458bbc944ab9d90a4088-2147483649-Stopping-settled.png",
+      "bytes": 1374893
+    },
+    {
+      "path": "Logs/LimboReference/full-final-solo/host/trap-852a39d40fb0458bbc944ab9d90a4088-2147483649-Stopping.png",
+      "bytes": 1415843
+    },
+    {
+      "path": "Logs/LimboReference/full-final-solo/host/trap-852a39d40fb0458bbc944ab9d90a4088-2147483650-Building-settled.png",
+      "bytes": 1666679
+    },
+    {
+      "path": "Logs/LimboReference/full-final-solo/host/trap-852a39d40fb0458bbc944ab9d90a4088-2147483650-Building.png",
+      "bytes": 1635022
+    },
+    {
+      "path": "Logs/LimboReference/full-final-solo/host/trap-852a39d40fb0458bbc944ab9d90a4088-2147483650-Framing-settled.png",
+      "bytes": 1611555
+    },
+    {
+      "path": "Logs/LimboReference/full-final-solo/host/trap-852a39d40fb0458bbc944ab9d90a4088-2147483650-Framing.png",
+      "bytes": 1457278
+    },
+    {
+      "path": "Logs/LimboReference/full-final-solo/host/trap-852a39d40fb0458bbc944ab9d90a4088-2147483650-Shrinking-settled.png",
+      "bytes": 1429458
+    },
+    {
+      "path": "Logs/LimboReference/full-final-solo/host/trap-852a39d40fb0458bbc944ab9d90a4088-2147483650-Shrinking.png",
+      "bytes": 1421102
+    },
+    {
+      "path": "Logs/LimboReference/full-final-solo/host/trap-852a39d40fb0458bbc944ab9d90a4088-2147483650-Stopping-settled.png",
+      "bytes": 1412212
+    },
+    {
+      "path": "Logs/LimboReference/full-final-solo/host/trap-852a39d40fb0458bbc944ab9d90a4088-2147483650-Stopping.png",
+      "bytes": 1459099
+    },
+    {
+      "path": "Logs/LimboReference/full-final-solo/host/trap-852a39d40fb0458bbc944ab9d90a4088-27-Building-settled.png",
+      "bytes": 1344291
+    },
+    {
+      "path": "Logs/LimboReference/full-final-solo/host/trap-852a39d40fb0458bbc944ab9d90a4088-27-Building.png",
+      "bytes": 1416489
+    },
+    {
+      "path": "Logs/LimboReference/full-final-solo/host/trap-852a39d40fb0458bbc944ab9d90a4088-27-Stopping-settled.png",
+      "bytes": 1438105
+    },
+    {
+      "path": "Logs/LimboReference/full-final-solo/host/trap-852a39d40fb0458bbc944ab9d90a4088-27-Stopping.png",
+      "bytes": 1421128
+    },
+    {
+      "path": "Logs/LimboReference/full-final-solo/host/trap-852a39d40fb0458bbc944ab9d90a4088-29-Building-settled.png",
+      "bytes": 1398241
+    },
+    {
+      "path": "Logs/LimboReference/full-final-solo/host/trap-852a39d40fb0458bbc944ab9d90a4088-29-Building.png",
+      "bytes": 1351289
+    },
+    {
+      "path": "Logs/LimboReference/full-final-solo/host/trap-852a39d40fb0458bbc944ab9d90a4088-29-Stopping-settled.png",
+      "bytes": 1441945
+    },
+    {
+      "path": "Logs/LimboReference/full-final-solo/host/trap-852a39d40fb0458bbc944ab9d90a4088-29-Stopping.png",
+      "bytes": 1404420
+    },
+    {
+      "path": "Logs/LimboReference/full-final-solo/host/trap-852a39d40fb0458bbc944ab9d90a4088-30-Building-settled.png",
+      "bytes": 1432765
+    },
+    {
+      "path": "Logs/LimboReference/full-final-solo/host/trap-852a39d40fb0458bbc944ab9d90a4088-30-Building.png",
+      "bytes": 1422793
+    },
+    {
+      "path": "Logs/LimboReference/full-final-solo/host/trap-852a39d40fb0458bbc944ab9d90a4088-30-Stopping-settled.png",
+      "bytes": 1465976
+    },
+    {
+      "path": "Logs/LimboReference/full-final-solo/host/trap-852a39d40fb0458bbc944ab9d90a4088-30-Stopping.png",
+      "bytes": 1449366
+    },
+    {
+      "path": "Logs/LimboReference/full-final-solo/host/trap-852a39d40fb0458bbc944ab9d90a4088-31-Building-settled.png",
+      "bytes": 1464963
+    },
+    {
+      "path": "Logs/LimboReference/full-final-solo/host/trap-852a39d40fb0458bbc944ab9d90a4088-31-Building.png",
+      "bytes": 1462524
+    },
+    {
+      "path": "Logs/LimboReference/full-final-solo/host/trap-852a39d40fb0458bbc944ab9d90a4088-31-Stopping-settled.png",
+      "bytes": 1438954
+    },
+    {
+      "path": "Logs/LimboReference/full-final-solo/host/trap-852a39d40fb0458bbc944ab9d90a4088-31-Stopping.png",
+      "bytes": 1443735
+    },
+    {
+      "path": "Logs/LimboReference/full-final-solo/host/ui-restart.png",
+      "bytes": 65752
+    },
+    {
+      "path": "Logs/LimboReference/full-final-solo/host/ui-second-barrier.png",
+      "bytes": 79673
+    },
+    {
+      "path": "Logs/LimboReference/full-final-solo/host/ui-settlement.png",
+      "bytes": 24094
+    },
+    {
+      "path": "Logs/LimboReference/full-normal-smoke/host/art-build.json",
+      "bytes": 1602
+    },
+    {
+      "path": "Logs/LimboReference/full-normal-smoke/host/art-observation.jsonl",
+      "bytes": 2578221
+    },
+    {
+      "path": "Logs/LimboReference/full-normal-smoke/host/death-ReferenceBrotchi(Clone)-0-0.png",
+      "bytes": 1267419
+    },
+    {
+      "path": "Logs/LimboReference/full-normal-smoke/host/death-ReferenceBrotchi(Clone)-0-1.png",
+      "bytes": 1260371
+    },
+    {
+      "path": "Logs/LimboReference/full-normal-smoke/host/death-ReferenceBrotchi(Clone)-0-2.png",
+      "bytes": 1271774
+    },
+    {
+      "path": "Logs/LimboReference/full-normal-smoke/host/full.jsonl",
+      "bytes": 217508
+    },
+    {
+      "path": "Logs/LimboReference/full-normal-smoke/host/host-audit.jsonl",
+      "bytes": 178632
+    },
+    {
+      "path": "Logs/LimboReference/full-normal-smoke/host/player.log",
+      "bytes": 301762
+    },
+    {
+      "path": "Logs/LimboReference/full-normal-smoke/host/process.pid",
+      "bytes": 7
+    },
+    {
+      "path": "Logs/LimboReference/full-normal-smoke/host/spatial-observation.jsonl",
+      "bytes": 0
+    },
+    {
+      "path": "Logs/LimboReference/full-normal-smoke/host/spawns-20260915-152931-306.csv",
+      "bytes": 3487
+    },
+    {
+      "path": "Logs/LimboReference/full-normal-smoke/host/stage2-observation.jsonl",
+      "bytes": 98773
+    },
+    {
+      "path": "Logs/LimboReference/full-normal-smoke/host/ui-after-smoke.png",
+      "bytes": 34953
+    },
+    {
+      "path": "Logs/LimboReference/full-normal-smoke/host/ui-manual-selection.png",
+      "bytes": 50511
+    },
+    {
+      "path": "Logs/LimboReference/full-probe-chain/client/art-build.json",
+      "bytes": 1617
+    },
+    {
+      "path": "Logs/LimboReference/full-probe-chain/client/art-observation.jsonl",
+      "bytes": 3324676
+    },
+    {
+      "path": "Logs/LimboReference/full-probe-chain/client/client-audit.jsonl",
+      "bytes": 89895
+    },
+    {
+      "path": "Logs/LimboReference/full-probe-chain/client/full-time10.png",
+      "bytes": 1256270
+    },
+    {
+      "path": "Logs/LimboReference/full-probe-chain/client/full-time20.png",
+      "bytes": 947009
+    },
+    {
+      "path": "Logs/LimboReference/full-probe-chain/client/full-time25.png",
+      "bytes": 963487
+    },
+    {
+      "path": "Logs/LimboReference/full-probe-chain/client/full.jsonl",
+      "bytes": 100762
+    },
+    {
+      "path": "Logs/LimboReference/full-probe-chain/client/ghoul.jsonl",
+      "bytes": 732
+    },
+    {
+      "path": "Logs/LimboReference/full-probe-chain/client/player.log",
+      "bytes": 124122
+    },
+    {
+      "path": "Logs/LimboReference/full-probe-chain/client/process.pid",
+      "bytes": 7
+    },
+    {
+      "path": "Logs/LimboReference/full-probe-chain/client/spatial-completed-bff0525e6b6a4130aaa4dc25f46f92b8.png",
+      "bytes": 77427
+    },
+    {
+      "path": "Logs/LimboReference/full-probe-chain/client/spatial-completed-dad20a5c59614f47a6b2c2305d85b5d1.png",
+      "bytes": 77460
+    },
+    {
+      "path": "Logs/LimboReference/full-probe-chain/client/spatial-observation.jsonl",
+      "bytes": 1395
+    },
+    {
+      "path": "Logs/LimboReference/full-probe-chain/client/stage2-observation.jsonl",
+      "bytes": 942634
+    },
+    {
+      "path": "Logs/LimboReference/full-probe-chain/host/art-build.json",
+      "bytes": 1615
+    },
+    {
+      "path": "Logs/LimboReference/full-probe-chain/host/art-observation.jsonl",
+      "bytes": 3350673
+    },
+    {
+      "path": "Logs/LimboReference/full-probe-chain/host/full-time10.png",
+      "bytes": 1265920
+    },
+    {
+      "path": "Logs/LimboReference/full-probe-chain/host/full-time20.png",
+      "bytes": 1267384
+    },
+    {
+      "path": "Logs/LimboReference/full-probe-chain/host/full-time25.png",
+      "bytes": 1233280
+    },
+    {
+      "path": "Logs/LimboReference/full-probe-chain/host/full.jsonl",
+      "bytes": 98373
+    },
+    {
+      "path": "Logs/LimboReference/full-probe-chain/host/ghoul.jsonl",
+      "bytes": 731
+    },
+    {
+      "path": "Logs/LimboReference/full-probe-chain/host/host-audit.jsonl",
+      "bytes": 87070
+    },
+    {
+      "path": "Logs/LimboReference/full-probe-chain/host/player.log",
+      "bytes": 238502
+    },
+    {
+      "path": "Logs/LimboReference/full-probe-chain/host/process.pid",
+      "bytes": 7
+    },
+    {
+      "path": "Logs/LimboReference/full-probe-chain/host/spatial-completed-bff0525e6b6a4130aaa4dc25f46f92b8.png",
+      "bytes": 1292950
+    },
+    {
+      "path": "Logs/LimboReference/full-probe-chain/host/spatial-completed-dad20a5c59614f47a6b2c2305d85b5d1.png",
+      "bytes": 1268999
+    },
+    {
+      "path": "Logs/LimboReference/full-probe-chain/host/spatial-observation.jsonl",
+      "bytes": 1390
+    },
+    {
+      "path": "Logs/LimboReference/full-probe-chain/host/spawns-20260915-145525-937.csv",
+      "bytes": 4789
+    },
+    {
+      "path": "Logs/LimboReference/full-probe-chain/host/spawns-20260915-145630-028.csv",
+      "bytes": 4806
+    },
+    {
+      "path": "Logs/LimboReference/full-probe-chain/host/stage2-observation.jsonl",
+      "bytes": 130071
+    },
+    {
+      "path": "Logs/LimboReference/full-probe-reconnect/client/art-build.json",
+      "bytes": 1617
+    },
+    {
+      "path": "Logs/LimboReference/full-probe-reconnect/client/art-observation.jsonl",
+      "bytes": 2159365
+    },
+    {
+      "path": "Logs/LimboReference/full-probe-reconnect/client/client-audit.jsonl",
+      "bytes": 50716
+    },
+    {
+      "path": "Logs/LimboReference/full-probe-reconnect/client/full-time10.png",
+      "bytes": 1248382
+    },
+    {
+      "path": "Logs/LimboReference/full-probe-reconnect/client/full-time20.png",
+      "bytes": 948311
+    },
+    {
+      "path": "Logs/LimboReference/full-probe-reconnect/client/full-time25.png",
+      "bytes": 1016286
+    },
+    {
+      "path": "Logs/LimboReference/full-probe-reconnect/client/full.jsonl",
+      "bytes": 57183
+    },
+    {
+      "path": "Logs/LimboReference/full-probe-reconnect/client/ghoul.jsonl",
+      "bytes": 531
+    },
+    {
+      "path": "Logs/LimboReference/full-probe-reconnect/client/player.log",
+      "bytes": 99437
+    },
+    {
+      "path": "Logs/LimboReference/full-probe-reconnect/client/process.pid",
+      "bytes": 7
+    },
+    {
+      "path": "Logs/LimboReference/full-probe-reconnect/client/render-8aa3acdaa66549f488655fccd7d6444b-30.png",
+      "bytes": 1018375
+    },
+    {
+      "path": "Logs/LimboReference/full-probe-reconnect/client/spatial-completed-8aa3acdaa66549f488655fccd7d6444b.png",
+      "bytes": 77465
+    },
+    {
+      "path": "Logs/LimboReference/full-probe-reconnect/client/spatial-observation.jsonl",
+      "bytes": 699
+    },
+    {
+      "path": "Logs/LimboReference/full-probe-reconnect/client/stage2-observation.jsonl",
+      "bytes": 156284
+    },
+    {
+      "path": "Logs/LimboReference/full-probe-reconnect/host/art-build.json",
+      "bytes": 1615
+    },
+    {
+      "path": "Logs/LimboReference/full-probe-reconnect/host/art-observation.jsonl",
+      "bytes": 2280207
+    },
+    {
+      "path": "Logs/LimboReference/full-probe-reconnect/host/full-time10.png",
+      "bytes": 1250715
+    },
+    {
+      "path": "Logs/LimboReference/full-probe-reconnect/host/full-time20.png",
+      "bytes": 1036847
+    },
+    {
+      "path": "Logs/LimboReference/full-probe-reconnect/host/full-time25.png",
+      "bytes": 1033272
+    },
+    {
+      "path": "Logs/LimboReference/full-probe-reconnect/host/full.jsonl",
+      "bytes": 59772
+    },
+    {
+      "path": "Logs/LimboReference/full-probe-reconnect/host/ghoul.jsonl",
+      "bytes": 333
+    },
+    {
+      "path": "Logs/LimboReference/full-probe-reconnect/host/host-audit.jsonl",
+      "bytes": 52588
+    },
+    {
+      "path": "Logs/LimboReference/full-probe-reconnect/host/player.log",
+      "bytes": 187354
+    },
+    {
+      "path": "Logs/LimboReference/full-probe-reconnect/host/process.pid",
+      "bytes": 7
+    },
+    {
+      "path": "Logs/LimboReference/full-probe-reconnect/host/render-8aa3acdaa66549f488655fccd7d6444b-30.png",
+      "bytes": 1033961
+    },
+    {
+      "path": "Logs/LimboReference/full-probe-reconnect/host/spatial-completed-8aa3acdaa66549f488655fccd7d6444b.png",
+      "bytes": 1308221
+    },
+    {
+      "path": "Logs/LimboReference/full-probe-reconnect/host/spatial-observation.jsonl",
+      "bytes": 692
+    },
+    {
+      "path": "Logs/LimboReference/full-probe-reconnect/host/spawns-20260915-145848-040.csv",
+      "bytes": 5901
+    },
+    {
+      "path": "Logs/LimboReference/full-probe-reconnect/host/stage2-observation.jsonl",
+      "bytes": 909463
+    },
+    {
+      "path": "Logs/LimboReference/full-probe-solo-busy/host/art-build.json",
+      "bytes": 1615
+    },
+    {
+      "path": "Logs/LimboReference/full-probe-solo-busy/host/art-observation.jsonl",
+      "bytes": 1147286
+    },
+    {
+      "path": "Logs/LimboReference/full-probe-solo-busy/host/full-time10.png",
+      "bytes": 1246527
+    },
+    {
+      "path": "Logs/LimboReference/full-probe-solo-busy/host/full-time20.png",
+      "bytes": 1017200
+    },
+    {
+      "path": "Logs/LimboReference/full-probe-solo-busy/host/full.jsonl",
+      "bytes": 48450
+    },
+    {
+      "path": "Logs/LimboReference/full-probe-solo-busy/host/ghoul.jsonl",
+      "bytes": 334
+    },
+    {
+      "path": "Logs/LimboReference/full-probe-solo-busy/host/host-audit.jsonl",
+      "bytes": 40676
+    },
+    {
+      "path": "Logs/LimboReference/full-probe-solo-busy/host/player.log",
+      "bytes": 114467
+    },
+    {
+      "path": "Logs/LimboReference/full-probe-solo-busy/host/process.pid",
+      "bytes": 7
+    },
+    {
+      "path": "Logs/LimboReference/full-probe-solo-busy/host/spatial-completed-609e1352f14f4df1800604a261df392a.png",
+      "bytes": 1289780
+    },
+    {
+      "path": "Logs/LimboReference/full-probe-solo-busy/host/spatial-observation.jsonl",
+      "bytes": 692
+    },
+    {
+      "path": "Logs/LimboReference/full-probe-solo-busy/host/spawns-20260915-145738-703.csv",
+      "bytes": 3145
+    },
+    {
+      "path": "Logs/LimboReference/full-probe-solo-busy/host/stage2-observation.jsonl",
+      "bytes": 42059
+    },
+    {
+      "path": "Logs/LimboReference/full-probe-unavailable/host/art-build.json",
+      "bytes": 1615
+    },
+    {
+      "path": "Logs/LimboReference/full-probe-unavailable/host/art-observation.jsonl",
+      "bytes": 1146802
+    },
+    {
+      "path": "Logs/LimboReference/full-probe-unavailable/host/full-time10.png",
+      "bytes": 1246589
+    },
+    {
+      "path": "Logs/LimboReference/full-probe-unavailable/host/full.jsonl",
+      "bytes": 47314
+    },
+    {
+      "path": "Logs/LimboReference/full-probe-unavailable/host/ghoul.jsonl",
+      "bytes": 333
+    },
+    {
+      "path": "Logs/LimboReference/full-probe-unavailable/host/host-audit.jsonl",
+      "bytes": 40015
+    },
+    {
+      "path": "Logs/LimboReference/full-probe-unavailable/host/player.log",
+      "bytes": 97446
+    },
+    {
+      "path": "Logs/LimboReference/full-probe-unavailable/host/process.pid",
+      "bytes": 7
+    },
+    {
+      "path": "Logs/LimboReference/full-probe-unavailable/host/spatial-completed-29c99b65c0784be180378b3f8ada8463.png",
+      "bytes": 1288324
+    },
+    {
+      "path": "Logs/LimboReference/full-probe-unavailable/host/spatial-observation.jsonl",
+      "bytes": 695
+    },
+    {
+      "path": "Logs/LimboReference/full-probe-unavailable/host/spawns-20260915-145738-750.csv",
+      "bytes": 3146
+    },
+    {
+      "path": "Logs/LimboReference/full-probe-unavailable/host/stage2-observation.jsonl",
+      "bytes": 42069
+    },
+    {
+      "path": "Logs/LimboReference/full-slime-b/client/art-build.json",
+      "bytes": 1612
+    },
+    {
+      "path": "Logs/LimboReference/full-slime-b/client/art-observation.jsonl",
+      "bytes": 631054
+    },
+    {
+      "path": "Logs/LimboReference/full-slime-b/client/client-audit.jsonl",
+      "bytes": 89701
+    },
+    {
+      "path": "Logs/LimboReference/full-slime-b/client/full-51a7d87451dd4050b8d8cdfe3b4de4a7-end.png",
+      "bytes": 86951
+    },
+    {
+      "path": "Logs/LimboReference/full-slime-b/client/full-51a7d87451dd4050b8d8cdfe3b4de4a7-request.png",
+      "bytes": 1422483
+    },
+    {
+      "path": "Logs/LimboReference/full-slime-b/client/full-51a7d87451dd4050b8d8cdfe3b4de4a7-time10.png",
+      "bytes": 1439921
+    },
+    {
+      "path": "Logs/LimboReference/full-slime-b/client/full.jsonl",
+      "bytes": 111973
+    },
+    {
+      "path": "Logs/LimboReference/full-slime-b/client/ghoul.jsonl",
+      "bytes": 333
+    },
+    {
+      "path": "Logs/LimboReference/full-slime-b/client/player.log",
+      "bytes": 40769
+    },
+    {
+      "path": "Logs/LimboReference/full-slime-b/client/process.pid",
+      "bytes": 7
+    },
+    {
+      "path": "Logs/LimboReference/full-slime-b/client/spatial-completed-51a7d87451dd4050b8d8cdfe3b4de4a7.png",
+      "bytes": 76912
+    },
+    {
+      "path": "Logs/LimboReference/full-slime-b/client/spatial-observation.jsonl",
+      "bytes": 15568
+    },
+    {
+      "path": "Logs/LimboReference/full-slime-b/client/stage2-observation.jsonl",
+      "bytes": 8239
+    },
+    {
+      "path": "Logs/LimboReference/full-slime-b/client/trap-51a7d87451dd4050b8d8cdfe3b4de4a7-1-Building-settled.png",
+      "bytes": 1240992
+    },
+    {
+      "path": "Logs/LimboReference/full-slime-b/client/trap-51a7d87451dd4050b8d8cdfe3b4de4a7-1-Building.png",
+      "bytes": 1262812
+    },
+    {
+      "path": "Logs/LimboReference/full-slime-b/client/trap-51a7d87451dd4050b8d8cdfe3b4de4a7-1-Stopping-settled.png",
+      "bytes": 1229015
+    },
+    {
+      "path": "Logs/LimboReference/full-slime-b/client/trap-51a7d87451dd4050b8d8cdfe3b4de4a7-1-Stopping.png",
+      "bytes": 1213122
+    },
+    {
+      "path": "Logs/LimboReference/full-slime-b/host/art-build.json",
+      "bytes": 1610
+    },
+    {
+      "path": "Logs/LimboReference/full-slime-b/host/art-observation.jsonl",
+      "bytes": 632840
+    },
+    {
+      "path": "Logs/LimboReference/full-slime-b/host/full-51a7d87451dd4050b8d8cdfe3b4de4a7-end.png",
+      "bytes": 1472329
+    },
+    {
+      "path": "Logs/LimboReference/full-slime-b/host/full-51a7d87451dd4050b8d8cdfe3b4de4a7-request.png",
+      "bytes": 1472329
+    },
+    {
+      "path": "Logs/LimboReference/full-slime-b/host/full-51a7d87451dd4050b8d8cdfe3b4de4a7-time10.png",
+      "bytes": 1440868
+    },
+    {
+      "path": "Logs/LimboReference/full-slime-b/host/full.jsonl",
+      "bytes": 111385
+    },
+    {
+      "path": "Logs/LimboReference/full-slime-b/host/ghoul.jsonl",
+      "bytes": 333
+    },
+    {
+      "path": "Logs/LimboReference/full-slime-b/host/host-audit.jsonl",
+      "bytes": 89337
+    },
+    {
+      "path": "Logs/LimboReference/full-slime-b/host/player.log",
+      "bytes": 86561
+    },
+    {
+      "path": "Logs/LimboReference/full-slime-b/host/process.pid",
+      "bytes": 7
+    },
+    {
+      "path": "Logs/LimboReference/full-slime-b/host/spatial-completed-51a7d87451dd4050b8d8cdfe3b4de4a7.png",
+      "bytes": 1289998
+    },
+    {
+      "path": "Logs/LimboReference/full-slime-b/host/spatial-observation.jsonl",
+      "bytes": 14763
+    },
+    {
+      "path": "Logs/LimboReference/full-slime-b/host/spawns-20260915-150752-536.csv",
+      "bytes": 722
+    },
+    {
+      "path": "Logs/LimboReference/full-slime-b/host/stage2-observation.jsonl",
+      "bytes": 8251
+    },
+    {
+      "path": "Logs/LimboReference/full-slime-b/host/trap-51a7d87451dd4050b8d8cdfe3b4de4a7-1-Building-settled.png",
+      "bytes": 1226783
+    },
+    {
+      "path": "Logs/LimboReference/full-slime-b/host/trap-51a7d87451dd4050b8d8cdfe3b4de4a7-1-Building.png",
+      "bytes": 1234792
+    },
+    {
+      "path": "Logs/LimboReference/full-slime-b/host/trap-51a7d87451dd4050b8d8cdfe3b4de4a7-1-Stopping-settled.png",
+      "bytes": 1232086
+    },
+    {
+      "path": "Logs/LimboReference/full-slime-b/host/trap-51a7d87451dd4050b8d8cdfe3b4de4a7-1-Stopping.png",
+      "bytes": 1220828
+    },
+    {
+      "path": "Tools/Audit-LimboFullRuns.py",
+      "bytes": 7732
+    },
+    {
+      "path": "Tools/Audit-LimboLostSoulRuns.py",
+      "bytes": 7525
+    },
+    {
+      "path": "Tools/Run-LimboReference.ps1",
+      "bytes": 5200
+    }
+  ],
+  "note": "Preserves failed probes, candidate and final runs separately. Build binaries remain in Builds/LimboFull20260915; pinned hashes included."
+}

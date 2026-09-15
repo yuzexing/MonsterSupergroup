@@ -35,9 +35,18 @@ namespace MonsterSupergroup.NetworkCombat
 
         private void Awake()
         {
+            manager = NetworkManager.singleton as BootGameplayNetworkManager;
             catalog = PreparationMenuCatalog.Load();
             if (cardPickMenu == null) cardPickMenu = GetComponentInChildren<CardPickMenu>(true);
-            BuildView();
+            if (manager == null || !manager.IsGameplayTransitioning) BuildView();
+        }
+        private System.Collections.IEnumerator Start()
+        {
+            if (canvasRoot != null) yield break;
+            // An orphan additive load can be scheduled for unload before its UI Start/Awake callbacks.
+            // Wait for the accepted scene; destroying the old scene also cancels this coroutine.
+            while (manager != null && manager.IsGameplayTransitioning) yield return null;
+            if (gameObject.scene.IsValid() && gameObject.scene.isLoaded) BuildView();
         }
         private void OnEnable()
         {
@@ -60,6 +69,7 @@ namespace MonsterSupergroup.NetworkCombat
         }
         private void Update()
         {
+            if (canvasRoot == null) return;
             manager = NetworkManager.singleton as BootGameplayNetworkManager;
             bool available = manager != null && manager.IsGameplayLoaded && NetworkClient.active &&
                 !manager.IsRunEndScreen && manager.RoomSnapshot.Phase != PreparationPhase.Loading;

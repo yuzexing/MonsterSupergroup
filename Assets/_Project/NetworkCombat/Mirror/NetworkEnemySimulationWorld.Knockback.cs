@@ -156,6 +156,7 @@ namespace MonsterSupergroup.NetworkCombat
             var command = new EnemyKnockbackCommand
             {
                 Kind = EnemyKnockbackKind.OrdinaryHit, EnemyEntityId = enemy.netId,
+                InterruptedActionId = request.InterruptedActionId,
                 AssignmentEpoch = assigned.Epoch, SourcePlayerId = result.SourcePlayerId, AbilityCombatId = result.AbilityId,
                 RootEventId = result.RootEventId, DamageEventId = result.EventId, CommandId = ++knockbackCommandId,
                 IssuedAt = request.HitNetworkTime, Origin = request.Origin, MultiplierSum = request.MultiplierSum, Settings = preset

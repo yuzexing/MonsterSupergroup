@@ -3,6 +3,7 @@ param(
     [string]$ClientDirectory = 'Builds/LimboSpatialClient20260915',
     [string]$Prefix = 'spatial-matrix-20260915',
     [int]$Port = 8180,
+    [switch]$ArtObserve,
     [switch]$CancelOnly,
     [string[]]$OnlyCases = @()
 )
@@ -18,7 +19,7 @@ foreach ($case in $cases) {
     if ($OnlyCases.Count -gt 0 -and "$($case[0])/$($case[1])" -notin $OnlyCases) { continue }
     if ($CancelOnly -and !$case[1].StartsWith('cancel-')) { continue }
     $name = "$Prefix-$($case[0])-$($case[1])"
-    & "$PSScriptRoot/Run-LimboReference.ps1" -Role host -Profile $case[0] -SpatialCase $case[1] -WaitFor 2 -Port $Port -Windowed -AutoWalk -BuildDirectory $BuildDirectory -RunName $name
+    & "$PSScriptRoot/Run-LimboReference.ps1" -Role host -Profile $case[0] -SpatialCase $case[1] -WaitFor 2 -Port $Port -Windowed -AutoWalk -ArtObserve:$ArtObserve -BuildDirectory $BuildDirectory -RunName $name
     $folder = Join-Path $root "Logs/LimboReference/$name"
     $readyDeadline = [DateTime]::UtcNow.AddSeconds(90)
     while (!(Test-Path -LiteralPath "$folder/host/player.log") -or
@@ -26,7 +27,7 @@ foreach ($case in $cases) {
         if ([DateTime]::UtcNow -ge $readyDeadline) { throw "Host did not open preparation: $name" }
         Start-Sleep -Milliseconds 500
     }
-    & "$PSScriptRoot/Run-LimboReference.ps1" -Role client -Profile $case[0] -SpatialCase $case[1] -WaitFor 2 -Port $Port -Windowed -AutoWalk -BuildDirectory $ClientDirectory -RunName $name
+    & "$PSScriptRoot/Run-LimboReference.ps1" -Role client -Profile $case[0] -SpatialCase $case[1] -WaitFor 2 -Port $Port -Windowed -AutoWalk -ArtObserve:$ArtObserve -BuildDirectory $ClientDirectory -RunName $name
     $folder = Join-Path $root "Logs/LimboReference/$name"
     $pids = @((Get-Content -LiteralPath "$folder/host/process.pid"), (Get-Content -LiteralPath "$folder/client/process.pid"))
     $deadline = [DateTime]::UtcNow.AddSeconds(160)

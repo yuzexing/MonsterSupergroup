@@ -1,11 +1,14 @@
 param(
     [string[]]$Cases = @('Skeleton0','Skeleton2','Elite0','Elite1','Brotchi0','Brotchi1','Slime0','Slime1','Rusher2','Rusher1'),
     [string]$Prefix = 'stage2-matrix',
-    [int]$Port = 8130
+    [int]$Port = 8130,
+    [string]$BuildDirectory = 'Builds/LimboReference',
+    [ValidateSet('mechanism','art-death')][string]$FixtureMode = 'mechanism',
+    [switch]$ArtObserve
 )
 $ErrorActionPreference = 'Stop'
 $project = Split-Path -Parent $PSScriptRoot
-$binary = Join-Path $project 'Builds/LimboReference/MonsterSupergroupLimbo.exe'
+$binary = Join-Path (Join-Path $project $BuildDirectory) 'MonsterSupergroupLimbo.exe'
 $processFiles = @()
 function Stop-RecordedPlayers {
     foreach ($file in $processFiles) {
@@ -16,12 +19,12 @@ function Stop-RecordedPlayers {
 try {
     foreach ($case in $Cases) {
         $solo = "$Prefix-$case-solo"; $pair = "$Prefix-$case-pair"
-        & "$PSScriptRoot/Run-LimboReference.ps1" -Profile stage2-fixture -FixtureEnemy $case -Windowed -Role host -Port $Port -RunName $solo
-        & "$PSScriptRoot/Run-LimboReference.ps1" -Profile stage2-fixture -FixtureEnemy $case -Windowed -Role host -FixtureTarget client -WaitFor 2 -Port ($Port+1) -RunName $pair
+        & "$PSScriptRoot/Run-LimboReference.ps1" -Profile stage2-fixture -FixtureEnemy $case -FixtureMode $FixtureMode -Windowed -Role host -Port $Port -RunName $solo -BuildDirectory $BuildDirectory -ArtObserve:$ArtObserve
+        & "$PSScriptRoot/Run-LimboReference.ps1" -Profile stage2-fixture -FixtureEnemy $case -FixtureMode $FixtureMode -Windowed -Role host -FixtureTarget client -WaitFor 2 -Port ($Port+1) -RunName $pair -BuildDirectory $BuildDirectory -ArtObserve:$ArtObserve
         $processFiles = @("$project/Logs/LimboReference/$solo/host/process.pid", "$project/Logs/LimboReference/$pair/host/process.pid")
         # Let the ordinary Host establish its listening socket before starting the Client.
         Start-Sleep -Seconds 8
-        & "$PSScriptRoot/Run-LimboReference.ps1" -Profile stage2-fixture -FixtureEnemy $case -Windowed -Role client -FixtureTarget client -Port ($Port+1) -RunName $pair
+        & "$PSScriptRoot/Run-LimboReference.ps1" -Profile stage2-fixture -FixtureEnemy $case -FixtureMode $FixtureMode -Windowed -Role client -FixtureTarget client -Port ($Port+1) -RunName $pair -BuildDirectory $BuildDirectory -ArtObserve:$ArtObserve
         $processFiles += "$project/Logs/LimboReference/$pair/client/process.pid"
         $audits = @("$project/Logs/LimboReference/$solo/host/host-audit.jsonl", "$project/Logs/LimboReference/$pair/host/host-audit.jsonl", "$project/Logs/LimboReference/$pair/client/client-audit.jsonl")
         $deadline = [DateTime]::UtcNow.AddSeconds(170)

@@ -378,6 +378,7 @@ namespace MonsterSupergroup.NetworkCombat
             }
             TryInitializeProductEnemy();
             UpdateNetworkKnockbackState();
+            RefreshReferenceReplicaMovement();
         }
 
         private bool AssignmentNeedsLocalRefresh()

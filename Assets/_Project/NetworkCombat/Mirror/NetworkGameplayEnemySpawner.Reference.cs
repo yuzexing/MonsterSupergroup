@@ -182,7 +182,7 @@ namespace MonsterSupergroup.NetworkCombat
         {
             var view = ReferenceView(target);
             var controller = prefab.GetComponent<EnemyController>();
-            var sprite = controller.GetComponentInChildren<SpriteRenderer>(true);
+            var sprite = controller.spriteRenderer;
             Vector2 padding = sprite != null ? (Vector2)sprite.bounds.extents : Vector2.zero;
             Vector2 extents = (Vector2)view.extents + padding + Vector2.one * margin;
             for (int attempt = 0; attempt < settings.Attempts * 2; attempt++)

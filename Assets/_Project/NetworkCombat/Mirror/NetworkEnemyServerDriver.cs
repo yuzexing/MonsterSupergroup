@@ -1,4 +1,6 @@
 using MonsterSupergroup.Gameplay.Combat;
+using System.Collections;
+using AstralShift.HellMaiden.AI.Enemy;
 using Mirror;
 using UnityEngine;
 
@@ -10,9 +12,15 @@ namespace MonsterSupergroup.NetworkCombat
     [RequireComponent(typeof(CombatantBehaviour))]
     public sealed class NetworkEnemyServerDriver : NetworkBehaviour
     {
+        [SerializeField] private bool waitForDeathPresentation;
+        private EnemyController enemy;
+        private bool awaitingPresentation;
+
         public override void OnStartServer()
         {
             base.OnStartServer();
+            awaitingPresentation = false;
+            if (waitForDeathPresentation) TryGetComponent(out enemy);
             NetworkCombatWorld world = NetworkCombatWorld.Instance;
             if (world != null)
             {
@@ -44,10 +52,25 @@ namespace MonsterSupergroup.NetworkCombat
             {
                 if (entities[i].EntityId == netId && !entities[i].Alive)
                 {
+                    // Canonical death has already removed this entity from all
+                    // source alive counts and disabled combat. Retain only its
+                    // existing presentation until the normal death callback.
+                    if (waitForDeathPresentation && enemy != null && !enemy.DeathPresentationComplete)
+                    {
+                        if (!awaitingPresentation)
+                        { awaitingPresentation = true; StartCoroutine(FinishPresentation()); }
+                        return;
+                    }
                     NetworkServer.Destroy(gameObject);
                     return;
                 }
             }
+        }
+
+        private IEnumerator FinishPresentation()
+        {
+            while (enemy != null && !enemy.DeathPresentationComplete) yield return null;
+            if (NetworkServer.active) NetworkServer.Destroy(gameObject);
         }
     }
 }

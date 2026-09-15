@@ -104,6 +104,8 @@ namespace AstralShift.HellMaiden.AI.Enemy
 		private int shadowAnimationLayer = 5;
 
 		public Animator animator;
+        [SerializeField] private bool useRecoveredMovement;
+        private Vector2 bodyPresentationFacing;
 
 		public bool randomAnimatorSpeed;
 
@@ -482,29 +484,25 @@ namespace AstralShift.HellMaiden.AI.Enemy
 		protected virtual void ResetAnimancer()
 		{
 			_blockAnimations = false;
+            bodyPresentationFacing = Vector2.zero;
 			animancer.Stop();
 		}
 
-		public virtual void Movement(float x, float y)
+        public virtual void Movement(float x, float y)
 		{
-			// if (!_blockAnimations)
-			// {
-			// 	ResumeAnimator();
-			// 	if (x > 0f)
-			// 	{
-			// 		animancer.Layers[0].Play((y > 0f) ? moveRightUp : moveRightDown, 0f);
-			// 	}
-			// 	else
-			// 	{
-			// 		animancer.Layers[0].Play((y > 0f) ? moveLeftUp : moveLeftDown, 0f);
-			// 	}
-			// }
+            if (!useRecoveredMovement || _blockAnimations || animancer == null) return;
+            var move = x > 0 ? (y > 0 ? moveRightUp : moveRightDown) : (y > 0 ? moveLeftUp : moveLeftDown);
+            if (move?.Clip == null) return;
+            bodyPresentationFacing = new Vector2(x,y);
+            ResumeAnimator();
+            animancer.Layers[0].Play(move, 0f);
 		}
 
 		public virtual void AttackWarning(float x, float y)
 		{
 			if (!_blockAnimations)
 			{
+                bodyPresentationFacing = new Vector2(x,y);
 				PauseAnimator();
 				if (x > 0f)
 				{
@@ -521,6 +519,7 @@ namespace AstralShift.HellMaiden.AI.Enemy
 		{
 			if (!_blockAnimations)
 			{
+                bodyPresentationFacing = new Vector2(x,y);
 				if (x > 0f)
 				{
 					animancer.Layers[0].Play((y > 0f) ? attackRightUp : attackRightDown, 0f);
@@ -536,6 +535,7 @@ namespace AstralShift.HellMaiden.AI.Enemy
 		{
 			if (!_blockAnimations)
 			{
+                bodyPresentationFacing = new Vector2(x,y);
 				PauseAnimator();
 				if (x > 0f)
 				{
@@ -552,6 +552,7 @@ namespace AstralShift.HellMaiden.AI.Enemy
 		{
 			if (!_blockAnimations)
 			{
+                bodyPresentationFacing = new Vector2(x,y);
 				if (x > 0f)
 				{
 					animancer.Layers[0].Play((y > 0f) ? recoveryRightUp : recoveryRightDown, 0f);
@@ -671,6 +672,8 @@ namespace AstralShift.HellMaiden.AI.Enemy
 
 		public ClipTransition GetDeadClipTransition(float x, float y)
 		{
+            if (useRecoveredMovement && _blockAnimations && bodyPresentationFacing.sqrMagnitude > .0001f)
+            { x=bodyPresentationFacing.x; y=bodyPresentationFacing.y; }
 			if (x > 0f)
 			{
 				if (!(y > 0f))
@@ -690,6 +693,9 @@ namespace AstralShift.HellMaiden.AI.Enemy
 		{
 			if (base.enabled && base.gameObject.activeSelf)
 			{
+                // A late navigation/attack snapshot must not turn a dying body
+                // or replace its clip. Keep its last presented quadrant.
+                if (useRecoveredMovement) _blockAnimations = true;
 				if (_deadBlinkAnimation != null)
 				{
 					StopCoroutine(_deadBlinkAnimation);

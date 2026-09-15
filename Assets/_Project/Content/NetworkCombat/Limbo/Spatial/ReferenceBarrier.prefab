@@ -121,7 +121,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: MonsterSupergroup.Gameplay.Combat::AstralShift.HellMaiden.Combat.Traps.BarrierTrap
   trapTransform: {fileID: 221722046742948423}
-  particleSystem: {fileID: 4651619412093520051, guid: cd0259eb8e0641345971aad3288db3c1, type: 3}
+  particleSystem: {fileID: 3045355958693970700, guid: b06ee00771d73cc4283d615ea00ab698, type: 3}
   numberOfSides: 40
   minRadius: 10
   maxRadius: 20

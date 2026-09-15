@@ -28,12 +28,15 @@ namespace MonsterSupergroup.Gameplay.Combat
 
         // Zero means at least one participant still sees the enemy. No views means no decision.
         public static float MinimumOutsideDistance(Vector2 position, IReadOnlyList<Bounds> views)
+            => MinimumOutsideDistance(new Bounds(position, Vector3.zero), views);
+
+        public static float MinimumOutsideDistance(Bounds body, IReadOnlyList<Bounds> views)
         {
             float result = float.PositiveInfinity;
             foreach (var view in views)
             {
-                var outside = new Vector2(Mathf.Max(0, Mathf.Abs(position.x - view.center.x) - view.extents.x),
-                    Mathf.Max(0, Mathf.Abs(position.y - view.center.y) - view.extents.y));
+                var outside = new Vector2(Mathf.Max(0, Mathf.Abs(body.center.x - view.center.x) - view.extents.x - body.extents.x),
+                    Mathf.Max(0, Mathf.Abs(body.center.y - view.center.y) - view.extents.y - body.extents.y));
                 result = Mathf.Min(result, outside.magnitude);
             }
             return result;

@@ -14,13 +14,12 @@ SOURCE = Path('F:/DecomplieLatest/HellMaiden/ExportedProject/Assets')
 ROOT = PROJECT / 'Assets/_Project/Content/NetworkCombat/Limbo/Art'
 EVIDENCE = PROJECT / 'docs/evidence/hellmaiden-attacks/runtime-assets.json'
 GUID = re.compile(r'guid: ([a-f0-9]{32})')
-WHITE = [1, 1, 1, 1]
 BODIES = [
     ('E1', 'Enemy_Brotchi', 'Brotchi', 'Stage2/ReferenceBrotchi.prefab', True),
     ('E2', 'Enemy_Brotchi_LVL2', 'Brotchi_Dash', 'Dash/ReferenceBrotchiDash.prefab', False),
     ('E3', 'Enemy_Imp', 'Imp', 'Imp/ReferenceImp.prefab', False),
     ('E4', 'Enemy_Skeleton', 'Skeleton', 'Stage2/ReferenceSkeleton.prefab', False),
-    ('E5', 'Elite_Skeleton', 'Elite_Skeleton', 'Stage2/ReferenceElite.prefab', False),
+    ('E5', 'Elite_Skeleton', 'Elite_Skeleton', 'Stage2/ReferenceElite_Skeleton.prefab', False),
     ('E6', 'Enemy_Slime', 'Slime', 'Stage2/ReferenceSlime.prefab', True),
     ('E7', 'Enemy_Slime Rusher', 'Slime', 'Stage2/ReferenceRusher.prefab', True),
 ]
@@ -34,6 +33,8 @@ def sha(p):
 
 
 def field(value, name):
+    if value is None:
+        return None
     return next((v for k, v in value.get('fields', value).items() if k.endswith('::' + name)), None)
 
 
@@ -59,6 +60,8 @@ def main():
     shader = PROJECT / 'Assets/Plugins/AllIn1SpriteShader/Shaders/AllIn1SpriteShader.shader'
     shader_guid = GUID.search(Path(str(shader) + '.meta').read_text())[1]
     entries, visited = {}, {}
+    previous_path = ROOT / 'ArtSource.json'
+    previous = {e['sourceGuid']: e for e in json.loads(previous_path.read_text(encoding='utf-8'))['entries']} if previous_path.exists() else {}
 
     def guid_for(g):
         p = source[g]
@@ -87,7 +90,10 @@ def main():
                           destinationGuid=dest_guid, groups=[group], referencedBy=[parent] if parent else [],
                           treatment='shader-adaptation' if p.suffix == '.shader' else 'reuse' if dest_guid == g and dest_guid in current else 'independent-adaptation' if dest_guid != g else 'import',
                           sourceSize=p.stat().st_size)
-        if dest.exists():
+        if g in previous:
+            entries[g]['treatment'] = previous[g]['treatment']
+        existed = dest.exists()
+        if p.suffix == '.shader':
             return dest
         if p.suffix in ('.prefab', '.anim', '.asset', '.mat'):
             text = p.read_text(encoding='utf-8-sig')
@@ -119,13 +125,16 @@ def main():
                 import_asset(source[dep], group, p.relative_to(SOURCE).as_posix())
                 return 'guid: ' + guid_for(dep)
             text = GUID.sub(remap, text)
-            dest.parent.mkdir(parents=True, exist_ok=True)
-            dest.write_text(text, encoding='utf-8')
+            if not existed:
+                dest.parent.mkdir(parents=True, exist_ok=True)
+                dest.write_text(text, encoding='utf-8')
         else:
-            dest.parent.mkdir(parents=True, exist_ok=True)
-            dest.write_bytes(p.read_bytes())
-        meta = Path(str(p) + '.meta').read_text(encoding='utf-8-sig')
-        Path(str(dest) + '.meta').write_text(meta.replace('guid: ' + g, 'guid: ' + dest_guid), encoding='utf-8')
+            if not existed:
+                dest.parent.mkdir(parents=True, exist_ok=True)
+                dest.write_bytes(p.read_bytes())
+        if not existed:
+            meta = Path(str(p) + '.meta').read_text(encoding='utf-8-sig')
+            Path(str(dest) + '.meta').write_text(meta.replace('guid: ' + g, 'guid: ' + dest_guid), encoding='utf-8')
         return dest
 
     data = json.loads(EVIDENCE.read_text(encoding='utf-8-sig'))
@@ -146,10 +155,22 @@ def main():
                 continue
             path = import_asset(SOURCE / 'AnimationClip' / (clip['name'] + '.anim'), group, animator['path'] + '/' + prop)
             events = field(value, '_Events')
+            callbacks = []
+            for index, callback in enumerate(field(events, '_Callbacks') or []):
+                if not callback:
+                    continue
+                for call in field(field(callback, 'm_PersistentCalls'), 'm_Calls') or []:
+                    method = field(call, 'm_MethodName')
+                    target_type = field(call, 'm_TargetAssemblyTypeName') or ''
+                    if target_type.startswith('FMODUnity.'):
+                        continue
+                    if method != 'DeathAnimationShadowFade' or not target_type.startswith('AstralShift.HellMaiden.AI.Enemy.EnemyAnimator,'):
+                        raise ValueError('Unclassified visual callback: '+str(method)+' / '+target_type)
+                    callbacks.append(dict(index=index, method=method))
             bindings.append(dict(field=prop, path=path.relative_to(PROJECT).as_posix(), length=objects[clip['reference']]['data']['length'],
                                  speed=field(value, '_Speed'), fade=field(value, '_FadeDuration'),
                                  normalizedStart=str(field(value, '_NormalizedStartTime')),
-                                 eventTimes=[str(x) for x in (field(events, '_NormalizedTimes') or [])]))
+                                 eventTimes=[str(x) for x in (field(events, '_NormalizedTimes') or [])], visualCallbacks=callbacks))
         p = import_asset(SOURCE / 'GameObject' / (name + '.prefab'), group)
         bodies.append(dict(group=group, name=name, identity=identity, target='Assets/_Project/Content/NetworkCombat/Limbo/' + target,
                            template=p.relative_to(PROJECT).as_posix(), bindings=bindings, contact=contact))
@@ -166,10 +187,33 @@ def main():
             lut = field(v, 'colorLUT'); path = ''
             if lut:
                 path = import_asset(SOURCE / 'Texture2D' / (lut['name'] + '.png'), 'palettes', name + '/' + str(variant)).relative_to(PROJECT).as_posix()
-            palettes.append(dict(identity=name, variant=variant, texture=path, hue=WHITE))
+            hue = [field(field(v, 'hueColor'), channel) for channel in ('r','g','b','a')]
+            if any(channel is None for channel in hue):
+                raise ValueError('Missing source hue: '+name+'/'+str(variant))
+            palettes.append(dict(identity=name, variant=variant, texture=path, hue=hue))
+    bakes = {}
+    def source_links(p):
+        return {source[g] for g in GUID.findall(p.read_text(encoding='utf-8-sig')) if g in source}
+    for body in bodies:
+        textures = set()
+        for binding in body['bindings']:
+            if binding['field'].startswith('shadow'):
+                continue
+            clip = SOURCE / 'AnimationClip' / Path(binding['path']).name
+            for sprite in source_links(clip):
+                if sprite.parent.name == 'Sprite':
+                    textures.update(t for t in source_links(sprite) if t.parent.name == 'Texture2D')
+        for palette in palettes:
+            if palette['identity'] != body['identity'] or not palette['texture']:
+                continue
+            for texture in sorted(textures):
+                lut = Path(palette['texture'])
+                key = hashlib.sha256((texture.name + '|' + lut.name).encode()).hexdigest()[:20]
+                bakes[key] = dict(file=key+'.png', textureName=texture.stem, lutName=lut.stem,
+                                  sourceTexture=str(texture), lut=palette['texture'])
     ROOT.mkdir(parents=True, exist_ok=True)
     manifest = dict(schemaVersion=1, sourceEvidence=str(EVIDENCE), sourceSha256=sha(EVIDENCE), bodies=bodies, effects=effects,
-                    palettes=palettes, entries=sorted(entries.values(), key=lambda x: x['source']),
+                    palettes=palettes, bakes=list(bakes.values()), entries=sorted(entries.values(), key=lambda x: x['source']),
                     deferred=['E8 LostSoul body', 'E9 Ghoul body'], excluded=['audio', 'UI', 'loot', 'player', 'weapons', 'maps', 'gameplay scripts'])
     (ROOT / 'ArtSource.json').write_text(json.dumps(manifest, ensure_ascii=False, indent=2), encoding='utf-8')
     print(json.dumps(dict(bodies=len(bodies), effectRoots=len(effects), dependencies=len(entries), sourceSha256=manifest['sourceSha256'])))

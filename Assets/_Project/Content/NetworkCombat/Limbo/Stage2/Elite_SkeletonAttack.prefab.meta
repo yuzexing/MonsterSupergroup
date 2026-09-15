@@ -1,12 +1,9 @@
 fileFormatVersion: 2
 guid: e983665ba8c181b4aa9cce8c93af4d4b
-timeCreated: 1786187374
-licenseType: Free
+labels:
+- LimboArtRestoredV1
 PrefabImporter:
   externalObjects: {}
-  addedObjectFileIDs: 
-  isPrefabVariant: 0
-  variantParentGUID: 00000000000000000000000000000000
   userData: 
   assetBundleName: 
   assetBundleVariant: 

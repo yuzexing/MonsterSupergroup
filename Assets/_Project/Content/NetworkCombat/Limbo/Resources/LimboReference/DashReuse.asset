@@ -104,6 +104,6 @@ MonoBehaviour:
   effectsDelay: 1
   activationDelay: 1
   barriers: []
-  referenceFormationWarning: {fileID: 4651619412093520051, guid: cd0259eb8e0641345971aad3288db3c1, type: 3}
+  referenceFormationWarning: {fileID: 3045355958693970700, guid: b06ee00771d73cc4283d615ea00ab698, type: 3}
   referenceBarrier: {fileID: 1194541754668854216, guid: f1088dc4d55ee1b499163bc181513510, type: 3}
   referenceBarrierEntryScale: 0.25

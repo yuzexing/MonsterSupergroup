@@ -62,7 +62,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 68c6f586788539b44b76c04f4ef7b4e6, type: 2}
+  - {fileID: 2100000, guid: 0bf3fd7886ae7206a2f2b1fe7329c421, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -120,7 +120,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1703437598541787}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0.7071068, w: 0.7071068}
+  m_LocalRotation: {x: -0, y: -0, z: 0.7071068, w: 0.7071068}
   m_LocalPosition: {x: -0.01, y: 0.668, z: 0}
   m_LocalScale: {x: 0.4411733, y: 0.4411733, z: 0.4411733}
   m_ConstrainProportionsScale: 0
@@ -153,7 +153,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 68c6f586788539b44b76c04f4ef7b4e6, type: 2}
+  - {fileID: 2100000, guid: 0bf3fd7886ae7206a2f2b1fe7329c421, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -306,7 +306,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1724804207875695}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0.7071068, w: 0.7071068}
+  m_LocalRotation: {x: -0, y: -0, z: 0.7071068, w: 0.7071068}
   m_LocalPosition: {x: 0, y: 0.36, z: 0}
   m_LocalScale: {x: 0.46967, y: 0.46967, z: 0.46967}
   m_ConstrainProportionsScale: 0
@@ -339,7 +339,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 68c6f586788539b44b76c04f4ef7b4e6, type: 2}
+  - {fileID: 2100000, guid: 0bf3fd7886ae7206a2f2b1fe7329c421, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -399,7 +399,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1730242686860875}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: -0.7071068, w: 0.7071068}
+  m_LocalRotation: {x: -0, y: -0, z: -0.7071068, w: 0.7071068}
   m_LocalPosition: {x: 0.91, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -444,24 +444,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b21d19dff2e05181ab2e35937d36d4e9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  animancer: {fileID: 0}
+  animancer: {fileID: 114044625135789424}
   warningStart:
-    _FadeDuration: 0.25
+    _FadeDuration: 0
     _Speed: 1
     _Events:
       _NormalizedTimes: []
       _Callbacks: []
       _Names: []
-    _Clip: {fileID: 7400000, guid: 32760356fc0fc8e4691c3494ac8714da, type: 2}
+    _Clip: {fileID: 7400000, guid: 734c9b7cf16106464216098523e13699, type: 2}
     _NormalizedStartTime: NaN
   warningEnd:
-    _FadeDuration: 0.25
+    _FadeDuration: 0
     _Speed: 1
     _Events:
       _NormalizedTimes: []
       _Callbacks: []
       _Names: []
-    _Clip: {fileID: 7400000, guid: 3fcacfc3a059c264ab77d086e3e5cde7, type: 2}
+    _Clip: {fileID: 7400000, guid: b3c07a83c0eee7a9fa2249ea560f1564, type: 2}
     _NormalizedStartTime: NaN
   references:
     version: 2

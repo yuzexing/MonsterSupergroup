@@ -3,6 +3,7 @@ param(
  [string]$ClientDirectory='Builds/LimboDashClient20260915',
  [string]$Prefix='dash-matrix-20260915',
  [string[]]$Cases=@('0-host','0-client','1-host','1-client'),
+ [switch]$ArtObserve,
  [ValidateSet("main","boundary","reuse")][string]$DashCase="main",
  [int]$Port=8240
 )
@@ -13,14 +14,14 @@ foreach($case in $Cases){
  if($variant -notin @(0,1) -or $target -notin @('host','client')){throw 'Cases must be 0-host, 0-client, 1-host, 1-client'}
  $name="$Prefix-$case";$folder=Join-Path $root "Logs/LimboReference/$name";$owned=@()
  try{
-  & "$PSScriptRoot/Run-LimboReference.ps1" -Role host -Profile dash-fixture -DashVariant $variant -DashCase $DashCase -FixtureTarget $target -WaitFor 2 -Port $Port -Windowed -BuildDirectory $BuildDirectory -RunName $name
+  & "$PSScriptRoot/Run-LimboReference.ps1" -Role host -Profile dash-fixture -DashVariant $variant -DashCase $DashCase -FixtureTarget $target -WaitFor 2 -Port $Port -Windowed -ArtObserve:$ArtObserve -BuildDirectory $BuildDirectory -RunName $name
   $owned += [int](Get-Content -LiteralPath "$folder/host/process.pid")
   $deadline=[DateTime]::UtcNow.AddSeconds(90)
   while(!(Test-Path -LiteralPath "$folder/host/player.log") -or !(Select-String -LiteralPath "$folder/host/player.log" -SimpleMatch '[Preparation] Open' -Quiet)){
    if([DateTime]::UtcNow -gt $deadline){throw 'Host preparation timeout'}
    Start-Sleep -Milliseconds 500
   }
-  & "$PSScriptRoot/Run-LimboReference.ps1" -Role client -Profile dash-fixture -DashVariant $variant -DashCase $DashCase -FixtureTarget $target -Port $Port -Windowed -BuildDirectory $ClientDirectory -RunName $name
+  & "$PSScriptRoot/Run-LimboReference.ps1" -Role client -Profile dash-fixture -DashVariant $variant -DashCase $DashCase -FixtureTarget $target -Port $Port -Windowed -ArtObserve:$ArtObserve -BuildDirectory $ClientDirectory -RunName $name
   $owned += [int](Get-Content -LiteralPath "$folder/client/process.pid")
   $deadline=[DateTime]::UtcNow.AddSeconds(250);$complete=$false
   while([DateTime]::UtcNow -lt $deadline){

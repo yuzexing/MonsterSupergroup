@@ -540,6 +540,7 @@ MonoBehaviour:
   angle: 0
   collider: {fileID: 721894178300467092}
   hurtBox: {fileID: 3949225564415453723}
+  animateMovementOnlyDeath: 1
 --- !u!50 &643773787611812521
 Rigidbody2D:
   serializedVersion: 5
@@ -566,7 +567,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 0
+  m_Constraints: 4
 --- !u!114 &3464355175358801471
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -695,6 +696,7 @@ MonoBehaviour:
   syncDirection: 0
   syncMode: 0
   syncInterval: 0
+  referenceArtDatabase: {fileID: 11400000, guid: 9c334089fb87dee41bbfd5eb1b05b3b9, type: 2}
   authority: {fileID: 0}
   interpolator: {fileID: 0}
   body: {fileID: 0}
@@ -735,6 +737,7 @@ MonoBehaviour:
   syncDirection: 0
   syncMode: 0
   syncInterval: 0
+  waitForDeathPresentation: 1
 --- !u!114 &6636599899439864565
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -762,6 +765,7 @@ GameObject:
   - component: {fileID: 6634749241475583828}
   - component: {fileID: 3826333316387773728}
   - component: {fileID: 81410022000739470}
+  - component: {fileID: 3447529023900870758}
   m_Layer: 0
   m_Name: Sprite
   m_TagString: Untagged
@@ -777,12 +781,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4919775779397899460}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.2, y: 0.2, z: 0.2}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 8652513492408536084}
+  - {fileID: 3156239527168888039}
   m_Father: {fileID: 5034422102077585780}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &4711044852071195017
@@ -811,7 +816,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 980561408307c4f40aa7adafa34d2429, type: 2}
+  - {fileID: 2100000, guid: 427ebd23a537fddce9380cd5f7a13a67, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -823,27 +828,27 @@ SpriteRenderer:
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
-  m_StitchLightmapSeams: 1
+  m_StitchLightmapSeams: 0
   m_SelectedEditorRenderState: 0
   m_MinimumChartSize: 4
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: -2050434577
+  m_SortingLayer: 5
   m_SortingOrder: 0
   m_MaskInteraction: 0
-  m_Sprite: {fileID: -2413806693520163455, guid: a86470a33a6bf42c4b3595704624658b, type: 3}
-  m_Color: {r: 1, g: 0, b: 0, a: 1}
+  m_Sprite: {fileID: 21300000, guid: b76060a76d7304547981a401546c5812, type: 2}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 4.32, y: 3.84}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
-  m_SpriteSortPoint: 0
+  m_SpriteSortPoint: 1
 --- !u!95 &6634749241475583828
 Animator:
   serializedVersion: 7
@@ -854,7 +859,7 @@ Animator:
   m_GameObject: {fileID: 4919775779397899460}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 40eb2b7f7d3a51c479ab3d19da149865, type: 2}
+  m_Controller: {fileID: 0}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -901,7 +906,7 @@ MonoBehaviour:
       _NormalizedTimes: []
       _Callbacks: []
       _Names: []
-    _Clip: {fileID: 7400000, guid: b3ff059e81d96b04dbdaa60a3e69ef60, type: 2}
+    _Clip: {fileID: 7400000, guid: 811cc367ebf35e64fa5e51eaebe9bf72, type: 2}
     _NormalizedStartTime: NaN
   moveLeftDown:
     _FadeDuration: 0.25
@@ -910,7 +915,7 @@ MonoBehaviour:
       _NormalizedTimes: []
       _Callbacks: []
       _Names: []
-    _Clip: {fileID: 7400000, guid: b3ff059e81d96b04dbdaa60a3e69ef60, type: 2}
+    _Clip: {fileID: 7400000, guid: 811cc367ebf35e64fa5e51eaebe9bf72, type: 2}
     _NormalizedStartTime: NaN
   moveRightUp:
     _FadeDuration: 0.25
@@ -919,7 +924,7 @@ MonoBehaviour:
       _NormalizedTimes: []
       _Callbacks: []
       _Names: []
-    _Clip: {fileID: 7400000, guid: b3ff059e81d96b04dbdaa60a3e69ef60, type: 2}
+    _Clip: {fileID: 7400000, guid: 54bc65253b4cf034299996cadf4ef853, type: 2}
     _NormalizedStartTime: NaN
   moveRightDown:
     _FadeDuration: 0.25
@@ -928,7 +933,7 @@ MonoBehaviour:
       _NormalizedTimes: []
       _Callbacks: []
       _Names: []
-    _Clip: {fileID: 7400000, guid: b3ff059e81d96b04dbdaa60a3e69ef60, type: 2}
+    _Clip: {fileID: 7400000, guid: 54bc65253b4cf034299996cadf4ef853, type: 2}
     _NormalizedStartTime: NaN
   attackWarningLeftUp:
     _FadeDuration: 0.25
@@ -1042,103 +1047,316 @@ MonoBehaviour:
     _FadeDuration: 0.25
     _Speed: 1
     _Events:
-      _NormalizedTimes: []
+      _NormalizedTimes:
+      - 0
+      - NaN
       _Callbacks: []
       _Names: []
-    _Clip: {fileID: 7400000, guid: b3ff059e81d96b04dbdaa60a3e69ef60, type: 2}
+    _Clip: {fileID: 7400000, guid: 3a0a2a54ff384a54b955245eec0a0667, type: 2}
     _NormalizedStartTime: NaN
   hurtLeftDown:
     _FadeDuration: 0.25
     _Speed: 1
     _Events:
-      _NormalizedTimes: []
+      _NormalizedTimes:
+      - 0
+      - NaN
       _Callbacks: []
       _Names: []
-    _Clip: {fileID: 7400000, guid: b3ff059e81d96b04dbdaa60a3e69ef60, type: 2}
+    _Clip: {fileID: 7400000, guid: 3a0a2a54ff384a54b955245eec0a0667, type: 2}
     _NormalizedStartTime: NaN
   hurtRightUp:
     _FadeDuration: 0.25
     _Speed: 1
     _Events:
-      _NormalizedTimes: []
+      _NormalizedTimes:
+      - 0
+      - NaN
       _Callbacks: []
       _Names: []
-    _Clip: {fileID: 7400000, guid: b3ff059e81d96b04dbdaa60a3e69ef60, type: 2}
+    _Clip: {fileID: 7400000, guid: 8fffb800106ade34f9ca81fc6cfecfb7, type: 2}
     _NormalizedStartTime: NaN
   hurtRightDown:
     _FadeDuration: 0.25
     _Speed: 1
     _Events:
-      _NormalizedTimes: []
+      _NormalizedTimes:
+      - 0
+      - NaN
       _Callbacks: []
       _Names: []
-    _Clip: {fileID: 7400000, guid: b3ff059e81d96b04dbdaa60a3e69ef60, type: 2}
+    _Clip: {fileID: 7400000, guid: 8fffb800106ade34f9ca81fc6cfecfb7, type: 2}
     _NormalizedStartTime: NaN
   deadLeftUp:
     _FadeDuration: 0.25
     _Speed: 1
     _Events:
-      _NormalizedTimes: []
-      _Callbacks: []
+      _NormalizedTimes:
+      - 0
+      - 0.7581066
+      - NaN
+      _Callbacks:
+      - rid: -2
+      - rid: 8799243470792818689
       _Names: []
-    _Clip: {fileID: 7400000, guid: b3ff059e81d96b04dbdaa60a3e69ef60, type: 2}
+    _Clip: {fileID: 7400000, guid: 36a3e2386678c6242815d9e6b63efcfc, type: 2}
     _NormalizedStartTime: NaN
   deadLeftDown:
     _FadeDuration: 0.25
     _Speed: 1
     _Events:
-      _NormalizedTimes: []
-      _Callbacks: []
+      _NormalizedTimes:
+      - 0
+      - 0.7581066
+      - NaN
+      _Callbacks:
+      - rid: -2
+      - rid: 8799243470792818688
       _Names: []
-    _Clip: {fileID: 7400000, guid: b3ff059e81d96b04dbdaa60a3e69ef60, type: 2}
+    _Clip: {fileID: 7400000, guid: 36a3e2386678c6242815d9e6b63efcfc, type: 2}
     _NormalizedStartTime: NaN
   deadRightUp:
     _FadeDuration: 0.25
     _Speed: 1
     _Events:
-      _NormalizedTimes: []
-      _Callbacks: []
+      _NormalizedTimes:
+      - 0
+      - 0.7581066
+      - NaN
+      _Callbacks:
+      - rid: -2
+      - rid: 8799243470792818691
       _Names: []
-    _Clip: {fileID: 7400000, guid: b3ff059e81d96b04dbdaa60a3e69ef60, type: 2}
+    _Clip: {fileID: 7400000, guid: 9cdcc9c52a03f7543b25d9cb1eb7ab32, type: 2}
     _NormalizedStartTime: NaN
   deadRightDown:
     _FadeDuration: 0.25
     _Speed: 1
     _Events:
-      _NormalizedTimes: []
-      _Callbacks: []
+      _NormalizedTimes:
+      - 0
+      - 0.7581066
+      - NaN
+      _Callbacks:
+      - rid: -2
+      - rid: 8799243470792818690
       _Names: []
-    _Clip: {fileID: 7400000, guid: b3ff059e81d96b04dbdaa60a3e69ef60, type: 2}
+    _Clip: {fileID: 7400000, guid: 9cdcc9c52a03f7543b25d9cb1eb7ab32, type: 2}
     _NormalizedStartTime: NaN
   shadowFadeout:
-    _FadeDuration: 0.25
+    _FadeDuration: 0
     _Speed: 1
     _Events:
       _NormalizedTimes: []
       _Callbacks: []
       _Names: []
-    _Clip: {fileID: 7400000, guid: b3ff059e81d96b04dbdaa60a3e69ef60, type: 2}
+    _Clip: {fileID: 7400000, guid: 7354971bac478284cb38f4270fa00542, type: 2}
     _NormalizedStartTime: NaN
   shadowIdle:
-    _FadeDuration: 0.25
+    _FadeDuration: 0
     _Speed: 1
     _Events:
       _NormalizedTimes: []
       _Callbacks: []
       _Names: []
-    _Clip: {fileID: 7400000, guid: b3ff059e81d96b04dbdaa60a3e69ef60, type: 2}
+    _Clip: {fileID: 7400000, guid: f73a932baa14e244c99afa830bcdd915, type: 2}
     _NormalizedStartTime: NaN
   shadowAnimationLayer: 5
-  animator: {fileID: 0}
+  animator: {fileID: 6634749241475583828}
+  useRecoveredMovement: 1
   randomAnimatorSpeed: 0
   animatorSpeed: 1
   animatorSpeedBounds: {x: 1, y: 1}
   renderers:
   - {fileID: 4711044852071195017}
-  paletteSwapper: {fileID: 0}
+  - {fileID: 7200909286967305746}
+  paletteSwapper: {fileID: 3447529023900870758}
   references:
     version: 2
-    RefIds: []
+    RefIds:
+    - rid: -2
+      type: {class: , ns: , asm: }
+    - rid: 8799243470792818688
+      type: {class: UnityEvent, ns: Animancer, asm: Kybernetik.Animancer}
+      data:
+        m_PersistentCalls:
+          m_Calls:
+          - m_Target: {fileID: 81410022000739470}
+            m_TargetAssemblyTypeName: AstralShift.HellMaiden.AI.Enemy.EnemyAnimator,
+              MonsterSupergroup.Gameplay.Combat
+            m_MethodName: DeathAnimationShadowFade
+            m_Mode: 0
+            m_Arguments:
+              m_ObjectArgument: {fileID: 0}
+              m_ObjectArgumentAssemblyTypeName: 
+              m_IntArgument: 0
+              m_FloatArgument: 0
+              m_StringArgument: 
+              m_BoolArgument: 0
+            m_CallState: 2
+    - rid: 8799243470792818689
+      type: {class: UnityEvent, ns: Animancer, asm: Kybernetik.Animancer}
+      data:
+        m_PersistentCalls:
+          m_Calls:
+          - m_Target: {fileID: 81410022000739470}
+            m_TargetAssemblyTypeName: AstralShift.HellMaiden.AI.Enemy.EnemyAnimator,
+              MonsterSupergroup.Gameplay.Combat
+            m_MethodName: DeathAnimationShadowFade
+            m_Mode: 0
+            m_Arguments:
+              m_ObjectArgument: {fileID: 0}
+              m_ObjectArgumentAssemblyTypeName: 
+              m_IntArgument: 0
+              m_FloatArgument: 0
+              m_StringArgument: 
+              m_BoolArgument: 0
+            m_CallState: 2
+    - rid: 8799243470792818690
+      type: {class: UnityEvent, ns: Animancer, asm: Kybernetik.Animancer}
+      data:
+        m_PersistentCalls:
+          m_Calls:
+          - m_Target: {fileID: 81410022000739470}
+            m_TargetAssemblyTypeName: AstralShift.HellMaiden.AI.Enemy.EnemyAnimator,
+              MonsterSupergroup.Gameplay.Combat
+            m_MethodName: DeathAnimationShadowFade
+            m_Mode: 0
+            m_Arguments:
+              m_ObjectArgument: {fileID: 0}
+              m_ObjectArgumentAssemblyTypeName: 
+              m_IntArgument: 0
+              m_FloatArgument: 0
+              m_StringArgument: 
+              m_BoolArgument: 0
+            m_CallState: 2
+    - rid: 8799243470792818691
+      type: {class: UnityEvent, ns: Animancer, asm: Kybernetik.Animancer}
+      data:
+        m_PersistentCalls:
+          m_Calls:
+          - m_Target: {fileID: 81410022000739470}
+            m_TargetAssemblyTypeName: AstralShift.HellMaiden.AI.Enemy.EnemyAnimator,
+              MonsterSupergroup.Gameplay.Combat
+            m_MethodName: DeathAnimationShadowFade
+            m_Mode: 0
+            m_Arguments:
+              m_ObjectArgument: {fileID: 0}
+              m_ObjectArgumentAssemblyTypeName: 
+              m_IntArgument: 0
+              m_FloatArgument: 0
+              m_StringArgument: 
+              m_BoolArgument: 0
+            m_CallState: 2
+--- !u!114 &3447529023900870758
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4919775779397899460}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bae23e64e9e510b1acfe7d5c92f90a46, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: MonsterSupergroup.Gameplay.Combat::AstralShift.Rendering.SpriteRendererPaletteSwapper
+  bakedPalettes:
+  - original: {fileID: 2800000, guid: 37e766e78025fdd4e998ecb4e012ccce, type: 3}
+    lut: {fileID: 2800000, guid: dcd3d0d47e26f3d49b3da4f075aefc2e, type: 3}
+    baked: {fileID: 2800000, guid: f1bc368abceeb8b0f71c39c85f5b9d2b, type: 3}
+  _Renderer: {fileID: 4711044852071195017}
+  _modifiedTexture: {fileID: 0}
+--- !u!1 &5174848868089676230
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3156239527168888039}
+  - component: {fileID: 7200909286967305746}
+  m_Layer: 0
+  m_Name: ShadowCircle
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3156239527168888039
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5174848868089676230}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0.069000244, y: 0.0189991, z: 0}
+  m_LocalScale: {x: 0.65, y: 0.325, z: 0.65}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7737456504531732710}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!212 &7200909286967305746
+SpriteRenderer:
+  serializedVersion: 2
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5174848868089676230}
+  m_Enabled: 1
+  m_CastShadows: 0
+  m_ReceiveShadows: 0
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: 427ebd23a537fddce9380cd5f7a13a67, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 0
+  m_SelectedEditorRenderState: 0
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
+  m_SortingLayerID: 842383085
+  m_SortingLayer: 3
+  m_SortingOrder: 0
+  m_MaskInteraction: 0
+  m_Sprite: {fileID: 21300000, guid: a12c5157dd264e34a8784ac8858fb37c, type: 2}
+  m_Color: {r: 0, g: 0, b: 0, a: 0.62352943}
+  m_FlipX: 0
+  m_FlipY: 0
+  m_DrawMode: 0
+  m_Size: {x: 2.56, y: 2.56}
+  m_AdaptiveModeThreshold: 0.5
+  m_SpriteTileMode: 0
+  m_WasSpriteAssigned: 1
+  m_SpriteSortPoint: 0
 --- !u!1 &5334731849460581870
 GameObject:
   m_ObjectHideFlags: 0

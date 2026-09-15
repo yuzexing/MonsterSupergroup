@@ -18,7 +18,7 @@ namespace MonsterSupergroup.NetworkCombat
         public static bool Enabled => Argument("--limbo-role=") != null;
         public static string OutputDirectory => Argument("--limbo-output=") ?? Path.Combine(Application.persistentDataPath, "LimboReference");
         public static string Profile => Argument("--limbo-profile=") ?? "opening";
-        public static GameplayWaveRules Rules => Resources.Load<GameplayWaveRules>("LimboReference/" + (Profile == "dash" ? "Dash" : Profile == "dash-validation" ? "DashValidation" : Profile == "dash-fixture" ? (Argument("--limbo-dash-case=")=="reuse"?"DashReuse":(Argument("--limbo-dash-case=")=="boundary"?"DashBoundary":"DashFixture") + (Argument("--limbo-dash-variant=") ?? "0")) : Profile == "spatial-reposition" ? LimboRepositionFixture.RulesName : Profile == "spatial-b" ? "SpatialB" : Profile == "spatial-barrier" ? "SpatialBarrier" : Profile == "spatial-overlap" ? (Argument("--limbo-spatial-case=") == "occupancy" ? "SpatialOverlapWait" : "SpatialOverlap") : Profile == "stage2" ? "Stage2" : Profile == "stage2-validation" ? "Stage2Validation" : Profile == "stage2-fixture" ? "Stage2" + (Argument("--limbo-fixture-mode=")?.StartsWith("l-")==true?"RusherWave":Argument("--limbo-fixture-enemy=") ?? "Skeleton0") : Profile == "full" ? "Full" : Profile == "imp" ? "ImpOpening" : Profile == "imp-validation" ? "ImpValidation" : Profile == "imp-v0" ? "ImpFixture0" : Profile == "imp-v1" ? "ImpFixture1" : "Opening"));
+        public static GameplayWaveRules Rules => Profile == "art-effects" ? Resources.Load<GameplayWaveRules>("LimboReference/ArtEffects") : Resources.Load<GameplayWaveRules>("LimboReference/" + (Profile == "dash" ? "Dash" : Profile == "dash-validation" ? "DashValidation" : Profile == "dash-fixture" ? (Argument("--limbo-dash-case=")=="reuse"?"DashReuse":(Argument("--limbo-dash-case=")=="boundary"?"DashBoundary":"DashFixture") + (Argument("--limbo-dash-variant=") ?? "0")) : Profile == "spatial-reposition" ? LimboRepositionFixture.RulesName : Profile == "spatial-b" ? "SpatialB" : Profile == "spatial-barrier" ? "SpatialBarrier" : Profile == "spatial-overlap" ? (Argument("--limbo-spatial-case=") == "occupancy" ? "SpatialOverlapWait" : "SpatialOverlap") : Profile == "stage2" ? "Stage2" : Profile == "stage2-validation" ? "Stage2Validation" : Profile == "stage2-fixture" ? "Stage2" + (Argument("--limbo-fixture-mode=")?.StartsWith("l-")==true?"RusherWave":Argument("--limbo-fixture-enemy=") ?? "Skeleton0") : Profile == "full" ? "Full" : Profile == "imp" ? "ImpOpening" : Profile == "imp-validation" ? "ImpValidation" : Profile == "imp-v0" ? "ImpFixture0" : Profile == "imp-v1" ? "ImpFixture1" : "Opening"));
         private BootGameplayNetworkManager manager;
         private readonly HashSet<uint> observed = new HashSet<uint>();
         private StreamWriter audit;
@@ -39,6 +39,12 @@ namespace MonsterSupergroup.NetworkCombat
             if (!Enabled) return;
             var runner = new GameObject("Limbo reference launch").AddComponent<LimboReferenceLaunch>();
             DontDestroyOnLoad(runner.gameObject);
+            if (Argument("--limbo-art-observe=") == "true") runner.gameObject.AddComponent<LimboArtObservation>();
+            if (Profile == "art-effects")
+            {
+                var visuals = Instantiate(Resources.Load<GameObject>("LimboReference/ArtEffectDisplay"));
+                DontDestroyOnLoad(visuals);
+            }
             if (Profile.StartsWith("imp", StringComparison.Ordinal) || Profile == "stage2" || Profile == "stage2-validation")
                 runner.gameObject.AddComponent<LimboImpObservation>();
             if (Profile.StartsWith("stage2", StringComparison.Ordinal) || Profile.StartsWith("dash", StringComparison.Ordinal)) runner.gameObject.AddComponent<LimboStage2Observation>();

@@ -173,6 +173,9 @@ namespace AstralShift.HellMaiden.AI.Enemy
 		private bool _confirmedConsequencesApplied;
 
 		private bool _deathPresentationComplete;
+        public bool DeathPresentationComplete => _deathPresentationComplete;
+        [SerializeField] private bool animateMovementOnlyDeath;
+        private bool movementDeathPresentationStarted;
 
 		private bool _deathPresentationEventRaised;
 
@@ -621,6 +624,8 @@ namespace AstralShift.HellMaiden.AI.Enemy
 					: Vector2.right;
 			}
 
+            // The same replicated facing must also select later death frames.
+            if (animateMovementOnlyDeath) Movement?.SetFacingDirection(facing);
 			enemyAnimator.ApplyReplicatedAttackPresentation(
 				phase,
 				facing,
@@ -715,6 +720,7 @@ namespace AstralShift.HellMaiden.AI.Enemy
 			_killConfirmed = false;
 			_confirmedConsequencesApplied = false;
 			_deathPresentationComplete = false;
+            movementDeathPresentationStarted = false;
 			_deathPresentationEventRaised = false;
 			_combatDefeat = false;
 			_damageResolutionDepth = 0;
@@ -1495,10 +1501,14 @@ namespace AstralShift.HellMaiden.AI.Enemy
 		{
 			if (_stateMachine == null)
 			{
+				if (movementDeathPresentationStarted) return;
+				movementDeathPresentationStarted = true;
 				ActivateColliders(activate: false);
 				Movement?.FreezeRigidbody(state: true);
 				EnemyAIManager.Instance?.UnRegisterEnemy(this);
-				CompleteDeathPresentation();
+                if (animateMovementOnlyDeath && enemyAnimator != null && enemyAnimator.isActiveAndEnabled)
+                    enemyAnimator.DeathAnimation(FacingDirection, CompleteDeathPresentation);
+                else CompleteDeathPresentation();
 				return;
 			}
 			if (IsInDeadState)
@@ -1538,6 +1548,11 @@ namespace AstralShift.HellMaiden.AI.Enemy
 		private void EndDamageResolution()
 		{
 			_damageResolutionDepth = Mathf.Max(0, _damageResolutionDepth - 1);
+            // A network hit defers lethal presentation while GAS resolves its
+            // effects. The local predictor must start it after that scope too;
+            // its later confirmed-kill echo is deliberately deduplicated.
+            if (_damageResolutionDepth == 0 && _predictedDeath && animateMovementOnlyDeath)
+                BeginPredictedDeathPresentation();
 			if (_damageResolutionDepth == 0 && _killConfirmed)
 			{
 				ApplyConfirmedConsequences();

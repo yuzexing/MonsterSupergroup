@@ -29,7 +29,9 @@ namespace MonsterSupergroup.NetworkCombat
             {
                 var target = activeParticipants.Find(p => p.AvatarId == enemy.Assignment.AggroTargetPlayerId) ?? activeParticipants[0];
                 Vector2 position = enemy.transform.position;
-                float outside = GameplayCameraGeometry.MinimumOutsideDistance(position, referenceParticipantViews);
+                var bodyRenderer = enemy.GetComponent<AstralShift.HellMaiden.AI.Enemy.EnemyController>().spriteRenderer;
+                float outside = GameplayCameraGeometry.MinimumOutsideDistance(
+                    bodyRenderer != null ? bodyRenderer.bounds : new Bounds(position, Vector3.zero), referenceParticipantViews);
                 if (outside == 0) { offscreenSince.Remove(enemy.netId); continue; }
                 if (!offscreenSince.TryGetValue(enemy.netId, out double since)) offscreenSince[enemy.netId] = since = elapsed;
                 if (!reference.OffscreenProcessingDue(enemy.Birth.BornAt, elapsed, since, outside)) continue;

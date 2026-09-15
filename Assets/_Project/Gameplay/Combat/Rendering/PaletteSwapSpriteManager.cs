@@ -8,6 +8,7 @@ namespace AstralShift.Rendering
 		public class ColorLookupTextureMap
 		{
 			private readonly Dictionary<Texture2D, Texture2D> _originalToModifiedTexturesMap = new Dictionary<Texture2D, Texture2D>();
+			private readonly HashSet<Texture2D> _ownedTextures = new HashSet<Texture2D>();
 
 			private readonly Dictionary<Texture2D, Dictionary<Sprite, Sprite>> _textureToSpriteMap = new Dictionary<Texture2D, Dictionary<Sprite, Sprite>>();
 
@@ -16,9 +17,11 @@ namespace AstralShift.Rendering
 				return _originalToModifiedTexturesMap.TryGetValue(originalTexture, out modifiedTexture);
 			}
 
-			public bool TryAddModifiedTexture(Texture2D originalTexture, Texture2D modifiedTexture)
+			public bool TryAddModifiedTexture(Texture2D originalTexture, Texture2D modifiedTexture, bool ownsTexture = true)
 			{
-				return _originalToModifiedTexturesMap.TryAdd(originalTexture, modifiedTexture);
+				if (!_originalToModifiedTexturesMap.TryAdd(originalTexture, modifiedTexture)) return false;
+				if (ownsTexture) _ownedTextures.Add(modifiedTexture);
+				return true;
 			}
 
 			public bool IsAModifiedTexture(Texture2D texture)
@@ -47,7 +50,8 @@ namespace AstralShift.Rendering
 				}
 				foreach (Sprite value in spriteMap.Values)
 				{
-					Object.Destroy(value);
+					if (Application.isPlaying) Object.Destroy(value);
+					else Object.DestroyImmediate(value);
 				}
 				spriteMap.Clear();
 			}
@@ -74,6 +78,7 @@ namespace AstralShift.Rendering
 				List<Texture2D> list = new List<Texture2D>(_originalToModifiedTexturesMap.Values);
 				for (int num = list.Count - 1; num >= 0; num--)
 				{
+					if (!_ownedTextures.Contains(list[num])) continue;
 					if (!Application.isPlaying)
 					{
 						Object.DestroyImmediate(list[num]);
@@ -84,6 +89,7 @@ namespace AstralShift.Rendering
 					}
 				}
 				_originalToModifiedTexturesMap.Clear();
+				_ownedTextures.Clear();
 			}
 		}
 
@@ -92,6 +98,21 @@ namespace AstralShift.Rendering
 		private static readonly int _ColorLookupTexPropID = Shader.PropertyToID("_ColorLookupTex");
 
 		private static readonly Dictionary<Texture2D, ColorLookupTextureMap> GlobalMap = new Dictionary<Texture2D, ColorLookupTextureMap>();
+        private static readonly Dictionary<Texture2D, int> Users = new Dictionary<Texture2D, int>();
+
+        public static void Retain(Texture2D lut)
+        {
+            if (lut == null) return;
+            Users.TryGetValue(lut, out int count); Users[lut] = count + 1;
+        }
+
+        public static void Release(Texture2D lut)
+        {
+            if (lut == null || !Users.TryGetValue(lut, out int count)) return;
+            if (count > 1) { Users[lut] = count - 1; return; }
+            Users.Remove(lut);
+            if (GlobalMap.Remove(lut, out var map)) map.Clear();
+        }
 
 		public static Material BlitMaterial
 		{
@@ -156,6 +177,14 @@ namespace AstralShift.Rendering
 			return value;
 		}
 
+        // Baked by the original game's compiled shader. Asset textures are shared
+        // and must never be destroyed when a spawned enemy or cache is released.
+        public static void RegisterBakedTexture(Texture2D original, Texture2D lut, Texture2D baked)
+        {
+            if (original == null || lut == null || baked == null) return;
+            GetOrCreateColorLutTextureMap(lut).TryAddModifiedTexture(original, baked, false);
+        }
+
 		public static void ClearAll()
 		{
 			if (GlobalMap.Count == 0)
@@ -166,6 +195,7 @@ namespace AstralShift.Rendering
 			{
 				value.Clear();
 			}
+            GlobalMap.Clear(); Users.Clear();
 		}
 	}
 }

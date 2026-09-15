@@ -8,6 +8,10 @@ namespace AstralShift.Rendering
 	[RequireComponent(typeof(SpriteRenderer))]
 	public class SpriteRendererPaletteSwapper : MonoBehaviour
 	{
+        [System.Serializable]
+        public struct BakedPalette { public Texture2D original, lut, baked; }
+        [SerializeField] private BakedPalette[] bakedPalettes = System.Array.Empty<BakedPalette>();
+        private Sprite _originalSprite;
 		public const int DefaultExecutionOrder = 30000;
 
 		[SerializeField]
@@ -52,7 +56,15 @@ namespace AstralShift.Rendering
 			}
 			set
 			{
+				if (_colorLut == value) return;
+                if (_Renderer != null && _Renderer.sprite != null && _Renderer.sprite.texture == _modifiedTexture && _originalSprite != null)
+                    _Renderer.sprite = _originalSprite;
+                PaletteSwapSpriteManager.Release(_colorLut);
+				_previousTexture = null;
+				_modifiedTexture = null;
+				_spriteMap = null;
 				_colorLut = value;
+                PaletteSwapSpriteManager.Retain(_colorLut);
 				_isEnabled = _colorLut;
 				RefreshColorLutMap();
 			}
@@ -64,7 +76,16 @@ namespace AstralShift.Rendering
 			{
 				TryGetComponent<SpriteRenderer>(out _Renderer);
 			}
+            RegisterBakedPalettes();
 		}
+
+        private void RegisterBakedPalettes()
+        {
+            if (ColorLut == null) return;
+            foreach (var pair in bakedPalettes)
+                if (pair.lut == ColorLut)
+                    PaletteSwapSpriteManager.RegisterBakedTexture(pair.original, pair.lut, pair.baked);
+        }
 
 		protected virtual void LateUpdate()
 		{
@@ -81,19 +102,20 @@ namespace AstralShift.Rendering
 
 		private void RefreshColorLutMap()
 		{
-			if ((bool)ColorLut)
-			{
-				_mainMap = PaletteSwapSpriteManager.GetOrCreateColorLutTextureMap(ColorLut);
-			}
+            RegisterBakedPalettes();
+            _mainMap = ColorLut ? PaletteSwapSpriteManager.GetOrCreateColorLutTextureMap(ColorLut) : null;
 		}
 
 		private void RefreshSpriteMap()
 		{
-			_spriteMap = _mainMap.GetSpriteMap(_modifiedTexture);
+			_spriteMap = _mainMap?.GetSpriteMap(_modifiedTexture);
 		}
 
 		private void TrySwapTexture()
 		{
+            if (_Renderer.sprite == null) return;
+            if (_modifiedTexture != null && _Renderer.sprite.texture == _modifiedTexture) return;
+            if (_Renderer.sprite.texture != _modifiedTexture) _originalSprite = _Renderer.sprite;
 			if (_previousTexture != _Renderer.sprite.texture)
 			{
 				Texture2D texture = _Renderer.sprite.texture;
@@ -122,12 +144,8 @@ namespace AstralShift.Rendering
 			return true;
 		}
 
-		private void OnDestroy()
-		{
-			if (_mainMap != null)
-			{
-				_mainMap.Clear();
-			}
-		}
+		// The map belongs to the shared manager. One enemy's death must not clear
+		// sprites/textures still referenced by other living enemies of this variant.
+        protected virtual void OnDestroy() => PaletteSwapSpriteManager.Release(_colorLut);
 	}
 }

@@ -1,10 +1,10 @@
 fileFormatVersion: 2
 guid: c20bcc0820a7a69c0f0736aa5e45c44d
-timeCreated: 1786187372
-licenseType: Free
+labels:
+- LimboArtRestoredV1
 NativeFormatImporter:
   externalObjects: {}
   mainObjectFileID: 2100000
-  userData:
-  assetBundleName:
-  assetBundleVariant:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

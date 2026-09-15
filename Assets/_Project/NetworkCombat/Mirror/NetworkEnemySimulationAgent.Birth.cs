@@ -1,5 +1,6 @@
 using System;
 using AstralShift.HellMaiden.AI.Enemy;
+using AstralShift.HellMaiden.AI;
 using Mirror;
 using UnityEngine;
 
@@ -30,6 +31,7 @@ namespace MonsterSupergroup.NetworkCombat
         [SyncVar(hook = nameof(HandleReferenceReset))] private uint referenceResetVersion;
         public uint ReferenceResetVersion => referenceResetVersion;
         private bool birthPrepared;
+        [SerializeField] private EnemyDatabase referenceArtDatabase;
         public EnemyBirthParameters Birth => birth;
 
         public void ConfigureBirth(EnemyBirthParameters value)
@@ -84,6 +86,9 @@ namespace MonsterSupergroup.NetworkCombat
 
         private void RestoreCanonicalAfterBirthInitialization()
         {
+            if (birth.Enabled && referenceArtDatabase != null && enemyController != null &&
+                !MonsterSupergroup.Gameplay.Combat.GameplayRuntimeEnvironment.IsDedicatedServer)
+                enemyController.enemyAnimator?.Recolor(referenceArtDatabase.GetEnemyData(birth.SourceEnemy, birth.Variant)?.ColorLUT);
             if (birth.Enabled && enemyController != null) enemyController.allowRubberband = false;
             if (!birth.Enabled || combatant == null || NetworkCombatWorld.Instance == null) return;
             var world = NetworkCombatWorld.Instance;
@@ -91,6 +96,21 @@ namespace MonsterSupergroup.NetworkCombat
                 combatant.ApplyCanonicalHealth(serverState.Health, serverState.MaxHealth, serverState.StateVersion);
             else if (world.Replica.TryGetEntity(netId, out var clientState))
                 combatant.ApplyCanonicalHealth(clientState.Health, clientState.MaxHealth, clientState.StateVersion);
+        }
+
+        private void RefreshReferenceReplicaMovement()
+        {
+            if (!birth.Enabled || referenceArtDatabase == null || !productEnemyInitialized || !IsCanonicalAlive ||
+                authority == null || (!productMovementOnly && !authority.ConsumesSnapshots) || resolvedTarget == null) return;
+            if (hasLatestAttackPresentation)
+            {
+                var phase = latestAttackPresentation.Checkpoint.Movement.Runtime.Action.PhaseAt(EnemySimulationClock.CombatNow);
+                if (phase == EnemyAttackPresentationPhase.Warning || phase == EnemyAttackPresentationPhase.Active ||
+                    phase == EnemyAttackPresentationPhase.Recovery) return;
+            }
+            Vector2 facing = (Vector2)resolvedTarget.position - (Vector2)transform.position;
+            if (authority.ConsumesSnapshots) enemyController.Movement?.SetFacingDirection(facing);
+            enemyController.enemyAnimator.Movement(facing.x, facing.y);
         }
     }
 }

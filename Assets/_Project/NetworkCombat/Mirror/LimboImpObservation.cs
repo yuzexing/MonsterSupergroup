@@ -90,6 +90,25 @@ namespace MonsterSupergroup.NetworkCombat
         {
             var local = NetworkClient.localPlayer;
             var player = local.GetComponent<PlayerMovement>();
+            if(LimboReferenceLaunch.Argument("--limbo-fixture-mode=")=="art-death")
+            {
+                local.GetComponent<PlayerBuildRuntime>()?.SetWeaponExecutionEnabled(true);
+                player.StopMovement();player.PlayerStats.currentStats.xpModifier=0;
+                if(local.GetComponent<CombatantBehaviour>().CurrentHealth<250)
+                {Write("fixture-heal","IncreaseHealth(500), art death fixture only");player.IncreaseHealth(500);}
+                var subject=enemies.FirstOrDefault(e=>e.IsCanonicalAlive);
+                if(!positioned&&NetworkServer.active&&subject!=null)
+                {
+                    var observer=NetworkServer.connections.Values.Select(c=>c.identity).FirstOrDefault(i=>i!=null&&i.netId!=local.netId);
+                    bool remoteTarget=LimboReferenceLaunch.Argument("--limbo-fixture-target=")=="client";
+                    if(remoteTarget&&observer==null)return;
+                    var target=remoteTarget?observer:local;
+                    world.RepositionReferenceEnemy(subject,(Vector2)target.transform.position+new Vector2(.8f,-.4f));
+                    world.RequestTargetChange(subject.netId,target.netId,EnemyTargetChangeReason.Forced);
+                    positioned=true;Write("fixture-art-death","One production reposition; ordinary equipped weapon; XP pickup zero and explicit healing; no forced kill.");
+                }
+                return;
+            }
             local.GetComponent<PlayerBuildRuntime>()?.SetWeaponExecutionEnabled(false);
             player.StopMovement();
             if (!positioned) { anchor = local.transform.position; desired = anchor; positioned = true; Write("fixture-position", anchor.ToString()); }

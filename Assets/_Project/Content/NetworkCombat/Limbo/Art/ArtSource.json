@@ -21,6 +21,12 @@
             "0.0",
             "0.7581066",
             "NaN"
+          ],
+          "visualCallbacks": [
+            {
+              "index": 1,
+              "method": "DeathAnimationShadowFade"
+            }
           ]
         },
         {
@@ -34,6 +40,12 @@
             "0.0",
             "0.7581066",
             "NaN"
+          ],
+          "visualCallbacks": [
+            {
+              "index": 1,
+              "method": "DeathAnimationShadowFade"
+            }
           ]
         },
         {
@@ -47,6 +59,12 @@
             "0.0",
             "0.7581066",
             "NaN"
+          ],
+          "visualCallbacks": [
+            {
+              "index": 1,
+              "method": "DeathAnimationShadowFade"
+            }
           ]
         },
         {
@@ -60,6 +78,12 @@
             "0.0",
             "0.7581066",
             "NaN"
+          ],
+          "visualCallbacks": [
+            {
+              "index": 1,
+              "method": "DeathAnimationShadowFade"
+            }
           ]
         },
         {
@@ -72,7 +96,8 @@
           "eventTimes": [
             "0.0",
             "NaN"
-          ]
+          ],
+          "visualCallbacks": []
         },
         {
           "field": "hurtLeftUp",
@@ -84,7 +109,8 @@
           "eventTimes": [
             "0.0",
             "NaN"
-          ]
+          ],
+          "visualCallbacks": []
         },
         {
           "field": "hurtRightDown",
@@ -96,7 +122,8 @@
           "eventTimes": [
             "0.0",
             "NaN"
-          ]
+          ],
+          "visualCallbacks": []
         },
         {
           "field": "hurtRightUp",
@@ -108,7 +135,8 @@
           "eventTimes": [
             "0.0",
             "NaN"
-          ]
+          ],
+          "visualCallbacks": []
         },
         {
           "field": "moveLeftDown",
@@ -117,7 +145,8 @@
           "speed": 1.0,
           "fade": 0.25,
           "normalizedStart": "NaN",
-          "eventTimes": []
+          "eventTimes": [],
+          "visualCallbacks": []
         },
         {
           "field": "moveLeftUp",
@@ -126,7 +155,8 @@
           "speed": 1.0,
           "fade": 0.25,
           "normalizedStart": "NaN",
-          "eventTimes": []
+          "eventTimes": [],
+          "visualCallbacks": []
         },
         {
           "field": "moveRightDown",
@@ -135,7 +165,8 @@
           "speed": 1.0,
           "fade": 0.25,
           "normalizedStart": "NaN",
-          "eventTimes": []
+          "eventTimes": [],
+          "visualCallbacks": []
         },
         {
           "field": "moveRightUp",
@@ -144,7 +175,8 @@
           "speed": 1.0,
           "fade": 0.25,
           "normalizedStart": "NaN",
-          "eventTimes": []
+          "eventTimes": [],
+          "visualCallbacks": []
         },
         {
           "field": "shadowFadeout",
@@ -153,7 +185,8 @@
           "speed": 1.0,
           "fade": 0.0,
           "normalizedStart": "NaN",
-          "eventTimes": []
+          "eventTimes": [],
+          "visualCallbacks": []
         },
         {
           "field": "shadowIdle",
@@ -162,7 +195,8 @@
           "speed": 1.0,
           "fade": 0.0,
           "normalizedStart": "NaN",
-          "eventTimes": []
+          "eventTimes": [],
+          "visualCallbacks": []
         }
       ],
       "contact": true
@@ -184,7 +218,8 @@
           "eventTimes": [
             "0.0",
             "NaN"
-          ]
+          ],
+          "visualCallbacks": []
         },
         {
           "field": "attackLeftUp",
@@ -196,7 +231,8 @@
           "eventTimes": [
             "0.0",
             "NaN"
-          ]
+          ],
+          "visualCallbacks": []
         },
         {
           "field": "attackRightDown",
@@ -208,7 +244,8 @@
           "eventTimes": [
             "0.0",
             "NaN"
-          ]
+          ],
+          "visualCallbacks": []
         },
         {
           "field": "attackRightUp",
@@ -220,7 +257,8 @@
           "eventTimes": [
             "0.0",
             "NaN"
-          ]
+          ],
+          "visualCallbacks": []
         },
         {
           "field": "attackWarningLeftDown",
@@ -232,7 +270,8 @@
           "eventTimes": [
             "0.0",
             "NaN"
-          ]
+          ],
+          "visualCallbacks": []
         },
         {
           "field": "attackWarningLeftUp",
@@ -244,7 +283,8 @@
           "eventTimes": [
             "0.0",
             "NaN"
-          ]
+          ],
+          "visualCallbacks": []
         },
         {
           "field": "attackWarningRightDown",
@@ -256,7 +296,8 @@
           "eventTimes": [
             "0.0",
             "NaN"
-          ]
+          ],
+          "visualCallbacks": []
         },
         {
           "field": "attackWarningRightUp",
@@ -268,7 +309,8 @@
           "eventTimes": [
             "0.0",
             "NaN"
-          ]
+          ],
+          "visualCallbacks": []
         },
         {
           "field": "deadLeftDown",
@@ -281,6 +323,12 @@
             "0.0",
             "0.7581066",
             "NaN"
+          ],
+          "visualCallbacks": [
+            {
+              "index": 1,
+              "method": "DeathAnimationShadowFade"
+            }
           ]
         },
         {
@@ -294,6 +342,12 @@
             "0.0",
             "0.7581066",
             "NaN"
+          ],
+          "visualCallbacks": [
+            {
+              "index": 1,
+              "method": "DeathAnimationShadowFade"
+            }
           ]
         },
         {
@@ -307,6 +361,12 @@
             "0.0",
             "0.7581066",
             "NaN"
+          ],
+          "visualCallbacks": [
+            {
+              "index": 1,
+              "method": "DeathAnimationShadowFade"
+            }
           ]
         },
         {
@@ -320,6 +380,12 @@
             "0.0",
             "0.7581066",
             "NaN"
+          ],
+          "visualCallbacks": [
+            {
+              "index": 1,
+              "method": "DeathAnimationShadowFade"
+            }
           ]
         },
         {
@@ -332,7 +398,8 @@
           "eventTimes": [
             "0.0",
             "NaN"
-          ]
+          ],
+          "visualCallbacks": []
         },
         {
           "field": "hurtLeftUp",
@@ -344,7 +411,8 @@
           "eventTimes": [
             "0.0",
             "NaN"
-          ]
+          ],
+          "visualCallbacks": []
         },
         {
           "field": "hurtRightDown",
@@ -356,7 +424,8 @@
           "eventTimes": [
             "0.0",
             "NaN"
-          ]
+          ],
+          "visualCallbacks": []
         },
         {
           "field": "hurtRightUp",
@@ -368,7 +437,8 @@
           "eventTimes": [
             "0.0",
             "NaN"
-          ]
+          ],
+          "visualCallbacks": []
         },
         {
           "field": "moveLeftDown",
@@ -377,7 +447,8 @@
           "speed": 1.0,
           "fade": 0.25,
           "normalizedStart": "NaN",
-          "eventTimes": []
+          "eventTimes": [],
+          "visualCallbacks": []
         },
         {
           "field": "moveLeftUp",
@@ -386,7 +457,8 @@
           "speed": 1.0,
           "fade": 0.25,
           "normalizedStart": "NaN",
-          "eventTimes": []
+          "eventTimes": [],
+          "visualCallbacks": []
         },
         {
           "field": "moveRightDown",
@@ -395,7 +467,8 @@
           "speed": 1.0,
           "fade": 0.25,
           "normalizedStart": "NaN",
-          "eventTimes": []
+          "eventTimes": [],
+          "visualCallbacks": []
         },
         {
           "field": "moveRightUp",
@@ -404,7 +477,8 @@
           "speed": 1.0,
           "fade": 0.25,
           "normalizedStart": "NaN",
-          "eventTimes": []
+          "eventTimes": [],
+          "visualCallbacks": []
         },
         {
           "field": "recoveryLeftDown",
@@ -413,7 +487,8 @@
           "speed": 1.0,
           "fade": 0.25,
           "normalizedStart": "NaN",
-          "eventTimes": []
+          "eventTimes": [],
+          "visualCallbacks": []
         },
         {
           "field": "recoveryLeftUp",
@@ -422,7 +497,8 @@
           "speed": 1.0,
           "fade": 0.25,
           "normalizedStart": "NaN",
-          "eventTimes": []
+          "eventTimes": [],
+          "visualCallbacks": []
         },
         {
           "field": "recoveryRightDown",
@@ -431,7 +507,8 @@
           "speed": 1.0,
           "fade": 0.25,
           "normalizedStart": "NaN",
-          "eventTimes": []
+          "eventTimes": [],
+          "visualCallbacks": []
         },
         {
           "field": "recoveryRightUp",
@@ -440,7 +517,8 @@
           "speed": 1.0,
           "fade": 0.25,
           "normalizedStart": "NaN",
-          "eventTimes": []
+          "eventTimes": [],
+          "visualCallbacks": []
         },
         {
           "field": "shadowFadeout",
@@ -449,7 +527,8 @@
           "speed": 1.0,
           "fade": 0.0,
           "normalizedStart": "NaN",
-          "eventTimes": []
+          "eventTimes": [],
+          "visualCallbacks": []
         },
         {
           "field": "shadowIdle",
@@ -458,7 +537,8 @@
           "speed": 1.0,
           "fade": 0.0,
           "normalizedStart": "NaN",
-          "eventTimes": []
+          "eventTimes": [],
+          "visualCallbacks": []
         }
       ],
       "contact": false
@@ -480,7 +560,8 @@
           "eventTimes": [
             "0.0",
             "NaN"
-          ]
+          ],
+          "visualCallbacks": []
         },
         {
           "field": "attackLeftUp",
@@ -492,7 +573,8 @@
           "eventTimes": [
             "0.0",
             "NaN"
-          ]
+          ],
+          "visualCallbacks": []
         },
         {
           "field": "attackRightDown",
@@ -504,7 +586,8 @@
           "eventTimes": [
             "0.0",
             "NaN"
-          ]
+          ],
+          "visualCallbacks": []
         },
         {
           "field": "attackRightUp",
@@ -516,7 +599,8 @@
           "eventTimes": [
             "0.0",
             "NaN"
-          ]
+          ],
+          "visualCallbacks": []
         },
         {
           "field": "attackWarningLeftDown",
@@ -528,7 +612,8 @@
           "eventTimes": [
             "0.0",
             "NaN"
-          ]
+          ],
+          "visualCallbacks": []
         },
         {
           "field": "attackWarningLeftUp",
@@ -540,7 +625,8 @@
           "eventTimes": [
             "0.0",
             "NaN"
-          ]
+          ],
+          "visualCallbacks": []
         },
         {
           "field": "attackWarningRightDown",
@@ -552,7 +638,8 @@
           "eventTimes": [
             "0.0",
             "NaN"
-          ]
+          ],
+          "visualCallbacks": []
         },
         {
           "field": "attackWarningRightUp",
@@ -564,7 +651,8 @@
           "eventTimes": [
             "0.0",
             "NaN"
-          ]
+          ],
+          "visualCallbacks": []
         },
         {
           "field": "deadLeftDown",
@@ -577,6 +665,12 @@
             "0.0",
             "0.6999558",
             "NaN"
+          ],
+          "visualCallbacks": [
+            {
+              "index": 1,
+              "method": "DeathAnimationShadowFade"
+            }
           ]
         },
         {
@@ -590,6 +684,12 @@
             "0.0",
             "0.6999558",
             "NaN"
+          ],
+          "visualCallbacks": [
+            {
+              "index": 1,
+              "method": "DeathAnimationShadowFade"
+            }
           ]
         },
         {
@@ -603,6 +703,12 @@
             "0.0",
             "0.6999558",
             "NaN"
+          ],
+          "visualCallbacks": [
+            {
+              "index": 1,
+              "method": "DeathAnimationShadowFade"
+            }
           ]
         },
         {
@@ -616,6 +722,12 @@
             "0.0",
             "0.6999558",
             "NaN"
+          ],
+          "visualCallbacks": [
+            {
+              "index": 1,
+              "method": "DeathAnimationShadowFade"
+            }
           ]
         },
         {
@@ -628,7 +740,8 @@
           "eventTimes": [
             "0.0",
             "NaN"
-          ]
+          ],
+          "visualCallbacks": []
         },
         {
           "field": "hurtLeftUp",
@@ -640,7 +753,8 @@
           "eventTimes": [
             "0.0",
             "NaN"
-          ]
+          ],
+          "visualCallbacks": []
         },
         {
           "field": "hurtRightDown",
@@ -652,7 +766,8 @@
           "eventTimes": [
             "0.0",
             "NaN"
-          ]
+          ],
+          "visualCallbacks": []
         },
         {
           "field": "hurtRightUp",
@@ -664,7 +779,8 @@
           "eventTimes": [
             "0.0",
             "NaN"
-          ]
+          ],
+          "visualCallbacks": []
         },
         {
           "field": "moveLeftDown",
@@ -676,7 +792,8 @@
           "eventTimes": [
             "0.0",
             "NaN"
-          ]
+          ],
+          "visualCallbacks": []
         },
         {
           "field": "moveLeftUp",
@@ -688,7 +805,8 @@
           "eventTimes": [
             "0.0",
             "NaN"
-          ]
+          ],
+          "visualCallbacks": []
         },
         {
           "field": "moveRightDown",
@@ -700,7 +818,8 @@
           "eventTimes": [
             "0.0",
             "NaN"
-          ]
+          ],
+          "visualCallbacks": []
         },
         {
           "field": "moveRightUp",
@@ -712,7 +831,8 @@
           "eventTimes": [
             "0.0",
             "NaN"
-          ]
+          ],
+          "visualCallbacks": []
         },
         {
           "field": "recoveryLeftDown",
@@ -724,7 +844,8 @@
           "eventTimes": [
             "0.0",
             "NaN"
-          ]
+          ],
+          "visualCallbacks": []
         },
         {
           "field": "recoveryLeftUp",
@@ -736,7 +857,8 @@
           "eventTimes": [
             "0.0",
             "NaN"
-          ]
+          ],
+          "visualCallbacks": []
         },
         {
           "field": "recoveryRightDown",
@@ -747,7 +869,8 @@
           "normalizedStart": "NaN",
           "eventTimes": [
             "NaN"
-          ]
+          ],
+          "visualCallbacks": []
         },
         {
           "field": "recoveryRightUp",
@@ -759,7 +882,8 @@
           "eventTimes": [
             "0.5",
             "NaN"
-          ]
+          ],
+          "visualCallbacks": []
         },
         {
           "field": "shadowFadeout",
@@ -768,7 +892,8 @@
           "speed": 1.0,
           "fade": 0.0,
           "normalizedStart": "NaN",
-          "eventTimes": []
+          "eventTimes": [],
+          "visualCallbacks": []
         },
         {
           "field": "shadowIdle",
@@ -777,7 +902,8 @@
           "speed": 1.0,
           "fade": 0.0,
           "normalizedStart": "NaN",
-          "eventTimes": []
+          "eventTimes": [],
+          "visualCallbacks": []
         }
       ],
       "contact": false
@@ -799,7 +925,8 @@
           "eventTimes": [
             "0.0",
             "NaN"
-          ]
+          ],
+          "visualCallbacks": []
         },
         {
           "field": "attackLeftUp",
@@ -811,7 +938,8 @@
           "eventTimes": [
             "0.0",
             "NaN"
-          ]
+          ],
+          "visualCallbacks": []
         },
         {
           "field": "attackRightDown",
@@ -823,7 +951,8 @@
           "eventTimes": [
             "0.0",
             "NaN"
-          ]
+          ],
+          "visualCallbacks": []
         },
         {
           "field": "attackRightUp",
@@ -835,7 +964,8 @@
           "eventTimes": [
             "0.0",
             "NaN"
-          ]
+          ],
+          "visualCallbacks": []
         },
         {
           "field": "attackWarningLeftDown",
@@ -847,7 +977,8 @@
           "eventTimes": [
             "0.0",
             "NaN"
-          ]
+          ],
+          "visualCallbacks": []
         },
         {
           "field": "attackWarningLeftUp",
@@ -859,7 +990,8 @@
           "eventTimes": [
             "0.0",
             "NaN"
-          ]
+          ],
+          "visualCallbacks": []
         },
         {
           "field": "attackWarningRightDown",
@@ -871,7 +1003,8 @@
           "eventTimes": [
             "0.0",
             "NaN"
-          ]
+          ],
+          "visualCallbacks": []
         },
         {
           "field": "attackWarningRightUp",
@@ -883,7 +1016,8 @@
           "eventTimes": [
             "0.0",
             "NaN"
-          ]
+          ],
+          "visualCallbacks": []
         },
         {
           "field": "deadLeftDown",
@@ -896,6 +1030,12 @@
             "0.0",
             "0.6065949",
             "NaN"
+          ],
+          "visualCallbacks": [
+            {
+              "index": 1,
+              "method": "DeathAnimationShadowFade"
+            }
           ]
         },
         {
@@ -909,6 +1049,12 @@
             "0.0",
             "0.606594861",
             "NaN"
+          ],
+          "visualCallbacks": [
+            {
+              "index": 1,
+              "method": "DeathAnimationShadowFade"
+            }
           ]
         },
         {
@@ -922,6 +1068,12 @@
             "0.0",
             "0.6065949",
             "NaN"
+          ],
+          "visualCallbacks": [
+            {
+              "index": 1,
+              "method": "DeathAnimationShadowFade"
+            }
           ]
         },
         {
@@ -935,6 +1087,12 @@
             "0.0",
             "0.6065949",
             "NaN"
+          ],
+          "visualCallbacks": [
+            {
+              "index": 1,
+              "method": "DeathAnimationShadowFade"
+            }
           ]
         },
         {
@@ -947,7 +1105,8 @@
           "eventTimes": [
             "0.0",
             "NaN"
-          ]
+          ],
+          "visualCallbacks": []
         },
         {
           "field": "hurtLeftUp",
@@ -959,7 +1118,8 @@
           "eventTimes": [
             "0.0",
             "NaN"
-          ]
+          ],
+          "visualCallbacks": []
         },
         {
           "field": "hurtRightDown",
@@ -971,7 +1131,8 @@
           "eventTimes": [
             "0.0",
             "NaN"
-          ]
+          ],
+          "visualCallbacks": []
         },
         {
           "field": "hurtRightUp",
@@ -983,7 +1144,8 @@
           "eventTimes": [
             "0.0",
             "NaN"
-          ]
+          ],
+          "visualCallbacks": []
         },
         {
           "field": "moveLeftDown",
@@ -992,7 +1154,8 @@
           "speed": 1.0,
           "fade": 0.25,
           "normalizedStart": "NaN",
-          "eventTimes": []
+          "eventTimes": [],
+          "visualCallbacks": []
         },
         {
           "field": "moveLeftUp",
@@ -1001,7 +1164,8 @@
           "speed": 1.0,
           "fade": 0.25,
           "normalizedStart": "NaN",
-          "eventTimes": []
+          "eventTimes": [],
+          "visualCallbacks": []
         },
         {
           "field": "moveRightDown",
@@ -1010,7 +1174,8 @@
           "speed": 1.0,
           "fade": 0.25,
           "normalizedStart": "NaN",
-          "eventTimes": []
+          "eventTimes": [],
+          "visualCallbacks": []
         },
         {
           "field": "moveRightUp",
@@ -1019,7 +1184,8 @@
           "speed": 1.0,
           "fade": 0.25,
           "normalizedStart": "NaN",
-          "eventTimes": []
+          "eventTimes": [],
+          "visualCallbacks": []
         },
         {
           "field": "recoveryLeftDown",
@@ -1028,7 +1194,8 @@
           "speed": 1.0,
           "fade": 0.25,
           "normalizedStart": "NaN",
-          "eventTimes": []
+          "eventTimes": [],
+          "visualCallbacks": []
         },
         {
           "field": "recoveryLeftUp",
@@ -1037,7 +1204,8 @@
           "speed": 1.0,
           "fade": 0.25,
           "normalizedStart": "NaN",
-          "eventTimes": []
+          "eventTimes": [],
+          "visualCallbacks": []
         },
         {
           "field": "recoveryRightDown",
@@ -1046,7 +1214,8 @@
           "speed": 1.0,
           "fade": 0.25,
           "normalizedStart": "NaN",
-          "eventTimes": []
+          "eventTimes": [],
+          "visualCallbacks": []
         },
         {
           "field": "recoveryRightUp",
@@ -1055,7 +1224,8 @@
           "speed": 1.0,
           "fade": 0.25,
           "normalizedStart": "NaN",
-          "eventTimes": []
+          "eventTimes": [],
+          "visualCallbacks": []
         },
         {
           "field": "shadowFadeout",
@@ -1064,7 +1234,8 @@
           "speed": 1.0,
           "fade": 0.0,
           "normalizedStart": "NaN",
-          "eventTimes": []
+          "eventTimes": [],
+          "visualCallbacks": []
         },
         {
           "field": "shadowIdle",
@@ -1073,7 +1244,8 @@
           "speed": 1.0,
           "fade": 0.0,
           "normalizedStart": "NaN",
-          "eventTimes": []
+          "eventTimes": [],
+          "visualCallbacks": []
         }
       ],
       "contact": false
@@ -1082,7 +1254,7 @@
       "group": "E5",
       "name": "Elite_Skeleton",
       "identity": "Elite_Skeleton",
-      "target": "Assets/_Project/Content/NetworkCombat/Limbo/Stage2/ReferenceElite.prefab",
+      "target": "Assets/_Project/Content/NetworkCombat/Limbo/Stage2/ReferenceElite_Skeleton.prefab",
       "template": "Assets/_Project/Content/NetworkCombat/Limbo/Art/Imported/GameObject/Elite_Skeleton.prefab",
       "bindings": [
         {
@@ -1095,7 +1267,8 @@
           "eventTimes": [
             "0.0",
             "NaN"
-          ]
+          ],
+          "visualCallbacks": []
         },
         {
           "field": "attackLeftUp",
@@ -1107,7 +1280,8 @@
           "eventTimes": [
             "0.0",
             "NaN"
-          ]
+          ],
+          "visualCallbacks": []
         },
         {
           "field": "attackRightDown",
@@ -1119,7 +1293,8 @@
           "eventTimes": [
             "0.0",
             "NaN"
-          ]
+          ],
+          "visualCallbacks": []
         },
         {
           "field": "attackRightUp",
@@ -1131,7 +1306,8 @@
           "eventTimes": [
             "0.0",
             "NaN"
-          ]
+          ],
+          "visualCallbacks": []
         },
         {
           "field": "attackWarningLeftDown",
@@ -1143,7 +1319,8 @@
           "eventTimes": [
             "0.0",
             "NaN"
-          ]
+          ],
+          "visualCallbacks": []
         },
         {
           "field": "attackWarningLeftUp",
@@ -1155,7 +1332,8 @@
           "eventTimes": [
             "0.0",
             "NaN"
-          ]
+          ],
+          "visualCallbacks": []
         },
         {
           "field": "attackWarningRightDown",
@@ -1167,7 +1345,8 @@
           "eventTimes": [
             "0.0",
             "NaN"
-          ]
+          ],
+          "visualCallbacks": []
         },
         {
           "field": "attackWarningRightUp",
@@ -1179,7 +1358,8 @@
           "eventTimes": [
             "0.0",
             "NaN"
-          ]
+          ],
+          "visualCallbacks": []
         },
         {
           "field": "deadLeftDown",
@@ -1192,6 +1372,12 @@
             "0.0",
             "0.59736985",
             "NaN"
+          ],
+          "visualCallbacks": [
+            {
+              "index": 1,
+              "method": "DeathAnimationShadowFade"
+            }
           ]
         },
         {
@@ -1205,7 +1391,8 @@
             "0.0",
             "0.5973698",
             "NaN"
-          ]
+          ],
+          "visualCallbacks": []
         },
         {
           "field": "deadRightDown",
@@ -1218,6 +1405,12 @@
             "0.0",
             "0.5973698",
             "NaN"
+          ],
+          "visualCallbacks": [
+            {
+              "index": 1,
+              "method": "DeathAnimationShadowFade"
+            }
           ]
         },
         {
@@ -1231,7 +1424,8 @@
             "0.0",
             "1.04801714",
             "NaN"
-          ]
+          ],
+          "visualCallbacks": []
         },
         {
           "field": "hurtLeftDown",
@@ -1243,7 +1437,8 @@
           "eventTimes": [
             "0.0",
             "NaN"
-          ]
+          ],
+          "visualCallbacks": []
         },
         {
           "field": "hurtLeftUp",
@@ -1255,7 +1450,8 @@
           "eventTimes": [
             "0.0",
             "NaN"
-          ]
+          ],
+          "visualCallbacks": []
         },
         {
           "field": "hurtRightDown",
@@ -1267,7 +1463,8 @@
           "eventTimes": [
             "0.0",
             "NaN"
-          ]
+          ],
+          "visualCallbacks": []
         },
         {
           "field": "hurtRightUp",
@@ -1279,7 +1476,8 @@
           "eventTimes": [
             "0.0",
             "NaN"
-          ]
+          ],
+          "visualCallbacks": []
         },
         {
           "field": "moveLeftDown",
@@ -1288,7 +1486,8 @@
           "speed": 1.0,
           "fade": 0.25,
           "normalizedStart": "NaN",
-          "eventTimes": []
+          "eventTimes": [],
+          "visualCallbacks": []
         },
         {
           "field": "moveLeftUp",
@@ -1297,7 +1496,8 @@
           "speed": 1.0,
           "fade": 0.25,
           "normalizedStart": "NaN",
-          "eventTimes": []
+          "eventTimes": [],
+          "visualCallbacks": []
         },
         {
           "field": "moveRightDown",
@@ -1306,7 +1506,8 @@
           "speed": 1.0,
           "fade": 0.25,
           "normalizedStart": "NaN",
-          "eventTimes": []
+          "eventTimes": [],
+          "visualCallbacks": []
         },
         {
           "field": "moveRightUp",
@@ -1315,7 +1516,8 @@
           "speed": 1.0,
           "fade": 0.25,
           "normalizedStart": "NaN",
-          "eventTimes": []
+          "eventTimes": [],
+          "visualCallbacks": []
         },
         {
           "field": "recoveryLeftDown",
@@ -1324,7 +1526,8 @@
           "speed": 1.0,
           "fade": 0.25,
           "normalizedStart": "NaN",
-          "eventTimes": []
+          "eventTimes": [],
+          "visualCallbacks": []
         },
         {
           "field": "recoveryLeftUp",
@@ -1333,7 +1536,8 @@
           "speed": 1.0,
           "fade": 0.25,
           "normalizedStart": "NaN",
-          "eventTimes": []
+          "eventTimes": [],
+          "visualCallbacks": []
         },
         {
           "field": "recoveryRightDown",
@@ -1342,7 +1546,8 @@
           "speed": 1.0,
           "fade": 0.25,
           "normalizedStart": "NaN",
-          "eventTimes": []
+          "eventTimes": [],
+          "visualCallbacks": []
         },
         {
           "field": "recoveryRightUp",
@@ -1351,7 +1556,8 @@
           "speed": 1.0,
           "fade": 0.25,
           "normalizedStart": "NaN",
-          "eventTimes": []
+          "eventTimes": [],
+          "visualCallbacks": []
         },
         {
           "field": "shadowFadeout",
@@ -1360,7 +1566,8 @@
           "speed": 1.0,
           "fade": 0.25,
           "normalizedStart": "NaN",
-          "eventTimes": []
+          "eventTimes": [],
+          "visualCallbacks": []
         },
         {
           "field": "shadowIdle",
@@ -1369,7 +1576,8 @@
           "speed": 1.0,
           "fade": 0.25,
           "normalizedStart": "NaN",
-          "eventTimes": []
+          "eventTimes": [],
+          "visualCallbacks": []
         }
       ],
       "contact": false
@@ -1392,6 +1600,12 @@
             "0.0",
             "0.6065949",
             "NaN"
+          ],
+          "visualCallbacks": [
+            {
+              "index": 1,
+              "method": "DeathAnimationShadowFade"
+            }
           ]
         },
         {
@@ -1405,6 +1619,12 @@
             "0.0",
             "0.606594861",
             "NaN"
+          ],
+          "visualCallbacks": [
+            {
+              "index": 1,
+              "method": "DeathAnimationShadowFade"
+            }
           ]
         },
         {
@@ -1418,6 +1638,12 @@
             "0.0",
             "0.6065949",
             "NaN"
+          ],
+          "visualCallbacks": [
+            {
+              "index": 1,
+              "method": "DeathAnimationShadowFade"
+            }
           ]
         },
         {
@@ -1431,6 +1657,12 @@
             "0.0",
             "0.6065949",
             "NaN"
+          ],
+          "visualCallbacks": [
+            {
+              "index": 1,
+              "method": "DeathAnimationShadowFade"
+            }
           ]
         },
         {
@@ -1443,7 +1675,8 @@
           "eventTimes": [
             "0.0",
             "NaN"
-          ]
+          ],
+          "visualCallbacks": []
         },
         {
           "field": "hurtLeftUp",
@@ -1455,7 +1688,8 @@
           "eventTimes": [
             "0.0",
             "NaN"
-          ]
+          ],
+          "visualCallbacks": []
         },
         {
           "field": "hurtRightDown",
@@ -1467,7 +1701,8 @@
           "eventTimes": [
             "0.0",
             "NaN"
-          ]
+          ],
+          "visualCallbacks": []
         },
         {
           "field": "hurtRightUp",
@@ -1479,7 +1714,8 @@
           "eventTimes": [
             "0.0",
             "NaN"
-          ]
+          ],
+          "visualCallbacks": []
         },
         {
           "field": "moveLeftDown",
@@ -1488,7 +1724,8 @@
           "speed": 1.0,
           "fade": 0.25,
           "normalizedStart": "NaN",
-          "eventTimes": []
+          "eventTimes": [],
+          "visualCallbacks": []
         },
         {
           "field": "moveLeftUp",
@@ -1497,7 +1734,8 @@
           "speed": 1.0,
           "fade": 0.25,
           "normalizedStart": "NaN",
-          "eventTimes": []
+          "eventTimes": [],
+          "visualCallbacks": []
         },
         {
           "field": "moveRightDown",
@@ -1506,7 +1744,8 @@
           "speed": 1.0,
           "fade": 0.25,
           "normalizedStart": "NaN",
-          "eventTimes": []
+          "eventTimes": [],
+          "visualCallbacks": []
         },
         {
           "field": "moveRightUp",
@@ -1515,7 +1754,8 @@
           "speed": 1.0,
           "fade": 0.25,
           "normalizedStart": "NaN",
-          "eventTimes": []
+          "eventTimes": [],
+          "visualCallbacks": []
         },
         {
           "field": "shadowFadeout",
@@ -1524,7 +1764,8 @@
           "speed": 1.0,
           "fade": 0.0,
           "normalizedStart": "NaN",
-          "eventTimes": []
+          "eventTimes": [],
+          "visualCallbacks": []
         },
         {
           "field": "shadowIdle",
@@ -1533,7 +1774,8 @@
           "speed": 1.0,
           "fade": 0.0,
           "normalizedStart": "NaN",
-          "eventTimes": []
+          "eventTimes": [],
+          "visualCallbacks": []
         }
       ],
       "contact": true
@@ -1556,6 +1798,12 @@
             "0.0",
             "0.6065949",
             "NaN"
+          ],
+          "visualCallbacks": [
+            {
+              "index": 1,
+              "method": "DeathAnimationShadowFade"
+            }
           ]
         },
         {
@@ -1569,6 +1817,12 @@
             "0.0",
             "0.606594861",
             "NaN"
+          ],
+          "visualCallbacks": [
+            {
+              "index": 1,
+              "method": "DeathAnimationShadowFade"
+            }
           ]
         },
         {
@@ -1582,6 +1836,12 @@
             "0.0",
             "0.6065949",
             "NaN"
+          ],
+          "visualCallbacks": [
+            {
+              "index": 1,
+              "method": "DeathAnimationShadowFade"
+            }
           ]
         },
         {
@@ -1595,6 +1855,12 @@
             "0.0",
             "0.6065949",
             "NaN"
+          ],
+          "visualCallbacks": [
+            {
+              "index": 1,
+              "method": "DeathAnimationShadowFade"
+            }
           ]
         },
         {
@@ -1607,7 +1873,8 @@
           "eventTimes": [
             "0.0",
             "NaN"
-          ]
+          ],
+          "visualCallbacks": []
         },
         {
           "field": "hurtLeftUp",
@@ -1619,7 +1886,8 @@
           "eventTimes": [
             "0.0",
             "NaN"
-          ]
+          ],
+          "visualCallbacks": []
         },
         {
           "field": "hurtRightDown",
@@ -1631,7 +1899,8 @@
           "eventTimes": [
             "0.0",
             "NaN"
-          ]
+          ],
+          "visualCallbacks": []
         },
         {
           "field": "hurtRightUp",
@@ -1643,7 +1912,8 @@
           "eventTimes": [
             "0.0",
             "NaN"
-          ]
+          ],
+          "visualCallbacks": []
         },
         {
           "field": "moveLeftDown",
@@ -1652,7 +1922,8 @@
           "speed": 1.0,
           "fade": 0.25,
           "normalizedStart": "NaN",
-          "eventTimes": []
+          "eventTimes": [],
+          "visualCallbacks": []
         },
         {
           "field": "moveLeftUp",
@@ -1661,7 +1932,8 @@
           "speed": 1.0,
           "fade": 0.25,
           "normalizedStart": "NaN",
-          "eventTimes": []
+          "eventTimes": [],
+          "visualCallbacks": []
         },
         {
           "field": "moveRightDown",
@@ -1670,7 +1942,8 @@
           "speed": 1.0,
           "fade": 0.25,
           "normalizedStart": "NaN",
-          "eventTimes": []
+          "eventTimes": [],
+          "visualCallbacks": []
         },
         {
           "field": "moveRightUp",
@@ -1679,7 +1952,8 @@
           "speed": 1.0,
           "fade": 0.25,
           "normalizedStart": "NaN",
-          "eventTimes": []
+          "eventTimes": [],
+          "visualCallbacks": []
         },
         {
           "field": "shadowFadeout",
@@ -1688,7 +1962,8 @@
           "speed": 1.0,
           "fade": 0.0,
           "normalizedStart": "NaN",
-          "eventTimes": []
+          "eventTimes": [],
+          "visualCallbacks": []
         },
         {
           "field": "shadowIdle",
@@ -1697,7 +1972,8 @@
           "speed": 1.0,
           "fade": 0.0,
           "normalizedStart": "NaN",
-          "eventTimes": []
+          "eventTimes": [],
+          "visualCallbacks": []
         }
       ],
       "contact": true
@@ -1751,10 +2027,10 @@
       "variant": 0,
       "texture": "",
       "hue": [
-        1,
-        1,
-        1,
-        1
+        1.0,
+        1.0,
+        1.0,
+        1.0
       ]
     },
     {
@@ -1762,10 +2038,10 @@
       "variant": 2,
       "texture": "Assets/_Project/Content/NetworkCombat/Limbo/Art/Imported/Texture2D/Enemy_Skeleton_Dark_LUT.png",
       "hue": [
-        1,
-        1,
-        1,
-        1
+        1.0,
+        1.0,
+        1.0,
+        1.0
       ]
     },
     {
@@ -1773,10 +2049,10 @@
       "variant": 0,
       "texture": "",
       "hue": [
-        1,
-        1,
-        1,
-        1
+        1.0,
+        1.0,
+        1.0,
+        1.0
       ]
     },
     {
@@ -1784,10 +2060,10 @@
       "variant": 1,
       "texture": "Assets/_Project/Content/NetworkCombat/Limbo/Art/Imported/Texture2D/Enemy_Brotchi_Level_02_LUT.png",
       "hue": [
-        1,
-        1,
-        1,
-        1
+        1.0,
+        1.0,
+        1.0,
+        1.0
       ]
     },
     {
@@ -1795,10 +2071,10 @@
       "variant": 0,
       "texture": "",
       "hue": [
-        1,
-        1,
-        1,
-        1
+        1.0,
+        1.0,
+        1.0,
+        1.0
       ]
     },
     {
@@ -1806,10 +2082,10 @@
       "variant": 1,
       "texture": "Assets/_Project/Content/NetworkCombat/Limbo/Art/Imported/Texture2D/Enemy_Elite_Skeleton_LUT.png",
       "hue": [
-        1,
-        1,
-        1,
-        1
+        1.0,
+        1.0,
+        1.0,
+        1.0
       ]
     },
     {
@@ -1817,10 +2093,10 @@
       "variant": 0,
       "texture": "",
       "hue": [
-        1,
-        1,
-        1,
-        1
+        1.0,
+        1.0,
+        1.0,
+        1.0
       ]
     },
     {
@@ -1828,10 +2104,10 @@
       "variant": 1,
       "texture": "Assets/_Project/Content/NetworkCombat/Limbo/Art/Imported/Texture2D/Enemy_Imp_Level_02_LUT.png",
       "hue": [
-        1,
-        1,
-        1,
-        1
+        1.0,
+        1.0,
+        1.0,
+        1.0
       ]
     },
     {
@@ -1839,10 +2115,10 @@
       "variant": 0,
       "texture": "",
       "hue": [
-        1,
-        1,
-        1,
-        1
+        1.0,
+        1.0,
+        1.0,
+        1.0
       ]
     },
     {
@@ -1850,10 +2126,10 @@
       "variant": 1,
       "texture": "Assets/_Project/Content/NetworkCombat/Limbo/Art/Imported/Texture2D/Enemy_Brotchi_Level_03_LUT.png",
       "hue": [
-        1,
-        1,
-        1,
-        1
+        1.0,
+        1.0,
+        1.0,
+        1.0
       ]
     },
     {
@@ -1861,10 +2137,10 @@
       "variant": 0,
       "texture": "",
       "hue": [
-        1,
-        1,
-        1,
-        1
+        1.0,
+        1.0,
+        1.0,
+        1.0
       ]
     },
     {
@@ -1872,10 +2148,10 @@
       "variant": 1,
       "texture": "Assets/_Project/Content/NetworkCombat/Limbo/Art/Imported/Texture2D/Enemy_Slime_Level_02_LUT.png",
       "hue": [
-        1,
-        1,
-        1,
-        1
+        1.0,
+        1.0,
+        1.0,
+        1.0
       ]
     },
     {
@@ -1883,11 +2159,83 @@
       "variant": 2,
       "texture": "",
       "hue": [
-        1,
-        1,
-        1,
-        1
+        1.0,
+        1.0,
+        1.0,
+        1.0
       ]
+    }
+  ],
+  "bakes": [
+    {
+      "file": "3587ff07e22abfd69e85.png",
+      "textureName": "sactx-0-1024x2048-Uncompressed-Enemy Brotchi-9b78e02f",
+      "lutName": "Enemy_Brotchi_Level_02_LUT",
+      "sourceTexture": "F:\\DecomplieLatest\\HellMaiden\\ExportedProject\\Assets\\Texture2D\\sactx-0-1024x2048-Uncompressed-Enemy Brotchi-9b78e02f.png",
+      "lut": "Assets/_Project/Content/NetworkCombat/Limbo/Art/Imported/Texture2D/Enemy_Brotchi_Level_02_LUT.png"
+    },
+    {
+      "file": "3a865383f3e446b72a43.png",
+      "textureName": "sactx-0-1024x2048-Uncompressed-Enemy Brotchi Pink-420a781f",
+      "lutName": "Enemy_Brotchi_Level_03_LUT",
+      "sourceTexture": "F:\\DecomplieLatest\\HellMaiden\\ExportedProject\\Assets\\Texture2D\\sactx-0-1024x2048-Uncompressed-Enemy Brotchi Pink-420a781f.png",
+      "lut": "Assets/_Project/Content/NetworkCombat/Limbo/Art/Imported/Texture2D/Enemy_Brotchi_Level_03_LUT.png"
+    },
+    {
+      "file": "00ee924dbd23a4098ff6.png",
+      "textureName": "sactx-0-2048x2048-Uncompressed-Enemy Imp-9608cb95",
+      "lutName": "Enemy_Imp_Level_02_LUT",
+      "sourceTexture": "F:\\DecomplieLatest\\HellMaiden\\ExportedProject\\Assets\\Texture2D\\sactx-0-2048x2048-Uncompressed-Enemy Imp-9608cb95.png",
+      "lut": "Assets/_Project/Content/NetworkCombat/Limbo/Art/Imported/Texture2D/Enemy_Imp_Level_02_LUT.png"
+    },
+    {
+      "file": "549ae72374381af81f97.png",
+      "textureName": "sactx-1-1024x1024-Uncompressed-Enemy Imp-9608cb95",
+      "lutName": "Enemy_Imp_Level_02_LUT",
+      "sourceTexture": "F:\\DecomplieLatest\\HellMaiden\\ExportedProject\\Assets\\Texture2D\\sactx-1-1024x1024-Uncompressed-Enemy Imp-9608cb95.png",
+      "lut": "Assets/_Project/Content/NetworkCombat/Limbo/Art/Imported/Texture2D/Enemy_Imp_Level_02_LUT.png"
+    },
+    {
+      "file": "68014b1beecc120facb8.png",
+      "textureName": "sactx-0-2048x2048-Uncompressed-Enemy Skeleton-da75d519",
+      "lutName": "Enemy_Skeleton_Dark_LUT",
+      "sourceTexture": "F:\\DecomplieLatest\\HellMaiden\\ExportedProject\\Assets\\Texture2D\\sactx-0-2048x2048-Uncompressed-Enemy Skeleton-da75d519.png",
+      "lut": "Assets/_Project/Content/NetworkCombat/Limbo/Art/Imported/Texture2D/Enemy_Skeleton_Dark_LUT.png"
+    },
+    {
+      "file": "2164d13e1d2d0d38075f.png",
+      "textureName": "bigskeletonelite1_attack",
+      "lutName": "Enemy_Elite_Skeleton_LUT",
+      "sourceTexture": "F:\\DecomplieLatest\\HellMaiden\\ExportedProject\\Assets\\Texture2D\\bigskeletonelite1_attack.png",
+      "lut": "Assets/_Project/Content/NetworkCombat/Limbo/Art/Imported/Texture2D/Enemy_Elite_Skeleton_LUT.png"
+    },
+    {
+      "file": "33ecfbd3b8c2e2f564dc.png",
+      "textureName": "bigskeletonelite1_death",
+      "lutName": "Enemy_Elite_Skeleton_LUT",
+      "sourceTexture": "F:\\DecomplieLatest\\HellMaiden\\ExportedProject\\Assets\\Texture2D\\bigskeletonelite1_death.png",
+      "lut": "Assets/_Project/Content/NetworkCombat/Limbo/Art/Imported/Texture2D/Enemy_Elite_Skeleton_LUT.png"
+    },
+    {
+      "file": "fd3903fe4688bec7a160.png",
+      "textureName": "bigskeletonelite1_walk",
+      "lutName": "Enemy_Elite_Skeleton_LUT",
+      "sourceTexture": "F:\\DecomplieLatest\\HellMaiden\\ExportedProject\\Assets\\Texture2D\\bigskeletonelite1_walk.png",
+      "lut": "Assets/_Project/Content/NetworkCombat/Limbo/Art/Imported/Texture2D/Enemy_Elite_Skeleton_LUT.png"
+    },
+    {
+      "file": "8d9190ebe9b1f5bc721b.png",
+      "textureName": "sactx-0-1024x2048-Uncompressed-Enemy Slime-07753f55",
+      "lutName": "Enemy_Slime_Level_02_LUT",
+      "sourceTexture": "F:\\DecomplieLatest\\HellMaiden\\ExportedProject\\Assets\\Texture2D\\sactx-0-1024x2048-Uncompressed-Enemy Slime-07753f55.png",
+      "lut": "Assets/_Project/Content/NetworkCombat/Limbo/Art/Imported/Texture2D/Enemy_Slime_Level_02_LUT.png"
+    },
+    {
+      "file": "bbf1273ebfb9d69c6c32.png",
+      "textureName": "sactx-0-1024x2048-Uncompressed-Igni Slime-f85a3a1d",
+      "lutName": "Enemy_Slime_Level_02_LUT",
+      "sourceTexture": "F:\\DecomplieLatest\\HellMaiden\\ExportedProject\\Assets\\Texture2D\\sactx-0-1024x2048-Uncompressed-Igni Slime-f85a3a1d.png",
+      "lut": "Assets/_Project/Content/NetworkCombat/Limbo/Art/Imported/Texture2D/Enemy_Slime_Level_02_LUT.png"
     }
   ],
   "entries": [
@@ -4019,10 +4367,94 @@
         "E4"
       ],
       "referencedBy": [
+        "AnimationClip/Enemy_Skeleton_WarningLeftDown.anim",
+        "AnimationClip/Enemy_Skeleton_WarningRightDown.anim",
         "GameObject/Enemy_Skeleton.prefab"
       ],
       "treatment": "reuse",
       "sourceSize": 6758
+    },
+    {
+      "source": "F:\\DecomplieLatest\\HellMaiden\\ExportedProject\\Assets\\Sprite\\Enemy_Skeleton_Attack_1.asset",
+      "sourceGuid": "00931b79d60402c47b2ed9842b67004a",
+      "sourceSha256": "4e5197b10ae1e380abe88f9e2caa44c672d4dafa3fc3a8345998a1f3fa7caff9",
+      "destination": "Assets/_Project/Content/NetworkCombat/Validation/HellMaiden/Sprite/Enemy_Skeleton_Attack_1.asset",
+      "destinationGuid": "00931b79d60402c47b2ed9842b67004a",
+      "groups": [
+        "E4"
+      ],
+      "referencedBy": [
+        "AnimationClip/Enemy_Skeleton_WarningLeftDown.anim",
+        "AnimationClip/Enemy_Skeleton_WarningRightDown.anim"
+      ],
+      "treatment": "reuse",
+      "sourceSize": 6286
+    },
+    {
+      "source": "F:\\DecomplieLatest\\HellMaiden\\ExportedProject\\Assets\\Sprite\\Enemy_Skeleton_Attack_2.asset",
+      "sourceGuid": "a35b099c3505ff04cb81c54b90695f31",
+      "sourceSha256": "adda263850e5a8b3035e35303d28642abe5dc7fe30a542dba01fe40b8ed1ea6b",
+      "destination": "Assets/_Project/Content/NetworkCombat/Validation/HellMaiden/Sprite/Enemy_Skeleton_Attack_2.asset",
+      "destinationGuid": "a35b099c3505ff04cb81c54b90695f31",
+      "groups": [
+        "E4"
+      ],
+      "referencedBy": [
+        "AnimationClip/Enemy_Skeleton_WarningLeftDown.anim",
+        "AnimationClip/Enemy_Skeleton_WarningRightDown.anim"
+      ],
+      "treatment": "reuse",
+      "sourceSize": 5451
+    },
+    {
+      "source": "F:\\DecomplieLatest\\HellMaiden\\ExportedProject\\Assets\\Sprite\\Enemy_Skeleton_Attack_3.asset",
+      "sourceGuid": "371c6f8c8d3519549a48240d6144884f",
+      "sourceSha256": "3ac722962d1b2f9646f2fea9fa3e1fe7c3b590bb5a6fe8737feecf3e9c0f1ac7",
+      "destination": "Assets/_Project/Content/NetworkCombat/Validation/HellMaiden/Sprite/Enemy_Skeleton_Attack_3.asset",
+      "destinationGuid": "371c6f8c8d3519549a48240d6144884f",
+      "groups": [
+        "E4"
+      ],
+      "referencedBy": [
+        "AnimationClip/Enemy_Skeleton_AttackMomentLeft.anim",
+        "AnimationClip/Enemy_Skeleton_AttackMomentRight.anim"
+      ],
+      "treatment": "reuse",
+      "sourceSize": 10730
+    },
+    {
+      "source": "F:\\DecomplieLatest\\HellMaiden\\ExportedProject\\Assets\\Sprite\\Enemy_Skeleton_Attack_4.asset",
+      "sourceGuid": "cf3c621d8de50614195fe0e95c492e72",
+      "sourceSha256": "f50ddd29d5e16572610a174940e84d9533c965976463785407b2fe4a8f273749",
+      "destination": "Assets/_Project/Content/NetworkCombat/Validation/HellMaiden/Sprite/Enemy_Skeleton_Attack_4.asset",
+      "destinationGuid": "cf3c621d8de50614195fe0e95c492e72",
+      "groups": [
+        "E4"
+      ],
+      "referencedBy": [
+        "AnimationClip/Enemy_Skeleton_AttackMomentLeft.anim",
+        "AnimationClip/Enemy_Skeleton_AttackMomentRight.anim",
+        "AnimationClip/Enemy_Skeleton_AttackRecoveryLeft.anim",
+        "AnimationClip/Enemy_Skeleton_AttackRecoveryRight.anim"
+      ],
+      "treatment": "reuse",
+      "sourceSize": 5382
+    },
+    {
+      "source": "F:\\DecomplieLatest\\HellMaiden\\ExportedProject\\Assets\\Sprite\\Enemy_Skeleton_Attack_5.asset",
+      "sourceGuid": "a63e66171a1a4d34ca26f3ce35172495",
+      "sourceSha256": "d16ecfc999b61a474ab7f4b5af999e545418396b62924a5b73eada2c6de35259",
+      "destination": "Assets/_Project/Content/NetworkCombat/Validation/HellMaiden/Sprite/Enemy_Skeleton_Attack_5.asset",
+      "destinationGuid": "a63e66171a1a4d34ca26f3ce35172495",
+      "groups": [
+        "E4"
+      ],
+      "referencedBy": [
+        "AnimationClip/Enemy_Skeleton_AttackRecoveryLeft.anim",
+        "AnimationClip/Enemy_Skeleton_AttackRecoveryRight.anim"
+      ],
+      "treatment": "reuse",
+      "sourceSize": 5045
     },
     {
       "source": "F:\\DecomplieLatest\\HellMaiden\\ExportedProject\\Assets\\Sprite\\Enemy_Skeleton_Shadow.asset",
@@ -4038,6 +4470,102 @@
       ],
       "treatment": "reuse",
       "sourceSize": 3864
+    },
+    {
+      "source": "F:\\DecomplieLatest\\HellMaiden\\ExportedProject\\Assets\\Sprite\\Enemy_Skeleton_Walk_03_0.asset",
+      "sourceGuid": "6d5c5a8f5d91642478108cc7c2079a10",
+      "sourceSha256": "ca9082b0ab6da09466c395deef7be708daad02cc10bec2b49e85af87237dff30",
+      "destination": "Assets/_Project/Content/NetworkCombat/Validation/HellMaiden/Sprite/Enemy_Skeleton_Walk_03_0.asset",
+      "destinationGuid": "6d5c5a8f5d91642478108cc7c2079a10",
+      "groups": [
+        "E4"
+      ],
+      "referencedBy": [
+        "AnimationClip/Enemy_Skeleton_WalkLeft_03.anim",
+        "AnimationClip/Enemy_Skeleton_WalkRight_03.anim"
+      ],
+      "treatment": "reuse",
+      "sourceSize": 6072
+    },
+    {
+      "source": "F:\\DecomplieLatest\\HellMaiden\\ExportedProject\\Assets\\Sprite\\Enemy_Skeleton_Walk_03_1.asset",
+      "sourceGuid": "ab2d47225773be242b1da0ceb52869d2",
+      "sourceSha256": "207739b4ca11e920e64af02e838b898ddd262d66c66974d369842dcf68dbc803",
+      "destination": "Assets/_Project/Content/NetworkCombat/Validation/HellMaiden/Sprite/Enemy_Skeleton_Walk_03_1.asset",
+      "destinationGuid": "ab2d47225773be242b1da0ceb52869d2",
+      "groups": [
+        "E4"
+      ],
+      "referencedBy": [
+        "AnimationClip/Enemy_Skeleton_WalkLeft_03.anim",
+        "AnimationClip/Enemy_Skeleton_WalkRight_03.anim"
+      ],
+      "treatment": "reuse",
+      "sourceSize": 5922
+    },
+    {
+      "source": "F:\\DecomplieLatest\\HellMaiden\\ExportedProject\\Assets\\Sprite\\Enemy_Skeleton_Walk_03_2.asset",
+      "sourceGuid": "5a4ffd73eafbfa847bd332d018a0a14b",
+      "sourceSha256": "312e2c1734f2ca547d5a521c390b0c057770a0e88aaa8eb3e76c69809df99339",
+      "destination": "Assets/_Project/Content/NetworkCombat/Validation/HellMaiden/Sprite/Enemy_Skeleton_Walk_03_2.asset",
+      "destinationGuid": "5a4ffd73eafbfa847bd332d018a0a14b",
+      "groups": [
+        "E4"
+      ],
+      "referencedBy": [
+        "AnimationClip/Enemy_Skeleton_WalkLeft_03.anim",
+        "AnimationClip/Enemy_Skeleton_WalkRight_03.anim"
+      ],
+      "treatment": "reuse",
+      "sourceSize": 5664
+    },
+    {
+      "source": "F:\\DecomplieLatest\\HellMaiden\\ExportedProject\\Assets\\Sprite\\Enemy_Skeleton_Walk_03_3.asset",
+      "sourceGuid": "fd497c577ee1a754698499677f34cc4c",
+      "sourceSha256": "2a8b68180b147d86806dd7f1cb46dd18490d8a2b47d97dfe14321250a31f3a03",
+      "destination": "Assets/_Project/Content/NetworkCombat/Validation/HellMaiden/Sprite/Enemy_Skeleton_Walk_03_3.asset",
+      "destinationGuid": "fd497c577ee1a754698499677f34cc4c",
+      "groups": [
+        "E4"
+      ],
+      "referencedBy": [
+        "AnimationClip/Enemy_Skeleton_WalkLeft_03.anim",
+        "AnimationClip/Enemy_Skeleton_WalkRight_03.anim"
+      ],
+      "treatment": "reuse",
+      "sourceSize": 6214
+    },
+    {
+      "source": "F:\\DecomplieLatest\\HellMaiden\\ExportedProject\\Assets\\Sprite\\Enemy_Skeleton_Walk_03_4.asset",
+      "sourceGuid": "91fc5c849ba295242a09440c3fa7899a",
+      "sourceSha256": "c24ca8fa866b4b7d743c995d0e88adf2869ff04e6d0b773860e54fa1511a103f",
+      "destination": "Assets/_Project/Content/NetworkCombat/Validation/HellMaiden/Sprite/Enemy_Skeleton_Walk_03_4.asset",
+      "destinationGuid": "91fc5c849ba295242a09440c3fa7899a",
+      "groups": [
+        "E4"
+      ],
+      "referencedBy": [
+        "AnimationClip/Enemy_Skeleton_WalkLeft_03.anim",
+        "AnimationClip/Enemy_Skeleton_WalkRight_03.anim"
+      ],
+      "treatment": "reuse",
+      "sourceSize": 6559
+    },
+    {
+      "source": "F:\\DecomplieLatest\\HellMaiden\\ExportedProject\\Assets\\Sprite\\Enemy_Skeleton_Walk_03_5.asset",
+      "sourceGuid": "9f6703471f468694d8a87c166b6aa0d3",
+      "sourceSha256": "73786a1b120b01e368135592543f41bbc258bdc67ab1ea6d4367a6d349fa153a",
+      "destination": "Assets/_Project/Content/NetworkCombat/Validation/HellMaiden/Sprite/Enemy_Skeleton_Walk_03_5.asset",
+      "destinationGuid": "9f6703471f468694d8a87c166b6aa0d3",
+      "groups": [
+        "E4"
+      ],
+      "referencedBy": [
+        "AnimationClip/Enemy_Skeleton_WalkLeft_03.anim",
+        "AnimationClip/Enemy_Skeleton_WalkRight_03.anim"
+      ],
+      "treatment": "reuse",
+      "sourceSize": 6319
     },
     {
       "source": "F:\\DecomplieLatest\\HellMaiden\\ExportedProject\\Assets\\Sprite\\Enemy_Slime_Shadow.asset",
@@ -5487,6 +6015,280 @@
       "sourceSize": 4306
     },
     {
+      "source": "F:\\DecomplieLatest\\HellMaiden\\ExportedProject\\Assets\\Sprite\\imp_attack_0.asset",
+      "sourceGuid": "1113cc88808cdb14baa024da09269222",
+      "sourceSha256": "56988516b74694feeb9c8b7859e5c6296c8d652035f9ad00dbbf7e2ab7d50889",
+      "destination": "Assets/_Project/Content/HellMaiden/Enemies/Imp/Sprite/imp_attack_0.asset",
+      "destinationGuid": "1113cc88808cdb14baa024da09269222",
+      "groups": [
+        "E3"
+      ],
+      "referencedBy": [
+        "AnimationClip/Enemy_Imp_AttackMoment_LeftDown.anim",
+        "AnimationClip/Enemy_Imp_AttackMoment_RightDown.anim"
+      ],
+      "treatment": "reuse",
+      "sourceSize": 6169
+    },
+    {
+      "source": "F:\\DecomplieLatest\\HellMaiden\\ExportedProject\\Assets\\Sprite\\imp_attack_1.asset",
+      "sourceGuid": "9261c5e835ce28e46836e4a3257dec98",
+      "sourceSha256": "dc34ef87107f8434741a879c99a0031ec562911b392b6998b890614aa347a59c",
+      "destination": "Assets/_Project/Content/HellMaiden/Enemies/Imp/Sprite/imp_attack_1.asset",
+      "destinationGuid": "9261c5e835ce28e46836e4a3257dec98",
+      "groups": [
+        "E3"
+      ],
+      "referencedBy": [
+        "AnimationClip/Enemy_Imp_AttackMoment_LeftDown.anim",
+        "AnimationClip/Enemy_Imp_AttackMoment_RightDown.anim"
+      ],
+      "treatment": "reuse",
+      "sourceSize": 8040
+    },
+    {
+      "source": "F:\\DecomplieLatest\\HellMaiden\\ExportedProject\\Assets\\Sprite\\imp_attack_2.asset",
+      "sourceGuid": "83be1d39daf5b7144901e69521d368a4",
+      "sourceSha256": "bd5031202c1b08d05b8037cdfe0294a8baa1bccfce471018059ee21893e975da",
+      "destination": "Assets/_Project/Content/HellMaiden/Enemies/Imp/Sprite/imp_attack_2.asset",
+      "destinationGuid": "83be1d39daf5b7144901e69521d368a4",
+      "groups": [
+        "E3"
+      ],
+      "referencedBy": [
+        "AnimationClip/Enemy_Imp_Recovery_LeftDown.anim",
+        "AnimationClip/Enemy_Imp_Recovery_RightDown.anim"
+      ],
+      "treatment": "reuse",
+      "sourceSize": 6841
+    },
+    {
+      "source": "F:\\DecomplieLatest\\HellMaiden\\ExportedProject\\Assets\\Sprite\\imp_attack_3.asset",
+      "sourceGuid": "c14bf1aaf24d8324e9a698e5d3ab3db5",
+      "sourceSha256": "412bd0518c3bb085c320e7cb1f2db0f0faea155d508ba43c51b3dcdb3eafa8c5",
+      "destination": "Assets/_Project/Content/HellMaiden/Enemies/Imp/Sprite/imp_attack_3.asset",
+      "destinationGuid": "c14bf1aaf24d8324e9a698e5d3ab3db5",
+      "groups": [
+        "E3"
+      ],
+      "referencedBy": [
+        "AnimationClip/Enemy_Imp_Recovery_LeftDown.anim",
+        "AnimationClip/Enemy_Imp_Recovery_RightDown.anim"
+      ],
+      "treatment": "reuse",
+      "sourceSize": 5567
+    },
+    {
+      "source": "F:\\DecomplieLatest\\HellMaiden\\ExportedProject\\Assets\\Sprite\\imp_attack_4.asset",
+      "sourceGuid": "4a4103e3a99ebed458bcfc15cead7001",
+      "sourceSha256": "b510985c4f3e9e471d48ecfc0a1f85abeda2b6374b74266efb77b39840411f35",
+      "destination": "Assets/_Project/Content/HellMaiden/Enemies/Imp/Sprite/imp_attack_4.asset",
+      "destinationGuid": "4a4103e3a99ebed458bcfc15cead7001",
+      "groups": [
+        "E3"
+      ],
+      "referencedBy": [
+        "AnimationClip/Enemy_Imp_Recovery_LeftDown.anim",
+        "AnimationClip/Enemy_Imp_Recovery_RightDown.anim"
+      ],
+      "treatment": "reuse",
+      "sourceSize": 5759
+    },
+    {
+      "source": "F:\\DecomplieLatest\\HellMaiden\\ExportedProject\\Assets\\Sprite\\imp_attackloop_0.asset",
+      "sourceGuid": "813f6ba65634d1249ba68ee60bd14093",
+      "sourceSha256": "ee260cb6b8ee70125bd55129112fd7e3f2755e99578705ea0ba8366a85e4ed6d",
+      "destination": "Assets/_Project/Content/HellMaiden/Enemies/Imp/Sprite/imp_attackloop_0.asset",
+      "destinationGuid": "813f6ba65634d1249ba68ee60bd14093",
+      "groups": [
+        "E3"
+      ],
+      "referencedBy": [
+        "AnimationClip/Enemy_Imp_WarningLeftDown.anim",
+        "AnimationClip/Enemy_Imp_WarningRightDown.anim"
+      ],
+      "treatment": "reuse",
+      "sourceSize": 6574
+    },
+    {
+      "source": "F:\\DecomplieLatest\\HellMaiden\\ExportedProject\\Assets\\Sprite\\imp_attackloop_1.asset",
+      "sourceGuid": "4ae0696ce3563cb459d7885fe5f064a3",
+      "sourceSha256": "9e3bb45193a0b4a34d3592beef378f3306f3711ada44efb24935340bec58f2d0",
+      "destination": "Assets/_Project/Content/HellMaiden/Enemies/Imp/Sprite/imp_attackloop_1.asset",
+      "destinationGuid": "4ae0696ce3563cb459d7885fe5f064a3",
+      "groups": [
+        "E3"
+      ],
+      "referencedBy": [
+        "AnimationClip/Enemy_Imp_WarningLeftDown.anim",
+        "AnimationClip/Enemy_Imp_WarningRightDown.anim"
+      ],
+      "treatment": "reuse",
+      "sourceSize": 7860
+    },
+    {
+      "source": "F:\\DecomplieLatest\\HellMaiden\\ExportedProject\\Assets\\Sprite\\imp_attackloop_2.asset",
+      "sourceGuid": "588738cccb5bab54a83fb1c7680aed13",
+      "sourceSha256": "0e6831b31ab11fda39d613fc102e6a0c9113eeca2d42a73c25d143453533be52",
+      "destination": "Assets/_Project/Content/HellMaiden/Enemies/Imp/Sprite/imp_attackloop_2.asset",
+      "destinationGuid": "588738cccb5bab54a83fb1c7680aed13",
+      "groups": [
+        "E3"
+      ],
+      "referencedBy": [
+        "AnimationClip/Enemy_Imp_WarningLeftDown.anim",
+        "AnimationClip/Enemy_Imp_WarningRightDown.anim"
+      ],
+      "treatment": "reuse",
+      "sourceSize": 7512
+    },
+    {
+      "source": "F:\\DecomplieLatest\\HellMaiden\\ExportedProject\\Assets\\Sprite\\imp_attackloop_3.asset",
+      "sourceGuid": "92848b87850276f4485ba2c217a0bc21",
+      "sourceSha256": "6301cb04f60b69a42441f5c09b85dd8707d101265768ac1abb79b8f97997d6be",
+      "destination": "Assets/_Project/Content/HellMaiden/Enemies/Imp/Sprite/imp_attackloop_3.asset",
+      "destinationGuid": "92848b87850276f4485ba2c217a0bc21",
+      "groups": [
+        "E3"
+      ],
+      "referencedBy": [
+        "AnimationClip/Enemy_Imp_WarningLeftDown.anim",
+        "AnimationClip/Enemy_Imp_WarningRightDown.anim"
+      ],
+      "treatment": "reuse",
+      "sourceSize": 6502
+    },
+    {
+      "source": "F:\\DecomplieLatest\\HellMaiden\\ExportedProject\\Assets\\Sprite\\imp_attackloop_4.asset",
+      "sourceGuid": "a822afdfb68b4fc4d916194ab20b5dc3",
+      "sourceSha256": "2fd050835582e82745f0b414170cb77b525225120a56c3babd2b6bb8202c7094",
+      "destination": "Assets/_Project/Content/HellMaiden/Enemies/Imp/Sprite/imp_attackloop_4.asset",
+      "destinationGuid": "a822afdfb68b4fc4d916194ab20b5dc3",
+      "groups": [
+        "E3"
+      ],
+      "referencedBy": [
+        "AnimationClip/Enemy_Imp_WarningLeftDown.anim",
+        "AnimationClip/Enemy_Imp_WarningRightDown.anim"
+      ],
+      "treatment": "reuse",
+      "sourceSize": 5536
+    },
+    {
+      "source": "F:\\DecomplieLatest\\HellMaiden\\ExportedProject\\Assets\\Sprite\\imp_attackloop_5.asset",
+      "sourceGuid": "080189e1c8eca1244aefd159c0fd6b13",
+      "sourceSha256": "1ba57cada598bf566971803576a9f8bdffb7eafb60e1762af2d35203187fbac6",
+      "destination": "Assets/_Project/Content/HellMaiden/Enemies/Imp/Sprite/imp_attackloop_5.asset",
+      "destinationGuid": "080189e1c8eca1244aefd159c0fd6b13",
+      "groups": [
+        "E3"
+      ],
+      "referencedBy": [
+        "AnimationClip/Enemy_Imp_WarningLeftDown.anim",
+        "AnimationClip/Enemy_Imp_WarningRightDown.anim"
+      ],
+      "treatment": "reuse",
+      "sourceSize": 5626
+    },
+    {
+      "source": "F:\\DecomplieLatest\\HellMaiden\\ExportedProject\\Assets\\Sprite\\imp_death_0.asset",
+      "sourceGuid": "5f86a19334261b1428c287aa6b2dc107",
+      "sourceSha256": "b124b5b1c1e697e889365fd55946c64b45e0c41c20732b57bc62ff03f4c36133",
+      "destination": "Assets/_Project/Content/HellMaiden/Enemies/Imp/Sprite/imp_death_0.asset",
+      "destinationGuid": "5f86a19334261b1428c287aa6b2dc107",
+      "groups": [
+        "E3"
+      ],
+      "referencedBy": [
+        "AnimationClip/Enemy_Imp_DeathLeftDown.anim",
+        "AnimationClip/Enemy_Imp_DeathRightDown.anim",
+        "AnimationClip/Enemy_Imp_HurtLeftDown.anim",
+        "AnimationClip/Enemy_Imp_HurtRightDown.anim"
+      ],
+      "treatment": "reuse",
+      "sourceSize": 6373
+    },
+    {
+      "source": "F:\\DecomplieLatest\\HellMaiden\\ExportedProject\\Assets\\Sprite\\imp_death_1.asset",
+      "sourceGuid": "c5617bbf685558642b85c0ed514d2ae8",
+      "sourceSha256": "3934ee2831f94d230aca20b77bf2b06aca879a7801c0596bf307287b90bec606",
+      "destination": "Assets/_Project/Content/HellMaiden/Enemies/Imp/Sprite/imp_death_1.asset",
+      "destinationGuid": "c5617bbf685558642b85c0ed514d2ae8",
+      "groups": [
+        "E3"
+      ],
+      "referencedBy": [
+        "AnimationClip/Enemy_Imp_DeathLeftDown.anim",
+        "AnimationClip/Enemy_Imp_DeathRightDown.anim"
+      ],
+      "treatment": "reuse",
+      "sourceSize": 7311
+    },
+    {
+      "source": "F:\\DecomplieLatest\\HellMaiden\\ExportedProject\\Assets\\Sprite\\imp_death_2.asset",
+      "sourceGuid": "623b4f607d119e24381c6d3ac8973ff4",
+      "sourceSha256": "cabbb4fb4e14b956e8c54903e08ddc4a09fca744ff2f2ff3038a280377d5e1a9",
+      "destination": "Assets/_Project/Content/HellMaiden/Enemies/Imp/Sprite/imp_death_2.asset",
+      "destinationGuid": "623b4f607d119e24381c6d3ac8973ff4",
+      "groups": [
+        "E3"
+      ],
+      "referencedBy": [
+        "AnimationClip/Enemy_Imp_DeathLeftDown.anim",
+        "AnimationClip/Enemy_Imp_DeathRightDown.anim"
+      ],
+      "treatment": "reuse",
+      "sourceSize": 6792
+    },
+    {
+      "source": "F:\\DecomplieLatest\\HellMaiden\\ExportedProject\\Assets\\Sprite\\imp_death_3.asset",
+      "sourceGuid": "25bdb101d0367fc48bd4df0e4e67f24d",
+      "sourceSha256": "390bf1406a15404c83b9390c835070b8a559bf5f3bbf575eba8012cfd3c3b206",
+      "destination": "Assets/_Project/Content/HellMaiden/Enemies/Imp/Sprite/imp_death_3.asset",
+      "destinationGuid": "25bdb101d0367fc48bd4df0e4e67f24d",
+      "groups": [
+        "E3"
+      ],
+      "referencedBy": [
+        "AnimationClip/Enemy_Imp_DeathLeftDown.anim",
+        "AnimationClip/Enemy_Imp_DeathRightDown.anim"
+      ],
+      "treatment": "reuse",
+      "sourceSize": 6031
+    },
+    {
+      "source": "F:\\DecomplieLatest\\HellMaiden\\ExportedProject\\Assets\\Sprite\\imp_death_4.asset",
+      "sourceGuid": "19565bc566b687e429b41b98adbce810",
+      "sourceSha256": "3da2e3b9c2d9064a9ef826bc0ec0d3e19ca85ff36523f9cff4a613c711ebffeb",
+      "destination": "Assets/_Project/Content/HellMaiden/Enemies/Imp/Sprite/imp_death_4.asset",
+      "destinationGuid": "19565bc566b687e429b41b98adbce810",
+      "groups": [
+        "E3"
+      ],
+      "referencedBy": [
+        "AnimationClip/Enemy_Imp_DeathLeftDown.anim",
+        "AnimationClip/Enemy_Imp_DeathRightDown.anim"
+      ],
+      "treatment": "reuse",
+      "sourceSize": 6288
+    },
+    {
+      "source": "F:\\DecomplieLatest\\HellMaiden\\ExportedProject\\Assets\\Sprite\\imp_death_5.asset",
+      "sourceGuid": "4b5b6b9caa2b02f46a0babfe94a96716",
+      "sourceSha256": "d92e4e9610cf5542dc44324af5ba09c2fe8083601063aebf6e21573c13bfa5e6",
+      "destination": "Assets/_Project/Content/HellMaiden/Enemies/Imp/Sprite/imp_death_5.asset",
+      "destinationGuid": "4b5b6b9caa2b02f46a0babfe94a96716",
+      "groups": [
+        "E3"
+      ],
+      "referencedBy": [
+        "AnimationClip/Enemy_Imp_DeathLeftDown.anim",
+        "AnimationClip/Enemy_Imp_DeathRightDown.anim"
+      ],
+      "treatment": "reuse",
+      "sourceSize": 6018
+    },
+    {
       "source": "F:\\DecomplieLatest\\HellMaiden\\ExportedProject\\Assets\\Sprite\\imp_walk_0.asset",
       "sourceGuid": "8cb232f2608d8c744b1a04c9bb23db0a",
       "sourceSha256": "072c91dc1b0acf127115128b3244c9fa43e9b2101a703f20c040c84dc871d920",
@@ -5496,10 +6298,92 @@
         "E3"
       ],
       "referencedBy": [
+        "AnimationClip/Enemy_Imp_Walk_LeftDown.anim",
+        "AnimationClip/Enemy_Imp_Walk_RightDown.anim",
         "GameObject/Enemy_Imp.prefab"
       ],
       "treatment": "reuse",
       "sourceSize": 6551
+    },
+    {
+      "source": "F:\\DecomplieLatest\\HellMaiden\\ExportedProject\\Assets\\Sprite\\imp_walk_1.asset",
+      "sourceGuid": "ebc65970571db3d4c87776569006d1b0",
+      "sourceSha256": "06c97be1767f1c2f8729d11235ce5b84e3986200779685a6d2aa95750b3ee280",
+      "destination": "Assets/_Project/Content/HellMaiden/Enemies/Imp/Sprite/imp_walk_1.asset",
+      "destinationGuid": "ebc65970571db3d4c87776569006d1b0",
+      "groups": [
+        "E3"
+      ],
+      "referencedBy": [
+        "AnimationClip/Enemy_Imp_Walk_LeftDown.anim",
+        "AnimationClip/Enemy_Imp_Walk_RightDown.anim"
+      ],
+      "treatment": "reuse",
+      "sourceSize": 7463
+    },
+    {
+      "source": "F:\\DecomplieLatest\\HellMaiden\\ExportedProject\\Assets\\Sprite\\imp_walk_2.asset",
+      "sourceGuid": "c7c315ca723e0b1499ca875e7fe08ab7",
+      "sourceSha256": "11f2f3da01ad1edee5d9acce6ce0847c35969b5701b6baf929a7eeb808745523",
+      "destination": "Assets/_Project/Content/HellMaiden/Enemies/Imp/Sprite/imp_walk_2.asset",
+      "destinationGuid": "c7c315ca723e0b1499ca875e7fe08ab7",
+      "groups": [
+        "E3"
+      ],
+      "referencedBy": [
+        "AnimationClip/Enemy_Imp_Walk_LeftDown.anim",
+        "AnimationClip/Enemy_Imp_Walk_RightDown.anim"
+      ],
+      "treatment": "reuse",
+      "sourceSize": 7628
+    },
+    {
+      "source": "F:\\DecomplieLatest\\HellMaiden\\ExportedProject\\Assets\\Sprite\\imp_walk_3.asset",
+      "sourceGuid": "6b6ca1d54b6482c4d86046d33bc7826e",
+      "sourceSha256": "e7469c39bd59dd97f9a391585ccbc38124c788f8d55f749372a06c619bee5279",
+      "destination": "Assets/_Project/Content/HellMaiden/Enemies/Imp/Sprite/imp_walk_3.asset",
+      "destinationGuid": "6b6ca1d54b6482c4d86046d33bc7826e",
+      "groups": [
+        "E3"
+      ],
+      "referencedBy": [
+        "AnimationClip/Enemy_Imp_Walk_LeftDown.anim",
+        "AnimationClip/Enemy_Imp_Walk_RightDown.anim"
+      ],
+      "treatment": "reuse",
+      "sourceSize": 6643
+    },
+    {
+      "source": "F:\\DecomplieLatest\\HellMaiden\\ExportedProject\\Assets\\Sprite\\imp_walk_4.asset",
+      "sourceGuid": "8ea4072e884546a4487645702e1998ef",
+      "sourceSha256": "b8370e9105a47b83376b0a931a58af27f399e64a67132062dc73e59a4ee6d03f",
+      "destination": "Assets/_Project/Content/HellMaiden/Enemies/Imp/Sprite/imp_walk_4.asset",
+      "destinationGuid": "8ea4072e884546a4487645702e1998ef",
+      "groups": [
+        "E3"
+      ],
+      "referencedBy": [
+        "AnimationClip/Enemy_Imp_Walk_LeftDown.anim",
+        "AnimationClip/Enemy_Imp_Walk_RightDown.anim"
+      ],
+      "treatment": "reuse",
+      "sourceSize": 5559
+    },
+    {
+      "source": "F:\\DecomplieLatest\\HellMaiden\\ExportedProject\\Assets\\Sprite\\imp_walk_5.asset",
+      "sourceGuid": "5ea6d517e09183646965eb21b5dc6016",
+      "sourceSha256": "0085829d35f2159ee8f9c8620bfbe68d8e778455c8bdd5144c8286f7ee1e4535",
+      "destination": "Assets/_Project/Content/HellMaiden/Enemies/Imp/Sprite/imp_walk_5.asset",
+      "destinationGuid": "5ea6d517e09183646965eb21b5dc6016",
+      "groups": [
+        "E3"
+      ],
+      "referencedBy": [
+        "AnimationClip/Enemy_Imp_Walk_LeftDown.anim",
+        "AnimationClip/Enemy_Imp_Walk_RightDown.anim"
+      ],
+      "treatment": "reuse",
+      "sourceSize": 5767
     },
     {
       "source": "F:\\DecomplieLatest\\HellMaiden\\ExportedProject\\Assets\\Sprite\\indicator circle attack_0.asset",
@@ -5530,6 +6414,88 @@
       ],
       "treatment": "import",
       "sourceSize": 13015
+    },
+    {
+      "source": "F:\\DecomplieLatest\\HellMaiden\\ExportedProject\\Assets\\Sprite\\skeleton_death_0.asset",
+      "sourceGuid": "c5dc3149416eae841b0f13648748420c",
+      "sourceSha256": "3e81cb67bfa710faefa8e818cc65d11139139bcd702339f40b1c42820d3ec3a4",
+      "destination": "Assets/_Project/Content/NetworkCombat/Validation/HellMaiden/Sprite/skeleton_death_0.asset",
+      "destinationGuid": "c5dc3149416eae841b0f13648748420c",
+      "groups": [
+        "E4"
+      ],
+      "referencedBy": [
+        "AnimationClip/Enemy_Skeleton_Dead_LeftDown.anim",
+        "AnimationClip/Enemy_Skeleton_Dead_RightDown.anim",
+        "AnimationClip/Enemy_Skeleton_Hurt_LeftDown.anim",
+        "AnimationClip/Enemy_Skeleton_Hurt_RightDown.anim"
+      ],
+      "treatment": "reuse",
+      "sourceSize": 6002
+    },
+    {
+      "source": "F:\\DecomplieLatest\\HellMaiden\\ExportedProject\\Assets\\Sprite\\skeleton_death_1.asset",
+      "sourceGuid": "c17eeadad6fcd594d922c9935078ef19",
+      "sourceSha256": "87a0d78ea8562c3dbbca168127e2d4b009a04468d0ca70c15fd60ae63d7f3868",
+      "destination": "Assets/_Project/Content/NetworkCombat/Validation/HellMaiden/Sprite/skeleton_death_1.asset",
+      "destinationGuid": "c17eeadad6fcd594d922c9935078ef19",
+      "groups": [
+        "E4"
+      ],
+      "referencedBy": [
+        "AnimationClip/Enemy_Skeleton_Dead_LeftDown.anim",
+        "AnimationClip/Enemy_Skeleton_Dead_RightDown.anim"
+      ],
+      "treatment": "reuse",
+      "sourceSize": 7249
+    },
+    {
+      "source": "F:\\DecomplieLatest\\HellMaiden\\ExportedProject\\Assets\\Sprite\\skeleton_death_2.asset",
+      "sourceGuid": "2743f66179bad004f9cf81e347a93bb9",
+      "sourceSha256": "595150af8502b2921d7a46f060fcd0c70b63aa6964279face8be564a9d979cac",
+      "destination": "Assets/_Project/Content/NetworkCombat/Validation/HellMaiden/Sprite/skeleton_death_2.asset",
+      "destinationGuid": "2743f66179bad004f9cf81e347a93bb9",
+      "groups": [
+        "E4"
+      ],
+      "referencedBy": [
+        "AnimationClip/Enemy_Skeleton_Dead_LeftDown.anim",
+        "AnimationClip/Enemy_Skeleton_Dead_RightDown.anim"
+      ],
+      "treatment": "reuse",
+      "sourceSize": 8647
+    },
+    {
+      "source": "F:\\DecomplieLatest\\HellMaiden\\ExportedProject\\Assets\\Sprite\\skeleton_death_3.asset",
+      "sourceGuid": "6599ff42df15e154c969853f27ae3355",
+      "sourceSha256": "efd229db8cf30fc9a1cfb5ac620c815b6bd9c5f5803177971238084ce7d3473b",
+      "destination": "Assets/_Project/Content/NetworkCombat/Validation/HellMaiden/Sprite/skeleton_death_3.asset",
+      "destinationGuid": "6599ff42df15e154c969853f27ae3355",
+      "groups": [
+        "E4"
+      ],
+      "referencedBy": [
+        "AnimationClip/Enemy_Skeleton_Dead_LeftDown.anim",
+        "AnimationClip/Enemy_Skeleton_Dead_RightDown.anim"
+      ],
+      "treatment": "reuse",
+      "sourceSize": 9461
+    },
+    {
+      "source": "F:\\DecomplieLatest\\HellMaiden\\ExportedProject\\Assets\\Sprite\\skeleton_death_4.asset",
+      "sourceGuid": "ff2a0530363c57f439b4d2a020b9e5b1",
+      "sourceSha256": "f58098d06d186a1a383f594bc613e3557c4c873446acfa11fe235f139ddbb9f2",
+      "destination": "Assets/_Project/Content/NetworkCombat/Validation/HellMaiden/Sprite/skeleton_death_4.asset",
+      "destinationGuid": "ff2a0530363c57f439b4d2a020b9e5b1",
+      "groups": [
+        "E4"
+      ],
+      "referencedBy": [
+        "AnimationClip/Enemy_Skeleton_Dead_LeftDown.anim",
+        "AnimationClip/Enemy_Skeleton_Dead_RightDown.anim"
+      ],
+      "treatment": "reuse",
+      "sourceSize": 5054
     },
     {
       "source": "F:\\DecomplieLatest\\HellMaiden\\ExportedProject\\Assets\\Texture2D\\AOE_Enemy_Fill Pink.png",
@@ -5832,6 +6798,36 @@
       "sourceSize": 288835
     },
     {
+      "source": "F:\\DecomplieLatest\\HellMaiden\\ExportedProject\\Assets\\Texture2D\\area skeletton.png",
+      "sourceGuid": "5ced8bfb90d08ea4290d46fe8cf83212",
+      "sourceSha256": "99e02dce1c1d4df7e21511ad23b722e993fd2815d9ba3c37ac5b6453e3adedb0",
+      "destination": "Assets/_Project/Content/NetworkCombat/Validation/HellMaiden/Texture2D/area skeletton.png",
+      "destinationGuid": "5ced8bfb90d08ea4290d46fe8cf83212",
+      "groups": [
+        "V2"
+      ],
+      "referencedBy": [
+        "Sprite/area skeletton_0.asset"
+      ],
+      "treatment": "reuse",
+      "sourceSize": 263144
+    },
+    {
+      "source": "F:\\DecomplieLatest\\HellMaiden\\ExportedProject\\Assets\\Texture2D\\arrow skeleton.png",
+      "sourceGuid": "ba5e4d3d867cc0649b5bf42598bf3f02",
+      "sourceSha256": "84939c7bdd0f6518d2bb5823454f5d46f4077e32b70b35e9bccee4d298f5d28f",
+      "destination": "Assets/_Project/Content/NetworkCombat/Validation/HellMaiden/Texture2D/arrow skeleton.png",
+      "destinationGuid": "ba5e4d3d867cc0649b5bf42598bf3f02",
+      "groups": [
+        "V2"
+      ],
+      "referencedBy": [
+        "Sprite/arrow skeleton_0.asset"
+      ],
+      "treatment": "reuse",
+      "sourceSize": 25233
+    },
+    {
       "source": "F:\\DecomplieLatest\\HellMaiden\\ExportedProject\\Assets\\Texture2D\\arrow white fleur de lis.png",
       "sourceGuid": "bdee613daf5e6d94e8f68ac088efd39a",
       "sourceSha256": "07555037daef15c2584758a2e3a318d1f38a6e9d6aa796d23a6e6b7af505034b",
@@ -5952,6 +6948,36 @@
       ],
       "treatment": "import",
       "sourceSize": 5240
+    },
+    {
+      "source": "F:\\DecomplieLatest\\HellMaiden\\ExportedProject\\Assets\\Texture2D\\circle_blurred 1_0.png",
+      "sourceGuid": "f170e368f36afa34e997460d6feca2c9",
+      "sourceSha256": "90d334330f859fa04111689448c799b08ca5bcfdc1aa11f217958d32572d6996",
+      "destination": "Assets/_Project/Content/HellMaiden/NativeGAS/Ovid/Summon/Texture2D/circle_blurred 1_0.png",
+      "destinationGuid": "f170e368f36afa34e997460d6feca2c9",
+      "groups": [
+        "E3"
+      ],
+      "referencedBy": [
+        "Sprite/circle_blurred 1_0.asset"
+      ],
+      "treatment": "reuse",
+      "sourceSize": 38018
+    },
+    {
+      "source": "F:\\DecomplieLatest\\HellMaiden\\ExportedProject\\Assets\\Texture2D\\circle_blurred 2_0.png",
+      "sourceGuid": "ef158d33b8091de41b6287f1ca48c59a",
+      "sourceSha256": "eebfe217d4b16660c9d3e1f4c2035da3654d275536942655d913278107583bfb",
+      "destination": "Assets/_Project/Content/HellMaiden/Enemies/Imp/Texture2D/circle_blurred 2_0.png",
+      "destinationGuid": "ef158d33b8091de41b6287f1ca48c59a",
+      "groups": [
+        "V4"
+      ],
+      "referencedBy": [
+        "Sprite/circle_blurred 2_0.asset"
+      ],
+      "treatment": "reuse",
+      "sourceSize": 39661
     },
     {
       "source": "F:\\DecomplieLatest\\HellMaiden\\ExportedProject\\Assets\\Texture2D\\circle_sharp.png",
@@ -6322,7 +7348,8 @@
         "Sprite/brotchi_walk_2.asset",
         "Sprite/brotchi_walk_3.asset",
         "Sprite/brotchi_walk_4.asset",
-        "Sprite/brotchi_walk_5.asset"
+        "Sprite/brotchi_walk_5.asset",
+        "Sprite/Enemy_Brotchi_Shadow.asset"
       ],
       "treatment": "reuse",
       "sourceSize": 158765
@@ -6389,6 +7416,86 @@
       "sourceSize": 209338
     },
     {
+      "source": "F:\\DecomplieLatest\\HellMaiden\\ExportedProject\\Assets\\Texture2D\\sactx-0-2048x2048-Uncompressed-Enemy Imp-9608cb95.png",
+      "sourceGuid": "0505b81a7ca6c124b91e18a1781ae6c5",
+      "sourceSha256": "bc6a5cb383772664f5e2372a67f4c2fa468ea767362b87619ff5be5cdd0f0854",
+      "destination": "Assets/_Project/Content/HellMaiden/Enemies/Imp/Texture2D/sactx-0-2048x2048-Uncompressed-Enemy Imp-9608cb95.png",
+      "destinationGuid": "0505b81a7ca6c124b91e18a1781ae6c5",
+      "groups": [
+        "E3"
+      ],
+      "referencedBy": [
+        "Sprite/imp_attackloop_0.asset",
+        "Sprite/imp_attackloop_1.asset",
+        "Sprite/imp_attackloop_2.asset",
+        "Sprite/imp_attackloop_3.asset",
+        "Sprite/imp_attackloop_4.asset",
+        "Sprite/imp_attackloop_5.asset",
+        "Sprite/imp_death_0.asset",
+        "Sprite/imp_death_1.asset",
+        "Sprite/imp_death_2.asset",
+        "Sprite/imp_death_3.asset",
+        "Sprite/imp_death_4.asset",
+        "Sprite/imp_death_5.asset",
+        "Sprite/imp_walk_0.asset",
+        "Sprite/imp_walk_1.asset",
+        "Sprite/imp_walk_2.asset",
+        "Sprite/imp_walk_3.asset",
+        "Sprite/imp_walk_4.asset",
+        "Sprite/imp_walk_5.asset",
+        "Sprite/imp_attack_2.asset",
+        "Sprite/imp_attack_3.asset"
+      ],
+      "treatment": "reuse",
+      "sourceSize": 250993
+    },
+    {
+      "source": "F:\\DecomplieLatest\\HellMaiden\\ExportedProject\\Assets\\Texture2D\\sactx-0-2048x2048-Uncompressed-Enemy Skeleton-da75d519.png",
+      "sourceGuid": "8a7b84e5f56ca4745b626da4009285f1",
+      "sourceSha256": "4d7816a9ea9ec155dd85b27c9c1a54a1b6b9de78f0236bd5adff07c0c742e119",
+      "destination": "Assets/_Project/Content/NetworkCombat/Validation/HellMaiden/Texture2D/sactx-0-2048x2048-Uncompressed-Enemy Skeleton-da75d519.png",
+      "destinationGuid": "8a7b84e5f56ca4745b626da4009285f1",
+      "groups": [
+        "E4"
+      ],
+      "referencedBy": [
+        "Sprite/Enemy_Skeleton_Attack_3.asset",
+        "Sprite/Enemy_Skeleton_Attack_4.asset",
+        "Sprite/Enemy_Skeleton_Attack_0.asset",
+        "Sprite/Enemy_Skeleton_Attack_1.asset",
+        "Sprite/Enemy_Skeleton_Attack_2.asset",
+        "Sprite/skeleton_death_0.asset",
+        "Sprite/skeleton_death_1.asset",
+        "Sprite/skeleton_death_2.asset",
+        "Sprite/skeleton_death_3.asset",
+        "Sprite/skeleton_death_4.asset",
+        "Sprite/Enemy_Skeleton_Walk_03_0.asset",
+        "Sprite/Enemy_Skeleton_Walk_03_1.asset",
+        "Sprite/Enemy_Skeleton_Walk_03_2.asset",
+        "Sprite/Enemy_Skeleton_Walk_03_3.asset",
+        "Sprite/Enemy_Skeleton_Walk_03_4.asset",
+        "Sprite/Enemy_Skeleton_Walk_03_5.asset",
+        "Sprite/Enemy_Skeleton_Attack_5.asset"
+      ],
+      "treatment": "reuse",
+      "sourceSize": 266191
+    },
+    {
+      "source": "F:\\DecomplieLatest\\HellMaiden\\ExportedProject\\Assets\\Texture2D\\sactx-0-2048x2048-Uncompressed-Skeleton_Golden-e7c1e0b4.png",
+      "sourceGuid": "b3de240b3eb0a1e42bb2a357dd1ffc9c",
+      "sourceSha256": "d59107625dbc3cb35d5d69633c4695064e538433b1f4f91dd6c62f9ddaafd5ed",
+      "destination": "Assets/_Project/Content/NetworkCombat/Validation/HellMaiden/Texture2D/sactx-0-2048x2048-Uncompressed-Skeleton_Golden-e7c1e0b4.png",
+      "destinationGuid": "b3de240b3eb0a1e42bb2a357dd1ffc9c",
+      "groups": [
+        "E4"
+      ],
+      "referencedBy": [
+        "Sprite/Enemy_Skeleton_Shadow.asset"
+      ],
+      "treatment": "reuse",
+      "sourceSize": 415646
+    },
+    {
       "source": "F:\\DecomplieLatest\\HellMaiden\\ExportedProject\\Assets\\Texture2D\\sactx-0-512x512-DXT5_BC3-BarrierTrap_FireParticles-5c48d25f.png",
       "sourceGuid": "17fb7d74d9b873f4c88fb676c7d06817",
       "sourceSha256": "214881abc3ca75d140289e47d275446c405e1e2ac233457c56bbb1f655769832",
@@ -6412,6 +7519,23 @@
       ],
       "treatment": "import",
       "sourceSize": 62286
+    },
+    {
+      "source": "F:\\DecomplieLatest\\HellMaiden\\ExportedProject\\Assets\\Texture2D\\sactx-1-1024x1024-Uncompressed-Enemy Imp-9608cb95.png",
+      "sourceGuid": "b5ad6b9f4d6eb16459993d446d69a824",
+      "sourceSha256": "9901f1999dd1d28341b78ffd1b5e8610416fa62a4f68429e0882766fdbef8bee",
+      "destination": "Assets/_Project/Content/HellMaiden/Enemies/Imp/Texture2D/sactx-1-1024x1024-Uncompressed-Enemy Imp-9608cb95.png",
+      "destinationGuid": "b5ad6b9f4d6eb16459993d446d69a824",
+      "groups": [
+        "E3"
+      ],
+      "referencedBy": [
+        "Sprite/imp_attack_0.asset",
+        "Sprite/imp_attack_1.asset",
+        "Sprite/imp_attack_4.asset"
+      ],
+      "treatment": "reuse",
+      "sourceSize": 60294
     },
     {
       "source": "F:\\DecomplieLatest\\HellMaiden\\ExportedProject\\Assets\\Texture2D\\seamlessNoise_1.png",

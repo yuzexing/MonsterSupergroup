@@ -42,7 +42,7 @@ MonoBehaviour:
           speedMultiplier: 1
       rubberbandMaxDistance: 20
       colorLUT: {fileID: 0}
-      hueColor: {r: 0, g: 0, b: 0, a: 0}
+      hueColor: {r: 1, g: 1, b: 1, a: 1}
     - variantName: fast
       overrideGlobalLootSettings: 0
       lootSettings: {fileID: 0}
@@ -97,8 +97,8 @@ MonoBehaviour:
           xpMultiplier: 1
           speedMultiplier: 1
       rubberbandMaxDistance: 20
-      colorLUT: {fileID: 0}
-      hueColor: {r: 0, g: 0, b: 0, a: 0}
+      colorLUT: {fileID: 2800000, guid: 95a998c0d18f1ab43b5dc4af0f973ba5, type: 3}
+      hueColor: {r: 1, g: 1, b: 1, a: 1}
   - enemyName: Brotchi
     enemyData:
     - variantName: lvl1
@@ -128,7 +128,7 @@ MonoBehaviour:
           speedMultiplier: 1
       rubberbandMaxDistance: 20
       colorLUT: {fileID: 0}
-      hueColor: {r: 0, g: 0, b: 0, a: 0}
+      hueColor: {r: 1, g: 1, b: 1, a: 1}
     - variantName: lvl2
       overrideGlobalLootSettings: 0
       lootSettings: {fileID: 0}
@@ -155,8 +155,8 @@ MonoBehaviour:
           xpMultiplier: 1
           speedMultiplier: 1
       rubberbandMaxDistance: 20
-      colorLUT: {fileID: 0}
-      hueColor: {r: 0, g: 0, b: 0, a: 0}
+      colorLUT: {fileID: 2800000, guid: dcd3d0d47e26f3d49b3da4f075aefc2e, type: 3}
+      hueColor: {r: 1, g: 1, b: 1, a: 1}
   - enemyName: Elite_Skeleton
     enemyData:
     - variantName: lvl1
@@ -186,7 +186,7 @@ MonoBehaviour:
           speedMultiplier: 1
       rubberbandMaxDistance: 20
       colorLUT: {fileID: 0}
-      hueColor: {r: 0, g: 0, b: 0, a: 0}
+      hueColor: {r: 1, g: 1, b: 1, a: 1}
     - variantName: lvl2
       overrideGlobalLootSettings: 0
       lootSettings: {fileID: 0}
@@ -213,8 +213,8 @@ MonoBehaviour:
           xpMultiplier: 1
           speedMultiplier: 1
       rubberbandMaxDistance: 20
-      colorLUT: {fileID: 0}
-      hueColor: {r: 0, g: 0, b: 0, a: 0}
+      colorLUT: {fileID: 2800000, guid: b0288aca5b3757a4ba5390564da5ef6a, type: 3}
+      hueColor: {r: 1, g: 1, b: 1, a: 1}
   - enemyName: Imp
     enemyData:
     - variantName: lvl1
@@ -244,7 +244,7 @@ MonoBehaviour:
           speedMultiplier: 1
       rubberbandMaxDistance: 20
       colorLUT: {fileID: 0}
-      hueColor: {r: 0, g: 0, b: 0, a: 0}
+      hueColor: {r: 1, g: 1, b: 1, a: 1}
     - variantName: lvl2
       overrideGlobalLootSettings: 0
       lootSettings: {fileID: 0}
@@ -271,8 +271,8 @@ MonoBehaviour:
           xpMultiplier: 1
           speedMultiplier: 1
       rubberbandMaxDistance: 20
-      colorLUT: {fileID: 0}
-      hueColor: {r: 0, g: 0, b: 0, a: 0}
+      colorLUT: {fileID: 2800000, guid: b4d757b8cf4291445929811e32fea767, type: 3}
+      hueColor: {r: 1, g: 1, b: 1, a: 1}
   - enemyName: Brotchi_Dash
     enemyData:
     - variantName: lvl1
@@ -302,7 +302,7 @@ MonoBehaviour:
           speedMultiplier: 1
       rubberbandMaxDistance: 20
       colorLUT: {fileID: 0}
-      hueColor: {r: 0, g: 0, b: 0, a: 0}
+      hueColor: {r: 1, g: 1, b: 1, a: 1}
     - variantName: lvl2
       overrideGlobalLootSettings: 0
       lootSettings: {fileID: 0}
@@ -329,8 +329,8 @@ MonoBehaviour:
           xpMultiplier: 1
           speedMultiplier: 1
       rubberbandMaxDistance: 20
-      colorLUT: {fileID: 0}
-      hueColor: {r: 0, g: 0, b: 0, a: 0}
+      colorLUT: {fileID: 2800000, guid: d282a8c1c6fbeaf4495940e5c1e2bba3, type: 3}
+      hueColor: {r: 1, g: 1, b: 1, a: 1}
   - enemyName: Slime
     enemyData:
     - variantName: lvl1
@@ -360,7 +360,7 @@ MonoBehaviour:
           speedMultiplier: 1
       rubberbandMaxDistance: 20
       colorLUT: {fileID: 0}
-      hueColor: {r: 0, g: 0, b: 0, a: 0}
+      hueColor: {r: 1, g: 1, b: 1, a: 1}
     - variantName: lvl2
       overrideGlobalLootSettings: 0
       lootSettings: {fileID: 0}
@@ -387,8 +387,8 @@ MonoBehaviour:
           xpMultiplier: 1
           speedMultiplier: 1
       rubberbandMaxDistance: 20
-      colorLUT: {fileID: 0}
-      hueColor: {r: 0, g: 0, b: 0, a: 0}
+      colorLUT: {fileID: 2800000, guid: 0663fa69de74e7043b9d3d7f591cabfa, type: 3}
+      hueColor: {r: 1, g: 1, b: 1, a: 1}
     - variantName: rusher
       overrideGlobalLootSettings: 0
       lootSettings: {fileID: 0}
@@ -416,7 +416,7 @@ MonoBehaviour:
           speedMultiplier: 1
       rubberbandMaxDistance: 20
       colorLUT: {fileID: 0}
-      hueColor: {r: 0, g: 0, b: 0, a: 0}
+      hueColor: {r: 1, g: 1, b: 1, a: 1}
   - enemyName: LostSoul
     enemyData:
     - variantName: lvl1

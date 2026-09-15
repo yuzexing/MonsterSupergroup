@@ -1,5 +1,7 @@
 fileFormatVersion: 2
 guid: 995c1fd494f66c84985e19615ff8e5ee
+labels:
+- LimboArtRestoredV1
 PrefabImporter:
   externalObjects: {}
   userData: 

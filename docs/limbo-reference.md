@@ -2,9 +2,11 @@
 
 **美术状态更新（2026-09-15）：** 九套参考身体及八组提示已接入来源资源；本页下方的红点、普通 Skeleton 替代精英、橙色线条描述属于历史构建。最新美术验证、保留差异与待验项见 [序列帧美术恢复](limbo-art-restoration.md) 和 [Ghoul 接入](limbo-ghoul-integration.md)。历史数值／行为证据继续保留，不能自动视为新构建的运行证据。
 
-当前交付为 **全部 31 片段的完整 Limbo 参考流程**：720.9 秒请求转场，等待已连接、存活玩家结束选卡等忙碌后进入现有结算，不要求清怪。最终构建已完成单人 Host、Host/Client 有画面完整运行及界面重开，Full 已 Ready。详见 [Phase 5 实现与验收](limbo-full-integration.md)。当前共接入 8 类来源身份、9 套身体、17 种外观/变体组合（16 个数据库变体）；[Ghoul](limbo-ghoul-integration.md)、[LostSoul](limbo-lostsoul-integration.md)、[Dash](limbo-dash-integration.md) 和 [空间机制](limbo-spatial-closure.md) 保留历史证据。Minos、Spine、人工压力和同条件原游戏正常流程对照尚未完成；本阶段定向回归通过，广域保留失败及分类见 Phase 5 报告。
+当前实现为 **全部 31 片段的完整 Limbo 参考流程**：720.9 秒请求转场，等待已连接、存活玩家结束选卡等忙碌后进入现有结算，不要求清怪。Phase 5 构建已完成单人 Host、Host/Client 有画面完整运行及界面重开，Full 已 Ready。详见 [Phase 5 实现与验收](limbo-full-integration.md)。当前共接入 8 类来源身份、9 套身体、17 种外观/变体组合（16 个数据库变体）；[Ghoul](limbo-ghoul-integration.md)、[LostSoul](limbo-lostsoul-integration.md)、[Dash](limbo-dash-integration.md) 和 [空间机制](limbo-spatial-closure.md) 保留历史证据。上轮剩余失败已在 [回归收尾](regression-closure.md) 中归档；不能将旧构建的通过结果自动用于新包。
 
-下文保留此前 0–60 秒阶段的实施与验收历史（数据缺失、占位外观和待接入描述均为当时状态）。当前无辅助入口是 `-Profile full -BuildDirectory Builds/LimboFull20260915`；`full-validation` 含明确测试保护、自动选卡，添加 `-AutoWalk` 提供普通移动输入，不能当作人工压力结果。此前构建和 opening／imp／stage2／dash／lostsoul／ghoul 入口保留，启动脚本默认仍为 60 秒开场。现有 Ovid 材质提示及其他 Shader 差异继续保留记录。
+**Phase 6（2026-09-16）：** P6-20260916-02 独立人工入口、轻量日志及归档已完成验收：EditMode 780／780、PlayMode 523／523；同一构建完成单人及双端全流程、转场等待与界面重开。详见 [交付与验收](limbo-manual-delivery.md)。使用方法与固定基线见 [人工试玩说明](limbo-manual-playtest.md)。默认 XP 修正仍为 2，镜头和 Nordic 地图保持不变。Minos、Spine、人工压力和同条件原游戏正常流程对照尚未完成。
+
+下文保留此前 0–60 秒阶段的实施与验收历史（数据缺失、占位外观和待接入描述均为当时状态）。当前推荐无辅助入口是 Phase 6 包内 `1-Solo.cmd`；此前工程入口 `-Profile full -BuildDirectory Builds/LimboFull20260915` 保留历史构建；`full-validation` 含明确测试保护、自动选卡，添加 `-AutoWalk` 提供普通移动输入，不能当作人工压力结果。此前构建和 opening／imp／stage2／dash／lostsoul／ghoul 入口保留，启动脚本默认仍为 60 秒开场。现有 Ovid 材质提示及其他 Shader 差异继续保留记录。
 
 ## 启动、修改与证据
 

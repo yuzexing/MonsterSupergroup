@@ -7,6 +7,7 @@ param(
     [switch]$AutoWalk,
     [switch]$ArtObserve,
     [switch]$Windowed,
+    [ValidateSet('light','detailed')][string]$LogDetail = 'detailed',
     [string]$BuildDirectory = 'Builds/LimboReference',
     [ValidateSet('host', 'client')][string]$FixtureTarget = 'host',
     [ValidateSet('Skeleton0','Skeleton2','Elite0','Elite1','Brotchi0','Brotchi1','Slime0','Slime1','Rusher2','Rusher1')][string]$FixtureEnemy = 'Skeleton0',
@@ -46,7 +47,7 @@ if ($ArtObserve) {
 }
 $launchArgs = @("-force-$GraphicsApi", '-screen-fullscreen', '0', '-screen-width', '1100', '-screen-height', '700',
     '-logFile', ('"' + (Join-Path $outputDirectory 'player.log') + '"'),
-    "--limbo-full-case=$FullCase", "--limbo-ghoul-case=$GhoulCase", "--limbo-role=$Role", "--limbo-profile=$Profile", "--limbo-port=$Port", "--limbo-wait-for=$WaitFor", "--limbo-fixture-target=$FixtureTarget", "--limbo-fixture-enemy=$FixtureEnemy", "--limbo-fixture-mode=$FixtureMode", "--limbo-spatial-case=$SpatialCase", "--limbo-reposition-case=$RepositionCase", "--limbo-dash-variant=$DashVariant", "--limbo-dash-case=$DashCase", "--limbo-lostsoul-variant=$LostSoulVariant", "--limbo-lostsoul-case=$LostSoulCase",
+    "--limbo-log-detail=$LogDetail", "--limbo-full-case=$FullCase", "--limbo-ghoul-case=$GhoulCase", "--limbo-role=$Role", "--limbo-profile=$Profile", "--limbo-port=$Port", "--limbo-wait-for=$WaitFor", "--limbo-fixture-target=$FixtureTarget", "--limbo-fixture-enemy=$FixtureEnemy", "--limbo-fixture-mode=$FixtureMode", "--limbo-spatial-case=$SpatialCase", "--limbo-reposition-case=$RepositionCase", "--limbo-dash-variant=$DashVariant", "--limbo-dash-case=$DashCase", "--limbo-lostsoul-variant=$LostSoulVariant", "--limbo-lostsoul-case=$LostSoulCase",
     ('"--limbo-output=' + $outputDirectory + '"'), "--limbo-art-observe=$($ArtObserve.IsPresent.ToString().ToLowerInvariant())", "--limbo-autowalk=$($AutoWalk.IsPresent.ToString().ToLowerInvariant())", "--limbo-windowed=$($Windowed.IsPresent.ToString().ToLowerInvariant())")
 # Visible by design: this scenario is for rendered Host/Client verification.
 $gameProcess = Start-Process -FilePath $executable -ArgumentList $launchArgs -WindowStyle Normal -PassThru

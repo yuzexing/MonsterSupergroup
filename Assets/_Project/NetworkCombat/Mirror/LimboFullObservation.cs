@@ -15,7 +15,7 @@ namespace MonsterSupergroup.NetworkCombat
     {
         public static string Case => LimboReferenceLaunch.Argument("--limbo-full-case=") ?? "idle";
         public static string FixtureRulesName => Case switch { "barrier-first" => "FullBarrierFirst", "burst-first" => "FullBurstFirst", "slime-b" => "FullSlimeBurst", _ => "FullFixture" };
-        private StreamWriter log;
+        private LimboObservationLog log;
         private NetworkGameplayEnemySpawner spawner;
         private string run, lastState;
         private float nextCard, nextFrame, holdUntil;
@@ -30,7 +30,7 @@ namespace MonsterSupergroup.NetworkCombat
             fixture = LimboReferenceLaunch.Profile == "full-fixture";
             technical = fixture || LimboReferenceLaunch.Profile == "full-validation";
             Directory.CreateDirectory(LimboReferenceLaunch.OutputDirectory);
-            log = new StreamWriter(Path.Combine(LimboReferenceLaunch.OutputDirectory, "full.jsonl")) { AutoFlush = true };
+            log = new LimboObservationLog(Path.Combine(LimboReferenceLaunch.OutputDirectory, "full.jsonl"));
             Write("configuration", technical ? "TECHNICAL: optional normal auto-walk, first legal card, heal below 300 except downed case. Fixtures disable weapon execution and may queue real rewards; never pressure evidence." : "PLAYABLE: observation only.");
         }
         private void Update()
@@ -89,7 +89,8 @@ namespace MonsterSupergroup.NetworkCombat
             {
                 RestoreEquipment();
                 completed = true; Capture("end");
-                Write("completed", "Existing run-end lifecycle", snapshot);
+                Write(snapshot.Phase == WavePhase.Completed ? "completed" : "failed", "Existing run-end lifecycle", snapshot);
+                LimboObservationLog.FlushAll();
             }
         }
         private void Requested()
@@ -125,6 +126,7 @@ namespace MonsterSupergroup.NetworkCombat
         }
         private void Capture(string name)
         {
+            if (LimboReferenceLaunch.Light) return;
             if (!pictures.Add(name)) return;
             StartCoroutine(CaptureFrame(Path.Combine(LimboReferenceLaunch.OutputDirectory, "full-" + run + "-" + name + ".png")));
         }

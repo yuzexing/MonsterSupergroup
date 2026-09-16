@@ -40,6 +40,7 @@ namespace MonsterSupergroup.NetworkCombat
 
         private void OnEnable()
         {
+            if (LimboReferenceLaunch.Manual) { enabled = false; return; }
             bool supported = Application.isEditor || Debug.isDebugBuild;
 #if MONSTER_ENEMY_HANDOFF_VALIDATION
             supported = true;

@@ -12,7 +12,7 @@ namespace MonsterSupergroup.NetworkCombat
     [DefaultExecutionOrder(200)]
     public sealed partial class LimboSpatialObservation : MonoBehaviour
     {
-        private StreamWriter output;
+        private LimboObservationLog output;
         private readonly Dictionary<uint, BarrierPhase> phases = new Dictionary<uint, BarrierPhase>();
         private readonly Dictionary<uint, double> settledCaptures = new Dictionary<uint, double>();
         private string run;
@@ -42,12 +42,12 @@ namespace MonsterSupergroup.NetworkCombat
             if (output == null)
             {
                 Directory.CreateDirectory(LimboReferenceLaunch.OutputDirectory);
-                output = new StreamWriter(Path.Combine(LimboReferenceLaunch.OutputDirectory, "spatial-observation.jsonl")) { AutoFlush = true };
+                output = new LimboObservationLog(Path.Combine(LimboReferenceLaunch.OutputDirectory, "spatial-observation.jsonl"));
             }
             if (run != progress.RunId) { run = progress.RunId; phases.Clear(); settledCaptures.Clear(); completed = false; nextSample = 0; ResetValidation(); }
             TickValidation(world, progress);
             bool sample = EnemySimulationClock.CombatNow >= nextSample;
-            if (sample) nextSample = EnemySimulationClock.CombatNow + .25;
+            if (sample) nextSample = EnemySimulationClock.CombatNow + (LimboReferenceLaunch.Light ? 1 : .25);
             foreach (uint id in phases.Keys.Where(id => !world.ReferenceTraps.ContainsKey(id)).ToArray())
             {
                 output.WriteLine(JsonUtility.ToJson(Record("removed", progress.Elapsed, id, default)));
@@ -58,7 +58,7 @@ namespace MonsterSupergroup.NetworkCombat
             {
                 if (pair.Value.Round != NetworkEnemySimulationWorld.CurrentRound) continue;
                 bool changed = !phases.TryGetValue(pair.Key, out var phase) || phase != pair.Value.Phase;
-                if (!changed && settledCaptures.TryGetValue(pair.Key, out var captureAt) && EnemySimulationClock.CombatNow >= captureAt)
+                if (!LimboReferenceLaunch.Light && !changed && settledCaptures.TryGetValue(pair.Key, out var captureAt) && EnemySimulationClock.CombatNow >= captureAt)
                 {
                     // Phase-entry captures can precede the first emitted particle. Also retain the rendered phase after emission.
                     ScreenCapture.CaptureScreenshot(Path.Combine(LimboReferenceLaunch.OutputDirectory, $"trap-{run}-{pair.Key}-{pair.Value.Phase}-settled.png"));
@@ -66,7 +66,7 @@ namespace MonsterSupergroup.NetworkCombat
                 }
                 if (!sample && !changed) continue;
                 var record = Record(changed ? "phase" : "sample", progress.Elapsed, pair.Key, pair.Value);
-                if (world.TryGetReferenceBarrier(pair.Key, out var barrier))
+                if (!LimboReferenceLaunch.Light && world.TryGetReferenceBarrier(pair.Key, out var barrier))
                 {
                     var edge = barrier.GetComponentInChildren<EdgeCollider2D>();
                     record.worldEdgePoints = edge.points.Select(p => edge.transform.TransformPoint(p + edge.offset)).ToArray();
@@ -79,8 +79,11 @@ namespace MonsterSupergroup.NetworkCombat
                 if (changed)
                 {
                     phases[pair.Key] = pair.Value.Phase;
-                    settledCaptures[pair.Key] = EnemySimulationClock.CombatNow + .35;
-                    ScreenCapture.CaptureScreenshot(Path.Combine(LimboReferenceLaunch.OutputDirectory, $"trap-{run}-{pair.Key}-{pair.Value.Phase}.png"));
+                    if (!LimboReferenceLaunch.Light)
+                    {
+                        settledCaptures[pair.Key] = EnemySimulationClock.CombatNow + .35;
+                        ScreenCapture.CaptureScreenshot(Path.Combine(LimboReferenceLaunch.OutputDirectory, $"trap-{run}-{pair.Key}-{pair.Value.Phase}.png"));
+                    }
                 }
             }
             if (!completed && (progress.Phase == WavePhase.Completed || BootGameplayNetworkManager.CombatHasEnded))
@@ -92,7 +95,7 @@ namespace MonsterSupergroup.NetworkCombat
                 record.livingWarningRoots = FindObjectsByType<ParticleSystem>(FindObjectsSortMode.None)
                     .Count(ps => ps.name.StartsWith("ReferenceTrapWarning", StringComparison.Ordinal) && ps.IsAlive(true));
                 output.WriteLine(JsonUtility.ToJson(record));
-                ScreenCapture.CaptureScreenshot(Path.Combine(LimboReferenceLaunch.OutputDirectory, $"spatial-completed-{run}.png"));
+                if (!LimboReferenceLaunch.Light) ScreenCapture.CaptureScreenshot(Path.Combine(LimboReferenceLaunch.OutputDirectory, $"spatial-completed-{run}.png"));
             }
         }
         private Sample Record(string kind, double elapsed, uint id, ReferenceTrapSnapshot state) => new Sample {

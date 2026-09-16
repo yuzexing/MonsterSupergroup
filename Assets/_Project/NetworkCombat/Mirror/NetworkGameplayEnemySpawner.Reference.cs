@@ -17,7 +17,7 @@ namespace MonsterSupergroup.NetworkCombat
         private int[] referenceAlive;
         private System.Random referenceRandom;
         private readonly Dictionary<int, Vector2> formationCenters = new Dictionary<int, Vector2>();
-        private StreamWriter referenceTrace;
+        private LimboObservationLog referenceTrace;
         private bool referenceCompletionPublished;
         private bool referenceRequestPublished;
         private bool referenceCancellationPublished;
@@ -58,8 +58,8 @@ namespace MonsterSupergroup.NetworkCombat
             schedule.FormationReleased += i => world.ReleaseReferenceFormation(i);
             string directory = LimboReferenceLaunch.OutputDirectory;
             Directory.CreateDirectory(directory);
-            ReferenceTracePath = Path.Combine(directory, "spawns-" + DateTime.UtcNow.ToString("yyyyMMdd-HHmmss-fff") + ".csv");
-            referenceTrace = new StreamWriter(ReferenceTracePath) { AutoFlush = true };
+            ReferenceTracePath = Path.Combine(directory, "spawns-" + schedule.State.RunId + "-" + DateTime.UtcNow.ToString("yyyyMMdd-HHmmss-fff") + ".csv");
+            referenceTrace = new LimboObservationLog(ReferenceTracePath);
             referenceTrace.WriteLine("elapsed,event,clip,source,variant,planned,sequence,enemy,result,totalAlive,countedAlive,hp,damage,speed,xp,x,y");
             Debug.Log($"[Limbo] trace={ReferenceTracePath} seed={settings.Reference.Seed} previewEnd={settings.Reference.EndTime:R} sourceDuration={settings.Reference.SourceDuration:R}");
         }
@@ -115,7 +115,7 @@ namespace MonsterSupergroup.NetworkCombat
                 }
                 string result = id != 0 ? "Spawned" : legal ? "SpawnFailed" : "NoLegalPosition";
                 referenceTrace?.WriteLine(FormattableString.Invariant($"{schedule.State.Elapsed:R},spawn,{opportunity.ClipIndex},{clip.SourceEnemy},{clip.Variant},{clip.Count},{opportunity.Sequence},{id},{result},{total},{counted},{birth.Health},{birth.Damage},{birth.Speed * birth.SpeedMultiplier:R},{birth.Xp:R},{position.x:R},{position.y:R}"));
-                Debug.Log(FormattableString.Invariant($"[LimboSpawn] clip={opportunity.ClipIndex} event={opportunity.Sequence} enemy={id} source={clip.SourceEnemy}/{clip.Variant} result={result} hp={birth.Health} damage={birth.Damage} speed={birth.Speed * birth.SpeedMultiplier:F4} alive={total} counted={counted}"));
+                if (!LimboReferenceLaunch.Light) Debug.Log(FormattableString.Invariant($"[LimboSpawn] clip={opportunity.ClipIndex} event={opportunity.Sequence} enemy={id} source={clip.SourceEnemy}/{clip.Variant} result={result} hp={birth.Health} damage={birth.Damage} speed={birth.Speed * birth.SpeedMultiplier:F4} alive={total} counted={counted}"));
             }
             var trapSchedule = schedule;
             schedule.TickReferenceBarriers(Time.frameCount, () => (float)referenceRandom.NextDouble() * 100, i => {

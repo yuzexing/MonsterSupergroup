@@ -328,7 +328,7 @@ namespace MonsterSupergroup.NetworkCombat
         /// <summary>Development-only owner intent; the server determines and grants one level of XP.</summary>
         public bool RequestDebugLevelUp()
         {
-            if ((!Application.isEditor && !Debug.isDebugBuild) || !isActiveAndEnabled ||
+            if (LimboReferenceLaunch.Manual || (!Application.isEditor && !Debug.isDebugBuild) || !isActiveAndEnabled ||
                 !isOwned || !NetworkClient.active) return false;
             CmdDebugLevelUp();
             return true;
@@ -337,7 +337,7 @@ namespace MonsterSupergroup.NetworkCombat
         [Command]
         private void CmdDebugLevelUp(NetworkConnectionToClient sender = null)
         {
-            if ((!Application.isEditor && !Debug.isDebugBuild) || !isActiveAndEnabled ||
+            if (LimboReferenceLaunch.Manual || (!Application.isEditor && !Debug.isDebugBuild) || !isActiveAndEnabled ||
                 sender == null || sender != connectionToClient || sender.identity != netIdentity) return;
             int previousLevel = level;
             // A full threshold advances exactly one level and preserves the current XP remainder.
@@ -556,6 +556,7 @@ namespace MonsterSupergroup.NetworkCombat
                     originalOffers = CaptureOffers(serverOffers);
                     selectedEquipmentId = offer.EquipmentId;
                     stage = UpgradeSelectionStage.EquipmentTarget;
+                    LimboReferenceLaunch.ObserveAcceptedSelection(netId, eventId, UpgradeSelectionStage.Reward, offer);
                     PublishOffers(targets);
                     return true;
                 }
@@ -574,6 +575,7 @@ namespace MonsterSupergroup.NetworkCombat
                 return false;
             }
 
+            LimboReferenceLaunch.ObserveAcceptedSelection(netId, eventId, stage, offer);
             // Consume before any acknowledgement or next offer, including the host's local RPC.
             PendingEventId = 0;
             serverOffers = Array.Empty<ModifierOffer>();

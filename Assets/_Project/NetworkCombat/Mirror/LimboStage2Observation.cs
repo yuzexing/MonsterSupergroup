@@ -15,7 +15,7 @@ namespace MonsterSupergroup.NetworkCombat
     // Passive outside the explicitly named fixture profile. No alternate combat or enemy lifecycle.
     public sealed class LimboStage2Observation : MonoBehaviour
     {
-        private StreamWriter log;
+        private LimboObservationLog log;
         private bool fixture,positioned,paused,pauseFinished,destroyed,weaponProbe,deathProbe;
         private readonly HashSet<uint> knockbacks=new HashSet<uint>();
         private float pauseEnd;
@@ -43,12 +43,12 @@ namespace MonsterSupergroup.NetworkCombat
         {
             fixture=LimboReferenceLaunch.Profile=="stage2-fixture";
             Directory.CreateDirectory(LimboReferenceLaunch.OutputDirectory);
-            log=new StreamWriter(Path.Combine(LimboReferenceLaunch.OutputDirectory,"stage2-observation.jsonl")){AutoFlush=true};
-            PlayerDamageInteraction.DamageAttempted+=DamageAttempted;
+            log=new LimboObservationLog(Path.Combine(LimboReferenceLaunch.OutputDirectory,"stage2-observation.jsonl"));
+            if(!LimboReferenceLaunch.Light) PlayerDamageInteraction.DamageAttempted+=DamageAttempted;
             Write("mode",fixture?"Explicit fixture: XP pickup multiplier 0, healing, positioning, reset, pause and handoff; weapons enabled only during the logged 78–87 second probe. Not normal play.":"Passive continuous preview observation.");
         }
         private void Write(string kind,string detail,object payload=null)=>log?.WriteLine(JsonUtility.ToJson(new Row{kind=kind,detail=detail,
-            realtime=Time.realtimeSinceStartupAsDouble,combat=EnemySimulationClock.CombatNow,elapsed=Elapsed,payload=payload!=null?JsonUtility.ToJson(payload):null}));
+            run=runId,round=NetworkEnemySimulationWorld.CurrentRound,realtime=Time.realtimeSinceStartupAsDouble,combat=EnemySimulationClock.CombatNow,elapsed=Elapsed,payload=payload!=null?JsonUtility.ToJson(payload):null}));
         private void DamageAttempted(PlayerDamageInteraction source,PlayerMovement player,int amount)
         {
             var agent=source.GetComponentInParent<NetworkEnemySimulationAgent>();
@@ -87,7 +87,7 @@ namespace MonsterSupergroup.NetworkCombat
             // Capture the player's rendered frame, as in the existing gameplay process probes.
             // These are observation artifacts; all gameplay inputs still use the ordinary components.
             foreach(int at in fixture?new[]{10,20,30,40,48,76,85,96}:new[]{30,60,100,110,150,180,200,209})
-                if(Elapsed>=at&&screenshots.Add(at))
+                if(!LimboReferenceLaunch.Light&&Elapsed>=at&&screenshots.Add(at))
                 {
                     string name="render-"+runId+"-"+at+".png";
                     ScreenCapture.CaptureScreenshot(Path.Combine(LimboReferenceLaunch.OutputDirectory,name));
@@ -97,6 +97,8 @@ namespace MonsterSupergroup.NetworkCombat
                 .Where(e=>e!=null&&e.ProductEnemyInitialized&&e.Birth.Enabled).ToArray();
             foreach(var enemy in enemies)
             {
+                WatchHealth(enemy);
+                if(LimboReferenceLaunch.Light)continue;
                 var controller=enemy.GetComponent<EnemyController>();var action=ObservedAction(enemy);
                 if(fixture&&controller.isElite&&action.Facing.x>0&&action.PhaseAt(EnemySimulationClock.CombatNow)==EnemyAttackPresentationPhase.Recovery
                     &&EnemySimulationClock.CombatNow-action.ActiveUntil>.36&&geometry.Add("right-recovery/"+enemy.netId+"/"+action.ActionId))
@@ -117,7 +119,6 @@ namespace MonsterSupergroup.NetworkCombat
                     Write("configuration",enemy.netId.ToString(),new ConfigRow{birth=enemy.Birth, w=attack!=null?attack.WarningTime:0,a=attack!=null?attack.AttackTime:0,r=attack!=null?attack.RecoveryTime:0,
                         cooldown=controller.attackCooldown,distance=controller.attackDistance,elite=controller.isElite});
                 }
-                WatchHealth(enemy);
                 if(fixture)
                 {
                     var instance=controller.GetComponent<EnemyAttackMelee>()?.SimulationAttackInstance??enemy.GetComponent<NetworkEnemyMeleeReplica>()?.ReplicaAttackInstance;
@@ -192,7 +193,7 @@ namespace MonsterSupergroup.NetworkCombat
                 if(current<previous)
                 {
                     if(!firstHit.ContainsKey(id))firstHit[id]=EnemySimulationClock.CombatNow;
-                    Write("enemy-health",id.ToString(),new HealthRow{previous=previous,current=current,action=enemy!=null?ObservedAction(enemy):default});
+                    Write("enemy-health",id.ToString(),new HealthRow{previous=previous,current=current,action=!LimboReferenceLaunch.Light&&enemy!=null?ObservedAction(enemy):default});
                 }
                 else if(current>previous)
                 {
@@ -361,7 +362,7 @@ namespace MonsterSupergroup.NetworkCombat
             foreach(var pair in listeners)if(pair.Key!=null)pair.Key.AttackPresentationChanged-=pair.Value;
             ClearHealthObservers();if(paused)Time.timeScale=1;log?.Dispose();
         }
-        [Serializable] private class Row{public string kind,detail,payload;public double realtime,combat,elapsed;}
+        [Serializable] private class Row{public string kind,detail,payload,run;public uint round;public double realtime,combat,elapsed;}
         [Serializable] private class ConfigRow{public EnemyBirthParameters birth;public float w,a,r,cooldown,distance;public bool elite;}
         [Serializable] private class HitRow{public uint enemy,player;public int damage,instance;public bool active;public EnemyActionState action;}
         [Serializable] private class VisualRow{public double clipLength,animationTime;public bool playing;public EnemyActionState action;}

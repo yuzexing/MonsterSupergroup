@@ -7,6 +7,8 @@ param(
     [switch]$AutoWalk,
     [switch]$ArtObserve,
     [switch]$Windowed,
+    [ValidateSet('720p60','4k144')][string]$PerformancePreset,
+    [ValidateRange(0,120000)][int]$ProfilerFrames = 0,
     [ValidateSet('light','detailed')][string]$LogDetail = 'detailed',
     [ValidateSet('normal','warning-only')][string]$AttackEdges = 'normal',
     [string]$BuildDirectory = 'Builds/LimboReference',
@@ -51,6 +53,13 @@ $launchArgs = @("-force-$GraphicsApi", '-screen-fullscreen', '0', '-screen-width
     "--limbo-attack-edges=$AttackEdges", "--limbo-log-detail=$LogDetail", "--limbo-full-case=$FullCase", "--limbo-ghoul-case=$GhoulCase", "--limbo-role=$Role", "--limbo-profile=$Profile", "--limbo-port=$Port", "--limbo-wait-for=$WaitFor", "--limbo-fixture-target=$FixtureTarget", "--limbo-fixture-enemy=$FixtureEnemy", "--limbo-fixture-mode=$FixtureMode", "--limbo-spatial-case=$SpatialCase", "--limbo-reposition-case=$RepositionCase", "--limbo-dash-variant=$DashVariant", "--limbo-dash-case=$DashCase", "--limbo-lostsoul-variant=$LostSoulVariant", "--limbo-lostsoul-case=$LostSoulCase",
     ('"--limbo-output=' + $outputDirectory + '"'), "--limbo-art-observe=$($ArtObserve.IsPresent.ToString().ToLowerInvariant())", "--limbo-autowalk=$($AutoWalk.IsPresent.ToString().ToLowerInvariant())", "--limbo-windowed=$($Windowed.IsPresent.ToString().ToLowerInvariant())")
 # Visible by design: this scenario is for rendered Host/Client verification.
+if ($PerformancePreset) { $launchArgs += "--limbo-performance-preset=$PerformancePreset" }
+if ($ProfilerFrames -gt 0) {
+    # Explicit diagnostic capture, never a manual-play shortcut. Profiling overhead
+    # means this run must not be pooled with unprofiled performance comparisons.
+    $launchArgs += @('-profiler-enable', '-profiler-log-file', ('"' + (Join-Path $outputDirectory 'cpu-profile.raw') + '"'),
+        '-profiler-capture-frame-count', [string]$ProfilerFrames)
+}
 $gameProcess = Start-Process -FilePath $executable -ArgumentList $launchArgs -WindowStyle Normal -PassThru
 $gameProcess.Id | Set-Content -LiteralPath (Join-Path $outputDirectory 'process.pid')
 Write-Output "Started $Role PID=$($gameProcess.Id). Evidence: $outputDirectory"

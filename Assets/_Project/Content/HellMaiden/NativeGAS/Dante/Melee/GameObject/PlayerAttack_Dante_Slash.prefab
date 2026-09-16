@@ -2397,7 +2397,7 @@ ParticleSystemRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: ef1a3e78da62080478c99169cb09935e, type: 2}
+  - {fileID: 2100000, guid: 14e8cfe5fb0718e4a9b74bb97e25c9c1, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -4771,7 +4771,7 @@ ParticleSystemRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 2388c1b5f3d23784ba9764e3f30eea42, type: 2}
+  - {fileID: 2100000, guid: 5419d7d6673abad47826a0311a59cf14, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -7145,7 +7145,7 @@ ParticleSystemRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 78258f7ad499a1c45a0eca9bf0049a73, type: 2}
+  - {fileID: 2100000, guid: 76fb20a5ba5e4fa44bb4168b7cf00460, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -9607,7 +9607,7 @@ ParticleSystemRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 9b55b75b2c64b7a4aab2d69da3d8c228, type: 2}
+  - {fileID: 2100000, guid: 8142fdc123e488440b4d3219d2fa48b4, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -11982,7 +11982,7 @@ ParticleSystemRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 5acc4d6594aeff2469988cc17c5900a7, type: 2}
+  - {fileID: 2100000, guid: 6d62ea3576df2c04a872b83b425140f7, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -12049,6 +12049,7 @@ GameObject:
   - component: {fileID: 198985305603660343}
   - component: {fileID: 199705390221481576}
   - component: {fileID: 114977153420339851}
+  - component: {fileID: 8021842496438271598}
   m_Layer: 0
   m_Name: PlayerAttack_Dante_Slash
   m_TagString: Untagged
@@ -14494,6 +14495,18 @@ MonoBehaviour:
   projectileCountParticleSystemProperties: []
   projectileCountShaderProperties: []
   projectileCountCustomScalers: []
+--- !u!114 &8021842496438271598
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1709254077376921}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4f2e03ea45fc20d4caaa4ff32e55ae5e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: MonsterSupergroup.Gameplay.Combat::MonsterSupergroup.Gameplay.Combat.GameplayPlanarEffect
 --- !u!1 &1709867586078768
 GameObject:
   m_ObjectHideFlags: 0
@@ -16815,7 +16828,7 @@ ParticleSystemRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: fa3e20fd98b9e5e4d871e603e2a74344, type: 2}
+  - {fileID: 2100000, guid: c9212187e7704534d923ca98f90ba3ef, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -23793,7 +23806,7 @@ ParticleSystemRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 07eb561c2b4387f4eb93855de59dbb60, type: 2}
+  - {fileID: 2100000, guid: d444b4d7b3f5fa64a91aee576dfb5595, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

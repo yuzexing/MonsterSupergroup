@@ -17,6 +17,7 @@ namespace MonsterSupergroup.NetworkCombat
         private static readonly string[] LaunchArguments = Environment.GetCommandLineArgs();
         public static string Argument(string prefix) => LaunchArguments.FirstOrDefault(a => a.StartsWith(prefix, StringComparison.Ordinal))?.Substring(prefix.Length);
         public static bool Manual { get; } = Argument("--limbo-manual=") == "true";
+        public static bool SuppressDebugPanels => Manual || Enabled && Argument("--limbo-performance-preset=") != null;
         public static bool Light { get; } = Argument("--limbo-log-detail=") == "light";
         public static bool Enabled => Argument("--limbo-role=") != null;
         public static string OutputDirectory => Argument("--limbo-output=") ?? Path.Combine(Application.persistentDataPath, "LimboReference");
@@ -41,10 +42,13 @@ namespace MonsterSupergroup.NetworkCombat
         private static void Install()
         {
             if (!Enabled) return;
+            AstralShift.DebugTools.DBL.VerboseEnabled = !Light;
+            if (Light) Application.SetStackTraceLogType(LogType.Log, StackTraceLogType.None);
             var runner = new GameObject("Limbo reference launch").AddComponent<LimboReferenceLaunch>();
             DontDestroyOnLoad(runner.gameObject);
             runner.failure = LimboManualOptions.Validate(LaunchArguments);
             if (runner.failure != null) { Debug.LogError(runner.failure); return; }
+            runner.gameObject.AddComponent<LimboPerformanceObservation>();
             if (!Light) runner.gameObject.AddComponent<LimboAttackTimelineObservation>();
             if (Argument("--limbo-art-observe=") == "true") runner.gameObject.AddComponent<LimboArtObservation>();
             if (Profile == "art-effects")
@@ -111,12 +115,14 @@ namespace MonsterSupergroup.NetworkCombat
             LimboObservationLog.FlushDue();
             ObserveDelivery();
             if (manager == null || !manager.IsGameplayLoaded) return;
-            if (!windowConfigured && Argument("--limbo-windowed=") == "true")
+            if (!windowConfigured && (Argument("--limbo-windowed=") == "true" || Argument("--limbo-performance-preset=") != null))
             {
                 // Opt-in observation window; do not write SettingsManager or player preferences.
                 windowConfigured = true;
-                Screen.SetResolution(1280, 720, FullScreenMode.Windowed);
-                if (Manual) { QualitySettings.vSyncCount = 0; Application.targetFrameRate = 60; }
+                bool high = Argument("--limbo-performance-preset=") == "4k144";
+                Screen.SetResolution(high ? 3840 : 1280, high ? 2160 : 720, high ? FullScreenMode.FullScreenWindow : FullScreenMode.Windowed);
+                if (Manual || Argument("--limbo-performance-preset=") != null)
+                { QualitySettings.vSyncCount = 0; Application.targetFrameRate = high ? 144 : 60; }
             }
             var world = NetworkCombatWorld.Instance;
             if (world == null) return;

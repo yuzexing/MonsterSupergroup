@@ -69,6 +69,30 @@ namespace MonsterSupergroup.Gameplay.Tests
         }
 
         [UnityTest]
+        public IEnumerator PauseValidationSeparatesNativeMotionFromDelayedPublishedState()
+        {
+            authority = Object.Instantiate(rules.ReferenceBarrier);
+            authority.ConfigureNetworkAuthority(Vector3.zero, .25f, Entry); authority.Init();
+            float deadline = Time.realtimeSinceStartup + 5;
+            while (authority.NetworkPhase == BarrierPhase.Framing && Time.realtimeSinceStartup < deadline) yield return null;
+            Assert.That(authority.NetworkPhase, Is.EqualTo(BarrierPhase.Building));
+            pause.PauseGame(); yield return null;
+            // Represent the last 20 Hz publication, before the last native step.
+            var published = new ReferenceTrapSnapshot { Barrier = true, Center = Vector2.zero,
+                Phase = BarrierPhase.Building, Radius = authority.NetworkInnerRadius + .006666667f,
+                Count = authority.NetworkGroupCount, Visible = authority.NetworkVisibleGroups - 1 };
+            var before = LimboSpatialObservation.CaptureBarrierState(published, authority);
+            Assert.That(before.Radius, Is.Not.EqualTo(published.Radius));
+            Assert.That(before.Visible, Is.Not.EqualTo(published.Visible));
+            yield return new WaitForSecondsRealtime(.15f);
+            var after = LimboSpatialObservation.CaptureBarrierState(published, authority);
+            Assert.That(after, Is.EqualTo(before), "Native trap must remain frozen, including geometry and construction.");
+            Assert.That(published.Radius, Is.GreaterThan(after.Radius), "Observation must not mutate or force network publication.");
+            Assert.That(Time.timeScale, Is.Zero);
+            pause.ResumeGame();
+        }
+
+        [UnityTest]
         public IEnumerator ReplicaDoesNotShrinkOrChangeClockAndCancellationPreservesPause()
         {
             replica = Object.Instantiate(rules.ReferenceBarrier);

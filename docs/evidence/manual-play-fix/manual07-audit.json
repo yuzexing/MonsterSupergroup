@@ -1,0 +1,393 @@
+{
+  "host": {
+    "runs": {
+      "590b5bab31e54361b9731404012187c2": {
+        "initial": [
+          {
+            "player": 2,
+            "health": 500,
+            "maximum": 500,
+            "speed": 4.550000190734863,
+            "xpModifier": 2.0,
+            "build": {
+              "InitialWeaponId": 1,
+              "InitialWeaponSlot": 0,
+              "Weapons": [
+                {
+                  "SlotIndex": 0,
+                  "WeaponId": 1
+                }
+              ],
+              "Equipment": [],
+              "Perks": []
+            }
+          }
+        ],
+        "endings": [
+          {
+            "kind": "run-ended",
+            "detail": "failed",
+            "run": "590b5bab31e54361b9731404012187c2",
+            "role": "host",
+            "payload": "{\"RunId\":\"590b5bab31e54361b9731404012187c2\",\"Phase\":4,\"Wave\":0,\"Elapsed\":47.054418018087748,\"WaveDuration\":30.0,\"Planned\":1199,\"Spawned\":75,\"Skipped\":0,\"Alive\":11,\"Limit\":1000,\"TotalSpawned\":75,\"TotalSkipped\":0,\"ReferenceStage\":true,\"StageEndTime\":720.9,\"CountedAlive\":11,\"ActiveClips\":1,\"EvidenceBlocked\":0,\"TotalAttempts\":75,\"AbandonedBudget\":0,\"TransitionRequestedAt\":0.0,\"TransitionWaitCount\":0,\"TransitionWaitReason\":\"\"}",
+            "round": 1,
+            "realtime": 124.09086710578232,
+            "combat": 53.26149471179902
+          }
+        ],
+        "selections": [
+          {
+            "kind": "selection-close",
+            "detail": "Measured wall time; combat pause recorded separately",
+            "run": "590b5bab31e54361b9731404012187c2",
+            "role": "host",
+            "payload": "{\"seconds\":22.4439717}",
+            "round": 1,
+            "realtime": 38.051560105782315,
+            "combat": 15.604630320159188
+          },
+          {
+            "kind": "selection-close",
+            "detail": "Measured wall time; combat pause recorded separately",
+            "run": "590b5bab31e54361b9731404012187c2",
+            "role": "host",
+            "payload": "{\"seconds\":2.149129799999997}",
+            "round": 1,
+            "realtime": 49.55722220578231,
+            "combat": 24.96064942592143
+          },
+          {
+            "kind": "selection-close",
+            "detail": "Measured wall time; combat pause recorded separately",
+            "run": "590b5bab31e54361b9731404012187c2",
+            "role": "host",
+            "payload": "{\"seconds\":46.229966899999997}",
+            "round": 1,
+            "realtime": 119.25888700578231,
+            "combat": 48.43298111559211
+          }
+        ],
+        "acceptedChoices": 5,
+        "lastFrame": {
+          "kind": "frame",
+          "role": "host",
+          "snapshot": {
+            "RunId": "590b5bab31e54361b9731404012187c2",
+            "Phase": 4,
+            "Wave": 0,
+            "Elapsed": 47.1044194214046,
+            "WaveDuration": 30.0,
+            "Planned": 1199,
+            "Spawned": 75,
+            "Skipped": 0,
+            "Alive": 11,
+            "Limit": 1000,
+            "TotalSpawned": 75,
+            "TotalSkipped": 0,
+            "ReferenceStage": true,
+            "StageEndTime": 720.9,
+            "CountedAlive": 11,
+            "ActiveClips": 1,
+            "EvidenceBlocked": 0,
+            "TotalAttempts": 75,
+            "AbandonedBudget": 0,
+            "TransitionRequestedAt": 0.0,
+            "TransitionWaitCount": 0,
+            "TransitionWaitReason": ""
+          },
+          "health": 0,
+          "observed": 75,
+          "realtime": 152.3684563057823,
+          "position": {
+            "x": -14.524802207946777,
+            "y": 5.711283206939697
+          }
+        },
+        "requests": [],
+        "completions": [],
+        "waits": [],
+        "helpers": {},
+        "births": 75,
+        "birthMismatches": [],
+        "confirmedKills": 64,
+        "firstHitToConfirmedDeathSeconds": {
+          "samples": 64,
+          "median": 0.8187044430524111,
+          "p95": 2.4170647095888853,
+          "maximum": 12.463943488895893
+        },
+        "stageCleanup": [],
+        "trapCleanup": [
+          {
+            "kind": "completed-cleanup",
+            "role": "host",
+            "run": "590b5bab31e54361b9731404012187c2",
+            "elapsed": 47.054418018087745,
+            "combat": 53.26149471179902,
+            "realtime": 124.09259670578231,
+            "id": 0,
+            "state": {
+              "Round": 0,
+              "Target": 0,
+              "Barrier": false,
+              "Occupied": false,
+              "Collision": false,
+              "Phase": 0,
+              "Center": {
+                "x": 0.0,
+                "y": 0.0
+              },
+              "BeganAt": 0.0,
+              "ReleaseAt": 0.0,
+              "Radius": 0.0,
+              "Aspect": 0.0,
+              "EntryScale": 0.0,
+              "CameraOffset": 0.0,
+              "CameraDuration": 0.0,
+              "Count": 0,
+              "Visible": 0
+            },
+            "worldEdgePoints": [],
+            "edgeRadius": 0.0,
+            "localPlayer": 2,
+            "localPosition": {
+              "x": -14.524802207946777,
+              "y": 5.711283206939697
+            },
+            "localVelocity": {
+              "x": 0.0,
+              "y": 0.0
+            },
+            "localPlayerTouchesBarrier": false,
+            "timeScale": 1.0,
+            "slots": 0,
+            "states": 0,
+            "collisionAreas": 0,
+            "livingWarningRoots": 0,
+            "cameraPosition": {
+              "x": 0.0,
+              "y": 0.0,
+              "z": 0.0
+            },
+            "cameraFov": 0.0,
+            "fireRenderers": []
+          }
+        ],
+        "healthChanges": [
+          {
+            "kind": "health",
+            "role": "host",
+            "run": "590b5bab31e54361b9731404012187c2",
+            "source": "unknown",
+            "round": 1,
+            "elapsed": 8.794418619945645,
+            "realtime": 15.02198470578231,
+            "previous": 500,
+            "current": 450,
+            "maximum": 500
+          },
+          {
+            "kind": "health",
+            "role": "host",
+            "run": "590b5bab31e54361b9731404012187c2",
+            "source": "unknown",
+            "round": 1,
+            "elapsed": 9.799235623329878,
+            "realtime": 38.521336405782314,
+            "previous": 450,
+            "current": 400,
+            "maximum": 500
+          },
+          {
+            "kind": "health",
+            "role": "host",
+            "run": "590b5bab31e54361b9731404012187c2",
+            "source": "unknown",
+            "round": 1,
+            "elapsed": 12.40593002922833,
+            "realtime": 41.011025505782314,
+            "previous": 400,
+            "current": 350,
+            "maximum": 500
+          },
+          {
+            "kind": "health",
+            "role": "host",
+            "run": "590b5bab31e54361b9731404012187c2",
+            "source": "unknown",
+            "round": 1,
+            "elapsed": 14.024550633504987,
+            "realtime": 42.59635600578231,
+            "previous": 350,
+            "current": 300,
+            "maximum": 500
+          },
+          {
+            "kind": "health",
+            "role": "host",
+            "run": "590b5bab31e54361b9731404012187c2",
+            "source": "unknown",
+            "round": 1,
+            "elapsed": 18.03492853231728,
+            "realtime": 46.64049440578231,
+            "previous": 300,
+            "current": 250,
+            "maximum": 500
+          },
+          {
+            "kind": "health",
+            "role": "host",
+            "run": "590b5bab31e54361b9731404012187c2",
+            "source": "unknown",
+            "round": 1,
+            "elapsed": 18.636404329910874,
+            "realtime": 47.25833980578231,
+            "previous": 250,
+            "current": 200,
+            "maximum": 500
+          },
+          {
+            "kind": "health",
+            "role": "host",
+            "run": "590b5bab31e54361b9731404012187c2",
+            "source": "unknown",
+            "round": 1,
+            "elapsed": 19.292317232117057,
+            "realtime": 50.04792150578231,
+            "previous": 200,
+            "current": 150,
+            "maximum": 500
+          },
+          {
+            "kind": "health",
+            "role": "host",
+            "run": "590b5bab31e54361b9731404012187c2",
+            "source": "unknown",
+            "round": 1,
+            "elapsed": 43.44570992141962,
+            "realtime": 120.44636790578232,
+            "previous": 150,
+            "current": 100,
+            "maximum": 500
+          },
+          {
+            "kind": "health",
+            "role": "host",
+            "run": "590b5bab31e54361b9731404012187c2",
+            "source": "unknown",
+            "round": 1,
+            "elapsed": 46.45349742099643,
+            "realtime": 123.43734480578232,
+            "previous": 100,
+            "current": 50,
+            "maximum": 500
+          },
+          {
+            "kind": "health",
+            "role": "host",
+            "run": "590b5bab31e54361b9731404012187c2",
+            "source": "unknown",
+            "round": 1,
+            "elapsed": 47.054418018087745,
+            "realtime": 124.05522480578232,
+            "previous": 50,
+            "current": 0,
+            "maximum": 500
+          }
+        ],
+        "acceptedDamageChanges": 10,
+        "trapPhases": {},
+        "actionPhaseSamples": 0,
+        "geometrySamples": 0,
+        "statsBindingFailures": [],
+        "performanceActive": {
+          "meanFrameMs": {
+            "samples": 44,
+            "median": 16.715903250376385,
+            "p95": 17.00023870953059,
+            "maximum": 17.794078927291068
+          },
+          "p95FrameMs": {
+            "samples": 44,
+            "median": 17.007749557495117,
+            "p95": 17.063796997070312,
+            "maximum": 17.121400833129883
+          },
+          "maxFrameMs": {
+            "samples": 44,
+            "median": 17.068254470825195,
+            "p95": 17.48040008544922,
+            "maximum": 67.97810363769531
+          },
+          "logWriteMs": {
+            "samples": 44,
+            "median": 0.016249999999999987,
+            "p95": 0.03259999999999996,
+            "maximum": 0.06309999999999993
+          },
+          "logFlushMs": {
+            "samples": 44,
+            "median": 0.10515000000000008,
+            "p95": 0.1398999999999999,
+            "maximum": 1.7744999999999997
+          }
+        },
+        "sampledAlivePeak": 22,
+        "spawnFiles": [
+          {
+            "file": "spawns-590b5bab31e54361b9731404012187c2-20260916-100817-127.csv",
+            "attempts": 75,
+            "successful": 75,
+            "successByClip": {
+              "0": 75
+            },
+            "results": {
+              "Spawned": 75
+            },
+            "events": {
+              "spawn": 75,
+              "death": 64
+            },
+            "completion": null,
+            "conservationDelta": null
+          }
+        ]
+      }
+    },
+    "processClosed": true,
+    "writerStatuses": {
+      "full.jsonl.status.json": {
+        "complete": true,
+        "failure": ""
+      },
+      "host-audit.jsonl.status.json": {
+        "complete": true,
+        "failure": ""
+      },
+      "performance-detail.jsonl.status.json": {
+        "complete": true,
+        "failure": ""
+      },
+      "spatial-observation.jsonl.status.json": {
+        "complete": true,
+        "failure": ""
+      },
+      "spawns-590b5bab31e54361b9731404012187c2-20260916-100817-127.csv.status.json": {
+        "complete": true,
+        "failure": ""
+      },
+      "stage2-observation.jsonl.status.json": {
+        "complete": true,
+        "failure": ""
+      }
+    },
+    "missingWriterStatuses": [],
+    "backgroundFilesComplete": true,
+    "screenshots": 0,
+    "transitionServerLog": [],
+    "runEndLog": [
+      "[RunEnd] ended run=590b5bab31e54361b9731404012187c2 round=1 reason=all-online-downed"
+    ],
+    "errors": []
+  }
+}

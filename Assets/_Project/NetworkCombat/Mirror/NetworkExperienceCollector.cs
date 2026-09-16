@@ -40,7 +40,7 @@ namespace MonsterSupergroup.NetworkCombat
             if (!isActiveAndEnabled) return;
             var world = NetworkExperienceWorld.Current;
             if (world != null && !world.TryCollect(sender, netIdentity, run, drop, out string reason))
-                Debug.Log($"[XP] run={run} drop={drop} requester={netId} rejected={reason}");
+                if (AstralShift.DebugTools.DBL.VerboseEnabled) Debug.Log($"[XP] run={run} drop={drop} requester={netId} rejected={reason}");
         }
         public override void OnStopAuthority() { nextRequest = 0; }
         public override void OnStopClient() { nextRequest = 0; }

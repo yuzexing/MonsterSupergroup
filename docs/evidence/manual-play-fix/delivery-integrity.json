@@ -1,0 +1,22 @@
+{
+  "version": "FIX-20260916-07",
+  "filesChecked": 495,
+  "mismatches": [],
+  "originalEvidence": [
+    {
+      "path": "Builds/LimboManual-P6-20260916-02/Runs/20260916-131305-655-solo/host/host-audit.jsonl",
+      "unchanged": true,
+      "sha256": "75F89BAE133030513B65A47E3EF978B79616852E2C0DEC4C5D0AD8BDED53C076"
+    },
+    {
+      "path": "Builds/LimboManual-P6-20260916-02/Runs/20260916-131305-655-solo/host/player.log",
+      "unchanged": true,
+      "sha256": "58A217953DBA192F11B911ED2C0CAEA349F170E1358B1FAF4CC49E97D28F3433"
+    },
+    {
+      "path": "docs/evidence/hellmaiden-attacks/runtime-assets.json",
+      "unchanged": true,
+      "sha256": "4DCEFBCAE22FB6E8CD067618CD0BA782EB5A23D07B20A31A3ECF3323CD6D5C38"
+    }
+  ]
+}

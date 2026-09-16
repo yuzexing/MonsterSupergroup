@@ -723,7 +723,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 81410022000739470, guid: 55ff35e83fff4c74ea6f8f2e82883aa2, type: 3}
       propertyPath: deadLeftDown._Events._Callbacks.Array.size
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 81410022000739470, guid: 55ff35e83fff4c74ea6f8f2e82883aa2, type: 3}
       propertyPath: attackWarningRightDown._NormalizedStartTime
@@ -731,11 +731,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 81410022000739470, guid: 55ff35e83fff4c74ea6f8f2e82883aa2, type: 3}
       propertyPath: deadRightDown._Events._Callbacks.Array.size
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 81410022000739470, guid: 55ff35e83fff4c74ea6f8f2e82883aa2, type: 3}
       propertyPath: 'deadLeftDown._Events._Callbacks.Array.data[0]'
-      value: -2
+      value: 8799243470792818704
       objectReference: {fileID: 0}
     - target: {fileID: 81410022000739470, guid: 55ff35e83fff4c74ea6f8f2e82883aa2, type: 3}
       propertyPath: 'deadLeftDown._Events._Callbacks.Array.data[1]'
@@ -743,11 +743,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 81410022000739470, guid: 55ff35e83fff4c74ea6f8f2e82883aa2, type: 3}
       propertyPath: deadLeftUp._Events._NormalizedTimes.Array.size
-      value: 3
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 81410022000739470, guid: 55ff35e83fff4c74ea6f8f2e82883aa2, type: 3}
       propertyPath: 'deadRightDown._Events._Callbacks.Array.data[0]'
-      value: -2
+      value: 8799243470792818705
       objectReference: {fileID: 0}
     - target: {fileID: 81410022000739470, guid: 55ff35e83fff4c74ea6f8f2e82883aa2, type: 3}
       propertyPath: 'deadRightDown._Events._Callbacks.Array.data[1]'
@@ -755,31 +755,31 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 81410022000739470, guid: 55ff35e83fff4c74ea6f8f2e82883aa2, type: 3}
       propertyPath: hurtLeftUp._Events._NormalizedTimes.Array.size
-      value: 2
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 81410022000739470, guid: 55ff35e83fff4c74ea6f8f2e82883aa2, type: 3}
       propertyPath: deadRightUp._Events._NormalizedTimes.Array.size
-      value: 3
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 81410022000739470, guid: 55ff35e83fff4c74ea6f8f2e82883aa2, type: 3}
       propertyPath: hurtRightUp._Events._NormalizedTimes.Array.size
-      value: 2
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 81410022000739470, guid: 55ff35e83fff4c74ea6f8f2e82883aa2, type: 3}
       propertyPath: attackLeftUp._Events._NormalizedTimes.Array.size
-      value: 2
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 81410022000739470, guid: 55ff35e83fff4c74ea6f8f2e82883aa2, type: 3}
       propertyPath: deadLeftDown._Events._NormalizedTimes.Array.size
-      value: 3
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 81410022000739470, guid: 55ff35e83fff4c74ea6f8f2e82883aa2, type: 3}
       propertyPath: hurtLeftDown._Events._NormalizedTimes.Array.size
-      value: 2
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 81410022000739470, guid: 55ff35e83fff4c74ea6f8f2e82883aa2, type: 3}
       propertyPath: attackRightUp._Events._NormalizedTimes.Array.size
-      value: 2
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 81410022000739470, guid: 55ff35e83fff4c74ea6f8f2e82883aa2, type: 3}
       propertyPath: 'deadLeftUp._Events._NormalizedTimes.Array.data[1]'
@@ -791,7 +791,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 81410022000739470, guid: 55ff35e83fff4c74ea6f8f2e82883aa2, type: 3}
       propertyPath: deadRightDown._Events._NormalizedTimes.Array.size
-      value: 3
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 81410022000739470, guid: 55ff35e83fff4c74ea6f8f2e82883aa2, type: 3}
       propertyPath: 'hurtLeftUp._Events._NormalizedTimes.Array.data[1]'
@@ -799,11 +799,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 81410022000739470, guid: 55ff35e83fff4c74ea6f8f2e82883aa2, type: 3}
       propertyPath: hurtRightDown._Events._NormalizedTimes.Array.size
-      value: 2
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 81410022000739470, guid: 55ff35e83fff4c74ea6f8f2e82883aa2, type: 3}
       propertyPath: attackLeftDown._Events._NormalizedTimes.Array.size
-      value: 2
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 81410022000739470, guid: 55ff35e83fff4c74ea6f8f2e82883aa2, type: 3}
       propertyPath: 'deadRightUp._Events._NormalizedTimes.Array.data[1]'
@@ -823,11 +823,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 81410022000739470, guid: 55ff35e83fff4c74ea6f8f2e82883aa2, type: 3}
       propertyPath: attackRightDown._Events._NormalizedTimes.Array.size
-      value: 2
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 81410022000739470, guid: 55ff35e83fff4c74ea6f8f2e82883aa2, type: 3}
+      propertyPath: 'deadLeftDown._Events._NormalizedTimes.Array.data[0]'
+      value: 0.59736985
       objectReference: {fileID: 0}
     - target: {fileID: 81410022000739470, guid: 55ff35e83fff4c74ea6f8f2e82883aa2, type: 3}
       propertyPath: 'deadLeftDown._Events._NormalizedTimes.Array.data[1]'
-      value: 0.59736985
+      value: NaN
       objectReference: {fileID: 0}
     - target: {fileID: 81410022000739470, guid: 55ff35e83fff4c74ea6f8f2e82883aa2, type: 3}
       propertyPath: 'deadLeftDown._Events._NormalizedTimes.Array.data[2]'
@@ -842,8 +846,12 @@ PrefabInstance:
       value: NaN
       objectReference: {fileID: 0}
     - target: {fileID: 81410022000739470, guid: 55ff35e83fff4c74ea6f8f2e82883aa2, type: 3}
-      propertyPath: 'deadRightDown._Events._NormalizedTimes.Array.data[1]'
+      propertyPath: 'deadRightDown._Events._NormalizedTimes.Array.data[0]'
       value: 0.5973698
+      objectReference: {fileID: 0}
+    - target: {fileID: 81410022000739470, guid: 55ff35e83fff4c74ea6f8f2e82883aa2, type: 3}
+      propertyPath: 'deadRightDown._Events._NormalizedTimes.Array.data[1]'
+      value: NaN
       objectReference: {fileID: 0}
     - target: {fileID: 81410022000739470, guid: 55ff35e83fff4c74ea6f8f2e82883aa2, type: 3}
       propertyPath: 'deadRightDown._Events._NormalizedTimes.Array.data[2]'
@@ -863,15 +871,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 81410022000739470, guid: 55ff35e83fff4c74ea6f8f2e82883aa2, type: 3}
       propertyPath: attackWarningLeftUp._Events._NormalizedTimes.Array.size
-      value: 2
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 81410022000739470, guid: 55ff35e83fff4c74ea6f8f2e82883aa2, type: 3}
       propertyPath: attackWarningRightUp._Events._NormalizedTimes.Array.size
-      value: 2
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 81410022000739470, guid: 55ff35e83fff4c74ea6f8f2e82883aa2, type: 3}
       propertyPath: attackWarningLeftDown._Events._NormalizedTimes.Array.size
-      value: 2
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 81410022000739470, guid: 55ff35e83fff4c74ea6f8f2e82883aa2, type: 3}
       propertyPath: 'attackWarningLeftUp._Events._NormalizedTimes.Array.data[1]'
@@ -879,7 +887,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 81410022000739470, guid: 55ff35e83fff4c74ea6f8f2e82883aa2, type: 3}
       propertyPath: attackWarningRightDown._Events._NormalizedTimes.Array.size
-      value: 2
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 81410022000739470, guid: 55ff35e83fff4c74ea6f8f2e82883aa2, type: 3}
       propertyPath: 'attackWarningRightUp._Events._NormalizedTimes.Array.data[1]'

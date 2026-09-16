@@ -227,7 +227,7 @@ namespace AstralShift.HellMaiden.Player
 			IsRunLoadingLocked = value;
 			if (!value) return;
 			CancelDash();
-			if (body != null) body.linearVelocity = Vector2.zero;
+			if (body != null && body.bodyType != RigidbodyType2D.Static) body.linearVelocity = Vector2.zero;
 		}
 
 		public void SetUpgradeSelectionLocked(bool value)
@@ -241,10 +241,13 @@ namespace AstralShift.HellMaiden.Player
 			IsUpgradeSelectionLocked = value;
 			if (value) CancelDash();
 			_currentInputDirection = Vector2.zero;
-			if (body != null)
+            if (body != null)
 			{
-				body.linearVelocity = Vector2.zero;
-				body.angularVelocity = 0f;
+                if (body.bodyType != RigidbodyType2D.Static)
+                {
+				    body.linearVelocity = Vector2.zero;
+				    body.angularVelocity = 0f;
+                }
 				if (value)
 				{
 					_constraintsBeforeUpgradeSelection = body.constraints;
@@ -431,7 +434,7 @@ namespace AstralShift.HellMaiden.Player
 				else FinishDashUse();
 				_isDashInitialized = false;
 				_dashElapsedTime = 0f;
-				if (body != null) body.linearVelocity = Vector2.zero;
+				if (body != null && body.bodyType != RigidbodyType2D.Static) body.linearVelocity = Vector2.zero;
 			}
 			finally { _cancellingDash = false; }
 		}
@@ -900,7 +903,8 @@ namespace AstralShift.HellMaiden.Player
 			_dashBuffer.Consume();
 			_isDashInitialized = false;
 			if (body != null)
-				body.linearVelocity = CanExecuteDash ? _currentInputDirection.normalized * PlayerStats.currentStats.moveSpeed : Vector2.zero;
+				if (body.bodyType != RigidbodyType2D.Static)
+					body.linearVelocity = CanExecuteDash ? _currentInputDirection.normalized * PlayerStats.currentStats.moveSpeed : Vector2.zero;
 			FinishDashUse();
 		}
 

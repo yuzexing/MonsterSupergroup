@@ -19,10 +19,19 @@ $rows = foreach ($role in Get-ChildItem -LiteralPath $run -Directory) {
             if ($record.kind -eq 'run-ended') { $rounds += @{run=$record.run;round=$record.round;result=$record.detail} }
         }
     }
-    [pscustomobject]@{role=$role.Name; orderlyClose=$closed; parseErrors=$parseErrors; rounds=$rounds; integrity=if($closed -and $parseErrors -eq 0){'closed'}else{'incomplete-or-still-running'} }
+    $writerIssues = @()
+    if (Test-Path -LiteralPath (Join-Path $role.FullName 'performance-detail.jsonl')) {
+        foreach ($file in Get-ChildItem -LiteralPath $role.FullName -File -Filter '*.jsonl') {
+            $statusPath = $file.FullName + '.status.json'
+            if (!(Test-Path -LiteralPath $statusPath)) { $writerIssues += "Missing writer status: $($file.Name)"; continue }
+            try { $status = Get-Content -LiteralPath $statusPath -Raw | ConvertFrom-Json } catch { $writerIssues += "Unreadable writer status: $($file.Name)"; continue }
+            if (!$status.complete) { $writerIssues += "$($file.Name): incomplete; $($status.failure)" }
+        }
+    }
+    [pscustomobject]@{role=$role.Name; orderlyClose=$closed; parseErrors=$parseErrors; writerIssues=$writerIssues; rounds=$rounds; integrity=if($closed -and $parseErrors -eq 0 -and $writerIssues.Count -eq 0){'closed'}else{'incomplete-or-still-running'} }
 }
 $index = [ordered]@{ session=$Session; archivedUtc=[DateTime]::UtcNow.ToString('o'); roles=@($rows);
-    note='A missing close record or parse error means incomplete evidence. Interrupted/failed runs are never passes. Up to about one second may be lost after a crash.' }
+    note='A missing close record, parse error, or incomplete writer status means incomplete evidence. Interrupted/failed runs are never passes. Buffered records may be lost after a crash.' }
 $index | ConvertTo-Json -Depth 8 | Set-Content -LiteralPath (Join-Path $run 'archive-status.json') -Encoding UTF8
 $zip = Join-Path $archives ($Session + '-' + (Get-Date -Format 'yyyyMMdd-HHmmss-fff') + '.zip')
 Compress-Archive -LiteralPath @($run,(Join-Path $package 'build-manifest.json')) -DestinationPath $zip -CompressionLevel Optimal

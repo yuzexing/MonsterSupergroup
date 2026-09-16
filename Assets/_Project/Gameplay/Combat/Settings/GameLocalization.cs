@@ -29,6 +29,7 @@ namespace MonsterSupergroup.Gameplay.Options
         private static readonly Dictionary<string, AsyncOperationHandle<Font>> fonts = new();
         private static readonly Dictionary<string, AsyncOperationHandle<TMP_FontAsset>> tmpFonts = new();
         private static readonly HashSet<string> missing = new();
+        private static readonly HashSet<string> preparedFontLocales = new();
         private static MonoBehaviour runner;
         private static int revision;
         private static bool applying;
@@ -102,6 +103,23 @@ namespace MonsterSupergroup.Gameplay.Options
                 tmpFonts[code] = Addressables.ResourceManager.Acquire(tmp);
             }
             yield return font; yield return tmp;
+            if (HasTables(code) && tmp.Status == AsyncOperationStatus.Succeeded && tmp.Result != null && preparedFontLocales.Add(code))
+            {
+                // TMP's per-character dynamic path can upload the same atlas dozens
+                // of times when a reward first appears. Batch known text while the
+                // existing language load is still pending; leave unknown characters
+                // dynamic, and don't change font metrics, fallback or gameplay time.
+                if (tmp.Result.atlasPopulationMode != AtlasPopulationMode.Static)
+                {
+                    string characters = string.Concat(new[] { MenuTable, ContentTable }.SelectMany(name =>
+                        tables[code + "/" + name].Result.Values.Select(entry => entry.LocalizedValue ?? ""))) +
+                        string.Concat(Enumerable.Range(32, 95).Select(value => (char)value));
+                    using (new Unity.Profiling.ProfilerMarker("Localization.PrepareGlyphs").Auto())
+                        tmp.Result.TryAddCharacters(characters, includeFontFeatures: true);
+                    // Let the loading frame submit the batch before ready UI/gameplay.
+                    yield return null;
+                }
+            }
         }
         private static void OnLocaleChanged(Locale locale)
         { if (!applying && locale != null && locale.Identifier.Code != Language) Select(locale.Identifier.Code); }
@@ -165,7 +183,7 @@ namespace MonsterSupergroup.Gameplay.Options
             foreach (var handle in tables.Values) if (handle.IsValid()) Addressables.Release(handle);
             foreach (var handle in fonts.Values) if (handle.IsValid()) Addressables.Release(handle);
             foreach (var handle in tmpFonts.Values) if (handle.IsValid()) Addressables.Release(handle);
-            tables.Clear(); fonts.Clear(); tmpFonts.Clear(); missing.Clear();
+            tables.Clear(); fonts.Clear(); tmpFonts.Clear(); missing.Clear(); preparedFontLocales.Clear();
             runner = null; IsReady = false; UIFont = null; TMPFont = null;
         }
     }

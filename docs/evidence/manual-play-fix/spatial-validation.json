@@ -1,0 +1,465 @@
+{
+  "perf-fix06-b-pause": {
+    "run": "58f80e60440c487f9932db08c40fb5b6",
+    "checks": [
+      {
+        "phase": "Delay",
+        "kind": "pause-end",
+        "passed": true,
+        "combatBefore": 23.578879297496,
+        "combatAfter": 23.578879297496,
+        "native": [],
+        "published": null
+      },
+      {
+        "phase": "Building",
+        "kind": "pause-end",
+        "passed": true,
+        "combatBefore": 24.316732489288967,
+        "combatAfter": 24.316732489288967,
+        "native": [
+          {
+            "Round": 1,
+            "Target": 0,
+            "Barrier": false,
+            "Occupied": true,
+            "Collision": false,
+            "Phase": 1,
+            "Center": {
+              "x": -2.0,
+              "y": 0.0
+            },
+            "BeganAt": 24.19534239058308,
+            "ReleaseAt": 6.001483896747118,
+            "Radius": 6.0,
+            "Aspect": 1.409999966621399,
+            "EntryScale": 0.0,
+            "CameraOffset": 0.0,
+            "CameraDuration": 0.0,
+            "Count": 5,
+            "Visible": 5
+          }
+        ],
+        "published": null
+      },
+      {
+        "phase": "Stopping",
+        "kind": "pause-end",
+        "passed": true,
+        "combatBefore": 25.408181379334252,
+        "combatAfter": 25.408181379334252,
+        "native": [
+          {
+            "Round": 1,
+            "Target": 0,
+            "Barrier": false,
+            "Occupied": true,
+            "Collision": false,
+            "Phase": 3,
+            "Center": {
+              "x": -2.0,
+              "y": 0.0
+            },
+            "BeganAt": 24.19534239058308,
+            "ReleaseAt": 6.001483896747118,
+            "Radius": 6.0,
+            "Aspect": 1.409999966621399,
+            "EntryScale": 0.0,
+            "CameraOffset": 0.0,
+            "CameraDuration": 0.0,
+            "Count": 5,
+            "Visible": 5
+          }
+        ],
+        "published": null
+      }
+    ]
+  },
+  "perf-fix06-barrier-pause": {
+    "run": "b3e8c285f10c43e7908dfed26f5ecd15",
+    "checks": [
+      {
+        "phase": "Delay",
+        "kind": "pause-end",
+        "passed": true,
+        "combatBefore": 16.177710083015974,
+        "combatAfter": 16.177710083015974,
+        "native": [],
+        "published": null
+      },
+      {
+        "phase": "Framing",
+        "kind": "pause-end",
+        "passed": true,
+        "combatBefore": 17.934348975010927,
+        "combatAfter": 17.934348975010927,
+        "native": [
+          {
+            "Round": 1,
+            "Target": 2,
+            "Barrier": true,
+            "Occupied": true,
+            "Collision": false,
+            "Phase": 0,
+            "Center": {
+              "x": -2.0,
+              "y": 0.0
+            },
+            "BeganAt": 17.80832207452577,
+            "ReleaseAt": 0.0,
+            "Radius": 20.0,
+            "Aspect": 0.0,
+            "EntryScale": 0.25,
+            "CameraOffset": 10.0,
+            "CameraDuration": 0.5,
+            "Count": 0,
+            "Visible": 0
+          }
+        ],
+        "published": null
+      },
+      {
+        "phase": "Building",
+        "kind": "pause-end",
+        "passed": false,
+        "combatBefore": 19.43787010403421,
+        "combatAfter": 19.43787010403421,
+        "native": [
+          {
+            "Round": 1,
+            "Target": 2,
+            "Barrier": true,
+            "Occupied": true,
+            "Collision": true,
+            "Phase": 1,
+            "Center": {
+              "x": -2.0,
+              "y": 0.0
+            },
+            "BeganAt": 17.80832207452577,
+            "ReleaseAt": 0.0,
+            "Radius": 19.959991455078125,
+            "Aspect": 0.0,
+            "EntryScale": 0.25,
+            "CameraOffset": 10.0,
+            "CameraDuration": 0.5,
+            "Count": 90,
+            "Visible": 23
+          }
+        ],
+        "published": null
+      },
+      {
+        "phase": "Shrinking",
+        "kind": "pause-end",
+        "passed": false,
+        "combatBefore": 20.048206724394824,
+        "combatAfter": 20.048206724394824,
+        "native": [
+          {
+            "Round": 1,
+            "Target": 2,
+            "Barrier": true,
+            "Occupied": true,
+            "Collision": true,
+            "Phase": 2,
+            "Center": {
+              "x": -2.0,
+              "y": 0.0
+            },
+            "BeganAt": 17.80832207452577,
+            "ReleaseAt": 0.0,
+            "Radius": 19.753280639648438,
+            "Aspect": 0.0,
+            "EntryScale": 0.25,
+            "CameraOffset": 10.0,
+            "CameraDuration": 0.5,
+            "Count": 90,
+            "Visible": 90
+          }
+        ],
+        "published": null
+      },
+      {
+        "phase": "Stopping",
+        "kind": "pause-end",
+        "passed": true,
+        "combatBefore": 49.44134072976258,
+        "combatAfter": 49.44134072976258,
+        "native": [
+          {
+            "Round": 1,
+            "Target": 2,
+            "Barrier": true,
+            "Occupied": true,
+            "Collision": false,
+            "Phase": 3,
+            "Center": {
+              "x": -2.0,
+              "y": 0.0
+            },
+            "BeganAt": 17.80832207452577,
+            "ReleaseAt": 0.0,
+            "Radius": 9.99786376953125,
+            "Aspect": 0.0,
+            "EntryScale": 0.25,
+            "CameraOffset": 10.0,
+            "CameraDuration": 0.5,
+            "Count": 53,
+            "Visible": 90
+          }
+        ],
+        "published": null
+      }
+    ]
+  },
+  "perf-fix07-barrier-pause": {
+    "run": "5d195da957924784813711821c98e9c6",
+    "checks": [
+      {
+        "phase": "Delay",
+        "kind": "pause-end",
+        "passed": true,
+        "combatBefore": 32.488622795805185,
+        "combatAfter": 32.488622795805185,
+        "native": [],
+        "published": []
+      },
+      {
+        "phase": "Framing",
+        "kind": "pause-end",
+        "passed": true,
+        "combatBefore": 34.26844779589757,
+        "combatAfter": 34.26844779589757,
+        "native": [
+          {
+            "Round": 1,
+            "Target": 2,
+            "Barrier": true,
+            "Occupied": true,
+            "Collision": false,
+            "Phase": 0,
+            "Center": {
+              "x": -2.0,
+              "y": 0.0
+            },
+            "BeganAt": 34.14041749575719,
+            "ReleaseAt": 0.0,
+            "Radius": 20.0,
+            "Aspect": 0.0,
+            "EntryScale": 0.25,
+            "CameraOffset": 10.0,
+            "CameraDuration": 0.5,
+            "Count": 0,
+            "Visible": 0
+          }
+        ],
+        "published": [
+          {
+            "Round": 1,
+            "Target": 2,
+            "Barrier": true,
+            "Occupied": true,
+            "Collision": false,
+            "Phase": 0,
+            "Center": {
+              "x": -2.0,
+              "y": 0.0
+            },
+            "BeganAt": 34.14041749575719,
+            "ReleaseAt": 0.0,
+            "Radius": 20.0,
+            "Aspect": 0.0,
+            "EntryScale": 0.25,
+            "CameraOffset": 10.0,
+            "CameraDuration": 0.5,
+            "Count": 0,
+            "Visible": 0
+          }
+        ]
+      },
+      {
+        "phase": "Building",
+        "kind": "pause-end",
+        "passed": true,
+        "combatBefore": 35.771160035874544,
+        "combatAfter": 35.771160035874544,
+        "native": [
+          {
+            "Round": 1,
+            "Target": 2,
+            "Barrier": true,
+            "Occupied": true,
+            "Collision": true,
+            "Phase": 1,
+            "Center": {
+              "x": -2.0,
+              "y": 0.0
+            },
+            "BeganAt": 34.14041749575719,
+            "ReleaseAt": 0.0,
+            "Radius": 19.953323364257812,
+            "Aspect": 0.0,
+            "EntryScale": 0.25,
+            "CameraOffset": 10.0,
+            "CameraDuration": 0.5,
+            "Count": 90,
+            "Visible": 20
+          }
+        ],
+        "published": [
+          {
+            "Round": 1,
+            "Target": 2,
+            "Barrier": true,
+            "Occupied": true,
+            "Collision": true,
+            "Phase": 1,
+            "Center": {
+              "x": -2.0,
+              "y": 0.0
+            },
+            "BeganAt": 34.14041749575719,
+            "ReleaseAt": 0.0,
+            "Radius": 19.953323364257812,
+            "Aspect": 0.0,
+            "EntryScale": 0.25,
+            "CameraOffset": 10.0,
+            "CameraDuration": 0.5,
+            "Count": 90,
+            "Visible": 20
+          }
+        ]
+      },
+      {
+        "phase": "Shrinking",
+        "kind": "pause-end",
+        "passed": true,
+        "combatBefore": 36.38635327435642,
+        "combatAfter": 36.38635327435642,
+        "native": [
+          {
+            "Round": 1,
+            "Target": 2,
+            "Barrier": true,
+            "Occupied": true,
+            "Collision": true,
+            "Phase": 2,
+            "Center": {
+              "x": -2.0,
+              "y": 0.0
+            },
+            "BeganAt": 34.14041749575719,
+            "ReleaseAt": 0.0,
+            "Radius": 19.746612548828125,
+            "Aspect": 0.0,
+            "EntryScale": 0.25,
+            "CameraOffset": 10.0,
+            "CameraDuration": 0.5,
+            "Count": 90,
+            "Visible": 90
+          }
+        ],
+        "published": [
+          {
+            "Round": 1,
+            "Target": 2,
+            "Barrier": true,
+            "Occupied": true,
+            "Collision": true,
+            "Phase": 2,
+            "Center": {
+              "x": -2.0,
+              "y": 0.0
+            },
+            "BeganAt": 34.14041749575719,
+            "ReleaseAt": 0.0,
+            "Radius": 19.746612548828125,
+            "Aspect": 0.0,
+            "EntryScale": 0.25,
+            "CameraOffset": 10.0,
+            "CameraDuration": 0.5,
+            "Count": 90,
+            "Visible": 90
+          }
+        ]
+      },
+      {
+        "phase": "Stopping",
+        "kind": "pause-end",
+        "passed": true,
+        "combatBefore": 65.7566952631025,
+        "combatAfter": 65.7566952631025,
+        "native": [
+          {
+            "Round": 1,
+            "Target": 2,
+            "Barrier": true,
+            "Occupied": true,
+            "Collision": false,
+            "Phase": 3,
+            "Center": {
+              "x": -2.0,
+              "y": 0.0
+            },
+            "BeganAt": 34.14041749575719,
+            "ReleaseAt": 0.0,
+            "Radius": 9.99786376953125,
+            "Aspect": 0.0,
+            "EntryScale": 0.25,
+            "CameraOffset": 10.0,
+            "CameraDuration": 0.5,
+            "Count": 53,
+            "Visible": 90
+          }
+        ],
+        "published": [
+          {
+            "Round": 1,
+            "Target": 2,
+            "Barrier": true,
+            "Occupied": true,
+            "Collision": false,
+            "Phase": 3,
+            "Center": {
+              "x": -2.0,
+              "y": 0.0
+            },
+            "BeganAt": 34.14041749575719,
+            "ReleaseAt": 0.0,
+            "Radius": 9.99786376953125,
+            "Aspect": 0.0,
+            "EntryScale": 0.25,
+            "CameraOffset": 10.0,
+            "CameraDuration": 0.5,
+            "Count": 53,
+            "Visible": 90
+          }
+        ]
+      }
+    ]
+  },
+  "perf-fix07-barrier-cancel": {
+    "run": "0ac08ebaff2a4d3aa1cf33561ebfdd26",
+    "checks": [
+      {
+        "phase": "Shrinking",
+        "kind": "cancel-paused",
+        "passed": true,
+        "combatBefore": 11.451841578935245,
+        "combatAfter": 11.451841578935245,
+        "native": [],
+        "published": []
+      },
+      {
+        "phase": "Shrinking",
+        "kind": "pause-end",
+        "passed": true,
+        "combatBefore": 11.451841578935245,
+        "combatAfter": 11.451841578935245,
+        "native": [],
+        "published": []
+      }
+    ]
+  }
+}

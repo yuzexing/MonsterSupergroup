@@ -58,7 +58,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 0182676df1fe0723ea0003631a9c9c45, type: 2}
+  - {fileID: 2100000, guid: ee5d47f8c17e7314996ba99a40b294bb, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -149,7 +149,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 94344f8a0f961468760747d1c0e8e090, type: 2}
+  - {fileID: 2100000, guid: 55cb7bec1cbf0464b9846b1f50aa8d42, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -240,7 +240,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 3efa0be4440cb69bde0b9e4d20aaf0b2, type: 2}
+  - {fileID: 2100000, guid: 1017ab633b05e2948b828f8db373a2ac, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -331,7 +331,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 0182676df1fe0723ea0003631a9c9c45, type: 2}
+  - {fileID: 2100000, guid: ee5d47f8c17e7314996ba99a40b294bb, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -422,7 +422,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 0182676df1fe0723ea0003631a9c9c45, type: 2}
+  - {fileID: 2100000, guid: ee5d47f8c17e7314996ba99a40b294bb, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -513,7 +513,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 0182676df1fe0723ea0003631a9c9c45, type: 2}
+  - {fileID: 2100000, guid: ee5d47f8c17e7314996ba99a40b294bb, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -595,6 +595,7 @@ GameObject:
   - component: {fileID: 3142673659490268565}
   - component: {fileID: 7700690266169465604}
   - component: {fileID: 261265204764026605}
+  - component: {fileID: 8343153761420974819}
   m_Layer: 0
   m_Name: soul enemy warning
   m_TagString: Untagged
@@ -689,3 +690,15 @@ MonoBehaviour:
   references:
     version: 2
     RefIds: []
+--- !u!114 &8343153761420974819
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8789128977260572981}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4f2e03ea45fc20d4caaa4ff32e55ae5e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: MonsterSupergroup.Gameplay.Combat::MonsterSupergroup.Gameplay.Combat.GameplayPlanarEffect

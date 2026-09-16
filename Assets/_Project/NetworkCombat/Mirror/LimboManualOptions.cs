@@ -12,6 +12,8 @@ namespace MonsterSupergroup.NetworkCombat
             string Get(string key) => arguments.FirstOrDefault(a => a.StartsWith("--limbo-" + key + "=", StringComparison.Ordinal))?.Split('=', 2)[1];
             string detail = Get("log-detail");
             if (detail != null && detail != "light" && detail != "detailed") return "Use --limbo-log-detail=light or detailed.";
+            string performance = Get("performance-preset");
+            if (performance != null && performance != "720p60" && performance != "4k144") return "Unknown performance preset.";
             if (Get("manual") != "true") return null;
             if (Get("profile") != "full" || detail != "light") return "Manual play requires Full and light logging.";
             foreach (string argument in arguments.Where(a => a.StartsWith("--limbo-", StringComparison.Ordinal)))

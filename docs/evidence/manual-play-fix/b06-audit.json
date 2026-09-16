@@ -1,0 +1,689 @@
+{
+  "host": {
+    "runs": {
+      "58f80e60440c487f9932db08c40fb5b6": {
+        "initial": [
+          {
+            "player": 2,
+            "health": 500,
+            "maximum": 500,
+            "speed": 4.550000190734863,
+            "xpModifier": 2.0,
+            "build": {
+              "InitialWeaponId": 1,
+              "InitialWeaponSlot": 0,
+              "Weapons": [
+                {
+                  "SlotIndex": 0,
+                  "WeaponId": 1
+                }
+              ],
+              "Equipment": [],
+              "Perks": []
+            }
+          }
+        ],
+        "endings": [
+          {
+            "kind": "run-ended",
+            "detail": "completed",
+            "run": "58f80e60440c487f9932db08c40fb5b6",
+            "role": "host",
+            "payload": "{\"RunId\":\"58f80e60440c487f9932db08c40fb5b6\",\"Phase\":5,\"Wave\":0,\"Elapsed\":12.0,\"WaveDuration\":30.0,\"Planned\":5,\"Spawned\":5,\"Skipped\":0,\"Alive\":2,\"Limit\":1000,\"TotalSpawned\":5,\"TotalSkipped\":0,\"ReferenceStage\":true,\"StageEndTime\":12.0,\"CountedAlive\":0,\"ActiveClips\":0,\"EvidenceBlocked\":0,\"TotalAttempts\":5,\"AbandonedBudget\":0,\"TransitionRequestedAt\":0.0,\"TransitionWaitCount\":0,\"TransitionWaitReason\":\"\"}",
+            "round": 1,
+            "realtime": 38.053061901473924,
+            "combat": 34.35703068298213
+          }
+        ],
+        "selections": [],
+        "acceptedChoices": 0,
+        "lastFrame": {
+          "kind": "frame",
+          "role": "host",
+          "snapshot": {
+            "RunId": "58f80e60440c487f9932db08c40fb5b6",
+            "Phase": 5,
+            "Wave": 0,
+            "Elapsed": 12.0,
+            "WaveDuration": 30.0,
+            "Planned": 5,
+            "Spawned": 5,
+            "Skipped": 0,
+            "Alive": 2,
+            "Limit": 1000,
+            "TotalSpawned": 5,
+            "TotalSkipped": 0,
+            "ReferenceStage": true,
+            "StageEndTime": 12.0,
+            "CountedAlive": 0,
+            "ActiveClips": 0,
+            "EvidenceBlocked": 0,
+            "TotalAttempts": 5,
+            "AbandonedBudget": 0,
+            "TransitionRequestedAt": 0.0,
+            "TransitionWaitCount": 0,
+            "TransitionWaitReason": ""
+          },
+          "health": 0,
+          "observed": 5,
+          "realtime": 72.66931850147392,
+          "position": {
+            "x": -1.510299563407898,
+            "y": -0.5723534226417542
+          }
+        },
+        "requests": [],
+        "completions": [],
+        "waits": [],
+        "helpers": {},
+        "births": 5,
+        "birthMismatches": [],
+        "confirmedKills": 0,
+        "firstHitToConfirmedDeathSeconds": {
+          "samples": 0,
+          "median": null,
+          "p95": null,
+          "maximum": null
+        },
+        "stageCleanup": [],
+        "trapCleanup": [
+          {
+            "kind": "completed-cleanup",
+            "role": "host",
+            "run": "58f80e60440c487f9932db08c40fb5b6",
+            "elapsed": 12.0,
+            "combat": 34.296202678949754,
+            "realtime": 37.997712301473925,
+            "id": 0,
+            "state": {
+              "Round": 0,
+              "Target": 0,
+              "Barrier": false,
+              "Occupied": false,
+              "Collision": false,
+              "Phase": 0,
+              "Center": {
+                "x": 0.0,
+                "y": 0.0
+              },
+              "BeganAt": 0.0,
+              "ReleaseAt": 0.0,
+              "Radius": 0.0,
+              "Aspect": 0.0,
+              "EntryScale": 0.0,
+              "CameraOffset": 0.0,
+              "CameraDuration": 0.0,
+              "Count": 0,
+              "Visible": 0
+            },
+            "worldEdgePoints": [],
+            "edgeRadius": 0.0,
+            "localPlayer": 2,
+            "localPosition": {
+              "x": -1.510299563407898,
+              "y": -0.5723534226417542
+            },
+            "localVelocity": {
+              "x": 0.0,
+              "y": 0.0
+            },
+            "localPlayerTouchesBarrier": false,
+            "timeScale": 1.0,
+            "slots": 0,
+            "states": 0,
+            "collisionAreas": 0,
+            "livingWarningRoots": 0,
+            "cameraPosition": {
+              "x": 0.0,
+              "y": 0.0,
+              "z": 0.0
+            },
+            "cameraFov": 0.0,
+            "fireRenderers": []
+          }
+        ],
+        "healthChanges": [
+          {
+            "kind": "health",
+            "role": "host",
+            "run": "58f80e60440c487f9932db08c40fb5b6",
+            "source": "unknown",
+            "round": 1,
+            "elapsed": 4.135758081451058,
+            "realtime": 30.167701201473925,
+            "previous": 500,
+            "current": 450,
+            "maximum": 500
+          },
+          {
+            "kind": "health",
+            "role": "host",
+            "run": "58f80e60440c487f9932db08c40fb5b6",
+            "source": "unknown",
+            "round": 1,
+            "elapsed": 4.738532677292824,
+            "realtime": 30.776081001473923,
+            "previous": 450,
+            "current": 400,
+            "maximum": 500
+          },
+          {
+            "kind": "health",
+            "role": "host",
+            "run": "58f80e60440c487f9932db08c40fb5b6",
+            "source": "unknown",
+            "round": 1,
+            "elapsed": 5.339126881211996,
+            "realtime": 31.409922101473924,
+            "previous": 400,
+            "current": 350,
+            "maximum": 500
+          },
+          {
+            "kind": "health",
+            "role": "host",
+            "run": "58f80e60440c487f9932db08c40fb5b6",
+            "source": "unknown",
+            "round": 1,
+            "elapsed": 5.941082084551454,
+            "realtime": 32.06299790147393,
+            "previous": 350,
+            "current": 300,
+            "maximum": 500
+          },
+          {
+            "kind": "health",
+            "role": "host",
+            "run": "58f80e60440c487f9932db08c40fb5b6",
+            "source": "unknown",
+            "round": 1,
+            "elapsed": 6.542970882728696,
+            "realtime": 32.69808090147392,
+            "previous": 300,
+            "current": 250,
+            "maximum": 500
+          },
+          {
+            "kind": "health",
+            "role": "host",
+            "run": "58f80e60440c487f9932db08c40fb5b6",
+            "source": "unknown",
+            "round": 1,
+            "elapsed": 7.144956182688475,
+            "realtime": 33.31580940147393,
+            "previous": 250,
+            "current": 200,
+            "maximum": 500
+          },
+          {
+            "kind": "health",
+            "role": "host",
+            "run": "58f80e60440c487f9932db08c40fb5b6",
+            "source": "unknown",
+            "round": 1,
+            "elapsed": 7.948039283975959,
+            "realtime": 33.93560370147392,
+            "previous": 200,
+            "current": 150,
+            "maximum": 500
+          },
+          {
+            "kind": "health",
+            "role": "host",
+            "run": "58f80e60440c487f9932db08c40fb5b6",
+            "source": "unknown",
+            "round": 1,
+            "elapsed": 8.565604280680418,
+            "realtime": 34.56974710147392,
+            "previous": 150,
+            "current": 100,
+            "maximum": 500
+          },
+          {
+            "kind": "health",
+            "role": "host",
+            "run": "58f80e60440c487f9932db08c40fb5b6",
+            "source": "unknown",
+            "round": 1,
+            "elapsed": 9.166889680549502,
+            "realtime": 35.204321401473926,
+            "previous": 100,
+            "current": 50,
+            "maximum": 500
+          },
+          {
+            "kind": "health",
+            "role": "host",
+            "run": "58f80e60440c487f9932db08c40fb5b6",
+            "source": "unknown",
+            "round": 1,
+            "elapsed": 9.767441986128688,
+            "realtime": 35.838425801473925,
+            "previous": 50,
+            "current": 0,
+            "maximum": 500
+          }
+        ],
+        "acceptedDamageChanges": 10,
+        "trapPhases": {
+          "1": [
+            1,
+            3
+          ]
+        },
+        "actionPhaseSamples": 0,
+        "geometrySamples": 0,
+        "statsBindingFailures": [],
+        "performanceActive": {
+          "meanFrameMs": {
+            "samples": 10,
+            "median": 16.71683095296224,
+            "p95": 19.034205266407557,
+            "maximum": 19.034205266407557
+          },
+          "p95FrameMs": {
+            "samples": 10,
+            "median": 17.004096031188965,
+            "p95": 49.77589797973633,
+            "maximum": 49.77589797973633
+          },
+          "maxFrameMs": {
+            "samples": 10,
+            "median": 17.076350212097168,
+            "p95": 78.84429168701172,
+            "maximum": 78.84429168701172
+          },
+          "logWriteMs": {
+            "samples": 10,
+            "median": 0.008750000000000008,
+            "p95": 0.015199999999999991,
+            "maximum": 0.015199999999999991
+          },
+          "logFlushMs": {
+            "samples": 10,
+            "median": 0.056599999999999984,
+            "p95": 9.6731,
+            "maximum": 9.6731
+          }
+        },
+        "sampledAlivePeak": 5,
+        "spawnFiles": [
+          {
+            "file": "spawns-58f80e60440c487f9932db08c40fb5b6-20260916-092647-768.csv",
+            "attempts": 5,
+            "successful": 5,
+            "successByClip": {
+              "0": 5
+            },
+            "results": {
+              "Spawned": 5
+            },
+            "events": {
+              "spawn": 5,
+              "death": 3,
+              "completed": 1
+            },
+            "completion": {
+              "elapsed": "12",
+              "event": "completed",
+              "clip": "",
+              "source": "",
+              "variant": "",
+              "planned": "",
+              "sequence": "",
+              "enemy": "",
+              "result": "",
+              "totalAlive": "2",
+              "countedAlive": "0",
+              "hp": "",
+              "damage": "",
+              "speed": "",
+              "xp": "",
+              "x": "",
+              "y": ""
+            },
+            "conservationDelta": 3
+          }
+        ]
+      }
+    },
+    "processClosed": true,
+    "writerStatuses": {
+      "attack-timeline.jsonl.status.json": {
+        "complete": true,
+        "failure": ""
+      },
+      "host-audit.jsonl.status.json": {
+        "complete": true,
+        "failure": ""
+      },
+      "performance-detail.jsonl.status.json": {
+        "complete": true,
+        "failure": ""
+      },
+      "spatial-observation.jsonl.status.json": {
+        "complete": true,
+        "failure": ""
+      },
+      "spawns-58f80e60440c487f9932db08c40fb5b6-20260916-092647-768.csv.status.json": {
+        "complete": true,
+        "failure": ""
+      }
+    },
+    "missingWriterStatuses": [
+      "spatial-actions.jsonl"
+    ],
+    "backgroundFilesComplete": false,
+    "screenshots": 11,
+    "transitionServerLog": [],
+    "runEndLog": [
+      "[RunEnd] reference-stage-complete Limbo 参考预览完成（0–12 秒）"
+    ],
+    "errors": []
+  },
+  "client": {
+    "runs": {
+      "58f80e60440c487f9932db08c40fb5b6": {
+        "initial": [
+          {
+            "player": 3,
+            "health": 500,
+            "maximum": 500,
+            "speed": 4.550000190734863,
+            "xpModifier": 2.0,
+            "build": {
+              "InitialWeaponId": 1,
+              "InitialWeaponSlot": 0,
+              "Weapons": [
+                {
+                  "SlotIndex": 0,
+                  "WeaponId": 1
+                }
+              ],
+              "Equipment": [],
+              "Perks": []
+            }
+          }
+        ],
+        "endings": [
+          {
+            "kind": "run-ended",
+            "detail": "completed",
+            "run": "58f80e60440c487f9932db08c40fb5b6",
+            "role": "client",
+            "payload": "{\"RunId\":\"58f80e60440c487f9932db08c40fb5b6\",\"Phase\":5,\"Wave\":0,\"Elapsed\":12.0,\"WaveDuration\":30.0,\"Planned\":5,\"Spawned\":5,\"Skipped\":0,\"Alive\":2,\"Limit\":1000,\"TotalSpawned\":5,\"TotalSkipped\":0,\"ReferenceStage\":true,\"StageEndTime\":12.0,\"CountedAlive\":0,\"ActiveClips\":0,\"EvidenceBlocked\":0,\"TotalAttempts\":5,\"AbandonedBudget\":0,\"TransitionRequestedAt\":0.0,\"TransitionWaitCount\":0,\"TransitionWaitReason\":\"\"}",
+            "round": 1,
+            "realtime": 21.94392030391156,
+            "combat": 34.30442602203376
+          }
+        ],
+        "selections": [
+          {
+            "kind": "selection-close",
+            "detail": "Measured wall time; combat pause recorded separately",
+            "run": "58f80e60440c487f9932db08c40fb5b6",
+            "role": "client",
+            "payload": "{\"seconds\":4.619616500000003}",
+            "round": 1,
+            "realtime": 21.943898603911563,
+            "combat": 34.30442602203376
+          }
+        ],
+        "acceptedChoices": 0,
+        "lastFrame": {
+          "kind": "frame",
+          "role": "client",
+          "snapshot": {
+            "RunId": "58f80e60440c487f9932db08c40fb5b6",
+            "Phase": 5,
+            "Wave": 0,
+            "Elapsed": 12.0,
+            "WaveDuration": 30.0,
+            "Planned": 5,
+            "Spawned": 5,
+            "Skipped": 0,
+            "Alive": 2,
+            "Limit": 1000,
+            "TotalSpawned": 5,
+            "TotalSkipped": 0,
+            "ReferenceStage": true,
+            "StageEndTime": 12.0,
+            "CountedAlive": 0,
+            "ActiveClips": 0,
+            "EvidenceBlocked": 0,
+            "TotalAttempts": 5,
+            "AbandonedBudget": 0,
+            "TransitionRequestedAt": 0.0,
+            "TransitionWaitCount": 0,
+            "TransitionWaitReason": ""
+          },
+          "health": 200,
+          "observed": 5,
+          "realtime": 45.188444803911565,
+          "position": {
+            "x": 2.021934747695923,
+            "y": -0.1795453131198883
+          }
+        },
+        "requests": [],
+        "completions": [],
+        "waits": [],
+        "helpers": {},
+        "births": 5,
+        "birthMismatches": [],
+        "confirmedKills": 0,
+        "firstHitToConfirmedDeathSeconds": {
+          "samples": 0,
+          "median": null,
+          "p95": null,
+          "maximum": null
+        },
+        "stageCleanup": [],
+        "trapCleanup": [
+          {
+            "kind": "completed-cleanup",
+            "role": "client",
+            "run": "58f80e60440c487f9932db08c40fb5b6",
+            "elapsed": 12.0,
+            "combat": 34.30442602203376,
+            "realtime": 21.948101803911563,
+            "id": 0,
+            "state": {
+              "Round": 0,
+              "Target": 0,
+              "Barrier": false,
+              "Occupied": false,
+              "Collision": false,
+              "Phase": 0,
+              "Center": {
+                "x": 0.0,
+                "y": 0.0
+              },
+              "BeganAt": 0.0,
+              "ReleaseAt": 0.0,
+              "Radius": 0.0,
+              "Aspect": 0.0,
+              "EntryScale": 0.0,
+              "CameraOffset": 0.0,
+              "CameraDuration": 0.0,
+              "Count": 0,
+              "Visible": 0
+            },
+            "worldEdgePoints": [],
+            "edgeRadius": 0.0,
+            "localPlayer": 3,
+            "localPosition": {
+              "x": 2.0215954780578613,
+              "y": -0.17927362024784088
+            },
+            "localVelocity": {
+              "x": 0.0,
+              "y": 0.0
+            },
+            "localPlayerTouchesBarrier": false,
+            "timeScale": 1.0,
+            "slots": 0,
+            "states": 0,
+            "collisionAreas": 0,
+            "livingWarningRoots": 0,
+            "cameraPosition": {
+              "x": 0.0,
+              "y": 0.0,
+              "z": 0.0
+            },
+            "cameraFov": 0.0,
+            "fireRenderers": []
+          }
+        ],
+        "healthChanges": [
+          {
+            "kind": "health",
+            "role": "client",
+            "run": "58f80e60440c487f9932db08c40fb5b6",
+            "source": "unknown",
+            "round": 1,
+            "elapsed": 3.534858375787735,
+            "realtime": 13.522163603911565,
+            "previous": 500,
+            "current": 450,
+            "maximum": 500
+          },
+          {
+            "kind": "health",
+            "role": "client",
+            "run": "58f80e60440c487f9932db08c40fb5b6",
+            "source": "unknown",
+            "round": 1,
+            "elapsed": 4.135758081451058,
+            "realtime": 14.136131703911566,
+            "previous": 450,
+            "current": 400,
+            "maximum": 500
+          },
+          {
+            "kind": "health",
+            "role": "client",
+            "run": "58f80e60440c487f9932db08c40fb5b6",
+            "source": "unknown",
+            "round": 1,
+            "elapsed": 4.738532677292824,
+            "realtime": 14.753632303911566,
+            "previous": 400,
+            "current": 350,
+            "maximum": 500
+          },
+          {
+            "kind": "health",
+            "role": "client",
+            "run": "58f80e60440c487f9932db08c40fb5b6",
+            "source": "unknown",
+            "round": 1,
+            "elapsed": 5.339126881211996,
+            "realtime": 15.388122303911564,
+            "previous": 350,
+            "current": 300,
+            "maximum": 500
+          },
+          {
+            "kind": "health",
+            "role": "client",
+            "run": "58f80e60440c487f9932db08c40fb5b6",
+            "source": "unknown",
+            "round": 1,
+            "elapsed": 5.941082084551454,
+            "realtime": 16.03950860391156,
+            "previous": 300,
+            "current": 250,
+            "maximum": 500
+          },
+          {
+            "kind": "health",
+            "role": "client",
+            "run": "58f80e60440c487f9932db08c40fb5b6",
+            "source": "unknown",
+            "round": 1,
+            "elapsed": 6.743962781503797,
+            "realtime": 16.67339830391156,
+            "previous": 250,
+            "current": 200,
+            "maximum": 500
+          }
+        ],
+        "acceptedDamageChanges": 6,
+        "trapPhases": {
+          "1": [
+            1,
+            3
+          ]
+        },
+        "actionPhaseSamples": 0,
+        "geometrySamples": 0,
+        "statsBindingFailures": [],
+        "performanceActive": {
+          "meanFrameMs": {
+            "samples": 10,
+            "median": 16.72069829305013,
+            "p95": 17.324049949645996,
+            "maximum": 17.324049949645996
+          },
+          "p95FrameMs": {
+            "samples": 10,
+            "median": 17.019646644592285,
+            "p95": 17.07159996032715,
+            "maximum": 17.07159996032715
+          },
+          "maxFrameMs": {
+            "samples": 10,
+            "median": 17.115900993347168,
+            "p95": 50.710899353027344,
+            "maximum": 50.710899353027344
+          },
+          "logWriteMs": {
+            "samples": 10,
+            "median": 0.006799999999999987,
+            "p95": 0.01200000000000001,
+            "maximum": 0.01200000000000001
+          },
+          "logFlushMs": {
+            "samples": 10,
+            "median": 0.03460000000000002,
+            "p95": 0.06919999999999993,
+            "maximum": 0.06919999999999993
+          }
+        },
+        "sampledAlivePeak": 5,
+        "spawnFiles": []
+      }
+    },
+    "processClosed": true,
+    "writerStatuses": {
+      "attack-timeline.jsonl.status.json": {
+        "complete": true,
+        "failure": ""
+      },
+      "client-audit.jsonl.status.json": {
+        "complete": true,
+        "failure": ""
+      },
+      "performance-detail.jsonl.status.json": {
+        "complete": true,
+        "failure": ""
+      },
+      "spatial-observation.jsonl.status.json": {
+        "complete": true,
+        "failure": ""
+      }
+    },
+    "missingWriterStatuses": [],
+    "backgroundFilesComplete": true,
+    "screenshots": 5,
+    "transitionServerLog": [],
+    "runEndLog": [],
+    "errors": []
+  },
+  "comparison": {
+    "missingClient": [],
+    "extraClient": [],
+    "differing": []
+  }
+}

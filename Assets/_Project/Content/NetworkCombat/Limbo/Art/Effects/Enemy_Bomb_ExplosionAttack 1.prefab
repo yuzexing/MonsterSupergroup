@@ -2332,7 +2332,7 @@ ParticleSystemRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: d514d25eaa78c9e347f1848e335aa9a3, type: 2}
+  - {fileID: 2100000, guid: ffaedd97811e029499980adb4d70c976, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -2395,6 +2395,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4230337025766011942}
+  - component: {fileID: 5914956188498414262}
   m_Layer: 0
   m_Name: Enemy_Bomb_ExplosionAttack 1
   m_TagString: Untagged
@@ -2419,6 +2420,18 @@ Transform:
   - {fileID: 1069378095976624247}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: -0, z: -0}
+--- !u!114 &5914956188498414262
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3387330535589651579}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4f2e03ea45fc20d4caaa4ff32e55ae5e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: MonsterSupergroup.Gameplay.Combat::MonsterSupergroup.Gameplay.Combat.GameplayPlanarEffect
 --- !u!1 &6339382341540617862
 GameObject:
   m_ObjectHideFlags: 0

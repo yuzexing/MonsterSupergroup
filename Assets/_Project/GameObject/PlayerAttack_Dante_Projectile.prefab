@@ -2439,7 +2439,7 @@ ParticleSystemRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 8c6817d6dd87bcc86d829324cc74343a, type: 2}
+  - {fileID: 2100000, guid: 559b566d876e0314c88ffd46fa00968d, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -4810,7 +4810,7 @@ ParticleSystemRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 37f8eaf1085d27441d14f2423c554ce2, type: 2}
+  - {fileID: 2100000, guid: 3eec17feb0dadc04387478f66a2ddcc0, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -7138,7 +7138,7 @@ ParticleSystemRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 074f8fe059e1ef7b3fbe5f7eb3b0f7da, type: 2}
+  - {fileID: 2100000, guid: fb76cd140ecacf843a7d190bff7ee5e7, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -7251,7 +7251,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 06c6cfee52ddb169781c19a353b70a56, type: 2}
+  - {fileID: 2100000, guid: 80adc616a13727e4b8fbd4ef0a6c2d9d, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -9666,7 +9666,7 @@ ParticleSystemRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: bcdba449d7427dc8fa87d5939ca81231, type: 2}
+  - {fileID: 2100000, guid: 398dc5c74afe96d4db95c5eaa43976b9, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -12081,7 +12081,7 @@ ParticleSystemRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 9f1f9f7d0458063184cfaa025a7f08d4, type: 2}
+  - {fileID: 2100000, guid: 73aef68ceac057441a1950c9cdc6ea47, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -14427,7 +14427,7 @@ ParticleSystemRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: da7961a882f6632f00351e0fa076ea52, type: 2}
+  - {fileID: 2100000, guid: 3d3c187285810d34ea537ca1353f64b4, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -14528,6 +14528,7 @@ GameObject:
   - component: {fileID: 95470112387431263}
   - component: {fileID: 114313026266067498}
   - component: {fileID: 6411895922022977622}
+  - component: {fileID: 4604958863421111610}
   m_Layer: 0
   m_Name: PlayerAttack_Dante_Projectile
   m_TagString: Untagged
@@ -17077,6 +17078,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 384ac2a392f087d4dbf12205db8c5a9e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: MonsterSupergroup.Gameplay.Combat::AstralShift.HellMaiden.Player.Attacks.ProjectileVisualState
+--- !u!114 &4604958863421111610
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1709254077376921}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4f2e03ea45fc20d4caaa4ff32e55ae5e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: MonsterSupergroup.Gameplay.Combat::MonsterSupergroup.Gameplay.Combat.GameplayPlanarEffect
 --- !u!1 &1709867586078768
 GameObject:
   m_ObjectHideFlags: 0
@@ -19357,7 +19370,7 @@ ParticleSystemRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 3c9d591e7931262602e453e085032d3c, type: 2}
+  - {fileID: 2100000, guid: 6e251d7d8081fee408ff92b21dbc0a43, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -26329,7 +26342,7 @@ ParticleSystemRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: e3915bb7186be6a85b1aedd2dedcd858, type: 2}
+  - {fileID: 2100000, guid: 3c4c78b4b0dbbbb4ca6a2690a271ef5f, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

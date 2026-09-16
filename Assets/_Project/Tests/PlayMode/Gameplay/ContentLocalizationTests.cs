@@ -53,6 +53,31 @@ namespace MonsterSupergroup.Gameplay.Tests
         private static T[] Assets<T>() where T : Object => AssetDatabase.FindAssets("t:" + typeof(T).Name)
             .Select(g => AssetDatabase.LoadAssetAtPath<T>(AssetDatabase.GUIDToAssetPath(g))).ToArray();
 
+        [UnityTest] public IEnumerator LoadedLocalizedUiPreparesGameplayTextBeforeItIsFirstRendered()
+        {
+            foreach (string code in new[] { "zh-CN", "en" })
+            {
+                service.SetLanguage(code); yield return Wait(() => GameLocalization.Language == code);
+                var descriptions = Assets<WeaponData>().SelectMany(w => new[] { w.GetTitle(), w.GetDescription() })
+                    .Concat(Assets<EquipmentData>().SelectMany(e => Enumerable.Range(0, e.Levels.Length).Select(i => e.GetDescription((uint)i))))
+                    .Concat(Assets<PerkData>().SelectMany(p => p.GetAllRarities().Select(r => p.GetDescription(r.Rarity))));
+                string text = new string(string.Join(" ", descriptions).Where(c => !char.IsControl(c)).ToArray());
+                var font = GameLocalization.TMPFont;
+                Assert.That(font.HasCharacters(text, out uint[] missing, false, false), Is.True,
+                    "First gameplay text must not build per-character atlases: " + string.Join(",", missing ?? Array.Empty<uint>()));
+                Assert.That(font.atlasPopulationMode, Is.EqualTo(AtlasPopulationMode.Dynamic), "Unknown future text retains dynamic support.");
+                int glyphs = font.glyphTable.Count;
+                var root = new GameObject("first localized reward text", typeof(RectTransform), typeof(CanvasRenderer), typeof(TextMeshProUGUI));
+                try
+                {
+                    var label = root.GetComponent<TextMeshProUGUI>(); label.font = font; label.text = text;
+                    label.ForceMeshUpdate(true);
+                    Assert.That(font.glyphTable.Count, Is.EqualTo(glyphs), "Rendering new reward descriptions must reuse prepared glyphs.");
+                }
+                finally { Object.Destroy(root); }
+            }
+        }
+
         [UnityTest] public IEnumerator AllContentLanguagesLevelsAndRaritiesFormatWithoutChangingGameplay()
         {
             var weapons = Assets<WeaponData>(); var equipment = Assets<EquipmentData>(); var perks = Assets<PerkData>();

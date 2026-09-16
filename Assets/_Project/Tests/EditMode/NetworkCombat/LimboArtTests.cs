@@ -101,7 +101,13 @@ namespace MonsterSupergroup.NetworkCombat.Tests
                     Assert.That(actual,Is.SameAs(AssetDatabase.LoadAssetAtPath<AnimationClip>(binding.path)),body.group+"/"+binding.field);
                     foreach(var callback in binding.visualCallbacks ?? System.Array.Empty<LimboArtAssets.Callback>())
                     {
-                        var slot=so.FindProperty(binding.field).FindPropertyRelative("_Events").FindPropertyRelative("_Callbacks").GetArrayElementAtIndex(callback.index);
+                        var events=so.FindProperty(binding.field).FindPropertyRelative("_Events");
+                        var times=events.FindPropertyRelative("_NormalizedTimes");
+                        float sourceTime=float.Parse(binding.eventTimes[callback.index],System.Globalization.CultureInfo.InvariantCulture);
+                        int index=-1;
+                        for(int i=0;i<times.arraySize;i++)if(times.GetArrayElementAtIndex(i).floatValue.Equals(sourceTime)){index=i;break;}
+                        Assert.That(index,Is.GreaterThanOrEqualTo(0),"Required visual event time must survive audio-event removal");
+                        var slot=events.FindPropertyRelative("_Callbacks").GetArrayElementAtIndex(index);
                         var restored=slot.managedReferenceValue as UnityEngine.Events.UnityEvent;
                         Assert.That(restored,Is.Not.Null,body.group+"/"+binding.field+" visual callback");
                         Assert.That(restored.GetPersistentEventCount(),Is.EqualTo(1));

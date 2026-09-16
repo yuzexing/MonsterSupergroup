@@ -77,7 +77,7 @@ def summarize(root):
             performance = [json.loads(e["payload"]) for e in audit if e["kind"] == "performance" and e.get("run") == run]
             active = [p for p in performance if p["snapshot"]["RunId"] == run and p["snapshot"]["Phase"] in (2, 6) and p["snapshot"]["Elapsed"] >= 2]
             record["performanceActive"] = {k: distribution([p[k] for p in active]) for k in ("meanFrameMs", "p95FrameMs", "maxFrameMs", "logWriteMs", "logFlushMs")}
-            record["sampledAlivePeak"] = max((p["sampledAlivePeak"] for p in performance), default=0)
+            record["sampledAlivePeak"] = max((p["sampledAlivePeak"] for p in performance if p["snapshot"]["RunId"] == run), default=0)
             record["spawnFiles"] = []
             for file in folder.glob(f"spawns-{run}-*.csv"):
                 with file.open(encoding="utf-8-sig") as stream:
@@ -91,7 +91,15 @@ def summarize(root):
                     events=dict(counts), completion=end,
                     conservationDelta=len(success)-len(deaths)-counts["self-destruct"]-counts["retired"]-int(end["totalAlive"]) if end else None))
         raw = (folder / "player.log").read_text(encoding="utf-8-sig", errors="replace")
+        status_files = list(folder.glob("*.status.json"))
+        statuses = {p.name: json.loads(p.read_text(encoding="utf-8-sig")) for p in status_files}
+        # Legacy packages have no writer sidecars. New packages require all files
+        # registered by the audit to close, not merely a process-closed text line.
+        background = (folder / "performance-detail.jsonl").exists()
+        missing_status = [p.name for p in folder.glob("*.jsonl") if not Path(str(p) + ".status.json").exists()] if background else []
         result[role] = dict(runs=runs, processClosed=any(e["kind"] == "process-closed" for e in audit),
+                            writerStatuses=statuses, missingWriterStatuses=missing_status,
+                            backgroundFilesComplete=(not missing_status and bool(statuses) and all(s.get("complete") for s in statuses.values())) if background else None,
                             screenshots=len(list(folder.glob("*.png"))),
                             transitionServerLog=re.findall(r"^\[LimboTransition\].*$", raw, re.M),
                             runEndLog=re.findall(r"^\[RunEnd\].*$", raw, re.M),

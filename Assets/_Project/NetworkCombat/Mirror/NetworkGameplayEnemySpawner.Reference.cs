@@ -14,6 +14,9 @@ namespace MonsterSupergroup.NetworkCombat
 {
     public sealed partial class NetworkGameplayEnemySpawner
     {
+        private static readonly Unity.Profiling.ProfilerMarker ReferenceSpawnMarker = new("Limbo.Spawn");
+        private static readonly Unity.Profiling.ProfilerMarker ReferencePlacementMarker = new("Limbo.Placement");
+        private static readonly Unity.Profiling.ProfilerMarker ReferenceOffscreenMarker = new("Limbo.Offscreen");
         private int[] referenceAlive;
         private System.Random referenceRandom;
         private readonly Dictionary<int, Vector2> formationCenters = new Dictionary<int, Vector2>();
@@ -76,7 +79,7 @@ namespace MonsterSupergroup.NetworkCombat
             { referenceUpgradePause = PauseManager.Instance; referenceUpgradePause.PauseGame(); }
             else if (!selecting) ReleaseReferenceUpgradePause();
             bool active = activeParticipants.Count > 0 && !selecting && Time.timeScale > 0;
-            if (active) { UpdateReferenceReposition(); CountReferenceEnemies(out total, out counted); }
+            if (active) { using (ReferenceOffscreenMarker.Auto()) UpdateReferenceReposition(); CountReferenceEnemies(out total, out counted); }
             referenceNow += Time.deltaTime;
             while (schedule.TickReference(referenceNow, Time.frameCount, active, total, counted, referenceAlive, out var opportunity))
             {
@@ -92,7 +95,7 @@ namespace MonsterSupergroup.NetworkCombat
                     position = center + new Vector2(Mathf.Cos(angle), Mathf.Sin(angle) / settings.Reference.BurstAspect) * settings.Reference.BurstRadius;
                     legal = true; // Source B has no obstacle or global-alive check.
                 }
-                else legal = TryReferencePosition(target, prefab, settings.Reference.OffscreenDistance, out position);
+                else { using (ReferencePlacementMarker.Auto()) legal = TryReferencePosition(target, prefab, settings.Reference.OffscreenDistance, out position); }
                 uint id = 0;
                 var stats = clip.Stats;
                 var birth = new EnemyBirthParameters {
@@ -105,7 +108,7 @@ namespace MonsterSupergroup.NetworkCombat
                     ExpiresAt = clip.ExpiresOffscreen ? clip.End : 0, Counted = clip.Mode != ReferenceSpawnMode.FormationBurst,
                     ResetOnReposition = clip.ResetOnReposition
                 };
-                if (legal) id = SpawnEnemy(position, target.AvatarId, prefab, birth);
+                if (legal) { using (ReferenceSpawnMarker.Auto()) id = SpawnEnemy(position, target.AvatarId, prefab, birth); }
                 schedule.Resolve(opportunity, id != 0);
                 if (id != 0)
                 {

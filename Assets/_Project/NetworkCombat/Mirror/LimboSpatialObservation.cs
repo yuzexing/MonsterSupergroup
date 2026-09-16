@@ -18,6 +18,17 @@ namespace MonsterSupergroup.NetworkCombat
         private string run;
         private double nextSample;
         private bool completed;
+        private double nextRenderSample;
+        [Serializable] private class FireRenderSample
+        {
+            public string name, shader;
+            public int particles, layer;
+            public bool playing, visible, enabled;
+            public Vector3 position;
+            public Vector3 firstParticleWorld;
+            public int simulationSpace;
+            public Bounds bounds;
+        }
         [Serializable] private class Sample
         {
             public string kind, role, run;
@@ -31,6 +42,9 @@ namespace MonsterSupergroup.NetworkCombat
             public bool localPlayerTouchesBarrier;
             public float timeScale;
             public int slots, states, collisionAreas, livingWarningRoots;
+            public Vector3 cameraPosition;
+            public float cameraFov;
+            public FireRenderSample[] fireRenderers;
         }
         private void LateUpdate()
         {
@@ -71,6 +85,25 @@ namespace MonsterSupergroup.NetworkCombat
                     var edge = barrier.GetComponentInChildren<EdgeCollider2D>();
                     record.worldEdgePoints = edge.points.Select(p => edge.transform.TransformPoint(p + edge.offset)).ToArray();
                     record.edgeRadius = edge.edgeRadius;
+                    if (changed || Time.realtimeSinceStartupAsDouble >= nextRenderSample)
+                    {
+                        nextRenderSample = Time.realtimeSinceStartupAsDouble + 5;
+                        var camera = Camera.main;
+                        if (camera != null) { record.cameraPosition = camera.transform.position; record.cameraFov = camera.fieldOfView; }
+                        record.fireRenderers = barrier.GetComponentsInChildren<ParticleSystem>()
+                            .OrderBy(ps => ps.transform.position.y).Where(ps => ps.particleCount > 0).Take(6).Select(ps =>
+                            {
+                                var renderer = ps.GetComponent<ParticleSystemRenderer>();
+                                var first = new ParticleSystem.Particle[1]; ps.GetParticles(first);
+                                var main = ps.main;
+                                Vector3 particlePosition = main.simulationSpace == ParticleSystemSimulationSpace.Local ? ps.transform.TransformPoint(first[0].position) :
+                                    main.simulationSpace == ParticleSystemSimulationSpace.Custom && main.customSimulationSpace != null ? main.customSimulationSpace.TransformPoint(first[0].position) : first[0].position;
+                                return new FireRenderSample { name = ps.name, particles = ps.particleCount, playing = ps.isPlaying,
+                                    visible = renderer.isVisible, enabled = renderer.enabled, position = ps.transform.position,
+                                    firstParticleWorld = particlePosition, simulationSpace = (int)main.simulationSpace,
+                                    bounds = renderer.bounds, shader = renderer.sharedMaterial?.shader.name, layer = renderer.sortingLayerID };
+                            }).ToArray();
+                    }
                     if (NetworkClient.localPlayer != null)
                         record.localPlayerTouchesBarrier = NetworkClient.localPlayer.GetComponentsInChildren<Collider2D>()
                             .Any(c => !c.isTrigger && edge.IsTouching(c));

@@ -38,6 +38,7 @@ namespace AstralShift.HellMaiden.AI.Enemy
 
 		public override void AttackWarning(float x, float y)
 		{
+            PauseAnimator();
 			int currentAttackCount = PresentationIndex;
 			if (x > 0f)
 			{

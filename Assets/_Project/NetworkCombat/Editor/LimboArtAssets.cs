@@ -266,17 +266,61 @@ namespace MonsterSupergroup.NetworkCombat.Editor
         private static GameObject Template(string name) => AssetDatabase.LoadAssetAtPath<GameObject>(data.effects.Single(e => e.name == name).template);
         private static void BindVisualCallbacks(SerializedProperty transition, Binding binding, EnemyAnimator animator)
         {
-            var callbacks = transition.FindPropertyRelative("_Events").FindPropertyRelative("_Callbacks");
+            var events = transition.FindPropertyRelative("_Events");
+            var times = events.FindPropertyRelative("_NormalizedTimes");
+            var callbacks = events.FindPropertyRelative("_Callbacks");
             foreach (var source in binding.visualCallbacks ?? Array.Empty<Callback>())
             {
                 if (source.method != "DeathAnimationShadowFade") throw new InvalidDataException("Unknown visual callback " + source.method);
-                if (callbacks.arraySize <= source.index) callbacks.arraySize = source.index + 1;
-                var slot = callbacks.GetArrayElementAtIndex(source.index);
+                // Already adapted assets may have had omitted audio events removed.
+                // Resolve the callback by source time, not its old serialized index.
+                float sourceTime = Number(binding.eventTimes[source.index]);
+                int index = -1;
+                for (int i = 0; i < times.arraySize; i++)
+                    if (times.GetArrayElementAtIndex(i).floatValue.Equals(sourceTime)) { index = i; break; }
+                if (index < 0) throw new InvalidDataException("Missing visual event time: " + binding.field);
+                if (callbacks.arraySize <= index) callbacks.arraySize = index + 1;
+                var slot = callbacks.GetArrayElementAtIndex(index);
                 if (slot.managedReferenceValue != null) continue;
                 var evt = new Animancer.UnityEvent();
                 UnityEditor.Events.UnityEventTools.AddPersistentListener(evt, animator.DeathAnimationShadowFade);
                 slot.managedReferenceValue = evt;
             }
+            var names = events.FindPropertyRelative("_Names");
+            // Last time is the end-event marker. Keep it even without a callback.
+            for (int i = times.arraySize - 2; i >= 0; i--)
+            {
+                if (i < callbacks.arraySize && callbacks.GetArrayElementAtIndex(i).managedReferenceValue != null) continue;
+                if (i < names.arraySize && names.GetArrayElementAtIndex(i).objectReferenceValue != null) continue;
+                times.DeleteArrayElementAtIndex(i);
+                if (i < callbacks.arraySize) callbacks.DeleteArrayElementAtIndex(i);
+                if (i < names.arraySize) names.DeleteArrayElementAtIndex(i);
+            }
+        }
+
+        public static void RepairEventBindingsBatch()
+        {
+            int exit = 0;
+            try
+            {
+                var source = JsonUtility.FromJson<Source>(File.ReadAllText(Root + "/ArtSource.json"));
+                foreach (var body in source.bodies)
+                {
+                    var root = PrefabUtility.LoadPrefabContents(body.target);
+                    try
+                    {
+                        var animator = root.GetComponent<EnemyController>().enemyAnimator;
+                        var settings = new SerializedObject(animator);
+                        foreach (var binding in body.bindings) BindVisualCallbacks(settings.FindProperty(binding.field), binding, animator);
+                        settings.ApplyModifiedPropertiesWithoutUndo();
+                        PrefabUtility.SaveAsPrefabAsset(root, body.target);
+                    }
+                    finally { PrefabUtility.UnloadPrefabContents(root); }
+                }
+                AssetDatabase.SaveAssets();
+            }
+            catch (Exception e) { Debug.LogException(e); exit = 1; }
+            finally { EditorApplication.Exit(exit); }
         }
         private static AnimationClip Clip(string name) => AssetDatabase.LoadAssetAtPath<AnimationClip>(Root + "/Imported/AnimationClip/" + name + ".anim");
         private static MeleeAttackWarning Warning(GameObject host, Transform animationRoot, string start, string end)

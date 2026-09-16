@@ -1,0 +1,462 @@
+{
+  "host": {
+    "runs": {
+      "0ac08ebaff2a4d3aa1cf33561ebfdd26": {
+        "initial": [
+          {
+            "player": 2,
+            "health": 500,
+            "maximum": 500,
+            "speed": 4.550000190734863,
+            "xpModifier": 2.0,
+            "build": {
+              "InitialWeaponId": 1,
+              "InitialWeaponSlot": 0,
+              "Weapons": [
+                {
+                  "SlotIndex": 0,
+                  "WeaponId": 1
+                }
+              ],
+              "Equipment": [],
+              "Perks": []
+            }
+          }
+        ],
+        "endings": [
+          {
+            "kind": "run-ended",
+            "detail": "failed",
+            "run": "0ac08ebaff2a4d3aa1cf33561ebfdd26",
+            "role": "host",
+            "payload": "{\"RunId\":\"0ac08ebaff2a4d3aa1cf33561ebfdd26\",\"Phase\":4,\"Wave\":0,\"Elapsed\":5.24032767629251,\"WaveDuration\":30.0,\"Planned\":0,\"Spawned\":0,\"Skipped\":0,\"Alive\":0,\"Limit\":1000,\"TotalSpawned\":0,\"TotalSkipped\":0,\"ReferenceStage\":true,\"StageEndTime\":85.0,\"CountedAlive\":0,\"ActiveClips\":0,\"EvidenceBlocked\":0,\"TotalAttempts\":0,\"AbandonedBudget\":0,\"TransitionRequestedAt\":0.0,\"TransitionWaitCount\":0,\"TransitionWaitReason\":\"\"}",
+            "round": 1,
+            "realtime": 13.819625306859411,
+            "combat": 11.451841578935245
+          }
+        ],
+        "selections": [],
+        "acceptedChoices": 0,
+        "lastFrame": {
+          "kind": "frame",
+          "role": "host",
+          "snapshot": {
+            "RunId": "0ac08ebaff2a4d3aa1cf33561ebfdd26",
+            "Phase": 4,
+            "Wave": 0,
+            "Elapsed": 5.24032767629251,
+            "WaveDuration": 30.0,
+            "Planned": 0,
+            "Spawned": 0,
+            "Skipped": 0,
+            "Alive": 0,
+            "Limit": 1000,
+            "TotalSpawned": 0,
+            "TotalSkipped": 0,
+            "ReferenceStage": true,
+            "StageEndTime": 85.0,
+            "CountedAlive": 0,
+            "ActiveClips": 0,
+            "EvidenceBlocked": 0,
+            "TotalAttempts": 0,
+            "AbandonedBudget": 0,
+            "TransitionRequestedAt": 0.0,
+            "TransitionWaitCount": 0,
+            "TransitionWaitReason": ""
+          },
+          "health": 500,
+          "observed": 0,
+          "realtime": 44.73278920685941,
+          "position": {
+            "x": -2.0,
+            "y": 0.0
+          }
+        },
+        "requests": [],
+        "completions": [],
+        "waits": [],
+        "helpers": {},
+        "births": 0,
+        "birthMismatches": [],
+        "confirmedKills": 0,
+        "firstHitToConfirmedDeathSeconds": {
+          "samples": 0,
+          "median": null,
+          "p95": null,
+          "maximum": null
+        },
+        "stageCleanup": [],
+        "trapCleanup": [
+          {
+            "kind": "completed-cleanup",
+            "role": "host",
+            "run": "0ac08ebaff2a4d3aa1cf33561ebfdd26",
+            "elapsed": 5.24032767629251,
+            "combat": 11.451841578935245,
+            "realtime": 13.77431310685941,
+            "id": 0,
+            "state": {
+              "Round": 0,
+              "Target": 0,
+              "Barrier": false,
+              "Occupied": false,
+              "Collision": false,
+              "Phase": 0,
+              "Center": {
+                "x": 0.0,
+                "y": 0.0
+              },
+              "BeganAt": 0.0,
+              "ReleaseAt": 0.0,
+              "Radius": 0.0,
+              "Aspect": 0.0,
+              "EntryScale": 0.0,
+              "CameraOffset": 0.0,
+              "CameraDuration": 0.0,
+              "Count": 0,
+              "Visible": 0
+            },
+            "worldEdgePoints": [],
+            "edgeRadius": 0.0,
+            "localPlayer": 2,
+            "localPosition": {
+              "x": -2.0,
+              "y": 0.0
+            },
+            "localVelocity": {
+              "x": 0.0,
+              "y": 0.0
+            },
+            "localPlayerTouchesBarrier": false,
+            "timeScale": 0.0,
+            "slots": 0,
+            "states": 0,
+            "collisionAreas": 0,
+            "livingWarningRoots": 0,
+            "cameraPosition": {
+              "x": 0.0,
+              "y": 0.0,
+              "z": 0.0
+            },
+            "cameraFov": 0.0,
+            "fireRenderers": []
+          }
+        ],
+        "healthChanges": [],
+        "acceptedDamageChanges": 0,
+        "trapPhases": {
+          "2147483649": [
+            0,
+            1,
+            2
+          ]
+        },
+        "actionPhaseSamples": 0,
+        "geometrySamples": 0,
+        "statsBindingFailures": [],
+        "performanceActive": {
+          "meanFrameMs": {
+            "samples": 5,
+            "median": 17.331432605611866,
+            "p95": 17.467253356144347,
+            "maximum": 17.467253356144347
+          },
+          "p95FrameMs": {
+            "samples": 5,
+            "median": 17.000396728515625,
+            "p95": 17.105499267578125,
+            "maximum": 17.105499267578125
+          },
+          "maxFrameMs": {
+            "samples": 5,
+            "median": 53.11100387573242,
+            "p95": 57.43010330200195,
+            "maximum": 57.43010330200195
+          },
+          "logWriteMs": {
+            "samples": 5,
+            "median": 0.007500000000000007,
+            "p95": 0.009800000000000003,
+            "maximum": 0.009800000000000003
+          },
+          "logFlushMs": {
+            "samples": 5,
+            "median": 0.07390000000000002,
+            "p95": 0.20840000000000003,
+            "maximum": 0.20840000000000003
+          }
+        },
+        "sampledAlivePeak": 0,
+        "spawnFiles": [
+          {
+            "file": "spawns-0ac08ebaff2a4d3aa1cf33561ebfdd26-20260916-093911-304.csv",
+            "attempts": 0,
+            "successful": 0,
+            "successByClip": {},
+            "results": {},
+            "events": {
+              "barrier-decision": 4
+            },
+            "completion": null,
+            "conservationDelta": null
+          }
+        ]
+      }
+    },
+    "processClosed": true,
+    "writerStatuses": {
+      "attack-timeline.jsonl.status.json": {
+        "complete": true,
+        "failure": ""
+      },
+      "host-audit.jsonl.status.json": {
+        "complete": true,
+        "failure": ""
+      },
+      "performance-detail.jsonl.status.json": {
+        "complete": true,
+        "failure": ""
+      },
+      "spatial-observation.jsonl.status.json": {
+        "complete": true,
+        "failure": ""
+      },
+      "spawns-0ac08ebaff2a4d3aa1cf33561ebfdd26-20260916-093911-304.csv.status.json": {
+        "complete": true,
+        "failure": ""
+      }
+    },
+    "missingWriterStatuses": [
+      "spatial-actions.jsonl"
+    ],
+    "backgroundFilesComplete": false,
+    "screenshots": 8,
+    "transitionServerLog": [],
+    "runEndLog": [
+      "[RunEnd] reference-stage-complete Explicit spatial cancellation fixture: Shrinking"
+    ],
+    "errors": []
+  },
+  "client": {
+    "runs": {
+      "0ac08ebaff2a4d3aa1cf33561ebfdd26": {
+        "initial": [
+          {
+            "player": 3,
+            "health": 500,
+            "maximum": 500,
+            "speed": 4.550000190734863,
+            "xpModifier": 2.0,
+            "build": {
+              "InitialWeaponId": 1,
+              "InitialWeaponSlot": 0,
+              "Weapons": [
+                {
+                  "SlotIndex": 0,
+                  "WeaponId": 1
+                }
+              ],
+              "Equipment": [],
+              "Perks": []
+            }
+          }
+        ],
+        "endings": [
+          {
+            "kind": "run-ended",
+            "detail": "failed",
+            "run": "0ac08ebaff2a4d3aa1cf33561ebfdd26",
+            "role": "client",
+            "payload": "{\"RunId\":\"0ac08ebaff2a4d3aa1cf33561ebfdd26\",\"Phase\":4,\"Wave\":0,\"Elapsed\":5.24032767629251,\"WaveDuration\":30.0,\"Planned\":0,\"Spawned\":0,\"Skipped\":0,\"Alive\":0,\"Limit\":1000,\"TotalSpawned\":0,\"TotalSkipped\":0,\"ReferenceStage\":true,\"StageEndTime\":85.0,\"CountedAlive\":0,\"ActiveClips\":0,\"EvidenceBlocked\":0,\"TotalAttempts\":0,\"AbandonedBudget\":0,\"TransitionRequestedAt\":0.0,\"TransitionWaitCount\":0,\"TransitionWaitReason\":\"\"}",
+            "round": 1,
+            "realtime": 13.785466000453516,
+            "combat": 11.451841578935245
+          }
+        ],
+        "selections": [],
+        "acceptedChoices": 0,
+        "lastFrame": {
+          "kind": "frame",
+          "role": "client",
+          "snapshot": {
+            "RunId": "0ac08ebaff2a4d3aa1cf33561ebfdd26",
+            "Phase": 4,
+            "Wave": 0,
+            "Elapsed": 5.24032767629251,
+            "WaveDuration": 30.0,
+            "Planned": 0,
+            "Spawned": 0,
+            "Skipped": 0,
+            "Alive": 0,
+            "Limit": 1000,
+            "TotalSpawned": 0,
+            "TotalSkipped": 0,
+            "ReferenceStage": true,
+            "StageEndTime": 85.0,
+            "CountedAlive": 0,
+            "ActiveClips": 0,
+            "EvidenceBlocked": 0,
+            "TotalAttempts": 0,
+            "AbandonedBudget": 0,
+            "TransitionRequestedAt": 0.0,
+            "TransitionWaitCount": 0,
+            "TransitionWaitReason": ""
+          },
+          "health": 500,
+          "observed": 0,
+          "realtime": 34.22825160045352,
+          "position": {
+            "x": 2.0,
+            "y": 0.0
+          }
+        },
+        "requests": [],
+        "completions": [],
+        "waits": [],
+        "helpers": {},
+        "births": 0,
+        "birthMismatches": [],
+        "confirmedKills": 0,
+        "firstHitToConfirmedDeathSeconds": {
+          "samples": 0,
+          "median": null,
+          "p95": null,
+          "maximum": null
+        },
+        "stageCleanup": [],
+        "trapCleanup": [
+          {
+            "kind": "completed-cleanup",
+            "role": "client",
+            "run": "0ac08ebaff2a4d3aa1cf33561ebfdd26",
+            "elapsed": 5.24032767629251,
+            "combat": 11.451841578935245,
+            "realtime": 13.789957900453516,
+            "id": 0,
+            "state": {
+              "Round": 0,
+              "Target": 0,
+              "Barrier": false,
+              "Occupied": false,
+              "Collision": false,
+              "Phase": 0,
+              "Center": {
+                "x": 0.0,
+                "y": 0.0
+              },
+              "BeganAt": 0.0,
+              "ReleaseAt": 0.0,
+              "Radius": 0.0,
+              "Aspect": 0.0,
+              "EntryScale": 0.0,
+              "CameraOffset": 0.0,
+              "CameraDuration": 0.0,
+              "Count": 0,
+              "Visible": 0
+            },
+            "worldEdgePoints": [],
+            "edgeRadius": 0.0,
+            "localPlayer": 3,
+            "localPosition": {
+              "x": 2.0,
+              "y": 0.0
+            },
+            "localVelocity": {
+              "x": 0.0,
+              "y": 0.0
+            },
+            "localPlayerTouchesBarrier": false,
+            "timeScale": 0.0,
+            "slots": 0,
+            "states": 0,
+            "collisionAreas": 0,
+            "livingWarningRoots": 0,
+            "cameraPosition": {
+              "x": 0.0,
+              "y": 0.0,
+              "z": 0.0
+            },
+            "cameraFov": 0.0,
+            "fireRenderers": []
+          }
+        ],
+        "healthChanges": [],
+        "acceptedDamageChanges": 0,
+        "trapPhases": {
+          "2147483649": [
+            0,
+            1,
+            2
+          ]
+        },
+        "actionPhaseSamples": 0,
+        "geometrySamples": 0,
+        "statsBindingFailures": [],
+        "performanceActive": {
+          "meanFrameMs": {
+            "samples": 5,
+            "median": 17.332260263377222,
+            "p95": 17.605586068672046,
+            "maximum": 17.605586068672046
+          },
+          "p95FrameMs": {
+            "samples": 5,
+            "median": 17.057697296142578,
+            "p95": 17.146697998046875,
+            "maximum": 17.146697998046875
+          },
+          "maxFrameMs": {
+            "samples": 5,
+            "median": 53.05750274658203,
+            "p95": 68.72410583496094,
+            "maximum": 68.72410583496094
+          },
+          "logWriteMs": {
+            "samples": 5,
+            "median": 0.007200000000000012,
+            "p95": 0.011800000000000005,
+            "maximum": 0.011800000000000005
+          },
+          "logFlushMs": {
+            "samples": 5,
+            "median": 0.08750000000000002,
+            "p95": 0.18680000000000002,
+            "maximum": 0.18680000000000002
+          }
+        },
+        "sampledAlivePeak": 0,
+        "spawnFiles": []
+      }
+    },
+    "processClosed": true,
+    "writerStatuses": {
+      "attack-timeline.jsonl.status.json": {
+        "complete": true,
+        "failure": ""
+      },
+      "client-audit.jsonl.status.json": {
+        "complete": true,
+        "failure": ""
+      },
+      "performance-detail.jsonl.status.json": {
+        "complete": true,
+        "failure": ""
+      },
+      "spatial-observation.jsonl.status.json": {
+        "complete": true,
+        "failure": ""
+      }
+    },
+    "missingWriterStatuses": [],
+    "backgroundFilesComplete": true,
+    "screenshots": 6,
+    "transitionServerLog": [],
+    "runEndLog": [],
+    "errors": []
+  },
+  "comparison": {
+    "missingClient": [],
+    "extraClient": [],
+    "differing": []
+  }
+}

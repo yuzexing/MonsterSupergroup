@@ -1,0 +1,30 @@
+{
+  "candidate": "Builds/ManualPlayFix20260916-07",
+  "automated": {
+    "edit": "791/791: Logs/ManualPlayFix/edit-ui-final.xml",
+    "play": "534/534: Logs/ManualPlayFix/play-ui-final.xml"
+  },
+  "current": {
+    "candidate06Solo": "Full 720.9144366 + restart passed",
+    "candidate06Pair": "Full 729.09762923 after 8.2s busy wait + restart passed",
+    "candidate07Barrier": "Pause five stages + cancel Shrinking passed, dual visible and cleanup",
+    "newFixtureTest": "3/3 passed",
+    "candidate07Solo": "720.9027345439 complete + UI restart d1452b0544194a5891cfc77698664107, orderly exit, all writers complete",
+    "windowCapture": "Recovered using new windows; old processes closed orderly",
+    "candidate07Pair": "729.08669522 after 8.2s busy wait + UI restart 36714352ea9f4700a53c1b68aaa11fc9, closed",
+    "portableManual": "Natural failure 47.1044, helpers zero, 5 choices, normal exit + archive closed"
+  },
+  "priorEvidence": {
+    "candidate04": "Three 720p samples; complete solo and pair + busy wait + UI restart",
+    "candidate05": "Diagnostic only; occlusion, debug panels and concurrent Editor exclude performance acceptance",
+    "candidate03": "Three 4K critical interval samples; complete solo and barrier pair"
+  },
+  "remaining": [
+    "Final visual confirmation is user-led; no further Computer Use scheduled."
+  ],
+  "deferredByUserEfficiencyRequest": [
+    "Controlled legacy before/after three-repeat matrix; not claimed complete."
+  ],
+  "status": "Delivered FIX-20260916-07; documented limits and user-led visual acceptance",
+  "computerUse": "Only necessary actions, after fresh user confirmation"
+}

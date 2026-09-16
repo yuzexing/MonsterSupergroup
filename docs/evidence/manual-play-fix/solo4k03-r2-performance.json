@@ -1,0 +1,336 @@
+[
+  {
+    "directory": "F:\\UnityStore\\MonsterSupergroup\\Logs\\LimboReference\\perf-fix03-solo4k-r1\\host",
+    "run": "97c4341935314ac3a6b49a2bf5591218",
+    "intervals": {
+      "0-135": {
+        "oneSecondWindows": 135,
+        "maxFrameMs": 150.05088806152344,
+        "maxWindowP95FrameMs": 85.53789520263672,
+        "maxWindowMeanFrameMs": 12.410933282640245,
+        "sampledAlivePeak": 94,
+        "longFrames100ms": 0,
+        "longFrames250ms": 0,
+        "longFrameRecords": [],
+        "pausedLongFrames": [
+          {
+            "kind": "long-frame",
+            "run": "97c4341935314ac3a6b49a2bf5591218",
+            "realtime": 766.7232507019274,
+            "elapsed": 0.0,
+            "mainMs": 150.0152,
+            "renderMs": 0.1378,
+            "gpuMs": -1.0,
+            "cpuMs": 6.9213,
+            "gcMs": 5.5545,
+            "mainWorkMs": 0.9681,
+            "presentWaitMs": 5.941,
+            "spawnMs": 0.0,
+            "placementMs": 0.0,
+            "offscreenMs": 0.0,
+            "planarBoundsMs": 0.0,
+            "timingTimestamp": 3992591396571,
+            "frameHistogram": [
+              15,
+              0,
+              0,
+              0,
+              1,
+              1,
+              0
+            ],
+            "frameMs": 150.05088806152344,
+            "timeScale": 1.0,
+            "allocatedBytes": 34569808,
+            "queuedBytes": 0,
+            "phase": 1,
+            "frame": 71729,
+            "alive": 0,
+            "gen0": 538,
+            "gen1": 538,
+            "gen2": 538,
+            "logFailures": 0,
+            "warnings": 1618,
+            "errors": 0,
+            "orphanEvents": 0,
+            "invalidAnimatorSpeed": 0,
+            "staticBodyWrites": 0,
+            "width": 3840,
+            "height": 2160,
+            "targetFps": 144
+          }
+        ],
+        "gpuMaxMs": 80.114688,
+        "renderMaxMs": 4.5957,
+        "allocationMaxBytes": 4088578,
+        "queuedBytesMax": 0,
+        "frameHistogram": [
+          17130,
+          538,
+          19,
+          55,
+          75,
+          0,
+          0
+        ],
+        "frameHistogramUpperBoundsMs": [
+          8.34,
+          16.67,
+          25,
+          50,
+          100,
+          250,
+          null
+        ]
+      },
+      "135-180": {
+        "oneSecondWindows": 45,
+        "maxFrameMs": 16.619897842407227,
+        "maxWindowP95FrameMs": 11.544600486755371,
+        "maxWindowMeanFrameMs": 8.851938931287917,
+        "sampledAlivePeak": 57,
+        "longFrames100ms": 0,
+        "longFrames250ms": 0,
+        "longFrameRecords": [],
+        "pausedLongFrames": [],
+        "gpuMaxMs": 2.74944,
+        "renderMaxMs": 1.0153,
+        "allocationMaxBytes": 268823,
+        "queuedBytesMax": 0,
+        "frameHistogram": [
+          4971,
+          832,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "frameHistogramUpperBoundsMs": [
+          8.34,
+          16.67,
+          25,
+          50,
+          100,
+          250,
+          null
+        ]
+      },
+      "180-201": {
+        "oneSecondWindows": 21,
+        "maxFrameMs": 25.17759895324707,
+        "maxWindowP95FrameMs": 17.9845027923584,
+        "maxWindowMeanFrameMs": 14.657498484072478,
+        "sampledAlivePeak": 147,
+        "longFrames100ms": 0,
+        "longFrames250ms": 0,
+        "longFrameRecords": [],
+        "pausedLongFrames": [],
+        "gpuMaxMs": 4.330496,
+        "renderMaxMs": 1.6762,
+        "allocationMaxBytes": 594474,
+        "queuedBytesMax": 0,
+        "frameHistogram": [
+          73,
+          1496,
+          48,
+          2,
+          0,
+          0,
+          0
+        ],
+        "frameHistogramUpperBoundsMs": [
+          8.34,
+          16.67,
+          25,
+          50,
+          100,
+          250,
+          null
+        ]
+      },
+      "240-300": {
+        "oneSecondWindows": 60,
+        "maxFrameMs": 20.393701553344727,
+        "maxWindowP95FrameMs": 18.48579978942871,
+        "maxWindowMeanFrameMs": 13.326881395975748,
+        "sampledAlivePeak": 106,
+        "longFrames100ms": 0,
+        "longFrames250ms": 0,
+        "longFrameRecords": [],
+        "pausedLongFrames": [],
+        "gpuMaxMs": 3.913728,
+        "renderMaxMs": 1.8609,
+        "allocationMaxBytes": 278180,
+        "queuedBytesMax": 0,
+        "frameHistogram": [
+          1639,
+          4410,
+          29,
+          0,
+          0,
+          0,
+          0
+        ],
+        "frameHistogramUpperBoundsMs": [
+          8.34,
+          16.67,
+          25,
+          50,
+          100,
+          250,
+          null
+        ]
+      },
+      "333-379": {
+        "oneSecondWindows": 46,
+        "maxFrameMs": 23.85829734802246,
+        "maxWindowP95FrameMs": 12.8399019241333,
+        "maxWindowMeanFrameMs": 11.582271225150974,
+        "sampledAlivePeak": 42,
+        "longFrames100ms": 0,
+        "longFrames250ms": 0,
+        "longFrameRecords": [],
+        "pausedLongFrames": [],
+        "gpuMaxMs": 3.704832,
+        "renderMaxMs": 2.4573,
+        "allocationMaxBytes": 160109,
+        "queuedBytesMax": 0,
+        "frameHistogram": [
+          30,
+          4715,
+          4,
+          0,
+          0,
+          0,
+          0
+        ],
+        "frameHistogramUpperBoundsMs": [
+          8.34,
+          16.67,
+          25,
+          50,
+          100,
+          250,
+          null
+        ]
+      },
+      "599-721": {
+        "oneSecondWindows": 0,
+        "maxFrameMs": null,
+        "maxWindowP95FrameMs": null,
+        "maxWindowMeanFrameMs": null,
+        "sampledAlivePeak": null,
+        "longFrames100ms": 0,
+        "longFrames250ms": 0,
+        "longFrameRecords": [],
+        "pausedLongFrames": [],
+        "gpuMaxMs": null,
+        "renderMaxMs": null,
+        "allocationMaxBytes": null,
+        "queuedBytesMax": null,
+        "frameHistogram": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "frameHistogramUpperBoundsMs": [
+          8.34,
+          16.67,
+          25,
+          50,
+          100,
+          250,
+          null
+        ]
+      }
+    },
+    "settings": [
+      {
+        "kind": "display-settings",
+        "detail": "Runtime values take precedence over stored preferences",
+        "run": "",
+        "role": "host",
+        "payload": "{\"width\":1100,\"height\":700,\"targetFps\":60,\"vsync\":0,\"fullscreen\":\"Windowed\",\"settings\":{\"Version\":1,\"Language\":\"zh-CN\",\"MasterVolume\":1.0,\"MusicVolume\":1.0,\"EffectsVolume\":1.0,\"ScreenShake\":true,\"DisplayMode\":1,\"Width\":3840,\"Height\":2160,\"RefreshNumerator\":60,\"RefreshDenominator\":1,\"VSync\":false,\"FrameLimit\":144,\"RenderScale\":1.0,\"Msaa\":1,\"TextureLimit\":0}}",
+        "round": 0,
+        "realtime": 4.4336242019274374,
+        "combat": 3.7519279974489796
+      },
+      {
+        "kind": "display-settings",
+        "detail": "Runtime values take precedence over stored preferences",
+        "run": "",
+        "role": "host",
+        "payload": "{\"width\":3840,\"height\":2160,\"targetFps\":60,\"vsync\":0,\"fullscreen\":\"FullScreenWindow\",\"settings\":{\"Version\":1,\"Language\":\"zh-CN\",\"MasterVolume\":1.0,\"MusicVolume\":1.0,\"EffectsVolume\":1.0,\"ScreenShake\":true,\"DisplayMode\":1,\"Width\":3840,\"Height\":2160,\"RefreshNumerator\":60,\"RefreshDenominator\":1,\"VSync\":false,\"FrameLimit\":144,\"RenderScale\":1.0,\"Msaa\":1,\"TextureLimit\":0}}",
+        "round": 0,
+        "realtime": 5.469332901927437,
+        "combat": 5.226568898809524
+      },
+      {
+        "kind": "display-settings",
+        "detail": "Runtime values take precedence over stored preferences",
+        "run": "d2b6145566d94a5aa13825edb847d9e1",
+        "role": "host",
+        "payload": "{\"width\":3840,\"height\":2160,\"targetFps\":144,\"vsync\":0,\"fullscreen\":\"FullScreenWindow\",\"settings\":{\"Version\":1,\"Language\":\"zh-CN\",\"MasterVolume\":1.0,\"MusicVolume\":1.0,\"EffectsVolume\":1.0,\"ScreenShake\":true,\"DisplayMode\":1,\"Width\":3840,\"Height\":2160,\"RefreshNumerator\":60,\"RefreshDenominator\":1,\"VSync\":false,\"FrameLimit\":144,\"RenderScale\":1.0,\"Msaa\":1,\"TextureLimit\":0}}",
+        "round": 1,
+        "realtime": 6.471779801927437,
+        "combat": 6.469707804327493
+      }
+    ],
+    "endings": [
+      {
+        "kind": "run-ended",
+        "detail": "interrupted: process-exit",
+        "run": "97c4341935314ac3a6b49a2bf5591218",
+        "role": "host",
+        "payload": "{\"RunId\":\"97c4341935314ac3a6b49a2bf5591218\",\"Phase\":2,\"Wave\":0,\"Elapsed\":415.4798891679384,\"WaveDuration\":30.0,\"Planned\":1199,\"Spawned\":1743,\"Skipped\":0,\"Alive\":72,\"Limit\":1000,\"TotalSpawned\":1743,\"TotalSkipped\":0,\"ReferenceStage\":true,\"StageEndTime\":720.9,\"CountedAlive\":72,\"ActiveClips\":2,\"EvidenceBlocked\":0,\"TotalAttempts\":1743,\"AbandonedBudget\":0,\"TransitionRequestedAt\":0.0,\"TransitionWaitCount\":0,\"TransitionWaitReason\":\"\"}",
+        "round": 2,
+        "realtime": 1186.4851479019273,
+        "combat": 1182.6574002645423
+      }
+    ],
+    "helpers": {
+      "test-card": 38,
+      "test-heal": 8
+    },
+    "logBytes": 2384422,
+    "orphanEventWarnings": 0,
+    "invalidSpeedWarnings": 0,
+    "staticBodyWarnings": 0,
+    "writerStatuses": {
+      "full.jsonl.status.json": {
+        "complete": true,
+        "failure": ""
+      },
+      "host-audit.jsonl.status.json": {
+        "complete": true,
+        "failure": ""
+      },
+      "performance-detail.jsonl.status.json": {
+        "complete": true,
+        "failure": ""
+      },
+      "spatial-observation.jsonl.status.json": {
+        "complete": true,
+        "failure": ""
+      },
+      "spawns-97c4341935314ac3a6b49a2bf5591218-20260916-071229-629.csv.status.json": {
+        "complete": true,
+        "failure": ""
+      },
+      "spawns-d2b6145566d94a5aa13825edb847d9e1-20260916-065948-616.csv.status.json": {
+        "complete": true,
+        "failure": ""
+      },
+      "stage2-observation.jsonl.status.json": {
+        "complete": true,
+        "failure": ""
+      }
+    },
+    "note": "Frame distribution fields summarize 1-second windows, not the pooled per-frame distribution. Legacy logs cannot count individual long frames or attribute CPU/GPU. ProfilerRecorder/FrameTiming values are latest available samples and may lag the frame event; timingTimestamp identifies the GPU/CPU timing sample. Worker write times in fixed builds do not represent main-thread stalls. Different loadouts/inputs are not identical gameplay."
+  }
+]

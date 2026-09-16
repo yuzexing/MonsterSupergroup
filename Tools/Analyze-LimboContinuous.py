@@ -39,7 +39,10 @@ for role in ('host', 'client'):
                 selections.append(dict(level=started['level'],startElapsed=started['elapsed'],endElapsed=row['elapsed'],
                                        realtimeSeconds=row['realtime']-started['realtime']))
                 started=None
-        configs = {r['detail']: r['p']['birth'] for r in rows if r['kind'] == 'configuration'}
+        # Light delivery keeps birth snapshots in the audit, but intentionally omits
+        # the detailed attack/geometry configuration dump. Do not require that dump.
+        configs = {str(r['id']):r['birth'] for r in audit if r['kind']=='birth' and r.get('run')==run}
+        configs.update({r['detail']:r['p']['birth'] for r in rows if r['kind']=='configuration'})
         deaths = [r for r in rows if r['kind'] == 'enemy-death']
         confirmed = {r['detail'] for r in deaths}
         timings = collections.defaultdict(list)
@@ -63,6 +66,7 @@ for role in ('host', 'client'):
             bindsIncorrect=sum(not r['p'].get('currentStatsBound',True) for r in rows if r['kind']=='geometry'),
             lastElapsed=rows[-1]['elapsed'])
         summaries[run]['selectionWindows']=selections
+        summaries[run]['attackPhaseEvidenceAvailable']=any(r['kind']=='configuration' for r in rows)
         summaries[run]['lastFrame']=frames[-1] if frames else None
         summaries[run]['healthLosses']=[r for r in audit if r['round']==round_number and r['kind']=='health' and r['current']<r['previous']]
     result[role] = summaries
@@ -71,12 +75,17 @@ for path in sorted(root.rglob('spawns-*.csv')):
     with path.open(encoding='utf-8-sig', newline='') as handle:
         rows = list(csv.DictReader(handle))
     births = [r for r in rows if r['event']=='spawn' and r['result']=='Spawned']
+    # This analyzer now also covers Full; the original Stage 2 ceiling hid the
+    # later Slime/barrier/overlap intervals from rate summaries.
+    bin_end = (int(max((float(r['elapsed']) for r in rows), default=0) // 10) + 1) * 10
     traces.append(dict(file=path.name, events=dict(collections.Counter(r['event'] for r in rows)),
         successfulByClip=dict(collections.Counter(r['clip'] for r in births)),
         lastBirthByClip={k:max(float(r['elapsed']) for r in births if r['clip']==k) for k in {r['clip'] for r in births}},
         rusherAfterClipEnd=sum(r['clip']=='4' and float(r['elapsed'])>200.083334 for r in births),
         bins10s=[dict(start=t, births=sum(t<=float(r['elapsed'])<t+10 for r in births),
-                     deaths=sum(r['event']=='death' and t<=float(r['elapsed'])<t+10 for r in rows)) for t in range(0,210,10)]))
+                     deaths=sum(r['event']=='death' and t<=float(r['elapsed'])<t+10 for r in rows),
+                     selfDestruct=sum(r['event']=='self-destruct' and t<=float(r['elapsed'])<t+10 for r in rows),
+                     retired=sum(r['event']=='retired' and t<=float(r['elapsed'])<t+10 for r in rows)) for t in range(0,bin_end,10)]))
 result['traces']=traces
 output=root/'continuous-summary.json'
 output.write_text(json.dumps(result,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')

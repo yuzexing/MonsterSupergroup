@@ -1138,9 +1138,7 @@ MonoBehaviour:
     _FadeDuration: 0.25
     _Speed: 1
     _Events:
-      _NormalizedTimes:
-      - 0
-      - NaN
+      _NormalizedTimes: []
       _Callbacks: []
       _Names: []
     _Clip: {fileID: 7400000, guid: 4609b36bbe9213b4b9634ac3e789e0b3, type: 2}
@@ -1149,9 +1147,7 @@ MonoBehaviour:
     _FadeDuration: 0.25
     _Speed: 1
     _Events:
-      _NormalizedTimes:
-      - 0
-      - NaN
+      _NormalizedTimes: []
       _Callbacks: []
       _Names: []
     _Clip: {fileID: 7400000, guid: 4609b36bbe9213b4b9634ac3e789e0b3, type: 2}
@@ -1160,9 +1156,7 @@ MonoBehaviour:
     _FadeDuration: 0.25
     _Speed: 1
     _Events:
-      _NormalizedTimes:
-      - 0
-      - NaN
+      _NormalizedTimes: []
       _Callbacks: []
       _Names: []
     _Clip: {fileID: 7400000, guid: 4974dea46bf99a44fa2bf55ab96b44aa, type: 2}
@@ -1171,9 +1165,7 @@ MonoBehaviour:
     _FadeDuration: 0.25
     _Speed: 1
     _Events:
-      _NormalizedTimes:
-      - 0
-      - NaN
+      _NormalizedTimes: []
       _Callbacks: []
       _Names: []
     _Clip: {fileID: 7400000, guid: 4974dea46bf99a44fa2bf55ab96b44aa, type: 2}
@@ -1183,11 +1175,9 @@ MonoBehaviour:
     _Speed: 1
     _Events:
       _NormalizedTimes:
-      - 0
       - 0.60659486
       - NaN
       _Callbacks:
-      - rid: -2
       - rid: 8799243470792818711
       _Names: []
     _Clip: {fileID: 7400000, guid: 7d20b35b333ae424b8608398c1f96853, type: 2}
@@ -1197,11 +1187,9 @@ MonoBehaviour:
     _Speed: 1
     _Events:
       _NormalizedTimes:
-      - 0
       - 0.6065949
       - NaN
       _Callbacks:
-      - rid: -2
       - rid: 8799243470792818710
       _Names: []
     _Clip: {fileID: 7400000, guid: 7d20b35b333ae424b8608398c1f96853, type: 2}
@@ -1211,11 +1199,9 @@ MonoBehaviour:
     _Speed: 1
     _Events:
       _NormalizedTimes:
-      - 0
       - 0.6065949
       - NaN
       _Callbacks:
-      - rid: -2
       - rid: 8799243470792818713
       _Names: []
     _Clip: {fileID: 7400000, guid: c19ad044118c0fa4d8c727d443751c37, type: 2}
@@ -1225,11 +1211,9 @@ MonoBehaviour:
     _Speed: 1
     _Events:
       _NormalizedTimes:
-      - 0
       - 0.6065949
       - NaN
       _Callbacks:
-      - rid: -2
       - rid: 8799243470792818712
       _Names: []
     _Clip: {fileID: 7400000, guid: c19ad044118c0fa4d8c727d443751c37, type: 2}
@@ -1265,8 +1249,6 @@ MonoBehaviour:
   references:
     version: 2
     RefIds:
-    - rid: -2
-      type: {class: , ns: , asm: }
     - rid: 8799243470792818710
       type: {class: UnityEvent, ns: Animancer, asm: Kybernetik.Animancer}
       data:

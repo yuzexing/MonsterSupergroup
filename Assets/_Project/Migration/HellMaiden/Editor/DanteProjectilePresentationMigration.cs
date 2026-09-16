@@ -252,7 +252,7 @@ namespace MonsterSupergroup.HellMaidenMigration.Editor
                         // The source contains disabled container renderers with no material.
                         if (!renderer.enabled && material == null) continue;
                         Require(material != null && material.shader != null, "Missing material/shader: " + renderer.name);
-                        Require(AssetDatabase.GetAssetPath(material).StartsWith(OutputFolder + "/Material/"), "Unexpected shared material: " + renderer.name);
+                        Require(PlanarMaterialValidation.IsOriginalOrFaithfulPlanarCopy(material, OutputFolder + "/Material"), "Unexpected or altered shared material: " + renderer.name);
                         Require(material.mainTexture != null || renderer is SpriteRenderer, "Missing main texture: " + renderer.name);
                     }
                 Require(!root.GetComponentsInChildren<MonoBehaviour>(true).Any(c => c.GetType().Name == "StudioEventEmitter" || c.GetType().Name == "StudioParameterTrigger"), "Legacy audio chain remains");

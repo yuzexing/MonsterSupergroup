@@ -1,0 +1,185 @@
+{
+  "version": "FIX-20260916-07",
+  "status": "repair-delivery-with-documented-validation-limits",
+  "sourceCommit": "0117ca0041c1adef33c2999c2f71c8146fb043ee",
+  "baseline": {
+    "xpDenominator": 841.5766649882,
+    "targetFps": 60,
+    "map": "Nordic",
+    "xpModifier": 2,
+    "graphics": "D3D11",
+    "width": 1280,
+    "seed": 14301,
+    "manualHelpers": false,
+    "enemyClips": 31,
+    "hp": 500,
+    "height": 720,
+    "weaponId": 1,
+    "moveSpeed": 4.55,
+    "transitionRequest": 720.9
+  },
+  "samePackageFilesVerified": 495,
+  "runtimeUnchangedAfterBuild": "07 build; subsequent report changes only. 07 vs 06 changed explicit spatial validation sampling, not production movement/rendering.",
+  "tests": {
+    "edit": {
+      "passed": 791,
+      "total": 791,
+      "file": "Logs/ManualPlayFix/edit-ui-final.xml"
+    },
+    "play": {
+      "passed": 534,
+      "total": 534,
+      "file": "Logs/ManualPlayFix/play-ui-final.xml"
+    },
+    "afterValidationSamplerChange": {
+      "passed": 3,
+      "total": 3,
+      "file": "Logs/ManualPlayFix/trap-pause-observation.xml",
+      "note": "Targeted repeat; do not add overlapping tests to broad totals."
+    }
+  },
+  "runs": {
+    "solo4k07-audit.json": {
+      "host": {
+        "runId": "0c72117b999940f48c6edb8954ed69a1",
+        "requestedAt": 720.9027345438953,
+        "completedAt": 720.9027345438953,
+        "waitWallSeconds": 0.00014090000001942826,
+        "births": 4207,
+        "birthMismatches": 0,
+        "confirmedKills": 4112,
+        "endAlive": 87,
+        "helpers": {
+          "test-card": 92,
+          "test-heal": 27
+        },
+        "stageCleanup": [
+          {
+            "kind": "completed-cleanup",
+            "detail": "0c72117b999940f48c6edb8954ed69a1",
+            "payload": "{\"damageAreas\":0,\"warnings\":0}",
+            "run": "0c72117b999940f48c6edb8954ed69a1",
+            "round": 1,
+            "realtime": 736.7746572047619,
+            "combat": 727.9124875759021,
+            "elapsed": 720.9027345438953
+          }
+        ],
+        "trapCleanup": [
+          {
+            "states": 0,
+            "slots": 0,
+            "collisionAreas": 0,
+            "livingWarningRoots": 0
+          }
+        ],
+        "processClosed": true,
+        "backgroundFilesComplete": true,
+        "errors": []
+      }
+    },
+    "pair72007-audit.json": {
+      "host": {
+        "runId": "7cb69645e41347a3a0d702670652f019",
+        "requestedAt": 720.9000915209763,
+        "completedAt": 729.0866952198558,
+        "waitWallSeconds": 8.187858000000006,
+        "births": 4017,
+        "birthMismatches": 0,
+        "confirmedKills": 3951,
+        "endAlive": 34,
+        "helpers": {
+          "test-card": 77,
+          "test-heal": 20,
+          "test-queue": 1
+        },
+        "stageCleanup": [
+          {
+            "kind": "completed-cleanup",
+            "detail": "7cb69645e41347a3a0d702670652f019",
+            "payload": "{\"damageAreas\":0,\"warnings\":0}",
+            "run": "7cb69645e41347a3a0d702670652f019",
+            "round": 1,
+            "realtime": 738.9059706036848,
+            "combat": 735.9548307200932,
+            "elapsed": 729.0866952198558
+          }
+        ],
+        "trapCleanup": [
+          {
+            "states": 0,
+            "slots": 0,
+            "collisionAreas": 0,
+            "livingWarningRoots": 0
+          }
+        ],
+        "processClosed": true,
+        "backgroundFilesComplete": true,
+        "errors": []
+      },
+      "client": {
+        "runId": "7cb69645e41347a3a0d702670652f019",
+        "requestedAt": 720.9000915209763,
+        "completedAt": 729.0866952198558,
+        "waitWallSeconds": 8.206283199999916,
+        "births": 4017,
+        "birthMismatches": 0,
+        "confirmedKills": 3951,
+        "endAlive": 34,
+        "helpers": {
+          "test-card": 72,
+          "test-heal": 9
+        },
+        "stageCleanup": [
+          {
+            "kind": "completed-cleanup",
+            "detail": "7cb69645e41347a3a0d702670652f019",
+            "payload": "{\"damageAreas\":0,\"warnings\":0}",
+            "run": "7cb69645e41347a3a0d702670652f019",
+            "round": 1,
+            "realtime": 738.5738194031746,
+            "combat": 735.9519520050204,
+            "elapsed": 729.0866952198558
+          }
+        ],
+        "trapCleanup": [
+          {
+            "states": 0,
+            "slots": 0,
+            "collisionAreas": 0,
+            "livingWarningRoots": 0
+          }
+        ],
+        "processClosed": true,
+        "backgroundFilesComplete": true,
+        "errors": []
+      },
+      "comparisonCompletedRun": {
+        "missingClient": [],
+        "extraClient": [],
+        "differing": []
+      }
+    }
+  },
+  "portableSmoke": {
+    "runId": "590b5bab31e54361b9731404012187c2",
+    "session": "20260916-180809-923-solo",
+    "result": "natural failure at 47.1044194214; not a completed full run",
+    "helpers": 0,
+    "acceptedChoices": 5,
+    "effectiveHealthChanges": 10,
+    "orderlyExit": true,
+    "archiveIntegrity": "closed, parse errors 0",
+    "input": "User and agent ordinary input; pauses recorded. Not pressure evidence."
+  },
+  "scopeDecision": "2026-09-16 user requested reduced repeated Computer Use; no further screenshot matrix or legacy repeated runs. Future visual acceptance is user-led; agent handles code, numbers, logs and necessary automated regression.",
+  "limitations": [
+    "Controlled legacy before/after three-repeat matrix was not completed; no exact performance improvement ratio claimed.",
+    "Original manual 2.34-second stall has no original CPU trace; identified log and font defects are fixed but complete attribution of that frame remains unproven.",
+    "Loading and first running frame still have >100ms work. 144 is a target, not a sustained FPS guarantee.",
+    "FMOD voice-stealing/exit resource warnings remain separately recorded; the three targeted warning classes are zero in final full runs.",
+    "No manual pressure verdict, equivalent original-game pressure comparison, XP/camera calibration or Spine work.",
+    "Already collected visual evidence is retained. Final appearance confirmation belongs to the user, not repeated automated screenshots."
+  ],
+  "computerUsePolicy": "Only when necessary, explain the purpose and obtain fresh user confirmation before any Computer Use."
+}

@@ -1,0 +1,12 @@
+{
+  "archive": "F:\\Limbo Acceptance\\LimboManual-FIX-20260916-07.zip",
+  "bytes": 425478199,
+  "files": 499,
+  "sha256": "991429FB8929A675C49489B0E300BA362FD0341E95E719234D6583CEB8980D98",
+  "exclusions": [
+    "Runs",
+    "Archives"
+  ],
+  "note": "Smoke logs remain beside extracted package and in their separately archived run; user starts with clean Runs in this archive.",
+  "archiveCrcCheck": "passed"
+}

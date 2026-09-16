@@ -72,8 +72,13 @@ namespace MonsterSupergroup.NetworkCombat.Tests
             using var log = new LimboObservationLog(stream, () => clock);
             log.WriteLine("birth"); Assert.That(stream.Length, Is.Zero);
             clock = 10.99; log.FlushIfDue(); Assert.That(stream.Length, Is.Zero);
-            clock = 11; LimboObservationLog.FlushDue(); Assert.That(Encoding.UTF8.GetString(stream.ToArray()), Does.Contain("birth"));
-            log.WriteLine("death"); clock = 12; LimboObservationLog.FlushDue(); Assert.That(Encoding.UTF8.GetString(stream.ToArray()), Does.Contain("death"));
+            clock = 11; LimboObservationLog.FlushDue();
+            Assert.That(System.Threading.SpinWait.SpinUntil(() => stream.Length > 0, 2000), Is.True);
+            log.Flush(); Assert.That(Encoding.UTF8.GetString(stream.ToArray()), Does.Contain("birth"));
+            long firstLength = stream.Length;
+            log.WriteLine("death"); clock = 12; LimboObservationLog.FlushDue();
+            Assert.That(System.Threading.SpinWait.SpinUntil(() => stream.Length > firstLength, 2000), Is.True);
+            log.Flush(); Assert.That(Encoding.UTF8.GetString(stream.ToArray()), Does.Contain("death"));
         }
         [Test] public void EndFlushAndDisposePreserveTailWithoutWaitingOneSecond()
         {
@@ -91,7 +96,9 @@ namespace MonsterSupergroup.NetworkCombat.Tests
             var stream = new MemoryStream();
             using var log = new LimboObservationLog(stream, () => 0);
             for (int i = 0; i < 100; i++) log.WriteLine(new string('x', 1024));
-            Assert.That(stream.Length, Is.GreaterThan(80 * 1024), "Full buffers write synchronously even before the periodic flush.");
+            Assert.That(LimboObservationLog.PendingBytes, Is.LessThanOrEqualTo(LimboObservationLog.MaximumPendingBytes));
+            log.Flush();
+            Assert.That(stream.Length, Is.EqualTo(100 * (1024 + Environment.NewLine.Length)), "Explicit drain preserves every queued event.");
         }
         [Test] public void ExistingRunEvidenceCannotBeTruncated()
         {

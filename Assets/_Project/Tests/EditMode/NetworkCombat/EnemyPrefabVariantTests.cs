@@ -125,7 +125,10 @@ namespace MonsterSupergroup.NetworkCombat.Tests
         public void MissingRequiredBindingRepairsWithoutResettingAnAuthoredStat()
         {
             string path = EnemyPrefabVariantMigration.ExamplePath;
-            var saved = File.ReadAllBytes(path);
+            var original = new SerializedObject(Load(path).GetComponent<EnemyController>());
+            int originalHp = original.FindProperty("stats.baseStats.hp").intValue;
+            var originalAnimator = original.FindProperty("enemyAnimator").objectReferenceValue;
+            bool animatorWasOverride = original.FindProperty("enemyAnimator").prefabOverride;
             try
             {
                 var root = Load(path);
@@ -142,10 +145,32 @@ namespace MonsterSupergroup.NetworkCombat.Tests
             }
             finally
             {
-                File.WriteAllBytes(path, saved);
-                AssetDatabase.ImportAsset(path, ImportAssetOptions.ForceSynchronousImport);
+                // The importer can memory-map this file after Migrate. Restore through
+                // the same prefab API instead of truncating its mapped file on Windows.
+                var root = PrefabUtility.LoadPrefabContents(path);
+                try
+                {
+                    var restored = new SerializedObject(root.GetComponent<EnemyController>());
+                    if (!animatorWasOverride)
+                        PrefabUtility.RevertPropertyOverride(restored.FindProperty("enemyAnimator"), InteractionMode.AutomatedAction);
+                    else
+                    {
+                        restored.Update();
+                        restored.FindProperty("enemyAnimator").objectReferenceValue = originalAnimator;
+                        restored.ApplyModifiedPropertiesWithoutUndo();
+                    }
+                    // RevertPropertyOverride refreshes the variant instance. Restore
+                    // unrelated values after that refresh, then save the contents once.
+                    restored.Update();
+                    restored.FindProperty("stats.baseStats.hp").intValue = originalHp;
+                    restored.ApplyModifiedPropertiesWithoutUndo();
+                    PrefabUtility.SaveAsPrefabAsset(root, path);
+                }
+                finally { PrefabUtility.UnloadPrefabContents(root); }
             }
             EnemyPrefabVariantMigration.Migrate();
+            Assert.That(new SerializedObject(Load(path).GetComponent<EnemyController>()).FindProperty("stats.baseStats.hp").intValue,
+                Is.EqualTo(originalHp), "The fixture must restore its authored HP after migration.");
         }
     }
 }

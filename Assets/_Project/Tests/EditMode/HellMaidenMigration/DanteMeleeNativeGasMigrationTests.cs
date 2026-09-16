@@ -98,7 +98,8 @@ namespace MonsterSupergroup.HellMaidenMigration.Tests
             {
                 Assert.That(material, Is.Not.Null);
                 Assert.That(material.shader, Is.Not.Null);
-                Assert.That(material.shader.name, Does.StartWith("AllIn1"));
+                Assert.That(PlanarMaterialValidation.IsOriginalOrFaithfulPlanarCopy(material,
+                    DanteMeleeNativeGasMigration.OutputFolder + "/Material"), Is.True, material.name);
             }
             Assert.DoesNotThrow(DanteMeleeNativeGasMigration.ValidateImportedAssets);
         }

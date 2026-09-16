@@ -1,0 +1,1562 @@
+{
+  "02": {
+    "host": [
+      {
+        "elapsed": 4.513515613041817,
+        "run": "dc11794362d644d4bf79309daa8e1b97",
+        "renderer": {
+          "name": "Glow",
+          "shader": "MonsterSupergroup/PlanarSprite",
+          "particles": 1,
+          "layer": -1937444793,
+          "playing": true,
+          "visible": true,
+          "enabled": true,
+          "position": {
+            "x": 18.0,
+            "y": 0.0,
+            "z": 0.0
+          },
+          "bounds": {
+            "m_Center": {
+              "x": 17.99997901916504,
+              "y": -6.912082608323544e-05,
+              "z": 0.0
+            },
+            "m_Extent": {
+              "x": 2.8399999141693115,
+              "y": 4.016366004943848,
+              "z": 0.05000000074505806
+            }
+          }
+        }
+      },
+      {
+        "elapsed": 4.513515613041817,
+        "run": "dc11794362d644d4bf79309daa8e1b97",
+        "renderer": {
+          "name": "Glow",
+          "shader": "MonsterSupergroup/PlanarSprite",
+          "particles": 1,
+          "layer": -1937444793,
+          "playing": true,
+          "visible": false,
+          "enabled": true,
+          "position": {
+            "x": 17.951282501220703,
+            "y": 0.986505389213562,
+            "z": 0.9865055680274963
+          },
+          "bounds": {
+            "m_Center": {
+              "x": 17.951358795166016,
+              "y": 0.9864593744277954,
+              "z": 0.9864595532417297
+            },
+            "m_Extent": {
+              "x": 2.8399999141693115,
+              "y": 4.016366004943848,
+              "z": 4.016366004943848
+            }
+          }
+        }
+      },
+      {
+        "elapsed": 5.0305511741898945,
+        "run": "dc11794362d644d4bf79309daa8e1b97",
+        "renderer": {
+          "name": "Glow",
+          "shader": "MonsterSupergroup/PlanarSprite",
+          "particles": 1,
+          "layer": -1937444793,
+          "playing": true,
+          "visible": true,
+          "enabled": true,
+          "position": {
+            "x": -2.691481590270996,
+            "y": -14.001611709594727,
+            "z": -14.001612663269043
+          },
+          "bounds": {
+            "m_Center": {
+              "x": -2.6930155754089355,
+              "y": -14.034610748291016,
+              "z": 0.0
+            },
+            "m_Extent": {
+              "x": 2.8399999141693115,
+              "y": 4.016366004943848,
+              "z": 0.05000000074505806
+            }
+          }
+        }
+      },
+      {
+        "elapsed": 9.977219277527183,
+        "run": "dc11794362d644d4bf79309daa8e1b97",
+        "renderer": {
+          "name": "Glow",
+          "shader": "MonsterSupergroup/PlanarSprite",
+          "particles": 1,
+          "layer": -1937444793,
+          "playing": true,
+          "visible": false,
+          "enabled": true,
+          "position": {
+            "x": -2.343149423599243,
+            "y": -12.819639205932617,
+            "z": -12.81964111328125
+          },
+          "bounds": {
+            "m_Center": {
+              "x": -9.444766998291016,
+              "y": -13.02926254272461,
+              "z": 0.0
+            },
+            "m_Extent": {
+              "x": 2.8399999141693115,
+              "y": 4.016366004943848,
+              "z": 0.05000000074505806
+            }
+          }
+        }
+      },
+      {
+        "elapsed": 14.98510655714199,
+        "run": "dc11794362d644d4bf79309daa8e1b97",
+        "renderer": {
+          "name": "Glow",
+          "shader": "MonsterSupergroup/PlanarSprite",
+          "particles": 1,
+          "layer": -1937444793,
+          "playing": true,
+          "visible": true,
+          "enabled": true,
+          "position": {
+            "x": -2.3448312282562256,
+            "y": -11.640649795532227,
+            "z": -11.64065170288086
+          },
+          "bounds": {
+            "m_Center": {
+              "x": -16.305334091186523,
+              "y": -9.768332481384277,
+              "z": 0.0
+            },
+            "m_Extent": {
+              "x": 2.8399999141693115,
+              "y": 4.016366004943848,
+              "z": 0.05000000074505806
+            }
+          }
+        }
+      },
+      {
+        "elapsed": 19.999510928522795,
+        "run": "dc11794362d644d4bf79309daa8e1b97",
+        "renderer": {
+          "name": "Glow",
+          "shader": "MonsterSupergroup/PlanarSprite",
+          "particles": 1,
+          "layer": -1937444793,
+          "playing": true,
+          "visible": false,
+          "enabled": true,
+          "position": {
+            "x": -1.9999998807907104,
+            "y": -10.459697723388672,
+            "z": -10.459699630737305
+          },
+          "bounds": {
+            "m_Center": {
+              "x": -20.173500061035156,
+              "y": -5.721380233764648,
+              "z": 0.0
+            },
+            "m_Extent": {
+              "x": 2.8399999141693115,
+              "y": 4.016366004943848,
+              "z": 0.05000000074505806
+            }
+          }
+        }
+      },
+      {
+        "elapsed": 25.03123003570363,
+        "run": "dc11794362d644d4bf79309daa8e1b97",
+        "renderer": {
+          "name": "Glow",
+          "shader": "MonsterSupergroup/PlanarSprite",
+          "particles": 1,
+          "layer": -1937444793,
+          "playing": true,
+          "visible": true,
+          "enabled": true,
+          "position": {
+            "x": -1.9999998807907104,
+            "y": -9.276220321655273,
+            "z": -9.27622127532959
+          },
+          "bounds": {
+            "m_Center": {
+              "x": -21.906574249267578,
+              "y": -1.320027786277933e-05,
+              "z": 0.0
+            },
+            "m_Extent": {
+              "x": 2.8399999141693115,
+              "y": 4.016366004943848,
+              "z": 0.05000000074505806
+            }
+          }
+        }
+      },
+      {
+        "elapsed": 30.044852843042463,
+        "run": "dc11794362d644d4bf79309daa8e1b97",
+        "renderer": {
+          "name": "Glow",
+          "shader": "MonsterSupergroup/PlanarSprite",
+          "particles": 1,
+          "layer": -1937444793,
+          "playing": true,
+          "visible": true,
+          "enabled": true,
+          "position": {
+            "x": -1.6608483791351318,
+            "y": -8.089205741882324,
+            "z": -8.08920669555664
+          },
+          "bounds": {
+            "m_Center": {
+              "x": -20.718599319458008,
+              "y": 4.817513465881348,
+              "z": 0.0
+            },
+            "m_Extent": {
+              "x": 2.8399999141693115,
+              "y": 4.016366004943848,
+              "z": 0.05000000074505806
+            }
+          }
+        }
+      },
+      {
+        "elapsed": 34.47382924659178,
+        "run": "dc11794362d644d4bf79309daa8e1b97",
+        "renderer": {
+          "name": "Glow",
+          "shader": "MonsterSupergroup/PlanarSprite",
+          "particles": 1,
+          "layer": -1937444793,
+          "playing": true,
+          "visible": true,
+          "enabled": true,
+          "position": {
+            "x": -1.703718900680542,
+            "y": -7.066771030426025,
+            "z": -7.066771984100342
+          },
+          "bounds": {
+            "m_Center": {
+              "x": -20.718759536743164,
+              "y": 4.817498683929443,
+              "z": 0.0
+            },
+            "m_Extent": {
+              "x": 2.8399999141693115,
+              "y": 4.016366004943848,
+              "z": 0.05000000074505806
+            }
+          }
+        }
+      }
+    ],
+    "client": [
+      {
+        "elapsed": 4.513515613041817,
+        "run": "dc11794362d644d4bf79309daa8e1b97",
+        "renderer": {
+          "name": "Glow",
+          "shader": "MonsterSupergroup/PlanarSprite",
+          "particles": 1,
+          "layer": -1937444793,
+          "playing": true,
+          "visible": false,
+          "enabled": true,
+          "position": {
+            "x": 17.993331909179688,
+            "y": 0.0,
+            "z": 0.0
+          },
+          "bounds": {
+            "m_Center": {
+              "x": 17.993328094482422,
+              "y": 7.063811062835157e-05,
+              "z": 7.06381251802668e-05
+            },
+            "m_Extent": {
+              "x": 2.8399999141693115,
+              "y": 4.016366004943848,
+              "z": 4.016366004943848
+            }
+          }
+        }
+      },
+      {
+        "elapsed": 4.513515613041817,
+        "run": "dc11794362d644d4bf79309daa8e1b97",
+        "renderer": {
+          "name": "Glow",
+          "shader": "MonsterSupergroup/PlanarSprite",
+          "particles": 1,
+          "layer": -1937444793,
+          "playing": true,
+          "visible": false,
+          "enabled": true,
+          "position": {
+            "x": 17.944629669189453,
+            "y": 0.9861764907836914,
+            "z": 0.9861766695976257
+          },
+          "bounds": {
+            "m_Center": {
+              "x": 17.944721221923828,
+              "y": 0.9861478209495544,
+              "z": 0.9861479997634888
+            },
+            "m_Extent": {
+              "x": 2.8399999141693115,
+              "y": 4.016366004943848,
+              "z": 4.016366004943848
+            }
+          }
+        }
+      },
+      {
+        "elapsed": 5.0305511741898945,
+        "run": "dc11794362d644d4bf79309daa8e1b97",
+        "renderer": {
+          "name": "Glow",
+          "shader": "MonsterSupergroup/PlanarSprite",
+          "particles": 1,
+          "layer": -1937444793,
+          "playing": true,
+          "visible": true,
+          "enabled": true,
+          "position": {
+            "x": -2.691469669342041,
+            "y": -14.001579284667969,
+            "z": -14.001580238342285
+          },
+          "bounds": {
+            "m_Center": {
+              "x": -2.6916403770446777,
+              "y": -14.006235122680664,
+              "z": 0.0
+            },
+            "m_Extent": {
+              "x": 2.8399999141693115,
+              "y": 4.016366004943848,
+              "z": 0.05000000074505806
+            }
+          }
+        }
+      },
+      {
+        "elapsed": 10.177711674477905,
+        "run": "dc11794362d644d4bf79309daa8e1b97",
+        "renderer": {
+          "name": "Glow",
+          "shader": "MonsterSupergroup/PlanarSprite",
+          "particles": 1,
+          "layer": -1937444793,
+          "playing": true,
+          "visible": false,
+          "enabled": true,
+          "position": {
+            "x": -2.3423914909362793,
+            "y": -12.791339874267578,
+            "z": -12.791341781616211
+          },
+          "bounds": {
+            "m_Center": {
+              "x": -2.3424880504608154,
+              "y": -12.791357040405273,
+              "z": 0.0
+            },
+            "m_Extent": {
+              "x": 2.8399999141693115,
+              "y": 4.016366004943848,
+              "z": 0.05000000074505806
+            }
+          }
+        }
+      },
+      {
+        "elapsed": 15.185108251404017,
+        "run": "dc11794362d644d4bf79309daa8e1b97",
+        "renderer": {
+          "name": "Glow",
+          "shader": "MonsterSupergroup/PlanarSprite",
+          "particles": 1,
+          "layer": -1937444793,
+          "playing": true,
+          "visible": true,
+          "enabled": true,
+          "position": {
+            "x": -2.343853235244751,
+            "y": -11.60760498046875,
+            "z": -11.607606887817383
+          },
+          "bounds": {
+            "m_Center": {
+              "x": -2.3439226150512695,
+              "y": -11.60755443572998,
+              "z": 0.0
+            },
+            "m_Extent": {
+              "x": 2.8399999141693115,
+              "y": 4.016366004943848,
+              "z": 0.05000000074505806
+            }
+          }
+        }
+      },
+      {
+        "elapsed": 20.199956831987947,
+        "run": "dc11794362d644d4bf79309daa8e1b97",
+        "renderer": {
+          "name": "Glow",
+          "shader": "MonsterSupergroup/PlanarSprite",
+          "particles": 1,
+          "layer": -1937444793,
+          "playing": true,
+          "visible": true,
+          "enabled": true,
+          "position": {
+            "x": -1.9999998807907104,
+            "y": -10.417243957519531,
+            "z": -10.417244911193848
+          },
+          "bounds": {
+            "m_Center": {
+              "x": -2.000053882598877,
+              "y": -10.426613807678223,
+              "z": 0.0
+            },
+            "m_Extent": {
+              "x": 2.8399999141693115,
+              "y": 4.016366004943848,
+              "z": 0.05000000074505806
+            }
+          }
+        }
+      },
+      {
+        "elapsed": 25.23177903657779,
+        "run": "dc11794362d644d4bf79309daa8e1b97",
+        "renderer": {
+          "name": "Glow",
+          "shader": "MonsterSupergroup/PlanarSprite",
+          "particles": 1,
+          "layer": -1937444793,
+          "playing": true,
+          "visible": true,
+          "enabled": true,
+          "position": {
+            "x": -1.9999998807907104,
+            "y": -9.238480567932129,
+            "z": -9.238481521606445
+          },
+          "bounds": {
+            "m_Center": {
+              "x": -2.0000157356262207,
+              "y": -9.238550186157227,
+              "z": 0.0
+            },
+            "m_Extent": {
+              "x": 2.8399999141693115,
+              "y": 4.016366004943848,
+              "z": 0.05000000074505806
+            }
+          }
+        }
+      },
+      {
+        "elapsed": 30.245151251088828,
+        "run": "dc11794362d644d4bf79309daa8e1b97",
+        "renderer": {
+          "name": "Glow",
+          "shader": "MonsterSupergroup/PlanarSprite",
+          "particles": 1,
+          "layer": -1937444793,
+          "playing": true,
+          "visible": true,
+          "enabled": true,
+          "position": {
+            "x": -1.6622326374053955,
+            "y": -8.056178092956543,
+            "z": -8.05617904663086
+          },
+          "bounds": {
+            "m_Center": {
+              "x": -1.6622614860534668,
+              "y": -8.056110382080078,
+              "z": 0.0
+            },
+            "m_Extent": {
+              "x": 2.8399999141693115,
+              "y": 4.016366004943848,
+              "z": 0.05000000074505806
+            }
+          }
+        }
+      },
+      {
+        "elapsed": 34.47382924659178,
+        "run": "dc11794362d644d4bf79309daa8e1b97",
+        "renderer": {
+          "name": "Glow",
+          "shader": "MonsterSupergroup/PlanarSprite",
+          "particles": 1,
+          "layer": -1937444793,
+          "playing": true,
+          "visible": true,
+          "enabled": true,
+          "position": {
+            "x": -1.703728437423706,
+            "y": -7.0664520263671875,
+            "z": -7.066452980041504
+          },
+          "bounds": {
+            "m_Center": {
+              "x": -1.7031933069229126,
+              "y": -7.080533027648926,
+              "z": 0.0
+            },
+            "m_Extent": {
+              "x": 2.8399999141693115,
+              "y": 4.016366004943848,
+              "z": 0.05000000074505806
+            }
+          }
+        }
+      }
+    ]
+  },
+  "03": {
+    "host": [
+      {
+        "elapsed": 4.479948606342076,
+        "run": "90c7ee08318249e3a15069bdfaa67b19",
+        "renderer": {
+          "name": "Glow",
+          "shader": "MonsterSupergroup/PlanarSprite",
+          "particles": 1,
+          "layer": -1937444793,
+          "playing": true,
+          "visible": true,
+          "enabled": true,
+          "position": {
+            "x": 18.0,
+            "y": 0.0,
+            "z": 0.0
+          },
+          "firstParticleWorld": {
+            "x": 18.000015258789062,
+            "y": -6.98758740327321e-05,
+            "z": -6.987588130868971e-05
+          },
+          "simulationSpace": 0,
+          "bounds": {
+            "m_Center": {
+              "x": 18.000015258789062,
+              "y": -6.979517638683319e-05,
+              "z": -6.97951836627908e-05
+            },
+            "m_Extent": {
+              "x": 2.8399999141693115,
+              "y": 4.016366004943848,
+              "z": 4.016366004943848
+            }
+          }
+        }
+      },
+      {
+        "elapsed": 4.479948606342076,
+        "run": "90c7ee08318249e3a15069bdfaa67b19",
+        "renderer": {
+          "name": "Glow",
+          "shader": "MonsterSupergroup/PlanarSprite",
+          "particles": 1,
+          "layer": -1937444793,
+          "playing": true,
+          "visible": false,
+          "enabled": true,
+          "position": {
+            "x": 17.951282501220703,
+            "y": 0.986505389213562,
+            "z": 0.9865055680274963
+          },
+          "firstParticleWorld": {
+            "x": 17.951187133789062,
+            "y": 0.9864836931228638,
+            "z": 0.9864838123321533
+          },
+          "simulationSpace": 0,
+          "bounds": {
+            "m_Center": {
+              "x": 17.951187133789062,
+              "y": 0.986483633518219,
+              "z": 0.9864838123321533
+            },
+            "m_Extent": {
+              "x": 2.8399999141693115,
+              "y": 4.016366004943848,
+              "z": 4.016366004943848
+            }
+          }
+        }
+      },
+      {
+        "elapsed": 5.085724638309329,
+        "run": "90c7ee08318249e3a15069bdfaa67b19",
+        "renderer": {
+          "name": "Glow",
+          "shader": "MonsterSupergroup/PlanarSprite",
+          "particles": 1,
+          "layer": -1937444793,
+          "playing": true,
+          "visible": true,
+          "enabled": true,
+          "position": {
+            "x": -2.691481590270996,
+            "y": -14.001611709594727,
+            "z": -14.001612663269043
+          },
+          "firstParticleWorld": {
+            "x": -2.691575050354004,
+            "y": -14.001636505126953,
+            "z": -14.001638412475586
+          },
+          "simulationSpace": 0,
+          "bounds": {
+            "m_Center": {
+              "x": -2.691575050354004,
+              "y": -14.001635551452637,
+              "z": -14.00163745880127
+            },
+            "m_Extent": {
+              "x": 2.8399999141693115,
+              "y": 4.016366004943848,
+              "z": 4.016366004943848
+            }
+          }
+        }
+      },
+      {
+        "elapsed": 10.131185533013195,
+        "run": "90c7ee08318249e3a15069bdfaa67b19",
+        "renderer": {
+          "name": "Glow",
+          "shader": "MonsterSupergroup/PlanarSprite",
+          "particles": 1,
+          "layer": -1937444793,
+          "playing": true,
+          "visible": false,
+          "enabled": true,
+          "position": {
+            "x": -2.3420140743255615,
+            "y": -12.777215957641602,
+            "z": -12.777217864990234
+          },
+          "firstParticleWorld": {
+            "x": -2.3420417308807373,
+            "y": -12.777283668518066,
+            "z": -12.7772855758667
+          },
+          "simulationSpace": 0,
+          "bounds": {
+            "m_Center": {
+              "x": -2.3420417308807373,
+              "y": -12.777283668518066,
+              "z": -12.7772855758667
+            },
+            "m_Extent": {
+              "x": 2.8399999141693115,
+              "y": 4.016366004943848,
+              "z": 4.016366004943848
+            }
+          }
+        }
+      },
+      {
+        "elapsed": 15.14587752847001,
+        "run": "90c7ee08318249e3a15069bdfaa67b19",
+        "renderer": {
+          "name": "Glow",
+          "shader": "MonsterSupergroup/PlanarSprite",
+          "particles": 1,
+          "layer": -1937444793,
+          "playing": true,
+          "visible": true,
+          "enabled": true,
+          "position": {
+            "x": -2.343435049057007,
+            "y": -11.593526840209961,
+            "z": -11.593527793884277
+          },
+          "firstParticleWorld": {
+            "x": -2.3433351516723633,
+            "y": -11.593530654907227,
+            "z": -11.593531608581543
+          },
+          "simulationSpace": 0,
+          "bounds": {
+            "m_Center": {
+              "x": -2.3433351516723633,
+              "y": -11.593530654907227,
+              "z": -11.59353256225586
+            },
+            "m_Extent": {
+              "x": 2.8399999141693115,
+              "y": 4.016366004943848,
+              "z": 4.016366004943848
+            }
+          }
+        }
+      },
+      {
+        "elapsed": 20.15804582601413,
+        "run": "90c7ee08318249e3a15069bdfaa67b19",
+        "renderer": {
+          "name": "Glow",
+          "shader": "MonsterSupergroup/PlanarSprite",
+          "particles": 1,
+          "layer": -1937444793,
+          "playing": true,
+          "visible": true,
+          "enabled": true,
+          "position": {
+            "x": -1.9999998807907104,
+            "y": -10.412553787231445,
+            "z": -10.412555694580078
+          },
+          "firstParticleWorld": {
+            "x": -1.9999027252197266,
+            "y": -10.41257095336914,
+            "z": -10.412572860717773
+          },
+          "simulationSpace": 0,
+          "bounds": {
+            "m_Center": {
+              "x": -1.9999028444290161,
+              "y": -10.41257095336914,
+              "z": -10.412572860717773
+            },
+            "m_Extent": {
+              "x": 2.8399999141693115,
+              "y": 4.016366004943848,
+              "z": 4.016366004943848
+            }
+          }
+        }
+      },
+      {
+        "elapsed": 25.171736826654524,
+        "run": "90c7ee08318249e3a15069bdfaa67b19",
+        "renderer": {
+          "name": "Glow",
+          "shader": "MonsterSupergroup/PlanarSprite",
+          "particles": 1,
+          "layer": -1937444793,
+          "playing": true,
+          "visible": true,
+          "enabled": true,
+          "position": {
+            "x": -1.9999998807907104,
+            "y": -9.233790397644043,
+            "z": -9.23379135131836
+          },
+          "firstParticleWorld": {
+            "x": -2.000094413757324,
+            "y": -9.233813285827637,
+            "z": -9.23381519317627
+          },
+          "simulationSpace": 0,
+          "bounds": {
+            "m_Center": {
+              "x": -2.000094413757324,
+              "y": -9.233813285827637,
+              "z": -9.233814239501953
+            },
+            "m_Extent": {
+              "x": 2.8399999141693115,
+              "y": 4.016366004943848,
+              "z": 4.016366004943848
+            }
+          }
+        }
+      },
+      {
+        "elapsed": 30.186868419405073,
+        "run": "90c7ee08318249e3a15069bdfaa67b19",
+        "renderer": {
+          "name": "Glow",
+          "shader": "MonsterSupergroup/PlanarSprite",
+          "particles": 1,
+          "layer": -1937444793,
+          "playing": true,
+          "visible": true,
+          "enabled": true,
+          "position": {
+            "x": -1.6626265048980713,
+            "y": -8.04680061340332,
+            "z": -8.046801567077637
+          },
+          "firstParticleWorld": {
+            "x": -1.6625280380249023,
+            "y": -8.04678726196289,
+            "z": -8.046789169311523
+          },
+          "simulationSpace": 0,
+          "bounds": {
+            "m_Center": {
+              "x": -1.6625280380249023,
+              "y": -8.046788215637207,
+              "z": -8.046789169311523
+            },
+            "m_Extent": {
+              "x": 2.8399999141693115,
+              "y": 4.016366004943848,
+              "z": 4.016366004943848
+            }
+          }
+        }
+      },
+      {
+        "elapsed": 34.41301761707291,
+        "run": "90c7ee08318249e3a15069bdfaa67b19",
+        "renderer": {
+          "name": "Glow",
+          "shader": "MonsterSupergroup/PlanarSprite",
+          "particles": 1,
+          "layer": -1937444793,
+          "playing": true,
+          "visible": true,
+          "enabled": true,
+          "position": {
+            "x": -1.703718900680542,
+            "y": -7.066771030426025,
+            "z": -7.066771984100342
+          },
+          "firstParticleWorld": {
+            "x": -1.7036267518997192,
+            "y": -7.06674337387085,
+            "z": -7.066744327545166
+          },
+          "simulationSpace": 0,
+          "bounds": {
+            "m_Center": {
+              "x": -1.7036268711090088,
+              "y": -7.06674337387085,
+              "z": -7.066744327545166
+            },
+            "m_Extent": {
+              "x": 2.8399999141693115,
+              "y": 4.016366004943848,
+              "z": 4.016366004943848
+            }
+          }
+        }
+      },
+      {
+        "elapsed": 4.472075499594212,
+        "run": "d08f0afca00d4db2af35939b0e934f94",
+        "renderer": {
+          "name": "Glow",
+          "shader": "MonsterSupergroup/PlanarSprite",
+          "particles": 1,
+          "layer": -1937444793,
+          "playing": true,
+          "visible": true,
+          "enabled": true,
+          "position": {
+            "x": 20.0,
+            "y": -2.0,
+            "z": 0.0
+          },
+          "firstParticleWorld": {
+            "x": 19.999990463256836,
+            "y": -2.000070333480835,
+            "z": -7.039092452032492e-05
+          },
+          "simulationSpace": 0,
+          "bounds": {
+            "m_Center": {
+              "x": 19.999990463256836,
+              "y": -2.000070571899414,
+              "z": -7.046953396638855e-05
+            },
+            "m_Extent": {
+              "x": 2.8399999141693115,
+              "y": 4.016366004943848,
+              "z": 4.016366004943848
+            }
+          }
+        }
+      },
+      {
+        "elapsed": 4.472075499594212,
+        "run": "d08f0afca00d4db2af35939b0e934f94",
+        "renderer": {
+          "name": "Glow",
+          "shader": "MonsterSupergroup/PlanarSprite",
+          "particles": 1,
+          "layer": -1937444793,
+          "playing": true,
+          "visible": false,
+          "enabled": true,
+          "position": {
+            "x": 19.951282501220703,
+            "y": -1.013494610786438,
+            "z": 0.9865055680274963
+          },
+          "firstParticleWorld": {
+            "x": 19.951202392578125,
+            "y": -1.0135366916656494,
+            "z": 0.9864634275436401
+          },
+          "simulationSpace": 0,
+          "bounds": {
+            "m_Center": {
+              "x": 19.951202392578125,
+              "y": -1.013536810874939,
+              "z": 0.9864634275436401
+            },
+            "m_Extent": {
+              "x": 2.8399999141693115,
+              "y": 4.016366004943848,
+              "z": 4.016366004943848
+            }
+          }
+        }
+      },
+      {
+        "elapsed": 5.064393779728562,
+        "run": "d08f0afca00d4db2af35939b0e934f94",
+        "renderer": {
+          "name": "Glow",
+          "shader": "MonsterSupergroup/PlanarSprite",
+          "particles": 1,
+          "layer": -1937444793,
+          "playing": true,
+          "visible": true,
+          "enabled": true,
+          "position": {
+            "x": -0.6914814710617065,
+            "y": -16.001611709594727,
+            "z": -14.001612663269043
+          },
+          "firstParticleWorld": {
+            "x": -0.691581130027771,
+            "y": -16.001605987548828,
+            "z": -14.001607894897461
+          },
+          "simulationSpace": 0,
+          "bounds": {
+            "m_Center": {
+              "x": -0.691581130027771,
+              "y": -16.001604080200195,
+              "z": -14.001606941223145
+            },
+            "m_Extent": {
+              "x": 2.8399999141693115,
+              "y": 4.016366004943848,
+              "z": 4.016366004943848
+            }
+          }
+        }
+      },
+      {
+        "elapsed": 10.11088142497465,
+        "run": "d08f0afca00d4db2af35939b0e934f94",
+        "renderer": {
+          "name": "Glow",
+          "shader": "MonsterSupergroup/PlanarSprite",
+          "particles": 1,
+          "layer": -1937444793,
+          "playing": true,
+          "visible": false,
+          "enabled": true,
+          "position": {
+            "x": -0.3428972065448761,
+            "y": -14.810212135314941,
+            "z": -12.810214042663574
+          },
+          "firstParticleWorld": {
+            "x": -0.3429015576839447,
+            "y": -14.810142517089844,
+            "z": -12.81014347076416
+          },
+          "simulationSpace": 0,
+          "bounds": {
+            "m_Center": {
+              "x": -0.3429014980792999,
+              "y": -14.810140609741211,
+              "z": -12.81014347076416
+            },
+            "m_Extent": {
+              "x": 2.8399999141693115,
+              "y": 4.016366004943848,
+              "z": 4.016366004943848
+            }
+          }
+        }
+      },
+      {
+        "elapsed": 15.155418827664107,
+        "run": "d08f0afca00d4db2af35939b0e934f94",
+        "renderer": {
+          "name": "Glow",
+          "shader": "MonsterSupergroup/PlanarSprite",
+          "particles": 1,
+          "layer": -1937444793,
+          "playing": true,
+          "visible": true,
+          "enabled": true,
+          "position": {
+            "x": -0.344133198261261,
+            "y": -13.617088317871094,
+            "z": -11.61708927154541
+          },
+          "firstParticleWorld": {
+            "x": -0.34409138560295105,
+            "y": -13.61715316772461,
+            "z": -11.617154121398926
+          },
+          "simulationSpace": 0,
+          "bounds": {
+            "m_Center": {
+              "x": -0.3440914750099182,
+              "y": -13.617151260375977,
+              "z": -11.61715316772461
+            },
+            "m_Extent": {
+              "x": 2.8399999141693115,
+              "y": 4.016366004943848,
+              "z": 4.016366004943848
+            }
+          }
+        }
+      }
+    ],
+    "client": [
+      {
+        "elapsed": 4.479948606342076,
+        "run": "90c7ee08318249e3a15069bdfaa67b19",
+        "renderer": {
+          "name": "Glow",
+          "shader": "MonsterSupergroup/PlanarSprite",
+          "particles": 1,
+          "layer": -1937444793,
+          "playing": true,
+          "visible": false,
+          "enabled": true,
+          "position": {
+            "x": 17.993331909179688,
+            "y": 0.0,
+            "z": 0.0
+          },
+          "firstParticleWorld": {
+            "x": 17.993419647216797,
+            "y": -3.324958379380405e-05,
+            "z": -3.3249587431782857e-05
+          },
+          "simulationSpace": 0,
+          "bounds": {
+            "m_Center": {
+              "x": 17.993419647216797,
+              "y": -3.3211712434422225e-05,
+              "z": -3.321171971037984e-05
+            },
+            "m_Extent": {
+              "x": 2.8399999141693115,
+              "y": 4.016366004943848,
+              "z": 4.016366004943848
+            }
+          }
+        }
+      },
+      {
+        "elapsed": 4.479948606342076,
+        "run": "90c7ee08318249e3a15069bdfaa67b19",
+        "renderer": {
+          "name": "Glow",
+          "shader": "MonsterSupergroup/PlanarSprite",
+          "particles": 1,
+          "layer": -1937444793,
+          "playing": true,
+          "visible": false,
+          "enabled": true,
+          "position": {
+            "x": 17.944629669189453,
+            "y": 0.9861764907836914,
+            "z": 0.9861766695976257
+          },
+          "firstParticleWorld": {
+            "x": 17.944541931152344,
+            "y": 0.9861414432525635,
+            "z": 0.986141562461853
+          },
+          "simulationSpace": 0,
+          "bounds": {
+            "m_Center": {
+              "x": 17.944541931152344,
+              "y": 0.9861414432525635,
+              "z": 0.9861416220664978
+            },
+            "m_Extent": {
+              "x": 2.8399999141693115,
+              "y": 4.016366004943848,
+              "z": 4.016366004943848
+            }
+          }
+        }
+      },
+      {
+        "elapsed": 5.085724638309329,
+        "run": "90c7ee08318249e3a15069bdfaa67b19",
+        "renderer": {
+          "name": "Glow",
+          "shader": "MonsterSupergroup/PlanarSprite",
+          "particles": 1,
+          "layer": -1937444793,
+          "playing": true,
+          "visible": true,
+          "enabled": true,
+          "position": {
+            "x": -2.691469669342041,
+            "y": -14.001579284667969,
+            "z": -14.001580238342285
+          },
+          "firstParticleWorld": {
+            "x": -2.6914315223693848,
+            "y": -14.001514434814453,
+            "z": -14.00151538848877
+          },
+          "simulationSpace": 0,
+          "bounds": {
+            "m_Center": {
+              "x": -2.6914315223693848,
+              "y": -14.00151252746582,
+              "z": -14.001514434814453
+            },
+            "m_Extent": {
+              "x": 2.8399999141693115,
+              "y": 4.016366004943848,
+              "z": 4.016366004943848
+            }
+          }
+        }
+      },
+      {
+        "elapsed": 10.331525731366128,
+        "run": "90c7ee08318249e3a15069bdfaa67b19",
+        "renderer": {
+          "name": "Glow",
+          "shader": "MonsterSupergroup/PlanarSprite",
+          "particles": 1,
+          "layer": -1937444793,
+          "playing": true,
+          "visible": false,
+          "enabled": true,
+          "position": {
+            "x": -2.3418867588043213,
+            "y": -12.772481918334961,
+            "z": -12.772483825683594
+          },
+          "firstParticleWorld": {
+            "x": -2.341980218887329,
+            "y": -12.772457122802734,
+            "z": -12.77245807647705
+          },
+          "simulationSpace": 0,
+          "bounds": {
+            "m_Center": {
+              "x": -2.341980218887329,
+              "y": -12.772457122802734,
+              "z": -12.772459030151367
+            },
+            "m_Extent": {
+              "x": 2.8399999141693115,
+              "y": 4.016366004943848,
+              "z": 4.016366004943848
+            }
+          }
+        }
+      },
+      {
+        "elapsed": 15.346643132623285,
+        "run": "90c7ee08318249e3a15069bdfaa67b19",
+        "renderer": {
+          "name": "Glow",
+          "shader": "MonsterSupergroup/PlanarSprite",
+          "particles": 1,
+          "layer": -1937444793,
+          "playing": true,
+          "visible": true,
+          "enabled": true,
+          "position": {
+            "x": -2.3431549072265625,
+            "y": -11.584035873413086,
+            "z": -11.584036827087402
+          },
+          "firstParticleWorld": {
+            "x": -2.3432488441467285,
+            "y": -11.584059715270996,
+            "z": -11.584061622619629
+          },
+          "simulationSpace": 0,
+          "bounds": {
+            "m_Center": {
+              "x": -2.3432486057281494,
+              "y": -11.584059715270996,
+              "z": -11.584061622619629
+            },
+            "m_Extent": {
+              "x": 2.8399999141693115,
+              "y": 4.016366004943848,
+              "z": 4.016366004943848
+            }
+          }
+        }
+      },
+      {
+        "elapsed": 20.359315229114145,
+        "run": "90c7ee08318249e3a15069bdfaa67b19",
+        "renderer": {
+          "name": "Glow",
+          "shader": "MonsterSupergroup/PlanarSprite",
+          "particles": 1,
+          "layer": -1937444793,
+          "playing": true,
+          "visible": true,
+          "enabled": true,
+          "position": {
+            "x": -1.9999998807907104,
+            "y": -10.412528991699219,
+            "z": -10.412529945373535
+          },
+          "firstParticleWorld": {
+            "x": -2.0000805854797363,
+            "y": -10.41257095336914,
+            "z": -10.412571907043457
+          },
+          "simulationSpace": 0,
+          "bounds": {
+            "m_Center": {
+              "x": -2.0000805854797363,
+              "y": -10.412569999694824,
+              "z": -10.412571907043457
+            },
+            "m_Extent": {
+              "x": 2.8399999141693115,
+              "y": 4.016366004943848,
+              "z": 4.016366004943848
+            }
+          }
+        }
+      },
+      {
+        "elapsed": 25.371859725099057,
+        "run": "90c7ee08318249e3a15069bdfaa67b19",
+        "renderer": {
+          "name": "Glow",
+          "shader": "MonsterSupergroup/PlanarSprite",
+          "particles": 1,
+          "layer": -1937444793,
+          "playing": true,
+          "visible": true,
+          "enabled": true,
+          "position": {
+            "x": -1.9999998807907104,
+            "y": -9.214905738830566,
+            "z": -9.214906692504883
+          },
+          "firstParticleWorld": {
+            "x": -2.0000619888305664,
+            "y": -9.214850425720215,
+            "z": -9.214851379394531
+          },
+          "simulationSpace": 0,
+          "bounds": {
+            "m_Center": {
+              "x": -2.0000619888305664,
+              "y": -9.214849472045898,
+              "z": -9.214851379394531
+            },
+            "m_Extent": {
+              "x": 2.8399999141693115,
+              "y": 4.016366004943848,
+              "z": 4.016366004943848
+            }
+          }
+        }
+      },
+      {
+        "elapsed": 30.38705632602796,
+        "run": "90c7ee08318249e3a15069bdfaa67b19",
+        "renderer": {
+          "name": "Glow",
+          "shader": "MonsterSupergroup/PlanarSprite",
+          "particles": 1,
+          "layer": -1937444793,
+          "playing": true,
+          "visible": true,
+          "enabled": true,
+          "position": {
+            "x": -1.6636159420013428,
+            "y": -8.023187637329102,
+            "z": -8.023188591003418
+          },
+          "firstParticleWorld": {
+            "x": -1.6635266542434692,
+            "y": -8.023219108581543,
+            "z": -8.02322006225586
+          },
+          "simulationSpace": 0,
+          "bounds": {
+            "m_Center": {
+              "x": -1.6635267734527588,
+              "y": -8.02322006225586,
+              "z": -8.023221015930176
+            },
+            "m_Extent": {
+              "x": 2.8399999141693115,
+              "y": 4.016366004943848,
+              "z": 4.016366004943848
+            }
+          }
+        }
+      },
+      {
+        "elapsed": 34.41301761707291,
+        "run": "90c7ee08318249e3a15069bdfaa67b19",
+        "renderer": {
+          "name": "Glow",
+          "shader": "MonsterSupergroup/PlanarSprite",
+          "particles": 1,
+          "layer": -1937444793,
+          "playing": true,
+          "visible": true,
+          "enabled": true,
+          "position": {
+            "x": -1.703728437423706,
+            "y": -7.0664520263671875,
+            "z": -7.066452980041504
+          },
+          "firstParticleWorld": {
+            "x": -1.7036564350128174,
+            "y": -7.066501617431641,
+            "z": -7.066502094268799
+          },
+          "simulationSpace": 0,
+          "bounds": {
+            "m_Center": {
+              "x": -1.7036564350128174,
+              "y": -7.066501140594482,
+              "z": -7.066502094268799
+            },
+            "m_Extent": {
+              "x": 2.8399999141693115,
+              "y": 4.016366004943848,
+              "z": 4.016366004943848
+            }
+          }
+        }
+      },
+      {
+        "elapsed": 4.472075499594212,
+        "run": "d08f0afca00d4db2af35939b0e934f94",
+        "renderer": {
+          "name": "Glow",
+          "shader": "MonsterSupergroup/PlanarSprite",
+          "particles": 1,
+          "layer": -1937444793,
+          "playing": true,
+          "visible": false,
+          "enabled": true,
+          "position": {
+            "x": 19.993331909179688,
+            "y": -2.0,
+            "z": 0.0
+          },
+          "firstParticleWorld": {
+            "x": 19.9932918548584,
+            "y": -2.0000646114349365,
+            "z": -6.464550097007304e-05
+          },
+          "simulationSpace": 0,
+          "bounds": {
+            "m_Center": {
+              "x": 19.9932918548584,
+              "y": -2.0000646114349365,
+              "z": -6.456897972384468e-05
+            },
+            "m_Extent": {
+              "x": 2.8399999141693115,
+              "y": 4.016366004943848,
+              "z": 4.016366004943848
+            }
+          }
+        }
+      },
+      {
+        "elapsed": 4.472075499594212,
+        "run": "d08f0afca00d4db2af35939b0e934f94",
+        "renderer": {
+          "name": "Glow",
+          "shader": "MonsterSupergroup/PlanarSprite",
+          "particles": 1,
+          "layer": -1937444793,
+          "playing": true,
+          "visible": false,
+          "enabled": true,
+          "position": {
+            "x": 19.944629669189453,
+            "y": -1.0138235092163086,
+            "z": 0.9861766695976257
+          },
+          "firstParticleWorld": {
+            "x": 19.944530487060547,
+            "y": -1.0138185024261475,
+            "z": 0.9861816167831421
+          },
+          "simulationSpace": 0,
+          "bounds": {
+            "m_Center": {
+              "x": 19.944530487060547,
+              "y": -1.0138185024261475,
+              "z": 0.9861817359924316
+            },
+            "m_Extent": {
+              "x": 2.8399999141693115,
+              "y": 4.016366004943848,
+              "z": 4.016366004943848
+            }
+          }
+        }
+      },
+      {
+        "elapsed": 5.064393779728562,
+        "run": "d08f0afca00d4db2af35939b0e934f94",
+        "renderer": {
+          "name": "Glow",
+          "shader": "MonsterSupergroup/PlanarSprite",
+          "particles": 1,
+          "layer": -1937444793,
+          "playing": true,
+          "visible": true,
+          "enabled": true,
+          "position": {
+            "x": -0.6914697885513306,
+            "y": -16.00157928466797,
+            "z": -14.001580238342285
+          },
+          "firstParticleWorld": {
+            "x": -0.6913965940475464,
+            "y": -16.001529693603516,
+            "z": -14.001531600952148
+          },
+          "simulationSpace": 0,
+          "bounds": {
+            "m_Center": {
+              "x": -0.6913965940475464,
+              "y": -16.00153160095215,
+              "z": -14.001531600952148
+            },
+            "m_Extent": {
+              "x": 2.8399999141693115,
+              "y": 4.016366004943848,
+              "z": 4.016366004943848
+            }
+          }
+        }
+      },
+      {
+        "elapsed": 10.11088142497465,
+        "run": "d08f0afca00d4db2af35939b0e934f94",
+        "renderer": {
+          "name": "Glow",
+          "shader": "MonsterSupergroup/PlanarSprite",
+          "particles": 1,
+          "layer": -1937444793,
+          "playing": true,
+          "visible": false,
+          "enabled": true,
+          "position": {
+            "x": -0.34340089559555054,
+            "y": -14.82905387878418,
+            "z": -12.829054832458496
+          },
+          "firstParticleWorld": {
+            "x": -0.3434981405735016,
+            "y": -14.829036712646484,
+            "z": -12.829038619995117
+          },
+          "simulationSpace": 0,
+          "bounds": {
+            "m_Center": {
+              "x": -0.343498170375824,
+              "y": -14.829036712646484,
+              "z": -12.829038619995117
+            },
+            "m_Extent": {
+              "x": 2.8399999141693115,
+              "y": 4.016366004943848,
+              "z": 4.016366004943848
+            }
+          }
+        }
+      },
+      {
+        "elapsed": 15.155418827664107,
+        "run": "d08f0afca00d4db2af35939b0e934f94",
+        "renderer": {
+          "name": "Glow",
+          "shader": "MonsterSupergroup/PlanarSprite",
+          "particles": 1,
+          "layer": -1937444793,
+          "playing": true,
+          "visible": false,
+          "enabled": true,
+          "position": {
+            "x": -0.3442721962928772,
+            "y": -13.621747970581055,
+            "z": -11.621749877929688
+          },
+          "firstParticleWorld": {
+            "x": -0.3443540930747986,
+            "y": -13.621788024902344,
+            "z": -11.621789932250977
+          },
+          "simulationSpace": 0,
+          "bounds": {
+            "m_Center": {
+              "x": -0.34435421228408813,
+              "y": -13.62178897857666,
+              "z": -11.621790885925293
+            },
+            "m_Extent": {
+              "x": 2.8399999141693115,
+              "y": 4.016366004943848,
+              "z": 4.016366004943848
+            }
+          }
+        }
+      }
+    ]
+  }
+}

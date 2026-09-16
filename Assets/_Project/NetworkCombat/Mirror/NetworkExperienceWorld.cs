@@ -69,7 +69,7 @@ namespace MonsterSupergroup.NetworkCombat
                 snapshot.AssignmentEpoch == agent.Assignment.Epoch) position = snapshot.Position;
             if (!schedule.ConsumeDeath(kill.TargetEntityId, kill.TargetStateVersion, amount, out string reason))
             {
-                Debug.Log($"[XP] run={runId} enemy={kill.TargetEntityId} death={kill.TargetStateVersion} cause={kill.CauseEventId} {reason}");
+                if (AstralShift.DebugTools.DBL.VerboseEnabled) Debug.Log($"[XP] run={runId} enemy={kill.TargetEntityId} death={kill.TargetStateVersion} cause={kill.CauseEventId} {reason}");
                 return;
             }
             var gem = Instantiate(gemPrefab, position, Quaternion.identity);
@@ -77,7 +77,7 @@ namespace MonsterSupergroup.NetworkCombat
             gem.Initialize(runId, ++sequence, amount);
             drops.Add(sequence, gem);
             NetworkServer.Spawn(gem.gameObject);
-            Debug.Log($"[XP] run={runId} drop={sequence} enemy={kill.TargetEntityId} death={kill.TargetStateVersion} cause={kill.CauseEventId} raw={amount} position={position}");
+            if (AstralShift.DebugTools.DBL.VerboseEnabled) Debug.Log($"[XP] run={runId} drop={sequence} enemy={kill.TargetEntityId} death={kill.TargetStateVersion} cause={kill.CauseEventId} raw={amount} position={position}");
         }
 
         public bool TryCollect(NetworkConnectionToClient sender, NetworkIdentity avatar, string requestedRun,
@@ -114,7 +114,7 @@ namespace MonsterSupergroup.NetworkCombat
             gem.ServerPresentCollection(avatar.netId);
             NetworkServer.Destroy(gem.gameObject);
             reason = "collected";
-            Debug.Log($"[XP] run={runId} drop={dropId} collector={avatar.netId} raw={gem.RawExperience} awarded={amount}");
+            if (AstralShift.DebugTools.DBL.VerboseEnabled) Debug.Log($"[XP] run={runId} drop={dropId} collector={avatar.netId} raw={gem.RawExperience} awarded={amount}");
             return true;
         }
 

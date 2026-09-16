@@ -62,7 +62,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 0bf3fd7886ae7206a2f2b1fe7329c421, type: 2}
+  - {fileID: 2100000, guid: 85fbc1b3599b850489cbf24802f645a2, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -153,7 +153,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 0bf3fd7886ae7206a2f2b1fe7329c421, type: 2}
+  - {fileID: 2100000, guid: 85fbc1b3599b850489cbf24802f645a2, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -197,6 +197,7 @@ GameObject:
   - component: {fileID: 2847369450603349378}
   - component: {fileID: 5256974246996931941}
   - component: {fileID: 2378170771161766656}
+  - component: {fileID: 2493955369689620360}
   m_Layer: 0
   m_Name: ReferenceGhoulAttack
   m_TagString: Untagged
@@ -316,6 +317,18 @@ MonoBehaviour:
   references:
     version: 2
     RefIds: []
+--- !u!114 &2493955369689620360
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3377742653309851581}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4f2e03ea45fc20d4caaa4ff32e55ae5e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: MonsterSupergroup.Gameplay.Combat::MonsterSupergroup.Gameplay.Combat.GameplayPlanarEffect
 --- !u!1 &3637179779627359050
 GameObject:
   m_ObjectHideFlags: 0
@@ -592,7 +605,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 0bf3fd7886ae7206a2f2b1fe7329c421, type: 2}
+  - {fileID: 2100000, guid: 85fbc1b3599b850489cbf24802f645a2, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

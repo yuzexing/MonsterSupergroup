@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using AstralShift.HellMaiden.Combat.Traps;
 using AstralShift.Managers;
 using Mirror;
 using UnityEngine;
@@ -44,7 +45,7 @@ namespace MonsterSupergroup.NetworkCombat
             yield return null; // Drain a wait already eligible in the initiating frame.
             var world = NetworkEnemySimulationWorld.Instance;
             double before = EnemySimulationClock.CombatNow;
-            var states = world.ReferenceTraps.Values.ToArray();
+            var states = CaptureValidationStates(world);
             LogValidation("pause-start", phase, before, states, true);
             if (cancel)
             {
@@ -57,13 +58,31 @@ namespace MonsterSupergroup.NetworkCombat
             }
             yield return new WaitForSecondsRealtime(1.2f);
             bool unchanged = Math.Abs(EnemySimulationClock.CombatNow - before) < .001 &&
-                (cancel ? world.ReferenceTraps.Count == 0 : states.SequenceEqual(world.ReferenceTraps.Values));
-            LogValidation("pause-end", phase, before, world.ReferenceTraps.Values.ToArray(), unchanged);
+                (cancel ? world.ReferenceTraps.Count == 0 : states.SequenceEqual(CaptureValidationStates(world)));
+            LogValidation("pause-end", phase, before, CaptureValidationStates(world), unchanged);
             if (!unchanged) Debug.LogError("[LimboSpatialFixture] paused state changed: " + phase);
             if (validationPause != null) validationPause.ResumeGame();
             validationPause = null;
             LogValidation("resume", phase, before, world.ReferenceTraps.Values.ToArray(), true);
             validationWaiting = false;
+        }
+
+        private static ReferenceTrapSnapshot[] CaptureValidationStates(NetworkEnemySimulationWorld world) =>
+            world.ReferenceTraps.OrderBy(pair => pair.Key).Select(pair =>
+                world.TryGetReferenceBarrier(pair.Key, out var barrier)
+                    ? CaptureBarrierState(pair.Value, barrier) : pair.Value).ToArray();
+
+        internal static ReferenceTrapSnapshot CaptureBarrierState(ReferenceTrapSnapshot published, BarrierTrap barrier)
+        {
+            // The SyncDictionary publishes at 20 Hz using communication time. A
+            // pre-pause change may arrive after the clock has stopped. Measure the
+            // native object, and retain the published value separately for audit.
+            published.Phase = barrier.NetworkPhase;
+            published.Collision = barrier.NetworkCollisionEnabled;
+            if (published.Phase != BarrierPhase.Framing) published.Radius = barrier.NetworkInnerRadius;
+            published.Count = barrier.NetworkGroupCount;
+            published.Visible = barrier.NetworkVisibleGroups;
+            return published;
         }
 
         [Serializable] private class ValidationRecord
@@ -73,13 +92,15 @@ namespace MonsterSupergroup.NetworkCombat
             public float scale;
             public bool passed;
             public ReferenceTrapSnapshot[] states;
+            public ReferenceTrapSnapshot[] publishedStates;
         }
         private void LogValidation(string kind, string phase, double before, ReferenceTrapSnapshot[] states, bool passed)
         {
             var value = new ValidationRecord { kind = kind, phase = phase, run = run,
                 role = LimboReferenceLaunch.Argument("--limbo-role="), fixture = ValidationCase,
                 combat = EnemySimulationClock.CombatNow, before = before, realtime = Time.realtimeSinceStartupAsDouble,
-                scale = Time.timeScale, passed = passed, states = states };
+                scale = Time.timeScale, passed = passed, states = states,
+                publishedStates = NetworkEnemySimulationWorld.Instance.ReferenceTraps.OrderBy(pair => pair.Key).Select(pair => pair.Value).ToArray() };
             File.AppendAllText(Path.Combine(LimboReferenceLaunch.OutputDirectory, "spatial-actions.jsonl"), JsonUtility.ToJson(value) + "\n");
             ScreenCapture.CaptureScreenshot(Path.Combine(LimboReferenceLaunch.OutputDirectory, $"fixture-{run}-{phase}-{kind}.png"));
         }

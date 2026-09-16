@@ -7,6 +7,7 @@ namespace AstralShift.DebugTools
 {
 	public static class DBL
 	{
+        public static bool VerboseEnabled { get; set; } = true;
 		public enum Module
 		{
 			Controllers = 0,
@@ -61,6 +62,7 @@ namespace AstralShift.DebugTools
 
 		public static void Log(Module module, string msg, int severity = 0)
 		{
+            if (severity == 0 && !VerboseEnabled) return;
 			string text = module switch
 			{
 				Module.Controllers => "<color=yellow><b>► Controllers: </b></color>", 

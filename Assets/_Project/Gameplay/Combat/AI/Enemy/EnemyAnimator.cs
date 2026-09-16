@@ -460,25 +460,18 @@ namespace AstralShift.HellMaiden.AI.Enemy
 
 		protected void ResumeAnimator()
 		{
-			if ((bool)animator)
-			{
-				if (randomAnimatorSpeed)
-				{
-					animator.speed = UnityEngine.Random.Range(animatorSpeedBounds.x, animatorSpeedBounds.y);
-				}
-				else
-				{
-					animator.speed = animatorSpeed;
-				}
-			}
+            // Mecanim.speed does not control an Animancer graph. Only movement uses
+            // the configured speed; timed attacks are sampled by the combat clock.
+            if (animancer != null)
+                animancer.Layers[0].Speed = randomAnimatorSpeed
+                    ? UnityEngine.Random.Range(animatorSpeedBounds.x, animatorSpeedBounds.y) : animatorSpeed;
 		}
 
 		protected void PauseAnimator()
 		{
-			if ((bool)animator)
-			{
-				animator.speed = 0f;
-			}
+            // Remove the movement multiplier, not animation playback. Death and
+            // hurt clips must finish; local timed attacks freeze their own state.
+            if (animancer != null) animancer.Layers[0].Speed = 1;
 		}
 
 		protected virtual void ResetAnimancer()

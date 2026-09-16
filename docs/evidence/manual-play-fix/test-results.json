@@ -1,0 +1,198 @@
+[
+  {
+    "file": "Logs/ManualPlayFix/edit-all-r1.xml",
+    "total": 790,
+    "passed": 788,
+    "failed": 2,
+    "sha256": "d3a1f1f04d76079262e19194952b05fbd683bbc573ba211ea2603d8afdd325fa"
+  },
+  {
+    "file": "Logs/ManualPlayFix/edit-all-r2.xml",
+    "total": 790,
+    "passed": 790,
+    "failed": 0,
+    "sha256": "5f63d8a79df02b908e03f734e97e714c5f0ce2e79710232b7bc232eb1eeab8fe"
+  },
+  {
+    "file": "Logs/ManualPlayFix/edit-all-r3.xml",
+    "total": 790,
+    "passed": 788,
+    "failed": 2,
+    "sha256": "45ddf7fda567ed9f78574da32336b72bff0f7c9c50aae071d31716508cb15da5"
+  },
+  {
+    "file": "Logs/ManualPlayFix/edit-all-r4.xml",
+    "total": 790,
+    "passed": 789,
+    "failed": 1,
+    "sha256": "9c430d47d5eadfec473df0cc5660d4e105a253472acf967d6f164a3ebc2d5ab2"
+  },
+  {
+    "file": "Logs/ManualPlayFix/edit-digits-final.xml",
+    "total": 791,
+    "passed": 791,
+    "failed": 0,
+    "sha256": "9ea2fda75335cc59e0aaf304e313429aa34baff4dfd8e6582a7fea9ed9b15bc2"
+  },
+  {
+    "file": "Logs/ManualPlayFix/edit-final.xml",
+    "total": 790,
+    "passed": 790,
+    "failed": 0,
+    "sha256": "33c54fc6235b19b8abb43e8f116fab133b951bd15ea19cfefe2ebb5fafa962e3"
+  },
+  {
+    "file": "Logs/ManualPlayFix/fire-r1.xml",
+    "total": 1,
+    "passed": 1,
+    "failed": 0,
+    "sha256": "604c02800dad6c99670f35f945056c45005e72e0206faf9e6ded9d7a0d3cf4fb"
+  },
+  {
+    "file": "Logs/ManualPlayFix/fire-r2.xml",
+    "total": 1,
+    "passed": 1,
+    "failed": 0,
+    "sha256": "9559b1f0417e942e83fbf70e92b12e1270db3fd11997779822e7e5d547f31e8b"
+  },
+  {
+    "file": "Logs/ManualPlayFix/fire-r4.xml",
+    "total": 1,
+    "passed": 1,
+    "failed": 0,
+    "sha256": "f3628ae401f8e5d766846cf6bd46919b9ad58a690418623c0973a7a39bac0eb6"
+  },
+  {
+    "file": "Logs/ManualPlayFix/play-all-r1.xml",
+    "total": 531,
+    "passed": 531,
+    "failed": 0,
+    "sha256": "6723aaeb9b9d4ed84b3ebfc5432d60de250548f6168904d666aa319275c23228"
+  },
+  {
+    "file": "Logs/ManualPlayFix/play-digits-final.xml",
+    "total": 2,
+    "passed": 2,
+    "failed": 0,
+    "sha256": "4a30a6f8aa7a77c13f1c525c0558cd089625e33d0a197f79d6ce10098a37ce35"
+  },
+  {
+    "file": "Logs/ManualPlayFix/play-final.xml",
+    "total": 533,
+    "passed": 533,
+    "failed": 0,
+    "sha256": "fa12f6c3a93602f35cfce71769b85d3c2833c7491e9ec4243df337a1020de56f"
+  },
+  {
+    "file": "Logs/ManualPlayFix/repro-edit.xml",
+    "total": 2,
+    "passed": 0,
+    "failed": 2,
+    "sha256": "b1b5fa920333ccb7512ca013fdf9cdac3511839e2d713b9683881b6117d7ba64"
+  },
+  {
+    "file": "Logs/ManualPlayFix/variant-r5.xml",
+    "total": 6,
+    "passed": 4,
+    "failed": 2,
+    "sha256": "5557d7375a74bc51ee4cc62c9aac1b306fbd944864d1b3a9fdf1030fd5a4a7d8"
+  },
+  {
+    "file": "Logs/ManualPlayFix/variant-r6.xml",
+    "total": 6,
+    "passed": 4,
+    "failed": 2,
+    "sha256": "1d7eaa9187603e5c5d4ec1a122349e0fd112fed4f3a78af438ae9cb5953ffae7"
+  },
+  {
+    "file": "Logs/ManualPlayFix/variant-r7.xml",
+    "total": 6,
+    "passed": 6,
+    "failed": 0,
+    "sha256": "a447410f9f250b58131bc55e2e957265e62ed5029a10edb3e38c15745e46c1f1"
+  },
+  {
+    "file": "Logs/ManualPlayFix/visual-r2.xml",
+    "total": 3,
+    "passed": 2,
+    "failed": 1,
+    "sha256": "664dc6b160e366f16e9ec9faa91213e622f21ce75eac225c5980171ddbaa5840"
+  },
+  {
+    "file": "Logs/ManualPlayFix/visual-r3.xml",
+    "total": 3,
+    "passed": 2,
+    "failed": 1,
+    "sha256": "20fb8ada2209af2159e0c19b64d6214acfb9008a7dcc55ec67b40f8b31a6cfb6"
+  },
+  {
+    "file": "Logs/ManualPlayFix/visual-r4.xml",
+    "total": 3,
+    "passed": 2,
+    "failed": 1,
+    "sha256": "79e4c5faf05db735301182449554d8d0cc2d4fdbb66b60ade5d4857bcb45b18a"
+  },
+  {
+    "file": "Logs/ManualPlayFix/visual-r5.xml",
+    "total": 3,
+    "passed": 2,
+    "failed": 1,
+    "sha256": "5a35f613fad85213756727cbfd35abf69ab160891cd87877f7577c67bc7f43f5"
+  },
+  {
+    "file": "Logs/ManualPlayFix/visual-r6.xml",
+    "total": 3,
+    "passed": 3,
+    "failed": 0,
+    "sha256": "bb00b0f35052585a6c64181249c212f578baf224be5214da253b238a8e9a8797"
+  },
+  {
+    "file": "Logs/ManualPlayFix/visual-r8.xml",
+    "total": 4,
+    "passed": 3,
+    "failed": 1,
+    "sha256": "c46df5ba2e02be19106455089ddbd1797c77578305f45fcd829f3e9448101a40"
+  },
+  {
+    "file": "Logs/ManualPlayFix/visual-r9.xml",
+    "total": 4,
+    "passed": 4,
+    "failed": 0,
+    "sha256": "e8a1f887e6b18a39130d4c1edc5454a6094dcb0940c8d670b1884cb2cba02ce4"
+  },
+  {
+    "file": "Logs/ManualPlayFix/ui-font-repro.xml",
+    "total": 1,
+    "passed": 0,
+    "failed": 1,
+    "sha256": "a5000f9af8b841a2bfec17a6d87b16b392f6a7d3afcc050b0f16dd6c7e92bfb8"
+  },
+  {
+    "file": "Logs/ManualPlayFix/ui-font-fixed.xml",
+    "total": 4,
+    "passed": 4,
+    "failed": 0,
+    "sha256": "e9118c130fcbc27b6cce0d2434b40a7640c5fdb0a8cece5bec6aa362d0e1883a"
+  },
+  {
+    "file": "Logs/ManualPlayFix/play-ui-final.xml",
+    "total": 534,
+    "passed": 534,
+    "failed": 0,
+    "sha256": "afe07606488dd1653b491f6a95453bf244693af2cdfdf93c260ebb6ce1720d2f"
+  },
+  {
+    "file": "Logs/ManualPlayFix/edit-ui-final.xml",
+    "total": 791,
+    "passed": 791,
+    "failed": 0,
+    "sha256": "10fd3018796dfc18e2127923977426965c813db252cb3a863c2c19b27fa5faa2"
+  },
+  {
+    "file": "Logs/ManualPlayFix/trap-pause-observation.xml",
+    "total": 3,
+    "passed": 3,
+    "failed": 0,
+    "sha256": "d999b7692c405075d63662694acb85583f5ad918aa2c71dfc4b6930a55ddbdc1"
+  }
+]

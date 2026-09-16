@@ -23,6 +23,7 @@ namespace MonsterSupergroup.Gameplay.Combat
         public static void Effect(GameObject root)
         {
             if (root == null || GameplayMapContext.Active == null) return;
+            GameplayPlanarEffect.Attach(root);
             foreach (var renderer in root.GetComponentsInChildren<Renderer>(true))
                 if (renderer.sortingLayerName != "UI" && renderer.sortingLayerName != "EnemyAttack") renderer.sortingLayerName = "Foreground";
             foreach (var group in root.GetComponentsInChildren<SortingGroup>(true))
@@ -31,6 +32,7 @@ namespace MonsterSupergroup.Gameplay.Combat
         public static void Warning(GameObject root)
         {
             if (root == null || GameplayMapContext.Active == null) return;
+            GameplayPlanarEffect.Attach(root);
             foreach (var renderer in root.GetComponentsInChildren<Renderer>(true)) renderer.sortingLayerName = "EnemyAttack";
             foreach (var group in root.GetComponentsInChildren<SortingGroup>(true)) group.sortingLayerName = "EnemyAttack";
         }

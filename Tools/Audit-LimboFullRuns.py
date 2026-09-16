@@ -87,7 +87,10 @@ def summarize(root):
                 role_report['firstCompletedRound']['counting'] = dict(
                     successful=len(successful), confirmedKills=kills, selfDestructs=counts['self-destruct'],
                     retired=counts['retired'], alive=int(end['totalAlive']), sourceCount=int(end['countedAlive']),
-                    conservationDelta=len(successful)-kills-counts['self-destruct']-counts['retired']-int(end['totalAlive']))
+                    conservationDelta=len(successful)-kills-counts['self-destruct']-counts['retired']-int(end['totalAlive']),
+                    removedFromAliveLedger=counts['death'],
+                    ledgerRemovalsWithoutObservedKill=counts['death']-kills,
+                    ledgerConservationDelta=len(successful)-counts['death']-counts['self-destruct']-counts['retired']-int(end['totalAlive']))
         raw = (folder / 'player.log').read_text(encoding='utf-8-sig', errors='replace')
         role_report['transitionServerLog'] = re.findall(r'^\[LimboTransition\].*$', raw, re.M)
         role_report['runEndLog'] = re.findall(r'^\[RunEnd\].*$', raw, re.M)

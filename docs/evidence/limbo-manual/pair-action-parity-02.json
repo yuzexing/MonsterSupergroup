@@ -1,0 +1,9 @@
+{
+  "description": "Common sampled actions keyed by run/enemy/action/phase/strike. Timings tolerance 1e-6 seconds; counts need not match because rendering and sampling occur on different frames. This is not a full handoff matrix or proof of every attempted hit.",
+  "hostSamples": 2135,
+  "clientSamples": 2135,
+  "commonSamples": 2116,
+  "different": [],
+  "hostOnly": 19,
+  "clientOnly": 19
+}

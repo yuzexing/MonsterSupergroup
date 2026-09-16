@@ -49,6 +49,29 @@ namespace MonsterSupergroup.Gameplay.Tests
             for(int i=owned.Count-1;i>=0;i--)if(owned[i]!=null)Object.DestroyImmediate(owned[i]);
             owned.Clear();PoolManager.Instance=null;
         }
+        [Test] public void LateRecoverySeeksTheSameStoppedEmissionAsSequentialPlayback()
+        {
+            var state=State();
+            attack.ApplyLocalFrame(state,state.WarningUntil,true);
+            var visual=attack.ExplosionInstance;
+            var particles=visual.particleSystem;
+            particles.Stop(true,ParticleSystemStopBehavior.StopEmittingAndClear);
+            var main=particles.main;main.loop=true;main.duration=2;main.startLifetime=2;main.maxParticles=2000;
+            var emission=particles.emission;emission.enabled=true;emission.rateOverTime=1000;emission.SetBursts(System.Array.Empty<ParticleSystem.Burst>());
+            float active=(float)(state.ActiveUntil-state.WarningUntil);
+            visual.TriggerVisual();
+            visual.SampleCombatTimeline(.06f,active);
+            visual.SampleCombatTimeline(active,active);
+            visual.SampleCombatTimeline(.6f,active);
+            int sequential=particles.particleCount;
+            Assert.That(sequential,Is.GreaterThan(40),"The diagnostic emitter must actually produce particles.");
+            Assert.That(visual.colliders.activeSelf,Is.False);
+            visual.TriggerVisual();
+            visual.SampleCombatTimeline(.6f,active);
+            Assert.That(particles.particleCount,Is.EqualTo(sequential).Within(2),
+                "A late Recovery may age the tail, but cannot emit during it.");
+            Assert.That(visual.colliders.activeSelf,Is.False);
+        }
         [Test] public void ReusedAttackRebindsFreshStatsOnSameOwnerAcrossVariants()
         {
             EnemyExplosionAttackVFX previous=null;

@@ -1,0 +1,74 @@
+[
+  {
+    "file": "Logs\\EnemyAttackTimeline\\editmode-r5-recheck.xml",
+    "total": 785,
+    "passed": 785,
+    "failed": 0,
+    "duration": 6.867336,
+    "sha256": "bb964c5f6e5c6ce085a9e7768e5e1a7a8926d7181912b77f860307837a3ab2d9",
+    "expectedReproductionFailure": false
+  },
+  {
+    "file": "Logs\\EnemyAttackTimeline\\editmode-r5-final.xml",
+    "total": 785,
+    "passed": 784,
+    "failed": 1,
+    "duration": 7.1250928,
+    "sha256": "6fb5944d4e85cac932434e4455cf0b09d21b04e29937637b6fd3423f974c13d6",
+    "expectedReproductionFailure": false
+  },
+  {
+    "file": "Logs\\EnemyAttackTimeline\\playmode-r5-final.xml",
+    "total": 529,
+    "passed": 529,
+    "failed": 0,
+    "duration": 404.3338433,
+    "sha256": "cb100273b62b5ea1401a95dc735399a4678b7ef125f977aa0c556c970fbe2435",
+    "expectedReproductionFailure": false
+  },
+  {
+    "file": "Logs\\EnemyAttackTimeline\\lostsoul-cancel-fixed.xml",
+    "total": 33,
+    "passed": 33,
+    "failed": 0,
+    "duration": 53.5505606,
+    "sha256": "a5d762ca357f1989e294363b7041112e4273894d9bf891b6d3ae317258257954",
+    "expectedReproductionFailure": false
+  },
+  {
+    "file": "Logs\\EnemyAttackTimeline\\lostsoul-cancel-repro2.xml",
+    "total": 1,
+    "passed": 0,
+    "failed": 1,
+    "duration": 4.3432366,
+    "sha256": "63f2184d6fb331fca67c9969382a46898c8a0286227745f60af9f5821db1549b",
+    "expectedReproductionFailure": true
+  },
+  {
+    "file": "Logs\\EnemyAttackTimeline\\interrupt-zero-repro.xml",
+    "total": 1,
+    "passed": 0,
+    "failed": 1,
+    "duration": 4.0632561,
+    "sha256": "27a122f13e58e81d15abf58333c27e160f1148347d8dfb0f597c9378b8f93d6b",
+    "expectedReproductionFailure": true
+  },
+  {
+    "file": "Logs\\EnemyAttackTimeline\\interrupt-fixed.xml",
+    "total": 5,
+    "passed": 5,
+    "failed": 0,
+    "duration": 14.5194722,
+    "sha256": "04d3f699e59257c2f15d705ee53fb0156f98d0c2718de8cb706fb97c1ee4e2e0",
+    "expectedReproductionFailure": false
+  },
+  {
+    "file": "Logs\\EnemyAttackTimeline\\lostsoul-tail.xml",
+    "total": 27,
+    "passed": 27,
+    "failed": 0,
+    "duration": 40.423847,
+    "sha256": "415646fd6387d33521b4e094371729432c3a0ad1478a78ca2584532110dc794c",
+    "expectedReproductionFailure": false
+  }
+]

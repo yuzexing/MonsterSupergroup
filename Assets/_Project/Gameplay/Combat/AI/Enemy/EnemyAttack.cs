@@ -6,6 +6,21 @@ namespace AstralShift.HellMaiden.AI.Enemy
 {
 	public abstract class EnemyAttack : MonoBehaviour
 	{
+        public virtual bool SupportsSharedTimeline => false;
+        private EnemyStrikeTiming[] timelineStrikes;
+        public System.Collections.Generic.IReadOnlyList<EnemyStrikeTiming> TimelineStrikes => timelineStrikes ??= CreateTimelineStrikes();
+        protected virtual EnemyStrikeTiming[] CreateTimelineStrikes() => new[] { new EnemyStrikeTiming(WarningTime, AttackTime) };
+        public virtual void PrepareTimeline(ref EnemyActionState state) { }
+        public virtual void ApplySimulationFrame(EnemyActionState state, double now) { }
+        public virtual void RestoreSimulationMotion(EnemyActionState state, double now) => ApplySimulationFrame(state, now);
+        public virtual void ReleaseSimulationMotion() { }
+        public virtual void ApplyLocalFrame(EnemyActionState state, double now, bool changed) { }
+        public virtual void ReleaseLocalFrame() { }
+        // Accepted cancellation may restore temporary body state; normal completion/death may not.
+        public virtual void CancelLocalFrame() => ReleaseLocalFrame();
+        public virtual EnemyAttackPrefab LocalAttackInstance => null;
+        public virtual AstralShift.HellMaiden.Interactions.PlayerDamageInteraction LocalDamageInteraction => null;
+        public virtual bool LocalDamageEnabled => LocalDamageInteraction != null && LocalDamageInteraction.isActiveAndEnabled;
 		[SerializeField]
 		[Range(0f, 10f)]
 		protected float warningTime;

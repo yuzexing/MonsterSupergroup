@@ -3,6 +3,7 @@ param(
     [string]$Prefix = 'stage2-matrix',
     [int]$Port = 8130,
     [string]$BuildDirectory = 'Builds/LimboReference',
+    [ValidateSet('normal','warning-only')][string]$AttackEdges = 'normal',
     [ValidateSet('mechanism','art-death')][string]$FixtureMode = 'mechanism',
     [switch]$ArtObserve
 )
@@ -19,12 +20,12 @@ function Stop-RecordedPlayers {
 try {
     foreach ($case in $Cases) {
         $solo = "$Prefix-$case-solo"; $pair = "$Prefix-$case-pair"
-        & "$PSScriptRoot/Run-LimboReference.ps1" -Profile stage2-fixture -FixtureEnemy $case -FixtureMode $FixtureMode -Windowed -Role host -Port $Port -RunName $solo -BuildDirectory $BuildDirectory -ArtObserve:$ArtObserve
-        & "$PSScriptRoot/Run-LimboReference.ps1" -Profile stage2-fixture -FixtureEnemy $case -FixtureMode $FixtureMode -Windowed -Role host -FixtureTarget client -WaitFor 2 -Port ($Port+1) -RunName $pair -BuildDirectory $BuildDirectory -ArtObserve:$ArtObserve
+        & "$PSScriptRoot/Run-LimboReference.ps1" -Profile stage2-fixture -FixtureEnemy $case -FixtureMode $FixtureMode -Windowed -Role host -Port $Port -RunName $solo -BuildDirectory $BuildDirectory -ArtObserve:$ArtObserve -AttackEdges $AttackEdges
+        & "$PSScriptRoot/Run-LimboReference.ps1" -Profile stage2-fixture -FixtureEnemy $case -FixtureMode $FixtureMode -Windowed -Role host -FixtureTarget client -WaitFor 2 -Port ($Port+1) -RunName $pair -BuildDirectory $BuildDirectory -ArtObserve:$ArtObserve -AttackEdges $AttackEdges
         $processFiles = @("$project/Logs/LimboReference/$solo/host/process.pid", "$project/Logs/LimboReference/$pair/host/process.pid")
         # Let the ordinary Host establish its listening socket before starting the Client.
         Start-Sleep -Seconds 8
-        & "$PSScriptRoot/Run-LimboReference.ps1" -Profile stage2-fixture -FixtureEnemy $case -FixtureMode $FixtureMode -Windowed -Role client -FixtureTarget client -Port ($Port+1) -RunName $pair -BuildDirectory $BuildDirectory -ArtObserve:$ArtObserve
+        & "$PSScriptRoot/Run-LimboReference.ps1" -Profile stage2-fixture -FixtureEnemy $case -FixtureMode $FixtureMode -Windowed -Role client -FixtureTarget client -Port ($Port+1) -RunName $pair -BuildDirectory $BuildDirectory -ArtObserve:$ArtObserve -AttackEdges $AttackEdges
         $processFiles += "$project/Logs/LimboReference/$pair/client/process.pid"
         $audits = @("$project/Logs/LimboReference/$solo/host/host-audit.jsonl", "$project/Logs/LimboReference/$pair/host/host-audit.jsonl", "$project/Logs/LimboReference/$pair/client/client-audit.jsonl")
         $deadline = [DateTime]::UtcNow.AddSeconds(170)

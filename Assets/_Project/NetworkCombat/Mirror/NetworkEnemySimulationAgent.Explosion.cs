@@ -34,7 +34,8 @@ namespace MonsterSupergroup.NetworkCombat
                 if (registry == null || !registry.TryGetLatestSnapshot(netId, out var latest) || latest.AssignmentEpoch != assignment.Epoch) return;
                 action = latest.Runtime.Action;
             }
-            if (!action.Explosion || !action.ExplosionTriggered || !action.SelfDestructPending ||
+            // A validated Warning already commits its timeline. Disposal does not depend on a later phase packet.
+            if (!action.Explosion || action.ActionId == 0 || action.ActionId == cancelledSequenceActionId ||
                 action.Phase == EnemyAttackPresentationPhase.Cancelled || EnemySimulationClock.CombatNow < action.RecoveryUntil) return;
             explosionDisposalCommitted = true;
             Debug.Log(FormattableString.Invariant($"[LostSoulDispose] id={netId} epoch={assignment.Epoch} action={action.ActionId} combat={EnemySimulationClock.CombatNow:R} deadline={action.RecoveryUntil:R} noXp=true"));

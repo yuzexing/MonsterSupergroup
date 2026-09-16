@@ -39,7 +39,7 @@ for role in ('host','client'):
             c['phases'].add((a['StrikeIndex'],a['Phase']))
     hits=[r for r in rows if r['kind']=='damage-attempt']
     raw=(folder/'player.log').read_text(encoding='utf-8-sig',errors='replace')
-    interrupts=re.findall(r'\[GhoulInterrupt\] enemy=(\d+) combo=(\d+) command=(\d+) hit=(\d+)',raw)
+    interrupts=re.findall(r'\[(?:GhoulInterrupt|EnemyAttackInterrupt)\] enemy=(\d+) (?:combo|action)=(\d+) command=(\d+) hit=(\d+)',raw)
     report[role]['ghoul']={
         'events':dict(Counter(r['kind'] for r in rows)),
         'completeCombos':sum({(0,2),(1,2),(2,2),(2,3)}<=c['phases'] for c in combos.values()),

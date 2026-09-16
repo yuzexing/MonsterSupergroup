@@ -1,0 +1,87 @@
+{
+  "note": "Same frozen build, assisted solo opening, elapsed [5,45] seconds. Frame summary medians are over one-second samples. Writer/flush timings cover this logging wrapper, not total serialization/Unity diagnostic overhead. No difficulty comparison.",
+  "detailed": {
+    "samples": 39,
+    "measures": {
+      "meanFrameMs": {
+        "median": 20.952479537652465,
+        "max": 31.050394221714566
+      },
+      "p95FrameMs": {
+        "median": 55.63949966430664,
+        "max": 104.74090576171875
+      },
+      "maxFrameMs": {
+        "median": 61.21590042114258,
+        "max": 141.53671264648438
+      },
+      "logWriteMs": {
+        "median": 0.007199999999999873,
+        "max": 0.012099999999999778
+      },
+      "logFlushMs": {
+        "median": 0.0815000000000019,
+        "max": 9.214799999999993
+      },
+      "logLines": {
+        "median": 11,
+        "max": 23
+      },
+      "openWriters": {
+        "median": 5,
+        "max": 5
+      },
+      "managedBytes": {
+        "median": 51269632,
+        "max": 60375040
+      }
+    },
+    "display": [
+      "{\"width\":1280,\"height\":720,\"targetFps\":60,\"vsync\":0,\"fullscreen\":\"Windowed\",\"settings\":{\"Version\":1,\"Language\":\"zh-CN\",\"MasterVolume\":1.0,\"MusicVolume\":1.0,\"EffectsVolume\":1.0,\"ScreenShake\":true,\"DisplayMode\":3,\"Width\":1920,\"Height\":1080,\"RefreshNumerator\":60,\"RefreshDenominator\":1,\"VSync\":false,\"FrameLimit\":144,\"RenderScale\":1.0,\"Msaa\":1,\"TextureLimit\":0}}",
+      "{\"width\":1920,\"height\":1080,\"targetFps\":60,\"vsync\":0,\"fullscreen\":\"Windowed\",\"settings\":{\"Version\":1,\"Language\":\"zh-CN\",\"MasterVolume\":1.0,\"MusicVolume\":1.0,\"EffectsVolume\":1.0,\"ScreenShake\":true,\"DisplayMode\":3,\"Width\":1920,\"Height\":1080,\"RefreshNumerator\":60,\"RefreshDenominator\":1,\"VSync\":false,\"FrameLimit\":144,\"RenderScale\":1.0,\"Msaa\":1,\"TextureLimit\":0}}",
+      "{\"width\":1280,\"height\":720,\"targetFps\":60,\"vsync\":0,\"fullscreen\":\"Windowed\",\"settings\":{\"Version\":1,\"Language\":\"zh-CN\",\"MasterVolume\":1.0,\"MusicVolume\":1.0,\"EffectsVolume\":1.0,\"ScreenShake\":true,\"DisplayMode\":3,\"Width\":1920,\"Height\":1080,\"RefreshNumerator\":60,\"RefreshDenominator\":1,\"VSync\":false,\"FrameLimit\":144,\"RenderScale\":1.0,\"Msaa\":1,\"TextureLimit\":0}}"
+    ]
+  },
+  "light": {
+    "samples": 39,
+    "measures": {
+      "meanFrameMs": {
+        "median": 20.548081767802337,
+        "max": 28.04268063439263
+      },
+      "p95FrameMs": {
+        "median": 55.75140380859375,
+        "max": 100.78630828857422
+      },
+      "maxFrameMs": {
+        "median": 60.007503509521484,
+        "max": 121.78150177001953
+      },
+      "logWriteMs": {
+        "median": 0.005600000000000049,
+        "max": 0.01090000000000002
+      },
+      "logFlushMs": {
+        "median": 0.06450000000000244,
+        "max": 9.793899999999999
+      },
+      "logLines": {
+        "median": 7,
+        "max": 12
+      },
+      "openWriters": {
+        "median": 5,
+        "max": 5
+      },
+      "managedBytes": {
+        "median": 50749440,
+        "max": 63434752
+      }
+    },
+    "display": [
+      "{\"width\":1280,\"height\":720,\"targetFps\":60,\"vsync\":0,\"fullscreen\":\"Windowed\",\"settings\":{\"Version\":1,\"Language\":\"zh-CN\",\"MasterVolume\":1.0,\"MusicVolume\":1.0,\"EffectsVolume\":1.0,\"ScreenShake\":true,\"DisplayMode\":3,\"Width\":1920,\"Height\":1080,\"RefreshNumerator\":60,\"RefreshDenominator\":1,\"VSync\":false,\"FrameLimit\":144,\"RenderScale\":1.0,\"Msaa\":1,\"TextureLimit\":0}}",
+      "{\"width\":1920,\"height\":1080,\"targetFps\":60,\"vsync\":0,\"fullscreen\":\"Windowed\",\"settings\":{\"Version\":1,\"Language\":\"zh-CN\",\"MasterVolume\":1.0,\"MusicVolume\":1.0,\"EffectsVolume\":1.0,\"ScreenShake\":true,\"DisplayMode\":3,\"Width\":1920,\"Height\":1080,\"RefreshNumerator\":60,\"RefreshDenominator\":1,\"VSync\":false,\"FrameLimit\":144,\"RenderScale\":1.0,\"Msaa\":1,\"TextureLimit\":0}}",
+      "{\"width\":1280,\"height\":720,\"targetFps\":60,\"vsync\":0,\"fullscreen\":\"Windowed\",\"settings\":{\"Version\":1,\"Language\":\"zh-CN\",\"MasterVolume\":1.0,\"MusicVolume\":1.0,\"EffectsVolume\":1.0,\"ScreenShake\":true,\"DisplayMode\":3,\"Width\":1920,\"Height\":1080,\"RefreshNumerator\":60,\"RefreshDenominator\":1,\"VSync\":false,\"FrameLimit\":144,\"RenderScale\":1.0,\"Msaa\":1,\"TextureLimit\":0}}"
+    ]
+  }
+}

@@ -1,0 +1,3328 @@
+{
+  "host": {
+    "runs": {
+      "112e9833e0514d0caf95b287fa186d78": {
+        "initial": [
+          {
+            "player": 2,
+            "health": 500,
+            "maximum": 500,
+            "speed": 4.550000190734863,
+            "xpModifier": 2.0,
+            "build": {
+              "InitialWeaponId": 1,
+              "InitialWeaponSlot": 0,
+              "Weapons": [
+                {
+                  "SlotIndex": 0,
+                  "WeaponId": 1
+                }
+              ],
+              "Equipment": [],
+              "Perks": []
+            }
+          }
+        ],
+        "endings": [
+          {
+            "kind": "run-ended",
+            "detail": "completed",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "role": "host",
+            "payload": "{\"RunId\":\"112e9833e0514d0caf95b287fa186d78\",\"Phase\":5,\"Wave\":0,\"Elapsed\":729.103852421511,\"WaveDuration\":30.0,\"Planned\":1199,\"Spawned\":4665,\"Skipped\":0,\"Alive\":16,\"Limit\":1000,\"TotalSpawned\":4665,\"TotalSkipped\":0,\"ReferenceStage\":true,\"StageEndTime\":720.9,\"CountedAlive\":16,\"ActiveClips\":0,\"EvidenceBlocked\":0,\"TotalAttempts\":4665,\"AbandonedBudget\":0,\"TransitionRequestedAt\":720.9007214331068,\"TransitionWaitCount\":0,\"TransitionWaitReason\":\"\"}",
+            "round": 1,
+            "realtime": 774.3188857001134,
+            "combat": 771.1594560151732
+          }
+        ],
+        "selections": [
+          {
+            "kind": "selection-close",
+            "detail": "Measured wall time; combat pause recorded separately",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "role": "host",
+            "payload": "{\"seconds\":0.207344599999999}",
+            "round": 1,
+            "realtime": 69.45766910011336,
+            "combat": 69.4546843712031
+          },
+          {
+            "kind": "selection-close",
+            "detail": "Measured wall time; combat pause recorded separately",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "role": "host",
+            "payload": "{\"seconds\":0.22475149999999645}",
+            "round": 1,
+            "realtime": 83.14010620011337,
+            "combat": 83.13687044110141
+          },
+          {
+            "kind": "selection-close",
+            "detail": "Measured wall time; combat pause recorded separately",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "role": "host",
+            "payload": "{\"seconds\":0.06472749999998939}",
+            "round": 1,
+            "realtime": 85.31306770011336,
+            "combat": 85.30965503405771
+          },
+          {
+            "kind": "selection-close",
+            "detail": "Measured wall time; combat pause recorded separately",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "role": "host",
+            "payload": "{\"seconds\":0.18253430000000038}",
+            "round": 1,
+            "realtime": 120.39942640011337,
+            "combat": 120.39568988520644
+          },
+          {
+            "kind": "selection-close",
+            "detail": "Measured wall time; combat pause recorded separately",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "role": "host",
+            "payload": "{\"seconds\":0.166899299999983}",
+            "round": 1,
+            "realtime": 143.86361090011337,
+            "combat": 143.86067256245752
+          },
+          {
+            "kind": "selection-close",
+            "detail": "Measured wall time; combat pause recorded separately",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "role": "host",
+            "payload": "{\"seconds\":0.043780900000001569}",
+            "round": 1,
+            "realtime": 175.50022540011338,
+            "combat": 175.49660023588677
+          },
+          {
+            "kind": "selection-close",
+            "detail": "Measured wall time; combat pause recorded separately",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "role": "host",
+            "payload": "{\"seconds\":0.18334509999999683}",
+            "round": 1,
+            "realtime": 218.43699500011337,
+            "combat": 218.43325029227873
+          },
+          {
+            "kind": "selection-close",
+            "detail": "Measured wall time; combat pause recorded separately",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "role": "host",
+            "payload": "{\"seconds\":0.019583600000004254}",
+            "round": 1,
+            "realtime": 232.25776580011336,
+            "combat": 232.25265586849292
+          },
+          {
+            "kind": "selection-close",
+            "detail": "Measured wall time; combat pause recorded separately",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "role": "host",
+            "payload": "{\"seconds\":0.17091579999998886}",
+            "round": 1,
+            "realtime": 236.30741880011337,
+            "combat": 236.3034347659721
+          },
+          {
+            "kind": "selection-close",
+            "detail": "Measured wall time; combat pause recorded separately",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "role": "host",
+            "payload": "{\"seconds\":0.016187400000006848}",
+            "round": 1,
+            "realtime": 252.98233490011336,
+            "combat": 252.97899926181873
+          },
+          {
+            "kind": "selection-close",
+            "detail": "Measured wall time; combat pause recorded separately",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "role": "host",
+            "payload": "{\"seconds\":0.07281190000003335}",
+            "round": 1,
+            "realtime": 259.65843790011337,
+            "combat": 259.65501035850485
+          },
+          {
+            "kind": "selection-close",
+            "detail": "Measured wall time; combat pause recorded separately",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "role": "host",
+            "payload": "{\"seconds\":0.01663050000001931}",
+            "round": 1,
+            "realtime": 271.7959707001134,
+            "combat": 271.7929625772684
+          },
+          {
+            "kind": "selection-close",
+            "detail": "Measured wall time; combat pause recorded separately",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "role": "host",
+            "payload": "{\"seconds\":0.18389229999996815}",
+            "round": 1,
+            "realtime": 303.1920684001134,
+            "combat": 303.1879700497537
+          },
+          {
+            "kind": "selection-close",
+            "detail": "Measured wall time; combat pause recorded separately",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "role": "host",
+            "payload": "{\"seconds\":0.01644099999998616}",
+            "round": 1,
+            "realtime": 332.4076109001134,
+            "combat": 332.40405150696625
+          },
+          {
+            "kind": "selection-close",
+            "detail": "Measured wall time; combat pause recorded separately",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "role": "host",
+            "payload": "{\"seconds\":0.18325860000004469}",
+            "round": 1,
+            "realtime": 361.8996870001134,
+            "combat": 361.89586697898795
+          },
+          {
+            "kind": "selection-close",
+            "detail": "Measured wall time; combat pause recorded separately",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "role": "host",
+            "payload": "{\"seconds\":0.016678799999965578}",
+            "round": 1,
+            "realtime": 363.9421573001134,
+            "combat": 363.9379812833666
+          },
+          {
+            "kind": "selection-close",
+            "detail": "Measured wall time; combat pause recorded separately",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "role": "host",
+            "payload": "{\"seconds\":0.0165822000000162}",
+            "round": 1,
+            "realtime": 380.1091239001134,
+            "combat": 378.9515148192457
+          },
+          {
+            "kind": "selection-close",
+            "detail": "Measured wall time; combat pause recorded separately",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "role": "host",
+            "payload": "{\"seconds\":0.016578600000002554}",
+            "round": 1,
+            "realtime": 389.5296921001134,
+            "combat": 387.8323097108676
+          },
+          {
+            "kind": "selection-close",
+            "detail": "Measured wall time; combat pause recorded separately",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "role": "host",
+            "payload": "{\"seconds\":0.16674710000000915}",
+            "round": 1,
+            "realtime": 408.6198210001134,
+            "combat": 406.92261282455166
+          },
+          {
+            "kind": "selection-close",
+            "detail": "Measured wall time; combat pause recorded separately",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "role": "host",
+            "payload": "{\"seconds\":0.016413399999976265}",
+            "round": 1,
+            "realtime": 439.3252648001134,
+            "combat": 437.62721771288653
+          },
+          {
+            "kind": "selection-close",
+            "detail": "Measured wall time; combat pause recorded separately",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "role": "host",
+            "payload": "{\"seconds\":0.18363619999996673}",
+            "round": 1,
+            "realtime": 457.2088662001134,
+            "combat": 455.5103026005252
+          },
+          {
+            "kind": "selection-close",
+            "detail": "Measured wall time; combat pause recorded separately",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "role": "host",
+            "payload": "{\"seconds\":0.018405500000028498}",
+            "round": 1,
+            "realtime": 479.2904754001134,
+            "combat": 477.59020977754136
+          },
+          {
+            "kind": "selection-close",
+            "detail": "Measured wall time; combat pause recorded separately",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "role": "host",
+            "payload": "{\"seconds\":0.1668905999999879}",
+            "round": 1,
+            "realtime": 501.07666970011337,
+            "combat": 499.37839268062254
+          },
+          {
+            "kind": "selection-close",
+            "detail": "Measured wall time; combat pause recorded separately",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "role": "host",
+            "payload": "{\"seconds\":0.017253299999993034}",
+            "round": 1,
+            "realtime": 507.8859044001134,
+            "combat": 506.18630856934925
+          },
+          {
+            "kind": "selection-close",
+            "detail": "Measured wall time; combat pause recorded separately",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "role": "host",
+            "payload": "{\"seconds\":0.16728059999991275}",
+            "round": 1,
+            "realtime": 518.4135174001134,
+            "combat": 516.7158614369853
+          },
+          {
+            "kind": "selection-close",
+            "detail": "Measured wall time; combat pause recorded separately",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "role": "host",
+            "payload": "{\"seconds\":0.016945999999961715}",
+            "round": 1,
+            "realtime": 528.6657214001133,
+            "combat": 526.9667810286207
+          },
+          {
+            "kind": "selection-close",
+            "detail": "Measured wall time; combat pause recorded separately",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "role": "host",
+            "payload": "{\"seconds\":0.16723989999991319}",
+            "round": 1,
+            "realtime": 534.5276331001133,
+            "combat": 532.8296179185434
+          },
+          {
+            "kind": "selection-close",
+            "detail": "Measured wall time; combat pause recorded separately",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "role": "host",
+            "payload": "{\"seconds\":0.016588899999987917}",
+            "round": 1,
+            "realtime": 540.8775101001133,
+            "combat": 539.1799613042547
+          },
+          {
+            "kind": "selection-close",
+            "detail": "Measured wall time; combat pause recorded separately",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "role": "host",
+            "payload": "{\"seconds\":0.16733940000005988}",
+            "round": 1,
+            "realtime": 549.7518427001133,
+            "combat": 548.0542859035356
+          },
+          {
+            "kind": "selection-close",
+            "detail": "Measured wall time; combat pause recorded separately",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "role": "host",
+            "payload": "{\"seconds\":0.016561600000045475}",
+            "round": 1,
+            "realtime": 562.5667555001133,
+            "combat": 560.8667372084035
+          },
+          {
+            "kind": "selection-close",
+            "detail": "Measured wall time; combat pause recorded separately",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "role": "host",
+            "payload": "{\"seconds\":0.17664489999992839}",
+            "round": 1,
+            "realtime": 584.1622401001133,
+            "combat": 582.4600929702444
+          },
+          {
+            "kind": "selection-close",
+            "detail": "Measured wall time; combat pause recorded separately",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "role": "host",
+            "payload": "{\"seconds\":0.01702540000007957}",
+            "round": 1,
+            "realtime": 595.3078146001134,
+            "combat": 593.6081883749737
+          },
+          {
+            "kind": "selection-close",
+            "detail": "Measured wall time; combat pause recorded separately",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "role": "host",
+            "payload": "{\"seconds\":0.18403939999996056}",
+            "round": 1,
+            "realtime": 601.1402657001133,
+            "combat": 599.4403315885736
+          },
+          {
+            "kind": "selection-close",
+            "detail": "Measured wall time; combat pause recorded separately",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "role": "host",
+            "payload": "{\"seconds\":0.017595299999925375}",
+            "round": 1,
+            "realtime": 605.1278582001133,
+            "combat": 603.426728495471
+          },
+          {
+            "kind": "selection-close",
+            "detail": "Measured wall time; combat pause recorded separately",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "role": "host",
+            "payload": "{\"seconds\":0.17709950000005393}",
+            "round": 1,
+            "realtime": 616.0656954001133,
+            "combat": 614.3624237841739
+          },
+          {
+            "kind": "selection-close",
+            "detail": "Measured wall time; combat pause recorded separately",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "role": "host",
+            "payload": "{\"seconds\":0.017107300000020588}",
+            "round": 1,
+            "realtime": 624.1846329001133,
+            "combat": 622.4857133841886
+          },
+          {
+            "kind": "selection-close",
+            "detail": "Measured wall time; combat pause recorded separately",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "role": "host",
+            "payload": "{\"seconds\":0.18471800000008899}",
+            "round": 1,
+            "realtime": 631.1170895001134,
+            "combat": 629.4174421719088
+          },
+          {
+            "kind": "selection-close",
+            "detail": "Measured wall time; combat pause recorded separately",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "role": "host",
+            "payload": "{\"seconds\":0.018778799999950026}",
+            "round": 1,
+            "realtime": 633.5000227001134,
+            "combat": 631.7979188683255
+          },
+          {
+            "kind": "selection-close",
+            "detail": "Measured wall time; combat pause recorded separately",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "role": "host",
+            "payload": "{\"seconds\":0.17992279999998574}",
+            "round": 1,
+            "realtime": 637.1823822001134,
+            "combat": 635.4799892726166
+          },
+          {
+            "kind": "selection-close",
+            "detail": "Measured wall time; combat pause recorded separately",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "role": "host",
+            "payload": "{\"seconds\":0.017325000000028014}",
+            "round": 1,
+            "realtime": 645.1612633001133,
+            "combat": 643.4602132561429
+          },
+          {
+            "kind": "selection-close",
+            "detail": "Measured wall time; combat pause recorded separately",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "role": "host",
+            "payload": "{\"seconds\":0.18849899999997889}",
+            "round": 1,
+            "realtime": 668.8506989001133,
+            "combat": 665.6931009670532
+          },
+          {
+            "kind": "selection-close",
+            "detail": "Measured wall time; combat pause recorded separately",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "role": "host",
+            "payload": "{\"seconds\":0.030561600000055479}",
+            "round": 1,
+            "realtime": 679.2862443001134,
+            "combat": 676.128464166615
+          },
+          {
+            "kind": "selection-close",
+            "detail": "Measured wall time; combat pause recorded separately",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "role": "host",
+            "payload": "{\"seconds\":0.179022600000053}",
+            "round": 1,
+            "realtime": 681.8109527001134,
+            "combat": 678.6554750712401
+          },
+          {
+            "kind": "selection-close",
+            "detail": "Measured wall time; combat pause recorded separately",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "role": "host",
+            "payload": "{\"seconds\":0.01733200000001034}",
+            "round": 1,
+            "realtime": 691.7538671001133,
+            "combat": 688.6025979822314
+          },
+          {
+            "kind": "selection-close",
+            "detail": "Measured wall time; combat pause recorded separately",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "role": "host",
+            "payload": "{\"seconds\":0.17431069999997818}",
+            "round": 1,
+            "realtime": 701.5560850001133,
+            "combat": 698.4026663718557
+          },
+          {
+            "kind": "selection-close",
+            "detail": "Measured wall time; combat pause recorded separately",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "role": "host",
+            "payload": "{\"seconds\":0.04281580000008489}",
+            "round": 1,
+            "realtime": 718.4503262001133,
+            "combat": 715.2895249636656
+          },
+          {
+            "kind": "selection-close",
+            "detail": "Measured wall time; combat pause recorded separately",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "role": "host",
+            "payload": "{\"seconds\":0.18836859999998979}",
+            "round": 1,
+            "realtime": 720.8066956001134,
+            "combat": 717.6491493662631
+          },
+          {
+            "kind": "selection-close",
+            "detail": "Measured wall time; combat pause recorded separately",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "role": "host",
+            "payload": "{\"seconds\":0.024901999999997316}",
+            "round": 1,
+            "realtime": 724.5283758001133,
+            "combat": 721.3716480737364
+          },
+          {
+            "kind": "selection-close",
+            "detail": "Measured wall time; combat pause recorded separately",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "role": "host",
+            "payload": "{\"seconds\":0.1943452000000434}",
+            "round": 1,
+            "realtime": 729.5611286001133,
+            "combat": 726.4048632649517
+          },
+          {
+            "kind": "selection-close",
+            "detail": "Measured wall time; combat pause recorded separately",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "role": "host",
+            "payload": "{\"seconds\":0.0318177999999989}",
+            "round": 1,
+            "realtime": 749.7271724001133,
+            "combat": 746.5678918534702
+          },
+          {
+            "kind": "selection-close",
+            "detail": "Measured wall time; combat pause recorded separately",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "role": "host",
+            "payload": "{\"seconds\":0.1917806000000155}",
+            "round": 1,
+            "realtime": 752.5678376001133,
+            "combat": 749.41331204826
+          },
+          {
+            "kind": "selection-close",
+            "detail": "Measured wall time; combat pause recorded separately",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "role": "host",
+            "payload": "{\"seconds\":0.027121699999952399}",
+            "round": 1,
+            "realtime": 755.0752457001133,
+            "combat": 751.9179057391173
+          },
+          {
+            "kind": "selection-close",
+            "detail": "Measured wall time; combat pause recorded separately",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "role": "host",
+            "payload": "{\"seconds\":0.18507950000002894}",
+            "round": 1,
+            "realtime": 760.5254648001134,
+            "combat": 757.3728526370412
+          },
+          {
+            "kind": "selection-close",
+            "detail": "Measured wall time; combat pause recorded separately",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "role": "host",
+            "payload": "{\"seconds\":0.029263000000014473}",
+            "round": 1,
+            "realtime": 765.5653422001134,
+            "combat": 762.4075772227532
+          },
+          {
+            "kind": "selection-close",
+            "detail": "Measured wall time; combat pause recorded separately",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "role": "host",
+            "payload": "{\"seconds\":2.9204862000000277}",
+            "round": 1,
+            "realtime": 774.3188643001133,
+            "combat": 771.1594560151732
+          }
+        ],
+        "acceptedChoices": 154,
+        "lastFrame": {
+          "kind": "frame",
+          "role": "host",
+          "snapshot": {
+            "RunId": "112e9833e0514d0caf95b287fa186d78",
+            "Phase": 5,
+            "Wave": 0,
+            "Elapsed": 729.103852421511,
+            "WaveDuration": 30.0,
+            "Planned": 1199,
+            "Spawned": 4665,
+            "Skipped": 0,
+            "Alive": 16,
+            "Limit": 1000,
+            "TotalSpawned": 4665,
+            "TotalSkipped": 0,
+            "ReferenceStage": true,
+            "StageEndTime": 720.9,
+            "CountedAlive": 16,
+            "ActiveClips": 0,
+            "EvidenceBlocked": 0,
+            "TotalAttempts": 4665,
+            "AbandonedBudget": 0,
+            "TransitionRequestedAt": 720.9007214331068,
+            "TransitionWaitCount": 0,
+            "TransitionWaitReason": ""
+          },
+          "health": 500,
+          "observed": 4665,
+          "realtime": 813.3437578001134,
+          "position": {
+            "x": 5.3103861808776855,
+            "y": 8.002899169921875
+          }
+        },
+        "requests": [
+          {
+            "kind": "request-observed",
+            "detail": "Existing combat continues; selection hold is explicit test input.",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "payload": "{\"RunId\":\"112e9833e0514d0caf95b287fa186d78\",\"Phase\":6,\"Wave\":0,\"Elapsed\":720.9007214331068,\"WaveDuration\":30.0,\"Planned\":1199,\"Spawned\":4664,\"Skipped\":0,\"Alive\":75,\"Limit\":1000,\"TotalSpawned\":4664,\"TotalSkipped\":0,\"ReferenceStage\":true,\"StageEndTime\":720.9,\"CountedAlive\":75,\"ActiveClips\":1,\"EvidenceBlocked\":0,\"TotalAttempts\":4664,\"AbandonedBudget\":0,\"TransitionRequestedAt\":720.9007214331068,\"TransitionWaitCount\":1,\"TransitionWaitReason\":\"玩家 3 选卡中\"}",
+            "realtime": 766.1289943001134,
+            "combat": 762.9696240262872
+          }
+        ],
+        "completions": [
+          {
+            "kind": "completed",
+            "detail": "Existing run-end lifecycle",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "payload": "{\"RunId\":\"112e9833e0514d0caf95b287fa186d78\",\"Phase\":5,\"Wave\":0,\"Elapsed\":729.103852421511,\"WaveDuration\":30.0,\"Planned\":1199,\"Spawned\":4665,\"Skipped\":0,\"Alive\":16,\"Limit\":1000,\"TotalSpawned\":4665,\"TotalSkipped\":0,\"ReferenceStage\":true,\"StageEndTime\":720.9,\"CountedAlive\":16,\"ActiveClips\":0,\"EvidenceBlocked\":0,\"TotalAttempts\":4665,\"AbandonedBudget\":0,\"TransitionRequestedAt\":720.9007214331068,\"TransitionWaitCount\":0,\"TransitionWaitReason\":\"\"}",
+            "realtime": 774.3196705001134,
+            "combat": 771.1594560151732
+          }
+        ],
+        "waits": [
+          {
+            "kind": "frame",
+            "detail": "TransitionPending/1/玩家 3 选卡中",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "payload": "{\"snapshot\":{\"RunId\":\"112e9833e0514d0caf95b287fa186d78\",\"Phase\":6,\"Wave\":0,\"Elapsed\":720.9007214331068,\"WaveDuration\":30.0,\"Planned\":1199,\"Spawned\":4664,\"Skipped\":0,\"Alive\":75,\"Limit\":1000,\"TotalSpawned\":4664,\"TotalSkipped\":0,\"ReferenceStage\":true,\"StageEndTime\":720.9,\"CountedAlive\":75,\"ActiveClips\":1,\"EvidenceBlocked\":0,\"TotalAttempts\":4664,\"AbandonedBudget\":0,\"TransitionRequestedAt\":720.9007214331068,\"TransitionWaitCount\":1,\"TransitionWaitReason\":\"玩家 3 选卡中\"},\"selecting\":false,\"eventId\":0,\"pending\":0,\"health\":330,\"timeScale\":1.0}",
+            "realtime": 766.1290504001133,
+            "combat": 762.9696240262872
+          },
+          {
+            "kind": "frame",
+            "detail": "TransitionPending/1/玩家 3 选卡中",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "payload": "{\"snapshot\":{\"RunId\":\"112e9833e0514d0caf95b287fa186d78\",\"Phase\":6,\"Wave\":0,\"Elapsed\":721.870176427532,\"WaveDuration\":30.0,\"Planned\":1199,\"Spawned\":4665,\"Skipped\":0,\"Alive\":69,\"Limit\":1000,\"TotalSpawned\":4665,\"TotalSkipped\":0,\"ReferenceStage\":true,\"StageEndTime\":720.9,\"CountedAlive\":69,\"ActiveClips\":0,\"EvidenceBlocked\":0,\"TotalAttempts\":4665,\"AbandonedBudget\":0,\"TransitionRequestedAt\":720.9007214331068,\"TransitionWaitCount\":1,\"TransitionWaitReason\":\"玩家 3 选卡中\"},\"selecting\":false,\"eventId\":0,\"pending\":0,\"health\":500,\"timeScale\":1.0}",
+            "realtime": 767.1419977001134,
+            "combat": 763.985734321717
+          },
+          {
+            "kind": "frame",
+            "detail": "TransitionPending/1/玩家 3 选卡中",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "payload": "{\"snapshot\":{\"RunId\":\"112e9833e0514d0caf95b287fa186d78\",\"Phase\":6,\"Wave\":0,\"Elapsed\":722.9329155241139,\"WaveDuration\":30.0,\"Planned\":1199,\"Spawned\":4665,\"Skipped\":0,\"Alive\":59,\"Limit\":1000,\"TotalSpawned\":4665,\"TotalSkipped\":0,\"ReferenceStage\":true,\"StageEndTime\":720.9,\"CountedAlive\":59,\"ActiveClips\":0,\"EvidenceBlocked\":0,\"TotalAttempts\":4665,\"AbandonedBudget\":0,\"TransitionRequestedAt\":720.9007214331068,\"TransitionWaitCount\":1,\"TransitionWaitReason\":\"玩家 3 选卡中\"},\"selecting\":false,\"eventId\":0,\"pending\":0,\"health\":500,\"timeScale\":1.0}",
+            "realtime": 768.1533234001133,
+            "combat": 764.9967832198179
+          },
+          {
+            "kind": "frame",
+            "detail": "TransitionPending/1/玩家 3 选卡中",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "payload": "{\"snapshot\":{\"RunId\":\"112e9833e0514d0caf95b287fa186d78\",\"Phase\":6,\"Wave\":0,\"Elapsed\":723.8037426327355,\"WaveDuration\":30.0,\"Planned\":1199,\"Spawned\":4665,\"Skipped\":0,\"Alive\":46,\"Limit\":1000,\"TotalSpawned\":4665,\"TotalSkipped\":0,\"ReferenceStage\":true,\"StageEndTime\":720.9,\"CountedAlive\":46,\"ActiveClips\":0,\"EvidenceBlocked\":0,\"TotalAttempts\":4665,\"AbandonedBudget\":0,\"TransitionRequestedAt\":720.9007214331068,\"TransitionWaitCount\":1,\"TransitionWaitReason\":\"玩家 3 选卡中\"},\"selecting\":false,\"eventId\":0,\"pending\":0,\"health\":500,\"timeScale\":1.0}",
+            "realtime": 769.1669055001133,
+            "combat": 766.0082852212524
+          },
+          {
+            "kind": "frame",
+            "detail": "TransitionPending/1/玩家 3 选卡中",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "payload": "{\"snapshot\":{\"RunId\":\"112e9833e0514d0caf95b287fa186d78\",\"Phase\":6,\"Wave\":0,\"Elapsed\":724.8638565302826,\"WaveDuration\":30.0,\"Planned\":1199,\"Spawned\":4665,\"Skipped\":0,\"Alive\":34,\"Limit\":1000,\"TotalSpawned\":4665,\"TotalSkipped\":0,\"ReferenceStage\":true,\"StageEndTime\":720.9,\"CountedAlive\":34,\"ActiveClips\":0,\"EvidenceBlocked\":0,\"TotalAttempts\":4665,\"AbandonedBudget\":0,\"TransitionRequestedAt\":720.9007214331068,\"TransitionWaitCount\":1,\"TransitionWaitReason\":\"玩家 3 选卡中\"},\"selecting\":false,\"eventId\":0,\"pending\":0,\"health\":500,\"timeScale\":1.0}",
+            "realtime": 770.1771057001133,
+            "combat": 767.0190546238607
+          },
+          {
+            "kind": "frame",
+            "detail": "TransitionPending/1/玩家 3 选卡中",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "payload": "{\"snapshot\":{\"RunId\":\"112e9833e0514d0caf95b287fa186d78\",\"Phase\":6,\"Wave\":0,\"Elapsed\":725.9127454278059,\"WaveDuration\":30.0,\"Planned\":1199,\"Spawned\":4665,\"Skipped\":0,\"Alive\":22,\"Limit\":1000,\"TotalSpawned\":4665,\"TotalSkipped\":0,\"ReferenceStage\":true,\"StageEndTime\":720.9,\"CountedAlive\":22,\"ActiveClips\":0,\"EvidenceBlocked\":0,\"TotalAttempts\":4665,\"AbandonedBudget\":0,\"TransitionRequestedAt\":720.9007214331068,\"TransitionWaitCount\":1,\"TransitionWaitReason\":\"玩家 3 选卡中\"},\"selecting\":false,\"eventId\":0,\"pending\":0,\"health\":500,\"timeScale\":1.0}",
+            "realtime": 771.1981078001133,
+            "combat": 768.041564617846
+          },
+          {
+            "kind": "frame",
+            "detail": "TransitionPending/2/玩家 2 选卡中；玩家 3 选卡中",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "payload": "{\"snapshot\":{\"RunId\":\"112e9833e0514d0caf95b287fa186d78\",\"Phase\":6,\"Wave\":0,\"Elapsed\":726.1823337269016,\"WaveDuration\":30.0,\"Planned\":1199,\"Spawned\":4665,\"Skipped\":0,\"Alive\":22,\"Limit\":1000,\"TotalSpawned\":4665,\"TotalSkipped\":0,\"ReferenceStage\":true,\"StageEndTime\":720.9,\"CountedAlive\":22,\"ActiveClips\":0,\"EvidenceBlocked\":0,\"TotalAttempts\":4665,\"AbandonedBudget\":0,\"TransitionRequestedAt\":720.9007214331068,\"TransitionWaitCount\":2,\"TransitionWaitReason\":\"玩家 2 选卡中；玩家 3 选卡中\"},\"selecting\":true,\"eventId\":8589934673,\"pending\":1,\"health\":500,\"timeScale\":1.0}",
+            "realtime": 771.3987991001134,
+            "combat": 768.2421932151353
+          },
+          {
+            "kind": "frame",
+            "detail": "TransitionPending/2/玩家 2 选卡中；玩家 3 选卡中",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "payload": "{\"snapshot\":{\"RunId\":\"112e9833e0514d0caf95b287fa186d78\",\"Phase\":6,\"Wave\":0,\"Elapsed\":727.1644164198078,\"WaveDuration\":30.0,\"Planned\":1199,\"Spawned\":4665,\"Skipped\":0,\"Alive\":22,\"Limit\":1000,\"TotalSpawned\":4665,\"TotalSkipped\":0,\"ReferenceStage\":true,\"StageEndTime\":720.9,\"CountedAlive\":22,\"ActiveClips\":0,\"EvidenceBlocked\":0,\"TotalAttempts\":4665,\"AbandonedBudget\":0,\"TransitionRequestedAt\":720.9007214331068,\"TransitionWaitCount\":2,\"TransitionWaitReason\":\"玩家 2 选卡中；玩家 3 选卡中\"},\"selecting\":true,\"eventId\":8589934673,\"pending\":1,\"health\":500,\"timeScale\":1.0}",
+            "realtime": 772.4160033001133,
+            "combat": 769.2596465149707
+          },
+          {
+            "kind": "frame",
+            "detail": "TransitionPending/2/玩家 2 选卡中；玩家 3 选卡中",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "payload": "{\"snapshot\":{\"RunId\":\"112e9833e0514d0caf95b287fa186d78\",\"Phase\":6,\"Wave\":0,\"Elapsed\":728.0142624233849,\"WaveDuration\":30.0,\"Planned\":1199,\"Spawned\":4665,\"Skipped\":0,\"Alive\":21,\"Limit\":1000,\"TotalSpawned\":4665,\"TotalSkipped\":0,\"ReferenceStage\":true,\"StageEndTime\":720.9,\"CountedAlive\":21,\"ActiveClips\":0,\"EvidenceBlocked\":0,\"TotalAttempts\":4665,\"AbandonedBudget\":0,\"TransitionRequestedAt\":720.9007214331068,\"TransitionWaitCount\":2,\"TransitionWaitReason\":\"玩家 2 选卡中；玩家 3 选卡中\"},\"selecting\":true,\"eventId\":8589934673,\"pending\":1,\"health\":500,\"timeScale\":1.0}",
+            "realtime": 773.4184683001133,
+            "combat": 770.2628526152855
+          }
+        ],
+        "transitionWaitWallSeconds": 8.190676199999984,
+        "helpers": {
+          "test-card": 82,
+          "test-heal": 10,
+          "test-queue": 1
+        },
+        "births": 4665,
+        "birthMismatches": [],
+        "confirmedKills": 4624,
+        "firstHitToConfirmedDeathSeconds": {
+          "samples": 4245,
+          "median": 1.8366120997816324,
+          "p95": 14.260362777858973,
+          "maximum": 89.46146931312978
+        },
+        "stageCleanup": [
+          {
+            "kind": "completed-cleanup",
+            "detail": "112e9833e0514d0caf95b287fa186d78",
+            "payload": "{\"damageAreas\":0,\"warnings\":0}",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "round": 1,
+            "realtime": 774.6214160001133,
+            "combat": 771.4727866152114,
+            "elapsed": 729.103852421511
+          }
+        ],
+        "trapCleanup": [
+          {
+            "kind": "completed-cleanup",
+            "role": "host",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "elapsed": 729.103852421511,
+            "combat": 771.1594560151732,
+            "realtime": 774.3253618001133,
+            "id": 0,
+            "state": {
+              "Round": 0,
+              "Target": 0,
+              "Barrier": false,
+              "Occupied": false,
+              "Collision": false,
+              "Phase": 0,
+              "Center": {
+                "x": 0.0,
+                "y": 0.0
+              },
+              "BeganAt": 0.0,
+              "ReleaseAt": 0.0,
+              "Radius": 0.0,
+              "Aspect": 0.0,
+              "EntryScale": 0.0,
+              "CameraOffset": 0.0,
+              "CameraDuration": 0.0,
+              "Count": 0,
+              "Visible": 0
+            },
+            "worldEdgePoints": [],
+            "edgeRadius": 0.0,
+            "localPlayer": 2,
+            "localPosition": {
+              "x": 5.3103861808776855,
+              "y": 8.002899169921875
+            },
+            "localVelocity": {
+              "x": 0.0,
+              "y": 0.0
+            },
+            "localPlayerTouchesBarrier": false,
+            "timeScale": 1.0,
+            "slots": 0,
+            "states": 0,
+            "collisionAreas": 0,
+            "livingWarningRoots": 0
+          }
+        ],
+        "healthChanges": [
+          {
+            "kind": "health",
+            "role": "host",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "source": "unknown",
+            "round": 1,
+            "elapsed": 176.76461679209024,
+            "realtime": 218.99989580011336,
+            "previous": 500,
+            "current": 300,
+            "maximum": 500
+          },
+          {
+            "kind": "health",
+            "role": "host",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "source": "unknown",
+            "round": 1,
+            "elapsed": 188.24373897071928,
+            "realtime": 230.45695400011337,
+            "previous": 300,
+            "current": 270,
+            "maximum": 500
+          },
+          {
+            "kind": "health",
+            "role": "host",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "source": "unknown",
+            "round": 1,
+            "elapsed": 188.24373897071928,
+            "realtime": 230.46856430011337,
+            "previous": 270,
+            "current": 500,
+            "maximum": 500
+          },
+          {
+            "kind": "health",
+            "role": "host",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "source": "unknown",
+            "round": 1,
+            "elapsed": 189.86182646919042,
+            "realtime": 232.09157360011338,
+            "previous": 500,
+            "current": 470,
+            "maximum": 500
+          },
+          {
+            "kind": "health",
+            "role": "host",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "source": "unknown",
+            "round": 1,
+            "elapsed": 191.9038897762075,
+            "realtime": 234.12126690011337,
+            "previous": 470,
+            "current": 440,
+            "maximum": 500
+          },
+          {
+            "kind": "health",
+            "role": "host",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "source": "unknown",
+            "round": 1,
+            "elapsed": 193.526081177406,
+            "realtime": 235.62361060011335,
+            "previous": 440,
+            "current": 410,
+            "maximum": 500
+          },
+          {
+            "kind": "health",
+            "role": "host",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "source": "unknown",
+            "round": 1,
+            "elapsed": 198.58087336923927,
+            "realtime": 240.62894010011337,
+            "previous": 410,
+            "current": 380,
+            "maximum": 500
+          },
+          {
+            "kind": "health",
+            "role": "host",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "source": "unknown",
+            "round": 1,
+            "elapsed": 199.5845362721011,
+            "realtime": 241.80023150011337,
+            "previous": 380,
+            "current": 350,
+            "maximum": 500
+          },
+          {
+            "kind": "health",
+            "role": "host",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "source": "unknown",
+            "round": 1,
+            "elapsed": 289.8935287129134,
+            "realtime": 331.9711744001134,
+            "previous": 350,
+            "current": 310,
+            "maximum": 500
+          },
+          {
+            "kind": "health",
+            "role": "host",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "source": "unknown",
+            "round": 1,
+            "elapsed": 290.702328203246,
+            "realtime": 332.8145322001134,
+            "previous": 310,
+            "current": 270,
+            "maximum": 500
+          },
+          {
+            "kind": "health",
+            "role": "host",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "source": "unknown",
+            "round": 1,
+            "elapsed": 290.702328203246,
+            "realtime": 332.82651800011337,
+            "previous": 270,
+            "current": 500,
+            "maximum": 500
+          },
+          {
+            "kind": "health",
+            "role": "host",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "source": "unknown",
+            "round": 1,
+            "elapsed": 341.46633283700794,
+            "realtime": 385.2528551001134,
+            "previous": 500,
+            "current": 450,
+            "maximum": 500
+          },
+          {
+            "kind": "health",
+            "role": "host",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "source": "unknown",
+            "round": 1,
+            "elapsed": 355.3053798330948,
+            "realtime": 399.2083124001134,
+            "previous": 450,
+            "current": 400,
+            "maximum": 500
+          },
+          {
+            "kind": "health",
+            "role": "host",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "source": "unknown",
+            "round": 1,
+            "elapsed": 360.1220605345443,
+            "realtime": 403.9581029001134,
+            "previous": 400,
+            "current": 200,
+            "maximum": 500
+          },
+          {
+            "kind": "health",
+            "role": "host",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "source": "unknown",
+            "round": 1,
+            "elapsed": 360.1220605345443,
+            "realtime": 403.9730706001134,
+            "previous": 200,
+            "current": 500,
+            "maximum": 500
+          },
+          {
+            "kind": "health",
+            "role": "host",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "source": "unknown",
+            "round": 1,
+            "elapsed": 361.72646063100547,
+            "realtime": 405.56249530011337,
+            "previous": 500,
+            "current": 300,
+            "maximum": 500
+          },
+          {
+            "kind": "health",
+            "role": "host",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "source": "unknown",
+            "round": 1,
+            "elapsed": 363.3322048326954,
+            "realtime": 407.1691396001134,
+            "previous": 300,
+            "current": 100,
+            "maximum": 500
+          },
+          {
+            "kind": "health",
+            "role": "host",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "source": "unknown",
+            "round": 1,
+            "elapsed": 363.3322048326954,
+            "realtime": 407.1831671001134,
+            "previous": 100,
+            "current": 500,
+            "maximum": 500
+          },
+          {
+            "kind": "health",
+            "role": "host",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "source": "unknown",
+            "round": 1,
+            "elapsed": 364.93653952982277,
+            "realtime": 408.7731054001134,
+            "previous": 500,
+            "current": 300,
+            "maximum": 500
+          },
+          {
+            "kind": "health",
+            "role": "host",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "source": "unknown",
+            "round": 1,
+            "elapsed": 398.066319023259,
+            "realtime": 441.9381240001134,
+            "previous": 300,
+            "current": 250,
+            "maximum": 500
+          },
+          {
+            "kind": "health",
+            "role": "host",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "source": "unknown",
+            "round": 1,
+            "elapsed": 398.066319023259,
+            "realtime": 441.9509400001134,
+            "previous": 250,
+            "current": 500,
+            "maximum": 500
+          },
+          {
+            "kind": "health",
+            "role": "host",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "source": "unknown",
+            "round": 1,
+            "elapsed": 514.1708640055731,
+            "realtime": 557.9524281001134,
+            "previous": 500,
+            "current": 430,
+            "maximum": 500
+          },
+          {
+            "kind": "health",
+            "role": "host",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "source": "unknown",
+            "round": 1,
+            "elapsed": 514.7887316094711,
+            "realtime": 558.5645190001134,
+            "previous": 430,
+            "current": 380,
+            "maximum": 500
+          },
+          {
+            "kind": "health",
+            "role": "host",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "source": "unknown",
+            "round": 1,
+            "elapsed": 517.0774387111887,
+            "realtime": 560.8374532001134,
+            "previous": 380,
+            "current": 330,
+            "maximum": 500
+          },
+          {
+            "kind": "health",
+            "role": "host",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "source": "unknown",
+            "round": 1,
+            "elapsed": 517.6965291155502,
+            "realtime": 561.4801205001133,
+            "previous": 330,
+            "current": 280,
+            "maximum": 500
+          },
+          {
+            "kind": "health",
+            "role": "host",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "source": "unknown",
+            "round": 1,
+            "elapsed": 517.6965291155502,
+            "realtime": 561.4953708001134,
+            "previous": 280,
+            "current": 500,
+            "maximum": 500
+          },
+          {
+            "kind": "health",
+            "role": "host",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "source": "unknown",
+            "round": 1,
+            "elapsed": 569.3969633886591,
+            "realtime": 613.1576662001133,
+            "previous": 500,
+            "current": 430,
+            "maximum": 500
+          },
+          {
+            "kind": "health",
+            "role": "host",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "source": "unknown",
+            "round": 1,
+            "elapsed": 571.01389469672,
+            "realtime": 614.8803496001134,
+            "previous": 430,
+            "current": 380,
+            "maximum": 500
+          },
+          {
+            "kind": "health",
+            "role": "host",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "source": "unknown",
+            "round": 1,
+            "elapsed": 572.4799603922293,
+            "realtime": 616.3062317001134,
+            "previous": 380,
+            "current": 310,
+            "maximum": 500
+          },
+          {
+            "kind": "health",
+            "role": "host",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "source": "unknown",
+            "round": 1,
+            "elapsed": 580.7534417817369,
+            "realtime": 624.6269089001133,
+            "previous": 310,
+            "current": 260,
+            "maximum": 500
+          },
+          {
+            "kind": "health",
+            "role": "host",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "source": "unknown",
+            "round": 1,
+            "elapsed": 580.7534417817369,
+            "realtime": 624.6400450001133,
+            "previous": 260,
+            "current": 500,
+            "maximum": 500
+          },
+          {
+            "kind": "health",
+            "role": "host",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "source": "unknown",
+            "round": 1,
+            "elapsed": 601.5738843558356,
+            "realtime": 645.4843896001133,
+            "previous": 500,
+            "current": 450,
+            "maximum": 500
+          },
+          {
+            "kind": "health",
+            "role": "host",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "source": "unknown",
+            "round": 1,
+            "elapsed": 604.1284269862808,
+            "realtime": 649.4008856001134,
+            "previous": 450,
+            "current": 400,
+            "maximum": 500
+          },
+          {
+            "kind": "health",
+            "role": "host",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "source": "unknown",
+            "round": 1,
+            "elapsed": 605.5954203982837,
+            "realtime": 650.8309804001134,
+            "previous": 400,
+            "current": 350,
+            "maximum": 500
+          },
+          {
+            "kind": "health",
+            "role": "host",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "source": "unknown",
+            "round": 1,
+            "elapsed": 606.8668428030796,
+            "realtime": 652.2358383001133,
+            "previous": 350,
+            "current": 280,
+            "maximum": 500
+          },
+          {
+            "kind": "health",
+            "role": "host",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "source": "unknown",
+            "round": 1,
+            "elapsed": 606.8668428030796,
+            "realtime": 652.2460794001133,
+            "previous": 280,
+            "current": 500,
+            "maximum": 500
+          },
+          {
+            "kind": "health",
+            "role": "host",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "source": "unknown",
+            "round": 1,
+            "elapsed": 608.9137761932798,
+            "realtime": 654.2408104001133,
+            "previous": 500,
+            "current": 450,
+            "maximum": 500
+          },
+          {
+            "kind": "health",
+            "role": "host",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "source": "unknown",
+            "round": 1,
+            "elapsed": 615.7179074776359,
+            "realtime": 661.0703605001133,
+            "previous": 450,
+            "current": 380,
+            "maximum": 500
+          },
+          {
+            "kind": "health",
+            "role": "host",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "source": "unknown",
+            "round": 1,
+            "elapsed": 617.6099814777263,
+            "realtime": 662.8817601001133,
+            "previous": 380,
+            "current": 310,
+            "maximum": 500
+          },
+          {
+            "kind": "health",
+            "role": "host",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "source": "unknown",
+            "round": 1,
+            "elapsed": 630.3360401750542,
+            "realtime": 675.6915869001133,
+            "previous": 310,
+            "current": 110,
+            "maximum": 500
+          },
+          {
+            "kind": "health",
+            "role": "host",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "source": "unknown",
+            "round": 1,
+            "elapsed": 630.3360401750542,
+            "realtime": 675.7094176001133,
+            "previous": 110,
+            "current": 500,
+            "maximum": 500
+          },
+          {
+            "kind": "health",
+            "role": "host",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "source": "unknown",
+            "round": 1,
+            "elapsed": 637.8006368693896,
+            "realtime": 682.9968680001133,
+            "previous": 500,
+            "current": 450,
+            "maximum": 500
+          },
+          {
+            "kind": "health",
+            "role": "host",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "source": "unknown",
+            "round": 1,
+            "elapsed": 664.3002340798266,
+            "realtime": 709.6046322001133,
+            "previous": 450,
+            "current": 380,
+            "maximum": 500
+          },
+          {
+            "kind": "health",
+            "role": "host",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "source": "unknown",
+            "round": 1,
+            "elapsed": 678.3512878720649,
+            "realtime": 723.5538583001133,
+            "previous": 380,
+            "current": 330,
+            "maximum": 500
+          },
+          {
+            "kind": "health",
+            "role": "host",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "source": "unknown",
+            "round": 1,
+            "elapsed": 721.870176427532,
+            "realtime": 767.0762234001133,
+            "previous": 330,
+            "current": 260,
+            "maximum": 500
+          },
+          {
+            "kind": "health",
+            "role": "host",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "source": "unknown",
+            "round": 1,
+            "elapsed": 721.870176427532,
+            "realtime": 767.0916253001134,
+            "previous": 260,
+            "current": 500,
+            "maximum": 500
+          }
+        ],
+        "acceptedDamageChanges": 36,
+        "trapPhases": {
+          "2147483649": [
+            0,
+            1,
+            2,
+            3
+          ],
+          "17": [
+            1,
+            3
+          ],
+          "20": [
+            1,
+            3
+          ],
+          "2147483650": [
+            0,
+            1,
+            2,
+            3
+          ],
+          "26": [
+            1,
+            3
+          ],
+          "27": [
+            1,
+            3
+          ],
+          "29": [
+            1,
+            3
+          ],
+          "30": [
+            1,
+            3
+          ],
+          "31": [
+            1,
+            3
+          ]
+        },
+        "actionPhaseSamples": 14902,
+        "geometrySamples": 0,
+        "statsBindingFailures": [],
+        "performanceActive": {
+          "meanFrameMs": {
+            "samples": 725,
+            "median": 16.738253180185954,
+            "p95": 27.245735013807142,
+            "maximum": 37.43266628406666
+          },
+          "p95FrameMs": {
+            "samples": 725,
+            "median": 17.037500381469727,
+            "p95": 55.07760238647461,
+            "maximum": 90.94280242919922
+          },
+          "maxFrameMs": {
+            "samples": 725,
+            "median": 17.492197036743164,
+            "p95": 74.20769500732422,
+            "maximum": 156.04470825195312
+          },
+          "logWriteMs": {
+            "samples": 725,
+            "median": 0.16300000000001802,
+            "p95": 0.9140000000010389,
+            "maximum": 1.3231000000012045
+          },
+          "logFlushMs": {
+            "samples": 725,
+            "median": 0.08310000000000173,
+            "p95": 0.15330000000000155,
+            "maximum": 9.8991
+          }
+        },
+        "sampledAlivePeak": 145,
+        "spawnFiles": [
+          {
+            "file": "spawns-112e9833e0514d0caf95b287fa186d78-20260916-011042-308.csv",
+            "attempts": 4665,
+            "successful": 4665,
+            "successByClip": {
+              "0": 250,
+              "1": 15,
+              "2": 1,
+              "3": 150,
+              "4": 488,
+              "5": 114,
+              "6": 200,
+              "7": 60,
+              "8": 90,
+              "9": 1,
+              "10": 150,
+              "11": 109,
+              "12": 25,
+              "13": 50,
+              "14": 258,
+              "15": 50,
+              "16": 10,
+              "17": 199,
+              "18": 381,
+              "19": 10,
+              "20": 1106,
+              "21": 60,
+              "22": 2,
+              "23": 678,
+              "24": 60,
+              "25": 5,
+              "26": 5,
+              "27": 108,
+              "28": 10,
+              "29": 10,
+              "30": 10
+            },
+            "results": {
+              "Spawned": 4665
+            },
+            "events": {
+              "spawn": 4665,
+              "death": 4624,
+              "retired": 2,
+              "barrier-decision": 8,
+              "self-destruct": 23,
+              "transition-request": 1,
+              "completed": 1
+            },
+            "completion": {
+              "elapsed": "729.103852421511",
+              "event": "completed",
+              "clip": "",
+              "source": "",
+              "variant": "",
+              "planned": "",
+              "sequence": "",
+              "enemy": "",
+              "result": "",
+              "totalAlive": "16",
+              "countedAlive": "16",
+              "hp": "",
+              "damage": "",
+              "speed": "",
+              "xp": "",
+              "x": "",
+              "y": ""
+            },
+            "conservationDelta": 0
+          }
+        ]
+      },
+      "3e4d3fd9458a467f9eb13c2d7f929832": {
+        "initial": [
+          {
+            "player": 6983,
+            "health": 500,
+            "maximum": 500,
+            "speed": 4.550000190734863,
+            "xpModifier": 2.0,
+            "build": {
+              "InitialWeaponId": 1,
+              "InitialWeaponSlot": 0,
+              "Weapons": [
+                {
+                  "SlotIndex": 0,
+                  "WeaponId": 1
+                }
+              ],
+              "Equipment": [],
+              "Perks": []
+            }
+          }
+        ],
+        "endings": [
+          {
+            "kind": "run-ended",
+            "detail": "interrupted: process-exit",
+            "run": "3e4d3fd9458a467f9eb13c2d7f929832",
+            "role": "host",
+            "payload": "{\"RunId\":\"3e4d3fd9458a467f9eb13c2d7f929832\",\"Phase\":2,\"Wave\":0,\"Elapsed\":37.254714868962768,\"WaveDuration\":30.0,\"Planned\":1199,\"Spawned\":56,\"Skipped\":0,\"Alive\":41,\"Limit\":1000,\"TotalSpawned\":56,\"TotalSkipped\":0,\"ReferenceStage\":true,\"StageEndTime\":720.9,\"CountedAlive\":41,\"ActiveClips\":1,\"EvidenceBlocked\":0,\"TotalAttempts\":56,\"AbandonedBudget\":0,\"TransitionRequestedAt\":0.0,\"TransitionWaitCount\":0,\"TransitionWaitReason\":\"\"}",
+            "round": 2,
+            "realtime": 852.3437621001133,
+            "combat": 852.0999158685084
+          }
+        ],
+        "selections": [
+          {
+            "kind": "selection-close",
+            "detail": "Measured wall time; combat pause recorded separately",
+            "run": "3e4d3fd9458a467f9eb13c2d7f929832",
+            "role": "host",
+            "payload": "{\"seconds\":0.23414790000003905}",
+            "round": 2,
+            "realtime": 844.6525486001134,
+            "combat": 844.4156805755998
+          }
+        ],
+        "acceptedChoices": 2,
+        "lastFrame": {
+          "kind": "frame",
+          "role": "host",
+          "snapshot": {
+            "RunId": "3e4d3fd9458a467f9eb13c2d7f929832",
+            "Phase": 2,
+            "Wave": 0,
+            "Elapsed": 36.639545265585184,
+            "WaveDuration": 30.0,
+            "Planned": 1199,
+            "Spawned": 55,
+            "Skipped": 0,
+            "Alive": 40,
+            "Limit": 1000,
+            "TotalSpawned": 55,
+            "TotalSkipped": 0,
+            "ReferenceStage": true,
+            "StageEndTime": 720.9,
+            "CountedAlive": 40,
+            "ActiveClips": 1,
+            "EvidenceBlocked": 0,
+            "TotalAttempts": 55,
+            "AbandonedBudget": 0,
+            "TransitionRequestedAt": 0.0,
+            "TransitionWaitCount": 0,
+            "TransitionWaitReason": ""
+          },
+          "health": 500,
+          "observed": 55,
+          "realtime": 851.7208982001133,
+          "position": {
+            "x": 11.159978866577148,
+            "y": 2.5501348972320557
+          }
+        },
+        "requests": [],
+        "completions": [],
+        "waits": [],
+        "helpers": {
+          "test-card": 2
+        },
+        "births": 56,
+        "birthMismatches": [],
+        "confirmedKills": 15,
+        "firstHitToConfirmedDeathSeconds": {
+          "samples": 15,
+          "median": 0.09693569876253605,
+          "p95": 1.040336599573493,
+          "maximum": 1.040336599573493
+        },
+        "stageCleanup": [],
+        "trapCleanup": [],
+        "healthChanges": [],
+        "acceptedDamageChanges": 0,
+        "trapPhases": {},
+        "actionPhaseSamples": 68,
+        "geometrySamples": 0,
+        "statsBindingFailures": [],
+        "performanceActive": {
+          "meanFrameMs": {
+            "samples": 35,
+            "median": 19.35872110953698,
+            "p95": 24.685799714995593,
+            "maximum": 25.375552558898924
+          },
+          "p95FrameMs": {
+            "samples": 35,
+            "median": 47.370399475097656,
+            "p95": 82.93379974365234,
+            "maximum": 86.89340209960938
+          },
+          "maxFrameMs": {
+            "samples": 35,
+            "median": 48.82439422607422,
+            "p95": 88.58639526367188,
+            "maximum": 92.96879577636719
+          },
+          "logWriteMs": {
+            "samples": 35,
+            "median": 0.0075000000000216005,
+            "p95": 0.013399999999990087,
+            "maximum": 0.09910000000013497
+          },
+          "logFlushMs": {
+            "samples": 35,
+            "median": 0.06569999999999254,
+            "p95": 0.10709999999998843,
+            "maximum": 9.704499999999996
+          }
+        },
+        "sampledAlivePeak": 40,
+        "spawnFiles": [
+          {
+            "file": "spawns-3e4d3fd9458a467f9eb13c2d7f929832-20260916-012334-906.csv",
+            "attempts": 56,
+            "successful": 56,
+            "successByClip": {
+              "0": 56
+            },
+            "results": {
+              "Spawned": 56
+            },
+            "events": {
+              "spawn": 56,
+              "death": 15
+            },
+            "completion": null,
+            "conservationDelta": null
+          }
+        ]
+      }
+    },
+    "processClosed": true,
+    "screenshots": 67,
+    "transitionServerLog": [
+      "[LimboTransition] requested run=112e9833e0514d0caf95b287fa186d78 round=1 threshold=720.9 actual=720.90072143310681 frame=42276",
+      "[LimboTransition] waiting run=112e9833e0514d0caf95b287fa186d78 round=1 elapsed=720.90072143310681 count=1 reason=玩家 3 选卡中",
+      "[LimboTransition] waiting run=112e9833e0514d0caf95b287fa186d78 round=1 elapsed=726.18233372690156 count=2 reason=玩家 2 选卡中；玩家 3 选卡中",
+      "[LimboTransition] waiting run=112e9833e0514d0caf95b287fa186d78 round=1 elapsed=729.103852421511 count=0 reason=玩家已就绪"
+    ],
+    "runEndLog": [
+      "[RunEnd] reference-stage-complete Limbo 参考流程完成；Minos 战未实现",
+      "[RunEnd] cleanup run=112e9833e0514d0caf95b287fa186d78 round=1 action=Restart peers=2",
+      "[RunEnd] next run=3e4d3fd9458a467f9eb13c2d7f929832 round=2 action=Restart members=2"
+    ],
+    "errors": []
+  },
+  "client": {
+    "runs": {
+      "112e9833e0514d0caf95b287fa186d78": {
+        "initial": [
+          {
+            "player": 3,
+            "health": 500,
+            "maximum": 500,
+            "speed": 4.550000190734863,
+            "xpModifier": 2.0,
+            "build": {
+              "InitialWeaponId": 1,
+              "InitialWeaponSlot": 0,
+              "Weapons": [
+                {
+                  "SlotIndex": 0,
+                  "WeaponId": 1
+                }
+              ],
+              "Equipment": [],
+              "Perks": []
+            }
+          }
+        ],
+        "endings": [
+          {
+            "kind": "run-ended",
+            "detail": "completed",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "role": "client",
+            "payload": "{\"RunId\":\"112e9833e0514d0caf95b287fa186d78\",\"Phase\":5,\"Wave\":0,\"Elapsed\":729.103852421511,\"WaveDuration\":30.0,\"Planned\":1199,\"Spawned\":4665,\"Skipped\":0,\"Alive\":16,\"Limit\":1000,\"TotalSpawned\":4665,\"TotalSkipped\":0,\"ReferenceStage\":true,\"StageEndTime\":720.9,\"CountedAlive\":16,\"ActiveClips\":0,\"EvidenceBlocked\":0,\"TotalAttempts\":4665,\"AbandonedBudget\":0,\"TransitionRequestedAt\":720.9007214331068,\"TransitionWaitCount\":0,\"TransitionWaitReason\":\"\"}",
+            "round": 1,
+            "realtime": 738.6498348030045,
+            "combat": 771.1919061861827
+          }
+        ],
+        "selections": [
+          {
+            "kind": "selection-close",
+            "detail": "Measured wall time; combat pause recorded separately",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "role": "client",
+            "payload": "{\"seconds\":0.24270130000000024}",
+            "round": 1,
+            "realtime": 37.45865100300453,
+            "combat": 73.14671804714663
+          },
+          {
+            "kind": "selection-close",
+            "detail": "Measured wall time; combat pause recorded separately",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "role": "client",
+            "payload": "{\"seconds\":0.18445559999999973}",
+            "round": 1,
+            "realtime": 53.60999330300453,
+            "combat": 89.30211445978576
+          },
+          {
+            "kind": "selection-close",
+            "detail": "Measured wall time; combat pause recorded separately",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "role": "client",
+            "payload": "{\"seconds\":0.12628999999999736}",
+            "round": 1,
+            "realtime": 72.65544490300454,
+            "combat": 108.3459883550162
+          },
+          {
+            "kind": "selection-close",
+            "detail": "Measured wall time; combat pause recorded separately",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "role": "client",
+            "payload": "{\"seconds\":0.18343459999999824}",
+            "round": 1,
+            "realtime": 117.92061050300453,
+            "combat": 153.60867768172017
+          },
+          {
+            "kind": "selection-close",
+            "detail": "Measured wall time; combat pause recorded separately",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "role": "client",
+            "payload": "{\"seconds\":0.20152830000000677}",
+            "round": 1,
+            "realtime": 144.42796840300457,
+            "combat": 180.122096026522
+          },
+          {
+            "kind": "selection-close",
+            "detail": "Measured wall time; combat pause recorded separately",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "role": "client",
+            "payload": "{\"seconds\":0.055418000000003079}",
+            "round": 1,
+            "realtime": 164.15356890300455,
+            "combat": 199.84168439717752
+          },
+          {
+            "kind": "selection-close",
+            "detail": "Measured wall time; combat pause recorded separately",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "role": "client",
+            "payload": "{\"seconds\":0.1999744000000021}",
+            "round": 1,
+            "realtime": 180.51518890300457,
+            "combat": 216.2085458824696
+          },
+          {
+            "kind": "selection-close",
+            "detail": "Measured wall time; combat pause recorded separately",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "role": "client",
+            "payload": "{\"seconds\":0.03213269999997692}",
+            "round": 1,
+            "realtime": 191.85894560300457,
+            "combat": 227.55055097809145
+          },
+          {
+            "kind": "selection-close",
+            "detail": "Measured wall time; combat pause recorded separately",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "role": "client",
+            "payload": "{\"seconds\":0.21511849999998845}",
+            "round": 1,
+            "realtime": 198.83238300300457,
+            "combat": 234.52466783364238
+          },
+          {
+            "kind": "selection-close",
+            "detail": "Measured wall time; combat pause recorded separately",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "role": "client",
+            "payload": "{\"seconds\":0.03291020000000344}",
+            "round": 1,
+            "realtime": 207.92442360300456,
+            "combat": 243.61455507089502
+          },
+          {
+            "kind": "selection-close",
+            "detail": "Measured wall time; combat pause recorded separately",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "role": "client",
+            "payload": "{\"seconds\":0.017744399999997996}",
+            "round": 1,
+            "realtime": 225.40896830300457,
+            "combat": 261.09704862951946
+          },
+          {
+            "kind": "selection-close",
+            "detail": "Measured wall time; combat pause recorded separately",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "role": "client",
+            "payload": "{\"seconds\":0.0333175999999753}",
+            "round": 1,
+            "realtime": 295.0939808030045,
+            "combat": 330.7884337112445
+          },
+          {
+            "kind": "selection-close",
+            "detail": "Measured wall time; combat pause recorded separately",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "role": "client",
+            "payload": "{\"seconds\":0.2009095999999886}",
+            "round": 1,
+            "realtime": 314.5525932030045,
+            "combat": 350.24144411739707
+          },
+          {
+            "kind": "selection-close",
+            "detail": "Measured wall time; combat pause recorded separately",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "role": "client",
+            "payload": "{\"seconds\":0.03306380000003628}",
+            "round": 1,
+            "realtime": 324.2960320030045,
+            "combat": 359.98985149185137
+          },
+          {
+            "kind": "selection-close",
+            "detail": "Measured wall time; combat pause recorded separately",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "role": "client",
+            "payload": "{\"seconds\":0.20022199999999658}",
+            "round": 1,
+            "realtime": 337.9319805030045,
+            "combat": 373.62514618271933
+          },
+          {
+            "kind": "selection-close",
+            "detail": "Measured wall time; combat pause recorded separately",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "role": "client",
+            "payload": "{\"seconds\":0.033421400000008819}",
+            "round": 1,
+            "realtime": 362.0121354030045,
+            "combat": 396.00563915071865
+          },
+          {
+            "kind": "selection-close",
+            "detail": "Measured wall time; combat pause recorded separately",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "role": "client",
+            "payload": "{\"seconds\":0.04653200000001334}",
+            "round": 1,
+            "realtime": 396.3824645030045,
+            "combat": 430.3790982163138
+          },
+          {
+            "kind": "selection-close",
+            "detail": "Measured wall time; combat pause recorded separately",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "role": "client",
+            "payload": "{\"seconds\":0.033000399999991717}",
+            "round": 1,
+            "realtime": 427.3455519030045,
+            "combat": 461.3443021599422
+          },
+          {
+            "kind": "selection-close",
+            "detail": "Measured wall time; combat pause recorded separately",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "role": "client",
+            "payload": "{\"seconds\":0.18623819999999115}",
+            "round": 1,
+            "realtime": 445.7653427030045,
+            "combat": 479.7623799863341
+          },
+          {
+            "kind": "selection-close",
+            "detail": "Measured wall time; combat pause recorded separately",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "role": "client",
+            "payload": "{\"seconds\":0.04213299999997844}",
+            "round": 1,
+            "realtime": 462.2440604030045,
+            "combat": 496.2476369587004
+          },
+          {
+            "kind": "selection-close",
+            "detail": "Measured wall time; combat pause recorded separately",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "role": "client",
+            "payload": "{\"seconds\":0.19921149999998989}",
+            "round": 1,
+            "realtime": 465.1185204030045,
+            "combat": 499.1112330250857
+          },
+          {
+            "kind": "selection-close",
+            "detail": "Measured wall time; combat pause recorded separately",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "role": "client",
+            "payload": "{\"seconds\":0.03288600000001907}",
+            "round": 1,
+            "realtime": 473.5567192030045,
+            "combat": 507.55615432949713
+          },
+          {
+            "kind": "selection-close",
+            "detail": "Measured wall time; combat pause recorded separately",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "role": "client",
+            "payload": "{\"seconds\":0.19987200000002759}",
+            "round": 1,
+            "realtime": 491.6257821030045,
+            "combat": 525.6247933619921
+          },
+          {
+            "kind": "selection-close",
+            "detail": "Measured wall time; combat pause recorded separately",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "role": "client",
+            "payload": "{\"seconds\":0.03294379999999819}",
+            "round": 1,
+            "realtime": 505.9152201030045,
+            "combat": 539.9151056534728
+          },
+          {
+            "kind": "selection-close",
+            "detail": "Measured wall time; combat pause recorded separately",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "role": "client",
+            "payload": "{\"seconds\":0.20025490000000446}",
+            "round": 1,
+            "realtime": 523.1872165030046,
+            "combat": 557.1846221230578
+          },
+          {
+            "kind": "selection-close",
+            "detail": "Measured wall time; combat pause recorded separately",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "role": "client",
+            "payload": "{\"seconds\":0.04850129999999808}",
+            "round": 1,
+            "realtime": 526.9988575030046,
+            "combat": 560.995207176064
+          },
+          {
+            "kind": "selection-close",
+            "detail": "Measured wall time; combat pause recorded separately",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "role": "client",
+            "payload": "{\"seconds\":0.20087209999996959}",
+            "round": 1,
+            "realtime": 538.6702238030045,
+            "combat": 572.6629226342986
+          },
+          {
+            "kind": "selection-close",
+            "detail": "Measured wall time; combat pause recorded separately",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "role": "client",
+            "payload": "{\"seconds\":0.049037300000009057}",
+            "round": 1,
+            "realtime": 552.2203016030046,
+            "combat": 586.2152257712322
+          },
+          {
+            "kind": "selection-close",
+            "detail": "Measured wall time; combat pause recorded separately",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "role": "client",
+            "payload": "{\"seconds\":0.20047500000009678}",
+            "round": 1,
+            "realtime": 560.3789032030046,
+            "combat": 594.3754251142553
+          },
+          {
+            "kind": "selection-close",
+            "detail": "Measured wall time; combat pause recorded separately",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "role": "client",
+            "payload": "{\"seconds\":0.03276789999995344}",
+            "round": 1,
+            "realtime": 569.0701292030045,
+            "combat": 603.0667232944417
+          },
+          {
+            "kind": "selection-close",
+            "detail": "Measured wall time; combat pause recorded separately",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "role": "client",
+            "payload": "{\"seconds\":0.2167023000000654}",
+            "round": 1,
+            "realtime": 572.0804552030046,
+            "combat": 606.0744149572291
+          },
+          {
+            "kind": "selection-close",
+            "detail": "Measured wall time; combat pause recorded separately",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "role": "client",
+            "payload": "{\"seconds\":0.03439739999998892}",
+            "round": 1,
+            "realtime": 578.9930038030045,
+            "combat": 612.9882212233416
+          },
+          {
+            "kind": "selection-close",
+            "detail": "Measured wall time; combat pause recorded separately",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "role": "client",
+            "payload": "{\"seconds\":0.20000089999996363}",
+            "round": 1,
+            "realtime": 591.8888372030045,
+            "combat": 625.8845483436212
+          },
+          {
+            "kind": "selection-close",
+            "detail": "Measured wall time; combat pause recorded separately",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "role": "client",
+            "payload": "{\"seconds\":0.03299600000002556}",
+            "round": 1,
+            "realtime": 594.1185241030046,
+            "combat": 628.1134162236696
+          },
+          {
+            "kind": "selection-close",
+            "detail": "Measured wall time; combat pause recorded separately",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "role": "client",
+            "payload": "{\"seconds\":0.19895040000005793}",
+            "round": 1,
+            "realtime": 597.0772264030046,
+            "combat": 631.0723210401704
+          },
+          {
+            "kind": "selection-close",
+            "detail": "Measured wall time; combat pause recorded separately",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "role": "client",
+            "payload": "{\"seconds\":0.03307469999992918}",
+            "round": 1,
+            "realtime": 605.5747831030045,
+            "combat": 639.5691209153399
+          },
+          {
+            "kind": "selection-close",
+            "detail": "Measured wall time; combat pause recorded separately",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "role": "client",
+            "payload": "{\"seconds\":0.2384270000000015}",
+            "round": 1,
+            "realtime": 613.9522225030046,
+            "combat": 646.4953991646139
+          },
+          {
+            "kind": "selection-close",
+            "detail": "Measured wall time; combat pause recorded separately",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "role": "client",
+            "payload": "{\"seconds\":0.0488758000000189}",
+            "round": 1,
+            "realtime": 626.1911311030045,
+            "combat": 658.7336667457967
+          },
+          {
+            "kind": "selection-close",
+            "detail": "Measured wall time; combat pause recorded separately",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "role": "client",
+            "payload": "{\"seconds\":0.2172279000000117}",
+            "round": 1,
+            "realtime": 642.4996685030046,
+            "combat": 675.0409787997681
+          },
+          {
+            "kind": "selection-close",
+            "detail": "Measured wall time; combat pause recorded separately",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "role": "client",
+            "payload": "{\"seconds\":0.04947760000004564}",
+            "round": 1,
+            "realtime": 653.1428108030045,
+            "combat": 685.6835733447523
+          },
+          {
+            "kind": "selection-close",
+            "detail": "Measured wall time; combat pause recorded separately",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "role": "client",
+            "payload": "{\"seconds\":0.2173041999999441}",
+            "round": 1,
+            "realtime": 677.9911520030046,
+            "combat": 710.5336983417798
+          },
+          {
+            "kind": "selection-close",
+            "detail": "Measured wall time; combat pause recorded separately",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "role": "client",
+            "payload": "{\"seconds\":0.048065400000041339}",
+            "round": 1,
+            "realtime": 689.1110335030046,
+            "combat": 721.6522016458857
+          },
+          {
+            "kind": "selection-close",
+            "detail": "Measured wall time; combat pause recorded separately",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "role": "client",
+            "payload": "{\"seconds\":0.21920080000006693}",
+            "round": 1,
+            "realtime": 691.6977100030045,
+            "combat": 724.238152034575
+          },
+          {
+            "kind": "selection-close",
+            "detail": "Measured wall time; combat pause recorded separately",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "role": "client",
+            "payload": "{\"seconds\":0.049779699999930929}",
+            "round": 1,
+            "realtime": 695.0591860030046,
+            "combat": 727.6030930045872
+          },
+          {
+            "kind": "selection-close",
+            "detail": "Measured wall time; combat pause recorded separately",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "role": "client",
+            "payload": "{\"seconds\":0.20042149999994764}",
+            "round": 1,
+            "realtime": 699.5264699030046,
+            "combat": 732.0664765799263
+          },
+          {
+            "kind": "selection-close",
+            "detail": "Measured wall time; combat pause recorded separately",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "role": "client",
+            "payload": "{\"seconds\":0.06928159999995387}",
+            "round": 1,
+            "realtime": 713.9674279030046,
+            "combat": 746.5089430821441
+          },
+          {
+            "kind": "selection-close",
+            "detail": "Measured wall time; combat pause recorded separately",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "role": "client",
+            "payload": "{\"seconds\":0.21513660000005076}",
+            "round": 1,
+            "realtime": 724.0511145030046,
+            "combat": 756.5954746723297
+          },
+          {
+            "kind": "selection-close",
+            "detail": "Measured wall time; combat pause recorded separately",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "role": "client",
+            "payload": "{\"seconds\":8.22677770000007}",
+            "round": 1,
+            "realtime": 738.6497983030046,
+            "combat": 771.1919061861827
+          }
+        ],
+        "acceptedChoices": 0,
+        "lastFrame": {
+          "kind": "frame",
+          "role": "client",
+          "snapshot": {
+            "RunId": "112e9833e0514d0caf95b287fa186d78",
+            "Phase": 4,
+            "Wave": 0,
+            "Elapsed": 729.103852421511,
+            "WaveDuration": 30.0,
+            "Planned": 1199,
+            "Spawned": 4665,
+            "Skipped": 0,
+            "Alive": 16,
+            "Limit": 1000,
+            "TotalSpawned": 4665,
+            "TotalSkipped": 0,
+            "ReferenceStage": true,
+            "StageEndTime": 720.9,
+            "CountedAlive": 16,
+            "ActiveClips": 0,
+            "EvidenceBlocked": 0,
+            "TotalAttempts": 4665,
+            "AbandonedBudget": 0,
+            "TransitionRequestedAt": 720.9007214331068,
+            "TransitionWaitCount": 0,
+            "TransitionWaitReason": ""
+          },
+          "health": -1,
+          "observed": 0,
+          "realtime": 778.8870430030046,
+          "position": {
+            "x": 0.0,
+            "y": 0.0
+          }
+        },
+        "requests": [
+          {
+            "kind": "request-observed",
+            "detail": "Existing combat continues; selection hold is explicit test input.",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "payload": "{\"RunId\":\"112e9833e0514d0caf95b287fa186d78\",\"Phase\":6,\"Wave\":0,\"Elapsed\":720.9007214331068,\"WaveDuration\":30.0,\"Planned\":1199,\"Spawned\":4664,\"Skipped\":0,\"Alive\":75,\"Limit\":1000,\"TotalSpawned\":4664,\"TotalSkipped\":0,\"ReferenceStage\":true,\"StageEndTime\":720.9,\"CountedAlive\":75,\"ActiveClips\":1,\"EvidenceBlocked\":0,\"TotalAttempts\":4664,\"AbandonedBudget\":0,\"TransitionRequestedAt\":720.9007214331068,\"TransitionWaitCount\":0,\"TransitionWaitReason\":\"\"}",
+            "realtime": 730.4238664030046,
+            "combat": 762.9627809872565
+          }
+        ],
+        "completions": [
+          {
+            "kind": "completed",
+            "detail": "Existing run-end lifecycle",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "payload": "{\"RunId\":\"112e9833e0514d0caf95b287fa186d78\",\"Phase\":5,\"Wave\":0,\"Elapsed\":729.103852421511,\"WaveDuration\":30.0,\"Planned\":1199,\"Spawned\":4665,\"Skipped\":0,\"Alive\":16,\"Limit\":1000,\"TotalSpawned\":4665,\"TotalSkipped\":0,\"ReferenceStage\":true,\"StageEndTime\":720.9,\"CountedAlive\":16,\"ActiveClips\":0,\"EvidenceBlocked\":0,\"TotalAttempts\":4665,\"AbandonedBudget\":0,\"TransitionRequestedAt\":720.9007214331068,\"TransitionWaitCount\":0,\"TransitionWaitReason\":\"\"}",
+            "realtime": 738.6517845030046,
+            "combat": 771.1919061861827
+          }
+        ],
+        "waits": [
+          {
+            "kind": "frame",
+            "detail": "TransitionPending/0/",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "payload": "{\"snapshot\":{\"RunId\":\"112e9833e0514d0caf95b287fa186d78\",\"Phase\":6,\"Wave\":0,\"Elapsed\":720.9007214331068,\"WaveDuration\":30.0,\"Planned\":1199,\"Spawned\":4664,\"Skipped\":0,\"Alive\":75,\"Limit\":1000,\"TotalSpawned\":4664,\"TotalSkipped\":0,\"ReferenceStage\":true,\"StageEndTime\":720.9,\"CountedAlive\":75,\"ActiveClips\":1,\"EvidenceBlocked\":0,\"TotalAttempts\":4664,\"AbandonedBudget\":0,\"TransitionRequestedAt\":720.9007214331068,\"TransitionWaitCount\":0,\"TransitionWaitReason\":\"\"},\"selecting\":true,\"eventId\":0,\"pending\":0,\"health\":500,\"timeScale\":1.0}",
+            "realtime": 730.4239028030046,
+            "combat": 762.9627809872565
+          },
+          {
+            "kind": "frame",
+            "detail": "TransitionPending/1/玩家 3 选卡中",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "payload": "{\"snapshot\":{\"RunId\":\"112e9833e0514d0caf95b287fa186d78\",\"Phase\":6,\"Wave\":0,\"Elapsed\":720.9007214331068,\"WaveDuration\":30.0,\"Planned\":1199,\"Spawned\":4664,\"Skipped\":0,\"Alive\":75,\"Limit\":1000,\"TotalSpawned\":4664,\"TotalSkipped\":0,\"ReferenceStage\":true,\"StageEndTime\":720.9,\"CountedAlive\":75,\"ActiveClips\":1,\"EvidenceBlocked\":0,\"TotalAttempts\":4664,\"AbandonedBudget\":0,\"TransitionRequestedAt\":720.9007214331068,\"TransitionWaitCount\":1,\"TransitionWaitReason\":\"玩家 3 选卡中\"},\"selecting\":true,\"eventId\":0,\"pending\":0,\"health\":500,\"timeScale\":1.0}",
+            "realtime": 730.5049069030046,
+            "combat": 763.0432755875966
+          },
+          {
+            "kind": "frame",
+            "detail": "TransitionPending/1/玩家 3 选卡中",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "payload": "{\"snapshot\":{\"RunId\":\"112e9833e0514d0caf95b287fa186d78\",\"Phase\":6,\"Wave\":0,\"Elapsed\":721.870176427532,\"WaveDuration\":30.0,\"Planned\":1199,\"Spawned\":4665,\"Skipped\":0,\"Alive\":69,\"Limit\":1000,\"TotalSpawned\":4665,\"TotalSkipped\":0,\"ReferenceStage\":true,\"StageEndTime\":720.9,\"CountedAlive\":69,\"ActiveClips\":0,\"EvidenceBlocked\":0,\"TotalAttempts\":4665,\"AbandonedBudget\":0,\"TransitionRequestedAt\":720.9007214331068,\"TransitionWaitCount\":1,\"TransitionWaitReason\":\"玩家 3 选卡中\"},\"selecting\":true,\"eventId\":0,\"pending\":0,\"health\":500,\"timeScale\":1.0}",
+            "realtime": 731.5069270030045,
+            "combat": 764.048675280756
+          },
+          {
+            "kind": "frame",
+            "detail": "TransitionPending/1/玩家 3 选卡中",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "payload": "{\"snapshot\":{\"RunId\":\"112e9833e0514d0caf95b287fa186d78\",\"Phase\":6,\"Wave\":0,\"Elapsed\":722.9329155241139,\"WaveDuration\":30.0,\"Planned\":1199,\"Spawned\":4665,\"Skipped\":0,\"Alive\":59,\"Limit\":1000,\"TotalSpawned\":4665,\"TotalSkipped\":0,\"ReferenceStage\":true,\"StageEndTime\":720.9,\"CountedAlive\":59,\"ActiveClips\":0,\"EvidenceBlocked\":0,\"TotalAttempts\":4665,\"AbandonedBudget\":0,\"TransitionRequestedAt\":720.9007214331068,\"TransitionWaitCount\":1,\"TransitionWaitReason\":\"玩家 3 选卡中\"},\"selecting\":true,\"eventId\":0,\"pending\":0,\"health\":500,\"timeScale\":1.0}",
+            "realtime": 732.5079876030046,
+            "combat": 765.0466621030989
+          },
+          {
+            "kind": "frame",
+            "detail": "TransitionPending/1/玩家 3 选卡中",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "payload": "{\"snapshot\":{\"RunId\":\"112e9833e0514d0caf95b287fa186d78\",\"Phase\":6,\"Wave\":0,\"Elapsed\":723.8037426327355,\"WaveDuration\":30.0,\"Planned\":1199,\"Spawned\":4665,\"Skipped\":0,\"Alive\":46,\"Limit\":1000,\"TotalSpawned\":4665,\"TotalSkipped\":0,\"ReferenceStage\":true,\"StageEndTime\":720.9,\"CountedAlive\":46,\"ActiveClips\":0,\"EvidenceBlocked\":0,\"TotalAttempts\":4665,\"AbandonedBudget\":0,\"TransitionRequestedAt\":720.9007214331068,\"TransitionWaitCount\":1,\"TransitionWaitReason\":\"玩家 3 选卡中\"},\"selecting\":true,\"eventId\":0,\"pending\":0,\"health\":500,\"timeScale\":1.0}",
+            "realtime": 733.5112385030045,
+            "combat": 766.0515059348995
+          },
+          {
+            "kind": "frame",
+            "detail": "TransitionPending/1/玩家 3 选卡中",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "payload": "{\"snapshot\":{\"RunId\":\"112e9833e0514d0caf95b287fa186d78\",\"Phase\":6,\"Wave\":0,\"Elapsed\":724.8638565302826,\"WaveDuration\":30.0,\"Planned\":1199,\"Spawned\":4665,\"Skipped\":0,\"Alive\":34,\"Limit\":1000,\"TotalSpawned\":4665,\"TotalSkipped\":0,\"ReferenceStage\":true,\"StageEndTime\":720.9,\"CountedAlive\":34,\"ActiveClips\":0,\"EvidenceBlocked\":0,\"TotalAttempts\":4665,\"AbandonedBudget\":0,\"TransitionRequestedAt\":720.9007214331068,\"TransitionWaitCount\":1,\"TransitionWaitReason\":\"玩家 3 选卡中\"},\"selecting\":true,\"eventId\":0,\"pending\":0,\"health\":500,\"timeScale\":1.0}",
+            "realtime": 734.5157654030046,
+            "combat": 767.0552754652309
+          },
+          {
+            "kind": "frame",
+            "detail": "TransitionPending/1/玩家 3 选卡中",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "payload": "{\"snapshot\":{\"RunId\":\"112e9833e0514d0caf95b287fa186d78\",\"Phase\":6,\"Wave\":0,\"Elapsed\":725.9127454278059,\"WaveDuration\":30.0,\"Planned\":1199,\"Spawned\":4665,\"Skipped\":0,\"Alive\":22,\"Limit\":1000,\"TotalSpawned\":4665,\"TotalSkipped\":0,\"ReferenceStage\":true,\"StageEndTime\":720.9,\"CountedAlive\":22,\"ActiveClips\":0,\"EvidenceBlocked\":0,\"TotalAttempts\":4665,\"AbandonedBudget\":0,\"TransitionRequestedAt\":720.9007214331068,\"TransitionWaitCount\":1,\"TransitionWaitReason\":\"玩家 3 选卡中\"},\"selecting\":true,\"eventId\":0,\"pending\":0,\"health\":500,\"timeScale\":1.0}",
+            "realtime": 735.5200627030046,
+            "combat": 768.0602871794179
+          },
+          {
+            "kind": "frame",
+            "detail": "TransitionPending/2/玩家 2 选卡中；玩家 3 选卡中",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "payload": "{\"snapshot\":{\"RunId\":\"112e9833e0514d0caf95b287fa186d78\",\"Phase\":6,\"Wave\":0,\"Elapsed\":726.1823337269016,\"WaveDuration\":30.0,\"Planned\":1199,\"Spawned\":4665,\"Skipped\":0,\"Alive\":22,\"Limit\":1000,\"TotalSpawned\":4665,\"TotalSkipped\":0,\"ReferenceStage\":true,\"StageEndTime\":720.9,\"CountedAlive\":22,\"ActiveClips\":0,\"EvidenceBlocked\":0,\"TotalAttempts\":4665,\"AbandonedBudget\":0,\"TransitionRequestedAt\":720.9007214331068,\"TransitionWaitCount\":2,\"TransitionWaitReason\":\"玩家 2 选卡中；玩家 3 选卡中\"},\"selecting\":true,\"eventId\":0,\"pending\":0,\"health\":500,\"timeScale\":1.0}",
+            "realtime": 735.7201427030045,
+            "combat": 768.261973174107
+          },
+          {
+            "kind": "frame",
+            "detail": "TransitionPending/2/玩家 2 选卡中；玩家 3 选卡中",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "payload": "{\"snapshot\":{\"RunId\":\"112e9833e0514d0caf95b287fa186d78\",\"Phase\":6,\"Wave\":0,\"Elapsed\":727.1644164198078,\"WaveDuration\":30.0,\"Planned\":1199,\"Spawned\":4665,\"Skipped\":0,\"Alive\":22,\"Limit\":1000,\"TotalSpawned\":4665,\"TotalSkipped\":0,\"ReferenceStage\":true,\"StageEndTime\":720.9,\"CountedAlive\":22,\"ActiveClips\":0,\"EvidenceBlocked\":0,\"TotalAttempts\":4665,\"AbandonedBudget\":0,\"TransitionRequestedAt\":720.9007214331068,\"TransitionWaitCount\":2,\"TransitionWaitReason\":\"玩家 2 选卡中；玩家 3 选卡中\"},\"selecting\":true,\"eventId\":0,\"pending\":0,\"health\":500,\"timeScale\":1.0}",
+            "realtime": 736.7284514030046,
+            "combat": 769.2716036977986
+          },
+          {
+            "kind": "frame",
+            "detail": "TransitionPending/2/玩家 2 选卡中；玩家 3 选卡中",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "payload": "{\"snapshot\":{\"RunId\":\"112e9833e0514d0caf95b287fa186d78\",\"Phase\":6,\"Wave\":0,\"Elapsed\":728.0142624233849,\"WaveDuration\":30.0,\"Planned\":1199,\"Spawned\":4665,\"Skipped\":0,\"Alive\":21,\"Limit\":1000,\"TotalSpawned\":4665,\"TotalSkipped\":0,\"ReferenceStage\":true,\"StageEndTime\":720.9,\"CountedAlive\":21,\"ActiveClips\":0,\"EvidenceBlocked\":0,\"TotalAttempts\":4665,\"AbandonedBudget\":0,\"TransitionRequestedAt\":720.9007214331068,\"TransitionWaitCount\":2,\"TransitionWaitReason\":\"玩家 2 选卡中；玩家 3 选卡中\"},\"selecting\":true,\"eventId\":0,\"pending\":0,\"health\":500,\"timeScale\":1.0}",
+            "realtime": 737.7302941030046,
+            "combat": 770.272440049921
+          }
+        ],
+        "transitionWaitWallSeconds": 8.22791810000001,
+        "helpers": {
+          "test-card": 72,
+          "test-heal": 12
+        },
+        "births": 4665,
+        "birthMismatches": [],
+        "confirmedKills": 4624,
+        "firstHitToConfirmedDeathSeconds": {
+          "samples": 4623,
+          "median": 1.334065173332533,
+          "p95": 13.571674115968676,
+          "maximum": 89.42140545993925
+        },
+        "stageCleanup": [
+          {
+            "kind": "completed-cleanup",
+            "detail": "112e9833e0514d0caf95b287fa186d78",
+            "payload": "{\"damageAreas\":0,\"warnings\":0}",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "round": 1,
+            "realtime": 738.9643919030045,
+            "combat": 771.5121372671198,
+            "elapsed": 729.103852421511
+          }
+        ],
+        "trapCleanup": [
+          {
+            "kind": "completed-cleanup",
+            "role": "client",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "elapsed": 729.103852421511,
+            "combat": 771.1919061861827,
+            "realtime": 738.6640288030046,
+            "id": 0,
+            "state": {
+              "Round": 0,
+              "Target": 0,
+              "Barrier": false,
+              "Occupied": false,
+              "Collision": false,
+              "Phase": 0,
+              "Center": {
+                "x": 0.0,
+                "y": 0.0
+              },
+              "BeganAt": 0.0,
+              "ReleaseAt": 0.0,
+              "Radius": 0.0,
+              "Aspect": 0.0,
+              "EntryScale": 0.0,
+              "CameraOffset": 0.0,
+              "CameraDuration": 0.0,
+              "Count": 0,
+              "Visible": 0
+            },
+            "worldEdgePoints": [],
+            "edgeRadius": 0.0,
+            "localPlayer": 3,
+            "localPosition": {
+              "x": 11.913984298706055,
+              "y": 7.50218391418457
+            },
+            "localVelocity": {
+              "x": 0.0,
+              "y": 0.0
+            },
+            "localPlayerTouchesBarrier": false,
+            "timeScale": 1.0,
+            "slots": 0,
+            "states": 0,
+            "collisionAreas": 0,
+            "livingWarningRoots": 0
+          }
+        ],
+        "healthChanges": [
+          {
+            "kind": "health",
+            "role": "client",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "source": "unknown",
+            "round": 1,
+            "elapsed": 25.614889273419976,
+            "realtime": 32.16219730300453,
+            "previous": 500,
+            "current": 450,
+            "maximum": 500
+          },
+          {
+            "kind": "health",
+            "role": "client",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "source": "unknown",
+            "round": 1,
+            "elapsed": 183.40018067974597,
+            "realtime": 189.87516510300455,
+            "previous": 450,
+            "current": 420,
+            "maximum": 500
+          },
+          {
+            "kind": "health",
+            "role": "client",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "source": "unknown",
+            "round": 1,
+            "elapsed": 184.00201137829572,
+            "realtime": 190.48823820300456,
+            "previous": 420,
+            "current": 390,
+            "maximum": 500
+          },
+          {
+            "kind": "health",
+            "role": "client",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "source": "unknown",
+            "round": 1,
+            "elapsed": 184.61004757601768,
+            "realtime": 191.10922680300456,
+            "previous": 390,
+            "current": 360,
+            "maximum": 500
+          },
+          {
+            "kind": "health",
+            "role": "client",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "source": "unknown",
+            "round": 1,
+            "elapsed": 185.21555457543582,
+            "realtime": 191.74414720300456,
+            "previous": 360,
+            "current": 330,
+            "maximum": 500
+          },
+          {
+            "kind": "health",
+            "role": "client",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "source": "unknown",
+            "round": 1,
+            "elapsed": 185.81776197534055,
+            "realtime": 192.36308530300457,
+            "previous": 330,
+            "current": 300,
+            "maximum": 500
+          },
+          {
+            "kind": "health",
+            "role": "client",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "source": "unknown",
+            "round": 1,
+            "elapsed": 190.4857549732551,
+            "realtime": 197.04675090300455,
+            "previous": 300,
+            "current": 100,
+            "maximum": 500
+          },
+          {
+            "kind": "health",
+            "role": "client",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "source": "unknown",
+            "round": 1,
+            "elapsed": 190.68826496880502,
+            "realtime": 197.06004170300457,
+            "previous": 100,
+            "current": 500,
+            "maximum": 500
+          },
+          {
+            "kind": "health",
+            "role": "client",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "source": "unknown",
+            "round": 1,
+            "elapsed": 191.2944559706375,
+            "realtime": 197.66386320300455,
+            "previous": 500,
+            "current": 470,
+            "maximum": 500
+          },
+          {
+            "kind": "health",
+            "role": "client",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "source": "unknown",
+            "round": 1,
+            "elapsed": 192.30939247552305,
+            "realtime": 198.85093920300457,
+            "previous": 470,
+            "current": 440,
+            "maximum": 500
+          },
+          {
+            "kind": "health",
+            "role": "client",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "source": "unknown",
+            "round": 1,
+            "elapsed": 192.91706996876746,
+            "realtime": 199.47038180300456,
+            "previous": 440,
+            "current": 410,
+            "maximum": 500
+          },
+          {
+            "kind": "health",
+            "role": "client",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "source": "unknown",
+            "round": 1,
+            "elapsed": 193.92912787105888,
+            "realtime": 200.42307970300456,
+            "previous": 410,
+            "current": 380,
+            "maximum": 500
+          },
+          {
+            "kind": "health",
+            "role": "client",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "source": "unknown",
+            "round": 1,
+            "elapsed": 194.74136697221547,
+            "realtime": 201.19074910300455,
+            "previous": 380,
+            "current": 350,
+            "maximum": 500
+          },
+          {
+            "kind": "health",
+            "role": "client",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "source": "unknown",
+            "round": 1,
+            "elapsed": 195.95098557602614,
+            "realtime": 202.34504440300455,
+            "previous": 350,
+            "current": 320,
+            "maximum": 500
+          },
+          {
+            "kind": "health",
+            "role": "client",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "source": "unknown",
+            "round": 1,
+            "elapsed": 290.702328203246,
+            "realtime": 297.1183113030045,
+            "previous": 320,
+            "current": 280,
+            "maximum": 500
+          },
+          {
+            "kind": "health",
+            "role": "client",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "source": "unknown",
+            "round": 1,
+            "elapsed": 290.702328203246,
+            "realtime": 297.1338865030045,
+            "previous": 280,
+            "current": 500,
+            "maximum": 500
+          },
+          {
+            "kind": "health",
+            "role": "client",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "source": "unknown",
+            "round": 1,
+            "elapsed": 342.06836343649775,
+            "realtime": 350.2315186030045,
+            "previous": 500,
+            "current": 300,
+            "maximum": 500
+          },
+          {
+            "kind": "health",
+            "role": "client",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "source": "unknown",
+            "round": 1,
+            "elapsed": 343.67200072761625,
+            "realtime": 351.8345223030045,
+            "previous": 300,
+            "current": 100,
+            "maximum": 500
+          },
+          {
+            "kind": "health",
+            "role": "client",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "source": "unknown",
+            "round": 1,
+            "elapsed": 343.67200072761625,
+            "realtime": 351.8496215030045,
+            "previous": 100,
+            "current": 500,
+            "maximum": 500
+          },
+          {
+            "kind": "health",
+            "role": "client",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "source": "unknown",
+            "round": 1,
+            "elapsed": 345.2769035184756,
+            "realtime": 353.4218917030045,
+            "previous": 500,
+            "current": 300,
+            "maximum": 500
+          },
+          {
+            "kind": "health",
+            "role": "client",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "source": "unknown",
+            "round": 1,
+            "elapsed": 346.8817831175402,
+            "realtime": 355.0102931030045,
+            "previous": 300,
+            "current": 100,
+            "maximum": 500
+          },
+          {
+            "kind": "health",
+            "role": "client",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "source": "unknown",
+            "round": 1,
+            "elapsed": 346.8817831175402,
+            "realtime": 355.0257241030045,
+            "previous": 100,
+            "current": 500,
+            "maximum": 500
+          },
+          {
+            "kind": "health",
+            "role": "client",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "source": "unknown",
+            "round": 1,
+            "elapsed": 350.0909438235685,
+            "realtime": 358.2370371030045,
+            "previous": 500,
+            "current": 300,
+            "maximum": 500
+          },
+          {
+            "kind": "health",
+            "role": "client",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "source": "unknown",
+            "round": 1,
+            "elapsed": 351.69576833117753,
+            "realtime": 359.8410845030045,
+            "previous": 300,
+            "current": 100,
+            "maximum": 500
+          },
+          {
+            "kind": "health",
+            "role": "client",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "source": "unknown",
+            "round": 1,
+            "elapsed": 351.69576833117753,
+            "realtime": 359.85604610300453,
+            "previous": 100,
+            "current": 500,
+            "maximum": 500
+          },
+          {
+            "kind": "health",
+            "role": "client",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "source": "unknown",
+            "round": 1,
+            "elapsed": 358.517892931588,
+            "realtime": 366.6277927030045,
+            "previous": 500,
+            "current": 300,
+            "maximum": 500
+          },
+          {
+            "kind": "health",
+            "role": "client",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "source": "unknown",
+            "round": 1,
+            "elapsed": 360.1220605345443,
+            "realtime": 368.2307338030045,
+            "previous": 300,
+            "current": 100,
+            "maximum": 500
+          },
+          {
+            "kind": "health",
+            "role": "client",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "source": "unknown",
+            "round": 1,
+            "elapsed": 360.1220605345443,
+            "realtime": 368.2461035030045,
+            "previous": 100,
+            "current": 500,
+            "maximum": 500
+          },
+          {
+            "kind": "health",
+            "role": "client",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "source": "unknown",
+            "round": 1,
+            "elapsed": 361.72646063100547,
+            "realtime": 369.8533397030045,
+            "previous": 500,
+            "current": 300,
+            "maximum": 500
+          },
+          {
+            "kind": "health",
+            "role": "client",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "source": "unknown",
+            "round": 1,
+            "elapsed": 363.3322048326954,
+            "realtime": 371.4402829030045,
+            "previous": 300,
+            "current": 100,
+            "maximum": 500
+          },
+          {
+            "kind": "health",
+            "role": "client",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "source": "unknown",
+            "round": 1,
+            "elapsed": 363.3322048326954,
+            "realtime": 371.4564373030045,
+            "previous": 100,
+            "current": 500,
+            "maximum": 500
+          },
+          {
+            "kind": "health",
+            "role": "client",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "source": "unknown",
+            "round": 1,
+            "elapsed": 423.6207901807502,
+            "realtime": 431.8549588030045,
+            "previous": 500,
+            "current": 430,
+            "maximum": 500
+          },
+          {
+            "kind": "health",
+            "role": "client",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "source": "unknown",
+            "round": 1,
+            "elapsed": 425.436052092351,
+            "realtime": 433.5116444030045,
+            "previous": 430,
+            "current": 380,
+            "maximum": 500
+          },
+          {
+            "kind": "health",
+            "role": "client",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "source": "unknown",
+            "round": 1,
+            "elapsed": 458.9646084839478,
+            "realtime": 467.1310163030045,
+            "previous": 380,
+            "current": 330,
+            "maximum": 500
+          },
+          {
+            "kind": "health",
+            "role": "client",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "source": "unknown",
+            "round": 1,
+            "elapsed": 497.6278385156765,
+            "realtime": 505.7645176030045,
+            "previous": 330,
+            "current": 260,
+            "maximum": 500
+          },
+          {
+            "kind": "health",
+            "role": "client",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "source": "unknown",
+            "round": 1,
+            "elapsed": 497.6278385156765,
+            "realtime": 505.7658161030045,
+            "previous": 260,
+            "current": 500,
+            "maximum": 500
+          },
+          {
+            "kind": "health",
+            "role": "client",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "source": "unknown",
+            "round": 1,
+            "elapsed": 514.5797019088641,
+            "realtime": 522.7059631030046,
+            "previous": 500,
+            "current": 450,
+            "maximum": 500
+          },
+          {
+            "kind": "health",
+            "role": "client",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "source": "unknown",
+            "round": 1,
+            "elapsed": 516.866667705588,
+            "realtime": 525.0292994030045,
+            "previous": 450,
+            "current": 400,
+            "maximum": 500
+          },
+          {
+            "kind": "health",
+            "role": "client",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "source": "unknown",
+            "round": 1,
+            "elapsed": 519.3609497090802,
+            "realtime": 527.5829234030045,
+            "previous": 400,
+            "current": 330,
+            "maximum": 500
+          },
+          {
+            "kind": "health",
+            "role": "client",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "source": "unknown",
+            "round": 1,
+            "elapsed": 540.7447216818109,
+            "realtime": 548.9225968030046,
+            "previous": 330,
+            "current": 260,
+            "maximum": 500
+          },
+          {
+            "kind": "health",
+            "role": "client",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "source": "unknown",
+            "round": 1,
+            "elapsed": 540.7447216818109,
+            "realtime": 548.9244558030045,
+            "previous": 260,
+            "current": 500,
+            "maximum": 500
+          },
+          {
+            "kind": "health",
+            "role": "client",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "source": "unknown",
+            "round": 1,
+            "elapsed": 609.7465990916826,
+            "realtime": 619.2792959030046,
+            "previous": 500,
+            "current": 300,
+            "maximum": 500
+          },
+          {
+            "kind": "health",
+            "role": "client",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "source": "unknown",
+            "round": 1,
+            "elapsed": 614.4993240837939,
+            "realtime": 624.1224743030045,
+            "previous": 300,
+            "current": 100,
+            "maximum": 500
+          },
+          {
+            "kind": "health",
+            "role": "client",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "source": "unknown",
+            "round": 1,
+            "elapsed": 614.4993240837939,
+            "realtime": 624.1375873030046,
+            "previous": 100,
+            "current": 500,
+            "maximum": 500
+          },
+          {
+            "kind": "health",
+            "role": "client",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "source": "unknown",
+            "round": 1,
+            "elapsed": 622.2352087781765,
+            "realtime": 631.9197088030046,
+            "previous": 500,
+            "current": 430,
+            "maximum": 500
+          },
+          {
+            "kind": "health",
+            "role": "client",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "source": "unknown",
+            "round": 1,
+            "elapsed": 623.1025498774834,
+            "realtime": 632.8288051030046,
+            "previous": 430,
+            "current": 230,
+            "maximum": 500
+          },
+          {
+            "kind": "health",
+            "role": "client",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "source": "unknown",
+            "round": 1,
+            "elapsed": 623.3190991771407,
+            "realtime": 632.8437771030045,
+            "previous": 230,
+            "current": 500,
+            "maximum": 500
+          },
+          {
+            "kind": "health",
+            "role": "client",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "source": "unknown",
+            "round": 1,
+            "elapsed": 667.1258837752976,
+            "realtime": 676.8151331030045,
+            "previous": 500,
+            "current": 430,
+            "maximum": 500
+          },
+          {
+            "kind": "health",
+            "role": "client",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "source": "unknown",
+            "round": 1,
+            "elapsed": 673.6216659625061,
+            "realtime": 683.3542723030046,
+            "previous": 430,
+            "current": 360,
+            "maximum": 500
+          },
+          {
+            "kind": "health",
+            "role": "client",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "source": "unknown",
+            "round": 1,
+            "elapsed": 687.238792153541,
+            "realtime": 696.8957141030046,
+            "previous": 360,
+            "current": 290,
+            "maximum": 500
+          },
+          {
+            "kind": "health",
+            "role": "client",
+            "run": "112e9833e0514d0caf95b287fa186d78",
+            "source": "unknown",
+            "round": 1,
+            "elapsed": 687.238792153541,
+            "realtime": 696.8995618030045,
+            "previous": 290,
+            "current": 500,
+            "maximum": 500
+          }
+        ],
+        "acceptedDamageChanges": 39,
+        "trapPhases": {
+          "2147483649": [
+            0,
+            1,
+            2,
+            3
+          ],
+          "17": [
+            1,
+            3
+          ],
+          "20": [
+            1,
+            3
+          ],
+          "2147483650": [
+            0,
+            1,
+            2,
+            3
+          ],
+          "26": [
+            1,
+            3
+          ],
+          "27": [
+            1,
+            3
+          ],
+          "29": [
+            1,
+            3
+          ],
+          "30": [
+            1,
+            3
+          ],
+          "31": [
+            1,
+            3
+          ]
+        },
+        "actionPhaseSamples": 15777,
+        "geometrySamples": 0,
+        "statsBindingFailures": [],
+        "performanceActive": {
+          "meanFrameMs": {
+            "samples": 727,
+            "median": 16.719358348846434,
+            "p95": 17.584696552209685,
+            "maximum": 22.055069591688074
+          },
+          "p95FrameMs": {
+            "samples": 727,
+            "median": 16.9989013671875,
+            "p95": 17.54859733581543,
+            "maximum": 63.61799621582031
+          },
+          "maxFrameMs": {
+            "samples": 727,
+            "median": 17.085203170776367,
+            "p95": 55.024497985839844,
+            "maximum": 238.68479919433594
+          },
+          "logWriteMs": {
+            "samples": 727,
+            "median": 0.15559999999997842,
+            "p95": 0.9654000000005567,
+            "maximum": 2.3898000000001502
+          },
+          "logFlushMs": {
+            "samples": 727,
+            "median": 0.04860000000000042,
+            "p95": 0.10500000000000398,
+            "maximum": 9.7758
+          }
+        },
+        "sampledAlivePeak": 144,
+        "spawnFiles": []
+      },
+      "3e4d3fd9458a467f9eb13c2d7f929832": {
+        "initial": [
+          {
+            "player": 6984,
+            "health": 500,
+            "maximum": 500,
+            "speed": 4.550000190734863,
+            "xpModifier": 2.0,
+            "build": {
+              "InitialWeaponId": 1,
+              "InitialWeaponSlot": 0,
+              "Weapons": [
+                {
+                  "SlotIndex": 0,
+                  "WeaponId": 1
+                }
+              ],
+              "Equipment": [],
+              "Perks": []
+            }
+          }
+        ],
+        "endings": [
+          {
+            "kind": "run-ended",
+            "detail": "interrupted: process-exit",
+            "run": "3e4d3fd9458a467f9eb13c2d7f929832",
+            "role": "client",
+            "payload": "{\"RunId\":\"3e4d3fd9458a467f9eb13c2d7f929832\",\"Phase\":2,\"Wave\":0,\"Elapsed\":25.326577693223955,\"WaveDuration\":30.0,\"Planned\":1199,\"Spawned\":36,\"Skipped\":0,\"Alive\":26,\"Limit\":1000,\"TotalSpawned\":36,\"TotalSkipped\":0,\"ReferenceStage\":true,\"StageEndTime\":720.9,\"CountedAlive\":26,\"ActiveClips\":1,\"EvidenceBlocked\":0,\"TotalAttempts\":36,\"AbandonedBudget\":0,\"TransitionRequestedAt\":0.0,\"TransitionWaitCount\":0,\"TransitionWaitReason\":\"\"}",
+            "round": 2,
+            "realtime": 804.3686224030046,
+            "combat": 840.0643941676295
+          }
+        ],
+        "selections": [],
+        "acceptedChoices": 0,
+        "lastFrame": {
+          "kind": "frame",
+          "role": "client",
+          "snapshot": {
+            "RunId": "3e4d3fd9458a467f9eb13c2d7f929832",
+            "Phase": 2,
+            "Wave": 0,
+            "Elapsed": 25.117048589512706,
+            "WaveDuration": 30.0,
+            "Planned": 1199,
+            "Spawned": 35,
+            "Skipped": 0,
+            "Alive": 25,
+            "Limit": 1000,
+            "TotalSpawned": 35,
+            "TotalSkipped": 0,
+            "ReferenceStage": true,
+            "StageEndTime": 720.9,
+            "CountedAlive": 25,
+            "ActiveClips": 1,
+            "EvidenceBlocked": 0,
+            "TotalAttempts": 35,
+            "AbandonedBudget": 0,
+            "TransitionRequestedAt": 0.0,
+            "TransitionWaitCount": 0,
+            "TransitionWaitReason": ""
+          },
+          "health": 500,
+          "observed": 35,
+          "realtime": 804.0817663030045,
+          "position": {
+            "x": -11.54139518737793,
+            "y": 5.389050483703613
+          }
+        },
+        "requests": [],
+        "completions": [],
+        "waits": [],
+        "helpers": {},
+        "births": 36,
+        "birthMismatches": [],
+        "confirmedKills": 11,
+        "firstHitToConfirmedDeathSeconds": {
+          "samples": 11,
+          "median": 0.8957546454582825,
+          "p95": 1.1183774252040166,
+          "maximum": 1.1183774252040166
+        },
+        "stageCleanup": [],
+        "trapCleanup": [],
+        "healthChanges": [],
+        "acceptedDamageChanges": 0,
+        "trapPhases": {},
+        "actionPhaseSamples": 36,
+        "geometrySamples": 0,
+        "statsBindingFailures": [],
+        "performanceActive": {
+          "meanFrameMs": {
+            "samples": 23,
+            "median": 17.361422538757324,
+            "p95": 19.16760941271512,
+            "maximum": 19.433167237501877
+          },
+          "p95FrameMs": {
+            "samples": 23,
+            "median": 23.902301788330078,
+            "p95": 41.34489822387695,
+            "maximum": 44.67819595336914
+          },
+          "maxFrameMs": {
+            "samples": 23,
+            "median": 26.967899322509766,
+            "p95": 46.45549774169922,
+            "maximum": 52.911399841308594
+          },
+          "logWriteMs": {
+            "samples": 23,
+            "median": 0.004000000000047521,
+            "p95": 0.007200000000068485,
+            "maximum": 0.0074000000000467026
+          },
+          "logFlushMs": {
+            "samples": 23,
+            "median": 0.03989999999999583,
+            "p95": 0.060600000000000875,
+            "maximum": 0.07029999999999603
+          }
+        },
+        "sampledAlivePeak": 25,
+        "spawnFiles": []
+      }
+    },
+    "processClosed": true,
+    "screenshots": 66,
+    "transitionServerLog": [],
+    "runEndLog": [],
+    "errors": []
+  },
+  "comparison": {
+    "missingClient": [
+      [
+        "3e4d3fd9458a467f9eb13c2d7f929832",
+        7028
+      ],
+      [
+        "3e4d3fd9458a467f9eb13c2d7f929832",
+        7031
+      ],
+      [
+        "3e4d3fd9458a467f9eb13c2d7f929832",
+        7037
+      ],
+      [
+        "3e4d3fd9458a467f9eb13c2d7f929832",
+        7034
+      ],
+      [
+        "3e4d3fd9458a467f9eb13c2d7f929832",
+        7040
+      ],
+      [
+        "3e4d3fd9458a467f9eb13c2d7f929832",
+        7046
+      ],
+      [
+        "3e4d3fd9458a467f9eb13c2d7f929832",
+        7043
+      ],
+      [
+        "3e4d3fd9458a467f9eb13c2d7f929832",
+        7049
+      ],
+      [
+        "3e4d3fd9458a467f9eb13c2d7f929832",
+        7030
+      ],
+      [
+        "3e4d3fd9458a467f9eb13c2d7f929832",
+        7039
+      ],
+      [
+        "3e4d3fd9458a467f9eb13c2d7f929832",
+        7036
+      ],
+      [
+        "3e4d3fd9458a467f9eb13c2d7f929832",
+        7042
+      ],
+      [
+        "3e4d3fd9458a467f9eb13c2d7f929832",
+        7045
+      ],
+      [
+        "3e4d3fd9458a467f9eb13c2d7f929832",
+        7048
+      ],
+      [
+        "3e4d3fd9458a467f9eb13c2d7f929832",
+        7032
+      ],
+      [
+        "3e4d3fd9458a467f9eb13c2d7f929832",
+        7029
+      ],
+      [
+        "3e4d3fd9458a467f9eb13c2d7f929832",
+        7035
+      ],
+      [
+        "3e4d3fd9458a467f9eb13c2d7f929832",
+        7038
+      ],
+      [
+        "3e4d3fd9458a467f9eb13c2d7f929832",
+        7044
+      ],
+      [
+        "3e4d3fd9458a467f9eb13c2d7f929832",
+        7047
+      ]
+    ],
+    "extraClient": [],
+    "differing": []
+  },
+  "firstCompletedComparison": {
+    "missingClient": [],
+    "extraClient": [],
+    "differing": []
+  },
+  "comparisonNote": "Round 2 Client closed at 25.33 s before Host at 37.25 s. Twenty subsequent Host births are retained in raw comparison, not classified as missing replication in the completed round."
+}

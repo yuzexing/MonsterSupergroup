@@ -4,6 +4,21 @@ namespace AstralShift.HellMaiden.AI.Enemy
 {
 	public class SequenceEnemyAttack : EnemyAttackMelee
 	{
+        public override bool SupportsSharedTimeline => true;
+        protected override EnemyStrikeTiming[] CreateTimelineStrikes()
+        {
+            var animator = (MultipleAttackAnimator)enemyAnimator;
+            var warnings = animator.SequenceWarnings; var actives = animator.SequenceActives;
+            return new[] { new EnemyStrikeTiming(warnings.x, actives.x), new EnemyStrikeTiming(warnings.y, actives.y),
+                new EnemyStrikeTiming(warnings.z, actives.z) };
+        }
+        protected override Vector3 TimelineLocalOffset(int strike) => (strike % 2 == 0 ? -1 : 1) * areaSideWarpDistance;
+        public override void ApplyLocalFrame(EnemyActionState state, double now, bool changed)
+        {
+            ((MultipleAttackAnimator)enemyAnimator).SetSequencePresentationIndex(state.StrikeIndex);
+            currentAttackCount = state.Phase == EnemyAttackPresentationPhase.Recovery ? 0 : state.StrikeIndex;
+            base.ApplyLocalFrame(state, now, changed);
+        }
 		public int currentAttackCount;
 
 		public int consecutiveAttacks = 1;

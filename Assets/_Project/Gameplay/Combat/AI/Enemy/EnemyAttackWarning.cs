@@ -15,5 +15,12 @@ namespace AstralShift.HellMaiden.AI.Enemy
 
         public virtual void RestoreProgress(float warningTime, float attackTime, float elapsed)
         { SetWarningTime(warningTime, attackTime); Show(); }
+
+        public virtual float TimelineHideDuration => 0;
+        public virtual void SampleTimeline(float warningTime, float attackTime, float elapsed, bool warning, bool changed)
+        {
+            if (!changed) return;
+            if (warning) RestoreProgress(warningTime, attackTime, elapsed); else Hide();
+        }
 	}
 }

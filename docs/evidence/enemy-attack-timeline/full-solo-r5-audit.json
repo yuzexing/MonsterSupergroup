@@ -1,0 +1,1498 @@
+{
+  "host": {
+    "artBuildManifestAvailable": false,
+    "rounds": {
+      "": {
+        "first": {
+          "kind": "frame",
+          "role": "host",
+          "snapshot": {
+            "RunId": "",
+            "Phase": 0,
+            "Wave": 0,
+            "Elapsed": 0.0,
+            "WaveDuration": 0.0,
+            "Planned": 0,
+            "Spawned": 0,
+            "Skipped": 0,
+            "Alive": 0,
+            "Limit": 0,
+            "TotalSpawned": 0,
+            "TotalSkipped": 0,
+            "ReferenceStage": false,
+            "StageEndTime": 0.0,
+            "CountedAlive": 0,
+            "ActiveClips": 0,
+            "EvidenceBlocked": 0,
+            "TotalAttempts": 0,
+            "AbandonedBudget": 0,
+            "TransitionRequestedAt": 0.0,
+            "TransitionWaitCount": 0,
+            "TransitionWaitReason": ""
+          },
+          "health": -1,
+          "observed": 0,
+          "realtime": 6.083383002324263,
+          "position": {
+            "x": 0.0,
+            "y": 0.0
+          }
+        },
+        "max": {
+          "kind": "frame",
+          "role": "host",
+          "snapshot": {
+            "RunId": "",
+            "Phase": 0,
+            "Wave": 0,
+            "Elapsed": 0.0,
+            "WaveDuration": 0.0,
+            "Planned": 0,
+            "Spawned": 0,
+            "Skipped": 0,
+            "Alive": 0,
+            "Limit": 0,
+            "TotalSpawned": 0,
+            "TotalSkipped": 0,
+            "ReferenceStage": false,
+            "StageEndTime": 0.0,
+            "CountedAlive": 0,
+            "ActiveClips": 0,
+            "EvidenceBlocked": 0,
+            "TotalAttempts": 0,
+            "AbandonedBudget": 0,
+            "TransitionRequestedAt": 0.0,
+            "TransitionWaitCount": 0,
+            "TransitionWaitReason": ""
+          },
+          "health": -1,
+          "observed": 0,
+          "realtime": 6.083383002324263,
+          "position": {
+            "x": 0.0,
+            "y": 0.0
+          }
+        }
+      },
+      "113e2afc4dc04ecea1c4ea961df9f1b3": {
+        "first": {
+          "kind": "frame",
+          "role": "host",
+          "snapshot": {
+            "RunId": "113e2afc4dc04ecea1c4ea961df9f1b3",
+            "Phase": 2,
+            "Wave": 0,
+            "Elapsed": 0.6380553096532822,
+            "WaveDuration": 30.0,
+            "Planned": 1199,
+            "Spawned": 0,
+            "Skipped": 0,
+            "Alive": 0,
+            "Limit": 1000,
+            "TotalSpawned": 0,
+            "TotalSkipped": 0,
+            "ReferenceStage": true,
+            "StageEndTime": 720.9,
+            "CountedAlive": 0,
+            "ActiveClips": 0,
+            "EvidenceBlocked": 0,
+            "TotalAttempts": 0,
+            "AbandonedBudget": 0,
+            "TransitionRequestedAt": 0.0,
+            "TransitionWaitCount": 0,
+            "TransitionWaitReason": ""
+          },
+          "health": 500,
+          "observed": 0,
+          "realtime": 7.099026902324263,
+          "position": {
+            "x": 0.7130244970321655,
+            "y": 0.8052248358726501
+          }
+        },
+        "max": {
+          "kind": "frame",
+          "role": "host",
+          "snapshot": {
+            "RunId": "113e2afc4dc04ecea1c4ea961df9f1b3",
+            "Phase": 5,
+            "Wave": 0,
+            "Elapsed": 721.1871798429638,
+            "WaveDuration": 30.0,
+            "Planned": 1199,
+            "Spawned": 1583,
+            "Skipped": 5,
+            "Alive": 154,
+            "Limit": 1000,
+            "TotalSpawned": 1583,
+            "TotalSkipped": 5,
+            "ReferenceStage": true,
+            "StageEndTime": 720.9,
+            "CountedAlive": 129,
+            "ActiveClips": 1,
+            "EvidenceBlocked": 0,
+            "TotalAttempts": 1583,
+            "AbandonedBudget": 0,
+            "TransitionRequestedAt": 721.1871798429638,
+            "TransitionWaitCount": 0,
+            "TransitionWaitReason": ""
+          },
+          "health": 400,
+          "observed": 1583,
+          "realtime": 1017.0724437023242,
+          "position": {
+            "x": 5.736539840698242,
+            "y": -9.179384231567383
+          }
+        }
+      }
+    },
+    "births": 1583,
+    "birthMismatches": [],
+    "spawnEvents": {
+      "spawn": 1583,
+      "death": 183,
+      "reposition": 838,
+      "retired": 1241,
+      "barrier-decision": 11,
+      "self-destruct": 5,
+      "formation-skipped": 1,
+      "transition-request": 1,
+      "completed": 1
+    },
+    "spawnFiles": {
+      "spawns-113e2afc4dc04ecea1c4ea961df9f1b3-20260916-035253-259.csv": {
+        "events": {
+          "spawn": 1583,
+          "death": 183,
+          "reposition": 838,
+          "retired": 1241,
+          "barrier-decision": 11,
+          "self-destruct": 5,
+          "formation-skipped": 1,
+          "transition-request": 1,
+          "completed": 1
+        },
+        "identities": {
+          "Brotchi:0": 250,
+          "Imp:0": 15,
+          "Elite_Skeleton:0": 1,
+          "Skeleton:0": 150,
+          "Slime:2": 100,
+          "Brotchi_Dash:0": 31,
+          "Skeleton:2": 200,
+          "Slime:0": 150,
+          "Elite_Skeleton:1": 3,
+          "Brotchi:1": 150,
+          "LostSoul:0": 46,
+          "Imp:1": 53,
+          "Brotchi_Dash:1": 151,
+          "Ghoul:0": 107,
+          "Slime:1": 115,
+          "LostSoul:1": 61
+        },
+        "clips": {
+          "0": 250,
+          "1": 15,
+          "2": 1,
+          "3": 150,
+          "4": 100,
+          "5": 31,
+          "6": 200,
+          "7": 60,
+          "8": 90,
+          "9": 1,
+          "10": 150,
+          "11": 46,
+          "12": 10,
+          "13": 50,
+          "14": 30,
+          "15": 50,
+          "16": 10,
+          "17": 15,
+          "18": 80,
+          "19": 10,
+          "20": 51,
+          "21": 60,
+          "22": 2,
+          "23": 27,
+          "24": 41,
+          "26": 5,
+          "27": 18,
+          "28": 10,
+          "29": 10,
+          "30": 10
+        },
+        "lastEvent": {
+          "elapsed": "721.18717984296381",
+          "event": "completed",
+          "clip": "",
+          "source": "",
+          "variant": "",
+          "planned": "",
+          "sequence": "",
+          "enemy": "",
+          "result": "",
+          "totalAlive": "154",
+          "countedAlive": "129",
+          "hp": "",
+          "damage": "",
+          "speed": "",
+          "xp": "",
+          "x": "",
+          "y": ""
+        }
+      }
+    },
+    "statsBindingFailures": 0,
+    "lostSoulHits": {},
+    "hitsAfterActiveDeadline": [],
+    "disposals": 5,
+    "earlyDisposals": [],
+    "maxDisposalDelay": 0.29347725212574005,
+    "cleanup": [
+      {
+        "kind": "completed-cleanup",
+        "detail": "113e2afc4dc04ecea1c4ea961df9f1b3",
+        "payload": "{\"damageAreas\":0,\"warnings\":0}",
+        "run": "113e2afc4dc04ecea1c4ea961df9f1b3",
+        "round": 1,
+        "realtime": 880.9753184023242,
+        "combat": 728.6130207618021,
+        "elapsed": 721.1871798429638
+      }
+    ],
+    "trapCleanup": [
+      {
+        "kind": "completed-cleanup",
+        "role": "host",
+        "run": "113e2afc4dc04ecea1c4ea961df9f1b3",
+        "elapsed": 721.1871798429638,
+        "combat": 728.2810470544987,
+        "realtime": 880.6692203023242,
+        "id": 0,
+        "state": {
+          "Round": 0,
+          "Target": 0,
+          "Barrier": false,
+          "Occupied": false,
+          "Collision": false,
+          "Phase": 0,
+          "Center": {
+            "x": 0.0,
+            "y": 0.0
+          },
+          "BeganAt": 0.0,
+          "ReleaseAt": 0.0,
+          "Radius": 0.0,
+          "Aspect": 0.0,
+          "EntryScale": 0.0,
+          "CameraOffset": 0.0,
+          "CameraDuration": 0.0,
+          "Count": 0,
+          "Visible": 0
+        },
+        "worldEdgePoints": [],
+        "edgeRadius": 0.0,
+        "localPlayer": 2,
+        "localPosition": {
+          "x": 5.762302398681641,
+          "y": -9.221229553222656
+        },
+        "localVelocity": {
+          "x": 0.0,
+          "y": 0.0
+        },
+        "localPlayerTouchesBarrier": false,
+        "timeScale": 1.0,
+        "slots": 0,
+        "states": 0,
+        "collisionAreas": 0,
+        "livingWarningRoots": 0
+      }
+    ],
+    "trapClockRates": {
+      "1.0": 117,
+      "0.25": 15
+    },
+    "assistance": {},
+    "errors": [],
+    "screenshots": 0,
+    "firstCompletedRound": {
+      "run": "113e2afc4dc04ecea1c4ea961df9f1b3",
+      "startRealtime": 7.099026902324263,
+      "endRealtime": 880.6590104023242,
+      "confirmedKills": 183,
+      "firstHitToConfirmedDeath": {
+        "Brotchi": [
+          {
+            "id": "12",
+            "seconds": 1.0712296981364489
+          },
+          {
+            "id": "9",
+            "seconds": 2.131313979625702
+          },
+          {
+            "id": "14",
+            "seconds": 0.9292741976678371
+          },
+          {
+            "id": "13",
+            "seconds": 1.0129276979714632
+          },
+          {
+            "id": "3",
+            "seconds": 1.0474808029830456
+          },
+          {
+            "id": "24",
+            "seconds": 0.9011654928326607
+          },
+          {
+            "id": "25",
+            "seconds": 1.0421886015683413
+          },
+          {
+            "id": "27",
+            "seconds": 0.07223109900951385
+          },
+          {
+            "id": "33",
+            "seconds": 1.0986394006758928
+          },
+          {
+            "id": "36",
+            "seconds": 1.0881007090210915
+          },
+          {
+            "id": "43",
+            "seconds": 0.10336239077150822
+          },
+          {
+            "id": "46",
+            "seconds": 1.166229097172618
+          },
+          {
+            "id": "50",
+            "seconds": 0.11609229631721973
+          },
+          {
+            "id": "54",
+            "seconds": 0.050091296434402466
+          },
+          {
+            "id": "57",
+            "seconds": 0.10501759313046932
+          },
+          {
+            "id": "30",
+            "seconds": 0.08977160602807999
+          },
+          {
+            "id": "37",
+            "seconds": 0.08977160602807999
+          },
+          {
+            "id": "35",
+            "seconds": 0.08977160602807999
+          },
+          {
+            "id": "67",
+            "seconds": 0.11560979671776295
+          },
+          {
+            "id": "70",
+            "seconds": 0.05000520125031471
+          },
+          {
+            "id": "74",
+            "seconds": 0.10960199683904648
+          },
+          {
+            "id": "76",
+            "seconds": 0.10839489847421646
+          },
+          {
+            "id": "93",
+            "seconds": 0.05018859729170799
+          },
+          {
+            "id": "105",
+            "seconds": 0.17112970352172852
+          },
+          {
+            "id": "112",
+            "seconds": 0.21487179584801197
+          },
+          {
+            "id": "89",
+            "seconds": 0.1958847977221012
+          },
+          {
+            "id": "289",
+            "seconds": 5.333333492279053
+          },
+          {
+            "id": "284",
+            "seconds": 11.897062957286835
+          },
+          {
+            "id": "377",
+            "seconds": 29.645731300115585
+          },
+          {
+            "id": "380",
+            "seconds": 29.00000086426735
+          },
+          {
+            "id": "1002",
+            "seconds": 18.000000536441803
+          },
+          {
+            "id": "1266",
+            "seconds": 23.871405452489796
+          }
+        ],
+        "Slime": [
+          {
+            "id": "333",
+            "seconds": 0.32613879442214966
+          },
+          {
+            "id": "382",
+            "seconds": 0.3333333432674408
+          },
+          {
+            "id": "379",
+            "seconds": 0.3333333432674408
+          },
+          {
+            "id": "335",
+            "seconds": 0.3333333432674408
+          },
+          {
+            "id": "356",
+            "seconds": 0.3333333432674408
+          },
+          {
+            "id": "376",
+            "seconds": 0.3333333432674408
+          },
+          {
+            "id": "342",
+            "seconds": 0.3333333432674408
+          },
+          {
+            "id": "352",
+            "seconds": 0.3333333432674408
+          },
+          {
+            "id": "398",
+            "seconds": 0.3333333432674408
+          },
+          {
+            "id": "338",
+            "seconds": 0.3333333432674408
+          },
+          {
+            "id": "400",
+            "seconds": 0.3333333432674408
+          },
+          {
+            "id": "369",
+            "seconds": 0.3333333432674408
+          },
+          {
+            "id": "435",
+            "seconds": 0.3333333432674408
+          },
+          {
+            "id": "466",
+            "seconds": 0.3333333432674408
+          },
+          {
+            "id": "463",
+            "seconds": 0.3333333432674408
+          },
+          {
+            "id": "472",
+            "seconds": 0.3333333432674408
+          },
+          {
+            "id": "411",
+            "seconds": 0.3333333432674408
+          },
+          {
+            "id": "347",
+            "seconds": 0.3333333432674408
+          },
+          {
+            "id": "391",
+            "seconds": 0.3333333432674408
+          },
+          {
+            "id": "414",
+            "seconds": 0.3333333432674408
+          },
+          {
+            "id": "490",
+            "seconds": 0.3333333432674408
+          },
+          {
+            "id": "498",
+            "seconds": 0.3333333432674408
+          },
+          {
+            "id": "361",
+            "seconds": 0.3333333432674408
+          },
+          {
+            "id": "372",
+            "seconds": 0.3333333432674408
+          },
+          {
+            "id": "375",
+            "seconds": 0.3333333432674408
+          },
+          {
+            "id": "482",
+            "seconds": 0.3333333432674408
+          },
+          {
+            "id": "408",
+            "seconds": 0.3333333432674408
+          },
+          {
+            "id": "501",
+            "seconds": 0.3333333432674408
+          },
+          {
+            "id": "484",
+            "seconds": 0.3333333432674408
+          },
+          {
+            "id": "443",
+            "seconds": 0.3333333432674408
+          },
+          {
+            "id": "395",
+            "seconds": 0.3333333432674408
+          },
+          {
+            "id": "389",
+            "seconds": 0.3333333432674408
+          },
+          {
+            "id": "451",
+            "seconds": 0.3333333432674408
+          },
+          {
+            "id": "386",
+            "seconds": 0.3333333432674408
+          },
+          {
+            "id": "456",
+            "seconds": 0.3333333432674408
+          },
+          {
+            "id": "505",
+            "seconds": 0.3333333432674408
+          },
+          {
+            "id": "511",
+            "seconds": 0.3333333432674408
+          },
+          {
+            "id": "446",
+            "seconds": 0.3333333432674408
+          },
+          {
+            "id": "530",
+            "seconds": 0.3333333432674408
+          },
+          {
+            "id": "354",
+            "seconds": 0.3333333432674408
+          },
+          {
+            "id": "488",
+            "seconds": 0.3333333432674408
+          },
+          {
+            "id": "546",
+            "seconds": 0.3333333432674408
+          },
+          {
+            "id": "493",
+            "seconds": 0.3333333432674408
+          },
+          {
+            "id": "576",
+            "seconds": 0.26509881019592285
+          },
+          {
+            "id": "571",
+            "seconds": 0.30365750193595886
+          },
+          {
+            "id": "580",
+            "seconds": 0.30897819995880127
+          },
+          {
+            "id": "468",
+            "seconds": 0.2977527976036072
+          },
+          {
+            "id": "458",
+            "seconds": 0.29848089814186096
+          },
+          {
+            "id": "551",
+            "seconds": 0.31448349356651306
+          },
+          {
+            "id": "583",
+            "seconds": 0.31448349356651306
+          },
+          {
+            "id": "516",
+            "seconds": 0.3065432012081146
+          },
+          {
+            "id": "461",
+            "seconds": 0.3065432012081146
+          },
+          {
+            "id": "508",
+            "seconds": 0.3065432012081146
+          },
+          {
+            "id": "526",
+            "seconds": 0.3065432012081146
+          },
+          {
+            "id": "474",
+            "seconds": 0.29021960496902466
+          },
+          {
+            "id": "453",
+            "seconds": 0.312409907579422
+          },
+          {
+            "id": "549",
+            "seconds": 0.29842519760131836
+          },
+          {
+            "id": "448",
+            "seconds": 0.3145813047885895
+          },
+          {
+            "id": "518",
+            "seconds": 0.28089088201522827
+          },
+          {
+            "id": "523",
+            "seconds": 0.28089088201522827
+          },
+          {
+            "id": "513",
+            "seconds": 0.28089088201522827
+          },
+          {
+            "id": "521",
+            "seconds": 0.28416579961776733
+          },
+          {
+            "id": "557",
+            "seconds": 0.28416579961776733
+          },
+          {
+            "id": "560",
+            "seconds": 0.27976590394973755
+          },
+          {
+            "id": "477",
+            "seconds": 0.2568286955356598
+          },
+          {
+            "id": "584",
+            "seconds": 0.2733196020126343
+          },
+          {
+            "id": "567",
+            "seconds": 0.26273491978645325
+          },
+          {
+            "id": "579",
+            "seconds": 0.2538467049598694
+          },
+          {
+            "id": "565",
+            "seconds": 0.22552509605884552
+          },
+          {
+            "id": "588",
+            "seconds": 0.23900440335273743
+          },
+          {
+            "id": "479",
+            "seconds": 0.23899079859256744
+          },
+          {
+            "id": "572",
+            "seconds": 0.2347300946712494
+          },
+          {
+            "id": "587",
+            "seconds": 0.24858629703521729
+          },
+          {
+            "id": "543",
+            "seconds": 0.24858629703521729
+          },
+          {
+            "id": "538",
+            "seconds": 0.2479763925075531
+          },
+          {
+            "id": "720",
+            "seconds": 29.33333420753479
+          },
+          {
+            "id": "743",
+            "seconds": 23.833334043622017
+          },
+          {
+            "id": "713",
+            "seconds": 18.916667230427265
+          },
+          {
+            "id": "740",
+            "seconds": 0.2500000074505806
+          },
+          {
+            "id": "737",
+            "seconds": 0.1666666716337204
+          },
+          {
+            "id": "685",
+            "seconds": 0.1666666716337204
+          },
+          {
+            "id": "697",
+            "seconds": 1.1666667014360428
+          },
+          {
+            "id": "724",
+            "seconds": 1.4166667088866234
+          },
+          {
+            "id": "789",
+            "seconds": 1.4166667088866234
+          },
+          {
+            "id": "748",
+            "seconds": 1.4166667088866234
+          },
+          {
+            "id": "739",
+            "seconds": 18.750000558793545
+          },
+          {
+            "id": "750",
+            "seconds": 1.4166667088866234
+          },
+          {
+            "id": "730",
+            "seconds": 1.3333333730697632
+          },
+          {
+            "id": "760",
+            "seconds": 4.262838002294302
+          },
+          {
+            "id": "649",
+            "seconds": 4.262838002294302
+          },
+          {
+            "id": "680",
+            "seconds": 5.096171360462904
+          },
+          {
+            "id": "707",
+            "seconds": 5.096171360462904
+          },
+          {
+            "id": "722",
+            "seconds": 5.000000149011612
+          },
+          {
+            "id": "687",
+            "seconds": 49.15088865533471
+          },
+          {
+            "id": "705",
+            "seconds": 27.240875851362944
+          },
+          {
+            "id": "717",
+            "seconds": 15.240875493735075
+          },
+          {
+            "id": "679",
+            "seconds": 51.23338235542178
+          },
+          {
+            "id": "769",
+            "seconds": 10.06137079745531
+          },
+          {
+            "id": "753",
+            "seconds": 21.57420901581645
+          },
+          {
+            "id": "721",
+            "seconds": 21.90754235908389
+          },
+          {
+            "id": "756",
+            "seconds": 21.24087567254901
+          },
+          {
+            "id": "764",
+            "seconds": 14.157542128115892
+          },
+          {
+            "id": "718",
+            "seconds": 11.394704170525074
+          },
+          {
+            "id": "761",
+            "seconds": 14.490875471383333
+          },
+          {
+            "id": "759",
+            "seconds": 14.490875471383333
+          },
+          {
+            "id": "695",
+            "seconds": 14.311370924115181
+          },
+          {
+            "id": "752",
+            "seconds": 13.394704230129719
+          },
+          {
+            "id": "776",
+            "seconds": 32.90754268690944
+          },
+          {
+            "id": "738",
+            "seconds": 20.490875650197268
+          },
+          {
+            "id": "693",
+            "seconds": 20.574208986014128
+          },
+          {
+            "id": "700",
+            "seconds": 20.574208986014128
+          },
+          {
+            "id": "791",
+            "seconds": 17.72803769260645
+          },
+          {
+            "id": "757",
+            "seconds": 40.574209582060575
+          },
+          {
+            "id": "683",
+            "seconds": 29.90754259750247
+          },
+          {
+            "id": "755",
+            "seconds": 31.240875970572233
+          },
+          {
+            "id": "656",
+            "seconds": 21.394704468548298
+          },
+          {
+            "id": "765",
+            "seconds": 27.324209187179804
+          },
+          {
+            "id": "746",
+            "seconds": 30.32420927658677
+          },
+          {
+            "id": "688",
+            "seconds": 28.644704684615135
+          },
+          {
+            "id": "808",
+            "seconds": 21.00000062584877
+          },
+          {
+            "id": "735",
+            "seconds": 55.57421002909541
+          },
+          {
+            "id": "786",
+            "seconds": 33.97803817689419
+          },
+          {
+            "id": "714",
+            "seconds": 68.90754375979304
+          },
+          {
+            "id": "788",
+            "seconds": 35.824209440499544
+          }
+        ],
+        "Skeleton": [
+          {
+            "id": "274",
+            "seconds": 40.87894411571324
+          },
+          {
+            "id": "559",
+            "seconds": 22.09103332646191
+          },
+          {
+            "id": "561",
+            "seconds": 30.510469721630216
+          },
+          {
+            "id": "556",
+            "seconds": 31.668059753254056
+          },
+          {
+            "id": "515",
+            "seconds": 66.1063022930175
+          }
+        ],
+        "Brotchi_Dash": [
+          {
+            "id": "449",
+            "seconds": 35.95591500401497
+          },
+          {
+            "id": "514",
+            "seconds": 114.0870764683932
+          },
+          {
+            "id": "454",
+            "seconds": 61.240876864641905
+          },
+          {
+            "id": "1514",
+            "seconds": 21.519084203988314
+          },
+          {
+            "id": "1500",
+            "seconds": 30.77022011205554
+          },
+          {
+            "id": "1517",
+            "seconds": 24.29701082035899
+          }
+        ],
+        "Ghoul": [
+          {
+            "id": "1374",
+            "seconds": 5.238985896110535
+          },
+          {
+            "id": "1350",
+            "seconds": 26.499684303998947
+          },
+          {
+            "id": "1380",
+            "seconds": 19.596300065517426
+          },
+          {
+            "id": "1372",
+            "seconds": 71.36879776418209
+          },
+          {
+            "id": "1337",
+            "seconds": 86.77196496725082
+          },
+          {
+            "id": "1307",
+            "seconds": 59.539848670363426
+          },
+          {
+            "id": "1553",
+            "seconds": 7.000000208616257
+          },
+          {
+            "id": "1376",
+            "seconds": 103.83703910931945
+          },
+          {
+            "id": "1365",
+            "seconds": 111.79898929223418
+          },
+          {
+            "id": "1559",
+            "seconds": 6.665178418159485
+          },
+          {
+            "id": "1557",
+            "seconds": 15.331845343112946
+          },
+          {
+            "id": "1566",
+            "seconds": 3.912480503320694
+          },
+          {
+            "id": "1564",
+            "seconds": 21.934550255537033
+          },
+          {
+            "id": "1563",
+            "seconds": 26.934550404548645
+          },
+          {
+            "id": "1571",
+            "seconds": 21.269372016191483
+          }
+        ]
+      },
+      "selectionWaitsSeconds": [
+        0.2560603999999955,
+        0.28285160000000076,
+        0.3742326999999932,
+        0.42466509999997015,
+        0.39767069999999194,
+        0.5119564999999966,
+        0.6712951000000089,
+        0.38865770000006705,
+        0.4750002000000677,
+        0.34720919999995203
+      ],
+      "unclosedSelection": null,
+      "frameSampleCount": 0,
+      "frameMsMedian": null,
+      "frameMsP95": null,
+      "frameMsMax": 0,
+      "maxAllocatedBytes": 0,
+      "maxParticles": 0,
+      "counting": {
+        "successful": 1583,
+        "confirmedKills": 183,
+        "selfDestructs": 5,
+        "retired": 1241,
+        "alive": 154,
+        "sourceCount": 129,
+        "conservationDelta": 0,
+        "removedFromAliveLedger": 183,
+        "ledgerRemovalsWithoutObservedKill": 0,
+        "ledgerConservationDelta": 0
+      }
+    },
+    "birthsDuringEmptySnapshot": [],
+    "transitionRounds": {
+      "113e2afc4dc04ecea1c4ea961df9f1b3": {
+        "requests": [
+          {
+            "realtime": 880.6591176023242,
+            "snapshot": {
+              "RunId": "113e2afc4dc04ecea1c4ea961df9f1b3",
+              "Phase": 5,
+              "Wave": 0,
+              "Elapsed": 721.1871798429638,
+              "WaveDuration": 30.0,
+              "Planned": 1199,
+              "Spawned": 1583,
+              "Skipped": 5,
+              "Alive": 154,
+              "Limit": 1000,
+              "TotalSpawned": 1583,
+              "TotalSkipped": 5,
+              "ReferenceStage": true,
+              "StageEndTime": 720.9,
+              "CountedAlive": 129,
+              "ActiveClips": 1,
+              "EvidenceBlocked": 0,
+              "TotalAttempts": 1583,
+              "AbandonedBudget": 0,
+              "TransitionRequestedAt": 721.1871798429638,
+              "TransitionWaitCount": 0,
+              "TransitionWaitReason": ""
+            }
+          }
+        ],
+        "completions": [
+          {
+            "realtime": 880.6591865023242,
+            "snapshot": {
+              "RunId": "113e2afc4dc04ecea1c4ea961df9f1b3",
+              "Phase": 5,
+              "Wave": 0,
+              "Elapsed": 721.1871798429638,
+              "WaveDuration": 30.0,
+              "Planned": 1199,
+              "Spawned": 1583,
+              "Skipped": 5,
+              "Alive": 154,
+              "Limit": 1000,
+              "TotalSpawned": 1583,
+              "TotalSkipped": 5,
+              "ReferenceStage": true,
+              "StageEndTime": 720.9,
+              "CountedAlive": 129,
+              "ActiveClips": 1,
+              "EvidenceBlocked": 0,
+              "TotalAttempts": 1583,
+              "AbandonedBudget": 0,
+              "TransitionRequestedAt": 721.1871798429638,
+              "TransitionWaitCount": 0,
+              "TransitionWaitReason": ""
+            }
+          }
+        ],
+        "waits": [],
+        "helpers": {
+          "test-card": 16,
+          "test-heal": 7
+        },
+        "firstSnapshot": {
+          "RunId": "113e2afc4dc04ecea1c4ea961df9f1b3",
+          "Phase": 1,
+          "Wave": 0,
+          "Elapsed": 0.0,
+          "WaveDuration": 0.0,
+          "Planned": 0,
+          "Spawned": 0,
+          "Skipped": 0,
+          "Alive": 0,
+          "Limit": 0,
+          "TotalSpawned": 0,
+          "TotalSkipped": 0,
+          "ReferenceStage": false,
+          "StageEndTime": 0.0,
+          "CountedAlive": 0,
+          "ActiveClips": 0,
+          "EvidenceBlocked": 0,
+          "TotalAttempts": 0,
+          "AbandonedBudget": 0,
+          "TransitionRequestedAt": 0.0,
+          "TransitionWaitCount": 0,
+          "TransitionWaitReason": ""
+        },
+        "lastSnapshot": {
+          "RunId": "113e2afc4dc04ecea1c4ea961df9f1b3",
+          "Phase": 5,
+          "Wave": 0,
+          "Elapsed": 721.1871798429638,
+          "WaveDuration": 30.0,
+          "Planned": 1199,
+          "Spawned": 1583,
+          "Skipped": 5,
+          "Alive": 154,
+          "Limit": 1000,
+          "TotalSpawned": 1583,
+          "TotalSkipped": 5,
+          "ReferenceStage": true,
+          "StageEndTime": 720.9,
+          "CountedAlive": 129,
+          "ActiveClips": 1,
+          "EvidenceBlocked": 0,
+          "TotalAttempts": 1583,
+          "AbandonedBudget": 0,
+          "TransitionRequestedAt": 721.1871798429638,
+          "TransitionWaitCount": 0,
+          "TransitionWaitReason": ""
+        },
+        "waitWallSeconds": 6.890000008752395e-05,
+        "waitStageSeconds": 0.0,
+        "spawnedWhileWaiting": 0
+      }
+    },
+    "spawnAttemptsByClip": {
+      "0": 250,
+      "1": 15,
+      "2": 1,
+      "3": 150,
+      "4": 100,
+      "5": 31,
+      "6": 200,
+      "7": 60,
+      "8": 90,
+      "9": 1,
+      "10": 150,
+      "11": 46,
+      "12": 10,
+      "13": 50,
+      "14": 30,
+      "15": 50,
+      "16": 10,
+      "17": 15,
+      "18": 80,
+      "19": 10,
+      "20": 51,
+      "21": 60,
+      "22": 2,
+      "23": 27,
+      "24": 41,
+      "26": 5,
+      "27": 18,
+      "28": 10,
+      "29": 10,
+      "30": 10
+    },
+    "spawnAttemptsByIdentity": {
+      "Brotchi:0": 250,
+      "Imp:0": 15,
+      "Elite_Skeleton:0": 1,
+      "Skeleton:0": 150,
+      "Slime:2": 100,
+      "Brotchi_Dash:0": 31,
+      "Skeleton:2": 200,
+      "Slime:0": 150,
+      "Elite_Skeleton:1": 3,
+      "Brotchi:1": 150,
+      "LostSoul:0": 46,
+      "Imp:1": 53,
+      "Brotchi_Dash:1": 151,
+      "Ghoul:0": 107,
+      "Slime:1": 115,
+      "LostSoul:1": 61
+    },
+    "spawnResultsByRun": {
+      "spawns-113e2afc4dc04ecea1c4ea961df9f1b3-20260916-035253-259": {
+        "attempts": 1583,
+        "successful": 1583,
+        "results": {
+          "Spawned": 1583
+        },
+        "successfulByClip": {
+          "0": 250,
+          "1": 15,
+          "2": 1,
+          "3": 150,
+          "4": 100,
+          "5": 31,
+          "6": 200,
+          "7": 60,
+          "8": 90,
+          "9": 1,
+          "10": 150,
+          "11": 46,
+          "12": 10,
+          "13": 50,
+          "14": 30,
+          "15": 50,
+          "16": 10,
+          "17": 15,
+          "18": 80,
+          "19": 10,
+          "20": 51,
+          "21": 60,
+          "22": 2,
+          "23": 27,
+          "24": 41,
+          "26": 5,
+          "27": 18,
+          "28": 10,
+          "29": 10,
+          "30": 10
+        },
+        "sourceCountPeak": 205,
+        "totalAlivePeakAtSpawns": 205
+      }
+    },
+    "firstCompletedSpawnFile": "spawns-113e2afc4dc04ecea1c4ea961df9f1b3-20260916-035253-259.csv",
+    "transitionServerLog": [
+      "[LimboTransition] requested run=113e2afc4dc04ecea1c4ea961df9f1b3 round=1 threshold=720.9 actual=721.18717984296381 frame=4847",
+      "[LimboTransition] waiting run=113e2afc4dc04ecea1c4ea961df9f1b3 round=1 elapsed=721.18717984296381 count=0 reason=玩家已就绪"
+    ],
+    "runEndLog": [
+      "[RunEnd] reference-stage-complete Limbo 参考流程完成；Minos 战未实现"
+    ],
+    "spatialPaths": {
+      "113e2afc4dc04ecea1c4ea961df9f1b3/2147483649": {
+        "barrier": true,
+        "phases": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "centers": [
+          [
+            -12.663553237915039,
+            -4.685484886169434
+          ]
+        ],
+        "edgePointCounts": [
+          0
+        ],
+        "minRadius": 9.99786376953125,
+        "maxRadius": 20.0,
+        "collision": true,
+        "first": 336.25038387812674,
+        "last": 369.75038487650454
+      },
+      "113e2afc4dc04ecea1c4ea961df9f1b3/17": {
+        "barrier": false,
+        "phases": [
+          1,
+          3
+        ],
+        "centers": [
+          [
+            -13.078385353088379,
+            6.000720977783203
+          ]
+        ],
+        "edgePointCounts": [
+          0
+        ],
+        "minRadius": 6.0,
+        "maxRadius": 6.0,
+        "collision": false,
+        "first": 481.84660399891436,
+        "last": 494.6671336386353
+      },
+      "113e2afc4dc04ecea1c4ea961df9f1b3/20": {
+        "barrier": false,
+        "phases": [
+          1,
+          3
+        ],
+        "centers": [
+          [
+            6.568065166473389,
+            -3.0345699787139893
+          ]
+        ],
+        "edgePointCounts": [
+          0
+        ],
+        "minRadius": 6.0,
+        "maxRadius": 6.0,
+        "collision": false,
+        "first": 541.7211824450642,
+        "last": 554.8951288554817
+      },
+      "113e2afc4dc04ecea1c4ea961df9f1b3/2147483650": {
+        "barrier": true,
+        "phases": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "centers": [
+          [
+            -16.80573081970215,
+            3.624978542327881
+          ]
+        ],
+        "edgePointCounts": [
+          0
+        ],
+        "minRadius": 9.99786376953125,
+        "maxRadius": 20.0,
+        "collision": true,
+        "first": 604.7691372279078,
+        "last": 638.0823501441628
+      },
+      "113e2afc4dc04ecea1c4ea961df9f1b3/27": {
+        "barrier": false,
+        "phases": [
+          1,
+          3
+        ],
+        "centers": [
+          [
+            5.410826206207275,
+            -14.603656768798828
+          ]
+        ],
+        "edgePointCounts": [
+          0
+        ],
+        "minRadius": 6.0,
+        "maxRadius": 6.0,
+        "collision": false,
+        "first": 656.3473241124302,
+        "last": 659.1503896806389
+      },
+      "113e2afc4dc04ecea1c4ea961df9f1b3/29": {
+        "barrier": false,
+        "phases": [
+          1,
+          3
+        ],
+        "centers": [
+          [
+            -13.861051559448242,
+            18.303022384643555
+          ]
+        ],
+        "edgePointCounts": [
+          0
+        ],
+        "minRadius": 6.0,
+        "maxRadius": 6.0,
+        "collision": false,
+        "first": 676.5327202472836,
+        "last": 679.6658078525215
+      },
+      "113e2afc4dc04ecea1c4ea961df9f1b3/30": {
+        "barrier": false,
+        "phases": [
+          1,
+          3
+        ],
+        "centers": [
+          [
+            10.047224044799805,
+            -15.251494407653809
+          ]
+        ],
+        "edgePointCounts": [
+          0
+        ],
+        "minRadius": 6.0,
+        "maxRadius": 6.0,
+        "collision": false,
+        "first": 696.575091490522,
+        "last": 699.5205125305802
+      },
+      "113e2afc4dc04ecea1c4ea961df9f1b3/31": {
+        "barrier": false,
+        "phases": [
+          1,
+          3
+        ],
+        "centers": [
+          [
+            -5.743101596832275,
+            -11.542348861694336
+          ]
+        ],
+        "edgePointCounts": [
+          0
+        ],
+        "minRadius": 6.0,
+        "maxRadius": 6.0,
+        "collision": false,
+        "first": 715.8538463506848,
+        "last": 719.5205131266266
+      }
+    },
+    "classification": {
+      "confirmedKills": 183,
+      "selfDestructs": 5,
+      "expiry": 1241
+    }
+  }
+}

@@ -13,6 +13,18 @@ namespace MonsterSupergroup.NetworkCombat
         internal bool ValidateSequenceAction(EnemyActionState action)
         {
             if (!(new EnemySimulationRuntimeState{Action=action}).IsFinite) return false;
+            if (action.ActionId == cancelledSequenceActionId && action.ActionId != 0 && action.Phase != EnemyAttackPresentationPhase.Cancelled && action.Phase != EnemyAttackPresentationPhase.Inactive) return false;
+            var timed = enemyController != null ? enemyController.attackScript : null;
+            if (timed != null && timed.SupportsSharedTimeline && timed is not SequenceEnemyAttack && action.ActionId != 0)
+            {
+                timed.enemyAnimator = enemyController.enemyAnimator;
+                var strike = timed.TimelineStrikes[0];
+                if (action.Sequence || Math.Abs(action.WarningUntil-action.WarningStartedAt-strike.Warning)>.001 ||
+                    Math.Abs(action.ActiveUntil-action.WarningUntil-strike.Active)>.001 ||
+                    Math.Abs(action.RecoveryUntil-action.ActiveUntil-timed.RecoveryTime)>.001) return false;
+                if (action.Phase != EnemyAttackPresentationPhase.Cancelled && action.Phase != EnemyAttackPresentationPhase.Inactive &&
+                    Math.Abs(action.NextAttackAt-action.RecoveryUntil-enemyController.attackCooldown)>.001) return false;
+            }
             if (enemyController == null || enemyController.attackScript is not SequenceEnemyAttack sequence) return !action.Sequence;
             if (action.ActionId == 0) return !action.Sequence;
             if (!action.Sequence || action.Dash || action.Explosion || enemyController.enemyAnimator is not MultipleAttackAnimator animator) return false;
@@ -30,13 +42,13 @@ namespace MonsterSupergroup.NetworkCombat
             return Math.Abs(action.RecoveryUntil-action.ComboStartedAt-EnemySequenceTimeline.Duration(action.SequenceWarnings,action.SequenceActives)-sequence.RecoveryTime)<.00001;
         }
         internal void RememberSequenceCancellation(EnemyActionState action)
-        { if(action.Sequence && action.Phase==EnemyAttackPresentationPhase.Cancelled)cancelledSequenceActionId=action.ActionId; }
+        { if(action.Phase==EnemyAttackPresentationPhase.Cancelled)cancelledSequenceActionId=action.ActionId; }
 
         internal void ApplyAcceptedSequenceInterrupt(ulong actionId)
         {
-            if(actionId==0||!IsCanonicalAlive||CurrentActionId!=actionId||enemyController?.attackScript is not SequenceEnemyAttack)return;
+            if(actionId==0||!IsCanonicalAlive||CurrentActionId!=actionId||enemyController?.attackScript?.SupportsSharedTimeline!=true)return;
             cancelledSequenceActionId=actionId;
-            GetComponent<NetworkEnemyMeleeReplica>()?.CancelSequencePresentation(actionId);
+            GetComponent<NetworkEnemyMeleeReplica>()?.CancelActionPresentation(actionId);
         }
     }
 }

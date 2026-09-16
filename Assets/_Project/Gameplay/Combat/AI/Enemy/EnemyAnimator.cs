@@ -634,6 +634,12 @@ namespace AstralShift.HellMaiden.AI.Enemy
 			TryHurtBlinkAnimation();
 		}
 
+        public void FreezeTimedAttackPresentation()
+        {
+            if (animancer != null && animancer.Layers[0].CurrentState != null)
+                animancer.Layers[0].CurrentState.Speed = 0;
+        }
+
 		public bool TryHurtBlinkAnimation()
 		{
 			if (_controller != null && _controller.isActiveAndEnabled && isActiveAndEnabled)

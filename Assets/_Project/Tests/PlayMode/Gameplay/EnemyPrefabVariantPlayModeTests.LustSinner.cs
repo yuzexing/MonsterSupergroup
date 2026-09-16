@@ -26,7 +26,8 @@ namespace MonsterSupergroup.Gameplay.Tests
             var player = Owner.GetComponent<PlayerMovement>();
             var binding = Owner.GetComponent<PlayerCombatantBinding>();
             yield return WaitFor(() => !player.IsInvulnerable);
-            melee.AttackWarningEnter();
+            enemy.Attack();
+            yield return WaitFor(() => melee.HasSimulationAttackInstance);
             var area = enemy.GetComponentInChildren<EnemyAttackPrefab>();
             var collider = area.GetComponentInChildren<PolygonCollider2D>(true);
             Assert.That(area.damageInteraction.gameObject.activeInHierarchy, Is.False);
@@ -46,7 +47,7 @@ namespace MonsterSupergroup.Gameplay.Tests
             probe.GetComponent<Rigidbody2D>().useFullKinematicContacts = true;
             probe.transform.position = point;
             probe.GetComponent<Rigidbody2D>().position = point;
-            melee.AttackEnter();
+            yield return WaitFor(() => enemy.GetComponent<MonsterSupergroup.NetworkCombat.NetworkEnemyMeleeReplica>().DamageWindowActive);
             Physics2D.SyncTransforms();
             Assert.That(collider.OverlapPoint(point), Is.True);
             Assert.That(collider.OverlapPoint(point + Vector3.one * 20), Is.False);

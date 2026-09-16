@@ -106,7 +106,14 @@ namespace MonsterSupergroup.NetworkCombat.Tests
                 Assert.That(animator.FindProperty("attackRightDown._Clip").objectReferenceValue, Is.Not.Null);
                 Assert.That(animator.FindProperty("moveLeftUp._Clip").objectReferenceValue, Is.SameAs(preserved));
             }
-            finally { File.WriteAllBytes(path, before); AssetDatabase.ImportAsset(path, ImportAssetOptions.ForceSynchronousImport); }
+            finally
+            {
+                // Saving/importing a prefab may leave a cached mapped file on Windows.
+                // Release Unity's handles before restoring the exact authored bytes.
+                AssetDatabase.ReleaseCachedFileHandles();
+                File.WriteAllBytes(path, before);
+                AssetDatabase.ImportAsset(path, ImportAssetOptions.ForceSynchronousImport);
+            }
         }
     }
 }

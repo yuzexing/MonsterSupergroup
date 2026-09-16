@@ -1,0 +1,948 @@
+{
+  "host": {
+    "artBuildManifestAvailable": false,
+    "rounds": {
+      "": {
+        "first": {
+          "kind": "frame",
+          "role": "host",
+          "snapshot": {
+            "RunId": "",
+            "Phase": 0,
+            "Wave": 0,
+            "Elapsed": 0.0,
+            "WaveDuration": 0.0,
+            "Planned": 0,
+            "Spawned": 0,
+            "Skipped": 0,
+            "Alive": 0,
+            "Limit": 0,
+            "TotalSpawned": 0,
+            "TotalSkipped": 0,
+            "ReferenceStage": false,
+            "StageEndTime": 0.0,
+            "CountedAlive": 0,
+            "ActiveClips": 0,
+            "EvidenceBlocked": 0,
+            "TotalAttempts": 0,
+            "AbandonedBudget": 0,
+            "TransitionRequestedAt": 0.0,
+            "TransitionWaitCount": 0,
+            "TransitionWaitReason": ""
+          },
+          "health": -1,
+          "observed": 0,
+          "realtime": 12.182884000340138,
+          "position": {
+            "x": 0.0,
+            "y": 0.0
+          }
+        },
+        "max": {
+          "kind": "frame",
+          "role": "host",
+          "snapshot": {
+            "RunId": "",
+            "Phase": 0,
+            "Wave": 0,
+            "Elapsed": 0.0,
+            "WaveDuration": 0.0,
+            "Planned": 0,
+            "Spawned": 0,
+            "Skipped": 0,
+            "Alive": 0,
+            "Limit": 0,
+            "TotalSpawned": 0,
+            "TotalSkipped": 0,
+            "ReferenceStage": false,
+            "StageEndTime": 0.0,
+            "CountedAlive": 0,
+            "ActiveClips": 0,
+            "EvidenceBlocked": 0,
+            "TotalAttempts": 0,
+            "AbandonedBudget": 0,
+            "TransitionRequestedAt": 0.0,
+            "TransitionWaitCount": 0,
+            "TransitionWaitReason": ""
+          },
+          "health": -1,
+          "observed": 0,
+          "realtime": 12.182884000340138,
+          "position": {
+            "x": 0.0,
+            "y": 0.0
+          }
+        }
+      },
+      "32c85dce743c4edeac8cc98a22474fb8": {
+        "first": {
+          "kind": "frame",
+          "role": "host",
+          "snapshot": {
+            "RunId": "32c85dce743c4edeac8cc98a22474fb8",
+            "Phase": 2,
+            "Wave": 0,
+            "Elapsed": 0.2281917929649353,
+            "WaveDuration": 30.0,
+            "Planned": 0,
+            "Spawned": 0,
+            "Skipped": 0,
+            "Alive": 0,
+            "Limit": 1000,
+            "TotalSpawned": 0,
+            "TotalSkipped": 0,
+            "ReferenceStage": true,
+            "StageEndTime": 60.0,
+            "CountedAlive": 0,
+            "ActiveClips": 0,
+            "EvidenceBlocked": 0,
+            "TotalAttempts": 0,
+            "AbandonedBudget": 0,
+            "TransitionRequestedAt": 0.0,
+            "TransitionWaitCount": 0,
+            "TransitionWaitReason": ""
+          },
+          "health": 500,
+          "observed": 0,
+          "realtime": 13.197324800340137,
+          "position": {
+            "x": 0.0,
+            "y": 8.0
+          }
+        },
+        "max": {
+          "kind": "frame",
+          "role": "host",
+          "snapshot": {
+            "RunId": "32c85dce743c4edeac8cc98a22474fb8",
+            "Phase": 5,
+            "Wave": 0,
+            "Elapsed": 60.0,
+            "WaveDuration": 30.0,
+            "Planned": 0,
+            "Spawned": 30,
+            "Skipped": 0,
+            "Alive": 0,
+            "Limit": 1000,
+            "TotalSpawned": 30,
+            "TotalSkipped": 0,
+            "ReferenceStage": true,
+            "StageEndTime": 60.0,
+            "CountedAlive": 0,
+            "ActiveClips": 0,
+            "EvidenceBlocked": 0,
+            "TotalAttempts": 30,
+            "AbandonedBudget": 0,
+            "TransitionRequestedAt": 0.0,
+            "TransitionWaitCount": 0,
+            "TransitionWaitReason": ""
+          },
+          "health": 350,
+          "observed": 30,
+          "realtime": 73.45036790034014,
+          "position": {
+            "x": 11.300000190734863,
+            "y": 8.0
+          }
+        }
+      }
+    },
+    "births": 30,
+    "birthMismatches": [],
+    "spawnEvents": {
+      "spawn": 30,
+      "death": 30,
+      "completed": 1
+    },
+    "spawnFiles": {
+      "spawns-32c85dce743c4edeac8cc98a22474fb8-20260916-040138-629.csv": {
+        "events": {
+          "spawn": 30,
+          "death": 30,
+          "completed": 1
+        },
+        "identities": {
+          "Ghoul:0": 30
+        },
+        "clips": {
+          "0": 30
+        },
+        "lastEvent": {
+          "elapsed": "60",
+          "event": "completed",
+          "clip": "",
+          "source": "",
+          "variant": "",
+          "planned": "",
+          "sequence": "",
+          "enemy": "",
+          "result": "",
+          "totalAlive": "0",
+          "countedAlive": "0",
+          "hp": "",
+          "damage": "",
+          "speed": "",
+          "xp": "",
+          "x": "",
+          "y": ""
+        }
+      }
+    },
+    "spawnByClip": {
+      "0": 30
+    },
+    "spawnByIdentity": {
+      "Ghoul:0": 30
+    },
+    "statsBindingFailures": 0,
+    "lostSoulHits": {},
+    "hitsAfterActiveDeadline": [],
+    "disposals": 0,
+    "earlyDisposals": [],
+    "maxDisposalDelay": 0,
+    "cleanup": [
+      {
+        "kind": "completed-cleanup",
+        "detail": "32c85dce743c4edeac8cc98a22474fb8",
+        "payload": "{\"damageAreas\":0,\"warnings\":0}",
+        "run": "32c85dce743c4edeac8cc98a22474fb8",
+        "round": 1,
+        "realtime": 73.28415240034015,
+        "combat": 73.28307498654141,
+        "elapsed": 60.0
+      }
+    ],
+    "trapCleanup": [
+      {
+        "kind": "completed-cleanup",
+        "role": "host",
+        "run": "32c85dce743c4edeac8cc98a22474fb8",
+        "elapsed": 60.0,
+        "combat": 72.92072028143122,
+        "realtime": 72.92673480034014,
+        "id": 0,
+        "state": {
+          "Round": 0,
+          "Target": 0,
+          "Barrier": false,
+          "Occupied": false,
+          "Collision": false,
+          "Phase": 0,
+          "Center": {
+            "x": 0.0,
+            "y": 0.0
+          },
+          "BeganAt": 0.0,
+          "ReleaseAt": 0.0,
+          "Radius": 0.0,
+          "Aspect": 0.0,
+          "EntryScale": 0.0,
+          "CameraOffset": 0.0,
+          "CameraDuration": 0.0,
+          "Count": 0,
+          "Visible": 0
+        },
+        "worldEdgePoints": [],
+        "edgeRadius": 0.0,
+        "localPlayer": 2,
+        "localPosition": {
+          "x": 11.300000190734863,
+          "y": 8.0
+        },
+        "localVelocity": {
+          "x": 0.0,
+          "y": 0.0
+        },
+        "localPlayerTouchesBarrier": false,
+        "timeScale": 1.0,
+        "slots": 0,
+        "states": 0,
+        "collisionAreas": 0,
+        "livingWarningRoots": 0
+      }
+    ],
+    "trapClockRates": {
+      "1.0": 1
+    },
+    "assistance": {},
+    "errors": [],
+    "screenshots": 13,
+    "firstCompletedRound": {
+      "run": "32c85dce743c4edeac8cc98a22474fb8",
+      "startRealtime": 13.197324800340137,
+      "endRealtime": 73.45036790034014,
+      "confirmedKills": 30,
+      "firstHitToConfirmedDeath": {
+        "Ghoul": [
+          {
+            "id": "4",
+            "seconds": 1.8827666826546192
+          },
+          {
+            "id": "6",
+            "seconds": 1.938624296337366
+          },
+          {
+            "id": "8",
+            "seconds": 1.8554062992334366
+          },
+          {
+            "id": "10",
+            "seconds": 1.9559035059064627
+          },
+          {
+            "id": "12",
+            "seconds": 1.988643690943718
+          },
+          {
+            "id": "13",
+            "seconds": 1.9567688088864088
+          },
+          {
+            "id": "15",
+            "seconds": 1.9745852928608656
+          },
+          {
+            "id": "16",
+            "seconds": 1.9063484016805887
+          },
+          {
+            "id": "18",
+            "seconds": 1.872826710343361
+          },
+          {
+            "id": "19",
+            "seconds": 1.8898959141224623
+          },
+          {
+            "id": "21",
+            "seconds": 1.92450300604105
+          },
+          {
+            "id": "22",
+            "seconds": 1.939847493544221
+          },
+          {
+            "id": "24",
+            "seconds": 1.906153790652752
+          },
+          {
+            "id": "25",
+            "seconds": 0.83644849807024
+          },
+          {
+            "id": "27",
+            "seconds": 1.905826298519969
+          },
+          {
+            "id": "28",
+            "seconds": 0.8865252994000912
+          },
+          {
+            "id": "30",
+            "seconds": 1.0202490985393524
+          },
+          {
+            "id": "31",
+            "seconds": 0.9906938020139933
+          },
+          {
+            "id": "33",
+            "seconds": 0.7273720055818558
+          },
+          {
+            "id": "34",
+            "seconds": 0.8876253087073565
+          },
+          {
+            "id": "36",
+            "seconds": 0.9206589907407761
+          },
+          {
+            "id": "37",
+            "seconds": 0.9365977924317122
+          },
+          {
+            "id": "39",
+            "seconds": 1.019247803837061
+          },
+          {
+            "id": "40",
+            "seconds": 0.9199926964938641
+          },
+          {
+            "id": "42",
+            "seconds": 0.9715909045189619
+          },
+          {
+            "id": "43",
+            "seconds": 1.1030087973922562
+          },
+          {
+            "id": "45",
+            "seconds": 1.136327601969242
+          },
+          {
+            "id": "46",
+            "seconds": 1.086876692250371
+          },
+          {
+            "id": "48",
+            "seconds": 1.1024284027516842
+          },
+          {
+            "id": "49",
+            "seconds": 1.1044051963835955
+          }
+        ]
+      },
+      "selectionWaitsSeconds": [
+        0.17444580000000087,
+        0.16711990000000299
+      ],
+      "unclosedSelection": null,
+      "frameSampleCount": 0,
+      "frameMsMedian": null,
+      "frameMsP95": null,
+      "frameMsMax": 0,
+      "maxAllocatedBytes": 0,
+      "maxParticles": 0
+    },
+    "firstCompletionSnapshot": {
+      "RunId": "32c85dce743c4edeac8cc98a22474fb8",
+      "Phase": 5,
+      "Wave": 0,
+      "Elapsed": 60.0,
+      "WaveDuration": 30.0,
+      "Planned": 0,
+      "Spawned": 30,
+      "Skipped": 0,
+      "Alive": 0,
+      "Limit": 1000,
+      "TotalSpawned": 30,
+      "TotalSkipped": 0,
+      "ReferenceStage": true,
+      "StageEndTime": 60.0,
+      "CountedAlive": 0,
+      "ActiveClips": 0,
+      "EvidenceBlocked": 0,
+      "TotalAttempts": 30,
+      "AbandonedBudget": 0,
+      "TransitionRequestedAt": 0.0,
+      "TransitionWaitCount": 0,
+      "TransitionWaitReason": ""
+    },
+    "wavePhaseTransitions": [
+      {
+        "run": "",
+        "phase": 0,
+        "elapsed": 0.0,
+        "realtime": 12.182884000340138
+      },
+      {
+        "run": "32c85dce743c4edeac8cc98a22474fb8",
+        "phase": 2,
+        "elapsed": 0.2281917929649353,
+        "realtime": 13.197324800340137
+      },
+      {
+        "run": "32c85dce743c4edeac8cc98a22474fb8",
+        "phase": 5,
+        "elapsed": 60.0,
+        "realtime": 73.45036790034014
+      }
+    ],
+    "ghoul": {
+      "events": {
+        "configuration": 1,
+        "round": 1,
+        "test-no-knockback": 1,
+        "phase": 306,
+        "fixture-target": 15,
+        "fixture-placement": 32,
+        "active-frame": 763,
+        "test-knockback-restored": 1,
+        "test-two-sources": 1,
+        "damage-attempt": 16,
+        "test-card": 4,
+        "test-heal": 2
+      },
+      "completeCombos": 10,
+      "comboStartChanged": [],
+      "combosAcrossEpochs": 0,
+      "statsBindingFailures": 0,
+      "activeColliderOutsideAppliedActive": [],
+      "hitAmounts": {
+        "50": 16
+      },
+      "settlementsAfterDeadline": 0,
+      "maximumSettlementDelay": 0,
+      "interruptCount": 17,
+      "duplicateComboInterrupts": 0,
+      "interruptSources": {
+        "3": 11,
+        "2": 6
+      },
+      "assistance": {
+        "test-no-knockback": 1,
+        "test-knockback-restored": 1,
+        "test-two-sources": 1,
+        "test-card": 4,
+        "test-heal": 2
+      }
+    }
+  },
+  "client": {
+    "artBuildManifestAvailable": false,
+    "rounds": {
+      "32c85dce743c4edeac8cc98a22474fb8": {
+        "first": {
+          "kind": "frame",
+          "role": "client",
+          "snapshot": {
+            "RunId": "32c85dce743c4edeac8cc98a22474fb8",
+            "Phase": 1,
+            "Wave": 0,
+            "Elapsed": 0.0,
+            "WaveDuration": 0.0,
+            "Planned": 0,
+            "Spawned": 0,
+            "Skipped": 0,
+            "Alive": 0,
+            "Limit": 0,
+            "TotalSpawned": 0,
+            "TotalSkipped": 0,
+            "ReferenceStage": false,
+            "StageEndTime": 0.0,
+            "CountedAlive": 0,
+            "ActiveClips": 0,
+            "EvidenceBlocked": 0,
+            "TotalAttempts": 0,
+            "AbandonedBudget": 0,
+            "TransitionRequestedAt": 0.0,
+            "TransitionWaitCount": 0,
+            "TransitionWaitReason": ""
+          },
+          "health": 500,
+          "observed": 0,
+          "realtime": 6.567635806916099,
+          "position": {
+            "x": 2.0,
+            "y": 0.0
+          }
+        },
+        "max": {
+          "kind": "frame",
+          "role": "client",
+          "snapshot": {
+            "RunId": "32c85dce743c4edeac8cc98a22474fb8",
+            "Phase": 5,
+            "Wave": 0,
+            "Elapsed": 60.0,
+            "WaveDuration": 30.0,
+            "Planned": 0,
+            "Spawned": 30,
+            "Skipped": 0,
+            "Alive": 0,
+            "Limit": 1000,
+            "TotalSpawned": 30,
+            "TotalSkipped": 0,
+            "ReferenceStage": true,
+            "StageEndTime": 60.0,
+            "CountedAlive": 0,
+            "ActiveClips": 0,
+            "EvidenceBlocked": 0,
+            "TotalAttempts": 30,
+            "AbandonedBudget": 0,
+            "TransitionRequestedAt": 0.0,
+            "TransitionWaitCount": 0,
+            "TransitionWaitReason": ""
+          },
+          "health": 400,
+          "observed": 30,
+          "realtime": 66.87166600691612,
+          "position": {
+            "x": 12.0,
+            "y": 8.0
+          }
+        }
+      }
+    },
+    "births": 30,
+    "birthMismatches": [],
+    "spawnEvents": {},
+    "spawnFiles": {},
+    "spawnByClip": {},
+    "spawnByIdentity": {},
+    "statsBindingFailures": 0,
+    "lostSoulHits": {},
+    "hitsAfterActiveDeadline": [],
+    "disposals": 0,
+    "earlyDisposals": [],
+    "maxDisposalDelay": 0,
+    "cleanup": [
+      {
+        "kind": "completed-cleanup",
+        "detail": "32c85dce743c4edeac8cc98a22474fb8",
+        "payload": "{\"damageAreas\":0,\"warnings\":0}",
+        "run": "32c85dce743c4edeac8cc98a22474fb8",
+        "round": 1,
+        "realtime": 67.00561610691611,
+        "combat": 73.24371547772208,
+        "elapsed": 60.0
+      }
+    ],
+    "trapCleanup": [
+      {
+        "kind": "completed-cleanup",
+        "role": "client",
+        "run": "32c85dce743c4edeac8cc98a22474fb8",
+        "elapsed": 60.0,
+        "combat": 72.93803756097867,
+        "realtime": 66.70125670691611,
+        "id": 0,
+        "state": {
+          "Round": 0,
+          "Target": 0,
+          "Barrier": false,
+          "Occupied": false,
+          "Collision": false,
+          "Phase": 0,
+          "Center": {
+            "x": 0.0,
+            "y": 0.0
+          },
+          "BeganAt": 0.0,
+          "ReleaseAt": 0.0,
+          "Radius": 0.0,
+          "Aspect": 0.0,
+          "EntryScale": 0.0,
+          "CameraOffset": 0.0,
+          "CameraDuration": 0.0,
+          "Count": 0,
+          "Visible": 0
+        },
+        "worldEdgePoints": [],
+        "edgeRadius": 0.0,
+        "localPlayer": 3,
+        "localPosition": {
+          "x": 12.0,
+          "y": 8.0
+        },
+        "localVelocity": {
+          "x": 0.0,
+          "y": 0.0
+        },
+        "localPlayerTouchesBarrier": false,
+        "timeScale": 1.0,
+        "slots": 0,
+        "states": 0,
+        "collisionAreas": 0,
+        "livingWarningRoots": 0
+      }
+    ],
+    "trapClockRates": {
+      "1.0": 1
+    },
+    "assistance": {},
+    "errors": [],
+    "screenshots": 12,
+    "firstCompletedRound": {
+      "run": "32c85dce743c4edeac8cc98a22474fb8",
+      "startRealtime": 6.567635806916099,
+      "endRealtime": 66.87166600691612,
+      "confirmedKills": 30,
+      "firstHitToConfirmedDeath": {
+        "Ghoul": [
+          {
+            "id": "4",
+            "seconds": 2.0543209799622737
+          },
+          {
+            "id": "6",
+            "seconds": 2.0103763518656734
+          },
+          {
+            "id": "8",
+            "seconds": 1.9076380810647073
+          },
+          {
+            "id": "10",
+            "seconds": 1.9923662368649424
+          },
+          {
+            "id": "12",
+            "seconds": 1.058940307246008
+          },
+          {
+            "id": "13",
+            "seconds": 2.001972846662529
+          },
+          {
+            "id": "15",
+            "seconds": 2.0624278500553856
+          },
+          {
+            "id": "16",
+            "seconds": 1.9932749275824122
+          },
+          {
+            "id": "18",
+            "seconds": 1.937429023960675
+          },
+          {
+            "id": "19",
+            "seconds": 1.9839765392755808
+          },
+          {
+            "id": "21",
+            "seconds": 1.995634232824564
+          },
+          {
+            "id": "22",
+            "seconds": 1.9844699768086613
+          },
+          {
+            "id": "24",
+            "seconds": 1.9878191813043387
+          },
+          {
+            "id": "25",
+            "seconds": 0.9192090824363603
+          },
+          {
+            "id": "27",
+            "seconds": 1.9760095054127902
+          },
+          {
+            "id": "28",
+            "seconds": 0.977326761262546
+          },
+          {
+            "id": "30",
+            "seconds": 0.96863118285345
+          },
+          {
+            "id": "31",
+            "seconds": 1.0448929717711195
+          },
+          {
+            "id": "33",
+            "seconds": 0.9951745087382733
+          },
+          {
+            "id": "34",
+            "seconds": 0.9474098366756607
+          },
+          {
+            "id": "36",
+            "seconds": 0.951004491517125
+          },
+          {
+            "id": "37",
+            "seconds": 0.9721681908392341
+          },
+          {
+            "id": "39",
+            "seconds": 1.1007087180921218
+          },
+          {
+            "id": "40",
+            "seconds": 0.9338528760950737
+          },
+          {
+            "id": "42",
+            "seconds": 0.9635598847461111
+          },
+          {
+            "id": "43",
+            "seconds": 1.1894248645063712
+          },
+          {
+            "id": "45",
+            "seconds": 1.2009363627252867
+          },
+          {
+            "id": "46",
+            "seconds": 1.1842804928828343
+          },
+          {
+            "id": "48",
+            "seconds": 1.1856705539900645
+          },
+          {
+            "id": "49",
+            "seconds": 1.0862292965519487
+          }
+        ]
+      },
+      "selectionWaitsSeconds": [
+        0.17484680000000097,
+        0.1831485000000015,
+        0.1280564000000055,
+        0.1999524000000008
+      ],
+      "unclosedSelection": null,
+      "frameSampleCount": 0,
+      "frameMsMedian": null,
+      "frameMsP95": null,
+      "frameMsMax": 0,
+      "maxAllocatedBytes": 0,
+      "maxParticles": 0
+    },
+    "firstCompletionSnapshot": {
+      "RunId": "32c85dce743c4edeac8cc98a22474fb8",
+      "Phase": 5,
+      "Wave": 0,
+      "Elapsed": 60.0,
+      "WaveDuration": 30.0,
+      "Planned": 0,
+      "Spawned": 30,
+      "Skipped": 0,
+      "Alive": 0,
+      "Limit": 1000,
+      "TotalSpawned": 30,
+      "TotalSkipped": 0,
+      "ReferenceStage": true,
+      "StageEndTime": 60.0,
+      "CountedAlive": 0,
+      "ActiveClips": 0,
+      "EvidenceBlocked": 0,
+      "TotalAttempts": 30,
+      "AbandonedBudget": 0,
+      "TransitionRequestedAt": 0.0,
+      "TransitionWaitCount": 0,
+      "TransitionWaitReason": ""
+    },
+    "wavePhaseTransitions": [
+      {
+        "run": "32c85dce743c4edeac8cc98a22474fb8",
+        "phase": 1,
+        "elapsed": 0.0,
+        "realtime": 6.567635806916099
+      },
+      {
+        "run": "32c85dce743c4edeac8cc98a22474fb8",
+        "phase": 2,
+        "elapsed": 0.8297876007854939,
+        "realtime": 7.5830964069161
+      },
+      {
+        "run": "32c85dce743c4edeac8cc98a22474fb8",
+        "phase": 5,
+        "elapsed": 60.0,
+        "realtime": 66.87166600691612
+      }
+    ],
+    "ghoul": {
+      "events": {
+        "configuration": 1,
+        "round": 1,
+        "test-no-knockback": 1,
+        "phase": 297,
+        "active-frame": 723,
+        "damage-attempt": 65,
+        "test-heal": 9,
+        "test-card": 7,
+        "test-knockback-restored": 1,
+        "test-two-sources": 1
+      },
+      "completeCombos": 9,
+      "comboStartChanged": [],
+      "combosAcrossEpochs": 0,
+      "statsBindingFailures": 0,
+      "activeColliderOutsideAppliedActive": [
+        {
+          "elapsed": 20.175663286820054,
+          "id": 15,
+          "action": {
+            "ActionId": 0,
+            "Phase": 0,
+            "WarningStartedAt": 0.0,
+            "WarningUntil": 0.0,
+            "ActiveUntil": 0.0,
+            "RecoveryUntil": 0.0,
+            "NextAttackAt": 33.11572437547835,
+            "Facing": {
+              "x": 0.0,
+              "y": 0.0
+            },
+            "TargetPosition": {
+              "x": 0.0,
+              "y": 0.0
+            },
+            "ProjectileDirection": {
+              "x": 0.0,
+              "y": 0.0
+            },
+            "ProjectileEmitted": false,
+            "Dash": false,
+            "DashStart": {
+              "x": 0.0,
+              "y": 0.0
+            },
+            "DashEnd": {
+              "x": 0.0,
+              "y": 0.0
+            },
+            "DashLastPosition": {
+              "x": 0.0,
+              "y": 0.0
+            },
+            "DashWarningOrigin": {
+              "x": 0.0,
+              "y": 0.0
+            },
+            "Explosion": false,
+            "ExplosionTriggered": false,
+            "SelfDestructPending": false,
+            "ExplosionPosition": {
+              "x": 0.0,
+              "y": 0.0
+            },
+            "Sequence": false,
+            "ComboStartedAt": 0.0,
+            "SequenceWarnings": {
+              "x": 0.0,
+              "y": 0.0,
+              "z": 0.0
+            },
+            "SequenceActives": {
+              "x": 0.0,
+              "y": 0.0,
+              "z": 0.0
+            },
+            "StrikeIndex": 0,
+            "PoseStrikeIndex": 0,
+            "LockedStrikeMask": 0,
+            "ExecutedStrikeMask": 0
+          }
+        }
+      ],
+      "hitAmounts": {
+        "50": 65
+      },
+      "settlementsAfterDeadline": 0,
+      "maximumSettlementDelay": 0,
+      "interruptCount": 17,
+      "duplicateComboInterrupts": 0,
+      "interruptSources": {
+        "3": 11,
+        "2": 6
+      },
+      "assistance": {
+        "test-no-knockback": 1,
+        "test-heal": 9,
+        "test-card": 7,
+        "test-knockback-restored": 1,
+        "test-two-sources": 1
+      }
+    }
+  },
+  "comparison": {
+    "missingClientBirthIds": [],
+    "extraClientBirthIds": [],
+    "differentBirths": [],
+    "sameBuild": null
+  }
+}

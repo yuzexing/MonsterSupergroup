@@ -332,6 +332,7 @@ namespace MonsterSupergroup.NetworkCombat
             }
 
             receivedAttackStateSequence = edge.StateSequence;
+            if (enemyController?.attackScript?.SupportsSharedTimeline == true && LimboAttackTimelineObservation.SuppressPhaseEdge(edge)) return true;
             RememberSequenceCancellation(edge.Checkpoint.Movement.Runtime.Action);
             latestAttackPresentation = edge;
             hasLatestAttackPresentation = true;
@@ -728,7 +729,7 @@ namespace MonsterSupergroup.NetworkCombat
             EnemyAttackPresentationEdge edge)
         {
             // Sequence replicas advance their whole absolute timeline, including the presentation index.
-            if (enemyController != null && enemyController.attackScript is SequenceEnemyAttack) return;
+            if (enemyController != null && enemyController.attackScript != null && enemyController.attackScript.SupportsSharedTimeline) return;
             if (productMovementOnly || !productEnemyInitialized ||
                 enemyController == null || authority == null ||
                 !authority.ConsumesSnapshots)

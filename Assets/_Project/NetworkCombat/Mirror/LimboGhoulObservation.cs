@@ -107,7 +107,19 @@ namespace MonsterSupergroup.NetworkCombat
             }
             bool twoSources=Case=="interrupt"&&Elapsed>=40;
             if(twoSources&&boundaries.Add("two-sources"))Write("test-two-sources","Both players placed in ordinary weapon reach; admitted hits still use GAS/Mirror.");
+            int q=Math.Min(3,(int)(Elapsed/20));Vector2[] offsets={new(.9f,.6f),new(-.9f,.6f),new(-.9f,-.6f),new(.9f,-.6f)};
             var at=anchor+(target ? Vector2.zero : Vector2.left*(twoSources ? .7f : 12));
+            if(Case=="main"&&target&&Elapsed<80)
+            {
+                var e=enemies.FirstOrDefault(e=>e.IsCanonicalAlive);
+                if(e!=null)
+                {
+                    // Test-only placement keeps the requested bearing for several complete combos.
+                    // One initial teleport otherwise lets chase movement collapse all later bearings.
+                    at=(Vector2)e.transform.position-offsets[q];
+                    if(boundaries.Add("bearing-"+q))Write("test-bearing","Fixed relative target bearing, quadrant="+q+"; fixture assistance, not ordinary input.");
+                }
+            }
             if(Case=="boundary"&&target)
             {
                 var e=enemies.FirstOrDefault(e=>e.IsCanonicalAlive);
@@ -134,7 +146,6 @@ namespace MonsterSupergroup.NetworkCombat
             var world=NetworkEnemySimulationWorld.Instance;
             var other=NetworkServer.connections.Values.Select(c=>c.identity).FirstOrDefault(i=>i!=null&&i.netId!=local.netId);
             var targetId=remote?other:local;if(targetId==null)return;
-            int q=Math.Min(3,(int)(Elapsed/20));Vector2[] offsets={new(.9f,.6f),new(-.9f,.6f),new(-.9f,-.6f),new(.9f,-.6f)};
             foreach(var e in enemies.Where(e=>e.IsCanonicalAlive))
             {
                 if(Elapsed>=1.5&&(!placed.TryGetValue(e.netId,out int last)||last!=q))

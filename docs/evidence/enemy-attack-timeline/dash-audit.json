@@ -1,0 +1,282 @@
+[
+  {
+    "folder": "F:\\UnityStore\\MonsterSupergroup\\Logs\\LimboReference\\attack-dash-r2-0-client\\client",
+    "counts": {
+      "phase": 331,
+      "handoff": 4,
+      "suppressed-phase-edge": 133,
+      "damage-attempt": 50,
+      "release": 1
+    },
+    "activeEntries": {
+      "Brotchi_Dash/v0/strike0": 67
+    },
+    "completeWAR": {
+      "Brotchi_Dash/v0/LD/strike0": 8,
+      "Brotchi_Dash/v0/RD/strike0": 7,
+      "Brotchi_Dash/v0/RU/strike0": 7,
+      "Brotchi_Dash/v0/LU/strike0": 44
+    },
+    "damageAttempts": {
+      "50": 50
+    },
+    "effectiveHealthDrops": {
+      "50": 46
+    },
+    "localCenters": 0,
+    "violations": [],
+    "cleanup": [
+      {
+        "damageAreas": 0,
+        "warnings": 0
+      }
+    ],
+    "meanFrameMs": 38.281658115854945,
+    "note": "Counts are observations, not proof of every planned matrix case. Ghoul strike 0/1 deliberately have no Recovery."
+  },
+  {
+    "folder": "F:\\UnityStore\\MonsterSupergroup\\Logs\\LimboReference\\attack-dash-r2-0-client\\host",
+    "counts": {
+      "phase": 327,
+      "handoff": 4,
+      "suppressed-phase-edge": 133,
+      "damage-attempt": 35,
+      "release": 1
+    },
+    "activeEntries": {
+      "Brotchi_Dash/v0/strike0": 67
+    },
+    "completeWAR": {
+      "Brotchi_Dash/v0/LD/strike0": 8,
+      "Brotchi_Dash/v0/RD/strike0": 7,
+      "Brotchi_Dash/v0/RU/strike0": 7,
+      "Brotchi_Dash/v0/LU/strike0": 44
+    },
+    "damageAttempts": {
+      "50": 35
+    },
+    "effectiveHealthDrops": {
+      "50": 33
+    },
+    "localCenters": 0,
+    "violations": [],
+    "cleanup": [
+      {
+        "damageAreas": 0,
+        "warnings": 0
+      }
+    ],
+    "meanFrameMs": 40.19434913768435,
+    "note": "Counts are observations, not proof of every planned matrix case. Ghoul strike 0/1 deliberately have no Recovery."
+  },
+  {
+    "folder": "F:\\UnityStore\\MonsterSupergroup\\Logs\\LimboReference\\attack-dash-r2-0-host\\client",
+    "counts": {
+      "phase": 328,
+      "suppressed-phase-edge": 134,
+      "damage-attempt": 33,
+      "handoff": 3,
+      "release": 1
+    },
+    "activeEntries": {
+      "Brotchi_Dash/v0/strike0": 67
+    },
+    "completeWAR": {
+      "Brotchi_Dash/v0/LD/strike0": 8,
+      "Brotchi_Dash/v0/RD/strike0": 7,
+      "Brotchi_Dash/v0/RU/strike0": 7,
+      "Brotchi_Dash/v0/LU/strike0": 44
+    },
+    "damageAttempts": {
+      "50": 33
+    },
+    "effectiveHealthDrops": {
+      "50": 33
+    },
+    "localCenters": 0,
+    "violations": [],
+    "cleanup": [
+      {
+        "damageAreas": 0,
+        "warnings": 0
+      }
+    ],
+    "meanFrameMs": 38.046666908024505,
+    "note": "Counts are observations, not proof of every planned matrix case. Ghoul strike 0/1 deliberately have no Recovery."
+  },
+  {
+    "folder": "F:\\UnityStore\\MonsterSupergroup\\Logs\\LimboReference\\attack-dash-r2-0-host\\host",
+    "counts": {
+      "phase": 331,
+      "suppressed-phase-edge": 133,
+      "damage-attempt": 49,
+      "handoff": 3,
+      "release": 1
+    },
+    "activeEntries": {
+      "Brotchi_Dash/v0/strike0": 67
+    },
+    "completeWAR": {
+      "Brotchi_Dash/v0/LD/strike0": 8,
+      "Brotchi_Dash/v0/RD/strike0": 7,
+      "Brotchi_Dash/v0/RU/strike0": 7,
+      "Brotchi_Dash/v0/LU/strike0": 44
+    },
+    "damageAttempts": {
+      "50": 49
+    },
+    "effectiveHealthDrops": {
+      "50": 46
+    },
+    "localCenters": 0,
+    "violations": [],
+    "cleanup": [
+      {
+        "damageAreas": 0,
+        "warnings": 0
+      }
+    ],
+    "meanFrameMs": 37.57335740728784,
+    "note": "Counts are observations, not proof of every planned matrix case. Ghoul strike 0/1 deliberately have no Recovery."
+  },
+  {
+    "folder": "F:\\UnityStore\\MonsterSupergroup\\Logs\\LimboReference\\attack-dash-r2-1-client\\client",
+    "counts": {
+      "phase": 335,
+      "handoff": 4,
+      "suppressed-phase-edge": 133,
+      "damage-attempt": 52,
+      "release": 1
+    },
+    "activeEntries": {
+      "Brotchi_Dash/v1/strike0": 67
+    },
+    "completeWAR": {
+      "Brotchi_Dash/v1/LD/strike0": 8,
+      "Brotchi_Dash/v1/RD/strike0": 7,
+      "Brotchi_Dash/v1/RU/strike0": 7,
+      "Brotchi_Dash/v1/LU/strike0": 44
+    },
+    "damageAttempts": {
+      "80": 52
+    },
+    "effectiveHealthDrops": {
+      "80": 46
+    },
+    "localCenters": 0,
+    "violations": [],
+    "cleanup": [
+      {
+        "damageAreas": 0,
+        "warnings": 0
+      }
+    ],
+    "meanFrameMs": 39.65658640191814,
+    "note": "Counts are observations, not proof of every planned matrix case. Ghoul strike 0/1 deliberately have no Recovery."
+  },
+  {
+    "folder": "F:\\UnityStore\\MonsterSupergroup\\Logs\\LimboReference\\attack-dash-r2-1-client\\host",
+    "counts": {
+      "phase": 332,
+      "handoff": 4,
+      "suppressed-phase-edge": 133,
+      "damage-attempt": 33,
+      "release": 1
+    },
+    "activeEntries": {
+      "Brotchi_Dash/v1/strike0": 67
+    },
+    "completeWAR": {
+      "Brotchi_Dash/v1/LD/strike0": 8,
+      "Brotchi_Dash/v1/RD/strike0": 7,
+      "Brotchi_Dash/v1/RU/strike0": 7,
+      "Brotchi_Dash/v1/LU/strike0": 44
+    },
+    "damageAttempts": {
+      "80": 33
+    },
+    "effectiveHealthDrops": {
+      "80": 32
+    },
+    "localCenters": 0,
+    "violations": [],
+    "cleanup": [
+      {
+        "damageAreas": 0,
+        "warnings": 0
+      }
+    ],
+    "meanFrameMs": 37.93184585354445,
+    "note": "Counts are observations, not proof of every planned matrix case. Ghoul strike 0/1 deliberately have no Recovery."
+  },
+  {
+    "folder": "F:\\UnityStore\\MonsterSupergroup\\Logs\\LimboReference\\attack-dash-r2-1-host\\client",
+    "counts": {
+      "phase": 333,
+      "suppressed-phase-edge": 134,
+      "damage-attempt": 35,
+      "handoff": 3,
+      "release": 1
+    },
+    "activeEntries": {
+      "Brotchi_Dash/v1/strike0": 67
+    },
+    "completeWAR": {
+      "Brotchi_Dash/v1/LD/strike0": 8,
+      "Brotchi_Dash/v1/RD/strike0": 7,
+      "Brotchi_Dash/v1/RU/strike0": 7,
+      "Brotchi_Dash/v1/LU/strike0": 44
+    },
+    "damageAttempts": {
+      "80": 35
+    },
+    "effectiveHealthDrops": {
+      "80": 33
+    },
+    "localCenters": 0,
+    "violations": [],
+    "cleanup": [
+      {
+        "damageAreas": 0,
+        "warnings": 0
+      }
+    ],
+    "meanFrameMs": 38.773498162742094,
+    "note": "Counts are observations, not proof of every planned matrix case. Ghoul strike 0/1 deliberately have no Recovery."
+  },
+  {
+    "folder": "F:\\UnityStore\\MonsterSupergroup\\Logs\\LimboReference\\attack-dash-r2-1-host\\host",
+    "counts": {
+      "phase": 335,
+      "suppressed-phase-edge": 133,
+      "damage-attempt": 48,
+      "handoff": 3,
+      "release": 1
+    },
+    "activeEntries": {
+      "Brotchi_Dash/v1/strike0": 67
+    },
+    "completeWAR": {
+      "Brotchi_Dash/v1/LD/strike0": 8,
+      "Brotchi_Dash/v1/RD/strike0": 7,
+      "Brotchi_Dash/v1/RU/strike0": 7,
+      "Brotchi_Dash/v1/LU/strike0": 44
+    },
+    "damageAttempts": {
+      "80": 48
+    },
+    "effectiveHealthDrops": {
+      "80": 44
+    },
+    "localCenters": 0,
+    "violations": [],
+    "cleanup": [
+      {
+        "damageAreas": 0,
+        "warnings": 0
+      }
+    ],
+    "meanFrameMs": 38.18443167068505,
+    "note": "Counts are observations, not proof of every planned matrix case. Ghoul strike 0/1 deliberately have no Recovery."
+  }
+]

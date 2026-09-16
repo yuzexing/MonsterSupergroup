@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace AstralShift.HellMaiden.AI.Enemy
 {
-	public class EnemyAttackMelee : EnemyAttack
+	public partial class EnemyAttackMelee : EnemyAttack
 	{
 		public EnemyAttackPrefab attackPrefab;
 
@@ -22,6 +22,8 @@ namespace AstralShift.HellMaiden.AI.Enemy
 
         private void OnDisable()
         {
+            if (controller != null && controller.UsesSharedAttackTimeline && gameObject.activeInHierarchy)
+            { ReleaseSimulationMotion(); return; }
             SuspendSimulation();
         }
 
@@ -93,6 +95,7 @@ namespace AstralShift.HellMaiden.AI.Enemy
             simulationGeneration++;
             if (_attack == null) return;
             _attack.damageInteraction?.DiscardPendingCollisions();
+            _attack.damageInteraction?.ConfigureAttackWindow(null);
             if (_collidersGameObject != null) _collidersGameObject.SetActive(false);
             if (_hitBox != null) _hitBox.Toggle(false);
             var released = _attack;

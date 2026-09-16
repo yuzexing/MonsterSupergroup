@@ -1,0 +1,216 @@
+[
+  {
+    "folder": "F:\\UnityStore\\MonsterSupergroup\\Logs\\LimboReference\\attack-stage2-r1-Skeleton0-pair\\client",
+    "counts": {
+      "phase": 332,
+      "handoff": 4,
+      "suppressed-phase-edge": 133,
+      "damage-attempt": 54,
+      "release": 2
+    },
+    "activeEntries": {
+      "Skeleton/v0/strike0": 53,
+      "Skeleton/v2/strike0": 14
+    },
+    "completeWAR": {
+      "Skeleton/v0/LD/strike0": 21,
+      "Skeleton/v0/RD/strike0": 13,
+      "Skeleton/v0/RU/strike0": 7,
+      "Skeleton/v0/LU/strike0": 11,
+      "Skeleton/v2/LD/strike0": 14
+    },
+    "damageAttempts": {
+      "50": 54
+    },
+    "effectiveHealthDrops": {
+      "50": 54
+    },
+    "localCenters": 0,
+    "violations": [],
+    "cleanup": [
+      {
+        "damageAreas": 0,
+        "warnings": 0
+      }
+    ],
+    "meanFrameMs": 48.79837734346193,
+    "note": "Counts are observations, not proof of every planned matrix case. Ghoul strike 0/1 deliberately have no Recovery."
+  },
+  {
+    "folder": "F:\\UnityStore\\MonsterSupergroup\\Logs\\LimboReference\\attack-stage2-r1-Skeleton0-pair\\host",
+    "counts": {
+      "phase": 347,
+      "handoff": 4,
+      "damage-attempt": 10,
+      "suppressed-phase-edge": 133,
+      "release": 2
+    },
+    "activeEntries": {
+      "Skeleton/v0/strike0": 53,
+      "Skeleton/v2/strike0": 14
+    },
+    "completeWAR": {
+      "Skeleton/v0/LD/strike0": 21,
+      "Skeleton/v0/RD/strike0": 13,
+      "Skeleton/v0/RU/strike0": 7,
+      "Skeleton/v0/LU/strike0": 11,
+      "Skeleton/v2/LD/strike0": 14
+    },
+    "damageAttempts": {
+      "50": 10
+    },
+    "effectiveHealthDrops": {
+      "50": 10
+    },
+    "localCenters": 0,
+    "violations": [],
+    "cleanup": [
+      {
+        "damageAreas": 0,
+        "warnings": 0
+      }
+    ],
+    "meanFrameMs": 47.40285334892723,
+    "note": "Counts are observations, not proof of every planned matrix case. Ghoul strike 0/1 deliberately have no Recovery."
+  },
+  {
+    "folder": "F:\\UnityStore\\MonsterSupergroup\\Logs\\LimboReference\\attack-stage2-r1-Skeleton0-solo\\host",
+    "counts": {
+      "phase": 344,
+      "suppressed-phase-edge": 136,
+      "damage-attempt": 67,
+      "release": 2
+    },
+    "activeEntries": {
+      "Skeleton/v0/strike0": 54,
+      "Skeleton/v2/strike0": 14
+    },
+    "completeWAR": {
+      "Skeleton/v0/LD/strike0": 28,
+      "Skeleton/v0/RD/strike0": 7,
+      "Skeleton/v0/RU/strike0": 7,
+      "Skeleton/v0/LU/strike0": 12,
+      "Skeleton/v2/LD/strike0": 14
+    },
+    "damageAttempts": {
+      "50": 67
+    },
+    "effectiveHealthDrops": {
+      "50": 67
+    },
+    "localCenters": 0,
+    "violations": [],
+    "cleanup": [
+      {
+        "damageAreas": 0,
+        "warnings": 0
+      }
+    ],
+    "meanFrameMs": 47.76606209215846,
+    "note": "Counts are observations, not proof of every planned matrix case. Ghoul strike 0/1 deliberately have no Recovery."
+  },
+  {
+    "folder": "F:\\UnityStore\\MonsterSupergroup\\Logs\\LimboReference\\attack-stage2-r1-Skeleton2-pair\\client",
+    "counts": {
+      "phase": 291,
+      "handoff": 4,
+      "suppressed-phase-edge": 106,
+      "damage-attempt": 39,
+      "release": 1
+    },
+    "activeEntries": {
+      "Skeleton/v2/strike0": 53
+    },
+    "completeWAR": {
+      "Skeleton/v2/LD/strike0": 24,
+      "Skeleton/v2/RD/strike0": 12,
+      "Skeleton/v2/RU/strike0": 7,
+      "Skeleton/v2/LU/strike0": 9
+    },
+    "damageAttempts": {
+      "50": 39
+    },
+    "effectiveHealthDrops": {
+      "50": 39
+    },
+    "localCenters": 0,
+    "violations": [],
+    "cleanup": [
+      {
+        "damageAreas": 0,
+        "warnings": 0
+      }
+    ],
+    "meanFrameMs": 55.28096717218561,
+    "note": "Counts are observations, not proof of every planned matrix case. Ghoul strike 0/1 deliberately have no Recovery."
+  },
+  {
+    "folder": "F:\\UnityStore\\MonsterSupergroup\\Logs\\LimboReference\\attack-stage2-r1-Skeleton2-pair\\host",
+    "counts": {
+      "phase": 300,
+      "handoff": 4,
+      "damage-attempt": 11,
+      "suppressed-phase-edge": 106,
+      "release": 1
+    },
+    "activeEntries": {
+      "Skeleton/v2/strike0": 53
+    },
+    "completeWAR": {
+      "Skeleton/v2/LD/strike0": 24,
+      "Skeleton/v2/RD/strike0": 12,
+      "Skeleton/v2/RU/strike0": 7,
+      "Skeleton/v2/LU/strike0": 9
+    },
+    "damageAttempts": {
+      "50": 11
+    },
+    "effectiveHealthDrops": {
+      "50": 11
+    },
+    "localCenters": 0,
+    "violations": [],
+    "cleanup": [
+      {
+        "damageAreas": 0,
+        "warnings": 0
+      }
+    ],
+    "meanFrameMs": 52.018404103468995,
+    "note": "Counts are observations, not proof of every planned matrix case. Ghoul strike 0/1 deliberately have no Recovery."
+  },
+  {
+    "folder": "F:\\UnityStore\\MonsterSupergroup\\Logs\\LimboReference\\attack-stage2-r1-Skeleton2-solo\\host",
+    "counts": {
+      "phase": 303,
+      "suppressed-phase-edge": 112,
+      "damage-attempt": 55,
+      "release": 1
+    },
+    "activeEntries": {
+      "Skeleton/v2/strike0": 56
+    },
+    "completeWAR": {
+      "Skeleton/v2/LD/strike0": 32,
+      "Skeleton/v2/RD/strike0": 7,
+      "Skeleton/v2/RU/strike0": 7,
+      "Skeleton/v2/LU/strike0": 10
+    },
+    "damageAttempts": {
+      "50": 55
+    },
+    "effectiveHealthDrops": {
+      "50": 55
+    },
+    "localCenters": 0,
+    "violations": [],
+    "cleanup": [
+      {
+        "damageAreas": 0,
+        "warnings": 0
+      }
+    ],
+    "meanFrameMs": 52.698129279739774,
+    "note": "Counts are observations, not proof of every planned matrix case. Ghoul strike 0/1 deliberately have no Recovery."
+  }
+]

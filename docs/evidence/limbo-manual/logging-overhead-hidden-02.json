@@ -1,0 +1,71 @@
+{
+  "note": "Same final build, solo technical input, debug panels collapsed before elapsed 30. Compare elapsed [30,50] seconds; medians over one-second samples. Actual enemy/kill counts not used to infer pressure or isolate CPU costs. Write/flush metrics cover buffered log wrapper, not Unity logging or all serialization.",
+  "detailed": {
+    "samples": 19,
+    "closed": true,
+    "measures": {
+      "meanFrameMs": {
+        "median": 16.705373191833495,
+        "max": 17.246148306747962
+      },
+      "p95FrameMs": {
+        "median": 16.94969367980957,
+        "max": 17.059799194335938
+      },
+      "maxFrameMs": {
+        "median": 17.060701370239258,
+        "max": 48.88309860229492
+      },
+      "logWriteMs": {
+        "median": 0.007799999999999918,
+        "max": 0.014799999999999702
+      },
+      "logFlushMs": {
+        "median": 0.0852999999999895,
+        "max": 4.469000000000001
+      },
+      "logLines": {
+        "median": 11,
+        "max": 26
+      },
+      "openWriters": {
+        "median": 5,
+        "max": 5
+      }
+    }
+  },
+  "light": {
+    "samples": 20,
+    "closed": true,
+    "measures": {
+      "meanFrameMs": {
+        "median": 16.715475002924602,
+        "max": 19.278745852983914
+      },
+      "p95FrameMs": {
+        "median": 16.95960521697998,
+        "max": 39.0137939453125
+      },
+      "maxFrameMs": {
+        "median": 17.064204216003418,
+        "max": 101.54549407958984
+      },
+      "logWriteMs": {
+        "median": 0.007350000000000079,
+        "max": 0.014899999999999913
+      },
+      "logFlushMs": {
+        "median": 0.06550000000000189,
+        "max": 0.134999999999998
+      },
+      "logLines": {
+        "median": 9.0,
+        "max": 21
+      },
+      "openWriters": {
+        "median": 5.0,
+        "max": 5
+      }
+    }
+  }
+}

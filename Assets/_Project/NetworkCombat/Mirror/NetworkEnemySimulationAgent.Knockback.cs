@@ -46,7 +46,10 @@ namespace MonsterSupergroup.NetworkCombat
             // The original Enemy rejects overlapping knockbacks. Consuming its command identity
             // preserves that decision; a duplicate must not apply later after recovery.
             if (!IsCanonicalAlive || HasActiveNetworkKnockback) return false;
-            if (command.InterruptedActionId != 0 && command.InterruptedActionId != CurrentActionId) return false;
+            // Timed attacks always identify the action at admission, including zero (no action).
+            // A delayed idle hit must not cancel a new attack which began in transit.
+            if ((enemyController.attackScript?.SupportsSharedTimeline == true || command.InterruptedActionId != 0) &&
+                command.InterruptedActionId != CurrentActionId) return false;
             ReleaseNetworkKnockbackPreset();
             var preset = command.Settings.CreateRuntimePreset();
             try
@@ -122,17 +125,17 @@ namespace MonsterSupergroup.NetworkCombat
                 hit.KnockbackPresentation == null || (!hit.KnockbackPresentation.HasKnockback && !hit.KnockbackPresentation.Staggers)) return;
             var report = new OrdinaryHitKnockback
             {
-                InterruptedActionId = enemyController.attackScript is AstralShift.HellMaiden.AI.Enemy.SequenceEnemyAttack ? CurrentActionId : 0,
+                InterruptedActionId = enemyController.attackScript?.SupportsSharedTimeline == true ? CurrentActionId : 0,
                 Requested = true, AssignmentEpoch = assignment.Epoch, Origin = hit.AttackPosition,
                 HitNetworkTime = EnemySimulationClock.Now, MultiplierSum = hit.Attack.Stats.KnockbackMultiplierSum
             };
             var collector = owner.GetComponent<MirrorNetworkCombatBridge>()?.Collector;
             if (collector == null || !collector.TryAttachKnockback(context.EventId.Value, netId, report)) return;
             RequestedOrdinaryKnockbackCount++;
-            // A combo cancellation is replicated and irreversible. Ghoul waits for the
-            // existing GAS admission before broadcasting it; no speculative cancellation
+            // Shared timed attacks wait for existing GAS admission before cancellation;
+            // no speculative cancellation
             // can escape in movement checkpoints and later resurrect on rejection.
-            if (enemyController.attackScript is AstralShift.HellMaiden.AI.Enemy.SequenceEnemyAttack) return;
+            if (enemyController.attackScript?.SupportsSharedTimeline == true) return;
 
             // The assigned simulator never waits for its own result to cross Mirror, including a Host server body.
             bool localAssignment = assignment.Host == EnemySimulationHost.ClientPlayer

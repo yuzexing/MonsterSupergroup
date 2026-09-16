@@ -53,6 +53,8 @@ namespace MonsterSupergroup.NetworkCombat
                 {
                     EnemyEntityId = enemy.netId, AssignmentEpoch = assignment.Epoch, SourcePlayerId = sourcePlayerId,
                     AbilityCombatId = abilityCombatId, RootEventId = admittedRootId, CommandId = ++knockbackCommandId,
+                    InterruptedActionId = enemy.GetComponent<AstralShift.HellMaiden.AI.Enemy.EnemyController>()?.attackScript?.SupportsSharedTimeline == true
+                        ? snapshot.Runtime.Action.ActionId : 0,
                     IssuedAt = EnemySimulationClock.Now, Origin = origin, Settings = preset
                 };
                 RouteKnockback(enemy, command);

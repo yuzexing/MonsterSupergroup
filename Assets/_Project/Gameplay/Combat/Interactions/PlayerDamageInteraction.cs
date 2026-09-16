@@ -13,6 +13,15 @@ namespace AstralShift.HellMaiden.Interactions
 {
 	public class PlayerDamageInteraction : Interaction
 	{
+        private AstralShift.HellMaiden.AI.EnemyAttackWindow attackWindow;
+        private AstralShift.HellMaiden.AI.EnemyContactStamp pendingAttackContact;
+        public AstralShift.HellMaiden.AI.EnemyContactStamp LastAttackContact => pendingAttackContact;
+        public void ConfigureAttackWindow(AstralShift.HellMaiden.AI.EnemyAttackWindow window)
+        {
+            if (attackWindow != window) DiscardPendingCollisions();
+            attackWindow = window;
+            FlushPendingCollisionsOnDisable = window == null;
+        }
 		[SerializeField]
 		protected bool directDamage;
 
@@ -57,6 +66,11 @@ namespace AstralShift.HellMaiden.Interactions
 
 		public override void Interact(IInteractor interactor)
 		{
+            if (attackWindow != null)
+            {
+                if (!attackWindow.TryCapture(out var stamp)) return;
+                pendingAttackContact = stamp;
+            }
             if (localProjectileMode)
             {
                 if (!isActiveAndEnabled || localProjectileConsumed ||
@@ -196,6 +210,8 @@ namespace AstralShift.HellMaiden.Interactions
 
 		private void VerifyCollisions()
 		{
+            if (attackWindow != null && !attackWindow.CanSettle(pendingAttackContact))
+            { DiscardPendingCollisions(); return; }
 			_processedPlayerOwners.Clear();
 			var damagedObjects = new HashSet<EnemyDamageableObject>();
 			bool processedLocalPlayer = false;

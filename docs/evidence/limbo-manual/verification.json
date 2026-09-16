@@ -1,0 +1,571 @@
+{
+  "version": "P6-20260916-02",
+  "status": "technical-validation-complete-with-documented-limitations",
+  "date": "2026-09-16",
+  "sourceCommit": "788a214a6cf3da3ea1f6c43fa8358c76982b43a4",
+  "sourceState": "Uncommitted Phase 6 changes captured at build freeze; runtime code/resources unchanged after freezing version 02. Post-run audit/report changes do not alter runtime.",
+  "baseline": {
+    "height": 720,
+    "graphics": "D3D11",
+    "hp": 500,
+    "enemyClips": 31,
+    "xpDenominator": 841.5766649882,
+    "targetFps": 60,
+    "xpModifier": 2,
+    "seed": 14301,
+    "manualHelpers": false,
+    "weaponId": 1,
+    "map": "Nordic",
+    "moveSpeed": 4.55,
+    "transitionRequest": 720.9,
+    "width": 1280
+  },
+  "sameRuntimeFilesVerified": 495,
+  "tests": {
+    "edit": {
+      "total": "780",
+      "passed": "780",
+      "failed": "0",
+      "skipped": "0",
+      "result": "Passed",
+      "duration": "6.6598505"
+    },
+    "play": {
+      "total": "523",
+      "passed": "523",
+      "failed": "0",
+      "skipped": "0",
+      "result": "Passed",
+      "duration": "353.8257911"
+    }
+  },
+  "runs": {
+    "solo-final-02": {
+      "host": {
+        "runId": "01c6d7764cf54fa4b10db24e44d31753",
+        "requestedAt": 720.9009586465545,
+        "completedAt": 720.9009586465545,
+        "waitWallSeconds": 7.950000008349889e-05,
+        "births": 2521,
+        "confirmedKills": 2097,
+        "sampledAlivePeak": 490,
+        "endAlive": 135,
+        "sourceEndAlive": 131,
+        "spawnEvents": {
+          "spawn": 2521,
+          "death": 2097,
+          "reposition": 378,
+          "retired": 277,
+          "barrier-decision": 15,
+          "self-destruct": 12,
+          "formation-skipped": 1,
+          "transition-request": 1,
+          "completed": 1
+        },
+        "initial": [
+          {
+            "player": 2,
+            "health": 500,
+            "maximum": 500,
+            "speed": 4.550000190734863,
+            "xpModifier": 2.0,
+            "build": {
+              "InitialWeaponId": 1,
+              "InitialWeaponSlot": 0,
+              "Weapons": [
+                {
+                  "SlotIndex": 0,
+                  "WeaponId": 1
+                }
+              ],
+              "Equipment": [],
+              "Perks": []
+            }
+          }
+        ],
+        "helperEvents": {
+          "test-card": 67,
+          "test-heal": 44
+        },
+        "acceptedChoices": 67,
+        "cleanup": "all observed damage/warning/trap counts zero",
+        "performance": {
+          "meanFrameMs": {
+            "samples": 753,
+            "median": 17.83821045724969,
+            "p95": 874.1385498046875,
+            "maximum": 1042.310302734375
+          },
+          "p95FrameMs": {
+            "samples": 753,
+            "median": 20.994699478149414,
+            "p95": 881.6972045898438,
+            "maximum": 1042.310302734375
+          },
+          "maxFrameMs": {
+            "samples": 753,
+            "median": 23.741504669189453,
+            "p95": 882.14892578125,
+            "maximum": 1424.9981689453125
+          },
+          "logWriteMs": {
+            "samples": 753,
+            "median": 0.014500000000001734,
+            "p95": 0.17089999999997474,
+            "maximum": 19.264200000000017
+          },
+          "logFlushMs": {
+            "samples": 753,
+            "median": 0.07329999999999615,
+            "p95": 0.12839999999998497,
+            "maximum": 9.793899999999999
+          }
+        },
+        "restart": [
+          {
+            "runId": "bd2c28bd3a8c4555bd789bbd5d0c3baf",
+            "initial": [
+              {
+                "player": 3574,
+                "health": 500,
+                "maximum": 500,
+                "speed": 4.550000190734863,
+                "xpModifier": 2.0,
+                "build": {
+                  "InitialWeaponId": 1,
+                  "InitialWeaponSlot": 0,
+                  "Weapons": [
+                    {
+                      "SlotIndex": 0,
+                      "WeaponId": 1
+                    }
+                  ],
+                  "Equipment": [],
+                  "Perks": []
+                }
+              }
+            ],
+            "ending": [
+              "interrupted: process-exit"
+            ]
+          }
+        ]
+      }
+    },
+    "pair-final-02": {
+      "host": {
+        "runId": "112e9833e0514d0caf95b287fa186d78",
+        "requestedAt": 720.9007214331068,
+        "completedAt": 729.103852421511,
+        "waitWallSeconds": 8.190676199999984,
+        "births": 4665,
+        "confirmedKills": 4624,
+        "sampledAlivePeak": 145,
+        "endAlive": 16,
+        "sourceEndAlive": 16,
+        "spawnEvents": {
+          "spawn": 4665,
+          "death": 4624,
+          "retired": 2,
+          "barrier-decision": 8,
+          "self-destruct": 23,
+          "transition-request": 1,
+          "completed": 1
+        },
+        "initial": [
+          {
+            "player": 2,
+            "health": 500,
+            "maximum": 500,
+            "speed": 4.550000190734863,
+            "xpModifier": 2.0,
+            "build": {
+              "InitialWeaponId": 1,
+              "InitialWeaponSlot": 0,
+              "Weapons": [
+                {
+                  "SlotIndex": 0,
+                  "WeaponId": 1
+                }
+              ],
+              "Equipment": [],
+              "Perks": []
+            }
+          }
+        ],
+        "helperEvents": {
+          "test-card": 82,
+          "test-heal": 10,
+          "test-queue": 1
+        },
+        "acceptedChoices": 154,
+        "cleanup": "all observed damage/warning/trap counts zero",
+        "performance": {
+          "meanFrameMs": {
+            "samples": 725,
+            "median": 16.738253180185954,
+            "p95": 27.245735013807142,
+            "maximum": 37.43266628406666
+          },
+          "p95FrameMs": {
+            "samples": 725,
+            "median": 17.037500381469727,
+            "p95": 55.07760238647461,
+            "maximum": 90.94280242919922
+          },
+          "maxFrameMs": {
+            "samples": 725,
+            "median": 17.492197036743164,
+            "p95": 74.20769500732422,
+            "maximum": 156.04470825195312
+          },
+          "logWriteMs": {
+            "samples": 725,
+            "median": 0.16300000000001802,
+            "p95": 0.9140000000010389,
+            "maximum": 1.3231000000012045
+          },
+          "logFlushMs": {
+            "samples": 725,
+            "median": 0.08310000000000173,
+            "p95": 0.15330000000000155,
+            "maximum": 9.8991
+          }
+        },
+        "restart": [
+          {
+            "runId": "3e4d3fd9458a467f9eb13c2d7f929832",
+            "initial": [
+              {
+                "player": 6983,
+                "health": 500,
+                "maximum": 500,
+                "speed": 4.550000190734863,
+                "xpModifier": 2.0,
+                "build": {
+                  "InitialWeaponId": 1,
+                  "InitialWeaponSlot": 0,
+                  "Weapons": [
+                    {
+                      "SlotIndex": 0,
+                      "WeaponId": 1
+                    }
+                  ],
+                  "Equipment": [],
+                  "Perks": []
+                }
+              }
+            ],
+            "ending": [
+              "interrupted: process-exit"
+            ]
+          }
+        ]
+      },
+      "client": {
+        "runId": "112e9833e0514d0caf95b287fa186d78",
+        "requestedAt": 720.9007214331068,
+        "completedAt": 729.103852421511,
+        "waitWallSeconds": 8.22791810000001,
+        "births": 4665,
+        "confirmedKills": 4624,
+        "sampledAlivePeak": 144,
+        "endAlive": 16,
+        "sourceEndAlive": 16,
+        "spawnEvents": null,
+        "initial": [
+          {
+            "player": 3,
+            "health": 500,
+            "maximum": 500,
+            "speed": 4.550000190734863,
+            "xpModifier": 2.0,
+            "build": {
+              "InitialWeaponId": 1,
+              "InitialWeaponSlot": 0,
+              "Weapons": [
+                {
+                  "SlotIndex": 0,
+                  "WeaponId": 1
+                }
+              ],
+              "Equipment": [],
+              "Perks": []
+            }
+          }
+        ],
+        "helperEvents": {
+          "test-card": 72,
+          "test-heal": 12
+        },
+        "acceptedChoices": 0,
+        "cleanup": "all observed damage/warning/trap counts zero",
+        "performance": {
+          "meanFrameMs": {
+            "samples": 727,
+            "median": 16.719358348846434,
+            "p95": 17.584696552209685,
+            "maximum": 22.055069591688074
+          },
+          "p95FrameMs": {
+            "samples": 727,
+            "median": 16.9989013671875,
+            "p95": 17.54859733581543,
+            "maximum": 63.61799621582031
+          },
+          "maxFrameMs": {
+            "samples": 727,
+            "median": 17.085203170776367,
+            "p95": 55.024497985839844,
+            "maximum": 238.68479919433594
+          },
+          "logWriteMs": {
+            "samples": 727,
+            "median": 0.15559999999997842,
+            "p95": 0.9654000000005567,
+            "maximum": 2.3898000000001502
+          },
+          "logFlushMs": {
+            "samples": 727,
+            "median": 0.04860000000000042,
+            "p95": 0.10500000000000398,
+            "maximum": 9.7758
+          }
+        },
+        "restart": [
+          {
+            "runId": "3e4d3fd9458a467f9eb13c2d7f929832",
+            "initial": [
+              {
+                "player": 6984,
+                "health": 500,
+                "maximum": 500,
+                "speed": 4.550000190734863,
+                "xpModifier": 2.0,
+                "build": {
+                  "InitialWeaponId": 1,
+                  "InitialWeaponSlot": 0,
+                  "Weapons": [
+                    {
+                      "SlotIndex": 0,
+                      "WeaponId": 1
+                    }
+                  ],
+                  "Equipment": [],
+                  "Perks": []
+                }
+              }
+            ],
+            "ending": [
+              "interrupted: process-exit"
+            ]
+          }
+        ]
+      },
+      "firstCompletedBirthComparison": {
+        "missingClient": [],
+        "extraClient": [],
+        "differing": []
+      },
+      "round2Note": "Round 2 Client closed at 25.33 s before Host at 37.25 s. Twenty subsequent Host births are retained in raw comparison, not classified as missing replication in the completed round."
+    }
+  },
+  "manual": {
+    "manual-02-summary": {
+      "host": {
+        "closed": true,
+        "automaticScreenshots": 0,
+        "initial": [
+          [
+            {
+              "player": 2,
+              "health": 500,
+              "maximum": 500,
+              "speed": 4.550000190734863,
+              "xpModifier": 2.0,
+              "build": {
+                "InitialWeaponId": 1,
+                "InitialWeaponSlot": 0,
+                "Weapons": [
+                  {
+                    "SlotIndex": 0,
+                    "WeaponId": 1
+                  }
+                ],
+                "Equipment": [],
+                "Perks": []
+              }
+            }
+          ]
+        ],
+        "endings": [
+          "left-gameplay"
+        ],
+        "helperEvents": 0,
+        "damageChanges": 2
+      }
+    },
+    "manual-pair-02-summary": {
+      "host": {
+        "closed": true,
+        "automaticScreenshots": 0,
+        "initial": [
+          [
+            {
+              "player": 2,
+              "health": 500,
+              "maximum": 500,
+              "speed": 4.550000190734863,
+              "xpModifier": 2.0,
+              "build": {
+                "InitialWeaponId": 1,
+                "InitialWeaponSlot": 0,
+                "Weapons": [
+                  {
+                    "SlotIndex": 0,
+                    "WeaponId": 1
+                  }
+                ],
+                "Equipment": [],
+                "Perks": []
+              }
+            }
+          ]
+        ],
+        "endings": [
+          "interrupted: process-exit"
+        ],
+        "helperEvents": 0,
+        "damageChanges": 0
+      },
+      "client": {
+        "closed": true,
+        "automaticScreenshots": 0,
+        "initial": [
+          [
+            {
+              "player": 3,
+              "health": 500,
+              "maximum": 500,
+              "speed": 4.550000190734863,
+              "xpModifier": 2.0,
+              "build": {
+                "InitialWeaponId": 1,
+                "InitialWeaponSlot": 0,
+                "Weapons": [
+                  {
+                    "SlotIndex": 0,
+                    "WeaponId": 1
+                  }
+                ],
+                "Equipment": [],
+                "Perks": []
+              }
+            }
+          ]
+        ],
+        "endings": [
+          "interrupted: process-exit"
+        ],
+        "helperEvents": 0,
+        "damageChanges": 3
+      }
+    }
+  },
+  "notClaimed": [
+    "Human gameplay pressure validation",
+    "Spine",
+    "Minos battle",
+    "XP/camera source calibration",
+    "Complete disconnect/revival matrix",
+    "Original-game same-conditions pressure comparison"
+  ],
+  "knownIssues": [
+    "Expanded Enemy Debug list in technical Development runs can cause severe frame stalls at hundreds of enemies. Manual entries disable the component; technical runs explicitly collapse it.",
+    "Development build emits Animancer AnimatorSpeed/Null-event warnings and startup FMOD Listener/EventSystem warnings; these enlarge player.log. No observed exception or birth mismatch in final runs.",
+    "Initial no-graphics PlayMode had one ordinary-orb handoff assertion failure (522/523). D3D11 full suites, including final 523/523, passed without changing that assertion; isolated cause remains unconfirmed.",
+    "Technical runs are assisted. Frame samples include diagnostics, captures and test-machine overhead; no sustained 60 FPS guarantee.",
+    "Health source is unknown where correlation is not reliable. Abnormal exit can lose about the final second of buffered logs."
+  ],
+  "actionSampleComparison": {
+    "description": "Common sampled actions keyed by run/enemy/action/phase/strike. Timings tolerance 1e-6 seconds; counts need not match because rendering and sampling occur on different frames. This is not a full handoff matrix or proof of every attempted hit.",
+    "hostSamples": 2135,
+    "clientSamples": 2135,
+    "commonSamples": 2116,
+    "different": [],
+    "hostOnly": 19,
+    "clientOnly": 19
+  },
+  "loggingOverhead": {
+    "note": "Same final build, solo technical input, debug panels collapsed before elapsed 30. Compare elapsed [30,50] seconds; medians over one-second samples. Actual enemy/kill counts not used to infer pressure or isolate CPU costs. Write/flush metrics cover buffered log wrapper, not Unity logging or all serialization.",
+    "detailed": {
+      "samples": 19,
+      "closed": true,
+      "measures": {
+        "meanFrameMs": {
+          "median": 16.705373191833495,
+          "max": 17.246148306747962
+        },
+        "p95FrameMs": {
+          "median": 16.94969367980957,
+          "max": 17.059799194335938
+        },
+        "maxFrameMs": {
+          "median": 17.060701370239258,
+          "max": 48.88309860229492
+        },
+        "logWriteMs": {
+          "median": 0.007799999999999918,
+          "max": 0.014799999999999702
+        },
+        "logFlushMs": {
+          "median": 0.0852999999999895,
+          "max": 4.469000000000001
+        },
+        "logLines": {
+          "median": 11,
+          "max": 26
+        },
+        "openWriters": {
+          "median": 5,
+          "max": 5
+        }
+      }
+    },
+    "light": {
+      "samples": 20,
+      "closed": true,
+      "measures": {
+        "meanFrameMs": {
+          "median": 16.715475002924602,
+          "max": 19.278745852983914
+        },
+        "p95FrameMs": {
+          "median": 16.95960521697998,
+          "max": 39.0137939453125
+        },
+        "maxFrameMs": {
+          "median": 17.064204216003418,
+          "max": 101.54549407958984
+        },
+        "logWriteMs": {
+          "median": 0.007350000000000079,
+          "max": 0.014899999999999913
+        },
+        "logFlushMs": {
+          "median": 0.06550000000000189,
+          "max": 0.134999999999998
+        },
+        "logLines": {
+          "median": 9.0,
+          "max": 21
+        },
+        "openWriters": {
+          "median": 5.0,
+          "max": 5
+        }
+      }
+    }
+  },
+  "evidence": "Limbo-P6-20260916-02-evidence.zip contains final-run raw records, screenshots, tests and summaries. Historical candidate failures remain in project Logs."
+}

@@ -1,0 +1,15 @@
+{
+  "version": "P6-20260916-02",
+  "runtimeFiles": 498,
+  "package": {
+    "path": "F:\\UnityStore\\MonsterSupergroup\\Builds\\Limbo-P6-20260916-02.zip",
+    "bytes": 410695928,
+    "sha256": "9a19885ed4e2ff609119833fbb9977993a0258ed96685129260ffa0f02830670"
+  },
+  "evidence": {
+    "path": "F:\\UnityStore\\MonsterSupergroup\\Builds\\Limbo-P6-20260916-02-evidence.zip",
+    "bytes": 230291546,
+    "sha256": "b4a8e42cd6aea5fdf4f460aa3b8c6b851d9d7e6587fe77a3382c98d45e004f39"
+  },
+  "verification": "Both ZIP CRC checks passed; every packaged file matched delivery-files.json."
+}

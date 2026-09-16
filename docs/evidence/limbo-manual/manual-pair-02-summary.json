@@ -1,0 +1,367 @@
+{
+  "host": {
+    "runs": {
+      "b05b6a0aff584e17847134d341acf1e5": {
+        "initial": [
+          {
+            "player": 2,
+            "health": 500,
+            "maximum": 500,
+            "speed": 4.550000190734863,
+            "xpModifier": 2.0,
+            "build": {
+              "InitialWeaponId": 1,
+              "InitialWeaponSlot": 0,
+              "Weapons": [
+                {
+                  "SlotIndex": 0,
+                  "WeaponId": 1
+                }
+              ],
+              "Equipment": [],
+              "Perks": []
+            }
+          }
+        ],
+        "endings": [
+          {
+            "kind": "run-ended",
+            "detail": "interrupted: process-exit",
+            "run": "b05b6a0aff584e17847134d341acf1e5",
+            "role": "host",
+            "payload": "{\"RunId\":\"b05b6a0aff584e17847134d341acf1e5\",\"Phase\":3,\"Wave\":0,\"Elapsed\":68.03552996274084,\"WaveDuration\":30.0,\"Planned\":1199,\"Spawned\":117,\"Skipped\":0,\"Alive\":82,\"Limit\":1000,\"TotalSpawned\":117,\"TotalSkipped\":0,\"ReferenceStage\":true,\"StageEndTime\":720.9,\"CountedAlive\":82,\"ActiveClips\":2,\"EvidenceBlocked\":0,\"TotalAttempts\":117,\"AbandonedBudget\":0,\"TransitionRequestedAt\":0.0,\"TransitionWaitCount\":0,\"TransitionWaitReason\":\"\"}",
+            "round": 1,
+            "realtime": 108.38478680396825,
+            "combat": 95.59747245948596
+          }
+        ],
+        "selections": [
+          {
+            "kind": "selection-interrupted",
+            "detail": "process-exit",
+            "run": "b05b6a0aff584e17847134d341acf1e5",
+            "role": "host",
+            "payload": "{\"seconds\":66.55040929999999}",
+            "round": 1,
+            "realtime": 108.38482130396825,
+            "combat": 95.59747245948596
+          }
+        ],
+        "acceptedChoices": 2,
+        "lastFrame": {
+          "kind": "frame",
+          "role": "host",
+          "snapshot": {
+            "RunId": "b05b6a0aff584e17847134d341acf1e5",
+            "Phase": 3,
+            "Wave": 0,
+            "Elapsed": 68.03552996274084,
+            "WaveDuration": 30.0,
+            "Planned": 1199,
+            "Spawned": 117,
+            "Skipped": 0,
+            "Alive": 82,
+            "Limit": 1000,
+            "TotalSpawned": 117,
+            "TotalSkipped": 0,
+            "ReferenceStage": true,
+            "StageEndTime": 720.9,
+            "CountedAlive": 82,
+            "ActiveClips": 2,
+            "EvidenceBlocked": 0,
+            "TotalAttempts": 117,
+            "AbandonedBudget": 0,
+            "TransitionRequestedAt": 0.0,
+            "TransitionWaitCount": 0,
+            "TransitionWaitReason": ""
+          },
+          "health": 500,
+          "observed": 117,
+          "realtime": 108.20211630396825,
+          "position": {
+            "x": -2.0,
+            "y": 0.0
+          }
+        },
+        "requests": [],
+        "completions": [],
+        "waits": [],
+        "helpers": {},
+        "births": 117,
+        "birthMismatches": [],
+        "confirmedKills": 35,
+        "firstHitToConfirmedDeathSeconds": {
+          "samples": 31,
+          "median": 0.785115597769618,
+          "p95": 1.0362532045692205,
+          "maximum": 1.0528224017471075
+        },
+        "stageCleanup": [],
+        "trapCleanup": [],
+        "healthChanges": [],
+        "acceptedDamageChanges": 0,
+        "trapPhases": {},
+        "actionPhaseSamples": 0,
+        "geometrySamples": 0,
+        "statsBindingFailures": [],
+        "performanceActive": {
+          "meanFrameMs": {
+            "samples": 66,
+            "median": 16.71442829767863,
+            "p95": 16.74711669286092,
+            "maximum": 21.17167313893636
+          },
+          "p95FrameMs": {
+            "samples": 66,
+            "median": 16.977150917053223,
+            "p95": 17.062103271484375,
+            "maximum": 17.06960105895996
+          },
+          "maxFrameMs": {
+            "samples": 66,
+            "median": 17.074000358581543,
+            "p95": 18.35039710998535,
+            "maximum": 133.4456024169922
+          },
+          "logWriteMs": {
+            "samples": 66,
+            "median": 0.006449999999999956,
+            "p95": 0.010399999999999965,
+            "maximum": 0.09249999999999936
+          },
+          "logFlushMs": {
+            "samples": 66,
+            "median": 0.06404999999999816,
+            "p95": 0.12049999999999983,
+            "maximum": 9.9285
+          }
+        },
+        "sampledAlivePeak": 82,
+        "spawnFiles": [
+          {
+            "file": "spawns-b05b6a0aff584e17847134d341acf1e5-20260916-012505-028.csv",
+            "attempts": 117,
+            "successful": 117,
+            "successByClip": {
+              "0": 113,
+              "1": 4
+            },
+            "results": {
+              "Spawned": 117
+            },
+            "events": {
+              "spawn": 117,
+              "death": 35
+            },
+            "completion": null,
+            "conservationDelta": null
+          }
+        ]
+      }
+    },
+    "processClosed": true,
+    "screenshots": 0,
+    "transitionServerLog": [],
+    "runEndLog": [],
+    "errors": []
+  },
+  "client": {
+    "runs": {
+      "b05b6a0aff584e17847134d341acf1e5": {
+        "initial": [
+          {
+            "player": 3,
+            "health": 500,
+            "maximum": 500,
+            "speed": 4.550000190734863,
+            "xpModifier": 2.0,
+            "build": {
+              "InitialWeaponId": 1,
+              "InitialWeaponSlot": 0,
+              "Weapons": [
+                {
+                  "SlotIndex": 0,
+                  "WeaponId": 1
+                }
+              ],
+              "Equipment": [],
+              "Perks": []
+            }
+          }
+        ],
+        "endings": [
+          {
+            "kind": "run-ended",
+            "detail": "interrupted: process-exit",
+            "run": "b05b6a0aff584e17847134d341acf1e5",
+            "role": "client",
+            "payload": "{\"RunId\":\"b05b6a0aff584e17847134d341acf1e5\",\"Phase\":2,\"Wave\":0,\"Elapsed\":67.95193775650114,\"WaveDuration\":30.0,\"Planned\":1199,\"Spawned\":117,\"Skipped\":0,\"Alive\":82,\"Limit\":1000,\"TotalSpawned\":117,\"TotalSkipped\":0,\"ReferenceStage\":true,\"StageEndTime\":720.9,\"CountedAlive\":82,\"ActiveClips\":2,\"EvidenceBlocked\":0,\"TotalAttempts\":117,\"AbandonedBudget\":0,\"TransitionRequestedAt\":0.0,\"TransitionWaitCount\":0,\"TransitionWaitReason\":\"\"}",
+            "round": 1,
+            "realtime": 74.08296470124716,
+            "combat": 95.58978202139055
+          }
+        ],
+        "selections": [
+          {
+            "kind": "selection-close",
+            "detail": "Measured wall time; combat pause recorded separately",
+            "run": "b05b6a0aff584e17847134d341acf1e5",
+            "role": "client",
+            "payload": "{\"seconds\":36.0921241}",
+            "round": 1,
+            "realtime": 52.562263501247166,
+            "combat": 74.08192185191727
+          },
+          {
+            "kind": "selection-interrupted",
+            "detail": "process-exit",
+            "run": "b05b6a0aff584e17847134d341acf1e5",
+            "role": "client",
+            "payload": "{\"seconds\":20.1863361}",
+            "round": 1,
+            "realtime": 74.08299480124717,
+            "combat": 95.58978202139055
+          }
+        ],
+        "acceptedChoices": 0,
+        "lastFrame": {
+          "kind": "frame",
+          "role": "client",
+          "snapshot": {
+            "RunId": "b05b6a0aff584e17847134d341acf1e5",
+            "Phase": 2,
+            "Wave": 0,
+            "Elapsed": 67.14993626158684,
+            "WaveDuration": 30.0,
+            "Planned": 1199,
+            "Spawned": 116,
+            "Skipped": 0,
+            "Alive": 81,
+            "Limit": 1000,
+            "TotalSpawned": 116,
+            "TotalSkipped": 0,
+            "ReferenceStage": true,
+            "StageEndTime": 720.9,
+            "CountedAlive": 81,
+            "ActiveClips": 2,
+            "EvidenceBlocked": 0,
+            "TotalAttempts": 116,
+            "AbandonedBudget": 0,
+            "TransitionRequestedAt": 0.0,
+            "TransitionWaitCount": 0,
+            "TransitionWaitReason": ""
+          },
+          "health": 350,
+          "observed": 116,
+          "realtime": 73.18381560124716,
+          "position": {
+            "x": 1.9338815212249756,
+            "y": 0.06756481528282166
+          }
+        },
+        "requests": [],
+        "completions": [],
+        "waits": [],
+        "helpers": {},
+        "births": 117,
+        "birthMismatches": [],
+        "confirmedKills": 35,
+        "firstHitToConfirmedDeathSeconds": {
+          "samples": 35,
+          "median": 0.8465776225685175,
+          "p95": 1.0587203596255286,
+          "maximum": 1.1030296955640395
+        },
+        "stageCleanup": [],
+        "trapCleanup": [],
+        "healthChanges": [
+          {
+            "kind": "health",
+            "role": "client",
+            "run": "b05b6a0aff584e17847134d341acf1e5",
+            "source": "unknown",
+            "round": 1,
+            "elapsed": 46.46970665920526,
+            "realtime": 52.581570001247165,
+            "previous": 500,
+            "current": 450,
+            "maximum": 500
+          },
+          {
+            "kind": "health",
+            "role": "client",
+            "run": "b05b6a0aff584e17847134d341acf1e5",
+            "source": "unknown",
+            "round": 1,
+            "elapsed": 47.0711462656036,
+            "realtime": 53.211992401247166,
+            "previous": 450,
+            "current": 400,
+            "maximum": 500
+          },
+          {
+            "kind": "health",
+            "role": "client",
+            "run": "b05b6a0aff584e17847134d341acf1e5",
+            "source": "unknown",
+            "round": 1,
+            "elapsed": 47.67283626180142,
+            "realtime": 53.830287601247164,
+            "previous": 400,
+            "current": 350,
+            "maximum": 500
+          }
+        ],
+        "acceptedDamageChanges": 3,
+        "trapPhases": {},
+        "actionPhaseSamples": 0,
+        "geometrySamples": 0,
+        "statsBindingFailures": [],
+        "performanceActive": {
+          "meanFrameMs": {
+            "samples": 66,
+            "median": 16.714085833231607,
+            "p95": 16.857454999287924,
+            "maximum": 20.6876108734696
+          },
+          "p95FrameMs": {
+            "samples": 66,
+            "median": 16.973299026489258,
+            "p95": 17.063003540039062,
+            "maximum": 17.09739875793457
+          },
+          "maxFrameMs": {
+            "samples": 66,
+            "median": 17.066999435424805,
+            "p95": 25.397705078125,
+            "maximum": 143.868896484375
+          },
+          "logWriteMs": {
+            "samples": 66,
+            "median": 0.0034500000000000086,
+            "p95": 0.007999999999999952,
+            "maximum": 0.18259999999999887
+          },
+          "logFlushMs": {
+            "samples": 66,
+            "median": 0.05099999999999927,
+            "p95": 0.11880000000000024,
+            "maximum": 0.21679999999999922
+          }
+        },
+        "sampledAlivePeak": 82,
+        "spawnFiles": []
+      }
+    },
+    "processClosed": true,
+    "screenshots": 0,
+    "transitionServerLog": [],
+    "runEndLog": [],
+    "errors": []
+  },
+  "comparison": {
+    "missingClient": [],
+    "extraClient": [],
+    "differing": []
+  }
+}

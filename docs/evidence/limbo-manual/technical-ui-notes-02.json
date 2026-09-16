@@ -1,0 +1,25 @@
+{
+  "version": "P6-20260916-02",
+  "session": "solo-final-02",
+  "changes": [
+    {
+      "stageElapsedApprox": 246,
+      "action": "Pressed F3 to collapse existing enemy debug panel",
+      "reason": "Expanded immediate-mode list renders every enemy row. Several hundred live enemies caused ~900 ms frames; collapsing restored ~16.7 ms without changing simulation or log mode.",
+      "manualEntry": "Already disables this component; this is an explicit technical-run UI state change, not a gameplay assist or enemy configuration change."
+    }
+  ],
+  "fileSizeCheck": "Directory metadata showed 0 bytes for still-open files. Direct reads confirmed current spawn CSV and observer content were flushed and readable.",
+  "pair": {
+    "session": "pair-final-02",
+    "client": {
+      "F3approx": 18,
+      "F2approx": 28
+    },
+    "host": {
+      "F3approx": 65,
+      "F2approx": 74
+    },
+    "purpose": "Collapse existing debug lists only; no difficulty or movement change."
+  }
+}

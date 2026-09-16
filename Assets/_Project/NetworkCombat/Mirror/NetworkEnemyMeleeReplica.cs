@@ -1,17 +1,16 @@
+using System;
 using AstralShift.HellMaiden.AI;
 using AstralShift.HellMaiden.AI.Enemy;
-using AstralShift.HellMaiden.Combat;
-using AstralShift.HellMaiden.Interactions;
-using AstralShift.Pooling;
 using Mirror;
 using UnityEngine;
 
 namespace MonsterSupergroup.NetworkCombat
 {
     /// <summary>
-    /// Reconstructs an EnemyAttackMelee warning and local Player damage window on
-    /// an observing Client. It never enters the legacy Enemy attack state machine.
+    /// One local presentation and local-player hit-window executor per enemy, on every client role.
+    /// The historical component name/GUID is retained for existing prefabs. It never owns movement or HP.
     /// </summary>
+    [DefaultExecutionOrder(100)]
     [DisallowMultipleComponent]
     [RequireComponent(typeof(NetworkEnemySimulationAgent))]
     [RequireComponent(typeof(EnemySimulationAuthority))]
@@ -21,403 +20,150 @@ namespace MonsterSupergroup.NetworkCombat
         [SerializeField] private EnemySimulationAuthority simulationAuthority;
         [SerializeField] private EnemyController controller;
         [SerializeField] private EnemyAttackMelee meleeAttack;
-
-        private GenericPooler<EnemyAttackPrefab> attackPool;
-        private EnemyAttackPrefab attackInstance;
-        private bool instanceBorrowedFromPool;
-        private bool damageWindowActive;
-        private double damageWindowEndNetworkTime;
-        private uint lastAppliedSequence;
-        private uint lastAppliedAssignmentEpoch;
-        private EnemyAttackPresentationPhase lastAppliedPhase;
-        private bool unsupportedAttackLogged;
-        private uint instanceGeneration;
-        private Vector2 dashWarningOrigin;
-        private bool ownsDashWindow;
-        private EnemyAttackDash DashAttack => meleeAttack as EnemyAttackDash;
-        private EnemyAttackExplosion explosionAttack;
-        private EnemyActionState explosionState;
-        private bool ownsExplosionPresentation;
-        private SequenceEnemyAttack sequenceAttack;
-        private EnemyActionState sequenceState, appliedSequenceState;
-        private bool ownsSequencePresentation;
-        public EnemyAttackPrefab ReplicaAttackInstance => ownsSequencePresentation ? sequenceAttack.SimulationAttackInstance : attackInstance;
-        internal EnemyActionState AppliedSequenceState => appliedSequenceState;
-
+        private EnemyAttack attack;
+        private EnemyActionState receivedAction, appliedAction;
+        private EnemyAttackWindow window;
+        private uint generation, lastAppliedSequence, lastAppliedAssignmentEpoch;
+        private ulong cancelledAction;
+        private bool hasAction;
+        public EnemyAttackPrefab ReplicaAttackInstance => attack?.LocalAttackInstance;
         public bool HasReplicaAttackInstance => ReplicaAttackInstance != null;
-
-        public bool DamageWindowActive => damageWindowActive;
-
+        public bool DamageWindowActive => attack != null && attack.LocalDamageEnabled && hasAction;
         public uint LastAppliedSequence => lastAppliedSequence;
-
         public uint LastAppliedAssignmentEpoch => lastAppliedAssignmentEpoch;
+        public EnemyAttackPresentationPhase LastAppliedPhase => appliedAction.Phase;
+        internal EnemyActionState AppliedSequenceState => appliedAction;
+        public EnemyActionState AppliedAction => appliedAction;
+        public static event Action<NetworkEnemyMeleeReplica, string> TimelineObserved;
 
-        public EnemyAttackPresentationPhase LastAppliedPhase => lastAppliedPhase;
-
-        private void Awake()
-        {
-            ResolveReferences();
-        }
-
+        private void Awake() => ResolveReferences();
         private void OnEnable()
         {
             ResolveReferences();
             if (simulationAgent != null)
             {
-                simulationAgent.AttackPresentationChanged -=
-                    HandleAttackPresentationChanged;
-                simulationAgent.AttackPresentationChanged +=
-                    HandleAttackPresentationChanged;
-            }
-            if (simulationAuthority != null)
-            {
-                simulationAuthority.RoleChanged -= HandleRoleChanged;
-                simulationAuthority.RoleChanged += HandleRoleChanged;
+                simulationAgent.AttackPresentationChanged -= HandleAttackPresentationChanged;
+                simulationAgent.AttackPresentationChanged += HandleAttackPresentationChanged;
             }
         }
 
-        private void Update()
+        private void LateUpdate()
         {
-            if (sequenceAttack != null)
-            {
-                if (simulationAgent == null || !simulationAgent.IsCanonicalAlive || simulationAuthority == null || !simulationAuthority.ConsumesSnapshots)
-                { if (ownsSequencePresentation) ReleaseAttackInstance(); return; }
-                if (ownsSequencePresentation) UpdateSequencePresentation(false);
-                return;
-            }
-            if (explosionAttack != null)
-            {
-                if (simulationAgent == null || !simulationAgent.IsCanonicalAlive || simulationAuthority == null || !simulationAuthority.ConsumesSnapshots)
-                { if (ownsExplosionPresentation) ReleaseAttackInstance(); return; }
-                if (explosionState.Explosion && EnemySimulationClock.CombatNow >= explosionState.ActiveUntil)
-                    explosionAttack.CloseExpiredWindow();
-                return;
-            }
-            if (attackInstance != null && DashAttack != null) attackInstance.transform.position = dashWarningOrigin;
-            if (attackInstance != null &&
-                (simulationAgent == null || !simulationAgent.IsCanonicalAlive ||
-                 simulationAuthority == null ||
-                 !simulationAuthority.ConsumesSnapshots))
-            {
-                ReleaseAttackInstance();
-                return;
-            }
+            if (attack == null || !attack.SupportsSharedTimeline) return;
+            if (!NetworkClient.active || simulationAgent == null || !simulationAgent.ProductEnemyInitialized ||
+                !simulationAgent.IsCanonicalAlive || controller.DeathRequested || !controller.IsAlive ||
+                BootGameplayNetworkManager.CombatHasEnded || simulationAuthority == null ||
+                simulationAuthority.Role == EnemySimulationRole.Frozen)
+            { ReleaseAction(); return; }
 
-            if (damageWindowActive &&
-                EnemySimulationClock.CombatNow >= damageWindowEndNetworkTime)
-            {
-                FinishWindowAndPresentation();
-            }
+            var state = simulationAuthority.RunsCombatDecisions
+                ? controller.CaptureSimulationAction(EnemySimulationClock.CombatNow) : receivedAction;
+            if (state.ActionId == cancelledAction) state.Phase = EnemyAttackPresentationPhase.Cancelled;
+            ApplyAction(state, simulationAgent.Assignment.Epoch, EnemySimulationClock.CombatNow);
         }
+
+        private void HandleAttackPresentationChanged(EnemyAttackPresentationEdge edge)
+        {
+            if (attack == null || !attack.SupportsSharedTimeline || !NetworkClient.active || !simulationAgent.IsCanonicalAlive) return;
+            lastAppliedSequence = edge.StateSequence;
+            receivedAction = edge.Checkpoint.Movement.Runtime.Action;
+            if (receivedAction.ActionId == cancelledAction) receivedAction.Phase = EnemyAttackPresentationPhase.Cancelled;
+            if (simulationAuthority.ConsumesSnapshots)
+                ApplyAction(receivedAction, edge.AssignmentEpoch, EnemySimulationClock.CombatNow);
+        }
+
+        // Accepted local simulation/checkpoint state only; there is no client damage RPC.
+        internal void ApplyAction(EnemyActionState state, uint epoch, double now)
+        {
+            if (attack == null || !attack.SupportsSharedTimeline) return;
+            var frame = EnemyActionTimeline.Resolve(state, now);
+            bool sameAction = hasAction && frame.ActionId == appliedAction.ActionId;
+            if (sameAction && EnemyActionTimeline.Order(frame) < EnemyActionTimeline.Order(appliedAction))
+                frame = EnemyActionTimeline.Resolve(appliedAction, now);
+            // An older pose update cannot erase a strike already locked on this peer.
+            if (sameAction && frame.StrikeIndex == appliedAction.StrikeIndex && EnemyActionTimeline.HasPose(appliedAction) &&
+                !EnemyActionTimeline.HasPose(frame))
+            {
+                frame.Facing = appliedAction.Facing; frame.TargetPosition = appliedAction.TargetPosition;
+                frame.PoseStrikeIndex = appliedAction.PoseStrikeIndex; frame.LockedStrikeMask |= appliedAction.LockedStrikeMask;
+            }
+            bool epochChanged = hasAction && epoch != lastAppliedAssignmentEpoch;
+            bool changed = !sameAction || frame.Phase != appliedAction.Phase || frame.StrikeIndex != appliedAction.StrikeIndex ||
+                EnemyActionTimeline.HasPose(frame) != EnemyActionTimeline.HasPose(appliedAction);
+            if (epochChanged) { attack.LocalDamageInteraction?.DiscardPendingCollisions(); generation++; }
+            if (changed)
+            {
+                bool normalBoundary = sameAction && !epochChanged && frame.Phase != EnemyAttackPresentationPhase.Cancelled &&
+                    controller.IsAlive && !controller.DeathRequested;
+                if (normalBoundary) attack.LocalDamageInteraction?.SettlePendingCollisions();
+                else attack.LocalDamageInteraction?.DiscardPendingCollisions();
+                if (!sameAction || frame.StrikeIndex != appliedAction.StrikeIndex)
+                { window.Cancel(); attack.ReleaseLocalFrame(); generation++; }
+            }
+            if (frame.ActionId == 0 || frame.Phase == EnemyAttackPresentationPhase.Cancelled ||
+                frame.Phase == EnemyAttackPresentationPhase.Inactive)
+            {
+                if (frame.Phase == EnemyAttackPresentationPhase.Cancelled) cancelledAction = frame.ActionId;
+                window.Cancel();
+                if (frame.Phase == EnemyAttackPresentationPhase.Cancelled) attack.CancelLocalFrame();
+                else attack.ReleaseLocalFrame();
+                if (changed) controller.ApplyReplicatedAttackPresentation(frame.Phase, frame.Facing, 0);
+                appliedAction = frame; hasAction = frame.ActionId != 0; lastAppliedAssignmentEpoch = epoch;
+                if (changed || epochChanged) TimelineObserved?.Invoke(this, "phase");
+                return;
+            }
+            lastAppliedAssignmentEpoch = epoch;
+            window.Bind(frame, epoch, generation);
+            attack.controller = controller; attack.enemyAnimator = controller.enemyAnimator;
+            attack.ApplyLocalFrame(frame, now, changed);
+            attack.LocalDamageInteraction?.ConfigureAttackWindow(window);
+            controller.ApplyTimedLocalAttackPresentation(frame.Phase, frame.Facing, Math.Max(0, now - frame.StartAt(frame.Phase)));
+            appliedAction = frame; hasAction = true;
+            if (changed || epochChanged) TimelineObserved?.Invoke(this, epochChanged ? "handoff" : "phase");
+        }
+
+        private void ReleaseAction()
+        {
+            bool observed = hasAction;
+            window?.Cancel();
+            if (hasAction || attack?.LocalAttackInstance != null || attack?.LocalDamageEnabled == true)
+                attack?.ReleaseLocalFrame();
+            hasAction = false;
+            appliedAction = default;
+            if (observed) TimelineObserved?.Invoke(this, "release");
+        }
+
+        internal void CancelActionPresentation(ulong actionId)
+        {
+            if (actionId == 0 || simulationAgent.CurrentActionId != actionId) return;
+            cancelledAction = actionId;
+            var action = hasAction && appliedAction.ActionId == actionId ? appliedAction :
+                simulationAuthority.RunsCombatDecisions ? controller.CaptureSimulationAction(EnemySimulationClock.CombatNow) : receivedAction;
+            action.Phase = EnemyAttackPresentationPhase.Cancelled;
+            receivedAction = action;
+            ApplyAction(action, simulationAgent.Assignment.Epoch, EnemySimulationClock.CombatNow);
+        }
+
+        internal void CancelSequencePresentation(ulong actionId) => CancelActionPresentation(actionId);
 
         private void OnDisable()
         {
-            if (simulationAgent != null)
-            {
-                simulationAgent.AttackPresentationChanged -=
-                    HandleAttackPresentationChanged;
-            }
-            if (simulationAuthority != null)
-            {
-                simulationAuthority.RoleChanged -= HandleRoleChanged;
-            }
-            ReleaseAttackInstance();
-        }
-
-        private void HandleRoleChanged(
-            EnemySimulationRole previous,
-            EnemySimulationRole current)
-        {
-            if (current != EnemySimulationRole.Replica)
-            {
-                ReleaseAttackInstance();
-            }
-        }
-
-        private void HandleAttackPresentationChanged(
-            EnemyAttackPresentationEdge edge)
-        {
-            if (simulationAuthority == null ||
-                !simulationAuthority.ConsumesSnapshots ||
-                simulationAgent == null || !simulationAgent.IsCanonicalAlive)
-            {
-                ReleaseAttackInstance();
-                return;
-            }
-
-            lastAppliedSequence = edge.StateSequence;
-            lastAppliedAssignmentEpoch = edge.AssignmentEpoch;
-            lastAppliedPhase = edge.Phase;
-            if (sequenceAttack != null)
-            {
-                sequenceState = edge.Checkpoint.Movement.Runtime.Action;
-                ownsSequencePresentation = true;
-                UpdateSequencePresentation(true);
-                return;
-            }
-            if (explosionAttack != null)
-            {
-                explosionState = edge.Checkpoint.Movement.Runtime.Action;
-                ownsExplosionPresentation = true;
-                explosionAttack.RestoreExplosion(explosionState, explosionState.PhaseAt(EnemySimulationClock.CombatNow), EnemySimulationClock.CombatNow, false);
-                return;
-            }
-            if (DashAttack != null) dashWarningOrigin = edge.Checkpoint.Movement.Runtime.Action.DashWarningOrigin;
-            switch (edge.Phase)
-            {
-            case EnemyAttackPresentationPhase.Warning:
-                ApplyWarning(edge);
-                break;
-            case EnemyAttackPresentationPhase.Active:
-                ApplyActive(edge);
-                break;
-            case EnemyAttackPresentationPhase.Recovery:
-                FinishWindowAndPresentation();
-                break;
-            case EnemyAttackPresentationPhase.Inactive:
-            case EnemyAttackPresentationPhase.Cancelled:
-                ReleaseAttackInstance();
-                break;
-            }
-        }
-
-        private void ApplyWarning(EnemyAttackPresentationEdge edge)
-        {
-            if (!TryAcquireAttackInstance())
-            {
-                return;
-            }
-
-            PositionAttack(edge.Facing);
-            SetDamageEnabled(false);
-            EnemyAttackWarning warning = attackInstance.attackWarning;
-            if (warning == null)
-            {
-                return;
-            }
-
-            warning.SetWarningTime(
-                (float)edge.RemainingAt(EnemySimulationClock.CombatNow),
-                meleeAttack.AttackTime);
-            warning.Show();
-            if (edge.IsExpiredAt(EnemySimulationClock.CombatNow))
-            {
-                warning.Hide();
-            }
-        }
-
-        private void ApplyActive(EnemyAttackPresentationEdge edge)
-        {
-            if (!TryAcquireAttackInstance())
-            {
-                return;
-            }
-
-            PositionAttack(edge.Facing);
-            attackInstance.attackWarning?.Hide();
-
-            double remaining = edge.RemainingAt(EnemySimulationClock.CombatNow);
-            if (remaining <= 0d)
-            {
-                // Presentation has already been fast-forwarded by EnemyAnimator.
-                // Never compensate for network delay by applying stale damage.
-                SetDamageEnabled(false);
-                return;
-            }
-
-            damageWindowEndNetworkTime = EnemySimulationClock.CombatNow + remaining;
-            SetDamageEnabled(true);
-        }
-
-        private async void FinishWindowAndPresentation()
-        {
-            if (ownsDashWindow) DashAttack.SetDashDamageEnabled(false, true);
-            attackInstance?.damageInteraction?.SettlePendingCollisions();
-            SetDamageEnabled(false);
-            var instance = attackInstance;
-            uint generation = instanceGeneration;
-            if (instance != null && instance.attackWarning != null) await instance.attackWarning.AwaitableHide();
-            if (generation == instanceGeneration && instance == attackInstance) ReleaseAttackInstance();
-        }
-
-        private bool TryAcquireAttackInstance()
-        {
-            if (attackInstance != null)
-            {
-                return true;
-            }
-            if (meleeAttack == null || meleeAttack.attackPrefab == null ||
-                controller == null)
-            {
-                LogUnsupportedAttackOnce(
-                    "Replica melee presentation requires EnemyAttackMelee, " +
-                    "its attackPrefab, and EnemyController.");
-                return false;
-            }
-            if (meleeAttack.attackPrefab.damageInteraction == null && DashAttack == null)
-            {
-                LogUnsupportedAttackOnce(
-                    "The first network melee slice supports the " +
-                    "PlayerDamageInteraction attack mode only.");
-                return false;
-            }
-
-            if (PoolManager.Instance != null)
-            {
-                attackPool = PoolManager.Instance.GetOrCreatePooler(
-                    meleeAttack.attackPrefab);
-                attackInstance = attackPool.GetOrCreate(transform, true);
-                instanceBorrowedFromPool = true;
-            }
-            else
-            {
-                attackInstance = Instantiate(meleeAttack.attackPrefab, transform);
-                instanceBorrowedFromPool = false;
-            }
-
-            attackInstance.SetStats(controller.stats);
-            instanceGeneration++;
-            MonsterSupergroup.Gameplay.Combat.GameplayMapPresentation.Warning(attackInstance.gameObject);
-            PlayerDamageInteraction interaction = attackInstance.damageInteraction;
-            if (interaction != null) interaction.enemyStats = controller.stats;
-            SetDamageEnabled(false);
-            return true;
-        }
-
-        private void PositionAttack(Vector2 facing)
-        {
-            if (facing.sqrMagnitude <= 0.0001f)
-            {
-                facing = controller.FacingDirection.sqrMagnitude > 0.0001f
-                    ? controller.FacingDirection
-                    : Vector2.right;
-            }
-
-            attackInstance.transform.SetParent(transform, true);
-            attackInstance.transform.position = DashAttack != null ? (Vector3)dashWarningOrigin : transform.position;
-            float angle = Mathf.Atan2(facing.y, facing.x) * Mathf.Rad2Deg;
-            attackInstance.transform.rotation = Quaternion.Euler(0f, 0f, angle);
-        }
-
-        private void SetDamageEnabled(bool enabled)
-        {
-            damageWindowActive = enabled;
-            if (DashAttack != null)
-            {
-                if (enabled || ownsDashWindow) DashAttack.SetDashDamageEnabled(enabled);
-                ownsDashWindow = enabled;
-            }
-            if (attackInstance == null)
-            {
-                return;
-            }
-
-            PlayerDamageInteraction interaction = attackInstance.damageInteraction;
-            if (interaction != null)
-            {
-                interaction.gameObject.SetActive(enabled);
-            }
-            if (attackInstance.hitBox != null)
-            {
-                // HitBox mode is not part of this first vertical slice.
-                attackInstance.hitBox.Toggle(false);
-            }
-        }
-
-        private void ReleaseAttackInstance()
-        {
-            if (ownsSequencePresentation) sequenceAttack?.SuspendSimulation();
-            ownsSequencePresentation = false; sequenceState = appliedSequenceState = default;
-            if (ownsExplosionPresentation) explosionAttack?.SuspendExplosion();
-            ownsExplosionPresentation = false;
-            explosionState = default;
-            instanceGeneration++;
-            if (ownsDashWindow) { DashAttack.SetDashDamageEnabled(false); ownsDashWindow = false; }
-            // Epoch/role changes invalidate deferred contacts from the old window.
-            attackInstance?.damageInteraction?.DiscardPendingCollisions();
-            if (attackInstance == null)
-            {
-                damageWindowActive = false;
-                return;
-            }
-
-            SetDamageEnabled(false);
-            EnemyAttackPrefab released = attackInstance;
-            attackInstance = null;
-            if (instanceBorrowedFromPool && attackPool != null)
-            {
-                if (!gameObject.activeInHierarchy)
-                {
-                    released.gameObject.SetActive(false);
-                    EnemyAttackPrefab.ReturnAfterHierarchyChange(released, attackPool);
-                }
-                else attackPool.Return(released);
-            }
-            else
-            {
-                released.gameObject.SetActive(false);
-                Destroy(released.gameObject);
-            }
-            instanceBorrowedFromPool = false;
+            if (simulationAgent != null) simulationAgent.AttackPresentationChanged -= HandleAttackPresentationChanged;
+            ReleaseAction();
         }
 
         private void ResolveReferences()
         {
-            if (sequenceAttack == null) sequenceAttack = GetComponent<SequenceEnemyAttack>();
-            if (explosionAttack == null) explosionAttack = GetComponent<EnemyAttackExplosion>();
-            if (simulationAgent == null)
-            {
-                simulationAgent = GetComponent<NetworkEnemySimulationAgent>();
-            }
-            if (simulationAuthority == null)
-            {
-                simulationAuthority = GetComponent<EnemySimulationAuthority>();
-            }
-            if (controller == null)
-            {
-                controller = GetComponent<EnemyController>();
-            }
-            if (meleeAttack == null)
-            {
-                meleeAttack = GetComponent<EnemyAttackMelee>();
-            }
-        }
-
-        private void UpdateSequencePresentation(bool received)
-        {
-            double now = EnemySimulationClock.CombatNow;
-            var frame = EnemySequenceTimeline.Resolve(sequenceState, now);
-            if(frame.ActionId==appliedSequenceState.ActionId&&EnemySequenceTimeline.Order(frame)<EnemySequenceTimeline.Order(appliedSequenceState))
-                frame=appliedSequenceState;
-            if (!received && frame.Phase == appliedSequenceState.Phase && frame.StrikeIndex == appliedSequenceState.StrikeIndex) return;
-            // Reliable phase edges can repeat a locally advanced phase. Do not reopen its collider.
-            if (frame.ActionId == appliedSequenceState.ActionId && frame.Phase == appliedSequenceState.Phase &&
-                frame.StrikeIndex == appliedSequenceState.StrikeIndex && frame.PoseStrikeIndex == appliedSequenceState.PoseStrikeIndex &&
-                frame.LockedStrikeMask == appliedSequenceState.LockedStrikeMask) return;
-            bool settle = frame.Phase != EnemyAttackPresentationPhase.Cancelled &&
-                frame.ActionId == appliedSequenceState.ActionId && lastAppliedAssignmentEpoch == simulationAgent.Assignment.Epoch;
-            sequenceAttack.controller = controller; sequenceAttack.enemyAnimator = controller.enemyAnimator;
-            sequenceAttack.RestoreSequence(frame, now, settle);
-            controller.ApplyReplicatedAttackPresentation(frame.Phase, frame.Facing, System.Math.Max(0,now-frame.StartAt(frame.Phase)));
-            appliedSequenceState = frame; lastAppliedPhase = frame.Phase;
-            damageWindowActive = frame.Phase == EnemyAttackPresentationPhase.Active && EnemySequenceTimeline.HasPose(frame) && sequenceAttack.HasSimulationAttackInstance;
-        }
-
-        internal void CancelSequencePresentation(ulong actionId)
-        {
-            if(!ownsSequencePresentation||sequenceState.ActionId!=actionId)return;
-            sequenceState.Phase=EnemyAttackPresentationPhase.Cancelled;UpdateSequencePresentation(true);
-        }
-
-        private void LogUnsupportedAttackOnce(string message)
-        {
-            if (unsupportedAttackLogged)
-            {
-                return;
-            }
-
-            unsupportedAttackLogged = true;
-            Debug.LogError(message, this);
+            if (simulationAgent == null) simulationAgent = GetComponent<NetworkEnemySimulationAgent>();
+            if (simulationAuthority == null) simulationAuthority = GetComponent<EnemySimulationAuthority>();
+            if (controller == null) controller = GetComponent<EnemyController>();
+            if (meleeAttack == null) meleeAttack = GetComponent<EnemyAttackMelee>();
+            attack = controller != null ? controller.attackScript : null;
+            if (attack == null) attack = GetComponent<EnemyAttack>();
+            if (window == null) window = new EnemyAttackWindow(() => EnemySimulationClock.CombatNow, () =>
+                isActiveAndEnabled && controller != null && controller.IsAlive && !controller.DeathRequested &&
+                simulationAgent != null && simulationAgent.IsCanonicalAlive &&
+                simulationAgent.Assignment.Epoch == lastAppliedAssignmentEpoch && !BootGameplayNetworkManager.CombatHasEnded);
         }
     }
 }

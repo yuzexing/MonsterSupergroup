@@ -1,0 +1,310 @@
+[
+  {
+    "folder": "F:\\UnityStore\\MonsterSupergroup\\Logs\\LimboReference\\attack-r3b-lostsoul-main-0-client\\client",
+    "counts": {
+      "phase": 861,
+      "suppressed-phase-edge": 134,
+      "damage-attempt": 64,
+      "release": 68,
+      "handoff": 3
+    },
+    "activeEntries": {
+      "LostSoul/v0/strike0": 67
+    },
+    "completeWAR": {
+      "LostSoul/v0/LD/strike0": 10,
+      "LostSoul/v0/RD/strike0": 9,
+      "LostSoul/v0/RU/strike0": 10,
+      "LostSoul/v0/LU/strike0": 37
+    },
+    "completeWA": {
+      "LostSoul/v0/LD/strike0": 10,
+      "LostSoul/v0/RD/strike0": 9,
+      "LostSoul/v0/RU/strike0": 10,
+      "LostSoul/v0/LU/strike0": 37
+    },
+    "damageAttempts": {
+      "50": 64
+    },
+    "effectiveHealthDrops": {
+      "50": 64
+    },
+    "localCenters": 66,
+    "violations": [],
+    "cleanup": [
+      {
+        "damageAreas": 0,
+        "warnings": 0
+      }
+    ],
+    "meanFrameMs": 38.675220652481705,
+    "note": "Counts are observations, not proof of every planned matrix case. Ghoul strike 0/1 deliberately have no Recovery."
+  },
+  {
+    "folder": "F:\\UnityStore\\MonsterSupergroup\\Logs\\LimboReference\\attack-r3b-lostsoul-main-0-client\\host",
+    "counts": {
+      "phase": 1128,
+      "suppressed-phase-edge": 132,
+      "release": 68,
+      "handoff": 3
+    },
+    "activeEntries": {
+      "LostSoul/v0/strike0": 67
+    },
+    "completeWAR": {
+      "LostSoul/v0/LD/strike0": 10,
+      "LostSoul/v0/RD/strike0": 9,
+      "LostSoul/v0/RU/strike0": 10,
+      "LostSoul/v0/LU/strike0": 37
+    },
+    "completeWA": {
+      "LostSoul/v0/LD/strike0": 10,
+      "LostSoul/v0/RD/strike0": 9,
+      "LostSoul/v0/RU/strike0": 10,
+      "LostSoul/v0/LU/strike0": 37
+    },
+    "damageAttempts": {},
+    "effectiveHealthDrops": {},
+    "localCenters": 66,
+    "violations": [],
+    "cleanup": [
+      {
+        "damageAreas": 0,
+        "warnings": 0
+      }
+    ],
+    "meanFrameMs": 38.98673151862547,
+    "note": "Counts are observations, not proof of every planned matrix case. Ghoul strike 0/1 deliberately have no Recovery."
+  },
+  {
+    "folder": "F:\\UnityStore\\MonsterSupergroup\\Logs\\LimboReference\\attack-r3b-lostsoul-main-0-host\\client",
+    "counts": {
+      "phase": 844,
+      "suppressed-phase-edge": 127,
+      "release": 66,
+      "handoff": 3
+    },
+    "activeEntries": {
+      "LostSoul/v0/strike0": 64
+    },
+    "completeWAR": {
+      "LostSoul/v0/LD/strike0": 12,
+      "LostSoul/v0/RD/strike0": 9,
+      "LostSoul/v0/RU/strike0": 10,
+      "LostSoul/v0/LU/strike0": 32
+    },
+    "completeWA": {
+      "LostSoul/v0/LD/strike0": 12,
+      "LostSoul/v0/RD/strike0": 9,
+      "LostSoul/v0/RU/strike0": 10,
+      "LostSoul/v0/LU/strike0": 32
+    },
+    "damageAttempts": {},
+    "effectiveHealthDrops": {},
+    "localCenters": 63,
+    "violations": [],
+    "cleanup": [
+      {
+        "damageAreas": 0,
+        "warnings": 0
+      }
+    ],
+    "meanFrameMs": 38.207274341083945,
+    "note": "Counts are observations, not proof of every planned matrix case. Ghoul strike 0/1 deliberately have no Recovery."
+  },
+  {
+    "folder": "F:\\UnityStore\\MonsterSupergroup\\Logs\\LimboReference\\attack-r3b-lostsoul-main-0-host\\host",
+    "counts": {
+      "phase": 677,
+      "suppressed-phase-edge": 129,
+      "damage-attempt": 61,
+      "release": 66,
+      "handoff": 3
+    },
+    "activeEntries": {
+      "LostSoul/v0/strike0": 64
+    },
+    "completeWAR": {
+      "LostSoul/v0/LD/strike0": 12,
+      "LostSoul/v0/RD/strike0": 9,
+      "LostSoul/v0/RU/strike0": 10,
+      "LostSoul/v0/LU/strike0": 32
+    },
+    "completeWA": {
+      "LostSoul/v0/LD/strike0": 12,
+      "LostSoul/v0/RD/strike0": 9,
+      "LostSoul/v0/RU/strike0": 10,
+      "LostSoul/v0/LU/strike0": 32
+    },
+    "damageAttempts": {
+      "50": 61
+    },
+    "effectiveHealthDrops": {
+      "50": 61
+    },
+    "localCenters": 63,
+    "violations": [],
+    "cleanup": [
+      {
+        "damageAreas": 0,
+        "warnings": 0
+      }
+    ],
+    "meanFrameMs": 37.17936241831746,
+    "note": "Counts are observations, not proof of every planned matrix case. Ghoul strike 0/1 deliberately have no Recovery."
+  },
+  {
+    "folder": "F:\\UnityStore\\MonsterSupergroup\\Logs\\LimboReference\\attack-r3b-lostsoul-main-1-client\\client",
+    "counts": {
+      "phase": 699,
+      "suppressed-phase-edge": 130,
+      "damage-attempt": 62,
+      "release": 65,
+      "handoff": 3
+    },
+    "activeEntries": {
+      "LostSoul/v1/strike0": 65
+    },
+    "completeWAR": {
+      "LostSoul/v1/LD/strike0": 12,
+      "LostSoul/v1/RD/strike0": 9,
+      "LostSoul/v1/RU/strike0": 10,
+      "LostSoul/v1/LU/strike0": 33
+    },
+    "completeWA": {
+      "LostSoul/v1/LD/strike0": 12,
+      "LostSoul/v1/RD/strike0": 9,
+      "LostSoul/v1/RU/strike0": 10,
+      "LostSoul/v1/LU/strike0": 33
+    },
+    "damageAttempts": {
+      "50": 62
+    },
+    "effectiveHealthDrops": {
+      "50": 62
+    },
+    "localCenters": 64,
+    "violations": [],
+    "cleanup": [
+      {
+        "damageAreas": 0,
+        "warnings": 0
+      }
+    ],
+    "meanFrameMs": 39.34070907630006,
+    "note": "Counts are observations, not proof of every planned matrix case. Ghoul strike 0/1 deliberately have no Recovery."
+  },
+  {
+    "folder": "F:\\UnityStore\\MonsterSupergroup\\Logs\\LimboReference\\attack-r3b-lostsoul-main-1-client\\host",
+    "counts": {
+      "phase": 954,
+      "suppressed-phase-edge": 128,
+      "release": 65,
+      "handoff": 3
+    },
+    "activeEntries": {
+      "LostSoul/v1/strike0": 65
+    },
+    "completeWAR": {
+      "LostSoul/v1/LD/strike0": 12,
+      "LostSoul/v1/RD/strike0": 9,
+      "LostSoul/v1/RU/strike0": 10,
+      "LostSoul/v1/LU/strike0": 33
+    },
+    "completeWA": {
+      "LostSoul/v1/LD/strike0": 12,
+      "LostSoul/v1/RD/strike0": 9,
+      "LostSoul/v1/RU/strike0": 10,
+      "LostSoul/v1/LU/strike0": 33
+    },
+    "damageAttempts": {},
+    "effectiveHealthDrops": {},
+    "localCenters": 64,
+    "violations": [],
+    "cleanup": [
+      {
+        "damageAreas": 0,
+        "warnings": 0
+      }
+    ],
+    "meanFrameMs": 38.57032248377753,
+    "note": "Counts are observations, not proof of every planned matrix case. Ghoul strike 0/1 deliberately have no Recovery."
+  },
+  {
+    "folder": "F:\\UnityStore\\MonsterSupergroup\\Logs\\LimboReference\\attack-r3b-lostsoul-main-1-host\\client",
+    "counts": {
+      "phase": 804,
+      "suppressed-phase-edge": 127,
+      "release": 65,
+      "handoff": 3
+    },
+    "activeEntries": {
+      "LostSoul/v1/strike0": 64
+    },
+    "completeWAR": {
+      "LostSoul/v1/LD/strike0": 10,
+      "LostSoul/v1/RD/strike0": 9,
+      "LostSoul/v1/RU/strike0": 10,
+      "LostSoul/v1/LU/strike0": 34
+    },
+    "completeWA": {
+      "LostSoul/v1/LD/strike0": 10,
+      "LostSoul/v1/RD/strike0": 9,
+      "LostSoul/v1/RU/strike0": 10,
+      "LostSoul/v1/LU/strike0": 34
+    },
+    "damageAttempts": {},
+    "effectiveHealthDrops": {},
+    "localCenters": 63,
+    "violations": [],
+    "cleanup": [
+      {
+        "damageAreas": 0,
+        "warnings": 0
+      }
+    ],
+    "meanFrameMs": 38.146562769268634,
+    "note": "Counts are observations, not proof of every planned matrix case. Ghoul strike 0/1 deliberately have no Recovery."
+  },
+  {
+    "folder": "F:\\UnityStore\\MonsterSupergroup\\Logs\\LimboReference\\attack-r3b-lostsoul-main-1-host\\host",
+    "counts": {
+      "phase": 617,
+      "suppressed-phase-edge": 129,
+      "damage-attempt": 61,
+      "release": 65,
+      "handoff": 3
+    },
+    "activeEntries": {
+      "LostSoul/v1/strike0": 64
+    },
+    "completeWAR": {
+      "LostSoul/v1/LD/strike0": 10,
+      "LostSoul/v1/RD/strike0": 9,
+      "LostSoul/v1/RU/strike0": 10,
+      "LostSoul/v1/LU/strike0": 34
+    },
+    "completeWA": {
+      "LostSoul/v1/LD/strike0": 10,
+      "LostSoul/v1/RD/strike0": 9,
+      "LostSoul/v1/RU/strike0": 10,
+      "LostSoul/v1/LU/strike0": 34
+    },
+    "damageAttempts": {
+      "50": 61
+    },
+    "effectiveHealthDrops": {
+      "50": 61
+    },
+    "localCenters": 63,
+    "violations": [],
+    "cleanup": [
+      {
+        "damageAreas": 0,
+        "warnings": 0
+      }
+    ],
+    "meanFrameMs": 37.60926154222441,
+    "note": "Counts are observations, not proof of every planned matrix case. Ghoul strike 0/1 deliberately have no Recovery."
+  }
+]

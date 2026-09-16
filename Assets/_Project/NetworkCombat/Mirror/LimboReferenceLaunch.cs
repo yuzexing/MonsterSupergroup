@@ -45,6 +45,7 @@ namespace MonsterSupergroup.NetworkCombat
             DontDestroyOnLoad(runner.gameObject);
             runner.failure = LimboManualOptions.Validate(LaunchArguments);
             if (runner.failure != null) { Debug.LogError(runner.failure); return; }
+            if (!Light) runner.gameObject.AddComponent<LimboAttackTimelineObservation>();
             if (Argument("--limbo-art-observe=") == "true") runner.gameObject.AddComponent<LimboArtObservation>();
             if (Profile == "art-effects")
             {

@@ -71,6 +71,28 @@ public sealed class MeleeAttackWarning : AstralShift.HellMaiden.AI.Enemy.EnemyAt
         }
     }
 
+    public override float TimelineHideDuration => warningEnd?.Clip != null
+        ? warningEnd.Length / Mathf.Max(.0001f, Mathf.Abs(warningEnd.Speed)) : 0;
+
+    public override void SampleTimeline(float warningTime, float attackTime, float elapsed, bool warning, bool changed)
+    {
+        ResolveAnimancer();
+        var transition = warning ? warningStart : warningEnd;
+        if (transition?.Clip == null || animancer == null)
+        { if (!warning) SetRenderersVisible(false); return; }
+        if (warning) SetWarningTime(warningTime, attackTime);
+        if (changed)
+        {
+            SetRenderersVisible(true);
+            animancer.Layers[0].Play(transition);
+        }
+        var state = animancer.Layers[0].CurrentState;
+        if (state == null) return;
+        state.Speed = 0; // Sample only the shared combat clock, with no late animation callbacks.
+        state.TimeD = Mathf.Clamp((warning ? elapsed : elapsed - warningTime) * transition.Speed, 0, transition.Length);
+        if (!warning && elapsed - warningTime >= TimelineHideDuration) SetRenderersVisible(false);
+    }
+
 	private void ResolveAnimancer()
 	{
 		if (animancer == null)

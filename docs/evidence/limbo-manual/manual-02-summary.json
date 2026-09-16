@@ -1,0 +1,207 @@
+{
+  "host": {
+    "runs": {
+      "c0d94d8f65cf428e9179a69a8343a2b5": {
+        "initial": [
+          {
+            "player": 2,
+            "health": 500,
+            "maximum": 500,
+            "speed": 4.550000190734863,
+            "xpModifier": 2.0,
+            "build": {
+              "InitialWeaponId": 1,
+              "InitialWeaponSlot": 0,
+              "Weapons": [
+                {
+                  "SlotIndex": 0,
+                  "WeaponId": 1
+                }
+              ],
+              "Equipment": [],
+              "Perks": []
+            }
+          }
+        ],
+        "endings": [
+          {
+            "kind": "run-ended",
+            "detail": "left-gameplay",
+            "run": "c0d94d8f65cf428e9179a69a8343a2b5",
+            "role": "host",
+            "payload": "{\"RunId\":\"c0d94d8f65cf428e9179a69a8343a2b5\",\"Phase\":3,\"Wave\":0,\"Elapsed\":23.470119948498906,\"WaveDuration\":30.0,\"Planned\":1199,\"Spawned\":33,\"Skipped\":0,\"Alive\":9,\"Limit\":1000,\"TotalSpawned\":33,\"TotalSkipped\":0,\"ReferenceStage\":true,\"StageEndTime\":720.9,\"CountedAlive\":9,\"ActiveClips\":1,\"EvidenceBlocked\":0,\"TotalAttempts\":33,\"AbandonedBudget\":0,\"TransitionRequestedAt\":0.0,\"TransitionWaitCount\":0,\"TransitionWaitReason\":\"\"}",
+            "round": 1,
+            "realtime": 4809.49688530017,
+            "combat": 29.11035004304895
+          }
+        ],
+        "selections": [
+          {
+            "kind": "selection-close",
+            "detail": "Measured wall time; combat pause recorded separately",
+            "run": "c0d94d8f65cf428e9179a69a8343a2b5",
+            "role": "host",
+            "payload": "{\"seconds\":4752.5821822}",
+            "round": 1,
+            "realtime": 4767.64876240017,
+            "combat": 15.0637870919908
+          },
+          {
+            "kind": "selection-interrupted",
+            "detail": "local-avatar-unavailable",
+            "run": "c0d94d8f65cf428e9179a69a8343a2b5",
+            "role": "host",
+            "payload": "{\"seconds\":27.800784300000488}",
+            "round": 1,
+            "realtime": 4809.49684490017,
+            "combat": 29.11035004304895
+          }
+        ],
+        "acceptedChoices": 2,
+        "lastFrame": {
+          "kind": "frame",
+          "role": "host",
+          "snapshot": {
+            "RunId": "c0d94d8f65cf428e9179a69a8343a2b5",
+            "Phase": 3,
+            "Wave": 0,
+            "Elapsed": 23.470119948498905,
+            "WaveDuration": 30.0,
+            "Planned": 1199,
+            "Spawned": 33,
+            "Skipped": 0,
+            "Alive": 9,
+            "Limit": 1000,
+            "TotalSpawned": 33,
+            "TotalSkipped": 0,
+            "ReferenceStage": true,
+            "StageEndTime": 720.9,
+            "CountedAlive": 9,
+            "ActiveClips": 1,
+            "EvidenceBlocked": 0,
+            "TotalAttempts": 33,
+            "AbandonedBudget": 0,
+            "TransitionRequestedAt": 0.0,
+            "TransitionWaitCount": 0,
+            "TransitionWaitReason": ""
+          },
+          "health": 400,
+          "observed": 33,
+          "realtime": 4808.70806980017,
+          "position": {
+            "x": -2.0339503288269043,
+            "y": -0.05077916383743286
+          }
+        },
+        "requests": [],
+        "completions": [],
+        "helpers": {},
+        "births": 33,
+        "birthMismatches": [],
+        "confirmedKills": 24,
+        "firstHitToConfirmedDeathSeconds": {
+          "samples": 24,
+          "median": 0.05004299897700548,
+          "p95": 1.115871600806713,
+          "maximum": 2.067761605605483
+        },
+        "stageCleanup": [
+          {
+            "kind": "cleanup",
+            "detail": "c0d94d8f65cf428e9179a69a8343a2b5",
+            "payload": "{\"damageAreas\":0,\"warnings\":0}",
+            "run": "c0d94d8f65cf428e9179a69a8343a2b5",
+            "round": 0,
+            "realtime": 4809.80575960017,
+            "combat": 29.11035004304895,
+            "elapsed": 0.0
+          }
+        ],
+        "trapCleanup": [],
+        "healthChanges": [
+          {
+            "kind": "health",
+            "role": "host",
+            "run": "c0d94d8f65cf428e9179a69a8343a2b5",
+            "source": "unknown",
+            "round": 1,
+            "elapsed": 8.871718698181212,
+            "realtime": 14.529408600170067,
+            "previous": 500,
+            "current": 450,
+            "maximum": 500
+          },
+          {
+            "kind": "health",
+            "role": "host",
+            "run": "c0d94d8f65cf428e9179a69a8343a2b5",
+            "source": "unknown",
+            "round": 1,
+            "elapsed": 9.992459095083177,
+            "realtime": 4768.3546653001695,
+            "previous": 450,
+            "current": 400,
+            "maximum": 500
+          }
+        ],
+        "acceptedDamageChanges": 2,
+        "trapPhases": {},
+        "performanceActive": {
+          "meanFrameMs": {
+            "samples": 21,
+            "median": 16.70849987665812,
+            "p95": 17.04730678816973,
+            "maximum": 21.12599378824234
+          },
+          "p95FrameMs": {
+            "samples": 21,
+            "median": 16.975801467895508,
+            "p95": 17.04290008544922,
+            "maximum": 17.067899703979492
+          },
+          "maxFrameMs": {
+            "samples": 21,
+            "median": 17.071203231811523,
+            "p95": 38.11460494995117,
+            "maximum": 134.77090454101562
+          },
+          "logWriteMs": {
+            "samples": 21,
+            "median": 0.008000000000000895,
+            "p95": 0.011099999999995447,
+            "maximum": 0.013399999999998968
+          },
+          "logFlushMs": {
+            "samples": 21,
+            "median": 0.06439999999997781,
+            "p95": 1.2721,
+            "maximum": 1.4772000000000007
+          }
+        },
+        "sampledAlivePeak": 9,
+        "spawnFiles": [
+          {
+            "file": "spawns-c0d94d8f65cf428e9179a69a8343a2b5-20260915-233322-987.csv",
+            "attempts": 33,
+            "successful": 33,
+            "successByClip": {
+              "0": 33
+            },
+            "results": {
+              "Spawned": 33
+            },
+            "events": {
+              "spawn": 33,
+              "death": 24
+            },
+            "completion": null,
+            "conservationDelta": null
+          }
+        ]
+      }
+    },
+    "processClosed": true,
+    "screenshots": 0,
+    "errors": []
+  }
+}

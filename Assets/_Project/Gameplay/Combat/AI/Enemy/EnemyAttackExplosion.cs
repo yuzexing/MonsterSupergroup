@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace AstralShift.HellMaiden.AI.Enemy
 {
-    public class EnemyAttackExplosion : EnemyAttack
+    public partial class EnemyAttackExplosion : EnemyAttack
     {
         [SerializeField] private EnemyAttackWarning _attackWarningPrefab;
         [SerializeField] private EnemyExplosionAttackVFX _attackVFXPrefab;
@@ -62,6 +62,8 @@ namespace AstralShift.HellMaiden.AI.Enemy
         public override void CancelAttack()
         {
             SuspendExplosion(); triggered = pending = false;
+            if (controller != null && controller.IsAlive && !controller.DeathRequested)
+                controller.ActivateColliders(true);
         }
         public void SuspendExplosion()
         {
@@ -73,7 +75,12 @@ namespace AstralShift.HellMaiden.AI.Enemy
             }
             presentationAction = 0;
         }
-        private void OnDisable() => SuspendExplosion();
+        private void OnDisable()
+        {
+            if (controller != null && controller.UsesSharedAttackTimeline && gameObject.activeInHierarchy)
+            { ReleaseSimulationMotion(); return; }
+            SuspendExplosion();
+        }
         public void CaptureExplosion(ref EnemyActionState state)
         {
             state.Explosion = state.ActionId != 0;
@@ -163,6 +170,7 @@ namespace AstralShift.HellMaiden.AI.Enemy
         {
             if (explosion == null) return;
             explosion.damageInteraction?.DiscardPendingCollisions();
+            explosion.damageInteraction?.ConfigureAttackWindow(null);
             explosion.Stop(); explosion.particleSystem.Clear(true);
             var released = explosion; explosion = null;
             if (gameObject.activeInHierarchy) explosionPool.Return(released);

@@ -1,0 +1,33 @@
+{
+  "build": "EnemyAttackTimeline20260916-05",
+  "result": "technical-validation-complete",
+  "originalPhase6PackageUnchanged": true,
+  "automated": {
+    "EditMode": {
+      "passed": 785,
+      "total": 785,
+      "file": "editmode-r5-recheck.xml"
+    },
+    "PlayMode": {
+      "passed": 529,
+      "total": 529,
+      "file": "playmode-r5-final.xml"
+    }
+  },
+  "rendered": {
+    "finalSoloFull": true,
+    "finalLocalHostClientFull": true,
+    "actualUiRestartSoloAndPair": true,
+    "secondRoundFullAfterPanelClose": true,
+    "transitionSelectionStillUsable": true,
+    "endCleanup": true,
+    "normalExitAndLogFlush": true
+  },
+  "limitations": [
+    "technical assists enabled and logged; not manual pressure evidence",
+    "late Host frame drops; not a locked-60-FPS or isolated performance benchmark",
+    "original game same-condition comparison and Spine excluded",
+    "original round-one callback/statistical gaps preserved in README"
+  ],
+  "codeOrBuildChangedDuringUiCloseout": false
+}

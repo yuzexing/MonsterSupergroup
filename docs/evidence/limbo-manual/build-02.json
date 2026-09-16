@@ -1,0 +1,17 @@
+{
+  "id": "build.player",
+  "startedUtc": "2026-09-15T23:31:32.2930006Z",
+  "success": true,
+  "pending": false,
+  "durationSeconds": 67.0762373,
+  "error": "",
+  "report": "F:\\UnityStore\\MonsterSupergroup\\Logs\\LimboManual20260916\\build-02.json",
+  "log": "F:\\UnityStore\\MonsterSupergroup\\Logs\\ProjectTools\\20260916-073132-284-build.player\\command.log",
+  "artifacts": [
+    "F:\\UnityStore\\MonsterSupergroup\\Builds\\LimboManual20260916-02\\MonsterSupergroupLimbo.exe",
+    "F:\\UnityStore\\MonsterSupergroup\\Logs\\ProjectTools\\20260916-073132-284-build.player\\unity.log",
+    "F:\\UnityStore\\MonsterSupergroup\\Logs\\ProjectTools\\20260916-073132-284-build.player\\unity-result.json",
+    "F:\\UnityStore\\MonsterSupergroup\\Logs\\ProjectTools\\20260916-073132-284-build.player\\command.log",
+    "F:\\UnityStore\\MonsterSupergroup\\Logs\\ProjectTools\\20260916-073132-284-build.player\\processes.jsonl"
+  ]
+}

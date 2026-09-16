@@ -48,6 +48,7 @@ namespace MonsterSupergroup.Gameplay.Tests
             var enemy=SpawnLostSoul();yield return WaitFor(()=>Ready(enemy));
             int kills=0;enemy.OnConfirmedKill+=_=>kills++;
             var state=LostSoulState(enemy,1.3);enemy.RestoreSimulationAction(state,EnemySimulationClock.CombatNow);
+            enemy.GetComponent<NetworkEnemyMeleeReplica>().ApplyAction(state,enemy.GetComponent<NetworkEnemySimulationAgent>().Assignment.Epoch,EnemySimulationClock.CombatNow);
             var attack=enemy.GetComponent<EnemyAttackExplosion>();Assert.That(attack.ExplosionInstance,Is.Not.Null);
             // A canonical damage event also covers damage that bypasses the disabled hurtbox (e.g. an existing status).
             var execution=new LegacyCombatExecution(Owner.GetComponent<CombatRuntimeServiceProvider>().Services);

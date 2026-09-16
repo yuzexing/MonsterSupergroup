@@ -148,10 +148,13 @@ namespace MonsterSupergroup.Gameplay.Tests
                 Assert.That(restored.ActionId,Is.EqualTo(77));Assert.That(restored.DashStart,Is.EqualTo(action.DashStart));
                 Assert.That(restored.DashLastPosition,Is.EqualTo(pose));Assert.That(enemy.rigidBody.position,Is.EqualTo(pose),"Restoring state must not jump back to the dash origin.");
                 bool active=age>.78&&age<1.21;
+                agent.GetComponent<NetworkEnemyMeleeReplica>().ApplyAction(action, agent.Assignment.Epoch, start+age);
                 Assert.That(dash.attackCollider.enabled&&dash.damageInteraction.enabled,Is.EqualTo(active));
                 if(active){Assert.That(enemy.rigidBody.simulated,Is.True);Assert.That(enemy.rigidBody.constraints,Is.EqualTo(RigidbodyConstraints2D.FreezeRotation));Assert.That(enemy.collider.excludeLayers.value,Is.EqualTo(64));}
-                enemy.SuspendSimulationExecution();Assert.That(dash.attackCollider.enabled||dash.damageInteraction.enabled,Is.False);
+                enemy.SuspendSimulationExecution();
+                Assert.That(dash.attackCollider.enabled&&dash.damageInteraction.enabled,Is.EqualTo(active),"A simulation lease change does not restart or close the local hit window.");
                 Assert.That(enemy.collider.excludeLayers.value,Is.EqualTo(originalMask));
+                dash.ReleaseLocalFrame();Assert.That(dash.attackCollider.enabled||dash.damageInteraction.enabled,Is.False);
             }
 #endif
             yield break;

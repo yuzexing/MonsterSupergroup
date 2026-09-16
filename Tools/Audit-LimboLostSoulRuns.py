@@ -56,9 +56,11 @@ def summarize(root):
         disposals = [dict(id=int(a), epoch=int(b), action=int(c), combat=float(d), deadline=float(f)) for a, b, c, d, f in re.findall(r"\[LostSoulDispose\] id=(\d+) epoch=(\d+) action=(\d+) combat=([\d.]+) deadline=([\d.]+)", raw)]
         cleanups = [e for e in rows(folder / "stage2-observation.jsonl") if e["kind"] == "completed-cleanup"]
         traps = rows(folder / "spatial-observation.jsonl")
-        build = json.loads((folder / "art-build.json").read_text(encoding="utf-8-sig"))
-        builds[role] = {e["file"]: e["sha256"] for e in build["files"]}
+        manifest = folder / "art-build.json"
+        build = json.loads(manifest.read_text(encoding="utf-8-sig")) if manifest.exists() else None
+        builds[role] = {e["file"]: e["sha256"] for e in build["files"]} if build else None
         result[role] = {
+            "artBuildManifestAvailable": build is not None,
             "rounds": by_round,
             "births": len(births[role]),
             "birthMismatches": [e for e in audit if e["kind"] == "birth" and not e["match"]],
@@ -120,7 +122,7 @@ def summarize(root):
             "missingClientBirthIds": sorted(births["host"].keys() - births["client"].keys()),
             "extraClientBirthIds": sorted(births["client"].keys() - births["host"].keys()),
             "differentBirths": [i for i in births["host"].keys() & births["client"].keys() if births["host"][i] != births["client"][i]],
-            "sameBuild": builds["host"] == builds["client"],
+            "sameBuild": builds["host"] == builds["client"] if builds.get("host") and builds.get("client") else None,
         }
     return result
 

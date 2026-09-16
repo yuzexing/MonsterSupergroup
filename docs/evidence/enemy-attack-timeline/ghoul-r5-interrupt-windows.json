@@ -1,0 +1,90 @@
+[
+  {
+    "folder": "Logs\\LimboReference\\attack-r5-ghoul-interrupt-0-client\\host",
+    "counts": {
+      "phase": 572,
+      "suppressed-phase-edge": 75,
+      "release": 30,
+      "damage-attempt": 16
+    },
+    "activeEntries": {
+      "Ghoul/v0/strike0": 43,
+      "Ghoul/v0/strike1": 19,
+      "Ghoul/v0/strike2": 11
+    },
+    "completeWAR": {
+      "Ghoul/v0/LD/strike2": 8,
+      "Ghoul/v0/RD/strike2": 2
+    },
+    "completeWA": {
+      "Ghoul/v0/LD/strike0": 10,
+      "Ghoul/v0/LD/strike1": 9,
+      "Ghoul/v0/LD/strike2": 9,
+      "Ghoul/v0/RD/strike0": 17,
+      "Ghoul/v0/RD/strike1": 7,
+      "Ghoul/v0/RD/strike2": 2,
+      "Ghoul/v0/RU/strike0": 16,
+      "Ghoul/v0/RU/strike1": 3
+    },
+    "damageAttempts": {
+      "50": 16
+    },
+    "effectiveHealthDrops": {
+      "50": 13
+    },
+    "localCenters": 0,
+    "violations": [],
+    "cleanup": [
+      {
+        "damageAreas": 0,
+        "warnings": 0
+      }
+    ],
+    "meanFrameMs": 72.4725306357628,
+    "note": "Counts are observations, not proof of every planned matrix case. Ghoul strike 0/1 deliberately have no Recovery."
+  },
+  {
+    "folder": "Logs\\LimboReference\\attack-r5-ghoul-interrupt-0-client\\client",
+    "counts": {
+      "phase": 373,
+      "suppressed-phase-edge": 74,
+      "damage-attempt": 65,
+      "release": 30
+    },
+    "activeEntries": {
+      "Ghoul/v0/strike0": 43,
+      "Ghoul/v0/strike1": 19,
+      "Ghoul/v0/strike2": 11
+    },
+    "completeWAR": {
+      "Ghoul/v0/LD/strike2": 8,
+      "Ghoul/v0/RD/strike2": 2
+    },
+    "completeWA": {
+      "Ghoul/v0/LD/strike0": 10,
+      "Ghoul/v0/LD/strike1": 9,
+      "Ghoul/v0/LD/strike2": 9,
+      "Ghoul/v0/RD/strike0": 17,
+      "Ghoul/v0/RD/strike1": 6,
+      "Ghoul/v0/RD/strike2": 2,
+      "Ghoul/v0/RU/strike0": 16,
+      "Ghoul/v0/RU/strike1": 4
+    },
+    "damageAttempts": {
+      "50": 65
+    },
+    "effectiveHealthDrops": {
+      "50": 47
+    },
+    "localCenters": 0,
+    "violations": [],
+    "cleanup": [
+      {
+        "damageAreas": 0,
+        "warnings": 0
+      }
+    ],
+    "meanFrameMs": 82.45989048527952,
+    "note": "Counts are observations, not proof of every planned matrix case. Ghoul strike 0/1 deliberately have no Recovery."
+  }
+]

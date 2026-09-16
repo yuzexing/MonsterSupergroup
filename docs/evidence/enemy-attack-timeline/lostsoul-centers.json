@@ -1,0 +1,142 @@
+[
+  {
+    "run": "attack-r3b-lostsoul-main-0-client",
+    "commonActions": 66,
+    "differentLocalCenters": 66,
+    "localCenterChanges": 0,
+    "examples": [
+      {
+        "enemy": 24,
+        "action": 12884901889,
+        "host": {
+          "x": 11.999710083007812,
+          "y": 9.872940063476562
+        },
+        "client": {
+          "x": 11.999958992004395,
+          "y": 9.841064453125
+        }
+      },
+      {
+        "enemy": 46,
+        "action": 12884901889,
+        "host": {
+          "x": 12.000297546386719,
+          "y": 9.872920989990234
+        },
+        "client": {
+          "x": 12.000043869018555,
+          "y": 9.841064453125
+        }
+      }
+    ],
+    "disposals": 66,
+    "duplicateDisposals": 0,
+    "earliestDisposalMinusDeadline": 5.249793559869431e-07
+  },
+  {
+    "run": "attack-r3b-lostsoul-main-0-host",
+    "commonActions": 63,
+    "differentLocalCenters": 63,
+    "localCenterChanges": 0,
+    "examples": [
+      {
+        "enemy": 13,
+        "action": 12884901889,
+        "host": {
+          "x": 12.000024795532227,
+          "y": 9.841064453125
+        },
+        "client": {
+          "x": 12.000142097473145,
+          "y": 9.872991561889648
+        }
+      },
+      {
+        "enemy": 35,
+        "action": 12884901889,
+        "host": {
+          "x": 12.000036239624023,
+          "y": 9.841064453125
+        },
+        "client": {
+          "x": 12.000236511230469,
+          "y": 9.872932434082031
+        }
+      }
+    ],
+    "disposals": 63,
+    "duplicateDisposals": 0,
+    "earliestDisposalMinusDeadline": 0.0002238750457763672
+  },
+  {
+    "run": "attack-r3b-lostsoul-main-1-client",
+    "commonActions": 64,
+    "differentLocalCenters": 64,
+    "localCenterChanges": 0,
+    "examples": [
+      {
+        "enemy": 24,
+        "action": 12884901889,
+        "host": {
+          "x": 11.999710083007812,
+          "y": 9.873220443725586
+        },
+        "client": {
+          "x": 11.999958992004395,
+          "y": 9.841064453125
+        }
+      },
+      {
+        "enemy": 46,
+        "action": 12884901889,
+        "host": {
+          "x": 12.000297546386719,
+          "y": 9.8729248046875
+        },
+        "client": {
+          "x": 12.000043869018555,
+          "y": 9.841064453125
+        }
+      }
+    ],
+    "disposals": 64,
+    "duplicateDisposals": 0,
+    "earliestDisposalMinusDeadline": 3.873237346851965e-06
+  },
+  {
+    "run": "attack-r3b-lostsoul-main-1-host",
+    "commonActions": 63,
+    "differentLocalCenters": 63,
+    "localCenterChanges": 0,
+    "examples": [
+      {
+        "enemy": 13,
+        "action": 12884901889,
+        "host": {
+          "x": 12.000024795532227,
+          "y": 9.841064453125
+        },
+        "client": {
+          "x": 12.000142097473145,
+          "y": 9.873006820678711
+        }
+      },
+      {
+        "enemy": 35,
+        "action": 12884901889,
+        "host": {
+          "x": 12.000043869018555,
+          "y": 9.841064453125
+        },
+        "client": {
+          "x": 12.000297546386719,
+          "y": 9.873197555541992
+        }
+      }
+    ],
+    "disposals": 63,
+    "duplicateDisposals": 0,
+    "earliestDisposalMinusDeadline": 0.0013683084398508072
+  }
+]

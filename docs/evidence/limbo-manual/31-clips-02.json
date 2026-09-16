@@ -1,0 +1,331 @@
+{
+  "clips": [
+    {
+      "start": 1.0,
+      "duration": 135.0,
+      "enemy": "Brotchi",
+      "variant": 0,
+      "mode": 1,
+      "count": 250,
+      "readiness": 0,
+      "spawnReadiness": 0
+    },
+    {
+      "start": 60.0,
+      "duration": 45.0,
+      "enemy": "Imp",
+      "variant": 0,
+      "mode": 1,
+      "count": 15,
+      "readiness": 0,
+      "spawnReadiness": 0
+    },
+    {
+      "start": 105.0,
+      "duration": 10.0,
+      "enemy": "Elite_Skeleton",
+      "variant": 0,
+      "mode": 1,
+      "count": 1,
+      "readiness": 0,
+      "spawnReadiness": 0
+    },
+    {
+      "start": 135.0,
+      "duration": 45.0,
+      "enemy": "Skeleton",
+      "variant": 0,
+      "mode": 1,
+      "count": 150,
+      "readiness": 0,
+      "spawnReadiness": 0
+    },
+    {
+      "start": 180.0,
+      "duration": 20.083333333333343,
+      "enemy": "Slime",
+      "variant": 2,
+      "mode": 2,
+      "count": 100,
+      "readiness": 0,
+      "spawnReadiness": 0
+    },
+    {
+      "start": 209.05,
+      "duration": 100.35,
+      "enemy": "Brotchi_Dash",
+      "variant": 0,
+      "mode": 2,
+      "count": 30,
+      "readiness": 0,
+      "spawnReadiness": 0
+    },
+    {
+      "start": 240.0,
+      "duration": 150.0,
+      "enemy": "Skeleton",
+      "variant": 2,
+      "mode": 1,
+      "count": 200,
+      "readiness": 0,
+      "spawnReadiness": 0
+    },
+    {
+      "start": 285.0,
+      "duration": 0.016666666666666666,
+      "enemy": "Slime",
+      "variant": 0,
+      "mode": 1,
+      "count": 60,
+      "readiness": 0,
+      "spawnReadiness": 0
+    },
+    {
+      "start": 285.0167,
+      "duration": 47.983299999999986,
+      "enemy": "Slime",
+      "variant": 0,
+      "mode": 1,
+      "count": 90,
+      "readiness": 0,
+      "spawnReadiness": 0
+    },
+    {
+      "start": 330.0,
+      "duration": 30.3099983215332,
+      "enemy": "Elite_Skeleton",
+      "variant": 1,
+      "mode": 1,
+      "count": 1,
+      "readiness": 0,
+      "spawnReadiness": 0
+    },
+    {
+      "start": 360.3099983215332,
+      "duration": 59.690001678466786,
+      "enemy": "Brotchi",
+      "variant": 1,
+      "mode": 1,
+      "count": 150,
+      "readiness": 0,
+      "spawnReadiness": 0
+    },
+    {
+      "start": 389.6,
+      "duration": 30.0,
+      "enemy": "LostSoul",
+      "variant": 0,
+      "mode": 2,
+      "count": 46,
+      "readiness": 0,
+      "spawnReadiness": 0
+    },
+    {
+      "start": 419.6,
+      "duration": 30.316666666666663,
+      "enemy": "Imp",
+      "variant": 1,
+      "mode": 2,
+      "count": 10,
+      "readiness": 0,
+      "spawnReadiness": 0
+    },
+    {
+      "start": 420.0,
+      "duration": 29.91666666666669,
+      "enemy": "Brotchi_Dash",
+      "variant": 1,
+      "mode": 1,
+      "count": 50,
+      "readiness": 0,
+      "spawnReadiness": 0
+    },
+    {
+      "start": 449.9166666666667,
+      "duration": 30.0,
+      "enemy": "Ghoul",
+      "variant": 0,
+      "mode": 2,
+      "count": 30,
+      "readiness": 0,
+      "spawnReadiness": 0
+    },
+    {
+      "start": 479.9166666666667,
+      "duration": 30.0,
+      "enemy": "Ghoul",
+      "variant": 0,
+      "mode": 1,
+      "count": 50,
+      "readiness": 0,
+      "spawnReadiness": 0
+    },
+    {
+      "start": 480.5,
+      "duration": 15.0,
+      "enemy": "Imp",
+      "variant": 1,
+      "mode": 3,
+      "count": 10,
+      "readiness": 0,
+      "spawnReadiness": 0
+    },
+    {
+      "start": 495.5,
+      "duration": 164.06666666666672,
+      "enemy": "Imp",
+      "variant": 1,
+      "mode": 2,
+      "count": 15,
+      "readiness": 0,
+      "spawnReadiness": 0
+    },
+    {
+      "start": 509.65,
+      "duration": 30.0,
+      "enemy": "Slime",
+      "variant": 1,
+      "mode": 2,
+      "count": 80,
+      "readiness": 0,
+      "spawnReadiness": 0
+    },
+    {
+      "start": 540.2833333333333,
+      "duration": 15.0,
+      "enemy": "LostSoul",
+      "variant": 1,
+      "mode": 3,
+      "count": 10,
+      "readiness": 0,
+      "spawnReadiness": 0
+    },
+    {
+      "start": 555.2833333333333,
+      "duration": 164.7166666666667,
+      "enemy": "LostSoul",
+      "variant": 1,
+      "mode": 2,
+      "count": 46,
+      "readiness": 0,
+      "spawnReadiness": 0
+    },
+    {
+      "start": 569.9666666666667,
+      "duration": 30.0,
+      "enemy": "Brotchi_Dash",
+      "variant": 1,
+      "mode": 1,
+      "count": 60,
+      "readiness": 0,
+      "spawnReadiness": 0
+    },
+    {
+      "start": 599.9666666666667,
+      "duration": 30.3099983215332,
+      "enemy": "Elite_Skeleton",
+      "variant": 1,
+      "mode": 1,
+      "count": 2,
+      "readiness": 0,
+      "spawnReadiness": 0
+    },
+    {
+      "start": 620.8,
+      "duration": 99.20000000000005,
+      "enemy": "Ghoul",
+      "variant": 0,
+      "mode": 2,
+      "count": 20,
+      "readiness": 0,
+      "spawnReadiness": 0
+    },
+    {
+      "start": 630.2766649881999,
+      "duration": 89.72333501180015,
+      "enemy": "Brotchi_Dash",
+      "variant": 1,
+      "mode": 1,
+      "count": 60,
+      "readiness": 0,
+      "spawnReadiness": 0
+    },
+    {
+      "start": 635.6666666666667,
+      "duration": 4.999999999999886,
+      "enemy": "Slime",
+      "variant": 1,
+      "mode": 3,
+      "count": 5,
+      "readiness": 0,
+      "spawnReadiness": 0
+    },
+    {
+      "start": 654.8666666666667,
+      "duration": 5.0,
+      "enemy": "Slime",
+      "variant": 1,
+      "mode": 3,
+      "count": 5,
+      "readiness": 0,
+      "spawnReadiness": 0
+    },
+    {
+      "start": 659.5666666666667,
+      "duration": 60.43333333333328,
+      "enemy": "Imp",
+      "variant": 1,
+      "mode": 2,
+      "count": 18,
+      "readiness": 0,
+      "spawnReadiness": 0
+    },
+    {
+      "start": 675.0833333333334,
+      "duration": 5.0,
+      "enemy": "Slime",
+      "variant": 1,
+      "mode": 3,
+      "count": 10,
+      "readiness": 0,
+      "spawnReadiness": 0
+    },
+    {
+      "start": 695.1,
+      "duration": 5.0,
+      "enemy": "Slime",
+      "variant": 1,
+      "mode": 3,
+      "count": 10,
+      "readiness": 0,
+      "spawnReadiness": 0
+    },
+    {
+      "start": 714.7166666666667,
+      "duration": 5.0,
+      "enemy": "Slime",
+      "variant": 1,
+      "mode": 3,
+      "count": 10,
+      "readiness": 0,
+      "spawnReadiness": 0
+    }
+  ],
+  "sourceDuration": 841.5766649882,
+  "stageEnd": 720.9,
+  "C": 14,
+  "L": 10,
+  "B": 7,
+  "Cbudget": 1139,
+  "Bbudget": 60,
+  "timeSerializationDifferences": [
+    {
+      "clip": 13,
+      "field": "duration",
+      "source": 29.916666666666686,
+      "serialized": 29.91666666666669,
+      "difference": 3.552713678800501e-15
+    }
+  ],
+  "comparison": "Identity, variant, mode and count equal exactly. All timing decimal round-trip differences listed; absolute differences below 1e-12 seconds. L has no fixed cumulative budget."
+}

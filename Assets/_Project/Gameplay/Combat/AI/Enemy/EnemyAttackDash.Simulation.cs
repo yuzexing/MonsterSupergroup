@@ -4,6 +4,48 @@ namespace AstralShift.HellMaiden.AI.Enemy
 {
     public partial class EnemyAttackDash
     {
+        public override bool SupportsSharedTimeline => GetType() == typeof(EnemyAttackDash);
+        public override AstralShift.HellMaiden.Interactions.PlayerDamageInteraction LocalDamageInteraction => damageInteraction;
+        public override bool LocalDamageEnabled => attackCollider != null && attackCollider.enabled && damageInteraction != null && damageInteraction.enabled;
+
+        public override void PrepareTimeline(ref EnemyActionState state)
+        {
+            BindCurrentStats();
+            startPoint = rb.position; lastPosition = startPoint;
+            _direction = state.Facing.normalized * distance;
+            endPoint = startPoint + _direction; attackStartPosition = startPoint; hasDashState = true; _returning = false;
+            if (controller.direction == AstralShift.HellMaiden.Common.Direction.Right) controller.direction = AstralShift.HellMaiden.Common.Direction.Left;
+            else if (controller.direction == AstralShift.HellMaiden.Common.Direction.Left) controller.direction = AstralShift.HellMaiden.Common.Direction.Right;
+            CaptureDashState(ref state);
+        }
+
+        public override void ApplySimulationFrame(EnemyActionState state, double now)
+        {
+            BindCurrentStats();
+            if (state.Phase != EnemyAttackPresentationPhase.Active || now >= state.ActiveUntil)
+            { EndDashMotion(); return; }
+            BeginDashMotion();
+            float progress = Mathf.Clamp01((float)((now - state.WarningUntil) / (state.ActiveUntil - state.WarningUntil)));
+            Vector2 next = Vector2.Lerp(state.DashStart, state.DashEnd, movementCurve.Evaluate(progress));
+            if (Time.deltaTime > 0) { rb.linearVelocity = (next - lastPosition) / Time.deltaTime; lastPosition = next; }
+        }
+
+        public override void ReleaseSimulationMotion() => EndDashMotion();
+        public override void RestoreSimulationMotion(EnemyActionState state, double now)
+        {
+            BindCurrentStats();
+            if (state.Phase == EnemyAttackPresentationPhase.Active && now < state.ActiveUntil) BeginDashMotion();
+            else EndDashMotion();
+        }
+        public override void ApplyLocalFrame(EnemyActionState state, double now, bool changed)
+        {
+            base.ApplyLocalFrame(state, now, changed);
+            bool active = state.Phase == EnemyAttackPresentationPhase.Active && now >= state.WarningUntil && now < state.ActiveUntil;
+            // No motion from this path, even on the machine currently simulating the enemy.
+            SetDashDamageEnabled(active);
+        }
+        public override void ReleaseLocalFrame()
+        { SetDashDamageEnabled(false); damageInteraction?.ConfigureAttackWindow(null); base.ReleaseLocalFrame(); }
         private bool hasDashState, changedMotion;
         private RigidbodyConstraints2D previousConstraints;
         private bool previousSimulated;

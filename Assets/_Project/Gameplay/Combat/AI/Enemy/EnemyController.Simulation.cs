@@ -24,11 +24,11 @@ namespace AstralShift.HellMaiden.AI.Enemy
         {
             if (simulationClock == null) return;
             double now = simulationClock();
-            if (attackScript is SequenceEnemyAttack sequence)
+            if (UsesSharedAttackTimeline)
             {
                 if (phase == EnemyAttackPresentationPhase.Warning &&
-                    (!simulationAction.Sequence || simulationAction.Phase == EnemyAttackPresentationPhase.Inactive || simulationAction.Phase == EnemyAttackPresentationPhase.Cancelled))
-                    BeginSequenceAction(now, sequence);
+                    (simulationAction.ActionId == 0 || simulationAction.Phase == EnemyAttackPresentationPhase.Inactive || simulationAction.Phase == EnemyAttackPresentationPhase.Cancelled))
+                    BeginSharedAction(now);
                 if (phase == EnemyAttackPresentationPhase.Cancelled || phase == EnemyAttackPresentationPhase.Inactive)
                 {
                     simulationAction.Phase = phase;
@@ -80,8 +80,12 @@ namespace AstralShift.HellMaiden.AI.Enemy
 
         public void SuspendSimulationExecution()
         {
-            if (attackScript is EnemyAttackMelee melee) melee.SuspendSimulation();
-            if (attackScript is EnemyAttackExplosion explosion) explosion.SuspendExplosion();
+            if (UsesSharedAttackTimeline) attackScript.ReleaseSimulationMotion();
+            else
+            {
+                if (attackScript is EnemyAttackMelee melee) melee.SuspendSimulation();
+                if (attackScript is EnemyAttackExplosion explosion) explosion.SuspendExplosion();
+            }
             if (attackScript is EnemyProjectileAttack projectile) projectile.NetworkExecution?.CancelCharge();
             // Do not execute Knockback.onExit or a deferred melee collision when giving up a lease.
             if (_networkKnockbackMovement != null) _networkKnockbackMovement.CancelKnockback();
@@ -101,8 +105,8 @@ namespace AstralShift.HellMaiden.AI.Enemy
         {
             simulationAction = state;
             if (_stateMachine == null || attackScript == null) return;
-            if (state.Sequence && attackScript is SequenceEnemyAttack)
-            { ApplySequenceFrame(state, now, false); return; }
+            if (UsesSharedAttackTimeline)
+            { ApplySharedSimulationFrame(state, now, true); return; }
             var phase = state.PhaseAt(now);
             simulationAction.Phase = phase;
             CurrentAttackPresentationPhase = phase;

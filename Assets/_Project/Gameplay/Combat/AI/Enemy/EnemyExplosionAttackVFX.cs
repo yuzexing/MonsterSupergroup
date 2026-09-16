@@ -17,6 +17,9 @@ namespace AstralShift.HellMaiden.AI.Enemy
 
 		private Coroutine _particlesLifetimeCheck;
 
+        private float sampledVisualTime;
+        private bool samplingTimeline, timelineEmissionStopped;
+
 		private void Awake()
 		{
 			Init();
@@ -31,13 +34,46 @@ namespace AstralShift.HellMaiden.AI.Enemy
 		public void Trigger(Action onEnd)
 		{
 			_onEnd = onEnd;
+			TriggerVisual();
+			SetDamageEnabled(true);
+		}
+
+        public void SetDamageEnabled(bool enabled)
+        { if (colliders.activeSelf != enabled) colliders.SetActive(enabled); }
+
+        public void TriggerVisual()
+        {
+			sampledVisualTime = 0; samplingTimeline = timelineEmissionStopped = false;
 			particleSystem.Play();
-			colliders.SetActive(value: true);
+			SetDamageEnabled(false);
 			if (_particlesLifetimeCheck != null)
 			{
 				StopCoroutine(_particlesLifetimeCheck);
 			}
 		}
+
+        // Seek emission and its tail separately. A late Recovery must not emit throughout the skipped tail.
+        public void SampleCombatTimeline(float elapsed, float activeDuration)
+        {
+            if (!samplingTimeline)
+            {
+                particleSystem.Simulate(0, true, true, true);
+                samplingTimeline = true;
+            }
+            elapsed = Mathf.Max(sampledVisualTime, elapsed);
+            float emissionTime = Mathf.Min(elapsed, activeDuration);
+            if (emissionTime > sampledVisualTime)
+                particleSystem.Simulate(emissionTime - sampledVisualTime, true, false, true);
+            if (elapsed >= activeDuration && !timelineEmissionStopped)
+            {
+                Stop();
+                timelineEmissionStopped = true;
+            }
+            float tailStart = Mathf.Max(sampledVisualTime, activeDuration);
+            if (elapsed > tailStart) particleSystem.Simulate(elapsed - tailStart, true, false, true);
+            particleSystem.Pause(true);
+            sampledVisualTime = elapsed;
+        }
 
 		public void Stop()
 		{

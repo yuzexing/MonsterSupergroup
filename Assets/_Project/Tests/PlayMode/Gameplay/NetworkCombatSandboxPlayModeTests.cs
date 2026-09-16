@@ -688,44 +688,62 @@ namespace MonsterSupergroup.Gameplay.Tests
                 }
                 localCombatant.Combatant.HealthChanged += CaptureReplicaHealth;
 
-                double activeStart = NetworkTime.time;
+                float vulnerabilityDeadline = Time.realtimeSinceStartup + 2f;
+                while (localMovement.IsInvulnerable && Time.realtimeSinceStartup < vulnerabilityDeadline) yield return null;
+                Assert.That(localMovement.IsInvulnerable, Is.False);
+                melee.enemyAnimator = controller.enemyAnimator;
+                double activeStart = EnemySimulationClock.CombatNow;
+                var action = EnemyActionTimeline.Begin(((ulong)replicaAssignment.Epoch << 32) | 77,
+                    activeStart, melee.TimelineStrikes, melee.RecoveryTime, controller.attackCooldown,
+                    Vector2.right, localHitbox.transform.position);
                 var warning = new EnemyAttackPresentationEdge
                 {
                     EnemyEntityId = agent.netId,
                     AssignmentEpoch = replicaAssignment.Epoch,
                     StateSequence = 1u,
                     StateStartNetworkTime = activeStart,
-                    PhaseDuration = 0.2f,
+                    PhaseDuration = melee.WarningTime,
                     Phase = EnemyAttackPresentationPhase.Warning,
-                    Facing = Vector2.right
+                    Facing = Vector2.right,
+                    Checkpoint = new EnemySimulationCheckpoint { Movement = new EnemySimulationSnapshot {
+                        EnemyEntityId = agent.netId, AssignmentEpoch = replicaAssignment.Epoch,
+                        Position = spawnedEnemy.transform.position, Runtime = new EnemySimulationRuntimeState { Action = action } } }
                 };
                 var active = warning;
                 active.StateSequence = 2u;
                 active.Phase = EnemyAttackPresentationPhase.Active;
-                active.PhaseDuration = 0.5f;
+                active.StateStartNetworkTime = action.WarningUntil;
+                active.PhaseDuration = melee.AttackTime;
+                active.Checkpoint.Movement.Runtime.Action.Phase = EnemyAttackPresentationPhase.Active;
                 world.SubmitClientAttackPresentations(
                     remoteEndpoint,
                     new EnemyAttackPresentationBatch
                     {
                         BatchSequence = 1u,
-                        Edges = new[] { warning, active }
+                        Edges = new[] { warning }
                     });
 
                 yield return null;
-                Assert.That(replica.DamageWindowActive, Is.True);
-                PlayerDamageInteraction replicaDamage = spawnedEnemy
-                    .GetComponentsInChildren<PlayerDamageInteraction>(true)
-                    .FirstOrDefault(interaction =>
-                        interaction.gameObject.activeInHierarchy);
+                Assert.That(replica.DamageWindowActive, Is.False, "Warning alone starts the shared timeline without damage.");
+                Assert.That(replica.ReplicaAttackInstance, Is.Not.Null);
+                PlayerDamageInteraction replicaDamage = replica.ReplicaAttackInstance.damageInteraction;
                 Collider2D replicaDamageCollider = replicaDamage != null
                     ? replicaDamage.GetComponent<Collider2D>()
                     : null;
                 Collider2D localPlayerCollider = localHitbox.GetComponent<Collider2D>();
                 Assert.That(replicaDamageCollider, Is.Not.Null);
                 Assert.That(localPlayerCollider, Is.Not.Null);
-                Vector2 alignmentDelta =
-                    (Vector2)localPlayerCollider.bounds.center -
-                    (Vector2)replicaDamageCollider.bounds.center;
+                Vector2 localCenter = replicaDamageCollider.offset;
+                if (replicaDamageCollider is PolygonCollider2D polygon)
+                {
+                    Vector2 polygonCenter = Vector2.zero;
+                    foreach (var point in polygon.GetPath(0)) polygonCenter += point;
+                    localCenter += polygonCenter / polygon.GetPath(0).Length;
+                }
+                // The collider is intentionally disabled during Warning, so bounds is empty.
+                // Align with a point inside the authored polygon before the short Active window.
+                Vector2 alignmentDelta = (Vector2)localPlayerCollider.bounds.center -
+                    (Vector2)replicaDamageCollider.transform.TransformPoint(localCenter);
                 enemyBody.position += alignmentDelta;
                 spawnedEnemy.transform.position = enemyBody.position;
                 Physics2D.SyncTransforms();
@@ -740,13 +758,13 @@ namespace MonsterSupergroup.Gameplay.Tests
                 int expectedReplicaHealth = healthBeforeReplicaHit - 5;
                 Assert.That(minimumReplicaHealth, Is.EqualTo(expectedReplicaHealth),
                     "Replica DamageArea must judge only the local Player hit.");
-                Assert.That(replica.LastAppliedSequence, Is.EqualTo(2u));
+                Assert.That(replica.LastAppliedSequence, Is.EqualTo(1u));
                 Assert.That(replica.LastAppliedAssignmentEpoch,
                     Is.EqualTo(replicaAssignment.Epoch));
                 Assert.That(replica.LastAppliedPhase,
                     Is.EqualTo(EnemyAttackPresentationPhase.Active));
                 Assert.That(agent.LatestAttackPresentation.Phase,
-                    Is.EqualTo(EnemyAttackPresentationPhase.Active));
+                    Is.EqualTo(EnemyAttackPresentationPhase.Warning), "No Active packet was required for actual OwnerFinal damage.");
 
                 NetworkCombatWorld combatWorld = NetworkCombatWorld.Instance;
                 CanonicalEntityState canonicalPlayer = default;
@@ -764,9 +782,11 @@ namespace MonsterSupergroup.Gameplay.Tests
 
                 var recovery = active;
                 recovery.StateSequence = 3u;
-                recovery.StateStartNetworkTime = NetworkTime.time;
+                while (EnemySimulationClock.CombatNow < action.RecoveryUntil) yield return null;
+                recovery.StateStartNetworkTime = action.ActiveUntil;
                 recovery.Phase = EnemyAttackPresentationPhase.Recovery;
-                recovery.PhaseDuration = 0.1f;
+                recovery.PhaseDuration = melee.RecoveryTime;
+                recovery.Checkpoint.Movement.Runtime.Action.Phase = EnemyAttackPresentationPhase.Recovery;
                 world.SubmitClientAttackPresentations(
                     remoteEndpoint,
                     new EnemyAttackPresentationBatch
@@ -801,8 +821,8 @@ namespace MonsterSupergroup.Gameplay.Tests
                 var expiredActive = active;
                 expiredActive.AssignmentEpoch = replicaAssignment.Epoch;
                 expiredActive.StateSequence = 1u;
-                expiredActive.StateStartNetworkTime = NetworkTime.time - 1d;
-                expiredActive.PhaseDuration = 0.1f;
+                expiredActive.Checkpoint.Movement.AssignmentEpoch = replicaAssignment.Epoch;
+                expiredActive.StateStartNetworkTime = action.WarningUntil;
                 world.SubmitClientAttackPresentations(
                     remoteEndpoint,
                     new EnemyAttackPresentationBatch
@@ -815,9 +835,9 @@ namespace MonsterSupergroup.Gameplay.Tests
                 Assert.That(replica.LastAppliedAssignmentEpoch,
                     Is.EqualTo(replicaAssignment.Epoch));
                 Assert.That(replica.LastAppliedPhase,
-                    Is.EqualTo(EnemyAttackPresentationPhase.Active));
-                Assert.That(replica.HasReplicaAttackInstance, Is.True,
-                    "Expired Active still restores its presentation object.");
+                    Is.EqualTo(EnemyAttackPresentationPhase.Inactive));
+                Assert.That(replica.HasReplicaAttackInstance, Is.False,
+                    "A completely expired action must not replay its presentation object.");
                 Assert.That(replica.DamageWindowActive, Is.False,
                     "Expired Active must never open a compensating damage window.");
                 int healthBeforeExpiredWindow = localCombatant.CurrentHealth;
@@ -827,8 +847,9 @@ namespace MonsterSupergroup.Gameplay.Tests
 
                 var expiredRecovery = expiredActive;
                 expiredRecovery.StateSequence = 2u;
-                expiredRecovery.StateStartNetworkTime = NetworkTime.time;
+                expiredRecovery.StateStartNetworkTime = action.ActiveUntil;
                 expiredRecovery.Phase = EnemyAttackPresentationPhase.Recovery;
+                expiredRecovery.Checkpoint.Movement.Runtime.Action.Phase = EnemyAttackPresentationPhase.Recovery;
                 world.SubmitClientAttackPresentations(
                     remoteEndpoint,
                     new EnemyAttackPresentationBatch

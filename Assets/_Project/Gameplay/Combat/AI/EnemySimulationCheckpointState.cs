@@ -24,12 +24,7 @@ namespace AstralShift.HellMaiden.AI
 
         public EnemyAttackPresentationPhase PhaseAt(double now)
         {
-            if (Sequence) return EnemySequenceTimeline.Resolve(this, now).Phase;
-            if (Phase == EnemyAttackPresentationPhase.Cancelled || Phase == EnemyAttackPresentationPhase.Inactive) return Phase;
-            // Small inter-client clock differences cannot rewind an accepted phase.
-            if (Phase == EnemyAttackPresentationPhase.Warning && now < WarningUntil) return EnemyAttackPresentationPhase.Warning;
-            if (Phase != EnemyAttackPresentationPhase.Recovery && now < ActiveUntil) return EnemyAttackPresentationPhase.Active;
-            return now < RecoveryUntil ? EnemyAttackPresentationPhase.Recovery : EnemyAttackPresentationPhase.Inactive;
+            return EnemyActionTimeline.Resolve(this, now).Phase;
         }
         public double StartAt(EnemyAttackPresentationPhase phase) => phase == EnemyAttackPresentationPhase.Warning
             ? WarningStartedAt : phase == EnemyAttackPresentationPhase.Active ? WarningUntil : ActiveUntil;

@@ -89,6 +89,7 @@ namespace AstralShift.HellMaiden.AI.Enemy
 
 		[SerializeField]
 		private bool _cancelAttackOnKnockback = true;
+        public bool CancelsAttackOnKnockback => _cancelAttackOnKnockback;
 
 		private BaseEnemyMovement _networkKnockbackMovement;
 		private bool _networkMovementOnlyKnockback;
@@ -437,6 +438,12 @@ namespace AstralShift.HellMaiden.AI.Enemy
 				attackScript.onRecoveryEnd = OnRecoveryEnd;
 				Warning.onEnter = delegate
 				{
+					if (UsesSharedAttackTimeline)
+					{
+						Movement.SetFacingDirection(GetTargetPosition - (Vector2)transform.position);
+						previousFacingDirection = FacingDirection;
+						return;
+					}
 					attackScript.AttackWarningEnter();
 					Movement.SetFacingDirection(GetTargetPosition - (Vector2)base.transform.position);
 					enemyAnimator.AttackWarning(FacingDirection.x, FacingDirection.y);
@@ -444,6 +451,7 @@ namespace AstralShift.HellMaiden.AI.Enemy
 				};
 				Warning.onLateUpdateTick = delegate
 				{
+					if (UsesSharedAttackTimeline) { TickSharedAction(); return; }
 					attackScript.AttackWarningTick();
 					if (facingPlayerDuringWarning)
 					{
@@ -451,14 +459,16 @@ namespace AstralShift.HellMaiden.AI.Enemy
 						enemyAnimator.AttackWarning(FacingDirection.x, FacingDirection.y);
 					}
 				};
-				Warning.onExit = attackScript.AttackWarningExit;
+				Warning.onExit = delegate { if (!UsesSharedAttackTimeline) attackScript.AttackWarningExit(); };
 				Attacking.onEnter = delegate
 				{
+					if (UsesSharedAttackTimeline) return;
 					attackScript.AttackEnter();
 					enemyAnimator.Attack(previousFacingDirection.x, previousFacingDirection.y);
 				};
 				Attacking.onLateUpdateTick = delegate
 				{
+					if (UsesSharedAttackTimeline) { TickSharedAction(); return; }
 					attackScript.AttackTick();
 					if (facingPlayerDuringAttack)
 					{
@@ -467,17 +477,19 @@ namespace AstralShift.HellMaiden.AI.Enemy
 						enemyAnimator.Attack(FacingDirection.x, FacingDirection.y);
 					}
 				};
-				Attacking.onExit = attackScript.AttackExit;
+				Attacking.onExit = delegate { if (!UsesSharedAttackTimeline) attackScript.AttackExit(); };
 				Recovery.onEnter = delegate
 				{
+					if (UsesSharedAttackTimeline) return;
 					enemyAnimator.Recovery(previousFacingDirection.x, previousFacingDirection.y);
 					Movement.SetFacingDirection(previousFacingDirection);
 					attackScript.RecoveryEnter();
 				};
 				State recovery = Recovery;
-				recovery.onLateUpdateTick = (Action)Delegate.Combine(recovery.onLateUpdateTick, new Action(attackScript.RecoveryTick));
+				recovery.onLateUpdateTick += delegate { if (UsesSharedAttackTimeline) TickSharedAction(); else attackScript.RecoveryTick(); };
 				Recovery.onExit = delegate
 				{
+					if (UsesSharedAttackTimeline) return;
 					Movement.FreezeRigidbody(state: false);
 					attackScript.RecoveryExit();
 				};
@@ -632,6 +644,13 @@ namespace AstralShift.HellMaiden.AI.Enemy
 				facing,
 				elapsedNetworkTime);
 		}
+
+        public void ApplyTimedLocalAttackPresentation(EnemyAttackPresentationPhase phase, Vector2 facing, double elapsed)
+        {
+            CurrentAttackPresentationPhase = phase;
+            ApplyReplicatedAttackPresentation(phase, facing, elapsed);
+            enemyAnimator?.FreezeTimedAttackPresentation();
+        }
 
 		public float GetAttackPresentationPhaseDuration(
 			EnemyAttackPresentationPhase phase)
@@ -1071,7 +1090,7 @@ namespace AstralShift.HellMaiden.AI.Enemy
 				if (ordinary) ApplyKnockBackCore(attackPosition, settings, multiplierSum, false);
                 else BruteforceKnockBack(attackPosition, settings);
                 if (!IsNetworkKnockbackActive) _networkKnockbackMovement = null;
-                else if (simulationClock != null)
+                else if (simulationClock != null && _cancelAttackOnKnockback)
                 {
                     // Knockback replaces its onEnter delegate at runtime; publish the
                     // cancellation explicitly instead of losing the network phase hook.

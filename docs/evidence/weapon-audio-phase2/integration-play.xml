@@ -1,0 +1,821 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="46" result="Failed(Child)" total="46" passed="45" failed="1" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-09-17 07:28:06Z" end-time="2026-09-17 07:28:58Z" duration="51.5988048">
+  <test-suite type="TestSuite" id="1657" name="Monster Supergroup" fullname="Monster Supergroup" runstate="Runnable" testcasecount="548" result="Failed" site="Child" start-time="2026-09-17 07:28:06Z" end-time="2026-09-17 07:28:58Z" duration="51.598805" total="46" passed="45" failed="1" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="PlayMode" />
+    </properties>
+    <failure>
+      <message><![CDATA[One or more child tests had errors]]></message>
+    </failure>
+    <test-suite type="Assembly" id="1641" name="MonsterSupergroup.Gameplay.Tests.PlayMode.dll" fullname="F:/UnityStore/MonsterSupergroup/Library/ScriptAssemblies/MonsterSupergroup.Gameplay.Tests.PlayMode.dll" runstate="Runnable" testcasecount="544" result="Failed" site="Child" start-time="2026-09-17 07:28:06Z" end-time="2026-09-17 07:28:58Z" duration="51.582464" total="46" passed="45" failed="1" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="73520" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="PlayMode" />
+        <property name="EditorOnly" value="False" />
+      </properties>
+      <failure>
+        <message><![CDATA[One or more child tests had errors]]></message>
+      </failure>
+      <test-suite type="TestSuite" id="1642" name="MonsterSupergroup" fullname="MonsterSupergroup" runstate="Runnable" testcasecount="544" result="Failed" site="Child" start-time="2026-09-17 07:28:06Z" end-time="2026-09-17 07:28:58Z" duration="51.576204" total="46" passed="45" failed="1" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <failure>
+          <message><![CDATA[One or more child tests had errors]]></message>
+        </failure>
+        <test-suite type="TestSuite" id="1643" name="Gameplay" fullname="MonsterSupergroup.Gameplay" runstate="Runnable" testcasecount="544" result="Failed" site="Child" start-time="2026-09-17 07:28:06Z" end-time="2026-09-17 07:28:58Z" duration="51.554261" total="46" passed="45" failed="1" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <failure>
+            <message><![CDATA[One or more child tests had errors]]></message>
+          </failure>
+          <test-suite type="TestSuite" id="1644" name="Tests" fullname="MonsterSupergroup.Gameplay.Tests" runstate="Runnable" testcasecount="544" result="Failed" site="Child" start-time="2026-09-17 07:28:06Z" end-time="2026-09-17 07:28:58Z" duration="51.548164" total="46" passed="45" failed="1" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <failure>
+              <message><![CDATA[One or more child tests had errors]]></message>
+            </failure>
+            <test-suite type="TestFixture" id="1028" name="BeamNativeAttackLifetimeTests" fullname="MonsterSupergroup.Gameplay.Tests.BeamNativeAttackLifetimeTests" classname="MonsterSupergroup.Gameplay.Tests.BeamNativeAttackLifetimeTests" runstate="Runnable" testcasecount="15" result="Passed" start-time="2026-09-17 07:28:06Z" end-time="2026-09-17 07:28:07Z" duration="0.882811" total="15" passed="15" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1030" name="AuthoredSingleBeamRuleIgnoresAdditionalProjectileCount" fullname="MonsterSupergroup.Gameplay.Tests.BeamNativeAttackLifetimeTests.AuthoredSingleBeamRuleIgnoresAdditionalProjectileCount" methodname="AuthoredSingleBeamRuleIgnoresAdditionalProjectileCount" classname="MonsterSupergroup.Gameplay.Tests.BeamNativeAttackLifetimeTests" runstate="Runnable" seed="53401343" result="Passed" start-time="2026-09-17 07:28:06Z" end-time="2026-09-17 07:28:07Z" duration="0.052490" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[OptionalWarning.DynamicAnimation - Possible Issue Detected: Attempted to set ClipTransition.Clip using an AnimationClip '' which is not an asset. Unity doesn't support dynamically creating animations for Animancer in runtime builds. This warning should be disabled if you're loading animations from Asset Bundles or Addressables or if you only intend to use the animation in the Unity Editor.
+
+This warning can be disabled via 'Edit/Project Settings/Animancer' or by calling Animancer.OptionalWarning.DynamicAnimation.Disable() and it will automatically be compiled out of Runtime Builds (except for Development Builds). More information can be found at <a href="https://kybernetik.com.au/animancer/api/Animancer/OptionalWarning">https://kybernetik.com.au/animancer/api/Animancer/OptionalWarning</a>
+
+OptionalWarning.DynamicAnimation - Possible Issue Detected: Attempted to set ClipTransition.Clip using an AnimationClip '' which is not an asset. Unity doesn't support dynamically creating animations for Animancer in runtime builds. This warning should be disabled if you're loading animations from Asset Bundles or Addressables or if you only intend to use the animation in the Unity Editor.
+
+This warning can be disabled via 'Edit/Project Settings/Animancer' or by calling Animancer.OptionalWarning.DynamicAnimation.Disable() and it will automatically be compiled out of Runtime Builds (except for Development Builds). More information can be found at <a href="https://kybernetik.com.au/animancer/api/Animancer/OptionalWarning">https://kybernetik.com.au/animancer/api/Animancer/OptionalWarning</a>
+
+OptionalWarning.DynamicAnimation - Possible Issue Detected: Attempted to set ClipTransition.Clip using an AnimationClip '' which is not an asset. Unity doesn't support dynamically creating animations for Animancer in runtime builds. This warning should be disabled if you're loading animations from Asset Bundles or Addressables or if you only intend to use the animation in the Unity Editor.
+
+This warning can be disabled via 'Edit/Project Settings/Animancer' or by calling Animancer.OptionalWarning.DynamicAnimation.Disable() and it will automatically be compiled out of Runtime Builds (except for Development Builds). More information can be found at <a href="https://kybernetik.com.au/animancer/api/Animancer/OptionalWarning">https://kybernetik.com.au/animancer/api/Animancer/OptionalWarning</a>
+
+]]></output>
+              </test-case>
+              <test-case id="1037" name="CancelledExitCannotEraseReplacementRemovalForSameTarget" fullname="MonsterSupergroup.Gameplay.Tests.BeamNativeAttackLifetimeTests.CancelledExitCannotEraseReplacementRemovalForSameTarget" methodname="CancelledExitCannotEraseReplacementRemovalForSameTarget" classname="MonsterSupergroup.Gameplay.Tests.BeamNativeAttackLifetimeTests" runstate="Runnable" seed="1212169593" result="Passed" start-time="2026-09-17 07:28:07Z" end-time="2026-09-17 07:28:07Z" duration="0.242150" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[OptionalWarning.DynamicAnimation - Possible Issue Detected: Attempted to set ClipTransition.Clip using an AnimationClip '' which is not an asset. Unity doesn't support dynamically creating animations for Animancer in runtime builds. This warning should be disabled if you're loading animations from Asset Bundles or Addressables or if you only intend to use the animation in the Unity Editor.
+
+This warning can be disabled via 'Edit/Project Settings/Animancer' or by calling Animancer.OptionalWarning.DynamicAnimation.Disable() and it will automatically be compiled out of Runtime Builds (except for Development Builds). More information can be found at <a href="https://kybernetik.com.au/animancer/api/Animancer/OptionalWarning">https://kybernetik.com.au/animancer/api/Animancer/OptionalWarning</a>
+
+OptionalWarning.DynamicAnimation - Possible Issue Detected: Attempted to set ClipTransition.Clip using an AnimationClip '' which is not an asset. Unity doesn't support dynamically creating animations for Animancer in runtime builds. This warning should be disabled if you're loading animations from Asset Bundles or Addressables or if you only intend to use the animation in the Unity Editor.
+
+This warning can be disabled via 'Edit/Project Settings/Animancer' or by calling Animancer.OptionalWarning.DynamicAnimation.Disable() and it will automatically be compiled out of Runtime Builds (except for Development Builds). More information can be found at <a href="https://kybernetik.com.au/animancer/api/Animancer/OptionalWarning">https://kybernetik.com.au/animancer/api/Animancer/OptionalWarning</a>
+
+OptionalWarning.DynamicAnimation - Possible Issue Detected: Attempted to set ClipTransition.Clip using an AnimationClip '' which is not an asset. Unity doesn't support dynamically creating animations for Animancer in runtime builds. This warning should be disabled if you're loading animations from Asset Bundles or Addressables or if you only intend to use the animation in the Unity Editor.
+
+This warning can be disabled via 'Edit/Project Settings/Animancer' or by calling Animancer.OptionalWarning.DynamicAnimation.Disable() and it will automatically be compiled out of Runtime Builds (except for Development Builds). More information can be found at <a href="https://kybernetik.com.au/animancer/api/Animancer/OptionalWarning">https://kybernetik.com.au/animancer/api/Animancer/OptionalWarning</a>
+
+[Localization] Applied locale=zh-CN revision=2
+]]></output>
+              </test-case>
+              <test-case id="1039" name="CancellingInsideSpawnNotificationPreventsEveryRemainingBeam" fullname="MonsterSupergroup.Gameplay.Tests.BeamNativeAttackLifetimeTests.CancellingInsideSpawnNotificationPreventsEveryRemainingBeam" methodname="CancellingInsideSpawnNotificationPreventsEveryRemainingBeam" classname="MonsterSupergroup.Gameplay.Tests.BeamNativeAttackLifetimeTests" runstate="Runnable" seed="1402361859" result="Passed" start-time="2026-09-17 07:28:07Z" end-time="2026-09-17 07:28:07Z" duration="0.004788" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[OptionalWarning.DynamicAnimation - Possible Issue Detected: Attempted to set ClipTransition.Clip using an AnimationClip '' which is not an asset. Unity doesn't support dynamically creating animations for Animancer in runtime builds. This warning should be disabled if you're loading animations from Asset Bundles or Addressables or if you only intend to use the animation in the Unity Editor.
+
+This warning can be disabled via 'Edit/Project Settings/Animancer' or by calling Animancer.OptionalWarning.DynamicAnimation.Disable() and it will automatically be compiled out of Runtime Builds (except for Development Builds). More information can be found at <a href="https://kybernetik.com.au/animancer/api/Animancer/OptionalWarning">https://kybernetik.com.au/animancer/api/Animancer/OptionalWarning</a>
+
+OptionalWarning.DynamicAnimation - Possible Issue Detected: Attempted to set ClipTransition.Clip using an AnimationClip '' which is not an asset. Unity doesn't support dynamically creating animations for Animancer in runtime builds. This warning should be disabled if you're loading animations from Asset Bundles or Addressables or if you only intend to use the animation in the Unity Editor.
+
+This warning can be disabled via 'Edit/Project Settings/Animancer' or by calling Animancer.OptionalWarning.DynamicAnimation.Disable() and it will automatically be compiled out of Runtime Builds (except for Development Builds). More information can be found at <a href="https://kybernetik.com.au/animancer/api/Animancer/OptionalWarning">https://kybernetik.com.au/animancer/api/Animancer/OptionalWarning</a>
+
+OptionalWarning.DynamicAnimation - Possible Issue Detected: Attempted to set ClipTransition.Clip using an AnimationClip '' which is not an asset. Unity doesn't support dynamically creating animations for Animancer in runtime builds. This warning should be disabled if you're loading animations from Asset Bundles or Addressables or if you only intend to use the animation in the Unity Editor.
+
+This warning can be disabled via 'Edit/Project Settings/Animancer' or by calling Animancer.OptionalWarning.DynamicAnimation.Disable() and it will automatically be compiled out of Runtime Builds (except for Development Builds). More information can be found at <a href="https://kybernetik.com.au/animancer/api/Animancer/OptionalWarning">https://kybernetik.com.au/animancer/api/Animancer/OptionalWarning</a>
+
+]]></output>
+              </test-case>
+              <test-case id="1032" name="CooldownFreezesUntilLastBeamEndsAndReconnectRetainsSequenceRemainder" fullname="MonsterSupergroup.Gameplay.Tests.BeamNativeAttackLifetimeTests.CooldownFreezesUntilLastBeamEndsAndReconnectRetainsSequenceRemainder" methodname="CooldownFreezesUntilLastBeamEndsAndReconnectRetainsSequenceRemainder" classname="MonsterSupergroup.Gameplay.Tests.BeamNativeAttackLifetimeTests" runstate="Runnable" seed="1603523736" result="Passed" start-time="2026-09-17 07:28:07Z" end-time="2026-09-17 07:28:07Z" duration="0.005865" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[OptionalWarning.DynamicAnimation - Possible Issue Detected: Attempted to set ClipTransition.Clip using an AnimationClip '' which is not an asset. Unity doesn't support dynamically creating animations for Animancer in runtime builds. This warning should be disabled if you're loading animations from Asset Bundles or Addressables or if you only intend to use the animation in the Unity Editor.
+
+This warning can be disabled via 'Edit/Project Settings/Animancer' or by calling Animancer.OptionalWarning.DynamicAnimation.Disable() and it will automatically be compiled out of Runtime Builds (except for Development Builds). More information can be found at <a href="https://kybernetik.com.au/animancer/api/Animancer/OptionalWarning">https://kybernetik.com.au/animancer/api/Animancer/OptionalWarning</a>
+
+OptionalWarning.DynamicAnimation - Possible Issue Detected: Attempted to set ClipTransition.Clip using an AnimationClip '' which is not an asset. Unity doesn't support dynamically creating animations for Animancer in runtime builds. This warning should be disabled if you're loading animations from Asset Bundles or Addressables or if you only intend to use the animation in the Unity Editor.
+
+This warning can be disabled via 'Edit/Project Settings/Animancer' or by calling Animancer.OptionalWarning.DynamicAnimation.Disable() and it will automatically be compiled out of Runtime Builds (except for Development Builds). More information can be found at <a href="https://kybernetik.com.au/animancer/api/Animancer/OptionalWarning">https://kybernetik.com.au/animancer/api/Animancer/OptionalWarning</a>
+
+OptionalWarning.DynamicAnimation - Possible Issue Detected: Attempted to set ClipTransition.Clip using an AnimationClip '' which is not an asset. Unity doesn't support dynamically creating animations for Animancer in runtime builds. This warning should be disabled if you're loading animations from Asset Bundles or Addressables or if you only intend to use the animation in the Unity Editor.
+
+This warning can be disabled via 'Edit/Project Settings/Animancer' or by calling Animancer.OptionalWarning.DynamicAnimation.Disable() and it will automatically be compiled out of Runtime Builds (except for Development Builds). More information can be found at <a href="https://kybernetik.com.au/animancer/api/Animancer/OptionalWarning">https://kybernetik.com.au/animancer/api/Animancer/OptionalWarning</a>
+
+]]></output>
+              </test-case>
+              <test-case id="1031" name="DirectionStartsAtOwnerAimAndCrossesAngleWrapWithoutAFullTurn" fullname="MonsterSupergroup.Gameplay.Tests.BeamNativeAttackLifetimeTests.DirectionStartsAtOwnerAimAndCrossesAngleWrapWithoutAFullTurn" methodname="DirectionStartsAtOwnerAimAndCrossesAngleWrapWithoutAFullTurn" classname="MonsterSupergroup.Gameplay.Tests.BeamNativeAttackLifetimeTests" runstate="Runnable" seed="2057610463" result="Passed" start-time="2026-09-17 07:28:07Z" end-time="2026-09-17 07:28:07Z" duration="0.004222" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[OptionalWarning.DynamicAnimation - Possible Issue Detected: Attempted to set ClipTransition.Clip using an AnimationClip '' which is not an asset. Unity doesn't support dynamically creating animations for Animancer in runtime builds. This warning should be disabled if you're loading animations from Asset Bundles or Addressables or if you only intend to use the animation in the Unity Editor.
+
+This warning can be disabled via 'Edit/Project Settings/Animancer' or by calling Animancer.OptionalWarning.DynamicAnimation.Disable() and it will automatically be compiled out of Runtime Builds (except for Development Builds). More information can be found at <a href="https://kybernetik.com.au/animancer/api/Animancer/OptionalWarning">https://kybernetik.com.au/animancer/api/Animancer/OptionalWarning</a>
+
+OptionalWarning.DynamicAnimation - Possible Issue Detected: Attempted to set ClipTransition.Clip using an AnimationClip '' which is not an asset. Unity doesn't support dynamically creating animations for Animancer in runtime builds. This warning should be disabled if you're loading animations from Asset Bundles or Addressables or if you only intend to use the animation in the Unity Editor.
+
+This warning can be disabled via 'Edit/Project Settings/Animancer' or by calling Animancer.OptionalWarning.DynamicAnimation.Disable() and it will automatically be compiled out of Runtime Builds (except for Development Builds). More information can be found at <a href="https://kybernetik.com.au/animancer/api/Animancer/OptionalWarning">https://kybernetik.com.au/animancer/api/Animancer/OptionalWarning</a>
+
+OptionalWarning.DynamicAnimation - Possible Issue Detected: Attempted to set ClipTransition.Clip using an AnimationClip '' which is not an asset. Unity doesn't support dynamically creating animations for Animancer in runtime builds. This warning should be disabled if you're loading animations from Asset Bundles or Addressables or if you only intend to use the animation in the Unity Editor.
+
+This warning can be disabled via 'Edit/Project Settings/Animancer' or by calling Animancer.OptionalWarning.DynamicAnimation.Disable() and it will automatically be compiled out of Runtime Builds (except for Development Builds). More information can be found at <a href="https://kybernetik.com.au/animancer/api/Animancer/OptionalWarning">https://kybernetik.com.au/animancer/api/Animancer/OptionalWarning</a>
+
+]]></output>
+              </test-case>
+              <test-case id="1040" name="ExternalBeamDisableIsPrunedAndCooldownCanResume" fullname="MonsterSupergroup.Gameplay.Tests.BeamNativeAttackLifetimeTests.ExternalBeamDisableIsPrunedAndCooldownCanResume" methodname="ExternalBeamDisableIsPrunedAndCooldownCanResume" classname="MonsterSupergroup.Gameplay.Tests.BeamNativeAttackLifetimeTests" runstate="Runnable" seed="165762697" result="Passed" start-time="2026-09-17 07:28:07Z" end-time="2026-09-17 07:28:07Z" duration="0.002036" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[OptionalWarning.DynamicAnimation - Possible Issue Detected: Attempted to set ClipTransition.Clip using an AnimationClip '' which is not an asset. Unity doesn't support dynamically creating animations for Animancer in runtime builds. This warning should be disabled if you're loading animations from Asset Bundles or Addressables or if you only intend to use the animation in the Unity Editor.
+
+This warning can be disabled via 'Edit/Project Settings/Animancer' or by calling Animancer.OptionalWarning.DynamicAnimation.Disable() and it will automatically be compiled out of Runtime Builds (except for Development Builds). More information can be found at <a href="https://kybernetik.com.au/animancer/api/Animancer/OptionalWarning">https://kybernetik.com.au/animancer/api/Animancer/OptionalWarning</a>
+
+OptionalWarning.DynamicAnimation - Possible Issue Detected: Attempted to set ClipTransition.Clip using an AnimationClip '' which is not an asset. Unity doesn't support dynamically creating animations for Animancer in runtime builds. This warning should be disabled if you're loading animations from Asset Bundles or Addressables or if you only intend to use the animation in the Unity Editor.
+
+This warning can be disabled via 'Edit/Project Settings/Animancer' or by calling Animancer.OptionalWarning.DynamicAnimation.Disable() and it will automatically be compiled out of Runtime Builds (except for Development Builds). More information can be found at <a href="https://kybernetik.com.au/animancer/api/Animancer/OptionalWarning">https://kybernetik.com.au/animancer/api/Animancer/OptionalWarning</a>
+
+OptionalWarning.DynamicAnimation - Possible Issue Detected: Attempted to set ClipTransition.Clip using an AnimationClip '' which is not an asset. Unity doesn't support dynamically creating animations for Animancer in runtime builds. This warning should be disabled if you're loading animations from Asset Bundles or Addressables or if you only intend to use the animation in the Unity Editor.
+
+This warning can be disabled via 'Edit/Project Settings/Animancer' or by calling Animancer.OptionalWarning.DynamicAnimation.Disable() and it will automatically be compiled out of Runtime Builds (except for Development Builds). More information can be found at <a href="https://kybernetik.com.au/animancer/api/Animancer/OptionalWarning">https://kybernetik.com.au/animancer/api/Animancer/OptionalWarning</a>
+
+]]></output>
+              </test-case>
+              <test-case id="1041" name="ExternalDisablePublishesEndBeforeRootCompletionWhileWeaponExecutionIsDisabled" fullname="MonsterSupergroup.Gameplay.Tests.BeamNativeAttackLifetimeTests.ExternalDisablePublishesEndBeforeRootCompletionWhileWeaponExecutionIsDisabled" methodname="ExternalDisablePublishesEndBeforeRootCompletionWhileWeaponExecutionIsDisabled" classname="MonsterSupergroup.Gameplay.Tests.BeamNativeAttackLifetimeTests" runstate="Runnable" seed="1496468225" result="Passed" start-time="2026-09-17 07:28:07Z" end-time="2026-09-17 07:28:07Z" duration="0.003236" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[OptionalWarning.DynamicAnimation - Possible Issue Detected: Attempted to set ClipTransition.Clip using an AnimationClip '' which is not an asset. Unity doesn't support dynamically creating animations for Animancer in runtime builds. This warning should be disabled if you're loading animations from Asset Bundles or Addressables or if you only intend to use the animation in the Unity Editor.
+
+This warning can be disabled via 'Edit/Project Settings/Animancer' or by calling Animancer.OptionalWarning.DynamicAnimation.Disable() and it will automatically be compiled out of Runtime Builds (except for Development Builds). More information can be found at <a href="https://kybernetik.com.au/animancer/api/Animancer/OptionalWarning">https://kybernetik.com.au/animancer/api/Animancer/OptionalWarning</a>
+
+OptionalWarning.DynamicAnimation - Possible Issue Detected: Attempted to set ClipTransition.Clip using an AnimationClip '' which is not an asset. Unity doesn't support dynamically creating animations for Animancer in runtime builds. This warning should be disabled if you're loading animations from Asset Bundles or Addressables or if you only intend to use the animation in the Unity Editor.
+
+This warning can be disabled via 'Edit/Project Settings/Animancer' or by calling Animancer.OptionalWarning.DynamicAnimation.Disable() and it will automatically be compiled out of Runtime Builds (except for Development Builds). More information can be found at <a href="https://kybernetik.com.au/animancer/api/Animancer/OptionalWarning">https://kybernetik.com.au/animancer/api/Animancer/OptionalWarning</a>
+
+OptionalWarning.DynamicAnimation - Possible Issue Detected: Attempted to set ClipTransition.Clip using an AnimationClip '' which is not an asset. Unity doesn't support dynamically creating animations for Animancer in runtime builds. This warning should be disabled if you're loading animations from Asset Bundles or Addressables or if you only intend to use the animation in the Unity Editor.
+
+This warning can be disabled via 'Edit/Project Settings/Animancer' or by calling Animancer.OptionalWarning.DynamicAnimation.Disable() and it will automatically be compiled out of Runtime Builds (except for Development Builds). More information can be found at <a href="https://kybernetik.com.au/animancer/api/Animancer/OptionalWarning">https://kybernetik.com.au/animancer/api/Animancer/OptionalWarning</a>
+
+]]></output>
+              </test-case>
+              <test-case id="1042" name="ExternalRemoteDisableRemovesReplicaTrackingImmediatelyWithoutTick" fullname="MonsterSupergroup.Gameplay.Tests.BeamNativeAttackLifetimeTests.ExternalRemoteDisableRemovesReplicaTrackingImmediatelyWithoutTick" methodname="ExternalRemoteDisableRemovesReplicaTrackingImmediatelyWithoutTick" classname="MonsterSupergroup.Gameplay.Tests.BeamNativeAttackLifetimeTests" runstate="Runnable" seed="1066790867" result="Passed" start-time="2026-09-17 07:28:07Z" end-time="2026-09-17 07:28:07Z" duration="0.011253" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[OptionalWarning.DynamicAnimation - Possible Issue Detected: Attempted to set ClipTransition.Clip using an AnimationClip '' which is not an asset. Unity doesn't support dynamically creating animations for Animancer in runtime builds. This warning should be disabled if you're loading animations from Asset Bundles or Addressables or if you only intend to use the animation in the Unity Editor.
+
+This warning can be disabled via 'Edit/Project Settings/Animancer' or by calling Animancer.OptionalWarning.DynamicAnimation.Disable() and it will automatically be compiled out of Runtime Builds (except for Development Builds). More information can be found at <a href="https://kybernetik.com.au/animancer/api/Animancer/OptionalWarning">https://kybernetik.com.au/animancer/api/Animancer/OptionalWarning</a>
+
+OptionalWarning.DynamicAnimation - Possible Issue Detected: Attempted to set ClipTransition.Clip using an AnimationClip '' which is not an asset. Unity doesn't support dynamically creating animations for Animancer in runtime builds. This warning should be disabled if you're loading animations from Asset Bundles or Addressables or if you only intend to use the animation in the Unity Editor.
+
+This warning can be disabled via 'Edit/Project Settings/Animancer' or by calling Animancer.OptionalWarning.DynamicAnimation.Disable() and it will automatically be compiled out of Runtime Builds (except for Development Builds). More information can be found at <a href="https://kybernetik.com.au/animancer/api/Animancer/OptionalWarning">https://kybernetik.com.au/animancer/api/Animancer/OptionalWarning</a>
+
+OptionalWarning.DynamicAnimation - Possible Issue Detected: Attempted to set ClipTransition.Clip using an AnimationClip '' which is not an asset. Unity doesn't support dynamically creating animations for Animancer in runtime builds. This warning should be disabled if you're loading animations from Asset Bundles or Addressables or if you only intend to use the animation in the Unity Editor.
+
+This warning can be disabled via 'Edit/Project Settings/Animancer' or by calling Animancer.OptionalWarning.DynamicAnimation.Disable() and it will automatically be compiled out of Runtime Builds (except for Development Builds). More information can be found at <a href="https://kybernetik.com.au/animancer/api/Animancer/OptionalWarning">https://kybernetik.com.au/animancer/api/Animancer/OptionalWarning</a>
+
+]]></output>
+              </test-case>
+              <test-case id="1029" name="MultipleBeamsShareSnapshotAndKeepOrdinalAfterOneEnds" fullname="MonsterSupergroup.Gameplay.Tests.BeamNativeAttackLifetimeTests.MultipleBeamsShareSnapshotAndKeepOrdinalAfterOneEnds" methodname="MultipleBeamsShareSnapshotAndKeepOrdinalAfterOneEnds" classname="MonsterSupergroup.Gameplay.Tests.BeamNativeAttackLifetimeTests" runstate="Runnable" seed="1356005197" result="Passed" start-time="2026-09-17 07:28:07Z" end-time="2026-09-17 07:28:07Z" duration="0.004705" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[OptionalWarning.DynamicAnimation - Possible Issue Detected: Attempted to set ClipTransition.Clip using an AnimationClip '' which is not an asset. Unity doesn't support dynamically creating animations for Animancer in runtime builds. This warning should be disabled if you're loading animations from Asset Bundles or Addressables or if you only intend to use the animation in the Unity Editor.
+
+This warning can be disabled via 'Edit/Project Settings/Animancer' or by calling Animancer.OptionalWarning.DynamicAnimation.Disable() and it will automatically be compiled out of Runtime Builds (except for Development Builds). More information can be found at <a href="https://kybernetik.com.au/animancer/api/Animancer/OptionalWarning">https://kybernetik.com.au/animancer/api/Animancer/OptionalWarning</a>
+
+OptionalWarning.DynamicAnimation - Possible Issue Detected: Attempted to set ClipTransition.Clip using an AnimationClip '' which is not an asset. Unity doesn't support dynamically creating animations for Animancer in runtime builds. This warning should be disabled if you're loading animations from Asset Bundles or Addressables or if you only intend to use the animation in the Unity Editor.
+
+This warning can be disabled via 'Edit/Project Settings/Animancer' or by calling Animancer.OptionalWarning.DynamicAnimation.Disable() and it will automatically be compiled out of Runtime Builds (except for Development Builds). More information can be found at <a href="https://kybernetik.com.au/animancer/api/Animancer/OptionalWarning">https://kybernetik.com.au/animancer/api/Animancer/OptionalWarning</a>
+
+OptionalWarning.DynamicAnimation - Possible Issue Detected: Attempted to set ClipTransition.Clip using an AnimationClip '' which is not an asset. Unity doesn't support dynamically creating animations for Animancer in runtime builds. This warning should be disabled if you're loading animations from Asset Bundles or Addressables or if you only intend to use the animation in the Unity Editor.
+
+This warning can be disabled via 'Edit/Project Settings/Animancer' or by calling Animancer.OptionalWarning.DynamicAnimation.Disable() and it will automatically be compiled out of Runtime Builds (except for Development Builds). More information can be found at <a href="https://kybernetik.com.au/animancer/api/Animancer/OptionalWarning">https://kybernetik.com.au/animancer/api/Animancer/OptionalWarning</a>
+
+]]></output>
+              </test-case>
+              <test-case id="1034" name="PoolCheckoutBindsBeforeEnableAndCleanupReleasesAllLeasesOnce" fullname="MonsterSupergroup.Gameplay.Tests.BeamNativeAttackLifetimeTests.PoolCheckoutBindsBeforeEnableAndCleanupReleasesAllLeasesOnce" methodname="PoolCheckoutBindsBeforeEnableAndCleanupReleasesAllLeasesOnce" classname="MonsterSupergroup.Gameplay.Tests.BeamNativeAttackLifetimeTests" runstate="Runnable" seed="1929170562" result="Passed" start-time="2026-09-17 07:28:07Z" end-time="2026-09-17 07:28:07Z" duration="0.016107" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[OptionalWarning.DynamicAnimation - Possible Issue Detected: Attempted to set ClipTransition.Clip using an AnimationClip '' which is not an asset. Unity doesn't support dynamically creating animations for Animancer in runtime builds. This warning should be disabled if you're loading animations from Asset Bundles or Addressables or if you only intend to use the animation in the Unity Editor.
+
+This warning can be disabled via 'Edit/Project Settings/Animancer' or by calling Animancer.OptionalWarning.DynamicAnimation.Disable() and it will automatically be compiled out of Runtime Builds (except for Development Builds). More information can be found at <a href="https://kybernetik.com.au/animancer/api/Animancer/OptionalWarning">https://kybernetik.com.au/animancer/api/Animancer/OptionalWarning</a>
+
+OptionalWarning.DynamicAnimation - Possible Issue Detected: Attempted to set ClipTransition.Clip using an AnimationClip '' which is not an asset. Unity doesn't support dynamically creating animations for Animancer in runtime builds. This warning should be disabled if you're loading animations from Asset Bundles or Addressables or if you only intend to use the animation in the Unity Editor.
+
+This warning can be disabled via 'Edit/Project Settings/Animancer' or by calling Animancer.OptionalWarning.DynamicAnimation.Disable() and it will automatically be compiled out of Runtime Builds (except for Development Builds). More information can be found at <a href="https://kybernetik.com.au/animancer/api/Animancer/OptionalWarning">https://kybernetik.com.au/animancer/api/Animancer/OptionalWarning</a>
+
+OptionalWarning.DynamicAnimation - Possible Issue Detected: Attempted to set ClipTransition.Clip using an AnimationClip '' which is not an asset. Unity doesn't support dynamically creating animations for Animancer in runtime builds. This warning should be disabled if you're loading animations from Asset Bundles or Addressables or if you only intend to use the animation in the Unity Editor.
+
+This warning can be disabled via 'Edit/Project Settings/Animancer' or by calling Animancer.OptionalWarning.DynamicAnimation.Disable() and it will automatically be compiled out of Runtime Builds (except for Development Builds). More information can be found at <a href="https://kybernetik.com.au/animancer/api/Animancer/OptionalWarning">https://kybernetik.com.au/animancer/api/Animancer/OptionalWarning</a>
+
+]]></output>
+              </test-case>
+              <test-case id="1035" name="PresentationKeepsIndependentRootAimAndCannotDamage" fullname="MonsterSupergroup.Gameplay.Tests.BeamNativeAttackLifetimeTests.PresentationKeepsIndependentRootAimAndCannotDamage" methodname="PresentationKeepsIndependentRootAimAndCannotDamage" classname="MonsterSupergroup.Gameplay.Tests.BeamNativeAttackLifetimeTests" runstate="Runnable" seed="669312617" result="Passed" start-time="2026-09-17 07:28:07Z" end-time="2026-09-17 07:28:07Z" duration="0.004101" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[OptionalWarning.DynamicAnimation - Possible Issue Detected: Attempted to set ClipTransition.Clip using an AnimationClip '' which is not an asset. Unity doesn't support dynamically creating animations for Animancer in runtime builds. This warning should be disabled if you're loading animations from Asset Bundles or Addressables or if you only intend to use the animation in the Unity Editor.
+
+This warning can be disabled via 'Edit/Project Settings/Animancer' or by calling Animancer.OptionalWarning.DynamicAnimation.Disable() and it will automatically be compiled out of Runtime Builds (except for Development Builds). More information can be found at <a href="https://kybernetik.com.au/animancer/api/Animancer/OptionalWarning">https://kybernetik.com.au/animancer/api/Animancer/OptionalWarning</a>
+
+OptionalWarning.DynamicAnimation - Possible Issue Detected: Attempted to set ClipTransition.Clip using an AnimationClip '' which is not an asset. Unity doesn't support dynamically creating animations for Animancer in runtime builds. This warning should be disabled if you're loading animations from Asset Bundles or Addressables or if you only intend to use the animation in the Unity Editor.
+
+This warning can be disabled via 'Edit/Project Settings/Animancer' or by calling Animancer.OptionalWarning.DynamicAnimation.Disable() and it will automatically be compiled out of Runtime Builds (except for Development Builds). More information can be found at <a href="https://kybernetik.com.au/animancer/api/Animancer/OptionalWarning">https://kybernetik.com.au/animancer/api/Animancer/OptionalWarning</a>
+
+OptionalWarning.DynamicAnimation - Possible Issue Detected: Attempted to set ClipTransition.Clip using an AnimationClip '' which is not an asset. Unity doesn't support dynamically creating animations for Animancer in runtime builds. This warning should be disabled if you're loading animations from Asset Bundles or Addressables or if you only intend to use the animation in the Unity Editor.
+
+This warning can be disabled via 'Edit/Project Settings/Animancer' or by calling Animancer.OptionalWarning.DynamicAnimation.Disable() and it will automatically be compiled out of Runtime Builds (except for Development Builds). More information can be found at <a href="https://kybernetik.com.au/animancer/api/Animancer/OptionalWarning">https://kybernetik.com.au/animancer/api/Animancer/OptionalWarning</a>
+
+]]></output>
+              </test-case>
+              <test-case id="1043" name="ReinitializingInsidePeriodicHitKeepsTheNewCallbackRunning" fullname="MonsterSupergroup.Gameplay.Tests.BeamNativeAttackLifetimeTests.ReinitializingInsidePeriodicHitKeepsTheNewCallbackRunning" methodname="ReinitializingInsidePeriodicHitKeepsTheNewCallbackRunning" classname="MonsterSupergroup.Gameplay.Tests.BeamNativeAttackLifetimeTests" runstate="Runnable" seed="2015287370" result="Passed" start-time="2026-09-17 07:28:07Z" end-time="2026-09-17 07:28:07Z" duration="0.147624" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[OptionalWarning.DynamicAnimation - Possible Issue Detected: Attempted to set ClipTransition.Clip using an AnimationClip '' which is not an asset. Unity doesn't support dynamically creating animations for Animancer in runtime builds. This warning should be disabled if you're loading animations from Asset Bundles or Addressables or if you only intend to use the animation in the Unity Editor.
+
+This warning can be disabled via 'Edit/Project Settings/Animancer' or by calling Animancer.OptionalWarning.DynamicAnimation.Disable() and it will automatically be compiled out of Runtime Builds (except for Development Builds). More information can be found at <a href="https://kybernetik.com.au/animancer/api/Animancer/OptionalWarning">https://kybernetik.com.au/animancer/api/Animancer/OptionalWarning</a>
+
+OptionalWarning.DynamicAnimation - Possible Issue Detected: Attempted to set ClipTransition.Clip using an AnimationClip '' which is not an asset. Unity doesn't support dynamically creating animations for Animancer in runtime builds. This warning should be disabled if you're loading animations from Asset Bundles or Addressables or if you only intend to use the animation in the Unity Editor.
+
+This warning can be disabled via 'Edit/Project Settings/Animancer' or by calling Animancer.OptionalWarning.DynamicAnimation.Disable() and it will automatically be compiled out of Runtime Builds (except for Development Builds). More information can be found at <a href="https://kybernetik.com.au/animancer/api/Animancer/OptionalWarning">https://kybernetik.com.au/animancer/api/Animancer/OptionalWarning</a>
+
+OptionalWarning.DynamicAnimation - Possible Issue Detected: Attempted to set ClipTransition.Clip using an AnimationClip '' which is not an asset. Unity doesn't support dynamically creating animations for Animancer in runtime builds. This warning should be disabled if you're loading animations from Asset Bundles or Addressables or if you only intend to use the animation in the Unity Editor.
+
+This warning can be disabled via 'Edit/Project Settings/Animancer' or by calling Animancer.OptionalWarning.DynamicAnimation.Disable() and it will automatically be compiled out of Runtime Builds (except for Development Builds). More information can be found at <a href="https://kybernetik.com.au/animancer/api/Animancer/OptionalWarning">https://kybernetik.com.au/animancer/api/Animancer/OptionalWarning</a>
+
+]]></output>
+              </test-case>
+              <test-case id="1036" name="ReturningHitboxInsidePeriodicHitStopsIterationAndAllowsReuse" fullname="MonsterSupergroup.Gameplay.Tests.BeamNativeAttackLifetimeTests.ReturningHitboxInsidePeriodicHitStopsIterationAndAllowsReuse" methodname="ReturningHitboxInsidePeriodicHitStopsIterationAndAllowsReuse" classname="MonsterSupergroup.Gameplay.Tests.BeamNativeAttackLifetimeTests" runstate="Runnable" seed="236190657" result="Passed" start-time="2026-09-17 07:28:07Z" end-time="2026-09-17 07:28:07Z" duration="0.103987" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[OptionalWarning.DynamicAnimation - Possible Issue Detected: Attempted to set ClipTransition.Clip using an AnimationClip '' which is not an asset. Unity doesn't support dynamically creating animations for Animancer in runtime builds. This warning should be disabled if you're loading animations from Asset Bundles or Addressables or if you only intend to use the animation in the Unity Editor.
+
+This warning can be disabled via 'Edit/Project Settings/Animancer' or by calling Animancer.OptionalWarning.DynamicAnimation.Disable() and it will automatically be compiled out of Runtime Builds (except for Development Builds). More information can be found at <a href="https://kybernetik.com.au/animancer/api/Animancer/OptionalWarning">https://kybernetik.com.au/animancer/api/Animancer/OptionalWarning</a>
+
+OptionalWarning.DynamicAnimation - Possible Issue Detected: Attempted to set ClipTransition.Clip using an AnimationClip '' which is not an asset. Unity doesn't support dynamically creating animations for Animancer in runtime builds. This warning should be disabled if you're loading animations from Asset Bundles or Addressables or if you only intend to use the animation in the Unity Editor.
+
+This warning can be disabled via 'Edit/Project Settings/Animancer' or by calling Animancer.OptionalWarning.DynamicAnimation.Disable() and it will automatically be compiled out of Runtime Builds (except for Development Builds). More information can be found at <a href="https://kybernetik.com.au/animancer/api/Animancer/OptionalWarning">https://kybernetik.com.au/animancer/api/Animancer/OptionalWarning</a>
+
+OptionalWarning.DynamicAnimation - Possible Issue Detected: Attempted to set ClipTransition.Clip using an AnimationClip '' which is not an asset. Unity doesn't support dynamically creating animations for Animancer in runtime builds. This warning should be disabled if you're loading animations from Asset Bundles or Addressables or if you only intend to use the animation in the Unity Editor.
+
+This warning can be disabled via 'Edit/Project Settings/Animancer' or by calling Animancer.OptionalWarning.DynamicAnimation.Disable() and it will automatically be compiled out of Runtime Builds (except for Development Builds). More information can be found at <a href="https://kybernetik.com.au/animancer/api/Animancer/OptionalWarning">https://kybernetik.com.au/animancer/api/Animancer/OptionalWarning</a>
+
+]]></output>
+              </test-case>
+              <test-case id="1033" name="SameTargetReceivesPeriodicNativeHitsUsingFrozenBuild" fullname="MonsterSupergroup.Gameplay.Tests.BeamNativeAttackLifetimeTests.SameTargetReceivesPeriodicNativeHitsUsingFrozenBuild" methodname="SameTargetReceivesPeriodicNativeHitsUsingFrozenBuild" classname="MonsterSupergroup.Gameplay.Tests.BeamNativeAttackLifetimeTests" runstate="Runnable" seed="1328633108" result="Passed" start-time="2026-09-17 07:28:07Z" end-time="2026-09-17 07:28:07Z" duration="0.256316" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[OptionalWarning.DynamicAnimation - Possible Issue Detected: Attempted to set ClipTransition.Clip using an AnimationClip '' which is not an asset. Unity doesn't support dynamically creating animations for Animancer in runtime builds. This warning should be disabled if you're loading animations from Asset Bundles or Addressables or if you only intend to use the animation in the Unity Editor.
+
+This warning can be disabled via 'Edit/Project Settings/Animancer' or by calling Animancer.OptionalWarning.DynamicAnimation.Disable() and it will automatically be compiled out of Runtime Builds (except for Development Builds). More information can be found at <a href="https://kybernetik.com.au/animancer/api/Animancer/OptionalWarning">https://kybernetik.com.au/animancer/api/Animancer/OptionalWarning</a>
+
+OptionalWarning.DynamicAnimation - Possible Issue Detected: Attempted to set ClipTransition.Clip using an AnimationClip '' which is not an asset. Unity doesn't support dynamically creating animations for Animancer in runtime builds. This warning should be disabled if you're loading animations from Asset Bundles or Addressables or if you only intend to use the animation in the Unity Editor.
+
+This warning can be disabled via 'Edit/Project Settings/Animancer' or by calling Animancer.OptionalWarning.DynamicAnimation.Disable() and it will automatically be compiled out of Runtime Builds (except for Development Builds). More information can be found at <a href="https://kybernetik.com.au/animancer/api/Animancer/OptionalWarning">https://kybernetik.com.au/animancer/api/Animancer/OptionalWarning</a>
+
+OptionalWarning.DynamicAnimation - Possible Issue Detected: Attempted to set ClipTransition.Clip using an AnimationClip '' which is not an asset. Unity doesn't support dynamically creating animations for Animancer in runtime builds. This warning should be disabled if you're loading animations from Asset Bundles or Addressables or if you only intend to use the animation in the Unity Editor.
+
+This warning can be disabled via 'Edit/Project Settings/Animancer' or by calling Animancer.OptionalWarning.DynamicAnimation.Disable() and it will automatically be compiled out of Runtime Builds (except for Development Builds). More information can be found at <a href="https://kybernetik.com.au/animancer/api/Animancer/OptionalWarning">https://kybernetik.com.au/animancer/api/Animancer/OptionalWarning</a>
+
+]]></output>
+              </test-case>
+              <test-case id="1038" name="SourceSpeedScalerAdjustsHitIntervalAndResetsForPoolReuse" fullname="MonsterSupergroup.Gameplay.Tests.BeamNativeAttackLifetimeTests.SourceSpeedScalerAdjustsHitIntervalAndResetsForPoolReuse" methodname="SourceSpeedScalerAdjustsHitIntervalAndResetsForPoolReuse" classname="MonsterSupergroup.Gameplay.Tests.BeamNativeAttackLifetimeTests" runstate="Runnable" seed="483300246" result="Passed" start-time="2026-09-17 07:28:07Z" end-time="2026-09-17 07:28:07Z" duration="0.002021" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[OptionalWarning.DynamicAnimation - Possible Issue Detected: Attempted to set ClipTransition.Clip using an AnimationClip '' which is not an asset. Unity doesn't support dynamically creating animations for Animancer in runtime builds. This warning should be disabled if you're loading animations from Asset Bundles or Addressables or if you only intend to use the animation in the Unity Editor.
+
+This warning can be disabled via 'Edit/Project Settings/Animancer' or by calling Animancer.OptionalWarning.DynamicAnimation.Disable() and it will automatically be compiled out of Runtime Builds (except for Development Builds). More information can be found at <a href="https://kybernetik.com.au/animancer/api/Animancer/OptionalWarning">https://kybernetik.com.au/animancer/api/Animancer/OptionalWarning</a>
+
+OptionalWarning.DynamicAnimation - Possible Issue Detected: Attempted to set ClipTransition.Clip using an AnimationClip '' which is not an asset. Unity doesn't support dynamically creating animations for Animancer in runtime builds. This warning should be disabled if you're loading animations from Asset Bundles or Addressables or if you only intend to use the animation in the Unity Editor.
+
+This warning can be disabled via 'Edit/Project Settings/Animancer' or by calling Animancer.OptionalWarning.DynamicAnimation.Disable() and it will automatically be compiled out of Runtime Builds (except for Development Builds). More information can be found at <a href="https://kybernetik.com.au/animancer/api/Animancer/OptionalWarning">https://kybernetik.com.au/animancer/api/Animancer/OptionalWarning</a>
+
+OptionalWarning.DynamicAnimation - Possible Issue Detected: Attempted to set ClipTransition.Clip using an AnimationClip '' which is not an asset. Unity doesn't support dynamically creating animations for Animancer in runtime builds. This warning should be disabled if you're loading animations from Asset Bundles or Addressables or if you only intend to use the animation in the Unity Editor.
+
+This warning can be disabled via 'Edit/Project Settings/Animancer' or by calling Animancer.OptionalWarning.DynamicAnimation.Disable() and it will automatically be compiled out of Runtime Builds (except for Development Builds). More information can be found at <a href="https://kybernetik.com.au/animancer/api/Animancer/OptionalWarning">https://kybernetik.com.au/animancer/api/Animancer/OptionalWarning</a>
+
+]]></output>
+              </test-case>
+            </test-suite>
+            <test-suite type="TestFixture" id="1044" name="BeamPresentationReplicaPlayModeTests" fullname="MonsterSupergroup.Gameplay.Tests.BeamPresentationReplicaPlayModeTests" classname="MonsterSupergroup.Gameplay.Tests.BeamPresentationReplicaPlayModeTests" runstate="Runnable" testcasecount="8" result="Passed" start-time="2026-09-17 07:28:07Z" end-time="2026-09-17 07:28:11Z" duration="3.552930" total="8" passed="8" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1046" name="AgedReplay_SeeksStartMainAndEndPhasesAndRejectsExpiredVisuals" fullname="MonsterSupergroup.Gameplay.Tests.BeamPresentationReplicaPlayModeTests.AgedReplay_SeeksStartMainAndEndPhasesAndRejectsExpiredVisuals" methodname="AgedReplay_SeeksStartMainAndEndPhasesAndRejectsExpiredVisuals" classname="MonsterSupergroup.Gameplay.Tests.BeamPresentationReplicaPlayModeTests" runstate="Runnable" seed="1419915643" result="Passed" start-time="2026-09-17 07:28:07Z" end-time="2026-09-17 07:28:07Z" duration="0.067385" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1047" name="AimIsScopedToAttackRootAndRetainsBeamOrdinalAfterSiblingCancellation" fullname="MonsterSupergroup.Gameplay.Tests.BeamPresentationReplicaPlayModeTests.AimIsScopedToAttackRootAndRetainsBeamOrdinalAfterSiblingCancellation" methodname="AimIsScopedToAttackRootAndRetainsBeamOrdinalAfterSiblingCancellation" classname="MonsterSupergroup.Gameplay.Tests.BeamPresentationReplicaPlayModeTests" runstate="Runnable" seed="644766010" result="Passed" start-time="2026-09-17 07:28:07Z" end-time="2026-09-17 07:28:07Z" duration="0.053272" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1051" name="CancelAndPoolReuse_RejectOldKeysWithoutInterruptingTheNewBeam" fullname="MonsterSupergroup.Gameplay.Tests.BeamPresentationReplicaPlayModeTests.CancelAndPoolReuse_RejectOldKeysWithoutInterruptingTheNewBeam" methodname="CancelAndPoolReuse_RejectOldKeysWithoutInterruptingTheNewBeam" classname="MonsterSupergroup.Gameplay.Tests.BeamPresentationReplicaPlayModeTests" runstate="Runnable" seed="485549045" result="Passed" start-time="2026-09-17 07:28:07Z" end-time="2026-09-17 07:28:08Z" duration="0.220773" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1052" name="Dispose_ReturnsEveryVariantAndDestroysOnlyReplicaEmitters" fullname="MonsterSupergroup.Gameplay.Tests.BeamPresentationReplicaPlayModeTests.Dispose_ReturnsEveryVariantAndDestroysOnlyReplicaEmitters" methodname="Dispose_ReturnsEveryVariantAndDestroysOnlyReplicaEmitters" classname="MonsterSupergroup.Gameplay.Tests.BeamPresentationReplicaPlayModeTests" runstate="Runnable" seed="1187342676" result="Passed" start-time="2026-09-17 07:28:08Z" end-time="2026-09-17 07:28:08Z" duration="0.021069" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1050" name="ExternalBeamAndAvatarDeactivation_ClearReplicaImmediatelyWithoutWaitingForTick" fullname="MonsterSupergroup.Gameplay.Tests.BeamPresentationReplicaPlayModeTests.ExternalBeamAndAvatarDeactivation_ClearReplicaImmediatelyWithoutWaitingForTick" methodname="ExternalBeamAndAvatarDeactivation_ClearReplicaImmediatelyWithoutWaitingForTick" classname="MonsterSupergroup.Gameplay.Tests.BeamPresentationReplicaPlayModeTests" runstate="Runnable" seed="1093028869" result="Passed" start-time="2026-09-17 07:28:08Z" end-time="2026-09-17 07:28:08Z" duration="0.019012" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1048" name="NaturalEnd_ReturnsAgedMainAndEndPhaseInstancesWithoutStaleEntries" fullname="MonsterSupergroup.Gameplay.Tests.BeamPresentationReplicaPlayModeTests.NaturalEnd_ReturnsAgedMainAndEndPhaseInstancesWithoutStaleEntries" methodname="NaturalEnd_ReturnsAgedMainAndEndPhaseInstancesWithoutStaleEntries" classname="MonsterSupergroup.Gameplay.Tests.BeamPresentationReplicaPlayModeTests" runstate="Runnable" seed="2064818805" result="Passed" start-time="2026-09-17 07:28:08Z" end-time="2026-09-17 07:28:09Z" duration="1.244541" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1045" name="RemoteFireAndPoison_FollowAvatarWithoutNativeRuntimeSnapshotOrDamage" fullname="MonsterSupergroup.Gameplay.Tests.BeamPresentationReplicaPlayModeTests.RemoteFireAndPoison_FollowAvatarWithoutNativeRuntimeSnapshotOrDamage" methodname="RemoteFireAndPoison_FollowAvatarWithoutNativeRuntimeSnapshotOrDamage" classname="MonsterSupergroup.Gameplay.Tests.BeamPresentationReplicaPlayModeTests" runstate="Runnable" seed="764197066" result="Passed" start-time="2026-09-17 07:28:09Z" end-time="2026-09-17 07:28:09Z" duration="0.090364" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1049" name="UpgradedDurationBeyondSourceClip_HoldsMainThenPlaysOutAndReturns" fullname="MonsterSupergroup.Gameplay.Tests.BeamPresentationReplicaPlayModeTests.UpgradedDurationBeyondSourceClip_HoldsMainThenPlaysOutAndReturns" methodname="UpgradedDurationBeyondSourceClip_HoldsMainThenPlaysOutAndReturns" classname="MonsterSupergroup.Gameplay.Tests.BeamPresentationReplicaPlayModeTests" runstate="Runnable" seed="474205484" result="Passed" start-time="2026-09-17 07:28:09Z" end-time="2026-09-17 07:28:11Z" duration="1.832578" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+            </test-suite>
+            <test-suite type="TestFixture" id="1210" name="GameOptionsTests" fullname="MonsterSupergroup.Gameplay.Tests.GameOptionsTests" classname="MonsterSupergroup.Gameplay.Tests.GameOptionsTests" runstate="Runnable" testcasecount="7" result="Passed" start-time="2026-09-17 07:28:11Z" end-time="2026-09-17 07:28:12Z" duration="1.147045" total="7" passed="7" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1215" name="AudioControlsRealFmodBusesIndependently" fullname="MonsterSupergroup.Gameplay.Tests.GameOptionsTests.AudioControlsRealFmodBusesIndependently" methodname="AudioControlsRealFmodBusesIndependently" classname="MonsterSupergroup.Gameplay.Tests.GameOptionsTests" runstate="Runnable" seed="1759289868" result="Passed" start-time="2026-09-17 07:28:11Z" end-time="2026-09-17 07:28:11Z" duration="0.102764" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[[Localization] Applied locale=zh-CN revision=3
+]]></output>
+              </test-case>
+              <test-case id="1211" name="CorruptFutureAndOutOfRangePreferencesRecover" fullname="MonsterSupergroup.Gameplay.Tests.GameOptionsTests.CorruptFutureAndOutOfRangePreferencesRecover" methodname="CorruptFutureAndOutOfRangePreferencesRecover" classname="MonsterSupergroup.Gameplay.Tests.GameOptionsTests" runstate="Runnable" seed="470265374" result="Passed" start-time="2026-09-17 07:28:11Z" end-time="2026-09-17 07:28:11Z" duration="0.013793" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1213" name="GraphicsAffectRuntimeAndKeepSourceAssetIntact" fullname="MonsterSupergroup.Gameplay.Tests.GameOptionsTests.GraphicsAffectRuntimeAndKeepSourceAssetIntact" methodname="GraphicsAffectRuntimeAndKeepSourceAssetIntact" classname="MonsterSupergroup.Gameplay.Tests.GameOptionsTests" runstate="Runnable" seed="1110327245" result="Passed" start-time="2026-09-17 07:28:11Z" end-time="2026-09-17 07:28:11Z" duration="0.042814" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[[Localization] Applied locale=zh-CN revision=7
+]]></output>
+              </test-case>
+              <test-case id="1212" name="LanguageUpdatesExistingTextAndPreservesArguments" fullname="MonsterSupergroup.Gameplay.Tests.GameOptionsTests.LanguageUpdatesExistingTextAndPreservesArguments" methodname="LanguageUpdatesExistingTextAndPreservesArguments" classname="MonsterSupergroup.Gameplay.Tests.GameOptionsTests" runstate="Runnable" seed="623584490" result="Passed" start-time="2026-09-17 07:28:11Z" end-time="2026-09-17 07:28:12Z" duration="0.562217" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[[Localization] Applied locale=en revision=10
+[Localization] Applied locale=zh-CN revision=11
+]]></output>
+              </test-case>
+              <test-case id="1214" name="PanelDiscardsDraftAndAppliesOnlyOnRequest" fullname="MonsterSupergroup.Gameplay.Tests.GameOptionsTests.PanelDiscardsDraftAndAppliesOnlyOnRequest" methodname="PanelDiscardsDraftAndAppliesOnlyOnRequest" classname="MonsterSupergroup.Gameplay.Tests.GameOptionsTests" runstate="Runnable" seed="2044694674" result="Passed" start-time="2026-09-17 07:28:12Z" end-time="2026-09-17 07:28:12Z" duration="0.256959" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[[Localization] Applied locale=zh-CN revision=13
+[Localization] Applied locale=en revision=14
+]]></output>
+              </test-case>
+              <test-case id="1216" name="ResolutionChangeKeepsSupportedRefreshRateOrUsesNearestAvailable" fullname="MonsterSupergroup.Gameplay.Tests.GameOptionsTests.ResolutionChangeKeepsSupportedRefreshRateOrUsesNearestAvailable" methodname="ResolutionChangeKeepsSupportedRefreshRateOrUsesNearestAvailable" classname="MonsterSupergroup.Gameplay.Tests.GameOptionsTests" runstate="Runnable" seed="1743927169" result="Passed" start-time="2026-09-17 07:28:12Z" end-time="2026-09-17 07:28:12Z" duration="0.042259" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[[Localization] Applied locale=zh-CN revision=18
+]]></output>
+              </test-case>
+              <test-case id="1217" name="ResolutionRefreshAndFrameLimitAreSeparateDraftControls" fullname="MonsterSupergroup.Gameplay.Tests.GameOptionsTests.ResolutionRefreshAndFrameLimitAreSeparateDraftControls" methodname="ResolutionRefreshAndFrameLimitAreSeparateDraftControls" classname="MonsterSupergroup.Gameplay.Tests.GameOptionsTests" runstate="Runnable" seed="1601096008" result="Passed" start-time="2026-09-17 07:28:12Z" end-time="2026-09-17 07:28:12Z" duration="0.118437" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[[Localization] Applied locale=zh-CN revision=20
+[Localization] Applied locale=en revision=21
+]]></output>
+              </test-case>
+            </test-suite>
+            <test-suite type="TestFixture" id="1218" name="GameplayCameraTests" fullname="MonsterSupergroup.Gameplay.Tests.GameplayCameraTests" classname="MonsterSupergroup.Gameplay.Tests.GameplayCameraTests" runstate="Runnable" testcasecount="8" result="Passed" start-time="2026-09-17 07:28:12Z" end-time="2026-09-17 07:28:51Z" duration="39.328026" total="8" passed="8" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1223" name="AdmittedUltimate_UsesOriginalTwoAnimationEvents_OnceOnHost" fullname="MonsterSupergroup.Gameplay.Tests.GameplayCameraTests.AdmittedUltimate_UsesOriginalTwoAnimationEvents_OnceOnHost" methodname="AdmittedUltimate_UsesOriginalTwoAnimationEvents_OnceOnHost" classname="MonsterSupergroup.Gameplay.Tests.GameplayCameraTests" runstate="Runnable" seed="884213689" result="Passed" start-time="2026-09-17 07:28:12Z" end-time="2026-09-17 07:28:28Z" duration="15.762090" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[[Localization] Applied locale=zh-CN revision=22
+[NetworkBackend] backend=Kcp purpose=Test source=test-runner transport=KcpTransport.
+--- Hardware Info ---
+CPU Model: 13th Gen Intel(R) Core(TM) i7-13700KF
+GPU Model: NVIDIA GeForce RTX 4080
+RAM: 65375 MB
+Install Disk Model: JZ-SSD4T-XW
+Main Monitor Model: Unknown Monitor
+---------------------
+Normal : True
+UI : False
+AstralShift.HellMaiden.Controllers.PlayerController_HMD
+<color=yellow><b>► Controllers: </b></color>Controller type AstralShift.Control.Controllers.NoInputGameController not available
+[BootGameplay] Server starting; loading 'Assets/_Project/Scenes/Gameplay.unity'.
+[BootGameplay] Server connection 0 is ready.
+[BootGameplay] Queued Player for connection 0.
+[BootGameplay] Gameplay scene ready: 'Assets/_Project/Scenes/Gameplay.unity'.
+[BootGameplay] Spawned Player NetworkPlayer [connId=0] in 'Assets/_Project/Scenes/Gameplay.unity'.
+<color=yellow><b>► Controllers: </b></color>Overrode <color=yellow><b></b></color> with <color=yellow><b>PlayerController_HMD</b></color>.
+Normal : True
+UI : False
+STATUS_BAR targetFill = 0.998
+[BootGameplay] Client stopping; serverActive=True.
+[BootGameplay] Server stopping.
+[BootGameplay] Gameplay unload requested.
+There are 2 audio listeners in the scene. Please ensure there is always exactly one audio listener in the scene.
+[SteamInvite] stage=cleanup lobby=0 host=0 phase=Disabled reason=
+]]></output>
+              </test-case>
+              <test-case id="1220" name="AudioListenerTracksFinalCameraXY_ButNotBarrierZoomDepth" fullname="MonsterSupergroup.Gameplay.Tests.GameplayCameraTests.AudioListenerTracksFinalCameraXY_ButNotBarrierZoomDepth" methodname="AudioListenerTracksFinalCameraXY_ButNotBarrierZoomDepth" classname="MonsterSupergroup.Gameplay.Tests.GameplayCameraTests" runstate="Runnable" seed="1638229541" result="Passed" start-time="2026-09-17 07:28:28Z" end-time="2026-09-17 07:28:29Z" duration="1.632516" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[[NetworkBackend] backend=Kcp purpose=Test source=test-runner transport=KcpTransport.
+--- Hardware Info ---
+CPU Model: 13th Gen Intel(R) Core(TM) i7-13700KF
+GPU Model: NVIDIA GeForce RTX 4080
+RAM: 65375 MB
+Install Disk Model: JZ-SSD4T-XW
+Main Monitor Model: Unknown Monitor
+---------------------
+Normal : True
+UI : False
+AstralShift.HellMaiden.Controllers.PlayerController_HMD
+<color=yellow><b>► Controllers: </b></color>Controller type AstralShift.Control.Controllers.NoInputGameController not available
+[BootGameplay] Server starting; loading 'Assets/_Project/Scenes/Gameplay.unity'.
+[BootGameplay] Server connection 0 is ready.
+[BootGameplay] Queued Player for connection 0.
+[BootGameplay] Gameplay scene ready: 'Assets/_Project/Scenes/Gameplay.unity'.
+[BootGameplay] Spawned Player NetworkPlayer [connId=0] in 'Assets/_Project/Scenes/Gameplay.unity'.
+<color=yellow><b>► Controllers: </b></color>Overrode <color=yellow><b></b></color> with <color=yellow><b>PlayerController_HMD</b></color>.
+Normal : True
+UI : False
+[BootGameplay] Client stopping; serverActive=True.
+[BootGameplay] Server stopping.
+[BootGameplay] Gameplay unload requested.
+There are 2 audio listeners in the scene. Please ensure there is always exactly one audio listener in the scene.
+[SteamInvite] stage=cleanup lobby=0 host=0 phase=Disabled reason=
+]]></output>
+              </test-case>
+              <test-case id="1226" name="Axeldor_DeathHoldsAndCanonicalLifeRestorationReversesClip" fullname="MonsterSupergroup.Gameplay.Tests.GameplayCameraTests.Axeldor_DeathHoldsAndCanonicalLifeRestorationReversesClip" methodname="Axeldor_DeathHoldsAndCanonicalLifeRestorationReversesClip" classname="MonsterSupergroup.Gameplay.Tests.GameplayCameraTests" runstate="Runnable" seed="42178743" result="Passed" start-time="2026-09-17 07:28:29Z" end-time="2026-09-17 07:28:34Z" duration="4.079048" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[[NetworkBackend] backend=Kcp purpose=Test source=test-runner transport=KcpTransport.
+--- Hardware Info ---
+CPU Model: 13th Gen Intel(R) Core(TM) i7-13700KF
+GPU Model: NVIDIA GeForce RTX 4080
+RAM: 65375 MB
+Install Disk Model: JZ-SSD4T-XW
+Main Monitor Model: Unknown Monitor
+---------------------
+Normal : True
+UI : False
+AstralShift.HellMaiden.Controllers.PlayerController_HMD
+<color=yellow><b>► Controllers: </b></color>Controller type AstralShift.Control.Controllers.NoInputGameController not available
+[BootGameplay] Server starting; loading 'Assets/_Project/Scenes/Gameplay.unity'.
+[BootGameplay] Server connection 0 is ready.
+[BootGameplay] Queued Player for connection 0.
+[BootGameplay] Gameplay scene ready: 'Assets/_Project/Scenes/Gameplay.unity'.
+[BootGameplay] Spawned Player NetworkPlayer [connId=0] in 'Assets/_Project/Scenes/Gameplay.unity'.
+<color=yellow><b>► Controllers: </b></color>Overrode <color=yellow><b></b></color> with <color=yellow><b>PlayerController_HMD</b></color>.
+Normal : True
+UI : False
+STATUS_BAR targetFill = 0
+[BootGameplay] Client stopping; serverActive=True.
+[BootGameplay] Server stopping.
+[BootGameplay] Gameplay unload requested.
+There are 2 audio listeners in the scene. Please ensure there is always exactly one audio listener in the scene.
+[SteamInvite] stage=cleanup lobby=0 host=0 phase=Disabled reason=
+]]></output>
+              </test-case>
+              <test-case id="1221" name="FormalCamera_FollowsOneOwner_UsesGroundEdges_AndConvertsAim" fullname="MonsterSupergroup.Gameplay.Tests.GameplayCameraTests.FormalCamera_FollowsOneOwner_UsesGroundEdges_AndConvertsAim" methodname="FormalCamera_FollowsOneOwner_UsesGroundEdges_AndConvertsAim" classname="MonsterSupergroup.Gameplay.Tests.GameplayCameraTests" runstate="Runnable" seed="1390297892" result="Passed" start-time="2026-09-17 07:28:34Z" end-time="2026-09-17 07:28:44Z" duration="10.702329" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[[NetworkBackend] backend=Kcp purpose=Test source=test-runner transport=KcpTransport.
+--- Hardware Info ---
+CPU Model: 13th Gen Intel(R) Core(TM) i7-13700KF
+GPU Model: NVIDIA GeForce RTX 4080
+RAM: 65375 MB
+Install Disk Model: JZ-SSD4T-XW
+Main Monitor Model: Unknown Monitor
+---------------------
+Normal : True
+UI : False
+AstralShift.HellMaiden.Controllers.PlayerController_HMD
+<color=yellow><b>► Controllers: </b></color>Controller type AstralShift.Control.Controllers.NoInputGameController not available
+[BootGameplay] Server starting; loading 'Assets/_Project/Scenes/Gameplay.unity'.
+[BootGameplay] Server connection 0 is ready.
+[BootGameplay] Queued Player for connection 0.
+[BootGameplay] Gameplay scene ready: 'Assets/_Project/Scenes/Gameplay.unity'.
+[BootGameplay] Spawned Player NetworkPlayer [connId=0] in 'Assets/_Project/Scenes/Gameplay.unity'.
+<color=yellow><b>► Controllers: </b></color>Overrode <color=yellow><b></b></color> with <color=yellow><b>PlayerController_HMD</b></color>.
+Normal : True
+UI : False
+[BootGameplay] Client stopping; serverActive=True.
+[BootGameplay] Server stopping.
+[BootGameplay] Gameplay unload requested.
+There are 2 audio listeners in the scene. Please ensure there is always exactly one audio listener in the scene.
+[SteamInvite] stage=cleanup lobby=0 host=0 phase=Disabled reason=
+]]></output>
+              </test-case>
+              <test-case id="1225" name="HostRestart_DestroysOldViewAndShakeContainer_ThenBindsNewOwner" fullname="MonsterSupergroup.Gameplay.Tests.GameplayCameraTests.HostRestart_DestroysOldViewAndShakeContainer_ThenBindsNewOwner" methodname="HostRestart_DestroysOldViewAndShakeContainer_ThenBindsNewOwner" classname="MonsterSupergroup.Gameplay.Tests.GameplayCameraTests" runstate="Runnable" seed="575409521" result="Passed" start-time="2026-09-17 07:28:44Z" end-time="2026-09-17 07:28:46Z" duration="2.258745" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[[NetworkBackend] backend=Kcp purpose=Test source=test-runner transport=KcpTransport.
+--- Hardware Info ---
+CPU Model: 13th Gen Intel(R) Core(TM) i7-13700KF
+GPU Model: NVIDIA GeForce RTX 4080
+RAM: 65375 MB
+Install Disk Model: JZ-SSD4T-XW
+Main Monitor Model: Unknown Monitor
+---------------------
+Normal : True
+UI : False
+AstralShift.HellMaiden.Controllers.PlayerController_HMD
+<color=yellow><b>► Controllers: </b></color>Controller type AstralShift.Control.Controllers.NoInputGameController not available
+[BootGameplay] Server starting; loading 'Assets/_Project/Scenes/Gameplay.unity'.
+[BootGameplay] Server connection 0 is ready.
+[BootGameplay] Queued Player for connection 0.
+[BootGameplay] Gameplay scene ready: 'Assets/_Project/Scenes/Gameplay.unity'.
+[BootGameplay] Spawned Player NetworkPlayer [connId=0] in 'Assets/_Project/Scenes/Gameplay.unity'.
+<color=yellow><b>► Controllers: </b></color>Overrode <color=yellow><b></b></color> with <color=yellow><b>PlayerController_HMD</b></color>.
+Normal : True
+UI : False
+[BootGameplay] Client stopping; serverActive=True.
+[BootGameplay] Server stopping.
+[BootGameplay] Gameplay unload requested.
+There are 2 audio listeners in the scene. Please ensure there is always exactly one audio listener in the scene.
+[BootGameplay] Server starting; loading 'Assets/_Project/Scenes/Gameplay.unity'.
+[BootGameplay] Gameplay scene ready: 'Assets/_Project/Scenes/Gameplay.unity'.
+[BootGameplay] Server connection 0 is ready.
+[BootGameplay] Queued Player for connection 0.
+[BootGameplay] Spawned Player NetworkPlayer [connId=0] in 'Assets/_Project/Scenes/Gameplay.unity'.
+<color=yellow><b>► Controllers: </b></color>Overrode <color=yellow><b></b></color> with <color=yellow><b>PlayerController_HMD</b></color>.
+Normal : True
+UI : False
+[BootGameplay] Client stopping; serverActive=True.
+[BootGameplay] Server stopping.
+[BootGameplay] Gameplay unload requested.
+There are 2 audio listeners in the scene. Please ensure there is always exactly one audio listener in the scene.
+[SteamInvite] stage=cleanup lobby=0 host=0 phase=Disabled reason=
+]]></output>
+              </test-case>
+              <test-case id="1224" name="LocalDamage_IgnoresCanonicalEchoAndInvulnerability_AndRebindsOneSubscription" fullname="MonsterSupergroup.Gameplay.Tests.GameplayCameraTests.LocalDamage_IgnoresCanonicalEchoAndInvulnerability_AndRebindsOneSubscription" methodname="LocalDamage_IgnoresCanonicalEchoAndInvulnerability_AndRebindsOneSubscription" classname="MonsterSupergroup.Gameplay.Tests.GameplayCameraTests" runstate="Runnable" seed="1034033000" result="Passed" start-time="2026-09-17 07:28:46Z" end-time="2026-09-17 07:28:48Z" duration="1.580238" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[[NetworkBackend] backend=Kcp purpose=Test source=test-runner transport=KcpTransport.
+--- Hardware Info ---
+CPU Model: 13th Gen Intel(R) Core(TM) i7-13700KF
+GPU Model: NVIDIA GeForce RTX 4080
+RAM: 65375 MB
+Install Disk Model: JZ-SSD4T-XW
+Main Monitor Model: Unknown Monitor
+---------------------
+Normal : True
+UI : False
+AstralShift.HellMaiden.Controllers.PlayerController_HMD
+<color=yellow><b>► Controllers: </b></color>Controller type AstralShift.Control.Controllers.NoInputGameController not available
+[BootGameplay] Server starting; loading 'Assets/_Project/Scenes/Gameplay.unity'.
+[BootGameplay] Server connection 0 is ready.
+[BootGameplay] Queued Player for connection 0.
+[BootGameplay] Gameplay scene ready: 'Assets/_Project/Scenes/Gameplay.unity'.
+[BootGameplay] Spawned Player NetworkPlayer [connId=0] in 'Assets/_Project/Scenes/Gameplay.unity'.
+<color=yellow><b>► Controllers: </b></color>Overrode <color=yellow><b></b></color> with <color=yellow><b>PlayerController_HMD</b></color>.
+Normal : True
+UI : False
+[BootGameplay] Client stopping; serverActive=True.
+[BootGameplay] Server stopping.
+[BootGameplay] Gameplay unload requested.
+There are 2 audio listeners in the scene. Please ensure there is always exactly one audio listener in the scene.
+[SteamInvite] stage=cleanup lobby=0 host=0 phase=Disabled reason=
+]]></output>
+              </test-case>
+              <test-case id="1219" name="OptionsDisableOwnerDamageAndExplicitShakeAndRestoreImmediately" fullname="MonsterSupergroup.Gameplay.Tests.GameplayCameraTests.OptionsDisableOwnerDamageAndExplicitShakeAndRestoreImmediately" methodname="OptionsDisableOwnerDamageAndExplicitShakeAndRestoreImmediately" classname="MonsterSupergroup.Gameplay.Tests.GameplayCameraTests" runstate="Runnable" seed="1459151229" result="Passed" start-time="2026-09-17 07:28:48Z" end-time="2026-09-17 07:28:50Z" duration="1.700438" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[[NetworkBackend] backend=Kcp purpose=Test source=test-runner transport=KcpTransport.
+--- Hardware Info ---
+CPU Model: 13th Gen Intel(R) Core(TM) i7-13700KF
+GPU Model: NVIDIA GeForce RTX 4080
+RAM: 65375 MB
+Install Disk Model: JZ-SSD4T-XW
+Main Monitor Model: Unknown Monitor
+---------------------
+Normal : True
+UI : False
+AstralShift.HellMaiden.Controllers.PlayerController_HMD
+<color=yellow><b>► Controllers: </b></color>Controller type AstralShift.Control.Controllers.NoInputGameController not available
+[BootGameplay] Server starting; loading 'Assets/_Project/Scenes/Gameplay.unity'.
+[BootGameplay] Server connection 0 is ready.
+[BootGameplay] Queued Player for connection 0.
+[BootGameplay] Gameplay scene ready: 'Assets/_Project/Scenes/Gameplay.unity'.
+[BootGameplay] Spawned Player NetworkPlayer [connId=0] in 'Assets/_Project/Scenes/Gameplay.unity'.
+<color=yellow><b>► Controllers: </b></color>Overrode <color=yellow><b></b></color> with <color=yellow><b>PlayerController_HMD</b></color>.
+Normal : True
+UI : False
+[BootGameplay] Client stopping; serverActive=True.
+[BootGameplay] Server stopping.
+[BootGameplay] Gameplay unload requested.
+There are 2 audio listeners in the scene. Please ensure there is always exactly one audio listener in the scene.
+[SteamInvite] stage=cleanup lobby=0 host=0 phase=Disabled reason=
+]]></output>
+              </test-case>
+              <test-case id="1222" name="OwnerReleaseAndLateCamera_RebindWithoutDuplicatesOrResidualShake" fullname="MonsterSupergroup.Gameplay.Tests.GameplayCameraTests.OwnerReleaseAndLateCamera_RebindWithoutDuplicatesOrResidualShake" methodname="OwnerReleaseAndLateCamera_RebindWithoutDuplicatesOrResidualShake" classname="MonsterSupergroup.Gameplay.Tests.GameplayCameraTests" runstate="Runnable" seed="844220426" result="Passed" start-time="2026-09-17 07:28:50Z" end-time="2026-09-17 07:28:51Z" duration="1.604665" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[[NetworkBackend] backend=Kcp purpose=Test source=test-runner transport=KcpTransport.
+--- Hardware Info ---
+CPU Model: 13th Gen Intel(R) Core(TM) i7-13700KF
+GPU Model: NVIDIA GeForce RTX 4080
+RAM: 65375 MB
+Install Disk Model: JZ-SSD4T-XW
+Main Monitor Model: Unknown Monitor
+---------------------
+Normal : True
+UI : False
+AstralShift.HellMaiden.Controllers.PlayerController_HMD
+<color=yellow><b>► Controllers: </b></color>Controller type AstralShift.Control.Controllers.NoInputGameController not available
+[BootGameplay] Server starting; loading 'Assets/_Project/Scenes/Gameplay.unity'.
+[BootGameplay] Server connection 0 is ready.
+[BootGameplay] Queued Player for connection 0.
+[BootGameplay] Gameplay scene ready: 'Assets/_Project/Scenes/Gameplay.unity'.
+[BootGameplay] Spawned Player NetworkPlayer [connId=0] in 'Assets/_Project/Scenes/Gameplay.unity'.
+<color=yellow><b>► Controllers: </b></color>Overrode <color=yellow><b></b></color> with <color=yellow><b>PlayerController_HMD</b></color>.
+Normal : True
+UI : False
+<color=yellow><b>► Controllers: </b></color>Overrode <color=yellow><b></b></color> with <color=yellow><b>PlayerController_HMD</b></color>.
+Normal : True
+UI : False
+[BootGameplay] Client stopping; serverActive=True.
+[BootGameplay] Server stopping.
+[BootGameplay] Gameplay unload requested.
+There are 2 audio listeners in the scene. Please ensure there is always exactly one audio listener in the scene.
+[SteamInvite] stage=cleanup lobby=0 host=0 phase=Disabled reason=
+]]></output>
+              </test-case>
+            </test-suite>
+            <test-suite type="TestFixture" id="1631" name="WeaponAudioLifetimeTests" fullname="MonsterSupergroup.Gameplay.Tests.WeaponAudioLifetimeTests" classname="MonsterSupergroup.Gameplay.Tests.WeaponAudioLifetimeTests" runstate="Runnable" testcasecount="2" result="Passed" start-time="2026-09-17 07:28:51Z" end-time="2026-09-17 07:28:55Z" duration="3.218354" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1633" name="BreathPhaseChangesAtExitCompletion_CancellationAndReuseReleaseOneInstance" fullname="MonsterSupergroup.Gameplay.Tests.WeaponAudioLifetimeTests.BreathPhaseChangesAtExitCompletion_CancellationAndReuseReleaseOneInstance" methodname="BreathPhaseChangesAtExitCompletion_CancellationAndReuseReleaseOneInstance" classname="MonsterSupergroup.Gameplay.Tests.WeaponAudioLifetimeTests" runstate="Runnable" seed="1250153360" result="Passed" start-time="2026-09-17 07:28:51Z" end-time="2026-09-17 07:28:55Z" duration="3.166292" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1632" name="WispOnlyShootsAndFinalHits_ReuseAndLateReplayDoNotAddFlightOrPiercingAudio" fullname="MonsterSupergroup.Gameplay.Tests.WeaponAudioLifetimeTests.WispOnlyShootsAndFinalHits_ReuseAndLateReplayDoNotAddFlightOrPiercingAudio" methodname="WispOnlyShootsAndFinalHits_ReuseAndLateReplayDoNotAddFlightOrPiercingAudio" classname="MonsterSupergroup.Gameplay.Tests.WeaponAudioLifetimeTests" runstate="Runnable" seed="500729182" result="Passed" start-time="2026-09-17 07:28:55Z" end-time="2026-09-17 07:28:55Z" duration="0.044806" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+            </test-suite>
+            <test-suite type="TestFixture" id="1634" name="WispPresentationTests" fullname="MonsterSupergroup.Gameplay.Tests.WispPresentationTests" classname="MonsterSupergroup.Gameplay.Tests.WispPresentationTests" runstate="Runnable" testcasecount="6" result="Failed" site="Child" start-time="2026-09-17 07:28:55Z" end-time="2026-09-17 07:28:58Z" duration="3.359909" total="6" passed="5" failed="1" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <failure>
+                <message><![CDATA[One or more child tests had errors]]></message>
+              </failure>
+              <test-case id="1635" name="Wisp_AllVariantsRestoreAnimationAndMaterialStateOnReuse" fullname="MonsterSupergroup.Gameplay.Tests.WispPresentationTests.Wisp_AllVariantsRestoreAnimationAndMaterialStateOnReuse" methodname="Wisp_AllVariantsRestoreAnimationAndMaterialStateOnReuse" classname="MonsterSupergroup.Gameplay.Tests.WispPresentationTests" runstate="Runnable" seed="1582993397" result="Passed" start-time="2026-09-17 07:28:55Z" end-time="2026-09-17 07:28:56Z" duration="1.228971" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1640" name="Wisp_MissingOptionalAudioDoesNotThrowOrCreateAnInstance" fullname="MonsterSupergroup.Gameplay.Tests.WispPresentationTests.Wisp_MissingOptionalAudioDoesNotThrowOrCreateAnInstance" methodname="Wisp_MissingOptionalAudioDoesNotThrowOrCreateAnInstance" classname="MonsterSupergroup.Gameplay.Tests.WispPresentationTests" runstate="Runnable" seed="782025816" result="Passed" start-time="2026-09-17 07:28:56Z" end-time="2026-09-17 07:28:56Z" duration="0.007035" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[[FMOD] ObjectLookup::get : Lookup failed for EventModel: {0012d687-cbb1-0074-0612-0f0055f80600}
+
+[Audio] Optional FMOD event is unavailable; continuing without sound: {0012d687-cbb1-0074-0612-0f0055f80600}
+]]></output>
+              </test-case>
+              <test-case id="1637" name="Wisp_OwnerPiercingHitDealsDamageOnceAndPublishesContactWithoutEndingFlight" fullname="MonsterSupergroup.Gameplay.Tests.WispPresentationTests.Wisp_OwnerPiercingHitDealsDamageOnceAndPublishesContactWithoutEndingFlight" methodname="Wisp_OwnerPiercingHitDealsDamageOnceAndPublishesContactWithoutEndingFlight" classname="MonsterSupergroup.Gameplay.Tests.WispPresentationTests" runstate="Runnable" seed="712380309" result="Passed" start-time="2026-09-17 07:28:56Z" end-time="2026-09-17 07:28:56Z" duration="0.032577" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1638" name="Wisp_PiercingContactPreservesFlightAndLoopAndUsesReportedImpactPosition" fullname="MonsterSupergroup.Gameplay.Tests.WispPresentationTests.Wisp_PiercingContactPreservesFlightAndLoopAndUsesReportedImpactPosition" methodname="Wisp_PiercingContactPreservesFlightAndLoopAndUsesReportedImpactPosition" classname="MonsterSupergroup.Gameplay.Tests.WispPresentationTests" runstate="Runnable" seed="559949364" result="Failed" start-time="2026-09-17 07:28:56Z" end-time="2026-09-17 07:28:56Z" duration="0.018024" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <failure>
+                  <message><![CDATA[  Expected: True
+  But was:  False
+]]></message>
+                  <stack-trace><![CDATA[at MonsterSupergroup.Gameplay.Tests.WispPresentationTests+<Wisp_PiercingContactPreservesFlightAndLoopAndUsesReportedImpactPosition>d__13.MoveNext () [0x000b8] in F:\UnityStore\MonsterSupergroup\Assets\_Project\Tests\PlayMode\Gameplay\WispPresentationTests.cs:133
+at UnityEngine.TestTools.TestEnumerator+<Execute>d__7.MoveNext () [0x0004e] in .\Library\PackageCache\com.unity.test-framework@bd7f943e9647\UnityEngine.TestRunner\NUnitExtensions\Attributes\TestEnumerator.cs:44
+]]></stack-trace>
+                </failure>
+              </test-case>
+              <test-case id="1636" name="Wisp_RemoteImpactHasNoCollisionAndDoesNotReplayDuplicateTermination" fullname="MonsterSupergroup.Gameplay.Tests.WispPresentationTests.Wisp_RemoteImpactHasNoCollisionAndDoesNotReplayDuplicateTermination" methodname="Wisp_RemoteImpactHasNoCollisionAndDoesNotReplayDuplicateTermination" classname="MonsterSupergroup.Gameplay.Tests.WispPresentationTests" runstate="Runnable" seed="1531280154" result="Passed" start-time="2026-09-17 07:28:56Z" end-time="2026-09-17 07:28:58Z" duration="2.014799" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1639" name="Wisp_SourceHasNoFlightLoopAndHistoricalShotIsSuppressed" fullname="MonsterSupergroup.Gameplay.Tests.WispPresentationTests.Wisp_SourceHasNoFlightLoopAndHistoricalShotIsSuppressed" methodname="Wisp_SourceHasNoFlightLoopAndHistoricalShotIsSuppressed" classname="MonsterSupergroup.Gameplay.Tests.WispPresentationTests" runstate="Runnable" seed="391983544" result="Passed" start-time="2026-09-17 07:28:58Z" end-time="2026-09-17 07:28:58Z" duration="0.049860" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[Saving results to: C:/Users/ADMIN/AppData/LocalLow/DefaultCompany/Monster Supergroup\TestResults.xml
+]]></output>
+              </test-case>
+            </test-suite>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

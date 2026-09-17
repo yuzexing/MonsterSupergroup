@@ -254,8 +254,14 @@ namespace MonsterSupergroup.Gameplay.Options
                 AudioAvailable = studio.getBus("bus:/", out masterBus) == FMOD.RESULT.OK &&
                     studio.getBus("bus:/mx", out musicBus) == FMOD.RESULT.OK && studio.getBus("bus:/sx", out effectsBus) == FMOD.RESULT.OK;
                 if (AudioAvailable)
+                {
+                    // User volume belongs to the buses in the production entrypoint.
+                    // Legacy menus must not multiply the same setting through a VCA.
+                    foreach (var path in new[] { "vca:/Master", "vca:/Music", "vca:/SFX" })
+                        if (studio.getVCA(path, out var vca) == FMOD.RESULT.OK) vca.setVolume(1);
                     AudioAvailable = masterBus.setVolume(current.MasterVolume) == FMOD.RESULT.OK &&
                         musicBus.setVolume(current.MusicVolume) == FMOD.RESULT.OK && effectsBus.setVolume(current.EffectsVolume) == FMOD.RESULT.OK;
+                }
             }
             catch (SystemNotInitializedException) { AudioAvailable = false; }
             if (!AudioAvailable && !audioWarning)

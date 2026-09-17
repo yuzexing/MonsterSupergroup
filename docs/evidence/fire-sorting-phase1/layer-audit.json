@@ -1,0 +1,73 @@
+{
+  "sourcePath": "F:/DecomplieLatest/HellMaiden/ExportedProject/Assets/GameObject/FireParticles.prefab",
+  "sourceSha256": "4947173CF992DA79F98C2DEE3C1C4C453F0D106344B32DA178AE47EFA584FF57",
+  "sourceLayers": [
+    {
+      "name": "FireParticles",
+      "layerId": -2050434577,
+      "order": 0
+    },
+    {
+      "name": "Fire",
+      "layerId": -2050434577,
+      "order": 0
+    },
+    {
+      "name": "GroundFire",
+      "layerId": -2050434577,
+      "order": 0
+    },
+    {
+      "name": "Sparks",
+      "layerId": -2050434577,
+      "order": 0
+    },
+    {
+      "name": "Glow",
+      "layerId": 842383085,
+      "order": 100
+    },
+    {
+      "name": "GlowFlat",
+      "layerId": 842383085,
+      "order": 100
+    }
+  ],
+  "adaptedPath": "Assets/_Project/Content/NetworkCombat/Limbo/Art/Effects/ReferenceFireParticles.prefab",
+  "adaptedSha256": "07CFEC43114DBE327BAB8519D954D9055B38BB59DF7B6F7E76ABF4E19C6623E8",
+  "adaptedLayers": [
+    {
+      "name": "GroundFire",
+      "layerId": -2050434577,
+      "order": 0
+    },
+    {
+      "name": "Sparks",
+      "layerId": -2050434577,
+      "order": 0
+    },
+    {
+      "name": "Fire",
+      "layerId": -2050434577,
+      "order": 0
+    },
+    {
+      "name": "ReferenceFireParticles",
+      "layerId": -2050434577,
+      "order": 0
+    },
+    {
+      "name": "GlowFlat",
+      "layerId": 842383085,
+      "order": 100
+    },
+    {
+      "name": "Glow",
+      "layerId": 842383085,
+      "order": 100
+    }
+  ],
+  "visualAcceptance": "pending-user",
+  "phase2": "not-started",
+  "phase3": "not-started"
+}

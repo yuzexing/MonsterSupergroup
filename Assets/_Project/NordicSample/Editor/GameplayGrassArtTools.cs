@@ -128,7 +128,9 @@ namespace MonsterSupergroup.NordicSample.Editor
                     bool cluster = IsCluster(p);
                     visual.sprite = (cluster ? profile.clusters : profile.tufts)[Variant(p.id)];
                     visual.sharedMaterial = source.sharedMaterial; visual.color = source.color;
-                    visual.sortingLayerID = source.sortingLayerID; visual.sortingOrder = source.sortingOrder;
+                    // Level3 shares the player's order so the root pivot participates in Y sorting.
+                    visual.sortingLayerName = cluster ? "BackgroundFront" : "Props";
+                    visual.sortingOrder = cluster ? source.sortingOrder : 0;
                     visual.spriteSortPoint = SpriteSortPoint.Pivot;
                     visual.flipX = false; visual.flipY = false; visual.enabled = true;
                     child.localPosition = Vector3.zero; child.localRotation = Quaternion.identity;
@@ -185,7 +187,7 @@ namespace MonsterSupergroup.NordicSample.Editor
                 Require(visual && visual.enabled && visual.sprite == (cluster ? profile.clusters : profile.tufts)[variant], "新草引用不匹配：" + p.id);
                 Require(child.localPosition == Vector3.zero && child.localRotation == Quaternion.identity &&
                     Vector3.Distance(child.localScale, new Vector3(multiplier, multiplier, 1)) < .00001f, "新草偏移或倍率错误：" + p.id);
-                Require(visual.sortingLayerName == "BackgroundFront" && visual.sortingOrder == 5 && visual.spriteSortPoint == SpriteSortPoint.Pivot && !visual.flipY,
+                Require(visual.sortingLayerName == (cluster ? "BackgroundFront" : "Props") && visual.sortingOrder == (cluster ? 5 : 0) && visual.spriteSortPoint == SpriteSortPoint.Pivot && !visual.flipY,
                     "新草排序或翻转错误：" + p.id);
                 Require(child.GetComponentsInChildren<Collider2D>(true).Length == 0, "新草不应有碰撞体。");
                 foreach (var r in t.GetComponentsInChildren<SpriteRenderer>(true).Where(r => r != visual))

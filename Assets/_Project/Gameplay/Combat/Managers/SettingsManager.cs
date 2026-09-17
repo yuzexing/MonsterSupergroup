@@ -293,18 +293,39 @@ public class SettingsManager : MonoBehaviour
 	public void SetMasterVolume(float volume)
 	{
 		MasterVolume = volume;
+		if (GameOptionsService.Instance != null)
+		{
+			Master_VCA.setVolume(1);
+			var options = GameOptionsService.Instance;
+			options.SetAudio(volume, options.Current.MusicVolume, options.Current.EffectsVolume);
+			return;
+		}
 		Master_VCA.setVolume(MasterVolume);
 	}
 
 	public void SetMusicVolume(float volume)
 	{
 		MusicVolume = volume;
+		if (GameOptionsService.Instance != null)
+		{
+			Music_VCA.setVolume(1);
+			var options = GameOptionsService.Instance;
+			options.SetAudio(options.Current.MasterVolume, volume, options.Current.EffectsVolume);
+			return;
+		}
 		Music_VCA.setVolume(MusicVolume);
 	}
 
 	public void SetSFXVolume(float volume)
 	{
 		SFXVolume = volume;
+		if (GameOptionsService.Instance != null)
+		{
+			SFX_VCA.setVolume(1);
+			var options = GameOptionsService.Instance;
+			options.SetAudio(options.Current.MasterVolume, options.Current.MusicVolume, volume);
+			return;
+		}
 		SFX_VCA.setVolume(SFXVolume);
 	}
 
@@ -610,6 +631,11 @@ public class SettingsManager : MonoBehaviour
 		MasterVolume = SettingsData.Instance.MasterVolume;
 		MusicVolume = SettingsData.Instance.MusicVolume;
 		SFXVolume = SettingsData.Instance.SFXVolume;
+		if (GameOptionsService.Instance != null)
+		{
+			var current = GameOptionsService.Instance.Current;
+			MasterVolume = current.MasterVolume; MusicVolume = current.MusicVolume; SFXVolume = current.EffectsVolume;
+		}
 		VoiceVolume = SettingsData.Instance.VoiceVolume;
 		AmbienceVolume = SettingsData.Instance.AmbienceVolume;
 		VAOnOff = SettingsData.Instance.VAOnOff;

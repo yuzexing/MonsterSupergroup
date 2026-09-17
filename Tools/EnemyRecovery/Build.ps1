@@ -12,6 +12,7 @@ $lines = @('/nologo','/target:library','/nostdlib',('/out:"' + $build + '\Recove
 $lines += Get-ChildItem -LiteralPath $managed -Filter '*.dll' | ForEach-Object { '/reference:"' + $_.FullName + '"' }
 $lines += ('"' + $PSScriptRoot + '\RecoveryProbe.cs"')
 $lines += ('"' + $PSScriptRoot + '\ArtRecoveryProbe.cs"')
+$lines += ('"' + $PSScriptRoot + '\AudioRecoveryProbe.cs"')
 $lines | Set-Content -LiteralPath (Join-Path $build 'probe.rsp') -Encoding utf8BOM
 $compiler = 'C:\Windows\Microsoft.NET\Framework64\v4.0.30319\csc.exe'
 & $compiler /noconfig ('@' + $build + '\probe.rsp')

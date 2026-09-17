@@ -12,7 +12,7 @@ using UnityEngine.Serialization;
 
 namespace AstralShift.HellMaiden.Player.Attacks
 {
-	public class AnimatedAttack : BasePlayerAttack
+	public partial class AnimatedAttack : BasePlayerAttack
 	{
 		[Serializable]
 		public struct AnimatedAttackSound
@@ -161,6 +161,7 @@ namespace AstralShift.HellMaiden.Player.Attacks
 			ReleaseNativeAttackSnapshot();
 			_behaviour = null;
 			StopLoopSound(immediate: true);
+			StopStagedSound(true);
 		}
 
 		protected virtual void OnDisable()
@@ -252,12 +253,17 @@ namespace AstralShift.HellMaiden.Player.Attacks
 		}
 
 		/// <summary>Seek an already aged visual without creating or retaining a gameplay attack.</summary>
-		public void PlayPresentation(Vector2 direction, float duration, float elapsedSeconds)
-		{
+        public void PlayPresentation(Vector2 direction, float duration, float elapsedSeconds)
+        {
 			if (!IsPresentationOnly)
 				throw new InvalidOperationException("Melee presentation requires InitPresentation first.");
-			if (duration >= 0f) Attack(direction, duration);
-			else Attack(direction);
+			stagedSoundAge = Mathf.Max(0, elapsedSeconds);
+			try
+			{
+				if (duration >= 0f) Attack(direction, duration);
+				else Attack(direction);
+			}
+			finally { stagedSoundAge = 0; }
 			if (elapsedSeconds <= 0f || !gameObject.activeInHierarchy) return;
 
 			float startDuration = ClipDuration(attackStartAnim);
@@ -341,6 +347,7 @@ namespace AstralShift.HellMaiden.Player.Attacks
 
 		public void PlayStartAnimation()
 		{
+			StartStagedSound();
 			_endSoundPlayed = false;
 			PlayOneShot(startSound);
 			if (attackStartAnim == null || !attackStartAnim.Clip || animancer == null)
@@ -361,6 +368,7 @@ namespace AstralShift.HellMaiden.Player.Attacks
 
 		public AnimancerHelpers.WaitForAnimationEnd PlayStartAnimationYield()
 		{
+			StartStagedSound();
 			_endSoundPlayed = false;
 			PlayOneShot(startSound);
 			if (attackStartAnim == null || !attackStartAnim.Clip || animancer == null)
@@ -534,6 +542,7 @@ namespace AstralShift.HellMaiden.Player.Attacks
 
 		protected virtual void EndCallback()
 		{
+			CompleteStagedSound();
 			Action onEnd = _onEnd;
 			_onEnd = null;
 			onEnd?.Invoke();

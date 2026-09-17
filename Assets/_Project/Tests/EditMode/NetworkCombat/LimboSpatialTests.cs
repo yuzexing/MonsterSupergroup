@@ -158,8 +158,10 @@ namespace MonsterSupergroup.NetworkCombat.Tests
             foreach (var ps in streams)
             {
                 Assert.That(ps.main.cullingMode, Is.EqualTo(ParticleSystemCullingMode.AlwaysSimulate));
-                Assert.That(SortingLayer.GetLayerValueFromID(ps.GetComponent<ParticleSystemRenderer>().sortingLayerID),
-                    Is.GreaterThan(SortingLayer.GetLayerValueFromName("BackgroundFront")), "Trap warning must render above the map.");
+                var renderer = ps.GetComponent<ParticleSystemRenderer>();
+                bool groundGlow = ps.name == "Glow" || ps.name == "GlowFlat";
+                Assert.That(renderer.sortingLayerName, Is.EqualTo(groundGlow ? "BackgroundFront" : "Props"), ps.name);
+                Assert.That(renderer.sortingOrder, Is.EqualTo(groundGlow ? 100 : 0), ps.name);
             }
             var full = AssetDatabase.LoadAssetAtPath<GameplayWaveRules>(LimboReferenceAssets.ResourcesRoot + "/Full.asset");
             Assert.That(full.TryCapture(out var all, out error), Is.True, error); all.Reference.FlowReadiness = ReferenceEnemyReadiness.ImplementationPending; Assert.That(all.Reference.ReadinessError(), Is.Not.Null);

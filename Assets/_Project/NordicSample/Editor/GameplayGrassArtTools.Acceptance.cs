@@ -99,15 +99,16 @@ namespace MonsterSupergroup.NordicSample.Editor
                     var profile = Profile; CheckProfile(profile);
                     var material = map.transform.Find("BaseFloors").GetComponentInChildren<SpriteRenderer>().sharedMaterial;
                     Add(profile.soil, new Vector2(-5, 5), false); Add(profile.rockySoil, new Vector2(6, 5), false);
-                    for (int i = 0; i < 3; i++) { Add(profile.clusters[i], new Vector2(-8 + i * 8, -1), true); Add(profile.tufts[i], new Vector2(-6 + i * 6, -5), true); }
+                    for (int i = 0; i < 3; i++) { Add(profile.clusters[i], new Vector2(-8 + i * 8, -1), true); Add(profile.tufts[i], new Vector2(-6 + i * 6, -5), true, true); }
                     camera.transform.position = new Vector3(0, 1, -10);
                     NordicStaticSampleBuilder.Capture(camera, Output + "/samples-eight-sprites.png", 1920, 1080);
-                    void Add(Sprite sprite, Vector2 position, bool grass)
+                    void Add(Sprite sprite, Vector2 position, bool grass, bool tuft = false)
                     {
                         var r = new GameObject(sprite.name).AddComponent<SpriteRenderer>();
                         SceneManager.MoveGameObjectToScene(r.gameObject, scene);
                         r.sprite = sprite; r.sharedMaterial = material; r.transform.position = position;
-                        r.sortingLayerName = grass ? "BackgroundFront" : "Background"; r.sortingOrder = grass ? 5 : 1;
+                        r.sortingLayerName = tuft ? "Props" : grass ? "BackgroundFront" : "Background";
+                        r.sortingOrder = tuft ? 0 : grass ? 5 : 1;
                         r.spriteSortPoint = grass ? SpriteSortPoint.Pivot : SpriteSortPoint.Center;
                     }
                     return;

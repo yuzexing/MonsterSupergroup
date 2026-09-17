@@ -14569,6 +14569,15 @@ MonoBehaviour:
   progressionScaler: {fileID: 114313026266067498}
   hitbox: {fileID: 114833703512093738}
   hitEffectResolver: {fileID: 114726790013014859}
+  audioAdaptationVersion: 1
+  stagedSound:
+    Guid:
+      Data1: 0
+      Data2: 0
+      Data3: 0
+      Data4: 0
+    Path: 
+  completionSoundParameter: 
   isometricRotation: 1
   isometricAngle: -45
   rotateToDirection: 0
@@ -14655,6 +14664,8 @@ MonoBehaviour:
   onlyDespawnOffCamera: 1
   hitEffectOnExpire: 0
   playPiercingHitPresentation: 1
+  playPiercingHitSound: 0
+  sourceSoundLifecycle: 1
   projectileMovement: {fileID: 0}
   particleSystem: {fileID: 198256069497284392}
   attachedToPlayerWhileStartAnimationPlays: 0
@@ -14679,20 +14690,20 @@ MonoBehaviour:
   projectileLoopSound:
     eventRef:
       Guid:
-        Data1: -450359305
-        Data2: 1330102086
-        Data3: -2065969494
-        Data4: -435797981
-      Path: event:/sx/plr/Sx_plr_slowprojectile_loop
-    automatic: 1
+        Data1: 0
+        Data2: 0
+        Data3: 0
+        Data4: 0
+      Path: 
+    automatic: 0
   projectileHitSound:
     eventRef:
       Guid:
-        Data1: 997541128
-        Data2: 1077009481
-        Data3: 1909684357
-        Data4: -832539066
-      Path: event:/sx/plr/Sx_plr_slowprojectile_hit
+        Data1: 305521848
+        Data2: 1139334325
+        Data3: -1555974261
+        Data4: -1191919773
+      Path: event:/sx/plr/Sx_plr_slowprojectile_shot
     automatic: 1
   expireSound:
     eventRef:

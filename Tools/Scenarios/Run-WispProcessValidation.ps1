@@ -1,6 +1,7 @@
 ﻿param(
     [string]$Executable = 'Builds/WispValidation/MonsterSupergroup.exe',
     [switch]$Dedicated,
+    [switch]$AudioAudit,
     [int]$Port = 7928,
     [string]$LogDirectory = 'Logs/Wisp/Network'
 )
@@ -19,6 +20,7 @@ function Launch([string]$role) {
     $arguments = @('-batchmode','-nographics','-logFile',"`"$logRoot/$role.log`"",
         "--wisp-network-role=$role","`"--wisp-network-sync=$logRoot`"","--wisp-network-port=$Port")
     if ($role -eq 'server') { $arguments += '--dedicated-server' }
+    if ($AudioAudit) { $arguments += '--weapon-audio-audit=true' }
     $processes[$role] = Start-ProjectProcess -FilePath $Executable -ArgumentList $arguments -PassThru -WindowStyle Hidden
 }
 try {
@@ -48,6 +50,7 @@ try {
         if ($processes[$role].ExitCode -ne 0 -or -not (Select-String -LiteralPath "$logRoot/$role.log" -SimpleMatch "result=PASS role=$role" -Quiet)) {
             throw "Validation failed for ${role}: $logRoot"
         }
+        if ($AudioAudit -and $role -ne 'server' -and -not (Select-String -LiteralPath "$logRoot/$role.log" -SimpleMatch "[WeaponAudioProcess] role=$role result=PASS" -Quiet)) { throw "Audio lifecycle failed for ${role}: $logRoot" }
     }
     Write-Output "Wisp network validation passed: $logRoot"
 } finally {

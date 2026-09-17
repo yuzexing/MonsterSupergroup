@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="17" result="Failed(Child)" total="17" passed="15" failed="2" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-09-17 07:29:39Z" end-time="2026-09-17 07:29:39Z" duration="0.1805274">
+  <test-suite type="TestSuite" id="1000" name="Monster Supergroup" fullname="Monster Supergroup" runstate="Runnable" testcasecount="794" result="Failed" site="Child" start-time="2026-09-17 07:29:39Z" end-time="2026-09-17 07:29:39Z" duration="0.180527" total="17" passed="15" failed="2" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="EditMode" />
+    </properties>
+    <failure>
+      <message><![CDATA[One or more child tests had errors]]></message>
+    </failure>
+    <test-suite type="Assembly" id="1245" name="MonsterSupergroup.HellMaidenMigration.Tests.EditMode.dll" fullname="F:/UnityStore/MonsterSupergroup/Library/ScriptAssemblies/MonsterSupergroup.HellMaidenMigration.Tests.EditMode.dll" runstate="Runnable" testcasecount="107" result="Failed" site="Child" start-time="2026-09-17 07:29:39Z" end-time="2026-09-17 07:29:39Z" duration="0.142954" total="17" passed="15" failed="2" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="89208" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="EditMode" />
+        <property name="EditorOnly" value="True" />
+      </properties>
+      <failure>
+        <message><![CDATA[One or more child tests had errors]]></message>
+      </failure>
+      <test-suite type="TestSuite" id="1246" name="MonsterSupergroup" fullname="MonsterSupergroup" runstate="Runnable" testcasecount="107" result="Failed" site="Child" start-time="2026-09-17 07:29:39Z" end-time="2026-09-17 07:29:39Z" duration="0.141322" total="17" passed="15" failed="2" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <failure>
+          <message><![CDATA[One or more child tests had errors]]></message>
+        </failure>
+        <test-suite type="TestSuite" id="1247" name="HellMaidenMigration" fullname="MonsterSupergroup.HellMaidenMigration" runstate="Runnable" testcasecount="107" result="Failed" site="Child" start-time="2026-09-17 07:29:39Z" end-time="2026-09-17 07:29:39Z" duration="0.139942" total="17" passed="15" failed="2" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <failure>
+            <message><![CDATA[One or more child tests had errors]]></message>
+          </failure>
+          <test-suite type="TestSuite" id="1248" name="Tests" fullname="MonsterSupergroup.HellMaidenMigration.Tests" runstate="Runnable" testcasecount="107" result="Failed" site="Child" start-time="2026-09-17 07:29:39Z" end-time="2026-09-17 07:29:39Z" duration="0.138475" total="17" passed="15" failed="2" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <failure>
+              <message><![CDATA[One or more child tests had errors]]></message>
+            </failure>
+            <test-suite type="TestFixture" id="1108" name="DanteBeamNativeGasMigrationTests" fullname="MonsterSupergroup.HellMaidenMigration.Tests.DanteBeamNativeGasMigrationTests" classname="MonsterSupergroup.HellMaidenMigration.Tests.DanteBeamNativeGasMigrationTests" runstate="Runnable" testcasecount="11" result="Failed" site="Child" start-time="2026-09-17 07:29:39Z" end-time="2026-09-17 07:29:39Z" duration="0.063632" total="11" passed="9" failed="2" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <failure>
+                <message><![CDATA[One or more child tests had errors]]></message>
+              </failure>
+              <test-suite type="ParameterizedMethod" id="1113" name="OvertimeHitboxRetainsSourceIntervalExitGraceAndSpeedScaler" fullname="MonsterSupergroup.HellMaidenMigration.Tests.DanteBeamNativeGasMigrationTests.OvertimeHitboxRetainsSourceIntervalExitGraceAndSpeedScaler" classname="MonsterSupergroup.HellMaidenMigration.Tests.DanteBeamNativeGasMigrationTests" runstate="Runnable" testcasecount="2" result="Passed" start-time="2026-09-17 07:29:39Z" end-time="2026-09-17 07:29:39Z" duration="0.034818" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0">
+                <properties />
+                <test-case id="1111" name="OvertimeHitboxRetainsSourceIntervalExitGraceAndSpeedScaler(False)" fullname="MonsterSupergroup.HellMaidenMigration.Tests.DanteBeamNativeGasMigrationTests.OvertimeHitboxRetainsSourceIntervalExitGraceAndSpeedScaler(False)" methodname="OvertimeHitboxRetainsSourceIntervalExitGraceAndSpeedScaler" classname="MonsterSupergroup.HellMaidenMigration.Tests.DanteBeamNativeGasMigrationTests" runstate="Runnable" seed="198201801" result="Passed" start-time="2026-09-17 07:29:39Z" end-time="2026-09-17 07:29:39Z" duration="0.027124" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1112" name="OvertimeHitboxRetainsSourceIntervalExitGraceAndSpeedScaler(True)" fullname="MonsterSupergroup.HellMaidenMigration.Tests.DanteBeamNativeGasMigrationTests.OvertimeHitboxRetainsSourceIntervalExitGraceAndSpeedScaler(True)" methodname="OvertimeHitboxRetainsSourceIntervalExitGraceAndSpeedScaler" classname="MonsterSupergroup.HellMaidenMigration.Tests.DanteBeamNativeGasMigrationTests" runstate="Runnable" seed="884911267" result="Passed" start-time="2026-09-17 07:29:39Z" end-time="2026-09-17 07:29:39Z" duration="0.002338" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+              </test-suite>
+              <test-suite type="ParameterizedMethod" id="1116" name="ReconstructedClipBindingsUseMainPhaseDurationWithoutChangingSourceLoopFlags" fullname="MonsterSupergroup.HellMaidenMigration.Tests.DanteBeamNativeGasMigrationTests.ReconstructedClipBindingsUseMainPhaseDurationWithoutChangingSourceLoopFlags" classname="MonsterSupergroup.HellMaidenMigration.Tests.DanteBeamNativeGasMigrationTests" runstate="Runnable" testcasecount="2" result="Passed" start-time="2026-09-17 07:29:39Z" end-time="2026-09-17 07:29:39Z" duration="0.005921" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0">
+                <properties />
+                <test-case id="1114" name="ReconstructedClipBindingsUseMainPhaseDurationWithoutChangingSourceLoopFlags(False)" fullname="MonsterSupergroup.HellMaidenMigration.Tests.DanteBeamNativeGasMigrationTests.ReconstructedClipBindingsUseMainPhaseDurationWithoutChangingSourceLoopFlags(False)" methodname="ReconstructedClipBindingsUseMainPhaseDurationWithoutChangingSourceLoopFlags" classname="MonsterSupergroup.HellMaidenMigration.Tests.DanteBeamNativeGasMigrationTests" runstate="Runnable" seed="1077276734" result="Passed" start-time="2026-09-17 07:29:39Z" end-time="2026-09-17 07:29:39Z" duration="0.004404" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1115" name="ReconstructedClipBindingsUseMainPhaseDurationWithoutChangingSourceLoopFlags(True)" fullname="MonsterSupergroup.HellMaidenMigration.Tests.DanteBeamNativeGasMigrationTests.ReconstructedClipBindingsUseMainPhaseDurationWithoutChangingSourceLoopFlags(True)" methodname="ReconstructedClipBindingsUseMainPhaseDurationWithoutChangingSourceLoopFlags" classname="MonsterSupergroup.HellMaidenMigration.Tests.DanteBeamNativeGasMigrationTests" runstate="Runnable" seed="909210635" result="Passed" start-time="2026-09-17 07:29:39Z" end-time="2026-09-17 07:29:39Z" duration="0.000293" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+              </test-suite>
+              <test-suite type="ParameterizedMethod" id="1120" name="SourceColliderWindowOnlyEnablesDuringMainPhase" fullname="MonsterSupergroup.HellMaidenMigration.Tests.DanteBeamNativeGasMigrationTests.SourceColliderWindowOnlyEnablesDuringMainPhase" classname="MonsterSupergroup.HellMaidenMigration.Tests.DanteBeamNativeGasMigrationTests" runstate="Runnable" testcasecount="3" result="Passed" start-time="2026-09-17 07:29:39Z" end-time="2026-09-17 07:29:39Z" duration="0.003714" total="3" passed="3" failed="0" inconclusive="0" skipped="0" asserts="0">
+                <properties />
+                <test-case id="1117" name="SourceColliderWindowOnlyEnablesDuringMainPhase(&quot;Assets/_Project/Content/HellMaiden/NativeGAS/Dante/Beam/AnimationClip/PlayerAttack_Dante_DragonsBreath_In.anim&quot;,0.3666667f,0.0f,1)" fullname="MonsterSupergroup.HellMaidenMigration.Tests.DanteBeamNativeGasMigrationTests.SourceColliderWindowOnlyEnablesDuringMainPhase(&quot;Assets/_Project/Content/HellMaiden/NativeGAS/Dante/Beam/AnimationClip/PlayerAttack_Dante_DragonsBreath_In.anim&quot;,0.3666667f,0.0f,1)" methodname="SourceColliderWindowOnlyEnablesDuringMainPhase" classname="MonsterSupergroup.HellMaidenMigration.Tests.DanteBeamNativeGasMigrationTests" runstate="Runnable" seed="151969886" result="Passed" start-time="2026-09-17 07:29:39Z" end-time="2026-09-17 07:29:39Z" duration="0.002211" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1118" name="SourceColliderWindowOnlyEnablesDuringMainPhase(&quot;Assets/_Project/Content/HellMaiden/NativeGAS/Dante/Beam/AnimationClip/PlayerAttack_Dante_DragonsBreath_Idle.anim&quot;,4.0f,1.0f,2)" fullname="MonsterSupergroup.HellMaidenMigration.Tests.DanteBeamNativeGasMigrationTests.SourceColliderWindowOnlyEnablesDuringMainPhase(&quot;Assets/_Project/Content/HellMaiden/NativeGAS/Dante/Beam/AnimationClip/PlayerAttack_Dante_DragonsBreath_Idle.anim&quot;,4.0f,1.0f,2)" methodname="SourceColliderWindowOnlyEnablesDuringMainPhase" classname="MonsterSupergroup.HellMaidenMigration.Tests.DanteBeamNativeGasMigrationTests" runstate="Runnable" seed="1551852442" result="Passed" start-time="2026-09-17 07:29:39Z" end-time="2026-09-17 07:29:39Z" duration="0.000170" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1119" name="SourceColliderWindowOnlyEnablesDuringMainPhase(&quot;Assets/_Project/Content/HellMaiden/NativeGAS/Dante/Beam/AnimationClip/PlayerAttack_Dante_DragonsBreath_Out.anim&quot;,1.0f,0.0f,1)" fullname="MonsterSupergroup.HellMaidenMigration.Tests.DanteBeamNativeGasMigrationTests.SourceColliderWindowOnlyEnablesDuringMainPhase(&quot;Assets/_Project/Content/HellMaiden/NativeGAS/Dante/Beam/AnimationClip/PlayerAttack_Dante_DragonsBreath_Out.anim&quot;,1.0f,0.0f,1)" methodname="SourceColliderWindowOnlyEnablesDuringMainPhase" classname="MonsterSupergroup.HellMaidenMigration.Tests.DanteBeamNativeGasMigrationTests" runstate="Runnable" seed="1922475055" result="Passed" start-time="2026-09-17 07:29:39Z" end-time="2026-09-17 07:29:39Z" duration="0.000139" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+              </test-suite>
+              <test-case id="1110" name="SourceEmitterKeepsFireDefaultPoisonVariantAndSingleBeamLimit" fullname="MonsterSupergroup.HellMaidenMigration.Tests.DanteBeamNativeGasMigrationTests.SourceEmitterKeepsFireDefaultPoisonVariantAndSingleBeamLimit" methodname="SourceEmitterKeepsFireDefaultPoisonVariantAndSingleBeamLimit" classname="MonsterSupergroup.HellMaidenMigration.Tests.DanteBeamNativeGasMigrationTests" runstate="Runnable" seed="997676955" result="Passed" start-time="2026-09-17 07:29:39Z" end-time="2026-09-17 07:29:39Z" duration="0.004255" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-suite type="ParameterizedMethod" id="1123" name="SourceHierarchyParticlesAudioAndRenderableDependenciesSurvive" fullname="MonsterSupergroup.HellMaidenMigration.Tests.DanteBeamNativeGasMigrationTests.SourceHierarchyParticlesAudioAndRenderableDependenciesSurvive" classname="MonsterSupergroup.HellMaidenMigration.Tests.DanteBeamNativeGasMigrationTests" runstate="Runnable" testcasecount="2" result="Failed" site="Child" start-time="2026-09-17 07:29:39Z" end-time="2026-09-17 07:29:39Z" duration="0.005624" total="2" passed="0" failed="2" inconclusive="0" skipped="0" asserts="0">
+                <properties />
+                <failure>
+                  <message><![CDATA[One or more child tests had errors]]></message>
+                </failure>
+                <test-case id="1121" name="SourceHierarchyParticlesAudioAndRenderableDependenciesSurvive(False,18,30)" fullname="MonsterSupergroup.HellMaidenMigration.Tests.DanteBeamNativeGasMigrationTests.SourceHierarchyParticlesAudioAndRenderableDependenciesSurvive(False,18,30)" methodname="SourceHierarchyParticlesAudioAndRenderableDependenciesSurvive" classname="MonsterSupergroup.HellMaidenMigration.Tests.DanteBeamNativeGasMigrationTests" runstate="Runnable" seed="211508206" result="Failed" start-time="2026-09-17 07:29:39Z" end-time="2026-09-17 07:29:39Z" duration="0.004060" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                  <failure>
+                    <message><![CDATA[  Expected: not null
+  But was:  null
+]]></message>
+                    <stack-trace><![CDATA[at MonsterSupergroup.HellMaidenMigration.Tests.DanteBeamNativeGasMigrationTests.SourceHierarchyParticlesAudioAndRenderableDependenciesSurvive (System.Boolean poison, System.Int32 particles, System.Int32 transforms) [0x000d2] in F:\UnityStore\MonsterSupergroup\Assets\_Project\Tests\EditMode\HellMaidenMigration\DanteBeamNativeGasMigrationTests.cs:137
+]]></stack-trace>
+                  </failure>
+                </test-case>
+                <test-case id="1122" name="SourceHierarchyParticlesAudioAndRenderableDependenciesSurvive(True,19,31)" fullname="MonsterSupergroup.HellMaidenMigration.Tests.DanteBeamNativeGasMigrationTests.SourceHierarchyParticlesAudioAndRenderableDependenciesSurvive(True,19,31)" methodname="SourceHierarchyParticlesAudioAndRenderableDependenciesSurvive" classname="MonsterSupergroup.HellMaidenMigration.Tests.DanteBeamNativeGasMigrationTests" runstate="Runnable" seed="1044701044" result="Failed" start-time="2026-09-17 07:29:39Z" end-time="2026-09-17 07:29:39Z" duration="0.000533" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                  <failure>
+                    <message><![CDATA[  Expected: not null
+  But was:  null
+]]></message>
+                    <stack-trace><![CDATA[at MonsterSupergroup.HellMaidenMigration.Tests.DanteBeamNativeGasMigrationTests.SourceHierarchyParticlesAudioAndRenderableDependenciesSurvive (System.Boolean poison, System.Int32 particles, System.Int32 transforms) [0x000d2] in F:\UnityStore\MonsterSupergroup\Assets\_Project\Tests\EditMode\HellMaidenMigration\DanteBeamNativeGasMigrationTests.cs:137
+]]></stack-trace>
+                  </failure>
+                </test-case>
+              </test-suite>
+              <test-case id="1109" name="SourceWeaponIdentityStatsAndModifierCompatibilityArePreserved" fullname="MonsterSupergroup.HellMaidenMigration.Tests.DanteBeamNativeGasMigrationTests.SourceWeaponIdentityStatsAndModifierCompatibilityArePreserved" methodname="SourceWeaponIdentityStatsAndModifierCompatibilityArePreserved" classname="MonsterSupergroup.HellMaidenMigration.Tests.DanteBeamNativeGasMigrationTests" runstate="Runnable" seed="775495559" result="Passed" start-time="2026-09-17 07:29:39Z" end-time="2026-09-17 07:29:39Z" duration="0.001933" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+            </test-suite>
+            <test-suite type="TestFixture" id="1172" name="DanteProjectilePresentationMigrationTests" fullname="MonsterSupergroup.HellMaidenMigration.Tests.DanteProjectilePresentationMigrationTests" classname="MonsterSupergroup.HellMaidenMigration.Tests.DanteProjectilePresentationMigrationTests" runstate="Runnable" testcasecount="4" result="Passed" start-time="2026-09-17 07:29:39Z" end-time="2026-09-17 07:29:39Z" duration="0.057142" total="4" passed="4" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1174" name="Wisp_AnimationTargetsExistAndMaterialCurvesUseSupportedProperties" fullname="MonsterSupergroup.HellMaidenMigration.Tests.DanteProjectilePresentationMigrationTests.Wisp_AnimationTargetsExistAndMaterialCurvesUseSupportedProperties" methodname="Wisp_AnimationTargetsExistAndMaterialCurvesUseSupportedProperties" classname="MonsterSupergroup.HellMaidenMigration.Tests.DanteProjectilePresentationMigrationTests" runstate="Runnable" seed="244847922" result="Passed" start-time="2026-09-17 07:29:39Z" end-time="2026-09-17 07:29:39Z" duration="0.017259" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1175" name="Wisp_PresentationRepairPreservesIdentityAndDamage" fullname="MonsterSupergroup.HellMaidenMigration.Tests.DanteProjectilePresentationMigrationTests.Wisp_PresentationRepairPreservesIdentityAndDamage" methodname="Wisp_PresentationRepairPreservesIdentityAndDamage" classname="MonsterSupergroup.HellMaidenMigration.Tests.DanteProjectilePresentationMigrationTests" runstate="Runnable" seed="816885644" result="Passed" start-time="2026-09-17 07:29:39Z" end-time="2026-09-17 07:29:39Z" duration="0.001760" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1173" name="Wisp_SourceLayersAndDependenciesAreComplete" fullname="MonsterSupergroup.HellMaidenMigration.Tests.DanteProjectilePresentationMigrationTests.Wisp_SourceLayersAndDependenciesAreComplete" methodname="Wisp_SourceLayersAndDependenciesAreComplete" classname="MonsterSupergroup.HellMaidenMigration.Tests.DanteProjectilePresentationMigrationTests" runstate="Runnable" seed="88296406" result="Passed" start-time="2026-09-17 07:29:39Z" end-time="2026-09-17 07:29:39Z" duration="0.034245" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[Wisp presentation dependencies validated.
+]]></output>
+              </test-case>
+              <test-case id="1176" name="Wisp_ThreeVariantsKeepDistinctAuthoredColors" fullname="MonsterSupergroup.HellMaidenMigration.Tests.DanteProjectilePresentationMigrationTests.Wisp_ThreeVariantsKeepDistinctAuthoredColors" methodname="Wisp_ThreeVariantsKeepDistinctAuthoredColors" classname="MonsterSupergroup.HellMaidenMigration.Tests.DanteProjectilePresentationMigrationTests" runstate="Runnable" seed="973517313" result="Passed" start-time="2026-09-17 07:29:39Z" end-time="2026-09-17 07:29:39Z" duration="0.002313" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+            </test-suite>
+            <test-suite type="TestFixture" id="1242" name="WeaponAudioMigrationTests" fullname="MonsterSupergroup.HellMaidenMigration.Tests.WeaponAudioMigrationTests" classname="MonsterSupergroup.HellMaidenMigration.Tests.WeaponAudioMigrationTests" runstate="Runnable" testcasecount="2" result="Passed" start-time="2026-09-17 07:29:39Z" end-time="2026-09-17 07:29:39Z" duration="0.012332" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1244" name="BreathHasOneStagedEntryAndNoStaleEmitterOrEndParameter" fullname="MonsterSupergroup.HellMaidenMigration.Tests.WeaponAudioMigrationTests.BreathHasOneStagedEntryAndNoStaleEmitterOrEndParameter" methodname="BreathHasOneStagedEntryAndNoStaleEmitterOrEndParameter" classname="MonsterSupergroup.HellMaidenMigration.Tests.WeaponAudioMigrationTests" runstate="Runnable" seed="1258200026" result="Passed" start-time="2026-09-17 07:29:39Z" end-time="2026-09-17 07:29:39Z" duration="0.007315" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1243" name="WispSourceSoundsAndManualAdaptationSurviveRepeatedRepair" fullname="MonsterSupergroup.HellMaidenMigration.Tests.WeaponAudioMigrationTests.WispSourceSoundsAndManualAdaptationSurviveRepeatedRepair" methodname="WispSourceSoundsAndManualAdaptationSurviveRepeatedRepair" classname="MonsterSupergroup.HellMaidenMigration.Tests.WeaponAudioMigrationTests" runstate="Runnable" seed="967063988" result="Passed" start-time="2026-09-17 07:29:39Z" end-time="2026-09-17 07:29:39Z" duration="0.004041" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[Saving results to: C:/Users/ADMIN/AppData/LocalLow/DefaultCompany/Monster Supergroup\TestResults.xml
+]]></output>
+              </test-case>
+            </test-suite>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

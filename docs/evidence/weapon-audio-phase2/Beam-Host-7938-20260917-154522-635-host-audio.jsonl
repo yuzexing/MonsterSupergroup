@@ -1,0 +1,12 @@
+{"Instance":-2824,"Generation":1,"ObjectName":"PlayerAttack_Dante_DragonsBreath_Fire(Clone)","Operation":"start","Event":"event:/sx/plr/Sx_plr_dragonbreath","Handle":2102784,"Value":0.0,"Result":0}
+{"Instance":-3072,"Generation":1,"ObjectName":"PlayerAttack_Dante_DragonsBreath_Fire(Clone)","Operation":"start","Event":"event:/sx/plr/Sx_plr_dragonbreath","Handle":2103552,"Value":0.059675298631191257,"Result":0}
+{"Instance":-2824,"Generation":1,"ObjectName":"PlayerAttack_Dante_DragonsBreath_Fire(Clone)","Operation":"completion-parameter","Event":"event:/sx/plr/Sx_plr_dragonbreath","Handle":2102784,"Value":1.0,"Result":0}
+{"Instance":-2824,"Generation":1,"ObjectName":"PlayerAttack_Dante_DragonsBreath_Fire(Clone)","Operation":"stop","Event":"event:/sx/plr/Sx_plr_dragonbreath","Handle":2102784,"Value":0.0,"Result":0}
+{"Instance":-2824,"Generation":1,"ObjectName":"PlayerAttack_Dante_DragonsBreath_Fire(Clone)","Operation":"release","Event":"event:/sx/plr/Sx_plr_dragonbreath","Handle":2102784,"Value":0.0,"Result":0}
+{"Instance":-3072,"Generation":1,"ObjectName":"PlayerAttack_Dante_DragonsBreath_Fire(Clone)","Operation":"completion-parameter","Event":"event:/sx/plr/Sx_plr_dragonbreath","Handle":2103552,"Value":1.0,"Result":0}
+{"Instance":-3072,"Generation":1,"ObjectName":"PlayerAttack_Dante_DragonsBreath_Fire(Clone)","Operation":"stop","Event":"event:/sx/plr/Sx_plr_dragonbreath","Handle":2103552,"Value":0.0,"Result":0}
+{"Instance":-3072,"Generation":1,"ObjectName":"PlayerAttack_Dante_DragonsBreath_Fire(Clone)","Operation":"release","Event":"event:/sx/plr/Sx_plr_dragonbreath","Handle":2103552,"Value":0.0,"Result":0}
+{"Instance":-2824,"Generation":2,"ObjectName":"PlayerAttack_Dante_DragonsBreath_Fire(Clone)","Operation":"start","Event":"event:/sx/plr/Sx_plr_dragonbreath","Handle":2104320,"Value":0.07488404959440232,"Result":0}
+{"Instance":-2824,"Generation":2,"ObjectName":"PlayerAttack_Dante_DragonsBreath_Fire(Clone)","Operation":"cancel","Event":"event:/sx/plr/Sx_plr_dragonbreath","Handle":2104320,"Value":0.0,"Result":0}
+{"Instance":-2824,"Generation":2,"ObjectName":"PlayerAttack_Dante_DragonsBreath_Fire(Clone)","Operation":"release","Event":"event:/sx/plr/Sx_plr_dragonbreath","Handle":2104320,"Value":0.0,"Result":0}
+{"summary":"PASS","starts":3,"duplicates":0,"errors":0,"activeAtExit":0}

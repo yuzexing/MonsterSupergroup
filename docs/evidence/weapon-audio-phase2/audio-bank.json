@@ -1,0 +1,1372 @@
+[
+  {
+    "path": "event:/sx/plr/Carpe diem/sx_plr_carpe_catch",
+    "id": {
+      "Data1": 2084251138,
+      "Data2": 1332988512,
+      "Data3": 234489014,
+      "Data4": -923137610,
+      "IsNull": false
+    },
+    "oneshot": true,
+    "is3d": false,
+    "min": 1.0,
+    "max": 20.0,
+    "length": 2733,
+    "parameters": []
+  },
+  {
+    "path": "event:/sx/plr/Summon/sx_plr_summon_beam",
+    "id": {
+      "Data1": -493486332,
+      "Data2": 1314707191,
+      "Data3": 1422160258,
+      "Data4": -407884447,
+      "IsNull": false
+    },
+    "oneshot": false,
+    "is3d": true,
+    "min": 1.0,
+    "max": 20.0,
+    "length": 7649,
+    "parameters": []
+  },
+  {
+    "path": "event:/sx/plr/Sx_plr_slowprojectile_hit",
+    "id": {
+      "Data1": 997541128,
+      "Data2": 1077009481,
+      "Data3": 1909684357,
+      "Data4": -832539066,
+      "IsNull": false
+    },
+    "oneshot": true,
+    "is3d": true,
+    "min": 1.0,
+    "max": 20.0,
+    "length": 1500,
+    "parameters": [
+      {
+        "name": "Distance",
+        "min": 0.0,
+        "max": 18.0,
+        "initial": 3.40282347E+38,
+        "id": {
+          "data1": 3604737918,
+          "data2": 3013521198
+        }
+      }
+    ]
+  },
+  {
+    "path": "event:/sx/plr/Angel Face/sx_plr_angel_face_blow",
+    "id": {
+      "Data1": -1965358327,
+      "Data2": 1148523878,
+      "Data3": -1835970920,
+      "Data4": 480559063,
+      "IsNull": false
+    },
+    "oneshot": true,
+    "is3d": true,
+    "min": 1.0,
+    "max": 20.0,
+    "length": 1734,
+    "parameters": [
+      {
+        "name": "Distance",
+        "min": 0.0,
+        "max": 18.0,
+        "initial": 3.40282347E+38,
+        "id": {
+          "data1": 3604737918,
+          "data2": 3013521198
+        }
+      }
+    ]
+  },
+  {
+    "path": "event:/sx/plr/Undying Legacy/sx_plr_undying_blast",
+    "id": {
+      "Data1": 1667067145,
+      "Data2": 1255467841,
+      "Data3": -1198683211,
+      "Data4": 1557523774,
+      "IsNull": false
+    },
+    "oneshot": true,
+    "is3d": true,
+    "min": 1.0,
+    "max": 20.0,
+    "length": 2733,
+    "parameters": [
+      {
+        "name": "Distance",
+        "min": 0.0,
+        "max": 18.0,
+        "initial": 3.40282347E+38,
+        "id": {
+          "data1": 3604737918,
+          "data2": 3013521198
+        }
+      }
+    ]
+  },
+  {
+    "path": "snapshot:/Rev_forest",
+    "id": {
+      "Data1": -119702518,
+      "Data2": 1075417950,
+      "Data3": 966592948,
+      "Data4": 947440796,
+      "IsNull": false
+    },
+    "oneshot": false,
+    "is3d": false,
+    "min": 0.0,
+    "max": 0.0,
+    "length": 0,
+    "parameters": []
+  },
+  {
+    "path": "event:/sx/plr/Shield/sx_plr_shield_loop",
+    "id": {
+      "Data1": 308883211,
+      "Data2": 1293147345,
+      "Data3": 326474667,
+      "Data4": 1979075963,
+      "IsNull": false
+    },
+    "oneshot": false,
+    "is3d": false,
+    "min": 0.0,
+    "max": 20.0,
+    "length": 10645,
+    "parameters": []
+  },
+  {
+    "path": "event:/sx/plr/Summon/sx_plr_summon_transform",
+    "id": {
+      "Data1": 1517815308,
+      "Data2": 1157615173,
+      "Data3": 1974035375,
+      "Data4": 693225658,
+      "IsNull": false
+    },
+    "oneshot": true,
+    "is3d": true,
+    "min": 1.0,
+    "max": 20.0,
+    "length": 5000,
+    "parameters": [
+      {
+        "name": "Distance",
+        "min": 0.0,
+        "max": 18.0,
+        "initial": 3.40282347E+38,
+        "id": {
+          "data1": 3604737918,
+          "data2": 3013521198
+        }
+      }
+    ]
+  },
+  {
+    "path": "event:/sx/plr/Ultimate Ovid/sx_plr_ulti_ovid_projectiles",
+    "id": {
+      "Data1": -69147376,
+      "Data2": 1290121094,
+      "Data3": -1433183319,
+      "Data4": 116151965,
+      "IsNull": false
+    },
+    "oneshot": true,
+    "is3d": false,
+    "min": 1.0,
+    "max": 20.0,
+    "length": 3000,
+    "parameters": []
+  },
+  {
+    "path": "event:/sx/plr/Angel Face/sx_plr_angel_face_start",
+    "id": {
+      "Data1": -463474669,
+      "Data2": 1308464217,
+      "Data3": -1061673814,
+      "Data4": -1696495419,
+      "IsNull": false
+    },
+    "oneshot": true,
+    "is3d": false,
+    "min": 1.0,
+    "max": 20.0,
+    "length": 3500,
+    "parameters": []
+  },
+  {
+    "path": "event:/sx/plr/Angel Face/sx_plr_angel_face_stop",
+    "id": {
+      "Data1": -471601120,
+      "Data2": 1218117927,
+      "Data3": -1179692928,
+      "Data4": -1759008136,
+      "IsNull": false
+    },
+    "oneshot": true,
+    "is3d": false,
+    "min": 1.0,
+    "max": 20.0,
+    "length": 2283,
+    "parameters": []
+  },
+  {
+    "path": "event:/sx/plr/Ultimate Horace/sx_plr_ulti_horace",
+    "id": {
+      "Data1": -66445535,
+      "Data2": 1261406673,
+      "Data3": -189751627,
+      "Data4": -1386508299,
+      "IsNull": false
+    },
+    "oneshot": true,
+    "is3d": false,
+    "min": 1.0,
+    "max": 20.0,
+    "length": 17537,
+    "parameters": [
+      {
+        "name": "Skip",
+        "min": 0.0,
+        "max": 1.0,
+        "initial": 0.0,
+        "id": {
+          "data1": 472417819,
+          "data2": 3004927351
+        }
+      }
+    ]
+  },
+  {
+    "path": "event:/sx/plr/Spear of Augustus/sx_plr_augustus_swipe",
+    "id": {
+      "Data1": -1960937437,
+      "Data2": 1219309704,
+      "Data3": 1075019683,
+      "Data4": -8757684,
+      "IsNull": false
+    },
+    "oneshot": true,
+    "is3d": true,
+    "min": 1.0,
+    "max": 20.0,
+    "length": 2600,
+    "parameters": []
+  },
+  {
+    "path": "event:/sx/plr/Sx_plr_area OLD",
+    "id": {
+      "Data1": -2052582096,
+      "Data2": 1081941462,
+      "Data3": -1562117463,
+      "Data4": 876111423,
+      "IsNull": false
+    },
+    "oneshot": false,
+    "is3d": true,
+    "min": 1.0,
+    "max": 20.0,
+    "length": 7000,
+    "parameters": [
+      {
+        "name": "Phase",
+        "min": 0.0,
+        "max": 1.0,
+        "initial": 0.0,
+        "id": {
+          "data1": 2844103887,
+          "data2": 2655182200
+        }
+      },
+      {
+        "name": "Distance",
+        "min": 0.0,
+        "max": 18.0,
+        "initial": 3.40282347E+38,
+        "id": {
+          "data1": 3604737918,
+          "data2": 3013521198
+        }
+      }
+    ]
+  },
+  {
+    "path": "event:/sx/plr/Ultimate Ovid/sx_plr_ulti_ovid_cocoon",
+    "id": {
+      "Data1": 1378767152,
+      "Data2": 1085859769,
+      "Data3": 1164553605,
+      "Data4": 2051796048,
+      "IsNull": false
+    },
+    "oneshot": true,
+    "is3d": false,
+    "min": 1.0,
+    "max": 20.0,
+    "length": 10790,
+    "parameters": []
+  },
+  {
+    "path": "event:/sx/plr/Sx_plr_spikes",
+    "id": {
+      "Data1": 367980080,
+      "Data2": 1336894041,
+      "Data3": 794410890,
+      "Data4": 875117185,
+      "IsNull": false
+    },
+    "oneshot": true,
+    "is3d": true,
+    "min": 1.0,
+    "max": 20.0,
+    "length": 1625,
+    "parameters": [
+      {
+        "name": "Distance",
+        "min": 0.0,
+        "max": 18.0,
+        "initial": 3.40282347E+38,
+        "id": {
+          "data1": 3604737918,
+          "data2": 3013521198
+        }
+      }
+    ]
+  },
+  {
+    "path": "event:/sx/plr/Sx_plr_circling",
+    "id": {
+      "Data1": -2079503045,
+      "Data2": 1252745763,
+      "Data3": -1125119835,
+      "Data4": 1625220312,
+      "IsNull": false
+    },
+    "oneshot": false,
+    "is3d": false,
+    "min": 0.0,
+    "max": 20.0,
+    "length": 9000,
+    "parameters": [
+      {
+        "name": "Phase",
+        "min": 0.0,
+        "max": 1.0,
+        "initial": 0.0,
+        "id": {
+          "data1": 2844103887,
+          "data2": 2655182200
+        }
+      }
+    ]
+  },
+  {
+    "path": "event:/sx/plr/Carpe diem/sx_plr_carpe_throw",
+    "id": {
+      "Data1": -1901356227,
+      "Data2": 1098094271,
+      "Data3": 1280645782,
+      "Data4": 1107816621,
+      "IsNull": false
+    },
+    "oneshot": true,
+    "is3d": false,
+    "min": 1.0,
+    "max": 20.0,
+    "length": 3000,
+    "parameters": []
+  },
+  {
+    "path": "event:/sx/plr/Ovid Dash/sx_plr_ovid_dash",
+    "id": {
+      "Data1": 332199493,
+      "Data2": 1272237209,
+      "Data3": -391955836,
+      "Data4": 1281871850,
+      "IsNull": false
+    },
+    "oneshot": true,
+    "is3d": false,
+    "min": 1.0,
+    "max": 20.0,
+    "length": 2000,
+    "parameters": []
+  },
+  {
+    "path": "event:/sx/plr/Ultimate Homer/sx_plr_ulti_homer_power_spawn",
+    "id": {
+      "Data1": -662990010,
+      "Data2": 1123471663,
+      "Data3": -1222635594,
+      "Data4": -1989094845,
+      "IsNull": false
+    },
+    "oneshot": true,
+    "is3d": false,
+    "min": 1.0,
+    "max": 20.0,
+    "length": 5000,
+    "parameters": []
+  },
+  {
+    "path": "event:/sx/plr/Sx_plr_firetrail",
+    "id": {
+      "Data1": 232515404,
+      "Data2": 1258032158,
+      "Data3": 1951765410,
+      "Data4": -522659016,
+      "IsNull": false
+    },
+    "oneshot": false,
+    "is3d": true,
+    "min": 1.0,
+    "max": 20.0,
+    "length": 7000,
+    "parameters": [
+      {
+        "name": "Distance",
+        "min": 0.0,
+        "max": 18.0,
+        "initial": 3.40282347E+38,
+        "id": {
+          "data1": 3604737918,
+          "data2": 3013521198
+        }
+      },
+      {
+        "name": "Phase",
+        "min": 0.0,
+        "max": 1.0,
+        "initial": 0.0,
+        "id": {
+          "data1": 2844103887,
+          "data2": 2655182200
+        }
+      }
+    ]
+  },
+  {
+    "path": "event:/sx/plr/Sx_plr_wayfarer_loop",
+    "id": {
+      "Data1": 1209505103,
+      "Data2": 1135972473,
+      "Data3": 1888124604,
+      "Data4": -619276173,
+      "IsNull": false
+    },
+    "oneshot": false,
+    "is3d": true,
+    "min": 1.0,
+    "max": 20.0,
+    "length": 9679,
+    "parameters": [
+      {
+        "name": "Distance",
+        "min": 0.0,
+        "max": 18.0,
+        "initial": 3.40282347E+38,
+        "id": {
+          "data1": 3604737918,
+          "data2": 3013521198
+        }
+      }
+    ]
+  },
+  {
+    "path": "event:/sx/plr/Ultimate Dante/sx_plr_ultimate",
+    "id": {
+      "Data1": -2125952432,
+      "Data2": 1321712197,
+      "Data3": 962647972,
+      "Data4": -772681212,
+      "IsNull": false
+    },
+    "oneshot": true,
+    "is3d": false,
+    "min": 1.0,
+    "max": 20.0,
+    "length": 18533,
+    "parameters": [
+      {
+        "name": "Skip",
+        "min": 0.0,
+        "max": 1.0,
+        "initial": 0.0,
+        "id": {
+          "data1": 472417819,
+          "data2": 3004927351
+        }
+      }
+    ]
+  },
+  {
+    "path": "event:/sx/plr/Sx_plr_wayfarer_explosion",
+    "id": {
+      "Data1": -902465964,
+      "Data2": 1084750313,
+      "Data3": -1565015925,
+      "Data4": -586777597,
+      "IsNull": false
+    },
+    "oneshot": true,
+    "is3d": true,
+    "min": 1.0,
+    "max": 20.0,
+    "length": 1770,
+    "parameters": [
+      {
+        "name": "Distance",
+        "min": 0.0,
+        "max": 18.0,
+        "initial": 3.40282347E+38,
+        "id": {
+          "data1": 3604737918,
+          "data2": 3013521198
+        }
+      }
+    ]
+  },
+  {
+    "path": "event:/sx/plr/Ultimate Horace/sx_plr_ulti_horace_cart_spawn",
+    "id": {
+      "Data1": -293940137,
+      "Data2": 1173264383,
+      "Data3": 1294243465,
+      "Data4": 1971263673,
+      "IsNull": false
+    },
+    "oneshot": true,
+    "is3d": false,
+    "min": 1.0,
+    "max": 20.0,
+    "length": 2500,
+    "parameters": []
+  },
+  {
+    "path": "event:/sx/plr/Sx_plr_hurt",
+    "id": {
+      "Data1": 1470421335,
+      "Data2": 1098605746,
+      "Data3": -1728109897,
+      "Data4": -1704822658,
+      "IsNull": false
+    },
+    "oneshot": true,
+    "is3d": false,
+    "min": 1.0,
+    "max": 20.0,
+    "length": 1187,
+    "parameters": []
+  },
+  {
+    "path": "event:/sx/plr/Shield/sx_plr_shield_break",
+    "id": {
+      "Data1": -2128431780,
+      "Data2": 1247258630,
+      "Data3": 579967370,
+      "Data4": -2033513939,
+      "IsNull": false
+    },
+    "oneshot": true,
+    "is3d": false,
+    "min": 0.0,
+    "max": 20.0,
+    "length": 1500,
+    "parameters": []
+  },
+  {
+    "path": "event:/sx/plr/Sx_plr_dash",
+    "id": {
+      "Data1": 1514720351,
+      "Data2": 1125937234,
+      "Data3": -351542111,
+      "Data4": 1321702800,
+      "IsNull": false
+    },
+    "oneshot": true,
+    "is3d": true,
+    "min": 1.0,
+    "max": 20.0,
+    "length": 375,
+    "parameters": [
+      {
+        "name": "Distance",
+        "min": 0.0,
+        "max": 18.0,
+        "initial": 3.40282347E+38,
+        "id": {
+          "data1": 3604737918,
+          "data2": 3013521198
+        }
+      }
+    ]
+  },
+  {
+    "path": "event:/sx/plr/Sx_plr_dragonbreath",
+    "id": {
+      "Data1": -1201277076,
+      "Data2": 1182374954,
+      "Data3": -2002646633,
+      "Data4": 429272306,
+      "IsNull": false
+    },
+    "oneshot": false,
+    "is3d": true,
+    "min": 1.0,
+    "max": 20.0,
+    "length": 9068,
+    "parameters": [
+      {
+        "name": "Distance",
+        "min": 0.0,
+        "max": 18.0,
+        "initial": 3.40282347E+38,
+        "id": {
+          "data1": 3604737918,
+          "data2": 3013521198
+        }
+      },
+      {
+        "name": "Phase",
+        "min": 0.0,
+        "max": 1.0,
+        "initial": 0.0,
+        "id": {
+          "data1": 2844103887,
+          "data2": 2655182200
+        }
+      }
+    ]
+  },
+  {
+    "path": "event:/sx/plr/Ultimate Virgil/sx_plr_ulti_virgil_electric_loop",
+    "id": {
+      "Data1": -1246218386,
+      "Data2": 1122398607,
+      "Data3": -2066791536,
+      "Data4": 701662946,
+      "IsNull": false
+    },
+    "oneshot": false,
+    "is3d": true,
+    "min": 1.0,
+    "max": 20.0,
+    "length": 16001,
+    "parameters": []
+  },
+  {
+    "path": "event:/sx/plr/Sx_plr_stars",
+    "id": {
+      "Data1": -1341286539,
+      "Data2": 1334157988,
+      "Data3": -52653685,
+      "Data4": -1532589267,
+      "IsNull": false
+    },
+    "oneshot": true,
+    "is3d": false,
+    "min": 1.0,
+    "max": 20.0,
+    "length": 2226,
+    "parameters": []
+  },
+  {
+    "path": "event:/sx/plr/Carpe diem/sx_plr_carpe_fly_loop",
+    "id": {
+      "Data1": 957683067,
+      "Data2": 1212446556,
+      "Data3": 1365271739,
+      "Data4": -1069338837,
+      "IsNull": false
+    },
+    "oneshot": false,
+    "is3d": true,
+    "min": 1.0,
+    "max": 20.0,
+    "length": 3602,
+    "parameters": [
+      {
+        "name": "Distance",
+        "min": 0.0,
+        "max": 18.0,
+        "initial": 3.40282347E+38,
+        "id": {
+          "data1": 3604737918,
+          "data2": 3013521198
+        }
+      }
+    ]
+  },
+  {
+    "path": "event:/sx/plr/Selenic bloom/sx_plr_selenic_charging",
+    "id": {
+      "Data1": -821907842,
+      "Data2": 1271749947,
+      "Data3": -2016724297,
+      "Data4": -554785037,
+      "IsNull": false
+    },
+    "oneshot": true,
+    "is3d": false,
+    "min": 1.0,
+    "max": 20.0,
+    "length": 3000,
+    "parameters": []
+  },
+  {
+    "path": "event:/sx/plr/Sx_plr_area",
+    "id": {
+      "Data1": -538277245,
+      "Data2": 1166107265,
+      "Data3": -36610377,
+      "Data4": -2029770573,
+      "IsNull": false
+    },
+    "oneshot": false,
+    "is3d": true,
+    "min": 1.0,
+    "max": 20.0,
+    "length": 16500,
+    "parameters": [
+      {
+        "name": "Distance",
+        "min": 0.0,
+        "max": 18.0,
+        "initial": 3.40282347E+38,
+        "id": {
+          "data1": 3604737918,
+          "data2": 3013521198
+        }
+      },
+      {
+        "name": "Phase",
+        "min": 0.0,
+        "max": 1.0,
+        "initial": 0.0,
+        "id": {
+          "data1": 2844103887,
+          "data2": 2655182200
+        }
+      }
+    ]
+  },
+  {
+    "path": "event:/sx/plr/footsteps/sx_plr_footsteps",
+    "id": {
+      "Data1": 950638211,
+      "Data2": 1245180627,
+      "Data3": 1662616974,
+      "Data4": -135839688,
+      "IsNull": false
+    },
+    "oneshot": false,
+    "is3d": true,
+    "min": 1.0,
+    "max": 20.0,
+    "length": 0,
+    "parameters": [
+      {
+        "name": "Surface",
+        "min": 0.0,
+        "max": 3.0,
+        "initial": 0.0,
+        "id": {
+          "data1": 993539737,
+          "data2": 4046298938
+        }
+      },
+      {
+        "name": "Reverb",
+        "min": 0.0,
+        "max": 1.0,
+        "initial": 0.0,
+        "id": {
+          "data1": 1653419770,
+          "data2": 2181142986
+        }
+      },
+      {
+        "name": "Movement",
+        "min": 0.0,
+        "max": 1.0,
+        "initial": 0.0,
+        "id": {
+          "data1": 3841729950,
+          "data2": 2003200904
+        }
+      }
+    ]
+  },
+  {
+    "path": "event:/sx/plr/Ultimate Homer/sx_plr_ulti_homer_tornado_loop",
+    "id": {
+      "Data1": -1941452413,
+      "Data2": 1076616065,
+      "Data3": 245759423,
+      "Data4": 1249074552,
+      "IsNull": false
+    },
+    "oneshot": false,
+    "is3d": true,
+    "min": 1.0,
+    "max": 20.0,
+    "length": 10000,
+    "parameters": [
+      {
+        "name": "Distance",
+        "min": 0.0,
+        "max": 18.0,
+        "initial": 3.40282347E+38,
+        "id": {
+          "data1": 3604737918,
+          "data2": 3013521198
+        }
+      }
+    ]
+  },
+  {
+    "path": "event:/sx/plr/Ultimate Virgil/sx_plr_ulti_virgil_meteor_explosion",
+    "id": {
+      "Data1": -1537633135,
+      "Data2": 1329976343,
+      "Data3": 1706024596,
+      "Data4": 1941042825,
+      "IsNull": false
+    },
+    "oneshot": true,
+    "is3d": true,
+    "min": 1.0,
+    "max": 20.0,
+    "length": 5000,
+    "parameters": []
+  },
+  {
+    "path": "event:/sx/plr/Sx_plr_wayfarer_shot",
+    "id": {
+      "Data1": 1540478617,
+      "Data2": 1271845914,
+      "Data3": 2113388940,
+      "Data4": 484235453,
+      "IsNull": false
+    },
+    "oneshot": true,
+    "is3d": false,
+    "min": 1.0,
+    "max": 20.0,
+    "length": 1990,
+    "parameters": []
+  },
+  {
+    "path": "event:/sx/plr/Selenic bloom/sx_plr_selenic_second_burst",
+    "id": {
+      "Data1": -55930459,
+      "Data2": 1266679683,
+      "Data3": 208340619,
+      "Data4": -1577621037,
+      "IsNull": false
+    },
+    "oneshot": true,
+    "is3d": true,
+    "min": 1.0,
+    "max": 20.0,
+    "length": 4000,
+    "parameters": [
+      {
+        "name": "Distance",
+        "min": 0.0,
+        "max": 18.0,
+        "initial": 3.40282347E+38,
+        "id": {
+          "data1": 3604737918,
+          "data2": 3013521198
+        }
+      }
+    ]
+  },
+  {
+    "path": "event:/sx/plr/Signature Bird/sx_plr_bird_hit",
+    "id": {
+      "Data1": -83175259,
+      "Data2": 1089932918,
+      "Data3": 639619229,
+      "Data4": 1203787682,
+      "IsNull": false
+    },
+    "oneshot": true,
+    "is3d": true,
+    "min": 1.0,
+    "max": 20.0,
+    "length": 2500,
+    "parameters": []
+  },
+  {
+    "path": "event:/sx/plr/Ultimate Virgil/sx_plr_ulti_virgil_meteor_fall",
+    "id": {
+      "Data1": 1394248358,
+      "Data2": 1107552913,
+      "Data3": -1047684439,
+      "Data4": 193430039,
+      "IsNull": false
+    },
+    "oneshot": true,
+    "is3d": true,
+    "min": 1.0,
+    "max": 20.0,
+    "length": 3500,
+    "parameters": []
+  },
+  {
+    "path": "event:/sx/plr/Ovid Dash/sx_plr_ovid_dash_vanish",
+    "id": {
+      "Data1": 1155923879,
+      "Data2": 1093526955,
+      "Data3": -358401603,
+      "Data4": -506790550,
+      "IsNull": false
+    },
+    "oneshot": true,
+    "is3d": true,
+    "min": 1.0,
+    "max": 20.0,
+    "length": 2000,
+    "parameters": []
+  },
+  {
+    "path": "event:/sx/plr/Ultimate Horace/sx_plr_ulti_horace_cart_loop",
+    "id": {
+      "Data1": 69020328,
+      "Data2": 1299388110,
+      "Data3": -751263343,
+      "Data4": 1434915628,
+      "IsNull": false
+    },
+    "oneshot": false,
+    "is3d": false,
+    "min": 1.0,
+    "max": 20.0,
+    "length": 10000,
+    "parameters": []
+  },
+  {
+    "path": "event:/sx/plr/Ultimate Virgil/sx_plr_virgil_ulti",
+    "id": {
+      "Data1": -1796440,
+      "Data2": 1204670052,
+      "Data3": 170719134,
+      "Data4": -1412298601,
+      "IsNull": false
+    },
+    "oneshot": true,
+    "is3d": false,
+    "min": 1.0,
+    "max": 20.0,
+    "length": 19079,
+    "parameters": [
+      {
+        "name": "Skip",
+        "min": 0.0,
+        "max": 1.0,
+        "initial": 0.0,
+        "id": {
+          "data1": 472417819,
+          "data2": 3004927351
+        }
+      }
+    ]
+  },
+  {
+    "path": "event:/sx/plr/Signature Bird/sx_plr_bird_shot",
+    "id": {
+      "Data1": 484431537,
+      "Data2": 1276555857,
+      "Data3": -384109134,
+      "Data4": 1765761482,
+      "IsNull": false
+    },
+    "oneshot": true,
+    "is3d": false,
+    "min": 1.0,
+    "max": 20.0,
+    "length": 3000,
+    "parameters": []
+  },
+  {
+    "path": "event:/sx/plr/Ultimate Ovid/sx_plr_ulti_ovid",
+    "id": {
+      "Data1": 1816237234,
+      "Data2": 1092957540,
+      "Data3": 2024988303,
+      "Data4": -327576237,
+      "IsNull": false
+    },
+    "oneshot": true,
+    "is3d": false,
+    "min": 1.0,
+    "max": 20.0,
+    "length": 13066,
+    "parameters": [
+      {
+        "name": "Skip",
+        "min": 0.0,
+        "max": 1.0,
+        "initial": 0.0,
+        "id": {
+          "data1": 472417819,
+          "data2": 3004927351
+        }
+      }
+    ]
+  },
+  {
+    "path": "event:/sx/plr/Sx_plr_slowprojectile_shot",
+    "id": {
+      "Data1": 305521848,
+      "Data2": 1139334325,
+      "Data3": -1555974261,
+      "Data4": -1191919773,
+      "IsNull": false
+    },
+    "oneshot": true,
+    "is3d": true,
+    "min": 1.0,
+    "max": 20.0,
+    "length": 1500,
+    "parameters": [
+      {
+        "name": "Distance",
+        "min": 0.0,
+        "max": 18.0,
+        "initial": 3.40282347E+38,
+        "id": {
+          "data1": 3604737918,
+          "data2": 3013521198
+        }
+      }
+    ]
+  },
+  {
+    "path": "event:/sx/plr/Sx_plr_slowprojectile OLD",
+    "id": {
+      "Data1": -794711878,
+      "Data2": 1091168788,
+      "Data3": 1488765322,
+      "Data4": -404940286,
+      "IsNull": false
+    },
+    "oneshot": false,
+    "is3d": true,
+    "min": 1.0,
+    "max": 20.0,
+    "length": 5875,
+    "parameters": [
+      {
+        "name": "Phase",
+        "min": 0.0,
+        "max": 1.0,
+        "initial": 0.0,
+        "id": {
+          "data1": 2844103887,
+          "data2": 2655182200
+        }
+      },
+      {
+        "name": "Distance",
+        "min": 0.0,
+        "max": 18.0,
+        "initial": 3.40282347E+38,
+        "id": {
+          "data1": 3604737918,
+          "data2": 3013521198
+        }
+      }
+    ]
+  },
+  {
+    "path": "event:/sx/plr/Garlic/sx_plr_garlic",
+    "id": {
+      "Data1": -574750019,
+      "Data2": 1255343851,
+      "Data3": 1921771689,
+      "Data4": 2020774774,
+      "IsNull": false
+    },
+    "oneshot": false,
+    "is3d": false,
+    "min": 1.0,
+    "max": 20.0,
+    "length": 4000,
+    "parameters": []
+  },
+  {
+    "path": "event:/sx/plr/Ultimate Dante/sx_plr_ultimate_fire_rings",
+    "id": {
+      "Data1": 16352981,
+      "Data2": 1122692763,
+      "Data3": 785237127,
+      "Data4": -1722794395,
+      "IsNull": false
+    },
+    "oneshot": true,
+    "is3d": false,
+    "min": 1.0,
+    "max": 20.0,
+    "length": 4933,
+    "parameters": []
+  },
+  {
+    "path": "event:/sx/plr/Undying Legacy/sx_plr_undying_throw",
+    "id": {
+      "Data1": 1586715863,
+      "Data2": 1166929144,
+      "Data3": 1796810662,
+      "Data4": -1615894100,
+      "IsNull": false
+    },
+    "oneshot": true,
+    "is3d": false,
+    "min": 1.0,
+    "max": 20.0,
+    "length": 3000,
+    "parameters": []
+  },
+  {
+    "path": "event:/sx/plr/Angel Face/sx_plr_angel_face_blow_drone_loop",
+    "id": {
+      "Data1": 1460997085,
+      "Data2": 1087147419,
+      "Data3": 1770916504,
+      "Data4": 1014832041,
+      "IsNull": false
+    },
+    "oneshot": false,
+    "is3d": false,
+    "min": 1.0,
+    "max": 20.0,
+    "length": 6000,
+    "parameters": []
+  },
+  {
+    "path": "event:/sx/plr/Selenic bloom/sx_plr_selenic_first_burst",
+    "id": {
+      "Data1": 512365539,
+      "Data2": 1307959203,
+      "Data3": 1214089135,
+      "Data4": 530202729,
+      "IsNull": false
+    },
+    "oneshot": true,
+    "is3d": true,
+    "min": 1.0,
+    "max": 20.0,
+    "length": 3000,
+    "parameters": [
+      {
+        "name": "Distance",
+        "min": 0.0,
+        "max": 18.0,
+        "initial": 3.40282347E+38,
+        "id": {
+          "data1": 3604737918,
+          "data2": 3013521198
+        }
+      }
+    ]
+  },
+  {
+    "path": "event:/sx/plr/Sx_plr_lightningstrike",
+    "id": {
+      "Data1": -1404800020,
+      "Data2": 1256303871,
+      "Data3": -1981921100,
+      "Data4": 1405694761,
+      "IsNull": false
+    },
+    "oneshot": true,
+    "is3d": true,
+    "min": 1.0,
+    "max": 20.0,
+    "length": 3375,
+    "parameters": [
+      {
+        "name": "Distance",
+        "min": 0.0,
+        "max": 18.0,
+        "initial": 3.40282347E+38,
+        "id": {
+          "data1": 3604737918,
+          "data2": 3013521198
+        }
+      },
+      {
+        "name": "Phase",
+        "min": 0.0,
+        "max": 1.0,
+        "initial": 0.0,
+        "id": {
+          "data1": 2844103887,
+          "data2": 2655182200
+        }
+      }
+    ]
+  },
+  {
+    "path": "event:/sx/plr/Selenic bloom/sx_plr_selenic_rolling",
+    "id": {
+      "Data1": 575927278,
+      "Data2": 1153530692,
+      "Data3": -2015306344,
+      "Data4": -1887016385,
+      "IsNull": false
+    },
+    "oneshot": false,
+    "is3d": true,
+    "min": 1.0,
+    "max": 20.0,
+    "length": 4895,
+    "parameters": [
+      {
+        "name": "Distance",
+        "min": 0.0,
+        "max": 18.0,
+        "initial": 3.40282347E+38,
+        "id": {
+          "data1": 3604737918,
+          "data2": 3013521198
+        }
+      }
+    ]
+  },
+  {
+    "path": "event:/sx/plr/Summon/sx_plr_summon_wingflap",
+    "id": {
+      "Data1": 202224117,
+      "Data2": 1168404540,
+      "Data3": 270208185,
+      "Data4": 1868296016,
+      "IsNull": false
+    },
+    "oneshot": true,
+    "is3d": true,
+    "min": 1.0,
+    "max": 20.0,
+    "length": 1211,
+    "parameters": [
+      {
+        "name": "Distance",
+        "min": 0.0,
+        "max": 18.0,
+        "initial": 3.40282347E+38,
+        "id": {
+          "data1": 3604737918,
+          "data2": 3013521198
+        }
+      }
+    ]
+  },
+  {
+    "path": "event:/sx/plr/Sx_plr_slowprojectile_loop",
+    "id": {
+      "Data1": -450359305,
+      "Data2": 1330102086,
+      "Data3": -2065969494,
+      "Data4": -435797981,
+      "IsNull": false
+    },
+    "oneshot": false,
+    "is3d": true,
+    "min": 1.0,
+    "max": 20.0,
+    "length": 16500,
+    "parameters": [
+      {
+        "name": "Distance",
+        "min": 0.0,
+        "max": 18.0,
+        "initial": 3.40282347E+38,
+        "id": {
+          "data1": 3604737918,
+          "data2": 3013521198
+        }
+      }
+    ]
+  },
+  {
+    "path": "event:/sx/plr/Sx_plr_slash",
+    "id": {
+      "Data1": -749864710,
+      "Data2": 1134763170,
+      "Data3": -2098760784,
+      "Data4": 175510710,
+      "IsNull": false
+    },
+    "oneshot": true,
+    "is3d": true,
+    "min": 1.0,
+    "max": 20.0,
+    "length": 1000,
+    "parameters": [
+      {
+        "name": "Distance",
+        "min": 0.0,
+        "max": 18.0,
+        "initial": 3.40282347E+38,
+        "id": {
+          "data1": 3604737918,
+          "data2": 3013521198
+        }
+      }
+    ]
+  },
+  {
+    "path": "event:/sx/plr/Ultimate Homer/sx_plr_ulti_homer",
+    "id": {
+      "Data1": 80655613,
+      "Data2": 1242134815,
+      "Data3": -2125690484,
+      "Data4": 1228535849,
+      "IsNull": false
+    },
+    "oneshot": true,
+    "is3d": false,
+    "min": 1.0,
+    "max": 20.0,
+    "length": 17600,
+    "parameters": [
+      {
+        "name": "Skip",
+        "min": 0.0,
+        "max": 1.0,
+        "initial": 0.0,
+        "id": {
+          "data1": 472417819,
+          "data2": 3004927351
+        }
+      }
+    ]
+  },
+  {
+    "path": "snapshot:/Rev_interior",
+    "id": {
+      "Data1": -360656899,
+      "Data2": 1209733650,
+      "Data3": 793300899,
+      "Data4": 1852418753,
+      "IsNull": false
+    },
+    "oneshot": false,
+    "is3d": false,
+    "min": 0.0,
+    "max": 0.0,
+    "length": 0,
+    "parameters": []
+  }
+]

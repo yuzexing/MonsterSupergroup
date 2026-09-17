@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="1" result="Passed" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-09-17 07:45:49Z" end-time="2026-09-17 07:45:53Z" duration="3.2983689">
+  <test-suite type="TestSuite" id="1657" name="Monster Supergroup" fullname="Monster Supergroup" runstate="Runnable" testcasecount="548" result="Passed" start-time="2026-09-17 07:45:49Z" end-time="2026-09-17 07:45:53Z" duration="3.298369" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="PlayMode" />
+    </properties>
+    <test-suite type="Assembly" id="1641" name="MonsterSupergroup.Gameplay.Tests.PlayMode.dll" fullname="F:/UnityStore/MonsterSupergroup/Library/ScriptAssemblies/MonsterSupergroup.Gameplay.Tests.PlayMode.dll" runstate="Runnable" testcasecount="544" result="Passed" start-time="2026-09-17 07:45:49Z" end-time="2026-09-17 07:45:53Z" duration="3.268295" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="78988" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="PlayMode" />
+        <property name="EditorOnly" value="False" />
+      </properties>
+      <test-suite type="TestSuite" id="1642" name="MonsterSupergroup" fullname="MonsterSupergroup" runstate="Runnable" testcasecount="544" result="Passed" start-time="2026-09-17 07:45:49Z" end-time="2026-09-17 07:45:53Z" duration="3.260977" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-suite type="TestSuite" id="1643" name="Gameplay" fullname="MonsterSupergroup.Gameplay" runstate="Runnable" testcasecount="544" result="Passed" start-time="2026-09-17 07:45:49Z" end-time="2026-09-17 07:45:53Z" duration="3.245875" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <test-suite type="TestSuite" id="1644" name="Tests" fullname="MonsterSupergroup.Gameplay.Tests" runstate="Runnable" testcasecount="544" result="Passed" start-time="2026-09-17 07:45:49Z" end-time="2026-09-17 07:45:53Z" duration="3.239053" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-suite type="TestFixture" id="1631" name="WeaponAudioLifetimeTests" fullname="MonsterSupergroup.Gameplay.Tests.WeaponAudioLifetimeTests" classname="MonsterSupergroup.Gameplay.Tests.WeaponAudioLifetimeTests" runstate="Runnable" testcasecount="2" result="Passed" start-time="2026-09-17 07:45:49Z" end-time="2026-09-17 07:45:53Z" duration="3.224743" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1633" name="BreathPhaseChangesAtExitCompletion_CancellationAndReuseReleaseOneInstance" fullname="MonsterSupergroup.Gameplay.Tests.WeaponAudioLifetimeTests.BreathPhaseChangesAtExitCompletion_CancellationAndReuseReleaseOneInstance" methodname="BreathPhaseChangesAtExitCompletion_CancellationAndReuseReleaseOneInstance" classname="MonsterSupergroup.Gameplay.Tests.WeaponAudioLifetimeTests" runstate="Runnable" seed="1693579311" result="Passed" start-time="2026-09-17 07:45:49Z" end-time="2026-09-17 07:45:53Z" duration="3.214031" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[[Localization] Applied locale=zh-CN revision=2
+Saving results to: C:/Users/ADMIN/AppData/LocalLow/DefaultCompany/Monster Supergroup\TestResults.xml
+]]></output>
+              </test-case>
+            </test-suite>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

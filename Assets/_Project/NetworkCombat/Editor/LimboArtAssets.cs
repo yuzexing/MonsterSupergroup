@@ -404,8 +404,8 @@ namespace MonsterSupergroup.NetworkCombat.Editor
                 foreach (var system in fire.GetComponentsInChildren<ParticleSystem>(true))
                 {
                     var main = system.main; main.cullingMode = ParticleSystemCullingMode.AlwaysSimulate; main.useUnscaledTime = false;
-                    system.GetComponent<ParticleSystemRenderer>().sortingLayerName = "EnemyAttack";
                 }
+                ConfigureFireSorting(fire);
                 PrefabUtility.SaveAsPrefabAsset(fire, path);
             }
             finally { PrefabUtility.UnloadPrefabContents(fire); }
@@ -423,6 +423,18 @@ namespace MonsterSupergroup.NetworkCombat.Editor
                 so.FindProperty("particleSystem").objectReferenceValue = ps; so.ApplyModifiedPropertiesWithoutUndo(); PrefabUtility.SaveAsPrefabAsset(barrier, barrierPath);
             }
             finally { PrefabUtility.UnloadPrefabContents(barrier); }
+        }
+
+        public static void ConfigureFireSorting(GameObject fire)
+        {
+            foreach (var renderer in fire.GetComponentsInChildren<ParticleSystemRenderer>(true))
+            {
+                // Source FireParticles: body/fire/sparks are Props/0; the two ground glows
+                // are BackgroundFront/100. Do not put a SortingGroup around the whole ring.
+                bool glow = renderer.name == "Glow" || renderer.name == "GlowFlat";
+                renderer.sortingLayerName = glow ? "BackgroundFront" : "Props";
+                renderer.sortingOrder = glow ? 100 : 0;
+            }
         }
 
         private static void RestoreImpBullet()

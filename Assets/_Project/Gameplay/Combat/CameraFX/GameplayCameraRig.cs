@@ -19,6 +19,9 @@ namespace AstralShift.HellMaiden.CameraFX
         [SerializeField] private bool shakeEnabled = true;
         [SerializeField] private bool nordicFixedView;
         [SerializeField] private ShakePreset playerHitPreset;
+        [SerializeField, Min(.01f)] private float audioListenerDepth = 10f;
+        private FMODUnity.StudioListener audioListener;
+        public FMODUnity.StudioListener LocalAudioListener => audioListener;
 
         private ProCamera2D rig;
         private ProCamera2DShake shake;
@@ -110,6 +113,7 @@ namespace AstralShift.HellMaiden.CameraFX
             rig.AddCameraTarget(player.transform);
             rig.enabled = true;
             rig.Reset();
+            BindAudioListener();
         }
 
         public void PlayShake(PlayerMovement player, int presetIndex)
@@ -136,6 +140,7 @@ namespace AstralShift.HellMaiden.CameraFX
             ownerCombatant = null;
             referenceFraming = false;
             owner = null;
+            if (audioListener != null) audioListener.enabled = false;
             rig.RemoveAllCameraTargets(); // Plugin RemoveCameraTarget dereferences destroyed transforms.
             rig.enabled = false;
             if (shake != null)
@@ -156,7 +161,36 @@ namespace AstralShift.HellMaiden.CameraFX
             }
         }
 
-        private void LateUpdate() => ConstrainView();
+        private void LateUpdate()
+        {
+            ConstrainView();
+            UpdateAudioListener();
+        }
+
+        private void BindAudioListener()
+        {
+            if (GameplayRuntimeEnvironment.IsDedicatedServer || owner == null) return;
+            if (audioListener == null)
+            {
+                var anchor = new GameObject("Local gameplay audio listener");
+                anchor.SetActive(false);
+                anchor.transform.SetParent(transform, false);
+                audioListener = anchor.AddComponent<FMODUnity.StudioListener>();
+                UpdateAudioListener();
+                anchor.SetActive(true);
+            }
+            audioListener.enabled = true;
+            UpdateAudioListener();
+        }
+
+        private void UpdateAudioListener()
+        {
+            if (audioListener == null || owner == null) return;
+            var camera = GameCamera.transform;
+            audioListener.transform.SetPositionAndRotation(
+                new Vector3(camera.position.x, camera.position.y, owner.transform.position.z - audioListenerDepth),
+                camera.rotation);
+        }
         private void ConstrainView()
         {
             if (!nordicFixedView || rig == null || boundaryGround == null) return;

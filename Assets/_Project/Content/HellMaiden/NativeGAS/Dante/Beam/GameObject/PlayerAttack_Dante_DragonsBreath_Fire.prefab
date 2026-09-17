@@ -30825,7 +30825,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 073797afb82c5a1438f328866b10b3f0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_ComponentVersion: 2
+  m_ComponentVersion: 3
   m_LightType: 1
   m_BlendStyleIndex: 3
   m_FalloffIntensity: 0.5
@@ -33413,7 +33413,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4611579644537198}
-  - component: {fileID: 114328299215684997}
   m_Layer: 0
   m_Name: End
   m_TagString: Untagged
@@ -33436,27 +33435,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 4617365563186364}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &114328299215684997
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1642988549198181}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 744a208c85da6d04c861d81b992e4ead, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  CollisionTag: 
-  Emitters:
-  - Target: {fileID: 114408345039935966}
-    Params:
-    - Name: Phase
-      Value: 1
-    - Name: End
-      Value: 1
-  TriggerEvent: 0
 --- !u!1 &1703437598541787
 GameObject:
   m_ObjectHideFlags: 0
@@ -33501,7 +33479,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 073797afb82c5a1438f328866b10b3f0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_ComponentVersion: 2
+  m_ComponentVersion: 3
   m_LightType: 1
   m_BlendStyleIndex: 3
   m_FalloffIntensity: 0.5
@@ -35954,6 +35932,15 @@ MonoBehaviour:
   progressionScaler: {fileID: 114918264173551851}
   hitbox: {fileID: 114190181876552715}
   hitEffectResolver: {fileID: 0}
+  audioAdaptationVersion: 1
+  stagedSound:
+    Guid:
+      Data1: -1201277076
+      Data2: 1182374954
+      Data3: -2002646633
+      Data4: 429272306
+    Path: event:/sx/plr/Sx_plr_dragonbreath
+  completionSoundParameter: Phase
   isometricRotation: 1
   isometricAngle: -45
   rotateToDirection: 0
@@ -38993,7 +38980,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4998874197659892}
-  - component: {fileID: 114408345039935966}
   m_Layer: 0
   m_Name: Start
   m_TagString: Untagged
@@ -39016,39 +39002,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 4617365563186364}
   m_LocalEulerAnglesHint: {x: 0, y: -0, z: -0}
---- !u!114 &114408345039935966
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1969106005120503}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  CollisionTag: 
-  EventReference:
-    Guid:
-      Data1: -1201277076
-      Data2: 1182374954
-      Data3: -2002646633
-      Data4: 429272306
-    Path: 
-  Event: 
-  EventPlayTrigger: 11
-  EventStopTrigger: 12
-  AllowFadeout: 1
-  TriggerOnce: 0
-  Preload: 0
-  NonRigidbodyVelocity: 0
-  Params:
-  - Name: Phase
-    Value: 0
-  OverrideAttenuation: 0
-  OverrideMinDistance: 1
-  OverrideMaxDistance: 20
 --- !u!1 &1977153420339851
 GameObject:
   m_ObjectHideFlags: 0

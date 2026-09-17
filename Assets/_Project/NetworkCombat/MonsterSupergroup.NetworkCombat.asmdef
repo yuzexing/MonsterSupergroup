@@ -3,6 +3,7 @@
   "rootNamespace": "MonsterSupergroup.NetworkCombat",
   "references": [
     "UniTask",
+    "GUID:0c752da273b17c547ae705acf0f2adf2",
     "Unity.Timeline",
     "GUID:a7c8997642ef4acb9c3b5bb6f2af8b51",
     "GUID:30817c1a0e6d646d99c048fc403f5979",

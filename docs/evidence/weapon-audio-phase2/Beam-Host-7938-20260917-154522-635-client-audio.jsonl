@@ -1,0 +1,11 @@
+{"Instance":-3034,"Generation":1,"ObjectName":"PlayerAttack_Dante_DragonsBreath_Fire(Clone)","Operation":"start","Event":"event:/sx/plr/Sx_plr_dragonbreath","Handle":2102784,"Value":0.0,"Result":0}
+{"Instance":-3288,"Generation":1,"ObjectName":"PlayerAttack_Dante_DragonsBreath_Fire(Clone)","Operation":"start","Event":"event:/sx/plr/Sx_plr_dragonbreath","Handle":2103552,"Value":0.01712709665298462,"Result":0}
+{"Instance":-3034,"Generation":1,"ObjectName":"PlayerAttack_Dante_DragonsBreath_Fire(Clone)","Operation":"completion-parameter","Event":"event:/sx/plr/Sx_plr_dragonbreath","Handle":2102784,"Value":1.0,"Result":0}
+{"Instance":-3034,"Generation":1,"ObjectName":"PlayerAttack_Dante_DragonsBreath_Fire(Clone)","Operation":"stop","Event":"event:/sx/plr/Sx_plr_dragonbreath","Handle":2102784,"Value":0.0,"Result":0}
+{"Instance":-3034,"Generation":1,"ObjectName":"PlayerAttack_Dante_DragonsBreath_Fire(Clone)","Operation":"release","Event":"event:/sx/plr/Sx_plr_dragonbreath","Handle":2102784,"Value":0.0,"Result":0}
+{"Instance":-3288,"Generation":1,"ObjectName":"PlayerAttack_Dante_DragonsBreath_Fire(Clone)","Operation":"cancel","Event":"event:/sx/plr/Sx_plr_dragonbreath","Handle":2103552,"Value":0.0,"Result":0}
+{"Instance":-3288,"Generation":1,"ObjectName":"PlayerAttack_Dante_DragonsBreath_Fire(Clone)","Operation":"release","Event":"event:/sx/plr/Sx_plr_dragonbreath","Handle":2103552,"Value":0.0,"Result":0}
+{"Instance":-3034,"Generation":2,"ObjectName":"PlayerAttack_Dante_DragonsBreath_Fire(Clone)","Operation":"start","Event":"event:/sx/plr/Sx_plr_dragonbreath","Handle":2104320,"Value":0.0,"Result":0}
+{"Instance":-3034,"Generation":2,"ObjectName":"PlayerAttack_Dante_DragonsBreath_Fire(Clone)","Operation":"cancel","Event":"event:/sx/plr/Sx_plr_dragonbreath","Handle":2104320,"Value":0.0,"Result":0}
+{"Instance":-3034,"Generation":2,"ObjectName":"PlayerAttack_Dante_DragonsBreath_Fire(Clone)","Operation":"release","Event":"event:/sx/plr/Sx_plr_dragonbreath","Handle":2104320,"Value":0.0,"Result":0}
+{"summary":"PASS","starts":3,"duplicates":0,"errors":0,"activeAtExit":0}

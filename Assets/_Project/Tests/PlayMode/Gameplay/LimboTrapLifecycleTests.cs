@@ -39,6 +39,40 @@ namespace MonsterSupergroup.Gameplay.Tests
         }
 
         [UnityTest]
+        public IEnumerator FirePoolReuseKeepsBodyAndGroundGlowSortingSeparate()
+        {
+            var firePool = PoolManager.Instance.GetOrCreatePooler(rules.ReferenceFormationWarning, 100);
+            var fire = firePool.GetOrCreate(pool.transform, activate: true);
+            int instance = fire.GetInstanceID();
+            void Check(ParticleSystem root)
+            {
+                int bodies = 0, glows = 0;
+                foreach (var renderer in root.GetComponentsInChildren<ParticleSystemRenderer>(true))
+                {
+                    bool glow = renderer.name == "Glow" || renderer.name == "GlowFlat";
+                    if (glow) glows++; else bodies++;
+                    Assert.That(renderer.sortingLayerName, Is.EqualTo(glow ? "BackgroundFront" : "Props"));
+                    Assert.That(renderer.sortingOrder, Is.EqualTo(glow ? 100 : 0));
+                    Assert.That(renderer.GetComponentInParent<UnityEngine.Rendering.SortingGroup>(), Is.Null);
+                }
+                Assert.That(bodies, Is.EqualTo(4)); Assert.That(glows, Is.EqualTo(2));
+            }
+            fire.Play(true); yield return null; Check(fire);
+            fire.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear); firePool.Return(fire);
+            fire = firePool.GetOrCreate(pool.transform, activate: true);
+            Assert.That(fire.GetInstanceID(), Is.EqualTo(instance), "Exercise the same pooled object.");
+            fire.Play(true); yield return null; Check(fire);
+            fire.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear); firePool.Return(fire);
+            replica = Object.Instantiate(rules.ReferenceBarrier);
+            replica.ApplyNetworkPresentation(Vector3.zero, BarrierPhase.Shrinking, 15, 67, 67, .25f, true);
+            yield return null;
+            int groups = 0;
+            foreach (var system in replica.GetComponentsInChildren<ParticleSystem>(true))
+                if (system.transform.parent.GetComponentInParent<ParticleSystem>() == null) { Check(system); groups++; }
+            Assert.That(groups, Is.EqualTo(67), "Replica creates independently sorted fire points.");
+        }
+
+        [UnityTest]
         public IEnumerator NativeBarrierShrinksDuringEntryAndReleasesOnlyAfterParticlesFinish()
         {
             authority = Object.Instantiate(rules.ReferenceBarrier);

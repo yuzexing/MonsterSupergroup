@@ -1,0 +1,44 @@
+{
+  "version": "FS-20260917-01",
+  "phase": 1,
+  "scope": "B/barrier source fire sorting only",
+  "editMode": {
+    "failed": 0,
+    "passed": 23,
+    "suites": [
+      "LimboArtTests",
+      "LimboSpatialTests"
+    ]
+  },
+  "playMode": {
+    "failed": 0,
+    "passed": 6,
+    "suites": [
+      "LimboTrapLifecycleTests",
+      "PlanarPresentationTests"
+    ]
+  },
+  "launcherTests": {
+    "source": "Tools/Tests/Test-LimboManualPackage.ps1",
+    "passed": true,
+    "method": "mock process creation in independent path with spaces; actual packaging and archive logic"
+  },
+  "build": {
+    "output": "Builds/LimboFireSorting-FS-20260917-01/MonsterSupergroupLimbo.exe",
+    "profile": "kcp-development",
+    "success": true,
+    "testsIncluded": false
+  },
+  "acceptance": {
+    "full720": "not-run-this-phase",
+    "visualOcclusion": "pending-user",
+    "standaloneWindowSmoke": "pending-user",
+    "hostClientWindows": "not-run-this-phase",
+    "pressure": "not-evaluated",
+    "computerUse": "not-run"
+  },
+  "laterPhases": {
+    "phase2Audio": "not-started",
+    "phase3Pickups": "not-started"
+  }
+}

@@ -102,6 +102,32 @@ static class PatchRuntime
                             (t.Name == "EnemyExplosionAttackVFX" && new[] {"Trigger","Stop","OnEnd"}.Contains(m.Name))) Hook(m, probe, "Event", false);
                     }
                     changed = true;
+                    foreach(var t in module.Types.Where(t => t.Namespace == "AstralShift.HellMaiden.Player.Attacks"))
+                    foreach(var m in t.Methods.Where(m => !m.IsStatic && m.HasBody))
+                        if(new[]{"PlayStartAnimation","PlayAttackAnimation","PlayEndAnimation","PlayLaunchSound","PlayHitSound","PlayLaunchedLoopSound","OnHit","Dispose"}.Contains(m.Name))
+                            Hook(m,probe,"AudioComponent",false);
+                }
+                if (asm.Name.Name == "FMODUnity")
+                {
+                    var t=module.Types.Single(x=>x.FullName=="FMOD.Studio.EventInstance");
+                    foreach(var m in t.Methods.Where(x=>x.HasBody && x.Name=="setParameterByID"))
+                    {
+                        var il=m.Body.GetILProcessor();var first=m.Body.Instructions[0];
+                        il.InsertBefore(first,Instruction.Create(OpCodes.Ldarg_0));il.InsertBefore(first,Instruction.Create(OpCodes.Ldobj,t));
+                        il.InsertBefore(first,Instruction.Create(OpCodes.Ldarg_1));il.InsertBefore(first,Instruction.Create(OpCodes.Ldarg_2));
+                        il.InsertBefore(first,Instruction.Create(OpCodes.Call,Probe(module,probe,"AudioParameter",3)));changed=true;
+                    }
+                    foreach(var m in t.Methods.Where(x=>x.HasBody && new[]{"start","stop","release","setParameterByName"}.Contains(x.Name)))
+                    {
+                        var il=m.Body.GetILProcessor();var first=m.Body.Instructions[0];
+                        il.InsertBefore(first,Instruction.Create(OpCodes.Ldarg_0));
+                        il.InsertBefore(first,Instruction.Create(OpCodes.Ldobj,t));
+                        il.InsertBefore(first,Instruction.Create(OpCodes.Ldstr,m.Name));
+                        il.InsertBefore(first,m.Name=="setParameterByName"?Instruction.Create(OpCodes.Ldarg_1):Instruction.Create(OpCodes.Ldstr,""));
+                        il.InsertBefore(first,m.Name=="setParameterByName"?Instruction.Create(OpCodes.Ldarg_2):Instruction.Create(OpCodes.Ldc_R4,0f));
+                        il.InsertBefore(first,Instruction.Create(OpCodes.Call,Probe(module,probe,"AudioEvent",4)));
+                        report.Add("observe audio: "+m.FullName);changed=true;
+                    }
                 }
                 if (changed) asm.Write(Path.Combine(destination, Path.GetFileName(path)));
                 else File.Copy(path, Path.Combine(destination, Path.GetFileName(path)), true);

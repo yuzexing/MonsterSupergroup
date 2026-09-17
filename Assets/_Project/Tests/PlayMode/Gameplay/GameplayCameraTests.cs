@@ -81,6 +81,21 @@ namespace MonsterSupergroup.Gameplay.Tests
         }
 
         [UnityTest]
+        public IEnumerator AudioListenerTracksFinalCameraXY_ButNotBarrierZoomDepth()
+        {
+            view.SetReferenceTrapFraming(new Vector2(10,5),20,1);
+            yield return null; yield return null;
+            var audio=view.LocalAudioListener.transform.position;
+            Assert.That(audio.x,Is.EqualTo(view.GameCamera.transform.position.x).Within(.001));
+            Assert.That(audio.y,Is.EqualTo(view.GameCamera.transform.position.y).Within(.001));
+            Assert.That(audio.z,Is.EqualTo(player.transform.position.z-10).Within(.001));
+            view.ClearReferenceTrapFraming();
+            yield return null;
+            Assert.That(FMODUnity.StudioListener.ListenerCount,Is.EqualTo(1));
+            Assert.That(view.LocalAudioListener.transform.position.z,Is.EqualTo(player.transform.position.z-10).Within(.001));
+        }
+
+        [UnityTest]
         public IEnumerator FormalCamera_FollowsOneOwner_UsesGroundEdges_AndConvertsAim()
         {
             Assert.That(view.BoundPlayer, Is.SameAs(player));
@@ -89,7 +104,9 @@ namespace MonsterSupergroup.Gameplay.Tests
             Assert.That(Object.FindObjectsByType<Camera>(FindObjectsSortMode.None).Count(c => c.enabled && c.CompareTag("MainCamera")), Is.EqualTo(1));
             Assert.That(Object.FindObjectsByType<AudioListener>(FindObjectsSortMode.None).Count(c => c.enabled), Is.EqualTo(1));
             Assert.That(FMODUnity.StudioListener.ListenerCount, Is.EqualTo(1));
-            Assert.That(player.GetComponent<FMODUnity.StudioListener>().isActiveAndEnabled, Is.True);
+            Assert.That(view.LocalAudioListener.isActiveAndEnabled, Is.True);
+            Assert.That(player.GetComponent<FMODUnity.StudioListener>(), Is.Null);
+            Assert.That(view.LocalAudioListener.transform.position.z, Is.EqualTo(player.transform.position.z - 10).Within(.001));
             Assert.That(rig.HorizontalFollowSmoothness, Is.EqualTo(.15f));
             Assert.That(rig.VerticalFollowSmoothness, Is.EqualTo(.15f));
             Assert.That(view.GetComponent<ProCamera2DShake>().ShakePresets.Select(p => p.name),
@@ -149,12 +166,12 @@ namespace MonsterSupergroup.Gameplay.Tests
             Assert.That(calls, Is.EqualTo(1));
             view.enabled = false;
             binding.Bind(player); // Owner before an available camera.
-            Assert.That(FMODUnity.StudioListener.ListenerCount, Is.EqualTo(1));
-            Assert.That(player.GetComponents<FMODUnity.StudioListener>().Length, Is.EqualTo(1));
+            Assert.That(FMODUnity.StudioListener.ListenerCount, Is.Zero, "Wait for the local gameplay camera.");
             Assert.That(rig.CameraTargets, Is.Empty);
             view.enabled = true;
             binding.Refresh();
             Assert.That(view.BoundPlayer, Is.SameAs(player));
+            Assert.That(FMODUnity.StudioListener.ListenerCount, Is.EqualTo(1));
             Assert.That(rig.CameraTargets.Count, Is.EqualTo(1));
             binding.PlayCameraShake(2);
             Assert.That(calls, Is.EqualTo(2));

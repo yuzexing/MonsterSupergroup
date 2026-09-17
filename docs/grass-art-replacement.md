@@ -42,7 +42,7 @@
 
 三款草按每处物件的固定编号分配，重新应用或重新打开工程不会换款。保留原来 1～1.25 倍的大小变化和左右镜像；草不做上下翻转。地表保留自己的原翻转、颜色叠加和排序，不套用 BaseFloors 的仅左右翻转调整。
 
-Floors、Environment 是地图对象分组。地表仍画在 Background，草仍画在 BackgroundFront；角色在其上方显示。新草不增加阻挡。
+Floors、Environment 是地图对象分组。地表画在 Background；level2 草丛画在 BackgroundFront（Order 5），角色在其上方显示。level3 三款单株草使用 Props（Order 0），与角色一样按草根／脚底的 Y 位置决定前后遮挡。新草不增加阻挡。
 
 ## 当前视觉取舍
 

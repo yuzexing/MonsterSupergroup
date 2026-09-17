@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="2" result="Passed" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-09-17 07:30:33Z" end-time="2026-09-17 07:30:33Z" duration="0.5750563">
+  <test-suite type="TestSuite" id="1657" name="Monster Supergroup" fullname="Monster Supergroup" runstate="Runnable" testcasecount="548" result="Passed" start-time="2026-09-17 07:30:33Z" end-time="2026-09-17 07:30:33Z" duration="0.575056" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="PlayMode" />
+    </properties>
+    <test-suite type="Assembly" id="1641" name="MonsterSupergroup.Gameplay.Tests.PlayMode.dll" fullname="F:/UnityStore/MonsterSupergroup/Library/ScriptAssemblies/MonsterSupergroup.Gameplay.Tests.PlayMode.dll" runstate="Runnable" testcasecount="544" result="Passed" start-time="2026-09-17 07:30:33Z" end-time="2026-09-17 07:30:33Z" duration="0.559183" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="99792" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="PlayMode" />
+        <property name="EditorOnly" value="False" />
+      </properties>
+      <test-suite type="TestSuite" id="1642" name="MonsterSupergroup" fullname="MonsterSupergroup" runstate="Runnable" testcasecount="544" result="Passed" start-time="2026-09-17 07:30:33Z" end-time="2026-09-17 07:30:33Z" duration="0.552122" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-suite type="TestSuite" id="1643" name="Gameplay" fullname="MonsterSupergroup.Gameplay" runstate="Runnable" testcasecount="544" result="Passed" start-time="2026-09-17 07:30:33Z" end-time="2026-09-17 07:30:33Z" duration="0.529655" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <test-suite type="TestSuite" id="1644" name="Tests" fullname="MonsterSupergroup.Gameplay.Tests" runstate="Runnable" testcasecount="544" result="Passed" start-time="2026-09-17 07:30:33Z" end-time="2026-09-17 07:30:33Z" duration="0.522823" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-suite type="TestFixture" id="1210" name="GameOptionsTests" fullname="MonsterSupergroup.Gameplay.Tests.GameOptionsTests" classname="MonsterSupergroup.Gameplay.Tests.GameOptionsTests" runstate="Runnable" testcasecount="7" result="Passed" start-time="2026-09-17 07:30:33Z" end-time="2026-09-17 07:30:33Z" duration="0.403899" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1215" name="AudioControlsRealFmodBusesIndependently" fullname="MonsterSupergroup.Gameplay.Tests.GameOptionsTests.AudioControlsRealFmodBusesIndependently" methodname="AudioControlsRealFmodBusesIndependently" classname="MonsterSupergroup.Gameplay.Tests.GameOptionsTests" runstate="Runnable" seed="1902763003" result="Passed" start-time="2026-09-17 07:30:33Z" end-time="2026-09-17 07:30:33Z" duration="0.392756" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[[Localization] Applied locale=zh-CN revision=2
+[Localization] Applied locale=zh-CN revision=3
+]]></output>
+              </test-case>
+            </test-suite>
+            <test-suite type="TestFixture" id="1634" name="WispPresentationTests" fullname="MonsterSupergroup.Gameplay.Tests.WispPresentationTests" classname="MonsterSupergroup.Gameplay.Tests.WispPresentationTests" runstate="Runnable" testcasecount="6" result="Passed" start-time="2026-09-17 07:30:33Z" end-time="2026-09-17 07:30:33Z" duration="0.095934" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1638" name="Wisp_PiercingContactPreservesFlightWithoutInventedLoopAndUsesReportedImpactPosition" fullname="MonsterSupergroup.Gameplay.Tests.WispPresentationTests.Wisp_PiercingContactPreservesFlightWithoutInventedLoopAndUsesReportedImpactPosition" methodname="Wisp_PiercingContactPreservesFlightWithoutInventedLoopAndUsesReportedImpactPosition" classname="MonsterSupergroup.Gameplay.Tests.WispPresentationTests" runstate="Runnable" seed="2044236994" result="Passed" start-time="2026-09-17 07:30:33Z" end-time="2026-09-17 07:30:33Z" duration="0.094077" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[[Localization] Applied locale=zh-CN revision=4
+Saving results to: C:/Users/ADMIN/AppData/LocalLow/DefaultCompany/Monster Supergroup\TestResults.xml
+]]></output>
+              </test-case>
+            </test-suite>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

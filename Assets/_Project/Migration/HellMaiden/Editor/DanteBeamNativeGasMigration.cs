@@ -232,6 +232,7 @@ namespace MonsterSupergroup.HellMaidenMigration.Editor
                 serializedAnimancer.ApplyModifiedPropertiesWithoutUndo();
                 animator.runtimeAnimatorController = null;
                 animator.cullingMode = AnimatorCullingMode.AlwaysAnimate;
+                WeaponAudioMigration.ConfigureBeam(root);
                 PrefabUtility.SaveAsPrefabAsset(root, path);
             }
             finally { PrefabUtility.UnloadPrefabContents(root); }

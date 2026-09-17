@@ -153,6 +153,12 @@ namespace MonsterSupergroup.Gameplay.Tests
             master.getVolume(out float masterVolume); music.getVolume(out float musicVolume); effects.getVolume(out float effectsVolume);
             Assert.That(masterVolume, Is.EqualTo(.7f).Within(.001)); Assert.That(musicVolume, Is.Zero);
             Assert.That(effectsVolume, Is.EqualTo(.4f).Within(.001));
+            foreach(string path in new[]{"vca:/Master","vca:/Music","vca:/SFX"})
+            {
+                Assert.That(studio.getVCA(path,out var vca),Is.EqualTo(FMOD.RESULT.OK));
+                vca.getVolume(out float gain);
+                Assert.That(gain,Is.EqualTo(1).Within(.001),"User gain must not be applied again through "+path);
+            }
             service.SetAudio(0, .6f, .4f); yield return null;
             master.getVolume(out masterVolume); music.getVolume(out musicVolume); effects.getVolume(out effectsVolume);
             Assert.That(masterVolume, Is.Zero); Assert.That(musicVolume, Is.EqualTo(.6f).Within(.001));

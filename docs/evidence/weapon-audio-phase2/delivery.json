@@ -1,0 +1,11 @@
+{
+  "version": "WA-20260917-02",
+  "package": "F:\\Limbo Acceptance\\LimboManual-WA-20260917-02",
+  "archive": "F:\\Limbo Acceptance\\LimboManual-WA-20260917-02.zip",
+  "archiveBytes": 427111560,
+  "archiveSha256": "0f9aa0a79cf160336072820f9f8fc15accbd7322bbe67127949dc19d33409f23",
+  "manifestSha256": "276218bab350cfcee204654b3c0dfbd02219dea9b2ec3129db79db5e0b6aaf9c",
+  "packageFiles": 526,
+  "status": "Technical checks complete; human listening pending",
+  "integrity": "All listed file hashes and archive CRC verified"
+}

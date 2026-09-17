@@ -24,4 +24,4 @@ MonoBehaviour:
   - {fileID: -5829822269549135350, guid: bb7bcad1b1bb80a45b6582f75e9d6a80, type: 3}
   floorScale: 1
   clusterScale: 1
-  tuftScale: 1
+  tuftScale: 0.9

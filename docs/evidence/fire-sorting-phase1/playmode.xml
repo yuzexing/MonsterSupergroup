@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="6" result="Passed" total="6" passed="6" failed="0" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-09-17 06:06:52Z" end-time="2026-09-17 06:07:31Z" duration="38.9017768">
+  <test-suite type="TestSuite" id="1653" name="Monster Supergroup" fullname="Monster Supergroup" runstate="Runnable" testcasecount="545" result="Passed" start-time="2026-09-17 06:06:52Z" end-time="2026-09-17 06:07:31Z" duration="38.901777" total="6" passed="6" failed="0" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="PlayMode" />
+    </properties>
+    <test-suite type="Assembly" id="1637" name="MonsterSupergroup.Gameplay.Tests.PlayMode.dll" fullname="F:/UnityStore/MonsterSupergroup/Library/ScriptAssemblies/MonsterSupergroup.Gameplay.Tests.PlayMode.dll" runstate="Runnable" testcasecount="541" result="Passed" start-time="2026-09-17 06:06:52Z" end-time="2026-09-17 06:07:31Z" duration="38.882622" total="6" passed="6" failed="0" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="9684" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="PlayMode" />
+        <property name="EditorOnly" value="False" />
+      </properties>
+      <test-suite type="TestSuite" id="1638" name="MonsterSupergroup" fullname="MonsterSupergroup" runstate="Runnable" testcasecount="541" result="Passed" start-time="2026-09-17 06:06:52Z" end-time="2026-09-17 06:07:31Z" duration="38.877681" total="6" passed="6" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-suite type="TestSuite" id="1639" name="Gameplay" fullname="MonsterSupergroup.Gameplay" runstate="Runnable" testcasecount="541" result="Passed" start-time="2026-09-17 06:06:52Z" end-time="2026-09-17 06:07:31Z" duration="38.864670" total="6" passed="6" failed="0" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <test-suite type="TestSuite" id="1640" name="Tests" fullname="MonsterSupergroup.Gameplay.Tests" runstate="Runnable" testcasecount="541" result="Passed" start-time="2026-09-17 06:06:52Z" end-time="2026-09-17 06:07:31Z" duration="38.859806" total="6" passed="6" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-suite type="TestFixture" id="1301" name="LimboTrapLifecycleTests" fullname="MonsterSupergroup.Gameplay.Tests.LimboTrapLifecycleTests" classname="MonsterSupergroup.Gameplay.Tests.LimboTrapLifecycleTests" runstate="Runnable" testcasecount="4" result="Passed" start-time="2026-09-17 06:06:52Z" end-time="2026-09-17 06:07:30Z" duration="38.534938" total="4" passed="4" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1302" name="FirePoolReuseKeepsBodyAndGroundGlowSortingSeparate" fullname="MonsterSupergroup.Gameplay.Tests.LimboTrapLifecycleTests.FirePoolReuseKeepsBodyAndGroundGlowSortingSeparate" methodname="FirePoolReuseKeepsBodyAndGroundGlowSortingSeparate" classname="MonsterSupergroup.Gameplay.Tests.LimboTrapLifecycleTests" runstate="Runnable" seed="1112191073" result="Passed" start-time="2026-09-17 06:06:52Z" end-time="2026-09-17 06:06:52Z" duration="0.107393" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1303" name="NativeBarrierShrinksDuringEntryAndReleasesOnlyAfterParticlesFinish" fullname="MonsterSupergroup.Gameplay.Tests.LimboTrapLifecycleTests.NativeBarrierShrinksDuringEntryAndReleasesOnlyAfterParticlesFinish" methodname="NativeBarrierShrinksDuringEntryAndReleasesOnlyAfterParticlesFinish" classname="MonsterSupergroup.Gameplay.Tests.LimboTrapLifecycleTests" runstate="Runnable" seed="1961035018" result="Passed" start-time="2026-09-17 06:06:52Z" end-time="2026-09-17 06:07:27Z" duration="35.004783" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[[Localization] Applied locale=zh-CN revision=2
+Starting slow mo
+Game <color=pink>Paused</color>
+Game <color=pink>Resumed</color>
+]]></output>
+              </test-case>
+              <test-case id="1304" name="PauseValidationSeparatesNativeMotionFromDelayedPublishedState" fullname="MonsterSupergroup.Gameplay.Tests.LimboTrapLifecycleTests.PauseValidationSeparatesNativeMotionFromDelayedPublishedState" methodname="PauseValidationSeparatesNativeMotionFromDelayedPublishedState" classname="MonsterSupergroup.Gameplay.Tests.LimboTrapLifecycleTests" runstate="Runnable" seed="232948272" result="Passed" start-time="2026-09-17 06:07:27Z" end-time="2026-09-17 06:07:29Z" duration="1.706590" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[Starting slow mo
+Game <color=pink>Paused</color>
+Game <color=pink>Resumed</color>
+]]></output>
+              </test-case>
+              <test-case id="1305" name="ReplicaDoesNotShrinkOrChangeClockAndCancellationPreservesPause" fullname="MonsterSupergroup.Gameplay.Tests.LimboTrapLifecycleTests.ReplicaDoesNotShrinkOrChangeClockAndCancellationPreservesPause" methodname="ReplicaDoesNotShrinkOrChangeClockAndCancellationPreservesPause" classname="MonsterSupergroup.Gameplay.Tests.LimboTrapLifecycleTests" runstate="Runnable" seed="1488900167" result="Passed" start-time="2026-09-17 06:07:29Z" end-time="2026-09-17 06:07:30Z" duration="1.701604" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[Starting slow mo
+Game <color=pink>Paused</color>
+Game <color=pink>Resumed</color>
+]]></output>
+              </test-case>
+            </test-suite>
+            <test-suite type="TestFixture" id="1400" name="PlanarPresentationTests" fullname="MonsterSupergroup.Gameplay.Tests.PlanarPresentationTests" classname="MonsterSupergroup.Gameplay.Tests.PlanarPresentationTests" runstate="Runnable" testcasecount="2" result="Passed" start-time="2026-09-17 06:07:30Z" end-time="2026-09-17 06:07:31Z" duration="0.289091" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1402" name="PerspectiveCameraRendersOppositeDepthsAtTheSamePlanarSize" fullname="MonsterSupergroup.Gameplay.Tests.PlanarPresentationTests.PerspectiveCameraRendersOppositeDepthsAtTheSamePlanarSize" methodname="PerspectiveCameraRendersOppositeDepthsAtTheSamePlanarSize" classname="MonsterSupergroup.Gameplay.Tests.PlanarPresentationTests" runstate="Runnable" seed="1677091642" result="Passed" start-time="2026-09-17 06:07:30Z" end-time="2026-09-17 06:07:31Z" duration="0.279081" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1401" name="ProjectionPreservesWorldXYAndDoesNotChangeColliderTransform" fullname="MonsterSupergroup.Gameplay.Tests.PlanarPresentationTests.ProjectionPreservesWorldXYAndDoesNotChangeColliderTransform" methodname="ProjectionPreservesWorldXYAndDoesNotChangeColliderTransform" classname="MonsterSupergroup.Gameplay.Tests.PlanarPresentationTests" runstate="Runnable" seed="898111214" result="Passed" start-time="2026-09-17 06:07:31Z" end-time="2026-09-17 06:07:31Z" duration="0.003416" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[Saving results to: C:/Users/ADMIN/AppData/LocalLow/DefaultCompany/Monster Supergroup\TestResults.xml
+]]></output>
+              </test-case>
+            </test-suite>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

@@ -1,0 +1,32 @@
+[
+  {
+    "file": "F:\\BaiduNetdiskDownload\\d-地狱公主\\Hell Maiden-v0.2.31\\Hell Maiden_Data\\Managed\\Assembly-CSharp.dll",
+    "baseline": "97014f8388f08f45f281abdf3f21616e78980122e62bdd68d5d06eb7fad2e928",
+    "current": "97014f8388f08f45f281abdf3f21616e78980122e62bdd68d5d06eb7fad2e928",
+    "unchanged": true
+  },
+  {
+    "file": "F:\\BaiduNetdiskDownload\\d-地狱公主\\Hell Maiden-v0.2.31\\Hell Maiden_Data\\Managed\\FMODUnity.dll",
+    "baseline": "553d364fc58873c8cbbce84dbdabd082c78d97c3f3c270fd75c023e20b5f6632",
+    "current": "553d364fc58873c8cbbce84dbdabd082c78d97c3f3c270fd75c023e20b5f6632",
+    "unchanged": true
+  },
+  {
+    "file": "F:\\BaiduNetdiskDownload\\d-地狱公主\\Hell Maiden-v0.2.31\\Hell Maiden_Data\\StreamingAssets\\Desktop\\plr.bank",
+    "baseline": "6a1ce8897677a2c6421e9860d5add927dc4efa69d81d77c5498c7a78650f64b9",
+    "current": "6a1ce8897677a2c6421e9860d5add927dc4efa69d81d77c5498c7a78650f64b9",
+    "unchanged": true
+  },
+  {
+    "file": "F:\\BaiduNetdiskDownload\\d-地狱公主\\Hell Maiden-v0.2.31\\Hell Maiden_Data\\Managed\\Kybernetik.Animancer.dll",
+    "baseline": "cf4cf88aba9c7c9000d11024449eff67e8c4c0d937acb022f83799633ab74a40",
+    "current": "cf4cf88aba9c7c9000d11024449eff67e8c4c0d937acb022f83799633ab74a40",
+    "unchanged": true
+  },
+  {
+    "file": "F:\\BaiduNetdiskDownload\\d-地狱公主\\Hell Maiden-v0.2.31\\Hell Maiden_Data\\Managed\\Kybernetik.Animancer.FSM.dll",
+    "baseline": "38f6e80d37f72bfcc32819378742744f4074ef8e00f4cd7c572e6437da59ebc9",
+    "current": "38f6e80d37f72bfcc32819378742744f4074ef8e00f4cd7c572e6437da59ebc9",
+    "unchanged": true
+  }
+]

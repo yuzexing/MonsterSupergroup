@@ -141,7 +141,7 @@ public sealed partial class RecoveryProbe : MonoBehaviour
             object master=Singleton("AstralShift.HellMaiden.Scenes.SceneMaster");
             if(master!=null && SceneManager.GetActiveScene().name=="TitleScreen" && Get(master,"_mainOperationCoroutine")==null)
             {
-                if(Arg("--recovery-mode=","capture")=="observe")
+                if(Arg("--recovery-mode=","capture")=="observe" || Arg("--recovery-mode=","capture")=="audio")
                 {
                     ((IList)Get(Get(TypeNamed("AstralShift.HellMaiden.Data.GameData"),"Instance"),"viewedCutscenes")).Add("CUT_HUB_STR_INTRO2");
                     Log("fixture-skip-intro","Mark only CUT_HUB_STR_INTRO2 as viewed in the isolated in-memory profile. This is an attack fixture, not a complete new-game playthrough.");
@@ -169,6 +169,8 @@ public sealed partial class RecoveryProbe : MonoBehaviour
                     if(!captured)yield break;
                     if(Arg("--recovery-mode=","capture")=="art")
                     { yield return StartCoroutine(CaptureArt()); yield break; }
+                    if(Arg("--recovery-mode=","capture")=="audio")
+                    { yield return StartCoroutine(CaptureAudio(progression)); yield break; }
                     phase="observe";
                     if(Arg("--recovery-mode=","capture")=="capture")
                     {File.WriteAllText(Path.Combine(Output,"capture.complete"),"asset-capture completed"); yield return new WaitForSecondsRealtime(2); Application.Quit(); yield break;}

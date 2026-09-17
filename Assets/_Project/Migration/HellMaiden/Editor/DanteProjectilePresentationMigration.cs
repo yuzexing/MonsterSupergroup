@@ -208,10 +208,8 @@ namespace MonsterSupergroup.HellMaidenMigration.Editor
                     so.FindProperty("attackStartAnim._NormalizedStartTime").floatValue = 0f;
                     so.FindProperty("attackStartAnimTransitionAfterFinish").boolValue = false;
                     so.FindProperty("playPiercingHitPresentation").boolValue = true;
-                    ConfigureSound(so, "launchSound", "shot", new[] {305521848, 1139334325, -1555974261, -1191919773});
-                    ConfigureSound(so, "projectileLoopSound", "loop", new[] {-450359305, 1330102086, -2065969494, -435797981});
-                    ConfigureSound(so, "projectileHitSound", "hit", new[] {997541128, 1077009481, 1909684357, -832539066});
                     so.ApplyModifiedPropertiesWithoutUndo();
+                    WeaponAudioMigration.ConfigureProjectile(so);
                     root.GetComponent<Animator>().cullingMode = AnimatorCullingMode.AlwaysAnimate;
                 }
                 else
@@ -225,13 +223,6 @@ namespace MonsterSupergroup.HellMaidenMigration.Editor
                 PrefabUtility.SaveAsPrefabAsset(root, path);
             }
             finally { PrefabUtility.UnloadPrefabContents(root); }
-        }
-
-        private static void ConfigureSound(SerializedObject so, string field, string suffix, int[] guid)
-        {
-            for (int i = 0; i < 4; i++) so.FindProperty(field + ".eventRef.Guid.Data" + (i + 1)).intValue = guid[i];
-            so.FindProperty(field + ".eventRef.Path").stringValue = "event:/sx/plr/Sx_plr_slowprojectile_" + suffix;
-            so.FindProperty(field + ".automatic").boolValue = true;
         }
 
 
@@ -260,8 +251,9 @@ namespace MonsterSupergroup.HellMaidenMigration.Editor
                 ProjectileAttack attack = root.GetComponent<ProjectileAttack>();
                 var so = new SerializedObject(attack);
                 Require(so.FindProperty("attackStartAnim._Clip").objectReferenceValue == clip && !attack.attackStartAnimTransitionAfterFinish, "Appearance must not delay firing");
-                foreach (string field in new[] {"launchSound", "projectileLoopSound", "projectileHitSound"})
+                foreach (string field in new[] {"launchSound", "projectileHitSound"})
                     Require(so.FindProperty(field + ".automatic").boolValue && so.FindProperty(field + ".eventRef.Guid.Data1").intValue != 0, "Missing projectile sound: " + field);
+                Require(!so.FindProperty("projectileLoopSound.automatic").boolValue && !so.FindProperty("playPiercingHitSound").boolValue, "Unproven wisp loop/piercing sound enabled");
             }
             Debug.Log("Wisp presentation dependencies validated.");
         }

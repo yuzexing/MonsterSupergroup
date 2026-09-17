@@ -166,6 +166,44 @@ namespace MonsterSupergroup.NetworkCombat.Tests
             Assert.That(visual.Reference.ReadinessError(),Is.Null);
             Assert.That(visual.Reference.Clips.All(c=>c.Start>=24),Is.True,"Visual-only fixture must not spawn enemies");
         }
+
+        [Test]
+        public void FireSortingRepairPreservesSourceLayersAndIsIdempotent()
+        {
+            var prefab = AssetDatabase.LoadAssetAtPath<GameObject>(LimboArtAssets.Root + "/Effects/ReferenceFireParticles.prefab");
+            var fire = Object.Instantiate(prefab);
+            try
+            {
+                // First assert the shipped asset, then reproduce the old importer and repair it twice.
+                void Check()
+                {
+                    var renderers = fire.GetComponentsInChildren<ParticleSystemRenderer>(true);
+                    Assert.That(renderers.Length, Is.EqualTo(6));
+                    foreach (string name in new[] { fire.name, "Fire", "GroundFire", "Sparks" })
+                    {
+                        var r = renderers.Single(x => x.name == name);
+                        Assert.That(r.sortingLayerName, Is.EqualTo("Props"), name);
+                        Assert.That(r.sortingOrder, Is.Zero, name);
+                    }
+                    foreach (string name in new[] { "Glow", "GlowFlat" })
+                    {
+                        var r = renderers.Single(x => x.name == name);
+                        Assert.That(r.sortingLayerName, Is.EqualTo("BackgroundFront"), name);
+                        Assert.That(r.sortingOrder, Is.EqualTo(100), name);
+                    }
+                    Assert.That(fire.GetComponentsInChildren<UnityEngine.Rendering.SortingGroup>(true), Is.Empty);
+                }
+                Check();
+                var transforms = fire.GetComponentsInChildren<Transform>(true);
+                var matrices = transforms.Select(t => t.localToWorldMatrix).ToArray();
+                foreach (var renderer in fire.GetComponentsInChildren<ParticleSystemRenderer>(true))
+                    renderer.sortingLayerName = "EnemyAttack";
+                LimboArtAssets.ConfigureFireSorting(fire); Check();
+                LimboArtAssets.ConfigureFireSorting(fire); Check();
+                Assert.That(transforms.Select(t => t.localToWorldMatrix).ToArray(), Is.EqualTo(matrices));
+            }
+            finally { Object.DestroyImmediate(fire); }
+        }
         [TestCase("Stage2/ReferenceBrotchi.prefab", "Brotchi_Walk_LeftDown", "brotchi_walk")]
         [TestCase("Dash/ReferenceBrotchiDash.prefab", "brochipink_walk_left", "brotchi_walk_pink")]
         public void OpeningBodiesUseSourceSpritesAndMovement(string path, string clip, string sprite)

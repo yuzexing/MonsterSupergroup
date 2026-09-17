@@ -123,14 +123,14 @@ namespace MonsterSupergroup.Gameplay.Tests
         private sealed class FixedRandom : MonsterSupergroup.GAS.IRandomSource { public float Next01() => .99f; }
 
         [UnityTest]
-        public IEnumerator Wisp_PiercingContactPreservesFlightAndLoopAndUsesReportedImpactPosition()
+        public IEnumerator Wisp_PiercingContactPreservesFlightWithoutInventedLoopAndUsesReportedImpactPosition()
         {
             var projectile = Spawn(AttackElement.Default, .5f, false);
             Vector3 before = projectile.transform.position;
             projectile.TerminatePresentation(ProjectilePresentationPhase.Impact, new Vector3(2, 3));
             Assert.That(projectile.gameObject.activeInHierarchy, Is.True);
             Assert.That(projectile.transform.position, Is.EqualTo(before), "A contact must not teleport the projectile");
-            Assert.That(((FMOD.Studio.EventInstance)typeof(ProjectileAttack).GetField("_loopInstance", Private).GetValue(projectile)).isValid(), Is.True);
+            Assert.That(((FMOD.Studio.EventInstance)typeof(ProjectileAttack).GetField("_loopInstance", Private).GetValue(projectile)).isValid(), Is.False, "Original Wisp does not enable the bank's optional loop event.");
             var impact = Object.FindFirstObjectByType<AttackHitParticleEffect>();
             Assert.That(impact, Is.Not.Null);
             Assert.That(impact.transform.position, Is.EqualTo(new Vector3(2, 3)));
@@ -140,14 +140,14 @@ namespace MonsterSupergroup.Gameplay.Tests
         }
 
         [UnityTest]
-        public IEnumerator Wisp_AudioLoopIsReleasedAndHistoricalShotIsSuppressed()
+        public IEnumerator Wisp_SourceHasNoFlightLoopAndHistoricalShotIsSuppressed()
         {
             yield return null;
             var projectile = Spawn(AttackElement.Default, 3f, false);
             Assert.That((bool)typeof(ProjectileAttack).GetField("_suppressLaunchSound", Private).GetValue(projectile), Is.True);
             RuntimeManager.StudioSystem.flushCommands();
             var loop = (FMOD.Studio.EventInstance)typeof(ProjectileAttack).GetField("_loopInstance", Private).GetValue(projectile);
-            Assert.That(loop.isValid(), Is.True, "Imported loop event must be available");
+            Assert.That(loop.isValid(), Is.False, "Recovered original binding has no flight loop.");
             projectile.TerminatePresentation(ProjectilePresentationPhase.Expired, projectile.transform.position);
             Assert.That(((FMOD.Studio.EventInstance)typeof(ProjectileAttack).GetField("_loopInstance", Private).GetValue(projectile)).isValid(), Is.False);
             var reused = Spawn(AttackElement.Default);

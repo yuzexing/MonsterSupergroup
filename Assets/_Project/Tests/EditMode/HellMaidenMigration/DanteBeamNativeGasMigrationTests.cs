@@ -134,14 +134,11 @@ namespace MonsterSupergroup.HellMaidenMigration.Tests
             Assert.That(beam.transform.Find("Root/Scale/Rotation/Mask_0"), Is.Not.Null);
             Component emitter = beam.transform.Find("Audio/Start").GetComponent("StudioEventEmitter");
             Component endTrigger = beam.transform.Find("Audio/End").GetComponent("StudioParameterTrigger");
-            Assert.That(emitter, Is.Not.Null);
-            Assert.That(endTrigger, Is.Not.Null);
-            var audio = new SerializedObject(emitter);
-            Assert.That(audio.FindProperty("EventReference.Guid.Data1").intValue, Is.EqualTo(-1201277076));
-            Assert.That(audio.FindProperty("EventPlayTrigger").intValue, Is.EqualTo(11));
-            Assert.That(audio.FindProperty("EventStopTrigger").intValue, Is.EqualTo(12));
-            var end = new SerializedObject(endTrigger);
-            Assert.That(end.FindProperty("Emitters.Array.data[0].Target").objectReferenceValue, Is.EqualTo(emitter));
+            Assert.That(emitter, Is.Null, "One explicit staged lifecycle replaces the old automatic emitter.");
+            Assert.That(endTrigger, Is.Null, "The original End parameter does not exist in the bank.");
+            var audio = new SerializedObject(beam);
+            Assert.That(audio.FindProperty("stagedSound.Guid.Data1").intValue, Is.EqualTo(-1201277076));
+            Assert.That(audio.FindProperty("completionSoundParameter").stringValue, Is.EqualTo("Phase"));
             foreach (Transform child in beam.GetComponentsInChildren<Transform>(true))
             {
                 Assert.That(GameObjectUtility.GetMonoBehavioursWithMissingScriptCount(child.gameObject), Is.Zero, child.name);

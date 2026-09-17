@@ -1,0 +1,158 @@
+{
+  "automatedRuns": [
+    {
+      "file": "Logs\\WeaponAudioPhase2\\audio-tests-01.xml",
+      "sha256": "b2a569d33fc355f93b42662b428d5fb3dd3a80ed1d37305de5deaf8228fc199a",
+      "total": 2,
+      "passed": 2,
+      "failed": 0,
+      "failures": []
+    },
+    {
+      "file": "Logs\\WeaponAudioPhase2\\integration-edit.xml",
+      "sha256": "5e03d79b2834446b476fb8b9b2bdf1458bfea580c11557b36bc85176cbae6d76",
+      "total": 17,
+      "passed": 15,
+      "failed": 2,
+      "failures": [
+        {
+          "name": "MonsterSupergroup.HellMaidenMigration.Tests.DanteBeamNativeGasMigrationTests.SourceHierarchyParticlesAudioAndRenderableDependenciesSurvive(False,18,30)",
+          "message": "  Expected: not null\n  But was:  null\n"
+        },
+        {
+          "name": "MonsterSupergroup.HellMaidenMigration.Tests.DanteBeamNativeGasMigrationTests.SourceHierarchyParticlesAudioAndRenderableDependenciesSurvive(True,19,31)",
+          "message": "  Expected: not null\n  But was:  null\n"
+        }
+      ]
+    },
+    {
+      "file": "Logs\\WeaponAudioPhase2\\focused-edit.xml",
+      "sha256": "95a42f5d06dced37cff11824dc2a80afa1b8bb2eccd496198dcc3c63a9712bc1",
+      "total": 2,
+      "passed": 2,
+      "failed": 0,
+      "failures": []
+    },
+    {
+      "file": "Logs\\WeaponAudioPhase2\\integration-play.xml",
+      "sha256": "f0989e3ef011e9720b36ee9bdb30d1bdd36b08a4e61bbab16dd0940cfa60d18e",
+      "total": 46,
+      "passed": 45,
+      "failed": 1,
+      "failures": [
+        {
+          "name": "MonsterSupergroup.Gameplay.Tests.WispPresentationTests.Wisp_PiercingContactPreservesFlightAndLoopAndUsesReportedImpactPosition",
+          "message": "  Expected: True\n  But was:  False\n"
+        }
+      ]
+    },
+    {
+      "file": "Logs\\WeaponAudioPhase2\\focused-play.xml",
+      "sha256": "e5ef35e34a476263d7e09803934750ef450aea83ea77bea2254fce192d5393ef",
+      "total": 2,
+      "passed": 2,
+      "failed": 0,
+      "failures": []
+    },
+    {
+      "file": "Logs\\WeaponAudioPhase2\\seek-play.xml",
+      "sha256": "15b5769f840e53d41f53f440f4b6155ebb9fd6271bd5e25c2f460e84320d17f0",
+      "total": 1,
+      "passed": 1,
+      "failed": 0,
+      "failures": []
+    }
+  ],
+  "network": [
+    {
+      "case": "Beam-Host-7938-20260917-154522-635",
+      "role": "host",
+      "summary": {
+        "summary": "PASS",
+        "starts": 3,
+        "duplicates": 0,
+        "errors": 0,
+        "activeAtExit": 0
+      },
+      "audioSha256": "63eca0ad2227854e8a04b7c931a078f4a633b1339bf2a67a64a730288e9a465d",
+      "log": "Logs\\WeaponAudioPhase2\\Network\\Beam-Host-7938-20260917-154522-635\\host.log"
+    },
+    {
+      "case": "Beam-Host-7938-20260917-154522-635",
+      "role": "client",
+      "summary": {
+        "summary": "PASS",
+        "starts": 3,
+        "duplicates": 0,
+        "errors": 0,
+        "activeAtExit": 0
+      },
+      "audioSha256": "d3419a4488a5dd935f4ce693feed74032019aea97d7e3834cb8cb26e95818239",
+      "log": "Logs\\WeaponAudioPhase2\\Network\\Beam-Host-7938-20260917-154522-635\\client.log"
+    },
+    {
+      "case": "Process-Host-7941-20260917-154815-071",
+      "role": "host",
+      "summary": {
+        "summary": "PASS",
+        "starts": 12,
+        "duplicates": 0,
+        "errors": 0,
+        "activeAtExit": 0
+      },
+      "audioSha256": "334e3f8d5e6f0b1f6ff81c6bb1428f69ae9066a2f3fdcfe35c3fa0edf3e00880",
+      "log": "Logs\\WeaponAudioPhase2\\Network\\Process-Host-7941-20260917-154815-071\\host.log"
+    },
+    {
+      "case": "Process-Host-7941-20260917-154815-071",
+      "role": "client",
+      "summary": {
+        "summary": "PASS",
+        "starts": 9,
+        "duplicates": 0,
+        "errors": 0,
+        "activeAtExit": 0
+      },
+      "audioSha256": "24508d08031b00ffa177eb03e9729888c6fd5274c015d878ad63e01e4e119f77",
+      "log": "Logs\\WeaponAudioPhase2\\Network\\Process-Host-7941-20260917-154815-071\\client.log"
+    }
+  ],
+  "status": "technical checks complete; human listening pending",
+  "notes": [
+    "Original failed tests remain archived. Three failures were old assertions expecting removed audio emitter/loop.",
+    "Related integration ran once, only affected failing/new assertions were rerun. No full 720.9s or whole-project regression claimed.",
+    "First beam process waited in preparation; fixture now explicitly uses existing direct-run mode.",
+    "Wisp same-frame quit audit was moved after FMOD flushCommands; production code did not change for that result.",
+    "Network validation build includes tests; final delivery excludes tests. Production audio code unchanged between them."
+  ],
+  "version": "WA-20260917-02",
+  "package": "F:/Limbo Acceptance/LimboManual-WA-20260917-02",
+  "smoke": [
+    {
+      "profile": "audio-wisp",
+      "result": {
+        "kind": "smoke-passed",
+        "detail": "errors=0;playing=0;starts=12;duplicateStarts=0",
+        "run": "f4ec0b2c77c744dd94ff7144abbb7ff4",
+        "role": "host",
+        "realtime": 16.964529406802722,
+        "attack": 6
+      },
+      "log": "Logs\\WeaponAudioPhase2\\package-audio-wisp\\weapon-audio.jsonl",
+      "sha256": "0a7c121eaaa65270904c68d64293cb4680c79973c97d2022f72ed04576c25701"
+    },
+    {
+      "profile": "audio-beam",
+      "result": {
+        "kind": "smoke-passed",
+        "detail": "errors=0;playing=0;starts=8;duplicateStarts=0",
+        "run": "f6be353a2b164e67b1c2b888ec569067",
+        "role": "host",
+        "realtime": 12.572667501133788,
+        "attack": 4
+      },
+      "log": "Logs\\WeaponAudioPhase2\\package-audio-beam\\weapon-audio.jsonl",
+      "sha256": "8c12566957e18c828d593e70360928fd3fea8065c8c375792d883e5ce70432d0"
+    }
+  ]
+}

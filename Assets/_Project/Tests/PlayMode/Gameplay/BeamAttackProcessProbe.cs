@@ -41,6 +41,7 @@ namespace MonsterSupergroup.Gameplay.Tests
             probe.role = value.Split('=')[1];
             probe.directory = args.First(a => a.StartsWith("--beam-sync=")).Substring("--beam-sync=".Length);
             probe.port = ushort.Parse(args.First(a => a.StartsWith("--beam-port=")).Split('=')[1]);
+            if (args.Contains("--weapon-audio-audit=true")) probe.gameObject.AddComponent<WeaponAudioProcessAudit>().Initialize(probe.directory, probe.role);
             DontDestroyOnLoad(probe.gameObject);
         }
 
@@ -132,6 +133,7 @@ namespace MonsterSupergroup.Gameplay.Tests
         {
             manager = FindFirstObjectByType<BootGameplayNetworkManager>();
             Require(manager != null, "Boot manager missing.");
+            manager.ConfigurePreparationFlow(false); // Fixture starts the real run explicitly below.
             var database = FindFirstObjectByType<RuntimeDB>();
             Require(database != null && database.TryGetWeaponData(3, out var beam), "Migrated beam is absent from the weapon database.");
             Require(BeamUpdate != null, "Native beam aiming routine is missing.");

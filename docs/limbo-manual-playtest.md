@@ -10,6 +10,12 @@
 | `2-Host.cmd` | 双人主机，等待两个参与者准备 |
 | `3-Join-Local-Host.cmd` | 加入同一包启动的本机主机，地址固定 127.0.0.1 |
 | `4-Archive-Latest-Logs.cmd` | 将最近一局的两端日志与版本清单打包到 Archives |
+| `6-Fire-B.cmd` | Phase 1 的 B 火焰遮挡短局；轻量日志、无自动截图 |
+| `7-Fire-Barrier.cmd` | Phase 1 的围栏遮挡短局；轻量日志、无自动截图 |
+| `8-Wisp-Audio.cmd` | Phase 2 鬼火三种元素的手动听感观察 |
+| `9-Breath-Audio.cmd` | Phase 2 吐息两种元素的手动听感观察 |
+
+WA-20260917-02 为 Phase 2 音效候选，按随包 `WEAPON-AUDIO.md` 核验听感；火焰分层已由用户验收，收缩连续性另行保留。血瓶／经验框架属于后续 Phase 3，尚未实施。此修复包不新增玩法压力验收要求。
 
 不需要 Unity Editor、工程目录或 F 盘。请放在可写目录并保留 EXE、Data 和所有依赖。启动脚本无法写日志时会报错，不会悄悄改用另一个目录。同一时间只运行一组主机；旧日志目录不会覆盖。
 

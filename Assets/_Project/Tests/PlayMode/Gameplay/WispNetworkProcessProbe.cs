@@ -37,6 +37,7 @@ namespace MonsterSupergroup.Gameplay.Tests
             probe.role = value.Split('=')[1];
             probe.directory = args.First(a => a.StartsWith("--wisp-network-sync=")).Substring("--wisp-network-sync=".Length);
             probe.port = ushort.Parse(args.First(a => a.StartsWith("--wisp-network-port=")).Split('=')[1]);
+            if (args.Contains("--weapon-audio-audit=true")) probe.gameObject.AddComponent<WeaponAudioProcessAudit>().Initialize(probe.directory, probe.role);
             DontDestroyOnLoad(probe.gameObject);
         }
 

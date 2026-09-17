@@ -1,0 +1,224 @@
+{
+  "source-03": {
+    "complete": true,
+    "cases": {
+      "2/Default/single": {
+        "calls": {
+          "event:/sx/plr/Sx_plr_slowprojectile_shot|setParameterByID|unknown-id|0.0": 1,
+          "event:/sx/plr/Sx_plr_slowprojectile_shot|start||0.0": 1,
+          "event:/sx/plr/Sx_plr_slowprojectile_shot|stop||0.0": 1,
+          "event:/sx/plr/Sx_plr_slowprojectile_shot|release||0.0": 1
+        },
+        "peakMax": 0.144559875,
+        "rmsMax": 0.05066727
+      },
+      "2/Default/multi": {
+        "calls": {
+          "event:/sx/plr/Sx_plr_slowprojectile_shot|setParameterByID|unknown-id|0.0": 3,
+          "event:/sx/plr/Sx_plr_slowprojectile_shot|start||0.0": 3,
+          "event:/sx/plr/Sx_plr_slowprojectile_shot|stop||0.0": 3,
+          "event:/sx/plr/Sx_plr_slowprojectile_shot|release||0.0": 3
+        },
+        "peakMax": 0.0517941266,
+        "rmsMax": 0.02474419
+      },
+      "2/Default/cancel": {
+        "calls": {
+          "event:/sx/plr/Sx_plr_slowprojectile_shot|setParameterByID|unknown-id|0.0": 1,
+          "event:/sx/plr/Sx_plr_slowprojectile_shot|start||0.0": 1,
+          "event:/sx/plr/Sx_plr_slowprojectile_shot|stop||0.0": 1,
+          "event:/sx/plr/Sx_plr_slowprojectile_shot|release||0.0": 1
+        },
+        "peakMax": 0.000971255242,
+        "rmsMax": 0.000350681279
+      },
+      "2/Fire/single": {
+        "calls": {
+          "event:/sx/plr/Sx_plr_slowprojectile_shot|setParameterByID|unknown-id|0.0": 1,
+          "event:/sx/plr/Sx_plr_slowprojectile_shot|start||0.0": 1,
+          "event:/sx/plr/Sx_plr_slowprojectile_shot|stop||0.0": 1,
+          "event:/sx/plr/Sx_plr_slowprojectile_shot|release||0.0": 1
+        },
+        "peakMax": 0.05457943,
+        "rmsMax": 0.02335967
+      },
+      "2/Fire/multi": {
+        "calls": {
+          "event:/sx/plr/Sx_plr_slowprojectile_shot|setParameterByID|unknown-id|0.0": 3,
+          "event:/sx/plr/Sx_plr_slowprojectile_shot|start||0.0": 3,
+          "event:/sx/plr/Sx_plr_slowprojectile_shot|stop||0.0": 3,
+          "event:/sx/plr/Sx_plr_slowprojectile_shot|release||0.0": 3
+        },
+        "peakMax": 0.0252979379,
+        "rmsMax": 0.0102798333
+      },
+      "2/Fire/cancel": {
+        "calls": {
+          "event:/sx/plr/Sx_plr_slowprojectile_shot|setParameterByID|unknown-id|0.0": 1,
+          "event:/sx/plr/Sx_plr_slowprojectile_shot|start||0.0": 1,
+          "event:/sx/plr/Sx_plr_slowprojectile_shot|stop||0.0": 1,
+          "event:/sx/plr/Sx_plr_slowprojectile_shot|release||0.0": 1
+        },
+        "peakMax": 0.0138567938,
+        "rmsMax": 0.00494055776
+      },
+      "2/Poison/single": {
+        "calls": {
+          "event:/sx/plr/Sx_plr_slowprojectile_shot|setParameterByID|unknown-id|0.0": 1,
+          "event:/sx/plr/Sx_plr_slowprojectile_shot|start||0.0": 1,
+          "event:/sx/plr/Sx_plr_slowprojectile_shot|stop||0.0": 1,
+          "event:/sx/plr/Sx_plr_slowprojectile_shot|release||0.0": 1
+        },
+        "peakMax": 0.02080041,
+        "rmsMax": 0.00882368
+      },
+      "2/Poison/multi": {
+        "calls": {
+          "event:/sx/plr/Sx_plr_slowprojectile_shot|setParameterByID|unknown-id|0.0": 3,
+          "event:/sx/plr/Sx_plr_slowprojectile_shot|start||0.0": 3,
+          "event:/sx/plr/Sx_plr_slowprojectile_shot|stop||0.0": 3,
+          "event:/sx/plr/Sx_plr_slowprojectile_shot|release||0.0": 3
+        },
+        "peakMax": 0.02064579,
+        "rmsMax": 0.008235663
+      },
+      "2/Poison/cancel": {
+        "calls": {
+          "event:/sx/plr/Sx_plr_slowprojectile_shot|setParameterByID|unknown-id|0.0": 1,
+          "event:/sx/plr/Sx_plr_slowprojectile_shot|start||0.0": 1,
+          "event:/sx/plr/Sx_plr_slowprojectile_shot|stop||0.0": 1,
+          "event:/sx/plr/Sx_plr_slowprojectile_shot|release||0.0": 1
+        },
+        "peakMax": 0.05110058,
+        "rmsMax": 0.0207002237
+      },
+      "3/Fire/single": {
+        "calls": {
+          "event:/sx/plr/Sx_plr_dragonbreath|setParameterByID|Phase|0.0": 1,
+          "event:/sx/plr/Sx_plr_dragonbreath|start||0.0": 1,
+          "event:/sx/plr/Sx_plr_dragonbreath|stop||0.0": 1,
+          "event:/sx/plr/Sx_plr_dragonbreath|release||0.0": 1
+        },
+        "peakMax": 0.0439568646,
+        "rmsMax": 0.0145334117
+      },
+      "3/Fire/multi": {
+        "calls": {
+          "event:/sx/plr/Sx_plr_dragonbreath|setParameterByID|Phase|0.0": 1,
+          "event:/sx/plr/Sx_plr_dragonbreath|start||0.0": 1,
+          "event:/sx/plr/Sx_plr_dragonbreath|stop||0.0": 1,
+          "event:/sx/plr/Sx_plr_dragonbreath|release||0.0": 1
+        },
+        "peakMax": 0.0433973558,
+        "rmsMax": 0.0166414455
+      },
+      "3/Fire/cancel": {
+        "calls": {
+          "event:/sx/plr/Sx_plr_dragonbreath|setParameterByID|Phase|0.0": 1,
+          "event:/sx/plr/Sx_plr_dragonbreath|start||0.0": 1,
+          "event:/sx/plr/Sx_plr_dragonbreath|stop||0.0": 1,
+          "event:/sx/plr/Sx_plr_dragonbreath|release||0.0": 1
+        },
+        "peakMax": 0.0209763534,
+        "rmsMax": 0.00570563041
+      },
+      "3/Poison/single": {
+        "calls": {
+          "event:/sx/plr/Sx_plr_dragonbreath|setParameterByID|Phase|0.0": 1,
+          "event:/sx/plr/Sx_plr_dragonbreath|start||0.0": 1,
+          "event:/sx/plr/Sx_plr_dragonbreath|stop||0.0": 1,
+          "event:/sx/plr/Sx_plr_dragonbreath|release||0.0": 1
+        },
+        "peakMax": 0.04639097,
+        "rmsMax": 0.0189605672
+      },
+      "3/Poison/multi": {
+        "calls": {
+          "event:/sx/plr/Sx_plr_dragonbreath|setParameterByID|Phase|0.0": 1,
+          "event:/sx/plr/Sx_plr_dragonbreath|start||0.0": 1,
+          "event:/sx/plr/Sx_plr_dragonbreath|stop||0.0": 1,
+          "event:/sx/plr/Sx_plr_dragonbreath|release||0.0": 1
+        },
+        "peakMax": 0.0606395,
+        "rmsMax": 0.0189605672
+      },
+      "3/Poison/cancel": {
+        "calls": {
+          "event:/sx/plr/Sx_plr_dragonbreath|setParameterByID|Phase|0.0": 1,
+          "event:/sx/plr/Sx_plr_dragonbreath|start||0.0": 1,
+          "event:/sx/plr/Sx_plr_dragonbreath|stop||0.0": 1,
+          "event:/sx/plr/Sx_plr_dragonbreath|release||0.0": 1
+        },
+        "peakMax": 0.03214875,
+        "rmsMax": 0.0116684809
+      }
+    },
+    "coverage": "single / multi / cancellation; breath source allows one beam"
+  },
+  "source-06": {
+    "complete": true,
+    "cases": {
+      "2/Default/controlled-hit-pause": {
+        "calls": {
+          "event:/sx/plr/Sx_plr_slowprojectile_shot|setParameterByID|unknown-id|0.0": 1,
+          "event:/sx/plr/Sx_plr_slowprojectile_shot|start||0.0": 2,
+          "event:/sx/plr/Sx_plr_slowprojectile_shot|setParameterByID|unknown-id|1.0": 1,
+          "event:/sx/plr/Sx_plr_slowprojectile_shot|stop||0.0": 1,
+          "event:/sx/plr/Sx_plr_slowprojectile_shot|release||0.0": 1
+        },
+        "peakMax": 0.146371961,
+        "rmsMax": 0.0602589622
+      },
+      "2/Fire/controlled-hit-pause": {
+        "calls": {
+          "event:/sx/plr/Sx_plr_slowprojectile_shot|setParameterByID|unknown-id|0.0": 1,
+          "event:/sx/plr/Sx_plr_slowprojectile_shot|start||0.0": 2,
+          "event:/sx/plr/Sx_plr_slowprojectile_shot|release||0.0": 2,
+          "event:/sx/plr/Sx_plr_slowprojectile_shot|setParameterByID|unknown-id|1.0": 1,
+          "event:/sx/plr/Sx_plr_slowprojectile_shot|stop||0.0": 1
+        },
+        "peakMax": 0.0336428061,
+        "rmsMax": 0.0141394287
+      },
+      "2/Poison/controlled-hit-pause": {
+        "calls": {
+          "event:/sx/plr/Sx_plr_slowprojectile_shot|setParameterByID|unknown-id|0.0": 1,
+          "event:/sx/plr/Sx_plr_slowprojectile_shot|start||0.0": 2,
+          "event:/sx/plr/Sx_plr_slowprojectile_shot|release||0.0": 2,
+          "event:/sx/plr/Sx_plr_slowprojectile_shot|setParameterByID|unknown-id|1.0": 1,
+          "event:/sx/plr/Sx_plr_slowprojectile_shot|stop||0.0": 1
+        },
+        "peakMax": 0.0222789086,
+        "rmsMax": 0.0100960368
+      },
+      "3/Fire/controlled-hit-pause": {
+        "calls": {
+          "event:/sx/plr/Sx_plr_dragonbreath|setParameterByID|Phase|0.0": 1,
+          "event:/sx/plr/Sx_plr_dragonbreath|start||0.0": 1,
+          "event:/sx/plr/Sx_plr_dragonbreath|stop||0.0": 1,
+          "event:/sx/plr/Sx_plr_dragonbreath|release||0.0": 1
+        },
+        "peakMax": 0.0378706865,
+        "rmsMax": 0.0168778077
+      },
+      "3/Poison/controlled-hit-pause": {
+        "calls": {
+          "event:/sx/plr/Sx_plr_dragonbreath|setParameterByID|Phase|0.0": 1,
+          "event:/sx/plr/Sx_plr_dragonbreath|start||0.0": 1,
+          "event:/sx/plr/Sx_plr_dragonbreath|stop||0.0": 1,
+          "event:/sx/plr/Sx_plr_dragonbreath|release||0.0": 1
+        },
+        "peakMax": 0.0329000652,
+        "rmsMax": 0.0168780889
+      }
+    },
+    "coverage": "controlled method callbacks / timeScale"
+  },
+  "limitations": [
+    "Calls logged before native return; playback samples are separate evidence.",
+    "Controlled intermediate/final hit invokes original OnHit with inert IDamageable, not physical collision.",
+    "Meter sampled every .25s; maxima are sampled, not whole-run true peak or integrated RMS.",
+    "Source-03 fingerprints were recorded after run; source-06 before run.",
+    "Source-01 clone failed, source-02 count took effect late, source-04 batch input failed, source-05 exited without log; preserved under Logs."
+  ]
+}

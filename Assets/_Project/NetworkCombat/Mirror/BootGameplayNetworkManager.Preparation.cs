@@ -257,11 +257,20 @@ namespace MonsterSupergroup.NetworkCombat
             {
                 if (Time.realtimeSinceStartupAsDouble >= preparationLoadDeadline)
                     AbortPreparation("加载超过 120 秒，本次开局已取消。请重新创建房间。");
-                else if (ServerRoom.AllGameplayReady && TryBeginRun(out _))
+                else if (ServerRoom.AllGameplayReady)
                 {
-                    ServerRoom.BeginCombat();
-                    PublishRoom();
-                    Debug.Log($"[Preparation] Combat started run={Session.RunId}");
+                    if (TryBeginRun(out string error))
+                    {
+                        ShowMenuNotice(string.Empty);
+                        ServerRoom.BeginCombat();
+                        PublishRoom();
+                        Debug.Log($"[Preparation] Combat started run={Session.RunId}");
+                    }
+                    else if (MenuNotice != error)
+                    {
+                        ShowMenuNotice(error);
+                        Debug.LogWarning($"[Preparation] Cannot begin combat: {error}", this);
+                    }
                 }
             }
             UpdateRunEnd();

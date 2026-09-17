@@ -85,6 +85,11 @@ namespace MonsterSupergroup.Gameplay.Tests
         }
         [UnityTest] public IEnumerator LoadingBarrierBlocksMovementDashAndWeaponsUntilOwnerBaselineAcknowledged()
         {
+            yield return manager.EnsureMainMenu();
+            var menu = UnityEngine.Object.FindFirstObjectByType<PreparationMenuView>();
+            Assert.That(menu, Is.Not.Null);
+            var menuCanvas = menu.GetComponentInChildren<Canvas>(true);
+            var menuEvents = menu.GetComponentInChildren<UnityEngine.EventSystems.EventSystem>(true);
             yield return Open();
             manager.SetOwnLoadout(6);
             yield return Until(() => manager.RoomSnapshot.Members[0].WeaponId == 6);
@@ -93,6 +98,10 @@ namespace MonsterSupergroup.Gameplay.Tests
             GameplayReady captured = default;
             NetworkServer.RegisterHandler<GameplayReady>((connection, message) => captured = message);
             yield return Until(() => captured.AvatarId != 0);
+            Assert.That(menuCanvas.gameObject.activeInHierarchy, Is.True, "Keep loading UI until all owners are ready.");
+            Assert.That(menuEvents.enabled, Is.True);
+            var spawner = UnityEngine.Object.FindFirstObjectByType<NetworkGameplayEnemySpawner>();
+            Assert.That(spawner.CanBeginWaveRun(out string waveError), Is.True, waveError);
             var avatar = NetworkClient.localPlayer;
             var movement = avatar.GetComponent<PlayerMovement>();
             var body = avatar.GetComponent<Rigidbody2D>();
@@ -115,6 +124,13 @@ namespace MonsterSupergroup.Gameplay.Tests
             yield return Until(() => manager.RoomSnapshot.Phase == PreparationPhase.InGame);
             yield return null;
             Assert.That(movement.IsRunLoadingLocked, Is.False);
+            Assert.That(menuCanvas.gameObject.activeInHierarchy, Is.False, "The preparation UI must hide when combat starts.");
+            Assert.That(menuEvents.enabled, Is.False, "The hidden menu must release input.");
+            manager.LeavePreparationRoom();
+            yield return Until(() => !NetworkServer.active && !manager.IsLeavingRoom && !manager.IsGameplayLoaded);
+            yield return null;
+            Assert.That(menuCanvas.gameObject.activeInHierarchy, Is.True, "Leaving combat must restore the menu.");
+            Assert.That(menuEvents.enabled, Is.True);
         }
         [UnityTest] public IEnumerator LoadingTimeoutAbortsAndAllowsANewRoom()
         {

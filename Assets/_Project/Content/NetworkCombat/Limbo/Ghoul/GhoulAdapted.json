@@ -1058,5 +1058,11 @@
     "Existing GAS/Mirror validates interrupts and routes them to the current simulator and replicas.",
     "Source third left warning uses right attack 2; logical duration follows source left bindings.",
     "Existing shader adaptation and Stats rebind; no source audio."
-  ]
+  ],
+  "warningStep": {
+    "objectId": "o00455",
+    "attackId": "o00134",
+    "rigidbodyId": "o00140",
+    "stepDistance": 0.4
+  }
 }

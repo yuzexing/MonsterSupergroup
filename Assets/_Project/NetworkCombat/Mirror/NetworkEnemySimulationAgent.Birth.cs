@@ -102,6 +102,7 @@ namespace MonsterSupergroup.NetworkCombat
         {
             if (!birth.Enabled || referenceArtDatabase == null || !productEnemyInitialized || !IsCanonicalAlive ||
                 authority == null || (!productMovementOnly && !authority.ConsumesSnapshots) || resolvedTarget == null) return;
+            if (enemyController.DeathRequested || enemyController.IsInKnockbackState || enemyController.IsNetworkKnockbackActive) return;
             if (hasLatestAttackPresentation)
             {
                 var phase = latestAttackPresentation.Checkpoint.Movement.Runtime.Action.PhaseAt(EnemySimulationClock.CombatNow);

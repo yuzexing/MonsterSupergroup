@@ -1,6 +1,6 @@
 param(
     [ValidateSet('host', 'client')][string]$Role = 'host',
-    [ValidateSet('opening', 'full', 'full-validation', 'full-fixture', 'imp', 'imp-validation', 'imp-v0', 'imp-v1','stage2','stage2-validation','stage2-fixture','spatial-b','spatial-barrier','spatial-overlap','spatial-reposition','dash','dash-fixture','dash-validation','art-effects','lostsoul','lostsoul-fixture','lostsoul-validation','ghoul','ghoul-fixture','ghoul-validation')][string]$Profile = 'opening',
+    [ValidateSet('opening', 'full', 'full-validation', 'full-fixture', 'imp', 'imp-validation', 'imp-v0', 'imp-v1','stage2','stage2-validation','stage2-fixture','spatial-b','spatial-barrier','spatial-overlap','spatial-reposition','dash','dash-fixture','dash-validation','art-effects','lostsoul','lostsoul-fixture','lostsoul-validation','ghoul','ghoul-fixture','ghoul-validation','ghoul-motion')][string]$Profile = 'opening',
     [ValidateSet('d3d11', 'd3d12')][string]$GraphicsApi = 'd3d11',
     [int]$Port = 7993,
     [ValidateRange(1,4)][int]$WaitFor = 1,

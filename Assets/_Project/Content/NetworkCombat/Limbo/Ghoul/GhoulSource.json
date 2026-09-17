@@ -8,6 +8,12 @@
   "cooldown": 0.5,
   "triggerDistance": 2.5,
   "consecutiveAttacks": 2,
+  "warningStep": {
+    "objectId": "o00455",
+    "attackId": "o00134",
+    "rigidbodyId": "o00140",
+    "stepDistance": 0.4
+  },
   "areaSideWarpDistance": {
     "x": 0.0,
     "y": 0.5,

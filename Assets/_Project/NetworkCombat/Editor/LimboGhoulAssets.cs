@@ -22,13 +22,15 @@ namespace MonsterSupergroup.NetworkCombat.Editor
             public Vector3 areaSideWarpDistance;
             public double previewEnd; public LimboDashAssets.Times extraStageTimes;
             public LimboLostSoulAssets.Geometry[] geometry;
+            public WarningStepData warningStep;
         }
+        [Serializable] public class WarningStepData { public string objectId, attackId, rigidbodyId; public float stepDistance; }
         [MenuItem("Tools/MonsterSupergroup/Limbo/Create Ghoul reference assets")]
         public static void Create()
         {
             AssetDatabase.Refresh(ImportAssetOptions.ForceSynchronousImport);
             var data = JsonUtility.FromJson<Data>(File.ReadAllText(Root+"/GhoulAdapted.json"));
-            CreateAttack(data); CreateEnemy(data); LimboArtAssets.Apply(false);
+            CreateAttack(data); CreateEnemy(data); UpdateWarningStep(); LimboArtAssets.Apply(false);
             var timeline = AssetDatabase.LoadAssetAtPath<TimelineAsset>(LimboReferenceAssets.Root+"/Limbo.playable");
             foreach(var spawn in timeline.GetOutputTracks().SelectMany(t=>t.GetClips()).Select(c=>(NetworkEnemySpawnClip)c.asset).Where(c=>c.sourceEnemy=="Ghoul"))
             {
@@ -101,6 +103,33 @@ namespace MonsterSupergroup.NetworkCombat.Editor
             }
             finally{PrefabUtility.UnloadPrefabContents(root);}
         }
+        [MenuItem("Tools/MonsterSupergroup/Limbo/Update Ghoul warning step")]
+        public static void UpdateWarningStep()
+        {
+            var data = JsonUtility.FromJson<Data>(File.ReadAllText(Root + "/GhoulAdapted.json"));
+            if (data.warningStep == null || data.warningStep.stepDistance <= 0)
+                throw new InvalidDataException("Extract the recovered Ghoul warning step before updating assets.");
+            var root = PrefabUtility.LoadPrefabContents(EnemyPath);
+            try
+            {
+                var step = root.GetComponent<EnemyWarningStep>();
+                if (step == null)
+                {
+                    step = root.AddComponent<EnemyWarningStep>();
+                    step.Configure(root.GetComponent<SequenceEnemyAttack>(), root.GetComponent<Rigidbody2D>(), data.warningStep.stepDistance);
+                    // Loading a variant's contents can temporarily assign its parent's Mirror ID.
+                    // Keep the reference prefab's own registration identity when saving it.
+                    var identity = new SerializedObject(root.GetComponent<NetworkIdentity>());
+                    identity.FindProperty("_assetId").longValue = NetworkIdentity.AssetGuidToUint(new Guid(AssetDatabase.AssetPathToGUID(EnemyPath)));
+                    identity.ApplyModifiedPropertiesWithoutUndo();
+                    PrefabUtility.SaveAsPrefabAsset(root, EnemyPath);
+                }
+            }
+            finally { PrefabUtility.UnloadPrefabContents(root); }
+            var timeline = AssetDatabase.LoadAssetAtPath<TimelineAsset>(LimboReferenceAssets.Root + "/Limbo.playable");
+            Rules("GhoulMotion", Fixture(timeline,"Motion",449.9166666666667,1,60),65,true,true);
+            AssetDatabase.SaveAssets();
+        }
         private static TimelineAsset Fixture(TimelineAsset source,string name,double start,int count,double duration)
         {
             string path=Root+"/"+name+".playable";var result=AssetDatabase.LoadAssetAtPath<TimelineAsset>(path);if(result!=null)return result;
@@ -142,6 +171,7 @@ namespace MonsterSupergroup.NetworkCombat.Editor
         }
         public static void AcceptBatch(){int code=0;try{MarkValidated();}catch(Exception e){Debug.LogException(e);code=1;}finally{EditorApplication.Exit(code);}}
         public static void CreateBatch(){int code=0;try{Create();}catch(Exception e){Debug.LogException(e);code=1;}finally{EditorApplication.Exit(code);}}
+        public static void UpdateWarningStepBatch(){int code=0;try{UpdateWarningStep();}catch(Exception e){Debug.LogException(e);code=1;}finally{EditorApplication.Exit(code);}}
         public static void BuildBatch()=>LimboLostSoulAssets.BuildBatch();
     }
 }

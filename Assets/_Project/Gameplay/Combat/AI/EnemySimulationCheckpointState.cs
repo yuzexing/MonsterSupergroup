@@ -21,6 +21,7 @@ namespace AstralShift.HellMaiden.AI
         public Vector3 SequenceWarnings, SequenceActives;
         public int StrikeIndex, PoseStrikeIndex;
         public byte LockedStrikeMask, ExecutedStrikeMask;
+        public EnemyWarningStepState WarningStep;
 
         public EnemyAttackPresentationPhase PhaseAt(double now)
         {
@@ -30,6 +31,17 @@ namespace AstralShift.HellMaiden.AI
             ? WarningStartedAt : phase == EnemyAttackPresentationPhase.Active ? WarningUntil : ActiveUntil;
         public double EndAt(EnemyAttackPresentationPhase phase) => phase == EnemyAttackPresentationPhase.Warning
             ? WarningUntil : phase == EnemyAttackPresentationPhase.Active ? ActiveUntil : RecoveryUntil;
+    }
+
+    [Serializable]
+    public struct EnemyWarningStepState
+    {
+        public bool Enabled;
+        public byte StartedMask, CompletedMask;
+        public double SampledAt;
+        // MovePosition is committed by physics, potentially after a handoff snapshot.
+        public bool Pending;
+        public Vector2 RequestedPosition, Facing;
     }
 
     [Serializable]

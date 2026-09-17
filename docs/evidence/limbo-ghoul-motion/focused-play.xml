@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="14" result="Failed(Child)" total="14" passed="8" failed="6" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-09-16 14:59:05Z" end-time="2026-09-16 14:59:12Z" duration="7.2539513">
+  <test-suite type="TestSuite" id="1650" name="Monster Supergroup" fullname="Monster Supergroup" runstate="Runnable" testcasecount="542" result="Failed" site="Child" start-time="2026-09-16 14:59:05Z" end-time="2026-09-16 14:59:12Z" duration="7.253951" total="14" passed="8" failed="6" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="PlayMode" />
+    </properties>
+    <failure>
+      <message><![CDATA[One or more child tests had errors]]></message>
+    </failure>
+    <test-suite type="Assembly" id="1634" name="MonsterSupergroup.Gameplay.Tests.PlayMode.dll" fullname="F:/UnityStore/MonsterSupergroup_validation_motion_20260916/Library/ScriptAssemblies/MonsterSupergroup.Gameplay.Tests.PlayMode.dll" runstate="Runnable" testcasecount="538" result="Failed" site="Child" start-time="2026-09-16 14:59:05Z" end-time="2026-09-16 14:59:12Z" duration="7.235643" total="14" passed="8" failed="6" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="74260" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="PlayMode" />
+        <property name="EditorOnly" value="False" />
+      </properties>
+      <failure>
+        <message><![CDATA[One or more child tests had errors]]></message>
+      </failure>
+      <test-suite type="TestSuite" id="1635" name="MonsterSupergroup" fullname="MonsterSupergroup" runstate="Runnable" testcasecount="538" result="Failed" site="Child" start-time="2026-09-16 14:59:05Z" end-time="2026-09-16 14:59:12Z" duration="7.232655" total="14" passed="8" failed="6" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <failure>
+          <message><![CDATA[One or more child tests had errors]]></message>
+        </failure>
+        <test-suite type="TestSuite" id="1636" name="Gameplay" fullname="MonsterSupergroup.Gameplay" runstate="Runnable" testcasecount="538" result="Failed" site="Child" start-time="2026-09-16 14:59:05Z" end-time="2026-09-16 14:59:12Z" duration="7.221844" total="14" passed="8" failed="6" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <failure>
+            <message><![CDATA[One or more child tests had errors]]></message>
+          </failure>
+          <test-suite type="TestSuite" id="1637" name="Tests" fullname="MonsterSupergroup.Gameplay.Tests" runstate="Runnable" testcasecount="538" result="Failed" site="Child" start-time="2026-09-16 14:59:05Z" end-time="2026-09-16 14:59:12Z" duration="7.214424" total="14" passed="8" failed="6" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <failure>
+              <message><![CDATA[One or more child tests had errors]]></message>
+            </failure>
+            <test-suite type="TestFixture" id="1168" name="EnemyPrefabVariantPlayModeTests" fullname="MonsterSupergroup.Gameplay.Tests.EnemyPrefabVariantPlayModeTests" classname="MonsterSupergroup.Gameplay.Tests.EnemyPrefabVariantPlayModeTests" runstate="Runnable" testcasecount="21" result="Failed" site="Child" start-time="2026-09-16 14:59:05Z" end-time="2026-09-16 14:59:11Z" duration="6.602772" total="1" passed="0" failed="1" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <failure>
+                <message><![CDATA[One or more child tests had errors]]></message>
+              </failure>
+              <test-case id="1180" name="GhoulBirthMovementKeepsLeftFacingAndAdvancesFramesBeforeFirstAttack" fullname="MonsterSupergroup.Gameplay.Tests.EnemyPrefabVariantPlayModeTests.GhoulBirthMovementKeepsLeftFacingAndAdvancesFramesBeforeFirstAttack" methodname="GhoulBirthMovementKeepsLeftFacingAndAdvancesFramesBeforeFirstAttack" classname="MonsterSupergroup.Gameplay.Tests.EnemyPrefabVariantPlayModeTests" runstate="Runnable" seed="1804463954" result="Failed" start-time="2026-09-16 14:59:05Z" end-time="2026-09-16 14:59:11Z" duration="6.588815" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <failure>
+                  <message><![CDATA[  Expected: greater than 0.10000000000000001d
+  But was:  0.0d
+]]></message>
+                  <stack-trace><![CDATA[at MonsterSupergroup.Gameplay.Tests.EnemyPrefabVariantPlayModeTests+<GhoulBirthMovementKeepsLeftFacingAndAdvancesFramesBeforeFirstAttack>d__14.MoveNext () [0x00360] in F:\UnityStore\MonsterSupergroup_validation_motion_20260916\Assets\_Project\Tests\PlayMode\Gameplay\EnemyPrefabVariantPlayModeTests.Timeline.cs:44
+at UnityEngine.TestTools.TestEnumerator+<Execute>d__7.MoveNext () [0x0004e] in .\Library\PackageCache\com.unity.test-framework@bd7f943e9647\UnityEngine.TestRunner\NUnitExtensions\Attributes\TestEnumerator.cs:44
+]]></stack-trace>
+                </failure>
+                <output><![CDATA[[Localization] Applied locale=zh-CN revision=2
+[NetworkBackend] backend=Kcp purpose=Test source=test-runner transport=KcpTransport.
+--- Hardware Info ---
+CPU Model: 13th Gen Intel(R) Core(TM) i7-13700KF
+GPU Model: Null Device
+RAM: 65375 MB
+Install Disk Model: JZ-SSD4T-XW
+Main Monitor Model: Unknown Monitor
+---------------------
+Normal : True
+UI : False
+AstralShift.HellMaiden.Controllers.PlayerController_HMD
+<color=yellow><b>► Controllers: </b></color>Controller type AstralShift.Control.Controllers.NoInputGameController not available
+Server listening on port 7986
+[BootGameplay] Server starting; loading 'Assets/_Project/Scenes/Gameplay.unity'.
+[BootGameplay] Server connection 0 is ready.
+[BootGameplay] Queued Player for connection 0.
+[BootGameplay] Gameplay scene ready: 'Assets/_Project/Scenes/Gameplay.unity'.
+[BootGameplay] Spawned Player NetworkPlayer [connId=0] in 'Assets/_Project/Scenes/Gameplay.unity'.
+<color=yellow><b>► Controllers: </b></color>Overrode <color=yellow><b></b></color> with <color=yellow><b>PlayerController_HMD</b></color>.
+Normal : True
+UI : False
+[BootGameplay] Client stopping; serverActive=True.
+[BootGameplay] Server stopping.
+[BootGameplay] Gameplay unload requested.
+There are 2 audio listeners in the scene. Please ensure there is always exactly one audio listener in the scene.
+[SteamInvite] stage=cleanup lobby=0 host=0 phase=Disabled reason=
+]]></output>
+              </test-case>
+            </test-suite>
+            <test-suite type="TestFixture" id="1281" name="GhoulAttackLifetimeTests" fullname="MonsterSupergroup.Gameplay.Tests.GhoulAttackLifetimeTests" classname="MonsterSupergroup.Gameplay.Tests.GhoulAttackLifetimeTests" runstate="Runnable" testcasecount="7" result="Passed" start-time="2026-09-16 14:59:11Z" end-time="2026-09-16 14:59:11Z" duration="0.044026" total="7" passed="7" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-suite type="ParameterizedMethod" id="1287" name="ActualColliderOnlyExistsInsideCurrentActiveWindow" fullname="MonsterSupergroup.Gameplay.Tests.GhoulAttackLifetimeTests.ActualColliderOnlyExistsInsideCurrentActiveWindow" classname="MonsterSupergroup.Gameplay.Tests.GhoulAttackLifetimeTests" runstate="Runnable" testcasecount="4" result="Passed" start-time="2026-09-16 14:59:11Z" end-time="2026-09-16 14:59:11Z" duration="0.028494" total="4" passed="4" failed="0" inconclusive="0" skipped="0" asserts="0">
+                <properties />
+                <test-case id="1283" name="ActualColliderOnlyExistsInsideCurrentActiveWindow(1.1d,False)" fullname="MonsterSupergroup.Gameplay.Tests.GhoulAttackLifetimeTests.ActualColliderOnlyExistsInsideCurrentActiveWindow(1.1d,False)" methodname="ActualColliderOnlyExistsInsideCurrentActiveWindow" classname="MonsterSupergroup.Gameplay.Tests.GhoulAttackLifetimeTests" runstate="Runnable" seed="528316145" result="Passed" start-time="2026-09-16 14:59:11Z" end-time="2026-09-16 14:59:11Z" duration="0.008639" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1284" name="ActualColliderOnlyExistsInsideCurrentActiveWindow(1.4d,True)" fullname="MonsterSupergroup.Gameplay.Tests.GhoulAttackLifetimeTests.ActualColliderOnlyExistsInsideCurrentActiveWindow(1.4d,True)" methodname="ActualColliderOnlyExistsInsideCurrentActiveWindow" classname="MonsterSupergroup.Gameplay.Tests.GhoulAttackLifetimeTests" runstate="Runnable" seed="1936628036" result="Passed" start-time="2026-09-16 14:59:11Z" end-time="2026-09-16 14:59:11Z" duration="0.002254" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1285" name="ActualColliderOnlyExistsInsideCurrentActiveWindow(2.6d,False)" fullname="MonsterSupergroup.Gameplay.Tests.GhoulAttackLifetimeTests.ActualColliderOnlyExistsInsideCurrentActiveWindow(2.6d,False)" methodname="ActualColliderOnlyExistsInsideCurrentActiveWindow" classname="MonsterSupergroup.Gameplay.Tests.GhoulAttackLifetimeTests" runstate="Runnable" seed="1418280790" result="Passed" start-time="2026-09-16 14:59:11Z" end-time="2026-09-16 14:59:11Z" duration="0.000282" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1286" name="ActualColliderOnlyExistsInsideCurrentActiveWindow(3.0d,False)" fullname="MonsterSupergroup.Gameplay.Tests.GhoulAttackLifetimeTests.ActualColliderOnlyExistsInsideCurrentActiveWindow(3.0d,False)" methodname="ActualColliderOnlyExistsInsideCurrentActiveWindow" classname="MonsterSupergroup.Gameplay.Tests.GhoulAttackLifetimeTests" runstate="Runnable" seed="1040388120" result="Passed" start-time="2026-09-16 14:59:11Z" end-time="2026-09-16 14:59:11Z" duration="0.000251" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+              </test-suite>
+              <test-case id="1288" name="CancelledOrMissingPoseNeverRestoresHit" fullname="MonsterSupergroup.Gameplay.Tests.GhoulAttackLifetimeTests.CancelledOrMissingPoseNeverRestoresHit" methodname="CancelledOrMissingPoseNeverRestoresHit" classname="MonsterSupergroup.Gameplay.Tests.GhoulAttackLifetimeTests" runstate="Runnable" seed="291454557" result="Passed" start-time="2026-09-16 14:59:11Z" end-time="2026-09-16 14:59:11Z" duration="0.000550" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1282" name="PoolReuseRebindsStatsAndKeepsAlternatingParentLocalOffsets" fullname="MonsterSupergroup.Gameplay.Tests.GhoulAttackLifetimeTests.PoolReuseRebindsStatsAndKeepsAlternatingParentLocalOffsets" methodname="PoolReuseRebindsStatsAndKeepsAlternatingParentLocalOffsets" classname="MonsterSupergroup.Gameplay.Tests.GhoulAttackLifetimeTests" runstate="Runnable" seed="770201718" result="Passed" start-time="2026-09-16 14:59:11Z" end-time="2026-09-16 14:59:11Z" duration="0.001855" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1289" name="ThirdRecoveryKeepsDisplayIndexAfterLogicalCounterResets" fullname="MonsterSupergroup.Gameplay.Tests.GhoulAttackLifetimeTests.ThirdRecoveryKeepsDisplayIndexAfterLogicalCounterResets" methodname="ThirdRecoveryKeepsDisplayIndexAfterLogicalCounterResets" classname="MonsterSupergroup.Gameplay.Tests.GhoulAttackLifetimeTests" runstate="Runnable" seed="144421368" result="Passed" start-time="2026-09-16 14:59:11Z" end-time="2026-09-16 14:59:11Z" duration="0.000412" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+            </test-suite>
+            <test-suite type="TestFixture" id="1290" name="GhoulWarningStepTests" fullname="MonsterSupergroup.Gameplay.Tests.GhoulWarningStepTests" classname="MonsterSupergroup.Gameplay.Tests.GhoulWarningStepTests" runstate="Runnable" testcasecount="6" result="Failed" site="Child" start-time="2026-09-16 14:59:11Z" end-time="2026-09-16 14:59:12Z" duration="0.535360" total="6" passed="1" failed="5" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <failure>
+                <message><![CDATA[One or more child tests had errors]]></message>
+              </failure>
+              <test-case id="1295" name="HandoffPreservesPendingPositionAndDoesNotReplayAnExpiredWarningExit" fullname="MonsterSupergroup.Gameplay.Tests.GhoulWarningStepTests.HandoffPreservesPendingPositionAndDoesNotReplayAnExpiredWarningExit" methodname="HandoffPreservesPendingPositionAndDoesNotReplayAnExpiredWarningExit" classname="MonsterSupergroup.Gameplay.Tests.GhoulWarningStepTests" runstate="Runnable" seed="1554564856" result="Failed" start-time="2026-09-16 14:59:11Z" end-time="2026-09-16 14:59:12Z" duration="0.051137" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <failure>
+                  <message><![CDATA[  Expected: less than 0.001d
+  But was:  4242.64063f
+]]></message>
+                  <stack-trace><![CDATA[at MonsterSupergroup.Gameplay.Tests.GhoulWarningStepTests+<HandoffPreservesPendingPositionAndDoesNotReplayAnExpiredWarningExit>d__16.MoveNext () [0x000f9] in F:\UnityStore\MonsterSupergroup_validation_motion_20260916\Assets\_Project\Tests\PlayMode\Gameplay\GhoulWarningStepTests.cs:122
+at UnityEngine.TestTools.TestEnumerator+<Execute>d__7.MoveNext () [0x0004e] in .\Library\PackageCache\com.unity.test-framework@bd7f943e9647\UnityEngine.TestRunner\NUnitExtensions\Attributes\TestEnumerator.cs:44
+]]></stack-trace>
+                </failure>
+              </test-case>
+              <test-case id="1294" name="PauseAndRepeatedTimeDoNotStepAndCancelDiscardsPendingMove" fullname="MonsterSupergroup.Gameplay.Tests.GhoulWarningStepTests.PauseAndRepeatedTimeDoNotStepAndCancelDiscardsPendingMove" methodname="PauseAndRepeatedTimeDoNotStepAndCancelDiscardsPendingMove" classname="MonsterSupergroup.Gameplay.Tests.GhoulWarningStepTests" runstate="Runnable" seed="397291660" result="Passed" start-time="2026-09-16 14:59:12Z" end-time="2026-09-16 14:59:12Z" duration="0.065666" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1293" name="SourceRequestsAt144Fps" fullname="MonsterSupergroup.Gameplay.Tests.GhoulWarningStepTests.SourceRequestsAt144Fps" methodname="SourceRequestsAt144Fps" classname="MonsterSupergroup.Gameplay.Tests.GhoulWarningStepTests" runstate="Runnable" seed="1101935927" result="Failed" start-time="2026-09-16 14:59:12Z" end-time="2026-09-16 14:59:12Z" duration="0.049921" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <failure>
+                  <message><![CDATA[  Expected: less than 0.00050000000000000001d
+  But was:  4242.64746f
+]]></message>
+                  <stack-trace><![CDATA[at MonsterSupergroup.Gameplay.Tests.GhoulWarningStepTests+<SourceRequests>d__14.MoveNext () [0x0020c] in F:\UnityStore\MonsterSupergroup_validation_motion_20260916\Assets\_Project\Tests\PlayMode\Gameplay\GhoulWarningStepTests.cs:78
+at UnityEngine.TestTools.TestEnumerator+<Execute>d__7.MoveNext () [0x0004e] in .\Library\PackageCache\com.unity.test-framework@bd7f943e9647\UnityEngine.TestRunner\NUnitExtensions\Attributes\TestEnumerator.cs:44
+]]></stack-trace>
+                </failure>
+              </test-case>
+              <test-case id="1291" name="SourceRequestsAt30Fps" fullname="MonsterSupergroup.Gameplay.Tests.GhoulWarningStepTests.SourceRequestsAt30Fps" methodname="SourceRequestsAt30Fps" classname="MonsterSupergroup.Gameplay.Tests.GhoulWarningStepTests" runstate="Runnable" seed="2001746515" result="Failed" start-time="2026-09-16 14:59:12Z" end-time="2026-09-16 14:59:12Z" duration="0.049790" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <failure>
+                  <message><![CDATA[  Expected: less than 0.00050000000000000001d
+  But was:  4242.67285f
+]]></message>
+                  <stack-trace><![CDATA[at MonsterSupergroup.Gameplay.Tests.GhoulWarningStepTests+<SourceRequests>d__14.MoveNext () [0x0020c] in F:\UnityStore\MonsterSupergroup_validation_motion_20260916\Assets\_Project\Tests\PlayMode\Gameplay\GhoulWarningStepTests.cs:78
+at UnityEngine.TestTools.TestEnumerator+<Execute>d__7.MoveNext () [0x0004e] in .\Library\PackageCache\com.unity.test-framework@bd7f943e9647\UnityEngine.TestRunner\NUnitExtensions\Attributes\TestEnumerator.cs:44
+]]></stack-trace>
+                </failure>
+              </test-case>
+              <test-case id="1292" name="SourceRequestsAt60Fps" fullname="MonsterSupergroup.Gameplay.Tests.GhoulWarningStepTests.SourceRequestsAt60Fps" methodname="SourceRequestsAt60Fps" classname="MonsterSupergroup.Gameplay.Tests.GhoulWarningStepTests" runstate="Runnable" seed="458767354" result="Failed" start-time="2026-09-16 14:59:12Z" end-time="2026-09-16 14:59:12Z" duration="0.049922" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <failure>
+                  <message><![CDATA[  Expected: less than 0.00050000000000000001d
+  But was:  4242.65674f
+]]></message>
+                  <stack-trace><![CDATA[at MonsterSupergroup.Gameplay.Tests.GhoulWarningStepTests+<SourceRequests>d__14.MoveNext () [0x0020c] in F:\UnityStore\MonsterSupergroup_validation_motion_20260916\Assets\_Project\Tests\PlayMode\Gameplay\GhoulWarningStepTests.cs:78
+at UnityEngine.TestTools.TestEnumerator+<Execute>d__7.MoveNext () [0x0004e] in .\Library\PackageCache\com.unity.test-framework@bd7f943e9647\UnityEngine.TestRunner\NUnitExtensions\Attributes\TestEnumerator.cs:44
+]]></stack-trace>
+                </failure>
+              </test-case>
+              <test-case id="1296" name="WarningRequestsRemainSubjectToActualPhysicsCollision" fullname="MonsterSupergroup.Gameplay.Tests.GhoulWarningStepTests.WarningRequestsRemainSubjectToActualPhysicsCollision" methodname="WarningRequestsRemainSubjectToActualPhysicsCollision" classname="MonsterSupergroup.Gameplay.Tests.GhoulWarningStepTests" runstate="Runnable" seed="84268087" result="Failed" start-time="2026-09-16 14:59:12Z" end-time="2026-09-16 14:59:12Z" duration="0.266798" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <failure>
+                  <message><![CDATA[  Expected: in range (0.1,0.46)
+  But was:  0.0f
+]]></message>
+                  <stack-trace><![CDATA[at MonsterSupergroup.Gameplay.Tests.GhoulWarningStepTests+<WarningRequestsRemainSubjectToActualPhysicsCollision>d__17.MoveNext () [0x00183] in F:\UnityStore\MonsterSupergroup_validation_motion_20260916\Assets\_Project\Tests\PlayMode\Gameplay\GhoulWarningStepTests.cs:148
+at UnityEngine.TestTools.TestEnumerator+<Execute>d__7.MoveNext () [0x0004e] in .\Library\PackageCache\com.unity.test-framework@bd7f943e9647\UnityEngine.TestRunner\NUnitExtensions\Attributes\TestEnumerator.cs:44
+]]></stack-trace>
+                </failure>
+                <output><![CDATA[Saving results to: C:/Users/ADMIN/AppData/LocalLow/DefaultCompany/Monster Supergroup\TestResults.xml
+]]></output>
+              </test-case>
+            </test-suite>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

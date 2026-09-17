@@ -484,6 +484,11 @@ namespace AstralShift.HellMaiden.AI.Enemy
         public virtual void Movement(float x, float y)
 		{
             if (!useRecoveredMovement || _blockAnimations || animancer == null) return;
+            if (x * x + y * y < .0001f)
+            {
+                if (bodyPresentationFacing.sqrMagnitude < .0001f) return;
+                x = bodyPresentationFacing.x; y = bodyPresentationFacing.y;
+            }
             var move = x > 0 ? (y > 0 ? moveRightUp : moveRightDown) : (y > 0 ? moveLeftUp : moveLeftDown);
             if (move?.Clip == null) return;
             bodyPresentationFacing = new Vector2(x,y);

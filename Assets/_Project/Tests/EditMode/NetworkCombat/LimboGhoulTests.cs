@@ -59,6 +59,9 @@ namespace MonsterSupergroup.NetworkCombat.Tests
             Assert.That(polygon.points[0],Is.EqualTo(new Vector2(1.56064153f,2.31846976f)));
             Assert.That(((CircleCollider2D)c.collider).radius,Is.EqualTo(.46f));Assert.That(c.collider.offset,Is.EqualTo(new Vector2(0,.3f)));
             Assert.That(p.GetComponent<EnemyContactDamage>(),Is.Null);
+            Assert.That(p.GetComponent<EnemyWarningStep>(),Is.Not.Null);
+            Assert.That(p.GetComponent<EnemyWarningStep>().stepDistance,Is.EqualTo(.4f));
+            Assert.That(p.GetComponent<NetworkIdentity>().assetId,Is.EqualTo(NetworkIdentity.AssetGuidToUint(new Guid(AssetDatabase.AssetPathToGUID(LimboGhoulAssets.EnemyPath)))));
         }
         [Test] public void PreviewKeepsExactCutoffCountsAndFullGate()
         {
@@ -75,6 +78,8 @@ namespace MonsterSupergroup.NetworkCombat.Tests
         [Test] public void CheckpointProtocolRoundTripsComboAndRejectsInvalidIndices()
         {
             var action=EnemySequenceTimeline.Resolve(Combo(),11.4);action.ExecutedStrikeMask=7;action.LockedStrikeMask=7;action.PoseStrikeIndex=2;
+            action.WarningStep=new EnemyWarningStepState{Enabled=true,StartedMask=7,CompletedMask=3,SampledAt=11.3,
+                Pending=true,RequestedPosition=new Vector2(2,3),Facing=Vector2.left};
             var snapshot=new EnemySimulationSnapshot{EnemyEntityId=4,AssignmentEpoch=9,Sequence=1,Runtime=new EnemySimulationRuntimeState{Action=action}};
             Assert.That(snapshot.IsFinite,Is.True);
             using(var writer=NetworkWriterPool.Get())
@@ -83,10 +88,14 @@ namespace MonsterSupergroup.NetworkCombat.Tests
                 var restored=new NetworkReader(writer.ToArraySegment()).Read<EnemySimulationSnapshot>();
                 Assert.That(restored.Runtime.Action.ActionId,Is.EqualTo(action.ActionId));Assert.That(restored.Runtime.Action.StrikeIndex,Is.EqualTo(2));
                 Assert.That(restored.Runtime.Action.ExecutedStrikeMask,Is.EqualTo(7));Assert.That(restored.Runtime.Action.ComboStartedAt,Is.EqualTo(10));
+                Assert.That(restored.Runtime.Action.WarningStep,Is.EqualTo(action.WarningStep));
                 TestContext.WriteLine("Ghoul full checkpoint bytes="+writer.Position);
             }
             snapshot.Runtime.Action.StrikeIndex=3;Assert.That(snapshot.IsFinite,Is.False);
             snapshot.Runtime.Action=action;snapshot.Runtime.Action.SequenceWarnings.x=float.NaN;Assert.That(snapshot.IsFinite,Is.False);
+            snapshot.Runtime.Action=action;snapshot.Runtime.Action.WarningStep.CompletedMask=8;Assert.That(snapshot.IsFinite,Is.False);
+            snapshot.Runtime.Action=action;snapshot.Runtime.Action.WarningStep.SampledAt=double.NaN;Assert.That(snapshot.IsFinite,Is.False);
+            snapshot.Runtime.Action=action;snapshot.Runtime.Action.WarningStep.RequestedPosition.x=float.PositiveInfinity;Assert.That(snapshot.IsFinite,Is.False);
         }
         [Test] public void AdmittedCancellationRejectsOldWindowsWithoutBlockingANewCombo()
         {

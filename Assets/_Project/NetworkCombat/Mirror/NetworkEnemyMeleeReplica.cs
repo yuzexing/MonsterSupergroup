@@ -76,6 +76,15 @@ namespace MonsterSupergroup.NetworkCombat
         internal void ApplyAction(EnemyActionState state, uint epoch, double now)
         {
             if (attack == null || !attack.SupportsSharedTimeline) return;
+            // An empty checkpoint is not an animation command. In particular, before the
+            // first attack it must not replace locomotion every LateUpdate with facing=0.
+            if (state.ActionId == 0)
+            {
+                ReleaseAction();
+                receivedAction = default;
+                lastAppliedAssignmentEpoch = epoch;
+                return;
+            }
             var frame = EnemyActionTimeline.Resolve(state, now);
             bool sameAction = hasAction && frame.ActionId == appliedAction.ActionId;
             if (sameAction && EnemyActionTimeline.Order(frame) < EnemyActionTimeline.Order(appliedAction))
@@ -104,10 +113,14 @@ namespace MonsterSupergroup.NetworkCombat
                 frame.Phase == EnemyAttackPresentationPhase.Inactive)
             {
                 if (frame.Phase == EnemyAttackPresentationPhase.Cancelled) cancelledAction = frame.ActionId;
-                window.Cancel();
-                if (frame.Phase == EnemyAttackPresentationPhase.Cancelled) attack.CancelLocalFrame();
-                else attack.ReleaseLocalFrame();
-                if (changed) controller.ApplyReplicatedAttackPresentation(frame.Phase, frame.Facing, 0);
+                if (changed)
+                {
+                    window.Cancel();
+                    if (frame.Phase == EnemyAttackPresentationPhase.Cancelled) attack.CancelLocalFrame();
+                    else attack.ReleaseLocalFrame();
+                }
+                // Locomotion/knockback/death owns the body after an attack. Its facing
+                // can already differ from the finished strike's locked direction.
                 appliedAction = frame; hasAction = frame.ActionId != 0; lastAppliedAssignmentEpoch = epoch;
                 if (changed || epochChanged) TimelineObserved?.Invoke(this, "phase");
                 return;

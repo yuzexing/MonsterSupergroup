@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="14" result="Passed" total="14" passed="14" failed="0" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-09-16 15:09:46Z" end-time="2026-09-16 15:09:46Z" duration="0.196518">
+  <test-suite type="TestSuite" id="1000" name="Monster Supergroup" fullname="Monster Supergroup" runstate="Runnable" testcasecount="791" result="Passed" start-time="2026-09-16 15:09:46Z" end-time="2026-09-16 15:09:46Z" duration="0.196518" total="14" passed="14" failed="0" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="EditMode" />
+    </properties>
+    <test-suite type="Assembly" id="1949" name="MonsterSupergroup.NetworkCombat.Tests.EditMode.dll" fullname="F:/UnityStore/MonsterSupergroup_validation_motion_20260916/Library/ScriptAssemblies/MonsterSupergroup.NetworkCombat.Tests.EditMode.dll" runstate="Runnable" testcasecount="598" result="Passed" start-time="2026-09-16 15:09:46Z" end-time="2026-09-16 15:09:46Z" duration="0.188077" total="14" passed="14" failed="0" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="92968" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="EditMode" />
+        <property name="EditorOnly" value="True" />
+      </properties>
+      <test-suite type="TestSuite" id="1950" name="MonsterSupergroup" fullname="MonsterSupergroup" runstate="Runnable" testcasecount="598" result="Passed" start-time="2026-09-16 15:09:46Z" end-time="2026-09-16 15:09:46Z" duration="0.186042" total="14" passed="14" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-suite type="TestSuite" id="1951" name="NetworkCombat" fullname="MonsterSupergroup.NetworkCombat" runstate="Runnable" testcasecount="598" result="Passed" start-time="2026-09-16 15:09:46Z" end-time="2026-09-16 15:09:46Z" duration="0.184220" total="14" passed="14" failed="0" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <test-suite type="TestSuite" id="1952" name="Tests" fullname="MonsterSupergroup.NetworkCombat.Tests" runstate="Runnable" testcasecount="598" result="Passed" start-time="2026-09-16 15:09:46Z" end-time="2026-09-16 15:09:46Z" duration="0.182312" total="14" passed="14" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-suite type="TestFixture" id="1460" name="LimboGhoulTests" fullname="MonsterSupergroup.NetworkCombat.Tests.LimboGhoulTests" classname="MonsterSupergroup.NetworkCombat.Tests.LimboGhoulTests" runstate="Runnable" testcasecount="14" result="Passed" start-time="2026-09-16 15:09:46Z" end-time="2026-09-16 15:09:46Z" duration="0.165863" total="14" passed="14" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1475" name="AdmittedCancellationRejectsOldWindowsWithoutBlockingANewCombo" fullname="MonsterSupergroup.NetworkCombat.Tests.LimboGhoulTests.AdmittedCancellationRejectsOldWindowsWithoutBlockingANewCombo" methodname="AdmittedCancellationRejectsOldWindowsWithoutBlockingANewCombo" classname="MonsterSupergroup.NetworkCombat.Tests.LimboGhoulTests" runstate="Runnable" seed="99751705" result="Passed" start-time="2026-09-16 15:09:46Z" end-time="2026-09-16 15:09:46Z" duration="0.040906" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1474" name="CheckpointProtocolRoundTripsComboAndRejectsInvalidIndices" fullname="MonsterSupergroup.NetworkCombat.Tests.LimboGhoulTests.CheckpointProtocolRoundTripsComboAndRejectsInvalidIndices" methodname="CheckpointProtocolRoundTripsComboAndRejectsInvalidIndices" classname="MonsterSupergroup.NetworkCombat.Tests.LimboGhoulTests" runstate="Runnable" seed="288306937" result="Passed" start-time="2026-09-16 15:09:46Z" end-time="2026-09-16 15:09:46Z" duration="0.008137" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[Ghoul full checkpoint bytes=280
+]]></output>
+              </test-case>
+              <test-case id="1471" name="ClockCorrectionCannotRewindAnAcceptedStrike" fullname="MonsterSupergroup.NetworkCombat.Tests.LimboGhoulTests.ClockCorrectionCannotRewindAnAcceptedStrike" methodname="ClockCorrectionCannotRewindAnAcceptedStrike" classname="MonsterSupergroup.NetworkCombat.Tests.LimboGhoulTests" runstate="Runnable" seed="21558542" result="Passed" start-time="2026-09-16 15:09:46Z" end-time="2026-09-16 15:09:46Z" duration="0.000293" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1470" name="ExpiredPoseCannotCreateHitForAnotherStrike" fullname="MonsterSupergroup.NetworkCombat.Tests.LimboGhoulTests.ExpiredPoseCannotCreateHitForAnotherStrike" methodname="ExpiredPoseCannotCreateHitForAnotherStrike" classname="MonsterSupergroup.NetworkCombat.Tests.LimboGhoulTests" runstate="Runnable" seed="429168160" result="Passed" start-time="2026-09-16 15:09:46Z" end-time="2026-09-16 15:09:46Z" duration="0.000317" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-suite type="ParameterizedMethod" id="1469" name="HandoffResolvesWholeComboWithoutIntermediateRecovery" fullname="MonsterSupergroup.NetworkCombat.Tests.LimboGhoulTests.HandoffResolvesWholeComboWithoutIntermediateRecovery" classname="MonsterSupergroup.NetworkCombat.Tests.LimboGhoulTests" runstate="Runnable" testcasecount="8" result="Passed" start-time="2026-09-16 15:09:46Z" end-time="2026-09-16 15:09:46Z" duration="0.007892" total="8" passed="8" failed="0" inconclusive="0" skipped="0" asserts="0">
+                <properties />
+                <test-case id="1461" name="HandoffResolvesWholeComboWithoutIntermediateRecovery(0.1d,0,Warning)" fullname="MonsterSupergroup.NetworkCombat.Tests.LimboGhoulTests.HandoffResolvesWholeComboWithoutIntermediateRecovery(0.1d,0,Warning)" methodname="HandoffResolvesWholeComboWithoutIntermediateRecovery" classname="MonsterSupergroup.NetworkCombat.Tests.LimboGhoulTests" runstate="Runnable" seed="1402398841" result="Passed" start-time="2026-09-16 15:09:46Z" end-time="2026-09-16 15:09:46Z" duration="0.000426" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1462" name="HandoffResolvesWholeComboWithoutIntermediateRecovery(0.4d,0,Active)" fullname="MonsterSupergroup.NetworkCombat.Tests.LimboGhoulTests.HandoffResolvesWholeComboWithoutIntermediateRecovery(0.4d,0,Active)" methodname="HandoffResolvesWholeComboWithoutIntermediateRecovery" classname="MonsterSupergroup.NetworkCombat.Tests.LimboGhoulTests" runstate="Runnable" seed="871011059" result="Passed" start-time="2026-09-16 15:09:46Z" end-time="2026-09-16 15:09:46Z" duration="0.000121" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1463" name="HandoffResolvesWholeComboWithoutIntermediateRecovery(0.6d,1,Warning)" fullname="MonsterSupergroup.NetworkCombat.Tests.LimboGhoulTests.HandoffResolvesWholeComboWithoutIntermediateRecovery(0.6d,1,Warning)" methodname="HandoffResolvesWholeComboWithoutIntermediateRecovery" classname="MonsterSupergroup.NetworkCombat.Tests.LimboGhoulTests" runstate="Runnable" seed="854305149" result="Passed" start-time="2026-09-16 15:09:46Z" end-time="2026-09-16 15:09:46Z" duration="0.000089" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1464" name="HandoffResolvesWholeComboWithoutIntermediateRecovery(1,1,Active)" fullname="MonsterSupergroup.NetworkCombat.Tests.LimboGhoulTests.HandoffResolvesWholeComboWithoutIntermediateRecovery(1,1,Active)" methodname="HandoffResolvesWholeComboWithoutIntermediateRecovery" classname="MonsterSupergroup.NetworkCombat.Tests.LimboGhoulTests" runstate="Runnable" seed="1205055109" result="Passed" start-time="2026-09-16 15:09:46Z" end-time="2026-09-16 15:09:46Z" duration="0.000082" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1465" name="HandoffResolvesWholeComboWithoutIntermediateRecovery(1.2d,2,Warning)" fullname="MonsterSupergroup.NetworkCombat.Tests.LimboGhoulTests.HandoffResolvesWholeComboWithoutIntermediateRecovery(1.2d,2,Warning)" methodname="HandoffResolvesWholeComboWithoutIntermediateRecovery" classname="MonsterSupergroup.NetworkCombat.Tests.LimboGhoulTests" runstate="Runnable" seed="842054860" result="Passed" start-time="2026-09-16 15:09:46Z" end-time="2026-09-16 15:09:46Z" duration="0.000091" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1466" name="HandoffResolvesWholeComboWithoutIntermediateRecovery(1.4d,2,Active)" fullname="MonsterSupergroup.NetworkCombat.Tests.LimboGhoulTests.HandoffResolvesWholeComboWithoutIntermediateRecovery(1.4d,2,Active)" methodname="HandoffResolvesWholeComboWithoutIntermediateRecovery" classname="MonsterSupergroup.NetworkCombat.Tests.LimboGhoulTests" runstate="Runnable" seed="640646200" result="Passed" start-time="2026-09-16 15:09:46Z" end-time="2026-09-16 15:09:46Z" duration="0.000080" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1467" name="HandoffResolvesWholeComboWithoutIntermediateRecovery(1.6d,2,Recovery)" fullname="MonsterSupergroup.NetworkCombat.Tests.LimboGhoulTests.HandoffResolvesWholeComboWithoutIntermediateRecovery(1.6d,2,Recovery)" methodname="HandoffResolvesWholeComboWithoutIntermediateRecovery" classname="MonsterSupergroup.NetworkCombat.Tests.LimboGhoulTests" runstate="Runnable" seed="79552107" result="Passed" start-time="2026-09-16 15:09:46Z" end-time="2026-09-16 15:09:46Z" duration="0.000074" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1468" name="HandoffResolvesWholeComboWithoutIntermediateRecovery(1.7d,2,Inactive)" fullname="MonsterSupergroup.NetworkCombat.Tests.LimboGhoulTests.HandoffResolvesWholeComboWithoutIntermediateRecovery(1.7d,2,Inactive)" methodname="HandoffResolvesWholeComboWithoutIntermediateRecovery" classname="MonsterSupergroup.NetworkCombat.Tests.LimboGhoulTests" runstate="Runnable" seed="613848196" result="Passed" start-time="2026-09-16 15:09:46Z" end-time="2026-09-16 15:09:46Z" duration="0.000078" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+              </test-suite>
+              <test-case id="1473" name="PreviewKeepsExactCutoffCountsAndFullGate" fullname="MonsterSupergroup.NetworkCombat.Tests.LimboGhoulTests.PreviewKeepsExactCutoffCountsAndFullGate" methodname="PreviewKeepsExactCutoffCountsAndFullGate" classname="MonsterSupergroup.NetworkCombat.Tests.LimboGhoulTests" runstate="Runnable" seed="2018183280" result="Passed" start-time="2026-09-16 15:09:46Z" end-time="2026-09-16 15:09:46Z" duration="0.093932" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1472" name="SourceBindingsAndGeometryAreIndependent" fullname="MonsterSupergroup.NetworkCombat.Tests.LimboGhoulTests.SourceBindingsAndGeometryAreIndependent" methodname="SourceBindingsAndGeometryAreIndependent" classname="MonsterSupergroup.NetworkCombat.Tests.LimboGhoulTests" runstate="Runnable" seed="601350364" result="Passed" start-time="2026-09-16 15:09:46Z" end-time="2026-09-16 15:09:46Z" duration="0.004329" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[Saving results to: C:/Users/ADMIN/AppData/LocalLow/DefaultCompany/Monster Supergroup\TestResults.xml
+]]></output>
+              </test-case>
+            </test-suite>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

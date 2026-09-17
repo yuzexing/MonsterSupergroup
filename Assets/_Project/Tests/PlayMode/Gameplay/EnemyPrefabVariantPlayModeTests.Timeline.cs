@@ -12,6 +12,89 @@ namespace MonsterSupergroup.Gameplay.Tests
 {
     public sealed partial class EnemyPrefabVariantPlayModeTests
     {
+        private EnemyController SpawnMotionGhoul()
+        {
+            var rules=Resources.Load<GameplayWaveRules>("LimboReference/GhoulFixture");
+            Assert.That(rules.TryCapture(out var plan,out var error),Is.True,error);
+            var root=Object.Instantiate(plan.Prefabs[plan.Reference.Clips[0].PrefabIndex],
+                Owner.transform.position+new Vector3(15,10),Quaternion.identity);
+            var agent=root.GetComponent<NetworkEnemySimulationAgent>();
+            agent.ConfigureBirth(new EnemyBirthParameters { Enabled=true,SourceEnemy="Ghoul",Health=50,Damage=50,
+                Speed=6,SpeedMultiplier=1,Wind=1,Knockback=1,Xp=9,Counted=true,ResetOnReposition=true });
+            agent.ConfigureInitialServerTarget(Owner.netId); NetworkServer.Spawn(root);
+            return root.GetComponent<EnemyController>();
+        }
+
+        [UnityTest]
+        public IEnumerator SharedGhoulControllerDrivesThreeWarningStepsButLocalReplicaNeverMovesBody()
+        {
+            var enemy=SpawnMotionGhoul(); yield return WaitFor(()=>Ready(enemy));
+            var agent=enemy.GetComponent<NetworkEnemySimulationAgent>();
+            var playback=enemy.GetComponent<NetworkEnemyMeleeReplica>();
+            var attack=enemy.GetComponent<SequenceEnemyAttack>();
+            enemy.SuspendSimulationExecution(); agent.enabled=false; enemy.enabled=false; playback.enabled=false;
+            double clock=EnemySimulationClock.CombatNow;
+            enemy.ConfigureSimulationClock(()=>clock,agent.Assignment.Epoch);
+            attack.enemyAnimator=enemy.enemyAnimator;
+            var state=EnemyActionTimeline.Begin(730,clock,attack.TimelineStrikes,attack.RecoveryTime,.5f,Vector2.left,Owner.transform.position);
+            attack.PrepareTimeline(ref state); enemy.RestoreSimulationAction(state,clock);
+            byte seen=0; var origin=enemy.rigidBody.position;
+            for(int i=0;i<84;i++)
+            {
+                yield return new WaitForFixedUpdate(); clock+=.02;
+                enemy.TickSharedAction(); state=enemy.CaptureSimulationAction(clock);
+                seen|=state.WarningStep.StartedMask;
+            }
+            Assert.That(seen,Is.EqualTo(7)); Assert.That(state.WarningStep.CompletedMask,Is.EqualTo(7));
+            Assert.That(Vector2.Distance(enemy.rigidBody.position,origin),Is.GreaterThan(.4));
+            // Presentation may borrow a warning/hit object, but cannot invoke motion.
+            enemy.SuspendSimulationExecution(); enemy.rigidBody.linearVelocity=Vector2.zero;
+            agent.Authority.ApplyRole(EnemySimulationRole.Replica,999,Owner.netId,agent.Assignment.Epoch);
+            origin=enemy.rigidBody.position;
+            state=EnemyActionTimeline.Begin(731,clock,attack.TimelineStrikes,attack.RecoveryTime,.5f,Vector2.left,Owner.transform.position);
+            for(int i=0;i<8;i++)
+            { playback.ApplyAction(state,agent.Assignment.Epoch,clock+i*.02); yield return new WaitForFixedUpdate(); }
+            Assert.That(Vector2.Distance(enemy.rigidBody.position,origin),Is.LessThan(.001));
+            NetworkServer.Destroy(enemy.gameObject);
+        }
+
+        [UnityTest]
+        public IEnumerator GhoulBirthMovementKeepsLeftFacingAndAdvancesFramesBeforeFirstAttack()
+        {
+            var rules = Resources.Load<GameplayWaveRules>("LimboReference/GhoulFixture");
+            Assert.That(rules.TryCapture(out var plan, out var error), Is.True, error);
+            var root = Object.Instantiate(plan.Prefabs[plan.Reference.Clips[0].PrefabIndex],
+                Owner.transform.position + new Vector3(15, 10, 0), Quaternion.identity);
+            var agent = root.GetComponent<NetworkEnemySimulationAgent>();
+            agent.ConfigureBirth(new EnemyBirthParameters { Enabled = true, SourceEnemy = "Ghoul",
+                Health = 50, Damage = 50, Speed = 6, SpeedMultiplier = 1, Wind = 1, Knockback = 1, Xp = 9,
+                Counted = true, ResetOnReposition = true });
+            agent.ConfigureInitialServerTarget(Owner.netId);
+            NetworkServer.Spawn(root);
+            var enemy = root.GetComponent<EnemyController>();
+            yield return WaitFor(() => Ready(enemy));
+            var animator = enemy.enemyAnimator;
+            // Batch-mode has no rendering camera. Evaluate the actual sprite bindings even
+            // though the production Animator correctly culls off-screen presentation.
+            animator.animancer.Animator.cullingMode = AnimatorCullingMode.AlwaysAnimate;
+            var sprites = new System.Collections.Generic.HashSet<Sprite>();
+            double maximumTime = 0;
+            var origin = root.transform.position;
+            for (int frame = 0; frame < 36; frame++)
+            {
+                yield return null;
+                Assert.That(enemy.CaptureSimulationAction(EnemySimulationClock.CombatNow).ActionId, Is.Zero);
+                Assert.That(animator.animancer.Layers[0].CurrentState?.Clip, Is.SameAs(animator.MoveLeftDown.Clip),
+                    "The previous frame's empty attack must not overwrite real leftward locomotion.");
+                maximumTime = System.Math.Max(maximumTime, animator.animancer.Layers[0].CurrentState.TimeD);
+                sprites.Add(enemy.spriteRenderer.sprite);
+            }
+            Assert.That(root.transform.position.x, Is.LessThan(origin.x));
+            Assert.That(maximumTime, Is.GreaterThan(.1));
+            Assert.That(sprites.Count, Is.GreaterThan(1), "Movement must change the actual rendered sprite, not only select a clip.");
+            NetworkServer.Destroy(root);
+        }
+
         [UnityTest]
         public IEnumerator LostSoulCancellationRestoresLocalBodyAfterActiveWithoutReplayingDamage()
         {

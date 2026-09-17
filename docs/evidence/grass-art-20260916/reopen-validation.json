@@ -1,0 +1,13 @@
+{
+    "id": "validate.grass-art",
+    "startedUtc": "2026-09-16T15:35:17.4149270Z",
+    "error": "",
+    "report": "F:\\UnityStore\\MonsterSupergroup\\Logs\\GrassArtReplacement\\reopen-validation.json",
+    "log": "F:\\UnityStore\\MonsterSupergroup\\Logs/ProjectTools\\20260916-233517-409-validate.grass-art\\tool.log",
+    "success": true,
+    "pending": false,
+    "durationSeconds": 15.607905599999999,
+    "artifacts": [
+        "Logs/GrassArtReplacement"
+    ]
+}

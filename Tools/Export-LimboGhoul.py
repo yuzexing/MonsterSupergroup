@@ -15,6 +15,9 @@ def field(data, name):
     return next(v for k,v in data.get('fields',data).items() if k.split('::')[-1]==name)
 attack = objects[p['attackId']]['data']
 animator = objects[p['animatorId']]['data']
+step = next(o for o in objects.values() if o['type'].endswith('.EnemyWarningStep') and o['path']==p['prefab'])
+warning_step = dict(objectId=step['id'], attackId=field(step['data'],'_attackMelee')['reference'],
+    rigidbodyId=field(step['data'],'_rigidbody')['reference'], stepDistance=field(step['data'],'stepDistance'))
 geometry=[]
 for group, prefix in [('body',p['prefab']),('attack',field(attack,'attackPrefab')['path'])]:
     for o in objects.values():
@@ -30,6 +33,7 @@ data=dict(schemaVersion=1,sourceSha256=hashlib.sha256(path.read_bytes()).hexdige
     controllerId=p['controllerId'],attackId=p['attackId'],animatorId=p['animatorId'],
     cooldown=p['controller']['attackCooldown'],triggerDistance=p['controller']['attackDistance'],
     consecutiveAttacks=field(attack,'consecutiveAttacks'),
+    warningStep=warning_step,
     areaSideWarpDistance={axis:field(field(attack,'areaSideWarpDistance'),axis) for axis in ('x','y','z')},
     extraStageTimes=p['extraStageTimes'],bindings=p['bindings'],attackSets=field(animator,'attackSets'),
     geometry=geometry,variants=enemy['databaseValues'],previewEnd=599.9666666666667,
@@ -44,9 +48,15 @@ if not (out/'GhoulAdapted.json').exists(): (out/'GhoulAdapted.json').write_text(
 else:
     adapted_path=out/'GhoulAdapted.json'
     adapted=json.loads(adapted_path.read_text(encoding='utf-8'))
+    changed = False
+    if 'warningStep' not in adapted:
+        adapted['warningStep'] = warning_step
+        changed = True
     # Migrate the earlier raw Vector3 representation without changing its adapted values.
     offset=adapted['areaSideWarpDistance']
     if 'fields' in offset:
         adapted['areaSideWarpDistance']={axis:field(offset,axis) for axis in ('x','y','z')}
+        changed = True
+    if changed:
         adapted_path.write_text(json.dumps(adapted,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
 print('Ghoul source extracted; adaptation preserved.')

@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="7" result="Passed" total="7" passed="7" failed="0" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-09-16 15:02:35Z" end-time="2026-09-16 15:02:49Z" duration="13.5177348">
+  <test-suite type="TestSuite" id="1651" name="Monster Supergroup" fullname="Monster Supergroup" runstate="Runnable" testcasecount="543" result="Passed" start-time="2026-09-16 15:02:35Z" end-time="2026-09-16 15:02:49Z" duration="13.517735" total="7" passed="7" failed="0" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="PlayMode" />
+    </properties>
+    <test-suite type="Assembly" id="1635" name="MonsterSupergroup.Gameplay.Tests.PlayMode.dll" fullname="F:/UnityStore/MonsterSupergroup_validation_motion_20260916/Library/ScriptAssemblies/MonsterSupergroup.Gameplay.Tests.PlayMode.dll" runstate="Runnable" testcasecount="539" result="Passed" start-time="2026-09-16 15:02:35Z" end-time="2026-09-16 15:02:49Z" duration="13.505756" total="7" passed="7" failed="0" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="104244" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="PlayMode" />
+        <property name="EditorOnly" value="False" />
+      </properties>
+      <test-suite type="TestSuite" id="1636" name="MonsterSupergroup" fullname="MonsterSupergroup" runstate="Runnable" testcasecount="539" result="Passed" start-time="2026-09-16 15:02:35Z" end-time="2026-09-16 15:02:49Z" duration="13.497107" total="7" passed="7" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-suite type="TestSuite" id="1637" name="Gameplay" fullname="MonsterSupergroup.Gameplay" runstate="Runnable" testcasecount="539" result="Passed" start-time="2026-09-16 15:02:35Z" end-time="2026-09-16 15:02:49Z" duration="13.480285" total="7" passed="7" failed="0" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <test-suite type="TestSuite" id="1638" name="Tests" fullname="MonsterSupergroup.Gameplay.Tests" runstate="Runnable" testcasecount="539" result="Passed" start-time="2026-09-16 15:02:35Z" end-time="2026-09-16 15:02:49Z" duration="13.473095" total="7" passed="7" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-suite type="TestFixture" id="1168" name="EnemyPrefabVariantPlayModeTests" fullname="MonsterSupergroup.Gameplay.Tests.EnemyPrefabVariantPlayModeTests" classname="MonsterSupergroup.Gameplay.Tests.EnemyPrefabVariantPlayModeTests" runstate="Runnable" testcasecount="22" result="Passed" start-time="2026-09-16 15:02:35Z" end-time="2026-09-16 15:02:42Z" duration="6.320989" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1180" name="SharedGhoulControllerDrivesThreeWarningStepsButLocalReplicaNeverMovesBody" fullname="MonsterSupergroup.Gameplay.Tests.EnemyPrefabVariantPlayModeTests.SharedGhoulControllerDrivesThreeWarningStepsButLocalReplicaNeverMovesBody" methodname="SharedGhoulControllerDrivesThreeWarningStepsButLocalReplicaNeverMovesBody" classname="MonsterSupergroup.Gameplay.Tests.EnemyPrefabVariantPlayModeTests" runstate="Runnable" seed="1280474801" result="Passed" start-time="2026-09-16 15:02:35Z" end-time="2026-09-16 15:02:42Z" duration="6.308004" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[[Localization] Applied locale=zh-CN revision=2
+[NetworkBackend] backend=Kcp purpose=Test source=test-runner transport=KcpTransport.
+--- Hardware Info ---
+CPU Model: 13th Gen Intel(R) Core(TM) i7-13700KF
+GPU Model: Null Device
+RAM: 65375 MB
+Install Disk Model: JZ-SSD4T-XW
+Main Monitor Model: Unknown Monitor
+---------------------
+Normal : True
+UI : False
+AstralShift.HellMaiden.Controllers.PlayerController_HMD
+<color=yellow><b>► Controllers: </b></color>Controller type AstralShift.Control.Controllers.NoInputGameController not available
+Server listening on port 7986
+[BootGameplay] Server starting; loading 'Assets/_Project/Scenes/Gameplay.unity'.
+[BootGameplay] Server connection 0 is ready.
+[BootGameplay] Queued Player for connection 0.
+[BootGameplay] Gameplay scene ready: 'Assets/_Project/Scenes/Gameplay.unity'.
+[BootGameplay] Spawned Player NetworkPlayer [connId=0] in 'Assets/_Project/Scenes/Gameplay.unity'.
+<color=yellow><b>► Controllers: </b></color>Overrode <color=yellow><b></b></color> with <color=yellow><b>PlayerController_HMD</b></color>.
+Normal : True
+UI : False
+[BootGameplay] Client stopping; serverActive=True.
+[BootGameplay] Server stopping.
+[BootGameplay] Gameplay unload requested.
+There are 2 audio listeners in the scene. Please ensure there is always exactly one audio listener in the scene.
+[SteamInvite] stage=cleanup lobby=0 host=0 phase=Disabled reason=
+]]></output>
+              </test-case>
+            </test-suite>
+            <test-suite type="TestFixture" id="1291" name="GhoulWarningStepTests" fullname="MonsterSupergroup.Gameplay.Tests.GhoulWarningStepTests" classname="MonsterSupergroup.Gameplay.Tests.GhoulWarningStepTests" runstate="Runnable" testcasecount="6" result="Passed" start-time="2026-09-16 15:02:42Z" end-time="2026-09-16 15:02:49Z" duration="7.129751" total="6" passed="6" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1296" name="HandoffPreservesPendingPositionAndDoesNotReplayAnExpiredWarningExit" fullname="MonsterSupergroup.Gameplay.Tests.GhoulWarningStepTests.HandoffPreservesPendingPositionAndDoesNotReplayAnExpiredWarningExit" methodname="HandoffPreservesPendingPositionAndDoesNotReplayAnExpiredWarningExit" classname="MonsterSupergroup.Gameplay.Tests.GhoulWarningStepTests" runstate="Runnable" seed="1753500190" result="Passed" start-time="2026-09-16 15:02:42Z" end-time="2026-09-16 15:02:42Z" duration="0.068172" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1295" name="PauseAndRepeatedTimeDoNotStepAndCancelDiscardsPendingMove" fullname="MonsterSupergroup.Gameplay.Tests.GhoulWarningStepTests.PauseAndRepeatedTimeDoNotStepAndCancelDiscardsPendingMove" methodname="PauseAndRepeatedTimeDoNotStepAndCancelDiscardsPendingMove" classname="MonsterSupergroup.Gameplay.Tests.GhoulWarningStepTests" runstate="Runnable" seed="2114783147" result="Passed" start-time="2026-09-16 15:02:42Z" end-time="2026-09-16 15:02:42Z" duration="0.065116" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1294" name="SourceRequestsAt144Fps" fullname="MonsterSupergroup.Gameplay.Tests.GhoulWarningStepTests.SourceRequestsAt144Fps" methodname="SourceRequestsAt144Fps" classname="MonsterSupergroup.Gameplay.Tests.GhoulWarningStepTests" runstate="Runnable" seed="774655968" result="Passed" start-time="2026-09-16 15:02:42Z" end-time="2026-09-16 15:02:46Z" duration="4.100624" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[Controlled render=144, physics=50Hz, displacement=(4.99, 3.91); frame dependent by source design.
+]]></output>
+              </test-case>
+              <test-case id="1292" name="SourceRequestsAt30Fps" fullname="MonsterSupergroup.Gameplay.Tests.GhoulWarningStepTests.SourceRequestsAt30Fps" methodname="SourceRequestsAt30Fps" classname="MonsterSupergroup.Gameplay.Tests.GhoulWarningStepTests" runstate="Runnable" seed="1104750630" result="Passed" start-time="2026-09-16 15:02:46Z" end-time="2026-09-16 15:02:47Z" duration="0.882363" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[Controlled render=30, physics=50Hz, displacement=(2.91, 2.38); frame dependent by source design.
+]]></output>
+              </test-case>
+              <test-case id="1293" name="SourceRequestsAt60Fps" fullname="MonsterSupergroup.Gameplay.Tests.GhoulWarningStepTests.SourceRequestsAt60Fps" methodname="SourceRequestsAt60Fps" classname="MonsterSupergroup.Gameplay.Tests.GhoulWarningStepTests" runstate="Runnable" seed="1909350979" result="Passed" start-time="2026-09-16 15:02:47Z" end-time="2026-09-16 15:02:48Z" duration="1.733236" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[Controlled render=60, physics=50Hz, displacement=(4.84, 3.64); frame dependent by source design.
+]]></output>
+              </test-case>
+              <test-case id="1297" name="WarningRequestsRemainSubjectToActualPhysicsCollision" fullname="MonsterSupergroup.Gameplay.Tests.GhoulWarningStepTests.WarningRequestsRemainSubjectToActualPhysicsCollision" methodname="WarningRequestsRemainSubjectToActualPhysicsCollision" classname="MonsterSupergroup.Gameplay.Tests.GhoulWarningStepTests" runstate="Runnable" seed="1696888466" result="Passed" start-time="2026-09-16 15:02:48Z" end-time="2026-09-16 15:02:49Z" duration="0.266967" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[Saving results to: C:/Users/ADMIN/AppData/LocalLow/DefaultCompany/Monster Supergroup\TestResults.xml
+]]></output>
+              </test-case>
+            </test-suite>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

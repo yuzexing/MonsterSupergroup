@@ -1,0 +1,1311 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="74" result="Passed" total="74" passed="74" failed="0" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-09-16 15:06:02Z" end-time="2026-09-16 15:07:09Z" duration="66.7712243">
+  <test-suite type="TestSuite" id="1651" name="Monster Supergroup" fullname="Monster Supergroup" runstate="Runnable" testcasecount="543" result="Passed" start-time="2026-09-16 15:06:02Z" end-time="2026-09-16 15:07:09Z" duration="66.771224" total="74" passed="74" failed="0" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="PlayMode" />
+    </properties>
+    <test-suite type="Assembly" id="1635" name="MonsterSupergroup.Gameplay.Tests.PlayMode.dll" fullname="F:/UnityStore/MonsterSupergroup_validation_motion_20260916/Library/ScriptAssemblies/MonsterSupergroup.Gameplay.Tests.PlayMode.dll" runstate="Runnable" testcasecount="539" result="Passed" start-time="2026-09-16 15:06:03Z" end-time="2026-09-16 15:07:09Z" duration="66.759872" total="74" passed="74" failed="0" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="92808" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="PlayMode" />
+        <property name="EditorOnly" value="False" />
+      </properties>
+      <test-suite type="TestSuite" id="1636" name="MonsterSupergroup" fullname="MonsterSupergroup" runstate="Runnable" testcasecount="539" result="Passed" start-time="2026-09-16 15:06:03Z" end-time="2026-09-16 15:07:09Z" duration="66.757622" total="74" passed="74" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-suite type="TestSuite" id="1637" name="Gameplay" fullname="MonsterSupergroup.Gameplay" runstate="Runnable" testcasecount="539" result="Passed" start-time="2026-09-16 15:06:03Z" end-time="2026-09-16 15:07:09Z" duration="66.747273" total="74" passed="74" failed="0" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <test-suite type="TestSuite" id="1638" name="Tests" fullname="MonsterSupergroup.Gameplay.Tests" runstate="Runnable" testcasecount="539" result="Passed" start-time="2026-09-16 15:06:03Z" end-time="2026-09-16 15:07:09Z" duration="66.738854" total="74" passed="74" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-suite type="TestFixture" id="1116" name="DashNativeAttackLifetimeTests" fullname="MonsterSupergroup.Gameplay.Tests.DashNativeAttackLifetimeTests" classname="MonsterSupergroup.Gameplay.Tests.DashNativeAttackLifetimeTests" runstate="Runnable" testcasecount="16" result="Passed" start-time="2026-09-16 15:06:03Z" end-time="2026-09-16 15:06:04Z" duration="1.546868" total="16" passed="16" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1132" name="AgedReplicaResumesExistingTailWithoutRestartingEmission" fullname="MonsterSupergroup.Gameplay.Tests.DashNativeAttackLifetimeTests.AgedReplicaResumesExistingTailWithoutRestartingEmission" methodname="AgedReplicaResumesExistingTailWithoutRestartingEmission" classname="MonsterSupergroup.Gameplay.Tests.DashNativeAttackLifetimeTests" runstate="Runnable" seed="1367290449" result="Passed" start-time="2026-09-16 15:06:03Z" end-time="2026-09-16 15:06:03Z" duration="0.561366" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[[Localization] Applied locale=zh-CN revision=2
+]]></output>
+              </test-case>
+              <test-case id="1124" name="CancellationInsideSpawnDoesNotActivateOrLeakTheCheckedOutTrail" fullname="MonsterSupergroup.Gameplay.Tests.DashNativeAttackLifetimeTests.CancellationInsideSpawnDoesNotActivateOrLeakTheCheckedOutTrail" methodname="CancellationInsideSpawnDoesNotActivateOrLeakTheCheckedOutTrail" classname="MonsterSupergroup.Gameplay.Tests.DashNativeAttackLifetimeTests" runstate="Runnable" seed="1344432033" result="Passed" start-time="2026-09-16 15:06:03Z" end-time="2026-09-16 15:06:03Z" duration="0.007046" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1126" name="CancellingOldUsePreservesNewRootAndRepeatedCancelDoesNotDoubleReturn" fullname="MonsterSupergroup.Gameplay.Tests.DashNativeAttackLifetimeTests.CancellingOldUsePreservesNewRootAndRepeatedCancelDoesNotDoubleReturn" methodname="CancellingOldUsePreservesNewRootAndRepeatedCancelDoesNotDoubleReturn" classname="MonsterSupergroup.Gameplay.Tests.DashNativeAttackLifetimeTests" runstate="Runnable" seed="170845880" result="Passed" start-time="2026-09-16 15:06:03Z" end-time="2026-09-16 15:06:03Z" duration="0.005935" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1125" name="ExternalTrailDisableAndDisabledWeaponParentCancelSynchronously" fullname="MonsterSupergroup.Gameplay.Tests.DashNativeAttackLifetimeTests.ExternalTrailDisableAndDisabledWeaponParentCancelSynchronously" methodname="ExternalTrailDisableAndDisabledWeaponParentCancelSynchronously" classname="MonsterSupergroup.Gameplay.Tests.DashNativeAttackLifetimeTests" runstate="Runnable" seed="1601276339" result="Passed" start-time="2026-09-16 15:06:03Z" end-time="2026-09-16 15:06:03Z" duration="0.016107" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1118" name="OneDashUseTriggersAllEquippedDashWeaponsWithoutConsumingResourcesAgain" fullname="MonsterSupergroup.Gameplay.Tests.DashNativeAttackLifetimeTests.OneDashUseTriggersAllEquippedDashWeaponsWithoutConsumingResourcesAgain" methodname="OneDashUseTriggersAllEquippedDashWeaponsWithoutConsumingResourcesAgain" classname="MonsterSupergroup.Gameplay.Tests.DashNativeAttackLifetimeTests" runstate="Runnable" seed="1980433828" result="Passed" start-time="2026-09-16 15:06:03Z" end-time="2026-09-16 15:06:03Z" duration="0.001641" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1117" name="OnlyCommittedDashSignalsStartRootsAndEachUseStartsOncePerWeapon" fullname="MonsterSupergroup.Gameplay.Tests.DashNativeAttackLifetimeTests.OnlyCommittedDashSignalsStartRootsAndEachUseStartsOncePerWeapon" methodname="OnlyCommittedDashSignalsStartRootsAndEachUseStartsOncePerWeapon" classname="MonsterSupergroup.Gameplay.Tests.DashNativeAttackLifetimeTests" runstate="Runnable" seed="1505741173" result="Passed" start-time="2026-09-16 15:06:03Z" end-time="2026-09-16 15:06:03Z" duration="0.003176" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1127" name="PoolReuseClearsOldPointsCallbacksAndSnapshots" fullname="MonsterSupergroup.Gameplay.Tests.DashNativeAttackLifetimeTests.PoolReuseClearsOldPointsCallbacksAndSnapshots" methodname="PoolReuseClearsOldPointsCallbacksAndSnapshots" classname="MonsterSupergroup.Gameplay.Tests.DashNativeAttackLifetimeTests" runstate="Runnable" seed="585204021" result="Passed" start-time="2026-09-16 15:06:03Z" end-time="2026-09-16 15:06:03Z" duration="0.003225" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1120" name="RealPhysicsHitsUseFrozenNativeDamageAndOriginalSpeedInterval" fullname="MonsterSupergroup.Gameplay.Tests.DashNativeAttackLifetimeTests.RealPhysicsHitsUseFrozenNativeDamageAndOriginalSpeedInterval" methodname="RealPhysicsHitsUseFrozenNativeDamageAndOriginalSpeedInterval" classname="MonsterSupergroup.Gameplay.Tests.DashNativeAttackLifetimeTests" runstate="Runnable" seed="591474638" result="Passed" start-time="2026-09-16 15:06:03Z" end-time="2026-09-16 15:06:03Z" duration="0.252294" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1123" name="RejectionDuringNativeStartStopsBeforePresentationAndCompletesRoot" fullname="MonsterSupergroup.Gameplay.Tests.DashNativeAttackLifetimeTests.RejectionDuringNativeStartStopsBeforePresentationAndCompletesRoot" methodname="RejectionDuringNativeStartStopsBeforePresentationAndCompletesRoot" classname="MonsterSupergroup.Gameplay.Tests.DashNativeAttackLifetimeTests" runstate="Runnable" seed="756916624" result="Passed" start-time="2026-09-16 15:06:03Z" end-time="2026-09-16 15:06:03Z" duration="0.001438" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1131" name="ReplicaParentDisableImmediatelyCancelsDetachedTrails" fullname="MonsterSupergroup.Gameplay.Tests.DashNativeAttackLifetimeTests.ReplicaParentDisableImmediatelyCancelsDetachedTrails" methodname="ReplicaParentDisableImmediatelyCancelsDetachedTrails" classname="MonsterSupergroup.Gameplay.Tests.DashNativeAttackLifetimeTests" runstate="Runnable" seed="1732915095" result="Passed" start-time="2026-09-16 15:06:03Z" end-time="2026-09-16 15:06:03Z" duration="0.000931" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1130" name="ReplicaRejectsDuplicateOutOfOrderAndMalformedPointsWithoutMutation" fullname="MonsterSupergroup.Gameplay.Tests.DashNativeAttackLifetimeTests.ReplicaRejectsDuplicateOutOfOrderAndMalformedPointsWithoutMutation" methodname="ReplicaRejectsDuplicateOutOfOrderAndMalformedPointsWithoutMutation" classname="MonsterSupergroup.Gameplay.Tests.DashNativeAttackLifetimeTests" runstate="Runnable" seed="1223445314" result="Passed" start-time="2026-09-16 15:06:03Z" end-time="2026-09-16 15:06:03Z" duration="0.001498" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1129" name="ReplicaWaitsForReliablePointsAndNeverSamplesOrCreatesGameplay" fullname="MonsterSupergroup.Gameplay.Tests.DashNativeAttackLifetimeTests.ReplicaWaitsForReliablePointsAndNeverSamplesOrCreatesGameplay" methodname="ReplicaWaitsForReliablePointsAndNeverSamplesOrCreatesGameplay" classname="MonsterSupergroup.Gameplay.Tests.DashNativeAttackLifetimeTests" runstate="Runnable" seed="1758794354" result="Passed" start-time="2026-09-16 15:06:03Z" end-time="2026-09-16 15:06:03Z" duration="0.024782" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1121" name="SamplingDurationAndSegmentLifetimeAreFrozenAndNaturalParticleTailRetainsRoot" fullname="MonsterSupergroup.Gameplay.Tests.DashNativeAttackLifetimeTests.SamplingDurationAndSegmentLifetimeAreFrozenAndNaturalParticleTailRetainsRoot" methodname="SamplingDurationAndSegmentLifetimeAreFrozenAndNaturalParticleTailRetainsRoot" classname="MonsterSupergroup.Gameplay.Tests.DashNativeAttackLifetimeTests" runstate="Runnable" seed="1558991901" result="Passed" start-time="2026-09-16 15:06:03Z" end-time="2026-09-16 15:06:04Z" duration="0.644810" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1119" name="SourceProjectionSamplesAtMostOneWorldPointAndKeepsOriginalStepLength" fullname="MonsterSupergroup.Gameplay.Tests.DashNativeAttackLifetimeTests.SourceProjectionSamplesAtMostOneWorldPointAndKeepsOriginalStepLength" methodname="SourceProjectionSamplesAtMostOneWorldPointAndKeepsOriginalStepLength" classname="MonsterSupergroup.Gameplay.Tests.DashNativeAttackLifetimeTests" runstate="Runnable" seed="1644904690" result="Passed" start-time="2026-09-16 15:06:04Z" end-time="2026-09-16 15:06:04Z" duration="0.002941" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1128" name="UnequipRemovesDashSubscriptionAndPreventsSameFrameOldWeaponAttack" fullname="MonsterSupergroup.Gameplay.Tests.DashNativeAttackLifetimeTests.UnequipRemovesDashSubscriptionAndPreventsSameFrameOldWeaponAttack" methodname="UnequipRemovesDashSubscriptionAndPreventsSameFrameOldWeaponAttack" classname="MonsterSupergroup.Gameplay.Tests.DashNativeAttackLifetimeTests" runstate="Runnable" seed="1314984459" result="Passed" start-time="2026-09-16 15:06:04Z" end-time="2026-09-16 15:06:04Z" duration="0.001052" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1122" name="ZeroDurationWithNoPointsClosesSamplingAndRootImmediately" fullname="MonsterSupergroup.Gameplay.Tests.DashNativeAttackLifetimeTests.ZeroDurationWithNoPointsClosesSamplingAndRootImmediately" methodname="ZeroDurationWithNoPointsClosesSamplingAndRootImmediately" classname="MonsterSupergroup.Gameplay.Tests.DashNativeAttackLifetimeTests" runstate="Runnable" seed="122601021" result="Passed" start-time="2026-09-16 15:06:04Z" end-time="2026-09-16 15:06:04Z" duration="0.000913" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+            </test-suite>
+            <test-suite type="TestFixture" id="1147" name="EnemyHandoffGameplayTests" fullname="MonsterSupergroup.Gameplay.Tests.EnemyHandoffGameplayTests" classname="MonsterSupergroup.Gameplay.Tests.EnemyHandoffGameplayTests" runstate="Runnable" testcasecount="5" result="Passed" start-time="2026-09-16 15:06:04Z" end-time="2026-09-16 15:06:15Z" duration="10.794488" total="5" passed="5" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1149" name="CanonicalEnemyDeathRejectsItsFirstSnapshotBeforeTheBodyReceivesTheDeathBatch" fullname="MonsterSupergroup.Gameplay.Tests.EnemyHandoffGameplayTests.CanonicalEnemyDeathRejectsItsFirstSnapshotBeforeTheBodyReceivesTheDeathBatch" methodname="CanonicalEnemyDeathRejectsItsFirstSnapshotBeforeTheBodyReceivesTheDeathBatch" classname="MonsterSupergroup.Gameplay.Tests.EnemyHandoffGameplayTests" runstate="Runnable" seed="996286089" result="Passed" start-time="2026-09-16 15:06:04Z" end-time="2026-09-16 15:06:08Z" duration="4.252806" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[[NetworkBackend] backend=Kcp purpose=Test source=test-runner transport=KcpTransport.
+--- Hardware Info ---
+CPU Model: 13th Gen Intel(R) Core(TM) i7-13700KF
+GPU Model: Null Device
+RAM: 65375 MB
+Install Disk Model: JZ-SSD4T-XW
+Main Monitor Model: Unknown Monitor
+---------------------
+Normal : True
+UI : False
+AstralShift.HellMaiden.Controllers.PlayerController_HMD
+<color=yellow><b>► Controllers: </b></color>Controller type AstralShift.Control.Controllers.NoInputGameController not available
+Server listening on port 7992
+[BootGameplay] Server starting; loading 'Assets/_Project/Scenes/Gameplay.unity'.
+[BootGameplay] Server connection 0 is ready.
+[BootGameplay] Queued Player for connection 0.
+[BootGameplay] Gameplay scene ready: 'Assets/_Project/Scenes/Gameplay.unity'.
+[BootGameplay] Spawned Player NetworkPlayer [connId=0] in 'Assets/_Project/Scenes/Gameplay.unity'.
+<color=yellow><b>► Controllers: </b></color>Overrode <color=yellow><b></b></color> with <color=yellow><b>PlayerController_HMD</b></color>.
+Normal : True
+UI : False
+[BootGameplay] Client stopping; serverActive=True.
+[BootGameplay] Server stopping.
+[BootGameplay] Gameplay unload requested.
+There are 2 audio listeners in the scene. Please ensure there is always exactly one audio listener in the scene.
+[SteamInvite] stage=cleanup lobby=0 host=0 phase=Disabled reason=
+]]></output>
+              </test-case>
+              <test-case id="1151" name="DashCheckpointRestoresMotionOnlyInsideRemainingActiveWindow" fullname="MonsterSupergroup.Gameplay.Tests.EnemyHandoffGameplayTests.DashCheckpointRestoresMotionOnlyInsideRemainingActiveWindow" methodname="DashCheckpointRestoresMotionOnlyInsideRemainingActiveWindow" classname="MonsterSupergroup.Gameplay.Tests.EnemyHandoffGameplayTests" runstate="Runnable" seed="1070727610" result="Passed" start-time="2026-09-16 15:06:08Z" end-time="2026-09-16 15:06:10Z" duration="1.577505" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[[NetworkBackend] backend=Kcp purpose=Test source=test-runner transport=KcpTransport.
+--- Hardware Info ---
+CPU Model: 13th Gen Intel(R) Core(TM) i7-13700KF
+GPU Model: Null Device
+RAM: 65375 MB
+Install Disk Model: JZ-SSD4T-XW
+Main Monitor Model: Unknown Monitor
+---------------------
+Normal : True
+UI : False
+AstralShift.HellMaiden.Controllers.PlayerController_HMD
+<color=yellow><b>► Controllers: </b></color>Controller type AstralShift.Control.Controllers.NoInputGameController not available
+Server listening on port 7992
+[BootGameplay] Server starting; loading 'Assets/_Project/Scenes/Gameplay.unity'.
+[BootGameplay] Server connection 0 is ready.
+[BootGameplay] Queued Player for connection 0.
+[BootGameplay] Gameplay scene ready: 'Assets/_Project/Scenes/Gameplay.unity'.
+[BootGameplay] Spawned Player NetworkPlayer [connId=0] in 'Assets/_Project/Scenes/Gameplay.unity'.
+<color=yellow><b>► Controllers: </b></color>Overrode <color=yellow><b></b></color> with <color=yellow><b>PlayerController_HMD</b></color>.
+Normal : True
+UI : False
+[BootGameplay] Client stopping; serverActive=True.
+[BootGameplay] Server stopping.
+[BootGameplay] Gameplay unload requested.
+There are 2 audio listeners in the scene. Please ensure there is always exactly one audio listener in the scene.
+[SteamInvite] stage=cleanup lobby=0 host=0 phase=Disabled reason=
+]]></output>
+              </test-case>
+              <test-case id="1148" name="HostFirstFrameIsAcknowledgedAndDownedTargetFreezesThenRestores" fullname="MonsterSupergroup.Gameplay.Tests.EnemyHandoffGameplayTests.HostFirstFrameIsAcknowledgedAndDownedTargetFreezesThenRestores" methodname="HostFirstFrameIsAcknowledgedAndDownedTargetFreezesThenRestores" classname="MonsterSupergroup.Gameplay.Tests.EnemyHandoffGameplayTests" runstate="Runnable" seed="907091536" result="Passed" start-time="2026-09-16 15:06:10Z" end-time="2026-09-16 15:06:12Z" duration="1.750747" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[[NetworkBackend] backend=Kcp purpose=Test source=test-runner transport=KcpTransport.
+--- Hardware Info ---
+CPU Model: 13th Gen Intel(R) Core(TM) i7-13700KF
+GPU Model: Null Device
+RAM: 65375 MB
+Install Disk Model: JZ-SSD4T-XW
+Main Monitor Model: Unknown Monitor
+---------------------
+Normal : True
+UI : False
+AstralShift.HellMaiden.Controllers.PlayerController_HMD
+<color=yellow><b>► Controllers: </b></color>Controller type AstralShift.Control.Controllers.NoInputGameController not available
+Server listening on port 7992
+[BootGameplay] Server starting; loading 'Assets/_Project/Scenes/Gameplay.unity'.
+[BootGameplay] Server connection 0 is ready.
+[BootGameplay] Queued Player for connection 0.
+[BootGameplay] Gameplay scene ready: 'Assets/_Project/Scenes/Gameplay.unity'.
+[BootGameplay] Spawned Player NetworkPlayer [connId=0] in 'Assets/_Project/Scenes/Gameplay.unity'.
+<color=yellow><b>► Controllers: </b></color>Overrode <color=yellow><b></b></color> with <color=yellow><b>PlayerController_HMD</b></color>.
+Normal : True
+UI : False
+[BootGameplay] Client stopping; serverActive=True.
+[BootGameplay] Server stopping.
+[BootGameplay] Gameplay unload requested.
+There are 2 audio listeners in the scene. Please ensure there is always exactly one audio listener in the scene.
+[SteamInvite] stage=cleanup lobby=0 host=0 phase=Disabled reason=
+]]></output>
+              </test-case>
+              <test-case id="1150" name="MeleeCheckpointRestoresEveryPhaseWithoutRestartingActionAndSeeksExpiredAttack" fullname="MonsterSupergroup.Gameplay.Tests.EnemyHandoffGameplayTests.MeleeCheckpointRestoresEveryPhaseWithoutRestartingActionAndSeeksExpiredAttack" methodname="MeleeCheckpointRestoresEveryPhaseWithoutRestartingActionAndSeeksExpiredAttack" classname="MonsterSupergroup.Gameplay.Tests.EnemyHandoffGameplayTests" runstate="Runnable" seed="2137799058" result="Passed" start-time="2026-09-16 15:06:12Z" end-time="2026-09-16 15:06:13Z" duration="1.644674" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[[NetworkBackend] backend=Kcp purpose=Test source=test-runner transport=KcpTransport.
+--- Hardware Info ---
+CPU Model: 13th Gen Intel(R) Core(TM) i7-13700KF
+GPU Model: Null Device
+RAM: 65375 MB
+Install Disk Model: JZ-SSD4T-XW
+Main Monitor Model: Unknown Monitor
+---------------------
+Normal : True
+UI : False
+AstralShift.HellMaiden.Controllers.PlayerController_HMD
+<color=yellow><b>► Controllers: </b></color>Controller type AstralShift.Control.Controllers.NoInputGameController not available
+Server listening on port 7992
+[BootGameplay] Server starting; loading 'Assets/_Project/Scenes/Gameplay.unity'.
+[BootGameplay] Server connection 0 is ready.
+[BootGameplay] Queued Player for connection 0.
+[BootGameplay] Gameplay scene ready: 'Assets/_Project/Scenes/Gameplay.unity'.
+[BootGameplay] Spawned Player NetworkPlayer [connId=0] in 'Assets/_Project/Scenes/Gameplay.unity'.
+<color=yellow><b>► Controllers: </b></color>Overrode <color=yellow><b></b></color> with <color=yellow><b>PlayerController_HMD</b></color>.
+Normal : True
+UI : False
+[BootGameplay] Client stopping; serverActive=True.
+[BootGameplay] Server stopping.
+[BootGameplay] Gameplay unload requested.
+There are 2 audio listeners in the scene. Please ensure there is always exactly one audio listener in the scene.
+[SteamInvite] stage=cleanup lobby=0 host=0 phase=Disabled reason=
+]]></output>
+              </test-case>
+              <test-case id="1152" name="ReferenceRepositionAppliesPoseEvenWhenServerRemainsSimulator" fullname="MonsterSupergroup.Gameplay.Tests.EnemyHandoffGameplayTests.ReferenceRepositionAppliesPoseEvenWhenServerRemainsSimulator" methodname="ReferenceRepositionAppliesPoseEvenWhenServerRemainsSimulator" classname="MonsterSupergroup.Gameplay.Tests.EnemyHandoffGameplayTests" runstate="Runnable" seed="1727451079" result="Passed" start-time="2026-09-16 15:06:13Z" end-time="2026-09-16 15:06:15Z" duration="1.566644" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[[NetworkBackend] backend=Kcp purpose=Test source=test-runner transport=KcpTransport.
+--- Hardware Info ---
+CPU Model: 13th Gen Intel(R) Core(TM) i7-13700KF
+GPU Model: Null Device
+RAM: 65375 MB
+Install Disk Model: JZ-SSD4T-XW
+Main Monitor Model: Unknown Monitor
+---------------------
+Normal : True
+UI : False
+AstralShift.HellMaiden.Controllers.PlayerController_HMD
+<color=yellow><b>► Controllers: </b></color>Controller type AstralShift.Control.Controllers.NoInputGameController not available
+Server listening on port 7992
+[BootGameplay] Server starting; loading 'Assets/_Project/Scenes/Gameplay.unity'.
+[BootGameplay] Server connection 0 is ready.
+[BootGameplay] Queued Player for connection 0.
+[BootGameplay] Gameplay scene ready: 'Assets/_Project/Scenes/Gameplay.unity'.
+[BootGameplay] Spawned Player NetworkPlayer [connId=0] in 'Assets/_Project/Scenes/Gameplay.unity'.
+<color=yellow><b>► Controllers: </b></color>Overrode <color=yellow><b></b></color> with <color=yellow><b>PlayerController_HMD</b></color>.
+Normal : True
+UI : False
+[BootGameplay] Client stopping; serverActive=True.
+[BootGameplay] Server stopping.
+[BootGameplay] Gameplay unload requested.
+There are 2 audio listeners in the scene. Please ensure there is always exactly one audio listener in the scene.
+[SteamInvite] stage=cleanup lobby=0 host=0 phase=Disabled reason=
+]]></output>
+              </test-case>
+            </test-suite>
+            <test-suite type="TestFixture" id="1156" name="EnemyNetworkKnockbackTests" fullname="MonsterSupergroup.Gameplay.Tests.EnemyNetworkKnockbackTests" classname="MonsterSupergroup.Gameplay.Tests.EnemyNetworkKnockbackTests" runstate="Runnable" testcasecount="10" result="Passed" start-time="2026-09-16 15:06:15Z" end-time="2026-09-16 15:06:18Z" duration="3.283373" total="10" passed="10" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1159" name="AssignmentCancellationStopsCoroutineAndVelocityImmediatelyWithoutReplay" fullname="MonsterSupergroup.Gameplay.Tests.EnemyNetworkKnockbackTests.AssignmentCancellationStopsCoroutineAndVelocityImmediatelyWithoutReplay" methodname="AssignmentCancellationStopsCoroutineAndVelocityImmediatelyWithoutReplay" classname="MonsterSupergroup.Gameplay.Tests.EnemyNetworkKnockbackTests" runstate="Runnable" seed="1074889030" result="Passed" start-time="2026-09-16 15:06:15Z" end-time="2026-09-16 15:06:15Z" duration="0.316480" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1163" name="ExistingMovementLockAndEnemyKnockbackMultiplierSurviveCancellation" fullname="MonsterSupergroup.Gameplay.Tests.EnemyNetworkKnockbackTests.ExistingMovementLockAndEnemyKnockbackMultiplierSurviveCancellation" methodname="ExistingMovementLockAndEnemyKnockbackMultiplierSurviveCancellation" classname="MonsterSupergroup.Gameplay.Tests.EnemyNetworkKnockbackTests" runstate="Runnable" seed="249407374" result="Passed" start-time="2026-09-16 15:06:15Z" end-time="2026-09-16 15:06:15Z" duration="0.000738" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1157" name="MovementOnlyUsesExistingPhysicsWithoutConstructingAnAiStateMachineOrDamage" fullname="MonsterSupergroup.Gameplay.Tests.EnemyNetworkKnockbackTests.MovementOnlyUsesExistingPhysicsWithoutConstructingAnAiStateMachineOrDamage" methodname="MovementOnlyUsesExistingPhysicsWithoutConstructingAnAiStateMachineOrDamage" classname="MonsterSupergroup.Gameplay.Tests.EnemyNetworkKnockbackTests" runstate="Runnable" seed="734931892" result="Passed" start-time="2026-09-16 15:06:15Z" end-time="2026-09-16 15:06:15Z" duration="0.082573" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1160" name="NaturalRecoveryPreservesTheSourceStaggerAndRestoresMovement" fullname="MonsterSupergroup.Gameplay.Tests.EnemyNetworkKnockbackTests.NaturalRecoveryPreservesTheSourceStaggerAndRestoresMovement" methodname="NaturalRecoveryPreservesTheSourceStaggerAndRestoresMovement" classname="MonsterSupergroup.Gameplay.Tests.EnemyNetworkKnockbackTests" runstate="Runnable" seed="1676315259" result="Passed" start-time="2026-09-16 15:06:15Z" end-time="2026-09-16 15:06:16Z" duration="0.849576" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1164" name="OrdinaryFactorUsesFrozenModifierAndRecoveryStopsVelocityWithoutUnlockingNavigation" fullname="MonsterSupergroup.Gameplay.Tests.EnemyNetworkKnockbackTests.OrdinaryFactorUsesFrozenModifierAndRecoveryStopsVelocityWithoutUnlockingNavigation" methodname="OrdinaryFactorUsesFrozenModifierAndRecoveryStopsVelocityWithoutUnlockingNavigation" classname="MonsterSupergroup.Gameplay.Tests.EnemyNetworkKnockbackTests" runstate="Runnable" seed="630683409" result="Passed" start-time="2026-09-16 15:06:16Z" end-time="2026-09-16 15:06:17Z" duration="1.066490" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-suite type="ParameterizedMethod" id="1167" name="OrdinaryImmuneEnemyMultiplierDoesNotStartMovementOrStagger" fullname="MonsterSupergroup.Gameplay.Tests.EnemyNetworkKnockbackTests.OrdinaryImmuneEnemyMultiplierDoesNotStartMovementOrStagger" classname="MonsterSupergroup.Gameplay.Tests.EnemyNetworkKnockbackTests" runstate="Runnable" testcasecount="2" result="Passed" start-time="2026-09-16 15:06:17Z" end-time="2026-09-16 15:06:17Z" duration="0.017561" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0">
+                <properties />
+                <test-case id="1165" name="OrdinaryImmuneEnemyMultiplierDoesNotStartMovementOrStagger(0.0f)" fullname="MonsterSupergroup.Gameplay.Tests.EnemyNetworkKnockbackTests.OrdinaryImmuneEnemyMultiplierDoesNotStartMovementOrStagger(0.0f)" methodname="OrdinaryImmuneEnemyMultiplierDoesNotStartMovementOrStagger" classname="MonsterSupergroup.Gameplay.Tests.EnemyNetworkKnockbackTests" runstate="Runnable" seed="1305184918" result="Passed" start-time="2026-09-16 15:06:17Z" end-time="2026-09-16 15:06:17Z" duration="0.000659" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1166" name="OrdinaryImmuneEnemyMultiplierDoesNotStartMovementOrStagger(-1.0f)" fullname="MonsterSupergroup.Gameplay.Tests.EnemyNetworkKnockbackTests.OrdinaryImmuneEnemyMultiplierDoesNotStartMovementOrStagger(-1.0f)" methodname="OrdinaryImmuneEnemyMultiplierDoesNotStartMovementOrStagger" classname="MonsterSupergroup.Gameplay.Tests.EnemyNetworkKnockbackTests" runstate="Runnable" seed="1825089410" result="Passed" start-time="2026-09-16 15:06:17Z" end-time="2026-09-16 15:06:17Z" duration="0.000214" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+              </test-suite>
+              <test-case id="1161" name="RepeatedHandoffPreservesTrajectoryAndOriginalStaggerDeadline" fullname="MonsterSupergroup.Gameplay.Tests.EnemyNetworkKnockbackTests.RepeatedHandoffPreservesTrajectoryAndOriginalStaggerDeadline" methodname="RepeatedHandoffPreservesTrajectoryAndOriginalStaggerDeadline" classname="MonsterSupergroup.Gameplay.Tests.EnemyNetworkKnockbackTests" runstate="Runnable" seed="2092989634" result="Passed" start-time="2026-09-16 15:06:17Z" end-time="2026-09-16 15:06:18Z" duration="0.848579" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1162" name="ReturningAfterAnExpiredImpulseRestoresNavigationWithoutReapplyingIt" fullname="MonsterSupergroup.Gameplay.Tests.EnemyNetworkKnockbackTests.ReturningAfterAnExpiredImpulseRestoresNavigationWithoutReapplyingIt" methodname="ReturningAfterAnExpiredImpulseRestoresNavigationWithoutReapplyingIt" classname="MonsterSupergroup.Gameplay.Tests.EnemyNetworkKnockbackTests" runstate="Runnable" seed="1064804142" result="Passed" start-time="2026-09-16 15:06:18Z" end-time="2026-09-16 15:06:18Z" duration="0.000690" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1158" name="UnusedUninitializedPathComponentDoesNotInterruptTheAssignedMovementImpulse" fullname="MonsterSupergroup.Gameplay.Tests.EnemyNetworkKnockbackTests.UnusedUninitializedPathComponentDoesNotInterruptTheAssignedMovementImpulse" methodname="UnusedUninitializedPathComponentDoesNotInterruptTheAssignedMovementImpulse" classname="MonsterSupergroup.Gameplay.Tests.EnemyNetworkKnockbackTests" runstate="Runnable" seed="1875899906" result="Passed" start-time="2026-09-16 15:06:18Z" end-time="2026-09-16 15:06:18Z" duration="0.082777" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+            </test-suite>
+            <test-suite type="TestFixture" id="1168" name="EnemyPrefabVariantPlayModeTests" fullname="MonsterSupergroup.Gameplay.Tests.EnemyPrefabVariantPlayModeTests" classname="MonsterSupergroup.Gameplay.Tests.EnemyPrefabVariantPlayModeTests" runstate="Runnable" testcasecount="22" result="Passed" start-time="2026-09-16 15:06:18Z" end-time="2026-09-16 15:07:02Z" duration="43.844273" total="22" passed="22" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1183" name="AHitAdmittedBeforeAnyActionCannotCancelANewerSharedAction" fullname="MonsterSupergroup.Gameplay.Tests.EnemyPrefabVariantPlayModeTests.AHitAdmittedBeforeAnyActionCannotCancelANewerSharedAction" methodname="AHitAdmittedBeforeAnyActionCannotCancelANewerSharedAction" classname="MonsterSupergroup.Gameplay.Tests.EnemyPrefabVariantPlayModeTests" runstate="Runnable" seed="180445567" result="Passed" start-time="2026-09-16 15:06:18Z" end-time="2026-09-16 15:06:20Z" duration="1.578723" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[[NetworkBackend] backend=Kcp purpose=Test source=test-runner transport=KcpTransport.
+--- Hardware Info ---
+CPU Model: 13th Gen Intel(R) Core(TM) i7-13700KF
+GPU Model: Null Device
+RAM: 65375 MB
+Install Disk Model: JZ-SSD4T-XW
+Main Monitor Model: Unknown Monitor
+---------------------
+Normal : True
+UI : False
+AstralShift.HellMaiden.Controllers.PlayerController_HMD
+<color=yellow><b>► Controllers: </b></color>Controller type AstralShift.Control.Controllers.NoInputGameController not available
+Server listening on port 7986
+[BootGameplay] Server starting; loading 'Assets/_Project/Scenes/Gameplay.unity'.
+[BootGameplay] Server connection 0 is ready.
+[BootGameplay] Queued Player for connection 0.
+[BootGameplay] Gameplay scene ready: 'Assets/_Project/Scenes/Gameplay.unity'.
+[BootGameplay] Spawned Player NetworkPlayer [connId=0] in 'Assets/_Project/Scenes/Gameplay.unity'.
+<color=yellow><b>► Controllers: </b></color>Overrode <color=yellow><b></b></color> with <color=yellow><b>PlayerController_HMD</b></color>.
+Normal : True
+UI : False
+<color=blue><b>► FSM: </b></color>EnemyAI: Warning -> TRANSITION to: Knockback
+<color=blue><b>► FSM: </b></color>EnemyAI: Knockback -> TRANSITION to: Moving
+[BootGameplay] Client stopping; serverActive=True.
+[BootGameplay] Server stopping.
+[BootGameplay] Gameplay unload requested.
+There are 2 audio listeners in the scene. Please ensure there is always exactly one audio listener in the scene.
+[SteamInvite] stage=cleanup lobby=0 host=0 phase=Disabled reason=
+]]></output>
+              </test-case>
+              <test-case id="1187" name="ContactOnlyAndEmptyActiveSlotKeepLifecycleAndDamageReception" fullname="MonsterSupergroup.Gameplay.Tests.EnemyPrefabVariantPlayModeTests.ContactOnlyAndEmptyActiveSlotKeepLifecycleAndDamageReception" methodname="ContactOnlyAndEmptyActiveSlotKeepLifecycleAndDamageReception" classname="MonsterSupergroup.Gameplay.Tests.EnemyPrefabVariantPlayModeTests" runstate="Runnable" seed="62858463" result="Passed" start-time="2026-09-16 15:06:20Z" end-time="2026-09-16 15:06:21Z" duration="1.610861" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[[NetworkBackend] backend=Kcp purpose=Test source=test-runner transport=KcpTransport.
+--- Hardware Info ---
+CPU Model: 13th Gen Intel(R) Core(TM) i7-13700KF
+GPU Model: Null Device
+RAM: 65375 MB
+Install Disk Model: JZ-SSD4T-XW
+Main Monitor Model: Unknown Monitor
+---------------------
+Normal : True
+UI : False
+AstralShift.HellMaiden.Controllers.PlayerController_HMD
+<color=yellow><b>► Controllers: </b></color>Controller type AstralShift.Control.Controllers.NoInputGameController not available
+Server listening on port 7986
+[BootGameplay] Server starting; loading 'Assets/_Project/Scenes/Gameplay.unity'.
+[BootGameplay] Server connection 0 is ready.
+[BootGameplay] Queued Player for connection 0.
+[BootGameplay] Gameplay scene ready: 'Assets/_Project/Scenes/Gameplay.unity'.
+[BootGameplay] Spawned Player NetworkPlayer [connId=0] in 'Assets/_Project/Scenes/Gameplay.unity'.
+<color=yellow><b>► Controllers: </b></color>Overrode <color=yellow><b></b></color> with <color=yellow><b>PlayerController_HMD</b></color>.
+Normal : True
+UI : False
+<color=blue><b>► FSM: </b></color>EnemyAI: Moving -> TRANSITION to: InstantDead
+[BootGameplay] Client stopping; serverActive=True.
+[BootGameplay] Server stopping.
+[BootGameplay] Gameplay unload requested.
+There are 2 audio listeners in the scene. Please ensure there is always exactly one audio listener in the scene.
+[SteamInvite] stage=cleanup lobby=0 host=0 phase=Disabled reason=
+]]></output>
+              </test-case>
+              <test-case id="1188" name="ContactToggleDiscardsPendingContactsAndCoexistsWithRealMelee" fullname="MonsterSupergroup.Gameplay.Tests.EnemyPrefabVariantPlayModeTests.ContactToggleDiscardsPendingContactsAndCoexistsWithRealMelee" methodname="ContactToggleDiscardsPendingContactsAndCoexistsWithRealMelee" classname="MonsterSupergroup.Gameplay.Tests.EnemyPrefabVariantPlayModeTests" runstate="Runnable" seed="376822612" result="Passed" start-time="2026-09-16 15:06:21Z" end-time="2026-09-16 15:06:24Z" duration="2.919237" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[[NetworkBackend] backend=Kcp purpose=Test source=test-runner transport=KcpTransport.
+--- Hardware Info ---
+CPU Model: 13th Gen Intel(R) Core(TM) i7-13700KF
+GPU Model: Null Device
+RAM: 65375 MB
+Install Disk Model: JZ-SSD4T-XW
+Main Monitor Model: Unknown Monitor
+---------------------
+Normal : True
+UI : False
+AstralShift.HellMaiden.Controllers.PlayerController_HMD
+<color=yellow><b>► Controllers: </b></color>Controller type AstralShift.Control.Controllers.NoInputGameController not available
+Server listening on port 7986
+[BootGameplay] Server starting; loading 'Assets/_Project/Scenes/Gameplay.unity'.
+[BootGameplay] Server connection 0 is ready.
+[BootGameplay] Queued Player for connection 0.
+[BootGameplay] Gameplay scene ready: 'Assets/_Project/Scenes/Gameplay.unity'.
+[BootGameplay] Spawned Player NetworkPlayer [connId=0] in 'Assets/_Project/Scenes/Gameplay.unity'.
+<color=yellow><b>► Controllers: </b></color>Overrode <color=yellow><b></b></color> with <color=yellow><b>PlayerController_HMD</b></color>.
+Normal : True
+UI : False
+<color=blue><b>► FSM: </b></color>PlayerMovement: Moving -> TRANSITION to: Hurt
+PLAYER INVULNERABILITY try set : True Invulnerability count now at 1 invulnerability state now at True
+<color=blue><b>► FSM: </b></color>PlayerMovement: Hurt -> TRANSITION to: Moving
+STATUS_BAR targetFill = 0.98
+PLAYER INVULNERABILITY try set : False Invulnerability count now at 0 invulnerability state now at False
+<color=blue><b>► FSM: </b></color>EnemyAI: Moving -> TRANSITION to: Warning
+<color=blue><b>► FSM: </b></color>PlayerMovement: Moving -> TRANSITION to: Hurt
+PLAYER INVULNERABILITY try set : True Invulnerability count now at 1 invulnerability state now at True
+<color=blue><b>► FSM: </b></color>EnemyAI: Attacking -> TRANSITION to: InstantDead
+[BootGameplay] Client stopping; serverActive=True.
+[BootGameplay] Server stopping.
+[BootGameplay] Gameplay unload requested.
+There are 2 audio listeners in the scene. Please ensure there is always exactly one audio listener in the scene.
+[SteamInvite] stage=cleanup lobby=0 host=0 phase=Disabled reason=
+]]></output>
+              </test-case>
+              <test-case id="1189" name="DisableAndDeathDiscardPendingContactDamage" fullname="MonsterSupergroup.Gameplay.Tests.EnemyPrefabVariantPlayModeTests.DisableAndDeathDiscardPendingContactDamage" methodname="DisableAndDeathDiscardPendingContactDamage" classname="MonsterSupergroup.Gameplay.Tests.EnemyPrefabVariantPlayModeTests" runstate="Runnable" seed="587848241" result="Passed" start-time="2026-09-16 15:06:24Z" end-time="2026-09-16 15:06:26Z" duration="1.712931" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[[NetworkBackend] backend=Kcp purpose=Test source=test-runner transport=KcpTransport.
+--- Hardware Info ---
+CPU Model: 13th Gen Intel(R) Core(TM) i7-13700KF
+GPU Model: Null Device
+RAM: 65375 MB
+Install Disk Model: JZ-SSD4T-XW
+Main Monitor Model: Unknown Monitor
+---------------------
+Normal : True
+UI : False
+AstralShift.HellMaiden.Controllers.PlayerController_HMD
+<color=yellow><b>► Controllers: </b></color>Controller type AstralShift.Control.Controllers.NoInputGameController not available
+Server listening on port 7986
+[BootGameplay] Server starting; loading 'Assets/_Project/Scenes/Gameplay.unity'.
+[BootGameplay] Server connection 0 is ready.
+[BootGameplay] Queued Player for connection 0.
+[BootGameplay] Gameplay scene ready: 'Assets/_Project/Scenes/Gameplay.unity'.
+[BootGameplay] Spawned Player NetworkPlayer [connId=0] in 'Assets/_Project/Scenes/Gameplay.unity'.
+<color=yellow><b>► Controllers: </b></color>Overrode <color=yellow><b></b></color> with <color=yellow><b>PlayerController_HMD</b></color>.
+Normal : True
+UI : False
+<color=blue><b>► FSM: </b></color>EnemyAI: Moving -> TRANSITION to: InstantDead
+[BootGameplay] Client stopping; serverActive=True.
+[BootGameplay] Server stopping.
+[BootGameplay] Gameplay unload requested.
+There are 2 audio listeners in the scene. Please ensure there is always exactly one audio listener in the scene.
+[SteamInvite] stage=cleanup lobby=0 host=0 phase=Disabled reason=
+]]></output>
+              </test-case>
+              <test-case id="1181" name="GhoulBirthMovementKeepsLeftFacingAndAdvancesFramesBeforeFirstAttack" fullname="MonsterSupergroup.Gameplay.Tests.EnemyPrefabVariantPlayModeTests.GhoulBirthMovementKeepsLeftFacingAndAdvancesFramesBeforeFirstAttack" methodname="GhoulBirthMovementKeepsLeftFacingAndAdvancesFramesBeforeFirstAttack" classname="MonsterSupergroup.Gameplay.Tests.EnemyPrefabVariantPlayModeTests" runstate="Runnable" seed="1445858511" result="Passed" start-time="2026-09-16 15:06:26Z" end-time="2026-09-16 15:06:28Z" duration="2.196723" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[[NetworkBackend] backend=Kcp purpose=Test source=test-runner transport=KcpTransport.
+--- Hardware Info ---
+CPU Model: 13th Gen Intel(R) Core(TM) i7-13700KF
+GPU Model: Null Device
+RAM: 65375 MB
+Install Disk Model: JZ-SSD4T-XW
+Main Monitor Model: Unknown Monitor
+---------------------
+Normal : True
+UI : False
+AstralShift.HellMaiden.Controllers.PlayerController_HMD
+<color=yellow><b>► Controllers: </b></color>Controller type AstralShift.Control.Controllers.NoInputGameController not available
+Server listening on port 7986
+[BootGameplay] Server starting; loading 'Assets/_Project/Scenes/Gameplay.unity'.
+[BootGameplay] Server connection 0 is ready.
+[BootGameplay] Queued Player for connection 0.
+[BootGameplay] Gameplay scene ready: 'Assets/_Project/Scenes/Gameplay.unity'.
+[BootGameplay] Spawned Player NetworkPlayer [connId=0] in 'Assets/_Project/Scenes/Gameplay.unity'.
+<color=yellow><b>► Controllers: </b></color>Overrode <color=yellow><b></b></color> with <color=yellow><b>PlayerController_HMD</b></color>.
+Normal : True
+UI : False
+[BootGameplay] Client stopping; serverActive=True.
+[BootGameplay] Server stopping.
+[BootGameplay] Gameplay unload requested.
+There are 2 audio listeners in the scene. Please ensure there is always exactly one audio listener in the scene.
+[SteamInvite] stage=cleanup lobby=0 host=0 phase=Disabled reason=
+]]></output>
+              </test-case>
+              <test-case id="1171" name="ImpExpiryHasLocalLifetimeAndBroadcastsOneTermination" fullname="MonsterSupergroup.Gameplay.Tests.EnemyPrefabVariantPlayModeTests.ImpExpiryHasLocalLifetimeAndBroadcastsOneTermination" methodname="ImpExpiryHasLocalLifetimeAndBroadcastsOneTermination" classname="MonsterSupergroup.Gameplay.Tests.EnemyPrefabVariantPlayModeTests" runstate="Runnable" seed="1033705948" result="Passed" start-time="2026-09-16 15:06:28Z" end-time="2026-09-16 15:06:30Z" duration="1.922746" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[[NetworkBackend] backend=Kcp purpose=Test source=test-runner transport=KcpTransport.
+--- Hardware Info ---
+CPU Model: 13th Gen Intel(R) Core(TM) i7-13700KF
+GPU Model: Null Device
+RAM: 65375 MB
+Install Disk Model: JZ-SSD4T-XW
+Main Monitor Model: Unknown Monitor
+---------------------
+Normal : True
+UI : False
+AstralShift.HellMaiden.Controllers.PlayerController_HMD
+<color=yellow><b>► Controllers: </b></color>Controller type AstralShift.Control.Controllers.NoInputGameController not available
+Server listening on port 7986
+[BootGameplay] Server starting; loading 'Assets/_Project/Scenes/Gameplay.unity'.
+[BootGameplay] Server connection 0 is ready.
+[BootGameplay] Queued Player for connection 0.
+[BootGameplay] Gameplay scene ready: 'Assets/_Project/Scenes/Gameplay.unity'.
+[BootGameplay] Spawned Player NetworkPlayer [connId=0] in 'Assets/_Project/Scenes/Gameplay.unity'.
+<color=yellow><b>► Controllers: </b></color>Overrode <color=yellow><b></b></color> with <color=yellow><b>PlayerController_HMD</b></color>.
+Normal : True
+UI : False
+<color=blue><b>► FSM: </b></color>EnemyBullet: Fired -> TRANSITION to: Expire
+<color=blue><b>► FSM: </b></color>EnemyBullet: Expire -> TRANSITION to: End
+[BootGameplay] Client stopping; serverActive=True.
+[BootGameplay] Server stopping.
+[BootGameplay] Gameplay unload requested.
+There are 2 audio listeners in the scene. Please ensure there is always exactly one audio listener in the scene.
+[SteamInvite] stage=cleanup lobby=0 host=0 phase=Disabled reason=
+]]></output>
+              </test-case>
+              <test-case id="1170" name="ImpHitConsumesOnceAndTerminalBeforeLaunchPreventsResurrection" fullname="MonsterSupergroup.Gameplay.Tests.EnemyPrefabVariantPlayModeTests.ImpHitConsumesOnceAndTerminalBeforeLaunchPreventsResurrection" methodname="ImpHitConsumesOnceAndTerminalBeforeLaunchPreventsResurrection" classname="MonsterSupergroup.Gameplay.Tests.EnemyPrefabVariantPlayModeTests" runstate="Runnable" seed="313556186" result="Passed" start-time="2026-09-16 15:06:30Z" end-time="2026-09-16 15:06:32Z" duration="1.605774" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[[NetworkBackend] backend=Kcp purpose=Test source=test-runner transport=KcpTransport.
+--- Hardware Info ---
+CPU Model: 13th Gen Intel(R) Core(TM) i7-13700KF
+GPU Model: Null Device
+RAM: 65375 MB
+Install Disk Model: JZ-SSD4T-XW
+Main Monitor Model: Unknown Monitor
+---------------------
+Normal : True
+UI : False
+AstralShift.HellMaiden.Controllers.PlayerController_HMD
+<color=yellow><b>► Controllers: </b></color>Controller type AstralShift.Control.Controllers.NoInputGameController not available
+Server listening on port 7986
+[BootGameplay] Server starting; loading 'Assets/_Project/Scenes/Gameplay.unity'.
+[BootGameplay] Server connection 0 is ready.
+[BootGameplay] Queued Player for connection 0.
+[BootGameplay] Gameplay scene ready: 'Assets/_Project/Scenes/Gameplay.unity'.
+[BootGameplay] Spawned Player NetworkPlayer [connId=0] in 'Assets/_Project/Scenes/Gameplay.unity'.
+<color=yellow><b>► Controllers: </b></color>Overrode <color=yellow><b></b></color> with <color=yellow><b>PlayerController_HMD</b></color>.
+Normal : True
+UI : False
+<color=blue><b>► FSM: </b></color>PlayerMovement: Moving -> TRANSITION to: Hurt
+PLAYER INVULNERABILITY try set : True Invulnerability count now at 1 invulnerability state now at True
+[BootGameplay] Client stopping; serverActive=True.
+[BootGameplay] Server stopping.
+[BootGameplay] Gameplay unload requested.
+There are 2 audio listeners in the scene. Please ensure there is always exactly one audio listener in the scene.
+[SteamInvite] stage=cleanup lobby=0 host=0 phase=Disabled reason=
+]]></output>
+              </test-case>
+              <test-case id="1173" name="ImpLateLaunchSurvivesMissingShooterAndInvulnerableHitStillTerminates" fullname="MonsterSupergroup.Gameplay.Tests.EnemyPrefabVariantPlayModeTests.ImpLateLaunchSurvivesMissingShooterAndInvulnerableHitStillTerminates" methodname="ImpLateLaunchSurvivesMissingShooterAndInvulnerableHitStillTerminates" classname="MonsterSupergroup.Gameplay.Tests.EnemyPrefabVariantPlayModeTests" runstate="Runnable" seed="247859457" result="Passed" start-time="2026-09-16 15:06:32Z" end-time="2026-09-16 15:06:33Z" duration="1.607609" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[[NetworkBackend] backend=Kcp purpose=Test source=test-runner transport=KcpTransport.
+--- Hardware Info ---
+CPU Model: 13th Gen Intel(R) Core(TM) i7-13700KF
+GPU Model: Null Device
+RAM: 65375 MB
+Install Disk Model: JZ-SSD4T-XW
+Main Monitor Model: Unknown Monitor
+---------------------
+Normal : True
+UI : False
+AstralShift.HellMaiden.Controllers.PlayerController_HMD
+<color=yellow><b>► Controllers: </b></color>Controller type AstralShift.Control.Controllers.NoInputGameController not available
+Server listening on port 7986
+[BootGameplay] Server starting; loading 'Assets/_Project/Scenes/Gameplay.unity'.
+[BootGameplay] Server connection 0 is ready.
+[BootGameplay] Queued Player for connection 0.
+[BootGameplay] Gameplay scene ready: 'Assets/_Project/Scenes/Gameplay.unity'.
+[BootGameplay] Spawned Player NetworkPlayer [connId=0] in 'Assets/_Project/Scenes/Gameplay.unity'.
+<color=yellow><b>► Controllers: </b></color>Overrode <color=yellow><b></b></color> with <color=yellow><b>PlayerController_HMD</b></color>.
+Normal : True
+UI : False
+[BootGameplay] Client stopping; serverActive=True.
+[BootGameplay] Server stopping.
+[BootGameplay] Gameplay unload requested.
+There are 2 audio listeners in the scene. Please ensure there is always exactly one audio listener in the scene.
+[SteamInvite] stage=cleanup lobby=0 host=0 phase=Disabled reason=
+]]></output>
+              </test-case>
+              <test-case id="1172" name="ImpPhysicsTriggerIgnoresUnownedHitboxAndHitsLocalPlayerOnce" fullname="MonsterSupergroup.Gameplay.Tests.EnemyPrefabVariantPlayModeTests.ImpPhysicsTriggerIgnoresUnownedHitboxAndHitsLocalPlayerOnce" methodname="ImpPhysicsTriggerIgnoresUnownedHitboxAndHitsLocalPlayerOnce" classname="MonsterSupergroup.Gameplay.Tests.EnemyPrefabVariantPlayModeTests" runstate="Runnable" seed="1126384009" result="Passed" start-time="2026-09-16 15:06:33Z" end-time="2026-09-16 15:06:35Z" duration="1.761601" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[[NetworkBackend] backend=Kcp purpose=Test source=test-runner transport=KcpTransport.
+--- Hardware Info ---
+CPU Model: 13th Gen Intel(R) Core(TM) i7-13700KF
+GPU Model: Null Device
+RAM: 65375 MB
+Install Disk Model: JZ-SSD4T-XW
+Main Monitor Model: Unknown Monitor
+---------------------
+Normal : True
+UI : False
+AstralShift.HellMaiden.Controllers.PlayerController_HMD
+<color=yellow><b>► Controllers: </b></color>Controller type AstralShift.Control.Controllers.NoInputGameController not available
+Server listening on port 7986
+[BootGameplay] Server starting; loading 'Assets/_Project/Scenes/Gameplay.unity'.
+[BootGameplay] Server connection 0 is ready.
+[BootGameplay] Queued Player for connection 0.
+[BootGameplay] Gameplay scene ready: 'Assets/_Project/Scenes/Gameplay.unity'.
+[BootGameplay] Spawned Player NetworkPlayer [connId=0] in 'Assets/_Project/Scenes/Gameplay.unity'.
+<color=yellow><b>► Controllers: </b></color>Overrode <color=yellow><b></b></color> with <color=yellow><b>PlayerController_HMD</b></color>.
+Normal : True
+UI : False
+<color=blue><b>► FSM: </b></color>PlayerMovement: Moving -> TRANSITION to: Hurt
+PLAYER INVULNERABILITY try set : True Invulnerability count now at 1 invulnerability state now at True
+[BootGameplay] Client stopping; serverActive=True.
+[BootGameplay] Server stopping.
+[BootGameplay] Gameplay unload requested.
+There are 2 audio listeners in the scene. Please ensure there is always exactly one audio listener in the scene.
+[SteamInvite] stage=cleanup lobby=0 host=0 phase=Disabled reason=
+]]></output>
+              </test-case>
+              <test-case id="1169" name="ImpPredictsOnceAndHandoffDoesNotRefire" fullname="MonsterSupergroup.Gameplay.Tests.EnemyPrefabVariantPlayModeTests.ImpPredictsOnceAndHandoffDoesNotRefire" methodname="ImpPredictsOnceAndHandoffDoesNotRefire" classname="MonsterSupergroup.Gameplay.Tests.EnemyPrefabVariantPlayModeTests" runstate="Runnable" seed="1143953867" result="Passed" start-time="2026-09-16 15:06:35Z" end-time="2026-09-16 15:06:38Z" duration="2.691446" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[[NetworkBackend] backend=Kcp purpose=Test source=test-runner transport=KcpTransport.
+--- Hardware Info ---
+CPU Model: 13th Gen Intel(R) Core(TM) i7-13700KF
+GPU Model: Null Device
+RAM: 65375 MB
+Install Disk Model: JZ-SSD4T-XW
+Main Monitor Model: Unknown Monitor
+---------------------
+Normal : True
+UI : False
+AstralShift.HellMaiden.Controllers.PlayerController_HMD
+<color=yellow><b>► Controllers: </b></color>Controller type AstralShift.Control.Controllers.NoInputGameController not available
+Server listening on port 7986
+[BootGameplay] Server starting; loading 'Assets/_Project/Scenes/Gameplay.unity'.
+[BootGameplay] Server connection 0 is ready.
+[BootGameplay] Queued Player for connection 0.
+[BootGameplay] Gameplay scene ready: 'Assets/_Project/Scenes/Gameplay.unity'.
+[BootGameplay] Spawned Player NetworkPlayer [connId=0] in 'Assets/_Project/Scenes/Gameplay.unity'.
+<color=yellow><b>► Controllers: </b></color>Overrode <color=yellow><b></b></color> with <color=yellow><b>PlayerController_HMD</b></color>.
+Normal : True
+UI : False
+<color=blue><b>► FSM: </b></color>EnemyAI: Moving -> TRANSITION to: Warning
+<color=blue><b>► FSM: </b></color>EnemyAI: Warning -> TRANSITION to: Attacking
+[BootGameplay] Client stopping; serverActive=True.
+[BootGameplay] Server stopping.
+[BootGameplay] Gameplay unload requested.
+There are 2 audio listeners in the scene. Please ensure there is always exactly one audio listener in the scene.
+[SteamInvite] stage=cleanup lobby=0 host=0 phase=Disabled reason=
+]]></output>
+              </test-case>
+              <test-case id="1182" name="LostSoulCancellationRestoresLocalBodyAfterActiveWithoutReplayingDamage" fullname="MonsterSupergroup.Gameplay.Tests.EnemyPrefabVariantPlayModeTests.LostSoulCancellationRestoresLocalBodyAfterActiveWithoutReplayingDamage" methodname="LostSoulCancellationRestoresLocalBodyAfterActiveWithoutReplayingDamage" classname="MonsterSupergroup.Gameplay.Tests.EnemyPrefabVariantPlayModeTests" runstate="Runnable" seed="1597205248" result="Passed" start-time="2026-09-16 15:06:38Z" end-time="2026-09-16 15:06:39Z" duration="1.607799" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[[NetworkBackend] backend=Kcp purpose=Test source=test-runner transport=KcpTransport.
+--- Hardware Info ---
+CPU Model: 13th Gen Intel(R) Core(TM) i7-13700KF
+GPU Model: Null Device
+RAM: 65375 MB
+Install Disk Model: JZ-SSD4T-XW
+Main Monitor Model: Unknown Monitor
+---------------------
+Normal : True
+UI : False
+AstralShift.HellMaiden.Controllers.PlayerController_HMD
+<color=yellow><b>► Controllers: </b></color>Controller type AstralShift.Control.Controllers.NoInputGameController not available
+Server listening on port 7986
+[BootGameplay] Server starting; loading 'Assets/_Project/Scenes/Gameplay.unity'.
+[BootGameplay] Server connection 0 is ready.
+[BootGameplay] Queued Player for connection 0.
+[BootGameplay] Gameplay scene ready: 'Assets/_Project/Scenes/Gameplay.unity'.
+[BootGameplay] Spawned Player NetworkPlayer [connId=0] in 'Assets/_Project/Scenes/Gameplay.unity'.
+<color=yellow><b>► Controllers: </b></color>Overrode <color=yellow><b></b></color> with <color=yellow><b>PlayerController_HMD</b></color>.
+Normal : True
+UI : False
+[BootGameplay] Client stopping; serverActive=True.
+[BootGameplay] Server stopping.
+[BootGameplay] Gameplay unload requested.
+There are 2 audio listeners in the scene. Please ensure there is always exactly one audio listener in the scene.
+[SteamInvite] stage=cleanup lobby=0 host=0 phase=Disabled reason=
+]]></output>
+              </test-case>
+              <test-case id="1175" name="LostSoulCanonicalDeathDuringRecoveryCancelsParticlesAndPendingDisposal" fullname="MonsterSupergroup.Gameplay.Tests.EnemyPrefabVariantPlayModeTests.LostSoulCanonicalDeathDuringRecoveryCancelsParticlesAndPendingDisposal" methodname="LostSoulCanonicalDeathDuringRecoveryCancelsParticlesAndPendingDisposal" classname="MonsterSupergroup.Gameplay.Tests.EnemyPrefabVariantPlayModeTests" runstate="Runnable" seed="90604430" result="Passed" start-time="2026-09-16 15:06:39Z" end-time="2026-09-16 15:06:41Z" duration="1.633792" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[[NetworkBackend] backend=Kcp purpose=Test source=test-runner transport=KcpTransport.
+--- Hardware Info ---
+CPU Model: 13th Gen Intel(R) Core(TM) i7-13700KF
+GPU Model: Null Device
+RAM: 65375 MB
+Install Disk Model: JZ-SSD4T-XW
+Main Monitor Model: Unknown Monitor
+---------------------
+Normal : True
+UI : False
+AstralShift.HellMaiden.Controllers.PlayerController_HMD
+<color=yellow><b>► Controllers: </b></color>Controller type AstralShift.Control.Controllers.NoInputGameController not available
+Server listening on port 7986
+[BootGameplay] Server starting; loading 'Assets/_Project/Scenes/Gameplay.unity'.
+[BootGameplay] Server connection 0 is ready.
+[BootGameplay] Queued Player for connection 0.
+[BootGameplay] Gameplay scene ready: 'Assets/_Project/Scenes/Gameplay.unity'.
+[BootGameplay] Spawned Player NetworkPlayer [connId=0] in 'Assets/_Project/Scenes/Gameplay.unity'.
+<color=yellow><b>► Controllers: </b></color>Overrode <color=yellow><b></b></color> with <color=yellow><b>PlayerController_HMD</b></color>.
+Normal : True
+UI : False
+<color=blue><b>► FSM: </b></color>EnemyAI: Recovery -> TRANSITION to: Dead
+[BootGameplay] Client stopping; serverActive=True.
+[BootGameplay] Server stopping.
+[BootGameplay] Gameplay unload requested.
+There are 2 audio listeners in the scene. Please ensure there is always exactly one audio listener in the scene.
+[SteamInvite] stage=cleanup lobby=0 host=0 phase=Disabled reason=
+]]></output>
+              </test-case>
+              <test-case id="1174" name="LostSoulExpiredHandoffDisposesOnceWithoutConfirmedKill" fullname="MonsterSupergroup.Gameplay.Tests.EnemyPrefabVariantPlayModeTests.LostSoulExpiredHandoffDisposesOnceWithoutConfirmedKill" methodname="LostSoulExpiredHandoffDisposesOnceWithoutConfirmedKill" classname="MonsterSupergroup.Gameplay.Tests.EnemyPrefabVariantPlayModeTests" runstate="Runnable" seed="707841930" result="Passed" start-time="2026-09-16 15:06:41Z" end-time="2026-09-16 15:06:43Z" duration="1.618485" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[[NetworkBackend] backend=Kcp purpose=Test source=test-runner transport=KcpTransport.
+--- Hardware Info ---
+CPU Model: 13th Gen Intel(R) Core(TM) i7-13700KF
+GPU Model: Null Device
+RAM: 65375 MB
+Install Disk Model: JZ-SSD4T-XW
+Main Monitor Model: Unknown Monitor
+---------------------
+Normal : True
+UI : False
+AstralShift.HellMaiden.Controllers.PlayerController_HMD
+<color=yellow><b>► Controllers: </b></color>Controller type AstralShift.Control.Controllers.NoInputGameController not available
+Server listening on port 7986
+[BootGameplay] Server starting; loading 'Assets/_Project/Scenes/Gameplay.unity'.
+[BootGameplay] Server connection 0 is ready.
+[BootGameplay] Queued Player for connection 0.
+[BootGameplay] Gameplay scene ready: 'Assets/_Project/Scenes/Gameplay.unity'.
+[BootGameplay] Spawned Player NetworkPlayer [connId=0] in 'Assets/_Project/Scenes/Gameplay.unity'.
+<color=yellow><b>► Controllers: </b></color>Overrode <color=yellow><b></b></color> with <color=yellow><b>PlayerController_HMD</b></color>.
+Normal : True
+UI : False
+[LostSoulDispose] id=3 epoch=1 action=4294967303 combat=47.114198001700679 deadline=46.030866688108837 noXp=true
+[BootGameplay] Client stopping; serverActive=True.
+[BootGameplay] Server stopping.
+[BootGameplay] Gameplay unload requested.
+There are 2 audio listeners in the scene. Please ensure there is always exactly one audio listener in the scene.
+[SteamInvite] stage=cleanup lobby=0 host=0 phase=Disabled reason=
+]]></output>
+              </test-case>
+              <test-case id="1184" name="LostSoulUsesLocalCenterAndRetainsItAcrossEpochWithoutAnActiveEdge" fullname="MonsterSupergroup.Gameplay.Tests.EnemyPrefabVariantPlayModeTests.LostSoulUsesLocalCenterAndRetainsItAcrossEpochWithoutAnActiveEdge" methodname="LostSoulUsesLocalCenterAndRetainsItAcrossEpochWithoutAnActiveEdge" classname="MonsterSupergroup.Gameplay.Tests.EnemyPrefabVariantPlayModeTests" runstate="Runnable" seed="1044108281" result="Passed" start-time="2026-09-16 15:06:43Z" end-time="2026-09-16 15:06:44Z" duration="1.583643" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[[NetworkBackend] backend=Kcp purpose=Test source=test-runner transport=KcpTransport.
+--- Hardware Info ---
+CPU Model: 13th Gen Intel(R) Core(TM) i7-13700KF
+GPU Model: Null Device
+RAM: 65375 MB
+Install Disk Model: JZ-SSD4T-XW
+Main Monitor Model: Unknown Monitor
+---------------------
+Normal : True
+UI : False
+AstralShift.HellMaiden.Controllers.PlayerController_HMD
+<color=yellow><b>► Controllers: </b></color>Controller type AstralShift.Control.Controllers.NoInputGameController not available
+Server listening on port 7986
+[BootGameplay] Server starting; loading 'Assets/_Project/Scenes/Gameplay.unity'.
+[BootGameplay] Server connection 0 is ready.
+[BootGameplay] Queued Player for connection 0.
+[BootGameplay] Gameplay scene ready: 'Assets/_Project/Scenes/Gameplay.unity'.
+[BootGameplay] Spawned Player NetworkPlayer [connId=0] in 'Assets/_Project/Scenes/Gameplay.unity'.
+<color=yellow><b>► Controllers: </b></color>Overrode <color=yellow><b></b></color> with <color=yellow><b>PlayerController_HMD</b></color>.
+Normal : True
+UI : False
+[BootGameplay] Client stopping; serverActive=True.
+[BootGameplay] Server stopping.
+[BootGameplay] Gameplay unload requested.
+There are 2 audio listeners in the scene. Please ensure there is always exactly one audio listener in the scene.
+[SteamInvite] stage=cleanup lobby=0 host=0 phase=Disabled reason=
+]]></output>
+              </test-case>
+              <test-case id="1177" name="LustSinnerCancelAndPoolReuseDiscardPendingDamage" fullname="MonsterSupergroup.Gameplay.Tests.EnemyPrefabVariantPlayModeTests.LustSinnerCancelAndPoolReuseDiscardPendingDamage" methodname="LustSinnerCancelAndPoolReuseDiscardPendingDamage" classname="MonsterSupergroup.Gameplay.Tests.EnemyPrefabVariantPlayModeTests" runstate="Runnable" seed="836891667" result="Passed" start-time="2026-09-16 15:06:44Z" end-time="2026-09-16 15:06:47Z" duration="2.228175" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[[NetworkBackend] backend=Kcp purpose=Test source=test-runner transport=KcpTransport.
+--- Hardware Info ---
+CPU Model: 13th Gen Intel(R) Core(TM) i7-13700KF
+GPU Model: Null Device
+RAM: 65375 MB
+Install Disk Model: JZ-SSD4T-XW
+Main Monitor Model: Unknown Monitor
+---------------------
+Normal : True
+UI : False
+AstralShift.HellMaiden.Controllers.PlayerController_HMD
+<color=yellow><b>► Controllers: </b></color>Controller type AstralShift.Control.Controllers.NoInputGameController not available
+Server listening on port 7986
+[BootGameplay] Server starting; loading 'Assets/_Project/Scenes/Gameplay.unity'.
+[BootGameplay] Server connection 0 is ready.
+[BootGameplay] Queued Player for connection 0.
+[BootGameplay] Gameplay scene ready: 'Assets/_Project/Scenes/Gameplay.unity'.
+[BootGameplay] Spawned Player NetworkPlayer [connId=0] in 'Assets/_Project/Scenes/Gameplay.unity'.
+<color=yellow><b>► Controllers: </b></color>Overrode <color=yellow><b></b></color> with <color=yellow><b>PlayerController_HMD</b></color>.
+Normal : True
+UI : False
+<color=blue><b>► FSM: </b></color>EnemyAI: Moving -> TRANSITION to: Warning
+<color=blue><b>► FSM: </b></color>EnemyAI: Attacking -> TRANSITION to: InstantDead
+[BootGameplay] Client stopping; serverActive=True.
+[BootGameplay] Server stopping.
+[BootGameplay] Gameplay unload requested.
+There are 2 audio listeners in the scene. Please ensure there is always exactly one audio listener in the scene.
+[SteamInvite] stage=cleanup lobby=0 host=0 phase=Disabled reason=
+]]></output>
+              </test-case>
+              <test-case id="1178" name="LustSinnerDisableReleasesNativeAttackAndPendingCollisions" fullname="MonsterSupergroup.Gameplay.Tests.EnemyPrefabVariantPlayModeTests.LustSinnerDisableReleasesNativeAttackAndPendingCollisions" methodname="LustSinnerDisableReleasesNativeAttackAndPendingCollisions" classname="MonsterSupergroup.Gameplay.Tests.EnemyPrefabVariantPlayModeTests" runstate="Runnable" seed="1155430909" result="Passed" start-time="2026-09-16 15:06:47Z" end-time="2026-09-16 15:06:49Z" duration="2.207863" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[[NetworkBackend] backend=Kcp purpose=Test source=test-runner transport=KcpTransport.
+--- Hardware Info ---
+CPU Model: 13th Gen Intel(R) Core(TM) i7-13700KF
+GPU Model: Null Device
+RAM: 65375 MB
+Install Disk Model: JZ-SSD4T-XW
+Main Monitor Model: Unknown Monitor
+---------------------
+Normal : True
+UI : False
+AstralShift.HellMaiden.Controllers.PlayerController_HMD
+<color=yellow><b>► Controllers: </b></color>Controller type AstralShift.Control.Controllers.NoInputGameController not available
+Server listening on port 7986
+[BootGameplay] Server starting; loading 'Assets/_Project/Scenes/Gameplay.unity'.
+[BootGameplay] Server connection 0 is ready.
+[BootGameplay] Queued Player for connection 0.
+[BootGameplay] Gameplay scene ready: 'Assets/_Project/Scenes/Gameplay.unity'.
+[BootGameplay] Spawned Player NetworkPlayer [connId=0] in 'Assets/_Project/Scenes/Gameplay.unity'.
+<color=yellow><b>► Controllers: </b></color>Overrode <color=yellow><b></b></color> with <color=yellow><b>PlayerController_HMD</b></color>.
+Normal : True
+UI : False
+<color=blue><b>► FSM: </b></color>EnemyAI: Moving -> TRANSITION to: Warning
+[BootGameplay] Client stopping; serverActive=True.
+[BootGameplay] Server stopping.
+[BootGameplay] Gameplay unload requested.
+There are 2 audio listeners in the scene. Please ensure there is always exactly one audio listener in the scene.
+[SteamInvite] stage=cleanup lobby=0 host=0 phase=Disabled reason=
+]]></output>
+              </test-case>
+              <test-case id="1179" name="LustSinnerInstancesHaveIndependentRuntimeState" fullname="MonsterSupergroup.Gameplay.Tests.EnemyPrefabVariantPlayModeTests.LustSinnerInstancesHaveIndependentRuntimeState" methodname="LustSinnerInstancesHaveIndependentRuntimeState" classname="MonsterSupergroup.Gameplay.Tests.EnemyPrefabVariantPlayModeTests" runstate="Runnable" seed="318188114" result="Passed" start-time="2026-09-16 15:06:49Z" end-time="2026-09-16 15:06:50Z" duration="1.606248" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[[NetworkBackend] backend=Kcp purpose=Test source=test-runner transport=KcpTransport.
+--- Hardware Info ---
+CPU Model: 13th Gen Intel(R) Core(TM) i7-13700KF
+GPU Model: Null Device
+RAM: 65375 MB
+Install Disk Model: JZ-SSD4T-XW
+Main Monitor Model: Unknown Monitor
+---------------------
+Normal : True
+UI : False
+AstralShift.HellMaiden.Controllers.PlayerController_HMD
+<color=yellow><b>► Controllers: </b></color>Controller type AstralShift.Control.Controllers.NoInputGameController not available
+Server listening on port 7986
+[BootGameplay] Server starting; loading 'Assets/_Project/Scenes/Gameplay.unity'.
+[BootGameplay] Server connection 0 is ready.
+[BootGameplay] Queued Player for connection 0.
+[BootGameplay] Gameplay scene ready: 'Assets/_Project/Scenes/Gameplay.unity'.
+[BootGameplay] Spawned Player NetworkPlayer [connId=0] in 'Assets/_Project/Scenes/Gameplay.unity'.
+<color=yellow><b>► Controllers: </b></color>Overrode <color=yellow><b></b></color> with <color=yellow><b>PlayerController_HMD</b></color>.
+Normal : True
+UI : False
+[BootGameplay] Client stopping; serverActive=True.
+[BootGameplay] Server stopping.
+[BootGameplay] Gameplay unload requested.
+There are 2 audio listeners in the scene. Please ensure there is always exactly one audio listener in the scene.
+[SteamInvite] stage=cleanup lobby=0 host=0 phase=Disabled reason=
+]]></output>
+              </test-case>
+              <test-case id="1176" name="LustSinnerWarningAndActiveKeepSeparateVisualAndDamageWindows" fullname="MonsterSupergroup.Gameplay.Tests.EnemyPrefabVariantPlayModeTests.LustSinnerWarningAndActiveKeepSeparateVisualAndDamageWindows" methodname="LustSinnerWarningAndActiveKeepSeparateVisualAndDamageWindows" classname="MonsterSupergroup.Gameplay.Tests.EnemyPrefabVariantPlayModeTests" runstate="Runnable" seed="629225426" result="Passed" start-time="2026-09-16 15:06:50Z" end-time="2026-09-16 15:06:53Z" duration="2.232067" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[[NetworkBackend] backend=Kcp purpose=Test source=test-runner transport=KcpTransport.
+--- Hardware Info ---
+CPU Model: 13th Gen Intel(R) Core(TM) i7-13700KF
+GPU Model: Null Device
+RAM: 65375 MB
+Install Disk Model: JZ-SSD4T-XW
+Main Monitor Model: Unknown Monitor
+---------------------
+Normal : True
+UI : False
+AstralShift.HellMaiden.Controllers.PlayerController_HMD
+<color=yellow><b>► Controllers: </b></color>Controller type AstralShift.Control.Controllers.NoInputGameController not available
+Server listening on port 7986
+[BootGameplay] Server starting; loading 'Assets/_Project/Scenes/Gameplay.unity'.
+[BootGameplay] Server connection 0 is ready.
+[BootGameplay] Queued Player for connection 0.
+[BootGameplay] Gameplay scene ready: 'Assets/_Project/Scenes/Gameplay.unity'.
+[BootGameplay] Spawned Player NetworkPlayer [connId=0] in 'Assets/_Project/Scenes/Gameplay.unity'.
+<color=yellow><b>► Controllers: </b></color>Overrode <color=yellow><b></b></color> with <color=yellow><b>PlayerController_HMD</b></color>.
+Normal : True
+UI : False
+<color=blue><b>► FSM: </b></color>EnemyAI: Moving -> TRANSITION to: Warning
+<color=blue><b>► FSM: </b></color>PlayerMovement: Moving -> TRANSITION to: Hurt
+PLAYER INVULNERABILITY try set : True Invulnerability count now at 1 invulnerability state now at True
+[BootGameplay] Client stopping; serverActive=True.
+[BootGameplay] Server stopping.
+[BootGameplay] Gameplay unload requested.
+There are 2 audio listeners in the scene. Please ensure there is always exactly one audio listener in the scene.
+[SteamInvite] stage=cleanup lobby=0 host=0 phase=Disabled reason=
+]]></output>
+              </test-case>
+              <test-case id="1180" name="SharedGhoulControllerDrivesThreeWarningStepsButLocalReplicaNeverMovesBody" fullname="MonsterSupergroup.Gameplay.Tests.EnemyPrefabVariantPlayModeTests.SharedGhoulControllerDrivesThreeWarningStepsButLocalReplicaNeverMovesBody" methodname="SharedGhoulControllerDrivesThreeWarningStepsButLocalReplicaNeverMovesBody" classname="MonsterSupergroup.Gameplay.Tests.EnemyPrefabVariantPlayModeTests" runstate="Runnable" seed="942840538" result="Passed" start-time="2026-09-16 15:06:53Z" end-time="2026-09-16 15:06:56Z" duration="3.421455" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[[NetworkBackend] backend=Kcp purpose=Test source=test-runner transport=KcpTransport.
+--- Hardware Info ---
+CPU Model: 13th Gen Intel(R) Core(TM) i7-13700KF
+GPU Model: Null Device
+RAM: 65375 MB
+Install Disk Model: JZ-SSD4T-XW
+Main Monitor Model: Unknown Monitor
+---------------------
+Normal : True
+UI : False
+AstralShift.HellMaiden.Controllers.PlayerController_HMD
+<color=yellow><b>► Controllers: </b></color>Controller type AstralShift.Control.Controllers.NoInputGameController not available
+Server listening on port 7986
+[BootGameplay] Server starting; loading 'Assets/_Project/Scenes/Gameplay.unity'.
+[BootGameplay] Server connection 0 is ready.
+[BootGameplay] Queued Player for connection 0.
+[BootGameplay] Gameplay scene ready: 'Assets/_Project/Scenes/Gameplay.unity'.
+[BootGameplay] Spawned Player NetworkPlayer [connId=0] in 'Assets/_Project/Scenes/Gameplay.unity'.
+<color=yellow><b>► Controllers: </b></color>Overrode <color=yellow><b></b></color> with <color=yellow><b>PlayerController_HMD</b></color>.
+Normal : True
+UI : False
+[BootGameplay] Client stopping; serverActive=True.
+[BootGameplay] Server stopping.
+[BootGameplay] Gameplay unload requested.
+There are 2 audio listeners in the scene. Please ensure there is always exactly one audio listener in the scene.
+[SteamInvite] stage=cleanup lobby=0 host=0 phase=Disabled reason=
+]]></output>
+              </test-case>
+              <test-case id="1185" name="SharedHostHasOneAttackAndDamageGuardRejectsAnExpiredEnabledCollider" fullname="MonsterSupergroup.Gameplay.Tests.EnemyPrefabVariantPlayModeTests.SharedHostHasOneAttackAndDamageGuardRejectsAnExpiredEnabledCollider" methodname="SharedHostHasOneAttackAndDamageGuardRejectsAnExpiredEnabledCollider" classname="MonsterSupergroup.Gameplay.Tests.EnemyPrefabVariantPlayModeTests" runstate="Runnable" seed="492653370" result="Passed" start-time="2026-09-16 15:06:56Z" end-time="2026-09-16 15:06:58Z" duration="1.592967" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[[NetworkBackend] backend=Kcp purpose=Test source=test-runner transport=KcpTransport.
+--- Hardware Info ---
+CPU Model: 13th Gen Intel(R) Core(TM) i7-13700KF
+GPU Model: Null Device
+RAM: 65375 MB
+Install Disk Model: JZ-SSD4T-XW
+Main Monitor Model: Unknown Monitor
+---------------------
+Normal : True
+UI : False
+AstralShift.HellMaiden.Controllers.PlayerController_HMD
+<color=yellow><b>► Controllers: </b></color>Controller type AstralShift.Control.Controllers.NoInputGameController not available
+Server listening on port 7986
+[BootGameplay] Server starting; loading 'Assets/_Project/Scenes/Gameplay.unity'.
+[BootGameplay] Server connection 0 is ready.
+[BootGameplay] Queued Player for connection 0.
+[BootGameplay] Gameplay scene ready: 'Assets/_Project/Scenes/Gameplay.unity'.
+[BootGameplay] Spawned Player NetworkPlayer [connId=0] in 'Assets/_Project/Scenes/Gameplay.unity'.
+<color=yellow><b>► Controllers: </b></color>Overrode <color=yellow><b></b></color> with <color=yellow><b>PlayerController_HMD</b></color>.
+Normal : True
+UI : False
+[BootGameplay] Client stopping; serverActive=True.
+[BootGameplay] Server stopping.
+[BootGameplay] Gameplay unload requested.
+There are 2 audio listeners in the scene. Please ensure there is always exactly one audio listener in the scene.
+[SteamInvite] stage=cleanup lobby=0 host=0 phase=Disabled reason=
+]]></output>
+              </test-case>
+              <test-case id="1190" name="SkeletonAndExampleHaveIndependentHealthTargetsCooldownsAndStatuses" fullname="MonsterSupergroup.Gameplay.Tests.EnemyPrefabVariantPlayModeTests.SkeletonAndExampleHaveIndependentHealthTargetsCooldownsAndStatuses" methodname="SkeletonAndExampleHaveIndependentHealthTargetsCooldownsAndStatuses" classname="MonsterSupergroup.Gameplay.Tests.EnemyPrefabVariantPlayModeTests" runstate="Runnable" seed="302763455" result="Passed" start-time="2026-09-16 15:06:58Z" end-time="2026-09-16 15:07:00Z" duration="1.927375" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[[NetworkBackend] backend=Kcp purpose=Test source=test-runner transport=KcpTransport.
+--- Hardware Info ---
+CPU Model: 13th Gen Intel(R) Core(TM) i7-13700KF
+GPU Model: Null Device
+RAM: 65375 MB
+Install Disk Model: JZ-SSD4T-XW
+Main Monitor Model: Unknown Monitor
+---------------------
+Normal : True
+UI : False
+AstralShift.HellMaiden.Controllers.PlayerController_HMD
+<color=yellow><b>► Controllers: </b></color>Controller type AstralShift.Control.Controllers.NoInputGameController not available
+Server listening on port 7986
+[BootGameplay] Server starting; loading 'Assets/_Project/Scenes/Gameplay.unity'.
+[BootGameplay] Server connection 0 is ready.
+[BootGameplay] Queued Player for connection 0.
+[BootGameplay] Gameplay scene ready: 'Assets/_Project/Scenes/Gameplay.unity'.
+[BootGameplay] Spawned Player NetworkPlayer [connId=0] in 'Assets/_Project/Scenes/Gameplay.unity'.
+<color=yellow><b>► Controllers: </b></color>Overrode <color=yellow><b></b></color> with <color=yellow><b>PlayerController_HMD</b></color>.
+Normal : True
+UI : False
+[BootGameplay] Client stopping; serverActive=True.
+[BootGameplay] Server stopping.
+[BootGameplay] Gameplay unload requested.
+There are 2 audio listeners in the scene. Please ensure there is always exactly one audio listener in the scene.
+[SteamInvite] stage=cleanup lobby=0 host=0 phase=Disabled reason=
+]]></output>
+              </test-case>
+              <test-case id="1186" name="SkeletonWarningAloneAdvancesLocalWindowWithoutAnActiveMessage" fullname="MonsterSupergroup.Gameplay.Tests.EnemyPrefabVariantPlayModeTests.SkeletonWarningAloneAdvancesLocalWindowWithoutAnActiveMessage" methodname="SkeletonWarningAloneAdvancesLocalWindowWithoutAnActiveMessage" classname="MonsterSupergroup.Gameplay.Tests.EnemyPrefabVariantPlayModeTests" runstate="Runnable" seed="1661282882" result="Passed" start-time="2026-09-16 15:07:00Z" end-time="2026-09-16 15:07:02Z" duration="2.546837" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[[NetworkBackend] backend=Kcp purpose=Test source=test-runner transport=KcpTransport.
+--- Hardware Info ---
+CPU Model: 13th Gen Intel(R) Core(TM) i7-13700KF
+GPU Model: Null Device
+RAM: 65375 MB
+Install Disk Model: JZ-SSD4T-XW
+Main Monitor Model: Unknown Monitor
+---------------------
+Normal : True
+UI : False
+AstralShift.HellMaiden.Controllers.PlayerController_HMD
+<color=yellow><b>► Controllers: </b></color>Controller type AstralShift.Control.Controllers.NoInputGameController not available
+Server listening on port 7986
+[BootGameplay] Server starting; loading 'Assets/_Project/Scenes/Gameplay.unity'.
+[BootGameplay] Server connection 0 is ready.
+[BootGameplay] Queued Player for connection 0.
+[BootGameplay] Gameplay scene ready: 'Assets/_Project/Scenes/Gameplay.unity'.
+[BootGameplay] Spawned Player NetworkPlayer [connId=0] in 'Assets/_Project/Scenes/Gameplay.unity'.
+<color=yellow><b>► Controllers: </b></color>Overrode <color=yellow><b></b></color> with <color=yellow><b>PlayerController_HMD</b></color>.
+Normal : True
+UI : False
+[BootGameplay] Client stopping; serverActive=True.
+[BootGameplay] Server stopping.
+[BootGameplay] Gameplay unload requested.
+There are 2 audio listeners in the scene. Please ensure there is always exactly one audio listener in the scene.
+[SteamInvite] stage=cleanup lobby=0 host=0 phase=Disabled reason=
+]]></output>
+              </test-case>
+            </test-suite>
+            <test-suite type="TestFixture" id="1282" name="GhoulAttackLifetimeTests" fullname="MonsterSupergroup.Gameplay.Tests.GhoulAttackLifetimeTests" classname="MonsterSupergroup.Gameplay.Tests.GhoulAttackLifetimeTests" runstate="Runnable" testcasecount="7" result="Passed" start-time="2026-09-16 15:07:02Z" end-time="2026-09-16 15:07:02Z" duration="0.040428" total="7" passed="7" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-suite type="ParameterizedMethod" id="1288" name="ActualColliderOnlyExistsInsideCurrentActiveWindow" fullname="MonsterSupergroup.Gameplay.Tests.GhoulAttackLifetimeTests.ActualColliderOnlyExistsInsideCurrentActiveWindow" classname="MonsterSupergroup.Gameplay.Tests.GhoulAttackLifetimeTests" runstate="Runnable" testcasecount="4" result="Passed" start-time="2026-09-16 15:07:02Z" end-time="2026-09-16 15:07:02Z" duration="0.021870" total="4" passed="4" failed="0" inconclusive="0" skipped="0" asserts="0">
+                <properties />
+                <test-case id="1284" name="ActualColliderOnlyExistsInsideCurrentActiveWindow(1.1d,False)" fullname="MonsterSupergroup.Gameplay.Tests.GhoulAttackLifetimeTests.ActualColliderOnlyExistsInsideCurrentActiveWindow(1.1d,False)" methodname="ActualColliderOnlyExistsInsideCurrentActiveWindow" classname="MonsterSupergroup.Gameplay.Tests.GhoulAttackLifetimeTests" runstate="Runnable" seed="322573057" result="Passed" start-time="2026-09-16 15:07:02Z" end-time="2026-09-16 15:07:02Z" duration="0.003514" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1285" name="ActualColliderOnlyExistsInsideCurrentActiveWindow(1.4d,True)" fullname="MonsterSupergroup.Gameplay.Tests.GhoulAttackLifetimeTests.ActualColliderOnlyExistsInsideCurrentActiveWindow(1.4d,True)" methodname="ActualColliderOnlyExistsInsideCurrentActiveWindow" classname="MonsterSupergroup.Gameplay.Tests.GhoulAttackLifetimeTests" runstate="Runnable" seed="2120464552" result="Passed" start-time="2026-09-16 15:07:02Z" end-time="2026-09-16 15:07:02Z" duration="0.000870" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1286" name="ActualColliderOnlyExistsInsideCurrentActiveWindow(2.6d,False)" fullname="MonsterSupergroup.Gameplay.Tests.GhoulAttackLifetimeTests.ActualColliderOnlyExistsInsideCurrentActiveWindow(2.6d,False)" methodname="ActualColliderOnlyExistsInsideCurrentActiveWindow" classname="MonsterSupergroup.Gameplay.Tests.GhoulAttackLifetimeTests" runstate="Runnable" seed="1739886738" result="Passed" start-time="2026-09-16 15:07:02Z" end-time="2026-09-16 15:07:02Z" duration="0.000264" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1287" name="ActualColliderOnlyExistsInsideCurrentActiveWindow(3.0d,False)" fullname="MonsterSupergroup.Gameplay.Tests.GhoulAttackLifetimeTests.ActualColliderOnlyExistsInsideCurrentActiveWindow(3.0d,False)" methodname="ActualColliderOnlyExistsInsideCurrentActiveWindow" classname="MonsterSupergroup.Gameplay.Tests.GhoulAttackLifetimeTests" runstate="Runnable" seed="1907737886" result="Passed" start-time="2026-09-16 15:07:02Z" end-time="2026-09-16 15:07:02Z" duration="0.000236" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+              </test-suite>
+              <test-case id="1289" name="CancelledOrMissingPoseNeverRestoresHit" fullname="MonsterSupergroup.Gameplay.Tests.GhoulAttackLifetimeTests.CancelledOrMissingPoseNeverRestoresHit" methodname="CancelledOrMissingPoseNeverRestoresHit" classname="MonsterSupergroup.Gameplay.Tests.GhoulAttackLifetimeTests" runstate="Runnable" seed="1197196426" result="Passed" start-time="2026-09-16 15:07:02Z" end-time="2026-09-16 15:07:02Z" duration="0.000380" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1283" name="PoolReuseRebindsStatsAndKeepsAlternatingParentLocalOffsets" fullname="MonsterSupergroup.Gameplay.Tests.GhoulAttackLifetimeTests.PoolReuseRebindsStatsAndKeepsAlternatingParentLocalOffsets" methodname="PoolReuseRebindsStatsAndKeepsAlternatingParentLocalOffsets" classname="MonsterSupergroup.Gameplay.Tests.GhoulAttackLifetimeTests" runstate="Runnable" seed="391332045" result="Passed" start-time="2026-09-16 15:07:02Z" end-time="2026-09-16 15:07:02Z" duration="0.001190" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1290" name="ThirdRecoveryKeepsDisplayIndexAfterLogicalCounterResets" fullname="MonsterSupergroup.Gameplay.Tests.GhoulAttackLifetimeTests.ThirdRecoveryKeepsDisplayIndexAfterLogicalCounterResets" methodname="ThirdRecoveryKeepsDisplayIndexAfterLogicalCounterResets" classname="MonsterSupergroup.Gameplay.Tests.GhoulAttackLifetimeTests" runstate="Runnable" seed="289312497" result="Passed" start-time="2026-09-16 15:07:02Z" end-time="2026-09-16 15:07:02Z" duration="0.000383" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+            </test-suite>
+            <test-suite type="TestFixture" id="1291" name="GhoulWarningStepTests" fullname="MonsterSupergroup.Gameplay.Tests.GhoulWarningStepTests" classname="MonsterSupergroup.Gameplay.Tests.GhoulWarningStepTests" runstate="Runnable" testcasecount="6" result="Passed" start-time="2026-09-16 15:07:02Z" end-time="2026-09-16 15:07:09Z" duration="7.126108" total="6" passed="6" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1296" name="HandoffPreservesPendingPositionAndDoesNotReplayAnExpiredWarningExit" fullname="MonsterSupergroup.Gameplay.Tests.GhoulWarningStepTests.HandoffPreservesPendingPositionAndDoesNotReplayAnExpiredWarningExit" methodname="HandoffPreservesPendingPositionAndDoesNotReplayAnExpiredWarningExit" classname="MonsterSupergroup.Gameplay.Tests.GhoulWarningStepTests" runstate="Runnable" seed="491337371" result="Passed" start-time="2026-09-16 15:07:02Z" end-time="2026-09-16 15:07:02Z" duration="0.066987" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1295" name="PauseAndRepeatedTimeDoNotStepAndCancelDiscardsPendingMove" fullname="MonsterSupergroup.Gameplay.Tests.GhoulWarningStepTests.PauseAndRepeatedTimeDoNotStepAndCancelDiscardsPendingMove" methodname="PauseAndRepeatedTimeDoNotStepAndCancelDiscardsPendingMove" classname="MonsterSupergroup.Gameplay.Tests.GhoulWarningStepTests" runstate="Runnable" seed="189502116" result="Passed" start-time="2026-09-16 15:07:02Z" end-time="2026-09-16 15:07:02Z" duration="0.066303" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1294" name="SourceRequestsAt144Fps" fullname="MonsterSupergroup.Gameplay.Tests.GhoulWarningStepTests.SourceRequestsAt144Fps" methodname="SourceRequestsAt144Fps" classname="MonsterSupergroup.Gameplay.Tests.GhoulWarningStepTests" runstate="Runnable" seed="277475318" result="Passed" start-time="2026-09-16 15:07:02Z" end-time="2026-09-16 15:07:06Z" duration="4.100201" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[Controlled render=144, physics=50Hz, displacement=(4.99, 3.91); frame dependent by source design.
+]]></output>
+              </test-case>
+              <test-case id="1292" name="SourceRequestsAt30Fps" fullname="MonsterSupergroup.Gameplay.Tests.GhoulWarningStepTests.SourceRequestsAt30Fps" methodname="SourceRequestsAt30Fps" classname="MonsterSupergroup.Gameplay.Tests.GhoulWarningStepTests" runstate="Runnable" seed="1240390822" result="Passed" start-time="2026-09-16 15:07:06Z" end-time="2026-09-16 15:07:07Z" duration="0.882875" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[Controlled render=30, physics=50Hz, displacement=(2.91, 2.38); frame dependent by source design.
+]]></output>
+              </test-case>
+              <test-case id="1293" name="SourceRequestsAt60Fps" fullname="MonsterSupergroup.Gameplay.Tests.GhoulWarningStepTests.SourceRequestsAt60Fps" methodname="SourceRequestsAt60Fps" classname="MonsterSupergroup.Gameplay.Tests.GhoulWarningStepTests" runstate="Runnable" seed="478443840" result="Passed" start-time="2026-09-16 15:07:07Z" end-time="2026-09-16 15:07:09Z" duration="1.733166" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[Controlled render=60, physics=50Hz, displacement=(4.84, 3.64); frame dependent by source design.
+]]></output>
+              </test-case>
+              <test-case id="1297" name="WarningRequestsRemainSubjectToActualPhysicsCollision" fullname="MonsterSupergroup.Gameplay.Tests.GhoulWarningStepTests.WarningRequestsRemainSubjectToActualPhysicsCollision" methodname="WarningRequestsRemainSubjectToActualPhysicsCollision" classname="MonsterSupergroup.Gameplay.Tests.GhoulWarningStepTests" runstate="Runnable" seed="135058244" result="Passed" start-time="2026-09-16 15:07:09Z" end-time="2026-09-16 15:07:09Z" duration="0.266821" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+            </test-suite>
+            <test-suite type="TestFixture" id="1306" name="LostSoulAttackLifetimeTests" fullname="MonsterSupergroup.Gameplay.Tests.LostSoulAttackLifetimeTests" classname="MonsterSupergroup.Gameplay.Tests.LostSoulAttackLifetimeTests" runstate="Runnable" testcasecount="8" result="Passed" start-time="2026-09-16 15:07:09Z" end-time="2026-09-16 15:07:09Z" duration="0.036555" total="8" passed="8" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1309" name="ExpiredActiveNeverReopensDamageAndExpiredRecoveryKeepsDisposalPending" fullname="MonsterSupergroup.Gameplay.Tests.LostSoulAttackLifetimeTests.ExpiredActiveNeverReopensDamageAndExpiredRecoveryKeepsDisposalPending" methodname="ExpiredActiveNeverReopensDamageAndExpiredRecoveryKeepsDisposalPending" classname="MonsterSupergroup.Gameplay.Tests.LostSoulAttackLifetimeTests" runstate="Runnable" seed="289715068" result="Passed" start-time="2026-09-16 15:07:09Z" end-time="2026-09-16 15:07:09Z" duration="0.003326" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1307" name="LateRecoverySeeksTheSameStoppedEmissionAsSequentialPlayback" fullname="MonsterSupergroup.Gameplay.Tests.LostSoulAttackLifetimeTests.LateRecoverySeeksTheSameStoppedEmissionAsSequentialPlayback" methodname="LateRecoverySeeksTheSameStoppedEmissionAsSequentialPlayback" classname="MonsterSupergroup.Gameplay.Tests.LostSoulAttackLifetimeTests" runstate="Runnable" seed="602161160" result="Passed" start-time="2026-09-16 15:07:09Z" end-time="2026-09-16 15:07:09Z" duration="0.001343" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1311" name="NineVertexWorldGeometrySeparatesInsideOutsideAndClosesAtDeadline" fullname="MonsterSupergroup.Gameplay.Tests.LostSoulAttackLifetimeTests.NineVertexWorldGeometrySeparatesInsideOutsideAndClosesAtDeadline" methodname="NineVertexWorldGeometrySeparatesInsideOutsideAndClosesAtDeadline" classname="MonsterSupergroup.Gameplay.Tests.LostSoulAttackLifetimeTests" runstate="Runnable" seed="1656388816" result="Passed" start-time="2026-09-16 15:07:09Z" end-time="2026-09-16 15:07:09Z" duration="0.000921" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1308" name="ReusedAttackRebindsFreshStatsOnSameOwnerAcrossVariants" fullname="MonsterSupergroup.Gameplay.Tests.LostSoulAttackLifetimeTests.ReusedAttackRebindsFreshStatsOnSameOwnerAcrossVariants" methodname="ReusedAttackRebindsFreshStatsOnSameOwnerAcrossVariants" classname="MonsterSupergroup.Gameplay.Tests.LostSoulAttackLifetimeTests" runstate="Runnable" seed="587082107" result="Passed" start-time="2026-09-16 15:07:09Z" end-time="2026-09-16 15:07:09Z" duration="0.000965" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-suite type="ParameterizedMethod" id="1315" name="WarningHandoffCrossingDeadlineCommitsDisposalWithoutExtendingWindow" fullname="MonsterSupergroup.Gameplay.Tests.LostSoulAttackLifetimeTests.WarningHandoffCrossingDeadlineCommitsDisposalWithoutExtendingWindow" classname="MonsterSupergroup.Gameplay.Tests.LostSoulAttackLifetimeTests" runstate="Runnable" testcasecount="3" result="Passed" start-time="2026-09-16 15:07:09Z" end-time="2026-09-16 15:07:09Z" duration="0.011822" total="3" passed="3" failed="0" inconclusive="0" skipped="0" asserts="0">
+                <properties />
+                <test-case id="1312" name="WarningHandoffCrossingDeadlineCommitsDisposalWithoutExtendingWindow(2.1d,True)" fullname="MonsterSupergroup.Gameplay.Tests.LostSoulAttackLifetimeTests.WarningHandoffCrossingDeadlineCommitsDisposalWithoutExtendingWindow(2.1d,True)" methodname="WarningHandoffCrossingDeadlineCommitsDisposalWithoutExtendingWindow" classname="MonsterSupergroup.Gameplay.Tests.LostSoulAttackLifetimeTests" runstate="Runnable" seed="444016995" result="Passed" start-time="2026-09-16 15:07:09Z" end-time="2026-09-16 15:07:09Z" duration="0.000958" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1313" name="WarningHandoffCrossingDeadlineCommitsDisposalWithoutExtendingWindow(2.4d,False)" fullname="MonsterSupergroup.Gameplay.Tests.LostSoulAttackLifetimeTests.WarningHandoffCrossingDeadlineCommitsDisposalWithoutExtendingWindow(2.4d,False)" methodname="WarningHandoffCrossingDeadlineCommitsDisposalWithoutExtendingWindow" classname="MonsterSupergroup.Gameplay.Tests.LostSoulAttackLifetimeTests" runstate="Runnable" seed="448077250" result="Passed" start-time="2026-09-16 15:07:09Z" end-time="2026-09-16 15:07:09Z" duration="0.000649" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1314" name="WarningHandoffCrossingDeadlineCommitsDisposalWithoutExtendingWindow(4,False)" fullname="MonsterSupergroup.Gameplay.Tests.LostSoulAttackLifetimeTests.WarningHandoffCrossingDeadlineCommitsDisposalWithoutExtendingWindow(4,False)" methodname="WarningHandoffCrossingDeadlineCommitsDisposalWithoutExtendingWindow" classname="MonsterSupergroup.Gameplay.Tests.LostSoulAttackLifetimeTests" runstate="Runnable" seed="7245922" result="Passed" start-time="2026-09-16 15:07:09Z" end-time="2026-09-16 15:07:09Z" duration="0.000321" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+              </test-suite>
+              <test-case id="1310" name="WarningRestoresSpeedMultiplierAndFollowingPoolInstanceWithoutDamage" fullname="MonsterSupergroup.Gameplay.Tests.LostSoulAttackLifetimeTests.WarningRestoresSpeedMultiplierAndFollowingPoolInstanceWithoutDamage" methodname="WarningRestoresSpeedMultiplierAndFollowingPoolInstanceWithoutDamage" classname="MonsterSupergroup.Gameplay.Tests.LostSoulAttackLifetimeTests" runstate="Runnable" seed="1703110392" result="Passed" start-time="2026-09-16 15:07:09Z" end-time="2026-09-16 15:07:09Z" duration="0.001470" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[Saving results to: C:/Users/ADMIN/AppData/LocalLow/DefaultCompany/Monster Supergroup\TestResults.xml
+]]></output>
+              </test-case>
+            </test-suite>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

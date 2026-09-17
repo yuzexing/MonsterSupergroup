@@ -1,5 +1,7 @@
 # Limbo 参考基线实施记录
 
+**2026-09-16 动作修复：** 出生空攻击状态不再覆盖移动动画，Ghoul 接入遗漏的每击预警前进。针对性自动化通过；新包画面由人工验收，详见 [修复与短时观察入口](limbo-ghoul-motion-fix.md)。
+
 **美术状态更新（2026-09-15）：** 九套参考身体及八组提示已接入来源资源；本页下方的红点、普通 Skeleton 替代精英、橙色线条描述属于历史构建。最新美术验证、保留差异与待验项见 [序列帧美术恢复](limbo-art-restoration.md) 和 [Ghoul 接入](limbo-ghoul-integration.md)。历史数值／行为证据继续保留，不能自动视为新构建的运行证据。
 
 当前实现为 **全部 31 片段的完整 Limbo 参考流程**：720.9 秒请求转场，等待已连接、存活玩家结束选卡等忙碌后进入现有结算，不要求清怪。Phase 5 构建已完成单人 Host、Host/Client 有画面完整运行及界面重开，Full 已 Ready。详见 [Phase 5 实现与验收](limbo-full-integration.md)。当前共接入 8 类来源身份、9 套身体、17 种外观/变体组合（16 个数据库变体）；[Ghoul](limbo-ghoul-integration.md)、[LostSoul](limbo-lostsoul-integration.md)、[Dash](limbo-dash-integration.md) 和 [空间机制](limbo-spatial-closure.md) 保留历史证据。上轮剩余失败已在 [回归收尾](regression-closure.md) 中归档；不能将旧构建的通过结果自动用于新包。

@@ -1,0 +1,103 @@
+{
+  "status": "targeted-automated-checks-passed; manual-visual-acceptance-pending",
+  "runs": [
+    {
+      "name": "before",
+      "total": 1,
+      "passed": 0,
+      "failed": 1,
+      "failures": [
+        {
+          "name": "GhoulBirthMovementKeepsLeftFacingAndAdvancesFramesBeforeFirstAttack",
+          "message": "  The previous frame's empty attack must not overwrite real leftward locomotion.\n  Expected: same as <Enemy_Ghoul_Walk_Left (UnityEngine.AnimationClip)>\n  But was:  <Enemy_Ghoul_Walk_Right (UnityEngine.AnimationClip)>\nat MonsterSupergroup.Gameplay.Tests.EnemyPrefabVariantPlayModeTests+<GhoulBirthMovementKeepsLeftFacingAndAdvancesFramesBeforeFirstAttack>d__14.MoveNext () [0x00270] in F:\\UnityStore\\MonsterSupergroup_validation_motion_20260916\\Assets\\_Project\\Tests\\PlayMode\\Gameplay\\EnemyPrefabVariantPlayModeTests.Timeline.cs:38\nat UnityEngine.TestTools.TestEnumerator+<Execute>d__7.MoveNext () [0x0004e] in .\\Library\\PackageCache\\com.unity.test-framework@bd7f943e9647\\UnityEngine.TestRunner\\NUnitExtensions\\Attributes\\TestEnumerator.cs:44\n"
+        }
+      ]
+    },
+    {
+      "name": "focused-play",
+      "total": 14,
+      "passed": 8,
+      "failed": 6,
+      "failures": [
+        {
+          "name": "GhoulBirthMovementKeepsLeftFacingAndAdvancesFramesBeforeFirstAttack",
+          "message": "  Expected: greater than 0.10000000000000001d\n  But was:  0.0d\nat MonsterSupergroup.Gameplay.Tests.EnemyPrefabVariantPlayModeTests+<GhoulBirthMovementKeepsLeftFacingAndAdvancesFramesBeforeFirstAttack>d__14.MoveNext () [0x00360] in F:\\UnityStore\\MonsterSupergroup_validation_motion_20260916\\Assets\\_Project\\Tests\\PlayMode\\Gameplay\\EnemyPrefabVariantPlayModeTests.Timeline.cs:44\nat UnityEngine.TestTools.TestEnumerator+<Execute>d__7.MoveNext () [0x0004e] in .\\Library\\PackageCache\\com.unity.test-framework@bd7f943e9647\\UnityEngine.TestRunner\\NUnitExtensions\\Attributes\\TestEnumerator.cs:44\n"
+        },
+        {
+          "name": "HandoffPreservesPendingPositionAndDoesNotReplayAnExpiredWarningExit",
+          "message": "  Expected: less than 0.001d\n  But was:  4242.64063f\nat MonsterSupergroup.Gameplay.Tests.GhoulWarningStepTests+<HandoffPreservesPendingPositionAndDoesNotReplayAnExpiredWarningExit>d__16.MoveNext () [0x000f9] in F:\\UnityStore\\MonsterSupergroup_validation_motion_20260916\\Assets\\_Project\\Tests\\PlayMode\\Gameplay\\GhoulWarningStepTests.cs:122\nat UnityEngine.TestTools.TestEnumerator+<Execute>d__7.MoveNext () [0x0004e] in .\\Library\\PackageCache\\com.unity.test-framework@bd7f943e9647\\UnityEngine.TestRunner\\NUnitExtensions\\Attributes\\TestEnumerator.cs:44\n"
+        },
+        {
+          "name": "SourceRequestsAt144Fps",
+          "message": "  Expected: less than 0.00050000000000000001d\n  But was:  4242.64746f\nat MonsterSupergroup.Gameplay.Tests.GhoulWarningStepTests+<SourceRequests>d__14.MoveNext () [0x0020c] in F:\\UnityStore\\MonsterSupergroup_validation_motion_20260916\\Assets\\_Project\\Tests\\PlayMode\\Gameplay\\GhoulWarningStepTests.cs:78\nat UnityEngine.TestTools.TestEnumerator+<Execute>d__7.MoveNext () [0x0004e] in .\\Library\\PackageCache\\com.unity.test-framework@bd7f943e9647\\UnityEngine.TestRunner\\NUnitExtensions\\Attributes\\TestEnumerator.cs:44\n"
+        },
+        {
+          "name": "SourceRequestsAt30Fps",
+          "message": "  Expected: less than 0.00050000000000000001d\n  But was:  4242.67285f\nat MonsterSupergroup.Gameplay.Tests.GhoulWarningStepTests+<SourceRequests>d__14.MoveNext () [0x0020c] in F:\\UnityStore\\MonsterSupergroup_validation_motion_20260916\\Assets\\_Project\\Tests\\PlayMode\\Gameplay\\GhoulWarningStepTests.cs:78\nat UnityEngine.TestTools.TestEnumerator+<Execute>d__7.MoveNext () [0x0004e] in .\\Library\\PackageCache\\com.unity.test-framework@bd7f943e9647\\UnityEngine.TestRunner\\NUnitExtensions\\Attributes\\TestEnumerator.cs:44\n"
+        },
+        {
+          "name": "SourceRequestsAt60Fps",
+          "message": "  Expected: less than 0.00050000000000000001d\n  But was:  4242.65674f\nat MonsterSupergroup.Gameplay.Tests.GhoulWarningStepTests+<SourceRequests>d__14.MoveNext () [0x0020c] in F:\\UnityStore\\MonsterSupergroup_validation_motion_20260916\\Assets\\_Project\\Tests\\PlayMode\\Gameplay\\GhoulWarningStepTests.cs:78\nat UnityEngine.TestTools.TestEnumerator+<Execute>d__7.MoveNext () [0x0004e] in .\\Library\\PackageCache\\com.unity.test-framework@bd7f943e9647\\UnityEngine.TestRunner\\NUnitExtensions\\Attributes\\TestEnumerator.cs:44\n"
+        },
+        {
+          "name": "WarningRequestsRemainSubjectToActualPhysicsCollision",
+          "message": "  Expected: in range (0.1,0.46)\n  But was:  0.0f\nat MonsterSupergroup.Gameplay.Tests.GhoulWarningStepTests+<WarningRequestsRemainSubjectToActualPhysicsCollision>d__17.MoveNext () [0x00183] in F:\\UnityStore\\MonsterSupergroup_validation_motion_20260916\\Assets\\_Project\\Tests\\PlayMode\\Gameplay\\GhoulWarningStepTests.cs:148\nat UnityEngine.TestTools.TestEnumerator+<Execute>d__7.MoveNext () [0x0004e] in .\\Library\\PackageCache\\com.unity.test-framework@bd7f943e9647\\UnityEngine.TestRunner\\NUnitExtensions\\Attributes\\TestEnumerator.cs:44\n"
+        }
+      ]
+    },
+    {
+      "name": "focused-play2",
+      "total": 14,
+      "passed": 13,
+      "failed": 1,
+      "failures": [
+        {
+          "name": "PauseAndRepeatedTimeDoNotStepAndCancelDiscardsPendingMove",
+          "message": "  Expected: less than 0.001d\n  But was:  0.136474609f\nat MonsterSupergroup.Gameplay.Tests.GhoulWarningStepTests+<PauseAndRepeatedTimeDoNotStepAndCancelDiscardsPendingMove>d__15.MoveNext () [0x0023c] in F:\\UnityStore\\MonsterSupergroup_validation_motion_20260916\\Assets\\_Project\\Tests\\PlayMode\\Gameplay\\GhoulWarningStepTests.cs:113\nat UnityEngine.TestTools.TestEnumerator+<Execute>d__7.MoveNext () [0x0004e] in .\\Library\\PackageCache\\com.unity.test-framework@bd7f943e9647\\UnityEngine.TestRunner\\NUnitExtensions\\Attributes\\TestEnumerator.cs:44\n"
+        }
+      ]
+    },
+    {
+      "name": "motion-final",
+      "total": 7,
+      "passed": 7,
+      "failed": 0,
+      "failures": []
+    },
+    {
+      "name": "edit-regression",
+      "total": 105,
+      "passed": 105,
+      "failed": 0,
+      "failures": []
+    },
+    {
+      "name": "play-regression",
+      "total": 74,
+      "passed": 74,
+      "failed": 0,
+      "failures": []
+    },
+    {
+      "name": "slow-motion",
+      "total": 1,
+      "passed": 1,
+      "failed": 0,
+      "failures": []
+    },
+    {
+      "name": "ghoul-config-final",
+      "total": 14,
+      "passed": 14,
+      "failed": 0,
+      "failures": []
+    }
+  ],
+  "notes": [
+    "before.xml reproduces the real Ghoul left-facing failure before production changes.",
+    "The first fixed run also exposed fixture omissions: off-screen Animator culling in batch mode and no Combatant life baseline in the physics fixture.",
+    "The remaining fixture failure required keeping Unity fixed-time aligned with manually simulated physics; no production assertion was removed.",
+    "No Computer Use, screenshots or 720.9-second rendered run was performed for this fix."
+  ],
+  "sourceEvidenceSha256": "4DCEFBCAE22FB6E8CD067618CD0BA782EB5A23D07B20A31A3ECF3323CD6D5C38"
+}

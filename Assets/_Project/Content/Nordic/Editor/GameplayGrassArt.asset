@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cdf744008eb047e9a30cf89337fea525, type: 3}
+  m_Name: GameplayGrassArt
+  m_EditorClassIdentifier: 
+  soil: {fileID: -5403683238646296984, guid: bb7bcad1b1bb80a45b6582f75e9d6a80, type: 3}
+  rockySoil: {fileID: 1990305821035119054, guid: bb7bcad1b1bb80a45b6582f75e9d6a80, type: 3}
+  clusters:
+  - {fileID: 1902610331174533245, guid: bb7bcad1b1bb80a45b6582f75e9d6a80, type: 3}
+  - {fileID: -5011985423820793196, guid: bb7bcad1b1bb80a45b6582f75e9d6a80, type: 3}
+  - {fileID: 4272308700868470604, guid: bb7bcad1b1bb80a45b6582f75e9d6a80, type: 3}
+  tufts:
+  - {fileID: 2066909558886726794, guid: bb7bcad1b1bb80a45b6582f75e9d6a80, type: 3}
+  - {fileID: -1194574384137465173, guid: bb7bcad1b1bb80a45b6582f75e9d6a80, type: 3}
+  - {fileID: -5829822269549135350, guid: bb7bcad1b1bb80a45b6582f75e9d6a80, type: 3}
+  floorScale: 1
+  clusterScale: 1
+  tuftScale: 1

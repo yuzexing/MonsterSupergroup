@@ -2,6 +2,72 @@
   "version": 1,
   "tools": [
     {
+      "id": "open.grass-art",
+      "name": "草地美术配置",
+      "category": "制作",
+      "description": "设置正式地图的两张地表、三张草丛、三张单株草和大小倍率。",
+      "impact": "选择美术配置；不改动地图。",
+      "asset": "Assets/_Project/Content/Nordic/Editor/GameplayGrassArt.asset",
+      "interactive": true,
+      "writesAssets": false,
+      "maintenance": false,
+      "parameters": [],
+      "audience": "人工 / AI",
+      "output": "Logs/GrassArtReplacement",
+      "condition": "edit",
+      "source": "Assets/_Project/NordicSample/Editor/GameplayGrassArtTools.cs"
+    },
+    {
+      "id": "art.apply-grass",
+      "name": "应用草地美术",
+      "category": "制作",
+      "description": "按固定布局替换正式地图中的736张地表和2709处草，保留草丛小石子与当前BaseFloors。",
+      "impact": "备份并更新NordicGameplayMap的美术覆盖；不重建地图，不保存场景。",
+      "method": "MonsterSupergroup.NordicSample.Editor.GameplayGrassArtTools.Apply",
+      "writesAssets": true,
+      "parameters": [
+        "Apply"
+      ],
+      "maintenance": false,
+      "audience": "人工 / AI",
+      "output": "Logs/GrassArtReplacement",
+      "condition": "edit",
+      "source": "Assets/_Project/NordicSample/Editor/GameplayGrassArtTools.cs"
+    },
+    {
+      "id": "validate.grass-art",
+      "name": "校验草地美术",
+      "category": "校验",
+      "description": "检查草地图片、倍率、原草隐藏、草丛小石子及替换数量。",
+      "impact": "只读地图与配置，输出校验报告。",
+      "method": "MonsterSupergroup.NordicSample.Editor.GameplayGrassArtTools.Validate",
+      "writesAssets": false,
+      "maintenance": false,
+      "parameters": [],
+      "audience": "人工 / AI",
+      "output": "Logs/GrassArtReplacement",
+      "condition": "edit",
+      "source": "Assets/_Project/NordicSample/Editor/GameplayGrassArtTools.cs"
+    },
+    {
+      "id": "test.grass-art",
+      "name": "草地美术验收与截图",
+      "category": "验收",
+      "description": "输出八张素材小样及全图截图，验证重复应用、倍率恢复和图集重导入。",
+      "impact": "多次应用当前配置并备份地图，临时测试倍率后恢复；不保存Gameplay场景。",
+      "method": "MonsterSupergroup.NordicSample.Editor.GameplayGrassArtTools.Acceptance",
+      "writesAssets": true,
+      "graphics": true,
+      "parameters": [
+        "Apply"
+      ],
+      "maintenance": false,
+      "audience": "人工 / AI",
+      "output": "Logs/GrassArtReplacement",
+      "condition": "edit",
+      "source": "Assets/_Project/NordicSample/Editor/GameplayGrassArtTools.cs"
+    },
+    {
       "id": "validate.checkout",
       "name": "Git 检出完整性",
       "category": "校验",

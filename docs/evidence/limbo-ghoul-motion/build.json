@@ -1,0 +1,38 @@
+{
+  "version": "GM-20260916-01",
+  "buildSucceeded": true,
+  "buildLog": "F:/UnityStore/MonsterSupergroup_validation_motion_20260916/Logs/GhoulMotionFix/build-final.log",
+  "buildLogSha256": "6BB14DF8B3A70288D1617D38659545C698A5E104CF76D667DB1F51787DAE434D",
+  "runtimeAssemblies": [
+    {
+      "file": "MonsterSupergroup.Gameplay.Combat.dll",
+      "sha256": "080AF4A1CD319373CB0E7CF43EEAA87BD283DD9F79AD30D8448BA0D80B1D5F08"
+    },
+    {
+      "file": "MonsterSupergroup.NetworkCombat.dll",
+      "sha256": "23AFEB2F3BF19FEC351F0C63978A5FFC3C734F0A7EC70435D0910056F4321207"
+    }
+  ],
+  "automated": {
+    "playRegression": "74/74",
+    "finalGhoulConfigurationAndProtocol": "14/14",
+    "editRegression": "105/105",
+    "quarterSpeed": "1/1",
+    "beforeFixReproduction": "failed as expected: empty attack overwrote left movement"
+  },
+  "visualAcceptance": "pending user manual check",
+  "computerUsePerformed": false,
+  "full720RenderedRunPerformed": false,
+  "pressureConclusion": "none",
+  "sourceEvidenceUnchanged": true,
+  "manualFullHelpers": false,
+  "shortProfile": {
+    "healBelow": 300,
+    "weaponsSuppressed": true,
+    "seconds": 65,
+    "automaticScreenshots": false,
+    "name": "ghoul-motion",
+    "automaticWalking": false
+  },
+  "buildEnvironmentNote": "Isolated copy AppID 480 replaced with unchanged main-project file 4886160 after the first build was rejected; no production Steam code changed."
+}

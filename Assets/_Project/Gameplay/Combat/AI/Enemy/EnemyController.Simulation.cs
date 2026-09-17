@@ -60,6 +60,7 @@ namespace AstralShift.HellMaiden.AI.Enemy
         public EnemyActionState CaptureSimulationAction(double now)
         {
             var state = simulationAction;
+            attackScript?.CaptureSimulationMotion(ref state);
             if (attackScript is EnemyAttackDash dash) dash.CaptureDashState(ref state);
             if (attackScript is EnemyAttackExplosion explosion) explosion.CaptureExplosion(ref state);
             if (attackScript is EnemyProjectileAttack projectile && projectile.NetworkExecution != null)

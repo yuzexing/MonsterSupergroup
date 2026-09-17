@@ -1,0 +1,15 @@
+{
+  "protectedFiles": {
+    "Assets/_Project/Content/Nordic/NordicStaticMap.prefab": true,
+    "Assets/_Project/Scenes/NordicStaticSample.unity": true,
+    "Assets/_Project/Content/Nordic/GameplayNavigation.bytes": true,
+    "Assets/_Project/Content/NetworkCombat/NetworkPlayer.prefab": true,
+    "Assets/_Project/Scenes/Gameplay.unity": true,
+    "Assets/Sprite/caodiwenli_all.tga": true,
+    "Assets/Sprite/changjing_caodi.tga": true,
+    "Assets/Sprite/changjing_caodi.tga.meta": true
+  },
+  "preexistingOverrideCount": 1703,
+  "preexistingOverridesPreserved": true,
+  "serializationFloatFormattingChanges": 560
+}

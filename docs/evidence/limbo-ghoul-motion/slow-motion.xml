@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="1" result="Passed" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-09-16 15:08:56Z" end-time="2026-09-16 15:08:59Z" duration="3.0261869">
+  <test-suite type="TestSuite" id="1652" name="Monster Supergroup" fullname="Monster Supergroup" runstate="Runnable" testcasecount="544" result="Passed" start-time="2026-09-16 15:08:56Z" end-time="2026-09-16 15:08:59Z" duration="3.026187" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="PlayMode" />
+    </properties>
+    <test-suite type="Assembly" id="1636" name="MonsterSupergroup.Gameplay.Tests.PlayMode.dll" fullname="F:/UnityStore/MonsterSupergroup_validation_motion_20260916/Library/ScriptAssemblies/MonsterSupergroup.Gameplay.Tests.PlayMode.dll" runstate="Runnable" testcasecount="540" result="Passed" start-time="2026-09-16 15:08:56Z" end-time="2026-09-16 15:08:59Z" duration="3.014267" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="97848" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="PlayMode" />
+        <property name="EditorOnly" value="False" />
+      </properties>
+      <test-suite type="TestSuite" id="1637" name="MonsterSupergroup" fullname="MonsterSupergroup" runstate="Runnable" testcasecount="540" result="Passed" start-time="2026-09-16 15:08:56Z" end-time="2026-09-16 15:08:59Z" duration="3.011072" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-suite type="TestSuite" id="1638" name="Gameplay" fullname="MonsterSupergroup.Gameplay" runstate="Runnable" testcasecount="540" result="Passed" start-time="2026-09-16 15:08:56Z" end-time="2026-09-16 15:08:59Z" duration="3.000121" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <test-suite type="TestSuite" id="1639" name="Tests" fullname="MonsterSupergroup.Gameplay.Tests" runstate="Runnable" testcasecount="540" result="Passed" start-time="2026-09-16 15:08:56Z" end-time="2026-09-16 15:08:59Z" duration="2.992737" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-suite type="TestFixture" id="1291" name="GhoulWarningStepTests" fullname="MonsterSupergroup.Gameplay.Tests.GhoulWarningStepTests" classname="MonsterSupergroup.Gameplay.Tests.GhoulWarningStepTests" runstate="Runnable" testcasecount="7" result="Passed" start-time="2026-09-16 15:08:56Z" end-time="2026-09-16 15:08:59Z" duration="2.971523" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1295" name="SourceRequestsAt60FpsWithQuarterSpeedClock" fullname="MonsterSupergroup.Gameplay.Tests.GhoulWarningStepTests.SourceRequestsAt60FpsWithQuarterSpeedClock" methodname="SourceRequestsAt60FpsWithQuarterSpeedClock" classname="MonsterSupergroup.Gameplay.Tests.GhoulWarningStepTests" runstate="Runnable" seed="716278897" result="Passed" start-time="2026-09-16 15:08:56Z" end-time="2026-09-16 15:08:59Z" duration="2.960995" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[[Localization] Applied locale=zh-CN revision=2
+Controlled render=60, scale=0.25, physics=50Hz, displacement=(4.95, 3.90); frame dependent by source design.
+Saving results to: C:/Users/ADMIN/AppData/LocalLow/DefaultCompany/Monster Supergroup\TestResults.xml
+]]></output>
+              </test-case>
+            </test-suite>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

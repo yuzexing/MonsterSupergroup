@@ -1,0 +1,7 @@
+{
+    "editorInstantiationMs": 231.298,
+    "editorRenderSubmitMedianMs": 1.502,
+    "editorAllocatedMiB": 567.2422533035278,
+    "enabledSprites": 8507,
+    "note": "Editor isolated map render; FOV80 Z=-10 except overview Z=-48. CPU render submission timing, not standalone gameplay frame time or GPU timing. No network/enemy simulation."
+}

@@ -22,6 +22,7 @@ namespace AstralShift.HellMaiden.AI.Enemy
         {
             if (!UsesSharedAttackTimeline || simulationAction.ActionId == 0) return false;
             double now = simulationClock();
+            attackScript.CaptureSimulationMotion(ref simulationAction);
             var next = EnemyActionTimeline.Resolve(simulationAction, now);
             if (next.Phase == EnemyAttackPresentationPhase.Cancelled) return true;
             bool changed = next.StrikeIndex != simulationAction.StrikeIndex || next.Phase != simulationAction.Phase;

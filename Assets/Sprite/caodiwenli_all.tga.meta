@@ -1,0 +1,366 @@
+fileFormatVersion: 2
+guid: bb7bcad1b1bb80a45b6582f75e9d6a80
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 3858831894235462825
+    second: caodiwenli_all_0
+  - first:
+      213: 2066909558886726794
+    second: caodiwenli_all_1
+  - first:
+      213: 1902610331174533245
+    second: caodiwenli_all_2
+  - first:
+      213: -5403683238646296984
+    second: caodiwenli_all_3
+  - first:
+      213: 7343321074533807692
+    second: caodiwenli_all_4
+  - first:
+      213: -1194574384137465173
+    second: caodiwenli_all_5
+  - first:
+      213: -8127594665431845628
+    second: caodiwenli_all_6
+  - first:
+      213: -5011985423820793196
+    second: caodiwenli_all_7
+  - first:
+      213: 1990305821035119054
+    second: caodiwenli_all_8
+  - first:
+      213: -1165865897407110832
+    second: caodiwenli_all_9
+  - first:
+      213: -8112706125937536452
+    second: caodiwenli_all_10
+  - first:
+      213: 652595310059581782
+    second: caodiwenli_all_11
+  - first:
+      213: -5829822269549135350
+    second: caodiwenli_all_12
+  - first:
+      213: 4195627343847174418
+    second: caodiwenli_all_13
+  - first:
+      213: 585946979752358065
+    second: caodiwenli_all_14
+  - first:
+      213: 4272308700868470604
+    second: caodiwenli_all_15
+  - first:
+      213: 8784047256001953968
+    second: caodiwenli_all_16
+  - first:
+      213: -6559211343532296050
+    second: caodiwenli_all_17
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: caodiwenli_all_level3_1
+      rect:
+        serializedVersion: 2
+        x: 93
+        y: 733
+        width: 166
+        height: 138
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a8c7d48fa432fac10800000000000000
+      internalID: 2066909558886726794
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: caodiwenli_all_level2_1
+      rect:
+        serializedVersion: 2
+        x: 447
+        y: 681
+        width: 297
+        height: 178
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d7875a7040e676a10800000000000000
+      internalID: 1902610331174533245
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: caodiwenli_all_level1_1
+      rect:
+        serializedVersion: 2
+        x: 792
+        y: 414
+        width: 874
+        height: 544
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 86e41c179b24205b0800000000000000
+      internalID: -5403683238646296984
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: caodiwenli_all_level3_2
+      rect:
+        serializedVersion: 2
+        x: 44
+        y: 480
+        width: 194
+        height: 123
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ba294bf3de40c6fe0800000000000000
+      internalID: -1194574384137465173
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: caodiwenli_all_level2_2
+      rect:
+        serializedVersion: 2
+        x: 313
+        y: 331
+        width: 475
+        height: 291
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 49ad9b9cfc9d17ab0800000000000000
+      internalID: -5011985423820793196
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: caodiwenli_all_level1_2
+      rect:
+        serializedVersion: 2
+        x: 792
+        y: 5
+        width: 808
+        height: 366
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ec1c031699cfe9b10800000000000000
+      internalID: 1990305821035119054
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: caodiwenli_all_level3_3
+      rect:
+        serializedVersion: 2
+        x: 22
+        y: 78
+        width: 285
+        height: 187
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a0abcd7988f481fa0800000000000000
+      internalID: -5829822269549135350
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: caodiwenli_all_level2_3
+      rect:
+        serializedVersion: 2
+        x: 447
+        y: 89
+        width: 259
+        height: 156
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c476316b02a4a4b30800000000000000
+      internalID: 4272308700868470604
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: d307dd1af1f8b264faa63b31079c310b
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      caodiwenli_all_0: 3858831894235462825
+      caodiwenli_all_10: -8112706125937536452
+      caodiwenli_all_11: 652595310059581782
+      caodiwenli_all_13: 4195627343847174418
+      caodiwenli_all_14: 585946979752358065
+      caodiwenli_all_16: 8784047256001953968
+      caodiwenli_all_17: -6559211343532296050
+      caodiwenli_all_4: 7343321074533807692
+      caodiwenli_all_6: -8127594665431845628
+      caodiwenli_all_9: -1165865897407110832
+      caodiwenli_all_level1_1: -5403683238646296984
+      caodiwenli_all_level1_2: 1990305821035119054
+      caodiwenli_all_level2_1: 1902610331174533245
+      caodiwenli_all_level2_2: -5011985423820793196
+      caodiwenli_all_level2_3: 4272308700868470604
+      caodiwenli_all_level3_1: 2066909558886726794
+      caodiwenli_all_level3_2: -1194574384137465173
+      caodiwenli_all_level3_3: -5829822269549135350
+      caodiwenli_allllevel2_2: 2066909558886726794
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

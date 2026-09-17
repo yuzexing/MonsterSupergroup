@@ -20,6 +20,7 @@ namespace MonsterSupergroup.NetworkCombat
         private StreamWriter log;
         private string run;
         private bool fixture,technical,positioned,paused,pauseDone,cleanup;
+        private bool motionPreview;
         private float nextSelection,resumeAt;
         private uint slow;
         private int handoff;
@@ -38,11 +39,13 @@ namespace MonsterSupergroup.NetworkCombat
             ?e.CaptureCurrentCheckpoint().Movement.Runtime.Action:e.GetComponent<NetworkEnemyMeleeReplica>().AppliedSequenceState;
         private void Start()
         {
-            fixture=LimboReferenceLaunch.Profile=="ghoul-fixture";technical=fixture||LimboReferenceLaunch.Profile=="ghoul-validation";
+            motionPreview = LimboReferenceLaunch.Profile == "ghoul-motion";
+            fixture=LimboReferenceLaunch.Profile=="ghoul-fixture";technical=fixture||LimboReferenceLaunch.Profile=="ghoul-validation"||motionPreview;
             Directory.CreateDirectory(LimboReferenceLaunch.OutputDirectory);
             log=new StreamWriter(Path.Combine(LimboReferenceLaunch.OutputDirectory,"ghoul.jsonl")){AutoFlush=true};
-            Write("configuration",fixture?"FIXTURE: placement, weapon suppression, healing, forced handoffs and clock leases; not pressure evidence.":technical?"TECHNICAL: ordinary auto-walk, first-card selection, healing below 300; not pressure evidence.":"PLAYABLE: passive observation.");
+            Write("configuration",motionPreview?"MOTION PREVIEW: manual movement, weapon suppression, healing below 300; no screenshots; not pressure evidence.":fixture?"FIXTURE: placement, weapon suppression, healing, forced handoffs and clock leases; not pressure evidence.":technical?"TECHNICAL: ordinary auto-walk, first-card selection, healing below 300; not pressure evidence.":"PLAYABLE: passive observation.");
             PlayerDamageInteraction.DamageAttempted+=Hit;
+            if (motionPreview) Write("motion-preview", "65-second isolated Ghoul: weapons suppressed, health restored below 300; manual movement, no placement or screenshots. Not pressure evidence.");
         }
         private void Write(string kind,string detail,object data=null)=>log?.WriteLine(JsonUtility.ToJson(new Row{kind=kind,detail=detail,run=run,elapsed=Elapsed,combat=EnemySimulationClock.CombatNow,realtime=Time.realtimeSinceStartupAsDouble,payload=data==null?null:JsonUtility.ToJson(data)}));
         private void Hit(PlayerDamageInteraction source,PlayerMovement player,int amount)
@@ -60,6 +63,7 @@ namespace MonsterSupergroup.NetworkCombat
             var progress=NetworkCombatWorld.Instance.GetComponent<NetworkWaveProgress>().Snapshot;
             if(run!=progress.RunId){ReleaseClock();RestoreFixtureKnockback();run=progress.RunId;placed.Clear();requested.Clear();phases.Clear();pictures.Clear();boundaries.Clear();handoff=0;positioned=pauseDone=cleanup=false;Write("round",run);}
             var local=NetworkClient.localPlayer;var player=local.GetComponent<PlayerMovement>();
+            if (motionPreview && !BootGameplayNetworkManager.CombatHasEnded) local.GetComponent<PlayerBuildRuntime>()?.SetWeaponExecutionEnabled(false);
             if(technical&&!BootGameplayNetworkManager.CombatHasEnded)
             {
                 if(local.GetComponent<CombatantBehaviour>().CurrentHealth<300){Write("test-heal","IncreaseHealth 500; max unchanged");player.IncreaseHealth(500);}
@@ -168,7 +172,7 @@ namespace MonsterSupergroup.NetworkCombat
             if(Elapsed>=170&&Elapsed<179&&slow==0){slow=PauseManager.Instance.StartSlowMo(true,.25f);Write("test-slow","Existing 0.25 slow-motion lease");}
             if(Elapsed>=179&&slow!=0){PauseManager.Instance.StopSlowMo(true,slow);slow=0;}
         }
-        private void Capture(string tag){if(pictures.Add(tag))ScreenCapture.CaptureScreenshot(Path.Combine(LimboReferenceLaunch.OutputDirectory,"ghoul-"+run+"-"+tag+".png"));}
+        private void Capture(string tag){if(!motionPreview&&pictures.Add(tag))ScreenCapture.CaptureScreenshot(Path.Combine(LimboReferenceLaunch.OutputDirectory,"ghoul-"+run+"-"+tag+".png"));}
         private void ReleaseClock(){if(PauseManager.Instance!=null){if(paused)PauseManager.Instance.ResumeGame();if(slow!=0)PauseManager.Instance.StopSlowMo(true,slow);}paused=false;slow=0;}
         private void RestoreFixtureKnockback(){if(fixtureKnockback!=null){fixtureKnockback.distance=originalDistance;fixtureKnockback.staggerTime=originalStagger;fixtureKnockback=null;}}
         private void OnDestroy(){ReleaseClock();RestoreFixtureKnockback();PlayerDamageInteraction.DamageAttempted-=Hit;log?.Dispose();}

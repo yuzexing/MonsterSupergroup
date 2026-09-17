@@ -4,6 +4,18 @@ namespace AstralShift.HellMaiden.AI.Enemy
 {
 	public class SequenceEnemyAttack : EnemyAttackMelee
 	{
+        private EnemyWarningStep warningStep;
+        private EnemyWarningStep WarningStep => warningStep != null ? warningStep : warningStep = GetComponent<EnemyWarningStep>();
+        public override void PrepareTimeline(ref EnemyActionState state) => WarningStep?.Begin(state, ref state.WarningStep);
+        public override void CaptureSimulationMotion(ref EnemyActionState state) => WarningStep?.Capture(state.ActionId, ref state.WarningStep);
+        public override void ApplySimulationFrame(EnemyActionState state, double now) => WarningStep?.Advance(state, now);
+        public override void RestoreSimulationMotion(EnemyActionState state, double now) => WarningStep?.Restore(state, now);
+        public override void ReleaseSimulationMotion() => WarningStep?.Release();
+        public override void SuspendSimulation()
+        {
+            ReleaseSimulationMotion();
+            base.SuspendSimulation();
+        }
         public override bool SupportsSharedTimeline => true;
         protected override EnemyStrikeTiming[] CreateTimelineStrikes()
         {
@@ -76,6 +88,7 @@ namespace AstralShift.HellMaiden.AI.Enemy
 
 		public override void CancelAttack()
 		{
+            ReleaseSimulationMotion();
 			currentAttackCount = 0;
 			base.CancelAttack();
 		}

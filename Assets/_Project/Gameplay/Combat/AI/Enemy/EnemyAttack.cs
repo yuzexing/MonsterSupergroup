@@ -11,6 +11,7 @@ namespace AstralShift.HellMaiden.AI.Enemy
         public System.Collections.Generic.IReadOnlyList<EnemyStrikeTiming> TimelineStrikes => timelineStrikes ??= CreateTimelineStrikes();
         protected virtual EnemyStrikeTiming[] CreateTimelineStrikes() => new[] { new EnemyStrikeTiming(WarningTime, AttackTime) };
         public virtual void PrepareTimeline(ref EnemyActionState state) { }
+        public virtual void CaptureSimulationMotion(ref EnemyActionState state) { }
         public virtual void ApplySimulationFrame(EnemyActionState state, double now) { }
         public virtual void RestoreSimulationMotion(EnemyActionState state, double now) => ApplySimulationFrame(state, now);
         public virtual void ReleaseSimulationMotion() { }

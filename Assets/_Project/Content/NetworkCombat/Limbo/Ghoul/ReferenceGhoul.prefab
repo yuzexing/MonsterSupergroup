@@ -1585,6 +1585,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 3911887690903730936, guid: 55ff35e83fff4c74ea6f8f2e82883aa2, type: 3}
       insertIndex: -1
       addedObject: {fileID: 2514499620270849595}
+    - targetCorrespondingSourceObject: {fileID: 3911887690903730936, guid: 55ff35e83fff4c74ea6f8f2e82883aa2, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 3159182072579288581}
     - targetCorrespondingSourceObject: {fileID: 4919775779397899460, guid: 55ff35e83fff4c74ea6f8f2e82883aa2, type: 3}
       insertIndex: -1
       addedObject: {fileID: 625512002732343490}
@@ -1595,6 +1598,11 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 1117221805532892749}
   m_SourcePrefab: {fileID: 100100000, guid: 55ff35e83fff4c74ea6f8f2e82883aa2, type: 3}
+--- !u!50 &695498751937934982 stripped
+Rigidbody2D:
+  m_CorrespondingSourceObject: {fileID: 643773787611812521, guid: 55ff35e83fff4c74ea6f8f2e82883aa2, type: 3}
+  m_PrefabInstance: {fileID: 92830354841510959}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &1234418896877776980 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 1182271614744417403, guid: 55ff35e83fff4c74ea6f8f2e82883aa2, type: 3}
@@ -1662,6 +1670,21 @@ MonoBehaviour:
   currentAttackCount: 2
   consecutiveAttacks: 2
   areaSideWarpDistance: {x: 0, y: 0.5, z: 0}
+--- !u!114 &3159182072579288581
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3963200209637973719}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c5ce731599074af4bdca074051a2fc65, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: MonsterSupergroup.Gameplay.Combat::AstralShift.HellMaiden.AI.Enemy.EnemyWarningStep
+  _attackMelee: {fileID: 2514499620270849595}
+  _rigidbody: {fileID: 695498751937934982}
+  stepDistance: 0.4
 --- !u!212 &4623282440663811494 stripped
 SpriteRenderer:
   m_CorrespondingSourceObject: {fileID: 4711044852071195017, guid: 55ff35e83fff4c74ea6f8f2e82883aa2, type: 3}

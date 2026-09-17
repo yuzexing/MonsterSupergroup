@@ -1,0 +1,20 @@
+{
+    "passed": true,
+    "map": "Assets/_Project/Content/Nordic/NordicGameplayMap.prefab",
+    "profile": "Assets/_Project/Content/Nordic/Editor/GameplayGrassArt.asset",
+    "floors": 736,
+    "clusters": 2038,
+    "tufts": 671,
+    "preservedStones": 1338,
+    "hiddenGrassParts": 11579,
+    "clusterVariants": [
+        668,
+        697,
+        673
+    ],
+    "tuftVariants": [
+        216,
+        239,
+        216
+    ]
+}

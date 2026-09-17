@@ -13,6 +13,8 @@ namespace MonsterSupergroup.NetworkCombat
         internal bool ValidateSequenceAction(EnemyActionState action)
         {
             if (!(new EnemySimulationRuntimeState{Action=action}).IsFinite) return false;
+            if (action.WarningStep.Enabled && (enemyController == null ||
+                enemyController.GetComponent<EnemyWarningStep>() is not { enabled: true })) return false;
             if (action.ActionId == cancelledSequenceActionId && action.ActionId != 0 && action.Phase != EnemyAttackPresentationPhase.Cancelled && action.Phase != EnemyAttackPresentationPhase.Inactive) return false;
             var timed = enemyController != null ? enemyController.attackScript : null;
             if (timed != null && timed.SupportsSharedTimeline && timed is not SequenceEnemyAttack && action.ActionId != 0)

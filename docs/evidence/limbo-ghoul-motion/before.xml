@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="1" result="Failed(Child)" total="1" passed="0" failed="1" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-09-16 14:50:46Z" end-time="2026-09-16 14:50:51Z" duration="4.8849669">
+  <test-suite type="TestSuite" id="1643" name="Monster Supergroup" fullname="Monster Supergroup" runstate="Runnable" testcasecount="536" result="Failed" site="Child" start-time="2026-09-16 14:50:46Z" end-time="2026-09-16 14:50:51Z" duration="4.884967" total="1" passed="0" failed="1" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="PlayMode" />
+    </properties>
+    <failure>
+      <message><![CDATA[One or more child tests had errors]]></message>
+    </failure>
+    <test-suite type="Assembly" id="1627" name="MonsterSupergroup.Gameplay.Tests.PlayMode.dll" fullname="F:/UnityStore/MonsterSupergroup_validation_motion_20260916/Library/ScriptAssemblies/MonsterSupergroup.Gameplay.Tests.PlayMode.dll" runstate="Runnable" testcasecount="532" result="Failed" site="Child" start-time="2026-09-16 14:50:46Z" end-time="2026-09-16 14:50:51Z" duration="4.872813" total="1" passed="0" failed="1" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="59560" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="PlayMode" />
+        <property name="EditorOnly" value="False" />
+      </properties>
+      <failure>
+        <message><![CDATA[One or more child tests had errors]]></message>
+      </failure>
+      <test-suite type="TestSuite" id="1628" name="MonsterSupergroup" fullname="MonsterSupergroup" runstate="Runnable" testcasecount="532" result="Failed" site="Child" start-time="2026-09-16 14:50:46Z" end-time="2026-09-16 14:50:51Z" duration="4.870334" total="1" passed="0" failed="1" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <failure>
+          <message><![CDATA[One or more child tests had errors]]></message>
+        </failure>
+        <test-suite type="TestSuite" id="1629" name="Gameplay" fullname="MonsterSupergroup.Gameplay" runstate="Runnable" testcasecount="532" result="Failed" site="Child" start-time="2026-09-16 14:50:46Z" end-time="2026-09-16 14:50:51Z" duration="4.859877" total="1" passed="0" failed="1" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <failure>
+            <message><![CDATA[One or more child tests had errors]]></message>
+          </failure>
+          <test-suite type="TestSuite" id="1630" name="Tests" fullname="MonsterSupergroup.Gameplay.Tests" runstate="Runnable" testcasecount="532" result="Failed" site="Child" start-time="2026-09-16 14:50:46Z" end-time="2026-09-16 14:50:51Z" duration="4.852063" total="1" passed="0" failed="1" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <failure>
+              <message><![CDATA[One or more child tests had errors]]></message>
+            </failure>
+            <test-suite type="TestFixture" id="1168" name="EnemyPrefabVariantPlayModeTests" fullname="MonsterSupergroup.Gameplay.Tests.EnemyPrefabVariantPlayModeTests" classname="MonsterSupergroup.Gameplay.Tests.EnemyPrefabVariantPlayModeTests" runstate="Runnable" testcasecount="21" result="Failed" site="Child" start-time="2026-09-16 14:50:46Z" end-time="2026-09-16 14:50:51Z" duration="4.841637" total="1" passed="0" failed="1" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <failure>
+                <message><![CDATA[One or more child tests had errors]]></message>
+              </failure>
+              <test-case id="1180" name="GhoulBirthMovementKeepsLeftFacingAndAdvancesFramesBeforeFirstAttack" fullname="MonsterSupergroup.Gameplay.Tests.EnemyPrefabVariantPlayModeTests.GhoulBirthMovementKeepsLeftFacingAndAdvancesFramesBeforeFirstAttack" methodname="GhoulBirthMovementKeepsLeftFacingAndAdvancesFramesBeforeFirstAttack" classname="MonsterSupergroup.Gameplay.Tests.EnemyPrefabVariantPlayModeTests" runstate="Runnable" seed="1788517968" result="Failed" start-time="2026-09-16 14:50:46Z" end-time="2026-09-16 14:50:51Z" duration="4.830022" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <failure>
+                  <message><![CDATA[  The previous frame's empty attack must not overwrite real leftward locomotion.
+  Expected: same as <Enemy_Ghoul_Walk_Left (UnityEngine.AnimationClip)>
+  But was:  <Enemy_Ghoul_Walk_Right (UnityEngine.AnimationClip)>
+]]></message>
+                  <stack-trace><![CDATA[at MonsterSupergroup.Gameplay.Tests.EnemyPrefabVariantPlayModeTests+<GhoulBirthMovementKeepsLeftFacingAndAdvancesFramesBeforeFirstAttack>d__14.MoveNext () [0x00270] in F:\UnityStore\MonsterSupergroup_validation_motion_20260916\Assets\_Project\Tests\PlayMode\Gameplay\EnemyPrefabVariantPlayModeTests.Timeline.cs:38
+at UnityEngine.TestTools.TestEnumerator+<Execute>d__7.MoveNext () [0x0004e] in .\Library\PackageCache\com.unity.test-framework@bd7f943e9647\UnityEngine.TestRunner\NUnitExtensions\Attributes\TestEnumerator.cs:44
+]]></stack-trace>
+                </failure>
+                <output><![CDATA[[Localization] Applied locale=zh-CN revision=2
+[NetworkBackend] backend=Kcp purpose=Test source=test-runner transport=KcpTransport.
+--- Hardware Info ---
+CPU Model: 13th Gen Intel(R) Core(TM) i7-13700KF
+GPU Model: Null Device
+RAM: 65375 MB
+Install Disk Model: Get-Partition : 找不到任何“DriveLetter”属性等于“F”的 MSFT_Partition 对象。请验证属性值，然后重试。
+所在位置 行:1 字符: 12
++ (Get-Disk (Get-Partition -DriveLetter 'F').DiskNumber).Model
++            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (F:Char) [Get-Partition], CimJobException
+    + FullyQualifiedErrorId : CmdletizationQuery_NotFound_DriveLetter,Get-Partition
+ 
+Get-Disk : 无法对参数“Number”执行参数验证。参数为 Null。请为参数提供一个有效的值，然后再次尝试运行该命令。
+所在位置 行:1 字符: 11
++ (Get-Disk (Get-Partition -DriveLetter 'F').DiskNumber).Model
++           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : InvalidData: (:) [Get-Disk]，ParameterBindingValidationException
+    + FullyQualifiedErrorId : ParameterArgumentValidationError,Get-Disk
+Main Monitor Model: Unknown Monitor
+---------------------
+Normal : True
+UI : False
+AstralShift.HellMaiden.Controllers.PlayerController_HMD
+<color=yellow><b>► Controllers: </b></color>Controller type AstralShift.Control.Controllers.NoInputGameController not available
+Server listening on port 7986
+[BootGameplay] Server starting; loading 'Assets/_Project/Scenes/Gameplay.unity'.
+[BootGameplay] Server connection 0 is ready.
+[BootGameplay] Queued Player for connection 0.
+[BootGameplay] Gameplay scene ready: 'Assets/_Project/Scenes/Gameplay.unity'.
+[BootGameplay] Spawned Player NetworkPlayer [connId=0] in 'Assets/_Project/Scenes/Gameplay.unity'.
+<color=yellow><b>► Controllers: </b></color>Overrode <color=yellow><b></b></color> with <color=yellow><b>PlayerController_HMD</b></color>.
+Normal : True
+UI : False
+[BootGameplay] Client stopping; serverActive=True.
+[BootGameplay] Server stopping.
+[BootGameplay] Gameplay unload requested.
+There are 2 audio listeners in the scene. Please ensure there is always exactly one audio listener in the scene.
+[SteamInvite] stage=cleanup lobby=0 host=0 phase=Disabled reason=
+Saving results to: C:/Users/ADMIN/AppData/LocalLow/DefaultCompany/Monster Supergroup\TestResults.xml
+]]></output>
+              </test-case>
+            </test-suite>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

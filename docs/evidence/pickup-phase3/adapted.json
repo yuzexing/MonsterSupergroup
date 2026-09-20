@@ -1,0 +1,37 @@
+{
+  "version": "PU-20260919-01",
+  "runtimeWorld": "NetworkExperienceWorld",
+  "items": [
+    {
+      "id": 1,
+      "effect": "Experience",
+      "value": "enemy birth XP",
+      "idleCapacity": 500,
+      "worldLimit": null,
+      "grant": "claim"
+    },
+    {
+      "id": 2,
+      "effect": "RestoreHealth",
+      "value": 200,
+      "idleCapacity": 100,
+      "worldLimit": 4,
+      "grant": "after .3+.5 combat seconds, owner health receipt"
+    }
+  ],
+  "prewarm": 0,
+  "itemWeight": 0.001,
+  "lowHealthBias": 0.1,
+  "randomSeed": 14303,
+  "xpModifier": 2,
+  "sourceCurveDifference": "Unity Linear has unused outside endpoint slopes 0; the interpolated 0..1 segment equals source linear curve.",
+  "differences": [
+    "Shared server pickup world; only XP and health candidates",
+    "Low health bias uses confirmed killer; unavailable health has no bias",
+    "Independent server random stream, seed 14303",
+    "XP awards at claim, health after flight and OwnerFinal receipt",
+    "No source map-tile despawn, screen-off XP merging, magnets, elite chest"
+  ],
+  "visualAcceptance": "pending user",
+  "audioAcceptance": "pending user"
+}

@@ -1,0 +1,10 @@
+{
+  "version": "PU-20260919-01",
+  "package": "F:\\Limbo Acceptance\\LimboManual-PU-20260919-01",
+  "archive": "F:\\Limbo Acceptance\\LimboManual-PU-20260919-01.zip",
+  "archiveBytes": 426541592,
+  "sha256": "407e42b22d4b05f007b1c8cd189c1bf857af0bf8977351edca2dcef268e9606e",
+  "manifestSha256": "61f9c2f7eec48a76ce2335f19fd2325fdd9c1a3ab6b99b22546e2062837e4f87",
+  "runtimeUnchangedSinceCandidateSmoke": true,
+  "testAssemblies": false
+}

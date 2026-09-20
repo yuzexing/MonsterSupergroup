@@ -1,0 +1,182 @@
+[
+  {
+    "path": "Assets/_Project/Content/HellMaiden/NativeGAS/Experience/AnimationClip/WorldItem_Health_Idle.anim",
+    "sha256": "ed81478b08e97fe2aea24824cafac4cebf58c1b2152b3033344a07ab6ee93b8f",
+    "guid": "136fa4fb437ebd242bccb149351637df"
+  },
+  {
+    "path": "Assets/_Project/Content/HellMaiden/NativeGAS/Experience/AnimatorController/WorldItem_Health.controller",
+    "sha256": "639f0592fd68bdd54da2fc2cef07988c2937b8c3516883db8ae7434b0cae25f6",
+    "guid": "af8aaa5d559fc814d85233145bc1b5ff"
+  },
+  {
+    "path": "Assets/_Project/Content/HellMaiden/NativeGAS/Experience/GameObject/WorldItem_Health.prefab",
+    "sha256": "e67ec9acfdf2c563a6d80e1005f4fc7d269d0d9538598822440496dcf6f4f9e7",
+    "guid": "e406dbf41e4e96a4eadc3762cdc4fc6b"
+  },
+  {
+    "path": "Assets/_Project/Content/HellMaiden/NativeGAS/Experience/Material/Sprite-Lit-Default_0.mat",
+    "sha256": "06f566a47101a4395730a96e9b43aab6e158fc6e9dfd0c319d6d730e164f2bb9",
+    "guid": "1248ef571ef70b8418ac654d57228301"
+  },
+  {
+    "path": "Assets/_Project/Content/HellMaiden/NativeGAS/Experience/Material/WorldItem_Health.mat",
+    "sha256": "ee9824cae53b3b0c7338a00447daa916d314b361e4adb7097cf077792335a335",
+    "guid": "8af794edb7322ca42a9484475089b1ef"
+  },
+  {
+    "path": "Assets/_Project/Content/HellMaiden/NativeGAS/Experience/Material/lightray2_ADD 1.mat",
+    "sha256": "462a2998ad150f8861ce34a193ecb62a93b1c78c7a5609be1a2738a50cce7f35",
+    "guid": "6d309caafc2d688408be13dba9dcd129"
+  },
+  {
+    "path": "Assets/_Project/Content/HellMaiden/NativeGAS/Experience/Material/sparkle_ADD 1_0.mat",
+    "sha256": "45cc50d8a4717a53e314d7944ce74ea23167f5bea154c48720692949379fcef1",
+    "guid": "df551a54cc06c5e4d85829fde5754a79"
+  },
+  {
+    "path": "Assets/_Project/Content/HellMaiden/NativeGAS/Experience/Shader/Universal Render Pipeline_2D_Sprite-Lit-Default_0.shader",
+    "sha256": "6925ae643aa69b78d9bbd3a8496b31e4f8e887fd7ae8fb5b76c2aa9d450589c2",
+    "guid": "c863b9e011f81ba46a99ee95d8d67fbb"
+  },
+  {
+    "path": "Assets/_Project/Content/HellMaiden/NativeGAS/Experience/Sprite/blurredSquare.asset",
+    "sha256": "710ae10ee60e823c5a8cf41510df00cee03786d353ae10feabbfdb9db772c272",
+    "guid": "9ce10328dd6043a418ddf6783861b8c1"
+  },
+  {
+    "path": "Assets/_Project/Content/HellMaiden/NativeGAS/Experience/Sprite/hp_icon_0.asset",
+    "sha256": "5700688825b49bb6314602261e78945981a6249944e6e82be8a87793e0dc2a9c",
+    "guid": "e928a06af95ceae46973c4d8d1fa2278"
+  },
+  {
+    "path": "Assets/_Project/Content/HellMaiden/NativeGAS/Experience/Sprite/hp_icon_1.asset",
+    "sha256": "2074e96f9e4437d6e725678ab501a56e65542c31b78b8970c83fc46861576a3b",
+    "guid": "b164829858a1a7d48bd86ead3103ba0a"
+  },
+  {
+    "path": "Assets/_Project/Content/HellMaiden/NativeGAS/Experience/Sprite/hp_icon_2.asset",
+    "sha256": "0c6b3adddb11e6a4f4bd431622bda70d4295f11624f688e11b53d3af7092bfc0",
+    "guid": "e4792024f733b9e40a05c9b03d162c64"
+  },
+  {
+    "path": "Assets/_Project/Content/HellMaiden/NativeGAS/Experience/Sprite/hp_icon_3.asset",
+    "sha256": "45631ae9ef98fc88b7473139f4c646de2a5dff281b84a45de2a6a371dd8856b7",
+    "guid": "a2f4704f17b29e54187043b34d4356b3"
+  },
+  {
+    "path": "Assets/_Project/Content/HellMaiden/NativeGAS/Experience/Sprite/hp_icon_4.asset",
+    "sha256": "d2716fada4a93860636fd04e56844172788ab06ec459e1e228876276616542bf",
+    "guid": "276ac1dfcd9b0d64ea731b5cd740b646"
+  },
+  {
+    "path": "Assets/_Project/Content/HellMaiden/NativeGAS/Experience/Sprite/hp_icon_5.asset",
+    "sha256": "ac2f8c5cc24b53d70f964d8a8d8cef398838a9cdde0078ca44b9b463d2673784",
+    "guid": "a3a334e5e6db9a5479f6e56534ab29d7"
+  },
+  {
+    "path": "Assets/_Project/Content/HellMaiden/NativeGAS/Experience/Sprite/hp_icon_6.asset",
+    "sha256": "f47259931e823a8ad749548130e353a087cc8ebcd379f43741d4d1af993246a3",
+    "guid": "f4f3424510f502e4a92ca9818656119b"
+  },
+  {
+    "path": "Assets/_Project/Content/HellMaiden/NativeGAS/Experience/Sprite/hp_icon_7.asset",
+    "sha256": "1d6c6b03a30e83bd0f34f5d231d1f7c9db6d80e0dac24c311e724f3882ec07a8",
+    "guid": "5a8bb5b696a7bf7458df28978b19419f"
+  },
+  {
+    "path": "Assets/_Project/Content/HellMaiden/NativeGAS/Experience/Sprite/hp_icon_8.asset",
+    "sha256": "71322ad540d3b8624d534681975560be5699f217706f9139b041f84644c404a9",
+    "guid": "3d85ded7b306ea640af20822268a7c64"
+  },
+  {
+    "path": "Assets/_Project/Content/HellMaiden/NativeGAS/Experience/Sprite/hp_icon_9.asset",
+    "sha256": "32f2bbeef5002871504cdf7c73449899dd6b86c4ec09015f2a46f9f6494bc09c",
+    "guid": "0c0e837511d9d1442bb29838ec3dad8e"
+  },
+  {
+    "path": "Assets/_Project/Content/HellMaiden/NativeGAS/Experience/Texture2D/Life.png",
+    "sha256": "b87498d2fc5a81e6ccb7c461666dbf11c598d0ac7ae4e5d599cb5c8e8d4c8c23",
+    "guid": "b911254c0835a0e42b00fca858528911"
+  },
+  {
+    "path": "Assets/_Project/Content/HellMaiden/NativeGAS/Experience/Texture2D/Star_023_3.png",
+    "sha256": "ae4337b29ae2287cf4a8d331fd6d60b957e0f8db0884949090e10b2cf0dd54af",
+    "guid": "46804e18329cc9a4a9e6106f2d7c415a"
+  },
+  {
+    "path": "Assets/_Project/Content/HellMaiden/NativeGAS/Experience/Texture2D/blurredSquare.png",
+    "sha256": "24e694114ba2a376b2a535a346d2819a718878c2216c56efdb73d6fb4889187b",
+    "guid": "8b1d52d4fd52dab448e9414dfc3651c1"
+  },
+  {
+    "path": "Assets/_Project/Content/HellMaiden/NativeGAS/Experience/Texture2D/hp_icon.png",
+    "sha256": "345c19cac4f5baa29c9bb38e8d45bf011b0e3552bcfd611356370b1e625a7b02",
+    "guid": "65b3f67e35ab2834a95d07b51dc99b7f"
+  },
+  {
+    "path": "Assets/_Project/Content/HellMaiden/NativeGAS/Experience/Texture2D/lightray2_0.png",
+    "sha256": "53ab7b9493e17291efdcf3c2faef010f416ef151e48eeb891c89eb63ff8db2c8",
+    "guid": "476d29795550a664eb8cd8d9081d5438"
+  },
+  {
+    "path": "Assets/_Project/Content/NetworkCombat/ExperiencePickup.asset",
+    "sha256": "0c3f82475ec755d4bbd08e3de3225ceaec0cb2e14a015a23d2529c763305d177",
+    "guid": "d5e65954e876bdc4a8dca8187f6d8d79"
+  },
+  {
+    "path": "Assets/_Project/Content/NetworkCombat/GameplayPickupRules.asset",
+    "sha256": "a991aa526dab4047143ea4704a7c6b759422d8c9c27e7039d37e9d379965966c",
+    "guid": "af01d4a0b36cf3f42a9cbfeb15dc4b0a"
+  },
+  {
+    "path": "Assets/_Project/Content/NetworkCombat/HealthPickup.asset",
+    "sha256": "3569603890ce55bd766d409c7cb1fc1006c5704dc75d98b808505f6b72c4f552",
+    "guid": "1674c6e6614927743a1718fb2cb6fd46"
+  },
+  {
+    "path": "Assets/_Project/Content/NetworkCombat/Limbo/Resources/LimboReference/PickupObservation.asset",
+    "sha256": "d8016c7e676499b21dabb21819474ed693aa8b500c757c67240de1d3e34b2727",
+    "guid": "c9f8613de40a54342bfe867e1244799e"
+  },
+  {
+    "path": "Assets/_Project/Content/NetworkCombat/NetworkCombatWorld.prefab",
+    "sha256": "19b406981e028978e441f24339844801de156f3a11cf5cd5429136e27b349f8d",
+    "guid": "2d7bd6dcc27cdc94a876f026b860af13"
+  },
+  {
+    "path": "Assets/_Project/Content/NetworkCombat/NetworkExperienceGem.prefab",
+    "sha256": "c95b3cc2a9fb9a46f5f97709bbaaadb00e9b06eacc89304a280a852cdefca58c",
+    "guid": "524e6d24c51203a49b4866144f17e64e"
+  },
+  {
+    "path": "Assets/_Project/Content/NetworkCombat/NetworkHealthPickup.prefab",
+    "sha256": "58e122e98b6b3a75723bff46880b42772aa8144b2ff22baaa225f5524120b9ec",
+    "guid": "fba14ccf7b42b704a8fb3ef2bee70ab5"
+  },
+  {
+    "path": "Assets/_Project/Content/Rendering/Planar/Materials/1248ef571ef70b8418ac654d57228301.mat",
+    "sha256": "a6af0d1de3f888a72955b4b1226ebe0ec41c4a05b456f1c2ca46b68d691d21c9",
+    "guid": "3a6af567436552c499d4d04782f1114d"
+  },
+  {
+    "path": "Assets/_Project/Content/Rendering/Planar/Materials/6d309caafc2d688408be13dba9dcd129.mat",
+    "sha256": "a3a541ec106212fa232b90aae93865c60b577cf268de9fa8d265598e8172bc6c",
+    "guid": "c4ff3e5ff96a9ab46afad4ecbdb277ed"
+  },
+  {
+    "path": "Assets/_Project/Content/Rendering/Planar/Materials/8af794edb7322ca42a9484475089b1ef.mat",
+    "sha256": "a728ac5f249b5643128d2567facab0020c9f3ae59c88d850d1548067e4add1be",
+    "guid": "4a1d8cc2072b16e499aad3831e6acf86"
+  },
+  {
+    "path": "Assets/_Project/Content/Rendering/Planar/Materials/df551a54cc06c5e4d85829fde5754a79.mat",
+    "sha256": "539b73af964a21e27c3549a6ce810d76445cbb1f7e3a03f33b7c342dbca5b60e",
+    "guid": "4c256f041568fb348a6d506c3566a69f"
+  },
+  {
+    "path": "Assets/_Project/Content/Rendering/Planar/Materials/e4a17982fe63da8409d82b905adf382b.mat",
+    "sha256": "ba9afcbaf3b00c9d76bf84ef96c4b14b133854654d0562339388cb14688801b8",
+    "guid": "fdf02c777e0196e4c8569bb421894781"
+  }
+]

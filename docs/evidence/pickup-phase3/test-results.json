@@ -1,0 +1,85 @@
+{
+  "version": "PU-20260919-01",
+  "result": "targeted technical verification passed; user visual/audio acceptance pending",
+  "tests": [
+    {
+      "path": "Logs\\PickupPhase3\\edit-related-final.xml",
+      "sha256": "186d6dbb1b32c43a4af3bb245323fe2e66cd3c56723d10a3a10e65fa05c01bc4",
+      "total": 82,
+      "passed": 82,
+      "failed": 0,
+      "note": ""
+    },
+    {
+      "path": "Logs\\PickupPhase3\\play-integration-final.xml",
+      "sha256": "7013762417fc28ab0bed143c159c2e3f3e2c245b59a8f9eda8670a25172f3757",
+      "total": 24,
+      "passed": 24,
+      "failed": 0,
+      "note": ""
+    },
+    {
+      "path": "Logs\\PickupPhase3\\health-boundaries-final.xml",
+      "sha256": "a9ea28f9d8ad884902e52bd04e9428fff861e737ab2a187d6da8a3c69245890a",
+      "total": 5,
+      "passed": 4,
+      "failed": 1,
+      "note": "One newly added fixture accidentally retained invulnerability; corrected and rerun in lethal-final.xml."
+    },
+    {
+      "path": "Logs\\PickupPhase3\\lethal-final.xml",
+      "sha256": "b70c8ab1ef868a4264c30b063f0fd1463f7f5cac9be52319e57098abd719b80a",
+      "total": 1,
+      "passed": 1,
+      "failed": 0,
+      "note": ""
+    }
+  ],
+  "processValidation": [
+    {
+      "role": "host",
+      "log": "Logs\\M6\\Host-20260919-103703-782-p7998\\host.log",
+      "sha256": "1797a3eb709558ba4bfbb1651e1be4e0f062fe2f4f7c4e1348b14cd4f1b1d96e",
+      "result": "PASS",
+      "errors": 0,
+      "exitCode": 0
+    },
+    {
+      "role": "client",
+      "log": "Logs\\M6\\Host-20260919-103703-782-p7998\\client.log",
+      "sha256": "7f0ffd0459e8d2910296a62191cd8fcbe0e5176bf7b1b921ff541fab97b4c948",
+      "result": "PASS",
+      "errors": 0,
+      "exitCode": 0
+    }
+  ],
+  "processAssistance": "Canonical test health/protection, forced health drops, paused ordinary weapons/movement, deliberate disconnect boundaries; real Mirror/collector/health receipts.",
+  "processBuild": "Logs/PickupPhase3/build-validation-06.json",
+  "shippingBuild": "Logs/PickupPhase3/build-candidate.json",
+  "candidateSmoke": {
+    "path": "Logs\\PickupPhase3\\candidate-smoke",
+    "result": "PASS",
+    "exitCode": 0,
+    "logComplete": true,
+    "intervalCombatSeconds": 0.8013624027371411,
+    "health": [
+      500,
+      200,
+      400
+    ],
+    "xpBase": 5,
+    "xpAwarded": 10,
+    "assistance": "Explicit headless pickup-observe smoke; damage, forced drops, no visual/audio or gameplay-pressure conclusion."
+  },
+  "scriptTests": {
+    "path": "Logs/PickupPhase3/package-scripts-final.log",
+    "result": "PASS"
+  },
+  "limits": [
+    "No new full 720.9-second visual run; no Computer Use.",
+    "No gold, magnet, elite chests, source offscreen XP merge.",
+    "Short pool reuse/overflow checks do not establish long-session performance.",
+    "Existing headless startup FMOD listener/EventSystem warnings and exit ComputeBuffer warning remain; no pickup exceptions."
+  ],
+  "deliveredTestsAssemblies": false
+}

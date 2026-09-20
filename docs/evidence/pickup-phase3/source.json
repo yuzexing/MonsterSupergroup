@@ -1,0 +1,66 @@
+{
+  "sources": [
+    {
+      "path": "F:\\DecomplieLatest\\HellMaiden\\ExportedProject\\Assets\\Scenes\\Game Scenes\\Circle 1 - Limbo\\Level_Limbo.unity",
+      "sha256": "a5b5b0a09a5171fbbbe9c85aeebdf9d41681e8d0681369d672c5404cfd353456"
+    },
+    {
+      "path": "F:\\DecomplieLatest\\HellMaiden\\ExportedProject\\Assets\\GameObject\\WorldItem_Health.prefab",
+      "sha256": "648e1d9922d25d4eaefa3080bae048da8fb4d1e37fcfe44f31edc657a5936580"
+    },
+    {
+      "path": "F:\\DecomplieLatest\\HellMaiden\\ExportedProject\\Assets\\Scripts\\Assembly-CSharp\\AstralShift\\HellMaiden\\Items\\LootManager.cs",
+      "sha256": "ac58faf0eace4b676cf3f0f65afd5b44f77ec212586eb7bcd12aa03961b7ce6a"
+    },
+    {
+      "path": "F:\\DecomplieLatest\\HellMaiden\\ExportedProject\\Assets\\Scripts\\Assembly-CSharp\\AstralShift\\HellMaiden\\Items\\WorldItem.cs",
+      "sha256": "87de07d6f0b385a7d33e2531ef210bb7557c48ab4dba1e1d146eaee8da253df0"
+    },
+    {
+      "path": "F:\\DecomplieLatest\\HellMaiden\\ExportedProject\\Assets\\Scripts\\Assembly-CSharp\\AstralShift\\HellMaiden\\Items\\WorldItemsPool.cs",
+      "sha256": "8aae19971a766977ade80a99ec3a705648cbcd2676f768d79aa893427379515a"
+    },
+    {
+      "path": "F:\\DecomplieLatest\\HellMaiden\\ExportedProject\\Assets\\Scripts\\Assembly-CSharp\\AstralShift\\Pooling\\BasePooler.cs",
+      "sha256": "54ad27321d63b5cc3e819726a3e0e65cd12265a7d1c7666162623fcacfccc8b8"
+    }
+  ],
+  "source": {
+    "xpAccumulator": 2,
+    "xpWeight": 0.5,
+    "itemAccumulator": 0,
+    "itemWeight": 0.001,
+    "lowHealthBias": 0.1,
+    "health": 200,
+    "healthWorldLimit": 4,
+    "healthIdleCapacity": 100,
+    "xpIdleCapacity": 500,
+    "prewarm": 0,
+    "healthFlight": {
+      "backTime": 0.3,
+      "jumpTime": 0.5,
+      "backDistance": 1,
+      "jumpHeight": 1,
+      "curves": "linear; all source tangents 1"
+    },
+    "healthPullEvent": [
+      -389910532,
+      1268344416,
+      -1814881387,
+      395186564
+    ],
+    "healthConsumeEvent": [
+      -2102030582,
+      1170010890,
+      -1997062268,
+      515058444
+    ]
+  },
+  "adaptations": [
+    "Shared server pickup world; only XP and health candidates",
+    "Low health bias uses confirmed killer; unavailable health has no bias",
+    "Independent server random stream, seed 14303",
+    "XP awards at claim, health after flight and OwnerFinal receipt",
+    "No source map-tile despawn, screen-off XP merging, magnets, elite chest"
+  ]
+}

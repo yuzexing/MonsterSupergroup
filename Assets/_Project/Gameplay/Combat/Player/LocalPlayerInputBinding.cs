@@ -15,7 +15,6 @@ namespace AstralShift.HellMaiden.Player
         private PlayerController_HMD controller;
         private ControllerManager controllerManager;
         private GameplayCameraRig cameraRig;
-        private StudioListener audioListener;
 
         public PlayerMovement BoundPlayer => player;
 
@@ -28,10 +27,9 @@ namespace AstralShift.HellMaiden.Player
                 Dispose();
                 player = value;
                 player.SetLocalOwnerBound(true);
-                // Listen on the local avatar's gameplay plane, not the camera's negative Z.
-                audioListener = player.GetComponent<StudioListener>();
-                if (audioListener == null) audioListener = player.gameObject.AddComponent<StudioListener>();
-                audioListener.enabled = true;
+                // Old runtime instances can still carry the avatar-plane listener.
+                var legacyListener = player.GetComponent<StudioListener>();
+                if (legacyListener != null) legacyListener.enabled = false;
             }
             Refresh();
         }
@@ -83,7 +81,6 @@ namespace AstralShift.HellMaiden.Player
                 controller.Unbind(player);
             }
             if (cameraRig != null) cameraRig.ReleaseOwner(player);
-            if (audioListener != null) audioListener.enabled = false;
             if (player != null)
             {
                 player.SetInputCamera(null);
@@ -93,7 +90,6 @@ namespace AstralShift.HellMaiden.Player
             controller = null;
             controllerManager = null;
             cameraRig = null;
-            audioListener = null;
         }
     }
 }

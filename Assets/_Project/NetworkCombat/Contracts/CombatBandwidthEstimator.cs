@@ -9,7 +9,7 @@ namespace MonsterSupergroup.NetworkCombat
         public const int CombatResultBytes = 117; // Base 66 + knockback/combination 33 + status instance/round 12 + presentation 6.
         public const int EnemyHitPresentationBytes = 43; // Identity/version 16 + damage/style/source 14 + position 13.
         public const int StatusMutationBytes = 133; // Includes magnitude and application revision.
-        public const int PlayerHealthReportBytes = 33;
+        public const int PlayerHealthReportBytes = 53; // 33 + pickup receipt (8 + 4 + 4 + 4).
         public const int BatchAndArrayHeadersBytes = 16;
         public const int EnemyActionProjectileProgressBytes = 9;
         public const int EnemyActionDashProgressBytes = 33; // Boolean plus four Vector2 values in the existing checkpoint.

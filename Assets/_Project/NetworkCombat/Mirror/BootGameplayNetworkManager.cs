@@ -147,6 +147,8 @@ namespace MonsterSupergroup.NetworkCombat
         {
             ++clientSceneGeneration;
             base.OnStartClient();
+            // A reconnect snapshot can contain existing pickups before World.OnStartClient runs.
+            NetworkExperienceWorld.Current?.PrepareClientPickupPools();
             CaptureBootScene();
             RegisterPreparationClient();
         }

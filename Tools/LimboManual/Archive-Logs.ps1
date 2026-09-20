@@ -2,8 +2,15 @@
 param([string]$Session)
 $ErrorActionPreference = 'Stop'
 $package = $PSScriptRoot
-$runs = Join-Path $package 'Runs'
-if (-not $Session) { $Session = (Get-ChildItem -LiteralPath $runs -Directory | Sort-Object Name -Descending | Select-Object -First 1).Name }
+$roots = @('Runs','TechnicalRuns') | ForEach-Object { Join-Path $package $_ } | Where-Object { Test-Path -LiteralPath $_ }
+if (-not $Session) {
+    $latest = $roots | ForEach-Object { Get-ChildItem -LiteralPath $_ -Directory } | Sort-Object LastWriteTime -Descending | Select-Object -First 1
+    $Session = $latest.Name; $runs = $latest.Parent.FullName
+} else {
+    $matches = @($roots | Where-Object { Test-Path -LiteralPath (Join-Path $_ $Session) -PathType Container })
+    if ($matches.Count -ne 1) { throw 'Session must identify exactly one manual or technical run.' }
+    $runs = $matches[0]
+}
 if (-not $Session -or $Session -notmatch '^[a-zA-Z0-9_-]+$') { throw 'No run found, or invalid session name.' }
 $run = Join-Path $runs $Session
 if (-not (Test-Path -LiteralPath $run -PathType Container)) { throw "Run not found: $Session" }

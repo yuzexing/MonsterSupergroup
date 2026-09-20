@@ -86,5 +86,10 @@ namespace MonsterSupergroup.NetworkCombat
         public int MaxHealth;
         public bool Alive;
         public uint StateVersion;
+        // Zero for ordinary health changes. Pickup receipt and health commit together.
+        public ulong PickupDropId;
+        public uint PickupClaimVersion;
+        public uint PickupRound;
+        public int PickupRestoredHealth;
     }
 }

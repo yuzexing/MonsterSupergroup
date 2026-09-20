@@ -17,12 +17,12 @@ namespace MonsterSupergroup.NetworkCombat
         private static readonly string[] LaunchArguments = Environment.GetCommandLineArgs();
         public static string Argument(string prefix) => LaunchArguments.FirstOrDefault(a => a.StartsWith(prefix, StringComparison.Ordinal))?.Substring(prefix.Length);
         public static bool Manual { get; } = Argument("--limbo-manual=") == "true";
-        public static bool SuppressDebugPanels => Profile.StartsWith("audio-", StringComparison.Ordinal) || Manual || Enabled && Argument("--limbo-performance-preset=") != null;
+        public static bool SuppressDebugPanels => Profile.StartsWith("pickup-", StringComparison.Ordinal) || Profile.StartsWith("audio-", StringComparison.Ordinal) || Manual || Enabled && Argument("--limbo-performance-preset=") != null;
         public static bool Light { get; } = Argument("--limbo-log-detail=") == "light";
         public static bool Enabled => Argument("--limbo-role=") != null;
         public static string OutputDirectory => Argument("--limbo-output=") ?? Path.Combine(Application.persistentDataPath, "LimboReference");
         public static string Profile => Argument("--limbo-profile=") ?? "opening";
-        public static GameplayWaveRules Rules => Profile.StartsWith("audio-", StringComparison.Ordinal) ? Resources.Load<GameplayWaveRules>("LimboReference/AudioObservation") : Profile.StartsWith("full", StringComparison.Ordinal) ? Resources.Load<GameplayWaveRules>("LimboReference/" + (Profile == "full" ? "Full" : Profile == "full-validation" ? "FullValidation" : LimboFullObservation.FixtureRulesName)) : Profile.StartsWith("ghoul", StringComparison.Ordinal) ? Resources.Load<GameplayWaveRules>("LimboReference/"+(Profile=="ghoul"?"Ghoul":Profile=="ghoul-motion"?"GhoulMotion":Profile=="ghoul-validation"?"GhoulValidation":LimboGhoulObservation.FixtureRulesName)) : Profile.StartsWith("lostsoul", StringComparison.Ordinal) ? Resources.Load<GameplayWaveRules>("LimboReference/"+(Profile=="lostsoul"?"LostSoul":Profile=="lostsoul-validation"?"LostSoulValidation":LimboLostSoulObservation.FixtureRulesName)) : Profile == "art-effects" ? Resources.Load<GameplayWaveRules>("LimboReference/ArtEffects") : Resources.Load<GameplayWaveRules>("LimboReference/" + (Profile == "dash" ? "Dash" : Profile == "dash-validation" ? "DashValidation" : Profile == "dash-fixture" ? (Argument("--limbo-dash-case=")=="reuse"?"DashReuse":(Argument("--limbo-dash-case=")=="boundary"?"DashBoundary":"DashFixture") + (Argument("--limbo-dash-variant=") ?? "0")) : Profile == "spatial-reposition" ? LimboRepositionFixture.RulesName : Profile == "spatial-b" ? "SpatialB" : Profile == "spatial-barrier" ? "SpatialBarrier" : Profile == "spatial-overlap" ? (Argument("--limbo-spatial-case=") == "occupancy" ? "SpatialOverlapWait" : "SpatialOverlap") : Profile == "stage2" ? "Stage2" : Profile == "stage2-validation" ? "Stage2Validation" : Profile == "stage2-fixture" ? "Stage2" + (Argument("--limbo-fixture-mode=")?.StartsWith("l-")==true?"RusherWave":Argument("--limbo-fixture-enemy=") ?? "Skeleton0") : Profile == "full" ? "Full" : Profile == "imp" ? "ImpOpening" : Profile == "imp-validation" ? "ImpValidation" : Profile == "imp-v0" ? "ImpFixture0" : Profile == "imp-v1" ? "ImpFixture1" : "Opening"));
+        public static GameplayWaveRules Rules => Profile.StartsWith("pickup-", StringComparison.Ordinal) ? Resources.Load<GameplayWaveRules>("LimboReference/PickupObservation") : Profile.StartsWith("audio-", StringComparison.Ordinal) ? Resources.Load<GameplayWaveRules>("LimboReference/AudioObservation") : Profile.StartsWith("full", StringComparison.Ordinal) ? Resources.Load<GameplayWaveRules>("LimboReference/" + (Profile == "full" ? "Full" : Profile == "full-validation" ? "FullValidation" : LimboFullObservation.FixtureRulesName)) : Profile.StartsWith("ghoul", StringComparison.Ordinal) ? Resources.Load<GameplayWaveRules>("LimboReference/"+(Profile=="ghoul"?"Ghoul":Profile=="ghoul-motion"?"GhoulMotion":Profile=="ghoul-validation"?"GhoulValidation":LimboGhoulObservation.FixtureRulesName)) : Profile.StartsWith("lostsoul", StringComparison.Ordinal) ? Resources.Load<GameplayWaveRules>("LimboReference/"+(Profile=="lostsoul"?"LostSoul":Profile=="lostsoul-validation"?"LostSoulValidation":LimboLostSoulObservation.FixtureRulesName)) : Profile == "art-effects" ? Resources.Load<GameplayWaveRules>("LimboReference/ArtEffects") : Resources.Load<GameplayWaveRules>("LimboReference/" + (Profile == "dash" ? "Dash" : Profile == "dash-validation" ? "DashValidation" : Profile == "dash-fixture" ? (Argument("--limbo-dash-case=")=="reuse"?"DashReuse":(Argument("--limbo-dash-case=")=="boundary"?"DashBoundary":"DashFixture") + (Argument("--limbo-dash-variant=") ?? "0")) : Profile == "spatial-reposition" ? LimboRepositionFixture.RulesName : Profile == "spatial-b" ? "SpatialB" : Profile == "spatial-barrier" ? "SpatialBarrier" : Profile == "spatial-overlap" ? (Argument("--limbo-spatial-case=") == "occupancy" ? "SpatialOverlapWait" : "SpatialOverlap") : Profile == "stage2" ? "Stage2" : Profile == "stage2-validation" ? "Stage2Validation" : Profile == "stage2-fixture" ? "Stage2" + (Argument("--limbo-fixture-mode=")?.StartsWith("l-")==true?"RusherWave":Argument("--limbo-fixture-enemy=") ?? "Skeleton0") : Profile == "full" ? "Full" : Profile == "imp" ? "ImpOpening" : Profile == "imp-validation" ? "ImpValidation" : Profile == "imp-v0" ? "ImpFixture0" : Profile == "imp-v1" ? "ImpFixture1" : "Opening"));
         private BootGameplayNetworkManager manager;
         private readonly HashSet<uint> observed = new HashSet<uint>();
         private LimboObservationLog audit;
@@ -50,6 +50,7 @@ namespace MonsterSupergroup.NetworkCombat
             if (runner.failure != null) { Debug.LogError(runner.failure); return; }
             runner.gameObject.AddComponent<LimboPerformanceObservation>();
             if (Profile.StartsWith("audio-", StringComparison.Ordinal)) runner.gameObject.AddComponent<WeaponAudioObservation>();
+            if (Profile.StartsWith("pickup-", StringComparison.Ordinal)) runner.gameObject.AddComponent<PickupObservation>();
             if (!Light) runner.gameObject.AddComponent<LimboAttackTimelineObservation>();
             if (Argument("--limbo-art-observe=") == "true") runner.gameObject.AddComponent<LimboArtObservation>();
             if (Profile == "art-effects")
@@ -80,6 +81,7 @@ namespace MonsterSupergroup.NetworkCombat
             Application.runInBackground = true; Application.targetFrameRate = 60;
             Directory.CreateDirectory(OutputDirectory);
             audit = new LimboObservationLog(Path.Combine(OutputDirectory, role + "-audit.jsonl"));
+            PickupAudit.Recorded += RecordPickup;
             BeginDeliveryObservation();
             yield return null;
             manager = FindFirstObjectByType<BootGameplayNetworkManager>();
@@ -247,7 +249,10 @@ namespace MonsterSupergroup.NetworkCombat
             GUI.matrix = previousMatrix;
         }
         private void OnApplicationQuit() { FinishDeliveryObservation("process-exit"); LimboObservationLog.FlushAll(); }
-        private void OnDestroy() { FinishDeliveryObservation("observer-destroy"); if (auditedPlayer != null) auditedPlayer.HealthChanged -= RecordHealth; audit?.Dispose(); audit = null; }
+        private void OnDestroy() { PickupAudit.Recorded -= RecordPickup; FinishDeliveryObservation("observer-destroy"); if (auditedPlayer != null) auditedPlayer.HealthChanged -= RecordHealth; audit?.Dispose(); audit = null; }
+        private void RecordPickup(string kind, string run, ulong drop, string detail) => audit?.WriteLine(JsonUtility.ToJson(new PickupRow
+            { kind = "pickup-" + kind, run = run, drop = drop, detail = detail, combat = EnemySimulationClock.CombatNow }));
+        [Serializable] private class PickupRow { public string kind, run, detail; public ulong drop; public double combat; }
         [Serializable] private class RoundAudit { public string kind, run; public uint round; }
         [Serializable] private class BirthAudit { public string kind, role, source, run; public uint id, round; public EnemyBirthParameters birth; public int hp, damage; public float speed, xp; public bool match; }
         [Serializable] private class FrameAudit { public string kind, role; public WaveProgressSnapshot snapshot; public int health, observed; public double realtime; public Vector2 position; }

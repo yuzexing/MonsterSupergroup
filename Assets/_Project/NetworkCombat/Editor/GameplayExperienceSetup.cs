@@ -23,6 +23,19 @@ namespace MonsterSupergroup.NetworkCombat.Editor
         private const string Network = "Assets/_Project/Content/NetworkCombat/";
         private static readonly Dictionary<string, string> sourcePaths = new Dictionary<string, string>();
 
+        internal static string ImportHealthVisual()
+        {
+            sourcePaths.Clear();
+            foreach (string meta in Directory.EnumerateFiles(Source, "*.meta", SearchOption.AllDirectories))
+            {
+                var match = Regex.Match(File.ReadAllText(meta), @"(?m)^guid: ([a-f0-9]{32})");
+                if (match.Success) sourcePaths[match.Groups[1].Value] = meta.Substring(0, meta.Length - 5);
+            }
+            ImportAsset(Path.Combine(Source, "GameObject/WorldItem_Health.prefab"), new HashSet<string>());
+            AssetDatabase.Refresh(ImportAssetOptions.ForceSynchronousImport);
+            return Output + "/GameObject/WorldItem_Health.prefab";
+        }
+
 
         public static void Apply()
         {
@@ -166,7 +179,7 @@ namespace MonsterSupergroup.NetworkCombat.Editor
             if (text)
             {
                 string yaml = File.ReadAllText(source);
-                if (relative == "GameObject/XP_0.prefab")
+                if (relative == "GameObject/XP_0.prefab" || relative == "GameObject/WorldItem_Health.prefab")
                 {
                     var removed = new List<string>();
                     yaml = Regex.Replace(yaml, @"(?ms)^--- !u!114 &(-?\d+)\r?\n.*?(?=^--- !u!|\z)", m =>

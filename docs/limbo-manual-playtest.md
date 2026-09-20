@@ -14,8 +14,10 @@
 | `7-Fire-Barrier.cmd` | Phase 1 的围栏遮挡短局；轻量日志、无自动截图 |
 | `8-Wisp-Audio.cmd` | Phase 2 鬼火三种元素的手动听感观察 |
 | `9-Breath-Audio.cmd` | Phase 2 吐息两种元素的手动听感观察 |
+| `10-Pickup-Observe.cmd` | Phase 3 经验、血瓶、飞行后回血及拒绝条件观察 |
+| `11-Pickup-Drops.cmd` | Phase 3 普通击杀掉落、低血量偏置与四瓶上限观察 |
 
-WA-20260917-02 为 Phase 2 音效候选，按随包 `WEAPON-AUDIO.md` 核验听感；火焰分层已由用户验收，收缩连续性另行保留。血瓶／经验框架属于后续 Phase 3，尚未实施。此修复包不新增玩法压力验收要求。
+PU-20260919-01 为 Phase 3 拾取候选，按随包 `PICKUPS.md` 确认血瓶外观、拾取节奏与音效；经验和血瓶已接入 Boot→Gameplay 与 Limbo 的共同联网入口。旧 WA-20260917-02 音效包保留，Phase 2 听感仍独立确认。火焰分层已由用户验收，收缩连续性另行保留。本轮不新增玩法压力验收要求，技术检查范围及结果以随包 `technical-verification.json` 为准。
 
 不需要 Unity Editor、工程目录或 F 盘。请放在可写目录并保留 EXE、Data 和所有依赖。启动脚本无法写日志时会报错，不会悄悄改用另一个目录。同一时间只运行一组主机；旧日志目录不会覆盖。
 

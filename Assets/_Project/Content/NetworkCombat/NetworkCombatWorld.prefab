@@ -49,7 +49,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Mirror::Mirror.NetworkIdentity
   sceneId: 0
-  _assetId: 3299869360
+  _assetId: 0
   serverOnly: 0
   visibility: 0
   hasSpawned: 0
@@ -97,7 +97,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e6384d28bde6462c998654ef96902a7c, type: 3}
-  m_Name:
+  m_Name: 
   m_EditorClassIdentifier: MonsterSupergroup.NetworkCombat::MonsterSupergroup.NetworkCombat.NetworkWaveProgress
   syncDirection: 0
   syncMode: 0
@@ -112,10 +112,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2f9ffe8fb16cd2a44a019b480147036f, type: 3}
-  m_Name:
+  m_Name: 
   m_EditorClassIdentifier: MonsterSupergroup.NetworkCombat::MonsterSupergroup.NetworkCombat.NetworkExperienceWorld
   syncDirection: 0
   syncMode: 0
   syncInterval: 0
   rules: {fileID: 11400000, guid: e735d34f6c31e8f4e8293c7301089899, type: 2}
   gemPrefab: {fileID: 414360905370282006, guid: 524e6d24c51203a49b4866144f17e64e, type: 3}
+  pickupRules: {fileID: 11400000, guid: af01d4a0b36cf3f42a9cbfeb15dc4b0a, type: 2}

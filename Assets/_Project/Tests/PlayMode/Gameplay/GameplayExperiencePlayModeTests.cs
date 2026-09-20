@@ -21,7 +21,7 @@ using Object = UnityEngine.Object;
 
 namespace MonsterSupergroup.Gameplay.Tests
 {
-    public sealed class GameplayExperiencePlayModeTests
+    public sealed partial class GameplayExperiencePlayModeTests
     {
         private BootGameplayNetworkManager manager;
         private GameObject[] roots;
@@ -32,6 +32,8 @@ namespace MonsterSupergroup.Gameplay.Tests
         private NetworkExperienceWorld World => NetworkExperienceWorld.Current;
         private IEnumerator StartHost()
         {
+            PickupAudit.Recorded -= LogPickup;
+            PickupAudit.Recorded += LogPickup;
             const string boot = "Assets/_Project/Scenes/Boot.unity";
 #if UNITY_EDITOR
             yield return EditorSceneManager.LoadSceneAsyncInPlayMode(boot, new LoadSceneParameters(LoadSceneMode.Single));
@@ -135,7 +137,7 @@ namespace MonsterSupergroup.Gameplay.Tests
             var flight = flights.Single();
             float maxX = origin.x, minReturnX = float.PositiveInfinity;
             bool visible = false;
-            while (flight != null)
+            while (flight != null && flight.isActiveAndEnabled)
             {
                 Assert.That(Object.FindObjectsByType<ExperienceCollectionFlight>(FindObjectsSortMode.None), Has.Length.EqualTo(1),
                     "Host's local and RPC paths must not create two flights.");
@@ -251,8 +253,9 @@ namespace MonsterSupergroup.Gameplay.Tests
             var gem = World.Unclaimed.First();
             player.body.position = gem.transform.position; player.transform.position = gem.transform.position;
             Owner.GetComponent<NetworkExperienceCollector>().enabled = true;
-            yield return WaitFor(() => Progression.Experience == 4, "automatic Owner pickup");
-            Debug.Log("[M6] real Circling -> canonical kill -> network gem -> automatic pickup -> 4 XP passed");
+            float expectedExperience = gem.RawExperience * player.PlayerStats.currentStats.xpModifier;
+            yield return WaitFor(() => Mathf.Abs(Progression.Experience - expectedExperience) < .001f, "automatic Owner pickup");
+            Debug.Log("[M6] real Circling -> canonical kill -> network gem -> automatic pickup passed");
         }
         private static IEnumerator WaitFor(Func<bool> predicate, string reason)
         {
@@ -263,6 +266,7 @@ namespace MonsterSupergroup.Gameplay.Tests
         [UnityTearDown]
         public IEnumerator TearDown()
         {
+            PickupAudit.Recorded -= LogPickup;
             if (originalLanguage != null) MonsterSupergroup.Gameplay.Options.GameLocalization.Select(originalLanguage);
             if (manager != null && NetworkServer.active)
             { manager.StopHost(); yield return WaitFor(() => !manager.IsGameplayLoaded && !manager.IsGameplayTransitioning, "teardown"); }
@@ -270,5 +274,6 @@ namespace MonsterSupergroup.Gameplay.Tests
             if (fixture != null) Object.Destroy(fixture);
             yield return null; NetworkManager.ResetStatics();
         }
+        private static void LogPickup(string kind, string run, ulong drop, string detail) => Debug.Log($"[PickupTest] {kind} drop={drop} {detail}");
     }
 }

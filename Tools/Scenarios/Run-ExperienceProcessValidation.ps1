@@ -2,6 +2,7 @@
     [string]$Executable = 'Builds/M6Experience/M6Experience.exe',
     [switch]$Dedicated,
     [switch]$Simulation,
+    [switch]$Pickups,
     [switch]$CaptureFrames,
     [switch]$VisibleWindows,
     [int]$Port = 7988
@@ -15,7 +16,7 @@ if (-not (Test-Path -LiteralPath $Executable)) { throw "Missing M6 build: $Execu
 $modeName = if ($Dedicated) { 'Dedicated' } else { 'Host' }
 $logRoot = Join-Path $projectRoot ('Logs/M6/' + $modeName + '-' + (Get-Date -Format 'yyyyMMdd-HHmmss-fff') + '-p' + $Port)
 New-Item -ItemType Directory -Path $logRoot -Force | Out-Null
-[ordered]@{ executable = $Executable; dedicated = [bool]$Dedicated; simulation = [bool]$Simulation; port = $Port; captureFrames = [bool]$CaptureFrames } |
+[ordered]@{ executable = $Executable; dedicated = [bool]$Dedicated; simulation = [bool]$Simulation; pickups = [bool]$Pickups; port = $Port; captureFrames = [bool]$CaptureFrames } |
     ConvertTo-Json | Set-Content -LiteralPath (Join-Path $logRoot 'run.json')
 Write-Output "M6 process artifacts: $logRoot"
 $processes = @{}
@@ -24,6 +25,7 @@ function Launch([string]$role) {
         ('"--m6-artifacts=' + $logRoot + '"'), "--m6-port=$Port", '-screen-fullscreen', '0', '-screen-width', '1920', '-screen-height', '1080', '-force-d3d11')
     if ($Dedicated) { $arguments += '--m6-dedicated' }
     if ($Simulation) { $arguments += '--m6-simulation' }
+    if ($Pickups) { $arguments += '--m6-pickups' }
     if ($CaptureFrames) { $arguments += '--m6-capture' }
     else { $arguments += @('-batchmode', '-nographics') }
     if ($role -eq 'server') { $arguments += '--dedicated-server' }

@@ -18,7 +18,7 @@ using UnityEngine.SceneManagement;
 namespace MonsterSupergroup.Gameplay.Tests
 {
     /// <summary>Opt-in Boot fixture. Markers coordinate assertions; all pickups use the production Command.</summary>
-    public sealed class GameplayExperienceProcessProbe : MonoBehaviour
+    public sealed partial class GameplayExperienceProcessProbe : MonoBehaviour
     {
         private string role, directory;
         private ushort port;
@@ -47,6 +47,7 @@ namespace MonsterSupergroup.Gameplay.Tests
             probe.port = ushort.Parse(args.First(a => a.StartsWith("--m6-port=")).Substring(10));
             probe.dedicated = args.Contains("--m6-dedicated"); probe.capture = args.Contains("--m6-capture");
             probe.simulation = args.Contains("--m6-simulation");
+            probe.pickups = args.Contains("--m6-pickups");
             DontDestroyOnLoad(probe.gameObject);
         }
         private IEnumerator Start()
@@ -56,7 +57,15 @@ namespace MonsterSupergroup.Gameplay.Tests
             gameObject.AddComponent<WeaponAttackAdmissionFixtureGate>();
             manager = FindFirstObjectByType<BootGameplayNetworkManager>();
             Require(manager != null, "Formal Boot is required.");
+            manager.ConfigurePreparationFlow(false);
             service = manager.GetComponent<KcpLocalNetworkService>();
+            if (pickups)
+            {
+                PickupAudit.Recorded += RecordPickup;
+                if (role == "host") StartCoroutine(Guard(PickupClientScenario()));
+                yield return Guard(IsServer ? PickupServerScenario() : PickupClientScenario());
+                if (!finished) Finish(true); yield break;
+            }
             if (role == "host") StartCoroutine(Guard(ClientScenario()));
             yield return Guard(IsServer ? ServerScenario() : ClientScenario());
             if (!finished) Finish(true);
@@ -336,7 +345,7 @@ namespace MonsterSupergroup.Gameplay.Tests
         private Vector2 ReadPosition(string name) { var parts = Read(name).Split(','); return new Vector2(float.Parse(parts[0], CultureInfo.InvariantCulture), float.Parse(parts[1], CultureInfo.InvariantCulture)); }
         private static void Require(bool condition, string message) { if (!condition) throw new InvalidOperationException(message); }
         private void ObserveLog(string message, string trace, LogType type) { if (type == LogType.Error || type == LogType.Exception || type == LogType.Assert) errors++; }
-        private void OnDestroy() => Application.logMessageReceived -= ObserveLog;
+        private void OnDestroy() { Application.logMessageReceived -= ObserveLog; PickupAudit.Recorded -= RecordPickup; }
         private void Finish(bool success)
         {
             if (finished) return; finished = true; success &= errors == 0;

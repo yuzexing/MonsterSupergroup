@@ -29,6 +29,55 @@ namespace MonsterSupergroup.NetworkCombat
         [SyncVar] private bool hasRestoredHealth;
         [SyncVar] private CanonicalEntityState restoredHealth;
         private bool restorationApplied;
+        private bool applyingPickup;
+        private ulong pickupDrop;
+        private uint pickupClaim;
+        private int pickupRestored;
+        private readonly System.Collections.Generic.HashSet<(string, ulong, uint)> appliedPickups = new();
+        private readonly System.Collections.Generic.Dictionary<(string, ulong, uint), PlayerHealthReport> pickupReports = new();
+
+        public int RestorePickupHealth(string run, ulong drop, uint claim, int amount)
+        {
+            if (!isOwned || ownerBridge?.Collector == null || ownerBridge.EventIds == null) return 0;
+            if (!appliedPickups.Add((run, drop, claim)))
+            {
+                if (!pickupReports.TryGetValue((run, drop, claim), out var prior)) return 0;
+                ownerBridge.Collector.EnqueuePlayerHealth(prior);
+                return -1;
+            }
+            applyingPickup = true;
+            int restored;
+            try { restored = GetComponent<AstralShift.HellMaiden.Player.PlayerMovement>().CombatantBinding.RestoreHealth(amount); }
+            finally { applyingPickup = false; }
+            if (restored > 0)
+            {
+                pickupDrop = drop; pickupClaim = claim; pickupRestored = restored;
+                ownerReportPending = true; TryEnqueueOwnerHealthReport();
+            }
+            return restored;
+        }
+
+        internal void AcknowledgePickup(ulong drop, uint claim)
+        { if (pickupDrop == drop && pickupClaim == claim) { pickupDrop = 0; pickupClaim = 0; pickupRestored = 0; } }
+        internal void RetryPickupReceipt(string run, ulong drop, uint claim, uint serverVersion)
+        {
+            if (NetworkExperienceWorld.Current?.RunId != run || pickupDrop != drop || pickupClaim != claim) return;
+            ownerReportVersion = System.Math.Max(ownerReportVersion, serverVersion);
+            ownerReportPending = true; TryEnqueueOwnerHealthReport(); ownerBridge.Flush();
+        }
+        internal void RejectPickupReceipt(string run, ulong drop, uint claim, CanonicalEntityState state)
+        {
+            if (NetworkExperienceWorld.Current?.RunId != run || pickupDrop != drop || pickupClaim != claim) return;
+            AcknowledgePickup(drop, claim);
+            applyingCanonical = true;
+            try
+            {
+                ownerReportVersion = System.Math.Max(ownerReportVersion, state.StateVersion) + 1;
+                combatant.ApplyCanonicalHealth(state.Health, state.MaxHealth, ownerReportVersion);
+            }
+            finally { applyingCanonical = false; }
+            ownerReportPending = true; TryEnqueueOwnerHealthReport(); ownerBridge.Flush();
+        }
 
         public void PrepareServerRestore(PlayerRuntimeCheckpoint checkpoint)
         {
@@ -171,6 +220,7 @@ namespace MonsterSupergroup.NetworkCombat
 
             ownerHealthSubscribed = false;
             ownerReportPending = false;
+            appliedPickups.Clear(); pickupReports.Clear(); pickupDrop = 0; pickupClaim = 0; pickupRestored = 0;
             if (ownerBridge != null)
             {
                 ownerBridge.OwnerCollectorReady -= HandleOwnerCollectorReady;
@@ -298,7 +348,7 @@ namespace MonsterSupergroup.NetworkCombat
             }
 
             ownerReportPending = true;
-            TryEnqueueOwnerHealthReport();
+            if (!applyingPickup) TryEnqueueOwnerHealthReport();
         }
 
         private void HandleOwnerCollectorReady(
@@ -333,7 +383,7 @@ namespace MonsterSupergroup.NetworkCombat
             }
 
             CombatEventId eventId = ownerBridge.EventIds.Next();
-            ownerBridge.Collector.EnqueuePlayerHealth(new PlayerHealthReport
+            var report = new PlayerHealthReport
             {
                 EventId = eventId.Value,
                 Sequence = eventId.Sequence,
@@ -342,8 +392,12 @@ namespace MonsterSupergroup.NetworkCombat
                 Health = combatant.CurrentHealth,
                 MaxHealth = combatant.MaxHealth,
                 Alive = combatant.IsAlive,
-                StateVersion = ownerReportVersion
-            });
+                StateVersion = ownerReportVersion,
+                PickupDropId = pickupDrop, PickupClaimVersion = pickupClaim, PickupRestoredHealth = pickupRestored,
+                PickupRound = pickupDrop != 0 ? NetworkExperienceWorld.Current.Round : 0
+            };
+            ownerBridge.Collector.EnqueuePlayerHealth(report);
+            if (pickupDrop != 0) pickupReports[(NetworkExperienceWorld.Current.RunId, pickupDrop, pickupClaim)] = report;
             ownerReportPending = false;
         }
 

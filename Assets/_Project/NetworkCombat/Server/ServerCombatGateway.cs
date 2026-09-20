@@ -85,6 +85,9 @@ namespace MonsterSupergroup.NetworkCombat
         public event Action<ConfirmedKill> ConfirmedKillProduced;
         public event Action<ServerStatusTick> ServerStatusTickProduced;
         public event Action<CombatResult, CombatApplyResult, double> CombatResultAccepted;
+        public Func<uint, PlayerHealthReport, bool> ValidatePickupReceipt { get; set; }
+        public event Action<PlayerHealthReport> PlayerHealthReportAccepted;
+        public event Action<uint, PlayerHealthReport, CombatRejectionReason> PlayerHealthReportRejected;
 
         public void RegisterClientIdentity(
             uint playerId,
@@ -256,12 +259,20 @@ namespace MonsterSupergroup.NetworkCombat
                     continue;
                 }
 
+                if (playerReports[i].PickupDropId != 0 &&
+                    (ValidatePickupReceipt == null || !ValidatePickupReceipt(senderPlayerId, playerReports[i])))
+                {
+                    Metrics.Reject(CombatRejectionReason.InvalidSender);
+                    PlayerHealthReportRejected?.Invoke(senderPlayerId, playerReports[i], CombatRejectionReason.InvalidSender);
+                    continue;
+                }
                 CombatApplyResult applied = Ledger.ApplyOwnerFinalReport(
                     senderPlayerId,
                     playerReports[i]);
                 if (!applied.Accepted)
                 {
                     Metrics.Reject(applied.Rejection);
+                    PlayerHealthReportRejected?.Invoke(senderPlayerId, playerReports[i], applied.Rejection);
                     if (applied.Rejection == CombatRejectionReason.AbsoluteInvulnerable &&
                         applied.State.EntityId != 0u)
                     {
@@ -272,6 +283,8 @@ namespace MonsterSupergroup.NetworkCombat
                 }
 
                 Metrics.AcceptedPlayerReports++;
+                // Synchronous with the ledger update, before another claim or disconnect can run.
+                PlayerHealthReportAccepted?.Invoke(playerReports[i]);
                 ProcessedEvents.MarkProcessed(playerReports[i].EventId, serverTime);
                 entities[applied.State.EntityId] = applied.State;
                 if (applied.IsConfirmedKill)

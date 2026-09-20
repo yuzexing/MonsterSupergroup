@@ -29,7 +29,7 @@ if($status.roles[0].integrity -ne 'closed' -or $status.roles[0].rounds[0].result
 & (Join-Path $fixture 'Archive-Logs.ps1') -Session $run.Name
 $status=Get-Content -LiteralPath (Join-Path $run.FullName 'archive-status.json') -Raw | ConvertFrom-Json
 if($status.roles[0].integrity -ne 'incomplete-or-still-running'){throw 'Missing normal close was accepted.'}
-foreach ($profile in @('spatial-b','spatial-barrier','audio-wisp','audio-beam')) {
+foreach ($profile in @('spatial-b','spatial-barrier','audio-wisp','audio-beam','pickup-observe','pickup-drops')) {
     & (Join-Path $fixture 'Start-Technical.ps1') -Profile $profile -LogDetail light -Session $profile
     $captured = $global:limboManualTestLaunch
     foreach ($expected in @("--limbo-profile=$profile",'--limbo-log-detail=light','--limbo-spatial-case=observe','--limbo-autowalk=false')) {
@@ -38,4 +38,6 @@ foreach ($profile in @('spatial-b','spatial-barrier','audio-wisp','audio-beam'))
     if ($captured.exe -ne (Join-Path $fixture 'MonsterSupergroupLimbo.exe')) { throw 'Fire observation escaped the package.' }
 }
 Remove-Variable -Name limboManualTestLaunch -Scope Global
+& (Join-Path $fixture 'Archive-Logs.ps1') -Session 'pickup-observe'
+if (-not (Test-Path -LiteralPath (Join-Path $fixture 'TechnicalRuns/pickup-observe/archive-status.json'))) { throw 'Technical pickup logs were not archived.' }
 Write-Output "PASS: manual isolation, portable quoted paths, fire observation profiles, failed/incomplete archive classifications. Evidence: $fixture"

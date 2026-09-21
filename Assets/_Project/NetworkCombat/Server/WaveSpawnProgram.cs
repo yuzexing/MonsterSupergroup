@@ -6,8 +6,9 @@ namespace MonsterSupergroup.NetworkCombat
     public readonly struct WaveSpawnEntry
     {
         public readonly double Time;
-        public readonly int PrefabIndex;
-        public WaveSpawnEntry(double time, int prefabIndex) { Time = time; PrefabIndex = prefabIndex; }
+        public readonly int PrefabIndex, DefinitionIndex;
+        public WaveSpawnEntry(double time, int prefabIndex, int definitionIndex = -1)
+        { Time = time; PrefabIndex = prefabIndex; DefinitionIndex = definitionIndex; }
     }
 
     /// <summary>Finite authored events followed by repetitions of the last wave. No runtime clock or Unity objects.</summary>
@@ -62,7 +63,7 @@ namespace MonsterSupergroup.NetworkCombat
                 time = Duration + (offset / TailCount) * WaveDuration + entry.Time - (Duration - WaveDuration);
             }
             int wave = checked((int)Math.Floor((time + Epsilon) / WaveDuration) + 1);
-            return new WaveSpawnOpportunity(sequence, wave, (int)(sequence - EventsBeforeWave(wave)), entry.PrefabIndex, time);
+            return new WaveSpawnOpportunity(sequence, wave, (int)(sequence - EventsBeforeWave(wave)), entry.PrefabIndex, time, -1, -1, entry.DefinitionIndex);
         }
 
         public long LastDue(double elapsed)

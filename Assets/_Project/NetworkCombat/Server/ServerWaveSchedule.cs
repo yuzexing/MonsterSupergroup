@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using MonsterSupergroup.Gameplay.Combat.Content;
 
 namespace MonsterSupergroup.NetworkCombat
 {
@@ -35,6 +36,9 @@ namespace MonsterSupergroup.NetworkCombat
         public readonly WaveSpawnProgram Program;
         public readonly ReferenceWaveProgram Reference;
         public IReadOnlyList<GameObject> Prefabs { get; }
+        public IReadOnlyList<EnemyDefinitionSnapshot> Definitions { get; private set; } = Array.Empty<EnemyDefinitionSnapshot>();
+        public void CaptureDefinitions(EnemyDefinitionSnapshot[] definitions) =>
+            Definitions = Array.AsReadOnly((EnemyDefinitionSnapshot[])definitions.Clone());
 
         public WaveParameters(double duration, int count, double interval, int limit,
             float radius = 5, float playerClearance = 2, int attempts = 16)
@@ -73,13 +77,13 @@ namespace MonsterSupergroup.NetworkCombat
         public readonly int Wave, Index;
         public readonly int PrefabIndex;
         public readonly double ScheduledTime;
-        public readonly int ClipIndex, FormationIndex;
+        public readonly int ClipIndex, FormationIndex, DefinitionIndex;
         public WaveSpawnOpportunity(long sequence, int wave, int index)
             : this(sequence, wave, index, 0, 0) { }
         public WaveSpawnOpportunity(long sequence, int wave, int index, int prefabIndex, double time)
             : this(sequence, wave, index, prefabIndex, time, -1, -1) { }
-        public WaveSpawnOpportunity(long sequence, int wave, int index, int prefabIndex, double time, int clipIndex, int formationIndex)
-        { Sequence = sequence; Wave = wave; Index = index; PrefabIndex = prefabIndex; ScheduledTime = time; ClipIndex = clipIndex; FormationIndex = formationIndex; }
+        public WaveSpawnOpportunity(long sequence, int wave, int index, int prefabIndex, double time, int clipIndex, int formationIndex, int definitionIndex = -1)
+        { Sequence = sequence; Wave = wave; Index = index; PrefabIndex = prefabIndex; ScheduledTime = time; ClipIndex = clipIndex; FormationIndex = formationIndex; DefinitionIndex = definitionIndex; }
     }
 
     /// <summary>Server clock only. No Unity coroutines, enemies, player registry or network transport.</summary>

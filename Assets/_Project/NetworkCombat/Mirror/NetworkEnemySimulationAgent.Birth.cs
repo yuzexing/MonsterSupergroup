@@ -2,6 +2,7 @@ using System;
 using AstralShift.HellMaiden.AI.Enemy;
 using AstralShift.HellMaiden.AI;
 using Mirror;
+using MonsterSupergroup.Gameplay.Combat.Content;
 using UnityEngine;
 
 namespace MonsterSupergroup.NetworkCombat
@@ -10,7 +11,9 @@ namespace MonsterSupergroup.NetworkCombat
     [Serializable]
     public struct EnemyBirthParameters
     {
-        public bool Enabled;
+        public bool Enabled; // Reference policy only, not the presence of authored base stats.
+        public Guid DefinitionId;
+        public bool HasAttributes => Enabled || DefinitionId != Guid.Empty;
         public string SourceEnemy;
         public int Variant, ClipIndex, Health, Damage;
         public float Speed, SpeedMultiplier, Xp, Knockback, Stun, Wind, ContactRadius;
@@ -31,12 +34,13 @@ namespace MonsterSupergroup.NetworkCombat
         [SyncVar(hook = nameof(HandleReferenceReset))] private uint referenceResetVersion;
         public uint ReferenceResetVersion => referenceResetVersion;
         private bool birthPrepared;
-        [SerializeField] private EnemyDatabase referenceArtDatabase;
+        [SerializeField, HideInInspector] private EnemyDatabase referenceArtDatabase; // Explicit schema-0 compatibility only; GUID births never consult it.
+        private EnemyAppearanceDefinition definitionAppearance;
         public EnemyBirthParameters Birth => birth;
 
         public void ConfigureBirth(EnemyBirthParameters value)
         {
-            if (netId != 0 || !value.Enabled || value.Health < 1 || value.SpeedMultiplier <= 0)
+            if (netId != 0 || !value.HasAttributes || value.Health < 1 || value.SpeedMultiplier <= 0)
                 throw new InvalidOperationException("Configure valid birth attributes before NetworkServer.Spawn.");
             birth = value;
             PrepareBirthForRegistration();
@@ -45,14 +49,24 @@ namespace MonsterSupergroup.NetworkCombat
         // Also called by the combat adapter, before its first registration on either peer.
         internal void PrepareBirthForRegistration()
         {
-            if (!birth.Enabled || birthPrepared || enemyController == null) return;
+            if (!birth.HasAttributes || birthPrepared || enemyController == null) return;
+            if (birth.DefinitionId != Guid.Empty)
+            {
+                var registry = (NetworkManager.singleton as BootGameplayNetworkManager)?.EnemyDefinitions
+                    ?? throw new InvalidOperationException("Boot enemy catalog is unavailable before enemy initialization.");
+                var definition = registry.Resolve(birth.DefinitionId);
+                definitionAppearance = definition.Appearance;
+                var expected = definition.Prefab.GetComponent<NetworkIdentity>();
+                if (expected != null && netIdentity.assetId != 0 && netIdentity.assetId != expected.assetId)
+                    throw new InvalidOperationException("Enemy definition and spawned Prefab identity differ: " + birth.DefinitionId);
+            }
             birth.Apply(enemyController.stats);
             if (referenceResetVersion != 0) enemyController.stats.SpeedMultiplier = 1;
             enemyController.selectedName = birth.SourceEnemy;
-            enemyController.allowRubberband = false; // Reference spawner decides; legacy AI must not also reposition.
+            if (birth.Enabled) enemyController.allowRubberband = false; // Only the reference policy repositions.
             enemyController.CombatantBinding.InitializeFromStats(enemyController.stats);
             if (contactDamage == null) contactDamage = GetComponent<EnemyContactDamage>();
-            if (contactDamage != null)
+            if (birth.Enabled && contactDamage != null)
             {
                 contactDamage.SetContactEnabled(birth.ContactRadius > 0);
                 if (contactDamage.DamageInteraction != null)
@@ -65,7 +79,7 @@ namespace MonsterSupergroup.NetworkCombat
 
         private void ApplyBirthAfterReset(EnemyStats stats)
         {
-            if (birth.Enabled) { birth.Apply(stats); if (referenceResetVersion != 0) stats.SpeedMultiplier = 1; }
+            if (birth.HasAttributes) { birth.Apply(stats); if (referenceResetVersion != 0) stats.SpeedMultiplier = 1; }
         }
 
         [Server]
@@ -86,11 +100,14 @@ namespace MonsterSupergroup.NetworkCombat
 
         private void RestoreCanonicalAfterBirthInitialization()
         {
-            if (birth.Enabled && referenceArtDatabase != null && enemyController != null &&
+            if (definitionAppearance != null && enemyController != null &&
+                !MonsterSupergroup.Gameplay.Combat.GameplayRuntimeEnvironment.IsDedicatedServer)
+                enemyController.enemyAnimator?.PaletteSwapper?.ApplyAppearance(definitionAppearance);
+            else if (birth.DefinitionId == Guid.Empty && birth.Enabled && referenceArtDatabase != null && enemyController != null &&
                 !MonsterSupergroup.Gameplay.Combat.GameplayRuntimeEnvironment.IsDedicatedServer)
                 enemyController.enemyAnimator?.Recolor(referenceArtDatabase.GetEnemyData(birth.SourceEnemy, birth.Variant)?.ColorLUT);
             if (birth.Enabled && enemyController != null) enemyController.allowRubberband = false;
-            if (!birth.Enabled || combatant == null || NetworkCombatWorld.Instance == null) return;
+            if (!birth.HasAttributes || combatant == null || NetworkCombatWorld.Instance == null) return;
             var world = NetworkCombatWorld.Instance;
             if (isServer && world.Gateway.Ledger.TryGetState(netId, out var serverState))
                 combatant.ApplyCanonicalHealth(serverState.Health, serverState.MaxHealth, serverState.StateVersion);
@@ -100,7 +117,7 @@ namespace MonsterSupergroup.NetworkCombat
 
         private void RefreshReferenceReplicaMovement()
         {
-            if (!birth.Enabled || referenceArtDatabase == null || !productEnemyInitialized || !IsCanonicalAlive ||
+            if (!birth.Enabled || (definitionAppearance == null && !(birth.DefinitionId == Guid.Empty && referenceArtDatabase != null)) || !productEnemyInitialized || !IsCanonicalAlive ||
                 authority == null || (!productMovementOnly && !authority.ConsumesSnapshots) || resolvedTarget == null) return;
             if (enemyController.DeathRequested || enemyController.IsInKnockbackState || enemyController.IsNetworkKnockbackActive) return;
             if (hasLatestAttackPresentation)

@@ -125,6 +125,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f6739ebf33d162242825e5945dc580be, type: 3}
   m_Name: NetworkEnemySpawnClip
   m_EditorClassIdentifier: MonsterSupergroup.NetworkCombat::MonsterSupergroup.NetworkCombat.NetworkEnemySpawnClip
+  authoringVersion: 1
+  enemy: {fileID: 11400000, guid: eabbbb55c3a085f4fbc30ee90bcd404b, type: 2}
   enemyPrefab: {fileID: 3963200209637973719, guid: 86e55309607377b4291451635184ffa4, type: 3}
   count: 30
   referenceMode: 2

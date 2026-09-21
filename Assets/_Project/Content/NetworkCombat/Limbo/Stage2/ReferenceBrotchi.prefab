@@ -696,7 +696,7 @@ MonoBehaviour:
   syncDirection: 0
   syncMode: 0
   syncInterval: 0
-  referenceArtDatabase: {fileID: 11400000, guid: 9c334089fb87dee41bbfd5eb1b05b3b9, type: 2}
+  referenceArtDatabase: {fileID: 0}
   authority: {fileID: 0}
   interpolator: {fileID: 0}
   body: {fileID: 0}
@@ -1242,10 +1242,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bae23e64e9e510b1acfe7d5c92f90a46, type: 3}
   m_Name: 
   m_EditorClassIdentifier: MonsterSupergroup.Gameplay.Combat::AstralShift.Rendering.SpriteRendererPaletteSwapper
-  bakedPalettes:
-  - original: {fileID: 2800000, guid: 37e766e78025fdd4e998ecb4e012ccce, type: 3}
-    lut: {fileID: 2800000, guid: dcd3d0d47e26f3d49b3da4f075aefc2e, type: 3}
-    baked: {fileID: 2800000, guid: f1bc368abceeb8b0f71c39c85f5b9d2b, type: 3}
+  bakedPalettes: []
   _Renderer: {fileID: 4711044852071195017}
   _modifiedTexture: {fileID: 0}
 --- !u!1 &5174848868089676230

@@ -99,7 +99,7 @@ namespace MonsterSupergroup.NetworkCombat
                 uint id = 0;
                 var stats = clip.Stats;
                 var birth = new EnemyBirthParameters {
-                    Enabled = true, SourceEnemy = clip.SourceEnemy, Variant = clip.Variant, ClipIndex = opportunity.ClipIndex,
+                    Enabled = true, DefinitionId = clip.DefinitionId, SourceEnemy = clip.SourceEnemy, Variant = clip.Variant, ClipIndex = opportunity.ClipIndex,
                     Health = stats.BaseHealth, Damage = stats.BaseDamage, Speed = stats.BaseSpeed,
                     SpeedMultiplier = legal ? Mathf.Lerp(clip.SpeedMultipliers.x, clip.SpeedMultipliers.y, (float)referenceRandom.NextDouble()) : 1,
                     Xp = stats.BaseXP * settings.Reference.XpMultiplier(schedule.State.Elapsed),

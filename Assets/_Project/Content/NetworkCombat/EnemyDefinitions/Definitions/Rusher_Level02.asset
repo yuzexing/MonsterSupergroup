@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0f0f31cef99ac244a8b7e128df9021d7, type: 3}
+  m_Name: Rusher_Level02
+  m_EditorClassIdentifier: MonsterSupergroup.Gameplay.Combat::MonsterSupergroup.Gameplay.Combat.Content.EnemyDefinition
+  definitionId: 4d7b507168e540da962ea0f17b11ecf2
+  displayName: Rusher_Level02
+  prefab: {fileID: 3911887690903730936, guid: 170893a2576147f4e8cc1aa6350638f5, type: 3}
+  stats: {fileID: 11400000, guid: 5beeab5081056bb42b43133c71254ef7, type: 2}
+  appearance: {fileID: 11400000, guid: 16dd834333a28fd4d90f6fbf99da4af0, type: 2}
+  legacyEnemyName: Slime
+  legacyVariant: 1
+  migrationKey: d7f0e00b20382271780ff441ca8bc10847b33e7fa4889f99e3ea59f59a2cd9e3

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using MonsterSupergroup.Gameplay.Combat.Content;
 using UnityEngine;
 using UnityEngine.Timeline;
 
@@ -14,13 +15,14 @@ namespace MonsterSupergroup.NetworkCombat
             float maximumDistance, float burstRadius, float burstAspect, float effectsDelay, float activationDelay,
             ReferenceBarrierDefinition[] barriers, out GameObject[] prefabs, bool validationOnly = false)
         {
-            if (timeline == null || database == null || xpCurve == null || !Finite(endTime) || endTime <= 0 ||
+            if (timeline == null || xpCurve == null || !Finite(endTime) || endTime <= 0 ||
                 !Finite(sourceDuration) || sourceDuration <= 0 || endTime > sourceDuration ||
                 offscreenDistance < 0 || repositionDistance < 0 || repositionGrace < 0 || offscreenTimeout < 0 ||
                 maximumDistance <= 0 || burstRadius <= 0 || burstAspect <= 0 || effectsDelay < 0 || activationDelay < 0)
                 throw new ArgumentException("Invalid reference stage configuration.");
             var definitions = new List<ReferenceSpawnDefinition>();
             var assets = new List<GameObject>();
+            var definitionSources = new Dictionary<Guid, EnemyDefinition>();
             foreach (var root in timeline.GetRootTracks()) Collect(root);
             prefabs = assets.ToArray();
             return new ReferenceWaveProgram(definitions.OrderBy(d => d.Start).ToArray(), barriers ?? Array.Empty<ReferenceBarrierDefinition>(),
@@ -39,15 +41,31 @@ namespace MonsterSupergroup.NetworkCombat
                             spawn.count < 1 || spawn.count > 10000 || spawn.spawnCooldown < 0 ||
                             spawn.speedMultipliers.x <= 0 || spawn.speedMultipliers.y < spawn.speedMultipliers.x)
                             throw new ArgumentException("Invalid reference clip: " + clip.displayName);
-                        var data = database.GetEnemyData(spawn.sourceEnemy, spawn.sourceVariant);
-                        if (data == null) throw new ArgumentException("Missing source variant: " + spawn.sourceEnemy + "/" + spawn.sourceVariant);
-                        if (spawn.enemyPrefab == null && string.IsNullOrWhiteSpace(spawn.missingEvidence))
-                            throw new ArgumentException("Enabled reference enemy needs a product Prefab: " + clip.displayName);
-                        int index = assets.IndexOf(spawn.enemyPrefab);
-                        if (index < 0 && spawn.enemyPrefab != null) { index = assets.Count; assets.Add(spawn.enemyPrefab); }
-                        var stats = data.Stats; stats.Reset();
+                        EnemyDefinitionSnapshot definition = null;
+                        GameObject prefab;
+                        AstralShift.HellMaiden.AI.Enemy.EnemyStats stats;
+                        if (spawn.AuthoringVersion == 1)
+                        {
+                            if (spawn.Enemy == null) throw new ArgumentException("Choose an Enemy Definition in " + track.name + "/" + clip.displayName);
+                            definition = spawn.Enemy.Capture(); prefab = definition.Prefab; stats = definition.CreateStats();
+                            if (definitionSources.TryGetValue(definition.Id, out var original) && original != spawn.Enemy)
+                                throw new ArgumentException("Duplicate DefinitionId in reference Timeline: " + definition.Id);
+                            definitionSources[definition.Id] = spawn.Enemy;
+                        }
+                        else if (spawn.AuthoringVersion == 0)
+                        {
+                            // Versioned migration boundary only, never a missing-definition fallback.
+                            var legacy = database != null ? database.GetEnemyData(spawn.sourceEnemy, spawn.sourceVariant) : null;
+                            if (legacy == null) throw new ArgumentException("Legacy clip needs its source database until explicitly migrated: " + clip.displayName);
+                            prefab = spawn.enemyPrefab; stats = legacy.Stats; stats.Reset();
+                        }
+                        else throw new ArgumentException("Unsupported enemy clip schema: " + spawn.AuthoringVersion);
+                        if (prefab == null && string.IsNullOrWhiteSpace(spawn.missingEvidence))
+                            throw new ArgumentException("Missing enemy Prefab: " + clip.displayName);
+                        int index = assets.IndexOf(prefab);
+                        if (index < 0 && prefab != null) { index = assets.Count; assets.Add(prefab); }
                         definitions.Add(new ReferenceSpawnDefinition {
-                            Name = clip.displayName, SourceEnemy = spawn.sourceEnemy, Variant = spawn.sourceVariant,
+                            Name = clip.displayName, DefinitionId = definition?.Id ?? Guid.Empty, SourceEnemy = definition?.LegacyEnemyName ?? spawn.sourceEnemy, Variant = definition?.LegacyVariant ?? spawn.sourceVariant,
                             SourceLocation = spawn.sourceLocation, MissingEvidence = spawn.missingEvidence,
                             Readiness = spawn.referenceReadiness,
                             SpawnReadiness = spawn.referenceSpawnReadiness, SpawnReadinessNote = spawn.spawnReadinessNote,

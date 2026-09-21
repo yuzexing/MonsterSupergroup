@@ -128,8 +128,48 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f6739ebf33d162242825e5945dc580be, type: 3}
   m_Name: NetworkEnemySpawnClip
   m_EditorClassIdentifier: MonsterSupergroup.NetworkCombat::MonsterSupergroup.NetworkCombat.NetworkEnemySpawnClip
+  authoringVersion: 1
+  enemy: {fileID: 11400000, guid: 0cf375641a2da604b8b1b9292e34e5fa, type: 2}
   enemyPrefab: {fileID: 7331318918578544153, guid: 05b4427c6fb40c84fb712ac16d351623, type: 3}
   count: 3
+  referenceMode: 0
+  sourceEnemy:
+  sourceVariant: 0
+  sourceLocation:
+  missingEvidence:
+  referenceReadiness: 0
+  referenceSpawnReadiness: 0
+  spawnReadinessNote:
+  recoveredEvidence:
+  spawnCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spawnCooldown: 0
+  speedMultipliers: {x: 0.9, y: 1.1}
+  contactRadius: 0
+  expiresOffscreen: 1
+  resetOnReposition: 1
 --- !u!114 &-2058797939233878420
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -258,8 +298,48 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f6739ebf33d162242825e5945dc580be, type: 3}
   m_Name: NetworkEnemySpawnClip
   m_EditorClassIdentifier: MonsterSupergroup.NetworkCombat::MonsterSupergroup.NetworkCombat.NetworkEnemySpawnClip
+  authoringVersion: 1
+  enemy: {fileID: 11400000, guid: da68ee66113acd943b56bcb0547d95f4, type: 2}
   enemyPrefab: {fileID: 3963200209637973719, guid: e9b6d6b03e4b1e341a17dcc0618c749f, type: 3}
   count: 3
+  referenceMode: 0
+  sourceEnemy:
+  sourceVariant: 0
+  sourceLocation:
+  missingEvidence:
+  referenceReadiness: 0
+  referenceSpawnReadiness: 0
+  spawnReadinessNote:
+  recoveredEvidence:
+  spawnCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spawnCooldown: 0
+  speedMultipliers: {x: 0.9, y: 1.1}
+  contactRadius: 0
+  expiresOffscreen: 1
+  resetOnReposition: 1
 --- !u!114 &-471813852798354260
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -272,8 +352,48 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f6739ebf33d162242825e5945dc580be, type: 3}
   m_Name: NetworkEnemySpawnClip
   m_EditorClassIdentifier: MonsterSupergroup.NetworkCombat::MonsterSupergroup.NetworkCombat.NetworkEnemySpawnClip
+  authoringVersion: 1
+  enemy: {fileID: 11400000, guid: 0cf375641a2da604b8b1b9292e34e5fa, type: 2}
   enemyPrefab: {fileID: 7331318918578544153, guid: 05b4427c6fb40c84fb712ac16d351623, type: 3}
   count: 3
+  referenceMode: 0
+  sourceEnemy:
+  sourceVariant: 0
+  sourceLocation:
+  missingEvidence:
+  referenceReadiness: 0
+  referenceSpawnReadiness: 0
+  spawnReadinessNote:
+  recoveredEvidence:
+  spawnCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spawnCooldown: 0
+  speedMultipliers: {x: 0.9, y: 1.1}
+  contactRadius: 0
+  expiresOffscreen: 1
+  resetOnReposition: 1
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -403,8 +523,48 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f6739ebf33d162242825e5945dc580be, type: 3}
   m_Name: NetworkEnemySpawnClip
   m_EditorClassIdentifier: MonsterSupergroup.NetworkCombat::MonsterSupergroup.NetworkCombat.NetworkEnemySpawnClip
+  authoringVersion: 1
+  enemy: {fileID: 11400000, guid: 565d6bc3afa7c9345913e2fc2a42e233, type: 2}
   enemyPrefab: {fileID: 3911887690903730936, guid: 55ff35e83fff4c74ea6f8f2e82883aa2, type: 3}
   count: 6
+  referenceMode: 0
+  sourceEnemy:
+  sourceVariant: 0
+  sourceLocation:
+  missingEvidence:
+  referenceReadiness: 0
+  referenceSpawnReadiness: 0
+  spawnReadinessNote:
+  recoveredEvidence:
+  spawnCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spawnCooldown: 0
+  speedMultipliers: {x: 0.9, y: 1.1}
+  contactRadius: 0
+  expiresOffscreen: 1
+  resetOnReposition: 1
 --- !u!114 &783424639269103491
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -417,8 +577,48 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f6739ebf33d162242825e5945dc580be, type: 3}
   m_Name: NetworkEnemySpawnClip
   m_EditorClassIdentifier: MonsterSupergroup.NetworkCombat::MonsterSupergroup.NetworkCombat.NetworkEnemySpawnClip
+  authoringVersion: 1
+  enemy: {fileID: 11400000, guid: 565d6bc3afa7c9345913e2fc2a42e233, type: 2}
   enemyPrefab: {fileID: 3911887690903730936, guid: 55ff35e83fff4c74ea6f8f2e82883aa2, type: 3}
   count: 3
+  referenceMode: 0
+  sourceEnemy:
+  sourceVariant: 0
+  sourceLocation:
+  missingEvidence:
+  referenceReadiness: 0
+  referenceSpawnReadiness: 0
+  spawnReadinessNote:
+  recoveredEvidence:
+  spawnCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spawnCooldown: 0
+  speedMultipliers: {x: 0.9, y: 1.1}
+  contactRadius: 0
+  expiresOffscreen: 1
+  resetOnReposition: 1
 --- !u!114 &1296152862233754091
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -456,8 +656,48 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f6739ebf33d162242825e5945dc580be, type: 3}
   m_Name: NetworkEnemySpawnClip
   m_EditorClassIdentifier: MonsterSupergroup.NetworkCombat::MonsterSupergroup.NetworkCombat.NetworkEnemySpawnClip
+  authoringVersion: 1
+  enemy: {fileID: 11400000, guid: 0cf375641a2da604b8b1b9292e34e5fa, type: 2}
   enemyPrefab: {fileID: 7331318918578544153, guid: 05b4427c6fb40c84fb712ac16d351623, type: 3}
   count: 6
+  referenceMode: 0
+  sourceEnemy:
+  sourceVariant: 0
+  sourceLocation:
+  missingEvidence:
+  referenceReadiness: 0
+  referenceSpawnReadiness: 0
+  spawnReadinessNote:
+  recoveredEvidence:
+  spawnCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spawnCooldown: 0
+  speedMultipliers: {x: 0.9, y: 1.1}
+  contactRadius: 0
+  expiresOffscreen: 1
+  resetOnReposition: 1
 --- !u!114 &3879782363150320400
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -796,8 +1036,48 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f6739ebf33d162242825e5945dc580be, type: 3}
   m_Name: NetworkEnemySpawnClip
   m_EditorClassIdentifier: MonsterSupergroup.NetworkCombat::MonsterSupergroup.NetworkCombat.NetworkEnemySpawnClip
+  authoringVersion: 1
+  enemy: {fileID: 11400000, guid: 0d239d70a2f8c4543bb9e67a14d51ea8, type: 2}
   enemyPrefab: {fileID: 6621018548167738675, guid: d2f06231a6b99b448a2eacb121addd48, type: 3}
   count: 3
+  referenceMode: 0
+  sourceEnemy:
+  sourceVariant: 0
+  sourceLocation:
+  missingEvidence:
+  referenceReadiness: 0
+  referenceSpawnReadiness: 0
+  spawnReadinessNote:
+  recoveredEvidence:
+  spawnCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spawnCooldown: 0
+  speedMultipliers: {x: 0.9, y: 1.1}
+  contactRadius: 0
+  expiresOffscreen: 1
+  resetOnReposition: 1
 --- !u!114 &7294072697714739734
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -902,8 +1182,48 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f6739ebf33d162242825e5945dc580be, type: 3}
   m_Name: NetworkEnemySpawnClip
   m_EditorClassIdentifier: MonsterSupergroup.NetworkCombat::MonsterSupergroup.NetworkCombat.NetworkEnemySpawnClip
+  authoringVersion: 1
+  enemy: {fileID: 11400000, guid: 0cf375641a2da604b8b1b9292e34e5fa, type: 2}
   enemyPrefab: {fileID: 7331318918578544153, guid: 05b4427c6fb40c84fb712ac16d351623, type: 3}
   count: 3
+  referenceMode: 0
+  sourceEnemy:
+  sourceVariant: 0
+  sourceLocation:
+  missingEvidence:
+  referenceReadiness: 0
+  referenceSpawnReadiness: 0
+  spawnReadinessNote:
+  recoveredEvidence:
+  spawnCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spawnCooldown: 0
+  speedMultipliers: {x: 0.9, y: 1.1}
+  contactRadius: 0
+  expiresOffscreen: 1
+  resetOnReposition: 1
 --- !u!114 &8080069970736954609
 MonoBehaviour:
   m_ObjectHideFlags: 1

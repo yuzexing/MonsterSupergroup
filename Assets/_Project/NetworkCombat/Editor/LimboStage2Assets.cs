@@ -26,6 +26,7 @@ namespace MonsterSupergroup.NetworkCombat.Editor
         [MenuItem("Tools/MonsterSupergroup/Limbo/Create stage two assets")]
         public static void Create()
         {
+            EnemyDefinitionMigration.EnsureLegacyWriterAllowed("LimboStage2Assets.Create");
             var data = JsonUtility.FromJson<Data>(File.ReadAllText(Root + "/Stage2Adapted.json"));
             AssetDatabase.Refresh();
             foreach (var warning in data.warning) CreateWarning(warning);

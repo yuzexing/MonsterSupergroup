@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a14c1725f00347e479e5f6e67c7bce29, type: 3}
+  m_Name: Enemy_Elite_Skeleton_LUT_4a6b4be6
+  m_EditorClassIdentifier: MonsterSupergroup.Gameplay.Combat::MonsterSupergroup.Gameplay.Combat.Content.EnemyAppearanceDefinition
+  lut: {fileID: 2800000, guid: b0288aca5b3757a4ba5390564da5ef6a, type: 3}
+  textureMappings:
+  - original: {fileID: 2800000, guid: c824e18b4617a1742b7f3458a051e3fb, type: 3}
+    baked: {fileID: 2800000, guid: 419c5402420df51ef45eefed51f5291a, type: 3}
+  - original: {fileID: 2800000, guid: 80da71b4ff9671e488209f492defb1fb, type: 3}
+    baked: {fileID: 2800000, guid: e8950852cc5bbbc6cd16f766b9919141, type: 3}
+  - original: {fileID: 2800000, guid: 86082c15569411e4da52d71a734067b3, type: 3}
+    baked: {fileID: 2800000, guid: a06d8664e21109fe9417db6f91248215, type: 3}
+  contentHash: 97adda8b4b0fab421374b662e99e382a8ec3433da3fb78c01c602e5fc7b036ed

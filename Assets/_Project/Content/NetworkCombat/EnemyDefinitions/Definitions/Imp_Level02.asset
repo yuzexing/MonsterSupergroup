@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0f0f31cef99ac244a8b7e128df9021d7, type: 3}
+  m_Name: Imp_Level02
+  m_EditorClassIdentifier: MonsterSupergroup.Gameplay.Combat::MonsterSupergroup.Gameplay.Combat.Content.EnemyDefinition
+  definitionId: 8b79562f359c4cdeac4f7f4cc7dd7dac
+  displayName: Imp_Level02
+  prefab: {fileID: 6621018548167738675, guid: fda541d34eb17a949a7ed573d099f307, type: 3}
+  stats: {fileID: 11400000, guid: a56472a7ffa060f47a802d4578563f4a, type: 2}
+  appearance: {fileID: 11400000, guid: ed1b3d7c177b2734ea7dcb61196fd4c0, type: 2}
+  legacyEnemyName: Imp
+  legacyVariant: 1
+  migrationKey: 340b26ba9d7bdae136f43ae183282ea854387875e1dae9212ebb47e24ba45adb

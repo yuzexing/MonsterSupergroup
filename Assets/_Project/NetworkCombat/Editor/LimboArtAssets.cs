@@ -43,6 +43,7 @@ namespace MonsterSupergroup.NetworkCombat.Editor
 
         public static void Apply(bool opening)
         {
+            EnemyDefinitionMigration.EnsureLegacyWriterAllowed("LimboArtAssets.Apply");
             AssetDatabase.Refresh(ImportAssetOptions.ForceSynchronousImport);
             data = JsonUtility.FromJson<Source>(File.ReadAllText(Root + "/ArtSource.json"));
             bakes = JsonUtility.FromJson<Bakes>(File.ReadAllText(Root + "/BakedPalettes.json"));

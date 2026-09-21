@@ -12,6 +12,7 @@ namespace MonsterSupergroup.NetworkCombat
     /// <summary>Captured authoring data, not an enemy registry or a second combat state.</summary>
     public sealed class ReferenceSpawnDefinition
     {
+        public Guid DefinitionId;
         public string Name, SourceEnemy, SourceLocation, MissingEvidence;
         public ReferenceEnemyReadiness Readiness;
         public ReferenceEnemyReadiness SpawnReadiness;

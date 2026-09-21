@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0f0f31cef99ac244a8b7e128df9021d7, type: 3}
+  m_Name: BrotchiDash_Level01
+  m_EditorClassIdentifier: MonsterSupergroup.Gameplay.Combat::MonsterSupergroup.Gameplay.Combat.Content.EnemyDefinition
+  definitionId: 023266fba74540d2948537db24476dd5
+  displayName: BrotchiDash_Level01
+  prefab: {fileID: 3911887690903730936, guid: 215bfcb276294c042891f2e05b7c0696, type: 3}
+  stats: {fileID: 11400000, guid: d9199da051547f84c902d07220f3d9c3, type: 2}
+  appearance: {fileID: 11400000, guid: e1958cb36b0ed3945998efdd0a34d755, type: 2}
+  legacyEnemyName: Brotchi_Dash
+  legacyVariant: 0
+  migrationKey: 8da78e7b3b7bbd3ea7ce9a2db4bdcdaa3127fc99ffa7508ca8fe5cdaaf7f94c5

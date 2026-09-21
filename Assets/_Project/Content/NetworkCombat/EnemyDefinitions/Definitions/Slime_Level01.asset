@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0f0f31cef99ac244a8b7e128df9021d7, type: 3}
+  m_Name: Slime_Level01
+  m_EditorClassIdentifier: MonsterSupergroup.Gameplay.Combat::MonsterSupergroup.Gameplay.Combat.Content.EnemyDefinition
+  definitionId: 4c253d64002249e69d8a312e52c3a00e
+  displayName: Slime_Level01
+  prefab: {fileID: 3911887690903730936, guid: 995c1fd494f66c84985e19615ff8e5ee, type: 3}
+  stats: {fileID: 11400000, guid: 99ba3aae1e8587d4fbb80999cb486760, type: 2}
+  appearance: {fileID: 11400000, guid: e1958cb36b0ed3945998efdd0a34d755, type: 2}
+  legacyEnemyName: Slime
+  legacyVariant: 0
+  migrationKey: 0cb9ceefd50c3a728d71edf1f43bde6c3dbcd2d223493caf90764e3b597337d6

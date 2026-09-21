@@ -30,6 +30,7 @@ namespace MonsterSupergroup.NetworkCombat.Editor
         [MenuItem("Tools/MonsterSupergroup/Limbo/Create LostSoul reference assets")]
         public static void Create()
         {
+            EnemyDefinitionMigration.EnsureLegacyWriterAllowed("LimboLostSoulAssets.Create");
             AssetDatabase.Refresh(ImportAssetOptions.ForceSynchronousImport);
             var data = JsonUtility.FromJson<Data>(File.ReadAllText(Root+"/LostSoulAdapted.json"));
             CreateExplosion(data); CreateEnemy(data);

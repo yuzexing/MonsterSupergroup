@@ -54,7 +54,8 @@ namespace MonsterSupergroup.NetworkCombat
             if (visual == null) return;
             visual.localPosition = visualOrigin; visual.gameObject.SetActive(true);
             foreach (var ps in visual.GetComponentsInChildren<ParticleSystem>(true)) { ps.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear); ps.Play(); }
-            foreach (var animator in visual.GetComponentsInChildren<Animator>(true)) { animator.Rebind(); animator.Update(0); }
+            foreach (var animator in visual.GetComponentsInChildren<Animator>(true))
+            { animator.Rebind(); if (animator.isActiveAndEnabled) animator.Update(0); }
         }
         public void BeginHealthFlight(uint player)
         { claimed = true; collectorId = player; claimVersion++; flightElapsed = 0; flightPaused = false; }

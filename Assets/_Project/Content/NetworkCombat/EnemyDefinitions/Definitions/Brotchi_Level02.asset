@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0f0f31cef99ac244a8b7e128df9021d7, type: 3}
+  m_Name: Brotchi_Level02
+  m_EditorClassIdentifier: MonsterSupergroup.Gameplay.Combat::MonsterSupergroup.Gameplay.Combat.Content.EnemyDefinition
+  definitionId: cb8cc281a8584314aef4307f4918e776
+  displayName: Brotchi_Level02
+  prefab: {fileID: 3911887690903730936, guid: 735c4c94bb65e1c4caf7352a7b94b262, type: 3}
+  stats: {fileID: 11400000, guid: f6a9ca24e7c8ac24782fed94a2c92af6, type: 2}
+  appearance: {fileID: 11400000, guid: 6c29a81443a702445996c39cc75f7850, type: 2}
+  legacyEnemyName: Brotchi
+  legacyVariant: 1
+  migrationKey: cb5f97bf98580584bfebcfc38b9cf8586725cadafb9545626a62b2e434a72121

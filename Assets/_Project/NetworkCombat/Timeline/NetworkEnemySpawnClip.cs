@@ -1,3 +1,4 @@
+using MonsterSupergroup.Gameplay.Combat.Content;
 using UnityEngine;
 using UnityEngine.Playables;
 using UnityEngine.Timeline;
@@ -7,11 +8,16 @@ namespace MonsterSupergroup.NetworkCombat
     // Authoring data only. Playing or scrubbing this asset never spawns an enemy.
     public sealed class NetworkEnemySpawnClip : PlayableAsset, ITimelineClipAsset
     {
-        public GameObject enemyPrefab;
+        [SerializeField, HideInInspector] private int authoringVersion; // 0 = explicit pre-migration schema; 1 = definition-only.
+        [SerializeField] private EnemyDefinition enemy;
+        public int AuthoringVersion => authoringVersion;
+        public EnemyDefinition Enemy => enemy;
+        // Legacy authoring/provenance only. Production compilers never fall back to these fields.
+        [HideInInspector] public GameObject enemyPrefab;
         [Min(1)] public int count = 6;
         public ReferenceSpawnMode referenceMode;
-        public string sourceEnemy;
-        public int sourceVariant;
+        [HideInInspector] public string sourceEnemy;
+        [HideInInspector] public int sourceVariant;
         public string sourceLocation;
         [TextArea] public string missingEvidence;
         public ReferenceEnemyReadiness referenceReadiness;

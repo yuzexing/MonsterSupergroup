@@ -112,7 +112,7 @@ namespace MonsterSupergroup.NetworkCombat
                         targetId = target.AvatarId;
                         if (TryChoosePosition(target, opportunity.Sequence, prefab, out var position))
                         {
-                            enemyId = SpawnEnemy(position, targetId, prefab);
+                            enemyId = SpawnEnemy(position, targetId, prefab, CaptureOrdinaryBirth(opportunity));
                             spawned = enemyId != 0;
                             reason = spawned ? "Spawned" : "SpawnFailed";
                         }
@@ -154,6 +154,15 @@ namespace MonsterSupergroup.NetworkCombat
             if (!waveRules.TryCapture(out var captured, out error)) return false;
             if (captured.Reference?.ReadinessError() is string readinessError)
             { error = readinessError; return false; }
+            var registry = (NetworkManager.singleton as BootGameplayNetworkManager)?.EnemyDefinitions;
+            if (captured.Reference != null)
+            {
+                foreach (var entry in captured.Reference.Clips)
+                    if (entry.DefinitionId != System.Guid.Empty && (registry == null || !registry.Contains(entry.DefinitionId)))
+                    { error = "Enemy definition missing from Boot catalog: " + entry.DefinitionId; return false; }
+            }
+            else foreach (var entry in captured.Definitions)
+                if (registry == null || !registry.Contains(entry.Id)) { error = "Enemy definition missing from Boot catalog: " + entry.Id; return false; }
             if (boundaryGround == null || boundaryGround.bounds.size.x <= 0 || boundaryGround.bounds.size.y <= 0)
             { error = "Gameplay requires the approved Ground boundary."; return false; }
             foreach (var prefab in captured.Prefabs)
@@ -275,13 +284,28 @@ namespace MonsterSupergroup.NetworkCombat
             SpawnEnemy((Vector2)endpoint.transform.position + DirectionFor(endpoint.PlayerEntityId) * spawnDistance, endpoint.PlayerEntityId, enemyPrefab);
         }
 
+        private EnemyBirthParameters CaptureOrdinaryBirth(WaveSpawnOpportunity opportunity)
+        {
+            if (opportunity.DefinitionIndex == -1) return default; // Explicit schema-0 fixture/import path only.
+            if (opportunity.DefinitionIndex < 0 || opportunity.DefinitionIndex >= settings.Definitions.Count)
+                throw new System.InvalidOperationException("Ordinary wave event has no captured enemy definition.");
+            var definition = settings.Definitions[opportunity.DefinitionIndex];
+            var values = definition.Values;
+            return new EnemyBirthParameters {
+                DefinitionId = definition.Id, Enabled = false, ClipIndex = -1, Counted = true,
+                SourceEnemy = definition.LegacyEnemyName, Variant = definition.LegacyVariant,
+                Health = values.Health, Damage = values.Damage, Speed = values.Speed, SpeedMultiplier = 1,
+                Xp = values.XP, Knockback = values.KnockBackMultiplier, Stun = values.StunTime, Wind = values.WindMultiplier
+            };
+        }
+
         private uint SpawnEnemy(Vector2 position, uint targetId, GameObject prefab, EnemyBirthParameters birth = default)
         {
             GameObject enemy = Instantiate(prefab, position, Quaternion.identity);
             var agent = enemy.GetComponent<NetworkEnemySimulationAgent>();
             if (agent == null) { Destroy(enemy); return 0; }
             agent.ConfigureRuntimeMinimumHealthOverride(runtimeMinimumSpawnHealth);
-            if (birth.Enabled) agent.ConfigureBirth(birth);
+            if (birth.HasAttributes) agent.ConfigureBirth(birth);
             agent.ConfigureInitialServerTarget(targetId);
             SceneManager.MoveGameObjectToScene(enemy, gameObject.scene);
             NetworkServer.Spawn(enemy);

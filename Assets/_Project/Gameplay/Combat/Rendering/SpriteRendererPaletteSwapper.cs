@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using AstralShift.Helpers.Attributes;
 using UnityEngine;
+using MonsterSupergroup.Gameplay.Combat.Content;
 
 namespace AstralShift.Rendering
 {
@@ -10,8 +11,11 @@ namespace AstralShift.Rendering
 	{
         [System.Serializable]
         public struct BakedPalette { public Texture2D original, lut, baked; }
-        [SerializeField] private BakedPalette[] bakedPalettes = System.Array.Empty<BakedPalette>();
+        [SerializeField, HideInInspector] private BakedPalette[] bakedPalettes = System.Array.Empty<BakedPalette>();
         private Sprite _originalSprite;
+        private EnemyAppearanceDefinition _appearance;
+        private EnemyAppearanceCache.Lease _appearanceLease;
+        public EnemyAppearanceDefinition Appearance => _appearance;
 		public const int DefaultExecutionOrder = 30000;
 
 		[SerializeField]
@@ -52,10 +56,11 @@ namespace AstralShift.Rendering
 		{
 			get
 			{
-				return _colorLut;
+                return _appearance != null ? _appearance.Lut : _colorLut;
 			}
 			set
 			{
+                ReleaseAppearance();
 				if (_colorLut == value) return;
                 if (_Renderer != null && _Renderer.sprite != null && _Renderer.sprite.texture == _modifiedTexture && _originalSprite != null)
                     _Renderer.sprite = _originalSprite;
@@ -89,6 +94,13 @@ namespace AstralShift.Rendering
 
 		protected virtual void LateUpdate()
 		{
+            if (_appearanceLease != null && _Renderer != null && _Renderer.sprite != null)
+            {
+                _originalSprite = _appearanceLease.Original(_Renderer.sprite);
+                _Renderer.sprite = _appearanceLease.Map(_originalSprite);
+                _modifiedTexture = _Renderer.sprite.texture;
+                return;
+            }
 			if (_isEnabled && !(_Renderer == null))
 			{
 				TrySwapTexture();
@@ -146,6 +158,26 @@ namespace AstralShift.Rendering
 
 		// The map belongs to the shared manager. One enemy's death must not clear
 		// sprites/textures still referenced by other living enemies of this variant.
-        protected virtual void OnDestroy() => PaletteSwapSpriteManager.Release(_colorLut);
+        public void ApplyAppearance(EnemyAppearanceDefinition value)
+        {
+            if (value == null) throw new System.ArgumentNullException(nameof(value));
+            if (_appearance == value && _appearanceLease != null) return;
+            ReleaseAppearance();
+            if (_Renderer != null && _Renderer.sprite != null && _Renderer.sprite.texture == _modifiedTexture && _originalSprite != null)
+                _Renderer.sprite = _originalSprite;
+            PaletteSwapSpriteManager.Release(_colorLut);
+            _colorLut = null; _isEnabled = false; _mainMap = null; _spriteMap = null;
+            _previousTexture = null; _modifiedTexture = null;
+            _appearanceLease = EnemyAppearanceCache.Acquire(value); _appearance = value;
+        }
+        private void ReleaseAppearance()
+        {
+            if (_appearanceLease == null) return;
+            if (_Renderer != null) _Renderer.sprite = _appearanceLease.Original(_Renderer.sprite);
+            _appearanceLease.Dispose(); _appearanceLease = null; _appearance = null;
+            _modifiedTexture = null; _previousTexture = null;
+        }
+        protected virtual void OnDestroy()
+        { ReleaseAppearance(); PaletteSwapSpriteManager.Release(_colorLut); }
 	}
 }

@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a14c1725f00347e479e5f6e67c7bce29, type: 3}
+  m_Name: Enemy_Slime_Level_02_LUT_c09cbd92
+  m_EditorClassIdentifier: MonsterSupergroup.Gameplay.Combat::MonsterSupergroup.Gameplay.Combat.Content.EnemyAppearanceDefinition
+  lut: {fileID: 2800000, guid: 0663fa69de74e7043b9d3d7f591cabfa, type: 3}
+  textureMappings:
+  - original: {fileID: 2800000, guid: 99cef9939db7bce4c82c5e2645f0b725, type: 3}
+    baked: {fileID: 2800000, guid: 5672b52aff51883569429f768e76c39c, type: 3}
+  - original: {fileID: 2800000, guid: c95f6efd850d6ad43af83229a432cbae, type: 3}
+    baked: {fileID: 2800000, guid: 975ee247154c105c35ebbf3471a50a99, type: 3}
+  contentHash: 94917c5357e71fa33cb7a4b135ac23443c6d4e8cfc177cf912a12bc0a7825402

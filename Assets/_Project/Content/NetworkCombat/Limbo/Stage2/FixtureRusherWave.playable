@@ -125,6 +125,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f6739ebf33d162242825e5945dc580be, type: 3}
   m_Name: NetworkEnemySpawnClip
   m_EditorClassIdentifier: MonsterSupergroup.NetworkCombat::MonsterSupergroup.NetworkCombat.NetworkEnemySpawnClip
+  authoringVersion: 1
+  enemy: {fileID: 11400000, guid: fcea7f0fd07fa764ab847d15c847d00b, type: 2}
   enemyPrefab: {fileID: 3911887690903730936, guid: 170893a2576147f4e8cc1aa6350638f5, type: 3}
   count: 100
   referenceMode: 2
@@ -134,6 +136,8 @@ MonoBehaviour:
   missingEvidence: 'Explicit L fixture: original 180-second segment shifted by -179
     seconds; not continuous play.'
   referenceReadiness: 3
+  referenceSpawnReadiness: 0
+  spawnReadinessNote:
   recoveredEvidence: docs/evidence/hellmaiden-attacks/recovered-enemies.json#Slime
   spawnCurve:
     serializedVersion: 2

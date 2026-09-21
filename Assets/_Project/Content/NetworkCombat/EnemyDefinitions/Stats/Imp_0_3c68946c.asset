@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fa1c00842e3f8bb428e019abf0ffe671, type: 3}
+  m_Name: Imp_0_3c68946c
+  m_EditorClassIdentifier: MonsterSupergroup.Gameplay.Combat::MonsterSupergroup.Gameplay.Combat.Content.EnemyStatsDefinition
+  baseStats:
+    hp: 12
+    damage: 5
+    xp: 6
+    speed: 2
+    knockbackMultiplier: 1
+    stunTime: 0
+    windMultiplier: 0

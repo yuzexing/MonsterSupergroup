@@ -19,7 +19,7 @@ namespace MonsterSupergroup.NetworkCombat
         [SerializeField] private ReferenceEnemyReadiness referenceFlowReadiness;
         [SerializeField] private string referenceFlowReadinessNote;
         [SerializeField] private ReferenceEndPolicy referenceEndPolicy;
-        [SerializeField] private EnemyDatabase referenceEnemies;
+        [SerializeField, HideInInspector] private EnemyDatabase referenceEnemies; // Schema-0 import source only; schema 1 resolves EnemyDefinition.
         [SerializeField] private double referenceEndTime = 60;
         [SerializeField] private double referenceSourceDuration = 841.5766649882;
         [SerializeField] private AnimationCurve referenceXpCurve = AnimationCurve.Linear(0, 0, 1, 1);
@@ -53,8 +53,9 @@ namespace MonsterSupergroup.NetworkCombat
                     parameters = new WaveParameters(reference, referencePrefabs, maximumAlive, positionAttempts);
                     error = null; return true;
                 }
-                var program = NetworkWaveTimelineCompiler.Compile(timeline, waveDuration, out var prefabs);
+                var program = NetworkWaveTimelineCompiler.Compile(timeline, waveDuration, out var prefabs, out var definitions);
                 parameters = new WaveParameters(program, prefabs, maximumAlive, spawnRadius, minimumPlayerDistance, positionAttempts);
+                parameters.CaptureDefinitions(definitions);
                 error = null; return true;
             }
             catch (ArgumentException exception) { parameters = null; error = exception.Message; return false; }

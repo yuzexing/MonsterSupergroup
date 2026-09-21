@@ -12,6 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f6739ebf33d162242825e5945dc580be, type: 3}
   m_Name: NetworkEnemySpawnClip
   m_EditorClassIdentifier: MonsterSupergroup.NetworkCombat::MonsterSupergroup.NetworkCombat.NetworkEnemySpawnClip
+  authoringVersion: 1
+  enemy: {fileID: 11400000, guid: 293bb5c99c77bc3418212e0203304415, type: 2}
   enemyPrefab: {fileID: 3911887690903730936, guid: 995c1fd494f66c84985e19615ff8e5ee, type: 3}
   count: 10
   referenceMode: 3
@@ -46,6 +48,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f6739ebf33d162242825e5945dc580be, type: 3}
   m_Name: NetworkEnemySpawnClip
   m_EditorClassIdentifier: MonsterSupergroup.NetworkCombat::MonsterSupergroup.NetworkCombat.NetworkEnemySpawnClip
+  authoringVersion: 1
+  enemy: {fileID: 11400000, guid: f87bd3deae05a2e4082f467405ad3e64, type: 2}
   enemyPrefab: {fileID: 6621018548167738675, guid: fda541d34eb17a949a7ed573d099f307, type: 3}
   count: 10
   referenceMode: 2
@@ -80,6 +84,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f6739ebf33d162242825e5945dc580be, type: 3}
   m_Name: NetworkEnemySpawnClip
   m_EditorClassIdentifier: MonsterSupergroup.NetworkCombat::MonsterSupergroup.NetworkCombat.NetworkEnemySpawnClip
+  authoringVersion: 1
+  enemy: {fileID: 11400000, guid: fcea7f0fd07fa764ab847d15c847d00b, type: 2}
   enemyPrefab: {fileID: 3911887690903730936, guid: 170893a2576147f4e8cc1aa6350638f5, type: 3}
   count: 100
   referenceMode: 2
@@ -114,6 +120,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f6739ebf33d162242825e5945dc580be, type: 3}
   m_Name: NetworkEnemySpawnClip
   m_EditorClassIdentifier: MonsterSupergroup.NetworkCombat::MonsterSupergroup.NetworkCombat.NetworkEnemySpawnClip
+  authoringVersion: 1
+  enemy: {fileID: 11400000, guid: 9fbea48db1bdb7a499c16b1d3a738d0c, type: 2}
   enemyPrefab: {fileID: 3911887690903730936, guid: 215bfcb276294c042891f2e05b7c0696, type: 3}
   count: 60
   referenceMode: 1
@@ -166,6 +174,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f6739ebf33d162242825e5945dc580be, type: 3}
   m_Name: NetworkEnemySpawnClip
   m_EditorClassIdentifier: MonsterSupergroup.NetworkCombat::MonsterSupergroup.NetworkCombat.NetworkEnemySpawnClip
+  authoringVersion: 1
+  enemy: {fileID: 11400000, guid: 9bd9213152bc09f4aba799fbc04ec53c, type: 2}
   enemyPrefab: {fileID: 3963200209637973719, guid: 248046ba9ce5b5540bd8688b3ef968a2, type: 3}
   count: 46
   referenceMode: 2
@@ -476,6 +486,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f6739ebf33d162242825e5945dc580be, type: 3}
   m_Name: NetworkEnemySpawnClip
   m_EditorClassIdentifier: MonsterSupergroup.NetworkCombat::MonsterSupergroup.NetworkCombat.NetworkEnemySpawnClip
+  authoringVersion: 1
+  enemy: {fileID: 11400000, guid: 86f0af8f74bb58347be786debbcaed3a, type: 2}
   enemyPrefab: {fileID: 3911887690903730936, guid: 735c4c94bb65e1c4caf7352a7b94b262, type: 3}
   count: 250
   referenceMode: 1
@@ -528,6 +540,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f6739ebf33d162242825e5945dc580be, type: 3}
   m_Name: NetworkEnemySpawnClip
   m_EditorClassIdentifier: MonsterSupergroup.NetworkCombat::MonsterSupergroup.NetworkCombat.NetworkEnemySpawnClip
+  authoringVersion: 1
+  enemy: {fileID: 11400000, guid: 293bb5c99c77bc3418212e0203304415, type: 2}
   enemyPrefab: {fileID: 3911887690903730936, guid: 995c1fd494f66c84985e19615ff8e5ee, type: 3}
   count: 10
   referenceMode: 3
@@ -654,6 +668,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f6739ebf33d162242825e5945dc580be, type: 3}
   m_Name: NetworkEnemySpawnClip
   m_EditorClassIdentifier: MonsterSupergroup.NetworkCombat::MonsterSupergroup.NetworkCombat.NetworkEnemySpawnClip
+  authoringVersion: 1
+  enemy: {fileID: 11400000, guid: 9fbea48db1bdb7a499c16b1d3a738d0c, type: 2}
   enemyPrefab: {fileID: 3911887690903730936, guid: 215bfcb276294c042891f2e05b7c0696, type: 3}
   count: 60
   referenceMode: 1
@@ -798,6 +814,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f6739ebf33d162242825e5945dc580be, type: 3}
   m_Name: NetworkEnemySpawnClip
   m_EditorClassIdentifier: MonsterSupergroup.NetworkCombat::MonsterSupergroup.NetworkCombat.NetworkEnemySpawnClip
+  authoringVersion: 1
+  enemy: {fileID: 11400000, guid: 293bb5c99c77bc3418212e0203304415, type: 2}
   enemyPrefab: {fileID: 3911887690903730936, guid: 995c1fd494f66c84985e19615ff8e5ee, type: 3}
   count: 5
   referenceMode: 3
@@ -832,6 +850,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f6739ebf33d162242825e5945dc580be, type: 3}
   m_Name: NetworkEnemySpawnClip
   m_EditorClassIdentifier: MonsterSupergroup.NetworkCombat::MonsterSupergroup.NetworkCombat.NetworkEnemySpawnClip
+  authoringVersion: 1
+  enemy: {fileID: 11400000, guid: a6c2a954e4ea8b547a02a261aeda71e8, type: 2}
   enemyPrefab: {fileID: 3963200209637973719, guid: 248046ba9ce5b5540bd8688b3ef968a2, type: 3}
   count: 10
   referenceMode: 3
@@ -1050,6 +1070,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f6739ebf33d162242825e5945dc580be, type: 3}
   m_Name: NetworkEnemySpawnClip
   m_EditorClassIdentifier: MonsterSupergroup.NetworkCombat::MonsterSupergroup.NetworkCombat.NetworkEnemySpawnClip
+  authoringVersion: 1
+  enemy: {fileID: 11400000, guid: 9097c1b4bd103ab42b6c528e2f5a8c90, type: 2}
   enemyPrefab: {fileID: 3963200209637973719, guid: a641541a073116c4b9e5396ffe09fb5f, type: 3}
   count: 1
   referenceMode: 1
@@ -1378,6 +1400,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f6739ebf33d162242825e5945dc580be, type: 3}
   m_Name: NetworkEnemySpawnClip
   m_EditorClassIdentifier: MonsterSupergroup.NetworkCombat::MonsterSupergroup.NetworkCombat.NetworkEnemySpawnClip
+  authoringVersion: 1
+  enemy: {fileID: 11400000, guid: a6c2a954e4ea8b547a02a261aeda71e8, type: 2}
   enemyPrefab: {fileID: 3963200209637973719, guid: 248046ba9ce5b5540bd8688b3ef968a2, type: 3}
   count: 46
   referenceMode: 2
@@ -1504,6 +1528,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f6739ebf33d162242825e5945dc580be, type: 3}
   m_Name: NetworkEnemySpawnClip
   m_EditorClassIdentifier: MonsterSupergroup.NetworkCombat::MonsterSupergroup.NetworkCombat.NetworkEnemySpawnClip
+  authoringVersion: 1
+  enemy: {fileID: 11400000, guid: 293bb5c99c77bc3418212e0203304415, type: 2}
   enemyPrefab: {fileID: 3911887690903730936, guid: 995c1fd494f66c84985e19615ff8e5ee, type: 3}
   count: 5
   referenceMode: 3
@@ -1906,6 +1932,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f6739ebf33d162242825e5945dc580be, type: 3}
   m_Name: NetworkEnemySpawnClip
   m_EditorClassIdentifier: MonsterSupergroup.NetworkCombat::MonsterSupergroup.NetworkCombat.NetworkEnemySpawnClip
+  authoringVersion: 1
+  enemy: {fileID: 11400000, guid: b667d0983bd818d48a7d0b72ce05894e, type: 2}
   enemyPrefab: {fileID: 3911887690903730936, guid: 995c1fd494f66c84985e19615ff8e5ee, type: 3}
   count: 90
   referenceMode: 1
@@ -2050,6 +2078,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f6739ebf33d162242825e5945dc580be, type: 3}
   m_Name: NetworkEnemySpawnClip
   m_EditorClassIdentifier: MonsterSupergroup.NetworkCombat::MonsterSupergroup.NetworkCombat.NetworkEnemySpawnClip
+  authoringVersion: 1
+  enemy: {fileID: 11400000, guid: 575c8b9b0306fe4409bdcc3aed7f036c, type: 2}
   enemyPrefab: {fileID: 3963200209637973719, guid: a35cd217aff134a4aa233d876ad3f2ae, type: 3}
   count: 150
   referenceMode: 1
@@ -2120,6 +2150,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f6739ebf33d162242825e5945dc580be, type: 3}
   m_Name: NetworkEnemySpawnClip
   m_EditorClassIdentifier: MonsterSupergroup.NetworkCombat::MonsterSupergroup.NetworkCombat.NetworkEnemySpawnClip
+  authoringVersion: 1
+  enemy: {fileID: 11400000, guid: f87bd3deae05a2e4082f467405ad3e64, type: 2}
   enemyPrefab: {fileID: 6621018548167738675, guid: fda541d34eb17a949a7ed573d099f307, type: 3}
   count: 10
   referenceMode: 3
@@ -2297,6 +2329,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f6739ebf33d162242825e5945dc580be, type: 3}
   m_Name: NetworkEnemySpawnClip
   m_EditorClassIdentifier: MonsterSupergroup.NetworkCombat::MonsterSupergroup.NetworkCombat.NetworkEnemySpawnClip
+  authoringVersion: 1
+  enemy: {fileID: 11400000, guid: f4a09a88f9186c74b89fb4a69887be38, type: 2}
   enemyPrefab: {fileID: 6621018548167738675, guid: fda541d34eb17a949a7ed573d099f307, type: 3}
   count: 15
   referenceMode: 1
@@ -2450,6 +2484,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f6739ebf33d162242825e5945dc580be, type: 3}
   m_Name: NetworkEnemySpawnClip
   m_EditorClassIdentifier: MonsterSupergroup.NetworkCombat::MonsterSupergroup.NetworkCombat.NetworkEnemySpawnClip
+  authoringVersion: 1
+  enemy: {fileID: 11400000, guid: f87bd3deae05a2e4082f467405ad3e64, type: 2}
   enemyPrefab: {fileID: 6621018548167738675, guid: fda541d34eb17a949a7ed573d099f307, type: 3}
   count: 18
   referenceMode: 2
@@ -2484,6 +2520,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f6739ebf33d162242825e5945dc580be, type: 3}
   m_Name: NetworkEnemySpawnClip
   m_EditorClassIdentifier: MonsterSupergroup.NetworkCombat::MonsterSupergroup.NetworkCombat.NetworkEnemySpawnClip
+  authoringVersion: 1
+  enemy: {fileID: 11400000, guid: 2db8a4c6d3cb030438a90bfafa69a877, type: 2}
   enemyPrefab: {fileID: 3963200209637973719, guid: a641541a073116c4b9e5396ffe09fb5f, type: 3}
   count: 1
   referenceMode: 1
@@ -2720,6 +2758,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f6739ebf33d162242825e5945dc580be, type: 3}
   m_Name: NetworkEnemySpawnClip
   m_EditorClassIdentifier: MonsterSupergroup.NetworkCombat::MonsterSupergroup.NetworkCombat.NetworkEnemySpawnClip
+  authoringVersion: 1
+  enemy: {fileID: 11400000, guid: 9097c1b4bd103ab42b6c528e2f5a8c90, type: 2}
   enemyPrefab: {fileID: 3963200209637973719, guid: a641541a073116c4b9e5396ffe09fb5f, type: 3}
   count: 2
   referenceMode: 1
@@ -2956,6 +2996,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f6739ebf33d162242825e5945dc580be, type: 3}
   m_Name: NetworkEnemySpawnClip
   m_EditorClassIdentifier: MonsterSupergroup.NetworkCombat::MonsterSupergroup.NetworkCombat.NetworkEnemySpawnClip
+  authoringVersion: 1
+  enemy: {fileID: 11400000, guid: eabbbb55c3a085f4fbc30ee90bcd404b, type: 2}
   enemyPrefab: {fileID: 3963200209637973719, guid: 86e55309607377b4291451635184ffa4, type: 3}
   count: 30
   referenceMode: 2
@@ -2990,6 +3032,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f6739ebf33d162242825e5945dc580be, type: 3}
   m_Name: NetworkEnemySpawnClip
   m_EditorClassIdentifier: MonsterSupergroup.NetworkCombat::MonsterSupergroup.NetworkCombat.NetworkEnemySpawnClip
+  authoringVersion: 1
+  enemy: {fileID: 11400000, guid: d66964bc354c0a24cb0000207e592d97, type: 2}
   enemyPrefab: {fileID: 3963200209637973719, guid: a35cd217aff134a4aa233d876ad3f2ae, type: 3}
   count: 200
   referenceMode: 1
@@ -3244,6 +3288,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f6739ebf33d162242825e5945dc580be, type: 3}
   m_Name: NetworkEnemySpawnClip
   m_EditorClassIdentifier: MonsterSupergroup.NetworkCombat::MonsterSupergroup.NetworkCombat.NetworkEnemySpawnClip
+  authoringVersion: 1
+  enemy: {fileID: 11400000, guid: eabbbb55c3a085f4fbc30ee90bcd404b, type: 2}
   enemyPrefab: {fileID: 3963200209637973719, guid: 86e55309607377b4291451635184ffa4, type: 3}
   count: 20
   referenceMode: 2
@@ -3278,6 +3324,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f6739ebf33d162242825e5945dc580be, type: 3}
   m_Name: NetworkEnemySpawnClip
   m_EditorClassIdentifier: MonsterSupergroup.NetworkCombat::MonsterSupergroup.NetworkCombat.NetworkEnemySpawnClip
+  authoringVersion: 1
+  enemy: {fileID: 11400000, guid: b667d0983bd818d48a7d0b72ce05894e, type: 2}
   enemyPrefab: {fileID: 3911887690903730936, guid: 995c1fd494f66c84985e19615ff8e5ee, type: 3}
   count: 60
   referenceMode: 1
@@ -3330,6 +3378,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f6739ebf33d162242825e5945dc580be, type: 3}
   m_Name: NetworkEnemySpawnClip
   m_EditorClassIdentifier: MonsterSupergroup.NetworkCombat::MonsterSupergroup.NetworkCombat.NetworkEnemySpawnClip
+  authoringVersion: 1
+  enemy: {fileID: 11400000, guid: 9fbea48db1bdb7a499c16b1d3a738d0c, type: 2}
   enemyPrefab: {fileID: 3911887690903730936, guid: 215bfcb276294c042891f2e05b7c0696, type: 3}
   count: 50
   referenceMode: 1
@@ -3382,6 +3432,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f6739ebf33d162242825e5945dc580be, type: 3}
   m_Name: NetworkEnemySpawnClip
   m_EditorClassIdentifier: MonsterSupergroup.NetworkCombat::MonsterSupergroup.NetworkCombat.NetworkEnemySpawnClip
+  authoringVersion: 1
+  enemy: {fileID: 11400000, guid: 197d21d0a0aa15347ba266285ee015d8, type: 2}
   enemyPrefab: {fileID: 3911887690903730936, guid: 170893a2576147f4e8cc1aa6350638f5, type: 3}
   count: 80
   referenceMode: 2
@@ -3692,6 +3744,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f6739ebf33d162242825e5945dc580be, type: 3}
   m_Name: NetworkEnemySpawnClip
   m_EditorClassIdentifier: MonsterSupergroup.NetworkCombat::MonsterSupergroup.NetworkCombat.NetworkEnemySpawnClip
+  authoringVersion: 1
+  enemy: {fileID: 11400000, guid: 68311abab08659841a7a72477530a0b1, type: 2}
   enemyPrefab: {fileID: 3911887690903730936, guid: 735c4c94bb65e1c4caf7352a7b94b262, type: 3}
   count: 150
   referenceMode: 1
@@ -3928,6 +3982,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f6739ebf33d162242825e5945dc580be, type: 3}
   m_Name: NetworkEnemySpawnClip
   m_EditorClassIdentifier: MonsterSupergroup.NetworkCombat::MonsterSupergroup.NetworkCombat.NetworkEnemySpawnClip
+  authoringVersion: 1
+  enemy: {fileID: 11400000, guid: 7da0bf87a7779fc40b6051082c2df2c4, type: 2}
   enemyPrefab: {fileID: 3911887690903730936, guid: 215bfcb276294c042891f2e05b7c0696, type: 3}
   count: 30
   referenceMode: 2
@@ -3962,6 +4018,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f6739ebf33d162242825e5945dc580be, type: 3}
   m_Name: NetworkEnemySpawnClip
   m_EditorClassIdentifier: MonsterSupergroup.NetworkCombat::MonsterSupergroup.NetworkCombat.NetworkEnemySpawnClip
+  authoringVersion: 1
+  enemy: {fileID: 11400000, guid: eabbbb55c3a085f4fbc30ee90bcd404b, type: 2}
   enemyPrefab: {fileID: 3963200209637973719, guid: 86e55309607377b4291451635184ffa4, type: 3}
   count: 50
   referenceMode: 1
@@ -4106,6 +4164,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f6739ebf33d162242825e5945dc580be, type: 3}
   m_Name: NetworkEnemySpawnClip
   m_EditorClassIdentifier: MonsterSupergroup.NetworkCombat::MonsterSupergroup.NetworkCombat.NetworkEnemySpawnClip
+  authoringVersion: 1
+  enemy: {fileID: 11400000, guid: 293bb5c99c77bc3418212e0203304415, type: 2}
   enemyPrefab: {fileID: 3911887690903730936, guid: 995c1fd494f66c84985e19615ff8e5ee, type: 3}
   count: 10
   referenceMode: 3
@@ -4140,6 +4200,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f6739ebf33d162242825e5945dc580be, type: 3}
   m_Name: NetworkEnemySpawnClip
   m_EditorClassIdentifier: MonsterSupergroup.NetworkCombat::MonsterSupergroup.NetworkCombat.NetworkEnemySpawnClip
+  authoringVersion: 1
+  enemy: {fileID: 11400000, guid: f87bd3deae05a2e4082f467405ad3e64, type: 2}
   enemyPrefab: {fileID: 6621018548167738675, guid: fda541d34eb17a949a7ed573d099f307, type: 3}
   count: 15
   referenceMode: 2

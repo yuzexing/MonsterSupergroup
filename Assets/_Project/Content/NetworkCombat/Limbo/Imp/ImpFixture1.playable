@@ -104,6 +104,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f6739ebf33d162242825e5945dc580be, type: 3}
   m_Name: NetworkEnemySpawnClip
   m_EditorClassIdentifier: MonsterSupergroup.NetworkCombat::MonsterSupergroup.NetworkCombat.NetworkEnemySpawnClip
+  authoringVersion: 1
+  enemy: {fileID: 11400000, guid: f87bd3deae05a2e4082f467405ad3e64, type: 2}
   enemyPrefab: {fileID: 6621018548167738675, guid: fda541d34eb17a949a7ed573d099f307, type: 3}
   count: 1
   referenceMode: 1
@@ -112,6 +114,8 @@ MonoBehaviour:
   sourceLocation: 
   missingEvidence: 
   referenceReadiness: 3
+  referenceSpawnReadiness: 0
+  spawnReadinessNote:
   recoveredEvidence: Explicit isolated mechanism fixture; not a source Timeline segment.
   spawnCurve:
     serializedVersion: 2

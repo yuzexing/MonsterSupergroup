@@ -125,6 +125,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f6739ebf33d162242825e5945dc580be, type: 3}
   m_Name: NetworkEnemySpawnClip
   m_EditorClassIdentifier: MonsterSupergroup.NetworkCombat::MonsterSupergroup.NetworkCombat.NetworkEnemySpawnClip
+  authoringVersion: 1
+  enemy: {fileID: 11400000, guid: 9097c1b4bd103ab42b6c528e2f5a8c90, type: 2}
   enemyPrefab: {fileID: 3963200209637973719, guid: a641541a073116c4b9e5396ffe09fb5f, type: 3}
   count: 1
   referenceMode: 1
@@ -133,6 +135,8 @@ MonoBehaviour:
   sourceLocation: 
   missingEvidence: Explicit stage-two mechanism fixture.
   referenceReadiness: 3
+  referenceSpawnReadiness: 0
+  spawnReadinessNote:
   recoveredEvidence: 
   spawnCurve:
     serializedVersion: 2

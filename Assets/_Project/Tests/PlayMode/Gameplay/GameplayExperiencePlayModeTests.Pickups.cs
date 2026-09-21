@@ -99,6 +99,9 @@ namespace MonsterSupergroup.Gameplay.Tests
                 Assert.That(Collect(HealthDrop(), out _), Is.True);
                 yield return WaitFor(() => damaged, "lethal damage after healing");
                 yield return null; yield return null;
+                // Receipt rejection/retry uses reliable network delivery; two rendered
+                // frames are not a stable deadline on a fast or headless Editor.
+                yield return WaitFor(() => committed, "consumed bottle receipt after lethal report");
                 Assert.That(committed, Is.True, "A bottle already applied before the lethal hit must consume exactly once.");
                 Assert.That(Owner.GetComponent<CombatantBehaviour>().CurrentHealth, Is.Zero, "Receipt rejection must not revive the owner.");
                 Assert.That(NetworkCombatWorld.Instance.Gateway.Ledger.TryGetState(Owner.netId, out var state) && !state.Alive, Is.True);

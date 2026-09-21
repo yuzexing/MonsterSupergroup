@@ -221,7 +221,13 @@ namespace MonsterSupergroup.Gameplay.Tests
         [UnityTest]
         public IEnumerator RealCirclingPhysicsKillProducesGem_OnlyAutomaticPickupGrantsXP()
         {
-            yield return StartHost(); manager.BeginRun();
+            yield return StartHost();
+            // This tests the original opening contact enemy, not the user-selected
+            // Full/custom stage (which can contain high-HP elites or no opening enemy).
+            var opening = Resources.Load<GameplayWaveRules>("LimboReference/Opening");
+            Assert.That(opening, Is.Not.Null, "Opening fixture rules are missing.");
+            Object.FindFirstObjectByType<NetworkGameplayEnemySpawner>().ConfigureWaveRules(opening);
+            manager.BeginRun();
             yield return WaitFor(() => Object.FindFirstObjectByType<NetworkEnemySimulationAgent>() != null, "wave enemy");
             var agent = Object.FindFirstObjectByType<NetworkEnemySimulationAgent>();
             yield return WaitFor(() => agent.ProductEnemyInitialized && agent.Authority.RunsNavigation, "enemy simulator");

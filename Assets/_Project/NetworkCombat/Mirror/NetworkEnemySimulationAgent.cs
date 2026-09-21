@@ -47,6 +47,7 @@ namespace MonsterSupergroup.NetworkCombat
         private bool hasLatestAttackPresentation;
         private EnemyContactDamage contactDamage;
         private uint initialServerTargetPlayerId;
+        private bool networkStartCallbacksReady;
 
         public EnemySimulationAssignment Assignment => assignment;
         public Vector2 ServerSpawnPosition { get; private set; }
@@ -123,6 +124,8 @@ namespace MonsterSupergroup.NetworkCombat
         public override void OnStartServer()
         {
             base.OnStartServer();
+            networkStartCallbacksReady = true;
+            PrepareBirthForRegistration();
             ServerSpawnPosition = transform.position;
             NetworkEnemySimulationWorld world = NetworkEnemySimulationWorld.Instance;
             if (world == null)
@@ -140,6 +143,7 @@ namespace MonsterSupergroup.NetworkCombat
         public override void OnStartClient()
         {
             base.OnStartClient();
+            networkStartCallbacksReady = true;
             PrepareBirthForRegistration();
             ApplyHandoff(handoff);
             TryInitializeProductEnemy();
@@ -745,7 +749,9 @@ namespace MonsterSupergroup.NetworkCombat
 
         private void TryInitializeProductEnemy()
         {
-            if (productEnemyInitialized || enemyController == null)
+            // SyncVar handoff hooks can run during initial deserialization, before
+            // OnStartClient resolves the definition. Never initialize appearance/HP early.
+            if (!networkStartCallbacksReady || productEnemyInitialized || enemyController == null)
             {
                 return;
             }

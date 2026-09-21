@@ -126,6 +126,7 @@ namespace MonsterSupergroup.NetworkCombat
 
         public override void OnStartServer()
         {
+            PrepareEnemyCatalog(true);
             base.OnStartServer();
             uint generation = ++serverSceneGeneration;
             Session = new RunSession();
@@ -145,6 +146,7 @@ namespace MonsterSupergroup.NetworkCombat
 
         public override void OnStartClient()
         {
+            PrepareEnemyCatalog(false);
             ++clientSceneGeneration;
             base.OnStartClient();
             // A reconnect snapshot can contain existing pickups before World.OnStartClient runs.
@@ -176,6 +178,7 @@ namespace MonsterSupergroup.NetworkCombat
 
         public override void OnServerReady(NetworkConnectionToClient connection)
         {
+            if (!CheckEnemyCatalogBeforeReady(connection)) return;
             if (UsePreparationRoom) PublishRoom();
             if (!CanCreateGameplayAvatar)
             {
@@ -213,6 +216,7 @@ namespace MonsterSupergroup.NetworkCombat
 
         public override void OnServerDisconnect(NetworkConnectionToClient connection)
         {
+            ForgetEnemyCatalog(connection);
             if (connection != null)
             {
                 PreparationDisconnected(connection);
@@ -278,6 +282,7 @@ namespace MonsterSupergroup.NetworkCombat
 
         public override void OnStopServer()
         {
+            StopEnemyCatalog(true);
             StopPreparationServer();
             ++serverSceneGeneration;
             if (NetworkCombatWorld.Instance != null)
@@ -308,6 +313,7 @@ namespace MonsterSupergroup.NetworkCombat
 
         public override void OnStopClient()
         {
+            StopEnemyCatalog(false);
             StopPreparationClient();
             ++clientSceneGeneration;
             Debug.Log(

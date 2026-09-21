@@ -1524,7 +1524,7 @@ PrefabInstance:
     - target: {fileID: 8610229519361375326, guid: 55ff35e83fff4c74ea6f8f2e82883aa2, type: 3}
       propertyPath: referenceArtDatabase
       value: 
-      objectReference: {fileID: 11400000, guid: 9c334089fb87dee41bbfd5eb1b05b3b9, type: 2}
+      objectReference: {fileID: 0}
     - target: {fileID: 8652513492408536084, guid: 55ff35e83fff4c74ea6f8f2e82883aa2, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.02

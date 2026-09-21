@@ -1537,6 +1537,7 @@ MonoBehaviour:
   evaluationMethod: 0
   evaluationInterval: 3
   timeInterpolationGui: 0
+  enemyDefinitions: {fileID: 11400000, guid: ec2b304f214ef444087c9e0d09e0a789, type: 2}
   gameplayScene: Assets/_Project/Scenes/Gameplay.unity
   bootCamera: {fileID: 61111575}
   bootAudioListener: {fileID: 61111574}

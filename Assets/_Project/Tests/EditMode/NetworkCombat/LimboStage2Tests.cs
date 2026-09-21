@@ -80,8 +80,7 @@ namespace MonsterSupergroup.NetworkCombat.Tests
         [Test]
         public void ValidatedImpAttackCannotBypassUnvalidatedFormationGate()
         {
-            var rule=AssetDatabase.LoadAssetAtPath<GameplayWaveRules>(LimboReferenceAssets.ResourcesRoot+"/Full.asset");
-            Assert.That(rule.TryCapture(out var p,out var error),Is.True,error);
+            var p = LimboReferenceFixture.CaptureFull();
             var imp=p.Reference.Clips.Single(c=>c.SourceEnemy=="Imp"&&c.Mode==ReferenceSpawnMode.FormationBurst);
             Assert.That(imp.Readiness,Is.EqualTo(ReferenceEnemyReadiness.Ready));
             Assert.That(imp.SpawnReadiness,Is.EqualTo(ReferenceEnemyReadiness.Ready));

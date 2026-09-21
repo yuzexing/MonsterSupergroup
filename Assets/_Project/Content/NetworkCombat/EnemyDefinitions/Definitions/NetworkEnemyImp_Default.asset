@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0f0f31cef99ac244a8b7e128df9021d7, type: 3}
+  m_Name: NetworkEnemyImp_Default
+  m_EditorClassIdentifier: MonsterSupergroup.Gameplay.Combat::MonsterSupergroup.Gameplay.Combat.Content.EnemyDefinition
+  definitionId: 71082be27ada440ea1ba1b3484c5714f
+  displayName: NetworkEnemyImp_Default
+  prefab: {fileID: 6621018548167738675, guid: d2f06231a6b99b448a2eacb121addd48, type: 3}
+  stats: {fileID: 11400000, guid: 29d896bad75214f4881eab4b8a2b2d86, type: 2}
+  appearance: {fileID: 11400000, guid: e1958cb36b0ed3945998efdd0a34d755, type: 2}
+  legacyEnemyName: Imp
+  legacyVariant: 0
+  migrationKey: 716d6532133c2cf51d292d4c9ad885b1d61c4309507db21c2ff305e15a958979

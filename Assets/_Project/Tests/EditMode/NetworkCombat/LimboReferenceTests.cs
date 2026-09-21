@@ -23,9 +23,20 @@ namespace MonsterSupergroup.NetworkCombat.Tests
         [Test]
         public void ExportedLimboKeepsAllThirtyOneClipsAndDoesNotSubstituteRusherVariant()
         {
-            var rules = AssetDatabase.LoadAssetAtPath<GameplayWaveRules>(LimboReferenceAssets.ResourcesRoot + "/Full.asset");
-            Assert.That(rules, Is.Not.Null, "Create the reference assets before validation.");
-            Assert.That(rules.TryCapture(out var parameters, out var error), Is.True, error);
+            // Full may reference a user-authored stage. Test the imported fixture without
+            // changing the user's selected production Timeline or saving any rule asset.
+            var original = AssetDatabase.LoadAssetAtPath<GameplayWaveRules>(LimboReferenceAssets.ResourcesRoot + "/Full.asset");
+            Assert.That(original, Is.Not.Null, "Create the reference assets before validation.");
+            var rules = UnityEngine.Object.Instantiate(original);
+            WaveParameters parameters;
+            try
+            {
+                var serialized = new SerializedObject(rules);
+                serialized.FindProperty("timeline").objectReferenceValue = AssetDatabase.LoadAssetAtPath<UnityEngine.Timeline.TimelineAsset>(LimboReferenceAssets.Root + "/Limbo.playable");
+                serialized.ApplyModifiedPropertiesWithoutUndo();
+                Assert.That(rules.TryCapture(out parameters, out var error), Is.True, error);
+            }
+            finally { UnityEngine.Object.DestroyImmediate(rules); }
             var reference = parameters.Reference;
             Assert.That(reference.Clips.Length, Is.EqualTo(31));
             Assert.That(reference.Clips.Where(c => c.Mode == ReferenceSpawnMode.CurveBudget).Sum(c => c.Count), Is.EqualTo(1139));

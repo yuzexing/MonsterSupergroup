@@ -49,7 +49,7 @@ public class EnemyDatabase : ScriptableObject
 	}
 
 	[SerializeField]
-	[HideInInspector]
+	// [HideInInspector]
 	private EnemyDataAggregator[] enemies;
 
 	private string enemyFilter = "All";

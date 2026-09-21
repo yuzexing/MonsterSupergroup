@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0f0f31cef99ac244a8b7e128df9021d7, type: 3}
+  m_Name: LostSoul_Level01
+  m_EditorClassIdentifier: MonsterSupergroup.Gameplay.Combat::MonsterSupergroup.Gameplay.Combat.Content.EnemyDefinition
+  definitionId: fa24becdf8f34ddfb5de55f4a6e5f473
+  displayName: LostSoul_Level01
+  prefab: {fileID: 3963200209637973719, guid: 248046ba9ce5b5540bd8688b3ef968a2, type: 3}
+  stats: {fileID: 11400000, guid: 5496499223afc9a4db6f8b77e50402c6, type: 2}
+  appearance: {fileID: 11400000, guid: e1958cb36b0ed3945998efdd0a34d755, type: 2}
+  legacyEnemyName: LostSoul
+  legacyVariant: 0
+  migrationKey: ffb62013489f2f995ac3b6246f47fac9771ba8ff859455e72d46628447376caf

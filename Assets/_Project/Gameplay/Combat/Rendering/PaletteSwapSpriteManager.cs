@@ -187,6 +187,7 @@ namespace AstralShift.Rendering
 
 		public static void ClearAll()
 		{
+            EnemyAppearanceCache.ClearAll();
 			if (GlobalMap.Count == 0)
 			{
 				return;

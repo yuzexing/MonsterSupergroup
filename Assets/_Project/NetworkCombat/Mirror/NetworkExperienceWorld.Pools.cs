@@ -36,6 +36,20 @@ namespace MonsterSupergroup.NetworkCombat
         private readonly Dictionary<uint, PickupPool<Transform>> visualPools = new();
         private readonly HashSet<ExperienceCollectionFlight> flights = new();
         private bool clearingPools;
+        private Transform runtimePoolRoot;
+        private Transform RuntimePoolRoot
+        {
+            get
+            {
+                if (runtimePoolRoot != null) return runtimePoolRoot;
+                // Idle dynamic identities must not be mistaken for authored scene objects
+                // by Mirror when Gameplay is additively reloaded in the Editor.
+                var root = new GameObject("Pickup runtime pools");
+                DontDestroyOnLoad(root);
+                runtimePoolRoot = root.transform;
+                return runtimePoolRoot;
+            }
+        }
         public int EntitiesCreated { get; private set; }
         public int EntityPoolHits { get; private set; }
         public int VisualsCreated { get; private set; }
@@ -44,7 +58,7 @@ namespace MonsterSupergroup.NetworkCombat
         {
             uint id = prefab.GetComponent<NetworkIdentity>().assetId;
             if (!entityPools.TryGetValue(id, out var pool))
-                entityPools.Add(id, pool = new PickupPool<NetworkExperienceGem>("Pickup entity", transform, capacity));
+                entityPools.Add(id, pool = new PickupPool<NetworkExperienceGem>("Pickup entity", RuntimePoolRoot, capacity));
             return pool;
         }
         private NetworkExperienceGem RentEntity(NetworkExperienceGem prefab, Vector3 position, int capacity)
@@ -54,7 +68,9 @@ namespace MonsterSupergroup.NetworkCombat
             if (item == null) { item = Instantiate(prefab); EntitiesCreated++; }
             else EntityPoolHits++;
             item.PrepareForReuse(prefab, capacity);
-            item.transform.SetParent(null); item.transform.SetPositionAndRotation(position, Quaternion.identity);
+            item.transform.SetParent(null);
+            SceneManager.MoveGameObjectToScene(item.gameObject, gameObject.scene);
+            item.transform.SetPositionAndRotation(position, Quaternion.identity);
             item.gameObject.SetActive(true);
             PickupAudit.Emit("pool-rent", runId, 0, $"instance={item.GetInstanceID()};asset={prefab.GetComponent<NetworkIdentity>().assetId};reused={reused};created={EntitiesCreated};hits={EntityPoolHits}");
             return item;
@@ -66,8 +82,9 @@ namespace MonsterSupergroup.NetworkCombat
             PickupAudit.Emit("pool-return", item.RunId, item.DropId, $"instance={item.GetInstanceID()};effect={item.Effect};capacity={item.PoolCapacity}");
             item.ResetPresentation();
             item.transform.SetParent(null);
-            SceneManager.MoveGameObjectToScene(item.gameObject, gameObject.scene);
-            item.transform.SetParent(transform, true);
+            var root = RuntimePoolRoot;
+            SceneManager.MoveGameObjectToScene(item.gameObject, root.gameObject.scene);
+            item.transform.SetParent(root, true);
             EntityPool(item.PoolPrefab, item.PoolCapacity).Return(item);
         }
         private void RecycleEntity(NetworkExperienceGem item)
@@ -94,7 +111,7 @@ namespace MonsterSupergroup.NetworkCombat
             if (gem.Visual == null || clearingPools) return;
             uint key = gem.GetComponent<NetworkIdentity>().assetId;
             if (!visualPools.TryGetValue(key, out var pool))
-                visualPools.Add(key, pool = new PickupPool<Transform>("Pickup flight", transform, gem.PoolCapacity));
+                visualPools.Add(key, pool = new PickupPool<Transform>("Pickup flight", RuntimePoolRoot, gem.PoolCapacity));
             var visual = pool.Rent();
             if (visual == null) { visual = Instantiate(gem.Visual); VisualsCreated++; }
             else VisualPoolHits++;
@@ -110,7 +127,7 @@ namespace MonsterSupergroup.NetworkCombat
             {
                 flights.Remove(flight);
                 if (clearingPools || this == null) { if (visual != null) Destroy(visual.gameObject); return; }
-                visual.SetParent(transform, true); pool.Return(visual);
+                visual.SetParent(RuntimePoolRoot, true); pool.Return(visual);
             });
         }
         private void ClearPools()
@@ -120,6 +137,8 @@ namespace MonsterSupergroup.NetworkCombat
             flights.Clear();
             foreach (var pool in entityPools.Values) pool.Clear(); entityPools.Clear();
             foreach (var pool in visualPools.Values) pool.Clear(); visualPools.Clear();
+            if (runtimePoolRoot != null) Destroy(runtimePoolRoot.gameObject);
+            runtimePoolRoot = null;
             clearingPools = false;
         }
     }

@@ -1552,7 +1552,7 @@ PrefabInstance:
     - target: {fileID: 8610229519361375326, guid: 55ff35e83fff4c74ea6f8f2e82883aa2, type: 3}
       propertyPath: referenceArtDatabase
       value: 
-      objectReference: {fileID: 11400000, guid: 9c334089fb87dee41bbfd5eb1b05b3b9, type: 2}
+      objectReference: {fileID: 0}
     - target: {fileID: 8652513492408536084, guid: 55ff35e83fff4c74ea6f8f2e82883aa2, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.02
@@ -1703,10 +1703,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bae23e64e9e510b1acfe7d5c92f90a46, type: 3}
   m_Name: 
   m_EditorClassIdentifier: MonsterSupergroup.Gameplay.Combat::AstralShift.Rendering.SpriteRendererPaletteSwapper
-  bakedPalettes:
-  - original: {fileID: 2800000, guid: 8a7b84e5f56ca4745b626da4009285f1, type: 3}
-    lut: {fileID: 2800000, guid: 95a998c0d18f1ab43b5dc4af0f973ba5, type: 3}
-    baked: {fileID: 2800000, guid: 19b1cbdfd2c5925ffe08da24b210ea3b, type: 3}
+  bakedPalettes: []
   _Renderer: {fileID: 4623282440663811494}
   _modifiedTexture: {fileID: 0}
 --- !u!210 &5955255123889492785

@@ -1,0 +1,37 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 185f07029e5fefd45a8c1c287fb5bd3c, type: 3}
+  m_Name: EnemyCatalog
+  m_EditorClassIdentifier: MonsterSupergroup.Gameplay.Combat::MonsterSupergroup.Gameplay.Combat.Content.EnemyDefinitionCatalog
+  definitions:
+  - {fileID: 11400000, guid: 7da0bf87a7779fc40b6051082c2df2c4, type: 2}
+  - {fileID: 11400000, guid: 9097c1b4bd103ab42b6c528e2f5a8c90, type: 2}
+  - {fileID: 11400000, guid: a6c2a954e4ea8b547a02a261aeda71e8, type: 2}
+  - {fileID: 11400000, guid: 575c8b9b0306fe4409bdcc3aed7f036c, type: 2}
+  - {fileID: 11400000, guid: b667d0983bd818d48a7d0b72ce05894e, type: 2}
+  - {fileID: 11400000, guid: 197d21d0a0aa15347ba266285ee015d8, type: 2}
+  - {fileID: 11400000, guid: d66964bc354c0a24cb0000207e592d97, type: 2}
+  - {fileID: 11400000, guid: 0d239d70a2f8c4543bb9e67a14d51ea8, type: 2}
+  - {fileID: 11400000, guid: da68ee66113acd943b56bcb0547d95f4, type: 2}
+  - {fileID: 11400000, guid: f87bd3deae05a2e4082f467405ad3e64, type: 2}
+  - {fileID: 11400000, guid: 2db8a4c6d3cb030438a90bfafa69a877, type: 2}
+  - {fileID: 11400000, guid: 86f0af8f74bb58347be786debbcaed3a, type: 2}
+  - {fileID: 11400000, guid: f4a09a88f9186c74b89fb4a69887be38, type: 2}
+  - {fileID: 11400000, guid: fcea7f0fd07fa764ab847d15c847d00b, type: 2}
+  - {fileID: 11400000, guid: 565d6bc3afa7c9345913e2fc2a42e233, type: 2}
+  - {fileID: 11400000, guid: eabbbb55c3a085f4fbc30ee90bcd404b, type: 2}
+  - {fileID: 11400000, guid: 68311abab08659841a7a72477530a0b1, type: 2}
+  - {fileID: 11400000, guid: 0cf375641a2da604b8b1b9292e34e5fa, type: 2}
+  - {fileID: 11400000, guid: 9fbea48db1bdb7a499c16b1d3a738d0c, type: 2}
+  - {fileID: 11400000, guid: 293bb5c99c77bc3418212e0203304415, type: 2}
+  - {fileID: 11400000, guid: 9bd9213152bc09f4aba799fbc04ec53c, type: 2}
+  contentHash: 7a855bed23a8ca3907c5e012ef5a4e45d0238ed4a51e84e7979c38a9739f2b05

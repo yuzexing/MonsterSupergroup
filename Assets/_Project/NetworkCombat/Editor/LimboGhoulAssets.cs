@@ -28,6 +28,7 @@ namespace MonsterSupergroup.NetworkCombat.Editor
         [MenuItem("Tools/MonsterSupergroup/Limbo/Create Ghoul reference assets")]
         public static void Create()
         {
+            EnemyDefinitionMigration.EnsureLegacyWriterAllowed("LimboGhoulAssets.Create");
             AssetDatabase.Refresh(ImportAssetOptions.ForceSynchronousImport);
             var data = JsonUtility.FromJson<Data>(File.ReadAllText(Root+"/GhoulAdapted.json"));
             CreateAttack(data); CreateEnemy(data); UpdateWarningStep(); LimboArtAssets.Apply(false);

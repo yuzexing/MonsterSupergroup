@@ -40,6 +40,7 @@ namespace MonsterSupergroup.NetworkCombat.Editor
         [MenuItem("Tools/MonsterSupergroup/Limbo/Create reference assets")]
         public static void Create()
         {
+            EnemyDefinitionMigration.EnsureLegacyWriterAllowed("LimboReferenceAssets.Create");
             var data = JsonUtility.FromJson<Manifest>(File.ReadAllText(Root + "/limbo-source.json"));
             if (data.clips.Length != 31) throw new InvalidDataException("Limbo requires exactly 31 source enemy clips.");
             Directory.CreateDirectory(ResourcesRoot); AssetDatabase.Refresh();

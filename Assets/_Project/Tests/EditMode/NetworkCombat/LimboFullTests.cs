@@ -12,8 +12,7 @@ namespace MonsterSupergroup.NetworkCombat.Tests
         [Test]
         public void FullBoundaryMustWaitForParticipantDecisionInsteadOfCompleting()
         {
-            var rules = AssetDatabase.LoadAssetAtPath<GameplayWaveRules>(LimboReferenceAssets.ResourcesRoot + "/Full.asset");
-            Assert.That(rules.TryCapture(out var settings, out var error), Is.True, error);
+            var settings = LimboReferenceFixture.CaptureFull();
             settings.Reference.FlowReadiness = ReferenceEnemyReadiness.Ready;
             settings.Reference.FlowReadinessNote = "";
             var schedule = new ServerWaveSchedule("boundary-repro", settings, 0);
@@ -23,8 +22,7 @@ namespace MonsterSupergroup.NetworkCombat.Tests
         }
         private static WaveParameters Captured(bool preview = false)
         {
-            var r = AssetDatabase.LoadAssetAtPath<GameplayWaveRules>(LimboReferenceAssets.ResourcesRoot + "/Full.asset");
-            Assert.That(r.TryCapture(out var p, out var error), Is.True, error);
+            var p = LimboReferenceFixture.CaptureFull();
             p.Reference.FlowReadiness = ReferenceEnemyReadiness.Ready; p.Reference.FlowReadinessNote = "";
             p.Reference.EndPolicy = preview ? ReferenceEndPolicy.ImmediatePreview : ReferenceEndPolicy.WaitForParticipants;
             return p;

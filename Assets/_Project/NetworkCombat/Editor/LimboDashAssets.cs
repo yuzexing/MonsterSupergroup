@@ -34,6 +34,7 @@ namespace MonsterSupergroup.NetworkCombat.Editor
         [MenuItem("Tools/MonsterSupergroup/Limbo/Create Dash reference assets")]
         public static void Create()
         {
+            EnemyDefinitionMigration.EnsureLegacyWriterAllowed("LimboDashAssets.Create");
             AssetDatabase.Refresh();
             var data = JsonUtility.FromJson<Data>(File.ReadAllText(Root + "/DashAdapted.json"));
             if(data.bindings.Length != 12) throw new InvalidDataException("Expected twelve recovered Dash transitions.");

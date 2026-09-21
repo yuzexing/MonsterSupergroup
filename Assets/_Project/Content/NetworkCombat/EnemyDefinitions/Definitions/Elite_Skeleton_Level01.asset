@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0f0f31cef99ac244a8b7e128df9021d7, type: 3}
+  m_Name: Elite_Skeleton_Level01
+  m_EditorClassIdentifier: MonsterSupergroup.Gameplay.Combat::MonsterSupergroup.Gameplay.Combat.Content.EnemyDefinition
+  definitionId: 965d312a75204e078bd38ee1d60a092d
+  displayName: Elite_Skeleton_Level01
+  prefab: {fileID: 3963200209637973719, guid: a641541a073116c4b9e5396ffe09fb5f, type: 3}
+  stats: {fileID: 11400000, guid: 404ce685450d98141b71be5787a0ea18, type: 2}
+  appearance: {fileID: 11400000, guid: e1958cb36b0ed3945998efdd0a34d755, type: 2}
+  legacyEnemyName: Elite_Skeleton
+  legacyVariant: 0
+  migrationKey: e73b5a065c93bd06804100c8f02e3d6f85dc311ed387c15ddeb5442c4aacfbee

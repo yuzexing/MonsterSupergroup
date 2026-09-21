@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a14c1725f00347e479e5f6e67c7bce29, type: 3}
+  m_Name: Enemy_LostSoul_Level_02_LUT_8ed30745
+  m_EditorClassIdentifier: MonsterSupergroup.Gameplay.Combat::MonsterSupergroup.Gameplay.Combat.Content.EnemyAppearanceDefinition
+  lut: {fileID: 2800000, guid: 43367521d23f18449bd45b0922a9df06, type: 3}
+  textureMappings:
+  - original: {fileID: 2800000, guid: f22235fc0be84f7419101d1cc30420ae, type: 3}
+    baked: {fileID: 2800000, guid: c8e53a07f51218f6a6b70f5169a6b522, type: 3}
+  contentHash: f3fec35473a3955896b4114b430e60b3c1ced186d9684fe0c77deaa17e9ad9ee

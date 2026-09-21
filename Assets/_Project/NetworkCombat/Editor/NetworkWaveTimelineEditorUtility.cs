@@ -23,6 +23,7 @@ namespace MonsterSupergroup.NetworkCombat.Editor
             var timeline = AssetDatabase.LoadAssetAtPath<TimelineAsset>(TimelinePath);
             if (timeline == null)
             {
+                EnemyDefinitionMigration.EnsureLegacyWriterAllowed("NetworkWaveTimelineEditorUtility.EnsureDefault");
                 timeline = ScriptableObject.CreateInstance<TimelineAsset>();
                 timeline.durationMode = TimelineAsset.DurationMode.FixedLength; timeline.fixedDuration = 150;
                 AssetDatabase.CreateAsset(timeline, TimelinePath);
@@ -123,8 +124,18 @@ namespace MonsterSupergroup.NetworkCombat.Editor
         {
             DrawDefaultInspector();
             var rules = (GameplayWaveRules)target;
+            if (rules.IsReferenceStage && rules.Timeline != null && EnemyDefinitionMigration.Clips(rules.Timeline)
+                .Any(c => c.asset is NetworkEnemySpawnClip spawn && spawn.AuthoringVersion == 0))
+            {
+                serializedObject.Update();
+                EditorGUILayout.PropertyField(serializedObject.FindProperty("referenceEnemies"), new GUIContent("Legacy Source Database"));
+                serializedObject.ApplyModifiedProperties();
+                EditorGUILayout.HelpBox("Unmigrated schema-0 clips still use this source. Migrated definitions ignore it.", MessageType.Warning);
+            }
             if (rules.TryCapture(out var captured, out var error))
-                EditorGUILayout.HelpBox($"{captured.Program.WaveCount} authored waves; the last {rules.WaveDuration} seconds repeat. Clip spacing = duration / count.", MessageType.Info);
+                EditorGUILayout.HelpBox(captured.Reference != null
+                    ? $"{captured.Reference.Clips.Length} reference spawn clips; end threshold {captured.Reference.EndTime:F2}s."
+                    : $"{captured.Program.WaveCount} authored waves; the last {rules.WaveDuration} seconds repeat. Clip spacing = duration / count.", MessageType.Info);
             else EditorGUILayout.HelpBox(error, MessageType.Error);
             if (GUILayout.Button("Open Timeline") && rules.Timeline != null) AssetDatabase.OpenAsset(rules.Timeline);
             if (GUILayout.Button("Validate Default Gameplay / Export 6 Waves")) NetworkWaveTimelineEditorUtility.ValidateConfigured();

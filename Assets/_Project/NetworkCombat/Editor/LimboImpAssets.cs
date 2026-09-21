@@ -26,6 +26,7 @@ namespace MonsterSupergroup.NetworkCombat.Editor
         // Deliberately updates only Imp's adapted assets and readiness links, not existing database tuning.
         public static void Create()
         {
+            EnemyDefinitionMigration.EnsureLegacyWriterAllowed("LimboImpAssets.Create");
             LimboReferenceAssets.Create();
             var data = JsonUtility.FromJson<Data>(File.ReadAllText(Root + "/ImpAdapted.json"));
             if (data.bindings.Length != 12) throw new InvalidDataException("Expected twelve recovered Imp attack transitions.");

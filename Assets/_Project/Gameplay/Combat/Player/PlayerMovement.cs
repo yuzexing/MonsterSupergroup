@@ -174,6 +174,15 @@ namespace AstralShift.HellMaiden.Player
 
 		private bool _ultimateCharge;
 		private Func<bool> _tryUseNativeUltimate;
+        private Func<bool> _tryUseGluttony;
+        public Camera InputCamera => _inputCamera;
+        public void BindGluttonyInput(Func<bool> use) => _tryUseGluttony = use;
+        public void UnbindGluttonyInput(Func<bool> use) { if (_tryUseGluttony == use) _tryUseGluttony = null; }
+        public void GluttonyAction()
+        {
+            if (!IsMenuInputBlocked && !IsUpgradeSelectionLocked && !IsRunLoadingLocked)
+                _tryUseGluttony?.Invoke();
+        }
 		private Func<bool> _hasNativeUltimateCharge;
 		private Func<bool> _requestDebugUltimateCharge;
 

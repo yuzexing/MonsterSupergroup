@@ -298,6 +298,23 @@ namespace MonsterSupergroup.NetworkCombat
                 result.SourcePlayerId);
         }
 
+        // Trusted prototype boundary; eligibility/geometry/cooldown are checked by NetworkPlayerGluttony.
+        // This is an execution, not a client-supplied oversized damage number.
+        internal CombatApplyResult ApplyGluttonyDevour(uint player, uint source, uint targetId, ulong eventId)
+        {
+            if (player == 0 || eventId == 0 || !IsSourceOwnedBy(source, player) || !IsAlive(player))
+                return CombatApplyResult.Reject(CombatRejectionReason.InvalidSender);
+            if (IsPlayerSelectingUpgrade(player))
+                return CombatApplyResult.Reject(CombatRejectionReason.SourceSelectingUpgrade);
+            if (!entities.TryGetValue(targetId, out var target))
+                return CombatApplyResult.Reject(CombatRejectionReason.TargetNotFound);
+            if (target.Kind != CombatEntityKind.Enemy || target.Authority != CombatEntityAuthority.ServerCanonical)
+                return CombatApplyResult.Reject(CombatRejectionReason.WrongAuthority);
+            if (!target.Alive) return CombatApplyResult.Reject(CombatRejectionReason.TargetCanonicalDead);
+            if (target.IsInvulnerable) return CombatApplyResult.Reject(CombatRejectionReason.AbsoluteInvulnerable);
+            return ApplyDamage(target, target.Health, eventId, player);
+        }
+
         public CombatApplyResult ApplyServerStatusDamage(
             uint targetEntityId,
             int damage,

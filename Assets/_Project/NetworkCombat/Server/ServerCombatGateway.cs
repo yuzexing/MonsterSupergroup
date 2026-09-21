@@ -296,6 +296,26 @@ namespace MonsterSupergroup.NetworkCombat
             return CreateBatch(entities.Values, statuses, kills, hits);
         }
 
+        internal CombatApplyResult ProcessGluttonyDevour(uint player, uint source, uint target,
+            ulong eventId, double now, out CanonicalWorldBatch batch)
+        {
+            batch = default;
+            if (CombatStopped) return CombatApplyResult.Reject(CombatRejectionReason.RunLoading);
+            ValidateServerTime(now);
+            if (!ClientIdentities.Validate(player, eventId, new CombatEventId(eventId).Sequence))
+                return CombatApplyResult.Reject(CombatRejectionReason.InvalidSequence);
+            if (ProcessedEvents.IsProcessed(eventId, now))
+                return CombatApplyResult.Reject(CombatRejectionReason.DuplicateEvent);
+            var result = Ledger.ApplyGluttonyDevour(player, source, target, eventId);
+            if (!result.Accepted) return result;
+            ProcessedEvents.MarkProcessed(eventId, now);
+            var removed = Statuses.RemoveTarget(target);
+            var kills = new List<ConfirmedKill>(1);
+            if (result.IsConfirmedKill) AddConfirmedKill(result.Kill, kills);
+            batch = CreateBatch(new[] { result.State }, removed, kills);
+            return result;
+        }
+
         public CanonicalWorldBatch Advance(double serverTime)
         {
             if (CombatStopped) return default;

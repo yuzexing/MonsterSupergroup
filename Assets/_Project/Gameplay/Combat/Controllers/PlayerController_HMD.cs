@@ -256,8 +256,11 @@ namespace AstralShift.HellMaiden.Controllers
 		}
 
 		public override void Button3(InputActionEventData data)
-		{
-		}
+        {
+            if (Application.isFocused && !InBusyState && !InHubState &&
+                data.eventType == InputActionEventType.ButtonJustPressed)
+                BoundPlayer?.GluttonyAction();
+        }
 
 		public override void LeftStickHorizontal(InputActionEventData data)
 		{

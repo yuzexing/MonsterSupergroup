@@ -43,6 +43,7 @@ namespace MonsterSupergroup.NetworkCombat
             // Boot survives Stop; each server run gets fresh registries before sibling
             // World components and spawned combatants subscribe to this gateway.
             Gateway = new ServerCombatGateway();
+            gluttonySession = null;
             nextServerTick = NetworkTime.time;
         }
 

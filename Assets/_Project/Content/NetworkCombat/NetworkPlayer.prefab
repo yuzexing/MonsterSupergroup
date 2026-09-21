@@ -1351,6 +1351,8 @@ GameObject:
   - component: {fileID: 871410000000000006}
   - component: {fileID: 4910487406198628534}
   - component: {fileID: 6241485991139389810}
+  - component: {fileID: 7971000000000000001}
+  - component: {fileID: 7971000000000000002}
   m_Layer: 10
   m_Name: NetworkPlayer
   m_TagString: Untagged
@@ -2307,3 +2309,34 @@ Transform:
   m_Children: []
   m_Father: {fileID: 8878785505183612663}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+
+--- !u!114 &7971000000000000001
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3415738789270495989}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 46f47d43bd0b0494aa10529075bdb91f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: MonsterSupergroup.NetworkCombat::MonsterSupergroup.NetworkCombat.GluttonyPrototypeView
+  prototypeMaterial: {fileID: 2100000, guid: 6ee3bd8645fa4110b5d93a5f833b381b, type: 2}
+
+--- !u!114 &7971000000000000002
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3415738789270495989}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a736f8ad64c612d46b19c8922bc28498, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: MonsterSupergroup.NetworkCombat::MonsterSupergroup.NetworkCombat.NetworkPlayerGluttony
+  syncDirection: 0
+  syncMode: 0
+  syncInterval: 0
+  config: {fileID: 11400000, guid: 4d8aa406dcc045249bafdb31ec00910f, type: 2}

@@ -1118,6 +1118,8 @@ namespace AstralShift.HellMaiden.Player
 
 		public void Damage(int damage, Enum damageType)
 		{
+			using var diagnosticScope = AstralShift.DebugTools.CombatPerformanceCounters.Measure(AstralShift.DebugTools.CombatPerformanceCounters.Area.DamageRequests);
+			if (AstralShift.DebugTools.CombatPerformanceCounters.Enabled && !combatantBinding.IsAlive) AstralShift.DebugTools.CombatPerformanceCounters.DeadDamageRequest();
 			if (!combatantBinding.AcceptsLocalMutations || IsInvulnerable)
 			{
 				return;

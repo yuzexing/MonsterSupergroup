@@ -1034,7 +1034,10 @@ namespace MonsterSupergroup.NetworkCombat
         private void CreateSteamCallbacks()
         {
             overlayActivated = Callback<GameOverlayActivated_t>.Create(overlay =>
-                Debug.Log($"[SteamInvite] overlay-active={overlay.m_bActive != 0} appId={overlay.m_nAppID.m_AppId}.", this));
+            {
+                NetworkDiagnosticsObservation.RecordOverlay(overlay.m_bActive != 0);
+                Debug.Log($"[SteamInvite] overlay-active={overlay.m_bActive != 0} appId={overlay.m_nAppID.m_AppId}.", this);
+            });
             lobbyJoinRequested = Callback<GameLobbyJoinRequested_t>.Create(request => {
                 Debug.Log($"[SteamInvite] stage=join_requested lobby={request.m_steamIDLobby.m_SteamID} " +
                     $"friend={request.m_steamIDFriend.m_SteamID} phase={State}", this);

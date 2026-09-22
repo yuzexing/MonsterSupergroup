@@ -27,7 +27,14 @@ namespace MonsterSupergroup.NetworkCombat
             double elapsed = schedule.State.Elapsed;
             if (activeParticipants.Count == 0) return;
             referenceParticipantViews.Clear();
-            foreach (var participant in activeParticipants) referenceParticipantViews.Add(ReferenceView(participant));
+            foreach (var participant in activeParticipants)
+            {
+                // Missing remote camera data is not proof that a live enemy is offscreen.
+                if ((NetworkClient.localPlayer == null || participant.AvatarId != NetworkClient.localPlayer.netId) &&
+                    !world.TryGetPlayerView(participant.AvatarId, out _))
+                { offscreenSince.Clear(); return; }
+                referenceParticipantViews.Add(ReferenceView(participant));
+            }
             repositionCandidates.Clear();
             foreach (var identity in NetworkServer.spawned.Values)
                 if (identity != null && identity.gameObject.scene == gameObject.scene &&
@@ -38,11 +45,13 @@ namespace MonsterSupergroup.NetworkCombat
             {
                 if (enemy.HasAllureDecoy || enemy.AllureHandoffPending)
                 { offscreenSince.Remove(enemy.netId); continue; }
+                if (!enemy.Authority.RunsNavigation && (!world.Registry.TryGetLatestSnapshot(enemy.netId, out var sample) ||
+                    sample.AssignmentEpoch != enemy.Assignment.Epoch || NetworkTime.time - sample.SampleNetworkTime > PlayerViewReport.MaximumAge))
+                { offscreenSince.Remove(enemy.netId); continue; }
                 var target = activeParticipants.Find(p => p.AvatarId == enemy.Assignment.AggroTargetPlayerId) ?? activeParticipants[0];
                 Vector2 position = enemy.transform.position;
-                var bodyRenderer = enemy.GetComponent<AstralShift.HellMaiden.AI.Enemy.EnemyController>().spriteRenderer;
                 float outside = GameplayCameraGeometry.MinimumOutsideDistance(
-                    bodyRenderer != null ? bodyRenderer.bounds : new Bounds(position, Vector3.zero), referenceParticipantViews);
+                    world.ServerEnemyBodyBounds(enemy), referenceParticipantViews);
                 if (outside == 0) { offscreenSince.Remove(enemy.netId); continue; }
                 if (!offscreenSince.TryGetValue(enemy.netId, out double since)) offscreenSince[enemy.netId] = since = elapsed;
                 if (!reference.OffscreenProcessingDue(enemy.Birth.BornAt, elapsed, since, outside)) continue;

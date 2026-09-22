@@ -1613,6 +1613,8 @@ namespace AstralShift.HellMaiden.AI.Enemy
 			}
 
 			_deathPresentationComplete = true;
+            if (GetComponent<EnemySimulationAuthority>()?.IsNetworkManaged == true)
+                enemyAnimator?.HideCompletedNetworkDeath();
 			if (!_deathPresentationEventRaised)
 			{
 				_deathPresentationEventRaised = true;

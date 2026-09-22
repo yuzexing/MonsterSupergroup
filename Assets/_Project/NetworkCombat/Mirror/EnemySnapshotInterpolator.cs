@@ -97,7 +97,11 @@ namespace MonsterSupergroup.NetworkCombat
             RefreshRenderInterpolation();
         }
 
-        private void LateUpdate() => RefreshRenderInterpolation();
+        private void LateUpdate()
+        {
+            RefreshRenderInterpolation();
+            UpdateReplicaPosition();
+        }
 
         private void RefreshRenderInterpolation()
         {
@@ -122,9 +126,9 @@ namespace MonsterSupergroup.NetworkCombat
             body.angularVelocity = 0;
         }
 
-        private void FixedUpdate()
+        private void UpdateReplicaPosition()
         {
-            if (!NetworkClient.active || authority == null ||
+            if (!NetworkClient.active || Time.timeScale <= 0 || authority == null ||
                 !authority.ConsumesSnapshots)
             {
                 return;
@@ -185,10 +189,9 @@ namespace MonsterSupergroup.NetworkCombat
                 body.position = position;
                 body.linearVelocity = Vector2.zero;
             }
-            else
-            {
-                transform.position = position;
-            }
+            // Rigidbody2D.position alone can leave its displayed Transform at the
+            // previous physics tick. Replicas render the sampled pose this frame.
+            transform.position = new Vector3(position.x, position.y, transform.position.z);
         }
 
         private void ResolveReferences()

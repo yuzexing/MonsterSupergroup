@@ -19,7 +19,7 @@ using Object = UnityEngine.Object;
 
 namespace MonsterSupergroup.Gameplay.Tests
 {
-    public sealed class EnemyHandoffGameplayTests
+    public sealed partial class EnemyHandoffGameplayTests
     {
         private BootGameplayNetworkManager manager;
         private GameObject[] roots;

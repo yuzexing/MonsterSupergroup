@@ -143,6 +143,7 @@ namespace AstralShift.FSM
 
 		public void MakeTransition(State to)
 		{
+			using var diagnosticScope = CombatPerformanceCounters.Measure(CombatPerformanceCounters.Area.StateTransitions);
 			if (_currentState.name == to.name || _isPaused)
 			{
 				return;
@@ -158,6 +159,7 @@ namespace AstralShift.FSM
 			else
 			{
 				DBL.Log(DBL.Module.FSM, _ownerName + ": " + _currentState.name + " -> INVALID TRANSITION to: " + to.name, 1);
+				if (_currentState.name == "Dead" && to.name == "Hurt") CombatPerformanceCounters.InvalidDeadTransition();
 			}
 		}
 

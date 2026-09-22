@@ -204,6 +204,8 @@ namespace MonsterSupergroup.NetworkCombat
 
         private Bounds ReferenceView(RunParticipant target)
         {
+            if ((NetworkClient.localPlayer == null || target.AvatarId != NetworkClient.localPlayer.netId) &&
+                world != null && world.TryGetPlayerView(target.AvatarId, out var reportedView)) return reportedView;
             var rig = FindFirstObjectByType<GameplayCameraRig>();
             Camera camera = rig != null ? rig.GameCamera : Camera.main;
             Vector3 center = NetworkServer.spawned[target.AvatarId].transform.position;

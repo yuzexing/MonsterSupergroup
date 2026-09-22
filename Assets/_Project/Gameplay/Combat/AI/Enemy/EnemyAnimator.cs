@@ -444,6 +444,7 @@ namespace AstralShift.HellMaiden.AI.Enemy
 		public virtual void Init(EnemyController controller)
 		{
 			_controller = controller;
+			foreach (var renderer in renderers) if (renderer != null) renderer.forceRenderingOff = false;
 			animancer.Events.Clear();
 			ResetAnimancer();
 			if (shadowIdle != null && shadowIdle.Clip != null)
@@ -640,7 +641,7 @@ namespace AstralShift.HellMaiden.AI.Enemy
 
 		public bool TryHurtBlinkAnimation()
 		{
-			if (_controller != null && _controller.isActiveAndEnabled && isActiveAndEnabled)
+			if (_controller != null && !_controller.DeathRequested && _controller.isActiveAndEnabled && isActiveAndEnabled)
 			{
 				if (_hurtBlinkAnimation != null)
 				{
@@ -673,6 +674,17 @@ namespace AstralShift.HellMaiden.AI.Enemy
 			SetRenderersShaderValue(HitEffectBlendSID, 0f);
 			SetRenderersShaderValue(HitEffectColorSID, Color.white);
 		}
+
+        // Keep the network identity alive for its receipt/despawn, but retire every
+        // configured body/shadow renderer after the local death presentation finishes.
+        public void HideCompletedNetworkDeath()
+        {
+            if (_hurtBlinkAnimation != null) StopCoroutine(_hurtBlinkAnimation);
+            _hurtBlinkAnimation = null;
+            _blockAnimations = true;
+            animancer.Stop();
+            foreach (var renderer in renderers) if (renderer != null) renderer.forceRenderingOff = true;
+        }
 
 		public ClipTransition GetDeadClipTransition(float x, float y)
 		{

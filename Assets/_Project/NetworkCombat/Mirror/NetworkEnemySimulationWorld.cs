@@ -349,6 +349,7 @@ namespace MonsterSupergroup.NetworkCombat
             NetworkEnemySimulationEndpoint endpoint,
             EnemySimulationSnapshotBatch batch)
         {
+            using var diagnosticScope = AstralShift.DebugTools.CombatPerformanceCounters.Measure(AstralShift.DebugTools.CombatPerformanceCounters.Area.SnapshotReceive);
             if (BootGameplayNetworkManager.CombatHasEnded) return;
             // Batch datagrams may arrive out of order and contain disjoint Enemies.
             // Per-Enemy epoch/sequence validation in the Registry provides idempotency.
@@ -583,6 +584,7 @@ namespace MonsterSupergroup.NetworkCombat
 
         private void ApplyMovementSnapshots(EnemySimulationSnapshotBatch batch)
         {
+            using var diagnosticScope = AstralShift.DebugTools.CombatPerformanceCounters.Measure(AstralShift.DebugTools.CombatPerformanceCounters.Area.SnapshotReceive);
             if (batch.Round != CurrentRound) return;
             if (BootGameplayNetworkManager.CombatHasEnded) return;
             if (batch.Snapshots == null)

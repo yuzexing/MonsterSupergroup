@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using AstralShift.HellMaiden.Player;
 using Mirror;
 using UnityEngine;
@@ -10,6 +11,12 @@ namespace MonsterSupergroup.NetworkCombat
         private PlayerMovement player;
         private NetworkModifierSelection progression;
         private float nextRequest;
+        public const int MaximumCollectionsPerBatch = 32;
+        private string pendingRun;
+        private readonly Dictionary<ulong, (NetworkExperienceGem Gem, uint ClaimVersion)> pending = new();
+        private readonly List<ulong> batch = new(MaximumCollectionsPerBatch);
+        public int PendingCollectionCount => pending.Count;
+        public int SubmittedCollectionBatchCount { get; private set; }
         private void Awake()
         {
             player = GetComponent<PlayerMovement>();
@@ -17,24 +24,53 @@ namespace MonsterSupergroup.NetworkCombat
         }
         private void Update()
         {
-            if (!isOwned || !NetworkClient.active || player == null || progression == null ||
-                !player.isActiveAndEnabled || !player.CombatantBinding.IsAlive || !progression.HasOwnerBaseline ||
-                progression.IsSelecting || Time.unscaledTime < nextRequest) return;
+            if (!isOwned || !NetworkClient.active || !NetworkClient.ready || NetworkClient.connection == null)
+            { ClearPending(); return; }
             var world = NetworkExperienceWorld.Current;
-            if (world == null || string.IsNullOrEmpty(world.RunId)) return;
+            if (world == null || string.IsNullOrEmpty(world.RunId)) { ClearPending(); return; }
+            if (pendingRun != world.RunId) { ClearPending(); pendingRun = world.RunId; }
+            // Claims/despawns are the success confirmation, including another player's claim.
+            // Pooled objects may already represent a different drop by the next scan.
+            batch.Clear();
+            foreach (var entry in pending)
+            {
+                var gem = entry.Value.Gem;
+                if (gem == null || !gem.isActiveAndEnabled || gem.Claimed || gem.ClaimVersion != entry.Value.ClaimVersion ||
+                    gem.DropId != entry.Key || gem.RunId != pendingRun) batch.Add(entry.Key);
+            }
+            foreach (ulong id in batch) pending.Remove(id);
+            batch.Clear();
+            if (player == null || progression == null ||
+                !player.isActiveAndEnabled || !player.CombatantBinding.IsAlive || !progression.HasOwnerBaseline ||
+                progression.IsSelecting || BootGameplayNetworkManager.CombatHasEnded || Time.unscaledTime < nextRequest) return;
             nextRequest = Time.unscaledTime + 0.1f;
             float radius = player.PlayerStats.currentStats.pullArea;
-            // Send at most one intent per pass; rejection is safe to retry. No predicted claim or root motion.
+            if (!ExperienceParameters.Finite(radius) || radius <= 0) return;
             foreach (var gem in NetworkExperienceGem.ClientGems)
-                if (gem != null && !gem.Claimed && gem.RunId == world.RunId &&
+                if (gem != null && !gem.Claimed && gem.RunId == world.RunId && !pending.ContainsKey(gem.DropId) &&
                     (gem.Effect != PickupEffect.RestoreHealth || player.CombatantBinding.CurrentHealth < player.CombatantBinding.MaximumHealth) &&
                     ((Vector2)transform.position - (Vector2)gem.transform.position).sqrMagnitude <= radius * radius)
-                { RequestCollection(gem.RunId, gem.DropId); break; }
+                {
+                    pending.Add(gem.DropId, (gem, gem.ClaimVersion));
+                    batch.Add(gem.DropId);
+                    if (batch.Count == MaximumCollectionsPerBatch) break;
+                }
+            // Build the batch before invoking a Host command, which may recycle gems synchronously.
+            if (batch.Count > 0) SubmitCollectionBatch(world.RunId, batch.ToArray());
         }
         public void RequestCollection(string run, ulong drop)
         {
-            if (isOwned && NetworkClient.active && isActiveAndEnabled) CmdCollect(run, drop);
+            if (!isOwned || !NetworkClient.active || !NetworkClient.ready || NetworkClient.connection == null || !isActiveAndEnabled ||
+                NetworkExperienceWorld.Current?.RunId != run) return;
+            if (pendingRun != run) { ClearPending(); pendingRun = run; }
+            if (pending.ContainsKey(drop)) return;
+            foreach (var gem in NetworkExperienceGem.ClientGems)
+                if (gem != null && gem.RunId == run && gem.DropId == drop)
+                { pending.Add(drop, (gem, gem.ClaimVersion)); break; }
+            SubmitCollectionBatch(run, new[] { drop });
         }
+        private void SubmitCollectionBatch(string run, ulong[] drops)
+        { SubmittedCollectionBatchCount++; CmdCollectBatch(run, drops); }
         [Server]
         public void ServerAuthorizeHealth(string run, ulong drop, uint claim, int amount) => TargetRestoreHealth(connectionToClient, run, drop, claim, amount);
         [TargetRpc]
@@ -60,14 +96,32 @@ namespace MonsterSupergroup.NetworkCombat
         private void CmdRejectHealth(string run, ulong drop, uint claim, NetworkConnectionToClient sender = null)
             => NetworkExperienceWorld.Current?.RejectHealthGrant(sender, run, drop, claim);
         [Command]
-        private void CmdCollect(string run, ulong drop, NetworkConnectionToClient sender = null)
+        private void CmdCollectBatch(string run, ulong[] drops, NetworkConnectionToClient sender = null)
         {
-            if (!isActiveAndEnabled) return;
+            if (sender == null || sender != connectionToClient || drops == null ||
+                drops.Length == 0 || drops.Length > MaximumCollectionsPerBatch) return;
             var world = NetworkExperienceWorld.Current;
-            if (world != null && !world.TryCollect(sender, netIdentity, run, drop, out string reason))
-                if (AstralShift.DebugTools.DBL.VerboseEnabled) Debug.Log($"[XP] run={run} drop={drop} requester={netId} rejected={reason}");
+            var rejected = new List<ulong>();
+            var unique = new HashSet<ulong>();
+            foreach (ulong drop in drops)
+            {
+                if (!unique.Add(drop)) continue;
+                if (!isActiveAndEnabled || world == null || !world.TryCollect(sender, netIdentity, run, drop, out _))
+                    rejected.Add(drop);
+            }
+            // Reliable responses release only rejected requests. Successful requests stay
+            // suppressed until their replicated claim/despawn arrives, without timeout spam.
+            if (rejected.Count > 0) TargetRejectCollections(sender, run, rejected.ToArray());
         }
-        public override void OnStopAuthority() { nextRequest = 0; }
-        public override void OnStopClient() { nextRequest = 0; }
+        [TargetRpc]
+        private void TargetRejectCollections(NetworkConnectionToClient target, string run, ulong[] drops)
+        {
+            if (run != pendingRun || run != NetworkExperienceWorld.Current?.RunId) return;
+            foreach (ulong drop in drops) pending.Remove(drop);
+        }
+        private void ClearPending() { pending.Clear(); batch.Clear(); pendingRun = null; nextRequest = 0; }
+        private void OnDisable() => ClearPending();
+        public override void OnStopAuthority() => ClearPending();
+        public override void OnStopClient() => ClearPending();
     }
 }

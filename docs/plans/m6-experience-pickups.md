@@ -21,14 +21,20 @@
 
 1. `NetworkExperienceWorld` 挂在现有 `NetworkCombatWorld.prefab`。World 在 Enemy 生成前订阅 `ConfirmedKillProduced`，在后续死亡表现和销毁回调之前冻结 XP、位置与死亡身份。
 2. 客户端模拟者使用当前 epoch 的最新已接纳快照；服务器模拟者使用服务器位置；没有当前快照则使用 Agent 记录的生成位置。创建注册在 Boot.spawnPrefabs 的 `NetworkExperienceGem`，初始同步含 RunId、DropId 和基础值。
-3. `NetworkPlayer.prefab` 上的 `NetworkExperienceCollector` 仅在本地 Owner 存活、有效且未选择时搜索可拾取球。以每 0.1 秒最多一条请求提交 RunId/DropId；不提交数量、半径、目标玩家或最终位置。
-4. World 校验连接、当前角色与成员、本局、权威生命、选择锁定、服务器距离和未领取状态。先预留球，再通过 `TryGrantExperience` 入账，失败释放预留；成功后通过 `ServerPresentCollection` 在 Host 本地先分离显示对象，可靠 RPC 通知远端，再立即销毁网络球。Host 本地与 RPC 共用 `presented` 去重；动画不决定入账。
+3. `NetworkPlayer.prefab` 上的 `NetworkExperienceCollector` 仅在本地 Owner 存活、有效且未选择时搜索可拾取球。每 0.1 秒提交一批范围内的球，每批最多 32 个 DropId，附带 RunId；不提交经验数值、半径、目标玩家或最终位置。等待确认的球不占后续批次：领取状态或销毁同步确认成功，可靠拒绝回执释放待确认记录，以便后续重试。换局、断线、失权和禁用清理记录；对象池复用和回血物品撤销预留也会释放旧记录。
+4. World 对批内每颗球分别校验连接、当前角色与成员、本局、权威生命、选择锁定、服务器距离和未领取状态，批内重复 ID 只处理一次。先预留球，再通过 `TryGrantExperience` 入账，失败释放预留；成功后通过 `ServerPresentCollection` 在 Host 本地先分离显示对象，可靠 RPC 通知远端，再立即销毁网络球。Host 本地与 RPC 共用 `presented` 去重；动画不决定入账。若批内领取触发升级选卡，后续球仍受选择锁定限制，留在地面，选完后再领取。多人争抢只授予第一个通过校验的玩家。
 5. `NetworkModifierSelection` 按当前等级逐次扣门槛，保留余量，将所有等级加入原奖励队列；原 OnConfirmedKill 只保留自身死亡取消选择。F5 使用当前门槛，恰好升级一次，保留余量，不乘拾取倍率。
 6. 个人 XP/等级/队列/阶段仍使用原 checkpoint。未领取球及累加器只属于服务器局。断线后剩余球由 Mirror 当前生成对象基线恢复，已领取球不回放。
 7. `LocalPlayerUIBinder → CombatHUDController → PlayerExperienceHUD` 在底部中央显示本人等级、XP 余量/当前门槛和填充条，保留顶部波次与中央选择空间。HUD 和玩家任意先后创建、失权、重连均沿用现有 Owner 入口。
 8. Stop/World 禁用清理球与订阅；飞行显示对象在完成、目标消失、断线或新局时销毁。没有第二套经验存档或镜头同步协议。
 
 ## 验证记录
+
+2026-09-22 批量拾取修复：原网络实现每 0.1 秒只提交一颗，且未跳过待确认球，确认延迟会重复占用扫描机会。改为每批最多 32 颗、记录待确认球并返回拒绝回执，服务器仍逐颗结算。此变更将网络协议从 4 升至 5，所有参与者须更新到同一构建。
+
+- 独立无界面 Unity 6000.3.21f1 工程完成编译和 Mirror Weaver；拾取 PlayMode **22/22** 通过（`Logs/PickupBatchValidation/playmode-final.xml`），其中新增 7 项覆盖 70 颗跨批拾取、确认前不重复提交、范围校验拒绝后重试、批内升级选卡、超长批次/旧局/重复 ID、两个已认证玩家争抢、连接尚未就绪及回血预留取消。
+- 相关 EditMode **29/29** 通过（`Logs/PickupBatchValidation/editmode.xml`），覆盖经验规则、拾取规则/回执/资源和 Steam 房间版本校验。
+- 新增测试首轮因未等待客户端生成基线而有 4 项失败，修正测试时序后整体通过；保留首轮 `playmode.xml`。双玩家争抢使用 Host 与第二个已认证连接的服务器命令入口，未将其当作双机 Steam 实测。实际吸取表现由用户用同一构建验收，未使用 computer-use。
 
 测试从正式 Boot 启动，使用正式 NetworkEnemyBase、Circling 和 Physics2D。只有验证夹具会暂停武器自动触发、锁定角色位置/敌人追逐或通过确认击杀边界造球；至少一条击杀完整通过真实武器、攻击准入、GAS、服务器确认死亡和网络领取。
 

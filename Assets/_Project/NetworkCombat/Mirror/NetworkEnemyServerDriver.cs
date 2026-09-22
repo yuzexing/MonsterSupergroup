@@ -69,7 +69,13 @@ namespace MonsterSupergroup.NetworkCombat
 
         private IEnumerator FinishPresentation()
         {
-            while (enemy != null && !enemy.DeathPresentationComplete) yield return null;
+            // Rendering may be culled, disabled, or interrupted. Confirmed corpses
+            // must still leave the network world, even while gameplay is paused.
+            float clipDuration = enemy != null && enemy.enemyAnimator != null ? enemy.enemyAnimator.DeadTime : 0;
+            double deadline = Time.unscaledTimeAsDouble + Mathf.Clamp(clipDuration, 1, 10) + 1;
+            while (enemy != null && !enemy.DeathPresentationComplete && Time.unscaledTimeAsDouble < deadline) yield return null;
+            if (enemy != null && !enemy.DeathPresentationComplete)
+                NetworkEnemySimulationWorld.Instance?.RecordDeathCleanupTimeout();
             if (NetworkServer.active) NetworkServer.Destroy(gameObject);
         }
     }

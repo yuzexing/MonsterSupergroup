@@ -32,6 +32,8 @@ namespace MonsterSupergroup.NetworkCombat
         {
             if (current.Assignment.Epoch == 0 || current.Assignment.EnemyEntityId != netId ||
                 (appliedHandoffEpoch != 0 && !EnemySimulationSequence.IsNewer(current.Assignment.Epoch, appliedHandoffEpoch))) return;
+            Vector2 previousPosition = transform.position;
+            bool previouslyLocal = authority != null && authority.RunsNavigation;
             bool keepServerAction = current.Reason != EnemyTargetChangeReason.ReferenceReposition && isServer && appliedHandoffEpoch != 0 &&
                 assignment.Host == EnemySimulationHost.ServerAuthoritative && current.Assignment.Host == EnemySimulationHost.ServerAuthoritative;
             assignment = current.Assignment;
@@ -71,6 +73,7 @@ namespace MonsterSupergroup.NetworkCombat
                 authority.MarkDiscontinuity();
             }
             restoringHandoff = false;
+            NetworkEnemySimulationWorld.Instance?.RecordMotionCorrection(this, current, previouslyLocal, previousPosition);
             if (authority.ConsumesSnapshots)
             {
                 // A handoff baseline is not a producer's first movement packet.

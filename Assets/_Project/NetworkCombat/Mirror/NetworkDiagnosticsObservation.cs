@@ -1,107 +1,167 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Runtime.InteropServices;
+using System.Threading;
+using AstralShift.DebugTools;
+using AstralShift.HellMaiden.Player;
 using Mirror;
 using Mirror.FizzySteam;
 using Unity.Profiling;
 using UnityEngine;
+using UnityEngine.Profiling;
 
 namespace MonsterSupergroup.NetworkCombat
 {
-    // Passive observation of the ordinary Boot/Steam flow. Never selects a backend or supplies input.
+    // Opt-in observer of ordinary Boot/Steam play. No backend, gameplay or graphics overrides.
     public sealed class NetworkDiagnosticsObservation : MonoBehaviour
     {
+        public const int SchemaVersion = 2;
         private static bool enabledForRun;
+        public static bool Enabled => enabledForRun;
         public static long SnapshotCount, SnapshotBytes, ReliableSnapshotPackets;
+        private static int overlayState = -1, overlayChanges;
         private LimboObservationLog log;
         private ProfilerRecorder main, allocations, gc;
-        private readonly List<ProfilerRecorderSample> gcSamples = new List<ProfilerRecorderSample>(1);
+        private readonly List<ProfilerRecorderSample> gcSamples = new(1);
         private readonly FrameTiming[] timing = new FrameTiming[1];
-        private readonly List<SteamConnectionSample> connections = new List<SteamConnectionSample>(4);
-        private readonly float[] frames = new float[4096];
-        private int frameCount, frameOverflow;
-        private double nextSample, sumFrame, maxFrame, allocatedBytes, gcMilliseconds, maximumMainMs;
+        private readonly List<SteamConnectionSample> connections = new(4);
+        private readonly NetworkDiagnosticsWindow window = new();
+        private readonly List<LongFrame> longFrames = new(8);
+        private System.Diagnostics.Process process;
+        private string captureId, utcStart;
+        private int processId, warnings, errors, deadWarnings, focusChanges, pauseChanges, displayChanges;
+        private int lastWidth, lastHeight, lastMode;
+        private double nextSample, windowStart, allocatedBytes, gcMilliseconds, maximumMainMs;
+        private bool closed;
+        public string OutputPath { get; private set; }
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
         private static void Install()
         {
             enabledForRun = Array.IndexOf(Environment.GetCommandLineArgs(), "--network-diagnostics") >= 0;
-            SteamTransportDiagnostics.Enabled = enabledForRun;
+            SteamTransportDiagnostics.Enabled = CombatPerformanceCounters.Enabled = enabledForRun;
             SnapshotCount = SnapshotBytes = ReliableSnapshotPackets = 0;
+            overlayState = -1; overlayChanges = 0;
+            CombatPerformanceCounters.Reset();
             if (!enabledForRun) return;
             SteamTransportDiagnostics.Reset();
             var root = new GameObject("Network diagnostics");
             DontDestroyOnLoad(root);
             root.AddComponent<NetworkDiagnosticsObservation>();
         }
-
-        internal static void RecordSnapshot(int bytes)
-        { if (enabledForRun) { SnapshotCount++; SnapshotBytes += bytes; } }
-        internal static void RecordReliableSnapshot()
-        { if (enabledForRun) ReliableSnapshotPackets++; }
-
+        internal static void RecordSnapshot(int bytes) { if (enabledForRun) { SnapshotCount++; SnapshotBytes += bytes; } }
+        internal static void RecordReliableSnapshot() { if (enabledForRun) ReliableSnapshotPackets++; }
+        public static void RecordOverlay(bool active) { if (enabledForRun) { overlayState = active ? 1 : 0; overlayChanges++; } }
+        private static string Argument(string key)
+        {
+            foreach (string arg in Environment.GetCommandLineArgs()) if (arg.StartsWith(key, StringComparison.Ordinal)) return arg.Substring(key.Length);
+            return null;
+        }
         private void Start()
         {
-            string directory = Path.Combine(Application.persistentDataPath, "NetworkDiagnostics");
+            // Also supports an explicitly added observer in diagnostics tests.
+            enabledForRun = SteamTransportDiagnostics.Enabled = CombatPerformanceCounters.Enabled = true;
+            string directory = Argument("--network-diagnostics-output=") ?? Path.Combine(Application.persistentDataPath, "NetworkDiagnostics");
             Directory.CreateDirectory(directory);
-            string path = Path.Combine(directory, DateTime.UtcNow.ToString("yyyyMMdd-HHmmss") + "-" + Guid.NewGuid().ToString("N") + ".jsonl");
-            log = new LimboObservationLog(path);
-            log.WriteLine(JsonUtility.ToJson(new Header
-            {
+            captureId = Guid.NewGuid().ToString("N"); utcStart = DateTime.UtcNow.ToString("o");
+            process = System.Diagnostics.Process.GetCurrentProcess(); processId = process.Id;
+            OutputPath = Path.Combine(directory, DateTime.UtcNow.ToString("yyyyMMdd-HHmmss") + "-" + processId + "-" + captureId + ".jsonl");
+            log = new LimboObservationLog(OutputPath);
+            lastWidth = Screen.width; lastHeight = Screen.height; lastMode = (int)Screen.fullScreenMode;
+            log.WriteLine(JsonUtility.ToJson(new Header {
+                captureId = captureId, utcStart = utcStart, processId = processId,
                 buildGuid = Application.buildGUID, version = Application.version, unity = Application.unityVersion,
                 development = Debug.isDebugBuild, protocol = SteamLobbyMetadata.ProtocolValue,
                 width = Screen.width, height = Screen.height, targetFps = Application.targetFrameRate,
                 quality = QualitySettings.names[QualitySettings.GetQualityLevel()],
-                rejectionReasons = Enum.GetNames(typeof(CombatRejectionReason)),
-                vSync = QualitySettings.vSyncCount, graphics = SystemInfo.graphicsDeviceType.ToString()
-            }));
+                rejectionReasons = Enum.GetNames(typeof(CombatRejectionReason)), areas = CombatPerformanceCounters.Names,
+                vSync = QualitySettings.vSyncCount, graphics = SystemInfo.graphicsDeviceType.ToString(),
+                gpu = SystemInfo.graphicsDeviceName, driver = SystemInfo.graphicsDeviceVersion,
+                cpu = SystemInfo.processorType, systemMemoryMb = SystemInfo.systemMemorySize,
+                commandLine = Environment.CommandLine, monotonicStart = Time.realtimeSinceStartupAsDouble }));
             main = ProfilerRecorder.StartNew(ProfilerCategory.Internal, "Main Thread", 1);
             allocations = ProfilerRecorder.StartNew(ProfilerCategory.Memory, "GC Allocated In Frame", 1);
             gc = ProfilerRecorder.StartNew(ProfilerCategory.Memory, "GC.Collect", 1);
-            nextSample = Time.realtimeSinceStartupAsDouble + 1;
-            Debug.Log("[NetworkDiagnostics] " + path);
+            windowStart = Time.realtimeSinceStartupAsDouble; nextSample = windowStart + 1;
+            Application.logMessageReceivedThreaded += CountLog;
+            Debug.Log("[NetworkDiagnostics] " + OutputPath);
         }
-
+        private void CountLog(string text, string stack, LogType type)
+        {
+            if (type == LogType.Warning) Interlocked.Increment(ref warnings);
+            if (type == LogType.Error || type == LogType.Exception || type == LogType.Assert) Interlocked.Increment(ref errors);
+            if (text.Contains("Dead -> INVALID TRANSITION to: Hurt")) Interlocked.Increment(ref deadWarnings);
+        }
+        private void OnApplicationFocus(bool focused) { focusChanges++; }
+        private void OnApplicationPause(bool paused) { pauseChanges++; }
         private void LateUpdate()
         {
-            if (log == null) return;
+            if (log == null || closed) return;
             FrameTimingManager.CaptureFrameTimings();
+            double now = Time.realtimeSinceStartupAsDouble;
             float ms = Time.unscaledDeltaTime * 1000f;
-            sumFrame += ms; maxFrame = Math.Max(maxFrame, ms);
-            if (frameCount < frames.Length) frames[frameCount++] = ms; else frameOverflow++;
+            if (window.Add(ms)) longFrames.Add(new LongFrame { frame = Time.frameCount, time = now,
+                utc = DateTime.UtcNow.ToString("o"), networkTime = NetworkTime.time, frameMs = ms,
+                mainMs = main.Valid ? main.LastValue / 1e6 : -1,
+                allocatedBytes = allocations.Valid ? allocations.LastValue : -1 });
             if (allocations.Valid) allocatedBytes += allocations.LastValue;
             if (gc.Valid)
             {
-                // Consume each GC marker once; LastValue alone can repeat an old collection.
                 gc.CopyTo(gcSamples, true);
                 foreach (var sample in gcSamples) gcMilliseconds += sample.Value / 1e6;
                 if (!gc.IsRunning) gc.Start();
             }
             if (main.Valid) maximumMainMs = Math.Max(maximumMainMs, main.LastValue / 1e6);
-            double now = Time.realtimeSinceStartupAsDouble;
-            if (now < nextSample) return;
-            nextSample = now + 1;
-            Array.Sort(frames, 0, frameCount);
+            if (Screen.width != lastWidth || Screen.height != lastHeight || (int)Screen.fullScreenMode != lastMode)
+            { displayChanges++; lastWidth = Screen.width; lastHeight = Screen.height; lastMode = (int)Screen.fullScreenMode; }
+            if (now >= nextSample) { Emit(now); nextSample = now + 1; }
+        }
+        private void Emit(double now)
+        {
+            if (window.Count == 0) return;
+            window.Sort();
             var world = NetworkCombatWorld.Instance;
             var metrics = world?.Gateway?.Metrics;
-            var collector = NetworkClient.localPlayer?.GetComponent<MirrorNetworkCombatBridge>()?.Collector;
+            var owner = NetworkClient.localPlayer;
+            var binding = owner != null ? owner.GetComponent<PlayerCombatantBinding>() : null;
+            var collector = owner != null ? owner.GetComponent<MirrorNetworkCombatBridge>()?.Collector : null;
             var progress = world != null ? world.GetComponent<NetworkWaveProgress>() : null;
+            var manager = NetworkManager.singleton as BootGameplayNetworkManager;
             connections.Clear();
             if (Transport.active is FizzySteamworks steam) steam.ReadConnectionDiagnostics(connections);
             uint timingCount = FrameTimingManager.GetLatestTimings(1, timing);
-            var row = new Row
-            {
-                time = now, round = NetworkCombatWorld.CurrentRound,
+            long working = -1, privateBytes = -1;
+            ReadProcessMemory(out working, out privateBytes);
+            var row = new Row {
+                captureId = captureId, processId = processId, utc = DateTime.UtcNow.ToString("o"), time = now,
+                windowSeconds = now - windowStart, networkTime = NetworkTime.time, rttMs = NetworkTime.rtt * 1000,
+                round = NetworkCombatWorld.CurrentRound,
                 role = NetworkServer.active ? "host" : NetworkClient.active ? "client" : "offline",
                 transport = Transport.active != null ? Transport.active.GetType().Name : "none",
                 run = progress != null ? progress.Snapshot.RunId : "", alive = progress != null ? progress.Snapshot.Alive : 0,
-                frameCount = frameCount + frameOverflow, frameOverflow = frameOverflow,
-                frameMeanMs = sumFrame / Math.Max(1, frameCount + frameOverflow), frameMaxMs = maxFrame,
-                frameP95Ms = Percentile(.95), frameP99Ms = Percentile(.99), mainMaxMs = main.Valid ? maximumMainMs : -1,
+                phase = progress != null ? progress.Snapshot.Phase.ToString() : "none",
+                playerCount = NetworkServer.active ? manager?.Session?.Participants.Count ?? 0 : manager?.RoomSnapshot.Members?.Length ?? 0,
+                localHealth = binding != null ? binding.CurrentHealth : -1, localAlive = binding != null && binding.IsAlive,
+                frameCount = window.Count, frameOverflow = window.Overflow, frameMeanMs = window.Mean, frameMaxMs = window.Maximum,
+                frameP95Ms = window.Percentile(.95), frameP99Ms = window.Percentile(.99), frameHistogram = window.Histogram,
+                longFrames = longFrames.ToArray(), longFrameCount = window.LongFrames, omittedLongFrames = window.LongFrames - window.LongDetails,
+                mainMaxMs = main.Valid ? maximumMainMs : -1,
                 gpuMs = timingCount > 0 && timing[0].gpuFrameTime > 0 ? timing[0].gpuFrameTime : -1,
                 renderMs = timingCount > 0 ? timing[0].cpuRenderThreadFrameTime : -1,
+                mainWorkMs = timingCount > 0 ? timing[0].cpuMainThreadFrameTime : -1,
+                presentWaitMs = timingCount > 0 ? timing[0].cpuMainThreadPresentWaitTime : -1,
+                timingTimestamp = timingCount > 0 ? timing[0].frameStartTimestamp : 0,
                 allocatedBytes = allocations.Valid ? allocatedBytes : -1, gcMs = gc.Valid ? gcMilliseconds : -1,
+                managedBytes = GC.GetTotalMemory(false), unityAllocatedBytes = Profiler.GetTotalAllocatedMemoryLong(),
+                workingSetBytes = working, privateBytes = privateBytes,
                 gen0 = GC.CollectionCount(0), gen1 = GC.CollectionCount(1), gen2 = GC.CollectionCount(2),
+                warnings = Volatile.Read(ref warnings), errors = Volatile.Read(ref errors), deadWarnings = Volatile.Read(ref deadWarnings),
+                focused = Application.isFocused, fullScreenMode = Screen.fullScreenMode.ToString(), width = Screen.width, height = Screen.height,
+                focusChanges = focusChanges, pauseChanges = pauseChanges, displayChanges = displayChanges,
+                overlayState = overlayState, overlayChanges = overlayChanges,
+                areas = CombatPerformanceCounters.ReadAndReset(),
+                enemyMotion = NetworkEnemySimulationWorld.Instance?.CaptureMotionDiagnostics(),
                 sentBytes = SteamTransportDiagnostics.SentBytes, receivedBytes = SteamTransportDiagnostics.ReceivedBytes,
                 sentMessages = SteamTransportDiagnostics.SentMessages, receivedMessages = SteamTransportDiagnostics.ReceivedMessages,
                 maxSentMessage = SteamTransportDiagnostics.MaximumSentMessage, sendFailures = SteamTransportDiagnostics.SendFailures,
@@ -109,38 +169,88 @@ namespace MonsterSupergroup.NetworkCombat
                 reliableSnapshotPackets = ReliableSnapshotPackets,
                 acceptedDamage = metrics?.AcceptedCombatResults ?? 0, receivedDamage = metrics?.ReceivedCombatResults ?? 0,
                 deathReports = metrics?.ReceivedEnemyDeathReports ?? 0, deathReceipts = metrics?.ConfirmedEnemyDeathReports ?? 0,
-                confirmedKills = metrics?.ConfirmedKills ?? 0,
-                pendingDeaths = collector?.PendingEnemyDeathCount ?? 0,
+                confirmedKills = metrics?.ConfirmedKills ?? 0, pendingDeaths = collector?.PendingEnemyDeathCount ?? 0,
                 oldestPendingDeathSeconds = collector?.OldestPendingDeathAge(Time.unscaledTimeAsDouble) ?? 0,
                 lastDeathConfirmationSeconds = collector?.LastDeathConfirmationSeconds ?? 0,
                 maximumDeathConfirmationSeconds = collector?.MaximumDeathConfirmationSeconds ?? 0,
-                logFailures = LimboObservationLog.FailureCount
-            };
+                logFailures = LimboObservationLog.FailureCount, logQueuedBytes = LimboObservationLog.PendingBytes };
             row.rejections = new long[(int)CombatRejectionReason.RunLoading + 1];
             for (int i = 0; i < row.rejections.Length; i++) row.rejections[i] = metrics?.GetRejected((CombatRejectionReason)i) ?? 0;
-            log.WriteLine(JsonUtility.ToJson(row));
-            frameCount = frameOverflow = 0; sumFrame = maxFrame = allocatedBytes = gcMilliseconds = maximumMainMs = 0;
+            log.WriteLine(JsonUtility.ToJson(row)); // Serialize before mutable window arrays are cleared.
+            window.Reset(); longFrames.Clear(); windowStart = now;
+            allocatedBytes = gcMilliseconds = maximumMainMs = 0;
         }
-        private double Percentile(double percentile) => frameCount == 0 ? 0 : frames[Math.Min(frameCount - 1, (int)Math.Ceiling(frameCount * percentile) - 1)];
-        private void OnDestroy()
-        { main.Dispose(); allocations.Dispose(); gc.Dispose(); log?.Dispose(); log = null; SteamTransportDiagnostics.Enabled = false; enabledForRun = false; }
-
+        private void OnApplicationQuit() => Close();
+        private void OnDestroy() => Close();
+        private void ReadProcessMemory(out long working, out long privateBytes)
+        {
+            working = privateBytes = -1;
+#if UNITY_STANDALONE_WIN || UNITY_EDITOR_WIN
+            // Mono's Process memory properties return zero in some Windows Players.
+            uint size = (uint)Marshal.SizeOf<ProcessMemory>();
+            var memory = new ProcessMemory { size = size };
+            if (GetProcessMemoryInfo(GetCurrentProcess(), ref memory, size))
+            {
+                working = (long)memory.workingSet.ToUInt64();
+                privateBytes = (long)memory.privateUsage.ToUInt64();
+            }
+#else
+            try { process.Refresh(); working = process.WorkingSet64; privateBytes = process.PrivateMemorySize64; }
+            catch (Exception) { /* Unavailable on some platforms. */ }
+#endif
+            if (working <= 0) working = -1;
+            if (privateBytes <= 0) privateBytes = -1;
+        }
+#if UNITY_STANDALONE_WIN || UNITY_EDITOR_WIN
+        [StructLayout(LayoutKind.Sequential)]
+        private struct ProcessMemory
+        {
+            public uint size, pageFaults;
+            public UIntPtr peakWorkingSet, workingSet, peakPagedPool, pagedPool, peakNonPagedPool, nonPagedPool, pagefile, peakPagefile, privateUsage;
+        }
+        [DllImport("kernel32.dll")] private static extern IntPtr GetCurrentProcess();
+        [DllImport("psapi.dll")][return: MarshalAs(UnmanagedType.Bool)]
+        private static extern bool GetProcessMemoryInfo(IntPtr processHandle, ref ProcessMemory memory, uint size);
+#endif
+        private void Close()
+        {
+            if (closed) return;
+            closed = true;
+            Application.logMessageReceivedThreaded -= CountLog;
+            if (log != null) Emit(Time.realtimeSinceStartupAsDouble);
+            main.Dispose(); allocations.Dispose(); gc.Dispose(); log?.Dispose(); log = null; process?.Dispose();
+            SteamTransportDiagnostics.Enabled = CombatPerformanceCounters.Enabled = enabledForRun = false;
+        }
         [Serializable] private sealed class Header
         {
-            public string kind = "header", buildGuid, version, unity, protocol, graphics, quality;
-            public string[] rejectionReasons;
+            public string kind = "header";
+            public int schemaVersion = SchemaVersion;
+            public string captureId, utcStart, buildGuid, version, unity, protocol, graphics, quality, gpu, driver, cpu, commandLine;
+            public string[] rejectionReasons, areas;
             public bool development;
-            public int width, height, targetFps, vSync;
+            public int processId, width, height, targetFps, vSync, systemMemoryMb;
+            public double monotonicStart;
+        }
+        [Serializable] private sealed class LongFrame
+        {
+            public int frame; public string utc; public double time, networkTime, frameMs, mainMs; public long allocatedBytes;
         }
         [Serializable] private sealed class Row
         {
-            public string kind = "sample", role, transport, run;
+            public string kind = "sample", captureId, utc, role, transport, run, phase, fullScreenMode;
             public uint round;
-            public int alive, frameCount, frameOverflow, gen0, gen1, gen2, pendingDeaths, logFailures;
-            public double time, frameMeanMs, frameMaxMs, frameP95Ms, frameP99Ms, mainMaxMs, gpuMs, renderMs, allocatedBytes, gcMs;
+            public int processId, playerCount, localHealth, alive, frameCount, frameOverflow, gen0, gen1, gen2, pendingDeaths, logFailures;
+            public int warnings, errors, deadWarnings, longFrameCount, omittedLongFrames, width, height, focusChanges, pauseChanges, displayChanges, overlayState, overlayChanges;
+            public bool localAlive, focused;
+            public double time, networkTime, rttMs, windowSeconds, frameMeanMs, frameMaxMs, frameP95Ms, frameP99Ms, mainMaxMs, gpuMs, renderMs, mainWorkMs, presentWaitMs, allocatedBytes, gcMs;
+            public ulong timingTimestamp;
             public double oldestPendingDeathSeconds, lastDeathConfirmationSeconds, maximumDeathConfirmationSeconds;
+            public long managedBytes, unityAllocatedBytes, workingSetBytes, privateBytes, logQueuedBytes;
             public long[] sentBytes, receivedBytes, sentMessages, receivedMessages, rejections;
-            public int[] maxSentMessage;
+            public int[] maxSentMessage, frameHistogram;
+            public LongFrame[] longFrames;
+            public CombatPerformanceCounters.Sample areas;
+            public EnemyMotionDiagnosticSample enemyMotion;
             public SteamConnectionSample[] connections;
             public long sendFailures, snapshots, snapshotBytes, reliableSnapshotPackets, acceptedDamage, receivedDamage, deathReports, deathReceipts, confirmedKills;
         }

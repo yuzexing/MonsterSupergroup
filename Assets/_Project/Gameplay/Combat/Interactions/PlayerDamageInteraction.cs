@@ -210,6 +210,7 @@ namespace AstralShift.HellMaiden.Interactions
 
 		private void VerifyCollisions()
 		{
+			using var diagnosticScope = AstralShift.DebugTools.CombatPerformanceCounters.Measure(AstralShift.DebugTools.CombatPerformanceCounters.Area.CollisionChecks);
             if (attackWindow != null && !attackWindow.CanSettle(pendingAttackContact))
             { DiscardPendingCollisions(); return; }
 			_processedPlayerOwners.Clear();

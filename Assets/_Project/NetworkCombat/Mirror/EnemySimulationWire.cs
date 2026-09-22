@@ -10,6 +10,7 @@ namespace MonsterSupergroup.NetworkCombat
         internal static void SendBatches(List<EnemySimulationSnapshot> source, int maximumCount,
             Action<EnemySimulationSnapshotBatch, bool> send)
         {
+            using var diagnosticScope = AstralShift.DebugTools.CombatPerformanceCounters.Measure(AstralShift.DebugTools.CombatPerformanceCounters.Area.SnapshotSend);
             int budget = Math.Max(128, Math.Min(1000, Transport.active.GetMaxPacketSize(Channels.Unreliable) - 100));
             var packet = new List<EnemySimulationSnapshot>();
             int bytes = 20;

@@ -18,6 +18,7 @@ namespace MonsterSupergroup.NetworkCombat
         [Server]
         public void ServerConfigureAllure(AllureParameters settings, bool resetCooldowns = false)
         {
+            if (!MonsterSupergroup.Builds.BuildFeatures.DevelopmentToolsAllowed) return;
             if (!settings.IsValid) throw new ArgumentException("Invalid Allure parameters.");
             allureSession = settings;
             foreach (var identity in NetworkServer.spawned.Values)

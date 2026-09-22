@@ -26,7 +26,7 @@ namespace MonsterSupergroup.NetworkCombat
         {
             activeObservation = this;
             WriteDelivery("process-start", Manual ? "Manual Full: all test inputs disabled" : "Explicit reference/technical launch",
-                new LaunchRow { arguments = LaunchArguments, version = Argument("--limbo-version="), session = Argument("--limbo-session="),
+                new LaunchRow { arguments = LaunchArguments, version = MonsterSupergroup.Builds.RuntimeBuildInfo.Display, session = Argument("--limbo-session="),
                     detail = Light ? "light" : "detailed", device = SystemInfo.graphicsDeviceName, api = SystemInfo.graphicsDeviceType.ToString(),
                     unity = Application.unityVersion });
         }

@@ -9,6 +9,8 @@ using MonsterSupergroup.NetworkCombat.Diagnostics;
 using UnityEditor;
 using UnityEditor.Build;
 using UnityEditor.Build.Reporting;
+using MonsterSupergroup.EditorTools;
+using MonsterSupergroup.Builds;
 
 namespace MonsterSupergroup.NetworkCombat.Editor
 {
@@ -18,11 +20,20 @@ namespace MonsterSupergroup.NetworkCombat.Editor
         private const string ResourcePath = "Assets/_Project/NetworkCombat/Resources/CombatEvidenceBuild.json";
         private static string pendingManifest, archivePath;
         public int callbackOrder => -100;
+        public static bool ShouldCapture(BuildInfo info) => info != null && info.Evidence && info.Diagnostics == "Evidence" &&
+            !string.Equals(info.Kind, "shipping", StringComparison.OrdinalIgnoreCase);
         public void OnPreprocessBuild(BuildReport report)
         {
+            // A previous interrupted build must not leak its Resources manifest into a normal package.
+            Cleanup();
+            string output = Path.GetDirectoryName(Path.GetFullPath(report.summary.outputPath));
+            string oldManifest = Path.Combine(output, "combat-build.json");
+            if (File.Exists(oldManifest)) File.Delete(oldManifest);
+            if (!ShouldCapture(ProjectBuildIdentity.Active)) return;
+            ProjectBuildIdentity.BuildFinished -= Cleanup;
+            ProjectBuildIdentity.BuildFinished += Cleanup;
             string root = Directory.GetParent(UnityEngine.Application.dataPath).FullName;
             var entries = new List<object>();
-            string output = Path.GetDirectoryName(Path.GetFullPath(report.summary.outputPath));
             Directory.CreateDirectory(output);
             string archiveDirectory = Path.Combine(root, "Logs", "CombatEvidenceBuilds", DateTime.UtcNow.ToString("yyyyMMdd-HHmmss-fff"));
             Directory.CreateDirectory(archiveDirectory);
@@ -42,8 +53,8 @@ namespace MonsterSupergroup.NetworkCombat.Editor
                     }
             if (File.Exists(archivePath)) File.Replace(archivePath + ".tmp", archivePath, null); else File.Move(archivePath + ".tmp", archivePath);
             string files = EvidenceJson.Encode(entries);
-            pendingManifest = EvidenceJson.Encode(new { version = 1, sourceConfigurationHash = EvidenceJson.Hash(Encoding.UTF8.GetBytes(files)),
-                protocol = SteamLobbyMetadata.ProtocolValue, logFormat = 1, replicationProtocol = DiagnosticReplicator.Version, replayFormat = 1,
+            pendingManifest = EvidenceJson.Encode(new { version = 1, buildId = ProjectBuildIdentity.Active.BuildId, sourceConfigurationHash = EvidenceJson.Hash(Encoding.UTF8.GetBytes(files)),
+                protocol = SteamLobbyMetadata.ProtocolValue, logFormat = 2, replicationProtocol = DiagnosticReplicator.Version, replayFormat = 2,
                 unity = UnityEngine.Application.unityVersion, buildUtc = DateTime.UtcNow.ToString("o"), files = entries,
                 gameplayDependencyHash = AssetDatabase.GetAssetDependencyHash("Assets/_Project/Scenes/Gameplay.unity").ToString(),
                 bootDependencyHash = AssetDatabase.GetAssetDependencyHash("Assets/_Project/Scenes/Boot.unity").ToString() });
@@ -52,13 +63,21 @@ namespace MonsterSupergroup.NetworkCombat.Editor
         }
         public void OnPostprocessBuild(BuildReport report)
         {
+            if (pendingManifest == null || archivePath == null) { Cleanup(); return; }
             string path = Path.Combine(Path.GetDirectoryName(Path.GetFullPath(report.summary.outputPath)), "combat-build.json");
-            string metadata = EvidenceJson.Encode(new { buildGuid = report.summary.guid.ToString(), manifest = pendingManifest,
+            string metadata = EvidenceJson.Encode(new { buildGuid = report.summary.guid.ToString(), buildId = ProjectBuildIdentity.Active.BuildId, manifest = pendingManifest,
                 replaySources = "Logs/CombatEvidenceBuilds/" + Path.GetFileName(Path.GetDirectoryName(archivePath)) + "/" + Path.GetFileName(archivePath),
                 result = report.summary.result.ToString() });
             EvidenceJson.AtomicWrite(path, metadata);
             EvidenceJson.AtomicWrite(Path.Combine(Path.GetDirectoryName(archivePath), "combat-build.json"), metadata);
-            AssetDatabase.DeleteAsset(ResourcePath);
+            Cleanup();
+        }
+        private static void Cleanup()
+        {
+            ProjectBuildIdentity.BuildFinished -= Cleanup;
+            if (File.Exists(ResourcePath) || File.Exists(ResourcePath + ".meta")) AssetDatabase.DeleteAsset(ResourcePath);
+            if (archivePath != null && File.Exists(archivePath + ".tmp")) File.Delete(archivePath + ".tmp");
+            pendingManifest = null; archivePath = null;
         }
     }
 }

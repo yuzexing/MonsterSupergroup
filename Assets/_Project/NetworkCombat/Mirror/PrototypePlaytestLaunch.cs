@@ -19,6 +19,7 @@ namespace MonsterSupergroup.NetworkCombat
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
         private static void Install()
         {
+            if (!MonsterSupergroup.Builds.BuildFeatures.DevelopmentToolsAllowed) return;
             string[] args = Environment.GetCommandLineArgs();
             string selected = Argument(args, "--prototype-playtest=");
             if (selected == null) return;

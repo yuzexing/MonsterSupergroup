@@ -15,8 +15,8 @@ namespace MonsterSupergroup.EditorTools
 {
     [Serializable] public sealed class ProjectToolRequest
     {
-        public string profile, assetPath, source, output, resultPath;
-        public bool apply, scriptsOnly;
+        public string profile, assetPath, source, output, resultPath, buildKind, development, network, distribution, diagnostics;
+        public bool apply, scriptsOnly, uniqueOutput;
     }
     [Serializable] public sealed class ProjectToolResult
     {
@@ -75,7 +75,7 @@ namespace MonsterSupergroup.EditorTools
                 if (tool.writesAssets && !request.apply) throw new InvalidOperationException("该维护操作会修改资产；请明确传入 -Apply。影响: " + tool.impact);
                 if (!string.IsNullOrWhiteSpace(request.source)) Environment.SetEnvironmentVariable("HELLMAIDEN_SOURCE_PROJECT", Path.GetFullPath(request.source));
                 if (tool.externalSource) ProjectToolPaths.HellMaiden();
-                if (!tool.writesAssets && !tool.interactive) before = CaptureAssets();
+                if (!tool.writesAssets && !tool.interactive && tool.id != "build.player" && string.IsNullOrEmpty(tool.profile)) before = CaptureAssets();
                 Busy = true;
                 if (tool.asynchronous && Application.isBatchMode)
                 {
@@ -109,7 +109,7 @@ namespace MonsterSupergroup.EditorTools
         {
             if (!string.IsNullOrEmpty(tool.script)) throw new InvalidOperationException("进程验收请使用 Tools/Invoke-ProjectTool.ps1；可在工具中心复制命令。");
             if (tool.id == "build.player" || !string.IsNullOrEmpty(tool.profile))
-            { result.artifacts = new[] { ProjectBuildService.Build(request.profile ?? tool.profile ?? "menu-development", request.output, request.scriptsOnly) }; return; }
+            { result.artifacts = new[] { ProjectBuildService.Build(request.profile ?? tool.profile ?? "product", request.output, request.scriptsOnly, request.buildKind, request.development, request.uniqueOutput, request.network, request.distribution, request.diagnostics), ProjectBuildIdentity.LastInfoPath }; return; }
             if (tool.id == "preview.attack")
             {
                 string profile = request.profile ?? "projectile";
@@ -183,12 +183,17 @@ namespace MonsterSupergroup.EditorTools
             if (before == null) return;
             try
             {
-                var original = before.files.ToDictionary(f => f.path, f => f.hash);
-                var current = CaptureAssets().files.ToDictionary(f => f.path, f => f.hash);
-                string[] changed = original.Keys.Union(current.Keys).Where(p => !original.TryGetValue(p, out var a) || !current.TryGetValue(p, out var b) || a != b).ToArray();
-                if (changed.Length != 0) throw new InvalidOperationException("只读操作改动正式资源: " + string.Join("\n", changed));
+                AssertAssetsUnchanged(before);
             }
             catch (Exception error) { result.success = false; result.error += "\n" + error; }
+        }
+
+        internal static void AssertAssetsUnchanged(AssetDigests before)
+        {
+            var original = before.files.ToDictionary(f => f.path, f => f.hash);
+            var current = CaptureAssets().files.ToDictionary(f => f.path, f => f.hash);
+            string[] changed = original.Keys.Union(current.Keys).Where(p => !original.TryGetValue(p, out var a) || !current.TryGetValue(p, out var b) || a != b).ToArray();
+            if (changed.Length != 0) throw new InvalidOperationException("只读构建／校验改动正式资源: " + string.Join("\n", changed));
         }
 
         public static void Batch()
@@ -197,7 +202,9 @@ namespace MonsterSupergroup.EditorTools
             string Value(string key) { int i = Array.IndexOf(args, key); return i >= 0 && i + 1 < args.Length ? args[i + 1] : null; }
             var result = Run(Value("-toolId") ?? "validate.tools", new ProjectToolRequest {
                 profile = Value("-toolProfile"), assetPath = Value("-toolAsset"), source = Value("-toolSource"), output = Value("-toolOutput"),
-                resultPath = Value("-toolResult"), apply = args.Contains("-toolApply"), scriptsOnly = args.Contains("-toolScriptsOnly")
+                resultPath = Value("-toolResult"), apply = args.Contains("-toolApply"), scriptsOnly = args.Contains("-toolScriptsOnly"),
+                buildKind = Value("-toolBuildKind"), development = Value("-toolDevelopment"), uniqueOutput = args.Contains("-toolUniqueOutput"),
+                network = Value("-toolNetwork"), distribution = Value("-toolDistribution"), diagnostics = Value("-toolDiagnostics")
             });
             if (!result.pending) EditorApplication.Exit(result.success ? 0 : 1);
         }

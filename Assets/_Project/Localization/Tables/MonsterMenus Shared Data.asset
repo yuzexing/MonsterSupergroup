@@ -3884,6 +3884,58 @@ MonoBehaviour:
     m_Key: ui.options.refresh_rate
     m_Metadata:
       m_Items: []
+  - m_Id: 3685644554461184
+    m_Key: ui.connection.build.clientolder
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3685644596404224
+    m_Key: ui.connection.build.hostolder
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3685644596404225
+    m_Key: ui.connection.build.unknownversion
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3685644596404226
+    m_Key: ui.connection.build.protocolmismatch
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3685644596404227
+    m_Key: ui.connection.build.invalidpackage
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3685644596404228
+    m_Key: ui.connection.update_steam
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3685644596404229
+    m_Key: ui.connection.update_local
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3685644596404230
+    m_Key: ui.connection.content_mismatch
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3685644596404231
+    m_Key: ui.connection.host_closed
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3685644596404232
+    m_Key: ui.connection.host_lost
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3685644596404233
+    m_Key: ui.connection.connect_failed
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3685644596404334
+    m_Key: "正在离开当前会话并加入好友房间…"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3685644596404335
+    m_Key: "退出原房间超时，已取消自动加入；请等待清理完成后重试。"
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

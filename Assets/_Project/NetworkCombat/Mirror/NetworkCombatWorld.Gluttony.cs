@@ -18,6 +18,7 @@ namespace MonsterSupergroup.NetworkCombat
         [Server]
         public void ServerConfigureGluttony(GluttonyParameters settings, bool resetCooldowns = false)
         {
+            if (!MonsterSupergroup.Builds.BuildFeatures.DevelopmentToolsAllowed) return;
             if (!settings.IsValid) throw new ArgumentException("Invalid Gluttony parameters.");
             gluttonySession = settings;
             foreach (var identity in NetworkServer.spawned.Values)

@@ -266,6 +266,7 @@ namespace MonsterSupergroup.NetworkCombat
             bool isKcpDevelopmentBuild,
             NetworkBackendKind editorPreference)
         {
+            if (!MonsterSupergroup.Builds.BuildFeatures.DevelopmentToolsAllowed) arguments = Array.Empty<string>();
             if (HasArgumentPrefix(arguments, ValidationRolePrefix) || HasArgumentPrefix(arguments, "--menu-role="))
             {
                 return new NetworkBackendSelection(

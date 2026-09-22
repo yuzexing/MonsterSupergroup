@@ -1,5 +1,5 @@
 {
-  "version": 1,
+  "version": 2,
   "tools": [
     {
       "id": "open.grass-art",
@@ -1210,18 +1210,24 @@
     },
     {
       "id": "build.player",
-      "name": "构建验收包",
+      "name": "统一构建",
       "category": "构建与验收",
-      "description": "按配置校验并构建已提交资源；不执行导入或修复",
+      "description": "统一产品／专项配方；只读校验现有资源。版本独立更新，实际构建生成唯一目录和 BuildInfo，不执行迁移。",
       "method": "",
       "audience": "人工 / AI",
       "impact": "只读；不修改玩法资产",
-      "output": "配置中定义的 Builds 子目录",
+      "output": "构建完成报告中的唯一 Builds 子目录",
       "condition": "edit",
       "parameters": [
         "Profile",
         "Output",
-        "ScriptsOnly"
+        "ScriptsOnly",
+        "BuildKind",
+        "Development",
+        "UniqueOutput",
+        "Network",
+        "Distribution",
+        "Diagnostics"
       ]
     },
     {
@@ -1871,65 +1877,11 @@
   ],
   "builds": [
     {
-      "id": "menu-development",
-      "name": "menu-development",
-      "output": "Builds/MenuDevelopment/MonsterSupergroup.exe",
-      "defines": [
-        "MONSTER_MENU_VALIDATION"
-      ],
-      "development": true,
-      "testAssemblies": true,
-      "scenes": [
-        "Assets/_Project/Scenes/Boot.unity",
-        "Assets/_Project/Scenes/MainMenu.unity",
-        "Assets/_Project/Scenes/Gameplay.unity"
-      ],
-      "validations": [
-        "validate.all"
-      ]
-    },
-    {
-      "id": "menu-release",
-      "name": "menu-release",
-      "output": "Builds/MenuRelease/MonsterSupergroup.exe",
-      "defines": [
-        "MONSTER_MENU_VALIDATION"
-      ],
-      "development": false,
-      "testAssemblies": true,
-      "scenes": [
-        "Assets/_Project/Scenes/Boot.unity",
-        "Assets/_Project/Scenes/MainMenu.unity",
-        "Assets/_Project/Scenes/Gameplay.unity"
-      ],
-      "validations": [
-        "validate.all"
-      ]
-    },
-    {
-      "id": "kcp-development",
-      "name": "kcp-development",
-      "output": "Builds/KcpDevelopment/MonsterSupergroupKcp.exe",
-      "defines": [
-        "MONSTER_KCP_DEVELOPMENT_BUILD"
-      ],
-      "development": true,
-      "testAssemblies": false,
-      "scenes": [
-        "Assets/_Project/Scenes/Boot.unity",
-        "Assets/_Project/Scenes/MainMenu.unity",
-        "Assets/_Project/Scenes/Gameplay.unity"
-      ],
-      "validations": [
-        "validate.all"
-      ]
-    },
-    {
-      "id": "boot-process",
-      "name": "boot-process",
-      "output": "Builds/BootGameplayValidation/MonsterSupergroupBootGameplayValidation.exe",
+      "id": "product",
+      "name": "产品构建",
+      "output": "Builds/product/MonsterSupergroup.exe",
       "defines": [],
-      "development": true,
+      "development": false,
       "testAssemblies": false,
       "scenes": [
         "Assets/_Project/Scenes/Boot.unity",
@@ -1938,539 +1890,17 @@
       ],
       "validations": [
         "validate.all"
-      ]
-    },
-    {
-      "id": "sandbox",
-      "name": "sandbox",
-      "output": "Builds/EnemySimulationValidation/MonsterSupergroupEnemySimulationValidation.exe",
-      "defines": [],
-      "development": true,
-      "testAssemblies": false,
-      "scenes": [
-        "Assets/_Project/Scenes/Development/NetworkCombatSandbox.unity"
       ],
-      "validations": [
-        "validate.gas"
-      ]
+      "kind": "Test",
+      "product": true,
+      "network": "Steam",
+      "distribution": "Steam"
     },
     {
-      "id": "nordic",
-      "name": "nordic",
-      "output": "Builds/NordicStaticSample/NordicStaticSample.exe",
-      "defines": [],
-      "development": true,
-      "testAssemblies": false,
-      "scenes": [
-        "Assets/_Project/Scenes/NordicStaticSample.unity"
-      ],
-      "validations": [
-        "sample.nordic-validate"
-      ]
-    },
-    {
-      "id": "enemy-variants",
-      "name": "enemy-variants",
-      "output": "Builds/EnemyVariants/EnemyVariants.exe",
+      "id": "gameplay-validation",
+      "name": "通用 Gameplay 验收",
+      "output": "Builds/gameplay-validation/MonsterSupergroup.exe",
       "defines": [
-        "MONSTER_KCP_DEVELOPMENT_BUILD",
-        "MONSTER_MENU_VALIDATION"
-      ],
-      "development": true,
-      "testAssemblies": true,
-      "scenes": [
-        "Assets/_Project/Scenes/Boot.unity",
-        "Assets/_Project/Scenes/MainMenu.unity",
-        "Assets/_Project/Scenes/Gameplay.unity"
-      ],
-      "validations": [
-        "validate.all"
-      ]
-    },
-    {
-      "id": "imp",
-      "name": "imp",
-      "output": "Builds/Imp/Imp.exe",
-      "defines": [
-        "MONSTER_KCP_DEVELOPMENT_BUILD",
-        "MONSTER_MENU_VALIDATION"
-      ],
-      "development": true,
-      "testAssemblies": true,
-      "scenes": [
-        "Assets/_Project/Scenes/Boot.unity",
-        "Assets/_Project/Scenes/MainMenu.unity",
-        "Assets/_Project/Scenes/Gameplay.unity"
-      ],
-      "validations": [
-        "validate.all"
-      ]
-    },
-    {
-      "id": "lust-sinner",
-      "name": "lust-sinner",
-      "output": "Builds/LustSinner/LustSinner.exe",
-      "defines": [
-        "MONSTER_KCP_DEVELOPMENT_BUILD",
-        "MONSTER_MENU_VALIDATION"
-      ],
-      "development": true,
-      "testAssemblies": true,
-      "scenes": [
-        "Assets/_Project/Scenes/Boot.unity",
-        "Assets/_Project/Scenes/MainMenu.unity",
-        "Assets/_Project/Scenes/Gameplay.unity"
-      ],
-      "validations": [
-        "validate.all"
-      ]
-    },
-    {
-      "id": "enemy-hit-flash",
-      "name": "enemy-hit-flash",
-      "output": "Builds/EnemyHitFlash/EnemyHitFlash.exe",
-      "defines": [
-        "MONSTER_KCP_DEVELOPMENT_BUILD",
-        "MONSTER_MENU_VALIDATION"
-      ],
-      "development": true,
-      "testAssemblies": true,
-      "scenes": [
-        "Assets/_Project/Scenes/Boot.unity",
-        "Assets/_Project/Scenes/MainMenu.unity",
-        "Assets/_Project/Scenes/Gameplay.unity"
-      ],
-      "validations": [
-        "validate.all"
-      ]
-    },
-    {
-      "id": "camera",
-      "name": "camera",
-      "output": "Builds/GameplayCameraValidation/GameplayCameraValidation.exe",
-      "defines": [
-        "MONSTER_KCP_DEVELOPMENT_BUILD",
-        "MONSTER_MENU_VALIDATION"
-      ],
-      "development": true,
-      "testAssemblies": true,
-      "scenes": [
-        "Assets/_Project/Scenes/Boot.unity",
-        "Assets/_Project/Scenes/MainMenu.unity",
-        "Assets/_Project/Scenes/Gameplay.unity"
-      ],
-      "validations": [
-        "validate.all"
-      ]
-    },
-    {
-      "id": "experience",
-      "name": "experience",
-      "output": "Builds/M6Experience/M6Experience.exe",
-      "defines": [
-        "MONSTER_KCP_DEVELOPMENT_BUILD",
-        "MONSTER_MENU_VALIDATION"
-      ],
-      "development": true,
-      "testAssemblies": true,
-      "scenes": [
-        "Assets/_Project/Scenes/Boot.unity",
-        "Assets/_Project/Scenes/MainMenu.unity",
-        "Assets/_Project/Scenes/Gameplay.unity"
-      ],
-      "validations": [
-        "validate.all"
-      ]
-    },
-    {
-      "id": "waves",
-      "name": "waves",
-      "output": "Builds/M5Waves/M5Waves.exe",
-      "defines": [
-        "MONSTER_KCP_DEVELOPMENT_BUILD",
-        "MONSTER_MENU_VALIDATION"
-      ],
-      "development": true,
-      "testAssemblies": true,
-      "scenes": [
-        "Assets/_Project/Scenes/Boot.unity",
-        "Assets/_Project/Scenes/MainMenu.unity",
-        "Assets/_Project/Scenes/Gameplay.unity"
-      ],
-      "validations": [
-        "validate.all"
-      ]
-    },
-    {
-      "id": "health-hud",
-      "name": "health-hud",
-      "output": "Builds/HealthHUDValidation/HealthHUDValidation.exe",
-      "defines": [
-        "MONSTER_KCP_DEVELOPMENT_BUILD",
-        "MONSTER_MENU_VALIDATION"
-      ],
-      "development": true,
-      "testAssemblies": true,
-      "scenes": [
-        "Assets/_Project/Scenes/Boot.unity",
-        "Assets/_Project/Scenes/MainMenu.unity",
-        "Assets/_Project/Scenes/Gameplay.unity"
-      ],
-      "validations": [
-        "validate.all"
-      ]
-    },
-    {
-      "id": "modifier-selection",
-      "name": "modifier-selection",
-      "output": "Builds/ModifierSelectionValidation/ModifierSelectionValidation.exe",
-      "defines": [
-        "MONSTER_KCP_DEVELOPMENT_BUILD",
-        "MONSTER_MENU_VALIDATION"
-      ],
-      "development": true,
-      "testAssemblies": true,
-      "scenes": [
-        "Assets/_Project/Scenes/Boot.unity",
-        "Assets/_Project/Scenes/MainMenu.unity",
-        "Assets/_Project/Scenes/Gameplay.unity"
-      ],
-      "validations": [
-        "validate.all"
-      ]
-    },
-    {
-      "id": "knockback",
-      "name": "knockback",
-      "output": "Builds/M3Knockback/M3Knockback.exe",
-      "defines": [
-        "MONSTER_KCP_DEVELOPMENT_BUILD",
-        "MONSTER_MENU_VALIDATION"
-      ],
-      "development": true,
-      "testAssemblies": true,
-      "scenes": [
-        "Assets/_Project/Scenes/Boot.unity",
-        "Assets/_Project/Scenes/MainMenu.unity",
-        "Assets/_Project/Scenes/Gameplay.unity"
-      ],
-      "validations": [
-        "validate.all"
-      ]
-    },
-    {
-      "id": "timeline-waves",
-      "name": "timeline-waves",
-      "output": "Builds/TimelineWaves/TimelineWaves.exe",
-      "defines": [
-        "MONSTER_KCP_DEVELOPMENT_BUILD",
-        "MONSTER_MENU_VALIDATION"
-      ],
-      "development": true,
-      "testAssemblies": true,
-      "scenes": [
-        "Assets/_Project/Scenes/Boot.unity",
-        "Assets/_Project/Scenes/MainMenu.unity",
-        "Assets/_Project/Scenes/Gameplay.unity"
-      ],
-      "validations": [
-        "validate.all"
-      ]
-    },
-    {
-      "id": "wisp",
-      "name": "wisp",
-      "output": "Builds/WispValidation/MonsterSupergroup.exe",
-      "defines": [
-        "MONSTER_KCP_DEVELOPMENT_BUILD",
-        "MONSTER_MENU_VALIDATION"
-      ],
-      "development": true,
-      "testAssemblies": true,
-      "scenes": [
-        "Assets/_Project/Scenes/Boot.unity",
-        "Assets/_Project/Scenes/MainMenu.unity",
-        "Assets/_Project/Scenes/Gameplay.unity"
-      ],
-      "validations": [
-        "validate.all"
-      ]
-    },
-    {
-      "id": "options",
-      "name": "options",
-      "output": "Builds/OptionsValidation/MonsterSupergroup.exe",
-      "defines": [
-        "MONSTER_KCP_DEVELOPMENT_BUILD",
-        "MONSTER_MENU_VALIDATION",
-        "MONSTER_OPTIONS_VALIDATION"
-      ],
-      "development": true,
-      "testAssemblies": true,
-      "scenes": [
-        "Assets/_Project/Scenes/Boot.unity",
-        "Assets/_Project/Scenes/MainMenu.unity",
-        "Assets/_Project/Scenes/Gameplay.unity"
-      ],
-      "validations": [
-        "validate.all"
-      ]
-    },
-    {
-      "id": "enemy-handoff-development",
-      "name": "enemy-handoff-development",
-      "output": "Builds/EnemyHandoff/EnemyHandoff.exe",
-      "defines": [
-        "MONSTER_KCP_DEVELOPMENT_BUILD",
-        "MONSTER_MENU_VALIDATION",
-        "MONSTER_ENEMY_HANDOFF_VALIDATION"
-      ],
-      "development": true,
-      "testAssemblies": true,
-      "scenes": [
-        "Assets/_Project/Scenes/Boot.unity",
-        "Assets/_Project/Scenes/MainMenu.unity",
-        "Assets/_Project/Scenes/Gameplay.unity"
-      ],
-      "validations": [
-        "validate.all"
-      ]
-    },
-    {
-      "id": "player-debug-development",
-      "name": "player-debug-development",
-      "output": "Builds/PlayerDebugDevelopment/PlayerDebug.exe",
-      "defines": [
-        "MONSTER_KCP_DEVELOPMENT_BUILD",
-        "MONSTER_MENU_VALIDATION"
-      ],
-      "development": true,
-      "testAssemblies": true,
-      "scenes": [
-        "Assets/_Project/Scenes/Boot.unity",
-        "Assets/_Project/Scenes/MainMenu.unity",
-        "Assets/_Project/Scenes/Gameplay.unity"
-      ],
-      "validations": [
-        "validate.all"
-      ]
-    },
-    {
-      "id": "rewired-development",
-      "name": "rewired-development",
-      "output": "Builds/RewiredAbilities/Development/RewiredAbilities.exe",
-      "defines": [
-        "MONSTER_KCP_DEVELOPMENT_BUILD",
-        "MONSTER_MENU_VALIDATION"
-      ],
-      "development": true,
-      "testAssemblies": true,
-      "scenes": [
-        "Assets/_Project/Scenes/Boot.unity",
-        "Assets/_Project/Scenes/MainMenu.unity",
-        "Assets/_Project/Scenes/Gameplay.unity"
-      ],
-      "validations": [
-        "validate.all"
-      ]
-    },
-    {
-      "id": "enemy-handoff-release",
-      "name": "enemy-handoff-release",
-      "output": "Builds/EnemyHandoffRelease/EnemyHandoff.exe",
-      "defines": [
-        "MONSTER_KCP_DEVELOPMENT_BUILD",
-        "MONSTER_MENU_VALIDATION",
-        "MONSTER_ENEMY_HANDOFF_VALIDATION"
-      ],
-      "development": false,
-      "testAssemblies": true,
-      "scenes": [
-        "Assets/_Project/Scenes/Boot.unity",
-        "Assets/_Project/Scenes/MainMenu.unity",
-        "Assets/_Project/Scenes/Gameplay.unity"
-      ],
-      "validations": [
-        "validate.all"
-      ]
-    },
-    {
-      "id": "player-debug-release",
-      "name": "player-debug-release",
-      "output": "Builds/PlayerDebugRelease/PlayerDebug.exe",
-      "defines": [
-        "MONSTER_KCP_DEVELOPMENT_BUILD",
-        "MONSTER_MENU_VALIDATION"
-      ],
-      "development": false,
-      "testAssemblies": true,
-      "scenes": [
-        "Assets/_Project/Scenes/Boot.unity",
-        "Assets/_Project/Scenes/MainMenu.unity",
-        "Assets/_Project/Scenes/Gameplay.unity"
-      ],
-      "validations": [
-        "validate.all"
-      ]
-    },
-    {
-      "id": "rewired-release",
-      "name": "rewired-release",
-      "output": "Builds/RewiredAbilities/Release/RewiredAbilities.exe",
-      "defines": [
-        "MONSTER_KCP_DEVELOPMENT_BUILD",
-        "MONSTER_MENU_VALIDATION"
-      ],
-      "development": false,
-      "testAssemblies": true,
-      "scenes": [
-        "Assets/_Project/Scenes/Boot.unity",
-        "Assets/_Project/Scenes/MainMenu.unity",
-        "Assets/_Project/Scenes/Gameplay.unity"
-      ],
-      "validations": [
-        "validate.all"
-      ]
-    },
-    {
-      "id": "beam",
-      "name": "beam",
-      "output": "Builds/Phase02/BeamValidation.exe",
-      "defines": [
-        "MONSTER_KCP_DEVELOPMENT_BUILD",
-        "MONSTER_MENU_VALIDATION"
-      ],
-      "development": true,
-      "testAssemblies": true,
-      "scenes": [
-        "Assets/_Project/Scenes/Boot.unity",
-        "Assets/_Project/Scenes/MainMenu.unity",
-        "Assets/_Project/Scenes/Gameplay.unity"
-      ],
-      "validations": [
-        "validate.all"
-      ]
-    },
-    {
-      "id": "circling",
-      "name": "circling",
-      "output": "Builds/Phase02/CirclingValidation.exe",
-      "defines": [
-        "MONSTER_KCP_DEVELOPMENT_BUILD",
-        "MONSTER_MENU_VALIDATION"
-      ],
-      "development": true,
-      "testAssemblies": true,
-      "scenes": [
-        "Assets/_Project/Scenes/Boot.unity",
-        "Assets/_Project/Scenes/MainMenu.unity",
-        "Assets/_Project/Scenes/Gameplay.unity"
-      ],
-      "validations": [
-        "validate.all"
-      ]
-    },
-    {
-      "id": "dash",
-      "name": "dash",
-      "output": "Builds/Phase02/DashValidation.exe",
-      "defines": [
-        "MONSTER_KCP_DEVELOPMENT_BUILD",
-        "MONSTER_MENU_VALIDATION"
-      ],
-      "development": true,
-      "testAssemblies": true,
-      "scenes": [
-        "Assets/_Project/Scenes/Boot.unity",
-        "Assets/_Project/Scenes/MainMenu.unity",
-        "Assets/_Project/Scenes/Gameplay.unity"
-      ],
-      "validations": [
-        "validate.all"
-      ]
-    },
-    {
-      "id": "melee",
-      "name": "melee",
-      "output": "Builds/Phase02/MeleeValidation.exe",
-      "defines": [
-        "MONSTER_KCP_DEVELOPMENT_BUILD",
-        "MONSTER_MENU_VALIDATION"
-      ],
-      "development": true,
-      "testAssemblies": true,
-      "scenes": [
-        "Assets/_Project/Scenes/Boot.unity",
-        "Assets/_Project/Scenes/MainMenu.unity",
-        "Assets/_Project/Scenes/Gameplay.unity"
-      ],
-      "validations": [
-        "validate.all"
-      ]
-    },
-    {
-      "id": "summon",
-      "name": "summon",
-      "output": "Builds/Phase02/SummonValidation.exe",
-      "defines": [
-        "MONSTER_KCP_DEVELOPMENT_BUILD",
-        "MONSTER_MENU_VALIDATION"
-      ],
-      "development": true,
-      "testAssemblies": true,
-      "scenes": [
-        "Assets/_Project/Scenes/Boot.unity",
-        "Assets/_Project/Scenes/MainMenu.unity",
-        "Assets/_Project/Scenes/Gameplay.unity"
-      ],
-      "validations": [
-        "validate.all"
-      ]
-    },
-    {
-      "id": "ultimate",
-      "name": "ultimate",
-      "output": "Builds/Phase02/UltimateValidation.exe",
-      "defines": [
-        "MONSTER_KCP_DEVELOPMENT_BUILD",
-        "MONSTER_MENU_VALIDATION"
-      ],
-      "development": true,
-      "testAssemblies": true,
-      "scenes": [
-        "Assets/_Project/Scenes/Boot.unity",
-        "Assets/_Project/Scenes/MainMenu.unity",
-        "Assets/_Project/Scenes/Gameplay.unity"
-      ],
-      "validations": [
-        "validate.all"
-      ]
-    },
-    {
-      "id": "runtime-boundary",
-      "name": "runtime-boundary",
-      "output": "Builds/Phase01/RuntimeBoundaryValidation.exe",
-      "defines": [
-        "MONSTER_KCP_DEVELOPMENT_BUILD",
-        "MONSTER_MENU_VALIDATION"
-      ],
-      "development": true,
-      "testAssemblies": true,
-      "scenes": [
-        "Assets/_Project/Scenes/Boot.unity",
-        "Assets/_Project/Scenes/MainMenu.unity",
-        "Assets/_Project/Scenes/Gameplay.unity"
-      ],
-      "validations": [
-        "validate.all"
-      ]
-    },
-    {
-      "id": "nordic-gameplay",
-      "name": "Nordic 正式 Gameplay",
-      "output": "Builds/NordicGameplay/MonsterSupergroup.exe",
-      "defines": [
-        "MONSTER_KCP_DEVELOPMENT_BUILD",
         "MONSTER_MENU_VALIDATION"
       ],
       "development": true,
@@ -2483,57 +1913,389 @@
       "validations": [
         "validate.all",
         "validate.nordic-gameplay"
-      ]
+      ],
+      "kind": "Dev",
+      "product": false,
+      "network": "Kcp",
+      "distribution": "Direct"
     },
     {
-      "id": "player-development",
-      "name": "正式开发包",
-      "output": "Builds/PlayerDevelopment/MonsterSupergroup.exe",
+      "id": "wisp-validation",
+      "name": "鬼火表现验收",
+      "output": "Builds/wisp-validation/MonsterSupergroup.exe",
+      "defines": [
+        "MONSTER_MENU_VALIDATION"
+      ],
+      "development": true,
+      "testAssemblies": true,
+      "scenes": [
+        "Assets/_Project/Scenes/Boot.unity",
+        "Assets/_Project/Scenes/MainMenu.unity",
+        "Assets/_Project/Scenes/Gameplay.unity"
+      ],
+      "validations": [
+        "validate.all"
+      ],
+      "kind": "Dev",
+      "product": false,
+      "network": "Kcp",
+      "distribution": "Direct"
+    },
+    {
+      "id": "options-validation",
+      "name": "设置验收",
+      "output": "Builds/options-validation/MonsterSupergroup.exe",
+      "defines": [
+        "MONSTER_MENU_VALIDATION",
+        "MONSTER_OPTIONS_VALIDATION"
+      ],
+      "development": true,
+      "testAssemblies": true,
+      "scenes": [
+        "Assets/_Project/Scenes/Boot.unity",
+        "Assets/_Project/Scenes/MainMenu.unity",
+        "Assets/_Project/Scenes/Gameplay.unity"
+      ],
+      "validations": [
+        "validate.all"
+      ],
+      "kind": "Dev",
+      "product": false,
+      "network": "Kcp",
+      "distribution": "Direct"
+    },
+    {
+      "id": "handoff-validation",
+      "name": "模拟权交接验收",
+      "output": "Builds/handoff-validation/MonsterSupergroup.exe",
+      "defines": [
+        "MONSTER_MENU_VALIDATION",
+        "MONSTER_ENEMY_HANDOFF_VALIDATION"
+      ],
+      "development": true,
+      "testAssemblies": true,
+      "scenes": [
+        "Assets/_Project/Scenes/Boot.unity",
+        "Assets/_Project/Scenes/MainMenu.unity",
+        "Assets/_Project/Scenes/Gameplay.unity"
+      ],
+      "validations": [
+        "validate.all"
+      ],
+      "kind": "Dev",
+      "product": false,
+      "network": "Kcp",
+      "distribution": "Direct"
+    },
+    {
+      "id": "sandbox",
+      "name": "网络战斗 Sandbox",
+      "output": "Builds/sandbox/MonsterSupergroup.exe",
       "defines": [],
       "development": true,
       "testAssemblies": false,
       "scenes": [
-        "Assets/_Project/Scenes/Boot.unity",
-        "Assets/_Project/Scenes/MainMenu.unity",
-        "Assets/_Project/Scenes/Gameplay.unity"
+        "Assets/_Project/Scenes/Development/NetworkCombatSandbox.unity"
       ],
       "validations": [
-        "validate.all"
-      ]
+        "validate.gas"
+      ],
+      "kind": "Dev",
+      "product": false,
+      "network": "Kcp",
+      "distribution": "Direct"
+    },
+    {
+      "id": "nordic",
+      "name": "Nordic 静态样例",
+      "output": "Builds/nordic/MonsterSupergroup.exe",
+      "defines": [],
+      "development": true,
+      "testAssemblies": false,
+      "scenes": [
+        "Assets/_Project/Scenes/NordicStaticSample.unity"
+      ],
+      "validations": [
+        "sample.nordic-validate"
+      ],
+      "kind": "Dev",
+      "product": false,
+      "network": "Kcp",
+      "distribution": "Direct"
+    }
+  ],
+  "buildAliases": [
+    {
+      "id": "menu-development",
+      "recipe": "gameplay-validation",
+      "kind": "Dev",
+      "network": "Steam",
+      "distribution": "Direct",
+      "diagnostics": "Normal"
+    },
+    {
+      "id": "menu-release",
+      "recipe": "gameplay-validation",
+      "kind": "Test",
+      "network": "Steam",
+      "distribution": "Direct",
+      "diagnostics": "Normal"
+    },
+    {
+      "id": "kcp-development",
+      "recipe": "product",
+      "kind": "Dev",
+      "network": "Kcp",
+      "distribution": "Direct",
+      "diagnostics": "Normal"
+    },
+    {
+      "id": "boot-process",
+      "recipe": "product",
+      "kind": "Dev",
+      "network": "Steam",
+      "distribution": "Direct",
+      "diagnostics": "Normal"
+    },
+    {
+      "id": "enemy-variants",
+      "recipe": "gameplay-validation",
+      "kind": "Dev",
+      "network": "Kcp",
+      "distribution": "Direct",
+      "diagnostics": "Normal"
+    },
+    {
+      "id": "imp",
+      "recipe": "gameplay-validation",
+      "kind": "Dev",
+      "network": "Kcp",
+      "distribution": "Direct",
+      "diagnostics": "Normal"
+    },
+    {
+      "id": "lust-sinner",
+      "recipe": "gameplay-validation",
+      "kind": "Dev",
+      "network": "Kcp",
+      "distribution": "Direct",
+      "diagnostics": "Normal"
+    },
+    {
+      "id": "enemy-hit-flash",
+      "recipe": "gameplay-validation",
+      "kind": "Dev",
+      "network": "Kcp",
+      "distribution": "Direct",
+      "diagnostics": "Normal"
+    },
+    {
+      "id": "camera",
+      "recipe": "gameplay-validation",
+      "kind": "Dev",
+      "network": "Kcp",
+      "distribution": "Direct",
+      "diagnostics": "Normal"
+    },
+    {
+      "id": "experience",
+      "recipe": "gameplay-validation",
+      "kind": "Dev",
+      "network": "Kcp",
+      "distribution": "Direct",
+      "diagnostics": "Normal"
+    },
+    {
+      "id": "waves",
+      "recipe": "gameplay-validation",
+      "kind": "Dev",
+      "network": "Kcp",
+      "distribution": "Direct",
+      "diagnostics": "Normal"
+    },
+    {
+      "id": "health-hud",
+      "recipe": "gameplay-validation",
+      "kind": "Dev",
+      "network": "Kcp",
+      "distribution": "Direct",
+      "diagnostics": "Normal"
+    },
+    {
+      "id": "modifier-selection",
+      "recipe": "gameplay-validation",
+      "kind": "Dev",
+      "network": "Kcp",
+      "distribution": "Direct",
+      "diagnostics": "Normal"
+    },
+    {
+      "id": "knockback",
+      "recipe": "gameplay-validation",
+      "kind": "Dev",
+      "network": "Kcp",
+      "distribution": "Direct",
+      "diagnostics": "Normal"
+    },
+    {
+      "id": "timeline-waves",
+      "recipe": "gameplay-validation",
+      "kind": "Dev",
+      "network": "Kcp",
+      "distribution": "Direct",
+      "diagnostics": "Normal"
+    },
+    {
+      "id": "wisp",
+      "recipe": "wisp-validation",
+      "kind": "Dev",
+      "network": "Kcp",
+      "distribution": "Direct",
+      "diagnostics": "Normal"
+    },
+    {
+      "id": "options",
+      "recipe": "options-validation",
+      "kind": "Dev",
+      "network": "Kcp",
+      "distribution": "Direct",
+      "diagnostics": "Normal"
+    },
+    {
+      "id": "enemy-handoff-development",
+      "recipe": "handoff-validation",
+      "kind": "Dev",
+      "network": "Kcp",
+      "distribution": "Direct",
+      "diagnostics": "Normal"
+    },
+    {
+      "id": "player-debug-development",
+      "recipe": "gameplay-validation",
+      "kind": "Dev",
+      "network": "Kcp",
+      "distribution": "Direct",
+      "diagnostics": "Normal"
+    },
+    {
+      "id": "rewired-development",
+      "recipe": "gameplay-validation",
+      "kind": "Dev",
+      "network": "Kcp",
+      "distribution": "Direct",
+      "diagnostics": "Normal"
+    },
+    {
+      "id": "enemy-handoff-release",
+      "recipe": "handoff-validation",
+      "kind": "Test",
+      "network": "Kcp",
+      "distribution": "Direct",
+      "diagnostics": "Normal"
+    },
+    {
+      "id": "player-debug-release",
+      "recipe": "gameplay-validation",
+      "kind": "Test",
+      "network": "Kcp",
+      "distribution": "Direct",
+      "diagnostics": "Normal"
+    },
+    {
+      "id": "rewired-release",
+      "recipe": "gameplay-validation",
+      "kind": "Test",
+      "network": "Kcp",
+      "distribution": "Direct",
+      "diagnostics": "Normal"
+    },
+    {
+      "id": "beam",
+      "recipe": "gameplay-validation",
+      "kind": "Dev",
+      "network": "Kcp",
+      "distribution": "Direct",
+      "diagnostics": "Normal"
+    },
+    {
+      "id": "circling",
+      "recipe": "gameplay-validation",
+      "kind": "Dev",
+      "network": "Kcp",
+      "distribution": "Direct",
+      "diagnostics": "Normal"
+    },
+    {
+      "id": "dash",
+      "recipe": "gameplay-validation",
+      "kind": "Dev",
+      "network": "Kcp",
+      "distribution": "Direct",
+      "diagnostics": "Normal"
+    },
+    {
+      "id": "melee",
+      "recipe": "gameplay-validation",
+      "kind": "Dev",
+      "network": "Kcp",
+      "distribution": "Direct",
+      "diagnostics": "Normal"
+    },
+    {
+      "id": "summon",
+      "recipe": "gameplay-validation",
+      "kind": "Dev",
+      "network": "Kcp",
+      "distribution": "Direct",
+      "diagnostics": "Normal"
+    },
+    {
+      "id": "ultimate",
+      "recipe": "gameplay-validation",
+      "kind": "Dev",
+      "network": "Kcp",
+      "distribution": "Direct",
+      "diagnostics": "Normal"
+    },
+    {
+      "id": "runtime-boundary",
+      "recipe": "gameplay-validation",
+      "kind": "Dev",
+      "network": "Kcp",
+      "distribution": "Direct",
+      "diagnostics": "Normal"
+    },
+    {
+      "id": "nordic-gameplay",
+      "recipe": "gameplay-validation",
+      "kind": "Dev",
+      "network": "Kcp",
+      "distribution": "Direct",
+      "diagnostics": "Normal"
+    },
+    {
+      "id": "player-development",
+      "recipe": "product",
+      "kind": "Dev",
+      "network": "Steam",
+      "distribution": "Direct",
+      "diagnostics": "Normal"
     },
     {
       "id": "player-release",
-      "name": "正式发布包",
-      "output": "Builds/PlayerRelease/MonsterSupergroup.exe",
-      "defines": [],
-      "development": false,
-      "testAssemblies": false,
-      "scenes": [
-        "Assets/_Project/Scenes/Boot.unity",
-        "Assets/_Project/Scenes/MainMenu.unity",
-        "Assets/_Project/Scenes/Gameplay.unity"
-      ],
-      "validations": [
-        "validate.all"
-      ]
+      "recipe": "product",
+      "kind": "Shipping",
+      "network": "Steam",
+      "distribution": "Steam",
+      "diagnostics": "Normal"
     },
     {
       "id": "steam-evidence",
-      "name": "Steam 战斗证据测试包",
-      "output": "Builds/SteamEvidence/MonsterSupergroup.exe",
-      "defines": [
-        "MONSTER_COMBAT_EVIDENCE"
-      ],
-      "development": false,
-      "testAssemblies": false,
-      "scenes": [
-        "Assets/_Project/Scenes/Boot.unity",
-        "Assets/_Project/Scenes/MainMenu.unity",
-        "Assets/_Project/Scenes/Gameplay.unity"
-      ],
-      "validations": [
-        "validate.all"
-      ]
+      "recipe": "product",
+      "kind": "Test",
+      "network": "Steam",
+      "distribution": "Steam",
+      "diagnostics": "Evidence"
     }
   ]
 }

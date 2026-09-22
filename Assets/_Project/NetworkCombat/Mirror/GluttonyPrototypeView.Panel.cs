@@ -14,6 +14,7 @@ namespace MonsterSupergroup.NetworkCombat
         private Vector2 parameterScroll;
         private void OnGUI()
         {
+            if (!MonsterSupergroup.Builds.BuildFeatures.DevelopmentToolsAllowed) return;
             if (skill==null || !skill.isOwned || !skill.isClient) return;
             var abilities=GetComponent<NetworkPlayerPrototypeAbilities>();
             if (abilities==null) return;

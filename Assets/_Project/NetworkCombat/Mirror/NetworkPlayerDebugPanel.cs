@@ -33,6 +33,7 @@ namespace MonsterSupergroup.NetworkCombat
 
         private void OnEnable()
         {
+            if (!MonsterSupergroup.Builds.BuildFeatures.DevelopmentToolsAllowed) { enabled = false; return; }
             if (LimboReferenceLaunch.SuppressDebugPanels) { enabled = false; return; }
             if (GameplayRuntimeEnvironment.IsDedicatedServer) { enabled = false; return; }
             ClearBinding();

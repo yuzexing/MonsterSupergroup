@@ -60,6 +60,7 @@ namespace MonsterSupergroup.NetworkCombat
         }
         private void Start()
         {
+            Diagnostics.NetworkMessageEvidence.Install();
             // Also supports an explicitly added observer in diagnostics tests.
             enabledForRun = SteamTransportDiagnostics.Enabled = CombatPerformanceCounters.Enabled = true;
             string directory = Argument("--network-diagnostics-output=") ?? Path.Combine(Application.persistentDataPath, "NetworkDiagnostics");
@@ -73,7 +74,7 @@ namespace MonsterSupergroup.NetworkCombat
             lastWidth = Screen.width; lastHeight = Screen.height; lastMode = (int)Screen.fullScreenMode;
             string header = JsonUtility.ToJson(new Header {
                 captureId = captureId, utcStart = utcStart, processId = processId,
-                buildGuid = Application.buildGUID, version = Application.version, unity = Application.unityVersion,
+                buildGuid = Application.buildGUID, version = Application.version, buildInfo = MonsterSupergroup.Builds.RuntimeBuildInfo.Current?.ToJson(), unity = Application.unityVersion,
                 development = Debug.isDebugBuild, protocol = SteamLobbyMetadata.ProtocolValue,
                 width = Screen.width, height = Screen.height, targetFps = Application.targetFrameRate,
                 quality = QualitySettings.names[QualitySettings.GetQualityLevel()],
@@ -232,7 +233,7 @@ namespace MonsterSupergroup.NetworkCombat
         {
             public string kind = "header";
             public int schemaVersion = SchemaVersion;
-            public string captureId, utcStart, buildGuid, version, unity, protocol, graphics, quality, gpu, driver, cpu, commandLine;
+            public string captureId, utcStart, buildInfo, buildGuid, version, unity, protocol, graphics, quality, gpu, driver, cpu, commandLine;
             public string[] rejectionReasons, areas;
             public bool development;
             public int processId, width, height, targetFps, vSync, systemMemoryMb;

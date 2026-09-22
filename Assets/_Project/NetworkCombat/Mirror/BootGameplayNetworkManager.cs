@@ -146,6 +146,7 @@ namespace MonsterSupergroup.NetworkCombat
 
         public override void OnStartClient()
         {
+            BeginConnectionAttempt();
             PrepareEnemyCatalog(false);
             ++clientSceneGeneration;
             base.OnStartClient();
@@ -157,6 +158,7 @@ namespace MonsterSupergroup.NetworkCombat
 
         public override void OnClientConnect()
         {
+            connectionNotice.MarkConnected();
             if (!NetworkServer.active && gameplayUnloadStarted)
                 StartCoroutine(ReadyClientAfterCleanup(NetworkClient.connection, clientSceneGeneration));
             else

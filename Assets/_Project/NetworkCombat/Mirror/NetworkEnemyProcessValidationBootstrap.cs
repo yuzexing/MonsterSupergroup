@@ -111,6 +111,7 @@ namespace MonsterSupergroup.NetworkCombat
 
         private IEnumerator Start()
         {
+            if (!MonsterSupergroup.Builds.BuildFeatures.DevelopmentToolsAllowed) yield break;
             if (!TryParseOptions(
                     Environment.GetCommandLineArgs(),
                     out options,

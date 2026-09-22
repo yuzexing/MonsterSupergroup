@@ -19,9 +19,15 @@ namespace MonsterSupergroup.EditorTools
     [Serializable]
     public sealed class ProjectBuildProfile
     {
-        public string id, name, output;
+        public string id, name, output, kind, network, distribution;
         public string[] scenes, defines, validations;
-        public bool development = true, testAssemblies = true;
+        public bool development = true, testAssemblies = true, product;
+    }
+
+    [Serializable]
+    public sealed class ProjectBuildAlias
+    {
+        public string id, recipe, kind, network, distribution, diagnostics;
     }
 
     [Serializable]
@@ -30,6 +36,7 @@ namespace MonsterSupergroup.EditorTools
         public int version;
         public ProjectToolDescriptor[] tools;
         public ProjectBuildProfile[] builds;
+        public ProjectBuildAlias[] buildAliases = Array.Empty<ProjectBuildAlias>();
     }
 
     public static class ProjectToolCatalog
@@ -44,6 +51,10 @@ namespace MonsterSupergroup.EditorTools
             if (manifest.tools.GroupBy(t => t.id).Any(g => string.IsNullOrWhiteSpace(g.Key) || g.Count() != 1) ||
                 manifest.builds.GroupBy(t => t.id).Any(g => string.IsNullOrWhiteSpace(g.Key) || g.Count() != 1))
                 throw new InvalidDataException("工具或构建配置 ID 重复/为空。");
+            var ids = manifest.builds.Select(b => b.id).Concat(manifest.buildAliases.Select(a => a.id));
+            if (ids.GroupBy(id => id).Any(g => string.IsNullOrWhiteSpace(g.Key) || g.Count() != 1) ||
+                manifest.buildAliases.Any(a => !manifest.builds.Any(b => b.id == a.recipe)))
+                throw new InvalidDataException("构建别名重复或指向不存在的配方。");
             return manifest;
         }
         public static ProjectToolDescriptor Find(string id) => Load().tools.FirstOrDefault(t => t.id == id)

@@ -9,6 +9,7 @@ namespace MonsterSupergroup.NetworkCombat
         [Server]
         public void ServerConfigurePrototypesEnabled(bool enabled)
         {
+            if (!MonsterSupergroup.Builds.BuildFeatures.DevelopmentToolsAllowed) return;
             PrototypesEnabled = enabled;
             foreach (var identity in NetworkServer.spawned.Values)
                 if (identity != null && identity.TryGetComponent<NetworkPlayerPrototypeAbilities>(out var abilities))

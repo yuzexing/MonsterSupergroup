@@ -74,7 +74,7 @@ namespace MonsterSupergroup.NetworkCombat
             }
             catch (Exception error)
             {
-                ShowMenuNotice(error.Message); Debug.LogError("[EnemyDefinitions] " + error.Message);
+                SetConnectionNotice("ui.connection.content_mismatch"); Debug.LogWarning("[EnemyDefinitions] " + error.Message);
                 NetworkClient.Disconnect();
             }
         }

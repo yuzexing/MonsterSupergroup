@@ -5,6 +5,7 @@ using Mirror;
 using Mirror.FizzySteam;
 using Steamworks;
 using UnityEngine;
+using MonsterSupergroup.Builds;
 
 namespace MonsterSupergroup.NetworkCombat
 {
@@ -40,18 +41,25 @@ namespace MonsterSupergroup.NetworkCombat
 
         public override void OnClientAuthenticate()
         {
+            if (!Manager.CheckBuildForConnection()) { ClientReject(); return; }
             clientTokens.TryGetValue(ClientEndpoint, out string token);
             var steam = Manager.GetComponent<SteamLobbyService>();
             string name = steam != null && steam.IsSteamInitialized ? SteamFriends.GetPersonaName() : Environment.UserName;
             NetworkClient.Send(new RunIdentityRequest { ResumeToken = token, DisplayName = name,
-                Version = SteamLobbyMetadata.ProtocolValue + ":" + Application.version });
+                Version = SteamLobbyMetadata.ProtocolValue + ":" + RuntimeBuildInfo.Version });
         }
 
         private void ReceiveIdentity(NetworkConnectionToClient connection, RunIdentityRequest request)
         {
             if (connection.isAuthenticated) return;
-            if (Manager.UsePreparationRoom && request.Version != SteamLobbyMetadata.ProtocolValue + ":" + Application.version)
-            { RejectWithReason(connection, "游戏版本不兼容，请使用相同版本。"); return; }
+            if (!RuntimeBuildInfo.CanConnect)
+            { RejectWithReason(connection, BuildCompatibility.Encode(BuildRejection.InvalidPackage, null, null, Manager.transport is FizzySteamworks)); return; }
+            var versionResult = BuildCompatibility.CheckIdentity(request.Version, RuntimeBuildInfo.Version, SteamLobbyMetadata.ProtocolValue, out string clientVersion);
+            if (Manager.UsePreparationRoom && versionResult != BuildRejection.None)
+            {
+                Debug.LogWarning($"[RunSession] admission={versionResult} client={clientVersion} host={RuntimeBuildInfo.Version} hostBuild={RuntimeBuildInfo.Current?.BuildId}");
+                RejectWithReason(connection, BuildCompatibility.Encode(versionResult, clientVersion, RuntimeBuildInfo.Version, Manager.transport is FizzySteamworks)); return;
+            }
             if (Manager.UsePreparationRoom && (Manager.ServerRoom?.Phase == PreparationPhase.Loading || Manager.ServerRoom?.Phase == PreparationPhase.Transitioning))
             { RejectWithReason(connection, "房间正在加载，请稍后重连。"); return; }
             if (Manager.UsePreparationRoom && Manager.ServerRoom?.Phase == PreparationPhase.Preparing &&
@@ -102,7 +110,7 @@ namespace MonsterSupergroup.NetworkCombat
             var lobby = Manager.GetComponent<SteamLobbyService>();
             if (lobby != null && lobby.CurrentLobbyId != 0)
                 Debug.Log($"[SteamInvite] stage=authentication lobby={lobby.CurrentLobbyId} host={lobby.HostSteamId64} accepted={result.Accepted} reason={result.Error}");
-            if (!result.Accepted) { Manager.ShowMenuNotice(result.Error); ClientReject(); return; }
+            if (!result.Accepted) { Manager.SetConnectionNotice(result.Error); ClientReject(); return; }
             if (!string.IsNullOrEmpty(result.ResumeToken)) clientTokens[ClientEndpoint] = result.ResumeToken;
             ClientAccept();
         }

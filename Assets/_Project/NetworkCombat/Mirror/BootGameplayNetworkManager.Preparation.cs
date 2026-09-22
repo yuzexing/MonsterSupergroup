@@ -50,7 +50,12 @@ namespace MonsterSupergroup.NetworkCombat
 
         public IEnumerator EnsureMainMenu()
         {
-            if (menuLoadStarted) yield break;
+            if (menuLoadStarted)
+            {
+                // Concurrent callers must observe the completed load, not a false ready state.
+                while (menuLoadStarted) yield return null;
+                yield break;
+            }
             menuLoadStarted = true;
             var scene = SceneManager.GetSceneByPath(MainMenuScene);
             if (!scene.IsValid() || !scene.isLoaded)
@@ -67,6 +72,8 @@ namespace MonsterSupergroup.NetworkCombat
 
         public void ShowMenuNotice(string message)
         {
+            if (MonsterSupergroup.Builds.BuildCompatibility.TryDecode(message, out _, out _, out _, out _)) { SetConnectionNotice(message); return; }
+            if (connectionNotice.Priority > 0) return;
             MenuNotice = message ?? string.Empty;
             PreparationChanged?.Invoke();
         }
@@ -74,7 +81,8 @@ namespace MonsterSupergroup.NetworkCombat
         public void CreatePreparationRoom()
         {
             if (NetworkClient.active || NetworkServer.active || IsGameplayTransitioning || IsLeavingRoom || IsLocalRoomConnecting) return;
-            ShowMenuNotice(string.Empty);
+            BeginConnectionAttempt();
+            if (!CheckBuildForConnection()) return;
             var steam = GetComponent<SteamLobbyService>();
             if (steam != null && steam.IsSteamInitialized)
             {
@@ -88,6 +96,7 @@ namespace MonsterSupergroup.NetworkCombat
         public bool TryStartOfflineRoom(out string error)
         {
             error = null;
+            if (!RuntimeBuildAvailable(out error)) return false;
             if (IsGameplayTransitioning || IsLeavingRoom) { error = "正在清理上一次游戏，请稍候。"; return false; }
             var backend = GetComponent<NetworkBackendBootstrap>();
             if (backend == null || !backend.TryPrepareLocalHost(out error)) return false;
@@ -126,10 +135,12 @@ namespace MonsterSupergroup.NetworkCombat
 
         private void RegisterPreparationClient()
         {
+            uint noticeAttempt = ConnectionAttempt;
             readyAvatarSent = 0; clientCleanupRound = 0;
             NetworkClient.RegisterHandler<RunCleanupRequest>(ReceiveCleanupRequest);
             NetworkClient.RegisterHandler<PreparationRoomSnapshot>(snapshot =>
             {
+                if (noticeAttempt != ConnectionAttempt) return;
                 if (!UsePreparationRoom) UsePreparationRoom = true;
                 if (snapshot.Round < RoomSnapshot.Round ||
                     (snapshot.Round == RoomSnapshot.Round && RoomSnapshot.Revision > snapshot.Revision)) return;
@@ -140,7 +151,9 @@ namespace MonsterSupergroup.NetworkCombat
             });
             NetworkClient.RegisterHandler<PreparationNotice>(notice =>
             {
-                ShowMenuNotice(notice.Reason);
+                if (noticeAttempt != ConnectionAttempt) return;
+                if (notice.Closing) SetConnectionNotice(notice.Reason == "房主已结束会话。" ? "ui.connection.host_closed" : notice.Reason, 80, noticeAttempt);
+                else ShowMenuNotice(notice.Reason);
                 if (notice.Closing && !NetworkServer.active) StartCoroutine(LeaveRoomRoutine(false));
             });
         }
@@ -320,6 +333,12 @@ namespace MonsterSupergroup.NetworkCombat
         }
         public void LeavePreparationRoom()
         {
+            GetComponent<SteamLobbyService>()?.CancelInvitationJoin();
+            BeginLeavingPreparationRoom();
+        }
+        internal void BeginLeavingPreparationRoom()
+        {
+            connectionNotice.LeaveLocally();
             ShowMenuNotice(string.Empty);
             StartCoroutine(LeaveRoomRoutine(true));
         }
@@ -331,7 +350,7 @@ namespace MonsterSupergroup.NetworkCombat
             IsLeavingRoom = true; roomStopping = true;
             if (announce && NetworkServer.active)
             {
-                string reason = string.IsNullOrEmpty(MenuNotice) ? "房主已结束会话。" : MenuNotice;
+                string reason = string.IsNullOrEmpty(MenuNotice) ? "ui.connection.host_closed" : MenuNotice;
                 foreach (var connection in NetworkServer.connections.Values)
                     if (connection.isAuthenticated && !(connection is LocalConnectionToClient))
                         connection.Send(new PreparationNotice { Reason = reason, Closing = true });
@@ -373,6 +392,8 @@ namespace MonsterSupergroup.NetworkCombat
         }
         public override void OnClientDisconnect()
         {
+            if (!IsLeavingRoom && !connectionNotice.Intentional)
+                SetConnectionNotice(connectionNotice.Connected ? "ui.connection.host_lost" : "ui.connection.connect_failed", 50);
             if (IsLocalRoomConnecting)
                 FailLocalRoom(string.IsNullOrEmpty(MenuNotice) ? "本地连接已断开，请确认主机与端口。" : MenuNotice);
             if (UsePreparationRoom && !IsLeavingRoom && string.IsNullOrEmpty(MenuNotice))
@@ -381,16 +402,23 @@ namespace MonsterSupergroup.NetworkCombat
         }
         public override void OnClientError(TransportError error, string reason)
         {
+            Debug.LogWarning($"[ConnectionNotice] transport={error} attempt={ConnectionAttempt} detail={reason}");
+            if (IsLeavingRoom || connectionNotice.Intentional) return;
             if (IsLocalRoomConnecting)
             {
-                if (string.IsNullOrEmpty(MenuNotice)) ShowMenuNotice("本地连接失败，请确认主机已创建且端口一致。");
+                SetConnectionNotice("本地连接失败，请确认主机已创建且端口一致。", 10);
             }
-            else ShowMenuNotice("ui.connection.transport_error");
+            else SetConnectionNotice("ui.connection.transport_error", 10);
             base.OnClientError(error, reason);
         }
-        public void QuitFromMenu() => StartCoroutine(QuitAfterCleanup());
+        public void QuitFromMenu()
+        {
+            GetComponent<SteamLobbyService>()?.CancelInvitationJoin();
+            StartCoroutine(QuitAfterCleanup());
+        }
         private IEnumerator QuitAfterCleanup()
         {
+            connectionNotice.LeaveLocally();
             yield return LeaveRoomRoutine(true);
             while (IsLeavingRoom) yield return null;
             Application.Quit();

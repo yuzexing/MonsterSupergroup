@@ -75,8 +75,8 @@ namespace MonsterSupergroup.NetworkCombat.Tests
             Assert.That(SteamLobbyMetadata.IsActiveSession(SteamLobbyMetadata.LoadingState), Is.True);
             Assert.That(SteamLobbyMetadata.IsActiveSession(SteamLobbyMetadata.InGameState), Is.True);
             Assert.That(SteamLobbyMetadata.IsActiveSession(SteamLobbyMetadata.ClosedState), Is.False);
-            Assert.That(SteamLobbyService.ReadStartupInvitation(new[] { "game.exe", "+connect_lobby", "1234" }), Is.EqualTo(1234ul));
-            Assert.That(SteamLobbyService.ReadStartupInvitation(new[] { "--connect-lobby=5678" }), Is.EqualTo(5678ul));
+            Assert.That(SteamLobbyService.ReadStartupInvitation(new[] { "game.exe", "+connect_lobby", "109775242349881186" }), Is.EqualTo(109775242349881186ul));
+            Assert.That(SteamLobbyService.ReadStartupInvitation(new[] { "--connect-lobby=109775242349881187" }), Is.EqualTo(109775242349881187ul));
         }
     }
 }

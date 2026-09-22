@@ -22,7 +22,7 @@ namespace MonsterSupergroup.NetworkCombat
         {
             var result = Invitations.Send(expectedLobbyId, friendSteamId);
             Debug.Log($"[SteamInvite] stage=send lobby={expectedLobbyId} currentLobby={CurrentLobbyId} friend={friendSteamId} " +
-                $"phase={networkManager?.RoomSnapshot.Phase} result={result.Code} reason={result.Message}", this);
+                $"role={(isHostSession ? "host" : "member")} method=InviteUserToGame phase={networkManager?.RoomSnapshot.Phase} result={result.Code} reason={result.Message}", this);
             // A failed invite must not change the session state or trigger the creation fallback.
             ShowInvitationNotice(result.Message);
             Invitations.Refresh();
@@ -30,6 +30,7 @@ namespace MonsterSupergroup.NetworkCombat
         }
         private void ObserveInvitationLifecycle()
         {
+            ObserveLobbyPresence();
             invitations?.SynchronizeContext();
             if (CurrentLobbyId == 0) { loggedPreparationRun = null; return; }
             if (networkManager == null) return;

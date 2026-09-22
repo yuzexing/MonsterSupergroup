@@ -154,7 +154,7 @@ namespace MonsterSupergroup.NetworkCombat
             string message = manager.MenuNotice;
             if (string.IsNullOrEmpty(message) && steam != null && steam.IsSteamBackendSelected && steam.State == SteamLobbyState.Error && steam.IsSteamInitialized)
                 message = "Steam 连接失败，请返回后重试。";
-            notice = Label(content, message, new Rect(48, 678, 1184, 30), 16, Accent);
+            notice = Label(content, message, new Rect(48, 640, 1184, 42), 16, Accent);
             if (selectingFriends) WireFriendNavigation();
             else WireNavigation(manager.IsRunEndScreen ? -1 : selectedIndex);
             if (localHomePanel != null && localHomePanel.gameObject.activeSelf) WireLocalHomeNavigation();

@@ -124,3 +124,9 @@ InitTestScene*.unity*
 # If the source bank files are kept outside of the StreamingAssets folder then these can be ignored.
 # Log files can be ignored.
 fmod_editor.log
+# Python tool bytecode is not source.
+/Tools/**/__pycache__/
+
+# Temporary build-only evidence manifest (created and cleaned by CombatEvidenceBuild).
+/Assets/_Project/NetworkCombat/Resources/CombatEvidenceBuild.json
+/Assets/_Project/NetworkCombat/Resources/CombatEvidenceBuild.json.meta

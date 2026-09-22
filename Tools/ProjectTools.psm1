@@ -1,5 +1,60 @@
-﻿$ErrorActionPreference = 'Stop'
+$ErrorActionPreference = 'Stop'
 $script:OwnedProcesses = [System.Collections.Generic.List[object]]::new()
+
+function Resolve-ProjectBuildExecutable {
+    [CmdletBinding()]
+    param([Parameter(Mandatory)][string]$ProjectRoot,
+        [Parameter(Mandatory)][ValidatePattern('^[a-z0-9-]+$')][string]$Recipe,
+        [string]$Executable, [string]$BuildDirectory,
+        [switch]$RequireDevelopmentTools,
+        [ValidateSet('Steam','Kcp')][string]$Network,
+        [ValidateSet('Normal','Evidence')][string]$Diagnostics)
+
+    if ($Executable -and $BuildDirectory) { throw 'Choose either Executable or BuildDirectory.' }
+    if ($BuildDirectory) {
+        if (-not [IO.Path]::IsPathRooted($BuildDirectory)) { $BuildDirectory = Join-Path $ProjectRoot $BuildDirectory }
+        $players = @(Get-ChildItem -LiteralPath $BuildDirectory -Directory -Filter '*_Data' | ForEach-Object {
+            $candidate = Join-Path $BuildDirectory ($_.Name.Substring(0, $_.Name.Length - 5) + '.exe')
+            if (Test-Path -LiteralPath $candidate -PathType Leaf) { $candidate }
+        })
+        if ($players.Count -ne 1) { throw "Expected one Unity Player in explicit build directory: $BuildDirectory" }
+        $Executable = $players[0]
+    }
+    # Explicit paths support frozen historical packages. Automatic selection never searches old output folders.
+    if ($Executable) {
+        if (-not [IO.Path]::IsPathRooted($Executable)) { $Executable = Join-Path $ProjectRoot $Executable }
+        if (-not (Test-Path -LiteralPath $Executable -PathType Leaf)) { throw "Missing explicit Player: $Executable" }
+        return (Resolve-Path -LiteralPath $Executable).Path
+    }
+
+    $resultPath = Join-Path $ProjectRoot "Library/ProjectTools/BuildResults/$Recipe.json"
+    $instruction = "Build '$Recipe' using MonsterSupergroup > 构建与验收 > 构建配置 or Invoke-ProjectTool.ps1 -ToolId build.player -Profile $Recipe. Use -Executable only to select a specific frozen package."
+    if (-not (Test-Path -LiteralPath $resultPath -PathType Leaf)) { throw "No successful current build result. $instruction" }
+    $result = Get-Content -LiteralPath $resultPath -Raw -Encoding UTF8 | ConvertFrom-Json
+    if ($result.success -isnot [bool] -or -not $result.success -or $result.recipe -cne $Recipe -or -not $result.buildId) {
+        throw "Invalid or failed build result: $resultPath. $instruction"
+    }
+    $executablePath = [IO.Path]::GetFullPath([string]$result.executable)
+    $buildRoot = Split-Path -Parent $executablePath
+    $embedded = Join-Path $buildRoot (([IO.Path]::GetFileNameWithoutExtension($executablePath)) + '_Data/StreamingAssets/BuildInfo.json')
+    $marker = Join-Path $buildRoot 'build-complete.json'
+    foreach ($required in @($executablePath,$embedded,$marker)) {
+        if (-not (Test-Path -LiteralPath $required -PathType Leaf)) { throw "Incomplete build: $required. $instruction" }
+    }
+    if ([IO.Path]::GetFullPath([string]$result.buildInfoPath) -ne [IO.Path]::GetFullPath($embedded) -or
+        (Get-FileHash -LiteralPath $embedded -Algorithm SHA256).Hash -ne (Get-FileHash -LiteralPath $marker -Algorithm SHA256).Hash) {
+        throw "BuildInfo does not match the successful package: $resultPath"
+    }
+    $info = Get-Content -LiteralPath $embedded -Raw -Encoding UTF8 | ConvertFrom-Json
+    if ($info.buildId -cne $result.buildId -or $info.profile -cne $Recipe) { throw 'Build identity or recipe differs from the selected result.' }
+    if ($RequireDevelopmentTools -and ($info.developmentTools -isnot [bool] -or -not $info.developmentTools)) {
+        throw "The selected package has no mechanism/development capability. $instruction"
+    }
+    if ($Network -and $info.network -cne $Network) { throw "The selected $Recipe package uses '$($info.network)'; this scenario requires $Network. $instruction" }
+    if ($Diagnostics -and $info.diagnostics -cne $Diagnostics) { throw "This scenario requires $Diagnostics diagnostics. $instruction" }
+    Write-Host "Using $Recipe $($info.buildId): $executablePath"
+    return $executablePath
+}
 
 function Resolve-ProjectUnity {
     param([string]$ProjectRoot, [string]$Unity)
@@ -14,6 +69,27 @@ function Resolve-ProjectUnity {
     $actual = [Diagnostics.FileVersionInfo]::GetVersionInfo($Unity).ProductVersion
     if (-not $actual.StartsWith($version)) { throw "Unity version mismatch: expected $version, found $actual ($Unity)." }
     return $Unity
+}
+
+function Test-ProjectUnityCommandLine {
+    param([string]$CommandLine, [string]$ProjectRoot)
+    if ([string]::IsNullOrWhiteSpace($CommandLine) -or [string]::IsNullOrWhiteSpace($ProjectRoot)) { return $false }
+    # Inspect argument tokens, not substrings: the project may occur in -logFile or
+    # be the parent of an isolated validation project. Quotes keep spaces in one token.
+    $tokens = @([regex]::Matches($CommandLine, '(?:[^\s"]+|"[^"]*")+') | ForEach-Object { $_.Value.Replace('"','') })
+    $projectArguments = @()
+    for ($index = 0; $index -lt $tokens.Count; $index++) {
+        if ($tokens[$index] -ieq '-projectPath') {
+            if ($index + 1 -ge $tokens.Count) { return $false }
+            $projectArguments += $tokens[$index + 1]
+        }
+    }
+    if ($projectArguments.Count -ne 1 -or -not [IO.Path]::IsPathRooted($projectArguments[0])) { return $false }
+    try {
+        $actual = [IO.Path]::GetFullPath($projectArguments[0].Replace('/', '\')).TrimEnd('\')
+        $expected = [IO.Path]::GetFullPath($ProjectRoot.Replace('/', '\')).TrimEnd('\')
+        return [string]::Equals($actual, $expected, [StringComparison]::OrdinalIgnoreCase)
+    } catch { return $false }
 }
 
 function Start-ProjectProcess {
@@ -82,7 +158,7 @@ function Convert-ProjectToolParameters {
     foreach ($key in $Values.Keys) {
         if ($allowed -notcontains $key) { throw "Unsupported tool parameter: $key. Query -Help for this tool." }
         $value = $Values[$key]
-        if ($key -in @('Apply','ScriptsOnly')) {
+        if ($key -in @('Apply','ScriptsOnly','UniqueOutput')) {
             if ($value -is [string]) { $value = [bool]::Parse($value) }
             $converted[$key] = [bool]$value
         } else { $converted[$key] = [string]$value }

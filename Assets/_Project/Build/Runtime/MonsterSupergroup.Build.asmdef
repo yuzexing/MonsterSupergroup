@@ -1,0 +1,6 @@
+{
+  "name": "MonsterSupergroup.Build",
+  "rootNamespace": "MonsterSupergroup.Builds",
+  "references": [],
+  "autoReferenced": false
+}

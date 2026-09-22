@@ -1,4 +1,5 @@
 using System;
+using MonsterSupergroup.Builds;
 using System.Collections.Generic;
 using Mirror;
 using Mirror.FizzySteam;
@@ -39,9 +40,7 @@ namespace MonsterSupergroup.NetworkCombat
         private readonly List<SteamLobbySummary> lobbies =
             new List<SteamLobbySummary>();
 
-        private CallResult<LobbyCreated_t> lobbyCreatedResult;
         private CallResult<LobbyMatchList_t> lobbyListResult;
-        private CallResult<LobbyEnter_t> lobbyEnterResult;
         private Callback<LobbyChatUpdate_t> lobbyChatUpdate;
         private Callback<LobbyDataUpdate_t> lobbyDataUpdate;
         private Callback<LobbyKicked_t> lobbyKicked;
@@ -85,16 +84,7 @@ namespace MonsterSupergroup.NetworkCombat
         public BootGameplayNetworkManager ConfiguredNetworkManager => networkManager;
         public FizzySteamworks ConfiguredFizzyTransport => fizzyTransport;
 
-        public bool CanStartOperation =>
-            IsSteamInitialized &&
-            (State == SteamLobbyState.Idle || State == SteamLobbyState.Error) &&
-            CurrentLobbyId == 0ul &&
-            !NetworkServer.active &&
-            !NetworkClient.active &&
-            !cleanupInProgress &&
-            !waitingForClientDisconnect &&
-            networkManager != null &&
-            !networkManager.IsGameplayLoaded;
+        public bool CanStartOperation => invitationQueue.Target == 0 && CanCompleteLobbyCleanup;
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
         private static void ResetStatics()
@@ -194,17 +184,19 @@ namespace MonsterSupergroup.NetworkCombat
             CompleteCleanupWhenGameplayUnloaded();
             ObserveMirrorLifecycle();
             ObserveInvitationLifecycle();
-            if (startupInvitation != 0 && CanStartOperation && !networkManager.IsGameplayTransitioning)
+            TickInvitationJoin();
+            if (startupInvitation != 0 && IsSteamInitialized && networkManager != null)
             {
                 ulong invitation = startupInvitation;
                 startupInvitation = 0;
-                JoinLobby(invitation);
+                RequestInvitationJoin(invitation, "startup", 0);
             }
         }
 
         private void OnApplicationQuit()
         {
             applicationQuitting = true;
+            invitationQueue.Clear();
             CleanupInternal(string.Empty, true);
             ShutdownSteam();
         }
@@ -287,7 +279,8 @@ namespace MonsterSupergroup.NetworkCombat
                 CreateSteamCallbacks();
                 IsSteamInitialized = true;
                 steamInitializedAt = Time.realtimeSinceStartup;
-                startupInvitation = ReadStartupInvitation(Environment.GetCommandLineArgs());
+                ReadSteamLaunchInvitation(true);
+                ClearLobbyPresence();
                 SetState(SteamLobbyState.Idle, string.Empty);
                 Debug.Log(
                     $"[SteamLobby] Steam initialized with AppID " +
@@ -319,7 +312,7 @@ namespace MonsterSupergroup.NetworkCombat
             try
             {
                 SteamAPICall_t call = SteamMatchmaking.CreateLobby(
-                    ELobbyType.k_ELobbyTypePrivate,
+                    ELobbyType.k_ELobbyTypeFriendsOnly,
                     PreparationRoom.Capacity);
                 if (call == SteamAPICall_t.Invalid)
                 {
@@ -327,7 +320,7 @@ namespace MonsterSupergroup.NetworkCombat
                     return;
                 }
 
-                lobbyCreatedResult.Set(call);
+                TrackLobbyCreation(call);
             }
             catch (Exception exception)
             {
@@ -381,7 +374,7 @@ namespace MonsterSupergroup.NetworkCombat
 
         public void JoinLobby(ulong lobbyId)
         {
-            if (lobbyId == 0ul)
+            if (!SteamLobbyConnection.IsValidLobby(lobbyId))
             {
                 RejectOperation("LobbyID is invalid.");
                 return;
@@ -405,7 +398,7 @@ namespace MonsterSupergroup.NetworkCombat
                     return;
                 }
 
-                lobbyEnterResult.Set(call);
+                TrackLobbyJoin(call);
             }
             catch (Exception exception)
             {
@@ -468,6 +461,9 @@ namespace MonsterSupergroup.NetworkCombat
                 lobby,
                 SteamLobbyMetadata.NameKey,
                 lobbyName);
+            metadataWritten &= SteamMatchmaking.SetLobbyData(lobby, SteamLobbyMetadata.VersionKey, RuntimeBuildInfo.Version);
+            metadataWritten &= SteamMatchmaking.SetLobbyData(lobby, SteamLobbyMetadata.BuildKindKey, RuntimeBuildInfo.Current?.Kind ?? "editor");
+            metadataWritten &= SteamMatchmaking.SetLobbyData(lobby, SteamLobbyMetadata.BuildIdKey, RuntimeBuildInfo.Current?.BuildId ?? "Editor");
             if (!metadataWritten)
             {
                 CleanupInternal("Failed to publish Lobby metadata.", true);
@@ -658,6 +654,15 @@ namespace MonsterSupergroup.NetworkCombat
             out ulong hostSteamId,
             out string error)
         {
+            hostSteamId = 0;
+            string remoteVersion = SteamMatchmaking.GetLobbyData(lobby, SteamLobbyMetadata.VersionKey);
+            var compatibility = BuildCompatibility.Compare(RuntimeBuildInfo.Version, remoteVersion);
+            Debug.Log($"[SteamBuild] local={RuntimeBuildInfo.Display} hostVersion={remoteVersion} hostKind={SteamMatchmaking.GetLobbyData(lobby, SteamLobbyMetadata.BuildKindKey)} hostBuild={SteamMatchmaking.GetLobbyData(lobby, SteamLobbyMetadata.BuildIdKey)} result={compatibility}");
+            if (compatibility != BuildRejection.None)
+            {
+                error = BuildCompatibility.Encode(compatibility, RuntimeBuildInfo.Version, remoteVersion, true);
+                networkManager.SetConnectionNotice(error); return false;
+            }
             return SteamLobbyMetadata.TryGetReadyHostSteamId(
                 SteamMatchmaking.GetLobbyData(
                     lobby,
@@ -724,6 +729,9 @@ namespace MonsterSupergroup.NetworkCombat
 
         private void HandleSteamDisconnected(SteamServersDisconnected_t result)
         {
+            invitationQueue.Clear();
+            startupInvitation = 0;
+            ClearLobbyPresence();
             string message = $"Steam backend disconnected: {result.m_eResult}.";
             if (!IsSteamBackendSelected && CurrentLobbyId == 0)
             {
@@ -853,7 +861,8 @@ namespace MonsterSupergroup.NetworkCombat
             }
 
             CancelPendingOperations();
-            networkManager?.ShowMenuNotice(string.Empty);
+            networkManager?.BeginConnectionAttempt();
+            if (networkManager != null && !networkManager.CheckBuildForConnection()) return false;
             SetState(operationState, string.Empty);
             return true;
         }
@@ -877,6 +886,8 @@ namespace MonsterSupergroup.NetworkCombat
             }
 
             cleanupInProgress = true;
+            ClearLobbyPresence();
+            networkManager?.NoticeSteamCleanup(error);
             invitations?.Clear();
             if (!string.IsNullOrEmpty(error) && networkManager != null &&
                 (string.IsNullOrEmpty(networkManager.MenuNotice) || networkManager.MenuNotice == lastInvitationNotice))
@@ -1041,14 +1052,16 @@ namespace MonsterSupergroup.NetworkCombat
             lobbyJoinRequested = Callback<GameLobbyJoinRequested_t>.Create(request => {
                 Debug.Log($"[SteamInvite] stage=join_requested lobby={request.m_steamIDLobby.m_SteamID} " +
                     $"friend={request.m_steamIDFriend.m_SteamID} phase={State}", this);
-                AcceptInvitation(request.m_steamIDLobby.m_SteamID);
+                RequestInvitationJoin(request.m_steamIDLobby.m_SteamID, "lobby", request.m_steamIDFriend.m_SteamID);
             });
-            lobbyCreatedResult = CallResult<LobbyCreated_t>.Create(
-                HandleLobbyCreated);
+            richPresenceJoinRequested = Callback<GameRichPresenceJoinRequested_t>.Create(request =>
+                AcceptConnectionString(request.m_rgchConnect, "rich_presence", request.m_steamIDFriend.m_SteamID));
+            launchParametersChanged = Callback<NewUrlLaunchParameters_t>.Create(_ => ReadSteamLaunchInvitation(false));
+            lobbyInviteReceived = Callback<LobbyInvite_t>.Create(invite =>
+                Debug.Log($"[SteamInvite] stage=received source=lobby lobby={invite.m_ulSteamIDLobby} friend={invite.m_ulSteamIDUser} game={invite.m_ulGameID} phase={State}", this));
             lobbyListResult = CallResult<LobbyMatchList_t>.Create(
                 HandleLobbyList);
-            lobbyEnterResult = CallResult<LobbyEnter_t>.Create(
-                HandleLobbyEntered);
+
             lobbyChatUpdate = Callback<LobbyChatUpdate_t>.Create(
                 HandleLobbyChatUpdate);
             lobbyDataUpdate = Callback<LobbyDataUpdate_t>.Create(
@@ -1062,9 +1075,8 @@ namespace MonsterSupergroup.NetworkCombat
 
         private void CancelPendingOperations()
         {
-            lobbyCreatedResult?.Cancel();
+            lobbyOperationGeneration++;
             lobbyListResult?.Cancel();
-            lobbyEnterResult?.Cancel();
             pendingLobbyId = 0ul;
         }
 
@@ -1074,12 +1086,15 @@ namespace MonsterSupergroup.NetworkCombat
             overlayActivated = null;
             lobbyJoinRequested?.Dispose();
             lobbyJoinRequested = null;
-            lobbyCreatedResult?.Dispose();
-            lobbyCreatedResult = null;
+            richPresenceJoinRequested?.Dispose(); richPresenceJoinRequested = null;
+            launchParametersChanged?.Dispose(); launchParametersChanged = null;
+            lobbyInviteReceived?.Dispose(); lobbyInviteReceived = null;
+            foreach (var callback in pendingCreates) callback.Dispose();
+            foreach (var callback in pendingJoins) callback.Dispose();
+            pendingCreates.Clear(); pendingJoins.Clear();
             lobbyListResult?.Dispose();
             lobbyListResult = null;
-            lobbyEnterResult?.Dispose();
-            lobbyEnterResult = null;
+
             lobbyChatUpdate?.Dispose();
             lobbyChatUpdate = null;
             lobbyDataUpdate?.Dispose();
@@ -1094,6 +1109,8 @@ namespace MonsterSupergroup.NetworkCombat
 
         private void ShutdownSteam()
         {
+            invitationQueue.Clear();
+            ClearLobbyPresence();
             DisposeSteamCallbacks();
             IsSteamInitialized = false;
             if (!ownsSteamApi)
@@ -1150,9 +1167,10 @@ namespace MonsterSupergroup.NetworkCombat
 
         private static string DescribeConnectionError(string error)
         {
+            if (BuildCompatibility.TryDecode(error, out _, out _, out _, out _)) return error;
             if (error.IndexOf("Full", StringComparison.OrdinalIgnoreCase) >= 0) return "房间已满（最多四人）。";
             if (error.IndexOf("protocol", StringComparison.OrdinalIgnoreCase) >= 0 || error.IndexOf("incompatible", StringComparison.OrdinalIgnoreCase) >= 0)
-                return "游戏版本不兼容，请使用相同版本。";
+                return "ui.connection.build.protocolmismatch";
             if (error.IndexOf("closed", StringComparison.OrdinalIgnoreCase) >= 0 || error.IndexOf("owner", StringComparison.OrdinalIgnoreCase) >= 0)
                 return "房主已结束会话，请重新加入房间。";
             if (error.IndexOf("DoesntExist", StringComparison.OrdinalIgnoreCase) >= 0 || error.IndexOf("not ready", StringComparison.OrdinalIgnoreCase) >= 0)
@@ -1209,22 +1227,6 @@ namespace MonsterSupergroup.NetworkCombat
             Debug.Log("[SteamInvite] Invite dialog requested; look for overlay-active=True to confirm overlay activation.", this);
         }
 
-        public void AcceptInvitation(ulong lobbyId)
-        {
-            if (lobbyId == 0 || lobbyId == CurrentLobbyId || lobbyId == pendingLobbyId)
-            {
-                Debug.Log($"[SteamInvite] stage=accept lobby={lobbyId} result=ignored_duplicate_or_invalid", this);
-                return;
-            }
-            if (NetworkClient.active || NetworkServer.active || CurrentLobbyId != 0 || cleanupInProgress ||
-                networkManager == null || networkManager.IsGameplayTransitioning || !CanStartOperation)
-            {
-                Debug.Log($"[SteamInvite] stage=accept lobby={lobbyId} currentLobby={CurrentLobbyId} result=session_busy phase={State}", this);
-                networkManager?.ShowMenuNotice("请先离开当前房间，再接受其他房间的邀请。"); return;
-            }
-            JoinLobby(lobbyId);
-        }
-
         public void PublishPreparationPhase(PreparationPhase phase)
         {
             if (!IsSteamInitialized || !isHostSession || CurrentLobbyId == 0) return;
@@ -1234,20 +1236,11 @@ namespace MonsterSupergroup.NetworkCombat
                 phase == PreparationPhase.InGame ? SteamLobbyMetadata.InGameState : SteamLobbyMetadata.PreparingState;
             if (publishedPhase == value) return;
             if (SteamMatchmaking.SetLobbyData(new CSteamID(CurrentLobbyId), SteamLobbyMetadata.StateKey, value)) publishedPhase = value;
-            // Keep the private lobby reachable by original members. RunSession authenticates
+            // Keep the friends lobby reachable by original members. RunSession authenticates
             // the sealed roster; closing all Steam admission would also break reconnection.
         }
 
-        public static ulong ReadStartupInvitation(string[] args)
-        {
-            for (int i = 0; args != null && i < args.Length; i++)
-            {
-                if (args[i] == "+connect_lobby" && i + 1 < args.Length && ulong.TryParse(args[i + 1], out ulong id)) return id;
-                const string prefix = "--connect-lobby=";
-                if (args[i].StartsWith(prefix, StringComparison.OrdinalIgnoreCase) && ulong.TryParse(args[i].Substring(prefix.Length), out id)) return id;
-            }
-            return 0;
-        }
+        public static ulong ReadStartupInvitation(string[] args) => SteamLobbyConnection.Parse(args);
 
         private static bool HasValidationRoleArgument(string[] arguments)
         {

@@ -23,7 +23,8 @@
     "Unity.RenderPipelines.Universal.2D.Runtime",
     "Unity.RenderPipelines.Core.Runtime",
     "PackageTools",
-    "Drawing"
+    "Drawing",
+    "MonsterSupergroup.Build"
   ],
   "includePlatforms": [
     "Editor"

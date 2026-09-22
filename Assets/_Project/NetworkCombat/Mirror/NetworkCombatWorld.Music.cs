@@ -18,6 +18,7 @@ namespace MonsterSupergroup.NetworkCombat
         [Server]
         public void ServerConfigureMusic(MusicParameters settings, bool resetCooldowns = false)
         {
+            if (!MonsterSupergroup.Builds.BuildFeatures.DevelopmentToolsAllowed) return;
             if (!settings.IsValid) throw new ArgumentException("Invalid Music parameters.");
             musicSession = settings;
             foreach (var identity in NetworkServer.spawned.Values)

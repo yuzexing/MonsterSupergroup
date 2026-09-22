@@ -1,7 +1,14 @@
 {
   "name": "MonsterSupergroup.EditorTools.Tests",
-  "references": ["MonsterSupergroup.EditorTools"],
-  "includePlatforms": ["Editor"],
-  "optionalUnityReferences": ["TestAssemblies"],
+  "references": [
+    "MonsterSupergroup.EditorTools",
+    "MonsterSupergroup.Build"
+  ],
+  "includePlatforms": [
+    "Editor"
+  ],
+  "optionalUnityReferences": [
+    "TestAssemblies"
+  ],
   "autoReferenced": false
 }

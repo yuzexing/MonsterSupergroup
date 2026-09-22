@@ -46,6 +46,17 @@ namespace MonsterSupergroup.NetworkCombat
                 ValidHost = metadataValid && owner.m_SteamID == host && members.Contains(host)
             };
         }
-        public bool Send(ulong lobby, ulong friend) => SteamMatchmaking.InviteUserToLobby(new CSteamID(lobby), new CSteamID(friend));
+        public bool Send(ulong lobby, ulong friend)
+        {
+            string connection = SteamLobbyConnection.Format(lobby);
+            uint appId = SteamUtils.GetAppID().m_AppId;
+            ulong sender = LocalUser;
+            ulong owner = SteamMatchmaking.GetLobbyOwner(new CSteamID(lobby)).m_SteamID;
+            bool member = ReadLobby(lobby).Members.Contains(sender);
+            bool submitted = SteamFriends.InviteUserToGame(new CSteamID(friend), connection);
+            UnityEngine.Debug.Log($"[SteamInvite] stage=native_send method=InviteUserToGame appId={appId} " +
+                $"lobby={lobby} sender={sender} owner={owner} friend={friend} member={member} result={submitted}");
+            return submitted;
+        }
     }
 }

@@ -29,6 +29,7 @@ namespace MonsterSupergroup.NetworkCombat
 
     public static class SteamLobbyMetadata
     {
+        public const string VersionKey = "game_version", BuildKindKey = "build_kind", BuildIdKey = "build_id";
         public const string GameKey = "game";
         public const string GameValue = "monster_supergroup";
         public const string ProtocolKey = "protocol";

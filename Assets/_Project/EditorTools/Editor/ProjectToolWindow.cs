@@ -81,16 +81,17 @@ namespace MonsterSupergroup.EditorTools
                     EditorGUILayout.LabelField("输出位置", tool.output, EditorStyles.wordWrappedLabel);
                     EditorGUILayout.LabelField("运行要求", string.Join(" · ", new[] { tool.writesAssets ? "修改资产，需确认" : "只读资产", tool.externalSource ? "外部参考工程" : "项目内资源", tool.graphics ? "图形设备 / 视觉核验" : "可无图形运行", tool.asynchronous ? "等待 Play Mode 完成" : "" }), EditorStyles.wordWrappedLabel);
                     EditorGUILayout.Space();
+                    if (tool.id == "build.player")
+                    {
+                        EditorGUILayout.HelpBox("产品／专项构建统一在构建配置页选择；此处不再维护另一份 Profile 下拉框。", MessageType.Info);
+                        if (GUILayout.Button("打开统一构建配置", GUILayout.Height(32))) ProjectBuildWindow.Open();
+                        if (GUILayout.Button("复制默认产品 Test 命令")) EditorGUIUtility.systemCopyBuffer = "./Tools/Invoke-ProjectTool.ps1 -ToolId build.player -Profile product -BuildKind Test -Network Steam -Distribution Steam";
+                        return;
+                    }
                     foreach (string parameter in tool.parameters ?? Array.Empty<string>())
                     {
                         if (parameter == "Apply") continue;
-                        if (parameter == "Profile" && tool.id == "build.player")
-                        {
-                            string[] profiles = manifest.builds.Select(b => b.id).ToArray();
-                            int p = Math.Max(0, Array.IndexOf(profiles, Value(parameter, "menu-development")));
-                            parameters[parameter] = profiles[EditorGUILayout.Popup("构建配置", p, profiles)];
-                        }
-                        else parameters[parameter] = EditorGUILayout.TextField(parameter, Value(parameter));
+                        parameters[parameter] = EditorGUILayout.TextField(parameter, Value(parameter));
                     }
                     string unavailable = ProjectToolRunner.Availability(tool);
                     if (process != null) unavailable = "验收进程正在运行；请等待日志与退出结果";
@@ -118,9 +119,9 @@ namespace MonsterSupergroup.EditorTools
             foreach (string p in tool.parameters ?? Array.Empty<string>())
             {
                 if (p == "Apply" || string.IsNullOrWhiteSpace(Value(p))) continue;
-                if (p == "ScriptsOnly")
+                if (p == "ScriptsOnly" || p == "UniqueOutput")
                 {
-                    if (string.Equals(Value(p), "true", StringComparison.OrdinalIgnoreCase)) command += " -ScriptsOnly";
+                    if (string.Equals(Value(p), "true", StringComparison.OrdinalIgnoreCase)) command += " -" + p;
                 }
                 else command += " -" + p + " " + Quote(Value(p));
             }
@@ -143,7 +144,8 @@ namespace MonsterSupergroup.EditorTools
             }
             ProjectToolRunner.Run(tool.id, new ProjectToolRequest {
                 apply = tool.writesAssets, profile = Empty(Value("Profile")), source = Empty(Value("Source")), assetPath = Empty(Value("AssetPath")),
-                output = Empty(Value("Output")), scriptsOnly = string.Equals(Value("ScriptsOnly"), "true", StringComparison.OrdinalIgnoreCase)
+                output = Empty(Value("Output")), scriptsOnly = string.Equals(Value("ScriptsOnly"), "true", StringComparison.OrdinalIgnoreCase),
+                buildKind = Empty(Value("BuildKind")), development = Empty(Value("Development")), uniqueOutput = string.Equals(Value("UniqueOutput"), "true", StringComparison.OrdinalIgnoreCase)
             });
         }
         private static string Empty(string value) => string.IsNullOrWhiteSpace(value) ? null : value;
@@ -162,8 +164,8 @@ namespace MonsterSupergroup.EditorTools
         [MenuItem(Root + "校验/GAS", priority = 21)] public static void Gas() => Run("validate.gas");
         [MenuItem(Root + "校验/本地化", priority = 22)] public static void ValidateLocalization() => Run("validate.localization");
         [MenuItem(Root + "校验/波次与怪物", priority = 23)] public static void ValidateWaves() => Run("validate.waves-and-enemies");
-        [MenuItem(Root + "构建与验收/Development 验收包", priority = 30)] public static void Development() => Run("build.player", "menu-development");
-        [MenuItem(Root + "构建与验收/非 Development 验收包", priority = 31)] public static void Release() => Run("build.player", "menu-release");
+        public static void Development() => ProjectBuildWindow.OpenValidation(MonsterSupergroup.Builds.BuildKind.Dev);
+        public static void Release() => ProjectBuildWindow.OpenValidation(MonsterSupergroup.Builds.BuildKind.Test);
         [MenuItem(Root + "构建与验收/专项验收…", priority = 32)] public static void Validation() => ProjectToolWindow.Open("自动验收");
         [MenuItem(Root + "联机诊断/Editor 后端：Steam", priority = 40)] public static void Steam() => Run("diagnostic.backend-steam");
         [MenuItem(Root + "联机诊断/Editor 后端：KCP", priority = 41)] public static void Kcp() => Run("diagnostic.backend-kcp");

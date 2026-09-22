@@ -14,6 +14,13 @@ namespace MonsterSupergroup.Gameplay.Options
         public static string Get(string key, params object[] arguments)
         {
             if (string.IsNullOrEmpty(key)) return "";
+            if (MonsterSupergroup.Builds.BuildCompatibility.TryDecode(key, out var reason, out var client, out var host, out bool steam))
+            {
+                string message = GameLocalization.Menu("ui.connection.build." + reason.ToString().ToLowerInvariant(), client, host);
+                if (reason == MonsterSupergroup.Builds.BuildRejection.ClientOlder || reason == MonsterSupergroup.Builds.BuildRejection.HostOlder)
+                    message += " " + GameLocalization.Menu(steam ? "ui.connection.update_steam" : "ui.connection.update_local");
+                return message;
+            }
             if (key.StartsWith("连接失败：", StringComparison.Ordinal) && key != "连接失败：{0}")
                 return Get("连接失败：{0}", Get(key.Substring("连接失败：".Length)));
             return GameLocalization.Menu(key, arguments);

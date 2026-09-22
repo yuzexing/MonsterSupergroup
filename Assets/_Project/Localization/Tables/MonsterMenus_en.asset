@@ -109,7 +109,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 1366286354
-    m_Localized: "Frame rate limit (FPS)"
+    m_Localized: Frame rate limit (FPS)
     m_Metadata:
       m_Items: []
   - m_Id: 1366286355
@@ -3994,7 +3994,68 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 343984059703520
-    m_Localized: "Screen refresh rate (Hz)"
+    m_Localized: Screen refresh rate (Hz)
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3685644554461184
+    m_Localized: 'Your version is older: local v{0}, host v{1}.'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3685644596404224
+    m_Localized: 'The host''s version is older: host v{1}, local v{0}. Ask the host
+      to update and create a new room.'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3685644596404225
+    m_Localized: Version compatibility could not be verified. Both players should
+      install the same complete release.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3685644596404226
+    m_Localized: Network compatibility differs. Update both games to the same release
+      and try again.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3685644596404227
+    m_Localized: Build information is missing or inconsistent. Reinstall the complete
+      game package before connecting.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3685644596404228
+    m_Localized: The player with the older version should exit the game and update
+      in Steam. Restart Steam if no update appears.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3685644596404229
+    m_Localized: Install the matching newer package on the outdated computer and
+      try again.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3685644596404230
+    m_Localized: Game content differs. Make sure both players use the same released
+      content.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3685644596404231
+    m_Localized: The host disconnected. The room has closed.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3685644596404232
+    m_Localized: Connection to the host was lost. The host may have left or the network
+      may be interrupted.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3685644596404233
+    m_Localized: Could not connect to the host. Check that the room is open and your
+      connection is available.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3685644596404334
+    m_Localized: "Leaving the current session and joining your friend’s room…"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3685644596404335
+    m_Localized: "Leaving the previous room timed out. Joining was canceled; wait for cleanup to finish, then try again."
     m_Metadata:
       m_Items: []
   references:

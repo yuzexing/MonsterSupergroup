@@ -48,6 +48,7 @@ namespace MonsterSupergroup.NetworkCombat
 
         private void OnEnable()
         {
+            if (!MonsterSupergroup.Builds.BuildFeatures.DevelopmentToolsAllowed) { enabled = false; return; }
             if (LimboReferenceLaunch.SuppressDebugPanels) { enabled = false; return; }
             bool supported = Application.isEditor || Debug.isDebugBuild;
 #if MONSTER_ENEMY_HANDOFF_VALIDATION

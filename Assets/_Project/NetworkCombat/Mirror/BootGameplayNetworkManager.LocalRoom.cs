@@ -10,7 +10,8 @@ namespace MonsterSupergroup.NetworkCombat
 
     public sealed partial class BootGameplayNetworkManager
     {
-        public static bool LocalPreparationAvailable => Application.isEditor || Debug.isDebugBuild;
+        public static bool LocalPreparationAvailable => MonsterSupergroup.Builds.BuildFeatures.DevelopmentToolsAllowed &&
+            (Application.isEditor || Debug.isDebugBuild);
         public LocalPreparationOperation LocalRoomOperation { get; private set; }
         public bool IsLocalRoomConnecting => LocalRoomOperation != LocalPreparationOperation.None;
         public ushort LocalRoomPort { get; private set; } = NetworkBackendBootstrap.DefaultKcpPort;
@@ -41,6 +42,8 @@ namespace MonsterSupergroup.NetworkCombat
             if (!LocalPreparationAvailable) { error = "本地联机入口仅在开发环境可用。"; return false; }
             if (port == 0) { error = "端口必须是 1 至 65535 的整数。"; return false; }
             if (!CanStartLocalRoom) { error = "已有连接操作或会话尚未清理，请稍候。"; return false; }
+            BeginConnectionAttempt();
+            if (!RuntimeBuildAvailable(out error)) return false;
             var backend = GetComponent<NetworkBackendBootstrap>();
             if (backend == null) { error = "本地网络组件未就绪。"; return false; }
             if (!backend.TryPrepareKcp(NetworkBackendBootstrap.DefaultKcpAddress, port, false, out error)) return false;
@@ -96,6 +99,7 @@ namespace MonsterSupergroup.NetworkCombat
         public void CancelLocalRoomConnection()
         {
             if (!IsLocalRoomConnecting) return;
+            connectionNotice.LeaveLocally();
             ClearLocalRoomOperation();
             ShowMenuNotice("已取消本地连接。");
             StartCoroutine(LeaveRoomRoutine(false));

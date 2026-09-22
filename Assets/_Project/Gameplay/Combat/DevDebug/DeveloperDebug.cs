@@ -79,7 +79,7 @@ namespace AstralShift.HellMaiden.DevDebug
 		{
 			get
 			{
-				if (buildDevMod != null)
+				if (buildDevMod != null && MonsterSupergroup.Builds.BuildFeatures.DevelopmentToolsAllowed)
 				{
 					return buildDevMod.devMode;
 				}

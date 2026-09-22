@@ -1,7 +1,8 @@
-﻿[CmdletBinding()]
+[CmdletBinding()]
 param(
     [switch]$List, [switch]$Help, [string]$ToolId,
-    [string]$Profile, [int]$Port, [string]$AssetPath, [string]$Source, [string]$Output,
+    [string]$Profile, [ValidateSet("Dev","Test","Shipping")][string]$BuildKind, [ValidateSet("true","false")][string]$Development, [switch]$UniqueOutput, [int]$Port, [string]$AssetPath, [string]$Source, [string]$Output,
+    [ValidateSet('Steam','Kcp')][string]$Network, [ValidateSet('Steam','Direct')][string]$Distribution, [ValidateSet('Normal','Evidence')][string]$Diagnostics,
     [string]$Unity, [string]$Executable, [switch]$Apply, [switch]$ScriptsOnly,
     [string]$ResultPath, [string]$ParametersFile, [hashtable]$Parameters = @{},
     [ValidateRange(1,14400)][int]$TimeoutSeconds = 1800,
@@ -16,7 +17,11 @@ $tool = $catalog.tools | Where-Object id -eq $ToolId
 if (-not $tool) { throw "Unknown ToolId '$ToolId'. Use -List." }
 if ($Help) {
     $tool | ConvertTo-Json -Depth 10
-    if ($ToolId -eq 'build.player') { $catalog.builds | Format-Table id,development,testAssemblies,output -AutoSize }
+    if ($ToolId -eq 'build.player') {
+        $catalog.builds | Format-Table id,name,development,testAssemblies -AutoSize
+        Write-Output 'Daily default: product / Test / Steam / Steam distribution / Normal. Build does not change the game version.'
+        if ($catalog.buildAliases) { $catalog.buildAliases | Format-Table id,recipe,kind,network,diagnostics -AutoSize }
+    }
     if ($tool.script) {
         $definition = Get-Command (Join-Path $PSScriptRoot ('Scenarios/' + [IO.Path]::GetFileName($tool.script)))
         $definition.ScriptBlock.Ast.ParamBlock.Parameters | ForEach-Object {
@@ -60,13 +65,17 @@ try {
     if (-not $tool.script) {
         $values = @{}
         foreach ($key in $Parameters.Keys) { $values[$key] = $Parameters[$key] }
-        foreach ($key in @('Profile','Port','AssetPath','Source','Output','Unity','Executable','Apply','ScriptsOnly')) {
+        foreach ($key in @('Profile','Port','AssetPath','Source','Output','Unity','Executable','Apply','ScriptsOnly','BuildKind','Development','UniqueOutput','Network','Distribution','Diagnostics')) {
             if ($PSBoundParameters.ContainsKey($key)) { $values[$key] = $PSBoundParameters[$key] }
         }
         $values = Convert-ProjectToolParameters -Tool $tool -Values $values
         $Profile = $values.Profile; $AssetPath = $values.AssetPath; $Source = $values.Source
         $Output = $values.Output; $Unity = $values.Unity
         $Apply = [bool]$values.Apply; $ScriptsOnly = [bool]$values.ScriptsOnly
+        # Keep optional values separate from parameter variables: assigning null back to a
+        # ValidateSet string casts it to '' and rejects an otherwise valid default request.
+        $toolBuildKind = $values.BuildKind; $toolDevelopment = $values.Development; $UniqueOutput = [bool]$values.UniqueOutput
+        $toolNetwork = $values.Network; $toolDistribution = $values.Distribution; $toolDiagnostics = $values.Diagnostics
     }
     if ($tool.writesAssets -and -not $Apply) { throw "Asset writes require -Apply. Impact: $($tool.impact)" }
     if ($tool.script) {
@@ -74,7 +83,7 @@ try {
         if ($tool.parameters -contains 'Unity') {
             if (-not $Unity -and $Parameters.ContainsKey('Unity')) { $Unity = $Parameters.Unity }
             $Parameters.Unity = Resolve-ProjectUnity -ProjectRoot $projectRoot -Unity $Unity
-            $active = Get-CimInstance Win32_Process -Filter "Name = 'Unity.exe'" | Where-Object { $_.CommandLine -and $_.CommandLine.IndexOf($projectRoot,[StringComparison]::OrdinalIgnoreCase) -ge 0 }
+            $active = Get-CimInstance Win32_Process -Filter "Name = 'Unity.exe'" | Where-Object { Test-ProjectUnityCommandLine -CommandLine $_.CommandLine -ProjectRoot $projectRoot }
             if ($active) { throw 'Close this project in Unity before running Editor tests.' }
         }
         $arguments = Convert-ProjectParameters -ScriptPath $script -Values $Parameters
@@ -83,14 +92,14 @@ try {
     } else {
         if ($tool.interactive) { throw 'This tool requires an already open Editor. Use the Tool Center.' }
         $Unity = Resolve-ProjectUnity -ProjectRoot $projectRoot -Unity $Unity
-        $active = Get-CimInstance Win32_Process -Filter "Name = 'Unity.exe'" | Where-Object { $_.CommandLine -and $_.CommandLine.IndexOf($projectRoot,[StringComparison]::OrdinalIgnoreCase) -ge 0 }
+        $active = Get-CimInstance Win32_Process -Filter "Name = 'Unity.exe'" | Where-Object { Test-ProjectUnityCommandLine -CommandLine $_.CommandLine -ProjectRoot $projectRoot }
         if ($active) { throw 'The project is already open in Unity. Use the Tool Center or close that Editor before batch execution.' }
         $unityResult = Join-Path $folder 'unity-result.json'
         $unityLog = Join-Path $folder 'unity.log'
         $arguments = @('-batchmode','-projectPath',('"' + $projectRoot + '"'),'-logFile',('"' + $unityLog + '"'),
             '-executeMethod','MonsterSupergroup.EditorTools.ProjectToolRunner.Batch','-toolId',$ToolId,'-toolResult',('"' + $unityResult + '"'))
         if (-not $tool.graphics) { $arguments += '-nographics' }
-        foreach ($pair in @(@('-toolProfile',$Profile),@('-toolAsset',$AssetPath),@('-toolSource',$Source),@('-toolOutput',$Output))) {
+        foreach ($pair in @(@('-toolProfile',$Profile),@('-toolAsset',$AssetPath),@('-toolSource',$Source),@('-toolOutput',$Output),@('-toolBuildKind',$toolBuildKind),@('-toolDevelopment',$toolDevelopment),@('-toolNetwork',$toolNetwork),@('-toolDistribution',$toolDistribution),@('-toolDiagnostics',$toolDiagnostics))) {
             if ($pair[1]) {
                 if ($pair[1].Contains('"')) { throw 'A quoted path/value is not supported; pass the unquoted value as one PowerShell argument.' }
                 $arguments += @($pair[0],('"' + $pair[1] + '"'))
@@ -98,6 +107,7 @@ try {
         }
         if ($Apply) { $arguments += '-toolApply' }
         if ($ScriptsOnly) { $arguments += '-toolScriptsOnly' }
+        if ($UniqueOutput) { $arguments += '-toolUniqueOutput' }
         $process = Start-ProjectProcess -FilePath $Unity -ArgumentList $arguments -WindowStyle Hidden -PassThru -WorkingDirectory $projectRoot
         Wait-ProjectProcess -Process $process -TimeoutSeconds $TimeoutSeconds
         if (Test-Path -LiteralPath $unityResult) {

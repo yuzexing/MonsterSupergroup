@@ -1,12 +1,17 @@
-param(
-    [string]$BuildDirectory = 'Builds/LimboSpatialBoundary20260915',
-    [string]$ClientDirectory = 'Builds/LimboSpatialBoundaryClient20260915',
+﻿param(
+    [string]$BuildDirectory,
+    [string]$ClientDirectory,
     [string]$Prefix = 'spatial-boundary-20260915',
     [int]$Port = 8220,
     [ValidateSet('distance','placement-failure','expiry','framing')][string[]]$Cases = @('distance','placement-failure','expiry','framing')
 )
 $ErrorActionPreference = 'Stop'
 $root = Split-Path -Parent $PSScriptRoot
+Import-Module (Join-Path $PSScriptRoot 'ProjectTools.psm1')
+$resolvedPlayer = Resolve-ProjectBuildExecutable -ProjectRoot $root -Recipe 'gameplay-validation' -BuildDirectory $BuildDirectory -RequireDevelopmentTools -Network Kcp
+$BuildDirectory = Split-Path -Parent $resolvedPlayer
+if (-not $ClientDirectory) { $ClientDirectory = $BuildDirectory }
+
 foreach ($case in $Cases) {
     $name = "$Prefix-$case"
     $folder = Join-Path $root "Logs/LimboReference/$name"

@@ -89,6 +89,18 @@ namespace MonsterSupergroup.GAS
             RuntimeModifierExecutionSnapshot execution =
                 modifiers.CaptureExecutionSnapshot();
             var attack = new AttackSnapshot(weapon, stats, context, execution);
+            if (CombatEvidence.Enabled)
+            {
+                try
+                {
+                    var statInput = new AttackStatsEvidenceInput { baseStats = weapon.Stats.BaseStats,
+                        globalMultipliers = weapon.Stats.GlobalStatsMultipliers.Clone(), remaps = weapon.Stats.CaptureDiagnosticRemaps(),
+                        staticModifiers = CaptureModifiers(modifiers.StaticModifiers), dynamicModifiers = CaptureModifiers(modifiers.DynamicModifiers) };
+                    CombatCalculationEvidence.Record("weapon_stats", "owner.attack_stats", "Rebuild", context, statInput, stats);
+                }
+                catch (Exception error) { CombatEvidence.Event("Owner", "owner.attack_stats", "CaptureFailed", error.GetType().Name,
+                    context.EventId.Value, context.SourcePlayerId, root: context.RootEventId.Value); }
+            }
             try
             {
                 eventSink.Publish(new CombatEvent(CombatEventKind.AttackStarted, context));
@@ -234,6 +246,9 @@ namespace MonsterSupergroup.GAS
 
             if (!target.IsAlive)
             {
+                if (CombatEvidence.Enabled) CombatEvidence.Event("Owner", "owner.hit_filter", "Ignored", "TargetNotAlive",
+                    attack.Context.EventId.Value, attack.Context.SourcePlayerId, target is ICombatStateIdentity filtered ? filtered.EntityId : 0,
+                    root: attack.Context.RootEventId.Value);
                 var zero = new DamageInfo(attack.CombatId, 0, false);
                 return new CombatResolution(
                     CombatContext.None,
@@ -253,32 +268,22 @@ namespace MonsterSupergroup.GAS
                 onDamageModifiers[i].Apply(targetMultipliers, target);
             }
 
-            int baseDamage = CeilingToNonNegativeInt(
-                attack.Stats.DamageBeforeRounding * SignedMultiplier(targetMultipliers.damage));
             float criticalChance = Probability.Clamp01(attack.Stats.CritRate + targetMultipliers.critRate);
             float criticalRoll = criticalChance > 0f ? random.Next01() : -1f;
-            bool isCritical = criticalChance > 0f && criticalRoll < criticalChance;
-            if (CombatEvidence.Enabled) CombatEvidence.Event("Owner", "owner.damage_calculation", "Resolved", null,
-                attack.Context.EventId.Value, attack.Context.SourcePlayerId, target is ICombatStateIdentity identified ? identified.EntityId : 0,
-                new { stats = attack.Stats, baseDamage, criticalChance, criticalRoll, isCritical, targetMultipliers },
-                root: attack.Context.RootEventId.Value, parent: attack.Context.ParentEventId.Value);
-
-            int requestedValue = baseDamage;
-            if (isCritical)
+            DamageCalculationResult calculation = DamageCalculation.Calculate(attack.Stats, targetMultipliers, criticalRoll);
+            DamageCalculationInput calculationInput = null;
+            if (CombatEvidence.Enabled)
             {
-                float criticalMultiplier = attack.Stats.CritDamageMultiplier + targetMultipliers.critDamage;
-                if (criticalMultiplier < 0f)
-                {
-                    criticalMultiplier = 0f;
-                }
-
-                requestedValue = TruncateToNonNegativeInt(baseDamage * criticalMultiplier);
+                try { calculationInput = new DamageCalculationInput { stats = attack.Stats, targetMultipliers = targetMultipliers.Clone(),
+                    criticalRoll = criticalRoll, modifiers = CaptureModifiers(onDamageModifiers) }; }
+                catch (Exception error) { CombatEvidence.Event("Owner", "owner.damage_calculation", "CaptureFailed", error.GetType().Name,
+                    attack.Context.EventId.Value, attack.Context.SourcePlayerId, root: attack.Context.RootEventId.Value); }
             }
 
             var resolvedDamage = new DamageInfo(
                 attack.CombatId,
-                requestedValue,
-                isCritical);
+                calculation.requestedDamage,
+                calculation.isCritical);
             return ResolveDamageCore(
                 attack.Context,
                 target,
@@ -287,7 +292,8 @@ namespace MonsterSupergroup.GAS
                 onHitChanceMultiplier,
                 predictedLethalChanceMultiplier,
                 burnDamageMultiplier,
-                presentationDamageType ?? attack.Stats.DamageType);
+                presentationDamageType ?? attack.Stats.DamageType,
+                calculationInput, calculation);
         }
 
         private CombatResolution ResolveDamageCore(
@@ -298,7 +304,9 @@ namespace MonsterSupergroup.GAS
             float onHitChanceMultiplier,
             float predictedLethalChanceMultiplier,
             float burnDamageMultiplier,
-            DamageType presentationDamageType)
+            DamageType presentationDamageType,
+            DamageCalculationInput calculationInput = null,
+            DamageCalculationResult calculation = default)
         {
             if (target == null)
             {
@@ -351,13 +359,19 @@ namespace MonsterSupergroup.GAS
                     damageTags,
                     targetEntityId,
                     targetStateVersion);
+                if (calculationInput != null) CombatCalculationEvidence.Record("damage", "owner.damage_calculation", "Calculate",
+                    damageContext, calculationInput, calculation);
+                int? previousHealth = CombatCalculationEvidence.Health(target);
                 if (CombatEvidence.Enabled) CombatEvidence.Event("Owner", "owner.hit", "Applying", null,
                     damageContext.EventId.Value, damageContext.SourcePlayerId, targetEntityId, resolvedDamage,
-                    new { alive = wasAlive, version = targetStateVersion }, root: damageContext.RootEventId.Value, parent: damageContext.ParentEventId.Value);
+                    new { alive = wasAlive, health = previousHealth, version = targetStateVersion,
+                        invulnerable = CombatCalculationEvidence.Invulnerable(target) }, root: damageContext.RootEventId.Value, parent: damageContext.ParentEventId.Value);
                 DamageInfo predictedAppliedDamage = target.ReceiveDamage(resolvedDamage);
                 if (CombatEvidence.Enabled) CombatEvidence.Event("Owner", "owner.hit", "Applied", null,
                     damageContext.EventId.Value, damageContext.SourcePlayerId, targetEntityId, resolvedDamage,
-                    new { alive = wasAlive, version = targetStateVersion }, new { alive = target.IsAlive, applied = predictedAppliedDamage },
+                    new { alive = wasAlive, health = previousHealth, version = targetStateVersion },
+                    new { alive = target.IsAlive, health = CombatCalculationEvidence.Health(target), applied = predictedAppliedDamage,
+                        version = (target as ICombatStateIdentity)?.StateVersion },
                     damageContext.RootEventId.Value, damageContext.ParentEventId.Value);
                 eventSink.Publish(new CombatEvent(
                     CombatEventKind.DamageResolved,
@@ -465,39 +479,11 @@ namespace MonsterSupergroup.GAS
             }
         }
 
-        private static float SignedMultiplier(float value)
+        private static ModifierEvidence[] CaptureModifiers<T>(System.Collections.Generic.IReadOnlyList<T> values) where T : RuntimeEquipmentModifier
         {
-            return value >= 0f ? 1f + value : 1f / (1f + Math.Abs(value));
-        }
-
-        private static int CeilingToNonNegativeInt(float value)
-        {
-            if (float.IsNaN(value) || value <= 0f)
-            {
-                return 0;
-            }
-
-            if (float.IsPositiveInfinity(value) || value >= int.MaxValue)
-            {
-                return int.MaxValue;
-            }
-
-            return (int)Math.Ceiling(value);
-        }
-
-        private static int TruncateToNonNegativeInt(float value)
-        {
-            if (float.IsNaN(value) || value <= 0f)
-            {
-                return 0;
-            }
-
-            if (float.IsPositiveInfinity(value) || value >= int.MaxValue)
-            {
-                return int.MaxValue;
-            }
-
-            return (int)value;
+            var result = new ModifierEvidence[values.Count];
+            for (int i = 0; i < result.Length; i++) result[i] = ModifierEvidence.Capture(values[i]);
+            return result;
         }
 
         private static void ValidateFinite(float value, string parameterName)

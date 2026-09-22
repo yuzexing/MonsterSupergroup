@@ -77,7 +77,7 @@ namespace AstralShift.HellMaiden.Player.Attacks
 
 		protected virtual void OnTriggerEnter2D(Collider2D other)
 		{
-			if (!CanProcessHits) return;
+			if (!CanProcessHits) { RecordContactEvidence(null, "Ignored", "AttackWindowClosed"); return; }
 			if (other.TryGetComponent<IDamageable>(out var component))
 			{
 				int iD = component.GetID();
@@ -86,9 +86,12 @@ namespace AstralShift.HellMaiden.Player.Attacks
 					CollisionEntry collisionEntry = new CollisionEntry(component, iD);
 					_collisionEntriesMap.Add(iD, collisionEntry);
 					_collisionEntries.Add(collisionEntry);
+					RecordContactEvidence(component, "Accepted", "FirstContact");
 					_onHit?.Invoke(component);
 				}
+				else RecordContactEvidence(component, "Ignored", "ContactAlreadyTracked");
 			}
+			else RecordContactEvidence(null, "Ignored", "ColliderHasNoDamageable");
 		}
 
 		protected virtual void OnTriggerExit2D(Collider2D other)
@@ -194,6 +197,7 @@ namespace AstralShift.HellMaiden.Player.Attacks
 					}
 					else if (Time.time - collisionEntry.Timestamp >= HitInterval)
 					{
+						RecordContactEvidence(collisionEntry.Damageable, "Accepted", "ContactIntervalDue", collisionEntry.Timestamp + HitInterval);
 						collisionEntry.Timestamp = Time.time;
 						uint entriesVersion = _entriesVersion;
 						_onHit?.Invoke(collisionEntry.Damageable);

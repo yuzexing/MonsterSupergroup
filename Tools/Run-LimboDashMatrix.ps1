@@ -1,6 +1,6 @@
-param(
- [string]$BuildDirectory='Builds/LimboDash20260915',
- [string]$ClientDirectory='Builds/LimboDashClient20260915',
+﻿param(
+ [string]$BuildDirectory,
+ [string]$ClientDirectory,
  [string]$Prefix='dash-matrix-20260915',
  [string[]]$Cases=@('0-host','0-client','1-host','1-client'),
  [switch]$ArtObserve,
@@ -10,6 +10,11 @@ param(
 )
 $ErrorActionPreference='Stop'
 $root=Split-Path -Parent $PSScriptRoot
+Import-Module (Join-Path $PSScriptRoot 'ProjectTools.psm1')
+$resolvedPlayer = Resolve-ProjectBuildExecutable -ProjectRoot $root -Recipe 'gameplay-validation' -BuildDirectory $BuildDirectory -RequireDevelopmentTools -Network Kcp
+$BuildDirectory = Split-Path -Parent $resolvedPlayer
+if (-not $ClientDirectory) { $ClientDirectory = $BuildDirectory }
+
 foreach($case in $Cases){
  $parts=$case.Split('-');$variant=[int]$parts[0];$target=$parts[1]
  if($variant -notin @(0,1) -or $target -notin @('host','client')){throw 'Cases must be 0-host, 0-client, 1-host, 1-client'}

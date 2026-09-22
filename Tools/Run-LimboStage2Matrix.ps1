@@ -1,15 +1,19 @@
-param(
+﻿param(
     [string[]]$Cases = @('Skeleton0','Skeleton2','Elite0','Elite1','Brotchi0','Brotchi1','Slime0','Slime1','Rusher2','Rusher1'),
     [string]$Prefix = 'stage2-matrix',
     [int]$Port = 8130,
-    [string]$BuildDirectory = 'Builds/LimboReference',
+    [string]$BuildDirectory,
     [ValidateSet('normal','warning-only')][string]$AttackEdges = 'normal',
     [ValidateSet('mechanism','art-death')][string]$FixtureMode = 'mechanism',
     [switch]$ArtObserve
 )
 $ErrorActionPreference = 'Stop'
 $project = Split-Path -Parent $PSScriptRoot
-$binary = Join-Path (Join-Path $project $BuildDirectory) 'MonsterSupergroupLimbo.exe'
+Import-Module (Join-Path $PSScriptRoot 'ProjectTools.psm1')
+$resolvedPlayer = Resolve-ProjectBuildExecutable -ProjectRoot $project -Recipe 'gameplay-validation' -BuildDirectory $BuildDirectory -RequireDevelopmentTools -Network Kcp
+$BuildDirectory = Split-Path -Parent $resolvedPlayer
+
+$binary = $resolvedPlayer
 $processFiles = @()
 function Stop-RecordedPlayers {
     foreach ($file in $processFiles) {

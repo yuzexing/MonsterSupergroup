@@ -11,7 +11,7 @@ namespace MonsterSupergroup.Gameplay.Combat
 
         private void OnEnable()
         {
-            if (!Application.isEditor && !Debug.isDebugBuild)
+            if (!MonsterSupergroup.Builds.BuildFeatures.DevelopmentToolsAllowed || (!Application.isEditor && !Debug.isDebugBuild))
             {
                 enabled = false;
                 return;

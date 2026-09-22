@@ -1,5 +1,5 @@
 ﻿param(
-    [string]$Executable = 'Builds/MenuDevelopment/MonsterSupergroup.exe',
+    [string]$Executable = '',
     [ValidateSet('party','solo')][string]$Scenario = 'party',
     [int]$Width = 1280,
     [int]$Height = 720,

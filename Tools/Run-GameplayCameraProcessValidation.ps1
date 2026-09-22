@@ -1,5 +1,5 @@
 ﻿param(
-    [string]$Executable = 'Builds/GameplayCameraValidation/GameplayCameraValidation.exe',
+    [string]$Executable = '',
     [switch]$CaptureFrames,
     [switch]$VisibleWindows,
     [switch]$ForceD3D11

@@ -1,5 +1,5 @@
 ﻿param(
-    [string]$Executable = 'Builds/OptionsValidation/MonsterSupergroup.exe',
+    [string]$Executable = '',
     [string]$Artifacts = 'Logs/OptionsStandalone'
 )
 Write-Warning '旧脚本兼容一版；新入口: Invoke-ProjectTool.ps1 -ToolId test.options'

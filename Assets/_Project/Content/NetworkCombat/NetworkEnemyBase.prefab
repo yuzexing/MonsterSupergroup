@@ -540,6 +540,7 @@ MonoBehaviour:
   angle: 0
   collider: {fileID: 721894178300467092}
   hurtBox: {fileID: 3949225564415453723}
+  animateMovementOnlyDeath: 0
 --- !u!50 &643773787611812521
 Rigidbody2D:
   serializedVersion: 5
@@ -695,6 +696,7 @@ MonoBehaviour:
   syncDirection: 0
   syncMode: 0
   syncInterval: 0
+  referenceArtDatabase: {fileID: 0}
   authority: {fileID: 0}
   interpolator: {fileID: 0}
   body: {fileID: 0}
@@ -735,6 +737,7 @@ MonoBehaviour:
   syncDirection: 0
   syncMode: 0
   syncInterval: 0
+  waitForDeathPresentation: 0
 --- !u!114 &6636599899439864565
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1130,6 +1133,7 @@ MonoBehaviour:
     _NormalizedStartTime: NaN
   shadowAnimationLayer: 5
   animator: {fileID: 0}
+  useRecoveredMovement: 0
   randomAnimatorSpeed: 0
   animatorSpeed: 1
   animatorSpeedBounds: {x: 1, y: 1}

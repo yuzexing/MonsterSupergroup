@@ -1,5 +1,5 @@
-param(
-    [string]$Executable = 'Builds/NordicGameplay/MonsterSupergroup.exe',
+﻿param(
+    [string]$Executable = '',
     [string]$OutputDirectory = 'Logs/NordicGameplay/Acceptance',
     [switch]$FullSuite,
     [switch]$FullPerformance

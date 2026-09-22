@@ -139,12 +139,35 @@ namespace MonsterSupergroup.NetworkCombat.Editor
             so.ApplyModifiedPropertiesWithoutUndo();
         }
 
+        public static void ValidateBuildInputs()
+        {
+            var timeline = AssetDatabase.LoadAssetAtPath<TimelineAsset>(Root + "/Limbo.playable");
+            var full = AssetDatabase.LoadAssetAtPath<GameplayWaveRules>(ResourcesRoot + "/Full.asset");
+            if (timeline == null || full == null || full.Timeline != timeline)
+                throw new InvalidDataException("Limbo build requires the existing main Timeline and Full rules. Asset generation is a separate maintenance operation.");
+            if (!full.TryCapture(out var captured, out var error))
+                throw new InvalidDataException("Limbo build validation failed: " + error);
+            if (captured.Reference == null || captured.Reference.Clips.Length != 31)
+                throw new InvalidDataException("Limbo Full must contain all 31 reference clips before building.");
+        }
+
+        public static string BuildPlayer(string output = null)
+        {
+            ValidateBuildInputs();
+            return MonsterSupergroup.EditorTools.ProjectBuildService.Build("kcp-development",
+                output ?? "Builds/LimboReference/MonsterSupergroupLimbo.exe");
+        }
+
         public static void CreateAndBuildBatch()
         {
             int exit = 0;
-            try { Create(); MonsterSupergroup.EditorTools.ProjectBuildService.Build("kcp-development", "Builds/LimboReference/MonsterSupergroupLimbo.exe"); }
+            try
+            {
+                Debug.LogWarning("[ProjectTools] CreateAndBuildBatch now builds existing Limbo assets only. Use explicit maintenance tools to generate or restore assets.");
+                BuildPlayer();
+            }
             catch (Exception error) { Debug.LogException(error); exit = 1; }
-            finally { EditorApplication.Exit(exit); }
+            finally { if (Application.isBatchMode) EditorApplication.Exit(exit); }
         }
     }
 }

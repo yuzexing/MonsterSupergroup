@@ -1,6 +1,6 @@
-param(
+﻿param(
     [ValidateSet('host', 'client', 'both')][string]$Role = 'both',
-    [string]$Executable = 'Builds/AllurePrototype/AllurePrototype.exe',
+    [string]$Executable = '',
     [string]$Address = '127.0.0.1',
     [ValidateRange(1, 65535)][int]$Port = 8000,
     [ValidateRange(1, 4)][int]$WaitFor = 2,
@@ -9,6 +9,7 @@ param(
 $ErrorActionPreference = 'Stop'
 Import-Module (Join-Path (Split-Path -Parent $PSScriptRoot) 'ProjectTools.psm1')
 $projectRoot = Split-Path -Parent (Split-Path -Parent $PSScriptRoot)
+$Executable = Resolve-ProjectBuildExecutable -ProjectRoot $projectRoot -Recipe 'gameplay-validation' -Executable $Executable -RequireDevelopmentTools -Network Kcp
 if (-not [IO.Path]::IsPathRooted($Executable)) { $Executable = Join-Path $projectRoot $Executable }
 if (-not (Test-Path -LiteralPath $Executable -PathType Leaf)) { throw "Missing prototype build: $Executable" }
 if ([string]::IsNullOrWhiteSpace($Address)) { throw 'Address cannot be empty.' }

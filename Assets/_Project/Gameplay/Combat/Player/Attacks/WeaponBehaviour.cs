@@ -24,6 +24,7 @@ namespace AstralShift.HellMaiden.Player.Attacks
 		private WeaponRuntimeBehaviour _nativeRuntime;
 
 		private WeaponData _weaponData;
+		private string diagnosticCooldownState;
 
 		[Header("Sounds")]
 		[SerializeField]
@@ -178,6 +179,9 @@ namespace AstralShift.HellMaiden.Player.Attacks
 		{
 			GasAttackSnapshot attack = RequireNativeRuntime().BeginAttack(
 				RequireWeaponData().AttackTags);
+			if (MonsterSupergroup.GAS.CombatEvidence.Enabled) MonsterSupergroup.GAS.CombatEvidence.Event("Owner", "owner.attack_started", "Created", "NativeAttackCreated",
+				attack.Context.EventId.Value, attack.Context.SourcePlayerId, input: new { weaponId = ID, actualTime = Time.time,
+					cooldownElapsed = LastAttackElapsedTime, speed = attack.Stats.Speed, duration = attack.Stats.Duration }, root: attack.Context.RootEventId.Value, bytes: 768);
 			try
 			{
 				NativeAttackCreated?.Invoke(this, attack);
@@ -233,12 +237,26 @@ namespace AstralShift.HellMaiden.Player.Attacks
 
 		protected virtual bool CheckCooldown()
 		{
-			if (!CanAttack) return false;
-			if (LastAttackElapsedTime >= GetCooldown())
+			if (!CanAttack) { RecordCooldownEvidence("OwnerBlocked", null); return false; }
+			float cooldown = GetCooldown();
+			if (LastAttackElapsedTime >= cooldown)
 			{
+				RecordCooldownEvidence("Ready", cooldown);
 				return true;
 			}
+			RecordCooldownEvidence("CoolingDown", cooldown);
 			return false;
+		}
+
+		private void RecordCooldownEvidence(string state, float? cooldown)
+		{
+			if (!MonsterSupergroup.GAS.CombatEvidence.Enabled || state == diagnosticCooldownState) return;
+			diagnosticCooldownState = state;
+			MonsterSupergroup.GAS.CombatEvidence.Event("Owner", "owner.attack_gate", "Changed", state,
+				source: _nativeRuntime != null ? _nativeRuntime.SourcePlayerId : 0,
+				input: new { weaponId = ID, elapsed = LastAttackElapsedTime, cooldown, actualTime = Time.time,
+					upgradeLocked = player != null && player.IsUpgradeSelectionLocked,
+					loadingLocked = player != null && player.IsRunLoadingLocked }, bytes: 768);
 		}
 
 		public virtual float GetCooldown()
@@ -279,7 +297,13 @@ namespace AstralShift.HellMaiden.Player.Attacks
 			IDamageable damageable,
 			GasAttackSnapshot attack)
 		{
-			if (!CanAttack) return;
+			if (!CanAttack)
+			{
+				if (MonsterSupergroup.GAS.CombatEvidence.Enabled) MonsterSupergroup.GAS.CombatEvidence.Event("Owner", "owner.hit_filter", "Ignored", "OwnerCannotAttack",
+					attack?.Context.EventId.Value ?? 0, attack?.Context.SourcePlayerId ?? 0,
+					input: new { weaponId = ID }, root: attack?.Context.RootEventId.Value ?? 0, bytes: 512);
+				return;
+			}
 			if (attack == null)
 			{
 				throw new ArgumentNullException(nameof(attack));
@@ -287,6 +311,7 @@ namespace AstralShift.HellMaiden.Player.Attacks
 
 			WeaponRuntimeBehaviour runtime = RequireNativeRuntime();
 			WeaponData weaponData = RequireWeaponData();
+			using var evidenceContext = MonsterSupergroup.GAS.CombatOutputEvidence.Enter(attack.Context);
 			this.OnWeaponHit?.Invoke();
 			if (damageable is INativeGasDamageable nativeDamageable)
 			{
@@ -298,11 +323,14 @@ namespace AstralShift.HellMaiden.Player.Attacks
 					ToLegacyDamageType(attack.Stats.DamageType),
 					weaponData.Presentation.Knockback));
 			}
+			else if (MonsterSupergroup.GAS.CombatEvidence.Enabled) MonsterSupergroup.GAS.CombatEvidence.Event("Owner", "owner.hit_filter", "Ignored", "TargetHasNoNativeDamageReceiver",
+				attack.Context.EventId.Value, attack.Context.SourcePlayerId, input: new { weaponId = ID }, root: attack.Context.RootEventId.Value, bytes: 512);
 		}
 
-		public void NotifyNativeDamage(float value, bool isCritical)
+		public void NotifyNativeDamage(float value, bool isCritical, MonsterSupergroup.GAS.CombatContext context = default)
 		{
 			RequireNativeRuntime();
+			using var evidenceContext = MonsterSupergroup.GAS.CombatOutputEvidence.Enter(context);
 			this.OnWeaponDamage?.Invoke(value, isCritical);
 		}
 

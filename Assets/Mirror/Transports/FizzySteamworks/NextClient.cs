@@ -125,6 +125,7 @@ namespace Mirror.FizzySteam
 
         private void OnConnectionStatusChanged(SteamNetConnectionStatusChangedCallback_t param)
         {
+            SteamTransportDiagnostics.RecordConnection(param.m_hConn.m_HSteamNetConnection, 0, "Client", param.m_eOldState.ToString(), param.m_info.m_eState.ToString(), param.m_info.m_eEndReason);
             ulong clientSteamID = param.m_info.m_identityRemote.GetSteamID64();
             if (param.m_info.m_eState == ESteamNetworkingConnectionState.k_ESteamNetworkingConnectionState_Connected)
             {
@@ -246,10 +247,6 @@ namespace Mirror.FizzySteam
                 {
                     Debug.Log($"Connection to server was lost.");
                     InternalDisconnect();
-                }
-                else if (res != EResult.k_EResultOK)
-                {
-                    Debug.LogError($"Could not send: {res.ToString()}");
                 }
             }
             catch (Exception ex)

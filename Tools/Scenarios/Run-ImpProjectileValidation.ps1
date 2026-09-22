@@ -1,5 +1,5 @@
 ﻿param(
-    [string]$Executable = 'Builds/Imp/Imp.exe',
+    [string]$Executable = '',
     [switch]$Dedicated,
     [switch]$Impaired,
     [switch]$Graphics,
@@ -9,6 +9,7 @@ Import-Module (Join-Path (Split-Path -Parent $PSScriptRoot) 'ProjectTools.psm1')
 
 $ErrorActionPreference = 'Stop'
 $impRoot = Split-Path -Parent (Split-Path -Parent $PSScriptRoot)
+$Executable = Resolve-ProjectBuildExecutable -ProjectRoot $impRoot -Recipe 'gameplay-validation' -Executable $Executable -RequireDevelopmentTools -Network Kcp
 if (-not [IO.Path]::IsPathRooted($Executable)) { $Executable = Join-Path $impRoot $Executable }
 $impLogs = Join-Path $impRoot ('Logs/Imp/process-' + (Get-Date -Format 'yyyyMMdd-HHmmss') + '-' + $(if ($Dedicated) { 'dedicated' } else { 'host' }) + '-' + $(if ($Impaired) { 'impaired' } else { 'normal' }))
 New-Item -ItemType Directory -Path $impLogs -Force | Out-Null

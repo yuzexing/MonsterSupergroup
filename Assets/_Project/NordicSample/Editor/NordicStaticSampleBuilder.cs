@@ -159,7 +159,11 @@ namespace MonsterSupergroup.NordicSample.Editor
             EditorSceneManager.SaveScene(SceneManager.GetActiveScene(), ScenePath);
         }
 
-        public static void RefreshSortingAndBuildPlayer() { RefreshSampleSorting(); BuildPlayer(); }
+        public static void RefreshSortingAndBuildPlayer()
+        {
+            Debug.LogWarning("[ProjectTools] This legacy build entry now validates and builds existing Nordic assets only. Run RefreshSampleSorting explicitly for maintenance.");
+            BuildPlayer();
+        }
 
         private static void ConfigureTorch(GameObject instance, Prop prop)
         {
@@ -351,7 +355,11 @@ namespace MonsterSupergroup.NordicSample.Editor
             MonsterSupergroup.EditorTools.ProjectBuildService.Legacy("nordic");
         }
 
-        public static void BuildAndValidatePlayer() { SmokeCheck(); BuildSample(); BuildPlayer(); }
+        public static void BuildAndValidatePlayer()
+        {
+            Debug.LogWarning("[ProjectTools] This legacy build entry now validates and builds the existing Nordic scene only. Run BuildSample explicitly for maintenance.");
+            BuildPlayer();
+        }
 
         private static SpriteRenderer SpriteNode(string name, Sprite sprite, Transform parent, Vector3 position, string layer, int order)
         {

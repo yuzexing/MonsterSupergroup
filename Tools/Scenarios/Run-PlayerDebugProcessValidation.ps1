@@ -1,5 +1,5 @@
 ﻿param(
-    [string]$Executable = 'Builds/PlayerDebugDevelopment/PlayerDebug.exe',
+    [string]$Executable = '',
     [int]$Width = 1280,
     [int]$Height = 720,
     [int]$Port = 7988,
@@ -9,6 +9,7 @@ Import-Module (Join-Path (Split-Path -Parent $PSScriptRoot) 'ProjectTools.psm1')
 
 $ErrorActionPreference = 'Stop'
 $projectRoot = Split-Path -Parent (Split-Path -Parent $PSScriptRoot)
+$Executable = Resolve-ProjectBuildExecutable -ProjectRoot $projectRoot -Recipe 'gameplay-validation' -Executable $Executable -RequireDevelopmentTools -Network Kcp
 if (-not [IO.Path]::IsPathRooted($Executable)) { $Executable = Join-Path $projectRoot $Executable }
 if (-not (Test-Path -LiteralPath $Executable)) { throw "Missing validation build: $Executable" }
 $logRoot = Join-Path $projectRoot ('Logs/PlayerDebug/Process-' + (Get-Date -Format 'yyyyMMdd-HHmmss'))

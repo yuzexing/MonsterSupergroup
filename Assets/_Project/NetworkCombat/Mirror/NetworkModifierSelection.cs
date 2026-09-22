@@ -333,7 +333,7 @@ namespace MonsterSupergroup.NetworkCombat
         /// <summary>Development-only owner intent; the server determines and grants one level of XP.</summary>
         public bool RequestDebugLevelUp()
         {
-            if (LimboReferenceLaunch.Manual || (!Application.isEditor && !Debug.isDebugBuild) || !isActiveAndEnabled ||
+            if (!MonsterSupergroup.Builds.BuildFeatures.DevelopmentToolsAllowed || LimboReferenceLaunch.Manual || (!Application.isEditor && !Debug.isDebugBuild) || !isActiveAndEnabled ||
                 !isOwned || !NetworkClient.active) return false;
             CmdDebugLevelUp();
             return true;
@@ -342,7 +342,7 @@ namespace MonsterSupergroup.NetworkCombat
         [Command]
         private void CmdDebugLevelUp(NetworkConnectionToClient sender = null)
         {
-            if (LimboReferenceLaunch.Manual || (!Application.isEditor && !Debug.isDebugBuild) || !isActiveAndEnabled ||
+            if (!MonsterSupergroup.Builds.BuildFeatures.DevelopmentToolsAllowed || LimboReferenceLaunch.Manual || (!Application.isEditor && !Debug.isDebugBuild) || !isActiveAndEnabled ||
                 sender == null || sender != connectionToClient || sender.identity != netIdentity) return;
             int previousLevel = level;
             // A full threshold advances exactly one level and preserves the current XP remainder.

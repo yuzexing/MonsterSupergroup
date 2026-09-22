@@ -484,6 +484,10 @@ namespace MonsterSupergroup.GAS
                                 status.CompletedTicks,
                                 status.RemainingHits == 0));
                         }
+                        else if (CombatEvidence.Enabled)
+                            RecordTickEvidence(new StatusTick(effective,
+                                new DamageInfo(effective.DamageSourceId, effective.TickDamage, false), status.CompletedTicks, status.RemainingHits == 0),
+                                false, "Ignored", "ExecutionPolicyRejected");
                     }
 
                     if (status.RemainingHits == 0)
@@ -522,7 +526,7 @@ namespace MonsterSupergroup.GAS
 
             for (int i = 0; i < pendingTicks.Count; i++)
             {
-                if (CombatEvidence.Enabled) CombatEvidence.Event("Owner", "status.tick", "Executed", "ExecutionPolicyAccepted", input: pendingTicks[i]);
+                RecordTickEvidence(pendingTicks[i], false, "Executed", "ExecutionPolicyAccepted");
                 tickReceiver(pendingTicks[i]);
             }
         }
@@ -618,8 +622,8 @@ namespace MonsterSupergroup.GAS
             {
                 for (int i = 0; i < ticks.Count; i++)
                 {
-                    if (CombatEvidence.Enabled) CombatEvidence.Event("Owner", "status.tick", "Executed", "ExecutionPolicyAccepted", input: ticks[i]);
-                tickReceiver(ticks[i]);
+                    RecordTickEvidence(ticks[i], true, "Executed", "ImmediateSettlement");
+                    tickReceiver(ticks[i]);
                 }
             }
 

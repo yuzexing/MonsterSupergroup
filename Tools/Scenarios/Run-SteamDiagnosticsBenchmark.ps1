@@ -1,7 +1,8 @@
-param([string]$Executable='Builds/SteamDiagnosticsValidation/MonsterSupergroup.exe',[string]$Artifacts)
+﻿param([string]$Executable = '',[string]$Artifacts)
 $ErrorActionPreference='Stop'
 $root=Split-Path -Parent (Split-Path -Parent $PSScriptRoot)
 Import-Module (Join-Path (Split-Path -Parent $PSScriptRoot) 'ProjectTools.psm1')
+$Executable = Resolve-ProjectBuildExecutable -ProjectRoot $root -Recipe 'gameplay-validation' -Executable $Executable -RequireDevelopmentTools -Network Kcp
 if(-not [IO.Path]::IsPathRooted($Executable)){$Executable=Join-Path $root $Executable}
 if(-not $Artifacts){$Artifacts=Join-Path $root ('Logs/SteamLagBenchmark/'+(Get-Date -Format 'yyyyMMdd-HHmmss'))}
 New-Item -ItemType Directory -Path $Artifacts -Force | Out-Null

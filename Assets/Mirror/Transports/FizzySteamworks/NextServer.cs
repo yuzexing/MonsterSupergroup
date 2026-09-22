@@ -77,6 +77,9 @@ namespace Mirror.FizzySteam
 
         private void OnConnectionStatusChanged(SteamNetConnectionStatusChangedCallback_t param)
         {
+            SteamTransportDiagnostics.RecordConnection(param.m_hConn.m_HSteamNetConnection,
+                connToMirrorID.TryGetValue(param.m_hConn, out int knownConnection) ? knownConnection : -1,
+                "Server", param.m_eOldState.ToString(), param.m_info.m_eState.ToString(), param.m_info.m_eEndReason);
             ulong clientSteamID = param.m_info.m_identityRemote.GetSteamID64();
             if (param.m_info.m_eState == ESteamNetworkingConnectionState.k_ESteamNetworkingConnectionState_Connecting)
             {
@@ -111,6 +114,7 @@ namespace Mirror.FizzySteam
                 int connectionId = nextConnectionID++;
                 SteamEvidenceLane.Connect(connectionId, param.m_hConn);
                 connToMirrorID.Add(param.m_hConn, connectionId);
+                SteamTransportDiagnostics.RecordConnection(param.m_hConn.m_HSteamNetConnection, connectionId, "Server", "Connected", "MirrorConnectionAssigned", 0);
                 steamIDToMirrorID.Add(param.m_info.m_identityRemote.GetSteamID(), connectionId);
                 OnConnectedWithAddress?.Invoke(connectionId,server.ServerGetClientAddress(connectionId));
                 Debug.Log($"Client with SteamID {clientSteamID} connected. Assigning connection id {connectionId}");
@@ -230,10 +234,6 @@ namespace Mirror.FizzySteam
                 {
                     Debug.Log($"Connection to {connectionId} was lost.");
                     InternalDisconnect(connectionId, conn);
-                }
-                else if (res != EResult.k_EResultOK)
-                {
-                    Debug.LogError($"Could not send: {res}");
                 }
             }
             else

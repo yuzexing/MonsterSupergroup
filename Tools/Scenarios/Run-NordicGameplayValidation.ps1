@@ -1,5 +1,5 @@
-param(
-    [string]$Executable = 'Builds/NordicGameplay/MonsterSupergroup.exe',
+﻿param(
+    [string]$Executable = '',
     [string]$OutputDirectory = 'Logs/NordicGameplay/Acceptance',
     [switch]$FullSuite,
     [switch]$FullPerformance
@@ -7,6 +7,7 @@ param(
 Import-Module (Join-Path (Split-Path -Parent $PSScriptRoot) 'ProjectTools.psm1')
 $ErrorActionPreference = 'Stop'
 $projectRoot = Split-Path -Parent (Split-Path -Parent $PSScriptRoot)
+$Executable = Resolve-ProjectBuildExecutable -ProjectRoot $projectRoot -Recipe 'gameplay-validation' -Executable $Executable -RequireDevelopmentTools -Network Kcp
 if (-not [IO.Path]::IsPathRooted($Executable)) { $Executable = Join-Path $projectRoot $Executable }
 if (-not [IO.Path]::IsPathRooted($OutputDirectory)) { $OutputDirectory = Join-Path $projectRoot $OutputDirectory }
 New-Item -ItemType Directory -Path $OutputDirectory -Force | Out-Null

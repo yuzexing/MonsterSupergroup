@@ -8,6 +8,10 @@ param([ValidateSet('host','client')][string]$Role='host', [ValidateRange(1,2)][i
 $ErrorActionPreference='Stop'
 $package=$PSScriptRoot
 $manifest=Get-Content -LiteralPath (Join-Path $package 'build-manifest.json') -Raw -Encoding UTF8 | ConvertFrom-Json
+$playerName = if ($manifest.executable) { [string]$manifest.executable } else { 'MonsterSupergroupLimbo.exe' }
+if ([IO.Path]::GetFileName($playerName) -ne $playerName -or $playerName -notlike '*.exe') { throw 'Invalid package executable.' }
+$executable = Join-Path $package $playerName
+if (-not (Test-Path -LiteralPath $executable)) { throw 'Extract the entire Limbo package before launching.' }
 $outputDirectory=Join-Path $package "TechnicalRuns/$Session/$Role"
 if(Test-Path -LiteralPath $outputDirectory){throw 'Use a new technical session; preserve the old logs.'}
 New-Item -ItemType Directory -Path $outputDirectory -Force | Out-Null
@@ -22,6 +26,6 @@ $arguments=@('-force-d3d11','-screen-fullscreen','0','-screen-width','1280','-sc
     '-logFile',('"'+(Join-Path $outputDirectory 'player.log')+'"'), "--limbo-profile=$Profile","--limbo-role=$Role",
     "--limbo-log-detail=$LogDetail","--limbo-audio-case=$AudioCase","--limbo-full-case=$Case",'--limbo-spatial-case=observe',"--limbo-port=$Port","--limbo-wait-for=$WaitFor",("--limbo-autowalk="+($Profile -eq 'full-validation').ToString().ToLowerInvariant()),'--limbo-windowed=true',
     "--limbo-version=$($manifest.version)","--limbo-session=$Session",('"--limbo-output='+$outputDirectory+'"'))
-$process=Start-Process -FilePath (Join-Path $package 'MonsterSupergroupLimbo.exe') -WorkingDirectory $package -ArgumentList $arguments -WindowStyle Normal -PassThru
+$process=Start-Process -FilePath $executable -WorkingDirectory $package -ArgumentList $arguments -WindowStyle Normal -PassThru
 $process.Id | Set-Content -LiteralPath (Join-Path $outputDirectory 'process.pid')
 Write-Output "TECHNICAL ONLY: $Session/$Role PID=$($process.Id) Logs=$outputDirectory"

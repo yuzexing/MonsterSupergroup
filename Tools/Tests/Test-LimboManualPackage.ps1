@@ -45,4 +45,15 @@ foreach ($profile in @('audio-wisp','audio-beam')) {
 Remove-Variable -Name limboManualTestLaunch -Scope Global
 & (Join-Path $fixture 'Archive-Logs.ps1') -Session 'pickup-observe'
 if (-not (Test-Path -LiteralPath (Join-Path $fixture 'TechnicalRuns/pickup-observe/archive-status.json'))) { throw 'Technical pickup logs were not archived.' }
+[IO.File]::WriteAllBytes((Join-Path $fixture 'MonsterSupergroup.exe'),[byte[]]@())
+'{"version":"new-build-test","executable":"MonsterSupergroup.exe"}' | Set-Content -LiteralPath (Join-Path $fixture 'build-manifest.json')
+& (Join-Path $fixture 'Start-Limbo.ps1') -Mode Solo
+if ($global:limboManualTestLaunch.exe -ne (Join-Path $fixture 'MonsterSupergroup.exe')) { throw 'Current build filename ignored by manual launcher.' }
+& (Join-Path $fixture 'Start-Technical.ps1') -Profile spatial-b -Session dynamic-player-name
+if ($global:limboManualTestLaunch.exe -ne (Join-Path $fixture 'MonsterSupergroup.exe')) { throw 'Current build filename ignored by technical launcher.' }
+'{"version":"invalid-test","executable":"../elsewhere.exe"}' | Set-Content -LiteralPath (Join-Path $fixture 'build-manifest.json')
+$rejected=$false
+try { & (Join-Path $fixture 'Start-Limbo.ps1') -Mode Solo } catch { $rejected=$true }
+if (-not $rejected) { throw 'Manifest executable escaped its package.' }
+Remove-Variable -Name limboManualTestLaunch -Scope Global
 Write-Output "PASS: manual isolation, portable quoted paths, fire observation profiles, failed/incomplete archive classifications. Evidence: $fixture"

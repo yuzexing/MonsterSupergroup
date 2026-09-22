@@ -1,16 +1,20 @@
-[CmdletBinding()]
+﻿[CmdletBinding()]
 param(
     [ValidateSet('pair','dedicated')][string]$Mode = 'pair',
     [Parameter(Mandatory=$true)][string]$RunName,
     [int]$Port = 8071,
-    [string]$BuildDirectory = 'Builds/RegressionClosure20260916'
+    [string]$BuildDirectory
 )
 $ErrorActionPreference = 'Stop'
 $projectRoot = Split-Path -Parent $PSScriptRoot
+Import-Module (Join-Path $PSScriptRoot 'ProjectTools.psm1')
+$resolvedPlayer = Resolve-ProjectBuildExecutable -ProjectRoot $projectRoot -Recipe 'gameplay-validation' -BuildDirectory $BuildDirectory -RequireDevelopmentTools -Network Kcp
+$BuildDirectory = Split-Path -Parent $resolvedPlayer
+
 if ($RunName -notmatch '^[a-zA-Z0-9_-]+$') { throw 'RunName must be a simple folder name.' }
 $runDir = Join-Path $projectRoot ('Logs/RegressionClosure20260916/' + $RunName)
 if (Test-Path -LiteralPath $runDir) { throw "Run already exists: $runDir" }
-$exePath = Join-Path $projectRoot ($BuildDirectory + '/RegressionClosure.exe')
+$exePath = $resolvedPlayer
 if (!(Test-Path -LiteralPath $exePath)) { throw "Build missing: $exePath" }
 New-Item -ItemType Directory -Path $runDir | Out-Null
 $serverRole = if ($Mode -eq 'dedicated') { 'server' } else { 'host' }

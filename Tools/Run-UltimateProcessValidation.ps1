@@ -1,5 +1,5 @@
 ﻿param(
-    [string]$Executable = 'Builds/Phase02/UltimateValidation.exe',
+    [string]$Executable = '',
     [switch]$Dedicated,
     [int]$Port = 7958,
     [string]$LogDirectory = 'Logs/Phase02'

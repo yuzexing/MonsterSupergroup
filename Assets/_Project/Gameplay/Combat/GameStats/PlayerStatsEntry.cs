@@ -1,10 +1,11 @@
 using System;
 using System.Collections.Generic;
 using AstralShift.HellMaiden.Combat;
+using MonsterSupergroup.GAS;
 
 namespace AstralShift.HellMaiden.GameStats
 {
-	public class PlayerStatsEntry : StatEntry
+	public class PlayerStatsEntry : StatEntry, IOutputStatisticsEvidence
 	{
 		public float maxLevelReached { get; set; }
 
@@ -56,8 +57,15 @@ namespace AstralShift.HellMaiden.GameStats
 
 		public void RegisterDamageDealt(float value)
 		{
-			totalDamageDealt += value;
+			string engine = CombatOutputEvidence.Register(this);
+			var before = CaptureOutputStatistics();
+			var input = new OutputStatisticInput { value = value, metric = "PlayerComputedDamage" };
+			var after = OutputStatistics.ApplyDamage(before, input);
+			totalDamageDealt = after.totalDamage;
+			CombatOutputEvidence.Record(engine, input, before, after);
 		}
+
+		public OutputStatisticsState CaptureOutputStatistics() => new OutputStatisticsState { totalDamage = totalDamageDealt };
 
 		public void RegisterHealthRecovered(int value)
 		{

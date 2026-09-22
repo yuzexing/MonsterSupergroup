@@ -266,6 +266,14 @@ namespace MonsterSupergroup.GAS
             }
         }
 
+        public StatRemapEvidence[] CaptureDiagnosticRemaps()
+        {
+            var result = new List<StatRemapEvidence>();
+            foreach (var pair in _statsMap)
+                if (pair.Key != pair.Value) result.Add(new StatRemapEvidence { target = pair.Key, source = pair.Value });
+            return result.ToArray();
+        }
+
         public float GetMultiplierFromType(
             AttackStatType type,
             AttackStatsMultipliers multipliers)

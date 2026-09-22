@@ -504,6 +504,7 @@ namespace MonsterSupergroup.NetworkCombat
             if (!forceNewEpoch && entry.Assignment.Host == host && entry.Assignment.SimulationOwnerPlayerId == ownerPlayerId &&
                 sameTarget && entry.Assignment.Epoch != 0)
                 return entry.Assignment;
+            var previousAssignment = entry.Assignment;
             uint epoch = unchecked(entry.Assignment.Epoch + 1u);
             if (epoch == 0u)
             {
@@ -522,6 +523,10 @@ namespace MonsterSupergroup.NetworkCombat
             entry.LastAcceptedMovementTime = 0d;
             entry.LastAcceptedAttackStateSequence = 0u;
             entry.HasAttackPresentation = false;
+            if (MonsterSupergroup.GAS.CombatEvidence.Enabled) MonsterSupergroup.GAS.CombatEvidence.Write(new MonsterSupergroup.GAS.DiagnosticRecord {
+                role = "Server", stage = "authority.assignment", outcome = "Applied", reason = forceNewEpoch ? "EpochRenewed" : "OwnerOrTargetChanged",
+                source = ownerPlayerId, target = entry.Assignment.EnemyEntityId, assignmentEpoch = epoch,
+                before = previousAssignment, after = entry.Assignment, critical = true });
             return entry.Assignment;
         }
     }

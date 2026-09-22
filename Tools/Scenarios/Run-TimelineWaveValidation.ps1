@@ -1,5 +1,5 @@
 ﻿param(
-    [string]$Executable = 'Builds/TimelineWaves/TimelineWaves.exe',
+    [string]$Executable = '',
     [switch]$Dedicated,
     [switch]$Impaired,
     [int]$Port = 7990
@@ -8,6 +8,7 @@ Import-Module (Join-Path (Split-Path -Parent $PSScriptRoot) 'ProjectTools.psm1')
 
 $ErrorActionPreference = 'Stop'
 $waveRoot = Split-Path -Parent (Split-Path -Parent $PSScriptRoot)
+$Executable = Resolve-ProjectBuildExecutable -ProjectRoot $waveRoot -Recipe 'gameplay-validation' -Executable $Executable -RequireDevelopmentTools -Network Kcp
 if (-not [IO.Path]::IsPathRooted($Executable)) { $Executable = Join-Path $waveRoot $Executable }
 $waveLogs = Join-Path $waveRoot ('Logs/TimelineWaves/process-' + (Get-Date -Format 'yyyyMMdd-HHmmss') + '-' + $(if ($Dedicated) { 'dedicated' } else { 'host' }) + '-' + $(if ($Impaired) { 'impaired' } else { 'normal' }))
 New-Item -ItemType Directory -Path $waveLogs -Force | Out-Null

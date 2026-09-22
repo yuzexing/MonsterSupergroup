@@ -1,5 +1,5 @@
 ﻿param(
-    [string]$Executable = 'Builds/EnemyHandoff/EnemyHandoff.exe',
+    [string]$Executable = '',
     [ValidateSet('normal', 'impaired')][string]$Profile = 'normal',
     [ValidateRange(2, 600)][int]$Duration = 120,
     [ValidateSet('NetworkEnemySkeleton', 'NetworkEnemySkeletonExample', 'NetworkEnemyLustSinner', 'NetworkEnemyImp')][string]$SkeletonPrefab = 'NetworkEnemySkeleton',
@@ -9,6 +9,7 @@ Import-Module (Join-Path (Split-Path -Parent $PSScriptRoot) 'ProjectTools.psm1')
 
 $ErrorActionPreference = 'Stop'
 $projectRoot = Split-Path -Parent (Split-Path -Parent $PSScriptRoot)
+$Executable = Resolve-ProjectBuildExecutable -ProjectRoot $projectRoot -Recipe 'handoff-validation' -Executable $Executable -RequireDevelopmentTools -Network Kcp
 if (-not [IO.Path]::IsPathRooted($Executable)) { $Executable = Join-Path $projectRoot $Executable }
 if (-not (Test-Path -LiteralPath $Executable)) { throw "Missing build: $Executable" }
 $logRoot = Join-Path $projectRoot ('Logs/EnemyHandoff/' + (Get-Date -Format 'yyyyMMdd-HHmmss') + '-' + $Profile)

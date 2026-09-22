@@ -1,5 +1,5 @@
 ﻿param(
-    [string]$Executable = 'Builds/TimelineWaves/TimelineWaves.exe',
+    [string]$Executable = '',
     [switch]$Dedicated,
     [switch]$Impaired,
     [int]$Port = 7990

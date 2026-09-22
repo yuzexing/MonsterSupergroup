@@ -1,5 +1,5 @@
 ﻿param(
-    [string]$Executable = "Builds/BootGameplayValidation/MonsterSupergroupBootGameplayValidation.exe",
+    [string]$Executable = '',
     [ValidateRange(1, 65535)]
     [int]$Port = 7801,
     [ValidateRange(20, 300)]
@@ -10,6 +10,7 @@ Import-Module (Join-Path (Split-Path -Parent $PSScriptRoot) 'ProjectTools.psm1')
 
 $ErrorActionPreference = "Stop"
 $projectRoot = Split-Path -Parent (Split-Path -Parent $PSScriptRoot)
+$Executable = Resolve-ProjectBuildExecutable -ProjectRoot $projectRoot -Recipe 'gameplay-validation' -Executable $Executable -RequireDevelopmentTools -Network Kcp
 if (-not [System.IO.Path]::IsPathRooted($Executable)) {
     $Executable = Join-Path $projectRoot $Executable
 }

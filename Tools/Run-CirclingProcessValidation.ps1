@@ -1,5 +1,5 @@
 ﻿param(
-    [string]$Executable = 'Builds/Phase02/CirclingValidation.exe',
+    [string]$Executable = '',
     [switch]$Dedicated,
     [int]$Port = 7948,
     [string]$LogDirectory = 'Logs/Phase02'

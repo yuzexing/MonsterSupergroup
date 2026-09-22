@@ -80,11 +80,11 @@ namespace AstralShift.HellMaiden.AI.Enemy
 
         private void BeginDashMotion()
         {
-            if (!changedMotion)
-            {
-                previousConstraints = rb.constraints; previousSimulated = rb.simulated;
-                previousExclusions = collider.excludeLayers; changedMotion = true;
-            }
+            // Reapplying body state every render frame resets interpolated physics poses
+            // and loses dash travel. Capture and apply it only when motion begins.
+            if (changedMotion) return;
+            previousConstraints = rb.constraints; previousSimulated = rb.simulated;
+            previousExclusions = collider.excludeLayers; changedMotion = true;
             rb.constraints = RigidbodyConstraints2D.FreezeRotation; rb.simulated = true;
             collider.excludeLayers = dashExclusionLayerMask;
         }

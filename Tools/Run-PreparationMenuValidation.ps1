@@ -1,5 +1,5 @@
 ﻿param(
-    [string]$Executable = 'Builds/MenuDevelopment/MonsterSupergroup.exe',
+    [string]$Executable = '',
     [ValidateSet('party','offline','invites','combat-menu','combat-menu-solo','run-end','run-end-solo','local-party','local-solo','local-errors','local-admission','local-release')][string]$Profile = 'party',
     [int]$Width = 1280, [int]$Height = 720, [int]$Port = 7998,
     [switch]$Headless,

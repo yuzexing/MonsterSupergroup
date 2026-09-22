@@ -1,5 +1,5 @@
 ﻿param(
-    [string]$Executable = 'Builds/MenuDevelopment/MonsterSupergroup.exe',
+    [string]$Executable = '',
     [ValidateSet('party','offline','invites','combat-menu','combat-menu-solo','run-end','run-end-solo','local-party','local-solo','local-errors','local-admission','local-release')][string]$Profile = 'party',
     [int]$Width = 1280, [int]$Height = 720, [int]$Port = 7998,
     [switch]$Headless,
@@ -11,6 +11,7 @@ Import-Module (Join-Path (Split-Path -Parent $PSScriptRoot) 'ProjectTools.psm1')
 
 $ErrorActionPreference = 'Stop'
 $projectRoot = Split-Path -Parent (Split-Path -Parent $PSScriptRoot)
+$Executable = Resolve-ProjectBuildExecutable -ProjectRoot $projectRoot -Recipe 'gameplay-validation' -Executable $Executable -RequireDevelopmentTools
 if (-not [IO.Path]::IsPathRooted($Executable)) { $Executable = Join-Path $projectRoot $Executable }
 if (-not (Test-Path -LiteralPath $Executable)) { throw "Missing validation build: $Executable" }
 $logRoot = Join-Path $projectRoot ('Logs/PreparationMenu/' + (Get-Date -Format 'yyyyMMdd-HHmmss') + '-' + $Profile + '-p' + $Port)

@@ -11,7 +11,7 @@ param(
     [ValidateRange(0,120000)][int]$ProfilerFrames = 0,
     [ValidateSet('light','detailed')][string]$LogDetail = 'detailed',
     [ValidateSet('normal','warning-only')][string]$AttackEdges = 'normal',
-    [string]$BuildDirectory = 'Builds/LimboReference',
+    [string]$BuildDirectory, [string]$Executable,
     [ValidateSet('host', 'client')][string]$FixtureTarget = 'host',
     [ValidateSet('Skeleton0','Skeleton2','Elite0','Elite1','Brotchi0','Brotchi1','Slime0','Slime1','Rusher2','Rusher1')][string]$FixtureEnemy = 'Skeleton0',
     [ValidateSet('mechanism','melee-cleanup','l-hold','l-kill','l-boundary','art-death')][string]$FixtureMode = 'mechanism',
@@ -27,20 +27,21 @@ param(
 )
 $ErrorActionPreference = 'Stop'
 $project = Split-Path -Parent $PSScriptRoot
-$executable = Join-Path (Join-Path $project $BuildDirectory) 'MonsterSupergroupLimbo.exe'
-if (-not (Test-Path -LiteralPath $executable)) { throw 'Build first with LimboReferenceAssets.CreateAndBuildBatch in Unity.' }
+Import-Module (Join-Path $PSScriptRoot 'ProjectTools.psm1')
+$executable = Resolve-ProjectBuildExecutable -ProjectRoot $project -Recipe 'gameplay-validation' -BuildDirectory $BuildDirectory -Executable $Executable -RequireDevelopmentTools -Network Kcp
 if ($RunName -notmatch '^[a-zA-Z0-9_-]+$') { throw 'RunName must contain only letters, digits, hyphens and underscores.' }
 $outputDirectory = Join-Path $project "Logs/LimboReference/$RunName/$Role"
 if (Test-Path -LiteralPath (Join-Path $outputDirectory 'player.log')) { throw 'Choose a new RunName to preserve the previous evidence.' }
 New-Item -ItemType Directory -Force -Path $outputDirectory | Out-Null
 if ($ArtObserve) {
     $buildRoot = Split-Path -Parent $executable
-    $artFiles = @('MonsterSupergroupLimbo.exe',
-        'MonsterSupergroupLimbo_Data/Managed/MonsterSupergroup.Gameplay.Combat.dll',
-        'MonsterSupergroupLimbo_Data/Managed/MonsterSupergroup.Gameplay.Combat.Runtime.dll',
-        'MonsterSupergroupLimbo_Data/Managed/MonsterSupergroup.Gameplay.Local.dll',
-        'MonsterSupergroupLimbo_Data/Managed/MonsterSupergroup.NetworkCombat.dll',
-        'MonsterSupergroupLimbo_Data/resources.assets', 'MonsterSupergroupLimbo_Data/sharedassets0.assets')
+    $playerName = [IO.Path]::GetFileNameWithoutExtension($executable)
+    $artFiles = @("$playerName.exe",
+        "${playerName}_Data/Managed/MonsterSupergroup.Gameplay.Combat.dll",
+        "${playerName}_Data/Managed/MonsterSupergroup.Gameplay.Combat.Runtime.dll",
+        "${playerName}_Data/Managed/MonsterSupergroup.Gameplay.Local.dll",
+        "${playerName}_Data/Managed/MonsterSupergroup.NetworkCombat.dll",
+        "${playerName}_Data/resources.assets", "${playerName}_Data/sharedassets0.assets")
     $artHashes = foreach ($relative in $artFiles) {
         $file = Join-Path $buildRoot $relative
         if (Test-Path -LiteralPath $file) { [pscustomobject]@{ file=$relative; sha256=(Get-FileHash -LiteralPath $file -Algorithm SHA256).Hash; bytes=(Get-Item -LiteralPath $file).Length } }

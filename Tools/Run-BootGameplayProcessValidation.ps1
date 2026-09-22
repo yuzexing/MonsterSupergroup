@@ -1,5 +1,5 @@
 ﻿param(
-    [string]$Executable = "Builds/BootGameplayValidation/MonsterSupergroupBootGameplayValidation.exe",
+    [string]$Executable = '',
     [ValidateRange(1, 65535)]
     [int]$Port = 7801,
     [ValidateRange(20, 300)]

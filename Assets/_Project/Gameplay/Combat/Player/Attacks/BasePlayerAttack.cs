@@ -102,6 +102,7 @@ namespace AstralShift.HellMaiden.Player.Attacks
 			if ((bool)hitbox)
 			{
 				hitbox.Init(IsPresentationOnly ? null : OnHit);
+				hitbox.BindDiagnosticAttack(NativeAttackSnapshot?.Context ?? default, IsPresentationOnly);
 			}
 			else
 			{

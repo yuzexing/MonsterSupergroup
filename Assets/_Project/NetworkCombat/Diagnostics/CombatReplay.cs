@@ -26,6 +26,10 @@ namespace MonsterSupergroup.NetworkCombat.Diagnostics
         public void RestoreReplayState(JToken state)
         {
             using var suppressed = CombatEvidence.Suppress();
+            if (Domain == "damage" || Domain == "weapon_stats" || Domain == "output_stats")
+            {
+                var calculation = new CalculationReplayAdapter(Domain); calculation.RestoreReplayState(state); Engine = calculation; return;
+            }
             Engine = Domain switch {
                 "gateway" => ServerCombatGateway.RestoreReplayState(EvidenceJson.Convert<GatewayReplayState>(state)),
                 "ledger" => CombatLedger.RestoreReplayState(EvidenceJson.Convert<LedgerReplayState>(state)),
@@ -54,11 +58,13 @@ namespace MonsterSupergroup.NetworkCombat.Diagnostics
             CanonicalWorldReplica e => e.CaptureReplayState(), ServerEnemySimulationRegistry e => e.CaptureReplayState(),
             StatusController e => e.CaptureReplayState(), ServerAttackRegistry e => e.CaptureReplayState(),
             ServerStatusDamageAdmissions e => e.CaptureReplayState(),
+            IReplayAdapter e => e.CaptureReplayState(),
             _ => throw new InvalidOperationException("Missing replay engine.")
         });
         public JToken Execute(string operation, JArray args, JToken boundary)
         {
             using var suppressed = CombatEvidence.Suppress();
+            if (Engine is IReplayAdapter calculation) return calculation.Execute(operation, args, boundary);
             object target = Engine;
             if (target is ServerCombatGateway gateway)
             {
@@ -123,7 +129,7 @@ namespace MonsterSupergroup.NetworkCombat.Diagnostics
     }
     [Serializable] public sealed class ReplayFixture
     {
-        public int version = 1;
+        public int version = 2;
         public string domain, build, source, engine;
         public bool complete;
         public string[] gaps;
@@ -148,7 +154,7 @@ namespace MonsterSupergroup.NetworkCombat.Diagnostics
         public static ReplayReport Run(ReplayFixture fixture)
         {
             var report = new ReplayReport();
-            if (fixture.version != 1 || !fixture.complete || (fixture.gaps?.Length ?? 0) != 0)
+            if ((fixture.version != 1 && fixture.version != 2) || !fixture.complete || (fixture.gaps?.Length ?? 0) != 0)
             { report.reason = "IncompleteOrUnsupportedEvidence"; return report; }
             try
             {

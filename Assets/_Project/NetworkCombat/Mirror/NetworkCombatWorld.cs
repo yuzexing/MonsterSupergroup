@@ -119,7 +119,10 @@ namespace MonsterSupergroup.NetworkCombat
                 throw new ArgumentNullException(nameof(connection));
             }
 
-            TargetApplyCanonical(connection, Gateway.CreateSnapshot(), CurrentRound);
+            var batch = Gateway.CreateSnapshot();
+            if (CombatEvidence.Enabled) CombatEvidence.Event("Server", "network.canonical", "Enqueued", "TargetSnapshot", input: batch, server: batch.ServerSequence);
+            using var evidenceSend = Diagnostics.NetworkMessageEvidence.Begin("Server", "CanonicalSnapshot", server: batch.ServerSequence);
+            TargetApplyCanonical(connection, batch, CurrentRound);
         }
 
         [Server]
@@ -209,7 +212,8 @@ namespace MonsterSupergroup.NetworkCombat
             }
 
             CaptureEnemyHitPositions(batch.EnemyHitPresentations);
-            if (CombatEvidence.Enabled) CombatEvidence.Event("Server", "network.canonical", "Sent", "Broadcast", input: batch, server: batch.ServerSequence);
+            if (CombatEvidence.Enabled) CombatEvidence.Event("Server", "network.canonical", "Enqueued", "Broadcast", input: batch, server: batch.ServerSequence);
+            using var evidenceSend = Diagnostics.NetworkMessageEvidence.Begin("Server", "CanonicalBatch", server: batch.ServerSequence);
             RpcApplyCanonical(batch, CurrentRound);
             ServerCanonicalBatchProduced?.Invoke(batch);
         }

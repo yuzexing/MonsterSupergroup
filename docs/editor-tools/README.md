@@ -1,5 +1,7 @@
 # 项目编辑器工具使用指南
 
+2026-09-22：打包只使用「构建配置」中的日常／专项页面。当前七个配方、旧 36 个 ID 去向及操作速查见 [统一打包指南](../build-guide.md)。本文中的历史验收报告保持原日期，不代表当前构建重新通过。
+
 项目菜单统一为 **MonsterSupergroup**。日常入口集中在“制作、校验、构建与验收、联机诊断”；历史导入、覆盖默认配置、初始化场景和样例工具进入“维护与样例”。
 
 工具中心默认停靠在场景视图旁，支持名称、用途和稳定 ID 搜索。选择一项后可查看运行条件、参数、资产影响、输出位置和最近结果。维护项目默认隐藏；执行前会列出影响范围并确认。工具中心与命令行读取同一份 [catalog.json](catalog.json)。
@@ -19,8 +21,8 @@
 | 为新内容绑定翻译 | 工具中心 → 创建内容本地化条目；选中目标资产 | `create.localization-entries -AssetPath ... -Apply` |
 | 新增 GAS Modifier 类型 | 工具中心 → 生成 GAS 注册表 | `generate.gas-registry -Apply`，然后 `validate.gas` |
 | 本机多人验收 | Development 包中的“创建本地主机 / 加入本地主机” | `build.player`，然后 `test.local-room` |
-| Steam 自动战斗日志与回放 | 选择 `steam-evidence` 配置，正常联机；见 [使用说明](../combat-evidence.md) | `build.player -Profile steam-evidence`；`Tools/CombatEvidence.py` 离线查询 |
-| 无测试代码的 Player 与退出检查 | 使用 `player-development` / `player-release` 构建配置 | `test.player-exit`，见 [退出验证说明](../player-exit-validation.md) |
+| Steam 自动战斗日志与回放 | 日常打包 → Test → 故障取证；见 [使用说明](../combat-evidence.md) | `build.player -Profile product -Diagnostics Evidence`；`Tools/CombatEvidence.py` 离线查询 |
+| 无测试代码的 Player 与退出检查 | 日常打包 → 产品；按目的选 Dev／Test／Shipping | `test.player-exit`，见 [退出验证说明](../player-exit-validation.md) |
 | 高频仇恨交接 | Play Mode Host → 联机诊断 → 仇恨交接控制 | `test.enemy-handoff -Profile normal` 或 `impaired` |
 | 查看武器表现 | 工具中心 → 表现预览 | `preview.attack -Profile beam` 等，要求图形设备 |
 | 查看大招表现 | 在空场景进入 Play Mode 后运行 `preview.ultimate` | 单独调用 `preview.ultimate`；执行器会等待 Play Mode 采集完成 |
@@ -38,8 +40,8 @@
 ./Tools/Invoke-ProjectTool.ps1 -List
 ./Tools/Invoke-ProjectTool.ps1 -ToolId build.player -Help
 ./Tools/Invoke-ProjectTool.ps1 -ToolId validate.localization -Unity '<Unity目录>/Editor/Unity.exe'
-./Tools/Invoke-ProjectTool.ps1 -ToolId build.player -Profile menu-development
-./Tools/Invoke-ProjectTool.ps1 -ToolId build.player -Profile menu-release
+./Tools/Invoke-ProjectTool.ps1 -ToolId build.player -Profile product
+./Tools/Invoke-ProjectTool.ps1 -ToolId build.player -Profile gameplay-validation
 ./Tools/Invoke-ProjectTool.ps1 -ToolId test.local-room -Profile party -Port 7777
 ./Tools/Invoke-ProjectTool.ps1 -ToolId test.preparation-menu -Profile local-party -Port 7778 -Headless -MixedLanguages
 ./Tools/Invoke-ProjectTool.ps1 -ToolId test.enemy-handoff -Profile impaired -Duration 120

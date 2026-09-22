@@ -150,7 +150,11 @@ namespace MonsterSupergroup.NetworkCombat.Tests
                 using var ready = new ManualResetEventSlim();
                 Assert.That(stores[0].Schedule(4096, () => {
                     string source = stores[0].Resolve("test/1/sources/" + ids[0]); Directory.CreateDirectory(source);
-                    for (int i = 0; i < 100; i++) File.WriteAllText(Path.Combine(source, "metadata-" + i.ToString("D3") + ".json"), "{}");
+                    for (int i = 0; i < 100; i++)
+                    {
+                        byte[] bytes = System.Text.Encoding.UTF8.GetBytes("{}");
+                        stores[0].ImportBlock("test/1/sources/" + ids[0] + "/metadata-" + i.ToString("D3") + ".json", 0, bytes, EvidenceJson.Hash(bytes), true, bytes.Length);
+                    }
                     ready.Set();
                 }), Is.True);
                 Assert.That(ready.Wait(5000), Is.True);
@@ -310,7 +314,7 @@ namespace MonsterSupergroup.NetworkCombat.Tests
                 return engine;
             }
         }
-        private static DiagnosticRecord Record(int sequence) => new DiagnosticRecord { captureId = "0123456789abcdef0123456789abcdef", runId = "test", round = 1,
+        private static DiagnosticRecord Record(int sequence) => new DiagnosticRecord { schemaVersion = 1, captureId = "0123456789abcdef0123456789abcdef", runId = "test", round = 1,
             recordSequence = sequence.ToString(), role = "Server", stage = "test", input = new { value = sequence } };
     }
 }

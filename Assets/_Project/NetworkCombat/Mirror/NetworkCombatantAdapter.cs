@@ -320,6 +320,10 @@ namespace MonsterSupergroup.NetworkCombat
                 if (isOwned && authority == CombatEntityAuthority.OwnerFinal &&
                     state.StateVersion < ownerReportVersion)
                 {
+                    if (MonsterSupergroup.GAS.CombatEvidence.Enabled) MonsterSupergroup.GAS.CombatEvidence.Write(new MonsterSupergroup.GAS.DiagnosticRecord {
+                        role = "Owner", stage = "player.canonical", outcome = "Ignored", reason = "OlderThanOwnerReport",
+                        source = state.OwnerPlayerId, target = netId, stateVersion = state.StateVersion,
+                        input = state, before = new { ownerReportVersion, health = combatant.CurrentHealth, combatant.StateVersion }, critical = true });
                     return;
                 }
 

@@ -1,5 +1,5 @@
 ﻿param(
-    [string]$Executable = 'Builds/NordicStaticSample/NordicStaticSample.exe',
+    [string]$Executable = '',
     [string]$OutputDirectory = 'Logs/NordicStaticSample/Acceptance'
 )
 Write-Warning '旧脚本兼容一版；新入口: Invoke-ProjectTool.ps1 -ToolId test.nordic'

@@ -18,7 +18,8 @@ namespace MonsterSupergroup.Gameplay.Tests
 
         public void OnProcessScene(Scene scene, BuildReport report)
         {
-            if (MonsterSupergroup.EditorTools.ProjectBuildService.ActiveProfile != "wisp" || report == null || scene.name != "Boot") return;
+            string profile = MonsterSupergroup.EditorTools.ProjectBuildService.ActiveProfile;
+            if ((profile != "wisp-validation" && profile != "wisp") || report == null || scene.name != "Boot") return;
             var root = new GameObject("Wisp validation (opt-in)");
             SceneManager.MoveGameObjectToScene(root, scene);
             root.AddComponent<WispPresentationProcessProbe>().Weapon = AssetDatabase.LoadAssetAtPath<WeaponData>(

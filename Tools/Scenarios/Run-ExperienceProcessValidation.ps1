@@ -1,5 +1,5 @@
 ﻿param(
-    [string]$Executable = 'Builds/M6Experience/M6Experience.exe',
+    [string]$Executable = '',
     [switch]$Dedicated,
     [switch]$Simulation,
     [switch]$Pickups,
@@ -11,6 +11,7 @@ Import-Module (Join-Path (Split-Path -Parent $PSScriptRoot) 'ProjectTools.psm1')
 
 $ErrorActionPreference = 'Stop'
 $projectRoot = Split-Path -Parent (Split-Path -Parent $PSScriptRoot)
+$Executable = Resolve-ProjectBuildExecutable -ProjectRoot $projectRoot -Recipe 'gameplay-validation' -Executable $Executable -RequireDevelopmentTools -Network Kcp
 if (-not [IO.Path]::IsPathRooted($Executable)) { $Executable = Join-Path $projectRoot $Executable }
 if (-not (Test-Path -LiteralPath $Executable)) { throw "Missing M6 build: $Executable" }
 $modeName = if ($Dedicated) { 'Dedicated' } else { 'Host' }

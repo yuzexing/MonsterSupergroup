@@ -2,10 +2,13 @@
 param([ValidateSet('Solo','Host','Client')][string]$Mode = 'Solo')
 $ErrorActionPreference = 'Stop'
 $package = $PSScriptRoot
-$executable = Join-Path $package 'MonsterSupergroupLimbo.exe'
 $manifestPath = Join-Path $package 'build-manifest.json'
-if (-not (Test-Path -LiteralPath $executable) -or -not (Test-Path -LiteralPath $manifestPath)) { throw 'Extract the entire Limbo package before launching.' }
+if (-not (Test-Path -LiteralPath $manifestPath)) { throw 'Extract the entire Limbo package before launching.' }
 $manifest = Get-Content -LiteralPath $manifestPath -Raw -Encoding UTF8 | ConvertFrom-Json
+$playerName = if ($manifest.executable) { [string]$manifest.executable } else { 'MonsterSupergroupLimbo.exe' }
+if ([IO.Path]::GetFileName($playerName) -ne $playerName -or $playerName -notlike '*.exe') { throw 'Invalid package executable.' }
+$executable = Join-Path $package $playerName
+if (-not (Test-Path -LiteralPath $executable)) { throw 'Extract the entire Limbo package before launching.' }
 $runs = Join-Path $package 'Runs'
 try { New-Item -ItemType Directory -Path $runs -Force | Out-Null } catch { throw "Package is not writable. Extract to a writable folder: $runs" }
 $pointer = Join-Path $runs 'local-host.json'

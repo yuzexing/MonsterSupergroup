@@ -1,6 +1,6 @@
-param(
-    [string]$BuildDirectory = 'Builds/LimboSpatial20260915',
-    [string]$ClientDirectory = 'Builds/LimboSpatialClient20260915',
+﻿param(
+    [string]$BuildDirectory,
+    [string]$ClientDirectory,
     [string]$Prefix = 'spatial-matrix-20260915',
     [int]$Port = 8180,
     [switch]$ArtObserve,
@@ -9,6 +9,11 @@ param(
 )
 $ErrorActionPreference = 'Stop'
 $root = Split-Path -Parent $PSScriptRoot
+Import-Module (Join-Path $PSScriptRoot 'ProjectTools.psm1')
+$resolvedPlayer = Resolve-ProjectBuildExecutable -ProjectRoot $root -Recipe 'gameplay-validation' -BuildDirectory $BuildDirectory -RequireDevelopmentTools -Network Kcp
+$BuildDirectory = Split-Path -Parent $resolvedPlayer
+if (-not $ClientDirectory) { $ClientDirectory = $BuildDirectory }
+
 $cases = @(
     @('spatial-b','pause-all'), @('spatial-b','cancel-Delay'), @('spatial-b','cancel-Building'),
     @('spatial-barrier','cancel-Framing'), @('spatial-barrier','cancel-Building'),

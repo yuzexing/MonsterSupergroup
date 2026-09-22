@@ -1,5 +1,5 @@
 ﻿param(
-    [string]$Executable = 'Builds/Phase01/RuntimeBoundaryValidation.exe',
+    [string]$Executable = '',
     [switch]$Dedicated,
     [int]$Port = 7896,
     [string]$LogDirectory = 'Logs/Phase01'

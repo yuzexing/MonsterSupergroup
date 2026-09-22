@@ -1,5 +1,5 @@
 ﻿param(
-    [string]$Executable = 'Builds/WispValidation/MonsterSupergroup.exe',
+    [string]$Executable = '',
     [switch]$Dedicated,
     [int]$Port = 7928,
     [string]$LogDirectory = 'Logs/Wisp/Network'

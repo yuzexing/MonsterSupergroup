@@ -1,5 +1,5 @@
 ﻿param(
-    [string]$Executable = 'Builds/Phase02/MeleeValidation.exe',
+    [string]$Executable = '',
     [switch]$Dedicated,
     [int]$Port = 7908,
     [string]$LogDirectory = 'Logs/Phase02'
@@ -8,6 +8,7 @@ Import-Module (Join-Path (Split-Path -Parent $PSScriptRoot) 'ProjectTools.psm1')
 
 $ErrorActionPreference = 'Stop'
 $projectRoot = Split-Path -Parent (Split-Path -Parent $PSScriptRoot)
+$Executable = Resolve-ProjectBuildExecutable -ProjectRoot $projectRoot -Recipe 'gameplay-validation' -Executable $Executable -RequireDevelopmentTools -Network Kcp
 if (-not [IO.Path]::IsPathRooted($Executable)) { $Executable = Join-Path $projectRoot $Executable }
 if (-not (Test-Path -LiteralPath $Executable)) { throw "Missing validation build: $Executable" }
 $stamp = Get-Date -Format 'yyyyMMdd-HHmmss-fff'

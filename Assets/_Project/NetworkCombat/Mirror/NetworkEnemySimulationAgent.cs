@@ -316,8 +316,11 @@ namespace MonsterSupergroup.NetworkCombat
             {
                 if (!hasPendingFutureSnapshot || EnemySimulationSequence.IsNewer(snapshot.AssignmentEpoch, pendingFutureSnapshot.AssignmentEpoch) ||
                     (snapshot.AssignmentEpoch == pendingFutureSnapshot.AssignmentEpoch && EnemySimulationSequence.IsNewer(snapshot.Sequence, pendingFutureSnapshot.Sequence)))
-                { pendingFutureSnapshot = snapshot; hasPendingFutureSnapshot = true; }
-                TraceReceivedMovement(snapshot, "Deferred", "HandoffPending");
+                {
+                    pendingFutureSnapshot = snapshot; hasPendingFutureSnapshot = true;
+                    TraceReceivedMovement(snapshot, "Deferred", "HandoffPending");
+                }
+                else TraceReceivedMovement(snapshot, "Ignored", "SupersededFutureSnapshot");
                 return;
             }
             if (!IsCanonicalAlive ||
@@ -330,7 +333,7 @@ namespace MonsterSupergroup.NetworkCombat
 
             bool accepted = interpolator.Push(snapshot);
             if (accepted) AcceptedRemoteSnapshotCount++;
-            TraceReceivedMovement(snapshot, accepted ? "Accepted" : "Ignored", accepted ? "None" : "InterpolatorRejected");
+            TraceReceivedMovement(snapshot, accepted ? "Accepted" : "Ignored", interpolator.LastPushReason);
         }
 
         private void TraceReceivedMovement(EnemySimulationSnapshot snapshot, string outcome, string reason)

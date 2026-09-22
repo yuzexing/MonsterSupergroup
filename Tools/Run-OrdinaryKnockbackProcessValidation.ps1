@@ -1,5 +1,5 @@
 ﻿param(
-    [string]$Executable = 'Builds/M3Knockback/M3Knockback.exe',
+    [string]$Executable = '',
     [string]$EnemyPrefab,
     [switch]$Dedicated,
     [switch]$ImpairedNetwork,

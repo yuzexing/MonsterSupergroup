@@ -20,9 +20,12 @@ namespace AstralShift.HellMaiden.Player.Attacks
 				TryCancelPendingRemoval(iD);
 				if (_hitEntries.Add(iD))
 				{
+					RecordContactEvidence(component, _onHit != null ? "Accepted" : "Ignored", _onHit != null ? "FirstContact" : "CallbackMissing");
 					_onHit?.Invoke(component);
 				}
+				else RecordContactEvidence(component, "Ignored", "DuplicateContact");
 			}
+			else RecordContactEvidence(null, "Ignored", "ColliderHasNoDamageable");
 		}
 
 		protected virtual void OnTriggerExit2D(Collider2D other)

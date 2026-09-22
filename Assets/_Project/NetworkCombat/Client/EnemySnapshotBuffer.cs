@@ -27,10 +27,14 @@ namespace MonsterSupergroup.NetworkCombat
             snapshots.Clear();
         }
 
-        public bool Push(EnemySimulationSnapshot snapshot)
+        public bool Push(EnemySimulationSnapshot snapshot) => Push(snapshot, out _);
+
+        public bool Push(EnemySimulationSnapshot snapshot, out EnemySnapshotRejectionReason rejection)
         {
+            rejection = EnemySnapshotRejectionReason.None;
             if (!snapshot.IsFinite)
             {
+                rejection = EnemySnapshotRejectionReason.InvalidValue;
                 return false;
             }
 
@@ -46,6 +50,8 @@ namespace MonsterSupergroup.NetworkCombat
                             newest.Sequence) ||
                         snapshot.SampleNetworkTime <= newest.SampleNetworkTime)
                     {
+                        rejection = !EnemySimulationSequence.IsNewer(snapshot.Sequence, newest.Sequence)
+                            ? EnemySnapshotRejectionReason.StaleSequence : EnemySnapshotRejectionReason.StaleTimestamp;
                         return false;
                     }
                 }
@@ -55,6 +61,7 @@ namespace MonsterSupergroup.NetworkCombat
                             snapshot.AssignmentEpoch,
                             newest.AssignmentEpoch))
                     {
+                        rejection = EnemySnapshotRejectionReason.WrongEpoch;
                         return false;
                     }
                     discontinuity = true;

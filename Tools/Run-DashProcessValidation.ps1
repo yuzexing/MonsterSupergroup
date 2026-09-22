@@ -1,5 +1,5 @@
 ﻿param(
-    [string]$Executable = 'Builds/Phase02/DashValidation.exe',
+    [string]$Executable = '',
     [switch]$Dedicated,
     [int]$Port = 7954,
     [string]$LogDirectory = 'Logs/Phase02'

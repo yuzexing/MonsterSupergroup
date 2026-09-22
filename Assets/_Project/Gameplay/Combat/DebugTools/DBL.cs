@@ -7,7 +7,14 @@ namespace AstralShift.DebugTools
 {
 	public static class DBL
 	{
-        public static bool VerboseEnabled { get; set; } = true;
+        private static bool verboseRequested = true;
+        // Normal/evidence Test packages retain warnings and errors, but not per-state debug chatter.
+        // Runtime preferences cannot grant a capability omitted from the build.
+        public static bool VerboseEnabled
+        {
+            get => MonsterSupergroup.Builds.BuildFeatures.DevelopmentToolsAllowed && verboseRequested;
+            set => verboseRequested = value;
+        }
 		public enum Module
 		{
 			Controllers = 0,

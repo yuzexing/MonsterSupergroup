@@ -102,12 +102,14 @@ namespace MonsterSupergroup.NetworkCombat
             if (!MonsterSupergroup.GAS.CombatEvidence.Enabled) { return EvidenceCore_TryAcceptClientSnapshot(senderPlayerId, snapshot); }
             using var evidence = MonsterSupergroup.GAS.CombatEvidence.Begin(this, "authority", "TryAcceptClientSnapshot", new object[] { senderPlayerId, snapshot }, o => ((ServerEnemySimulationRegistry)o).CaptureReplayState());
             entries.TryGetValue(snapshot.EnemyEntityId, out var prior);
-            var before = prior?.Assignment ?? default;
+            var before = new { assignment = prior?.Assignment ?? default, sequence = prior?.LastAcceptedSequence ?? 0u, movementTime = prior?.LastAcceptedMovementTime ?? 0d };
             var evidenceResult = EvidenceCore_TryAcceptClientSnapshot(senderPlayerId, snapshot);
             MonsterSupergroup.GAS.CombatEvidence.Write(new MonsterSupergroup.GAS.DiagnosticRecord { role = "Server", stage = "authority.movement",
                 outcome = evidenceResult == EnemySnapshotRejectionReason.None ? "Accepted" : "Rejected", reason = evidenceResult.ToString(),
                 source = senderPlayerId, target = snapshot.EnemyEntityId, assignmentEpoch = snapshot.AssignmentEpoch,
-                input = snapshot, before = before, after = prior?.Assignment ?? default });
+                engine = CombatEvidence.CurrentEngine, input = new { snapshot.Sequence, snapshot.AssignmentEpoch, snapshot.SampleNetworkTime }, before = before,
+                after = new { assignment = prior?.Assignment ?? default, sequence = prior?.LastAcceptedSequence ?? 0u, movementTime = prior?.LastAcceptedMovementTime ?? 0d },
+                critical = evidenceResult != EnemySnapshotRejectionReason.None });
             evidence.Complete(evidenceResult);
             return evidenceResult;
         }

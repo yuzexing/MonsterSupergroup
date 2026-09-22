@@ -1,5 +1,5 @@
 ﻿param(
-    [string]$Executable = 'Builds/EnemyHandoff/EnemyHandoff.exe',
+    [string]$Executable = '',
     [ValidateSet('normal', 'impaired')][string]$Profile = 'normal',
     [ValidateRange(2, 600)][int]$Duration = 120,
     [ValidateSet('NetworkEnemySkeleton', 'NetworkEnemySkeletonExample', 'NetworkEnemyLustSinner', 'NetworkEnemyImp')][string]$SkeletonPrefab = 'NetworkEnemySkeleton',

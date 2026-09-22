@@ -126,7 +126,7 @@ namespace MonsterSupergroup.NetworkCombat
         /// <summary>Development-only Owner intent. A true result means the request was sent, not granted.</summary>
         public bool RequestDebugUltimateCharge()
         {
-            if (!Application.isEditor && !Debug.isDebugBuild) return false;
+            if (!MonsterSupergroup.Builds.BuildFeatures.DevelopmentToolsAllowed || (!Application.isEditor && !Debug.isDebugBuild)) return false;
             if (!isActiveAndEnabled || !isOwned || !NetworkClient.active || NetworkClient.localPlayer != netIdentity ||
                 !hasBaseline || ownerServerExecutionSuspended || !player.isActiveAndEnabled || !player.IsRuntimeInitialized ||
                 !player.IsLocalOwnerBound || !build.IsBuildActive || !selection.HasOwnerBaseline ||
@@ -144,7 +144,7 @@ namespace MonsterSupergroup.NetworkCombat
         {
             string reason = null;
             var world = NetworkCombatWorld.Instance;
-            if (!Application.isEditor && !Debug.isDebugBuild) reason = "non-development-server";
+            if (!MonsterSupergroup.Builds.BuildFeatures.DevelopmentToolsAllowed || (!Application.isEditor && !Debug.isDebugBuild)) reason = "development-tools-unavailable";
             else if (sender == null || sender != connectionToClient || sender.identity != netIdentity || !sender.isReady)
                 reason = "not-current-owner";
             else if (!isActiveAndEnabled || !serverExecutionEnabled || !hasBaseline || !player.IsRuntimeInitialized ||

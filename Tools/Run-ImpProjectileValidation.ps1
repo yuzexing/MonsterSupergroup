@@ -1,5 +1,5 @@
 ﻿param(
-    [string]$Executable = 'Builds/Imp/Imp.exe',
+    [string]$Executable = '',
     [switch]$Dedicated,
     [switch]$Impaired,
     [switch]$Graphics,

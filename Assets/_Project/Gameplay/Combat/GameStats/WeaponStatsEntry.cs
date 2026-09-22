@@ -1,8 +1,9 @@
 using AstralShift.HellMaiden.Player.Attacks;
+using MonsterSupergroup.GAS;
 
 namespace AstralShift.HellMaiden.GameStats
 {
-	public class WeaponStatsEntry : StatEntry
+	public class WeaponStatsEntry : StatEntry, IOutputStatisticsEvidence
 	{
 		public uint ID { get; private set; }
 
@@ -31,16 +32,24 @@ namespace AstralShift.HellMaiden.GameStats
 		public void UpdateDamage(float value, bool critical)
 		{
 			RunStatsTracker.Instance.PlayerStatsEntry.RegisterDamageDealt(value);
-			TotalDamage += value;
-			if (critical)
-			{
-				CriticalDamage += value;
-			}
+			string engine = CombatOutputEvidence.Register(this);
+			var before = CaptureOutputStatistics();
+			var input = new OutputStatisticInput { weaponId = ID, value = value, critical = critical, metric = "ComputedDamage" };
+			var after = OutputStatistics.ApplyDamage(before, input);
+			TotalDamage = after.totalDamage;
+			CriticalDamage = after.criticalDamage;
+			CombatOutputEvidence.Record(engine, input, before, after);
 		}
+
+		public OutputStatisticsState CaptureOutputStatistics() => new OutputStatisticsState { totalDamage = TotalDamage, criticalDamage = CriticalDamage };
 
 		public void RegisterHit()
 		{
+			int before = TotalHits;
 			TotalHits++;
+			if (CombatEvidence.Enabled) CombatEvidence.Event("Owner", "stats.hit", "Applied", "ContactCounter",
+				CombatOutputEvidence.Current.EventId.Value, CombatOutputEvidence.Current.SourcePlayerId, CombatOutputEvidence.Current.TargetEntityId,
+				new { weaponId = ID, increment = 1 }, before, TotalHits, CombatOutputEvidence.Current.RootEventId.Value, bytes: 512);
 		}
 
 		public void RegisterEnemyDeath()

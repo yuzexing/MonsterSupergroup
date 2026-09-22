@@ -1,5 +1,5 @@
 ﻿param(
-    [string]$Executable = 'Builds/M6Experience/M6Experience.exe',
+    [string]$Executable = '',
     [switch]$Dedicated,
     [switch]$Simulation,
     [switch]$CaptureFrames,

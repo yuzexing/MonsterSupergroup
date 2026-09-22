@@ -23,6 +23,7 @@ namespace MonsterSupergroup.NetworkCombat
         private bool interpolationCaptured;
 
         public int BufferedSnapshotCount => buffer.Count;
+        public string LastPushReason { get; private set; }
         internal bool ObserveWithoutInterpolation { get; set; }
 
         private void Awake()
@@ -65,10 +66,12 @@ namespace MonsterSupergroup.NetworkCombat
             if (authority == null || !authority.ConsumesSnapshots ||
                 snapshot.AssignmentEpoch != authority.AssignmentEpoch)
             {
+                LastPushReason = authority == null ? "AuthorityUnavailable" : !authority.ConsumesSnapshots ? "RoleDoesNotConsumeSnapshots" : "WrongEpoch";
                 return false;
             }
 
-            bool accepted = buffer.Push(snapshot);
+            bool accepted = buffer.Push(snapshot, out var rejection);
+            LastPushReason = accepted ? "None" : rejection.ToString();
             if (accepted &&
                 (snapshot.Flags & EnemySimulationSnapshotFlags.Discontinuity) != 0)
             {

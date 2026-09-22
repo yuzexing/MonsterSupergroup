@@ -1,5 +1,5 @@
-param(
-    [string]$Executable = 'Builds/EnemyDefinitions20260920/MonsterSupergroup.exe',
+﻿param(
+    [string]$Executable,
     [int]$Port = 8039,
     [string]$OutputDirectory = '',
     [switch]$Headless,
@@ -7,7 +7,8 @@ param(
 )
 $ErrorActionPreference = 'Stop'
 $project = Split-Path -Parent $PSScriptRoot
-$exe = if ([IO.Path]::IsPathRooted($Executable)) { $Executable } else { Join-Path $project $Executable }
+Import-Module (Join-Path $PSScriptRoot 'ProjectTools.psm1')
+$exe = Resolve-ProjectBuildExecutable -ProjectRoot $project -Recipe 'gameplay-validation' -Executable $Executable -RequireDevelopmentTools -Network Kcp
 if (!(Test-Path -LiteralPath $exe)) { throw "Build the validation Player first: $exe" }
 if ([string]::IsNullOrWhiteSpace($OutputDirectory)) {
     $OutputDirectory = Join-Path $project ('Logs/EnemyDefinitions/Process-' + (Get-Date -Format 'yyyyMMdd-HHmmss'))

@@ -240,8 +240,8 @@ namespace MonsterSupergroup.NetworkCombat.Editor
             int code=0;
             try
             {
-                string output=Environment.GetCommandLineArgs().FirstOrDefault(a=>a.StartsWith("--limbo-build="))?.Substring(14)??"Builds/LimboLostSoul20260915/MonsterSupergroupLimbo.exe";
-                MonsterSupergroup.EditorTools.ProjectBuildService.Build("kcp-development",output);
+                string output=Environment.GetCommandLineArgs().FirstOrDefault(a=>a.StartsWith("--limbo-build="))?.Substring(14);
+                LimboReferenceAssets.BuildPlayer(output);
             }
             catch(Exception e){Debug.LogException(e);code=1;}
             finally{EditorApplication.Exit(code);}

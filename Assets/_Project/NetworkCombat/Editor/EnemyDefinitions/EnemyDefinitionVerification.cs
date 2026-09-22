@@ -42,7 +42,6 @@ namespace MonsterSupergroup.NetworkCombat.Editor
                     if (new SerializedObject(swapper).FindProperty("bakedPalettes").arraySize != 0)
                         throw new InvalidDataException("Legacy baked palette authoring still set: " + prefab.name);
             }
-            EnemyDefinitionEditorUtility.RefreshContentHashes();
             EnemyDefinitionEditorUtility.ValidateAll();
             File.WriteAllText(root + "/post-migration-preview.json", JsonUtility.ToJson(current, true));
             File.WriteAllText(root + "/migration-verification.txt", "PASS: " + current.rows.Length + " clips; Prefab, base values, LUT/mappings and timing/policy unchanged after disk reimport. Legacy Prefab sources cleared.");
@@ -61,15 +60,13 @@ namespace MonsterSupergroup.NetworkCombat.Editor
             VerifyMigrationBaseline();
             File.WriteAllText(EnemyDefinitionMigration.ReportRoot + "/migration-idempotence.txt",
                 "PASS: repeated reviewed migration preserved all definition IDs, asset paths, base values and appearances.");
-            BuildValidationPlayer();
+            Debug.Log("[EnemyDefinitions] Migration verification completed. Building is a separate operation; use the technical build page.");
         }
 
         public static void BuildValidationPlayer()
         {
-            EnemyDefinitionEditorUtility.RefreshContentHashes();
             EnemyDefinitionEditorUtility.ValidateAll();
-            MonsterSupergroup.EditorTools.ProjectBuildService.Build("enemy-variants",
-                "Builds/EnemyDefinitions20260920/MonsterSupergroup.exe");
+            MonsterSupergroup.EditorTools.ProjectBuildService.Build("enemy-variants");
         }
     }
 }

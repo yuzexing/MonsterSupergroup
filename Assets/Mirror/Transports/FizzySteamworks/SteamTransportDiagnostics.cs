@@ -21,11 +21,36 @@ namespace Mirror.FizzySteam
         public static readonly long[] SentMessages = new long[2], ReceivedMessages = new long[2];
         public static readonly int[] MaximumSentMessage = new int[2];
         public static long SendFailures;
+        // Observers must consume this borrowed segment synchronously. No payload is retained.
+        public static event Action<uint, ArraySegment<byte>, int, EResult> SendResult;
+        public static event Action<uint, int, string, string, string, int> ConnectionState;
+        internal static void RecordConnection(uint connection, int connectionId, string role, string previous, string current, int endReason)
+        {
+            try { ConnectionState?.Invoke(connection, connectionId, role, previous, current, endReason); }
+            catch { /* An observer may not change connection lifecycle. */ }
+        }
+        private static readonly System.Collections.Generic.Dictionary<int, double> nextFailureNotice = new();
+        private static readonly System.Diagnostics.Stopwatch failureClock = System.Diagnostics.Stopwatch.StartNew();
+        internal static void RecordSendResult(uint connection, ArraySegment<byte> payload, int channel, EResult result)
+        {
+            RecordSend(payload.Count + 1, channel, result == EResult.k_EResultOK);
+            try { SendResult?.Invoke(connection, payload, channel, result); }
+            catch { /* An observer may not change delivery or disconnect the game. */ }
+            if (result == EResult.k_EResultOK) return;
+            int key = (int)result;
+            double now = failureClock.Elapsed.TotalSeconds;
+            if (nextFailureNotice.TryGetValue(key, out double next) && now < next) return;
+            if (nextFailureNotice.Count >= 64) nextFailureNotice.Clear();
+            nextFailureNotice[key] = now + 10;
+            UnityEngine.Debug.LogFormat(UnityEngine.LogType.Warning, UnityEngine.LogOption.NoStacktrace, null,
+                "Steam send failed: {0}. Repeated notices are limited to one per reason every 10 seconds; structured evidence records individual results.", result);
+        }
         public static void Reset()
         {
             Array.Clear(SentBytes, 0, 2); Array.Clear(ReceivedBytes, 0, 2);
             Array.Clear(SentMessages, 0, 2); Array.Clear(ReceivedMessages, 0, 2);
             Array.Clear(MaximumSentMessage, 0, 2); SendFailures = 0;
+            nextFailureNotice.Clear();
         }
         internal static void RecordSend(int bytes, int channel, bool success)
         {

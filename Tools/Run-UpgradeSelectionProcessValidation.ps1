@@ -1,5 +1,5 @@
 ﻿param(
-    [string]$Executable = 'Builds/M4Selection/M4Selection.exe',
+    [string]$Executable = '',
     [switch]$Dedicated,
     [switch]$CaptureFrames,
     [switch]$VisibleWindows,

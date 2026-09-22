@@ -1,11 +1,12 @@
 ﻿param(
-    [string]$Executable = 'Builds/NordicStaticSample/NordicStaticSample.exe',
+    [string]$Executable = '',
     [string]$OutputDirectory = 'Logs/NordicStaticSample/Acceptance'
 )
 Import-Module (Join-Path (Split-Path -Parent $PSScriptRoot) 'ProjectTools.psm1')
 
 $ErrorActionPreference = 'Stop'
 $projectRoot = Split-Path -Parent (Split-Path -Parent $PSScriptRoot)
+$Executable = Resolve-ProjectBuildExecutable -ProjectRoot $projectRoot -Recipe 'nordic' -Executable $Executable -RequireDevelopmentTools
 if (-not [IO.Path]::IsPathRooted($Executable)) { $Executable = Join-Path $projectRoot $Executable }
 if (-not [IO.Path]::IsPathRooted($OutputDirectory)) { $OutputDirectory = Join-Path $projectRoot $OutputDirectory }
 if (-not (Test-Path -LiteralPath $Executable)) { throw "Build the Nordic standalone preview first: $Executable" }

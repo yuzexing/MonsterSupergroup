@@ -40,7 +40,7 @@ namespace MonsterSupergroup.GAS
         public void Advance(float deltaSeconds)
         {
             if (!MonsterSupergroup.GAS.CombatEvidence.Enabled) { EvidenceCore_Advance(deltaSeconds); return; }
-            using var evidence = MonsterSupergroup.GAS.CombatEvidence.Begin(this, "status", "Advance", new object[] { deltaSeconds }, o => ((StatusController)o).CaptureReplayState());
+            using var evidence = MonsterSupergroup.GAS.CombatEvidence.BeginAdvance(this, deltaSeconds);
             EvidenceCore_Advance(deltaSeconds);
             evidence.Complete();
 

@@ -15,23 +15,26 @@ namespace MonsterSupergroup.NetworkCombat.Diagnostics
         bool Send(int peer, byte[] packet);
     }
 
-    /// <summary>File replication with bounded windows and durable acknowledgements. All file and codec work uses the disk worker.</summary>
+    /// <summary>Bounded replication of durable files. Encoding runs independently of the capture writer.</summary>
     public sealed class DiagnosticReplicator : IDisposable
     {
-        public const int Version = 1, SendBytesPerSecond = 2 << 20, InflightBytesPerPeer = 256 << 10;
+        public const int Version = 2, SendBytesPerSecond = 2 << 20, InflightBytesPerPeer = 256 << 10;
         private const int BlockBytes = 32 << 10, MaximumPacketBytes = 96 << 10;
         [Serializable] public sealed class Packet
         {
             public int version = Version;
+            public int logFormat = 2, replayFormat = 2;
             public string kind, capture, run, path, revision, hash, failure;
             public long length, offset;
             public bool replace;
             public byte[] data;
         }
-        private sealed class Transfer { public EvidenceFile file; public byte[] metadata; public Packet packet; public double sentAt; public long acknowledged; }
+        private sealed class Transfer { public EvidenceFile file; public byte[] metadata; public Packet packet; public double sentAt; public long acknowledged; public int wireBytes; }
         private sealed class Peer
         {
             public int id; public string capture, run; public bool online;
+            public bool compatible = true;
+            public string incompatibility;
             public readonly Dictionary<string, Transfer> sending = new();
             public readonly Dictionary<string, string> completed = new(), pruned = new();
             public readonly Dictionary<string, string> failures = new();
@@ -41,7 +44,10 @@ namespace MonsterSupergroup.NetworkCombat.Diagnostics
         private readonly CombatEvidenceStore store;
         private readonly IDiagnosticReplicationTransport transport;
         private readonly string capture;
-        private readonly Dictionary<int, Peer> peers = new(); // Disk thread only.
+        private readonly Dictionary<int, Peer> peers = new(); // Replication thread only.
+        private readonly DiagnosticWorkQueue work;
+        private readonly object outboundGate = new();
+        private readonly Dictionary<int, long> outboundPerPeer = new();
         private readonly ConcurrentQueue<(int peer, byte[] bytes)> outbound = new();
         private long outboundBytes, mainTicks, workerTicks;
         public double MainMilliseconds => System.Threading.Interlocked.Read(ref mainTicks) * 1000d / System.Diagnostics.Stopwatch.Frequency;
@@ -50,13 +56,17 @@ namespace MonsterSupergroup.NetworkCombat.Diagnostics
         private string catalogCursor, catalogRun;
         private double catalogAt, watermarksAt, lastTick, budget = SendBytesPerSecond;
         private int serviceQueued;
-        private bool disposed;
+        private volatile bool disposed;
         public long SentBytes { get; private set; }
         public long RejectedPackets { get; private set; }
         public string LastFailure { get; private set; }
 
         public DiagnosticReplicator(CombatEvidenceStore store, IDiagnosticReplicationTransport transport, string capture)
-        { this.store = store; this.transport = transport; this.capture = capture; transport.Received += Receive; }
+        {
+            this.store = store; this.transport = transport; this.capture = capture;
+            work = new DiagnosticWorkQueue(store.Memory, error => LastFailure = error);
+            transport.Received += Receive;
+        }
 
         public void Tick(double now, string run)
         {
@@ -68,26 +78,40 @@ namespace MonsterSupergroup.NetworkCombat.Diagnostics
         {
             if (disposed) return;
             budget = Math.Min(SendBytesPerSecond, budget + Math.Max(0, now - lastTick) * SendBytesPerSecond); lastTick = now;
-            while (outbound.TryPeek(out var item) && budget >= item.bytes.Length)
+            while (true)
             {
-                outbound.TryDequeue(out item); System.Threading.Interlocked.Add(ref outboundBytes, -item.bytes.Length);
-                if (transport.Send(item.peer, item.bytes)) { budget -= item.bytes.Length; SentBytes += item.bytes.Length; }
+                (int peer, byte[] bytes) item;
+                lock (outboundGate)
+                {
+                    if (!outbound.TryPeek(out item) || budget < item.bytes.Length) break;
+                    outbound.TryDequeue(out item); outboundBytes -= item.bytes.Length;
+                    outboundPerPeer[item.peer] -= item.bytes.Length;
+                }
+                try
+                {
+                    budget -= item.bytes.Length;
+                    if (transport.Send(item.peer, item.bytes)) SentBytes += item.bytes.Length;
+                    else LastFailure = "DiagnosticTransportSendFailed";
+                }
+                finally { store.Memory.Release(item.bytes.Length); }
             }
             if (System.Threading.Interlocked.CompareExchange(ref serviceQueued, 1, 0) != 0) return;
             var connected = transport.Peers; bool host = transport.IsHost;
-            if (!store.Schedule(4096, () => { long started = System.Diagnostics.Stopwatch.GetTimestamp(); try { Service(now, run, connected, host); } catch (Exception e) { LastFailure = e.Message; }
+            if (!work.TrySchedule(4096, () => { long started = System.Diagnostics.Stopwatch.GetTimestamp(); try { Service(now, run, connected, host); } catch (Exception e) { LastFailure = e.Message; }
                 finally { System.Threading.Interlocked.Add(ref workerTicks, System.Diagnostics.Stopwatch.GetTimestamp() - started); System.Threading.Volatile.Write(ref serviceQueued, 0); } })) System.Threading.Volatile.Write(ref serviceQueued, 0);
         }
         private void Receive(int peer, ArraySegment<byte> packet)
         {
-            if (disposed || packet.Count > MaximumPacketBytes) { RejectedPackets++; return; }
-            byte[] copy = new byte[packet.Count]; Buffer.BlockCopy(packet.Array, packet.Offset, copy, 0, copy.Length);
+            if (disposed || packet.Array == null || packet.Count > MaximumPacketBytes) { RejectedPackets++; return; }
             bool host = transport.IsHost;
-            if (!store.Schedule(copy.Length * 4 + 4096, () => {
+            if (!work.TryCapture(packet.Count * 4 + 4096, () => {
+                byte[] copy = new byte[packet.Count]; Buffer.BlockCopy(packet.Array, packet.Offset, copy, 0, copy.Length);
+                return () => {
                 long started = System.Diagnostics.Stopwatch.GetTimestamp();
                 try { Handle(peer, EvidenceJson.Decode<Packet>(Encoding.UTF8.GetString(copy)), host); }
                 catch (Exception error) { LastFailure = error.Message; RejectedPackets++; }
                 finally { System.Threading.Interlocked.Add(ref workerTicks, System.Diagnostics.Stopwatch.GetTimestamp() - started); }
+                };
             })) RejectedPackets++;
         }
         private Peer GetPeer(int id)
@@ -128,7 +152,7 @@ namespace MonsterSupergroup.NetworkCombat.Diagnostics
             foreach (var peer in peers.Values.Where(p => p.online))
             {
                 if (now >= peer.helloAt) { Queue(peer.id, new Packet { kind = "hello", capture = capture, run = run }); peer.helloAt = now + 2; }
-                if (peer.capture == null || peer.run != run) continue;
+                if (!peer.compatible || peer.capture == null || peer.run != run) continue;
                 foreach (var transfer in peer.sending.Values.ToArray())
                     if (now - transfer.sentAt >= 3)
                     { Queue(peer.id, new Packet { kind = "offer", path = transfer.file.path, length = transfer.file.length,
@@ -159,21 +183,26 @@ namespace MonsterSupergroup.NetworkCombat.Diagnostics
                 store.SaveReplication(new { version = Version, captureId = capture, runId = run, utc = DateTime.UtcNow.ToString("o"),
                     failure = LastFailure, sentBytes = SentBytes, rejected = RejectedPackets,
                     peers = peers.Values.Select(p => new { peer = p.id, captureId = p.capture, p.online, p.run,
-                        status = p.online ? "Connected" : "SourceOffline", p.sent, p.acknowledged,
+                        status = !p.compatible ? "IncompatibleDiagnosticVersion" : p.online ? "Connected" : "SourceOffline", p.incompatibility, p.sent, p.acknowledged,
                         files = p.completed, prunedFiles = p.pruned, failedFiles = p.failures, pending = p.sending.Select(t => new { path = t.Key, acknowledged = t.Value.acknowledged, length = t.Value.file.length }).ToArray() }).ToArray() });
                 watermarksAt = now + 1;
             }
         }
         private void Handle(int id, Packet packet, bool host)
         {
-            if (packet == null || packet.version != Version) throw new InvalidDataException("Unsupported replication version.");
+            if (packet == null) throw new InvalidDataException("Empty diagnostic packet.");
             var peer = GetPeer(id);
+            if (packet.version != Version || packet.logFormat != 2 || packet.replayFormat != 2)
+            {
+                peer.compatible = false; peer.incompatibility = $"replication={packet.version},log={packet.logFormat},replay={packet.replayFormat}";
+                peer.sending.Clear(); peer.receiving.Clear(); LastFailure = "IncompatibleDiagnosticVersion:" + id; return;
+            }
             if (packet.kind == "hello")
             {
                 if (!Guid.TryParseExact(packet.capture, "N", out _) || packet.capture == capture || packet.run == null || packet.run.Length > 100)
                     throw new InvalidDataException("Invalid diagnostic handshake.");
                 if (peer.capture != packet.capture || peer.run != packet.run) { peer.sending.Clear(); peer.receiving.Clear(); peer.completed.Clear(); peer.pruned.Clear(); peer.failures.Clear(); }
-                peer.capture = packet.capture; peer.run = packet.run; return;
+                peer.compatible = true; peer.incompatibility = null; peer.capture = packet.capture; peer.run = packet.run; return;
             }
             if (peer.capture == null) return;
             if (packet.kind == "offer")
@@ -240,10 +269,32 @@ namespace MonsterSupergroup.NetworkCombat.Diagnostics
         private void Queue(int id, Packet packet)
         {
             byte[] bytes = Encoding.UTF8.GetBytes(EvidenceJson.Encode(packet));
-            if (bytes.Length > MaximumPacketBytes || System.Threading.Interlocked.Read(ref outboundBytes) + bytes.Length > (2 << 20))
-            { LastFailure = "ReplicationQueueOverload"; return; }
-            System.Threading.Interlocked.Add(ref outboundBytes, bytes.Length); outbound.Enqueue((id, bytes));
+            lock (outboundGate)
+            {
+                if (disposed) return;
+                outboundPerPeer.TryGetValue(id, out long queued);
+                Transfer transfer = null;
+                if (packet.kind == "data" && peers.TryGetValue(id, out var peer) && peer.sending.TryGetValue(packet.path, out transfer) &&
+                    peer.sending.Values.Sum(t => t.wireBytes) - transfer.wireBytes + bytes.Length > InflightBytesPerPeer)
+                { LastFailure = "DiagnosticInflightBackpressure"; return; }
+                if (bytes.Length > MaximumPacketBytes || outboundBytes + bytes.Length > (2 << 20) || queued + bytes.Length > InflightBytesPerPeer || !store.Memory.TryReserve(bytes.Length))
+                { LastFailure = "ReplicationQueueOverload"; return; }
+                if (transfer != null) transfer.wireBytes = bytes.Length;
+                outboundPerPeer[id] = queued + bytes.Length;
+                outboundBytes += bytes.Length; outbound.Enqueue((id, bytes));
+            }
         }
-        public void Dispose() { disposed = true; transport.Received -= Receive; }
+        public void Dispose()
+        {
+            lock (outboundGate)
+            {
+                disposed = true;
+                while (outbound.TryDequeue(out var item)) store.Memory.Release(item.bytes.Length);
+                outboundBytes = 0;
+                outboundPerPeer.Clear();
+            }
+            transport.Received -= Receive; work.Dispose();
+        }
+        public bool WaitForClose(int milliseconds = 5000) => work.WaitForClose(milliseconds);
     }
 }

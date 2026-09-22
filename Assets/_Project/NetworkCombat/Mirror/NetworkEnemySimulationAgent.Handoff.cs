@@ -31,9 +31,16 @@ namespace MonsterSupergroup.NetworkCombat
         private void ApplyHandoff(EnemySimulationHandoff current)
         {
             if (current.Assignment.Epoch == 0 || current.Assignment.EnemyEntityId != netId ||
-                (appliedHandoffEpoch != 0 && !EnemySimulationSequence.IsNewer(current.Assignment.Epoch, appliedHandoffEpoch))) return;
-            if (MonsterSupergroup.GAS.CombatEvidence.Enabled) MonsterSupergroup.GAS.CombatEvidence.Event(isServer ? "Server" : "Replica", "authority.handoff", "Applying", current.Reason.ToString(),
-                target: netId, input: current, before: new { assignment, position = transform.position, appliedHandoffEpoch });
+                (appliedHandoffEpoch != 0 && !EnemySimulationSequence.IsNewer(current.Assignment.Epoch, appliedHandoffEpoch)))
+            {
+                TraceHandoffDecision(current, "Ignored", current.Assignment.Epoch == 0 ? "ZeroEpoch" :
+                    current.Assignment.EnemyEntityId != netId ? "WrongEntity" : "EpochAlreadyApplied");
+                return;
+            }
+            if (MonsterSupergroup.GAS.CombatEvidence.Enabled) MonsterSupergroup.GAS.CombatEvidence.Write(new MonsterSupergroup.GAS.DiagnosticRecord {
+                role = isServer ? "Server" : "Replica", stage = "authority.handoff", outcome = "Applying", reason = current.Reason.ToString(),
+                target = netId, assignmentEpoch = current.Assignment.Epoch, source = current.Assignment.SimulationOwnerPlayerId,
+                input = current, before = new { assignment, position = transform.position, appliedHandoffEpoch }, critical = true, estimatedBytes = 4096 });
             Vector2 previousPosition = transform.position;
             bool previouslyLocal = authority != null && authority.RunsNavigation;
             bool keepServerAction = current.Reason != EnemyTargetChangeReason.ReferenceReposition && isServer && appliedHandoffEpoch != 0 &&
@@ -50,7 +57,11 @@ namespace MonsterSupergroup.NetworkCombat
             }
             TryInitializeProductEnemy();
             if (assignment.Host != EnemySimulationHost.Frozen && (resolvedTarget == null || !ProductEnemyInitialized))
-            { restoringHandoff = false; return; }
+            {
+                restoringHandoff = false;
+                TraceHandoffDecision(current, "Deferred", resolvedTarget == null ? "TargetUnavailable" : "ProductNotInitialized");
+                return;
+            }
             snapshotSequence = 0; sequenceEpoch = assignment.Epoch;
             ResetAttackPresentationForAssignment(assignment.Epoch);
             if (!keepServerAction) interpolator.ClearSnapshots();
@@ -95,8 +106,11 @@ namespace MonsterSupergroup.NetworkCombat
                 // The synthetic baseline must not consume the first real message's sequence.
                 receivedAttackStateSequence = 0;
             }
-            if (MonsterSupergroup.GAS.CombatEvidence.Enabled) MonsterSupergroup.GAS.CombatEvidence.Event(isServer ? "Server" : "Replica", "authority.handoff", "Applied", current.Reason.ToString(),
-                target: netId, input: current, before: new { position = previousPosition }, after: new { assignment, position = transform.position, appliedHandoffEpoch, keepServerAction });
+            if (MonsterSupergroup.GAS.CombatEvidence.Enabled) MonsterSupergroup.GAS.CombatEvidence.Write(new MonsterSupergroup.GAS.DiagnosticRecord {
+                role = isServer ? "Server" : "Replica", stage = "authority.handoff", outcome = "Applied", reason = current.Reason.ToString(),
+                target = netId, assignmentEpoch = current.Assignment.Epoch, source = current.Assignment.SimulationOwnerPlayerId,
+                input = new { current.CommittedAt }, before = new { position = previousPosition },
+                after = new { assignment, position = transform.position, appliedHandoffEpoch, keepServerAction }, critical = true });
             QueueAssignmentAttackPresentationBaseline();
             if (hasPendingFutureSnapshot && pendingFutureSnapshot.AssignmentEpoch == assignment.Epoch)
             {
@@ -106,6 +120,16 @@ namespace MonsterSupergroup.NetworkCombat
             else if (hasPendingFutureSnapshot && !EnemySimulationSequence.IsNewer(pendingFutureSnapshot.AssignmentEpoch, assignment.Epoch))
                 hasPendingFutureSnapshot = false;
             if (NetworkClient.active) NetworkEnemySimulationWorld.Instance?.TryApplyPendingAttackPresentation(this);
+        }
+
+        private void TraceHandoffDecision(EnemySimulationHandoff value, string outcome, string reason)
+        {
+            if (!MonsterSupergroup.GAS.CombatEvidence.Enabled) return;
+            MonsterSupergroup.GAS.CombatEvidence.Write(new MonsterSupergroup.GAS.DiagnosticRecord {
+                role = isServer ? "Server" : "Replica", stage = "authority.handoff", outcome = outcome, reason = reason,
+                source = value.Assignment.SimulationOwnerPlayerId, target = netId, assignmentEpoch = value.Assignment.Epoch,
+                input = new { value.Assignment, value.Reason, value.CommittedAt },
+                after = new { assignment, appliedHandoffEpoch, position = transform.position, ProductEnemyInitialized }, critical = true });
         }
 
         private EnemySimulationRuntimeState CaptureSimulationRuntime(double now)

@@ -1350,6 +1350,14 @@ namespace AstralShift.HellMaiden.AI.Enemy
 		{
 			if (IsDead || base.IsImmune || hit.Runtime == null || hit.Attack == null)
 			{
+				if (MonsterSupergroup.GAS.CombatEvidence.Enabled)
+				{
+					var entity = GetComponent<CombatantBehaviour>();
+					MonsterSupergroup.GAS.CombatEvidence.Event("Owner", "owner.hit_filter", "Ignored",
+						IsDead ? "EnemyAlreadyDead" : base.IsImmune ? "EnemyImmune" : hit.Runtime == null ? "MissingWeaponRuntime" : "MissingAttackSnapshot",
+						hit.Attack?.Context.EventId.Value ?? 0, hit.Attack?.Context.SourcePlayerId ?? 0, entity != null ? entity.EntityId : 0,
+						input: new { enemyLocalId = GetInstanceID() }, root: hit.Attack?.Context.RootEventId.Value ?? 0, bytes: 512);
+				}
 				return false;
 			}
 
@@ -1362,7 +1370,7 @@ namespace AstralShift.HellMaiden.AI.Enemy
 					presentationDamageType: (MonsterSupergroup.GAS.DamageType)hit.PresentationDamageType);
 				hit.PresentationWeapon?.NotifyNativeDamage(
 					resolution.ResolvedDamage.Value,
-					resolution.ResolvedDamage.IsCritical);
+					resolution.ResolvedDamage.IsCritical, resolution.DamageContext);
 
 				if (resolution.PredictedAppliedDamage.Value <= 0)
 				{

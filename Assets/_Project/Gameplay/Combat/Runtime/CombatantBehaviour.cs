@@ -6,7 +6,7 @@ namespace MonsterSupergroup.Gameplay.Combat
 {
     [DisallowMultipleComponent]
     public sealed class CombatantBehaviour : MonoBehaviour, ICombatTarget, IStatusQuery,
-        ICombatStateIdentity, ICombatLifecycleTarget
+        ICombatStateIdentity, ICombatLifecycleTarget, ICombatHealthEvidence
     {
         [SerializeField, Min(1)] private int maxHealth = 100;
 
@@ -26,13 +26,38 @@ namespace MonsterSupergroup.Gameplay.Combat
         private bool ultimateInvulnerable;
 
         public bool IsInvulnerable => upgradeSelectionInvulnerable || canonicalInvulnerable || ultimateInvulnerable;
+        public int DiagnosticHealth => CurrentHealth;
+        public bool DiagnosticInvulnerable => IsInvulnerable;
 
-        public void SetUltimateInvulnerable(bool value) => ultimateInvulnerable = value;
+        public void SetUltimateInvulnerable(bool value)
+        {
+            int previous = InvulnerabilityFlags;
+            ultimateInvulnerable = value;
+            TraceInvulnerability(previous, "Ultimate", value);
+        }
 
-        public void SetUpgradeSelectionInvulnerable(bool value) =>
+        public void SetUpgradeSelectionInvulnerable(bool value)
+        {
+            int previous = InvulnerabilityFlags;
             upgradeSelectionInvulnerable = value;
+            TraceInvulnerability(previous, "UpgradeSelection", value);
+        }
 
-        public void SetCanonicalInvulnerable(bool value) => canonicalInvulnerable = value;
+        public void SetCanonicalInvulnerable(bool value)
+        {
+            int previous = InvulnerabilityFlags;
+            canonicalInvulnerable = value;
+            TraceInvulnerability(previous, "Canonical", value);
+        }
+
+        private int InvulnerabilityFlags => (upgradeSelectionInvulnerable ? 1 : 0) | (canonicalInvulnerable ? 2 : 0) | (ultimateInvulnerable ? 4 : 0);
+        private void TraceInvulnerability(int previous, string flag, bool value)
+        {
+            if (!CombatEvidence.Enabled || previous == InvulnerabilityFlags) return;
+            CombatEvidence.Write(new DiagnosticRecord { role = "Entity", stage = "entity.permission", outcome = "Changed", reason = flag,
+                target = entityId, stateVersion = stateVersion, input = new { flag, value }, before = previous,
+                after = new { flags = InvulnerabilityFlags, upgradeSelectionInvulnerable, canonicalInvulnerable, ultimateInvulnerable }, critical = true });
+        }
 
         public event Action<int, int> HealthChanged;
 
@@ -135,14 +160,19 @@ namespace MonsterSupergroup.Gameplay.Combat
             EnsureInitialized();
             if (version < stateVersion)
             {
+                TraceCanonicalHealth(health, maximumHealth, version, CurrentHealth, stateVersion, "Ignored", "StaleStateVersion");
                 return false;
             }
 
             if (maximumHealth < 1 || health < 0 || health > maximumHealth)
             {
+                TraceCanonicalHealth(health, maximumHealth, version, CurrentHealth, stateVersion, "Rejected", "InvalidHealthRange");
                 throw new ArgumentOutOfRangeException(nameof(health));
             }
 
+            int previousHealth = CurrentHealth;
+            uint previousVersion = stateVersion;
+            bool keepPredictedDeath = clientFinalDeath && predictedLethalRaised && CurrentHealth == 0;
             maxHealth = maximumHealth;
             // Enemy outcomes are client-final. An older in-flight positive HP update
             // cannot undo a locally declared death while its receipt is in flight.
@@ -158,7 +188,20 @@ namespace MonsterSupergroup.Gameplay.Combat
             }
 
             HealthChanged?.Invoke(CurrentHealth, maxHealth);
+            TraceCanonicalHealth(health, maximumHealth, version, previousHealth, previousVersion, "Applied",
+                keepPredictedDeath && health > 0 ? "PredictedDeathRetained" : "CanonicalHealthApplied");
             return true;
+        }
+
+        private void TraceCanonicalHealth(int health, int maximum, uint version, int previousHealth, uint previousVersion, string outcome, string reason)
+        {
+            if (!CombatEvidence.Enabled) return;
+            CombatEvidence.Write(new DiagnosticRecord { role = "Replica", stage = "entity.canonical_health", outcome = outcome, reason = reason,
+                target = entityId, stateVersion = version, critical = outcome != "Applied" || health == 0 || previousHealth == 0,
+                input = new { canonicalHealth = health, canonicalMaximum = maximum, canonicalVersion = version },
+                before = new { localHealth = previousHealth, version = previousVersion },
+                after = new { localHealth = CurrentHealth, localMaximum = maxHealth, version = stateVersion,
+                    predictedLethalRaised, confirmedKillRaised, clientFinalDeath } });
         }
 
         public void ResetCombatant()
@@ -375,26 +418,29 @@ namespace MonsterSupergroup.Gameplay.Combat
         {
             if (!IsAlive)
             {
+                if (CombatEvidence.Enabled) RecordStatusDamage(tick, CombatContext.None, default, CurrentHealth, "Ignored", "TargetNotAlive");
                 return;
             }
 
             bool wasAlive = IsAlive;
+            int previousHealth = CurrentHealth;
             StatusTickCount++;
             DamageInfo applied = ApplyDamage(tick.Damage, true);
             if (applied.Value > 0)
             {
                 StatusDamageReceived?.Invoke(tick, applied);
             }
-            PublishStatusDamage(tick, applied, wasAlive);
+            PublishStatusDamage(tick, applied, wasAlive, previousHealth);
         }
 
         private void PublishStatusDamage(
             StatusTick tick,
             DamageInfo predictedApplied,
-            bool targetWasAlive)
+            bool targetWasAlive, int previousHealth)
         {
             if (tick.Damage.Value <= 0)
             {
+                if (CombatEvidence.Enabled) RecordStatusDamage(tick, CombatContext.None, predictedApplied, previousHealth, "Ignored", "NonPositiveTickDamage");
                 return;
             }
 
@@ -431,6 +477,8 @@ namespace MonsterSupergroup.Gameplay.Combat
                     0,
                     tags,
                     stateVersion);
+            if (CombatEvidence.Enabled) RecordStatusDamage(tick, damageContext, predictedApplied, previousHealth,
+                predictedApplied.Value > 0 ? "Applied" : "Ignored", predictedApplied.Value > 0 ? "PredictedDamageApplied" : "InvulnerableOrDead");
             activeEventSink.Publish(new CombatEvent(
                 CombatEventKind.DamageResolved,
                 damageContext,
@@ -457,6 +505,20 @@ namespace MonsterSupergroup.Gameplay.Combat
                     tick.Damage,
                     predictedApplied));
             }
+        }
+
+        private void RecordStatusDamage(StatusTick tick, CombatContext damageContext, DamageInfo applied, int previousHealth, string outcome, string reason)
+        {
+            CombatContext source = tick.Instance.SourceContext;
+            CombatEvidence.Write(new DiagnosticRecord { role = "Owner", stage = "owner.dot_damage", outcome = outcome, reason = reason,
+                engine = CombatEvidence.CurrentEngine,
+                eventId = damageContext.IsValid ? damageContext.EventId.Value.ToString() : null,
+                rootEventId = source.IsValid ? source.RootEventId.Value.ToString() : null,
+                parentEventId = source.IsValid ? source.EventId.Value.ToString() : null,
+                source = tick.Instance.SourcePlayerId, target = entityId, stateVersion = stateVersion,
+                statusInstanceId = tick.InstanceId.Value.ToString(), applicationRevision = tick.Instance.ApplicationRevision, tickIndex = tick.TickIndex,
+                input = tick, before = new { health = previousHealth, invulnerable = IsInvulnerable },
+                after = new { health = CurrentHealth, applied, alive = IsAlive }, critical = true, estimatedBytes = 1280 });
         }
 
         private void OnDestroy()

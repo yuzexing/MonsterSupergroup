@@ -28,12 +28,7 @@ namespace Mirror.FizzySteam
 #else
                 EResult res = SteamNetworkingSockets.SendMessageToConnection(conn, pData, (uint)(segment.Count + 1), sendFlag, out long _);
 #endif
-                if (res != EResult.k_EResultOK)
-                {
-                    Debug.LogWarning($"Send issue: {res}");
-                }
-
-                SteamTransportDiagnostics.RecordSend(segment.Count + 1, channelId, res == EResult.k_EResultOK);
+                SteamTransportDiagnostics.RecordSendResult(conn.m_HSteamNetConnection, segment, channelId, res);
                 return res;
             }
             finally

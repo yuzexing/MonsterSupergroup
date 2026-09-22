@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using Cysharp.Threading.Tasks;
+using MonsterSupergroup.GAS;
+using MonsterSupergroup.Gameplay.Combat;
 using UnityEngine;
 
 namespace AstralShift.HellMaiden.Player.Attacks
@@ -24,6 +26,29 @@ namespace AstralShift.HellMaiden.Player.Attacks
 		protected Dictionary<int, CancellationTokenSource> _removalCTS = new Dictionary<int, CancellationTokenSource>();
 
 		protected CancellationTokenSource _enableCts;
+		private CombatContext diagnosticAttack;
+		private bool diagnosticPresentationOnly;
+
+		public void BindDiagnosticAttack(CombatContext context, bool presentationOnly = false)
+		{
+			diagnosticAttack = context;
+			diagnosticPresentationOnly = presentationOnly;
+			RecordContactEvidence(null, "Bound", "AttackWindowBound");
+		}
+
+		protected void RecordContactEvidence(IDamageable candidate, string outcome, string reason, float? plannedTime = null)
+		{
+			if (!CombatEvidence.Enabled) return;
+			var component = candidate as Component;
+			var combatant = component != null ? component.GetComponent<CombatantBehaviour>() : null;
+			string stage = outcome == "Bound" || outcome == "Opened" || outcome == "Closed" ? "attack_window" : "contact";
+			CombatEvidence.Event(diagnosticPresentationOnly ? "Replica" : "Owner", (diagnosticPresentationOnly ? "replica." : "owner.") + stage, outcome, reason,
+				diagnosticAttack.EventId.Value, diagnosticAttack.SourcePlayerId, combatant != null ? combatant.EntityId : 0,
+				new { hitboxLocalId = GetInstanceID(), candidateLocalId = component != null ? component.GetInstanceID() : 0,
+					callbackPresent = _onHit != null, colliderEnabled = collider != null && collider.enabled,
+					plannedTime, actualTime = Time.time, association = diagnosticAttack.IsValid ? "AttackRoot" : "MissingAttackContext" },
+				root: diagnosticAttack.RootEventId.Value, bytes: 768);
+		}
 
 		protected virtual void Awake()
 		{
@@ -35,6 +60,8 @@ namespace AstralShift.HellMaiden.Player.Attacks
 
 		public virtual void Init(Action<IDamageable> onHit)
 		{
+			diagnosticAttack = default;
+			diagnosticPresentationOnly = false;
 			_onHit = onHit;
 			_hitEntries.Clear();
 			CancelAllRemovalTokens();
@@ -80,6 +107,7 @@ namespace AstralShift.HellMaiden.Player.Attacks
 			{
 				return;
 			}
+			bool changed = collider.enabled != state;
 			if (state)
 			{
 				_hitEntries.Clear();
@@ -94,6 +122,7 @@ namespace AstralShift.HellMaiden.Player.Attacks
 					array[i].enabled = state;
 				}
 			}
+			if (changed) RecordContactEvidence(null, state ? "Opened" : "Closed", "HitboxToggle");
 		}
 
 		protected virtual async UniTaskVoid StartTimeoutAsync(CancellationToken token)
@@ -172,7 +201,10 @@ namespace AstralShift.HellMaiden.Player.Attacks
 
 		public virtual void ClearCallbacks()
 		{
+			bool changed = _onHit != null;
 			_onHit = null;
+			if (changed) RecordContactEvidence(null, "Closed", "CallbacksCleared");
+			diagnosticAttack = default;
 		}
 
 		protected virtual void OnDrawGizmos()

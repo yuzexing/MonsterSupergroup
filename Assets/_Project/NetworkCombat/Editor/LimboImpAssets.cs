@@ -161,8 +161,8 @@ namespace MonsterSupergroup.NetworkCombat.Editor
         }
         public static void CreateAndBuild()
         {
-            Create();
-            MonsterSupergroup.EditorTools.ProjectBuildService.Build("kcp-development", "Builds/LimboReference/MonsterSupergroupLimbo.exe");
+            Debug.LogWarning("[ProjectTools] CreateAndBuild now builds existing Limbo assets only; Imp maintenance must be invoked separately.");
+            LimboReferenceAssets.BuildPlayer();
         }
     }
 }

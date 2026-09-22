@@ -1,5 +1,5 @@
 ﻿param(
-    [string]$Executable = 'Builds/M4Selection/M4Selection.exe',
+    [string]$Executable = '',
     [switch]$Dedicated,
     [switch]$CaptureFrames,
     [switch]$VisibleWindows,
@@ -12,6 +12,7 @@ Import-Module (Join-Path (Split-Path -Parent $PSScriptRoot) 'ProjectTools.psm1')
 
 $ErrorActionPreference = 'Stop'
 $projectRoot = Split-Path -Parent (Split-Path -Parent $PSScriptRoot)
+$Executable = Resolve-ProjectBuildExecutable -ProjectRoot $projectRoot -Recipe 'gameplay-validation' -Executable $Executable -RequireDevelopmentTools -Network Kcp
 if (-not [IO.Path]::IsPathRooted($Executable)) { $Executable = Join-Path $projectRoot $Executable }
 if (-not (Test-Path -LiteralPath $Executable)) { throw "Missing M4 validation build: $Executable" }
 if ($IsolateTemporaryCache -and -not (Get-Command Start-Process).Parameters.ContainsKey('Environment')) {

@@ -101,7 +101,9 @@ namespace MonsterSupergroup.GAS
         public OnHitModifierArgs Apply(OnHitModifierArgs args)
         {
             float chance = Probability.Clamp01(GetRollChance() * args.OnHitChanceMultiplier);
-            if (args.Random.Next01() < chance)
+            float roll = args.Random.Next01();
+            if (CombatEvidence.Enabled) ModifierRollEvidence.Record(this, args.Context, args.Target, chance, roll);
+            if (roll < chance)
             {
                 ApplyEffect(args);
             }
@@ -131,7 +133,9 @@ namespace MonsterSupergroup.GAS
         public OnPredictedLethalHitModifierArgs Apply(OnPredictedLethalHitModifierArgs args)
         {
             float chance = Probability.Clamp01(GetRollChance() * args.ChanceMultiplier);
-            if (args.Random.Next01() < chance)
+            float roll = args.Random.Next01();
+            if (CombatEvidence.Enabled) ModifierRollEvidence.Record(this, args.Context, args.Target, chance, roll);
+            if (roll < chance)
             {
                 ApplyEffect(args);
             }

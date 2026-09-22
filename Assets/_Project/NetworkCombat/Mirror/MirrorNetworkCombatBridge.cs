@@ -53,6 +53,7 @@ namespace MonsterSupergroup.NetworkCombat
 
             world.Gateway.Ledger.RegisterSource(netId, ownerPlayerId);
             world.Gateway.RegisterClientIdentity(ownerPlayerId, sourceSlot, connectionEpoch);
+            TraceConnectionIdentity("Server", "Registered");
         }
 
         public override void OnStartAuthority()
@@ -61,6 +62,7 @@ namespace MonsterSupergroup.NetworkCombat
             if (collector != null) return;
             // Rebinding the same avatar must not reuse event sequences in its existing epoch.
             if (eventIds == null) eventIds = new SequentialCombatEventIdSource(sourceSlot, connectionEpoch);
+            TraceConnectionIdentity("Owner", "AuthorityStarted");
             Trace = enableCombatTrace
                 ? new CombatTraceRecorder(combatTraceCapacity)
                 : null;
@@ -143,8 +145,9 @@ namespace MonsterSupergroup.NetworkCombat
 
             CombatSubmissionBatch batch = collector.Drain(batchSequence, now: Time.unscaledTimeAsDouble);
             batch.Round = collectorRound;
-            if (CombatEvidence.Enabled) CombatEvidence.Event("Owner", "network.submit", "Sent", "ReliableCommand",
+            if (CombatEvidence.Enabled) CombatEvidence.Event("Owner", "network.submit", "Enqueued", "ReliableCommand",
                 source: ownerPlayerId, input: batch, batch: batch.BatchSequence);
+            using var evidenceSend = Diagnostics.NetworkMessageEvidence.Begin("Owner", "CombatSubmission", ownerPlayerId, batch.BatchSequence, epoch: connectionEpoch);
             CmdSubmit(batch);
         }
 
@@ -167,7 +170,11 @@ namespace MonsterSupergroup.NetworkCombat
             if (world != null)
             {
                 var receipts = world.ProcessSubmission(ownerPlayerId, batch);
-                if (receipts.Length > 0) TargetConfirmEnemyDeaths(sender, receipts, batch.Round);
+                if (receipts.Length > 0)
+                {
+                    using var evidenceSend = Diagnostics.NetworkMessageEvidence.Begin("Server", "EnemyDeathReceipts", ownerPlayerId, batch.BatchSequence, epoch: connectionEpoch);
+                    TargetConfirmEnemyDeaths(sender, receipts, batch.Round);
+                }
             }
         }
 
@@ -187,6 +194,7 @@ namespace MonsterSupergroup.NetworkCombat
 
         public override void OnStopAuthority()
         {
+            TraceConnectionIdentity("Owner", "AuthorityStopped");
             NetworkCombatWorld world = NetworkCombatWorld.Instance;
             if (world != null)
             {
@@ -198,6 +206,14 @@ namespace MonsterSupergroup.NetworkCombat
             collector = null;
             Trace = null;
             base.OnStopAuthority();
+        }
+
+        private void TraceConnectionIdentity(string role, string outcome)
+        {
+            if (!CombatEvidence.Enabled) return;
+            CombatEvidence.Write(new DiagnosticRecord { role = role, stage = "network.identity", outcome = outcome, reason = "CombatConnectionEpoch",
+                source = ownerPlayerId, target = netId, connectionEpoch = connectionEpoch, critical = true,
+                input = new { sourceSlot, collectorRound, connectionId = connectionToClient != null ? connectionToClient.connectionId : 0 } });
         }
 
         public override void OnStopClient()

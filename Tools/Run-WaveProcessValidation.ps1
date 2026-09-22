@@ -1,5 +1,5 @@
 ﻿param(
-    [string]$Executable = 'Builds/M5Waves/M5Waves.exe',
+    [string]$Executable = '',
     [switch]$Dedicated,
     [switch]$Simulation,
     [switch]$SelectionBeforeRun,

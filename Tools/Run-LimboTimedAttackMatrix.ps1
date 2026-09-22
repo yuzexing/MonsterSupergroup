@@ -1,5 +1,5 @@
-param(
-    [Parameter(Mandatory)][string]$BuildDirectory,
+﻿param(
+    [string]$BuildDirectory,
     [ValidateSet('lostsoul','ghoul')][string]$Enemy = 'lostsoul',
     [string[]]$Cases = @('0-host','0-client','1-host','1-client'),
     [string]$Prefix = 'timed-attack',
@@ -9,7 +9,11 @@ param(
 )
 $ErrorActionPreference = 'Stop'
 $project = Split-Path -Parent $PSScriptRoot
-$binary = [IO.Path]::GetFullPath((Join-Path $project "$BuildDirectory/MonsterSupergroupLimbo.exe"))
+Import-Module (Join-Path $PSScriptRoot 'ProjectTools.psm1')
+$resolvedPlayer = Resolve-ProjectBuildExecutable -ProjectRoot $project -Recipe 'gameplay-validation' -BuildDirectory $BuildDirectory -RequireDevelopmentTools -Network Kcp
+$BuildDirectory = Split-Path -Parent $resolvedPlayer
+
+$binary = $resolvedPlayer
 foreach ($case in $Cases) {
     $parts = $case.Split('-')
     if ($parts.Count -ne 2 -or $parts[0] -notin @('0','1') -or $parts[1] -notin @('host','client')) { throw "Invalid case: $case" }

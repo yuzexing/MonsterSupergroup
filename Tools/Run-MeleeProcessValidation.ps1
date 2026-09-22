@@ -1,5 +1,5 @@
 ﻿param(
-    [string]$Executable = 'Builds/Phase02/MeleeValidation.exe',
+    [string]$Executable = '',
     [switch]$Dedicated,
     [int]$Port = 7908,
     [string]$LogDirectory = 'Logs/Phase02'

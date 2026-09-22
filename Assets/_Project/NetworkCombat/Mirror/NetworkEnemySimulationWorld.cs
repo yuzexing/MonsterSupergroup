@@ -350,7 +350,8 @@ namespace MonsterSupergroup.NetworkCombat
             EnemySimulationSnapshotBatch batch)
         {
             using var diagnosticScope = AstralShift.DebugTools.CombatPerformanceCounters.Measure(AstralShift.DebugTools.CombatPerformanceCounters.Area.SnapshotReceive);
-            if (BootGameplayNetworkManager.CombatHasEnded) return;
+            if (BootGameplayNetworkManager.CombatHasEnded)
+            { TraceMovementBatch(endpoint, batch, "Ignored", "CombatEnded"); return; }
             // Batch datagrams may arrive out of order and contain disjoint Enemies.
             // Per-Enemy epoch/sequence validation in the Registry provides idempotency.
             if (endpoint == null ||
@@ -362,9 +363,14 @@ namespace MonsterSupergroup.NetworkCombat
                 batch.Snapshots.Length > maximumSnapshotsPerBatch ||
                 batch.BatchSequence == 0u)
             {
+                TraceMovementBatch(endpoint, batch, "Rejected", endpoint == null ? "EndpointUnavailable" :
+                    !players.TryGetValue(endpoint.PlayerEntityId, out var expected) || expected != endpoint ? "EndpointNotRegistered" :
+                    batch.Snapshots == null || batch.Snapshots.Length == 0 ? "EmptyBatch" :
+                    batch.Snapshots.Length > maximumSnapshotsPerBatch ? "BatchLimitExceeded" : "ZeroBatchSequence");
                 return;
             }
 
+            TraceMovementBatch(endpoint, batch, "Received", "PerEntityValidation");
             snapshotBuffer.Clear();
             for (int i = 0; i < batch.Snapshots.Length; i++)
             {
@@ -374,10 +380,12 @@ namespace MonsterSupergroup.NetworkCombat
                     out NetworkEnemySimulationAgent enemy) ||
                     enemy == null || !enemy.IsCanonicalAlive || !IsServerEnemyAlive(enemy.netId))
                 {
+                    TraceSkippedMovement(endpoint.PlayerEntityId, batch.BatchSequence, snapshot, enemy == null ? "EntityUnavailable" : "CanonicalDead");
                     continue;
                 }
 
-                if (!enemy.ValidateSequenceAction(snapshot.Runtime.Action) || !enemy.ValidateDashAction(snapshot.Runtime.Action) || !enemy.ValidateExplosionAction(snapshot.Runtime.Action, snapshot.Position)) continue;
+                if (!enemy.ValidateSequenceAction(snapshot.Runtime.Action) || !enemy.ValidateDashAction(snapshot.Runtime.Action) || !enemy.ValidateExplosionAction(snapshot.Runtime.Action, snapshot.Position))
+                { TraceSkippedMovement(endpoint.PlayerEntityId, batch.BatchSequence, snapshot, "RuntimeActionRejected"); continue; }
                 var rejection = Registry.TryAcceptClientSnapshot(endpoint.PlayerEntityId, snapshot);
                 var progress = GetHandoff(snapshot.EnemyEntityId);
                 if (rejection == EnemySnapshotRejectionReason.WrongOwner) progress.Diagnostics.WrongOwner++;
@@ -391,6 +399,21 @@ namespace MonsterSupergroup.NetworkCombat
             }
 
             BroadcastSnapshots(snapshotBuffer, endpoint.connectionToClient);
+        }
+
+        private static void TraceMovementBatch(NetworkEnemySimulationEndpoint endpoint, EnemySimulationSnapshotBatch batch, string outcome, string reason)
+        {
+            if (!MonsterSupergroup.GAS.CombatEvidence.Enabled) return;
+            MonsterSupergroup.GAS.CombatEvidence.Event("Server", "movement.batch", outcome, reason, source: endpoint != null ? endpoint.PlayerEntityId : 0,
+                batch: batch.BatchSequence, input: new { batch.Round, count = batch.Snapshots?.Length ?? 0 }, bytes: 512);
+        }
+        private static void TraceSkippedMovement(uint sender, uint batch, EnemySimulationSnapshot snapshot, string reason)
+        {
+            if (!MonsterSupergroup.GAS.CombatEvidence.Enabled) return;
+            MonsterSupergroup.GAS.CombatEvidence.Write(new MonsterSupergroup.GAS.DiagnosticRecord {
+                role = "Server", stage = "authority.movement", outcome = "Rejected", reason = reason, source = sender,
+                target = snapshot.EnemyEntityId, batchSequence = batch, assignmentEpoch = snapshot.AssignmentEpoch,
+                input = snapshot, critical = true, estimatedBytes = 4096 });
         }
 
         [Server]

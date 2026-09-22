@@ -1,5 +1,5 @@
 ﻿param(
-    [string]$Executable = 'Builds/PlayerDebugDevelopment/PlayerDebug.exe',
+    [string]$Executable = '',
     [int]$Width = 1280,
     [int]$Height = 720,
     [int]$Port = 7988,

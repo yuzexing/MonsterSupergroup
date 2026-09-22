@@ -225,6 +225,10 @@ namespace MonsterSupergroup.NetworkCombat.Editor
             var so=new SerializedObject(rules);so.FindProperty("timeline").objectReferenceValue=timeline;so.FindProperty("referenceEndTime").doubleValue=end;
             so.FindProperty("referenceValidationOnly").boolValue=validation;so.ApplyModifiedPropertiesWithoutUndo();
         }
-        public static void CreateAndBuild(){Create();MonsterSupergroup.EditorTools.ProjectBuildService.Build("kcp-development","Builds/LimboReference/MonsterSupergroupLimbo.exe");}
+        public static void CreateAndBuild()
+        {
+            Debug.LogWarning("[ProjectTools] CreateAndBuild now builds existing Limbo assets only; stage-two maintenance must be invoked separately.");
+            LimboReferenceAssets.BuildPlayer();
+        }
     }
 }

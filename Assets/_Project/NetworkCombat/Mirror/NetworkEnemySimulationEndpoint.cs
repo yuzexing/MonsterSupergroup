@@ -144,8 +144,9 @@ namespace MonsterSupergroup.NetworkCombat
             {
                 batch.Round = NetworkEnemySimulationWorld.CurrentRound;
                 batch.BatchSequence = batchSequence = NextSequence(batchSequence);
-                if (MonsterSupergroup.GAS.CombatEvidence.Enabled) MonsterSupergroup.GAS.CombatEvidence.Event("Owner", "movement.submit", "Sent", reliable ? "ReliableFallback" : "Unreliable",
+                if (MonsterSupergroup.GAS.CombatEvidence.Enabled) MonsterSupergroup.GAS.CombatEvidence.Event("Owner", "movement.submit", "Enqueued", reliable ? "ReliableFallback" : "Unreliable",
                     source: PlayerEntityId, input: batch, batch: batch.BatchSequence, bytes: batch.Snapshots.Length * 4096 + 2048);
+                using var evidenceSend = Diagnostics.NetworkMessageEvidence.Begin("Owner", "EnemyMovement", PlayerEntityId, batch.BatchSequence);
                 if (reliable) CmdSubmitLargeSnapshot(batch); else CmdSubmitSnapshots(batch);
             });
         }
@@ -161,6 +162,8 @@ namespace MonsterSupergroup.NetworkCombat
         {
             if (sender == null || sender != connectionToClient)
             {
+                if (MonsterSupergroup.GAS.CombatEvidence.Enabled) MonsterSupergroup.GAS.CombatEvidence.Event("Server", "movement.batch", "Rejected", "ConnectionMismatch",
+                    source: PlayerEntityId, batch: batch.BatchSequence, input: new { batch.Round, count = batch.Snapshots?.Length ?? 0 }, bytes: 512);
                 return;
             }
 

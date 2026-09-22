@@ -1,5 +1,5 @@
 ﻿param(
-    [string]$Executable = "Builds/EnemySimulationValidation/MonsterSupergroupEnemySimulationValidation.exe",
+    [string]$Executable = '',
     [ValidateRange(1, 65535)]
     [int]$Port = 7798,
     [ValidateRange(10, 300)]

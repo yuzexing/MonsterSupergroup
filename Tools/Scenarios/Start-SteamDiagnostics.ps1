@@ -1,6 +1,6 @@
-[CmdletBinding()]
+﻿[CmdletBinding()]
 param(
-    [string]$Executable = 'Builds/SteamDiagnostics/Monster Supergroup.exe',
+    [string]$Executable = '',
     [ValidateSet('D3D12','D3D11','Default')][string]$Graphics = 'D3D12',
     [ValidateSet('host','client','solo')][string]$ExpectedRole = 'client',
     [string]$Scenario = 'R1',
@@ -11,7 +11,8 @@ param(
 )
 $ErrorActionPreference = 'Stop'
 $projectRoot = Split-Path -Parent (Split-Path -Parent $PSScriptRoot)
-if (-not [IO.Path]::IsPathRooted($Executable)) { $Executable = Join-Path $projectRoot $Executable }
+Import-Module (Join-Path (Split-Path -Parent $PSScriptRoot) 'ProjectTools.psm1')
+if (-not $AttachProcessId) { $Executable = Resolve-ProjectBuildExecutable -ProjectRoot $projectRoot -Recipe 'product' -Executable $Executable -Network Steam }
 if ($AttachProcessId) {
     $player = Get-Process -Id $AttachProcessId
     $Executable = $player.Path

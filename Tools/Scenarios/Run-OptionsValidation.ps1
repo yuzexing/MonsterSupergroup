@@ -1,11 +1,12 @@
 ﻿param(
-    [string]$Executable = 'Builds/OptionsValidation/MonsterSupergroup.exe',
+    [string]$Executable = '',
     [string]$Artifacts = 'Logs/OptionsStandalone'
 )
 Import-Module (Join-Path (Split-Path -Parent $PSScriptRoot) 'ProjectTools.psm1')
 
 $ErrorActionPreference = 'Stop'
 $optionsRoot = Split-Path -Parent (Split-Path -Parent $PSScriptRoot)
+$Executable = Resolve-ProjectBuildExecutable -ProjectRoot $optionsRoot -Recipe 'options-validation' -Executable $Executable -RequireDevelopmentTools -Network Kcp
 if (-not [IO.Path]::IsPathRooted($Executable)) { $Executable = Join-Path $optionsRoot $Executable }
 if (-not [IO.Path]::IsPathRooted($Artifacts)) { $Artifacts = Join-Path $optionsRoot $Artifacts }
 $Artifacts = Join-Path $Artifacts (Get-Date -Format 'yyyyMMdd-HHmmss')

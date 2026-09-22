@@ -35,6 +35,12 @@ namespace MonsterSupergroup.NetworkCombat
         internal void RecordMotionCorrection(NetworkEnemySimulationAgent enemy, EnemySimulationHandoff handoff,
             bool wasLocal, Vector2 from)
         {
+            if (MonsterSupergroup.GAS.CombatEvidence.Enabled) MonsterSupergroup.GAS.CombatEvidence.Write(new MonsterSupergroup.GAS.DiagnosticRecord {
+                role = enemy.isServer ? "Server" : "Replica", stage = "movement.correction", outcome = "Applied", reason = handoff.Reason.ToString(),
+                source = handoff.Assignment.SimulationOwnerPlayerId, target = enemy.netId, assignmentEpoch = handoff.Assignment.Epoch,
+                input = new { checkpointTime = handoff.Checkpoint.Movement.SampleNetworkTime, checkpointPosition = handoff.Checkpoint.Movement.Position },
+                before = new { position = from, localSimulator = wasLocal },
+                after = new { position = enemy.transform.position, localSimulator = enemy.Authority.RunsNavigation, distance = Vector2.Distance(from, enemy.transform.position) }, critical = true });
             if (!NetworkDiagnosticsObservation.Enabled) return;
             int reason = (int)handoff.Reason;
             if (reason < diagnosticHandoffs.Length) diagnosticHandoffs[reason]++;

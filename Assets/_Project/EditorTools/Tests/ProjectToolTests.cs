@@ -44,10 +44,11 @@ namespace MonsterSupergroup.EditorTools.Tests
         {
             foreach (string id in new[] { "player-development", "player-release" })
             {
-                var profile = ProjectToolCatalog.Load().builds.Single(b => b.id == id);
-                Assert.That(profile.testAssemblies, Is.False, id);
-                Assert.That(profile.defines, Is.Empty, id);
-                Assert.That(profile.development, Is.EqualTo(id == "player-development"));
+                var build = ProjectBuildResolver.Resolve(id);
+                Assert.That(build.Recipe.id, Is.EqualTo("product"), id);
+                Assert.That(build.Recipe.testAssemblies, Is.False, id);
+                Assert.That(build.Recipe.defines, Is.Empty, id);
+                Assert.That(build.Development, Is.EqualTo(id == "player-development"));
             }
         }
 

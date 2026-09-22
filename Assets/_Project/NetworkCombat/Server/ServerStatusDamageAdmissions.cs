@@ -8,12 +8,12 @@ namespace MonsterSupergroup.NetworkCombat
     /// Bounded outcome permissions copied from accepted SourceClient statuses. These records
     /// never execute a status; they allow its remaining ticks after its weapon snapshot ends.
     /// </summary>
-    public sealed class ServerStatusDamageAdmissions
+    public sealed partial class ServerStatusDamageAdmissions
     {
         private const double DeliveryGrace = 2d;
         private readonly List<Receipt> receipts = new List<Receipt>();
 
-        public void Observe(StatusMutation mutation, CanonicalStatusState state, double serverTime)
+        private void EvidenceCore_Observe(StatusMutation mutation, CanonicalStatusState state, double serverTime)
         {
             Prune(serverTime);
             if (state.Removed)
@@ -54,7 +54,7 @@ namespace MonsterSupergroup.NetworkCombat
             return CombatRejectionReason.None;
         }
 
-        public void Commit(CombatResult result)
+        private void EvidenceCore_Commit(CombatResult result)
         {
             Receipt receipt = Find(result);
             if (receipt != null) receipt.Budget.AcceptedTicks = Math.Min(receipt.State.TotalTicks, receipt.Budget.AcceptedTicks + 1);
@@ -69,8 +69,8 @@ namespace MonsterSupergroup.NetworkCombat
             return 0;
         }
 
-        public void RemovePlayer(uint playerId) => receipts.RemoveAll(item => item.State.SourcePlayerId == playerId);
-        public void Prune(double serverTime) => receipts.RemoveAll(item => serverTime > item.ExpiresAt);
+        private void EvidenceCore_RemovePlayer(uint playerId) => receipts.RemoveAll(item => item.State.SourcePlayerId == playerId);
+        private void EvidenceCore_Prune(double serverTime) => receipts.RemoveAll(item => serverTime > item.ExpiresAt);
 
         public static bool IsPeriodic(CombatResult result) =>
             ((CombatTags)result.DamageTags & (CombatTags.Status | CombatTags.Periodic)) ==

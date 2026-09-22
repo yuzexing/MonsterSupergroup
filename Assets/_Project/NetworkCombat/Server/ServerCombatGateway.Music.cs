@@ -10,9 +10,9 @@ namespace MonsterSupergroup.NetworkCombat
 
         // All authoritative effects share the status tick allocator. A separate allocator
         // with the same server source slot would collide with damage and kill receipts.
-        public ulong NextServerEventId() => serverEventIds.Next().Value;
+        private ulong EvidenceCore_NextServerEventId() => serverEventIds.Next().Value;
 
-        internal bool TryAdmitMusicEffect(uint player, uint source, ulong eventId, double now)
+        private bool EvidenceCore_TryAdmitMusicEffect(uint player, uint source, ulong eventId, double now)
         {
             ValidateServerTime(now);
             var id = new CombatEventId(eventId);
@@ -24,7 +24,7 @@ namespace MonsterSupergroup.NetworkCombat
 
         // Only called by the server after a beat has been admitted. This never consumes a
         // client damage number or re-runs the player's automatic weapon/GAS modifiers.
-        internal CombatApplyResult[] ProcessMusicDamage(uint player, uint source, uint[] targets,
+        private CombatApplyResult[] EvidenceCore_ProcessMusicDamage(uint player, uint source, uint[] targets,
             int damage, ulong rootId, double now, out CanonicalWorldBatch batch)
         {
             batch = default;

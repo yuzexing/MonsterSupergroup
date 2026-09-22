@@ -128,6 +128,7 @@ namespace Mirror.FizzySteam
             ulong clientSteamID = param.m_info.m_identityRemote.GetSteamID64();
             if (param.m_info.m_eState == ESteamNetworkingConnectionState.k_ESteamNetworkingConnectionState_Connected)
             {
+                SteamEvidenceLane.Connect(0, HostConnection);
                 Connected = true;
                 OnConnected.Invoke();
                 Debug.Log("Connection established.");
@@ -155,6 +156,7 @@ namespace Mirror.FizzySteam
 
         public void Disconnect()
         {
+            SteamEvidenceLane.Disconnect(0);
             cancelToken?.Cancel();
             Dispose();
 
@@ -225,7 +227,7 @@ namespace Mirror.FizzySteam
 
         private void Deliver(ArraySegment<byte> data, int channel)
         {
-            try { OnReceivedData?.Invoke(data, channel); }
+            try { if (channel == 2) SteamEvidenceLane.Deliver(0, data); else OnReceivedData?.Invoke(data, channel); }
             finally { ReturnMessage(data); }
         }
 

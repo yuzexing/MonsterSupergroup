@@ -27,8 +27,9 @@ namespace MonsterSupergroup.NetworkCombat
             return rejections.TryGetValue(reason, out long count) ? count : 0;
         }
 
-        internal void Reject(CombatRejectionReason reason)
+        internal void Reject(CombatRejectionReason reason, string diagnosticReason = null)
         {
+            if (CombatEvidence.Enabled) GatewayEvidenceDecision.Reject(diagnosticReason ?? reason.ToString());
             rejections.TryGetValue(reason, out long count);
             rejections[reason] = count + 1;
         }
@@ -46,7 +47,17 @@ namespace MonsterSupergroup.NetworkCombat
         private readonly Dictionary<uint, ConfirmedKill> enemyDeaths = new Dictionary<uint, ConfirmedKill>();
         private readonly HashSet<uint> retiredEnemies = new HashSet<uint>();
         private readonly HashSet<uint> disconnectedPlayers = new HashSet<uint>();
-        public uint Round { get; set; }
+        private uint evidenceRound;
+        public uint Round
+        {
+            get => evidenceRound;
+            set
+            {
+                if (evidenceRound == value) return;
+                using var evidence = CombatEvidence.Enabled ? CombatEvidence.Begin(this, "gateway", "SetRound", new object[] { value }, o => ((ServerCombatGateway)o).CaptureReplayState()) : default;
+                evidenceRound = value; evidence.Complete();
+            }
+        }
 
         public ServerCombatGateway(
             CombatLedger ledger = null,
@@ -58,6 +69,7 @@ namespace MonsterSupergroup.NetworkCombat
             this.serverEventIds = serverEventIds ??
                 new SequentialCombatEventIdSource(ushort.MaxValue, 1);
             this.trace = trace;
+            BindEvidence();
         }
 
         public CombatLedger Ledger { get; private set; }
@@ -72,8 +84,8 @@ namespace MonsterSupergroup.NetworkCombat
             new ClientBatchSequenceTracker();
 
         public bool CombatStopped { get; private set; }
-        public void StopCombat() => CombatStopped = true;
-        public void ResetForNextRun()
+        private void EvidenceCore_StopCombat() => CombatStopped = true;
+        private void EvidenceCore_ResetForNextRun()
         {
             Statuses.Clear();
             Ledger = new CombatLedger(); Statuses = new ServerStatusRegistry(Ledger);
@@ -81,6 +93,7 @@ namespace MonsterSupergroup.NetworkCombat
             Metrics = new CombatGatewayMetrics(); ProcessedEvents = new ProcessedEventCache();
             ClientIdentities = new ClientEventIdentityRegistry(); BatchSequences = new ClientBatchSequenceTracker();
             enemyDeaths.Clear(); retiredEnemies.Clear(); disconnectedPlayers.Clear();
+            BindEvidence();
             // Keep event IDs monotonic across rounds, along with the event subscriptions.
             CombatStopped = false;
         }
@@ -96,7 +109,7 @@ namespace MonsterSupergroup.NetworkCombat
         public event Action<PlayerHealthReport> PlayerHealthReportAccepted;
         public event Action<uint, PlayerHealthReport, CombatRejectionReason> PlayerHealthReportRejected;
 
-        public void RegisterClientIdentity(
+        private void EvidenceCore_RegisterClientIdentity(
             uint playerId,
             ushort sourceSlot,
             ushort connectionEpoch)
@@ -105,7 +118,7 @@ namespace MonsterSupergroup.NetworkCombat
             disconnectedPlayers.Remove(playerId);
         }
 
-        public void UnregisterClientIdentity(uint playerId)
+        private void EvidenceCore_UnregisterClientIdentity(uint playerId)
         {
             disconnectedPlayers.Add(playerId);
             Attacks.UnregisterPlayer(playerId);
@@ -120,11 +133,11 @@ namespace MonsterSupergroup.NetworkCombat
             double serverTime)
             => ProcessBatch(senderPlayerId, batch, serverTime, out _);
 
-        public CanonicalWorldBatch ProcessBatch(uint senderPlayerId, CombatSubmissionBatch batch,
+        private CanonicalWorldBatch EvidenceCore_ProcessBatch(uint senderPlayerId, CombatSubmissionBatch batch,
             double serverTime, out EnemyDeathReceipt[] deathReceipts)
         {
             deathReceipts = Array.Empty<EnemyDeathReceipt>();
-            if (CombatStopped) return default;
+            if (CombatStopped) { GatewayEvidenceDecision.Reject("CombatStopped"); return default; }
             if (disconnectedPlayers.Contains(senderPlayerId))
             { Metrics.Reject(CombatRejectionReason.InvalidSender); return default; }
             ValidateServerTime(serverTime);
@@ -146,13 +159,13 @@ namespace MonsterSupergroup.NetworkCombat
             Metrics.ReceivedEnemyDeathReports += deaths.Length;
             Metrics.EstimatedReceivedPayloadBytes +=
                 CombatBandwidthEstimator.EstimatePayloadBytes(batch);
-            if (batch.Round != Round || !BatchSequences.Accept(senderPlayerId, batch.BatchSequence) ||
-                results.Length > MaximumResultsPerBatch ||
-                mutations.Length > MaximumStatusMutationsPerBatch ||
-                playerReports.Length > MaximumPlayerReportsPerBatch || deaths.Length > MaximumResultsPerBatch)
+            string batchReason = batch.Round != Round ? "WrongRound" : !BatchSequences.Accept(senderPlayerId, batch.BatchSequence) ? "StaleOrInvalidBatch" :
+                results.Length > MaximumResultsPerBatch || mutations.Length > MaximumStatusMutationsPerBatch ||
+                playerReports.Length > MaximumPlayerReportsPerBatch || deaths.Length > MaximumResultsPerBatch ? "BatchCapacityExceeded" : null;
+            if (batchReason != null)
             {
                 Metrics.RejectedBatches++;
-                Metrics.Reject(CombatRejectionReason.InvalidSequence);
+                Metrics.Reject(CombatRejectionReason.InvalidSequence, batchReason);
                 return CreateBatch(entities.Values, statuses, kills);
             }
 
@@ -165,6 +178,7 @@ namespace MonsterSupergroup.NetworkCombat
 
             void ApplyResult(CombatResult result)
             {
+                GatewayEvidenceDecision.Select(result);
                 if (!ClientIdentities.Validate(
                         senderPlayerId,
                         result.EventId,
@@ -200,6 +214,7 @@ namespace MonsterSupergroup.NetworkCombat
                 }
 
                 if (periodic) StatusDamageAdmissions.Commit(result);
+                GatewayEvidenceDecision.Accept(applied.State);
                 Metrics.AcceptedCombatResults++;
                 ProcessedEvents.MarkProcessed(result.EventId, serverTime);
                 entities[applied.State.EntityId] = applied.State;
@@ -215,6 +230,7 @@ namespace MonsterSupergroup.NetworkCombat
 
             for (int i = 0; i < mutations.Length; i++)
             {
+                GatewayEvidenceDecision.Select(mutations[i]);
                 if (!ClientIdentities.Validate(
                         senderPlayerId,
                         mutations[i].EventId,
@@ -249,6 +265,7 @@ namespace MonsterSupergroup.NetworkCombat
                     continue;
                 }
 
+                GatewayEvidenceDecision.Accept(applied.State);
                 Metrics.AcceptedStatusMutations++;
                 if (Attacks.RequiresAdmission(senderPlayerId))
                     StatusDamageAdmissions.Observe(mutations[i], applied.State, serverTime);
@@ -268,6 +285,7 @@ namespace MonsterSupergroup.NetworkCombat
                 var receipts = new List<EnemyDeathReceipt>(deaths.Length);
                 foreach (var report in deaths)
                 {
+                    GatewayEvidenceDecision.Select(report);
                     var cause = new CombatEventId(report.CauseEventId);
                     if (report.SourcePlayerId != senderPlayerId || senderPlayerId == 0 ||
                         !Ledger.IsSourceOwnedBy(report.SourceEntityId, senderPlayerId))
@@ -292,6 +310,7 @@ namespace MonsterSupergroup.NetworkCombat
                         }
                     }
                     ProcessedEvents.MarkProcessed(report.EventId, serverTime);
+                    GatewayEvidenceDecision.Accept(new { report.TargetEntityId, kill });
                     Metrics.ConfirmedEnemyDeathReports++;
                     receipts.Add(new EnemyDeathReceipt
                     { ReportEventId = report.EventId, TargetEntityId = report.TargetEntityId, Kill = kill });
@@ -301,6 +320,7 @@ namespace MonsterSupergroup.NetworkCombat
 
             for (int i = 0; i < playerReports.Length; i++)
             {
+                GatewayEvidenceDecision.Select(playerReports[i]);
                 if (!ClientIdentities.Validate(
                         senderPlayerId,
                         playerReports[i].EventId,
@@ -317,7 +337,7 @@ namespace MonsterSupergroup.NetworkCombat
                 }
 
                 if (playerReports[i].PickupDropId != 0 &&
-                    (ValidatePickupReceipt == null || !ValidatePickupReceipt(senderPlayerId, playerReports[i])))
+                    !ValidatePickupForEvidence(senderPlayerId, playerReports[i]))
                 {
                     Metrics.Reject(CombatRejectionReason.InvalidSender);
                     PlayerHealthReportRejected?.Invoke(senderPlayerId, playerReports[i], CombatRejectionReason.InvalidSender);
@@ -339,6 +359,7 @@ namespace MonsterSupergroup.NetworkCombat
                     continue;
                 }
 
+                GatewayEvidenceDecision.Accept(applied.State);
                 Metrics.AcceptedPlayerReports++;
                 // Synchronous with the ledger update, before another claim or disconnect can run.
                 PlayerHealthReportAccepted?.Invoke(playerReports[i]);
@@ -353,7 +374,14 @@ namespace MonsterSupergroup.NetworkCombat
             return CreateBatch(entities.Values, statuses, kills, hits);
         }
 
-        internal CombatApplyResult ProcessGluttonyDevour(uint player, uint source, uint target,
+        private bool ValidatePickupForEvidence(uint sender, PlayerHealthReport report)
+        {
+            bool accepted = ValidatePickupReceipt != null && ValidatePickupReceipt(sender, report);
+            if (CombatEvidence.Enabled) CombatEvidence.Event("ExternalPickupService", "replay.external", "Observed", "PickupReceiptFact",
+                report.EventId, sender, report.EntityId, new { sender, report, accepted });
+            return accepted;
+        }
+        private CombatApplyResult EvidenceCore_ProcessGluttonyDevour(uint player, uint source, uint target,
             ulong eventId, double now, out CanonicalWorldBatch batch)
         {
             batch = default;
@@ -373,7 +401,7 @@ namespace MonsterSupergroup.NetworkCombat
             return result;
         }
 
-        public CanonicalWorldBatch Advance(double serverTime)
+        private CanonicalWorldBatch EvidenceCore_Advance(double serverTime)
         {
             if (CombatStopped) return default;
             StatusDamageAdmissions.Prune(serverTime);
@@ -438,7 +466,7 @@ namespace MonsterSupergroup.NetworkCombat
             }
         }
 
-        public CanonicalWorldBatch HandleSourceDisconnected(
+        private CanonicalWorldBatch EvidenceCore_HandleSourceDisconnected(
             uint sourcePlayerId,
             double serverTime)
         {
@@ -453,7 +481,7 @@ namespace MonsterSupergroup.NetworkCombat
         }
 
         /// <summary>Returns all current canonical facts for a newly ready client.</summary>
-        public CanonicalWorldBatch UnregisterEntity(uint entityId)
+        private CanonicalWorldBatch EvidenceCore_UnregisterEntity(uint entityId)
         {
             bool retiredEnemy = Ledger.TryGetState(entityId, out var state) &&
                 state.Kind == (byte)CombatEntityKind.Enemy;
@@ -463,7 +491,7 @@ namespace MonsterSupergroup.NetworkCombat
             return CreateBatch(Array.Empty<CanonicalEntityState>(), removed, Array.Empty<ConfirmedKill>());
         }
 
-        public CanonicalWorldBatch CreateSnapshot()
+        private CanonicalWorldBatch EvidenceCore_CreateSnapshot()
         {
             return CreateBatch(
                 Ledger.GetAllStates(),
@@ -471,7 +499,7 @@ namespace MonsterSupergroup.NetworkCombat
                 Array.Empty<ConfirmedKill>());
         }
 
-        public CanonicalWorldBatch ResetEnemyCondition(uint entityId)
+        private CanonicalWorldBatch EvidenceCore_ResetEnemyCondition(uint entityId)
         {
             var saved = Ledger.CaptureEntityState(entityId);
             var state = saved.State;
@@ -483,7 +511,7 @@ namespace MonsterSupergroup.NetworkCombat
         }
 
         /// <summary>Wraps one newly registered entity in the normal sequence stream.</summary>
-        public CanonicalWorldBatch CreateEntityUpdate(CanonicalEntityState state)
+        private CanonicalWorldBatch EvidenceCore_CreateEntityUpdate(CanonicalEntityState state)
         {
             return CreateBatch(
                 new[] { state },

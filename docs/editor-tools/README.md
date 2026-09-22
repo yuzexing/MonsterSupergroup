@@ -19,6 +19,7 @@
 | 为新内容绑定翻译 | 工具中心 → 创建内容本地化条目；选中目标资产 | `create.localization-entries -AssetPath ... -Apply` |
 | 新增 GAS Modifier 类型 | 工具中心 → 生成 GAS 注册表 | `generate.gas-registry -Apply`，然后 `validate.gas` |
 | 本机多人验收 | Development 包中的“创建本地主机 / 加入本地主机” | `build.player`，然后 `test.local-room` |
+| Steam 自动战斗日志与回放 | 选择 `steam-evidence` 配置，正常联机；见 [使用说明](../combat-evidence.md) | `build.player -Profile steam-evidence`；`Tools/CombatEvidence.py` 离线查询 |
 | 无测试代码的 Player 与退出检查 | 使用 `player-development` / `player-release` 构建配置 | `test.player-exit`，见 [退出验证说明](../player-exit-validation.md) |
 | 高频仇恨交接 | Play Mode Host → 联机诊断 → 仇恨交接控制 | `test.enemy-handoff -Profile normal` 或 `impaired` |
 | 查看武器表现 | 工具中心 → 表现预览 | `preview.attack -Profile beam` 等，要求图形设备 |

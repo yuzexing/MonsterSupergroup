@@ -91,6 +91,7 @@ namespace MonsterSupergroup.NetworkCombat
         {
             if (sender == null || sender != connectionToClient)
             {
+                if (CombatEvidence.Enabled) CombatEvidence.Event("Server", "network.snapshot_request", "Rejected", "ConnectionMismatch");
                 return;
             }
 
@@ -142,6 +143,8 @@ namespace MonsterSupergroup.NetworkCombat
 
             CombatSubmissionBatch batch = collector.Drain(batchSequence, now: Time.unscaledTimeAsDouble);
             batch.Round = collectorRound;
+            if (CombatEvidence.Enabled) CombatEvidence.Event("Owner", "network.submit", "Sent", "ReliableCommand",
+                source: ownerPlayerId, input: batch, batch: batch.BatchSequence);
             CmdSubmit(batch);
         }
 
@@ -154,10 +157,13 @@ namespace MonsterSupergroup.NetworkCombat
         {
             if (sender == null || sender != connectionToClient)
             {
+                if (CombatEvidence.Enabled) CombatEvidence.Event("Server", "network.submit", "Rejected", "ConnectionMismatch", input: batch, batch: batch.BatchSequence);
                 return;
             }
 
             NetworkCombatWorld world = NetworkCombatWorld.Instance;
+            if (CombatEvidence.Enabled) CombatEvidence.Event("Server", "network.submit", world != null ? "Received" : "Ignored", world != null ? null : "WorldUnavailable",
+                source: ownerPlayerId, input: batch, batch: batch.BatchSequence);
             if (world != null)
             {
                 var receipts = world.ProcessSubmission(ownerPlayerId, batch);
@@ -168,7 +174,11 @@ namespace MonsterSupergroup.NetworkCombat
         [TargetRpc]
         private void TargetConfirmEnemyDeaths(NetworkConnectionToClient target, EnemyDeathReceipt[] receipts, uint round)
         {
-            if (round != NetworkCombatWorld.CurrentRound || collector == null) return;
+            if (round != NetworkCombatWorld.CurrentRound || collector == null)
+            {
+                if (CombatEvidence.Enabled) CombatEvidence.Event("Owner", "death.receipt", "Ignored", collector == null ? "CollectorUnavailable" : "WrongRound", input: new { round, receipts });
+                return;
+            }
             foreach (var receipt in receipts)
                 if (collector.AcknowledgeDeath(receipt, Time.unscaledTimeAsDouble) && receipt.Kill.TargetEntityId != 0)
                     NetworkCombatWorld.Instance?.Replica.Apply(new CanonicalWorldBatch

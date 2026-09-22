@@ -32,7 +32,7 @@ namespace MonsterSupergroup.NetworkCombat
     /// Server-side assignment and latest-snapshot ledger. It deliberately does not
     /// run Enemy AI or recalculate combat.
     /// </summary>
-    public sealed class ServerEnemySimulationRegistry
+    public sealed partial class ServerEnemySimulationRegistry
     {
         private sealed class Entry
         {
@@ -54,7 +54,7 @@ namespace MonsterSupergroup.NetworkCombat
 
         public int Count => entries.Count;
 
-        public void RegisterEnemy(
+        private void EvidenceCore_RegisterEnemy(
             uint enemyEntityId,
             Vector2 initialPosition,
             double serverTime)
@@ -88,12 +88,12 @@ namespace MonsterSupergroup.NetworkCombat
             });
         }
 
-        public void UnregisterEnemy(uint enemyEntityId)
+        private void EvidenceCore_UnregisterEnemy(uint enemyEntityId)
         {
             entries.Remove(enemyEntityId);
         }
 
-        public EnemySimulationAssignment AssignClientOwner(
+        private EnemySimulationAssignment EvidenceCore_AssignClientOwner(
             uint enemyEntityId,
             uint ownerPlayerId,
             uint targetPlayerId)
@@ -115,7 +115,7 @@ namespace MonsterSupergroup.NetworkCombat
                 targetPlayerId);
         }
 
-        public EnemySimulationAssignment AssignServerFallback(
+        private EnemySimulationAssignment EvidenceCore_AssignServerFallback(
             uint enemyEntityId,
             uint targetPlayerId)
         {
@@ -132,7 +132,7 @@ namespace MonsterSupergroup.NetworkCombat
                 targetPlayerId);
         }
 
-        public EnemySimulationAssignment AssignServerAuthoritative(
+        private EnemySimulationAssignment EvidenceCore_AssignServerAuthoritative(
             uint enemyEntityId,
             uint targetPlayerId)
         {
@@ -149,7 +149,7 @@ namespace MonsterSupergroup.NetworkCombat
                 targetPlayerId);
         }
 
-        public EnemySimulationAssignment Freeze(uint enemyEntityId)
+        private EnemySimulationAssignment EvidenceCore_Freeze(uint enemyEntityId)
         {
             Entry entry = RequireEntry(enemyEntityId);
             return SetAssignment(
@@ -179,7 +179,7 @@ namespace MonsterSupergroup.NetworkCombat
             target = default; return false;
         }
 
-        public EnemyTargetState SetAggroTarget(uint enemyId, uint playerId, uint controllerPlayerId = 0)
+        private EnemyTargetState EvidenceCore_SetAggroTarget(uint enemyId, uint playerId, uint controllerPlayerId = 0)
         {
             var entry = RequireEntry(enemyId);
             var target = new EnemyTargetState
@@ -190,7 +190,7 @@ namespace MonsterSupergroup.NetworkCombat
             return SetTarget(entry, target);
         }
 
-        public EnemyTargetState SetDecoyTarget(uint enemyId, uint owner, ulong cast, Vector2 position, double expires)
+        private EnemyTargetState EvidenceCore_SetDecoyTarget(uint enemyId, uint owner, ulong cast, Vector2 position, double expires)
         {
             if (owner == 0 || cast == 0 || double.IsNaN(expires) || double.IsInfinity(expires) ||
                 float.IsNaN(position.x) || float.IsInfinity(position.x) || float.IsNaN(position.y) || float.IsInfinity(position.y))
@@ -203,7 +203,7 @@ namespace MonsterSupergroup.NetworkCombat
             return SetTarget(entry, target);
         }
 
-        public bool ClearDecoyTarget(uint enemyId, uint owner, ulong cast, out EnemyTargetState target)
+        private bool EvidenceCore_ClearDecoyTarget(uint enemyId, uint owner, ulong cast, out EnemyTargetState target)
         {
             var entry = RequireEntry(enemyId);
             target = entry.Target;
@@ -238,14 +238,14 @@ namespace MonsterSupergroup.NetworkCombat
             return false;
         }
 
-        public void ConfirmProjectileLaunch(EnemyProjectileLaunch launch)
+        private void EvidenceCore_ConfirmProjectileLaunch(EnemyProjectileLaunch launch)
         {
             Entry entry = RequireEntry(launch.Key.EnemyEntityId);
             entry.LastConfirmedProjectileAction = Math.Max(entry.LastConfirmedProjectileAction, launch.Key.ActionId);
             RecordCheckpoint(launch.Checkpoint);
         }
 
-        public void RecordCheckpoint(EnemySimulationCheckpoint checkpoint)
+        private void EvidenceCore_RecordCheckpoint(EnemySimulationCheckpoint checkpoint)
         {
             Entry entry = RequireEntry(checkpoint.Movement.EnemyEntityId);
             // Reliable action boundaries may overtake an unreliable movement sample.
@@ -286,7 +286,7 @@ namespace MonsterSupergroup.NetworkCombat
             }
         }
 
-        public EnemySnapshotRejectionReason TryAcceptClientSnapshot(
+        private EnemySnapshotRejectionReason EvidenceCore_TryAcceptClientSnapshot(
             uint senderPlayerId,
             EnemySimulationSnapshot snapshot)
         {
@@ -314,7 +314,7 @@ namespace MonsterSupergroup.NetworkCombat
         }
 
         public EnemyAttackPresentationRejectionReason
-            TryAcceptClientAttackPresentation(
+            EvidenceCore_TryAcceptClientAttackPresentation(
                 uint senderPlayerId,
                 EnemyAttackPresentationEdge edge)
         {
@@ -361,7 +361,7 @@ namespace MonsterSupergroup.NetworkCombat
             return EnemyAttackPresentationRejectionReason.None;
         }
 
-        public void RecordServerSnapshot(EnemySimulationSnapshot snapshot)
+        private void EvidenceCore_RecordServerSnapshot(EnemySimulationSnapshot snapshot)
         {
             Entry entry = RequireEntry(snapshot.EnemyEntityId);
             if (entry.Assignment.Host != EnemySimulationHost.ServerFallback &&
@@ -403,7 +403,7 @@ namespace MonsterSupergroup.NetworkCombat
             }
         }
 
-        public void RecordServerAttackPresentation(
+        private void EvidenceCore_RecordServerAttackPresentation(
             EnemyAttackPresentationEdge edge)
         {
             Entry entry = RequireEntry(edge.EnemyEntityId);
@@ -485,7 +485,7 @@ namespace MonsterSupergroup.NetworkCombat
             return entry;
         }
 
-        public EnemySimulationAssignment RenewAssignment(uint enemyEntityId)
+        private EnemySimulationAssignment EvidenceCore_RenewAssignment(uint enemyEntityId)
         {
             var entry = RequireEntry(enemyEntityId);
             var current = entry.Assignment;

@@ -2516,6 +2516,24 @@
       "validations": [
         "validate.all"
       ]
+    },
+    {
+      "id": "steam-evidence",
+      "name": "Steam 战斗证据测试包",
+      "output": "Builds/SteamEvidence/MonsterSupergroup.exe",
+      "defines": [
+        "MONSTER_COMBAT_EVIDENCE"
+      ],
+      "development": false,
+      "testAssemblies": false,
+      "scenes": [
+        "Assets/_Project/Scenes/Boot.unity",
+        "Assets/_Project/Scenes/MainMenu.unity",
+        "Assets/_Project/Scenes/Gameplay.unity"
+      ],
+      "validations": [
+        "validate.all"
+      ]
     }
   ]
 }

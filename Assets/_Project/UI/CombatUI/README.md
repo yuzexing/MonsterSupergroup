@@ -53,6 +53,9 @@ Mirror's spawned enemy agents and the existing canonical replica at 5 Hz, labels
 local predicted HP separately, and displays canonical GAS stack counts and simulation
 assignment/role/epoch. Missing data is explicitly unavailable. A destroyed enemy's
 canonical death snapshot is retained for two seconds without retaining its GameObject.
+The list renders at most four rows per page (Previous/Next, scrolling within a page),
+so IMGUI never lays out every enemy's full text on each event. All snapshots keep
+refreshing; collapsing preserves the page, and despawn/expiry clamps the page index.
 Selection temporarily hides the list body, preserving the user's expanded preference;
 the panel never changes selection, movement locks, health, Build or network state.
 Disable, disconnect, world replacement and scene unload release subscriptions and caches.

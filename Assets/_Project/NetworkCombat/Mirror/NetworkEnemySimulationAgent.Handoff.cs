@@ -32,6 +32,8 @@ namespace MonsterSupergroup.NetworkCombat
         {
             if (current.Assignment.Epoch == 0 || current.Assignment.EnemyEntityId != netId ||
                 (appliedHandoffEpoch != 0 && !EnemySimulationSequence.IsNewer(current.Assignment.Epoch, appliedHandoffEpoch))) return;
+            if (MonsterSupergroup.GAS.CombatEvidence.Enabled) MonsterSupergroup.GAS.CombatEvidence.Event(isServer ? "Server" : "Replica", "authority.handoff", "Applying", current.Reason.ToString(),
+                target: netId, input: current, before: new { assignment, position = transform.position, appliedHandoffEpoch });
             Vector2 previousPosition = transform.position;
             bool previouslyLocal = authority != null && authority.RunsNavigation;
             bool keepServerAction = current.Reason != EnemyTargetChangeReason.ReferenceReposition && isServer && appliedHandoffEpoch != 0 &&
@@ -93,6 +95,8 @@ namespace MonsterSupergroup.NetworkCombat
                 // The synthetic baseline must not consume the first real message's sequence.
                 receivedAttackStateSequence = 0;
             }
+            if (MonsterSupergroup.GAS.CombatEvidence.Enabled) MonsterSupergroup.GAS.CombatEvidence.Event(isServer ? "Server" : "Replica", "authority.handoff", "Applied", current.Reason.ToString(),
+                target: netId, input: current, before: new { position = previousPosition }, after: new { assignment, position = transform.position, appliedHandoffEpoch, keepServerAction });
             QueueAssignmentAttackPresentationBaseline();
             if (hasPendingFutureSnapshot && pendingFutureSnapshot.AssignmentEpoch == assignment.Epoch)
             {

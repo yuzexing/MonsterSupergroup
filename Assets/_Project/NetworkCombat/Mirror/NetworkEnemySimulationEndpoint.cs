@@ -144,6 +144,8 @@ namespace MonsterSupergroup.NetworkCombat
             {
                 batch.Round = NetworkEnemySimulationWorld.CurrentRound;
                 batch.BatchSequence = batchSequence = NextSequence(batchSequence);
+                if (MonsterSupergroup.GAS.CombatEvidence.Enabled) MonsterSupergroup.GAS.CombatEvidence.Event("Owner", "movement.submit", "Sent", reliable ? "ReliableFallback" : "Unreliable",
+                    source: PlayerEntityId, input: batch, batch: batch.BatchSequence, bytes: batch.Snapshots.Length * 4096 + 2048);
                 if (reliable) CmdSubmitLargeSnapshot(batch); else CmdSubmitSnapshots(batch);
             });
         }

@@ -209,6 +209,7 @@ namespace MonsterSupergroup.NetworkCombat
             }
 
             CaptureEnemyHitPositions(batch.EnemyHitPresentations);
+            if (CombatEvidence.Enabled) CombatEvidence.Event("Server", "network.canonical", "Sent", "Broadcast", input: batch, server: batch.ServerSequence);
             RpcApplyCanonical(batch, CurrentRound);
             ServerCanonicalBatchProduced?.Invoke(batch);
         }
@@ -229,6 +230,8 @@ namespace MonsterSupergroup.NetworkCombat
 
         private void ApplyCanonicalForRound(CanonicalWorldBatch batch, uint round)
         {
+            if (CombatEvidence.Enabled) CombatEvidence.Event("Replica", "network.canonical", round == CurrentRound ? "Received" : "Ignored",
+                round == CurrentRound ? null : "WrongRound", input: new { incomingRound = round, batch = Diagnostics.DiagnosticPayload.Freeze(batch) }, server: batch.ServerSequence);
             if (round == CurrentRound) ApplyCanonical(batch);
         }
 

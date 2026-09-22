@@ -7,7 +7,7 @@ namespace MonsterSupergroup.GAS
     /// The single GAS status runtime. It owns effective query state, local prediction,
     /// canonical reconciliation and tick execution gating.
     /// </summary>
-    public sealed class StatusController
+    public sealed partial class StatusController
     {
         private const float TimeEpsilon = 0.000001f;
 
@@ -188,7 +188,7 @@ namespace MonsterSupergroup.GAS
         /// Applies an owner-client prediction. The generated instance ID is stable and
         /// is later reused by the server's canonical replica.
         /// </summary>
-        public StatusApplicationResult Apply(StatusApplication application)
+        private StatusApplicationResult EvidenceCore_Apply(StatusApplication application)
         {
             if (application.Definition.Id == EnemyStatusID.None)
             {
@@ -272,7 +272,7 @@ namespace MonsterSupergroup.GAS
             }
         }
 
-        public bool ApplyPredictedStackDelta(StatusInstanceId instanceId, int stackDelta)
+        private bool EvidenceCore_ApplyPredictedStackDelta(StatusInstanceId instanceId, int stackDelta)
         {
             if (stackDelta == 0 ||
                 !TryFind(instanceId, out List<ActiveStatus> statuses, out ActiveStatus active))
@@ -315,7 +315,7 @@ namespace MonsterSupergroup.GAS
         /// Reconciles one server snapshot. Matching prediction is cleared instead of
         /// replaying status gameplay.
         /// </summary>
-        public bool UpsertCanonical(StatusInstance snapshot)
+        private bool EvidenceCore_UpsertCanonical(StatusInstance snapshot)
         {
             if (removalVersions.TryGetValue(snapshot.InstanceId, out uint removalVersion) &&
                 snapshot.ApplicationRevision <= removedApplications[snapshot.InstanceId] && snapshot.Version <= removalVersion)
@@ -379,7 +379,7 @@ namespace MonsterSupergroup.GAS
             return true;
         }
 
-        public bool RemoveCanonical(StatusInstanceId instanceId, uint version, uint applicationRevision = 0u)
+        private bool EvidenceCore_RemoveCanonical(StatusInstanceId instanceId, uint version, uint applicationRevision = 0u)
         {
             if (version == 0u)
             {
@@ -420,7 +420,7 @@ namespace MonsterSupergroup.GAS
             return true;
         }
 
-        public void Advance(float deltaSeconds)
+        private void EvidenceCore_Advance(float deltaSeconds)
         {
             if (float.IsNaN(deltaSeconds) || float.IsInfinity(deltaSeconds) || deltaSeconds < 0f)
             {
@@ -522,11 +522,12 @@ namespace MonsterSupergroup.GAS
 
             for (int i = 0; i < pendingTicks.Count; i++)
             {
+                if (CombatEvidence.Enabled) CombatEvidence.Event("Owner", "status.tick", "Executed", "ExecutionPolicyAccepted", input: pendingTicks[i]);
                 tickReceiver(pendingTicks[i]);
             }
         }
 
-        public bool Consume(EnemyStatusID statusId)
+        private bool EvidenceCore_Consume(EnemyStatusID statusId)
         {
             if (!activeStatuses.TryGetValue(statusId, out List<ActiveStatus> statuses))
             {
@@ -560,7 +561,7 @@ namespace MonsterSupergroup.GAS
         /// definition and can execute one immediate tick per consumed stack.
         /// Tick execution still obeys the configured execution authority.
         /// </summary>
-        public int ConsumeAll(EnemyStatusID statusId, bool dispatchImmediateTicks)
+        private int EvidenceCore_ConsumeAll(EnemyStatusID statusId, bool dispatchImmediateTicks)
         {
             if (!activeStatuses.TryGetValue(statusId, out List<ActiveStatus> statuses))
             {
@@ -617,7 +618,8 @@ namespace MonsterSupergroup.GAS
             {
                 for (int i = 0; i < ticks.Count; i++)
                 {
-                    tickReceiver(ticks[i]);
+                    if (CombatEvidence.Enabled) CombatEvidence.Event("Owner", "status.tick", "Executed", "ExecutionPolicyAccepted", input: ticks[i]);
+                tickReceiver(ticks[i]);
                 }
             }
 
@@ -629,7 +631,7 @@ namespace MonsterSupergroup.GAS
         /// the legacy enemy-morph effect and preserves source, progress and the
         /// fraction of the current tick without retaining a second status store.
         /// </summary>
-        public int TransferTo(StatusController target, uint targetEntityId)
+        private int EvidenceCore_TransferTo(StatusController target, uint targetEntityId)
         {
             if (target == null)
             {
@@ -688,7 +690,7 @@ namespace MonsterSupergroup.GAS
             return transfers.Count;
         }
 
-        public bool Clear(EnemyStatusID statusId)
+        private bool EvidenceCore_Clear(EnemyStatusID statusId)
         {
             if (!activeStatuses.TryGetValue(statusId, out List<ActiveStatus> statuses))
             {
@@ -700,7 +702,7 @@ namespace MonsterSupergroup.GAS
             return true;
         }
 
-        public void Clear()
+        private void EvidenceCore_Clear()
         {
             var changes = new List<StatusChange>();
             foreach (List<ActiveStatus> statuses in activeStatuses.Values)
@@ -910,6 +912,9 @@ namespace MonsterSupergroup.GAS
                 RemainingHits = instance.RemainingTicks;
                 Elapsed = 0f;
             }
+
+            public static ActiveStatus Restore(StatusActiveReplayState a) => new ActiveStatus(a.instance, a.canonicalStack, a.predictedDelta, a.canonicalVersion)
+            { RemainingHits = a.remainingHits, CompletedTicks = a.completedTicks, Elapsed = a.elapsed };
 
             public StatusInstance Instance { get; private set; }
             public int CanonicalStack { get; private set; }

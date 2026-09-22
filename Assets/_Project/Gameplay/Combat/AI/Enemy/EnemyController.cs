@@ -1613,6 +1613,8 @@ namespace AstralShift.HellMaiden.AI.Enemy
 			}
 
 			_deathPresentationComplete = true;
+            if (MonsterSupergroup.GAS.CombatEvidence.Enabled) MonsterSupergroup.GAS.CombatEvidence.Event("Presentation", "entity.death_presentation", "Completed", null,
+                target: CombatantBinding?.Combatant?.EntityId ?? 0, input: new { name, position = transform.position });
             if (GetComponent<EnemySimulationAuthority>()?.IsNetworkManaged == true)
                 enemyAnimator?.HideCompletedNetworkDeath();
 			if (!_deathPresentationEventRaised)

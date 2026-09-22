@@ -53,6 +53,9 @@ namespace Mirror.FizzySteam
                     return (default, 0);
                 buffer = ArrayPool<byte>.Shared.Rent(data.m_cbSize);
                 Marshal.Copy(data.m_pData, buffer, 0, data.m_cbSize);
+                if (data.m_idxLane == 1)
+                { var evidence = new ArraySegment<byte>(buffer, 0, data.m_cbSize); buffer = null; return (evidence, 2); }
+                if (data.m_idxLane != 0) return (default, 0);
                 int channel = buffer[data.m_cbSize - 1];
                 if (channel != Channels.Reliable && channel != Channels.Unreliable) return (default, 0);
                 var result = new ArraySegment<byte>(buffer, 0, data.m_cbSize - 1);

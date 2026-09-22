@@ -59,6 +59,14 @@ namespace MonsterSupergroup.NetworkCombat
         public int PendingStatusMutationCount => statusMutations.Count;
         public int PendingPlayerHealthReportCount => playerHealthReports.Count;
         public int PendingEnemyDeathCount => deaths.Count;
+        public object CaptureDiagnosticState()
+        {
+            var pending = new List<object>(deaths.Count);
+            foreach (var death in deaths.Values)
+                pending.Add(new { death.Report, death.CreatedAt, death.NextSend, death.Sent });
+            return new { localPlayerId, capacity, results = results.ToArray(), statuses = statusMutations.ToArray(),
+                playerHealth = playerHealthReports.ToArray(), deaths = pending.ToArray() };
+        }
         public long DeathReceiptsReceived { get; private set; }
         public double LastDeathConfirmationSeconds { get; private set; }
         public double MaximumDeathConfirmationSeconds { get; private set; }
@@ -79,7 +87,13 @@ namespace MonsterSupergroup.NetworkCombat
         public bool AcknowledgeDeath(EnemyDeathReceipt receipt, double now)
         {
             if (!deaths.TryGetValue(receipt.ReportEventId, out var pending) ||
-                pending.Report.TargetEntityId != receipt.TargetEntityId) return false;
+                pending.Report.TargetEntityId != receipt.TargetEntityId)
+            {
+                if (CombatEvidence.Enabled) CombatEvidence.Event("Owner", "death.receipt", "Ignored", "NoMatchingPendingDeath", receipt.ReportEventId, localPlayerId, receipt.TargetEntityId, receipt);
+                return false;
+            }
+            if (CombatEvidence.Enabled) CombatEvidence.Event("Owner", "death.receipt", "Confirmed", "None", receipt.ReportEventId, localPlayerId, receipt.TargetEntityId,
+                receipt, before: new { pending.CreatedAt, pending.Sent }, after: new { latency = Math.Max(0, now - pending.CreatedAt) });
             deaths.Remove(receipt.ReportEventId);
             DeathReceiptsReceived++;
             LastDeathConfirmationSeconds = Math.Max(0, now - pending.CreatedAt);
@@ -113,6 +127,9 @@ namespace MonsterSupergroup.NetworkCombat
         public void Publish(CombatEvent combatEvent)
         {
             trace?.Publish(combatEvent);
+            if (CombatEvidence.Enabled) CombatEvidence.Event("Owner", "owner." + combatEvent.Kind, "Observed", null,
+                combatEvent.Context.EventId.Value, combatEvent.Context.SourcePlayerId, combatEvent.Context.TargetEntityId,
+                combatEvent, root: combatEvent.Context.RootEventId.Value, parent: combatEvent.Context.ParentEventId.Value);
             if (combatEvent.Kind == CombatEventKind.PredictedLethalHit &&
                 combatEvent.Context.SourcePlayerId == localPlayerId && combatEvent.Context.TargetEntityId != 0 &&
                 isClientFinalEnemy(combatEvent.Context.TargetEntityId))
@@ -131,10 +148,16 @@ namespace MonsterSupergroup.NetworkCombat
                 combatEvent.ResolvedDamage.Value <= 0 ||
                 combatEvent.Context.SourcePlayerId != localPlayerId)
             {
+                if (CombatEvidence.Enabled) CombatEvidence.Event("Owner", "collector.enqueue", "Ignored",
+                    combatEvent.Context.SourcePlayerId != localPlayerId ? "NotLocalSource" : combatEvent.Kind != CombatEventKind.DamageResolved ? "NotDamageOutcome" : "NoDamage",
+                    combatEvent.Context.EventId.Value, localPlayerId, combatEvent.Context.TargetEntityId);
                 return;
             }
 
             EnsureCapacity();
+            if (CombatEvidence.Enabled) CombatEvidence.Event("Owner", "collector.enqueue", "Queued", null,
+                combatEvent.Context.EventId.Value, localPlayerId, combatEvent.Context.TargetEntityId,
+                CombatResult.From(combatEvent), before: new { pending = results.Count }, after: new { pending = results.Count + 1 });
             results.Add(CombatResult.From(combatEvent));
             queuedDamage.Add(combatEvent.Context.EventId.Value);
             DamageResolved?.Invoke(combatEvent);
@@ -181,7 +204,7 @@ namespace MonsterSupergroup.NetworkCombat
 
             var drainedResults = Take(results, maxResults);
             foreach (var result in drainedResults) queuedDamage.Remove(result.EventId);
-            return new CombatSubmissionBatch
+            var batch = new CombatSubmissionBatch
             {
                 BatchSequence = batchSequence,
                 Results = drainedResults,
@@ -189,6 +212,9 @@ namespace MonsterSupergroup.NetworkCombat
                 PlayerHealthReports = Take(playerHealthReports, maxPlayerReports),
                 EnemyDeathReports = TakeDeaths(now, maxDeathReports)
             };
+            if (CombatEvidence.Enabled) CombatEvidence.Event("Owner", "collector.drain", "Drained", null,
+                source: localPlayerId, input: batch, batch: batchSequence);
+            return batch;
         }
 
         private EnemyDeathReport[] TakeDeaths(double now, int maximum)
@@ -201,6 +227,8 @@ namespace MonsterSupergroup.NetworkCombat
             {
                 if (pending.NextSend > now || (pending.Sent && !CanRetryDeath(now)) ||
                     queuedDamage.Contains(pending.Report.CauseEventId)) continue;
+                if (CombatEvidence.Enabled) CombatEvidence.Event("Owner", "death.report", "Submitted", pending.Sent ? "Retry" : "FirstSubmission",
+                    pending.Report.EventId, localPlayerId, pending.Report.TargetEntityId, pending.Report, parent: pending.Report.CauseEventId);
                 reports.Add(pending.Report);
                 if (pending.Sent) deathRetriesInWindow++;
                 pending.Sent = true;
@@ -269,6 +297,8 @@ namespace MonsterSupergroup.NetworkCombat
         {
             if (results.Count + statusMutations.Count + playerHealthReports.Count >= capacity)
             {
+                if (CombatEvidence.Enabled) CombatEvidence.Event("Owner", "collector.enqueue", "Rejected", "CapacityExceeded", source: localPlayerId,
+                    before: new { results = results.Count, statuses = statusMutations.Count, reports = playerHealthReports.Count, capacity });
                 throw new InvalidOperationException(
                     "Client combat submission buffer is full. Flush it before simulating more shared results.");
             }

@@ -132,6 +132,7 @@ namespace MonsterSupergroup.NetworkCombat
 
         public override void OnStartServer()
         {
+            if (MonsterSupergroup.GAS.CombatEvidence.Enabled) MonsterSupergroup.GAS.CombatEvidence.Event("Server", "entity.spawn", "Observed", null, target: netId, input: new { name, assignment, position = transform.position, localAlive = IsLocallyAlive, canonicalAlive = IsCanonicalAlive });
             base.OnStartServer();
             networkStartCallbacksReady = true;
             PrepareBirthForRegistration();
@@ -151,6 +152,7 @@ namespace MonsterSupergroup.NetworkCombat
 
         public override void OnStartClient()
         {
+            if (MonsterSupergroup.GAS.CombatEvidence.Enabled) MonsterSupergroup.GAS.CombatEvidence.Event("Replica", "entity.spawn", "Observed", null, target: netId, input: new { name, assignment, position = transform.position, localAlive = IsLocallyAlive, canonicalAlive = IsCanonicalAlive });
             base.OnStartClient();
             networkStartCallbacksReady = true;
             PrepareBirthForRegistration();
@@ -201,6 +203,7 @@ namespace MonsterSupergroup.NetworkCombat
 
         public override void OnStopClient()
         {
+            if (MonsterSupergroup.GAS.CombatEvidence.Enabled) MonsterSupergroup.GAS.CombatEvidence.Event("Replica", "entity.destroy", "Observed", null, target: netId, input: new { name, assignment, position = transform.position, localAlive = IsLocallyAlive, canonicalAlive = IsCanonicalAlive });
             ReleaseDecoyTargetAnchor();
             NetworkCombatWorld.Instance?.ForgetEnemyHitPresentation(netId);
             hasPendingFutureSnapshot = false;
@@ -215,6 +218,7 @@ namespace MonsterSupergroup.NetworkCombat
 
         public override void OnStopServer()
         {
+            if (MonsterSupergroup.GAS.CombatEvidence.Enabled) MonsterSupergroup.GAS.CombatEvidence.Event("Server", "entity.destroy", "Observed", null, target: netId, input: new { name, assignment, position = transform.position, localAlive = IsLocallyAlive, canonicalAlive = IsCanonicalAlive });
             CancelNetworkKnockbackState(true);
             NetworkEnemySimulationWorld.Instance?.UnregisterEnemy(this);
             base.OnStopServer();
@@ -305,7 +309,7 @@ namespace MonsterSupergroup.NetworkCombat
 
         public void ReceiveRemoteSnapshot(EnemySimulationSnapshot snapshot)
         {
-            if (!IsLocallyAlive) return;
+            if (!IsLocallyAlive) { TraceReceivedMovement(snapshot, "Ignored", "LocallyDead"); return; }
             if (IsCanonicalAlive && snapshot.EnemyEntityId == netId && snapshot.IsFinite &&
                 (EnemySimulationSequence.IsNewer(snapshot.AssignmentEpoch, assignment.Epoch) ||
                  snapshot.AssignmentEpoch == assignment.Epoch && appliedHandoffEpoch != assignment.Epoch))
@@ -313,18 +317,28 @@ namespace MonsterSupergroup.NetworkCombat
                 if (!hasPendingFutureSnapshot || EnemySimulationSequence.IsNewer(snapshot.AssignmentEpoch, pendingFutureSnapshot.AssignmentEpoch) ||
                     (snapshot.AssignmentEpoch == pendingFutureSnapshot.AssignmentEpoch && EnemySimulationSequence.IsNewer(snapshot.Sequence, pendingFutureSnapshot.Sequence)))
                 { pendingFutureSnapshot = snapshot; hasPendingFutureSnapshot = true; }
+                TraceReceivedMovement(snapshot, "Deferred", "HandoffPending");
                 return;
             }
             if (!IsCanonicalAlive ||
                 snapshot.EnemyEntityId != netId ||
                 snapshot.AssignmentEpoch != assignment.Epoch)
             {
+                TraceReceivedMovement(snapshot, "Ignored", !IsCanonicalAlive ? "CanonicalDead" : snapshot.EnemyEntityId != netId ? "WrongEntity" : "WrongEpoch");
                 return;
             }
 
-            if (interpolator.Push(snapshot)) AcceptedRemoteSnapshotCount++;
+            bool accepted = interpolator.Push(snapshot);
+            if (accepted) AcceptedRemoteSnapshotCount++;
+            TraceReceivedMovement(snapshot, accepted ? "Accepted" : "Ignored", accepted ? "None" : "InterpolatorRejected");
         }
 
+        private void TraceReceivedMovement(EnemySimulationSnapshot snapshot, string outcome, string reason)
+        {
+            if (MonsterSupergroup.GAS.CombatEvidence.Enabled) MonsterSupergroup.GAS.CombatEvidence.Write(new MonsterSupergroup.GAS.DiagnosticRecord {
+                role = authority.Role.ToString(), stage = "movement.receive", outcome = outcome, reason = reason, target = netId,
+                assignmentEpoch = assignment.Epoch, input = snapshot, after = new { position = transform.position, assignment, localAlive = IsLocallyAlive, canonicalAlive = IsCanonicalAlive } });
+        }
         public bool ReceiveRemoteAttackPresentation(
             EnemyAttackPresentationEdge edge)
         {

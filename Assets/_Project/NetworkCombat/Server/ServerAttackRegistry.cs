@@ -10,7 +10,7 @@ namespace MonsterSupergroup.NetworkCombat
     /// A record lives until the owner has flushed all outcomes and released the attack's leases.
     /// Build changes do not invalidate an already admitted immutable attack.
     /// </summary>
-    public sealed class ServerAttackRegistry
+    public sealed partial class ServerAttackRegistry
     {
         private readonly Dictionary<uint, PlayerAttacks> players = new Dictionary<uint, PlayerAttacks>();
         private readonly int maximumActiveRootsPerPlayer;
@@ -21,18 +21,18 @@ namespace MonsterSupergroup.NetworkCombat
             this.maximumActiveRootsPerPlayer = maximumActiveRootsPerPlayer;
         }
 
-        public void RegisterPlayer(uint playerId)
+        private void EvidenceCore_RegisterPlayer(uint playerId)
         {
             if (playerId == 0) throw new ArgumentOutOfRangeException(nameof(playerId));
             if (!players.ContainsKey(playerId)) players.Add(playerId, new PlayerAttacks());
         }
 
-        public void UnregisterPlayer(uint playerId) => players.Remove(playerId);
+        private void EvidenceCore_UnregisterPlayer(uint playerId) => players.Remove(playerId);
         public bool RequiresAdmission(uint playerId) => players.ContainsKey(playerId);
         public int ActiveCount(uint playerId) => players.TryGetValue(playerId, out var player) ? player.Roots.Count : 0;
 
         // The adapter supplies the authenticated source and observed weapon/revision.
-        public CombatRejectionReason Admit(uint playerId, uint sourceEntityId, uint weaponId,
+        private CombatRejectionReason EvidenceCore_Admit(uint playerId, uint sourceEntityId, uint weaponId,
             uint buildRevision, ulong rootEventId, EnemyKnockbackSettings knockback = default)
         {
             if (!players.TryGetValue(playerId, out var player)) return CombatRejectionReason.InvalidSender;
@@ -48,7 +48,7 @@ namespace MonsterSupergroup.NetworkCombat
             return CombatRejectionReason.None;
         }
 
-        public bool Retire(uint playerId, ulong rootEventId) =>
+        private bool EvidenceCore_Retire(uint playerId, ulong rootEventId) =>
             players.TryGetValue(playerId, out var player) && player.Roots.Remove(rootEventId);
 
         public bool Contains(uint playerId, ulong rootEventId, uint weaponId) =>

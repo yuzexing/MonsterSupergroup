@@ -33,7 +33,7 @@ namespace MonsterSupergroup.NetworkCombat
         private int processId, warnings, errors, deadWarnings, focusChanges, pauseChanges, displayChanges;
         private int lastWidth, lastHeight, lastMode;
         private double nextSample, windowStart, allocatedBytes, gcMilliseconds, maximumMainMs;
-        private bool closed;
+        private bool closed, unifiedEvidence;
         public string OutputPath { get; private set; }
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
@@ -63,13 +63,15 @@ namespace MonsterSupergroup.NetworkCombat
             // Also supports an explicitly added observer in diagnostics tests.
             enabledForRun = SteamTransportDiagnostics.Enabled = CombatPerformanceCounters.Enabled = true;
             string directory = Argument("--network-diagnostics-output=") ?? Path.Combine(Application.persistentDataPath, "NetworkDiagnostics");
-            Directory.CreateDirectory(directory);
+            unifiedEvidence = MonsterSupergroup.GAS.CombatEvidence.Enabled;
+            if (!unifiedEvidence) Directory.CreateDirectory(directory);
             captureId = Guid.NewGuid().ToString("N"); utcStart = DateTime.UtcNow.ToString("o");
             process = System.Diagnostics.Process.GetCurrentProcess(); processId = process.Id;
             OutputPath = Path.Combine(directory, DateTime.UtcNow.ToString("yyyyMMdd-HHmmss") + "-" + processId + "-" + captureId + ".jsonl");
-            log = new LimboObservationLog(OutputPath);
+            if (!unifiedEvidence) log = new LimboObservationLog(OutputPath);
+            else OutputPath = Diagnostics.CombatEvidenceRuntime.Instance?.Store.Root;
             lastWidth = Screen.width; lastHeight = Screen.height; lastMode = (int)Screen.fullScreenMode;
-            log.WriteLine(JsonUtility.ToJson(new Header {
+            string header = JsonUtility.ToJson(new Header {
                 captureId = captureId, utcStart = utcStart, processId = processId,
                 buildGuid = Application.buildGUID, version = Application.version, unity = Application.unityVersion,
                 development = Debug.isDebugBuild, protocol = SteamLobbyMetadata.ProtocolValue,
@@ -79,7 +81,9 @@ namespace MonsterSupergroup.NetworkCombat
                 vSync = QualitySettings.vSyncCount, graphics = SystemInfo.graphicsDeviceType.ToString(),
                 gpu = SystemInfo.graphicsDeviceName, driver = SystemInfo.graphicsDeviceVersion,
                 cpu = SystemInfo.processorType, systemMemoryMb = SystemInfo.systemMemorySize,
-                commandLine = Environment.CommandLine, monotonicStart = Time.realtimeSinceStartupAsDouble }));
+                commandLine = Environment.CommandLine, monotonicStart = Time.realtimeSinceStartupAsDouble });
+            log?.WriteLine(header);
+            if (unifiedEvidence) MonsterSupergroup.GAS.CombatEvidence.Event("Process", "performance.header", "Started", null, input: header, bytes: header.Length * 2 + 2048);
             main = ProfilerRecorder.StartNew(ProfilerCategory.Internal, "Main Thread", 1);
             allocations = ProfilerRecorder.StartNew(ProfilerCategory.Memory, "GC Allocated In Frame", 1);
             gc = ProfilerRecorder.StartNew(ProfilerCategory.Memory, "GC.Collect", 1);
@@ -97,7 +101,7 @@ namespace MonsterSupergroup.NetworkCombat
         private void OnApplicationPause(bool paused) { pauseChanges++; }
         private void LateUpdate()
         {
-            if (log == null || closed) return;
+            if ((log == null && !unifiedEvidence) || closed) return;
             FrameTimingManager.CaptureFrameTimings();
             double now = Time.realtimeSinceStartupAsDouble;
             float ms = Time.unscaledDeltaTime * 1000f;
@@ -176,7 +180,10 @@ namespace MonsterSupergroup.NetworkCombat
                 logFailures = LimboObservationLog.FailureCount, logQueuedBytes = LimboObservationLog.PendingBytes };
             row.rejections = new long[(int)CombatRejectionReason.RunLoading + 1];
             for (int i = 0; i < row.rejections.Length; i++) row.rejections[i] = metrics?.GetRejected((CombatRejectionReason)i) ?? 0;
-            log.WriteLine(JsonUtility.ToJson(row)); // Serialize before mutable window arrays are cleared.
+            string serializedRow = JsonUtility.ToJson(row); // Detach mutable window arrays before resetting.
+            log?.WriteLine(serializedRow);
+            if (MonsterSupergroup.GAS.CombatEvidence.Enabled) MonsterSupergroup.GAS.CombatEvidence.Event("Process", "performance.snapshot", "Observed", null,
+                input: serializedRow, bytes: serializedRow.Length * 2 + 2048);
             window.Reset(); longFrames.Clear(); windowStart = now;
             allocatedBytes = gcMilliseconds = maximumMainMs = 0;
         }
@@ -217,7 +224,7 @@ namespace MonsterSupergroup.NetworkCombat
             if (closed) return;
             closed = true;
             Application.logMessageReceivedThreaded -= CountLog;
-            if (log != null) Emit(Time.realtimeSinceStartupAsDouble);
+            if (log != null || unifiedEvidence) Emit(Time.realtimeSinceStartupAsDouble);
             main.Dispose(); allocations.Dispose(); gc.Dispose(); log?.Dispose(); log = null; process?.Dispose();
             SteamTransportDiagnostics.Enabled = CombatPerformanceCounters.Enabled = enabledForRun = false;
         }

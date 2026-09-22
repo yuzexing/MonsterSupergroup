@@ -32,7 +32,7 @@ namespace MonsterSupergroup.GAS
         StatusInstanceId Next();
     }
 
-    public sealed class SequentialStatusInstanceIdSource : IStatusInstanceIdSource
+    public sealed partial class SequentialStatusInstanceIdSource : IStatusInstanceIdSource
     {
         private readonly ushort sourceSlot;
         private readonly ushort connectionEpoch;
@@ -73,7 +73,7 @@ namespace MonsterSupergroup.GAS
     /// Uses the owning client's combat-event sequence so status IDs stay unique
     /// across every target StatusController observed by that client.
     /// </summary>
-    public sealed class CombatEventStatusInstanceIdSource : IStatusInstanceIdSource
+    public sealed partial class CombatEventStatusInstanceIdSource : IStatusInstanceIdSource
     {
         private readonly ICombatEventIdSource eventIds;
 

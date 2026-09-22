@@ -256,7 +256,12 @@ namespace MonsterSupergroup.GAS
             int baseDamage = CeilingToNonNegativeInt(
                 attack.Stats.DamageBeforeRounding * SignedMultiplier(targetMultipliers.damage));
             float criticalChance = Probability.Clamp01(attack.Stats.CritRate + targetMultipliers.critRate);
-            bool isCritical = criticalChance > 0f && random.Next01() < criticalChance;
+            float criticalRoll = criticalChance > 0f ? random.Next01() : -1f;
+            bool isCritical = criticalChance > 0f && criticalRoll < criticalChance;
+            if (CombatEvidence.Enabled) CombatEvidence.Event("Owner", "owner.damage_calculation", "Resolved", null,
+                attack.Context.EventId.Value, attack.Context.SourcePlayerId, target is ICombatStateIdentity identified ? identified.EntityId : 0,
+                new { stats = attack.Stats, baseDamage, criticalChance, criticalRoll, isCritical, targetMultipliers },
+                root: attack.Context.RootEventId.Value, parent: attack.Context.ParentEventId.Value);
 
             int requestedValue = baseDamage;
             if (isCritical)
@@ -346,7 +351,14 @@ namespace MonsterSupergroup.GAS
                     damageTags,
                     targetEntityId,
                     targetStateVersion);
+                if (CombatEvidence.Enabled) CombatEvidence.Event("Owner", "owner.hit", "Applying", null,
+                    damageContext.EventId.Value, damageContext.SourcePlayerId, targetEntityId, resolvedDamage,
+                    new { alive = wasAlive, version = targetStateVersion }, root: damageContext.RootEventId.Value, parent: damageContext.ParentEventId.Value);
                 DamageInfo predictedAppliedDamage = target.ReceiveDamage(resolvedDamage);
+                if (CombatEvidence.Enabled) CombatEvidence.Event("Owner", "owner.hit", "Applied", null,
+                    damageContext.EventId.Value, damageContext.SourcePlayerId, targetEntityId, resolvedDamage,
+                    new { alive = wasAlive, version = targetStateVersion }, new { alive = target.IsAlive, applied = predictedAppliedDamage },
+                    damageContext.RootEventId.Value, damageContext.ParentEventId.Value);
                 eventSink.Publish(new CombatEvent(
                     CombatEventKind.DamageResolved,
                     damageContext,

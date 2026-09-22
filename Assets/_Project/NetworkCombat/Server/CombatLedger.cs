@@ -59,7 +59,7 @@ namespace MonsterSupergroup.NetworkCombat
     /// Server-owned shared HP/death facts. It deliberately does not contain player
     /// attack stats, crit rolls, projectiles, builds or the full GAS.
     /// </summary>
-    public sealed class CombatLedger
+    public sealed partial class CombatLedger
     {
         private readonly Dictionary<uint, EntityEntry> entities =
             new Dictionary<uint, EntityEntry>();
@@ -79,7 +79,7 @@ namespace MonsterSupergroup.NetworkCombat
         public int MaximumDamagePerResult { get; }
         public int EntityCount => entities.Count;
 
-        public void RegisterSource(uint sourceEntityId, uint ownerPlayerId)
+        private void EvidenceCore_RegisterSource(uint sourceEntityId, uint ownerPlayerId)
         {
             if (sourceEntityId == 0 || ownerPlayerId == 0)
             {
@@ -89,7 +89,7 @@ namespace MonsterSupergroup.NetworkCombat
             sourceOwners[sourceEntityId] = ownerPlayerId;
         }
 
-        public bool UnregisterSource(uint sourceEntityId)
+        private bool EvidenceCore_UnregisterSource(uint sourceEntityId)
         {
             return sourceOwners.Remove(sourceEntityId);
         }
@@ -102,7 +102,7 @@ namespace MonsterSupergroup.NetworkCombat
                 owner == playerId;
         }
 
-        public CanonicalEntityState RegisterEntity(
+        private CanonicalEntityState EvidenceCore_RegisterEntity(
             uint entityId,
             int maximumHealth,
             CombatEntityKind kind,
@@ -139,7 +139,7 @@ namespace MonsterSupergroup.NetworkCombat
             return entry.ToState();
         }
 
-        public bool UnregisterEntity(uint entityId)
+        private bool EvidenceCore_UnregisterEntity(uint entityId)
         {
             return entities.Remove(entityId);
         }
@@ -184,7 +184,7 @@ namespace MonsterSupergroup.NetworkCombat
         /// avatar. Identity and authority come from the new registration. Call
         /// before publishing its baseline or accepting owner health reports.
         /// </summary>
-        public CanonicalEntityState RestoreEntityState(
+        private CanonicalEntityState EvidenceCore_RestoreEntityState(
             uint entityId,
             ServerEntityCheckpoint checkpoint)
         {
@@ -234,7 +234,7 @@ namespace MonsterSupergroup.NetworkCombat
             return entities.TryGetValue(entityId, out EntityEntry entry) && entry.Alive;
         }
 
-        public bool SetAbsoluteInvulnerable(uint entityId, bool value)
+        private bool EvidenceCore_SetAbsoluteInvulnerable(uint entityId, bool value)
         {
             if (!entities.TryGetValue(entityId, out EntityEntry entry))
             {
@@ -256,21 +256,21 @@ namespace MonsterSupergroup.NetworkCombat
                 entry.UpgradeSelectionActive;
         }
 
-        public bool SetPlayerUltimateInvulnerable(uint playerId, bool value)
+        private bool EvidenceCore_SetPlayerUltimateInvulnerable(uint playerId, bool value)
         {
             if (!entities.TryGetValue(playerId, out EntityEntry entry) || entry.Kind != CombatEntityKind.Player) return false;
             if (entry.UltimateInvulnerable != value) { entry.UltimateInvulnerable = value; entry.Version++; }
             return true;
         }
 
-        public bool SetPlayerTrapInvulnerable(uint playerId, bool value)
+        private bool EvidenceCore_SetPlayerTrapInvulnerable(uint playerId, bool value)
         {
             if (!entities.TryGetValue(playerId, out EntityEntry entry) || entry.Kind != CombatEntityKind.Player) return false;
             if (entry.TrapInvulnerable != value) { entry.TrapInvulnerable = value; entry.Version++; }
             return true;
         }
 
-        public bool SetPlayerUpgradeSelectionState(uint playerId, bool value)
+        private bool EvidenceCore_SetPlayerUpgradeSelectionState(uint playerId, bool value)
         {
             if (!entities.TryGetValue(playerId, out EntityEntry entry) ||
                 entry.Kind != CombatEntityKind.Player)
@@ -283,24 +283,26 @@ namespace MonsterSupergroup.NetworkCombat
             return true;
         }
 
-        public CombatApplyResult Apply(uint senderPlayerId, CombatResult result)
+        private CombatApplyResult EvidenceCore_Apply(uint senderPlayerId, CombatResult result)
         {
+            CanonicalEntityState before = default;
+            if (CombatEvidence.Enabled) TryGetState(result.TargetEntityId, out before);
             CombatRejectionReason validation = Validate(senderPlayerId, result);
             if (validation != CombatRejectionReason.None)
             {
+                if (CombatEvidence.Enabled) CombatEvidence.Event("Server", "ledger.apply", "Rejected", validation.ToString(), result.EventId,
+                    senderPlayerId, result.TargetEntityId, result, before, before, result.RootEventId, result.ParentEventId);
                 return CombatApplyResult.Reject(validation);
             }
-
-            return ApplyDamage(
-                entities[result.TargetEntityId],
-                result.Damage,
-                result.EventId,
-                result.SourcePlayerId);
+            var applied = ApplyDamage(entities[result.TargetEntityId], result.Damage, result.EventId, result.SourcePlayerId);
+            if (CombatEvidence.Enabled) CombatEvidence.Event("Server", "ledger.apply", "Applied", "None", result.EventId,
+                senderPlayerId, result.TargetEntityId, result, before, applied.State, result.RootEventId, result.ParentEventId);
+            return applied;
         }
 
         // Trusted prototype boundary; eligibility/geometry/cooldown are checked by NetworkPlayerGluttony.
         // This is an execution, not a client-supplied oversized damage number.
-        internal CombatApplyResult ApplyGluttonyDevour(uint player, uint source, uint targetId, ulong eventId)
+        private CombatApplyResult EvidenceCore_ApplyGluttonyDevour(uint player, uint source, uint targetId, ulong eventId)
         {
             if (player == 0 || eventId == 0 || !IsSourceOwnedBy(source, player) || !IsAlive(player))
                 return CombatApplyResult.Reject(CombatRejectionReason.InvalidSender);
@@ -315,7 +317,7 @@ namespace MonsterSupergroup.NetworkCombat
             return ApplyDamage(target, target.Health, eventId, player);
         }
 
-        public CombatApplyResult ApplyServerStatusDamage(
+        private CombatApplyResult EvidenceCore_ApplyServerStatusDamage(
             uint targetEntityId,
             int damage,
             ulong causeEventId,
@@ -349,7 +351,7 @@ namespace MonsterSupergroup.NetworkCombat
             return ApplyDamage(target, damage, causeEventId, sourcePlayerId);
         }
 
-        public CombatApplyResult ApplyOwnerFinalReport(
+        private CombatApplyResult EvidenceCore_ApplyOwnerFinalReport(
             uint senderPlayerId,
             PlayerHealthReport report)
         {
@@ -456,7 +458,7 @@ namespace MonsterSupergroup.NetworkCombat
                 : CombatRejectionReason.None;
         }
 
-        public CombatApplyResult ApplyEnemyDeath(uint senderPlayerId, EnemyDeathReport report)
+        private CombatApplyResult EvidenceCore_ApplyEnemyDeath(uint senderPlayerId, EnemyDeathReport report)
         {
             if (!entities.TryGetValue(report.TargetEntityId, out var target))
                 return CombatApplyResult.Reject(CombatRejectionReason.TargetNotFound);

@@ -44,7 +44,7 @@ namespace MonsterSupergroup.NetworkCombat
     }
 
     /// <summary>Server canonical Add/Remove/Stack/Duration/Version registry.</summary>
-    public sealed class ServerStatusRegistry
+    public sealed partial class ServerStatusRegistry
     {
         private readonly CombatLedger ledger;
         private readonly Dictionary<StatusInstanceId, StatusInstance> instances =
@@ -61,7 +61,7 @@ namespace MonsterSupergroup.NetworkCombat
         public int Count => instances.Count;
         public int RemovalHistoryCount => removalVersions.Count;
 
-        public void Clear()
+        private void EvidenceCore_Clear()
         {
             instances.Clear();
             removalVersions.Clear();
@@ -69,7 +69,7 @@ namespace MonsterSupergroup.NetworkCombat
         }
 
         /// <summary>Retire history for a target that cannot be restored, such as a despawned Enemy.</summary>
-        public void ForgetTargetHistory(uint targetEntityId)
+        private void EvidenceCore_ForgetTargetHistory(uint targetEntityId)
         {
             removalBuffer.Clear();
             foreach (var entry in removalVersions)
@@ -196,7 +196,7 @@ namespace MonsterSupergroup.NetworkCombat
         /// Time spent without an avatar consumes duration and tick opportunities;
         /// overdue damage is never replayed against the restored avatar.
         /// </summary>
-        public IReadOnlyList<CanonicalStatusState> RestoreTarget(
+        public IReadOnlyList<CanonicalStatusState> EvidenceCore_RestoreTarget(
             uint previousTargetEntityId,
             uint targetEntityId,
             IReadOnlyList<CanonicalStatusState> checkpoint,
@@ -286,7 +286,7 @@ namespace MonsterSupergroup.NetworkCombat
             return changes;
         }
 
-        public StatusMutationResult Apply(
+        private StatusMutationResult EvidenceCore_Apply(
             uint senderPlayerId,
             StatusMutation mutation,
             double serverTime)
@@ -413,7 +413,7 @@ namespace MonsterSupergroup.NetworkCombat
                 CanonicalStatusState.From(updated));
         }
 
-        public CanonicalStatusState AddServerStatus(StatusInstance instance)
+        private CanonicalStatusState EvidenceCore_AddServerStatus(StatusInstance instance)
         {
             if (instance.ExecutionAuthority != StatusExecutionAuthority.Server)
             {
@@ -426,7 +426,7 @@ namespace MonsterSupergroup.NetworkCombat
             return CanonicalStatusState.From(instance);
         }
 
-        public IReadOnlyList<CanonicalStatusState> HandleSourceDisconnected(
+        public IReadOnlyList<CanonicalStatusState> EvidenceCore_HandleSourceDisconnected(
             uint sourcePlayerId,
             double serverTime,
             Func<StatusInstance, int> acceptedTicks = null)
@@ -466,7 +466,7 @@ namespace MonsterSupergroup.NetworkCombat
             return changes;
         }
 
-        public IReadOnlyList<CanonicalStatusState> RemoveTarget(uint targetEntityId)
+        public IReadOnlyList<CanonicalStatusState> EvidenceCore_RemoveTarget(uint targetEntityId)
         {
             var changes = new List<CanonicalStatusState>();
             var ids = new List<StatusInstanceId>(instances.Keys);
@@ -489,7 +489,7 @@ namespace MonsterSupergroup.NetworkCombat
             return changes;
         }
 
-        public StatusAdvanceResult Advance(double serverTime)
+        private StatusAdvanceResult EvidenceCore_Advance(double serverTime)
         {
             if (double.IsNaN(serverTime) || double.IsInfinity(serverTime))
             {

@@ -5,6 +5,7 @@ using Mirror;
 using MonsterSupergroup.Gameplay.Combat;
 using MonsterSupergroup.Gameplay.UI;
 using MonsterSupergroup.GAS;
+using Unity.Profiling;
 using UnityEngine;
 
 namespace MonsterSupergroup.NetworkCombat
@@ -15,6 +16,9 @@ namespace MonsterSupergroup.NetworkCombat
     {
         private const double RefreshInterval = 0.2;
         private const double DeathDisplayDuration = 2.0;
+        public const int RowsPerPage = 4;
+        private static readonly ProfilerMarker RefreshMarker = new("EnemyDebug.Refresh");
+        private static readonly ProfilerMarker GuiMarker = new("EnemyDebug.OnGUI");
         private static readonly EnemyStatusID[] StatusIds = (EnemyStatusID[])Enum.GetValues(typeof(EnemyStatusID));
 
         [SerializeField] private bool expanded = true;
@@ -37,6 +41,10 @@ namespace MonsterSupergroup.NetworkCombat
         public string ConnectionText { get; private set; } = "Waiting for connection";
         public bool Expanded => expanded;
         public bool IsContentVisible => expanded && (cardPickMenu == null || !cardPickMenu.IsOpen);
+        public int PageIndex { get; private set; }
+        public int PageCount => Math.Max(1, (rows.Count + RowsPerPage - 1) / RowsPerPage);
+        public int PageRowCount => Math.Min(RowsPerPage, Math.Max(0, rows.Count - PageIndex * RowsPerPage));
+        public int LastDrawnRowCount { get; private set; }
 
         private void OnEnable()
         {
@@ -82,14 +90,23 @@ namespace MonsterSupergroup.NetworkCombat
             if (value) nextRefresh = 0;
         }
 
+        public void SetPage(int index)
+        {
+            int clamped = Math.Max(0, Math.Min(index, PageCount - 1));
+            if (clamped == PageIndex) return;
+            PageIndex = clamped;
+            scroll = Vector2.zero;
+        }
+
         private void RefreshRows()
         {
+            using var sample = RefreshMarker.Auto();
             string role = NetworkServer.active && NetworkClient.active ? "Host" : "Client";
             string localPlayer = NetworkClient.localPlayer != null ? NetworkClient.localPlayer.netId.ToString() : "unavailable";
             ConnectionText = $"{role} | Connected: {NetworkClient.isConnected} | Local player: {localPlayer}";
             rows.Clear();
             spawnedIds.Clear();
-            if (world == null) return;
+            if (world == null) { SetPage(0); return; }
 
             foreach (var pair in NetworkClient.spawned)
             {
@@ -117,6 +134,7 @@ namespace MonsterSupergroup.NetworkCombat
             }
             foreach (uint id in expiredIds) deaths.Remove(id);
             rows.Sort((left, right) => left.EntityId.CompareTo(right.EntityId));
+            SetPage(PageIndex); // Clamp after despawn/death expiry; never strand the user on an empty page.
         }
 
         private Row Capture(NetworkIdentity identity, NetworkEnemySimulationAgent agent, CanonicalEntityState? canonical, bool recentDeath = false)
@@ -196,6 +214,8 @@ namespace MonsterSupergroup.NetworkCombat
             spawnedIds.Clear();
             expiredIds.Clear();
             scroll = Vector2.zero;
+            PageIndex = 0;
+            LastDrawnRowCount = 0;
             ConnectionText = "Waiting for connection";
         }
 
@@ -203,6 +223,8 @@ namespace MonsterSupergroup.NetworkCombat
 
         private void OnGUI()
         {
+            using var sample = GuiMarker.Auto();
+            LastDrawnRowCount = 0;
             if (BootGameplayNetworkManager.CombatHasEnded || MonsterSupergroup.Gameplay.Combat.GameplayMenuInput.IsOpen) return;
             if (NetworkManager.singleton is BootGameplayNetworkManager manager && manager.UsePreparationRoom &&
                 manager.RoomSnapshot.Phase != PreparationPhase.InGame) return;
@@ -221,8 +243,26 @@ namespace MonsterSupergroup.NetworkCombat
                 if (world == null) GUILayout.Label(NetworkClient.isConnected ? "Waiting for combat world" : "Waiting for connection");
                 else if (rows.Count == 0) GUILayout.Label("No observed enemies");
                 rowStyle ??= new GUIStyle(GUI.skin.box) { alignment = TextAnchor.UpperLeft, wordWrap = true };
+                GUILayout.BeginHorizontal();
+                int requestedPage = PageIndex;
+                if (GUILayout.Button("Previous", GUILayout.Width(80))) requestedPage--;
+                GUILayout.Label($"Page {PageIndex + 1} / {PageCount} | {PageRowCount} rows");
+                if (GUILayout.Button("Next", GUILayout.Width(60))) requestedPage++;
+                GUILayout.EndHorizontal();
+                if (requestedPage != PageIndex)
+                {
+                    SetPage(requestedPage);
+                    GUIUtility.ExitGUI(); // Rebuild layout before changing the number of labels on the last page.
+                }
                 scroll = GUILayout.BeginScrollView(scroll);
-                foreach (Row row in rows) GUILayout.Label(row.Text, rowStyle);
+                // Scroll clipping does not avoid GUILayout's word-wrap/layout work. Bound the
+                // label count even with hundreds of enemies; keep the full read-only snapshots.
+                int end = Math.Min(rows.Count, (PageIndex + 1) * RowsPerPage);
+                for (int i = PageIndex * RowsPerPage; i < end; i++)
+                {
+                    GUILayout.Label(rows[i].Text, rowStyle);
+                    LastDrawnRowCount++;
+                }
                 GUILayout.EndScrollView();
             }
             GUILayout.EndArea();

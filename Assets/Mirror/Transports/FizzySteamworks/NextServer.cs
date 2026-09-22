@@ -109,6 +109,7 @@ namespace Mirror.FizzySteam
             else if (param.m_info.m_eState == ESteamNetworkingConnectionState.k_ESteamNetworkingConnectionState_Connected)
             {
                 int connectionId = nextConnectionID++;
+                SteamEvidenceLane.Connect(connectionId, param.m_hConn);
                 connToMirrorID.Add(param.m_hConn, connectionId);
                 steamIDToMirrorID.Add(param.m_info.m_identityRemote.GetSteamID(), connectionId);
                 OnConnectedWithAddress?.Invoke(connectionId,server.ServerGetClientAddress(connectionId));
@@ -129,6 +130,7 @@ namespace Mirror.FizzySteam
 
         private void InternalDisconnect(int connId, HSteamNetConnection socket)
         {
+            SteamEvidenceLane.Disconnect(connId);
             OnDisconnected?.Invoke(connId);
 #if UNITY_SERVER
             SteamGameServerNetworkingSockets.CloseConnection(socket, 0, "Graceful disconnect", false);
@@ -152,6 +154,7 @@ namespace Mirror.FizzySteam
 #endif
                 steamIDToMirrorID.Remove(connectionId);
                 connToMirrorID.Remove(connectionId);
+                SteamEvidenceLane.Disconnect(connectionId);
                 OnDisconnected?.Invoke(connectionId);
             }
             else
@@ -197,7 +200,7 @@ namespace Mirror.FizzySteam
                                 IntPtr pointer = ptrs[i]; ptrs[i] = IntPtr.Zero;
                                 (ArraySegment<byte> data, int ch) = ProcessMessage(pointer);
                                 if (data.Array == null) continue;
-                                try { OnReceivedData?.Invoke(connId, data, ch); }
+                                try { if (ch == 2) SteamEvidenceLane.Deliver(connId, data); else OnReceivedData?.Invoke(connId, data, ch); }
                                 finally { ReturnMessage(data); }
                             }
                         }
@@ -256,6 +259,7 @@ namespace Mirror.FizzySteam
 
         public void Shutdown()
         {
+            foreach (var connection in connToMirrorID.FirstTypes) if (connToMirrorID.TryGetValue(connection, out int id)) SteamEvidenceLane.Disconnect(id);
 #if UNITY_SERVER
             SteamGameServerNetworkingSockets.CloseListenSocket(listenSocket);
 #else

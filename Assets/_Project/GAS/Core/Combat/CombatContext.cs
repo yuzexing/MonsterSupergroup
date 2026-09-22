@@ -84,7 +84,7 @@ namespace MonsterSupergroup.GAS
         CombatEventId Next();
     }
 
-    public sealed class SequentialCombatEventIdSource : ICombatEventIdSource
+    public sealed partial class SequentialCombatEventIdSource : ICombatEventIdSource
     {
         private readonly ushort sourceSlot;
         private readonly ushort connectionEpoch;

@@ -4,7 +4,7 @@ using MonsterSupergroup.GAS;
 
 namespace MonsterSupergroup.NetworkCombat
 {
-    public sealed class ProcessedEventCache
+    public sealed partial class ProcessedEventCache
     {
         private readonly int capacity;
         private readonly double retentionSeconds;
@@ -97,7 +97,7 @@ namespace MonsterSupergroup.NetworkCombat
         }
     }
 
-    public sealed class ClientEventIdentityRegistry
+    public sealed partial class ClientEventIdentityRegistry
     {
         private readonly Dictionary<uint, Identity> identities =
             new Dictionary<uint, Identity>();
@@ -143,7 +143,7 @@ namespace MonsterSupergroup.NetworkCombat
         }
     }
 
-    public sealed class ClientBatchSequenceTracker
+    public sealed partial class ClientBatchSequenceTracker
     {
         private readonly uint maximumForwardJump;
         private readonly Dictionary<uint, uint> highestSequences =
@@ -182,6 +182,9 @@ namespace MonsterSupergroup.NetworkCombat
                 highestSequences[playerId] = sequence;
             }
 
+            if (CombatEvidence.Enabled) CombatEvidence.Event("Server", "gateway.batch", "Accepted",
+                sequence <= highest ? "RepeatedOrOlderBatchEventDeduplication" : "NewBatch", source: playerId,
+                input: new { sequence }, before: new { highestSequence = highest }, after: new { highestSequence = highestSequences[playerId] }, batch: sequence);
             // Older/repeated batches are allowed through because per-event idempotency
             // safely handles packet reordering and retransmission.
             return true;

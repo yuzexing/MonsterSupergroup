@@ -57,6 +57,31 @@ namespace MonsterSupergroup.Gameplay.Tests
         }
 
         [UnityTest]
+        public IEnumerator PagingKeepsAllFactsCurrentAndClampsAfterEnemiesDisappear()
+        {
+            var enemies = Enumerable.Range(0, 11).Select(_ => SpawnEnemy()).ToArray();
+            foreach (var enemy in enemies) Apply(State(enemy, 100));
+            yield return WaitFor(() => panel.Rows.Count == 11);
+            Assert.That(panel.PageCount, Is.EqualTo(3));
+            panel.SetPage(2);
+            Assert.That(panel.PageRowCount, Is.EqualTo(3));
+            panel.SetExpanded(false);
+            Apply(State(enemies[10], 23, 2));
+            yield return WaitFor(() => panel.Rows[10].Canonical.Value.Health == 23);
+            panel.SetExpanded(true);
+            Assert.That(panel.PageIndex, Is.EqualTo(2));
+            Assert.That(panel.Rows[10].Text, Does.Contain("23 / 100"));
+            for (int i = 0; i < 6; i++) NetworkServer.Destroy(enemies[i].gameObject);
+            yield return WaitFor(() => panel.Rows.Count == 5);
+            Assert.That(panel.PageIndex, Is.EqualTo(1));
+            Assert.That(panel.PageRowCount, Is.EqualTo(1));
+            Assert.That(panel.Rows[4].EntityId, Is.EqualTo(enemies[10].netId));
+            panel.SetPage(-1);
+            Assert.That(panel.PageIndex, Is.Zero);
+            Assert.That(panel.PageRowCount, Is.EqualTo(4));
+        }
+
+        [UnityTest]
         public IEnumerator DeathRetirementPreservesLivePreSpawnBaselinesPlayersAndSpawnedEnemies()
         {
             var earlyEnemy = new CanonicalEntityState { EntityId = 700, Kind = (byte)CombatEntityKind.Enemy,

@@ -175,14 +175,40 @@ namespace AstralShift.HellMaiden.Player
 		private bool _ultimateCharge;
 		private Func<bool> _tryUseNativeUltimate;
         private Func<bool> _tryUseGluttony;
+        private Func<PrototypeAbilityId, bool> _selectPrototypeAbility;
+        private Func<PrototypeAbilityAction, bool> _tryUsePrototypeAction;
         public Camera InputCamera => _inputCamera;
         public void BindGluttonyInput(Func<bool> use) => _tryUseGluttony = use;
         public void UnbindGluttonyInput(Func<bool> use) { if (_tryUseGluttony == use) _tryUseGluttony = null; }
-        public void GluttonyAction()
+        public void BindPrototypeInput(Func<PrototypeAbilityId, bool> select, Func<PrototypeAbilityAction, bool> action)
         {
-            if (!IsMenuInputBlocked && !IsUpgradeSelectionLocked && !IsRunLoadingLocked)
-                _tryUseGluttony?.Invoke();
+            _selectPrototypeAbility = select ?? throw new System.ArgumentNullException(nameof(select));
+            _tryUsePrototypeAction = action ?? throw new System.ArgumentNullException(nameof(action));
         }
+
+        public void UnbindPrototypeInput(Func<PrototypeAbilityId, bool> select, Func<PrototypeAbilityAction, bool> action)
+        {
+            if (_selectPrototypeAbility == select) _selectPrototypeAbility = null;
+            if (_tryUsePrototypeAction == action) _tryUsePrototypeAction = null;
+        }
+
+        private bool CanReceivePrototypeInput =>
+            !IsMenuInputBlocked && !IsUpgradeSelectionLocked && !IsRunLoadingLocked &&
+            (!UsesNetworkLifecycle || IsLocalOwnerBound) &&
+            !(GetComponent<ModifierSelectionController>()?.BlocksPrototypeInputThisFrame ?? false);
+
+        public bool SelectPrototypeAbility(PrototypeAbilityId ability) =>
+            CanReceivePrototypeInput && (_selectPrototypeAbility?.Invoke(ability) ?? false);
+
+        public bool PrototypeAction(PrototypeAbilityAction action)
+        {
+            if (!CanReceivePrototypeInput) return false;
+            if (_tryUsePrototypeAction != null) return _tryUsePrototypeAction(action);
+            return action == PrototypeAbilityAction.Primary && (_tryUseGluttony?.Invoke() ?? false);
+        }
+
+        // Retained for callers of the original prototype; the shared dispatcher takes precedence.
+        public void GluttonyAction() => PrototypeAction(PrototypeAbilityAction.Primary);
 		private Func<bool> _hasNativeUltimateCharge;
 		private Func<bool> _requestDebugUltimateCharge;
 

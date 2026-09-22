@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="1" result="Failed(Child)" total="1" passed="0" failed="1" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-09-21 12:43:59Z" end-time="2026-09-21 12:44:04Z" duration="5.6008817">
+  <test-suite type="TestSuite" id="1699" name="Monster Supergroup" fullname="Monster Supergroup" runstate="Runnable" testcasecount="583" result="Failed" site="Child" start-time="2026-09-21 12:43:59Z" end-time="2026-09-21 12:44:04Z" duration="5.600882" total="1" passed="0" failed="1" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="PlayMode" />
+    </properties>
+    <failure>
+      <message><![CDATA[One or more child tests had errors]]></message>
+    </failure>
+    <test-suite type="Assembly" id="1683" name="MonsterSupergroup.Gameplay.Tests.PlayMode.dll" fullname="F:/UnityStore/MonsterSupergroup/Library/ScriptAssemblies/MonsterSupergroup.Gameplay.Tests.PlayMode.dll" runstate="Runnable" testcasecount="579" result="Failed" site="Child" start-time="2026-09-21 12:43:59Z" end-time="2026-09-21 12:44:04Z" duration="5.588198" total="1" passed="0" failed="1" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="38636" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="PlayMode" />
+        <property name="EditorOnly" value="False" />
+      </properties>
+      <failure>
+        <message><![CDATA[One or more child tests had errors]]></message>
+      </failure>
+      <test-suite type="TestSuite" id="1684" name="MonsterSupergroup" fullname="MonsterSupergroup" runstate="Runnable" testcasecount="579" result="Failed" site="Child" start-time="2026-09-21 12:43:59Z" end-time="2026-09-21 12:44:04Z" duration="5.585023" total="1" passed="0" failed="1" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <failure>
+          <message><![CDATA[One or more child tests had errors]]></message>
+        </failure>
+        <test-suite type="TestSuite" id="1685" name="Gameplay" fullname="MonsterSupergroup.Gameplay" runstate="Runnable" testcasecount="579" result="Failed" site="Child" start-time="2026-09-21 12:43:59Z" end-time="2026-09-21 12:44:04Z" duration="5.573446" total="1" passed="0" failed="1" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <failure>
+            <message><![CDATA[One or more child tests had errors]]></message>
+          </failure>
+          <test-suite type="TestSuite" id="1686" name="Tests" fullname="MonsterSupergroup.Gameplay.Tests" runstate="Runnable" testcasecount="579" result="Failed" site="Child" start-time="2026-09-21 12:43:59Z" end-time="2026-09-21 12:44:04Z" duration="5.565938" total="1" passed="0" failed="1" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <failure>
+              <message><![CDATA[One or more child tests had errors]]></message>
+            </failure>
+            <test-suite type="TestFixture" id="1151" name="EnemyHandoffGameplayTests" fullname="MonsterSupergroup.Gameplay.Tests.EnemyHandoffGameplayTests" classname="MonsterSupergroup.Gameplay.Tests.EnemyHandoffGameplayTests" runstate="Runnable" testcasecount="6" result="Failed" site="Child" start-time="2026-09-21 12:43:59Z" end-time="2026-09-21 12:44:04Z" duration="5.553370" total="1" passed="0" failed="1" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <failure>
+                <message><![CDATA[One or more child tests had errors]]></message>
+              </failure>
+              <test-case id="1157" name="LocalSimulatorSmoothsRenderingButReplicaAndFrozenDoNotDoubleInterpolate" fullname="MonsterSupergroup.Gameplay.Tests.EnemyHandoffGameplayTests.LocalSimulatorSmoothsRenderingButReplicaAndFrozenDoNotDoubleInterpolate" methodname="LocalSimulatorSmoothsRenderingButReplicaAndFrozenDoNotDoubleInterpolate" classname="MonsterSupergroup.Gameplay.Tests.EnemyHandoffGameplayTests" runstate="Runnable" seed="1548660441" result="Failed" start-time="2026-09-21 12:43:59Z" end-time="2026-09-21 12:44:04Z" duration="5.541256" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <failure>
+                  <message><![CDATA[  A rendered local simulator must smooth its 50 Hz physics steps.
+  Expected: Interpolate
+  But was:  None
+]]></message>
+                  <stack-trace><![CDATA[at MonsterSupergroup.Gameplay.Tests.EnemyHandoffGameplayTests+<LocalSimulatorSmoothsRenderingButReplicaAndFrozenDoNotDoubleInterpolate>d__13.MoveNext () [0x0009e] in F:\UnityStore\MonsterSupergroup\Assets\_Project\Tests\PlayMode\Gameplay\EnemyHandoffGameplayTests.cs:203
+at UnityEngine.TestTools.TestEnumerator+<Execute>d__7.MoveNext () [0x0004e] in .\Library\PackageCache\com.unity.test-framework@bd7f943e9647\UnityEngine.TestRunner\NUnitExtensions\Attributes\TestEnumerator.cs:44
+]]></stack-trace>
+                </failure>
+                <output><![CDATA[[Localization] Applied locale=zh-CN revision=2
+[NetworkBackend] backend=Kcp purpose=Test source=test-runner transport=KcpTransport.
+--- Hardware Info ---
+CPU Model: 13th Gen Intel(R) Core(TM) i7-13700KF
+GPU Model: Null Device
+RAM: 65375 MB
+Install Disk Model: JZ-SSD4T-XW
+Main Monitor Model: Unknown Monitor
+---------------------
+Normal : True
+UI : False
+AstralShift.HellMaiden.Controllers.PlayerController_HMD
+<color=yellow><b>► Controllers: </b></color>Controller type AstralShift.Control.Controllers.NoInputGameController not available
+Server listening on port 7992
+[BootGameplay] Server starting; loading 'Assets/_Project/Scenes/Gameplay.unity'.
+[BootGameplay] Server connection 0 is ready.
+[BootGameplay] Queued Player for connection 0.
+[BootGameplay] Gameplay scene ready: 'Assets/_Project/Scenes/Gameplay.unity'.
+[BootGameplay] Spawned Player NetworkPlayer [connId=0] in 'Assets/_Project/Scenes/Gameplay.unity'.
+<color=yellow><b>► Controllers: </b></color>Overrode <color=yellow><b></b></color> with <color=yellow><b>PlayerController_HMD</b></color>.
+Normal : True
+UI : False
+[BootGameplay] Client stopping; serverActive=True.
+[BootGameplay] Server stopping.
+[BootGameplay] Gameplay unload requested.
+There are 2 audio listeners in the scene. Please ensure there is always exactly one audio listener in the scene.
+[SteamInvite] stage=cleanup lobby=0 host=0 phase=Disabled reason=
+Saving results to: C:/Users/ADMIN/AppData/LocalLow/DefaultCompany/Monster Supergroup\TestResults.xml
+]]></output>
+              </test-case>
+            </test-suite>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

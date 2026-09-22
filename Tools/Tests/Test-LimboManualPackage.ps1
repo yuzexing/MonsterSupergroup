@@ -29,13 +29,18 @@ if($status.roles[0].integrity -ne 'closed' -or $status.roles[0].rounds[0].result
 & (Join-Path $fixture 'Archive-Logs.ps1') -Session $run.Name
 $status=Get-Content -LiteralPath (Join-Path $run.FullName 'archive-status.json') -Raw | ConvertFrom-Json
 if($status.roles[0].integrity -ne 'incomplete-or-still-running'){throw 'Missing normal close was accepted.'}
-foreach ($profile in @('spatial-b','spatial-barrier','audio-wisp','audio-beam','pickup-observe','pickup-drops')) {
+foreach ($profile in @('spatial-b','spatial-barrier','audio-wisp','audio-beam','pickup-observe','pickup-drops','movement-observe','effects-observe')) {
     & (Join-Path $fixture 'Start-Technical.ps1') -Profile $profile -LogDetail light -Session $profile
     $captured = $global:limboManualTestLaunch
     foreach ($expected in @("--limbo-profile=$profile",'--limbo-log-detail=light','--limbo-spatial-case=observe','--limbo-autowalk=false')) {
         if ($captured.arguments -notcontains $expected) { throw "Fire observation is missing $expected" }
     }
     if ($captured.exe -ne (Join-Path $fixture 'MonsterSupergroupLimbo.exe')) { throw 'Fire observation escaped the package.' }
+}
+foreach ($profile in @('audio-wisp','audio-beam')) {
+    & (Join-Path $fixture 'Start-Technical.ps1') -Profile $profile -AudioCase edge -LogDetail light -Session ($profile+'-edge')
+    if ($global:limboManualTestLaunch.arguments -notcontains '--limbo-audio-case=edge') { throw 'Edge diagnostics not forwarded.' }
+    if ($global:limboManualTestLaunch.arguments -notcontains '--limbo-autowalk=false') { throw 'Manual audio observation enabled auto-walk.' }
 }
 Remove-Variable -Name limboManualTestLaunch -Scope Global
 & (Join-Path $fixture 'Archive-Logs.ps1') -Session 'pickup-observe'

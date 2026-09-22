@@ -32,7 +32,7 @@ namespace MonsterSupergroup.NetworkCombat
         public const string GameKey = "game";
         public const string GameValue = "monster_supergroup";
         public const string ProtocolKey = "protocol";
-        public const string ProtocolValue = "3";
+        public const string ProtocolValue = "4";
         public const string StateKey = "state";
         public const string StartingState = "starting";
         public const string ReadyState = "ready";

@@ -41,7 +41,8 @@ namespace MonsterSupergroup.NetworkCombat.Tests
             Assert.That(gateway.ProcessBatch(1, Batch(2, invalid), 0).EnemyHitPresentations, Is.Empty);
             Assert.That(gateway.ProcessBatch(2, Batch(3, Hit(5)), 0).EnemyHitPresentations, Is.Empty);
             gateway.Ledger.SetAbsoluteInvulnerable(100, true);
-            Assert.That(gateway.ProcessBatch(1, Batch(4, Hit(6)), 0).EnemyHitPresentations, Is.Empty);
+            Assert.That(gateway.ProcessBatch(1, Batch(4, Hit(6)), 0).EnemyHitPresentations, Has.Length.EqualTo(1),
+                "An enemy hit already resolved by the owner remains final after a server immunity change.");
         }
 
         [TestCase(EnemyStatusID.Burn)]

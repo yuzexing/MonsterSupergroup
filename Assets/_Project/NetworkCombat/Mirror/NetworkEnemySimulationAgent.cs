@@ -77,9 +77,18 @@ namespace MonsterSupergroup.NetworkCombat
         {
             get
             {
-                return combatant == null || combatant.IsAlive;
+                var world = NetworkCombatWorld.Instance;
+                if (world != null && netId != 0)
+                {
+                    if (NetworkServer.active && world.Gateway.Ledger.TryGetState(netId, out var server))
+                        return server.Alive;
+                    if (world.Replica.TryGetEntity(netId, out var replica)) return replica.Alive;
+                }
+                return IsLocallyAlive;
             }
         }
+
+        internal bool IsLocallyAlive => combatant == null || combatant.IsAlive;
 
         public uint InitialServerTargetPlayerId => initialServerTargetPlayerId;
 
@@ -192,6 +201,7 @@ namespace MonsterSupergroup.NetworkCombat
 
         public override void OnStopClient()
         {
+            ReleaseDecoyTargetAnchor();
             NetworkCombatWorld.Instance?.ForgetEnemyHitPresentation(netId);
             hasPendingFutureSnapshot = false;
             pendingFutureSnapshot = default;
@@ -223,6 +233,7 @@ namespace MonsterSupergroup.NetworkCombat
             var world = NetworkEnemySimulationWorld.Instance;
             EnemySimulationSnapshot seed = default;
             world?.Registry.TryGetLatestSnapshot(netId, out seed);
+            if (world != null && world.Registry.TryGetTargetState(netId, out var target)) SetServerTarget(target);
             seed.EnemyEntityId = netId;
             SetServerHandoff(new EnemySimulationHandoff { Assignment = newAssignment,
                 Checkpoint = new EnemySimulationCheckpoint { Movement = seed }, CommittedAt = EnemySimulationClock.Now });
@@ -232,7 +243,7 @@ namespace MonsterSupergroup.NetworkCombat
             double networkTime,
             out EnemySimulationSnapshot snapshot)
         {
-            if (authority == null || !authority.RunsNavigation ||
+            if (!IsLocallyAlive || authority == null || !authority.RunsNavigation ||
                 assignment.EnemyEntityId == 0u ||
                 assignment.Host == EnemySimulationHost.Frozen)
             {
@@ -294,6 +305,7 @@ namespace MonsterSupergroup.NetworkCombat
 
         public void ReceiveRemoteSnapshot(EnemySimulationSnapshot snapshot)
         {
+            if (!IsLocallyAlive) return;
             if (IsCanonicalAlive && snapshot.EnemyEntityId == netId && snapshot.IsFinite &&
                 (EnemySimulationSequence.IsNewer(snapshot.AssignmentEpoch, assignment.Epoch) ||
                  snapshot.AssignmentEpoch == assignment.Epoch && appliedHandoffEpoch != assignment.Epoch))
@@ -316,7 +328,7 @@ namespace MonsterSupergroup.NetworkCombat
         public bool ReceiveRemoteAttackPresentation(
             EnemyAttackPresentationEdge edge)
         {
-            if (!IsCanonicalAlive || edge.EnemyEntityId != netId ||
+            if (!IsLocallyAlive || !IsCanonicalAlive || edge.EnemyEntityId != netId ||
                 edge.AssignmentEpoch != assignment.Epoch ||
                 !edge.IsFinite || !edge.HasKnownPhase || !edge.Checkpoint.Movement.Runtime.IsFinite || !ValidateSequenceAction(edge.Checkpoint.Movement.Runtime.Action))
             {
@@ -356,7 +368,7 @@ namespace MonsterSupergroup.NetworkCombat
             // Handoff changes the replica's kinematic body back to dynamic immediately.
             // Keep its Transform in step too: a body-type change can otherwise restore the
             // previous Transform pose before the next physics step (the spawn pose on a server-only peer).
-            transform.position = new Vector3(snapshot.Position.x, snapshot.Position.y, transform.position.z);
+            interpolator.ResetRenderPose(snapshot.Position);
             if (body != null)
             {
                 body.position = snapshot.Position;
@@ -419,7 +431,7 @@ namespace MonsterSupergroup.NetworkCombat
 
             bool previouslyRanCombat = authority.RunsCombatDecisions;
             enemyController?.ConfigureSimulationClock(() => EnemySimulationClock.CombatNow, current.Epoch);
-            resolvedTarget = ResolvePlayerTarget(current.AggroTargetPlayerId);
+            resolvedTarget = ResolveSimulationTarget();
             EnemySimulationRole role = ResolveRole(current, resolvedTarget != null);
             authority.ApplyRole(
                 role,
@@ -431,20 +443,13 @@ namespace MonsterSupergroup.NetworkCombat
                 (activeKnockbackEpoch != current.Epoch || !authority.RunsNavigation))
                 CancelNetworkKnockbackState();
 
-            if (enemyController != null)
-            {
-                enemyController.Target = resolvedTarget;
-                if (enemyController.attackScript != null)
-                {
-                    enemyController.attackScript.Target = resolvedTarget;
-                }
-            }
+            BindSimulationTarget();
 
             RefreshAttackScriptExecution();
 
             if (localChase != null)
             {
-                bool runChase = authority.RunsNavigation && resolvedTarget != null;
+                bool runChase = IsLocallyAlive && authority.RunsNavigation && resolvedTarget != null;
                 localChase.enabled = runChase;
                 if (runChase)
                 {
@@ -465,7 +470,7 @@ namespace MonsterSupergroup.NetworkCombat
             EnemySimulationAssignment current,
             bool hasTarget)
         {
-            if (BootGameplayNetworkManager.CombatHasEnded || current.Host == EnemySimulationHost.Frozen || !hasTarget)
+            if (!IsLocallyAlive || BootGameplayNetworkManager.CombatHasEnded || current.Host == EnemySimulationHost.Frozen || !hasTarget)
             {
                 return EnemySimulationRole.Frozen;
             }
@@ -590,6 +595,7 @@ namespace MonsterSupergroup.NetworkCombat
 
         private void OnDestroy()
         {
+            ReleaseDecoyTargetAnchor();
             NetworkCombatWorld.Instance?.ForgetEnemyHitPresentation(netId);
             CancelNetworkKnockbackState(true);
             if (combatant != null)
@@ -609,7 +615,7 @@ namespace MonsterSupergroup.NetworkCombat
             Vector2 facing)
         {
             if (restoringHandoff || productMovementOnly || authority == null ||
-                !authority.RunsCombatDecisions || !IsCanonicalAlive ||
+                !authority.RunsCombatDecisions || !IsLocallyAlive || !IsCanonicalAlive ||
                 assignment.EnemyEntityId == 0u ||
                 assignment.Host == EnemySimulationHost.Frozen)
             {
@@ -641,7 +647,7 @@ namespace MonsterSupergroup.NetworkCombat
         {
             if (!productMovementOnly && productEnemyInitialized &&
                 authority != null && authority.RunsCombatDecisions &&
-                IsCanonicalAlive && pendingAttackPresentationEdges.Count == 0)
+                IsLocallyAlive && IsCanonicalAlive && pendingAttackPresentationEdges.Count == 0)
             {
                 QueueCurrentAttackPresentation();
             }
@@ -705,7 +711,7 @@ namespace MonsterSupergroup.NetworkCombat
             bool hasActiveSimulationAssignment = authority != null &&
                 authority.Role != EnemySimulationRole.Frozen;
             SetContinuousContactDamageInteractionsActive(NetworkClient.active &&
-                productEnemyInitialized && IsCanonicalAlive && hasActiveSimulationAssignment);
+                productEnemyInitialized && IsLocallyAlive && IsCanonicalAlive && hasActiveSimulationAssignment);
         }
 
         private void SetContinuousContactDamageInteractionsActive(bool active)
@@ -716,7 +722,7 @@ namespace MonsterSupergroup.NetworkCombat
         private void RefreshAttackScriptExecution()
         {
             bool shouldExecute = !productMovementOnly &&
-                productEnemyInitialized && IsCanonicalAlive &&
+                productEnemyInitialized && IsLocallyAlive && IsCanonicalAlive &&
                 authority != null && authority.RunsCombatDecisions;
             SetAttackScriptExecutionActive(shouldExecute);
         }

@@ -1,6 +1,7 @@
 #if !DISABLESTEAMWORKS
 using Steamworks;
 using System;
+using System.Buffers;
 using System.Runtime.InteropServices;
 using UnityEngine;
 
@@ -9,39 +10,73 @@ namespace Mirror.FizzySteam
     public abstract class NextCommon
     {
         protected const int MAX_MESSAGES = 256;
+        protected readonly IntPtr[] messagePointers = new IntPtr[MAX_MESSAGES];
 
-        protected EResult SendSocket(HSteamNetConnection conn, byte[] data, int channelId)
+        protected EResult SendSocket(HSteamNetConnection conn, ArraySegment<byte> segment, int channelId)
         {
-            Array.Resize(ref data, data.Length + 1);
-            data[data.Length - 1] = (byte)channelId;
-
-            GCHandle pinnedArray = GCHandle.Alloc(data, GCHandleType.Pinned);
-            IntPtr pData = pinnedArray.AddrOfPinnedObject();
-            int sendFlag = channelId == Channels.Unreliable ? Constants.k_nSteamNetworkingSend_Unreliable : Constants.k_nSteamNetworkingSend_Reliable;
-#if UNITY_SERVER
-            EResult res = SteamGameServerNetworkingSockets.SendMessageToConnection(conn, pData, (uint)data.Length, sendFlag, out long _);
-#else
-            EResult res = SteamNetworkingSockets.SendMessageToConnection(conn, pData, (uint)data.Length, sendFlag, out long _);
-#endif
-            if (res != EResult.k_EResultOK)
+            byte[] data = ArrayPool<byte>.Shared.Rent(segment.Count + 1);
+            GCHandle pinnedArray = default;
+            try
             {
-                Debug.LogWarning($"Send issue: {res}");
-            }
+                Buffer.BlockCopy(segment.Array, segment.Offset, data, 0, segment.Count);
+                data[segment.Count] = (byte)channelId;
+                pinnedArray = GCHandle.Alloc(data, GCHandleType.Pinned);
+                IntPtr pData = pinnedArray.AddrOfPinnedObject();
+                int sendFlag = channelId == Channels.Unreliable ? Constants.k_nSteamNetworkingSend_Unreliable : Constants.k_nSteamNetworkingSend_Reliable;
+#if UNITY_SERVER
+                EResult res = SteamGameServerNetworkingSockets.SendMessageToConnection(conn, pData, (uint)(segment.Count + 1), sendFlag, out long _);
+#else
+                EResult res = SteamNetworkingSockets.SendMessageToConnection(conn, pData, (uint)(segment.Count + 1), sendFlag, out long _);
+#endif
+                if (res != EResult.k_EResultOK)
+                {
+                    Debug.LogWarning($"Send issue: {res}");
+                }
 
-            pinnedArray.Free();
-            return res;
+                SteamTransportDiagnostics.RecordSend(segment.Count + 1, channelId, res == EResult.k_EResultOK);
+                return res;
+            }
+            finally
+            {
+                if (pinnedArray.IsAllocated) pinnedArray.Free();
+                ArrayPool<byte>.Shared.Return(data);
+            }
         }
 
-        protected (byte[], int) ProcessMessage(IntPtr ptrs)
+        protected (ArraySegment<byte>, int) ProcessMessage(IntPtr pointer)
         {
-            SteamNetworkingMessage_t data = Marshal.PtrToStructure<SteamNetworkingMessage_t>(ptrs);
-            byte[] managedArray = new byte[data.m_cbSize];
-            Marshal.Copy(data.m_pData, managedArray, 0, data.m_cbSize);
-            SteamNetworkingMessage_t.Release(ptrs);
+            byte[] buffer = null;
+            try
+            {
+                SteamNetworkingMessage_t data = Marshal.PtrToStructure<SteamNetworkingMessage_t>(pointer);
+                if (data.m_cbSize < 2 || data.m_cbSize > Constants.k_cbMaxSteamNetworkingSocketsMessageSizeSend)
+                    return (default, 0);
+                buffer = ArrayPool<byte>.Shared.Rent(data.m_cbSize);
+                Marshal.Copy(data.m_pData, buffer, 0, data.m_cbSize);
+                int channel = buffer[data.m_cbSize - 1];
+                if (channel != Channels.Reliable && channel != Channels.Unreliable) return (default, 0);
+                var result = new ArraySegment<byte>(buffer, 0, data.m_cbSize - 1);
+                buffer = null; // The receiver returns this after the callback or deferred delivery.
+                SteamTransportDiagnostics.RecordReceive(data.m_cbSize, channel);
+                return (result, channel);
+            }
+            finally
+            {
+                if (buffer != null) ArrayPool<byte>.Shared.Return(buffer);
+                SteamNetworkingMessage_t.Release(pointer);
+            }
+        }
 
-            int channel = managedArray[managedArray.Length - 1];
-            Array.Resize(ref managedArray, managedArray.Length - 1);
-            return (managedArray, channel);
+        protected static void ReturnMessage(ArraySegment<byte> data)
+        { if (data.Array != null) ArrayPool<byte>.Shared.Return(data.Array); }
+
+        protected void ReleasePendingMessages(int count)
+        {
+            for (int i = 0; i < count; i++)
+            {
+                if (messagePointers[i] != IntPtr.Zero) SteamNetworkingMessage_t.Release(messagePointers[i]);
+                messagePointers[i] = IntPtr.Zero;
+            }
         }
     }
 }

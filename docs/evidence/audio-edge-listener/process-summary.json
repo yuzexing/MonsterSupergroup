@@ -1,0 +1,1106 @@
+[
+  {
+    "log": "Logs\\AudioEdge\\process-01\\audio-beam\\host\\weapon-audio.jsonl",
+    "completion": [
+      "errors=0;playing=0;starts=18;duplicateStarts=0"
+    ],
+    "position_checks": [
+      "location=center;passed=True;owner=(0.00, 0.99, 0.00);camera=(-0.41, 0.79, -10.00);listener=(0.00, 0.99, -10.00)",
+      "location=left;passed=True;owner=(-58.67, 0.99, 0.00);camera=(-43.07, 0.98, -10.00);listener=(-58.67, 0.99, -10.00)",
+      "location=right;passed=True;owner=(58.67, 0.99, 0.00);camera=(28.19, 0.99, -10.00);listener=(58.67, 0.99, -10.00)",
+      "location=top;passed=True;owner=(0.00, 33.55, 0.00);camera=(14.30, 24.89, -10.00);listener=(0.00, 33.55, -10.00)",
+      "location=bottom;passed=True;owner=(0.00, -31.57, 0.00);camera=(0.61, -14.70, -10.00);listener=(0.00, -31.57, -10.00)",
+      "location=top-left;passed=True;owner=(-58.67, 33.55, 0.00);camera=(-43.06, 16.98, -10.00);listener=(-58.67, 33.55, -10.00)",
+      "location=top-right;passed=True;owner=(58.67, 33.55, 0.00);camera=(28.14, 26.16, -10.00);listener=(58.67, 33.55, -10.00)",
+      "location=bottom-left;passed=True;owner=(-58.67, -31.57, 0.00);camera=(-28.87, -14.34, -10.00);listener=(-58.67, -31.57, -10.00)",
+      "location=bottom-right;passed=True;owner=(58.67, -31.57, 0.00);camera=(28.79, -24.18, -10.00);listener=(58.67, -31.57, -10.00)",
+      "passed=True;listener=(58.67, -31.57, -10.00);camera=(0.00, 0.00, -13.41)"
+    ],
+    "event_guids": [
+      "{b865f76c-9c2a-4679-9709-a288f22c9619}"
+    ],
+    "locations": {
+      "center": {
+        "samples": 2,
+        "listener_owner_fixed_depth_max_error": 5.960464477539063e-08,
+        "actual_source_distance_range": [
+          10.124228477478027,
+          10.124228477478027
+        ],
+        "old_camera_policy_distance_range": [
+          10.135600090026855,
+          10.162139892578125
+        ],
+        "distance_parameter_read_results": {
+          "OK": 2
+        },
+        "max_observed_peak": 0.029100706800818443,
+        "max_observed_rms": 0.01064106822013855
+      },
+      "left": {
+        "samples": 2,
+        "listener_owner_fixed_depth_max_error": 0.0,
+        "actual_source_distance_range": [
+          10.124228477478027,
+          10.124228477478027
+        ],
+        "old_camera_policy_distance_range": [
+          15.95121955871582,
+          15.951313972473145
+        ],
+        "distance_parameter_read_results": {
+          "OK": 2
+        },
+        "max_observed_peak": 0.03809310868382454,
+        "max_observed_rms": 0.019395580515265465
+      },
+      "right": {
+        "samples": 2,
+        "listener_owner_fixed_depth_max_error": 0.0,
+        "actual_source_distance_range": [
+          10.124228477478027,
+          10.124228477478027
+        ],
+        "old_camera_policy_distance_range": [
+          18.383255004882812,
+          19.89645004272461
+        ],
+        "distance_parameter_read_results": {
+          "OK": 2
+        },
+        "max_observed_peak": 0.03809310868382454,
+        "max_observed_rms": 0.019395580515265465
+      },
+      "top": {
+        "samples": 2,
+        "listener_owner_fixed_depth_max_error": 0.0,
+        "actual_source_distance_range": [
+          10.124228477478027,
+          10.124228477478027
+        ],
+        "old_camera_policy_distance_range": [
+          12.763813972473145,
+          14.027628898620605
+        ],
+        "distance_parameter_read_results": {
+          "OK": 2
+        },
+        "max_observed_peak": 0.03790104761719704,
+        "max_observed_rms": 0.015873093158006668
+      },
+      "bottom": {
+        "samples": 2,
+        "listener_owner_fixed_depth_max_error": 1.9073486328125e-06,
+        "actual_source_distance_range": [
+          10.124228477478027,
+          10.124228477478027
+        ],
+        "old_camera_policy_distance_range": [
+          12.224931716918945,
+          12.994040489196777
+        ],
+        "distance_parameter_read_results": {
+          "OK": 2
+        },
+        "max_observed_peak": 0.03809310868382454,
+        "max_observed_rms": 0.019395580515265465
+      },
+      "top-left": {
+        "samples": 2,
+        "listener_owner_fixed_depth_max_error": 0.0,
+        "actual_source_distance_range": [
+          10.124228477478027,
+          10.124228477478027
+        ],
+        "old_camera_policy_distance_range": [
+          17.789260864257812,
+          18.331937789916992
+        ],
+        "distance_parameter_read_results": {
+          "OK": 2
+        },
+        "max_observed_peak": 0.03809310868382454,
+        "max_observed_rms": 0.019395580515265465
+      },
+      "top-right": {
+        "samples": 2,
+        "listener_owner_fixed_depth_max_error": 0.0,
+        "actual_source_distance_range": [
+          10.124228477478027,
+          10.124228477478027
+        ],
+        "old_camera_policy_distance_range": [
+          19.99904441833496,
+          21.415462493896484
+        ],
+        "distance_parameter_read_results": {
+          "OK": 2
+        },
+        "max_observed_peak": 0.03790104761719704,
+        "max_observed_rms": 0.015873093158006668
+      },
+      "bottom-left": {
+        "samples": 2,
+        "listener_owner_fixed_depth_max_error": 1.9073486328125e-06,
+        "actual_source_distance_range": [
+          10.124228477478027,
+          10.124228477478027
+        ],
+        "old_camera_policy_distance_range": [
+          17.368818283081055,
+          19.001855850219727
+        ],
+        "distance_parameter_read_results": {
+          "OK": 2
+        },
+        "max_observed_peak": 0.03809310868382454,
+        "max_observed_rms": 0.019395580515265465
+      },
+      "bottom-right": {
+        "samples": 11,
+        "listener_owner_fixed_depth_max_error": 5.3947966093944364e-06,
+        "actual_source_distance_range": [
+          10.059868812561035,
+          10.124228477478027
+        ],
+        "old_camera_policy_distance_range": [
+          18.451427459716797,
+          68.45391082763672
+        ],
+        "distance_parameter_read_results": {
+          "OK": 11
+        },
+        "max_observed_peak": 0.03809310868382454,
+        "max_observed_rms": 0.019395580515265465
+      }
+    },
+    "dsp_types": {
+      "FADER": 123,
+      "PAN": 27,
+      "MULTIBAND_EQ": 54,
+      "THREE_EQ": 27,
+      "SFXREVERB": 27
+    },
+    "filter_parameter_ranges": {
+      "g0/2:MULTIBAND_EQ/A) Filter": [
+        1.0,
+        1.0
+      ],
+      "g0/2:MULTIBAND_EQ/A) Frequency": [
+        10143.4678,
+        10189.0068
+      ],
+      "g0/2:MULTIBAND_EQ/A) Q": [
+        0.707,
+        0.707
+      ],
+      "g0/2:MULTIBAND_EQ/A) Gain": [
+        0.0,
+        0.0
+      ],
+      "g0/2:MULTIBAND_EQ/B) Filter": [
+        0.0,
+        0.0
+      ],
+      "g0/2:MULTIBAND_EQ/B) Frequency": [
+        40.0,
+        40.0
+      ],
+      "g0/2:MULTIBAND_EQ/B) Q": [
+        0.707,
+        0.707
+      ],
+      "g0/2:MULTIBAND_EQ/B) Gain": [
+        0.0,
+        0.0
+      ],
+      "g0/2:MULTIBAND_EQ/C) Filter": [
+        0.0,
+        0.0
+      ],
+      "g0/2:MULTIBAND_EQ/C) Frequency": [
+        11000.0,
+        11000.0
+      ],
+      "g0/2:MULTIBAND_EQ/C) Q": [
+        0.707,
+        0.707
+      ],
+      "g0/2:MULTIBAND_EQ/C) Gain": [
+        0.0,
+        0.0
+      ],
+      "g0/2:MULTIBAND_EQ/D) Filter": [
+        0.0,
+        0.0
+      ],
+      "g0/2:MULTIBAND_EQ/D) Frequency": [
+        160.0,
+        160.0
+      ],
+      "g0/2:MULTIBAND_EQ/D) Q": [
+        0.707,
+        0.707
+      ],
+      "g0/2:MULTIBAND_EQ/D) Gain": [
+        0.0,
+        0.0
+      ],
+      "g0/2:MULTIBAND_EQ/E) Filter": [
+        0.0,
+        0.0
+      ],
+      "g0/2:MULTIBAND_EQ/E) Frequency": [
+        2700.0,
+        2700.0
+      ],
+      "g0/2:MULTIBAND_EQ/E) Q": [
+        0.707,
+        0.707
+      ],
+      "g0/2:MULTIBAND_EQ/E) Gain": [
+        0.0,
+        0.0
+      ],
+      "g1/0:MULTIBAND_EQ/A) Filter": [
+        0.0,
+        0.0
+      ],
+      "g1/0:MULTIBAND_EQ/A) Frequency": [
+        660.0,
+        660.0
+      ],
+      "g1/0:MULTIBAND_EQ/A) Q": [
+        0.707,
+        0.707
+      ],
+      "g1/0:MULTIBAND_EQ/A) Gain": [
+        0.0,
+        0.0
+      ],
+      "g1/0:MULTIBAND_EQ/B) Filter": [
+        9.0,
+        9.0
+      ],
+      "g1/0:MULTIBAND_EQ/B) Frequency": [
+        4193.4,
+        4193.4
+      ],
+      "g1/0:MULTIBAND_EQ/B) Q": [
+        0.359999985,
+        0.359999985
+      ],
+      "g1/0:MULTIBAND_EQ/B) Gain": [
+        5.172415,
+        5.172415
+      ],
+      "g1/0:MULTIBAND_EQ/C) Filter": [
+        9.0,
+        9.0
+      ],
+      "g1/0:MULTIBAND_EQ/C) Frequency": [
+        43.95029,
+        43.95029
+      ],
+      "g1/0:MULTIBAND_EQ/C) Q": [
+        0.707,
+        0.707
+      ],
+      "g1/0:MULTIBAND_EQ/C) Gain": [
+        -10.3448277,
+        -10.3448277
+      ],
+      "g1/0:MULTIBAND_EQ/D) Filter": [
+        0.0,
+        0.0
+      ],
+      "g1/0:MULTIBAND_EQ/D) Frequency": [
+        160.0,
+        160.0
+      ],
+      "g1/0:MULTIBAND_EQ/D) Q": [
+        0.707,
+        0.707
+      ],
+      "g1/0:MULTIBAND_EQ/D) Gain": [
+        0.0,
+        0.0
+      ],
+      "g1/0:MULTIBAND_EQ/E) Filter": [
+        0.0,
+        0.0
+      ],
+      "g1/0:MULTIBAND_EQ/E) Frequency": [
+        2700.0,
+        2700.0
+      ],
+      "g1/0:MULTIBAND_EQ/E) Q": [
+        0.707,
+        0.707
+      ],
+      "g1/0:MULTIBAND_EQ/E) Gain": [
+        0.0,
+        0.0
+      ],
+      "g1/0:THREE_EQ/Low Gain": [
+        -15.5,
+        -15.5
+      ],
+      "g1/0:THREE_EQ/Mid Gain": [
+        0.0,
+        0.0
+      ],
+      "g1/0:THREE_EQ/High Gain": [
+        0.0,
+        0.0
+      ],
+      "g1/0:THREE_EQ/Low Crossover": [
+        400.0,
+        400.0
+      ],
+      "g1/0:THREE_EQ/High Crossover": [
+        4000.0,
+        4000.0
+      ],
+      "g1/0:THREE_EQ/Slope": [
+        1.0,
+        1.0
+      ]
+    },
+    "note": "Short event-block meters; random clips and stages are not normalized. No listening acceptance or causal loudness claim."
+  },
+  {
+    "log": "Logs\\AudioEdge\\process-01\\audio-wisp\\host\\weapon-audio.jsonl",
+    "completion": [
+      "errors=0;playing=0;starts=22;duplicateStarts=0"
+    ],
+    "position_checks": [
+      "location=center;passed=True;owner=(0.00, 0.99, 0.00);camera=(-0.42, 0.78, -10.00);listener=(0.00, 0.99, -10.00)",
+      "location=left;passed=True;owner=(-58.67, 0.99, 0.00);camera=(-43.06, 0.98, -10.00);listener=(-58.67, 0.99, -10.00)",
+      "location=right;passed=True;owner=(58.67, 0.99, 0.00);camera=(28.08, 0.99, -10.00);listener=(58.67, 0.99, -10.00)",
+      "location=top;passed=True;owner=(0.00, 33.55, 0.00);camera=(14.27, 24.90, -10.00);listener=(0.00, 33.55, -10.00)",
+      "location=bottom;passed=True;owner=(0.00, -31.57, 0.00);camera=(0.61, -14.57, -10.00);listener=(0.00, -31.57, -10.00)",
+      "location=top-left;passed=True;owner=(-58.67, 33.55, 0.00);camera=(-43.09, 17.02, -10.00);listener=(-58.67, 33.55, -10.00)",
+      "location=top-right;passed=True;owner=(58.67, 33.55, 0.00);camera=(28.08, 26.16, -10.00);listener=(58.67, 33.55, -10.00)",
+      "location=bottom-left;passed=True;owner=(-58.67, -31.57, 0.00);camera=(-28.90, -14.35, -10.00);listener=(-58.67, -31.57, -10.00)",
+      "location=bottom-right;passed=True;owner=(58.67, -31.57, 0.00);camera=(28.75, -24.18, -10.00);listener=(58.67, -31.57, -10.00)",
+      "passed=True;listener=(58.67, -31.57, -10.00);camera=(0.00, 0.00, -13.41)"
+    ],
+    "event_guids": [
+      "{1235e4b8-dcb5-43e8-8bb7-41a363bff4b8}"
+    ],
+    "locations": {
+      "center": {
+        "samples": 2,
+        "listener_owner_fixed_depth_max_error": 5.960464477539063e-08,
+        "actual_source_distance_range": [
+          10.000360488891602,
+          10.002543449401855
+        ],
+        "old_camera_policy_distance_range": [
+          10.004363059997559,
+          10.005115509033203
+        ],
+        "distance_parameter_read_results": {
+          "OK": 2
+        },
+        "max_observed_peak": 0.020258422940969467,
+        "max_observed_rms": 0.008032657206058502
+      },
+      "left": {
+        "samples": 2,
+        "listener_owner_fixed_depth_max_error": 0.0,
+        "actual_source_distance_range": [
+          10.000320434570312,
+          10.00243091583252
+        ],
+        "old_camera_policy_distance_range": [
+          16.95886993408203,
+          17.07249641418457
+        ],
+        "distance_parameter_read_results": {
+          "OK": 2
+        },
+        "max_observed_peak": 0.012698295526206493,
+        "max_observed_rms": 0.006557253189384937
+      },
+      "right": {
+        "samples": 2,
+        "listener_owner_fixed_depth_max_error": 0.0,
+        "actual_source_distance_range": [
+          10.000320434570312,
+          10.002423286437988
+        ],
+        "old_camera_policy_distance_range": [
+          17.31673240661621,
+          18.766918182373047
+        ],
+        "distance_parameter_read_results": {
+          "OK": 2
+        },
+        "max_observed_peak": 0.020229576155543327,
+        "max_observed_rms": 0.00836743600666523
+      },
+      "top": {
+        "samples": 2,
+        "listener_owner_fixed_depth_max_error": 0.0,
+        "actual_source_distance_range": [
+          10.000323295593262,
+          10.002443313598633
+        ],
+        "old_camera_policy_distance_range": [
+          12.60769271850586,
+          14.398999214172363
+        ],
+        "distance_parameter_read_results": {
+          "OK": 2
+        },
+        "max_observed_peak": 0.012705614790320396,
+        "max_observed_rms": 0.0063967956230044365
+      },
+      "bottom": {
+        "samples": 2,
+        "listener_owner_fixed_depth_max_error": 3.814697265625e-06,
+        "actual_source_distance_range": [
+          10.000320434570312,
+          10.002424240112305
+        ],
+        "old_camera_policy_distance_range": [
+          12.4354887008667,
+          13.30998420715332
+        ],
+        "distance_parameter_read_results": {
+          "OK": 2
+        },
+        "max_observed_peak": 0.012727680616080761,
+        "max_observed_rms": 0.0073343184776604176
+      },
+      "top-left": {
+        "samples": 2,
+        "listener_owner_fixed_depth_max_error": 0.0,
+        "actual_source_distance_range": [
+          10.000323295593262,
+          10.002440452575684
+        ],
+        "old_camera_policy_distance_range": [
+          18.499141693115234,
+          19.08108901977539
+        ],
+        "distance_parameter_read_results": {
+          "OK": 2
+        },
+        "max_observed_peak": 0.014404953457415104,
+        "max_observed_rms": 0.005886794999241829
+      },
+      "top-right": {
+        "samples": 2,
+        "listener_owner_fixed_depth_max_error": 0.0,
+        "actual_source_distance_range": [
+          10.000322341918945,
+          10.002432823181152
+        ],
+        "old_camera_policy_distance_range": [
+          18.828367233276367,
+          20.143009185791016
+        ],
+        "distance_parameter_read_results": {
+          "OK": 2
+        },
+        "max_observed_peak": 0.012722678482532501,
+        "max_observed_rms": 0.006932667922228575
+      },
+      "bottom-left": {
+        "samples": 3,
+        "listener_owner_fixed_depth_max_error": 1.9073486328125e-06,
+        "actual_source_distance_range": [
+          10.0,
+          10.002439498901367
+        ],
+        "old_camera_policy_distance_range": [
+          18.49916648864746,
+          34.05258560180664
+        ],
+        "distance_parameter_read_results": {
+          "OK": 3
+        },
+        "max_observed_peak": 0.01729750819504261,
+        "max_observed_rms": 0.010266674682497978
+      },
+      "bottom-right": {
+        "samples": 14,
+        "listener_owner_fixed_depth_max_error": 4.264961199760036e-06,
+        "actual_source_distance_range": [
+          10.000020027160645,
+          10.003959655761719
+        ],
+        "old_camera_policy_distance_range": [
+          18.686874389648438,
+          67.51202392578125
+        ],
+        "distance_parameter_read_results": {
+          "OK": 14
+        },
+        "max_observed_peak": 0.03658584505319595,
+        "max_observed_rms": 0.016896536573767662
+      }
+    },
+    "dsp_types": {
+      "PAN": 30,
+      "FADER": 90
+    },
+    "filter_parameter_ranges": {},
+    "note": "Short event-block meters; random clips and stages are not normalized. No listening acceptance or causal loudness claim."
+  },
+  {
+    "log": "Logs\\AudioEdge\\process-01\\audio-beam\\client\\weapon-audio.jsonl",
+    "completion": [
+      "errors=0;playing=0;starts=18;duplicateStarts=0"
+    ],
+    "position_checks": [
+      "location=center;passed=True;owner=(0.00, 0.99, 0.00);camera=(0.24, 0.87, -10.00);listener=(0.00, 0.99, -10.00)",
+      "location=bottom-right;passed=True;owner=(58.67, -31.57, 0.00);camera=(43.10, -22.93, -10.00);listener=(58.67, -31.57, -10.00)",
+      "location=bottom-left;passed=True;owner=(-58.67, -31.57, 0.00);camera=(-28.06, -24.18, -10.00);listener=(-58.67, -31.57, -10.00)",
+      "location=top-right;passed=True;owner=(58.67, 33.55, 0.00);camera=(28.88, 16.31, -10.00);listener=(58.67, 33.55, -10.00)",
+      "location=top-left;passed=True;owner=(-58.67, 33.55, 0.00);camera=(-28.66, 26.16, -10.00);listener=(-58.67, 33.55, -10.00)",
+      "location=bottom;passed=True;owner=(0.00, -31.57, 0.00);camera=(-14.27, -14.33, -10.00);listener=(0.00, -31.57, -10.00)",
+      "location=top;passed=True;owner=(0.00, 33.55, 0.00);camera=(-0.61, 17.00, -10.00);listener=(0.00, 33.55, -10.00)",
+      "location=right;passed=True;owner=(58.67, 0.99, 0.00);camera=(43.00, 8.96, -10.00);listener=(58.67, 0.99, -10.00)",
+      "location=left;passed=True;owner=(-58.67, 0.99, 0.00);camera=(-28.22, 1.33, -10.00);listener=(-58.67, 0.99, -10.00)",
+      "passed=True;listener=(-58.67, 0.99, -10.00);camera=(0.00, 0.00, -13.41)"
+    ],
+    "event_guids": [
+      "{b865f76c-9c2a-4679-9709-a288f22c9619}"
+    ],
+    "locations": {
+      "center": {
+        "samples": 2,
+        "listener_owner_fixed_depth_max_error": 0.0,
+        "actual_source_distance_range": [
+          10.124228477478027,
+          10.124228477478027
+        ],
+        "old_camera_policy_distance_range": [
+          10.109926223754883,
+          10.119549751281738
+        ],
+        "distance_parameter_read_results": {
+          "OK": 2
+        },
+        "max_observed_peak": 0.029100706800818443,
+        "max_observed_rms": 0.01064106822013855
+      },
+      "bottom-right": {
+        "samples": 2,
+        "listener_owner_fixed_depth_max_error": 0.0,
+        "actual_source_distance_range": [
+          10.124228477478027,
+          10.124228477478027
+        ],
+        "old_camera_policy_distance_range": [
+          19.625999450683594,
+          19.625999450683594
+        ],
+        "distance_parameter_read_results": {
+          "OK": 2
+        },
+        "max_observed_peak": 0.03809310868382454,
+        "max_observed_rms": 0.019395580515265465
+      },
+      "bottom-left": {
+        "samples": 2,
+        "listener_owner_fixed_depth_max_error": 1.9073486328125e-06,
+        "actual_source_distance_range": [
+          10.124228477478027,
+          10.124228477478027
+        ],
+        "old_camera_policy_distance_range": [
+          17.368818283081055,
+          18.72226905822754
+        ],
+        "distance_parameter_read_results": {
+          "OK": 2
+        },
+        "max_observed_peak": 0.04394203796982765,
+        "max_observed_rms": 0.013209985569119453
+      },
+      "top-right": {
+        "samples": 2,
+        "listener_owner_fixed_depth_max_error": 0.0,
+        "actual_source_distance_range": [
+          10.124228477478027,
+          10.124228477478027
+        ],
+        "old_camera_policy_distance_range": [
+          19.99904441833496,
+          21.687881469726562
+        ],
+        "distance_parameter_read_results": {
+          "OK": 2
+        },
+        "max_observed_peak": 0.03809310868382454,
+        "max_observed_rms": 0.019395580515265465
+      },
+      "top-left": {
+        "samples": 3,
+        "listener_owner_fixed_depth_max_error": 3.814697265625e-06,
+        "actual_source_distance_range": [
+          10.124228477478027,
+          10.124228477478027
+        ],
+        "old_camera_policy_distance_range": [
+          17.789260864257812,
+          29.767990112304688
+        ],
+        "distance_parameter_read_results": {
+          "OK": 3
+        },
+        "max_observed_peak": 0.03809310868382454,
+        "max_observed_rms": 0.019395580515265465
+      },
+      "bottom": {
+        "samples": 3,
+        "listener_owner_fixed_depth_max_error": 1.9073486328125e-06,
+        "actual_source_distance_range": [
+          10.124228477478027,
+          10.124228477478027
+        ],
+        "old_camera_policy_distance_range": [
+          12.728026390075684,
+          21.097919464111328
+        ],
+        "distance_parameter_read_results": {
+          "OK": 3
+        },
+        "max_observed_peak": 0.03809310868382454,
+        "max_observed_rms": 0.019395580515265465
+      },
+      "top": {
+        "samples": 3,
+        "listener_owner_fixed_depth_max_error": 0.0,
+        "actual_source_distance_range": [
+          10.124228477478027,
+          10.124228477478027
+        ],
+        "old_camera_policy_distance_range": [
+          12.838460922241211,
+          15.557500839233398
+        ],
+        "distance_parameter_read_results": {
+          "OK": 3
+        },
+        "max_observed_peak": 0.03809310868382454,
+        "max_observed_rms": 0.019395580515265465
+      },
+      "right": {
+        "samples": 3,
+        "listener_owner_fixed_depth_max_error": 3.814697265625e-06,
+        "actual_source_distance_range": [
+          10.124228477478027,
+          10.124228477478027
+        ],
+        "old_camera_policy_distance_range": [
+          18.39335823059082,
+          18.826322555541992
+        ],
+        "distance_parameter_read_results": {
+          "OK": 3
+        },
+        "max_observed_peak": 0.04394203796982765,
+        "max_observed_rms": 0.013209985569119453
+      },
+      "left": {
+        "samples": 12,
+        "listener_owner_fixed_depth_max_error": 3.815162898494067e-06,
+        "actual_source_distance_range": [
+          10.124227523803711,
+          10.124228477478027
+        ],
+        "old_camera_policy_distance_range": [
+          15.949541091918945,
+          58.056434631347656
+        ],
+        "distance_parameter_read_results": {
+          "OK": 12
+        },
+        "max_observed_peak": 0.03809310868382454,
+        "max_observed_rms": 0.019395580515265465
+      }
+    },
+    "dsp_types": {
+      "FADER": 139,
+      "PAN": 31,
+      "MULTIBAND_EQ": 62,
+      "THREE_EQ": 31,
+      "SFXREVERB": 31
+    },
+    "filter_parameter_ranges": {
+      "g0/2:MULTIBAND_EQ/A) Filter": [
+        1.0,
+        1.0
+      ],
+      "g0/2:MULTIBAND_EQ/A) Frequency": [
+        10143.4678,
+        10143.4678
+      ],
+      "g0/2:MULTIBAND_EQ/A) Q": [
+        0.707,
+        0.707
+      ],
+      "g0/2:MULTIBAND_EQ/A) Gain": [
+        0.0,
+        0.0
+      ],
+      "g0/2:MULTIBAND_EQ/B) Filter": [
+        0.0,
+        0.0
+      ],
+      "g0/2:MULTIBAND_EQ/B) Frequency": [
+        40.0,
+        40.0
+      ],
+      "g0/2:MULTIBAND_EQ/B) Q": [
+        0.707,
+        0.707
+      ],
+      "g0/2:MULTIBAND_EQ/B) Gain": [
+        0.0,
+        0.0
+      ],
+      "g0/2:MULTIBAND_EQ/C) Filter": [
+        0.0,
+        0.0
+      ],
+      "g0/2:MULTIBAND_EQ/C) Frequency": [
+        11000.0,
+        11000.0
+      ],
+      "g0/2:MULTIBAND_EQ/C) Q": [
+        0.707,
+        0.707
+      ],
+      "g0/2:MULTIBAND_EQ/C) Gain": [
+        0.0,
+        0.0
+      ],
+      "g0/2:MULTIBAND_EQ/D) Filter": [
+        0.0,
+        0.0
+      ],
+      "g0/2:MULTIBAND_EQ/D) Frequency": [
+        160.0,
+        160.0
+      ],
+      "g0/2:MULTIBAND_EQ/D) Q": [
+        0.707,
+        0.707
+      ],
+      "g0/2:MULTIBAND_EQ/D) Gain": [
+        0.0,
+        0.0
+      ],
+      "g0/2:MULTIBAND_EQ/E) Filter": [
+        0.0,
+        0.0
+      ],
+      "g0/2:MULTIBAND_EQ/E) Frequency": [
+        2700.0,
+        2700.0
+      ],
+      "g0/2:MULTIBAND_EQ/E) Q": [
+        0.707,
+        0.707
+      ],
+      "g0/2:MULTIBAND_EQ/E) Gain": [
+        0.0,
+        0.0
+      ],
+      "g1/0:MULTIBAND_EQ/A) Filter": [
+        0.0,
+        0.0
+      ],
+      "g1/0:MULTIBAND_EQ/A) Frequency": [
+        660.0,
+        660.0
+      ],
+      "g1/0:MULTIBAND_EQ/A) Q": [
+        0.707,
+        0.707
+      ],
+      "g1/0:MULTIBAND_EQ/A) Gain": [
+        0.0,
+        0.0
+      ],
+      "g1/0:MULTIBAND_EQ/B) Filter": [
+        9.0,
+        9.0
+      ],
+      "g1/0:MULTIBAND_EQ/B) Frequency": [
+        4193.4,
+        4193.4
+      ],
+      "g1/0:MULTIBAND_EQ/B) Q": [
+        0.359999985,
+        0.359999985
+      ],
+      "g1/0:MULTIBAND_EQ/B) Gain": [
+        5.172415,
+        5.172415
+      ],
+      "g1/0:MULTIBAND_EQ/C) Filter": [
+        9.0,
+        9.0
+      ],
+      "g1/0:MULTIBAND_EQ/C) Frequency": [
+        43.95029,
+        43.95029
+      ],
+      "g1/0:MULTIBAND_EQ/C) Q": [
+        0.707,
+        0.707
+      ],
+      "g1/0:MULTIBAND_EQ/C) Gain": [
+        -10.3448277,
+        -10.3448277
+      ],
+      "g1/0:MULTIBAND_EQ/D) Filter": [
+        0.0,
+        0.0
+      ],
+      "g1/0:MULTIBAND_EQ/D) Frequency": [
+        160.0,
+        160.0
+      ],
+      "g1/0:MULTIBAND_EQ/D) Q": [
+        0.707,
+        0.707
+      ],
+      "g1/0:MULTIBAND_EQ/D) Gain": [
+        0.0,
+        0.0
+      ],
+      "g1/0:MULTIBAND_EQ/E) Filter": [
+        0.0,
+        0.0
+      ],
+      "g1/0:MULTIBAND_EQ/E) Frequency": [
+        2700.0,
+        2700.0
+      ],
+      "g1/0:MULTIBAND_EQ/E) Q": [
+        0.707,
+        0.707
+      ],
+      "g1/0:MULTIBAND_EQ/E) Gain": [
+        0.0,
+        0.0
+      ],
+      "g1/0:THREE_EQ/Low Gain": [
+        -15.5,
+        -15.5
+      ],
+      "g1/0:THREE_EQ/Mid Gain": [
+        0.0,
+        0.0
+      ],
+      "g1/0:THREE_EQ/High Gain": [
+        0.0,
+        0.0
+      ],
+      "g1/0:THREE_EQ/Low Crossover": [
+        400.0,
+        400.0
+      ],
+      "g1/0:THREE_EQ/High Crossover": [
+        4000.0,
+        4000.0
+      ],
+      "g1/0:THREE_EQ/Slope": [
+        1.0,
+        1.0
+      ]
+    },
+    "note": "Short event-block meters; random clips and stages are not normalized. No listening acceptance or causal loudness claim."
+  },
+  {
+    "log": "Logs\\AudioEdge\\process-01\\audio-wisp\\client\\weapon-audio.jsonl",
+    "completion": [
+      "errors=0;playing=0;starts=22;duplicateStarts=0"
+    ],
+    "position_checks": [
+      "location=center;passed=True;owner=(0.00, 0.99, 0.00);camera=(0.25, 0.87, -10.00);listener=(0.00, 0.99, -10.00)",
+      "location=bottom-right;passed=True;owner=(58.67, -31.57, 0.00);camera=(43.09, -22.92, -10.00);listener=(58.67, -31.57, -10.00)",
+      "location=bottom-left;passed=True;owner=(-58.67, -31.57, 0.00);camera=(-28.04, -24.18, -10.00);listener=(-58.67, -31.57, -10.00)",
+      "location=top-right;passed=True;owner=(58.67, 33.55, 0.00);camera=(28.75, 16.23, -10.00);listener=(58.67, 33.55, -10.00)",
+      "location=top-left;passed=True;owner=(-58.67, 33.55, 0.00);camera=(-28.82, 26.16, -10.00);listener=(-58.67, 33.55, -10.00)",
+      "location=bottom;passed=True;owner=(0.00, -31.57, 0.00);camera=(-14.34, -14.26, -10.00);listener=(0.00, -31.57, -10.00)",
+      "location=top;passed=True;owner=(0.00, 33.55, 0.00);camera=(-0.62, 17.01, -10.00);listener=(0.00, 33.55, -10.00)",
+      "location=right;passed=True;owner=(58.67, 0.99, 0.00);camera=(43.07, 8.92, -10.00);listener=(58.67, 0.99, -10.00)",
+      "location=left;passed=True;owner=(-58.67, 0.99, 0.00);camera=(-28.18, 1.33, -10.00);listener=(-58.67, 0.99, -10.00)",
+      "passed=True;listener=(-58.67, 0.99, -10.00);camera=(0.00, 0.00, -13.41)"
+    ],
+    "event_guids": [
+      "{1235e4b8-dcb5-43e8-8bb7-41a363bff4b8}"
+    ],
+    "locations": {
+      "center": {
+        "samples": 2,
+        "listener_owner_fixed_depth_max_error": 5.960464477539063e-08,
+        "actual_source_distance_range": [
+          10.000338554382324,
+          10.00247859954834
+        ],
+        "old_camera_policy_distance_range": [
+          10.0003023147583,
+          10.00168514251709
+        ],
+        "distance_parameter_read_results": {
+          "OK": 2
+        },
+        "max_observed_peak": 0.020228037610650063,
+        "max_observed_rms": 0.0077080861665308475
+      },
+      "bottom-right": {
+        "samples": 2,
+        "listener_owner_fixed_depth_max_error": 3.814697265625e-06,
+        "actual_source_distance_range": [
+          10.000320434570312,
+          10.002426147460938
+        ],
+        "old_camera_policy_distance_range": [
+          18.723047256469727,
+          18.828140258789062
+        ],
+        "distance_parameter_read_results": {
+          "OK": 2
+        },
+        "max_observed_peak": 0.012711809016764164,
+        "max_observed_rms": 0.007188791409134865
+      },
+      "bottom-left": {
+        "samples": 3,
+        "listener_owner_fixed_depth_max_error": 0.0,
+        "actual_source_distance_range": [
+          10.000001907348633,
+          10.002436637878418
+        ],
+        "old_camera_policy_distance_range": [
+          18.4992733001709,
+          30.11372947692871
+        ],
+        "distance_parameter_read_results": {
+          "OK": 3
+        },
+        "max_observed_peak": 0.01993458904325962,
+        "max_observed_rms": 0.006833115126937628
+      },
+      "top-right": {
+        "samples": 3,
+        "listener_owner_fixed_depth_max_error": 3.814697265625e-06,
+        "actual_source_distance_range": [
+          10.000036239624023,
+          10.00243854522705
+        ],
+        "old_camera_policy_distance_range": [
+          18.82857894897461,
+          28.061866760253906
+        ],
+        "distance_parameter_read_results": {
+          "OK": 3
+        },
+        "max_observed_peak": 0.02024437114596367,
+        "max_observed_rms": 0.0075293960981070995
+      },
+      "top-left": {
+        "samples": 3,
+        "listener_owner_fixed_depth_max_error": 3.814697265625e-06,
+        "actual_source_distance_range": [
+          10.000109672546387,
+          10.002432823181152
+        ],
+        "old_camera_policy_distance_range": [
+          18.499374389648438,
+          22.83102798461914
+        ],
+        "distance_parameter_read_results": {
+          "OK": 3
+        },
+        "max_observed_peak": 0.015925975516438484,
+        "max_observed_rms": 0.00780681986361742
+      },
+      "bottom": {
+        "samples": 3,
+        "listener_owner_fixed_depth_max_error": 1.9073486328125e-06,
+        "actual_source_distance_range": [
+          10.000223159790039,
+          10.002426147460938
+        ],
+        "old_camera_policy_distance_range": [
+          12.692710876464844,
+          15.858288764953613
+        ],
+        "distance_parameter_read_results": {
+          "OK": 3
+        },
+        "max_observed_peak": 0.014049073681235313,
+        "max_observed_rms": 0.006813095882534981
+      },
+      "top": {
+        "samples": 3,
+        "listener_owner_fixed_depth_max_error": 0.0,
+        "actual_source_distance_range": [
+          10.000322341918945,
+          10.002437591552734
+        ],
+        "old_camera_policy_distance_range": [
+          12.439033508300781,
+          13.14461898803711
+        ],
+        "distance_parameter_read_results": {
+          "OK": 3
+        },
+        "max_observed_peak": 0.022790776565670967,
+        "max_observed_rms": 0.00851674284785986
+      },
+      "right": {
+        "samples": 3,
+        "listener_owner_fixed_depth_max_error": 0.0,
+        "actual_source_distance_range": [
+          10.000322341918945,
+          10.002437591552734
+        ],
+        "old_camera_policy_distance_range": [
+          17.364591598510742,
+          17.6823673248291
+        ],
+        "distance_parameter_read_results": {
+          "OK": 3
+        },
+        "max_observed_peak": 0.054982855916023254,
+        "max_observed_rms": 0.0228448323905468
+      },
+      "left": {
+        "samples": 13,
+        "listener_owner_fixed_depth_max_error": 3.814697265625e-06,
+        "actual_source_distance_range": [
+          10.000035285949707,
+          10.003952026367188
+        ],
+        "old_camera_policy_distance_range": [
+          16.90989112854004,
+          59.365692138671875
+        ],
+        "distance_parameter_read_results": {
+          "OK": 13
+        },
+        "max_observed_peak": 0.05594424158334732,
+        "max_observed_rms": 0.02368841879069805
+      }
+    },
+    "dsp_types": {
+      "PAN": 35,
+      "FADER": 105
+    },
+    "filter_parameter_ranges": {},
+    "note": "Short event-block meters; random clips and stages are not normalized. No listening acceptance or causal loudness claim."
+  }
+]

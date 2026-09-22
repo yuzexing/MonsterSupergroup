@@ -132,5 +132,26 @@ namespace RewiredConsts
 
 		[ActionIdFieldInfo(categoryName = "UI", friendlyName = "UIButton4")]
 		public const int UIButton4 = 62;
+
+        [ActionIdFieldInfo(categoryName = "Normal", friendlyName = "Select Gluttony Prototype")]
+        public const int PrototypeSelectGluttony = 63;
+
+        [ActionIdFieldInfo(categoryName = "Normal", friendlyName = "Select Music Prototype")]
+        public const int PrototypeSelectMusic = 64;
+
+        [ActionIdFieldInfo(categoryName = "Normal", friendlyName = "Select Allure Prototype")]
+        public const int PrototypeSelectAllure = 65;
+
+        [ActionIdFieldInfo(categoryName = "Normal", friendlyName = "Prototype Secondary")]
+        public const int PrototypeSecondary = 66;
+
+        [ActionIdFieldInfo(categoryName = "Normal", friendlyName = "Prototype Decoy")]
+        public const int PrototypeDecoy = 67;
+
+        [ActionIdFieldInfo(categoryName = "Normal", friendlyName = "Prototype Rhythm")]
+        public const int PrototypeRhythm = 68;
+
+        [ActionIdFieldInfo(categoryName = "Normal", friendlyName = "Select Fourth Upgrade")]
+        public const int UpgradeSelectFourth = 69;
 	}
 }

@@ -15,7 +15,7 @@ namespace Mirror.FizzySteam
 
         private TimeSpan ConnectionTimeout;
 
-        private event Action<byte[], int> OnReceivedData;
+        private event Action<ArraySegment<byte>, int> OnReceivedData;
         private event Action OnConnected;
         private event Action OnDisconnected;
         private Callback<SteamNetConnectionStatusChangedCallback_t> c_onConnectionChange = null;
@@ -24,12 +24,11 @@ namespace Mirror.FizzySteam
         private TaskCompletionSource<Task> connectedComplete;
         private CSteamID hostSteamID = CSteamID.Nil;
         private HSteamNetConnection HostConnection;
-        private List<Action> BufferedData;
+        private readonly Queue<(ArraySegment<byte> Data, int Channel)> BufferedData = new Queue<(ArraySegment<byte>, int)>();
 
         private NextClient(FizzySteamworks transport)
         {
             ConnectionTimeout = TimeSpan.FromSeconds(Math.Max(1, transport.Timeout));
-            BufferedData = new List<Action>();
         }
 
         public static NextClient CreateClient(FizzySteamworks transport, string host)
@@ -38,7 +37,7 @@ namespace Mirror.FizzySteam
 
             c.OnConnected += () => transport.OnClientConnected.Invoke();
             c.OnDisconnected += () => transport.OnClientDisconnected.Invoke();
-            c.OnReceivedData += (data, ch) => transport.OnClientDataReceived.Invoke(new ArraySegment<byte>(data), ch);
+            c.OnReceivedData += (data, ch) => transport.OnClientDataReceived.Invoke(data, ch);
 
             try
             {
@@ -136,11 +135,10 @@ namespace Mirror.FizzySteam
                 if (BufferedData.Count > 0)
                 {
                     Debug.Log($"{BufferedData.Count} received before connection was established. Processing now.");
+                    while (BufferedData.Count > 0)
                     {
-                        foreach (Action a in BufferedData)
-                        {
-                            a();
-                        }
+                        var message = BufferedData.Dequeue();
+                        Deliver(message.Data, message.Channel);
                     }
                 }
             }
@@ -175,6 +173,7 @@ namespace Mirror.FizzySteam
 
         protected void Dispose()
         {
+            while (BufferedData.Count > 0) ReturnMessage(BufferedData.Dequeue().Data);
             if (c_onConnectionChange != null)
             {
                 c_onConnectionChange.Dispose();
@@ -192,27 +191,50 @@ namespace Mirror.FizzySteam
 
         public void ReceiveData()
         {
-            IntPtr[] ptrs = new IntPtr[MAX_MESSAGES];
+            if (HostConnection.m_HSteamNetConnection == 0) return;
+            IntPtr[] ptrs = messagePointers;
             int messageCount;
 
             if ((messageCount = SteamNetworkingSockets.ReceiveMessagesOnConnection(HostConnection, ptrs, MAX_MESSAGES)) > 0)
             {
-                for (int i = 0; i < messageCount; i++)
+                try
                 {
-                    (byte[] data, int ch) = ProcessMessage(ptrs[i]);
-                    if (Connected)
+                    for (int i = 0; i < messageCount; i++)
                     {
-                        OnReceivedData(data, ch);
-                    }
-                    else
-                    {
-                        BufferedData.Add(() => OnReceivedData(data, ch));
+                        // A delivery callback may disconnect and dispose the deferred queue.
+                        if (HostConnection.m_HSteamNetConnection == 0) return;
+                        IntPtr pointer = ptrs[i]; ptrs[i] = IntPtr.Zero;
+                        (ArraySegment<byte> data, int ch) = ProcessMessage(pointer);
+                        if (data.Array == null) continue;
+                        if (Connected)
+                        {
+                            Deliver(data, ch);
+                        }
+                        else
+                        {
+                            BufferedData.Enqueue((data, ch));
+                        }
                     }
                 }
+                finally { ReleasePendingMessages(messageCount); }
             }
         }
 
         public void Send(byte[] data, int channelId)
+            => Send(new ArraySegment<byte>(data), channelId);
+
+        private void Deliver(ArraySegment<byte> data, int channel)
+        {
+            try { OnReceivedData?.Invoke(data, channel); }
+            finally { ReturnMessage(data); }
+        }
+
+        public void ReadConnectionDiagnostics(List<SteamConnectionSample> samples)
+        {
+            if (Connected && SteamTransportDiagnostics.TrySample(HostConnection, 0, out var sample)) samples.Add(sample);
+        }
+
+        public void Send(ArraySegment<byte> data, int channelId)
         {
             try
             {

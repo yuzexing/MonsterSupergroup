@@ -47,8 +47,8 @@ namespace MonsterSupergroup.HellMaidenMigration.Tests
             Assert.That(shadow.transform.localScale, Is.EqualTo(new Vector3(7.5f, 1, 1)));
             Assert.That(shadow.color, Is.EqualTo(Color.white));
             Material material = shadow.sharedMaterial;
-            Assert.That(AssetDatabase.AssetPathToGUID(AssetDatabase.GetAssetPath(material)), Is.EqualTo("ef5dd6be7c703534bb52398357fa94ed"));
-            Assert.That(material.shader, Is.EqualTo(AssetDatabase.LoadAssetAtPath<Shader>(OvidSummonNativeGasMigration.ShadowShaderPath)));
+            Assert.That(AssetDatabase.AssetPathToGUID(AssetDatabase.GetAssetPath(PlanarTestMaterials.Source(material, OvidSummonNativeGasMigration.OutputFolder + "/Material"))), Is.EqualTo("ef5dd6be7c703534bb52398357fa94ed"));
+            Assert.That(PlanarTestMaterials.Source(material, OvidSummonNativeGasMigration.OutputFolder + "/Material").shader, Is.EqualTo(AssetDatabase.LoadAssetAtPath<Shader>(OvidSummonNativeGasMigration.ShadowShaderPath)));
             Assert.That(material.GetTexture("_MainTex"), Is.SameAs(shadow.sprite.texture));
             Assert.That(AssetDatabase.AssetPathToGUID(AssetDatabase.GetAssetPath(shadow.sprite.texture)), Is.EqualTo("4f47ced8ac09c7d44b968acaa95ce587"));
             Assert.That(material.GetColor("_Color"), Is.EqualTo(Color.white), "The source shadow is not an opaque black tint.");
@@ -288,9 +288,9 @@ namespace MonsterSupergroup.HellMaidenMigration.Tests
                     Assert.That(material, Is.Not.Null, rendererPath);
                     Assert.That(material.shader, Is.Not.Null, rendererPath);
                     if (rendererPath == OvidSummonNativeGasMigration.VisualRootPath + "/Buterfly_Attack Laser/Rotate/Shadow")
-                        Assert.That(material.shader.name, Is.EqualTo("HellMaiden/Presentation/Ovid Summon Shadow"), rendererPath);
+                        Assert.That(PlanarTestMaterials.Source(material, OvidSummonNativeGasMigration.OutputFolder + "/Material").shader.name, Is.EqualTo("HellMaiden/Presentation/Ovid Summon Shadow"), rendererPath);
                     else
-                        Assert.That(material.shader.name, Does.StartWith("AllIn1"), rendererPath);
+                        Assert.That(PlanarTestMaterials.Source(material, OvidSummonNativeGasMigration.OutputFolder + "/Material").shader.name, Does.StartWith("AllIn1"), rendererPath);
                 }
             }
         }
@@ -301,7 +301,7 @@ namespace MonsterSupergroup.HellMaidenMigration.Tests
         public void BeamVariantsKeepTheirDistinctTexturesAndOriginalUvScroll(string path, string textureGuid)
         {
             Material material = Variant(path).GetComponentInChildren<LineRenderer>(true).sharedMaterial;
-            Assert.That(material.shader.name, Is.EqualTo("AllIn1Vfx/AllIn1VfxURPCompat"));
+            Assert.That(PlanarTestMaterials.Source(material, OvidSummonNativeGasMigration.OutputFolder + "/Material").shader.name, Is.EqualTo("AllIn1Vfx/AllIn1VfxURPCompat"));
             Assert.That(AssetDatabase.AssetPathToGUID(AssetDatabase.GetAssetPath(material.GetTexture("_MainTex"))), Is.EqualTo(textureGuid));
             Assert.That(material.GetTextureScale("_MainTex"), Is.EqualTo(new Vector2(0.04f, 1f)));
             Assert.That(material.GetFloat("_ShapeXSpeed"), Is.EqualTo(-5f));

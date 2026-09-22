@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="1" result="Failed(Child)" total="1" passed="0" failed="1" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-09-21 11:43:40Z" end-time="2026-09-21 11:43:45Z" duration="4.8131771">
+  <test-suite type="TestSuite" id="1670" name="Monster Supergroup" fullname="Monster Supergroup" runstate="Runnable" testcasecount="559" result="Failed" site="Child" start-time="2026-09-21 11:43:40Z" end-time="2026-09-21 11:43:45Z" duration="4.813177" total="1" passed="0" failed="1" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="PlayMode" />
+    </properties>
+    <failure>
+      <message><![CDATA[One or more child tests had errors]]></message>
+    </failure>
+    <test-suite type="Assembly" id="1654" name="MonsterSupergroup.Gameplay.Tests.PlayMode.dll" fullname="F:/UnityStore/MonsterSupergroup/Library/ScriptAssemblies/MonsterSupergroup.Gameplay.Tests.PlayMode.dll" runstate="Runnable" testcasecount="555" result="Failed" site="Child" start-time="2026-09-21 11:43:40Z" end-time="2026-09-21 11:43:45Z" duration="4.801835" total="1" passed="0" failed="1" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="32420" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="PlayMode" />
+        <property name="EditorOnly" value="False" />
+      </properties>
+      <failure>
+        <message><![CDATA[One or more child tests had errors]]></message>
+      </failure>
+      <test-suite type="TestSuite" id="1655" name="MonsterSupergroup" fullname="MonsterSupergroup" runstate="Runnable" testcasecount="555" result="Failed" site="Child" start-time="2026-09-21 11:43:40Z" end-time="2026-09-21 11:43:45Z" duration="4.799119" total="1" passed="0" failed="1" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <failure>
+          <message><![CDATA[One or more child tests had errors]]></message>
+        </failure>
+        <test-suite type="TestSuite" id="1656" name="Gameplay" fullname="MonsterSupergroup.Gameplay" runstate="Runnable" testcasecount="555" result="Failed" site="Child" start-time="2026-09-21 11:43:40Z" end-time="2026-09-21 11:43:45Z" duration="4.789032" total="1" passed="0" failed="1" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <failure>
+            <message><![CDATA[One or more child tests had errors]]></message>
+          </failure>
+          <test-suite type="TestSuite" id="1657" name="Tests" fullname="MonsterSupergroup.Gameplay.Tests" runstate="Runnable" testcasecount="555" result="Failed" site="Child" start-time="2026-09-21 11:43:40Z" end-time="2026-09-21 11:43:45Z" duration="4.768115" total="1" passed="0" failed="1" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <failure>
+              <message><![CDATA[One or more child tests had errors]]></message>
+            </failure>
+            <test-suite type="TestFixture" id="1220" name="GameplayCameraTests" fullname="MonsterSupergroup.Gameplay.Tests.GameplayCameraTests" classname="MonsterSupergroup.Gameplay.Tests.GameplayCameraTests" runstate="Runnable" testcasecount="9" result="Failed" site="Child" start-time="2026-09-21 11:43:40Z" end-time="2026-09-21 11:43:45Z" duration="4.757744" total="1" passed="0" failed="1" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <failure>
+                <message><![CDATA[One or more child tests had errors]]></message>
+              </failure>
+              <test-case id="1222" name="AudioListenerAtMapEdges_PreservesOwnerRelativeDistance" fullname="MonsterSupergroup.Gameplay.Tests.GameplayCameraTests.AudioListenerAtMapEdges_PreservesOwnerRelativeDistance" methodname="AudioListenerAtMapEdges_PreservesOwnerRelativeDistance" classname="MonsterSupergroup.Gameplay.Tests.GameplayCameraTests" runstate="Runnable" seed="623991347" result="Failed" start-time="2026-09-21 11:43:40Z" end-time="2026-09-21 11:43:45Z" duration="4.747335" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <failure>
+                  <message><![CDATA[  Local sounds must not fade as the camera reaches the map boundary.
+  Expected: 10.0498753f +/- 0.00100000005f
+  But was:  16.7271652f
+]]></message>
+                  <stack-trace><![CDATA[at MonsterSupergroup.Gameplay.Tests.GameplayCameraTests+<AudioListenerAtMapEdges_PreservesOwnerRelativeDistance>d__7.MoveNext () [0x00262] in F:\UnityStore\MonsterSupergroup\Assets\_Project\Tests\PlayMode\Gameplay\GameplayCameraTests.cs:98
+at UnityEngine.TestTools.TestEnumerator+<Execute>d__7.MoveNext () [0x0004e] in .\Library\PackageCache\com.unity.test-framework@bd7f943e9647\UnityEngine.TestRunner\NUnitExtensions\Attributes\TestEnumerator.cs:44
+]]></stack-trace>
+                </failure>
+                <output><![CDATA[[Localization] Applied locale=zh-CN revision=2
+[NetworkBackend] backend=Kcp purpose=Test source=test-runner transport=KcpTransport.
+--- Hardware Info ---
+CPU Model: 13th Gen Intel(R) Core(TM) i7-13700KF
+GPU Model: Null Device
+RAM: 65375 MB
+Install Disk Model: Get-Partition : 找不到任何“DriveLetter”属性等于“F”的 MSFT_Partition 对象。请验证属性值，然后重试。
+所在位置 行:1 字符: 12
++ (Get-Disk (Get-Partition -DriveLetter 'F').DiskNumber).Model
++            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (F:Char) [Get-Partition], CimJobException
+    + FullyQualifiedErrorId : CmdletizationQuery_NotFound_DriveLetter,Get-Partition
+ 
+Get-Disk : 无法对参数“Number”执行参数验证。参数为 Null。请为参数提供一个有效的值，然后再次尝试运行该命令。
+所在位置 行:1 字符: 11
++ (Get-Disk (Get-Partition -DriveLetter 'F').DiskNumber).Model
++           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : InvalidData: (:) [Get-Disk]，ParameterBindingValidationException
+    + FullyQualifiedErrorId : ParameterArgumentValidationError,Get-Disk
+Main Monitor Model: Unknown Monitor
+---------------------
+Normal : True
+UI : False
+AstralShift.HellMaiden.Controllers.PlayerController_HMD
+<color=yellow><b>► Controllers: </b></color>Controller type AstralShift.Control.Controllers.NoInputGameController not available
+Server listening on port 7904
+[BootGameplay] Server starting; loading 'Assets/_Project/Scenes/Gameplay.unity'.
+[BootGameplay] Server connection 0 is ready.
+[BootGameplay] Queued Player for connection 0.
+[BootGameplay] Gameplay scene ready: 'Assets/_Project/Scenes/Gameplay.unity'.
+[BootGameplay] Spawned Player NetworkPlayer [connId=0] in 'Assets/_Project/Scenes/Gameplay.unity'.
+<color=yellow><b>► Controllers: </b></color>Overrode <color=yellow><b></b></color> with <color=yellow><b>PlayerController_HMD</b></color>.
+Normal : True
+UI : False
+AUDIO-EDGE owner=(0.00, 0.99, 0.00) camera=(0.00, 0.99, -10.00) listener=(0.00, 0.99, -10.00) distance=10.049880
+AUDIO-EDGE owner=(58.67, 33.55, 0.00) camera=(48.48, 26.16, -10.00) listener=(48.48, 26.16, -10.00) distance=16.727170
+[BootGameplay] Client stopping; serverActive=True.
+[BootGameplay] Server stopping.
+[BootGameplay] Gameplay unload requested.
+There are 2 audio listeners in the scene. Please ensure there is always exactly one audio listener in the scene.
+[SteamInvite] stage=cleanup lobby=0 host=0 phase=Disabled reason=
+Saving results to: C:/Users/ADMIN/AppData/LocalLow/DefaultCompany/Monster Supergroup\TestResults.xml
+]]></output>
+              </test-case>
+            </test-suite>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

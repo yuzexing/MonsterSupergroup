@@ -12,7 +12,7 @@ namespace MonsterSupergroup.NetworkCombat
         public int MaximumTargets;
         public static GluttonyParameters Defaults => new GluttonyParameters
         {
-            Enabled = false, PassiveEnabled = true, ActiveEnabled = true,
+            Enabled = true, PassiveEnabled = true, ActiveEnabled = true,
             PassiveCooldown = 10, ActiveCooldown = 20, Radius = 1.15f,
             Length = 5.75f, Width = 2.3f, MarkDuration = 6, MaximumTargets = 5,
             ScanInterval = .05f, FlashDuration = .2f, FeedbackVolume = .12f

@@ -17,13 +17,14 @@ namespace MonsterSupergroup.NetworkCombat
             {
                 int size;
                 using (var writer = NetworkWriterPool.Get()) { writer.Write(snapshot); size = writer.Position; }
+                NetworkDiagnosticsObservation.RecordSnapshot(size);
                 if (packet.Count > 0 && (bytes + size > budget || packet.Count >= maximumCount))
                 {
                     send(new EnemySimulationSnapshotBatch { Snapshots = packet.ToArray() }, false);
                     packet.Clear(); bytes = 20;
                 }
                 if (size + 20 > budget)
-                { send(new EnemySimulationSnapshotBatch { Snapshots = new[] { snapshot } }, true); continue; }
+                { NetworkDiagnosticsObservation.RecordReliableSnapshot(); send(new EnemySimulationSnapshotBatch { Snapshots = new[] { snapshot } }, true); continue; }
                 packet.Add(snapshot); bytes += size;
             }
             if (packet.Count > 0) send(new EnemySimulationSnapshotBatch { Snapshots = packet.ToArray() }, false);

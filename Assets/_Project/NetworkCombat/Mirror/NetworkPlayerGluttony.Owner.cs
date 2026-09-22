@@ -12,7 +12,7 @@ namespace MonsterSupergroup.NetworkCombat
         private readonly Dictionary<uint, ulong> pendingTargets = new Dictionary<uint, ulong>();
         private ulong pendingCast, pendingPassive;
         private double nextScan;
-        public bool OwnerReady => isActiveAndEnabled && isOwned && NetworkClient.active && baseline && parameters.Enabled &&
+        public bool OwnerReady => isActiveAndEnabled && isOwned && NetworkClient.active && baseline && parameters.Enabled && IsPrototypeEnabled &&
             bridge != null && bridge.EventIds != null && player != null && player.IsRuntimeInitialized && player.IsLocalOwnerBound &&
             !player.IsMenuInputBlocked && !player.IsUpgradeSelectionLocked && !player.IsRunLoadingLocked &&
             build != null && build.IsBuildActive && selection != null && selection.HasOwnerBaseline && combatant.IsAlive &&
@@ -27,7 +27,7 @@ namespace MonsterSupergroup.NetworkCombat
         }
         public bool RequestMark(Vector2 direction)
         {
-            if (!OwnerReady || !parameters.ActiveEnabled || pendingCast != 0 ||
+            if (!OwnerReady || !abilities.OwnerCanBegin(AbilityId) || !parameters.ActiveEnabled || pendingCast != 0 ||
                 NetworkTime.time < State.ActiveReadyAt || !GluttonyGeometry.Finite(direction) || direction.sqrMagnitude < .0001f) return false;
             direction.Normalize(); Vector2 origin = transform.position;
             Physics2D.OverlapBox(origin + direction * parameters.Length * .5f, new Vector2(parameters.Length, parameters.Width),
@@ -36,17 +36,17 @@ namespace MonsterSupergroup.NetworkCombat
             if (candidates.Count > parameters.MaximumTargets) candidates.RemoveRange(parameters.MaximumTargets, candidates.Count - parameters.MaximumTargets);
             ulong id = bridge.EventIds.Next().Value; pendingCast = id;
             view?.ShowRectangle(id, origin, direction, parameters);
-            CmdMark(id, configRevision, selection.OwnerBuildRevision, origin, direction, candidates.ToArray());
+            CmdMark(id, configRevision, selection.OwnerBuildRevision, abilities.SelectionRevision, origin, direction, candidates.ToArray());
             return true;
         }
         public bool RequestDevour(uint target, bool marked)
         {
             if (!OwnerReady || pendingTargets.ContainsKey(target) ||
-                (marked ? !parameters.ActiveEnabled || !HasMark(target) : !parameters.PassiveEnabled ||
+                (marked ? !parameters.ActiveEnabled || !HasMark(target) : !abilities.OwnerCanBegin(AbilityId) || !parameters.PassiveEnabled ||
                     pendingPassive != 0 || NetworkTime.time < State.PassiveReadyAt || HasMark(target))) return false;
             ulong id = bridge.EventIds.Next().Value;
             pendingTargets.Add(target, id); if (!marked) pendingPassive = id;
-            CmdDevour(id, configRevision, selection.OwnerBuildRevision, target, marked, marked ? State.CastId : 0);
+            CmdDevour(id, configRevision, selection.OwnerBuildRevision, abilities.SelectionRevision, target, marked, marked ? State.CastId : 0);
             return true;
         }
         private void UpdateOwner()
@@ -58,7 +58,7 @@ namespace MonsterSupergroup.NetworkCombat
             markedThisScan.Clear();
             foreach (uint id in candidates) if (HasMark(id)) markedThisScan.Add(id);
             foreach (uint id in markedThisScan) RequestDevour(id, true);
-            if (parameters.PassiveEnabled && pendingPassive == 0 && NetworkTime.time >= State.PassiveReadyAt)
+            if (abilities.OwnerCanBegin(AbilityId) && parameters.PassiveEnabled && pendingPassive == 0 && NetworkTime.time >= State.PassiveReadyAt)
                 foreach (uint id in candidates)
                     if (!markedThisScan.Contains(id) && RequestDevour(id, false)) break;
         }

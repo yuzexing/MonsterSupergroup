@@ -55,12 +55,14 @@ namespace MonsterSupergroup.NetworkCombat
         private PlayerUpgradeOfferSnapshot[] restoredOffers = Array.Empty<PlayerUpgradeOfferSnapshot>();
 
         [SyncVar(hook = nameof(OnSelectingChanged))] private bool selecting;
+        [SyncVar] private ulong offerDeferralToken;
         [SyncVar] private int level = 1;
         [SyncVar] private float experience;
         [SyncVar] private int experiencePerLevel;
         [SerializeField] private UpgradeSelectionRules selectionRules;
 
         public bool IsSelecting => selecting;
+        public bool OffersDeferred => offerDeferralToken != 0;
         public int Level => level;
         public float Experience => experience;
         public int ExperiencePerLevel => experiencePerLevel;
@@ -174,6 +176,8 @@ namespace MonsterSupergroup.NetworkCombat
         public void RestoreProgression(PlayerProgressionSnapshot state)
         {
             ValidateProgression(state);
+            // A temporary presentation deferral belongs to the live avatar/cast, never its saved rewards.
+            offerDeferralToken = 0;
             level = state.Level;
             experience = state.Experience;
             experiencePerLevel = ExperienceRequiredAtLevel(level);
@@ -260,6 +264,7 @@ namespace MonsterSupergroup.NetworkCombat
 
         public override void OnStartServer()
         {
+            offerDeferralToken = 0;
             provider = new UpgradeOfferProvider(new ServerRandom());
             EnsureServerBuild();
             world = NetworkCombatWorld.Instance;
@@ -313,7 +318,7 @@ namespace MonsterSupergroup.NetworkCombat
             debugOwnerRequested = true;
             sentDebugStateValid = false;
             ownerCanSelect = canSelect;
-            if (!canSelect && PendingEventId != 0) ServerCancelPending();
+            if (!canSelect && PendingEventId != 0) ServerSuspendOffers();
             else SendOwnerState();
             TryOpenNextOffer();
         }
@@ -322,7 +327,7 @@ namespace MonsterSupergroup.NetworkCombat
         private void CmdSetSelectionAvailable(bool available)
         {
             ownerCanSelect = available;
-            if (!available) ServerCancelPending();
+            if (!available) ServerSuspendOffers();
         }
 
         /// <summary>Development-only owner intent; the server determines and grants one level of XP.</summary>
@@ -391,11 +396,34 @@ namespace MonsterSupergroup.NetworkCombat
             TryOpenNextOffer();
         }
 
+        /// <summary>Retains earned rewards without opening a selection or locking the player.</summary>
+        [Server]
+        public bool ServerDeferOffers(ulong token)
+        {
+            if (token == 0 || OffersDeferred || selecting || PendingEventId != 0 ||
+                BootGameplayNetworkManager.CombatHasEnded || !isActiveAndEnabled || !build.IsBuildActive ||
+                connectionToClient == null || connectionToClient.identity != netIdentity ||
+                (world != null && !world.Gateway.Ledger.IsAlive(netId))) return false;
+            offerDeferralToken = token;
+            return true;
+        }
+
+        /// <summary>Only the operation that deferred offers can release them; stale completion is ignored.</summary>
+        [Server]
+        public void ServerResumeOffers(ulong token)
+        {
+            if (token == 0 || token != offerDeferralToken) return;
+            offerDeferralToken = 0;
+            TryOpenNextOffer();
+        }
+
         [Server]
         private void TryOpenNextOffer()
         {
-            if (!isActiveAndEnabled || !ownerCanSelect || PendingEventId != 0 || PendingUpgradeCount == 0 ||
-                !build.IsBuildActive || connectionToClient == null) return;
+            if (OffersDeferred || BootGameplayNetworkManager.CombatHasEnded || !isActiveAndEnabled ||
+                !ownerCanSelect || PendingEventId != 0 || PendingUpgradeCount == 0 || !build.IsBuildActive ||
+                connectionToClient == null || connectionToClient.identity != netIdentity ||
+                (world != null && !world.Gateway.Ledger.IsAlive(netId))) return;
             IReadOnlyList<ModifierOffer> generated;
             try
             {
@@ -715,6 +743,7 @@ namespace MonsterSupergroup.NetworkCombat
         [Server]
         public void ServerCancelPending()
         {
+            offerDeferralToken = 0;
             PendingEventId = 0;
             rewards.Clear();
             originalOffers = Array.Empty<PlayerUpgradeOfferSnapshot>();
@@ -722,6 +751,19 @@ namespace MonsterSupergroup.NetworkCombat
             stage = UpgradeSelectionStage.Reward;
             serverOffers = Array.Empty<ModifierOffer>();
             restoredOffers = Array.Empty<PlayerUpgradeOfferSnapshot>();
+            SetSelecting(false);
+            SendOwnerState();
+        }
+
+        [Server]
+        private void ServerSuspendOffers(bool releaseDeferral = false)
+        {
+            // Losing presentation or dying is not spending a reward. Preserve any already drawn
+            // cards (including the Equipment target stage) so recovery cannot reroll the choice.
+            if (releaseDeferral) offerDeferralToken = 0;
+            if (serverOffers.Count != 0) restoredOffers = CaptureOffers(serverOffers);
+            PendingEventId = 0;
+            serverOffers = Array.Empty<ModifierOffer>();
             SetSelecting(false);
             SendOwnerState();
         }
@@ -752,8 +794,12 @@ namespace MonsterSupergroup.NetworkCombat
                     OnStartAuthority();
             }
             if (!isServer) return;
-            if (PendingEventId != 0 && (connectionToClient == null || connectionToClient.identity != netIdentity))
-                ServerCancelPending();
+            // Player health is OwnerFinal: an accepted lethal health report changes the ledger
+            // without producing an enemy-style ConfirmedKill event. Observe that path as well.
+            if ((PendingEventId != 0 || OffersDeferred) &&
+                (connectionToClient == null || connectionToClient.identity != netIdentity ||
+                    (world != null && !world.Gateway.Ledger.IsAlive(netId))))
+                ServerSuspendOffers(true);
             if (build.InitialWeapon != serverWeapon)
             {
                 serverWeapon = build.InitialWeapon;
@@ -783,14 +829,14 @@ namespace MonsterSupergroup.NetworkCombat
         {
             if (kill.TargetEntityId == netId)
             {
-                ServerCancelPending();
+                ServerSuspendOffers(true);
                 return;
             }
         }
 
         private void OnDisable()
         {
-            if (isServer && NetworkServer.active) ServerCancelPending();
+            if (isServer && NetworkServer.active) ServerSuspendOffers(true);
             if (isOwned && NetworkClient.active) CmdSetSelectionAvailable(false);
             ReleaseOwner();
             if (isOwned && NetworkClient.active) build?.SetWeaponExecutionEnabled(true);
@@ -833,6 +879,7 @@ namespace MonsterSupergroup.NetworkCombat
 
         public override void OnStopServer()
         {
+            offerDeferralToken = 0;
             debugOwnerRequested = sentDebugStateValid = false;
             debugConnection = null;
             if (world != null)

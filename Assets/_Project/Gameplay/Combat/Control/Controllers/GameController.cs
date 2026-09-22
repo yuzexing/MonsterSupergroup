@@ -1,5 +1,6 @@
 using Rewired;
 using UnityEngine;
+using MonsterSupergroup.Gameplay.Combat;
 
 namespace AstralShift.Control.Controllers
 {
@@ -55,6 +56,14 @@ namespace AstralShift.Control.Controllers
 		public virtual void Button4(InputActionEventData data)
 		{
 		}
+
+        public virtual void NumberedSelection(InputActionEventData data, int number)
+        {
+        }
+
+        public virtual void PrototypeAction(InputActionEventData data, PrototypeAbilityAction action)
+        {
+        }
 
 		public virtual void UIAccept(InputActionEventData data)
 		{

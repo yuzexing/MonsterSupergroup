@@ -33,6 +33,10 @@ namespace MonsterSupergroup.NetworkCombat
             Diagnostics.AwaitingFirstSnapshot = client;
             Diagnostics.StartedAt = now;
         }
+        public void CancelPending()
+        {
+            HasPending = false; PendingTarget = 0;
+        }
         public void Observe(uint epoch, double now)
         {
             if (Diagnostics.LastSnapshotAt > 0)

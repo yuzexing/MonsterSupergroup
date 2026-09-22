@@ -1,21 +1,27 @@
 # 暴食原型：标记 → 接近 → 收取
 
+## 阶段一：统一能力切换（2026-09-21）
+
+吞噬已接入统一原型选择器。普通 Boot → Gameplay 默认启用原型，每名玩家初始选择吞噬；1 / 2 / 3 分别切换吞噬、音乐、魅惑。阶段一已由用户验收通过。阶段二接入音乐（2 选择、R 开始、空格打拍）；阶段三接入魅惑（3 选择、R 甩怪、T 接怪、F 假人）。完整操作、扩展接口和本阶段验收记录见 [三种能力原型](prototype-abilities.md)。
+
+切出吞噬后停止普通近身被动和新的 R 标记，但已有标记仍可接近收取，直至原定到期时间；切换不刷新、不重置冷却。升级选卡优先使用数字键，选卡关闭当帧不会再触发能力切换。阶段一 Unity / Mirror 与回归已通过，用户已完成试玩验收；阶段二音乐及最新回归记录见统一原型文档，下方旧吞噬验证仅作为历史记录。
+
 ## 试玩入口
 
 打开 `Assets/_Project/Scenes/Boot.unity`，保存自己尚未保存的场景修改，然后选择：
 
-`Tools > MonsterSupergroup > Prototypes > Gluttony > Play Normal Enemies (Offline)`
+`Tools > MonsterSupergroup > Prototypes > Play Normal Enemies (Offline)`
 
-该入口启动真实 Boot → 离线准备房间 → Gameplay，使用当前武器 ID 6，启用两个原型技能。只在本次 Play Mode 使用临时普通 Brotchi 波次（约 3 分钟、48/64/80 只分三段生成，最大存活 120）；不会保存或替换用户的 Full.asset、TestTimeline 或正式怪物数值。玩家仍可能受伤、死亡、升级，需要正常移动和选卡。退出 Play Mode 清理临时配置。
+旧的 `Prototypes > Gluttony > Play Normal Enemies (Offline)` 菜单仍可用。该入口启动真实 Boot → 离线准备房间 → Gameplay，使用当前武器 ID 6，启用原型及吞噬的被动、主动。只在本次 Play Mode 使用临时普通 Brotchi 波次（约 3 分钟、48/64/80 只分三段生成，最大存活 120）；不会保存或替换用户的 Full.asset、TestTimeline 或正式怪物数值。玩家仍可能受伤、死亡、升级，需要正常移动和选卡。退出 Play Mode 清理临时配置。
 
-普通启动仍默认关闭原型。在游戏右下角打开 `Gluttony prototype / settings`，Host 可选 OFF / Passive / Both；参数修改对本次会话中的玩家统一生效。F2/F3 可隐藏原有玩家、敌人调试面板，减少遮挡。
+普通启动默认开启原型。在游戏右下角打开 `Prototype abilities / settings`，Host 可用 `Enable prototype abilities for this session` 控制本局所有原型，或用 `Gluttony OFF / Passive / Both` 单独控制吞噬模块。关闭全局原型会清除当前标记，不会重置冷却；再次开启不能恢复旧标记。参数修改对本次会话中的玩家统一生效。F2/F3 可隐藏原有玩家、敌人调试面板，减少遮挡。
 
 当前 Full.asset 引用的 TestTimeline 生成精英骷髅。精英不在本轮吞噬目标范围内，不能仅使用这条时间轴判断原型是否工作。
 
 ## 操作与规则
 
-- 被动：接近一只有效普通敌人后自动吞噬；成功后冷却 10 秒。没有目标、死亡目标、无敌或距离校验失败不消耗冷却。
-- 主动：鼠标确定方向，按 R 瞬时检测前方矩形一次，最多标记 5 只，标记持续 6 秒，施放冷却 20 秒；空挥也消耗主动冷却。长按 R 不重复施放。
+- 被动：选择吞噬时，接近一只有效普通敌人后自动吞噬；成功后进入冷却。当前配置资产沿用用户调参值 5 秒；没有目标、死亡目标、无敌或距离校验失败不消耗冷却。
+- 主动：选择吞噬时，鼠标确定方向，按 R 瞬时检测前方矩形一次，最多标记 5 只，标记持续 6 秒；当前配置资产沿用用户调参值 1 秒冷却，空挥也消耗主动冷却。长按 R 不重复施放。
 - 收取：接近本人标记的敌人自动免费吞噬，可连续收取多只，不消耗、不刷新被动冷却。标记过期的免费请求不会偷偷改为普通吞噬。
 - 标记不定身、不减速、不拖拽，敌人继续正常移动和攻击。普通武器、掉落、经验、升级选择仍运行。
 - 普通吞噬每次只取最近一只；标记收取优先。多个受击 Collider 按敌人身份去重。
@@ -30,7 +36,9 @@
 
 资产：`Assets/_Project/Content/NetworkCombat/GluttonyPrototype.asset`。
 
-默认值：Enabled=false；被动 10 秒；主动 20 秒；吞噬半径 1.15；矩形长 5.75、宽 2.3；最多 5 只；标记 6 秒；扫描间隔 0.05 秒；矩形显示 0.2 秒。它们是试验起点，不是完成平衡或半径校准的结论。
+当前资产值：Enabled=true、PassiveEnabled=true、ActiveEnabled=true；被动 5 秒、主动 1 秒。这两个冷却值是用户现有调参值，阶段一予以保留；`GluttonyParameters.Defaults` 的代码回退值仍为被动 10 秒、主动 20 秒，不能把它们误写成当前实际试玩配置。
+
+其余当前参数：吞噬半径 1.15；矩形长 5.75、宽 2.3；最多 5 只；标记 6 秒；扫描间隔 0.05 秒；矩形显示 0.2 秒；反馈音量 0.12。它们是试验起点，不是完成平衡或半径校准的结论。
 
 运行时面板可以调整冷却、半径、矩形尺寸、最大数量、标记时长、声音音量。Apply 会清除当前标记；Reset cooldowns + clear marks 同时重置冷却和清除标记。面板修改不保存回配置资产，也不会给每个客户端单独设置一套规则。
 
@@ -40,6 +48,8 @@
 
 | 入口 | 职责 |
 |---|---|
+| `NetworkCombat/Mirror/NetworkPlayerPrototypeAbilities.cs` | 每名玩家的能力选择、切换版本、新施放门禁与统一输入分发 |
+| `NetworkCombat/Mirror/IPrototypeAbilityModule.cs` | 模块注册、当前能力动作、已开始效果的后续输入与清理接口 |
 | `NetworkCombat/Server/GluttonyPrototypeRuntime.cs` | 纯规则、独立冷却、标记集合与带版本的原子快照 |
 | `NetworkCombat/Mirror/NetworkPlayerGluttony*.cs` | Owner 输入/查询、服务器校验、请求去重、复制、生命周期 |
 | `NetworkCombat/Mirror/GluttonyGeometry.cs` | 目标资格、近身与矩形几何、最新敌人位置快照 |
@@ -48,11 +58,13 @@
 | `NetworkCombat/Server/CombatLedger.cs` / `ServerCombatGateway.cs` | 吞噬进入原有 canonical HP、ConfirmedKill、状态移除和掉落通知 |
 | `NetworkCombat/Editor/GluttonyPrototypePlaytest.cs` | 不写原关卡的离线普通敌人试玩入口 |
 
-Boot 已配置 Rewired Button3（Action 5）→ R，NetworkPlayer Prefab 已接入技能、配置和表现组件。鼠标主动方向单独计算，不覆盖普通武器自动索敌。标记只是技能自己的目标批次，未新增第二套 GAS 状态系统或敌人控制状态机。
+Boot 已配置 Rewired Button3（Action 5）→ R；R 经统一选择器分发给当前能力。NetworkPlayer Prefab 已接入选择器、吞噬技能、配置和表现组件。鼠标主动方向单独计算，不覆盖普通武器自动索敌。标记只是技能自己的目标批次，未新增第二套 GAS 状态系统或敌人控制状态机。
 
 修复了原本分开复制标记集合和施法确认导致的确认窗口：计数与目标 ID 一起复制，Owner 回执不直接覆盖 SyncVar；旧复制消息不能恢复已收取的标记。待确认请求按目标隔离，免费收取不串行等待上一只。
 
-## 2026-09-21 实际验证
+## 2026-09-21 吞噬原型历史验证（统一切换接入前）
+
+本节为原吞噬实现的历史证据，不代表阶段一新增能力切换、输入优先级或联机版本校验已经通过验收。阶段一结果以 [三种能力原型](prototype-abilities.md) 的最新记录为准。
 
 证据目录：`Logs/GluttonyPrototype/20260921-125246/continuation-140405/`。
 

@@ -13,28 +13,30 @@ namespace MonsterSupergroup.NetworkCombat.Tests
         private const ushort Epoch = 3;
 
         [Test]
-        public void RegisteredPlayer_CannotDamageWithoutAdmittedRoot()
+        public void RegisteredPlayer_DamageDoesNotRequireAttackMetadata()
         {
             var gateway = CreateGateway();
             Submit(gateway, Hit());
 
-            AssertRejected(gateway, CombatRejectionReason.InvalidAttackRoot);
+            AssertHealth(gateway, 90);
+            Assert.That(gateway.Metrics.AcceptedCombatResults, Is.EqualTo(1));
         }
 
         [TestCase(true)]
         [TestCase(false)]
-        public void AdmittedRoot_CannotBeUsedByDifferentWeaponOrSource(bool changeWeapon)
+        public void OwnedOutcomeDoesNotDependOnWeaponMetadata(bool changeWeapon)
         {
             var gateway = CreateGateway();
             Admit(gateway);
             CombatResult hit = Hit();
             if (changeWeapon) hit.AbilityId = WeaponId + 1;
             else hit.SourceEntityId = SourceId + 1;
-            // Even another source owned by the same player needs its own admission.
+            // Owned outcomes are independent of stale weapon metadata.
             gateway.Ledger.RegisterSource(SourceId + 1, PlayerId);
             Submit(gateway, hit);
 
-            AssertRejected(gateway, CombatRejectionReason.InvalidAttackRoot);
+            AssertHealth(gateway, 90);
+            Assert.That(gateway.Metrics.AcceptedCombatResults, Is.EqualTo(1));
         }
 
         [Test]
@@ -172,7 +174,7 @@ namespace MonsterSupergroup.NetworkCombat.Tests
         }
 
         [Test]
-        public void NewBuildAdmission_PreservesInflightRootUntilExplicitRetirement()
+        public void BuildChangeAndRetirementDoNotInvalidateInflightDamage()
         {
             var gateway = CreateGateway();
             Admit(gateway, buildRevision: 1);
@@ -195,9 +197,9 @@ namespace MonsterSupergroup.NetworkCombat.Tests
                 Results = new[] { Hit(parentSequence: 15, resultSequence: 16) }
             }, 1);
 
-            AssertHealth(gateway, 80);
-            Assert.That(gateway.Metrics.AcceptedCombatResults, Is.EqualTo(2));
-            Assert.That(gateway.Metrics.GetRejected(CombatRejectionReason.InvalidAttackRoot), Is.EqualTo(1));
+            AssertHealth(gateway, 70);
+            Assert.That(gateway.Metrics.AcceptedCombatResults, Is.EqualTo(3));
+            Assert.That(gateway.Metrics.GetRejected(CombatRejectionReason.InvalidAttackRoot), Is.Zero);
         }
 
         [Test]

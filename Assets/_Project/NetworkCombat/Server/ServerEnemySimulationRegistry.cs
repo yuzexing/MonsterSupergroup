@@ -37,6 +37,7 @@ namespace MonsterSupergroup.NetworkCombat
         private sealed class Entry
         {
             public EnemySimulationAssignment Assignment;
+            public EnemyTargetState Target;
             public EnemySimulationSnapshot LastSnapshot;
             public bool HasSnapshot;
             public ulong LastConfirmedProjectileAction;
@@ -170,6 +171,56 @@ namespace MonsterSupergroup.NetworkCombat
 
             assignment = default;
             return false;
+        }
+
+        public bool TryGetTargetState(uint enemyId, out EnemyTargetState target)
+        {
+            if (entries.TryGetValue(enemyId, out var entry)) { target = entry.Target; return true; }
+            target = default; return false;
+        }
+
+        public EnemyTargetState SetAggroTarget(uint enemyId, uint playerId, uint controllerPlayerId = 0)
+        {
+            var entry = RequireEntry(enemyId);
+            var target = new EnemyTargetState
+            {
+                AggroPlayerId = playerId, ControllerPlayerId = controllerPlayerId,
+                AllureControlled = controllerPlayerId != 0
+            };
+            return SetTarget(entry, target);
+        }
+
+        public EnemyTargetState SetDecoyTarget(uint enemyId, uint owner, ulong cast, Vector2 position, double expires)
+        {
+            if (owner == 0 || cast == 0 || double.IsNaN(expires) || double.IsInfinity(expires) ||
+                float.IsNaN(position.x) || float.IsInfinity(position.x) || float.IsNaN(position.y) || float.IsInfinity(position.y))
+                throw new ArgumentException("A valid decoy identity, position and expiry are required.");
+            var entry = RequireEntry(enemyId);
+            var target = entry.Target;
+            target.AllureControlled = true;
+            target.DecoyOwnerPlayerId = owner; target.DecoyCastId = cast;
+            target.DecoyPosition = position; target.DecoyExpiresAt = expires;
+            return SetTarget(entry, target);
+        }
+
+        public bool ClearDecoyTarget(uint enemyId, uint owner, ulong cast, out EnemyTargetState target)
+        {
+            var entry = RequireEntry(enemyId);
+            target = entry.Target;
+            if (!target.MatchesDecoy(owner, cast)) return false;
+            target.DecoyOwnerPlayerId = 0; target.DecoyCastId = 0;
+            target.DecoyPosition = default; target.DecoyExpiresAt = 0;
+            target = SetTarget(entry, target);
+            return true;
+        }
+
+        private static EnemyTargetState SetTarget(Entry entry, EnemyTargetState target)
+        {
+            target.Revision = unchecked(entry.Target.Revision + 1u);
+            if (target.Revision == 0) target.Revision = 1;
+            entry.Target = target;
+            entry.Assignment.AggroTargetPlayerId = target.AggroPlayerId;
+            return target;
         }
 
         public bool TryGetLatestSnapshot(
@@ -447,8 +498,11 @@ namespace MonsterSupergroup.NetworkCombat
             uint ownerPlayerId,
             uint targetPlayerId, bool forceNewEpoch = false)
         {
+            bool sameTarget = entry.Assignment.AggroTargetPlayerId == targetPlayerId;
+            if (entry.Target.Revision == 0 || entry.Target.AggroPlayerId != targetPlayerId)
+                SetTarget(entry, new EnemyTargetState { AggroPlayerId = targetPlayerId });
             if (!forceNewEpoch && entry.Assignment.Host == host && entry.Assignment.SimulationOwnerPlayerId == ownerPlayerId &&
-                entry.Assignment.AggroTargetPlayerId == targetPlayerId && entry.Assignment.Epoch != 0)
+                sameTarget && entry.Assignment.Epoch != 0)
                 return entry.Assignment;
             uint epoch = unchecked(entry.Assignment.Epoch + 1u);
             if (epoch == 0u)

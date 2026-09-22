@@ -389,7 +389,7 @@ namespace MonsterSupergroup.NetworkCombat
                 }
             }
 
-            BroadcastSnapshots(snapshotBuffer);
+            BroadcastSnapshots(snapshotBuffer, endpoint.connectionToClient);
         }
 
         [Server]
@@ -532,14 +532,29 @@ namespace MonsterSupergroup.NetworkCombat
         }
 
         [Server]
-        private void BroadcastSnapshots(List<EnemySimulationSnapshot> snapshots)
+        private void BroadcastSnapshots(List<EnemySimulationSnapshot> snapshots, NetworkConnectionToClient source = null)
         {
             EnemySimulationWire.SendBatches(snapshots, maximumSnapshotsPerBatch, (batch, reliable) =>
             {
                 batch.Round = CurrentRound;
-                if (reliable) RpcApplyLargeSnapshot(batch); else RpcApplySnapshots(batch);
+                if (source == null)
+                {
+                    if (reliable) RpcApplyLargeSnapshot(batch); else RpcApplySnapshots(batch);
+                    return;
+                }
+                foreach (var observer in netIdentity.observers.Values)
+                {
+                    if (observer == source) continue;
+                    if (reliable) TargetApplyLargeSnapshot(observer, batch); else TargetApplySnapshot(observer, batch);
+                }
             });
         }
+
+        [TargetRpc(channel = Channels.Unreliable)]
+        private void TargetApplySnapshot(NetworkConnectionToClient target, EnemySimulationSnapshotBatch batch) => ApplyMovementSnapshots(batch);
+
+        [TargetRpc(channel = Channels.Reliable)]
+        private void TargetApplyLargeSnapshot(NetworkConnectionToClient target, EnemySimulationSnapshotBatch batch) => ApplyMovementSnapshots(batch);
 
         [ClientRpc(channel = Channels.Reliable)]
         private void RpcApplyLargeSnapshot(EnemySimulationSnapshotBatch batch) => ApplyMovementSnapshots(batch);

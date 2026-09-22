@@ -8,7 +8,7 @@ namespace MonsterSupergroup.NetworkCombat
 {
     [DisallowMultipleComponent]
     [RequireComponent(typeof(NetworkIdentity))]
-    public sealed class NetworkEnemySimulationEndpoint : NetworkBehaviour
+    public sealed partial class NetworkEnemySimulationEndpoint : NetworkBehaviour
     {
         [SerializeField, Min(0.01f)] private float snapshotInterval = 0.05f;
         [SerializeField, Range(1, 32)] private int maximumSnapshotsPerBatch = 20;
@@ -42,6 +42,7 @@ namespace MonsterSupergroup.NetworkCombat
         public override void OnStartServer()
         {
             base.OnStartServer();
+            serverView = default;
             NetworkEnemySimulationWorld.Instance?.RegisterPlayer(this);
         }
 
@@ -66,6 +67,7 @@ namespace MonsterSupergroup.NetworkCombat
             }
 
             FlushAttackPresentations();
+            ReportLocalView();
             if (NetworkTime.time >= nextReadyReport)
             {
                 nextReadyReport = NetworkTime.time + .25;

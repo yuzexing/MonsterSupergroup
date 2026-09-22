@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="1" result="Passed" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-09-21 12:50:30Z" end-time="2026-09-21 12:50:36Z" duration="5.9333427">
+  <test-suite type="TestSuite" id="1699" name="Monster Supergroup" fullname="Monster Supergroup" runstate="Runnable" testcasecount="583" result="Passed" start-time="2026-09-21 12:50:30Z" end-time="2026-09-21 12:50:36Z" duration="5.933343" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="PlayMode" />
+    </properties>
+    <test-suite type="Assembly" id="1683" name="MonsterSupergroup.Gameplay.Tests.PlayMode.dll" fullname="F:/UnityStore/MonsterSupergroup/Library/ScriptAssemblies/MonsterSupergroup.Gameplay.Tests.PlayMode.dll" runstate="Runnable" testcasecount="579" result="Passed" start-time="2026-09-21 12:50:30Z" end-time="2026-09-21 12:50:36Z" duration="5.920401" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="8220" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="PlayMode" />
+        <property name="EditorOnly" value="False" />
+      </properties>
+      <test-suite type="TestSuite" id="1684" name="MonsterSupergroup" fullname="MonsterSupergroup" runstate="Runnable" testcasecount="579" result="Passed" start-time="2026-09-21 12:50:30Z" end-time="2026-09-21 12:50:36Z" duration="5.917867" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-suite type="TestSuite" id="1685" name="Gameplay" fullname="MonsterSupergroup.Gameplay" runstate="Runnable" testcasecount="579" result="Passed" start-time="2026-09-21 12:50:30Z" end-time="2026-09-21 12:50:36Z" duration="5.907164" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <test-suite type="TestSuite" id="1686" name="Tests" fullname="MonsterSupergroup.Gameplay.Tests" runstate="Runnable" testcasecount="579" result="Passed" start-time="2026-09-21 12:50:30Z" end-time="2026-09-21 12:50:36Z" duration="5.900281" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-suite type="TestFixture" id="1151" name="EnemyHandoffGameplayTests" fullname="MonsterSupergroup.Gameplay.Tests.EnemyHandoffGameplayTests" classname="MonsterSupergroup.Gameplay.Tests.EnemyHandoffGameplayTests" runstate="Runnable" testcasecount="6" result="Passed" start-time="2026-09-21 12:50:31Z" end-time="2026-09-21 12:50:36Z" duration="5.871996" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1155" name="DashCheckpointRestoresMotionOnlyInsideRemainingActiveWindow" fullname="MonsterSupergroup.Gameplay.Tests.EnemyHandoffGameplayTests.DashCheckpointRestoresMotionOnlyInsideRemainingActiveWindow" methodname="DashCheckpointRestoresMotionOnlyInsideRemainingActiveWindow" classname="MonsterSupergroup.Gameplay.Tests.EnemyHandoffGameplayTests" runstate="Runnable" seed="1889841245" result="Passed" start-time="2026-09-21 12:50:31Z" end-time="2026-09-21 12:50:36Z" duration="5.859347" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[[Localization] Applied locale=zh-CN revision=2
+[NetworkBackend] backend=Kcp purpose=Test source=test-runner transport=KcpTransport.
+--- Hardware Info ---
+CPU Model: 13th Gen Intel(R) Core(TM) i7-13700KF
+GPU Model: Null Device
+RAM: 65375 MB
+Install Disk Model: JZ-SSD4T-XW
+Main Monitor Model: Unknown Monitor
+---------------------
+Normal : True
+UI : False
+AstralShift.HellMaiden.Controllers.PlayerController_HMD
+<color=yellow><b>► Controllers: </b></color>Controller type AstralShift.Control.Controllers.NoInputGameController not available
+Server listening on port 7992
+[BootGameplay] Server starting; loading 'Assets/_Project/Scenes/Gameplay.unity'.
+[BootGameplay] Server connection 0 is ready.
+[BootGameplay] Queued Player for connection 0.
+[BootGameplay] Gameplay scene ready: 'Assets/_Project/Scenes/Gameplay.unity'.
+[BootGameplay] Spawned Player NetworkPlayer [connId=0] in 'Assets/_Project/Scenes/Gameplay.unity'.
+<color=yellow><b>► Controllers: </b></color>Overrode <color=yellow><b></b></color> with <color=yellow><b>PlayerController_HMD</b></color>.
+Normal : True
+UI : False
+Dash restore age=0.2: expected=6,0; before=6,0; transform=6,0
+Dash restored: physical=6,0; transform=6,0
+Dash restore age=0.95: expected=6,0; before=6,0; transform=6,0
+Dash restored: physical=6,0; transform=6,0
+Dash restore age=1.25: expected=6,0; before=6,0; transform=6,0
+Dash restored: physical=6,0; transform=6,0
+Dash restore age=2: expected=6,0; before=6,0; transform=6,0
+Dash restored: physical=6,0; transform=6,0
+[BootGameplay] Client stopping; serverActive=True.
+[BootGameplay] Server stopping.
+[BootGameplay] Gameplay unload requested.
+There are 2 audio listeners in the scene. Please ensure there is always exactly one audio listener in the scene.
+[SteamInvite] stage=cleanup lobby=0 host=0 phase=Disabled reason=
+Saving results to: C:/Users/ADMIN/AppData/LocalLow/DefaultCompany/Monster Supergroup\TestResults.xml
+]]></output>
+              </test-case>
+            </test-suite>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

@@ -109,6 +109,45 @@ namespace MonsterSupergroup.Gameplay.Tests
             Assert.That(submitted, Is.EqualTo(201));
         }
 
+        [UnityTest]
+        public IEnumerator NumberKeyRemainsConsumedWhenSelectionClosesSynchronously()
+        {
+            Present();
+            var offered = selection.Offers;
+            selection.ReceiveOffers(offered, id =>
+            {
+                submitted = id;
+                requests++;
+                selection.ClearOffers();
+                return true;
+            });
+            Assert.That(selection.TryConsumeNumberKey(0), Is.True);
+            Assert.That(submitted, Is.EqualTo(100ul));
+            Assert.That(selection.Offers, Is.Empty);
+            Assert.That(selection.BlocksPrototypeInputThisFrame, Is.True);
+            Assert.That(selection.TryConsumeNumberKey(1), Is.True,
+                "The second input listener must not reinterpret the same frame as an ability switch.");
+            Assert.That(requests, Is.EqualTo(1));
+            yield return null;
+            Assert.That(selection.BlocksPrototypeInputThisFrame, Is.False);
+            Assert.That(selection.TryConsumeNumberKey(1), Is.False);
+        }
+
+        [UnityTest]
+        public IEnumerator InvalidAndPendingNumberKeysRemainOwnedByTheUpgradeMenu()
+        {
+            Present();
+            Assert.That(selection.TryConsumeNumberKey(3), Is.True);
+            Assert.That(requests, Is.Zero, "The fourth key is consumed even with only three options.");
+            Assert.That(selection.BlocksPrototypeInputThisFrame, Is.True);
+            yield return null;
+            Assert.That(selection.TryConsumeNumberKey(0), Is.True);
+            Assert.That(selection.IsRequestPending, Is.True);
+            yield return null;
+            Assert.That(selection.TryConsumeNumberKey(1), Is.True);
+            Assert.That(requests, Is.EqualTo(1), "A pending request must not produce another choice or ability switch.");
+        }
+
         [Test]
         public void RejectionRetainsOfferAndAllowsRetry()
         {

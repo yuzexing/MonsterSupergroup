@@ -64,10 +64,9 @@ namespace MonsterSupergroup.Gameplay.Tests
             yield return WaitFor(() => ServerHistory.PetCount == 1, "Cocoon presentation must reach the server without an attack root.");
             Assert.That(NetworkCombatWorld.Instance.Gateway.Attacks.ActiveCount(Player.netId), Is.Zero);
 
-            int rejected = Adapter.RejectedAttackCount;
+            int observed = Adapter.AcceptedCooldownReportCount;
             SendAttack(1, Bridge.EventIds.Next());
-            yield return WaitFor(() => Adapter.RejectedAttackCount == rejected + 1, "An owned valid identity still cannot skip maturation.");
-            Assert.That(Adapter.LastAttackRejection, Is.EqualTo(CombatRejectionReason.InvalidAttackRate));
+            yield return WaitFor(() => Adapter.AcceptedCooldownReportCount == observed + 1, "Observe the owner attack independently of presentation maturity.");
             var forged = ServerHistory.CaptureStates().Single();
             forged.State.PhaseSequence++;
             forged.State.Phase = SummonPhase.Birth;
@@ -77,7 +76,7 @@ namespace MonsterSupergroup.Gameplay.Tests
             yield return WaitFor(() => Adapter.RejectedSummonPresentationCount == rejectedViews + 1,
                 "A reliable phase message cannot skip the server's source Cocoon deadline.");
             Assert.That(ServerHistory.CaptureStates().Single().State.Phase, Is.EqualTo(SummonPhase.Cocoon));
-            Assert.That(Adapter.AcceptedCooldownReportCount, Is.Zero);
+            Assert.That(Adapter.AcceptedCooldownReportCount, Is.EqualTo(observed + 1));
             Assert.That(terminations, Is.Zero, "A rejected attack/presentation must not terminate the real Cocoon.");
 
             ulong originalPet = weapon.PetId;
@@ -141,9 +140,10 @@ namespace MonsterSupergroup.Gameplay.Tests
             Assert.That(weapon.GetCooldown() - weapon.LastAttackElapsedTime,
                 Is.EqualTo(ready - NetworkTime.time).Within(0.15d), "ConfigureSimulation cannot overwrite the attack checkpoint's remaining cooldown.");
             Assert.That(weapon.IsAttackReady, Is.False);
-            int rejects = Adapter.RejectedAttackCount;
+            int observed = Adapter.AcceptedCooldownReportCount;
             SendAttack(1, Bridge.EventIds.Next());
-            yield return WaitFor(() => Adapter.RejectedAttackCount == rejects + 1, "A saved cooldown cannot bypass the remaining Birth animation.");
+            yield return WaitFor(() => Adapter.AcceptedCooldownReportCount == observed + 1, "An owner attack is observed without re-adjudicating cooldown.");
+            ready = Adapter.CaptureCooldowns().Single().ReadyAt;
 
             var capture = typeof(BootGameplayNetworkManager).GetMethod("CapturePlayer", BindingFlags.Static | BindingFlags.NonPublic);
             var checkpoint = (PlayerRuntimeCheckpoint)capture.Invoke(null, new object[] { Player });

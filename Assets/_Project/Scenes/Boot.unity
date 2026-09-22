@@ -635,12 +635,96 @@ MonoBehaviour:
     - _id: 5
       _name: Button3
       _type: 1
-      _descriptiveName: Gluttony Mark (Prototype)
-      _positiveDescriptiveName: 
-      _negativeDescriptiveName: 
-      _key: 
-      _positiveKey: 
-      _negativeKey: 
+      _descriptiveName: Prototype Primary
+      _positiveDescriptiveName:
+      _negativeDescriptiveName:
+      _key:
+      _positiveKey:
+      _negativeKey:
+      _behaviorId: 0
+      _userAssignable: 1
+      _categoryId: 1
+    - _id: 63
+      _name: PrototypeSelectGluttony
+      _type: 1
+      _descriptiveName: Select Gluttony Prototype
+      _positiveDescriptiveName:
+      _negativeDescriptiveName:
+      _key:
+      _positiveKey:
+      _negativeKey:
+      _behaviorId: 0
+      _userAssignable: 1
+      _categoryId: 1
+    - _id: 64
+      _name: PrototypeSelectMusic
+      _type: 1
+      _descriptiveName: Select Music Prototype
+      _positiveDescriptiveName:
+      _negativeDescriptiveName:
+      _key:
+      _positiveKey:
+      _negativeKey:
+      _behaviorId: 0
+      _userAssignable: 1
+      _categoryId: 1
+    - _id: 65
+      _name: PrototypeSelectAllure
+      _type: 1
+      _descriptiveName: Select Allure Prototype
+      _positiveDescriptiveName:
+      _negativeDescriptiveName:
+      _key:
+      _positiveKey:
+      _negativeKey:
+      _behaviorId: 0
+      _userAssignable: 1
+      _categoryId: 1
+    - _id: 66
+      _name: PrototypeSecondary
+      _type: 1
+      _descriptiveName: Prototype Secondary
+      _positiveDescriptiveName:
+      _negativeDescriptiveName:
+      _key:
+      _positiveKey:
+      _negativeKey:
+      _behaviorId: 0
+      _userAssignable: 1
+      _categoryId: 1
+    - _id: 67
+      _name: PrototypeDecoy
+      _type: 1
+      _descriptiveName: Prototype Decoy
+      _positiveDescriptiveName:
+      _negativeDescriptiveName:
+      _key:
+      _positiveKey:
+      _negativeKey:
+      _behaviorId: 0
+      _userAssignable: 1
+      _categoryId: 1
+    - _id: 68
+      _name: PrototypeRhythm
+      _type: 1
+      _descriptiveName: Prototype Rhythm
+      _positiveDescriptiveName:
+      _negativeDescriptiveName:
+      _key:
+      _positiveKey:
+      _negativeKey:
+      _behaviorId: 0
+      _userAssignable: 1
+      _categoryId: 1
+    - _id: 69
+      _name: UpgradeSelectFourth
+      _type: 1
+      _descriptiveName: Select Fourth Upgrade
+      _positiveDescriptiveName:
+      _negativeDescriptiveName:
+      _key:
+      _positiveKey:
+      _negativeKey:
       _behaviorId: 0
       _userAssignable: 1
       _categoryId: 1
@@ -668,7 +752,7 @@ MonoBehaviour:
       - categoryId: 0
         actionIds: 
       - categoryId: 1
-        actionIds: 000000000100000003000000040000000e0000003300000005000000
+        actionIds: 000000000100000003000000040000000e00000033000000050000003f000000400000004100000042000000430000004400000045000000
       - categoryId: 2
         actionIds: 
     inputBehaviors:
@@ -1141,13 +1225,90 @@ MonoBehaviour:
         _modifierKey1: 0
         _modifierKey2: 0
         _modifierKey3: 0
+      - _actionCategoryId: 1
+        _actionId: 63
+        _elementType: 1
+        _elementIdentifierId: -1
+        _axisRange: 0
+        _invert: 0
+        _axisContribution: 0
+        _keyboardKeyCode: 49
+        _modifierKey1: 0
+        _modifierKey2: 0
+        _modifierKey3: 0
+      - _actionCategoryId: 1
+        _actionId: 64
+        _elementType: 1
+        _elementIdentifierId: -1
+        _axisRange: 0
+        _invert: 0
+        _axisContribution: 0
+        _keyboardKeyCode: 50
+        _modifierKey1: 0
+        _modifierKey2: 0
+        _modifierKey3: 0
+      - _actionCategoryId: 1
+        _actionId: 65
+        _elementType: 1
+        _elementIdentifierId: -1
+        _axisRange: 0
+        _invert: 0
+        _axisContribution: 0
+        _keyboardKeyCode: 51
+        _modifierKey1: 0
+        _modifierKey2: 0
+        _modifierKey3: 0
+      - _actionCategoryId: 1
+        _actionId: 66
+        _elementType: 1
+        _elementIdentifierId: -1
+        _axisRange: 0
+        _invert: 0
+        _axisContribution: 0
+        _keyboardKeyCode: 116
+        _modifierKey1: 0
+        _modifierKey2: 0
+        _modifierKey3: 0
+      - _actionCategoryId: 1
+        _actionId: 67
+        _elementType: 1
+        _elementIdentifierId: -1
+        _axisRange: 0
+        _invert: 0
+        _axisContribution: 0
+        _keyboardKeyCode: 102
+        _modifierKey1: 0
+        _modifierKey2: 0
+        _modifierKey3: 0
+      - _actionCategoryId: 1
+        _actionId: 68
+        _elementType: 1
+        _elementIdentifierId: -1
+        _axisRange: 0
+        _invert: 0
+        _axisContribution: 0
+        _keyboardKeyCode: 32
+        _modifierKey1: 0
+        _modifierKey2: 0
+        _modifierKey3: 0
+      - _actionCategoryId: 1
+        _actionId: 69
+        _elementType: 1
+        _elementIdentifierId: -1
+        _axisRange: 0
+        _invert: 0
+        _axisContribution: 0
+        _keyboardKeyCode: 52
+        _modifierKey1: 0
+        _modifierKey2: 0
+        _modifierKey3: 0
     mouseMaps: []
     customControllerMaps: []
     customControllers: []
     controllerMapLayoutManagerRuleSets: []
     controllerMapEnablerRuleSets: []
     playerIdCounter: 2
-    actionIdCounter: 52
+    actionIdCounter: 70
     actionCategoryIdCounter: 3
     inputBehaviorIdCounter: 1
     mapCategoryIdCounter: 3

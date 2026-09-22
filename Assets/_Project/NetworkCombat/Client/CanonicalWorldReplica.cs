@@ -15,6 +15,7 @@ namespace MonsterSupergroup.NetworkCombat
             new Dictionary<StatusInstanceId, uint>();
         private readonly Dictionary<StatusInstanceId, CanonicalStatusState> canonicalStatuses =
             new Dictionary<StatusInstanceId, CanonicalStatusState>();
+        private readonly HashSet<(uint Target, uint Version)> confirmedKills = new HashSet<(uint, uint)>();
 
         public event Action<CanonicalEntityState> EntityChanged;
         public event Action<CanonicalStatusState> StatusChanged;
@@ -142,7 +143,8 @@ namespace MonsterSupergroup.NetworkCombat
             ConfirmedKill[] kills = batch.ConfirmedKills ?? Array.Empty<ConfirmedKill>();
             for (int i = 0; i < kills.Length; i++)
             {
-                KillConfirmed?.Invoke(kills[i]);
+                if (confirmedKills.Add((kills[i].TargetEntityId, kills[i].TargetStateVersion)))
+                    KillConfirmed?.Invoke(kills[i]);
             }
         }
 
@@ -152,6 +154,7 @@ namespace MonsterSupergroup.NetworkCombat
             statusControllers.Clear();
             statusTargets.Clear();
             canonicalStatuses.Clear();
+            confirmedKills.Clear();
             EntityChanged = null;
             StatusChanged = null;
             KillConfirmed = null;

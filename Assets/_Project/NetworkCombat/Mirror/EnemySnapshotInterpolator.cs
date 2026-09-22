@@ -19,8 +19,11 @@ namespace MonsterSupergroup.NetworkCombat
         private RigidbodyConstraints2D originalConstraints;
         private bool originalSimulated;
         private bool physicsStateCaptured;
+        private RigidbodyInterpolation2D originalInterpolation;
+        private bool interpolationCaptured;
 
         public int BufferedSnapshotCount => buffer.Count;
+        internal bool ObserveWithoutInterpolation { get; set; }
 
         private void Awake()
         {
@@ -42,6 +45,8 @@ namespace MonsterSupergroup.NetworkCombat
                 authority.RoleChanged -= HandleRoleChanged;
             }
             RestorePhysicsState();
+            if (interpolationCaptured && body != null) body.interpolation = originalInterpolation;
+            interpolationCaptured = false;
             buffer.Clear();
         }
 
@@ -77,9 +82,44 @@ namespace MonsterSupergroup.NetworkCombat
             buffer.Clear();
             if (body != null)
             {
-                body.linearVelocity = Vector2.zero;
-                body.angularVelocity = 0f;
+                StopVelocity();
+                ResetRenderPose(body.position);
             }
+        }
+
+        // Teleports/handoffs must seed a new physics render history, never blend from the old location.
+        public void ResetRenderPose(Vector2 position)
+        {
+            if (body == null) return;
+            body.interpolation = RigidbodyInterpolation2D.None;
+            transform.position = new Vector3(position.x, position.y, transform.position.z);
+            body.position = position;
+            RefreshRenderInterpolation();
+        }
+
+        private void LateUpdate() => RefreshRenderInterpolation();
+
+        private void RefreshRenderInterpolation()
+        {
+            if (body == null || authority == null) return;
+            // Snapshot replicas already interpolate. Dedicated servers need only the physics pose.
+            bool localSimulation = !ObserveWithoutInterpolation && NetworkClient.active && authority.RunsNavigation &&
+                body.simulated && body.bodyType != RigidbodyType2D.Static && Time.timeScale > 0 &&
+                (body.constraints & RigidbodyConstraints2D.FreezePosition) != RigidbodyConstraints2D.FreezePosition;
+            var wanted = localSimulation ? RigidbodyInterpolation2D.Interpolate : RigidbodyInterpolation2D.None;
+            if (body.interpolation == wanted) return;
+            var position = body.position;
+            body.interpolation = RigidbodyInterpolation2D.None;
+            transform.position = new Vector3(position.x, position.y, transform.position.z);
+            body.position = position;
+            body.interpolation = wanted;
+        }
+
+        private void StopVelocity()
+        {
+            if (body.bodyType == RigidbodyType2D.Static) return;
+            body.linearVelocity = Vector2.zero;
+            body.angularVelocity = 0;
         }
 
         private void FixedUpdate()
@@ -116,19 +156,26 @@ namespace MonsterSupergroup.NetworkCombat
                 return;
             }
 
+            if (!interpolationCaptured)
+            {
+                originalInterpolation = body.interpolation;
+                interpolationCaptured = true;
+            }
+
             if (role == EnemySimulationRole.Replica ||
                 role == EnemySimulationRole.Frozen)
             {
                 CapturePhysicsState();
-                body.linearVelocity = Vector2.zero;
-                body.angularVelocity = 0f;
+                StopVelocity();
                 body.bodyType = RigidbodyType2D.Kinematic;
                 body.simulated = true;
                 body.constraints = RigidbodyConstraints2D.FreezeRotation;
+                RefreshRenderInterpolation();
                 return;
             }
 
             RestorePhysicsState();
+            RefreshRenderInterpolation();
         }
 
         private void SetPosition(Vector2 position)

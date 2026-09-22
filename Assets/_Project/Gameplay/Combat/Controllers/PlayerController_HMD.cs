@@ -256,10 +256,25 @@ namespace AstralShift.HellMaiden.Controllers
 		}
 
 		public override void Button3(InputActionEventData data)
+            => PrototypeAction(data, PrototypeAbilityAction.Primary);
+
+        public override void PrototypeAction(InputActionEventData data, PrototypeAbilityAction action)
         {
             if (Application.isFocused && !InBusyState && !InHubState &&
                 data.eventType == InputActionEventType.ButtonJustPressed)
-                BoundPlayer?.GluttonyAction();
+                BoundPlayer?.PrototypeAction(action);
+        }
+
+        public override void NumberedSelection(InputActionEventData data, int number)
+        {
+            if (!Application.isFocused || data.eventType != InputActionEventType.ButtonJustPressed ||
+                BoundPlayer == null || BoundPlayer.IsMenuInputBlocked || BoundPlayer.IsRunLoadingLocked ||
+                (BoundPlayer.UsesNetworkLifecycle && !BoundPlayer.IsLocalOwnerBound)) return;
+
+            var selection = BoundPlayer.GetComponent<ModifierSelectionController>();
+            if (selection != null && selection.TryConsumeNumberKey(number - 1)) return;
+            if (!InBusyState && !InHubState && number >= 1 && number <= 3)
+                BoundPlayer.SelectPrototypeAbility((PrototypeAbilityId)number);
         }
 
 		public override void LeftStickHorizontal(InputActionEventData data)

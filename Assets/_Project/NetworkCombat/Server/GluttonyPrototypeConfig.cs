@@ -4,7 +4,7 @@ namespace MonsterSupergroup.NetworkCombat
     [CreateAssetMenu(menuName = "MonsterSupergroup/Prototypes/Gluttony", fileName = "GluttonyPrototype")]
     public sealed class GluttonyPrototypeConfig : ScriptableObject
     {
-        [Tooltip("Disabled by default. Enable in the Host prototype panel to compare against normal combat.")]
+        [Tooltip("Enabled by default. The Host prototype panel can disable it for normal-combat comparisons.")]
         public GluttonyParameters parameters = GluttonyParameters.Defaults;
     }
 }

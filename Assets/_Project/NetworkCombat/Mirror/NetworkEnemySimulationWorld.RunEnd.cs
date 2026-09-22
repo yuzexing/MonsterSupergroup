@@ -10,6 +10,7 @@ namespace MonsterSupergroup.NetworkCombat
         [Server]
         public void StopRunSimulation()
         {
+            ServerClearAllureEffects();
             ClearReferenceTraps();
             foreach (var enemy in enemies.Values)
                 if (enemy != null) enemy.StopForRunEnd();

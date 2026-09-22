@@ -7,8 +7,8 @@ using MonsterSupergroup.Gameplay.Combat;
 using UnityEngine;
 namespace MonsterSupergroup.NetworkCombat
 {
-    [DisallowMultipleComponent, RequireComponent(typeof(GluttonyPrototypeView))]
-    public sealed partial class NetworkPlayerGluttony : NetworkBehaviour
+    [DisallowMultipleComponent, RequireComponent(typeof(GluttonyPrototypeView), typeof(NetworkPlayerPrototypeAbilities))]
+    public sealed partial class NetworkPlayerGluttony : NetworkBehaviour, IPrototypeAbilityModule
     {
         [SerializeField] private GluttonyPrototypeConfig config;
         [SyncVar] private GluttonyParameters parameters;
@@ -26,6 +26,7 @@ namespace MonsterSupergroup.NetworkCombat
         private MirrorNetworkCombatBridge bridge;
         private CombatantBehaviour combatant;
         private GluttonyPrototypeView view;
+        private NetworkPlayerPrototypeAbilities abilities;
         private ulong lastSummary;
         private NetworkConnectionToClient serverOwner;
         public GluttonyParameters Parameters => parameters;
@@ -35,11 +36,22 @@ namespace MonsterSupergroup.NetworkCombat
         public string LastResult { get; private set; } = "Ready";
         public bool PanelOpen => view != null && view.PanelOpen;
         public bool HasMark(uint id) => EffectiveState.HasMark(id, NetworkTime.time);
+        public PrototypeAbilityId AbilityId => PrototypeAbilityId.Gluttony;
+        public bool IsSelected => abilities != null && abilities.SelectedAbility == AbilityId;
+        public bool IsPrototypeEnabled => abilities != null && abilities.PrototypeEnabled;
+        public string StatusText => !parameters.Enabled ? "Gluttony module OFF" :
+            $"Passive: {(IsSelected && parameters.PassiveEnabled ? Math.Max(0, State.PassiveReadyAt - NetworkTime.time).ToString("0.0") + "s" : "OFF")}   " +
+            $"R Mark: {(parameters.ActiveEnabled ? Math.Max(0, State.ActiveReadyAt - NetworkTime.time).ToString("0.0") + "s" : "OFF")}\n" +
+            $"Collected {State.Collected}/{State.Marked}   Remaining {RemainingMarks}";
+        public bool TryHandleAction(PrototypeAbilityAction action) => action == PrototypeAbilityAction.Primary && RequestMarkAtPointer();
+        public bool TryHandleOngoingAction(PrototypeAbilityAction action) => false;
+        [Server] public void ServerCancelEffects() => EndBatch("prototype-disabled");
         private void Awake()
         {
             player = GetComponent<PlayerMovement>(); build = GetComponent<PlayerBuildRuntime>();
             selection = GetComponent<NetworkModifierSelection>(); bridge = GetComponent<MirrorNetworkCombatBridge>();
             combatant = GetComponent<CombatantBehaviour>(); view = GetComponent<GluttonyPrototypeView>();
+            abilities = GetComponent<NetworkPlayerPrototypeAbilities>();
         }
         public override void OnStartServer()
         {
@@ -47,17 +59,11 @@ namespace MonsterSupergroup.NetworkCombat
             ApplyServerParameters(NetworkCombatWorld.Instance.GetGluttonyParameters(config), false);
             baseline = true;
         }
-        public override void OnStartAuthority() => player.BindGluttonyInput(RequestMarkAtPointer);
-        private void OnEnable()
-        {
-            if (isOwned && NetworkClient.active && player != null) player.BindGluttonyInput(RequestMarkAtPointer);
-        }
         public override void OnStopAuthority() => ReleaseOwner();
         public override void OnStopClient() { ReleaseOwner(); view?.ClearVisuals(); }
         public override void OnStopServer() { EndBatch("disconnect"); baseline = false; }
         private void ReleaseOwner()
         {
-            player?.UnbindGluttonyInput(RequestMarkAtPointer);
             pendingTargets.Clear(); pendingCast = pendingPassive = 0; ownerReceipt = default;
         }
         private void OnDisable()

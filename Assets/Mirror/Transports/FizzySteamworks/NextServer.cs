@@ -1,7 +1,7 @@
 #if !DISABLESTEAMWORKS
 using Steamworks;
 using System;
-using System.Linq;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Mirror.FizzySteam
@@ -9,7 +9,9 @@ namespace Mirror.FizzySteam
     public class NextServer : NextCommon, IServer
     {
         private event Action<int,string> OnConnectedWithAddress;
-        private event Action<int, byte[], int> OnReceivedData;
+        private event Action<int, ArraySegment<byte>, int> OnReceivedData;
+        private readonly List<HSteamNetConnection> receiveConnections = new List<HSteamNetConnection>();
+        private readonly List<HSteamNetConnection> flushConnections = new List<HSteamNetConnection>();
         private event Action<int> OnDisconnected;
         private event Action<int, TransportError, string> OnReceivedError;
 
@@ -42,7 +44,7 @@ namespace Mirror.FizzySteam
 
             server.OnConnectedWithAddress += (id,addres) => transport.OnServerConnectedWithAddress.Invoke(id,addres);
             server.OnDisconnected += (id) => transport.OnServerDisconnected.Invoke(id);
-            server.OnReceivedData += (id, data, ch) => transport.OnServerDataReceived.Invoke(id, new ArraySegment<byte>(data), ch);
+            server.OnReceivedData += (id, data, ch) => transport.OnServerDataReceived.Invoke(id, data, ch);
             server.OnReceivedError += (id, error, reason) => transport.OnServerError.Invoke(id, error, reason);
 
             try
@@ -160,7 +162,8 @@ namespace Mirror.FizzySteam
 
         public void FlushData()
         {
-            foreach (HSteamNetConnection conn in connToMirrorID.FirstTypes.ToList())
+            flushConnections.Clear(); flushConnections.AddRange(connToMirrorID.FirstTypes);
+            foreach (HSteamNetConnection conn in flushConnections)
             {
 #if UNITY_SERVER
                 SteamGameServerNetworkingSockets.FlushMessagesOnConnection(conn);
@@ -172,11 +175,12 @@ namespace Mirror.FizzySteam
 
         public void ReceiveData()
         {
-            foreach (HSteamNetConnection conn in connToMirrorID.FirstTypes.ToList())
+            receiveConnections.Clear(); receiveConnections.AddRange(connToMirrorID.FirstTypes);
+            foreach (HSteamNetConnection conn in receiveConnections)
             {
                 if (connToMirrorID.TryGetValue(conn, out int connId))
                 {
-                    IntPtr[] ptrs = new IntPtr[MAX_MESSAGES];
+                    IntPtr[] ptrs = messagePointers;
                     int messageCount;
 
 #if UNITY_SERVER
@@ -185,17 +189,35 @@ namespace Mirror.FizzySteam
                     if ((messageCount = SteamNetworkingSockets.ReceiveMessagesOnConnection(conn, ptrs, MAX_MESSAGES)) > 0)
 #endif
                     {
-                        for (int i = 0; i < messageCount; i++)
+                        try
                         {
-                            (byte[] data, int ch) = ProcessMessage(ptrs[i]);
-                            OnReceivedData?.Invoke(connId, data, ch);
+                            for (int i = 0; i < messageCount; i++)
+                            {
+                                if (!connToMirrorID.TryGetValue(conn, out _)) break;
+                                IntPtr pointer = ptrs[i]; ptrs[i] = IntPtr.Zero;
+                                (ArraySegment<byte> data, int ch) = ProcessMessage(pointer);
+                                if (data.Array == null) continue;
+                                try { OnReceivedData?.Invoke(connId, data, ch); }
+                                finally { ReturnMessage(data); }
+                            }
                         }
+                        finally { ReleasePendingMessages(messageCount); }
                     }
                 }
             }
         }
 
         public void Send(int connectionId, byte[] data, int channelId)
+            => Send(connectionId, new ArraySegment<byte>(data), channelId);
+
+        public void ReadConnectionDiagnostics(List<SteamConnectionSample> samples)
+        {
+            foreach (var conn in connToMirrorID.FirstTypes)
+                if (connToMirrorID.TryGetValue(conn, out int id) && SteamTransportDiagnostics.TrySample(conn, id, out var sample))
+                    samples.Add(sample);
+        }
+
+        public void Send(int connectionId, ArraySegment<byte> data, int channelId)
         {
             if (connToMirrorID.TryGetValue(connectionId, out HSteamNetConnection conn))
             {

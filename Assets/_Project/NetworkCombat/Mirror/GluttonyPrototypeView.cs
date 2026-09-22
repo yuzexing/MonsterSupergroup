@@ -65,7 +65,7 @@ namespace MonsterSupergroup.NetworkCombat
             if (skill == null || !skill.isClient) return;
             UpdateRange();
             expiredMarkers.Clear(); foreach (uint id in markers.Keys) expiredMarkers.Add(id);
-            if (skill.Parameters.Enabled && NetworkTime.time<skill.State.MarkExpiresAt)
+            if (skill.IsPrototypeEnabled && skill.Parameters.Enabled && NetworkTime.time<skill.State.MarkExpiresAt)
                 foreach (uint id in skill.MarkedTargets)
                 {
                     if (!NetworkClient.spawned.TryGetValue(id,out var obj) || obj == null) continue;

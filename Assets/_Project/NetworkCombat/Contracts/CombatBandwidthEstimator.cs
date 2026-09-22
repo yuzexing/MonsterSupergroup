@@ -10,7 +10,8 @@ namespace MonsterSupergroup.NetworkCombat
         public const int EnemyHitPresentationBytes = 43; // Identity/version 16 + damage/style/source 14 + position 13.
         public const int StatusMutationBytes = 133; // Includes magnitude and application revision.
         public const int PlayerHealthReportBytes = 53; // 33 + pickup receipt (8 + 4 + 4 + 4).
-        public const int BatchAndArrayHeadersBytes = 16;
+        public const int BatchAndArrayHeadersBytes = 24; // Round and death-report array header included.
+        public const int EnemyDeathReportBytes = 32;
         public const int EnemyActionProjectileProgressBytes = 9;
         public const int EnemyActionDashProgressBytes = 33; // Boolean plus four Vector2 values in the existing checkpoint.
         public const int EnemyActionExplosionProgressBytes = 11; // Three booleans and the world-space explosion center.
@@ -38,7 +39,8 @@ namespace MonsterSupergroup.NetworkCombat
             return BatchAndArrayHeadersBytes +
                 (long)batch.ResultCount * CombatResultBytes +
                 (long)batch.StatusMutationCount * StatusMutationBytes +
-                (long)batch.PlayerHealthReportCount * PlayerHealthReportBytes;
+                (long)batch.PlayerHealthReportCount * PlayerHealthReportBytes +
+                (long)(batch.EnemyDeathReports?.Length ?? 0) * EnemyDeathReportBytes;
         }
     }
 }

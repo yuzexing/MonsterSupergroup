@@ -5,7 +5,8 @@ using MonsterSupergroup.GAS;
 namespace MonsterSupergroup.NetworkCombat
 {
     /// <summary>
-    /// Admission records for owned native attacks, not a second attack simulation.
+    /// Presentation and knockback metadata for owned native attacks.
+    /// Enemy outcome settlement does not require a record in this registry.
     /// A record lives until the owner has flushed all outcomes and released the attack's leases.
     /// Build changes do not invalidate an already admitted immutable attack.
     /// </summary>
@@ -30,7 +31,7 @@ namespace MonsterSupergroup.NetworkCombat
         public bool RequiresAdmission(uint playerId) => players.ContainsKey(playerId);
         public int ActiveCount(uint playerId) => players.TryGetValue(playerId, out var player) ? player.Roots.Count : 0;
 
-        // The adapter supplies server-verified source, weapon and revision after checking its Build.
+        // The adapter supplies the authenticated source and observed weapon/revision.
         public CombatRejectionReason Admit(uint playerId, uint sourceEntityId, uint weaponId,
             uint buildRevision, ulong rootEventId, EnemyKnockbackSettings knockback = default)
         {
@@ -80,10 +81,19 @@ namespace MonsterSupergroup.NetworkCombat
             if (!player.Roots.TryGetValue(result.RootEventId, out var root) ||
                 root.SourceEntityId != result.SourceEntityId || root.WeaponId != result.AbilityId)
                 return CombatRejectionReason.InvalidAttackRoot;
+            return ValidateOutcomeIdentity(result);
+        }
+
+        // Causal identity is structural; it does not require a live admission record.
+        public static CombatRejectionReason ValidateOutcomeIdentity(CombatResult result)
+        {
+            if (result.RootEventId == 0) return CombatRejectionReason.None;
+            if (result.RootEventId == result.EventId && result.ParentEventId == 0 && result.ChainDepth == 0)
+                return CombatRejectionReason.None; // A standalone outcome is itself the root.
             var id = new CombatEventId(result.EventId);
             var rootId = new CombatEventId(result.RootEventId);
             var parentId = new CombatEventId(result.ParentEventId);
-            if (id.SourceSlot != rootId.SourceSlot || id.ConnectionEpoch != rootId.ConnectionEpoch ||
+            if (!rootId.IsValid || !parentId.IsValid || id.SourceSlot != rootId.SourceSlot || id.ConnectionEpoch != rootId.ConnectionEpoch ||
                 parentId.SourceSlot != rootId.SourceSlot || parentId.ConnectionEpoch != rootId.ConnectionEpoch ||
                 parentId.Sequence <= rootId.Sequence || parentId.Sequence >= id.Sequence || result.ChainDepth < 2)
                 return CombatRejectionReason.InvalidAttackRoot;

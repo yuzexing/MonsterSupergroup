@@ -11,7 +11,8 @@ namespace MonsterSupergroup.NetworkCombat
         {
             if(enemy.GetComponent<EnemyController>() is not EnemyController controller || controller.attackScript?.SupportsSharedTimeline != true ||
                 !controller.CancelsAttackOnKnockback || controller.IsImmune ||
-                (command.Kind == EnemyKnockbackKind.OrdinaryHit ? controller.stats.KnockBackMultiplier <= 0 : controller.attackScript.OverrideKnockback) ||
+                (command.Kind == EnemyKnockbackKind.OrdinaryHit || command.Kind == EnemyKnockbackKind.Music
+                    ? controller.stats.KnockBackMultiplier <= 0 : controller.attackScript.OverrideKnockback) ||
                 !Registry.TryGetLatestSnapshot(enemy.netId,out var snapshot))return;
             var action=snapshot.Runtime.Action;var phase=action.PhaseAt(EnemySimulationClock.CombatNow);
             if(action.ActionId==0||command.InterruptedActionId!=action.ActionId)return;

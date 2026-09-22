@@ -102,7 +102,7 @@ namespace MonsterSupergroup.NetworkCombat
             HitNetworkTime <= now + .1d && HitNetworkTime >= now - 2d;
     }
 
-    public enum EnemyKnockbackKind : byte { Ultimate = 0, OrdinaryHit = 1 }
+    public enum EnemyKnockbackKind : byte { Ultimate = 0, OrdinaryHit = 1, Music = 2 }
 
     [Serializable]
     public struct EnemyKnockbackCommand
@@ -126,6 +126,9 @@ namespace MonsterSupergroup.NetworkCombat
             get
             {
                 if (Kind == EnemyKnockbackKind.Ultimate) return (AbilityCombatId & 0x80000000u) != 0;
+                if (Kind == EnemyKnockbackKind.Music)
+                    return AbilityCombatId == ServerCombatGateway.MusicCombatId &&
+                        new CombatEventId(RootEventId).SourceSlot == ushort.MaxValue && MultiplierSum == 0f;
                 if (Kind != EnemyKnockbackKind.OrdinaryHit || AbilityCombatId == 0 ||
                     (AbilityCombatId & 0x80000000u) != 0 || !EnemyKnockbackSettings.Finite(MultiplierSum)) return false;
                 var damage = new CombatEventId(DamageEventId);

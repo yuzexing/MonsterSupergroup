@@ -8,6 +8,7 @@ using System.Reflection;
 using AstralShift.HellMaiden.Player;
 using Mirror;
 using MonsterSupergroup.Gameplay.Combat;
+using MonsterSupergroup.Gameplay.Options;
 using MonsterSupergroup.NetworkCombat;
 using NUnit.Framework;
 using UnityEditor.SceneManagement;
@@ -34,6 +35,11 @@ namespace MonsterSupergroup.Gameplay.Tests
         {
             PickupAudit.Recorded += ObservePickup;
             if (!Application.isBatchMode) UnityEditor.EditorApplication.ExecuteMenuItem("Window/General/Game");
+            GameOptionsService.EnsureInitialized();
+            yield return EnemyDefinitionRuntimeFixture.Wait(() => GameLocalization.IsReady, "localization startup");
+            // Let initial dynamic-font imports finish before Boot loads Rewired and gameplay assets.
+            yield return null;
+            yield return null;
             const string boot="Assets/_Project/Scenes/Boot.unity";
             yield return EditorSceneManager.LoadSceneAsyncInPlayMode(boot,new LoadSceneParameters(LoadSceneMode.Single));
             roots=BootSceneFixtureObjects.Capture(boot); manager=(BootGameplayNetworkManager)NetworkManager.singleton;
@@ -52,7 +58,7 @@ namespace MonsterSupergroup.Gameplay.Tests
             yield return EnemyDefinitionRuntimeFixture.Wait(()=>manager.RoomSnapshot.Phase==PreparationPhase.InGame && NetworkClient.localPlayer!=null,"gameplay");
             var skill=NetworkClient.localPlayer.GetComponent<NetworkPlayerGluttony>();
             Assert.That(skill,Is.Not.Null,"Install the prototype on the production Player prefab first.");
-            var settings=GluttonyParameters.Defaults; settings.Enabled=true;
+            var settings=GluttonyParameters.Defaults; settings.Enabled=true; settings.PassiveEnabled=!controlled;
             NetworkCombatWorld.Instance.ServerConfigureGluttony(settings,true);
             yield return EnemyDefinitionRuntimeFixture.Wait(()=>skill.OwnerReady,"owner baseline");
         }
@@ -62,7 +68,7 @@ namespace MonsterSupergroup.Gameplay.Tests
             yield return Start(true);
             yield return EnemyDefinitionRuntimeFixture.Wait(()=>isolated.PairReady() && isolated.PlaceInView(),"fixture placement");
             var owner=NetworkClient.localPlayer; var skill=owner.GetComponent<NetworkPlayerGluttony>();
-            var settings=skill.Parameters; settings.ActiveEnabled=false;
+            var settings=skill.Parameters; settings.ActiveEnabled=false; settings.PassiveEnabled=true;
             NetworkCombatWorld.Instance.ServerConfigureGluttony(settings,true);
             var target=isolated.Agents().OrderBy(a=>Vector2.Distance(a.transform.position,owner.transform.position)).First();
             Assert.That(skill.RequestDevour(target.netId,false));

@@ -80,7 +80,8 @@ namespace MonsterSupergroup.Gameplay.Tests
             Assert.That(ledger.TryGetState(id, out var life), Is.True);
             var death = ledger.ApplyServerStatusDamage(id, life.Health, 900, Owner.netId);
             Assert.That(death.Accepted && !death.State.Alive, Is.True);
-            Assert.That(agent.IsCanonicalAlive, Is.True, "The runtime body has not received the canonical death batch yet.");
+            Assert.That(agent.IsCanonicalAlive, Is.False, "Canonical life comes from the server ledger, even before the body receives the death batch.");
+            Assert.That(agent.GetComponent<CombatantBehaviour>().IsAlive, Is.True);
             var poison = before;
             poison.Sequence = 1; poison.AssignmentEpoch = agent.Assignment.Epoch;
             poison.SampleNetworkTime = NetworkTime.time; poison.Position += Vector2.right * 100;
@@ -96,6 +97,48 @@ namespace MonsterSupergroup.Gameplay.Tests
             Assert.That(World.Registry.TryGetLatestAttackPresentation(id, out _), Is.False);
             Assert.That(World.RequestTargetChange(id, Owner.netId, EnemyTargetChangeReason.Forced), Is.EqualTo(EnemyTargetChangeResult.EnemyDead));
             yield return WaitFor(() => !World.TryReadHandoff(id, out _), "dead in-flight handoff removed");
+        }
+
+        [UnityTest]
+        public IEnumerator LocalDeathStaysStoppedAcrossPositiveEchoSnapshotAndHandoffUntilReceipt()
+        {
+            var agent = Spawn(Object.FindFirstObjectByType<NetworkGameplayEnemySpawner>().EnemyPrefab);
+            yield return WaitFor(() => agent.ProductEnemyInitialized && agent.Authority.RunsNavigation, "enemy ready");
+            var bridge = Owner.GetComponent<MirrorNetworkCombatBridge>();
+            bridge.enabled = false; // Simulate delayed delivery while local death remains immediate.
+            var combatant = agent.GetComponent<CombatantBehaviour>();
+            var enemy = agent.GetComponent<EnemyController>();
+            var root = CombatContext.CreateRoot(bridge.EventIds.Next(), Owner.netId, Owner.netId, 77);
+            var hit = root.CreateChild(bridge.EventIds.Next(), CombatTags.Hit, agent.netId, combatant.StateVersion);
+            var damage = hit.CreateChild(bridge.EventIds.Next(), CombatTags.Damage, agent.netId, combatant.StateVersion);
+            var lethal = damage.CreateChild(bridge.EventIds.Next(), CombatTags.PredictedLethalHit, agent.netId, combatant.StateVersion);
+            var amount = new DamageInfo(77, 10, false);
+            bridge.Collector.Publish(new CombatEvent(CombatEventKind.DamageResolved, damage, amount));
+            combatant.ReceiveDamage(new DamageInfo(77, combatant.CurrentHealth, false));
+            combatant.ReceivePredictedLethalHit(new PredictedLethalHit(lethal, amount, amount));
+            bridge.Collector.Publish(new CombatEvent(CombatEventKind.PredictedLethalHit, lethal, amount));
+            Assert.That(agent.IsCanonicalAlive, Is.True, "Host prediction must not change server ownership decisions.");
+            Assert.That(enemy.DeathRequested, Is.True);
+            combatant.ApplyCanonicalHealth(combatant.MaxHealth, combatant.MaxHealth, combatant.StateVersion + 1);
+            var handoff = agent.Handoff;
+            handoff.Assignment.Epoch++;
+            agent.SetServerHandoff(handoff);
+            int snapshots = agent.AcceptedRemoteSnapshotCount;
+            var late = handoff.Checkpoint.Movement;
+            late.AssignmentEpoch = handoff.Assignment.Epoch; late.Sequence = 100;
+            late.Position += Vector2.right * 100;
+            agent.ReceiveRemoteSnapshot(late);
+            yield return null;
+            Assert.That(combatant.IsAlive, Is.False);
+            Assert.That(enemy.DeathRequested, Is.True);
+            Assert.That(agent.Authority.RunsNavigation, Is.False);
+            Assert.That(agent.Authority.RunsCombatDecisions, Is.False);
+            Assert.That(agent.AcceptedRemoteSnapshotCount, Is.EqualTo(snapshots));
+            Assert.That(agent.TryCaptureSnapshot(NetworkTime.time, out _), Is.False);
+            bridge.enabled = true;
+            bridge.Flush();
+            yield return WaitFor(() => bridge.Collector.PendingEnemyDeathCount == 0, "death receipt");
+            Assert.That(NetworkCombatWorld.Instance.Gateway.Metrics.ConfirmedKills, Is.EqualTo(1));
         }
 
         [UnityTest]
@@ -143,7 +186,10 @@ namespace MonsterSupergroup.Gameplay.Tests
             int originalMask=enemy.collider.excludeLayers;
             foreach(double age in new[]{.2,.95,1.25,2.0})
             {
-                enemy.SuspendSimulationExecution();enemy.RestoreSimulationAction(action,start+age);
+                enemy.SuspendSimulationExecution();
+                TestContext.WriteLine($"Dash restore age={age}: expected={pose.x:R},{pose.y:R}; before={enemy.rigidBody.position.x:R},{enemy.rigidBody.position.y:R}; transform={enemy.transform.position.x:R},{enemy.transform.position.y:R}");
+                enemy.RestoreSimulationAction(action,start+age);
+                TestContext.WriteLine($"Dash restored: physical={enemy.rigidBody.position.x:R},{enemy.rigidBody.position.y:R}; transform={enemy.transform.position.x:R},{enemy.transform.position.y:R}");
                 var restored=enemy.CaptureSimulationAction(start+age);
                 Assert.That(restored.ActionId,Is.EqualTo(77));Assert.That(restored.DashStart,Is.EqualTo(action.DashStart));
                 Assert.That(restored.DashLastPosition,Is.EqualTo(pose));Assert.That(enemy.rigidBody.position,Is.EqualTo(pose),"Restoring state must not jump back to the dash origin.");
@@ -188,6 +234,45 @@ namespace MonsterSupergroup.Gameplay.Tests
             Assert.That(agent.Assignment.Host, Is.EqualTo(EnemySimulationHost.ServerAuthoritative));
             Assert.That(agent.ReferenceResetVersion, Is.EqualTo(1));
             Assert.That(agent.GetComponent<EnemyController>().stats.SpeedMultiplier, Is.EqualTo(1));
+#endif
+            yield break;
+        }
+
+        [UnityTest]
+        public IEnumerator LocalSimulatorSmoothsRenderingButReplicaAndFrozenDoNotDoubleInterpolate()
+        {
+#if UNITY_EDITOR
+            var prefab = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/_Project/Content/NetworkCombat/Limbo/Stage2/ReferenceSkeleton.prefab");
+            var agent = Spawn(prefab);
+            yield return WaitFor(() => agent.ProductEnemyInitialized && agent.Authority.RunsNavigation, "local skeleton simulator");
+            var body = agent.GetComponent<Rigidbody2D>();
+            Assert.That(body.interpolation, Is.EqualTo(RigidbodyInterpolation2D.Interpolate), "A rendered local simulator must smooth its 50 Hz physics steps.");
+            var authority = agent.Authority;
+            authority.ApplyRole(EnemySimulationRole.Replica, Owner.netId, Owner.netId, authority.AssignmentEpoch);
+            Assert.That(body.interpolation, Is.EqualTo(RigidbodyInterpolation2D.None), "Replica already consumes smoothed network samples.");
+            authority.ApplyRole(EnemySimulationRole.ClientOwner, Owner.netId, Owner.netId, authority.AssignmentEpoch);
+            Assert.That(body.interpolation, Is.EqualTo(RigidbodyInterpolation2D.Interpolate));
+            var interpolation = agent.GetComponent<EnemySnapshotInterpolator>();
+            var destination = body.position + new Vector2(5, 3);
+            interpolation.ResetRenderPose(destination);
+            Assert.That(body.position, Is.EqualTo(destination));
+            Assert.That((Vector2)agent.transform.position, Is.EqualTo(destination));
+            float previousScale = Time.timeScale;
+            try
+            {
+                Time.timeScale = 0;
+                yield return null; yield return null;
+                Assert.That(body.interpolation, Is.EqualTo(RigidbodyInterpolation2D.None));
+                var pausedPosition = agent.transform.position;
+                yield return null;
+                Assert.That(agent.transform.position, Is.EqualTo(pausedPosition));
+            }
+            finally { Time.timeScale = previousScale; }
+            authority.ApplyRole(EnemySimulationRole.Frozen, 0, Owner.netId, authority.AssignmentEpoch);
+            Assert.That(body.interpolation, Is.EqualTo(RigidbodyInterpolation2D.None));
+            Assert.That(body.linearVelocity, Is.EqualTo(Vector2.zero));
+            agent.GetComponent<EnemySnapshotInterpolator>().enabled = false;
+            Assert.That(body.interpolation, Is.EqualTo(prefab.GetComponent<Rigidbody2D>().interpolation), "Disable/reuse restores the prefab setting.");
 #endif
             yield break;
         }

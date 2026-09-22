@@ -14,7 +14,7 @@ using UnityEngine;
 namespace MonsterSupergroup.NetworkCombat
 {
     // Explicit, local presentation fixture. No damage, network attack admission or pressure claims.
-    public sealed class WeaponAudioObservation : MonoBehaviour
+    public sealed partial class WeaponAudioObservation : MonoBehaviour
     {
         private LimboObservationLog log;
         private WeaponBehaviour emitter;
@@ -35,11 +35,13 @@ namespace MonsterSupergroup.NetworkCombat
             log = new LimboObservationLog(Path.Combine(LimboReferenceLaunch.OutputDirectory, "weapon-audio.jsonl"));
             AttackAudioAudit.Changed += Audio;
             Write("fixture", "Local presentation only; normal weapon execution disabled. No damage, XP, auto-input or volume changes. Triple breath is an explicit presentation stress case.");
-            if (LimboReferenceLaunch.Argument("--limbo-audio-case=") != "smoke") yield break;
+            string audioCase = LimboReferenceLaunch.Argument("--limbo-audio-case=");
+            if (audioCase != "smoke" && audioCase != "edge-smoke") yield break;
             Write("test-assistance", "Explicit smoke: automated element/count/contact/cancel; exits when done. Not manual listening acceptance.");
             float deadline=Time.realtimeSinceStartup+90;
             while(emitter==null && Time.realtimeSinceStartup<deadline) yield return null;
             if(emitter==null) { Write("smoke-failed","Owner/presentation initialization timeout"); Application.Quit(1); yield break; }
+            if (audioCase == "edge-smoke") yield return EdgeSmoke();
             foreach(var variant in Wisp ? new[]{AttackElement.Default,AttackElement.Fire,AttackElement.Poison} : new[]{AttackElement.Fire,AttackElement.Poison})
             {
                 element=variant; Fire(1);
@@ -48,6 +50,15 @@ namespace MonsterSupergroup.NetworkCombat
                 yield return new WaitForSeconds(3);
                 Fire(3); yield return new WaitForSeconds(0.3f); Cancel();
             }
+            if (audioCase == "edge-smoke" && LimboReferenceLaunch.Argument("--limbo-wait-for=") == "2")
+            {
+                string directory = Directory.GetParent(LimboReferenceLaunch.OutputDirectory).FullName;
+                string role = LimboReferenceLaunch.Argument("--limbo-role=");
+                File.WriteAllText(Path.Combine(directory, role + "-audio-finished"), "finished");
+                deadline = Time.realtimeSinceStartup + 30;
+                while (!File.Exists(Path.Combine(directory, (role == "host" ? "client" : "host") + "-audio-finished")) && Time.realtimeSinceStartup < deadline) yield return null;
+                if (Time.realtimeSinceStartup >= deadline) errors++;
+            }
             smokeEnding=true; Release(); yield return new WaitForSecondsRealtime(2);
             var manager=FindFirstObjectByType<BootGameplayNetworkManager>();
             if(NetworkServer.active) manager.StopHost(); else manager.StopClient();
@@ -55,6 +66,7 @@ namespace MonsterSupergroup.NetworkCombat
             while(manager!=null && (manager.IsGameplayLoaded || manager.IsGameplayTransitioning) && Time.realtimeSinceStartup<deadline) yield return null;
             SampleSounds();
             bool clean=errors==0 && soundsPlaying==0 && starts>0 && duplicateStarts==0 && !NetworkClient.active && !NetworkServer.active;
+            clean &= StudioListener.ListenerCount == 0;
             Write(clean?"smoke-passed":"smoke-failed",$"errors={errors};playing={soundsPlaying};starts={starts};duplicateStarts={duplicateStarts}");
             log.Flush(); Application.Quit(clean?0:1);
         }
@@ -105,6 +117,7 @@ namespace MonsterSupergroup.NetworkCombat
             var camera = FindFirstObjectByType<GameplayCameraRig>();
             Vector3 position = camera != null && camera.LocalAudioListener != null ? camera.LocalAudioListener.transform.position : Vector3.zero;
             Write("sound-sample", $"tracked={sounds.Count};playing={playing};stopping={stopping};listeners={StudioListener.ListenerCount};listener={position};timeScale={Time.timeScale}");
+            if (EdgeDiagnostics) SampleSpatial(camera);
         }
         private void Fire(int count)
         {
@@ -115,6 +128,7 @@ namespace MonsterSupergroup.NetworkCombat
                 SizeMultiplierSum=1, DurationMultiplierSum=1, EffectiveSpeed=data.BaseStats.speed,
                 Duration=data.BaseStats.duration, ProjectileCount=count, BaseProjectileCount=count };
             Vector2 direction = owner.attackDirection.sqrMagnitude > .001f ? owner.attackDirection.normalized : Vector2.right;
+            if (LimboReferenceLaunch.Argument("--limbo-audio-case=") == "edge-smoke") direction = Vector2.right;
             for (ushort i=0;i<count;i++)
                 if (emitter is ProjectileAttackBehaviour p)
                 {
@@ -156,7 +170,7 @@ namespace MonsterSupergroup.NetworkCombat
         private void OnGUI()
         {
             if (emitter == null) return;
-            GUILayout.BeginArea(new Rect(12,12,420,255), GUI.skin.box);
+            GUILayout.BeginArea(new Rect(12,12,460,EdgeDiagnostics ? 420 : 255), GUI.skin.box);
             GUILayout.Label(Wisp ? "WISP AUDIO - local listening fixture" : "BREATH AUDIO - local listening fixture");
             GUILayout.Label("No combat damage. Move / aim normally. Settings keep your volume.");
             GUILayout.BeginHorizontal();
@@ -177,6 +191,7 @@ namespace MonsterSupergroup.NetworkCombat
                 GUILayout.EndHorizontal();
             }
             if (GUILayout.Button("Cancel active sounds / effects")) Cancel();
+            if (EdgeDiagnostics) DrawEdgeControls();
             GUILayout.EndArea();
         }
         private void OnDestroy() { Release(); AttackAudioAudit.Changed-=Audio; log?.Dispose(); }

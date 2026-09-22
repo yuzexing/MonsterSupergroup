@@ -37,7 +37,7 @@ namespace MonsterSupergroup.NetworkCombat.Tests
         }
 
         [Test]
-        public void SelectingPlayerCannotSubmitDamageOrStatus_OtherPlayerContinues()
+        public void SelectionDoesNotInvalidateInflightEnemyOutcomesAndDeduplicationSurvivesUnlock()
         {
             var gateway = CreateGateway();
             gateway.Ledger.SetPlayerUpgradeSelectionState(1, true);
@@ -48,17 +48,17 @@ namespace MonsterSupergroup.NetworkCombat.Tests
                 StatusMutations = new[] { Poison(2) }
             }, 0);
             Assert.That(gateway.Ledger.TryGetState(100, out var enemy), Is.True);
-            Assert.That(enemy.Health, Is.EqualTo(100));
-            Assert.That(gateway.Statuses.GetAllStates(), Is.Empty);
+            Assert.That(enemy.Health, Is.EqualTo(90));
+            Assert.That(gateway.Statuses.GetAllStates(), Has.Count.EqualTo(1));
             Assert.That(gateway.Metrics.GetRejected(
-                CombatRejectionReason.SourceSelectingUpgrade), Is.EqualTo(2));
+                CombatRejectionReason.SourceSelectingUpgrade), Is.Zero);
 
             gateway.ProcessBatch(2, new CombatSubmissionBatch
             {
                 BatchSequence = 1, Results = new[] { Hit(3, 2) }
             }, 0);
             gateway.Ledger.TryGetState(100, out enemy);
-            Assert.That(enemy.Health, Is.EqualTo(90));
+            Assert.That(enemy.Health, Is.EqualTo(80));
 
             gateway.Ledger.SetPlayerUpgradeSelectionState(1, false);
             gateway.ProcessBatch(1, new CombatSubmissionBatch
@@ -68,8 +68,8 @@ namespace MonsterSupergroup.NetworkCombat.Tests
                 StatusMutations = new[] { Poison(2) }
             }, 1);
             gateway.Ledger.TryGetState(100, out enemy);
-            Assert.That(enemy.Health, Is.EqualTo(80), "Rejected events cannot be replayed after unlock.");
-            Assert.That(gateway.Statuses.GetAllStates(), Is.Empty);
+            Assert.That(enemy.Health, Is.EqualTo(70), "Accepted events cannot damage twice after unlock.");
+            Assert.That(gateway.Statuses.GetAllStates(), Has.Count.EqualTo(1));
         }
 
         [Test]

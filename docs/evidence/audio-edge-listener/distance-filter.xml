@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="1" result="Passed" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-09-21 12:06:32Z" end-time="2026-09-21 12:06:33Z" duration="0.9620497">
+  <test-suite type="TestSuite" id="1682" name="Monster Supergroup" fullname="Monster Supergroup" runstate="Runnable" testcasecount="569" result="Passed" start-time="2026-09-21 12:06:32Z" end-time="2026-09-21 12:06:33Z" duration="0.962050" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="PlayMode" />
+    </properties>
+    <test-suite type="Assembly" id="1666" name="MonsterSupergroup.Gameplay.Tests.PlayMode.dll" fullname="F:/UnityStore/MonsterSupergroup/Library/ScriptAssemblies/MonsterSupergroup.Gameplay.Tests.PlayMode.dll" runstate="Runnable" testcasecount="565" result="Passed" start-time="2026-09-21 12:06:32Z" end-time="2026-09-21 12:06:33Z" duration="0.952203" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="32484" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="PlayMode" />
+        <property name="EditorOnly" value="False" />
+      </properties>
+      <test-suite type="TestSuite" id="1667" name="MonsterSupergroup" fullname="MonsterSupergroup" runstate="Runnable" testcasecount="565" result="Passed" start-time="2026-09-21 12:06:32Z" end-time="2026-09-21 12:06:33Z" duration="0.947418" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-suite type="TestSuite" id="1668" name="Gameplay" fullname="MonsterSupergroup.Gameplay" runstate="Runnable" testcasecount="565" result="Passed" start-time="2026-09-21 12:06:32Z" end-time="2026-09-21 12:06:33Z" duration="0.939080" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <test-suite type="TestSuite" id="1669" name="Tests" fullname="MonsterSupergroup.Gameplay.Tests" runstate="Runnable" testcasecount="565" result="Passed" start-time="2026-09-21 12:06:32Z" end-time="2026-09-21 12:06:33Z" duration="0.932110" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-suite type="TestFixture" id="1001" name="AudioDistanceDiagnosticsTests" fullname="MonsterSupergroup.Gameplay.Tests.AudioDistanceDiagnosticsTests" classname="MonsterSupergroup.Gameplay.Tests.AudioDistanceDiagnosticsTests" runstate="Runnable" testcasecount="1" result="Passed" start-time="2026-09-21 12:06:32Z" end-time="2026-09-21 12:06:33Z" duration="0.922377" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1002" name="BreathSameInstance_DistanceDrivesLowpass_AndReturnsAtOriginalDistance" fullname="MonsterSupergroup.Gameplay.Tests.AudioDistanceDiagnosticsTests.BreathSameInstance_DistanceDrivesLowpass_AndReturnsAtOriginalDistance" methodname="BreathSameInstance_DistanceDrivesLowpass_AndReturnsAtOriginalDistance" classname="MonsterSupergroup.Gameplay.Tests.AudioDistanceDiagnosticsTests" runstate="Runnable" seed="920845017" result="Passed" start-time="2026-09-21 12:06:32Z" end-time="2026-09-21 12:06:33Z" duration="0.910393" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[AUDIO-DISTANCE same-instance=2102784 distance=10 phase=0 lowpassHz=10231.373
+[Localization] Applied locale=zh-CN revision=2
+AUDIO-DISTANCE same-instance=2102784 distance=18 phase=0 lowpassHz=5000
+AUDIO-DISTANCE same-instance=2102784 distance=10 phase=0 lowpassHz=10231.373
+Saving results to: C:/Users/ADMIN/AppData/LocalLow/DefaultCompany/Monster Supergroup\TestResults.xml
+]]></output>
+              </test-case>
+            </test-suite>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

@@ -161,7 +161,7 @@ namespace MonsterSupergroup.NetworkCombat
             // Drain uses bounded batches. A large area attack can leave more than one batch.
             while (isOwned && NetworkClient.active && bridge.Collector != null &&
                 (bridge.Collector.PendingResultCount > 0 || bridge.Collector.PendingStatusMutationCount > 0 ||
-                 bridge.Collector.PendingPlayerHealthReportCount > 0))
+                 bridge.Collector.PendingPlayerHealthReportCount > 0 || bridge.Collector.HasDueDeaths(Time.unscaledTimeAsDouble)))
                 bridge.Flush();
             CmdCompleteWeaponAttack(eventId.Value);
         }
@@ -195,33 +195,22 @@ namespace MonsterSupergroup.NetworkCombat
                 eventId.Sequence <= lastCooldownReportSequence ||
                 !world.Gateway.ClientIdentities.Validate(bridge.OwnerPlayerId, attackEventId, eventId.Sequence))
             { RejectAttack(CombatRejectionReason.InvalidSequence); return; }
-            var selection = GetComponent<NetworkModifierSelection>();
-            if (selection == null || ownerBuildRevision == 0 || ownerBuildRevision != selection.BuildRevision)
-            { RejectAttack(CombatRejectionReason.StaleAttackBuild); return; }
-            if (world.Gateway.Ledger.IsPlayerSelectingUpgrade(netId))
-            { RejectAttack(CombatRejectionReason.SourceSelectingUpgrade); return; }
-            if (!world.Gateway.Ledger.TryGetState(netId, out var playerState) || !playerState.Alive)
-            { RejectAttack(CombatRejectionReason.TargetCanonicalDead); return; }
             RefreshServerCooldownWeapon(slotIndex);
             WeaponBehaviour weapon = serverCooldownWeapons[slotIndex];
-            if (weapon == null || weapon is DashAttackBehaviour || weapon.WeaponData.ID != weaponId)
-            { RejectAttack(CombatRejectionReason.SourceNotOwned); return; }
-            if (weapon is SummonAttackBehaviour summon)
-            {
-                RefreshServerSummonWeapon(slotIndex);
-                double readyAt = serverSummonMaturities[slotIndex].MaturityAt + summon.BirthPresentationDuration;
-                if (!serverCooldowns[slotIndex].IsValid) readyAt += weapon.GetCooldown();
-                if (ownerAttackTime + .05d < readyAt)
-                { RejectAttack(CombatRejectionReason.InvalidAttackRate); return; }
-            }
-            if (!PlayerWeaponCooldownSnapshot.TryAdmit(slotIndex, weaponId, attackEventId,
-                    ownerAttackTime, NetworkTime.time, weapon.GetCooldown(), serverCooldowns[slotIndex],
-                    out var next, weapon.GetAttackSequenceDuration()))
-            { RejectAttack(CombatRejectionReason.InvalidAttackRate); return; }
+            if (weapon != null && weapon.WeaponData.ID != weaponId) weapon = null;
+            // Timing and build observations supply presentation/restoration metadata,
+            // never permission to apply an already resolved owner outcome.
             CombatRejectionReason admitted = world.Gateway.Attacks.Admit(netId, bridge.SourceEntityId,
-                weaponId, ownerBuildRevision, attackEventId, CaptureKnockback(weapon));
+                weaponId, Math.Max(1u, ownerBuildRevision), attackEventId,
+                weapon != null ? CaptureKnockback(weapon) : default);
             if (admitted != CombatRejectionReason.None) { RejectAttack(admitted); return; }
-            serverCooldowns[slotIndex] = next;
+            if (weapon != null && PlayerWeaponCooldownSnapshot.TryObserve(slotIndex, weaponId, attackEventId,
+                    ownerAttackTime, NetworkTime.time, weapon.GetCooldown(), serverCooldowns[slotIndex], out var next))
+            {
+                next.SequenceSeconds = weapon.GetAttackSequenceDuration();
+                next.ReadyAt += next.SequenceSeconds;
+                serverCooldowns[slotIndex] = next;
+            }
             if (weapon is SummonAttackBehaviour) serverSummonRootSlots.Add(attackEventId, slotIndex);
             lastCooldownReportSequence = eventId.Sequence;
             AcceptedCooldownReportCount++;
@@ -239,22 +228,15 @@ namespace MonsterSupergroup.NetworkCombat
                 (uint)slotIndex >= PlayerBuildRuntime.HandSlotCount ||
                 !world.Gateway.ClientIdentities.Validate(bridge.OwnerPlayerId, attackEventId, eventId.Sequence))
             { RejectAttack(CombatRejectionReason.InvalidSequence); return; }
-            var selection = GetComponent<NetworkModifierSelection>();
-            if (selection == null || ownerBuildRevision == 0 || ownerBuildRevision != selection.BuildRevision)
-            { RejectAttack(CombatRejectionReason.StaleAttackBuild); return; }
-            if (world.Gateway.Ledger.IsPlayerSelectingUpgrade(netId))
-            { RejectAttack(CombatRejectionReason.SourceSelectingUpgrade); return; }
-            if (!world.Gateway.Ledger.TryGetState(netId, out var state) || !state.Alive)
-            { RejectAttack(CombatRejectionReason.TargetCanonicalDead); return; }
             var dash = GetComponent<NetworkPlayerDash>();
-            if (!(playerBuildRuntime.GetWeaponAtSlot(slotIndex) is DashAttackBehaviour weapon) ||
-                weapon.WeaponData.ID != weaponId || dash == null ||
-                !dash.CanAdmitWeapon(dashUseId, ownerBuildRevision, slotIndex, weaponId))
-            { RejectAttack(CombatRejectionReason.InvalidAttackRate); return; }
+            var weapon = playerBuildRuntime.GetWeaponAtSlot(slotIndex) as DashAttackBehaviour;
+            if (weapon != null && weapon.WeaponData.ID != weaponId) weapon = null;
             CombatRejectionReason admitted = world.Gateway.Attacks.Admit(netId, bridge.SourceEntityId,
-                weaponId, ownerBuildRevision, attackEventId, CaptureKnockback(weapon));
+                weaponId, Math.Max(1u, ownerBuildRevision), attackEventId,
+                weapon != null ? CaptureKnockback(weapon) : default);
             if (admitted != CombatRejectionReason.None) { RejectAttack(admitted); return; }
-            dash.MarkWeaponAdmitted(dashUseId, slotIndex);
+            if (dash != null && dash.CanAdmitWeapon(dashUseId, ownerBuildRevision, slotIndex, weaponId))
+                dash.MarkWeaponAdmitted(dashUseId, slotIndex);
             serverDashWeaponUses.Add(attackEventId, dashUseId);
         }
 

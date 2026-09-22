@@ -144,7 +144,9 @@ namespace MonsterSupergroup.Gameplay.Combat
             }
 
             maxHealth = maximumHealth;
-            CurrentHealth = health;
+            // Enemy outcomes are client-final. An older in-flight positive HP update
+            // cannot undo a locally declared death while its receipt is in flight.
+            CurrentHealth = clientFinalDeath && predictedLethalRaised && CurrentHealth == 0 ? 0 : health;
             stateVersion = version;
             if (CurrentHealth > 0 && !confirmedKillRaised)
             {
@@ -168,6 +170,9 @@ namespace MonsterSupergroup.Gameplay.Combat
         {
             requiresCanonicalKillConfirmation = requireCanonicalConfirmation;
         }
+
+        private bool clientFinalDeath;
+        public void ConfigureClientFinalDeath(bool enabled) => clientFinalDeath = enabled;
 
         public void ConfigureCanonicalConsequenceExecution(bool canExecute)
         {

@@ -11,6 +11,7 @@ namespace MonsterSupergroup.Gameplay.Combat
         private Func<ulong, bool> submitSelection;
         private Func<bool> submitBack;
         private AstralShift.HellMaiden.Player.Attacks.WeaponBehaviour boundWeapon;
+        private int lastConsumedInputFrame = -1;
 
         public PlayerBuildRuntime BoundBuild { get; private set; }
         public IReadOnlyList<ModifierOffer> Offers { get; private set; } = Array.Empty<ModifierOffer>();
@@ -20,6 +21,7 @@ namespace MonsterSupergroup.Gameplay.Combat
         public bool CanGoBack => Stage == UpgradeSelectionStage.EquipmentTarget && submitBack != null;
         public bool IsPresentationReady { get; private set; }
         public string LastError { get; private set; }
+        public bool BlocksPrototypeInputThisFrame => Offers.Count != 0 || lastConsumedInputFrame == Time.frameCount;
         public event Action OffersChanged;
         public event Action CancelRequested;
         public event Action PresentationReady;
@@ -75,6 +77,16 @@ namespace MonsterSupergroup.Gameplay.Combat
             (uint)index < Offers.Count ? SelectOffer(Offers[index].OfferId) :
                 ModifierSelectionResult.Failure("Invalid option index.");
 
+        /// <summary>Consumes the key even when invalid/pending, and after a synchronous close.</summary>
+        public bool TryConsumeNumberKey(int index)
+        {
+            if (lastConsumedInputFrame == Time.frameCount) return true;
+            if (Offers.Count == 0) return false;
+            lastConsumedInputFrame = Time.frameCount;
+            Select(index);
+            return true;
+        }
+
         public ModifierSelectionResult SelectOffer(ulong offerId)
         {
             if (BoundBuild == null || !BoundBuild.IsBuildActive ||
@@ -84,6 +96,7 @@ namespace MonsterSupergroup.Gameplay.Combat
             for (int i = 0; i < Offers.Count; i++) found |= Offers[i].OfferId == offerId;
             if (!found) return ModifierSelectionResult.Failure("The option is not in the current offer.");
 
+            lastConsumedInputFrame = Time.frameCount;
             IsRequestPending = true;
             OffersChanged?.Invoke();
             if (!submitSelection(offerId))
@@ -117,6 +130,7 @@ namespace MonsterSupergroup.Gameplay.Combat
         public void ClearOffers()
         {
             bool changed = Offers.Count != 0 || IsRequestPending;
+            if (changed) lastConsumedInputFrame = Time.frameCount;
             Offers = Array.Empty<ModifierOffer>();
             submitSelection = null;
             submitBack = null;

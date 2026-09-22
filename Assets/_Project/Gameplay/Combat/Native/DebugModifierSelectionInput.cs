@@ -26,23 +26,6 @@ namespace MonsterSupergroup.Gameplay.Combat
             if (selection != null) selection.OffersChanged -= LogOffers;
         }
 
-        private void Update()
-        {
-            if (!Application.isFocused || selection == null || selection.Offers.Count == 0) return;
-            int index;
-            if (Input.GetKeyDown(KeyCode.Alpha1)) index = 0;
-            else if (Input.GetKeyDown(KeyCode.Alpha2)) index = 1;
-            else if (Input.GetKeyDown(KeyCode.Alpha3)) index = 2;
-            else if (selection.Stage == UpgradeSelectionStage.EquipmentTarget && Input.GetKeyDown(KeyCode.Alpha4)) index = 3;
-            else return;
-
-            ModifierSelectionResult result = selection.Select(index);
-            if (result.Succeeded)
-                Debug.Log($"[ModifierSelection] request submitted for option {index + 1}", this);
-            else
-                Debug.LogWarning($"[ModifierSelection] selection failed: {result.Error}", this);
-        }
-
         private void LogOffers()
         {
             if (selection.Offers.Count == 0) return;

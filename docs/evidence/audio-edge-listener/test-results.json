@@ -1,0 +1,287 @@
+[
+  {
+    "name": "before",
+    "result": "Failed(Child)",
+    "total": 1,
+    "passed": 0,
+    "failed": 1,
+    "cases": [
+      {
+        "name": "MonsterSupergroup.Gameplay.Tests.GameplayCameraTests.AudioListenerAtMapEdges_PreservesOwnerRelativeDistance",
+        "result": "Failed",
+        "failure": "  Local sounds must not fade as the camera reaches the map boundary.\n  Expected: 10.0498753f +/- 0.00100000005f\n  But was:  16.7271652f\n"
+      }
+    ]
+  },
+  {
+    "name": "targeted",
+    "result": "Passed",
+    "total": 2,
+    "passed": 2,
+    "failed": 0,
+    "cases": [
+      {
+        "name": "MonsterSupergroup.Gameplay.Tests.GameplayCameraTests.AudioListenerAtMapEdges_PreservesOwnerRelativeDistance",
+        "result": "Passed",
+        "failure": null
+      },
+      {
+        "name": "MonsterSupergroup.Gameplay.Tests.GameplayCameraTests.AudioListenerTracksOwner_IndependentOfBarrierAndCameraShake",
+        "result": "Passed",
+        "failure": null
+      }
+    ]
+  },
+  {
+    "name": "integration",
+    "result": "Passed",
+    "total": 42,
+    "passed": 42,
+    "failed": 0,
+    "cases": [
+      {
+        "name": "MonsterSupergroup.Gameplay.Tests.AudioMigrationPlayModeTests.EmptyReferences_SkipPlaybackAndAttachment",
+        "result": "Passed",
+        "failure": null
+      },
+      {
+        "name": "MonsterSupergroup.Gameplay.Tests.AudioMigrationPlayModeTests.MigratedCombatEvent_CreatesPlayableInstance(\"1235e4b8-dcb5-43e8-8bb7-41a363bff4b8\")",
+        "result": "Passed",
+        "failure": null
+      },
+      {
+        "name": "MonsterSupergroup.Gameplay.Tests.AudioMigrationPlayModeTests.MigratedCombatEvent_CreatesPlayableInstance(\"b865f76c-9c2a-4679-9709-a288f22c9619\")",
+        "result": "Passed",
+        "failure": null
+      },
+      {
+        "name": "MonsterSupergroup.Gameplay.Tests.AudioMigrationPlayModeTests.MigratedCombatEvent_CreatesPlayableInstance(\"840d4d3b-6223-4aab-a508-f0bcd8e4de60\")",
+        "result": "Passed",
+        "failure": null
+      },
+      {
+        "name": "MonsterSupergroup.Gameplay.Tests.AudioMigrationPlayModeTests.MigratedCombatEvent_CreatesPlayableInstance(\"0ddbe74c-0c1e-4afc-a293-557438dbd8e0\")",
+        "result": "Passed",
+        "failure": null
+      },
+      {
+        "name": "MonsterSupergroup.Gameplay.Tests.AudioMigrationPlayModeTests.MigratedCombatEvent_CreatesPlayableInstance(\"d34df8fa-1ca2-43a3-b073-e782b614760a\")",
+        "result": "Passed",
+        "failure": null
+      },
+      {
+        "name": "MonsterSupergroup.Gameplay.Tests.AudioMigrationPlayModeTests.MigratedCombatEvent_CreatesPlayableInstance(\"00f986d5-ee9b-42ea-87c4-cd2e653e5099\")",
+        "result": "Passed",
+        "failure": null
+      },
+      {
+        "name": "MonsterSupergroup.Gameplay.Tests.AudioMigrationPlayModeTests.MigratedCombatEvent_CreatesPlayableInstance(\"5a78060c-ce45-44ff-af63-a975bac85129\")",
+        "result": "Passed",
+        "failure": null
+      },
+      {
+        "name": "MonsterSupergroup.Gameplay.Tests.AudioMigrationPlayModeTests.MigratedCombatEvent_CreatesPlayableInstance(\"0c0db1f5-703c-45a4-b90c-1b1050ef5b6f\")",
+        "result": "Passed",
+        "failure": null
+      },
+      {
+        "name": "MonsterSupergroup.Gameplay.Tests.AudioMigrationPlayModeTests.MigratedCombatEvent_CreatesPlayableInstance(\"5a48cc5f-7052-431c-a1e4-0beb9095c74e\")",
+        "result": "Passed",
+        "failure": null
+      },
+      {
+        "name": "MonsterSupergroup.Gameplay.Tests.AudioMigrationPlayModeTests.MigratedCombatEvent_CreatesPlayableInstance(\"57a4d957-64b2-417b-b722-ff987e78629a\")",
+        "result": "Passed",
+        "failure": null
+      },
+      {
+        "name": "MonsterSupergroup.Gameplay.Tests.AudioMigrationPlayModeTests.MigratedCombatEvent_CreatesPlayableInstance(\"2df3bdbe-8ccb-4f00-b5b1-6fdb3ac7bddf\")",
+        "result": "Passed",
+        "failure": null
+      },
+      {
+        "name": "MonsterSupergroup.Gameplay.Tests.AudioMigrationPlayModeTests.MigratedCombatEvent_CreatesPlayableInstance(\"8f40b0c2-bc01-4cb3-adf2-a95cb6c4f4d0\")",
+        "result": "Passed",
+        "failure": null
+      },
+      {
+        "name": "MonsterSupergroup.Gameplay.Tests.AudioMigrationPlayModeTests.MigratedCombatEvent_CreatesPlayableInstance(\"a32506b7-fbfd-4e62-ad46-7ce4a0bee1a3\")",
+        "result": "Passed",
+        "failure": null
+      },
+      {
+        "name": "MonsterSupergroup.Gameplay.Tests.AudioMigrationPlayModeTests.MigratedCombatEvent_CreatesPlayableInstance(\"1cdd3260-fa38-4f3e-8440-a13293578e2e\")",
+        "result": "Passed",
+        "failure": null
+      },
+      {
+        "name": "MonsterSupergroup.Gameplay.Tests.AudioMigrationPlayModeTests.MigratedCombatEvent_CreatesPlayableInstance(\"284fd736-4c4d-434a-aee6-e7e659c8af71\")",
+        "result": "Passed",
+        "failure": null
+      },
+      {
+        "name": "MonsterSupergroup.Gameplay.Tests.AudioMigrationPlayModeTests.MigratedCombatEvent_CreatesPlayableInstance(\"32e577a5-fc21-44ce-9600-85ed8e145ecf\")",
+        "result": "Passed",
+        "failure": null
+      },
+      {
+        "name": "MonsterSupergroup.Gameplay.Tests.AudioMigrationPlayModeTests.MigratedHurtSound_ProducesNonSilentMixerOutput",
+        "result": "Passed",
+        "failure": null
+      },
+      {
+        "name": "MonsterSupergroup.Gameplay.Tests.AudioMigrationPlayModeTests.MissingBank_DoesNotBlockOtherBanksOrSampleLoading(True)",
+        "result": "Passed",
+        "failure": null
+      },
+      {
+        "name": "MonsterSupergroup.Gameplay.Tests.AudioMigrationPlayModeTests.MissingBank_DoesNotBlockOtherBanksOrSampleLoading(False)",
+        "result": "Passed",
+        "failure": null
+      },
+      {
+        "name": "MonsterSupergroup.Gameplay.Tests.AudioMigrationPlayModeTests.MissingEmitterAndParameterEvent_DoNotInterruptActivation",
+        "result": "Passed",
+        "failure": null
+      },
+      {
+        "name": "MonsterSupergroup.Gameplay.Tests.AudioMigrationPlayModeTests.MissingGuidAndPath_SkipRepeatedPlaybackWithOneWarningEach",
+        "result": "Passed",
+        "failure": null
+      },
+      {
+        "name": "MonsterSupergroup.Gameplay.Tests.AudioMigrationPlayModeTests.MissingUnityAudioClip_CompletesInteraction",
+        "result": "Passed",
+        "failure": null
+      },
+      {
+        "name": "MonsterSupergroup.Gameplay.Tests.AudioMigrationPlayModeTests.ReloadedBank_RetriesPreviouslyMissingEvent",
+        "result": "Passed",
+        "failure": null
+      },
+      {
+        "name": "MonsterSupergroup.Gameplay.Tests.GameOptionsTests.AudioControlsRealFmodBusesIndependently",
+        "result": "Passed",
+        "failure": null
+      },
+      {
+        "name": "MonsterSupergroup.Gameplay.Tests.GameOptionsTests.CorruptFutureAndOutOfRangePreferencesRecover",
+        "result": "Passed",
+        "failure": null
+      },
+      {
+        "name": "MonsterSupergroup.Gameplay.Tests.GameOptionsTests.GraphicsAffectRuntimeAndKeepSourceAssetIntact",
+        "result": "Passed",
+        "failure": null
+      },
+      {
+        "name": "MonsterSupergroup.Gameplay.Tests.GameOptionsTests.LanguageUpdatesExistingTextAndPreservesArguments",
+        "result": "Passed",
+        "failure": null
+      },
+      {
+        "name": "MonsterSupergroup.Gameplay.Tests.GameOptionsTests.PanelDiscardsDraftAndAppliesOnlyOnRequest",
+        "result": "Passed",
+        "failure": null
+      },
+      {
+        "name": "MonsterSupergroup.Gameplay.Tests.GameOptionsTests.ResolutionChangeKeepsSupportedRefreshRateOrUsesNearestAvailable",
+        "result": "Passed",
+        "failure": null
+      },
+      {
+        "name": "MonsterSupergroup.Gameplay.Tests.GameOptionsTests.ResolutionRefreshAndFrameLimitAreSeparateDraftControls",
+        "result": "Passed",
+        "failure": null
+      },
+      {
+        "name": "MonsterSupergroup.Gameplay.Tests.GameplayCameraTests.AdmittedUltimate_UsesOriginalTwoAnimationEvents_OnceOnHost",
+        "result": "Passed",
+        "failure": null
+      },
+      {
+        "name": "MonsterSupergroup.Gameplay.Tests.GameplayCameraTests.AudioListenerAtMapEdges_PreservesOwnerRelativeDistance",
+        "result": "Passed",
+        "failure": null
+      },
+      {
+        "name": "MonsterSupergroup.Gameplay.Tests.GameplayCameraTests.AudioListenerTracksOwner_IndependentOfBarrierAndCameraShake",
+        "result": "Passed",
+        "failure": null
+      },
+      {
+        "name": "MonsterSupergroup.Gameplay.Tests.GameplayCameraTests.Axeldor_DeathHoldsAndCanonicalLifeRestorationReversesClip",
+        "result": "Passed",
+        "failure": null
+      },
+      {
+        "name": "MonsterSupergroup.Gameplay.Tests.GameplayCameraTests.FormalCamera_FollowsOneOwner_UsesGroundEdges_AndConvertsAim",
+        "result": "Passed",
+        "failure": null
+      },
+      {
+        "name": "MonsterSupergroup.Gameplay.Tests.GameplayCameraTests.HostRestart_DestroysOldViewAndShakeContainer_ThenBindsNewOwner",
+        "result": "Passed",
+        "failure": null
+      },
+      {
+        "name": "MonsterSupergroup.Gameplay.Tests.GameplayCameraTests.LocalDamage_IgnoresCanonicalEchoAndInvulnerability_AndRebindsOneSubscription",
+        "result": "Passed",
+        "failure": null
+      },
+      {
+        "name": "MonsterSupergroup.Gameplay.Tests.GameplayCameraTests.OptionsDisableOwnerDamageAndExplicitShakeAndRestoreImmediately",
+        "result": "Passed",
+        "failure": null
+      },
+      {
+        "name": "MonsterSupergroup.Gameplay.Tests.GameplayCameraTests.OwnerReleaseAndLateCamera_RebindWithoutDuplicatesOrResidualShake",
+        "result": "Passed",
+        "failure": null
+      },
+      {
+        "name": "MonsterSupergroup.Gameplay.Tests.WeaponAudioLifetimeTests.BreathPhaseChangesAtExitCompletion_CancellationAndReuseReleaseOneInstance",
+        "result": "Passed",
+        "failure": null
+      },
+      {
+        "name": "MonsterSupergroup.Gameplay.Tests.WeaponAudioLifetimeTests.WispOnlyShootsAndFinalHits_ReuseAndLateReplayDoNotAddFlightOrPiercingAudio",
+        "result": "Passed",
+        "failure": null
+      }
+    ]
+  },
+  {
+    "name": "assets",
+    "result": "Passed",
+    "total": 2,
+    "passed": 2,
+    "failed": 0,
+    "cases": [
+      {
+        "name": "MonsterSupergroup.HellMaidenMigration.Tests.WeaponAudioMigrationTests.BreathHasOneStagedEntryAndNoStaleEmitterOrEndParameter",
+        "result": "Passed",
+        "failure": null
+      },
+      {
+        "name": "MonsterSupergroup.HellMaidenMigration.Tests.WeaponAudioMigrationTests.WispSourceSoundsAndManualAdaptationSurviveRepeatedRepair",
+        "result": "Passed",
+        "failure": null
+      }
+    ]
+  },
+  {
+    "name": "distance-filter",
+    "result": "Passed",
+    "total": 1,
+    "passed": 1,
+    "failed": 0,
+    "cases": [
+      {
+        "name": "MonsterSupergroup.Gameplay.Tests.AudioDistanceDiagnosticsTests.BreathSameInstance_DistanceDrivesLowpass_AndReturnsAtOriginalDistance",
+        "result": "Passed",
+        "failure": null
+      }
+    ]
+  }
+]

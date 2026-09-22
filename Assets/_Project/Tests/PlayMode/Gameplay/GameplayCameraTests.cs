@@ -81,14 +81,43 @@ namespace MonsterSupergroup.Gameplay.Tests
         }
 
         [UnityTest]
-        public IEnumerator AudioListenerTracksFinalCameraXY_ButNotBarrierZoomDepth()
+        public IEnumerator AudioListenerAtMapEdges_PreservesOwnerRelativeDistance()
+        {
+            var ground = GameObject.Find("Ground").GetComponent<SpriteRenderer>().bounds;
+            foreach (Vector2 position in new[] { (Vector2)ground.center,
+                         new Vector2(ground.max.x - 1, ground.center.y), new Vector2(ground.min.x + 1, ground.center.y),
+                         new Vector2(ground.center.x, ground.max.y - 1), new Vector2(ground.center.x, ground.min.y + 1),
+                         new Vector2(ground.max.x - 1, ground.max.y - 1), new Vector2(ground.min.x + 1, ground.max.y - 1),
+                         new Vector2(ground.max.x - 1, ground.min.y + 1), new Vector2(ground.min.x + 1, ground.min.y + 1) })
+            {
+                MoveOwner(position);
+                rig.Reset();
+                yield return null; yield return null;
+                Vector3 source = player.transform.position + Vector3.right;
+                float distance = Vector3.Distance(source, view.LocalAudioListener.transform.position);
+                Debug.Log($"AUDIO-EDGE owner={player.transform.position} camera={view.transform.position} listener={view.LocalAudioListener.transform.position} distance={distance:F6}");
+                if (position != (Vector2)ground.center)
+                    Assert.That(Vector2.Distance(player.transform.position, view.transform.position), Is.GreaterThan(5), "Must exercise a constrained camera, not a centered one.");
+                Assert.That(distance, Is.EqualTo(Mathf.Sqrt(101)).Within(.001f), "Local sounds must not fade as the camera reaches the map boundary.");
+                Assert.That(Vector3.Distance(source + Vector3.right * 12, view.LocalAudioListener.transform.position), Is.GreaterThan(distance + 5), "Distant world sounds must retain distance attenuation.");
+            }
+        }
+
+        [UnityTest]
+        public IEnumerator AudioListenerTracksOwner_IndependentOfBarrierAndCameraShake()
         {
             view.SetReferenceTrapFraming(new Vector2(10,5),20,1);
             yield return null; yield return null;
             var audio=view.LocalAudioListener.transform.position;
-            Assert.That(audio.x,Is.EqualTo(view.GameCamera.transform.position.x).Within(.001));
-            Assert.That(audio.y,Is.EqualTo(view.GameCamera.transform.position.y).Within(.001));
+            Assert.That(audio.x,Is.EqualTo(player.transform.position.x).Within(.001));
+            Assert.That(audio.y,Is.EqualTo(player.transform.position.y).Within(.001));
             Assert.That(audio.z,Is.EqualTo(player.transform.position.z-10).Within(.001));
+            Assert.That(view.LocalAudioListener.gameObject.scene, Is.EqualTo(view.gameObject.scene));
+            view.transform.parent.position += new Vector3(2, 3, 0);
+            view.transform.parent.rotation = Quaternion.Euler(0, 0, 20);
+            Assert.That(view.LocalAudioListener.transform.position, Is.EqualTo(audio), "Shake hierarchy cannot move the listener between updates.");
+            Assert.That(view.LocalAudioListener.transform.rotation, Is.EqualTo(Quaternion.identity));
+            view.transform.parent.SetPositionAndRotation(Vector3.zero, Quaternion.identity);
             view.ClearReferenceTrapFraming();
             yield return null;
             Assert.That(FMODUnity.StudioListener.ListenerCount,Is.EqualTo(1));

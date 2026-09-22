@@ -150,7 +150,7 @@ namespace MonsterSupergroup.HellMaidenMigration.Tests
             {
                 Assert.That(material, Is.Not.Null);
                 Assert.That(material.shader, Is.Not.Null);
-                Assert.That(material.shader.name, Does.StartWith("AllIn1"));
+                Assert.That(PlanarTestMaterials.Source(material, DanteBeamNativeGasMigration.OutputFolder + "/Material").shader.name, Does.StartWith("AllIn1"));
             }
             Assert.DoesNotThrow(DanteBeamNativeGasMigration.ValidateImportedAssets);
         }

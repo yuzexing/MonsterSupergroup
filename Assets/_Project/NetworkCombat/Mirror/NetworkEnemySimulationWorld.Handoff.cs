@@ -62,9 +62,16 @@ namespace MonsterSupergroup.NetworkCombat
             foreach (var pair in enemies)
             {
                 var enemy = pair.Value;
-                if (enemy == null || !IsServerEnemyAlive(pair.Key)) { handoffs.Remove(pair.Key); continue; }
+                if (enemy == null || !IsServerEnemyAlive(pair.Key))
+                {
+                    if (enemy != null && Registry.TryGetTargetState(pair.Key, out var deadTarget) && deadTarget.HasDecoy &&
+                        Registry.ClearDecoyTarget(pair.Key, deadTarget.DecoyOwnerPlayerId, deadTarget.DecoyCastId, out var cleared))
+                        enemy.SetServerTarget(cleared);
+                    handoffs.Remove(pair.Key); continue;
+                }
                 var assigned = enemy.Assignment;
                 var progress = GetHandoff(pair.Key);
+                RefreshAllureDecoy(enemy, now);
                 if (!TryGetEligiblePlayer(assigned.AggroTargetPlayerId, out _))
                 {
                     Vector2 position = Registry.TryGetLatestSnapshot(pair.Key, out var pose) ? pose.Position : (Vector2)enemy.transform.position;
@@ -78,12 +85,26 @@ namespace MonsterSupergroup.NetworkCombat
                     CommitTarget(enemy, targetId, reason);
                     continue;
                 }
+                if (assigned.Host == EnemySimulationHost.ClientPlayer &&
+                    !TryGetEligiblePlayer(assigned.SimulationOwnerPlayerId, out _))
+                {
+                    CommitTarget(enemy, assigned.AggroTargetPlayerId, EnemyTargetChangeReason.TargetUnavailable,
+                        fallback: true, preserveTargetIntent: true);
+                    continue;
+                }
                 if (progress.TimedOut(now))
                 {
                     uint pending = progress.HasPending ? progress.PendingTarget : 0;
                     var reason = progress.PendingReason;
-                    CommitTarget(enemy, assigned.AggroTargetPlayerId, EnemyTargetChangeReason.Timeout, true);
+                    CommitTarget(enemy, assigned.AggroTargetPlayerId, EnemyTargetChangeReason.Timeout, true, true);
                     if (pending != 0) progress.Request(pending, assigned.AggroTargetPlayerId, reason);
+                    continue;
+                }
+                if (enemy.AllureHandoffPending && progress.AwaitingEpoch == 0)
+                {
+                    if (CanCompleteAllureHandoff(enemy))
+                        CommitTarget(enemy, assigned.AggroTargetPlayerId, EnemyTargetChangeReason.Forced,
+                            preserveTargetIntent: true);
                     continue;
                 }
                 if (progress.AwaitingEpoch == 0 && progress.HasPending)
@@ -96,8 +117,11 @@ namespace MonsterSupergroup.NetworkCombat
             }
         }
 
-        private void CommitTarget(NetworkEnemySimulationAgent enemy, uint target, EnemyTargetChangeReason reason, bool fallback = false)
+        private void CommitTarget(NetworkEnemySimulationAgent enemy, uint target, EnemyTargetChangeReason reason,
+            bool fallback = false, bool preserveTargetIntent = false)
         {
+            if (!preserveTargetIntent)
+                enemy.SetServerTarget(Registry.SetAggroTarget(enemy.netId, target));
             var assignment = target == 0 ? Registry.Freeze(enemy.netId) :
                 enemy.SimulationMode == EnemySimulationMode.BossServer ? Registry.AssignServerAuthoritative(enemy.netId, target) :
                 fallback ? Registry.AssignServerFallback(enemy.netId, target) : Registry.AssignClientOwner(enemy.netId, target, target);
@@ -107,6 +131,7 @@ namespace MonsterSupergroup.NetworkCombat
         private void PublishHandoff(NetworkEnemySimulationAgent enemy, EnemySimulationAssignment assignment, EnemyTargetChangeReason reason)
         {
             if (enemy.Assignment.Equals(assignment)) return;
+            if (Registry.TryGetTargetState(enemy.netId, out var target)) enemy.SetServerTarget(target);
             // A server simulator has a fresher pose than the last scheduled broadcast.
             if (enemy.Authority.RunsNavigation && enemy.TryCaptureSnapshot(NetworkTime.time, out var live))
                 Registry.RecordCheckpoint(new EnemySimulationCheckpoint { Movement = live });
@@ -141,8 +166,9 @@ namespace MonsterSupergroup.NetworkCombat
             foreach (uint id in ids)
                 if (enemies.TryGetValue(id, out var enemy) && enemy != null && IsServerEnemyAlive(id) &&
                     enemy.Assignment.Host == EnemySimulationHost.ServerFallback && enemy.Assignment.AggroTargetPlayerId == endpoint.netId &&
-                    NetworkTime.time - GetHandoff(id).Diagnostics.StartedAt >= .25)
-                    CommitTarget(enemy, endpoint.netId, EnemyTargetChangeReason.SimulatorReady);
+                    NetworkTime.time - GetHandoff(id).Diagnostics.StartedAt >= .25 &&
+                    (!enemy.TargetState.AllureControlled || CanCompleteAllureHandoff(enemy)))
+                    CommitTarget(enemy, endpoint.netId, EnemyTargetChangeReason.SimulatorReady, preserveTargetIntent: true);
         }
     }
 }

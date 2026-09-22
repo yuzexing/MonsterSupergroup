@@ -224,7 +224,7 @@ namespace MonsterSupergroup.HellMaidenMigration.Tests
                     Material material = materials[slot];
                     Assert.That(material, Is.Not.Null, path + " material slot " + slot);
                     Assert.That(material.shader, Is.Not.Null, path + " material slot " + slot);
-                    Assert.That(material.shader.name, Does.StartWith("AllIn1"), path + " material slot " + slot);
+                    Assert.That(PlanarTestMaterials.Source(material, "Assets/_Project/Content/HellMaiden/NativeGAS/Dante").shader.name, Does.StartWith("AllIn1"), path + " material slot " + slot);
                 }
             }
         }

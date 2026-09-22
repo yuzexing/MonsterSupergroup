@@ -21,6 +21,7 @@ namespace MonsterSupergroup.NetworkCombat
         private ClientCombatCollector collector;
         private float nextFlushTime;
         private uint batchSequence;
+        [SyncVar] private uint collectorRound;
 
         public uint OwnerPlayerId => ownerPlayerId;
         public uint SourceEntityId => netId;
@@ -35,6 +36,7 @@ namespace MonsterSupergroup.NetworkCombat
         {
             base.OnStartServer();
             ownerPlayerId = netId;
+            collectorRound = NetworkCombatWorld.CurrentRound;
             NetworkCombatWorld world = NetworkCombatWorld.Instance;
             if (world == null)
             {
@@ -65,7 +67,9 @@ namespace MonsterSupergroup.NetworkCombat
             collector = new ClientCombatCollector(
                 ownerPlayerId,
                 eventIds,
-                trace: Trace);
+                trace: Trace, timeSource: () => Time.unscaledTimeAsDouble,
+                isClientFinalEnemy: id => NetworkClient.spawned.TryGetValue(id, out var target) &&
+                    target.GetComponent<NetworkCombatantAdapter>()?.IsClientFinalEnemy == true);
             collector.DamageResolved += HandleDamageResolved;
             NetworkCombatWorld world = NetworkCombatWorld.Instance;
             if (world != null)
@@ -124,7 +128,8 @@ namespace MonsterSupergroup.NetworkCombat
             if (!isOwned || collector == null ||
                 (collector.PendingResultCount == 0 &&
                  collector.PendingStatusMutationCount == 0 &&
-                 collector.PendingPlayerHealthReportCount == 0))
+                 collector.PendingPlayerHealthReportCount == 0 &&
+                 !collector.HasDueDeaths(Time.unscaledTimeAsDouble)))
             {
                 return;
             }
@@ -135,7 +140,8 @@ namespace MonsterSupergroup.NetworkCombat
                 batchSequence = 1u;
             }
 
-            CombatSubmissionBatch batch = collector.Drain(batchSequence);
+            CombatSubmissionBatch batch = collector.Drain(batchSequence, now: Time.unscaledTimeAsDouble);
+            batch.Round = collectorRound;
             CmdSubmit(batch);
         }
 
@@ -154,8 +160,19 @@ namespace MonsterSupergroup.NetworkCombat
             NetworkCombatWorld world = NetworkCombatWorld.Instance;
             if (world != null)
             {
-                world.ProcessSubmission(ownerPlayerId, batch);
+                var receipts = world.ProcessSubmission(ownerPlayerId, batch);
+                if (receipts.Length > 0) TargetConfirmEnemyDeaths(sender, receipts, batch.Round);
             }
+        }
+
+        [TargetRpc]
+        private void TargetConfirmEnemyDeaths(NetworkConnectionToClient target, EnemyDeathReceipt[] receipts, uint round)
+        {
+            if (round != NetworkCombatWorld.CurrentRound || collector == null) return;
+            foreach (var receipt in receipts)
+                if (collector.AcknowledgeDeath(receipt, Time.unscaledTimeAsDouble) && receipt.Kill.TargetEntityId != 0)
+                    NetworkCombatWorld.Instance?.Replica.Apply(new CanonicalWorldBatch
+                    { ConfirmedKills = new[] { receipt.Kill } });
         }
 
         public override void OnStopAuthority()

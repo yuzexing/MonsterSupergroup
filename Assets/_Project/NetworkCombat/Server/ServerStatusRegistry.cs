@@ -551,7 +551,9 @@ namespace MonsterSupergroup.NetworkCombat
                 return CombatRejectionReason.SourceNotOwned;
             }
 
-            if (ledger.IsPlayerSelectingUpgrade(senderPlayerId))
+            bool clientFinalEnemy = ledger.TryGetState(mutation.TargetEntityId, out var target) &&
+                target.Kind == (byte)CombatEntityKind.Enemy;
+            if (!clientFinalEnemy && ledger.IsPlayerSelectingUpgrade(senderPlayerId))
             {
                 return CombatRejectionReason.SourceSelectingUpgrade;
             }
@@ -566,7 +568,7 @@ namespace MonsterSupergroup.NetworkCombat
                 mutation.MaxStacks < 1 ||
                 mutation.StackMode > (byte)StatusStackMode.HighestPriority ||
                 mutation.TickDamage < 0 ||
-                mutation.TickDamage > ledger.MaximumDamagePerResult ||
+                (!clientFinalEnemy && mutation.TickDamage > ledger.MaximumDamagePerResult) ||
                 mutation.TotalTicks < 1 ||
                 mutation.CompletedTicks < 0 ||
                 mutation.CompletedTicks > mutation.TotalTicks ||

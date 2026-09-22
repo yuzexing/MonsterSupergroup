@@ -19,7 +19,8 @@ namespace MonsterSupergroup.HellMaidenMigration.Editor
             var source = AssetDatabase.LoadAssetAtPath<Material>(sourcePath);
             if (source == null || source.shader == null) return false;
             string expected = source.shader.name == "AllIn1SpriteShader/AllIn1SpriteShader" ? "MonsterSupergroup/PlanarSprite" :
-                source.shader.name == "AllIn1Vfx/AllIn1VfxURPCompat" ? "MonsterSupergroup/PlanarVfx" : null;
+                source.shader.name == "AllIn1Vfx/AllIn1VfxURPCompat" ? "MonsterSupergroup/PlanarVfx" :
+                source.shader.name == "HellMaiden/Presentation/Ovid Summon Shadow" ? "MonsterSupergroup/PlanarSummonShadow" : null;
             if (expected == null || material.shader.name != expected || material.renderQueue != source.renderQueue) return false;
             for (int i = 0; i < ShaderUtil.GetPropertyCount(source.shader); i++)
             {

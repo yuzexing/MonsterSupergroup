@@ -152,7 +152,7 @@ namespace MonsterSupergroup.HellMaidenMigration.Tests
             {
                 Assert.That(material, Is.Not.Null);
                 Assert.That(material.shader, Is.Not.Null);
-                Assert.That(material.shader.name, Does.StartWith("AllIn1"));
+                Assert.That(PlanarTestMaterials.Source(material, DanteCirclingNativeGasMigration.OutputFolder + "/Material").shader.name, Does.StartWith("AllIn1"));
             }
             Assert.DoesNotThrow(DanteCirclingNativeGasMigration.ValidateImportedAssets);
         }
@@ -163,7 +163,7 @@ namespace MonsterSupergroup.HellMaidenMigration.Tests
             var renderer = Attack().transform.Find("Root/Scale/Main/BurstSparks").GetComponent<ParticleSystemRenderer>();
             Assert.That(renderer.enabled, Is.True);
             Material material = renderer.sharedMaterial;
-            Assert.That(material.shader.name, Is.EqualTo("AllIn1Vfx/AllIn1VfxURPCompat"));
+            Assert.That(PlanarTestMaterials.Source(material, DanteCirclingNativeGasMigration.OutputFolder + "/Material").shader.name, Is.EqualTo("AllIn1Vfx/AllIn1VfxURPCompat"));
             Assert.That(material.IsKeywordEnabled("PREMULTIPLYCOLOR_ON"), Is.True,
                 "This shader feature derives alpha from luminance; an opaque black atlas otherwise draws black billboards.");
             Assert.That(material.GetFloat("_SrcMode"), Is.EqualTo(5f));

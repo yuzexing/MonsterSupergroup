@@ -17,6 +17,7 @@ namespace MonsterSupergroup.NetworkCombat
             CombatEntityAuthority.ServerCanonical;
 
         private bool statusObserved;
+        public bool IsClientFinalEnemy => entityKind == CombatEntityKind.Enemy && authority == CombatEntityAuthority.ServerCanonical;
         private ClientCombatCollector observedCollector;
         private uint localPlayerId;
         private uint targetOwnerPlayerId;
@@ -95,6 +96,7 @@ namespace MonsterSupergroup.NetworkCombat
                 : throw new System.ArgumentNullException(nameof(targetCombatant));
             entityKind = kind;
             authority = entityAuthority;
+            combatant.ConfigureClientFinalDeath(IsClientFinalEnemy);
         }
 
         private void Awake()
@@ -110,6 +112,7 @@ namespace MonsterSupergroup.NetworkCombat
             }
 
             combatant.ConfigureKillConfirmation(true);
+            combatant.ConfigureClientFinalDeath(IsClientFinalEnemy);
         }
 
         public override void OnStartServer()

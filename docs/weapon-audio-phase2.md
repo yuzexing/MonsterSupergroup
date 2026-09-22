@@ -23,7 +23,7 @@
 | 吐息结束 | 资源末尾回调声明 Phase=1、End=1；bank **仅有 Phase**；隔离原运行未观察到 Phase=1 | 正常退出动画结束显式 Phase=1，然后 AllowFadeout／release；取消 immediate／release。这是生命周期修正，不能称为来源已执行行为 |
 | 多束 | 来源 allowMultipleAttacks=false，改 count=3 仍只产生一束 | 不改武器规则；专项 Three 按钮仅为三束展示压力检查，每束独立声音 |
 | 暂停／慢动作 | 补采 timeScale 变化时未重新 start；武器及音效脚本未发现 timeScale→setPitch 路径。没有采集逐帧音高 | 不以 timeScale 重建循环或设置音高；动画和攻击继续遵循既有时钟 |
-| 监听位置 | 相机 XY，Z=-10；bank 3D 范围 1–20 | GameplayCameraRig 管理唯一 Owner 监听器，最终镜头 XY、游戏平面朝镜头侧深度 10，推拉不改此深度 |
+| 监听位置 | 相机 XY，Z=-10；旧 EventDescription 快照范围 1–20（不是最终 DSP 衰减范围） | 2026-09-21 边缘修复改为唯一 Owner 玩家 XY、固定朝向、朝镜头侧深度 10；不再受有限地图镜头限位／震屏／推拉影响。原 WA 包的相机 XY 行为属于历史版本；直接 DSP 与低通证据见 [边缘修复报告](audio-edge-listener.md) |
 | 用户音量 | 来源 VCA；本项目正式设置入口为 Bus | 生产 Bus 应用用户音量；旧 Master/Music/SFX VCA 归一，旧菜单委托同一设置服务，避免同一用户值乘两次 |
 
 `plr.bank` 内容未修改。幅度统计是每 0.25 秒的全局混音峰值／RMS 抽样，可能包含环境声，不是分离武器的测量、整段积分或响度标准化；不能用它直接宣布“音量相同”。

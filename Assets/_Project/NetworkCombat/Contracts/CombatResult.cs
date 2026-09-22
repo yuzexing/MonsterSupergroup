@@ -65,14 +65,32 @@ namespace MonsterSupergroup.NetworkCombat
     [Serializable]
     public struct CombatSubmissionBatch
     {
+        public uint Round;
         public uint BatchSequence;
         public CombatResult[] Results;
         public StatusMutation[] StatusMutations;
         public PlayerHealthReport[] PlayerHealthReports;
+        public EnemyDeathReport[] EnemyDeathReports;
 
         public int ResultCount => Results?.Length ?? 0;
         public int StatusMutationCount => StatusMutations?.Length ?? 0;
         public int PlayerHealthReportCount => PlayerHealthReports?.Length ?? 0;
+    }
+
+    [Serializable]
+    public struct EnemyDeathReport
+    {
+        public ulong EventId, CauseEventId;
+        public uint Sequence, SourcePlayerId, SourceEntityId, TargetEntityId;
+    }
+
+    [Serializable]
+    public struct EnemyDeathReceipt
+    {
+        public ulong ReportEventId;
+        public uint TargetEntityId;
+        // A zero kill acknowledges a target already retired without a combat kill.
+        public ConfirmedKill Kill;
     }
 
     [Serializable]

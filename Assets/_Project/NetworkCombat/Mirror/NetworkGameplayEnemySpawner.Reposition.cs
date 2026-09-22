@@ -36,6 +36,8 @@ namespace MonsterSupergroup.NetworkCombat
                     repositionCandidates.Add(enemy);
             foreach (var enemy in repositionCandidates)
             {
+                if (enemy.HasAllureDecoy || enemy.AllureHandoffPending)
+                { offscreenSince.Remove(enemy.netId); continue; }
                 var target = activeParticipants.Find(p => p.AvatarId == enemy.Assignment.AggroTargetPlayerId) ?? activeParticipants[0];
                 Vector2 position = enemy.transform.position;
                 var bodyRenderer = enemy.GetComponent<AstralShift.HellMaiden.AI.Enemy.EnemyController>().spriteRenderer;

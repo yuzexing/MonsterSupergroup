@@ -44,6 +44,9 @@ namespace MonsterSupergroup.NetworkCombat
             // World components and spawned combatants subscribe to this gateway.
             Gateway = new ServerCombatGateway();
             gluttonySession = null;
+            musicSession = null;
+            allureSession = null;
+            PrototypesEnabled = true;
             nextServerTick = NetworkTime.time;
         }
 
@@ -132,9 +135,12 @@ namespace MonsterSupergroup.NetworkCombat
         }
 
         [Server]
-        public void ProcessSubmission(uint senderPlayerId, CombatSubmissionBatch batch)
+        public EnemyDeathReceipt[] ProcessSubmission(uint senderPlayerId, CombatSubmissionBatch batch)
         {
-            Broadcast(Gateway.ProcessBatch(senderPlayerId, batch, NetworkTime.time));
+            Gateway.Round = CurrentRound;
+            var canonical = Gateway.ProcessBatch(senderPlayerId, batch, NetworkTime.time, out var receipts);
+            Broadcast(canonical);
+            return receipts;
         }
 
         [Server]
@@ -249,7 +255,7 @@ namespace MonsterSupergroup.NetworkCombat
                 (batch.EnemyHitPresentations == null || batch.EnemyHitPresentations.Length == 0);
         }
 
-        private static uint CurrentRound => NetworkManager.singleton is BootGameplayNetworkManager manager && manager.UsePreparationRoom
+        internal static uint CurrentRound => NetworkManager.singleton is BootGameplayNetworkManager manager && manager.UsePreparationRoom
             ? (NetworkServer.active ? manager.Session.Round : manager.RoomSnapshot.Round) : 0;
         public void ResetClientRound()
         {
@@ -259,6 +265,7 @@ namespace MonsterSupergroup.NetworkCombat
         public void ResetServerRound()
         {
             Gateway.ResetForNextRun(); nextServerTick = NetworkTime.time;
+            PrototypesEnabled = true;
         }
 
         private void OnDestroy()

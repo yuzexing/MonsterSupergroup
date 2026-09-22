@@ -51,7 +51,7 @@ namespace MonsterSupergroup.NetworkCombat.Editor
                 EditorSceneManager.MarkSceneDirty(scene); EditorSceneManager.SaveScene(scene);
             }
             finally { if (opened) EditorSceneManager.CloseScene(scene,true); }
-            File.WriteAllText(Log+"installed.txt",DateTime.UtcNow.ToString("O")+"\nDefault OFF. Open Gluttony panel in-game and select Both.");
+            File.WriteAllText(Log+"installed.txt",DateTime.UtcNow.ToString("O")+"\nPrototypes default ON. 1/2/3 select Gluttony/Music/Allure; stage one implements Gluttony.");
         }
         private static void ConfigureInput(SerializedObject so)
         {
@@ -60,7 +60,7 @@ namespace MonsterSupergroup.NetworkCombat.Editor
             else if (action.FindPropertyRelative("_name").stringValue!="Button3") throw new InvalidOperationException("Action 5 is already assigned.");
             Int(action,"_id",5); Int(action,"_type",1); Int(action,"_categoryId",1); Int(action,"_behaviorId",0); Int(action,"_userAssignable",1);
             action.FindPropertyRelative("_name").stringValue="Button3";
-            action.FindPropertyRelative("_descriptiveName").stringValue="Gluttony Mark (Prototype)";
+            action.FindPropertyRelative("_descriptiveName").stringValue="Prototype Primary Action";
             var ids=Find(so.FindProperty("_userData.actionCategoryMap.list"),"categoryId",1).FindPropertyRelative("actionIds");
             bool exists=false; for(int i=0;i<ids.arraySize;i++) exists|=ids.GetArrayElementAtIndex(i).intValue==5;
             if (!exists) { int index=ids.arraySize++; ids.GetArrayElementAtIndex(index).intValue=5; }

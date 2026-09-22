@@ -144,7 +144,13 @@ namespace MonsterSupergroup.NetworkCombat
             string simulation = assignment.Epoch == 0 || agent.Authority == null
                 ? "unavailable (assignment pending)"
                 : $"{assignment.Host} | Here: {agent.Authority.Role}\n" +
-                  $"Simulator: {assignment.SimulationOwnerPlayerId} | Target: {assignment.AggroTargetPlayerId} | Epoch: {assignment.Epoch}";
+                  $"Simulator: {assignment.SimulationOwnerPlayerId} | Aggro: {assignment.AggroTargetPlayerId} | Epoch: {assignment.Epoch}";
+            var target = agent.TargetState;
+            string actualTarget = agent.HasAllureDecoy
+                ? $"Decoy P{target.DecoyOwnerPlayerId} @ {target.DecoyPosition} ({Math.Max(0, target.DecoyExpiresAt - NetworkTime.time):0.0}s)"
+                : $"Player {assignment.AggroTargetPlayerId}";
+            simulation += $"\nTracking: {actualTarget} | Target version: {target.Revision}" +
+                $"\nAllure transfer pending: {agent.AllureHandoffPending} | Decoy pauses transfer: {agent.HasAllureDecoy}";
             string runtime = $"Runtime: {(agent.ProductEnemyInitialized ? "ready" : "waiting")} | " +
                 (agent.ProductMovementOnly ? "MovementOnly" : "Combat simulation");
             simulation += $"\nTransfer: {agent.Handoff.Reason} | Applied epoch: {agent.AppliedHandoffEpoch}" +

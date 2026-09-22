@@ -1,0 +1,150 @@
+[
+  {
+    "role": "host",
+    "completed": [
+      {
+        "kind": "completed",
+        "detail": "renderersObserved=3666; presentation-only, manual visual acceptance pending",
+        "run": "0b0aed7b6a4948dfad24c04633f10c0a",
+        "real": 40.06635780430839
+      }
+    ],
+    "replays": [
+      "weapon=1;sourceId=1;element=Default;angle=45;size=1;source-duration=1",
+      "weapon=2;sourceId=2;element=Default;angle=90;size=1;source-duration=1",
+      "weapon=2;sourceId=2;element=Fire;angle=90;size=1;source-duration=1",
+      "weapon=2;sourceId=2;element=Poison;angle=90;size=1;source-duration=1",
+      "weapon=3;sourceId=3;element=Fire;angle=135;size=1;source-duration=2",
+      "weapon=3;sourceId=3;element=Poison;angle=135;size=1;source-duration=2",
+      "weapon=4;sourceId=6;element=Default;angle=180;size=1;source-duration=3.14",
+      "weapon=5;sourceId=8;element=Fire;angle=225;size=1;source-duration=1.25",
+      "weapon=5;sourceId=8;element=Poison;angle=225;size=1;source-duration=1.25",
+      "weapon=6;sourceId=402;element=Default;angle=270;size=1;source-duration=1",
+      "weapon=6;sourceId=402;element=Fire;angle=270;size=1;source-duration=1",
+      "weapon=6;sourceId=402;element=Poison;angle=270;size=1;source-duration=1",
+      "weapon=7;sourceId=0;element=Default;angle=315;size=1;source-duration=1"
+    ],
+    "phases": [
+      "AttackEnter",
+      "AttackMain",
+      "AttackExit",
+      "AttackEnter",
+      "AttackMain",
+      "AttackExit",
+      "AttackEnter",
+      "AttackMain",
+      "AttackExit"
+    ],
+    "samples": [
+      "weapon=1;renderers=0;particles=0;size=1;angle=0;element=Default",
+      "weapon=1;renderers=0;particles=0;size=1;angle=45;element=Default",
+      "weapon=2;renderers=7;particles=16;size=1;angle=90;element=Default",
+      "weapon=2;renderers=10;particles=10;size=1;angle=90;element=Fire",
+      "weapon=2;renderers=3;particles=12;size=1;angle=90;element=Fire",
+      "weapon=2;renderers=7;particles=18;size=1;angle=90;element=Poison",
+      "weapon=3;renderers=21;particles=46;size=1;angle=135;element=Fire",
+      "weapon=3;renderers=12;particles=42;size=1;angle=135;element=Poison",
+      "weapon=4;renderers=21;particles=10;size=1;angle=180;element=Default",
+      "weapon=4;renderers=21;particles=37;size=1;angle=180;element=Default",
+      "weapon=5;renderers=19;particles=105;size=1;angle=225;element=Fire",
+      "weapon=5;renderers=19;particles=65;size=1;angle=225;element=Poison",
+      "weapon=6;renderers=7;particles=9;size=1;angle=270;element=Default",
+      "weapon=6;renderers=0;particles=0;size=1;angle=270;element=Default",
+      "weapon=6;renderers=5;particles=26;size=1;angle=270;element=Default",
+      "weapon=6;renderers=5;particles=27;size=1;angle=270;element=Default",
+      "weapon=6;renderers=7;particles=21;size=1;angle=270;element=Fire",
+      "weapon=6;renderers=0;particles=0;size=1;angle=270;element=Fire",
+      "weapon=6;renderers=5;particles=28;size=1;angle=270;element=Fire",
+      "weapon=6;renderers=0;particles=0;size=1;angle=270;element=Fire",
+      "weapon=6;renderers=7;particles=30;size=1;angle=270;element=Poison",
+      "weapon=6;renderers=5;particles=5;size=1;angle=270;element=Poison",
+      "weapon=6;renderers=5;particles=17;size=1;angle=270;element=Poison",
+      "weapon=6;renderers=0;particles=0;size=1;angle=270;element=Poison",
+      "weapon=7;renderers=870;particles=6875;size=1;angle=315;element=Default",
+      "weapon=7;renderers=870;particles=8183;size=1;angle=315;element=Default",
+      "weapon=7;renderers=870;particles=693;size=1;angle=315;element=Default",
+      "weapon=7;renderers=870;particles=692;size=1;angle=315;element=Default",
+      "weapon=7;renderers=0;particles=0;size=1;angle=315;element=Default"
+    ],
+    "unityErrors": 0,
+    "warnings": 4,
+    "logStatus": {
+      "complete": true,
+      "failure": ""
+    }
+  },
+  {
+    "role": "client",
+    "completed": [
+      {
+        "kind": "completed",
+        "detail": "renderersObserved=3666; presentation-only, manual visual acceptance pending",
+        "run": "0b0aed7b6a4948dfad24c04633f10c0a",
+        "real": 39.84702160442177
+      }
+    ],
+    "replays": [
+      "weapon=1;sourceId=1;element=Default;angle=45;size=1;source-duration=1",
+      "weapon=2;sourceId=2;element=Default;angle=90;size=1;source-duration=1",
+      "weapon=2;sourceId=2;element=Fire;angle=90;size=1;source-duration=1",
+      "weapon=2;sourceId=2;element=Poison;angle=90;size=1;source-duration=1",
+      "weapon=3;sourceId=3;element=Fire;angle=135;size=1;source-duration=2",
+      "weapon=3;sourceId=3;element=Poison;angle=135;size=1;source-duration=2",
+      "weapon=4;sourceId=6;element=Default;angle=180;size=1;source-duration=3.14",
+      "weapon=5;sourceId=8;element=Fire;angle=225;size=1;source-duration=1.25",
+      "weapon=5;sourceId=8;element=Poison;angle=225;size=1;source-duration=1.25",
+      "weapon=6;sourceId=402;element=Default;angle=270;size=1;source-duration=1",
+      "weapon=6;sourceId=402;element=Fire;angle=270;size=1;source-duration=1",
+      "weapon=6;sourceId=402;element=Poison;angle=270;size=1;source-duration=1",
+      "weapon=7;sourceId=0;element=Default;angle=315;size=1;source-duration=1"
+    ],
+    "phases": [
+      "AttackEnter",
+      "AttackMain",
+      "AttackExit",
+      "AttackEnter",
+      "AttackMain",
+      "AttackExit",
+      "AttackEnter",
+      "AttackMain",
+      "AttackExit"
+    ],
+    "samples": [
+      "weapon=1;renderers=0;particles=0;size=1;angle=0;element=Default",
+      "weapon=1;renderers=0;particles=0;size=1;angle=45;element=Default",
+      "weapon=2;renderers=7;particles=16;size=1;angle=90;element=Default",
+      "weapon=2;renderers=10;particles=9;size=1;angle=90;element=Fire",
+      "weapon=2;renderers=3;particles=12;size=1;angle=90;element=Fire",
+      "weapon=2;renderers=7;particles=17;size=1;angle=90;element=Poison",
+      "weapon=3;renderers=21;particles=45;size=1;angle=135;element=Fire",
+      "weapon=3;renderers=12;particles=40;size=1;angle=135;element=Poison",
+      "weapon=4;renderers=21;particles=10;size=1;angle=180;element=Default",
+      "weapon=4;renderers=21;particles=39;size=1;angle=180;element=Default",
+      "weapon=5;renderers=19;particles=95;size=1;angle=225;element=Fire",
+      "weapon=5;renderers=19;particles=65;size=1;angle=225;element=Poison",
+      "weapon=6;renderers=7;particles=8;size=1;angle=270;element=Default",
+      "weapon=6;renderers=0;particles=0;size=1;angle=270;element=Default",
+      "weapon=6;renderers=5;particles=28;size=1;angle=270;element=Default",
+      "weapon=6;renderers=5;particles=28;size=1;angle=270;element=Default",
+      "weapon=6;renderers=7;particles=19;size=1;angle=270;element=Fire",
+      "weapon=6;renderers=0;particles=0;size=1;angle=270;element=Fire",
+      "weapon=6;renderers=5;particles=29;size=1;angle=270;element=Fire",
+      "weapon=6;renderers=0;particles=0;size=1;angle=270;element=Fire",
+      "weapon=6;renderers=7;particles=29;size=1;angle=270;element=Poison",
+      "weapon=6;renderers=5;particles=2;size=1;angle=270;element=Poison",
+      "weapon=6;renderers=5;particles=14;size=1;angle=270;element=Poison",
+      "weapon=6;renderers=0;particles=0;size=1;angle=270;element=Poison",
+      "weapon=7;renderers=870;particles=6446;size=1;angle=315;element=Default",
+      "weapon=7;renderers=870;particles=8108;size=1;angle=315;element=Default",
+      "weapon=7;renderers=870;particles=690;size=1;angle=315;element=Default",
+      "weapon=7;renderers=870;particles=690;size=1;angle=315;element=Default",
+      "weapon=7;renderers=0;particles=0;size=1;angle=315;element=Default"
+    ],
+    "unityErrors": 0,
+    "warnings": 6,
+    "logStatus": {
+      "complete": true,
+      "failure": ""
+    }
+  }
+]

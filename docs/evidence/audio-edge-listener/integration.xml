@@ -1,0 +1,620 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="42" result="Passed" total="42" passed="42" failed="0" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-09-21 11:47:42Z" end-time="2026-09-21 11:48:23Z" duration="41.0519807">
+  <test-suite type="TestSuite" id="1670" name="Monster Supergroup" fullname="Monster Supergroup" runstate="Runnable" testcasecount="559" result="Passed" start-time="2026-09-21 11:47:42Z" end-time="2026-09-21 11:48:23Z" duration="41.051981" total="42" passed="42" failed="0" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="PlayMode" />
+    </properties>
+    <test-suite type="Assembly" id="1654" name="MonsterSupergroup.Gameplay.Tests.PlayMode.dll" fullname="F:/UnityStore/MonsterSupergroup/Library/ScriptAssemblies/MonsterSupergroup.Gameplay.Tests.PlayMode.dll" runstate="Runnable" testcasecount="555" result="Passed" start-time="2026-09-21 11:47:42Z" end-time="2026-09-21 11:48:23Z" duration="41.039915" total="42" passed="42" failed="0" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="32404" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="PlayMode" />
+        <property name="EditorOnly" value="False" />
+      </properties>
+      <test-suite type="TestSuite" id="1655" name="MonsterSupergroup" fullname="MonsterSupergroup" runstate="Runnable" testcasecount="555" result="Passed" start-time="2026-09-21 11:47:42Z" end-time="2026-09-21 11:48:23Z" duration="41.037335" total="42" passed="42" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-suite type="TestSuite" id="1656" name="Gameplay" fullname="MonsterSupergroup.Gameplay" runstate="Runnable" testcasecount="555" result="Passed" start-time="2026-09-21 11:47:42Z" end-time="2026-09-21 11:48:23Z" duration="41.026606" total="42" passed="42" failed="0" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <test-suite type="TestSuite" id="1657" name="Tests" fullname="MonsterSupergroup.Gameplay.Tests" runstate="Runnable" testcasecount="555" result="Passed" start-time="2026-09-21 11:47:42Z" end-time="2026-09-21 11:48:23Z" duration="41.019163" total="42" passed="42" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-suite type="TestFixture" id="1001" name="AudioMigrationPlayModeTests" fullname="MonsterSupergroup.Gameplay.Tests.AudioMigrationPlayModeTests" classname="MonsterSupergroup.Gameplay.Tests.AudioMigrationPlayModeTests" runstate="Runnable" testcasecount="24" result="Passed" start-time="2026-09-21 11:47:42Z" end-time="2026-09-21 11:47:42Z" duration="0.674300" total="24" passed="24" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1019" name="EmptyReferences_SkipPlaybackAndAttachment" fullname="MonsterSupergroup.Gameplay.Tests.AudioMigrationPlayModeTests.EmptyReferences_SkipPlaybackAndAttachment" methodname="EmptyReferences_SkipPlaybackAndAttachment" classname="MonsterSupergroup.Gameplay.Tests.AudioMigrationPlayModeTests" runstate="Runnable" seed="1202074812" result="Passed" start-time="2026-09-21 11:47:42Z" end-time="2026-09-21 11:47:42Z" duration="0.005988" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-suite type="ParameterizedMethod" id="1018" name="MigratedCombatEvent_CreatesPlayableInstance" fullname="MonsterSupergroup.Gameplay.Tests.AudioMigrationPlayModeTests.MigratedCombatEvent_CreatesPlayableInstance" classname="MonsterSupergroup.Gameplay.Tests.AudioMigrationPlayModeTests" runstate="Runnable" testcasecount="16" result="Passed" start-time="2026-09-21 11:47:42Z" end-time="2026-09-21 11:47:42Z" duration="0.016673" total="16" passed="16" failed="0" inconclusive="0" skipped="0" asserts="0">
+                <properties />
+                <test-case id="1002" name="MigratedCombatEvent_CreatesPlayableInstance(&quot;1235e4b8-dcb5-43e8-8bb7-41a363bff4b8&quot;)" fullname="MonsterSupergroup.Gameplay.Tests.AudioMigrationPlayModeTests.MigratedCombatEvent_CreatesPlayableInstance(&quot;1235e4b8-dcb5-43e8-8bb7-41a363bff4b8&quot;)" methodname="MigratedCombatEvent_CreatesPlayableInstance" classname="MonsterSupergroup.Gameplay.Tests.AudioMigrationPlayModeTests" runstate="Runnable" seed="680338264" result="Passed" start-time="2026-09-21 11:47:42Z" end-time="2026-09-21 11:47:42Z" duration="0.005195" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1003" name="MigratedCombatEvent_CreatesPlayableInstance(&quot;b865f76c-9c2a-4679-9709-a288f22c9619&quot;)" fullname="MonsterSupergroup.Gameplay.Tests.AudioMigrationPlayModeTests.MigratedCombatEvent_CreatesPlayableInstance(&quot;b865f76c-9c2a-4679-9709-a288f22c9619&quot;)" methodname="MigratedCombatEvent_CreatesPlayableInstance" classname="MonsterSupergroup.Gameplay.Tests.AudioMigrationPlayModeTests" runstate="Runnable" seed="1165891782" result="Passed" start-time="2026-09-21 11:47:42Z" end-time="2026-09-21 11:47:42Z" duration="0.000136" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1004" name="MigratedCombatEvent_CreatesPlayableInstance(&quot;840d4d3b-6223-4aab-a508-f0bcd8e4de60&quot;)" fullname="MonsterSupergroup.Gameplay.Tests.AudioMigrationPlayModeTests.MigratedCombatEvent_CreatesPlayableInstance(&quot;840d4d3b-6223-4aab-a508-f0bcd8e4de60&quot;)" methodname="MigratedCombatEvent_CreatesPlayableInstance" classname="MonsterSupergroup.Gameplay.Tests.AudioMigrationPlayModeTests" runstate="Runnable" seed="1090704218" result="Passed" start-time="2026-09-21 11:47:42Z" end-time="2026-09-21 11:47:42Z" duration="0.000097" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1005" name="MigratedCombatEvent_CreatesPlayableInstance(&quot;0ddbe74c-0c1e-4afc-a293-557438dbd8e0&quot;)" fullname="MonsterSupergroup.Gameplay.Tests.AudioMigrationPlayModeTests.MigratedCombatEvent_CreatesPlayableInstance(&quot;0ddbe74c-0c1e-4afc-a293-557438dbd8e0&quot;)" methodname="MigratedCombatEvent_CreatesPlayableInstance" classname="MonsterSupergroup.Gameplay.Tests.AudioMigrationPlayModeTests" runstate="Runnable" seed="1770438857" result="Passed" start-time="2026-09-21 11:47:42Z" end-time="2026-09-21 11:47:42Z" duration="0.000302" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1006" name="MigratedCombatEvent_CreatesPlayableInstance(&quot;d34df8fa-1ca2-43a3-b073-e782b614760a&quot;)" fullname="MonsterSupergroup.Gameplay.Tests.AudioMigrationPlayModeTests.MigratedCombatEvent_CreatesPlayableInstance(&quot;d34df8fa-1ca2-43a3-b073-e782b614760a&quot;)" methodname="MigratedCombatEvent_CreatesPlayableInstance" classname="MonsterSupergroup.Gameplay.Tests.AudioMigrationPlayModeTests" runstate="Runnable" seed="1410775532" result="Passed" start-time="2026-09-21 11:47:42Z" end-time="2026-09-21 11:47:42Z" duration="0.000102" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1007" name="MigratedCombatEvent_CreatesPlayableInstance(&quot;00f986d5-ee9b-42ea-87c4-cd2e653e5099&quot;)" fullname="MonsterSupergroup.Gameplay.Tests.AudioMigrationPlayModeTests.MigratedCombatEvent_CreatesPlayableInstance(&quot;00f986d5-ee9b-42ea-87c4-cd2e653e5099&quot;)" methodname="MigratedCombatEvent_CreatesPlayableInstance" classname="MonsterSupergroup.Gameplay.Tests.AudioMigrationPlayModeTests" runstate="Runnable" seed="1902736696" result="Passed" start-time="2026-09-21 11:47:42Z" end-time="2026-09-21 11:47:42Z" duration="0.000083" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1008" name="MigratedCombatEvent_CreatesPlayableInstance(&quot;5a78060c-ce45-44ff-af63-a975bac85129&quot;)" fullname="MonsterSupergroup.Gameplay.Tests.AudioMigrationPlayModeTests.MigratedCombatEvent_CreatesPlayableInstance(&quot;5a78060c-ce45-44ff-af63-a975bac85129&quot;)" methodname="MigratedCombatEvent_CreatesPlayableInstance" classname="MonsterSupergroup.Gameplay.Tests.AudioMigrationPlayModeTests" runstate="Runnable" seed="252580356" result="Passed" start-time="2026-09-21 11:47:42Z" end-time="2026-09-21 11:47:42Z" duration="0.000084" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1009" name="MigratedCombatEvent_CreatesPlayableInstance(&quot;0c0db1f5-703c-45a4-b90c-1b1050ef5b6f&quot;)" fullname="MonsterSupergroup.Gameplay.Tests.AudioMigrationPlayModeTests.MigratedCombatEvent_CreatesPlayableInstance(&quot;0c0db1f5-703c-45a4-b90c-1b1050ef5b6f&quot;)" methodname="MigratedCombatEvent_CreatesPlayableInstance" classname="MonsterSupergroup.Gameplay.Tests.AudioMigrationPlayModeTests" runstate="Runnable" seed="348261456" result="Passed" start-time="2026-09-21 11:47:42Z" end-time="2026-09-21 11:47:42Z" duration="0.000081" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1010" name="MigratedCombatEvent_CreatesPlayableInstance(&quot;5a48cc5f-7052-431c-a1e4-0beb9095c74e&quot;)" fullname="MonsterSupergroup.Gameplay.Tests.AudioMigrationPlayModeTests.MigratedCombatEvent_CreatesPlayableInstance(&quot;5a48cc5f-7052-431c-a1e4-0beb9095c74e&quot;)" methodname="MigratedCombatEvent_CreatesPlayableInstance" classname="MonsterSupergroup.Gameplay.Tests.AudioMigrationPlayModeTests" runstate="Runnable" seed="1498747656" result="Passed" start-time="2026-09-21 11:47:42Z" end-time="2026-09-21 11:47:42Z" duration="0.000087" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1011" name="MigratedCombatEvent_CreatesPlayableInstance(&quot;57a4d957-64b2-417b-b722-ff987e78629a&quot;)" fullname="MonsterSupergroup.Gameplay.Tests.AudioMigrationPlayModeTests.MigratedCombatEvent_CreatesPlayableInstance(&quot;57a4d957-64b2-417b-b722-ff987e78629a&quot;)" methodname="MigratedCombatEvent_CreatesPlayableInstance" classname="MonsterSupergroup.Gameplay.Tests.AudioMigrationPlayModeTests" runstate="Runnable" seed="1513737782" result="Passed" start-time="2026-09-21 11:47:42Z" end-time="2026-09-21 11:47:42Z" duration="0.000075" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1012" name="MigratedCombatEvent_CreatesPlayableInstance(&quot;2df3bdbe-8ccb-4f00-b5b1-6fdb3ac7bddf&quot;)" fullname="MonsterSupergroup.Gameplay.Tests.AudioMigrationPlayModeTests.MigratedCombatEvent_CreatesPlayableInstance(&quot;2df3bdbe-8ccb-4f00-b5b1-6fdb3ac7bddf&quot;)" methodname="MigratedCombatEvent_CreatesPlayableInstance" classname="MonsterSupergroup.Gameplay.Tests.AudioMigrationPlayModeTests" runstate="Runnable" seed="878474968" result="Passed" start-time="2026-09-21 11:47:42Z" end-time="2026-09-21 11:47:42Z" duration="0.000075" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1013" name="MigratedCombatEvent_CreatesPlayableInstance(&quot;8f40b0c2-bc01-4cb3-adf2-a95cb6c4f4d0&quot;)" fullname="MonsterSupergroup.Gameplay.Tests.AudioMigrationPlayModeTests.MigratedCombatEvent_CreatesPlayableInstance(&quot;8f40b0c2-bc01-4cb3-adf2-a95cb6c4f4d0&quot;)" methodname="MigratedCombatEvent_CreatesPlayableInstance" classname="MonsterSupergroup.Gameplay.Tests.AudioMigrationPlayModeTests" runstate="Runnable" seed="1846787571" result="Passed" start-time="2026-09-21 11:47:42Z" end-time="2026-09-21 11:47:42Z" duration="0.000092" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1014" name="MigratedCombatEvent_CreatesPlayableInstance(&quot;a32506b7-fbfd-4e62-ad46-7ce4a0bee1a3&quot;)" fullname="MonsterSupergroup.Gameplay.Tests.AudioMigrationPlayModeTests.MigratedCombatEvent_CreatesPlayableInstance(&quot;a32506b7-fbfd-4e62-ad46-7ce4a0bee1a3&quot;)" methodname="MigratedCombatEvent_CreatesPlayableInstance" classname="MonsterSupergroup.Gameplay.Tests.AudioMigrationPlayModeTests" runstate="Runnable" seed="990509562" result="Passed" start-time="2026-09-21 11:47:42Z" end-time="2026-09-21 11:47:42Z" duration="0.000080" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1015" name="MigratedCombatEvent_CreatesPlayableInstance(&quot;1cdd3260-fa38-4f3e-8440-a13293578e2e&quot;)" fullname="MonsterSupergroup.Gameplay.Tests.AudioMigrationPlayModeTests.MigratedCombatEvent_CreatesPlayableInstance(&quot;1cdd3260-fa38-4f3e-8440-a13293578e2e&quot;)" methodname="MigratedCombatEvent_CreatesPlayableInstance" classname="MonsterSupergroup.Gameplay.Tests.AudioMigrationPlayModeTests" runstate="Runnable" seed="577292434" result="Passed" start-time="2026-09-21 11:47:42Z" end-time="2026-09-21 11:47:42Z" duration="0.000072" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1016" name="MigratedCombatEvent_CreatesPlayableInstance(&quot;284fd736-4c4d-434a-aee6-e7e659c8af71&quot;)" fullname="MonsterSupergroup.Gameplay.Tests.AudioMigrationPlayModeTests.MigratedCombatEvent_CreatesPlayableInstance(&quot;284fd736-4c4d-434a-aee6-e7e659c8af71&quot;)" methodname="MigratedCombatEvent_CreatesPlayableInstance" classname="MonsterSupergroup.Gameplay.Tests.AudioMigrationPlayModeTests" runstate="Runnable" seed="954964961" result="Passed" start-time="2026-09-21 11:47:42Z" end-time="2026-09-21 11:47:42Z" duration="0.000071" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1017" name="MigratedCombatEvent_CreatesPlayableInstance(&quot;32e577a5-fc21-44ce-9600-85ed8e145ecf&quot;)" fullname="MonsterSupergroup.Gameplay.Tests.AudioMigrationPlayModeTests.MigratedCombatEvent_CreatesPlayableInstance(&quot;32e577a5-fc21-44ce-9600-85ed8e145ecf&quot;)" methodname="MigratedCombatEvent_CreatesPlayableInstance" classname="MonsterSupergroup.Gameplay.Tests.AudioMigrationPlayModeTests" runstate="Runnable" seed="264421649" result="Passed" start-time="2026-09-21 11:47:42Z" end-time="2026-09-21 11:47:42Z" duration="0.000075" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+              </test-suite>
+              <test-case id="1023" name="MigratedHurtSound_ProducesNonSilentMixerOutput" fullname="MonsterSupergroup.Gameplay.Tests.AudioMigrationPlayModeTests.MigratedHurtSound_ProducesNonSilentMixerOutput" methodname="MigratedHurtSound_ProducesNonSilentMixerOutput" classname="MonsterSupergroup.Gameplay.Tests.AudioMigrationPlayModeTests" runstate="Runnable" seed="1129701190" result="Passed" start-time="2026-09-21 11:47:42Z" end-time="2026-09-21 11:47:42Z" duration="0.236454" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-suite type="ParameterizedMethod" id="1026" name="MissingBank_DoesNotBlockOtherBanksOrSampleLoading" fullname="MonsterSupergroup.Gameplay.Tests.AudioMigrationPlayModeTests.MissingBank_DoesNotBlockOtherBanksOrSampleLoading" classname="MonsterSupergroup.Gameplay.Tests.AudioMigrationPlayModeTests" runstate="Runnable" testcasecount="2" result="Passed" start-time="2026-09-21 11:47:42Z" end-time="2026-09-21 11:47:42Z" duration="0.248994" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0">
+                <properties />
+                <output><![CDATA[[Localization] Applied locale=zh-CN revision=2
+]]></output>
+                <test-case id="1024" name="MissingBank_DoesNotBlockOtherBanksOrSampleLoading(True)" fullname="MonsterSupergroup.Gameplay.Tests.AudioMigrationPlayModeTests.MissingBank_DoesNotBlockOtherBanksOrSampleLoading(True)" methodname="MissingBank_DoesNotBlockOtherBanksOrSampleLoading" classname="MonsterSupergroup.Gameplay.Tests.AudioMigrationPlayModeTests" runstate="Runnable" seed="790635729" result="Passed" start-time="2026-09-21 11:47:42Z" end-time="2026-09-21 11:47:42Z" duration="0.126250" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                  <output><![CDATA[[FMOD] Could not load bank 'Assets/_Project/Audio/FMODBanks/missing-audio-bank-6aa333b7-4750-4443-80de-632ccd3081c6.bank' : ERR_FILE_NOTFOUND : File not found.
+]]></output>
+                </test-case>
+                <test-case id="1025" name="MissingBank_DoesNotBlockOtherBanksOrSampleLoading(False)" fullname="MonsterSupergroup.Gameplay.Tests.AudioMigrationPlayModeTests.MissingBank_DoesNotBlockOtherBanksOrSampleLoading(False)" methodname="MissingBank_DoesNotBlockOtherBanksOrSampleLoading" classname="MonsterSupergroup.Gameplay.Tests.AudioMigrationPlayModeTests" runstate="Runnable" seed="523589888" result="Passed" start-time="2026-09-21 11:47:42Z" end-time="2026-09-21 11:47:42Z" duration="0.119903" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                  <output><![CDATA[[FMOD] Could not load bank 'Assets/_Project/Audio/FMODBanks/missing-audio-bank-68c4c506-a7a6-4bb0-85e4-24dcd9e97c56.bank' : ERR_FILE_NOTFOUND : File not found.
+]]></output>
+                </test-case>
+              </test-suite>
+              <test-case id="1021" name="MissingEmitterAndParameterEvent_DoNotInterruptActivation" fullname="MonsterSupergroup.Gameplay.Tests.AudioMigrationPlayModeTests.MissingEmitterAndParameterEvent_DoNotInterruptActivation" methodname="MissingEmitterAndParameterEvent_DoNotInterruptActivation" classname="MonsterSupergroup.Gameplay.Tests.AudioMigrationPlayModeTests" runstate="Runnable" seed="1446141878" result="Passed" start-time="2026-09-21 11:47:42Z" end-time="2026-09-21 11:47:42Z" duration="0.016524" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[[FMOD] ObjectLookup::get : Lookup failed for EventModel: {19aa2a80-f303-47ad-9d98-34f711948f05}
+
+[Audio] Optional FMOD event is unavailable; continuing without sound: {19aa2a80-f303-47ad-9d98-34f711948f05}
+]]></output>
+              </test-case>
+              <test-case id="1020" name="MissingGuidAndPath_SkipRepeatedPlaybackWithOneWarningEach" fullname="MonsterSupergroup.Gameplay.Tests.AudioMigrationPlayModeTests.MissingGuidAndPath_SkipRepeatedPlaybackWithOneWarningEach" methodname="MissingGuidAndPath_SkipRepeatedPlaybackWithOneWarningEach" classname="MonsterSupergroup.Gameplay.Tests.AudioMigrationPlayModeTests" runstate="Runnable" seed="1075803205" result="Passed" start-time="2026-09-21 11:47:42Z" end-time="2026-09-21 11:47:42Z" duration="0.002379" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[[FMOD] ObjectLookup::get : Lookup failed for EventModel: {8463d0a5-39ea-4201-8e77-c970acefe0a8}
+
+[Audio] Optional FMOD event is unavailable; continuing without sound: {8463d0a5-39ea-4201-8e77-c970acefe0a8}
+[Audio] Optional FMOD event is unavailable; continuing without sound: event:/missing-audio-test/1e62a94b-e86b-4f24-a916-adb11e6a133e
+]]></output>
+              </test-case>
+              <test-case id="1027" name="MissingUnityAudioClip_CompletesInteraction" fullname="MonsterSupergroup.Gameplay.Tests.AudioMigrationPlayModeTests.MissingUnityAudioClip_CompletesInteraction" methodname="MissingUnityAudioClip_CompletesInteraction" classname="MonsterSupergroup.Gameplay.Tests.AudioMigrationPlayModeTests" runstate="Runnable" seed="1391980203" result="Passed" start-time="2026-09-21 11:47:42Z" end-time="2026-09-21 11:47:42Z" duration="0.001093" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1022" name="ReloadedBank_RetriesPreviouslyMissingEvent" fullname="MonsterSupergroup.Gameplay.Tests.AudioMigrationPlayModeTests.ReloadedBank_RetriesPreviouslyMissingEvent" methodname="ReloadedBank_RetriesPreviouslyMissingEvent" classname="MonsterSupergroup.Gameplay.Tests.AudioMigrationPlayModeTests" runstate="Runnable" seed="726558827" result="Passed" start-time="2026-09-21 11:47:42Z" end-time="2026-09-21 11:47:42Z" duration="0.130695" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[[FMOD] ObjectLookup::get : Lookup failed for EventModel: {5a48cc5f-7052-431c-a1e4-0beb9095c74e}
+
+[Audio] Optional FMOD event is unavailable; continuing without sound: {5a48cc5f-7052-431c-a1e4-0beb9095c74e}
+]]></output>
+              </test-case>
+            </test-suite>
+            <test-suite type="TestFixture" id="1212" name="GameOptionsTests" fullname="MonsterSupergroup.Gameplay.Tests.GameOptionsTests" classname="MonsterSupergroup.Gameplay.Tests.GameOptionsTests" runstate="Runnable" testcasecount="7" result="Passed" start-time="2026-09-21 11:47:42Z" end-time="2026-09-21 11:47:43Z" duration="1.149770" total="7" passed="7" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1217" name="AudioControlsRealFmodBusesIndependently" fullname="MonsterSupergroup.Gameplay.Tests.GameOptionsTests.AudioControlsRealFmodBusesIndependently" methodname="AudioControlsRealFmodBusesIndependently" classname="MonsterSupergroup.Gameplay.Tests.GameOptionsTests" runstate="Runnable" seed="1854260997" result="Passed" start-time="2026-09-21 11:47:42Z" end-time="2026-09-21 11:47:42Z" duration="0.107204" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[[Localization] Applied locale=zh-CN revision=3
+]]></output>
+              </test-case>
+              <test-case id="1213" name="CorruptFutureAndOutOfRangePreferencesRecover" fullname="MonsterSupergroup.Gameplay.Tests.GameOptionsTests.CorruptFutureAndOutOfRangePreferencesRecover" methodname="CorruptFutureAndOutOfRangePreferencesRecover" classname="MonsterSupergroup.Gameplay.Tests.GameOptionsTests" runstate="Runnable" seed="1083674108" result="Passed" start-time="2026-09-21 11:47:42Z" end-time="2026-09-21 11:47:42Z" duration="0.013677" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1215" name="GraphicsAffectRuntimeAndKeepSourceAssetIntact" fullname="MonsterSupergroup.Gameplay.Tests.GameOptionsTests.GraphicsAffectRuntimeAndKeepSourceAssetIntact" methodname="GraphicsAffectRuntimeAndKeepSourceAssetIntact" classname="MonsterSupergroup.Gameplay.Tests.GameOptionsTests" runstate="Runnable" seed="1122779440" result="Passed" start-time="2026-09-21 11:47:42Z" end-time="2026-09-21 11:47:42Z" duration="0.044346" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[[Localization] Applied locale=zh-CN revision=7
+]]></output>
+              </test-case>
+              <test-case id="1214" name="LanguageUpdatesExistingTextAndPreservesArguments" fullname="MonsterSupergroup.Gameplay.Tests.GameOptionsTests.LanguageUpdatesExistingTextAndPreservesArguments" methodname="LanguageUpdatesExistingTextAndPreservesArguments" classname="MonsterSupergroup.Gameplay.Tests.GameOptionsTests" runstate="Runnable" seed="2113893348" result="Passed" start-time="2026-09-21 11:47:42Z" end-time="2026-09-21 11:47:43Z" duration="0.559954" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[[Localization] Applied locale=en revision=10
+[Localization] Applied locale=zh-CN revision=11
+]]></output>
+              </test-case>
+              <test-case id="1216" name="PanelDiscardsDraftAndAppliesOnlyOnRequest" fullname="MonsterSupergroup.Gameplay.Tests.GameOptionsTests.PanelDiscardsDraftAndAppliesOnlyOnRequest" methodname="PanelDiscardsDraftAndAppliesOnlyOnRequest" classname="MonsterSupergroup.Gameplay.Tests.GameOptionsTests" runstate="Runnable" seed="1562418747" result="Passed" start-time="2026-09-21 11:47:43Z" end-time="2026-09-21 11:47:43Z" duration="0.259089" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[[Localization] Applied locale=zh-CN revision=13
+[Localization] Applied locale=en revision=14
+]]></output>
+              </test-case>
+              <test-case id="1218" name="ResolutionChangeKeepsSupportedRefreshRateOrUsesNearestAvailable" fullname="MonsterSupergroup.Gameplay.Tests.GameOptionsTests.ResolutionChangeKeepsSupportedRefreshRateOrUsesNearestAvailable" methodname="ResolutionChangeKeepsSupportedRefreshRateOrUsesNearestAvailable" classname="MonsterSupergroup.Gameplay.Tests.GameOptionsTests" runstate="Runnable" seed="806017945" result="Passed" start-time="2026-09-21 11:47:43Z" end-time="2026-09-21 11:47:43Z" duration="0.041493" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[[Localization] Applied locale=zh-CN revision=18
+]]></output>
+              </test-case>
+              <test-case id="1219" name="ResolutionRefreshAndFrameLimitAreSeparateDraftControls" fullname="MonsterSupergroup.Gameplay.Tests.GameOptionsTests.ResolutionRefreshAndFrameLimitAreSeparateDraftControls" methodname="ResolutionRefreshAndFrameLimitAreSeparateDraftControls" classname="MonsterSupergroup.Gameplay.Tests.GameOptionsTests" runstate="Runnable" seed="1727132086" result="Passed" start-time="2026-09-21 11:47:43Z" end-time="2026-09-21 11:47:43Z" duration="0.119438" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[[Localization] Applied locale=zh-CN revision=20
+[Localization] Applied locale=en revision=21
+]]></output>
+              </test-case>
+            </test-suite>
+            <test-suite type="TestFixture" id="1220" name="GameplayCameraTests" fullname="MonsterSupergroup.Gameplay.Tests.GameplayCameraTests" classname="MonsterSupergroup.Gameplay.Tests.GameplayCameraTests" runstate="Runnable" testcasecount="9" result="Passed" start-time="2026-09-21 11:47:43Z" end-time="2026-09-21 11:48:19Z" duration="35.768553" total="9" passed="9" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1226" name="AdmittedUltimate_UsesOriginalTwoAnimationEvents_OnceOnHost" fullname="MonsterSupergroup.Gameplay.Tests.GameplayCameraTests.AdmittedUltimate_UsesOriginalTwoAnimationEvents_OnceOnHost" methodname="AdmittedUltimate_UsesOriginalTwoAnimationEvents_OnceOnHost" classname="MonsterSupergroup.Gameplay.Tests.GameplayCameraTests" runstate="Runnable" seed="209448100" result="Passed" start-time="2026-09-21 11:47:43Z" end-time="2026-09-21 11:47:53Z" duration="9.822661" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[[Localization] Applied locale=zh-CN revision=22
+[NetworkBackend] backend=Kcp purpose=Test source=test-runner transport=KcpTransport.
+--- Hardware Info ---
+CPU Model: 13th Gen Intel(R) Core(TM) i7-13700KF
+GPU Model: Null Device
+RAM: 65375 MB
+Install Disk Model: JZ-SSD4T-XW
+Main Monitor Model: Unknown Monitor
+---------------------
+Normal : True
+UI : False
+AstralShift.HellMaiden.Controllers.PlayerController_HMD
+<color=yellow><b>► Controllers: </b></color>Controller type AstralShift.Control.Controllers.NoInputGameController not available
+Server listening on port 7904
+[BootGameplay] Server starting; loading 'Assets/_Project/Scenes/Gameplay.unity'.
+[BootGameplay] Server connection 0 is ready.
+[BootGameplay] Queued Player for connection 0.
+[BootGameplay] Gameplay scene ready: 'Assets/_Project/Scenes/Gameplay.unity'.
+[BootGameplay] Spawned Player NetworkPlayer [connId=0] in 'Assets/_Project/Scenes/Gameplay.unity'.
+<color=yellow><b>► Controllers: </b></color>Overrode <color=yellow><b></b></color> with <color=yellow><b>PlayerController_HMD</b></color>.
+Normal : True
+UI : False
+STATUS_BAR targetFill = 0.998
+[BootGameplay] Client stopping; serverActive=True.
+[BootGameplay] Server stopping.
+[BootGameplay] Gameplay unload requested.
+There are 2 audio listeners in the scene. Please ensure there is always exactly one audio listener in the scene.
+[SteamInvite] stage=cleanup lobby=0 host=0 phase=Disabled reason=
+]]></output>
+              </test-case>
+              <test-case id="1222" name="AudioListenerAtMapEdges_PreservesOwnerRelativeDistance" fullname="MonsterSupergroup.Gameplay.Tests.GameplayCameraTests.AudioListenerAtMapEdges_PreservesOwnerRelativeDistance" methodname="AudioListenerAtMapEdges_PreservesOwnerRelativeDistance" classname="MonsterSupergroup.Gameplay.Tests.GameplayCameraTests" runstate="Runnable" seed="1811107120" result="Passed" start-time="2026-09-21 11:47:53Z" end-time="2026-09-21 11:47:55Z" duration="1.977598" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[[NetworkBackend] backend=Kcp purpose=Test source=test-runner transport=KcpTransport.
+--- Hardware Info ---
+CPU Model: 13th Gen Intel(R) Core(TM) i7-13700KF
+GPU Model: Null Device
+RAM: 65375 MB
+Install Disk Model: JZ-SSD4T-XW
+Main Monitor Model: Unknown Monitor
+---------------------
+Normal : True
+UI : False
+AstralShift.HellMaiden.Controllers.PlayerController_HMD
+<color=yellow><b>► Controllers: </b></color>Controller type AstralShift.Control.Controllers.NoInputGameController not available
+Server listening on port 7904
+[BootGameplay] Server starting; loading 'Assets/_Project/Scenes/Gameplay.unity'.
+[BootGameplay] Server connection 0 is ready.
+[BootGameplay] Queued Player for connection 0.
+[BootGameplay] Gameplay scene ready: 'Assets/_Project/Scenes/Gameplay.unity'.
+[BootGameplay] Spawned Player NetworkPlayer [connId=0] in 'Assets/_Project/Scenes/Gameplay.unity'.
+<color=yellow><b>► Controllers: </b></color>Overrode <color=yellow><b></b></color> with <color=yellow><b>PlayerController_HMD</b></color>.
+Normal : True
+UI : False
+AUDIO-EDGE owner=(0.00, 0.99, 0.00) camera=(0.00, 0.99, -10.00) listener=(0.00, 0.99, -10.00) distance=10.049880
+AUDIO-EDGE owner=(58.67, 0.99, 0.00) camera=(48.48, 0.99, -10.00) listener=(58.67, 0.99, -10.00) distance=10.049880
+AUDIO-EDGE owner=(-58.67, 0.99, 0.00) camera=(-48.48, 0.99, -10.00) listener=(-58.67, 0.99, -10.00) distance=10.049880
+AUDIO-EDGE owner=(0.00, 33.55, 0.00) camera=(0.00, 26.16, -10.00) listener=(0.00, 33.55, -10.00) distance=10.049880
+AUDIO-EDGE owner=(0.00, -31.57, 0.00) camera=(0.00, -24.18, -10.00) listener=(0.00, -31.57, -10.00) distance=10.049880
+AUDIO-EDGE owner=(58.67, 33.55, 0.00) camera=(48.48, 26.16, -10.00) listener=(58.67, 33.55, -10.00) distance=10.049880
+AUDIO-EDGE owner=(-58.67, 33.55, 0.00) camera=(-48.48, 26.16, -10.00) listener=(-58.67, 33.55, -10.00) distance=10.049880
+AUDIO-EDGE owner=(58.67, -31.57, 0.00) camera=(48.48, -24.18, -10.00) listener=(58.67, -31.57, -10.00) distance=10.049880
+AUDIO-EDGE owner=(-58.67, -31.57, 0.00) camera=(-48.48, -24.18, -10.00) listener=(-58.67, -31.57, -10.00) distance=10.049880
+[BootGameplay] Client stopping; serverActive=True.
+[BootGameplay] Server stopping.
+[BootGameplay] Gameplay unload requested.
+There are 2 audio listeners in the scene. Please ensure there is always exactly one audio listener in the scene.
+[SteamInvite] stage=cleanup lobby=0 host=0 phase=Disabled reason=
+]]></output>
+              </test-case>
+              <test-case id="1223" name="AudioListenerTracksOwner_IndependentOfBarrierAndCameraShake" fullname="MonsterSupergroup.Gameplay.Tests.GameplayCameraTests.AudioListenerTracksOwner_IndependentOfBarrierAndCameraShake" methodname="AudioListenerTracksOwner_IndependentOfBarrierAndCameraShake" classname="MonsterSupergroup.Gameplay.Tests.GameplayCameraTests" runstate="Runnable" seed="803159116" result="Passed" start-time="2026-09-21 11:47:55Z" end-time="2026-09-21 11:47:57Z" duration="1.730171" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[[NetworkBackend] backend=Kcp purpose=Test source=test-runner transport=KcpTransport.
+--- Hardware Info ---
+CPU Model: 13th Gen Intel(R) Core(TM) i7-13700KF
+GPU Model: Null Device
+RAM: 65375 MB
+Install Disk Model: JZ-SSD4T-XW
+Main Monitor Model: Unknown Monitor
+---------------------
+Normal : True
+UI : False
+AstralShift.HellMaiden.Controllers.PlayerController_HMD
+<color=yellow><b>► Controllers: </b></color>Controller type AstralShift.Control.Controllers.NoInputGameController not available
+Server listening on port 7904
+[BootGameplay] Server starting; loading 'Assets/_Project/Scenes/Gameplay.unity'.
+[BootGameplay] Server connection 0 is ready.
+[BootGameplay] Queued Player for connection 0.
+[BootGameplay] Gameplay scene ready: 'Assets/_Project/Scenes/Gameplay.unity'.
+[BootGameplay] Spawned Player NetworkPlayer [connId=0] in 'Assets/_Project/Scenes/Gameplay.unity'.
+<color=yellow><b>► Controllers: </b></color>Overrode <color=yellow><b></b></color> with <color=yellow><b>PlayerController_HMD</b></color>.
+Normal : True
+UI : False
+[BootGameplay] Client stopping; serverActive=True.
+[BootGameplay] Server stopping.
+[BootGameplay] Gameplay unload requested.
+There are 2 audio listeners in the scene. Please ensure there is always exactly one audio listener in the scene.
+[SteamInvite] stage=cleanup lobby=0 host=0 phase=Disabled reason=
+]]></output>
+              </test-case>
+              <test-case id="1229" name="Axeldor_DeathHoldsAndCanonicalLifeRestorationReversesClip" fullname="MonsterSupergroup.Gameplay.Tests.GameplayCameraTests.Axeldor_DeathHoldsAndCanonicalLifeRestorationReversesClip" methodname="Axeldor_DeathHoldsAndCanonicalLifeRestorationReversesClip" classname="MonsterSupergroup.Gameplay.Tests.GameplayCameraTests" runstate="Runnable" seed="1529022438" result="Passed" start-time="2026-09-21 11:47:57Z" end-time="2026-09-21 11:48:01Z" duration="4.118507" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[[NetworkBackend] backend=Kcp purpose=Test source=test-runner transport=KcpTransport.
+--- Hardware Info ---
+CPU Model: 13th Gen Intel(R) Core(TM) i7-13700KF
+GPU Model: Null Device
+RAM: 65375 MB
+Install Disk Model: JZ-SSD4T-XW
+Main Monitor Model: Unknown Monitor
+---------------------
+Normal : True
+UI : False
+AstralShift.HellMaiden.Controllers.PlayerController_HMD
+<color=yellow><b>► Controllers: </b></color>Controller type AstralShift.Control.Controllers.NoInputGameController not available
+Server listening on port 7904
+[BootGameplay] Server starting; loading 'Assets/_Project/Scenes/Gameplay.unity'.
+[BootGameplay] Server connection 0 is ready.
+[BootGameplay] Queued Player for connection 0.
+[BootGameplay] Gameplay scene ready: 'Assets/_Project/Scenes/Gameplay.unity'.
+[BootGameplay] Spawned Player NetworkPlayer [connId=0] in 'Assets/_Project/Scenes/Gameplay.unity'.
+<color=yellow><b>► Controllers: </b></color>Overrode <color=yellow><b></b></color> with <color=yellow><b>PlayerController_HMD</b></color>.
+Normal : True
+UI : False
+STATUS_BAR targetFill = 0
+[BootGameplay] Client stopping; serverActive=True.
+[BootGameplay] Server stopping.
+[BootGameplay] Gameplay unload requested.
+There are 2 audio listeners in the scene. Please ensure there is always exactly one audio listener in the scene.
+[SteamInvite] stage=cleanup lobby=0 host=0 phase=Disabled reason=
+]]></output>
+              </test-case>
+              <test-case id="1224" name="FormalCamera_FollowsOneOwner_UsesGroundEdges_AndConvertsAim" fullname="MonsterSupergroup.Gameplay.Tests.GameplayCameraTests.FormalCamera_FollowsOneOwner_UsesGroundEdges_AndConvertsAim" methodname="FormalCamera_FollowsOneOwner_UsesGroundEdges_AndConvertsAim" classname="MonsterSupergroup.Gameplay.Tests.GameplayCameraTests" runstate="Runnable" seed="1600789010" result="Passed" start-time="2026-09-21 11:48:01Z" end-time="2026-09-21 11:48:12Z" duration="10.676081" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[[NetworkBackend] backend=Kcp purpose=Test source=test-runner transport=KcpTransport.
+--- Hardware Info ---
+CPU Model: 13th Gen Intel(R) Core(TM) i7-13700KF
+GPU Model: Null Device
+RAM: 65375 MB
+Install Disk Model: JZ-SSD4T-XW
+Main Monitor Model: Unknown Monitor
+---------------------
+Normal : True
+UI : False
+AstralShift.HellMaiden.Controllers.PlayerController_HMD
+<color=yellow><b>► Controllers: </b></color>Controller type AstralShift.Control.Controllers.NoInputGameController not available
+Server listening on port 7904
+[BootGameplay] Server starting; loading 'Assets/_Project/Scenes/Gameplay.unity'.
+[BootGameplay] Server connection 0 is ready.
+[BootGameplay] Queued Player for connection 0.
+[BootGameplay] Gameplay scene ready: 'Assets/_Project/Scenes/Gameplay.unity'.
+[BootGameplay] Spawned Player NetworkPlayer [connId=0] in 'Assets/_Project/Scenes/Gameplay.unity'.
+<color=yellow><b>► Controllers: </b></color>Overrode <color=yellow><b></b></color> with <color=yellow><b>PlayerController_HMD</b></color>.
+Normal : True
+UI : False
+[BootGameplay] Client stopping; serverActive=True.
+[BootGameplay] Server stopping.
+[BootGameplay] Gameplay unload requested.
+There are 2 audio listeners in the scene. Please ensure there is always exactly one audio listener in the scene.
+[SteamInvite] stage=cleanup lobby=0 host=0 phase=Disabled reason=
+]]></output>
+              </test-case>
+              <test-case id="1228" name="HostRestart_DestroysOldViewAndShakeContainer_ThenBindsNewOwner" fullname="MonsterSupergroup.Gameplay.Tests.GameplayCameraTests.HostRestart_DestroysOldViewAndShakeContainer_ThenBindsNewOwner" methodname="HostRestart_DestroysOldViewAndShakeContainer_ThenBindsNewOwner" classname="MonsterSupergroup.Gameplay.Tests.GameplayCameraTests" runstate="Runnable" seed="208789897" result="Passed" start-time="2026-09-21 11:48:12Z" end-time="2026-09-21 11:48:14Z" duration="2.377358" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[[NetworkBackend] backend=Kcp purpose=Test source=test-runner transport=KcpTransport.
+--- Hardware Info ---
+CPU Model: 13th Gen Intel(R) Core(TM) i7-13700KF
+GPU Model: Null Device
+RAM: 65375 MB
+Install Disk Model: JZ-SSD4T-XW
+Main Monitor Model: Unknown Monitor
+---------------------
+Normal : True
+UI : False
+AstralShift.HellMaiden.Controllers.PlayerController_HMD
+<color=yellow><b>► Controllers: </b></color>Controller type AstralShift.Control.Controllers.NoInputGameController not available
+Server listening on port 7904
+[BootGameplay] Server starting; loading 'Assets/_Project/Scenes/Gameplay.unity'.
+[BootGameplay] Server connection 0 is ready.
+[BootGameplay] Queued Player for connection 0.
+[BootGameplay] Gameplay scene ready: 'Assets/_Project/Scenes/Gameplay.unity'.
+[BootGameplay] Spawned Player NetworkPlayer [connId=0] in 'Assets/_Project/Scenes/Gameplay.unity'.
+<color=yellow><b>► Controllers: </b></color>Overrode <color=yellow><b></b></color> with <color=yellow><b>PlayerController_HMD</b></color>.
+Normal : True
+UI : False
+[BootGameplay] Client stopping; serverActive=True.
+[BootGameplay] Server stopping.
+[BootGameplay] Gameplay unload requested.
+There are 2 audio listeners in the scene. Please ensure there is always exactly one audio listener in the scene.
+Server listening on port 7904
+[BootGameplay] Server starting; loading 'Assets/_Project/Scenes/Gameplay.unity'.
+[BootGameplay] Gameplay scene ready: 'Assets/_Project/Scenes/Gameplay.unity'.
+[BootGameplay] Server connection 0 is ready.
+[BootGameplay] Queued Player for connection 0.
+[BootGameplay] Spawned Player NetworkPlayer [connId=0] in 'Assets/_Project/Scenes/Gameplay.unity'.
+<color=yellow><b>► Controllers: </b></color>Overrode <color=yellow><b></b></color> with <color=yellow><b>PlayerController_HMD</b></color>.
+Normal : True
+UI : False
+[BootGameplay] Client stopping; serverActive=True.
+[BootGameplay] Server stopping.
+[BootGameplay] Gameplay unload requested.
+There are 2 audio listeners in the scene. Please ensure there is always exactly one audio listener in the scene.
+[SteamInvite] stage=cleanup lobby=0 host=0 phase=Disabled reason=
+]]></output>
+              </test-case>
+              <test-case id="1227" name="LocalDamage_IgnoresCanonicalEchoAndInvulnerability_AndRebindsOneSubscription" fullname="MonsterSupergroup.Gameplay.Tests.GameplayCameraTests.LocalDamage_IgnoresCanonicalEchoAndInvulnerability_AndRebindsOneSubscription" methodname="LocalDamage_IgnoresCanonicalEchoAndInvulnerability_AndRebindsOneSubscription" classname="MonsterSupergroup.Gameplay.Tests.GameplayCameraTests" runstate="Runnable" seed="282892920" result="Passed" start-time="2026-09-21 11:48:14Z" end-time="2026-09-21 11:48:16Z" duration="1.725040" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[[NetworkBackend] backend=Kcp purpose=Test source=test-runner transport=KcpTransport.
+--- Hardware Info ---
+CPU Model: 13th Gen Intel(R) Core(TM) i7-13700KF
+GPU Model: Null Device
+RAM: 65375 MB
+Install Disk Model: JZ-SSD4T-XW
+Main Monitor Model: Unknown Monitor
+---------------------
+Normal : True
+UI : False
+AstralShift.HellMaiden.Controllers.PlayerController_HMD
+<color=yellow><b>► Controllers: </b></color>Controller type AstralShift.Control.Controllers.NoInputGameController not available
+Server listening on port 7904
+[BootGameplay] Server starting; loading 'Assets/_Project/Scenes/Gameplay.unity'.
+[BootGameplay] Server connection 0 is ready.
+[BootGameplay] Queued Player for connection 0.
+[BootGameplay] Gameplay scene ready: 'Assets/_Project/Scenes/Gameplay.unity'.
+[BootGameplay] Spawned Player NetworkPlayer [connId=0] in 'Assets/_Project/Scenes/Gameplay.unity'.
+<color=yellow><b>► Controllers: </b></color>Overrode <color=yellow><b></b></color> with <color=yellow><b>PlayerController_HMD</b></color>.
+Normal : True
+UI : False
+[BootGameplay] Client stopping; serverActive=True.
+[BootGameplay] Server stopping.
+[BootGameplay] Gameplay unload requested.
+There are 2 audio listeners in the scene. Please ensure there is always exactly one audio listener in the scene.
+[SteamInvite] stage=cleanup lobby=0 host=0 phase=Disabled reason=
+]]></output>
+              </test-case>
+              <test-case id="1221" name="OptionsDisableOwnerDamageAndExplicitShakeAndRestoreImmediately" fullname="MonsterSupergroup.Gameplay.Tests.GameplayCameraTests.OptionsDisableOwnerDamageAndExplicitShakeAndRestoreImmediately" methodname="OptionsDisableOwnerDamageAndExplicitShakeAndRestoreImmediately" classname="MonsterSupergroup.Gameplay.Tests.GameplayCameraTests" runstate="Runnable" seed="112994851" result="Passed" start-time="2026-09-21 11:48:16Z" end-time="2026-09-21 11:48:18Z" duration="1.628968" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[[NetworkBackend] backend=Kcp purpose=Test source=test-runner transport=KcpTransport.
+--- Hardware Info ---
+CPU Model: 13th Gen Intel(R) Core(TM) i7-13700KF
+GPU Model: Null Device
+RAM: 65375 MB
+Install Disk Model: JZ-SSD4T-XW
+Main Monitor Model: Unknown Monitor
+---------------------
+Normal : True
+UI : False
+AstralShift.HellMaiden.Controllers.PlayerController_HMD
+<color=yellow><b>► Controllers: </b></color>Controller type AstralShift.Control.Controllers.NoInputGameController not available
+Server listening on port 7904
+[BootGameplay] Server starting; loading 'Assets/_Project/Scenes/Gameplay.unity'.
+[BootGameplay] Server connection 0 is ready.
+[BootGameplay] Queued Player for connection 0.
+[BootGameplay] Gameplay scene ready: 'Assets/_Project/Scenes/Gameplay.unity'.
+[BootGameplay] Spawned Player NetworkPlayer [connId=0] in 'Assets/_Project/Scenes/Gameplay.unity'.
+<color=yellow><b>► Controllers: </b></color>Overrode <color=yellow><b></b></color> with <color=yellow><b>PlayerController_HMD</b></color>.
+Normal : True
+UI : False
+[BootGameplay] Client stopping; serverActive=True.
+[BootGameplay] Server stopping.
+[BootGameplay] Gameplay unload requested.
+There are 2 audio listeners in the scene. Please ensure there is always exactly one audio listener in the scene.
+[SteamInvite] stage=cleanup lobby=0 host=0 phase=Disabled reason=
+]]></output>
+              </test-case>
+              <test-case id="1225" name="OwnerReleaseAndLateCamera_RebindWithoutDuplicatesOrResidualShake" fullname="MonsterSupergroup.Gameplay.Tests.GameplayCameraTests.OwnerReleaseAndLateCamera_RebindWithoutDuplicatesOrResidualShake" methodname="OwnerReleaseAndLateCamera_RebindWithoutDuplicatesOrResidualShake" classname="MonsterSupergroup.Gameplay.Tests.GameplayCameraTests" runstate="Runnable" seed="255309175" result="Passed" start-time="2026-09-21 11:48:18Z" end-time="2026-09-21 11:48:19Z" duration="1.703872" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[[NetworkBackend] backend=Kcp purpose=Test source=test-runner transport=KcpTransport.
+--- Hardware Info ---
+CPU Model: 13th Gen Intel(R) Core(TM) i7-13700KF
+GPU Model: Null Device
+RAM: 65375 MB
+Install Disk Model: JZ-SSD4T-XW
+Main Monitor Model: Unknown Monitor
+---------------------
+Normal : True
+UI : False
+AstralShift.HellMaiden.Controllers.PlayerController_HMD
+<color=yellow><b>► Controllers: </b></color>Controller type AstralShift.Control.Controllers.NoInputGameController not available
+Server listening on port 7904
+[BootGameplay] Server starting; loading 'Assets/_Project/Scenes/Gameplay.unity'.
+[BootGameplay] Server connection 0 is ready.
+[BootGameplay] Queued Player for connection 0.
+[BootGameplay] Gameplay scene ready: 'Assets/_Project/Scenes/Gameplay.unity'.
+[BootGameplay] Spawned Player NetworkPlayer [connId=0] in 'Assets/_Project/Scenes/Gameplay.unity'.
+<color=yellow><b>► Controllers: </b></color>Overrode <color=yellow><b></b></color> with <color=yellow><b>PlayerController_HMD</b></color>.
+Normal : True
+UI : False
+<color=yellow><b>► Controllers: </b></color>Overrode <color=yellow><b></b></color> with <color=yellow><b>PlayerController_HMD</b></color>.
+Normal : True
+UI : False
+[BootGameplay] Client stopping; serverActive=True.
+[BootGameplay] Server stopping.
+[BootGameplay] Gameplay unload requested.
+There are 2 audio listeners in the scene. Please ensure there is always exactly one audio listener in the scene.
+[SteamInvite] stage=cleanup lobby=0 host=0 phase=Disabled reason=
+]]></output>
+              </test-case>
+            </test-suite>
+            <test-suite type="TestFixture" id="1644" name="WeaponAudioLifetimeTests" fullname="MonsterSupergroup.Gameplay.Tests.WeaponAudioLifetimeTests" classname="MonsterSupergroup.Gameplay.Tests.WeaponAudioLifetimeTests" runstate="Runnable" testcasecount="2" result="Passed" start-time="2026-09-21 11:48:19Z" end-time="2026-09-21 11:48:23Z" duration="3.387249" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1646" name="BreathPhaseChangesAtExitCompletion_CancellationAndReuseReleaseOneInstance" fullname="MonsterSupergroup.Gameplay.Tests.WeaponAudioLifetimeTests.BreathPhaseChangesAtExitCompletion_CancellationAndReuseReleaseOneInstance" methodname="BreathPhaseChangesAtExitCompletion_CancellationAndReuseReleaseOneInstance" classname="MonsterSupergroup.Gameplay.Tests.WeaponAudioLifetimeTests" runstate="Runnable" seed="1299921303" result="Passed" start-time="2026-09-21 11:48:19Z" end-time="2026-09-21 11:48:23Z" duration="3.281094" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1645" name="WispOnlyShootsAndFinalHits_ReuseAndLateReplayDoNotAddFlightOrPiercingAudio" fullname="MonsterSupergroup.Gameplay.Tests.WeaponAudioLifetimeTests.WispOnlyShootsAndFinalHits_ReuseAndLateReplayDoNotAddFlightOrPiercingAudio" methodname="WispOnlyShootsAndFinalHits_ReuseAndLateReplayDoNotAddFlightOrPiercingAudio" classname="MonsterSupergroup.Gameplay.Tests.WeaponAudioLifetimeTests" runstate="Runnable" seed="516845239" result="Passed" start-time="2026-09-21 11:48:23Z" end-time="2026-09-21 11:48:23Z" duration="0.089310" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[Saving results to: C:/Users/ADMIN/AppData/LocalLow/DefaultCompany/Monster Supergroup\TestResults.xml
+]]></output>
+              </test-case>
+            </test-suite>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

@@ -1,0 +1,7 @@
+{
+  "from": "MP-20260921-01",
+  "to": "MP-20260921-02",
+  "changedAssets": [
+    "Assets/_Project/NetworkCombat/Mirror/WeaponEffectsObservation.cs"
+  ]
+}

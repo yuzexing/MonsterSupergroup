@@ -1,0 +1,170 @@
+{
+  "before": {
+    "total": "1",
+    "passed": "0",
+    "failed": "1",
+    "duration": "5.6008817",
+    "start-time": "2026-09-21 12:43:59Z",
+    "end-time": "2026-09-21 12:44:04Z",
+    "failures": [
+      {
+        "name": "MonsterSupergroup.Gameplay.Tests.EnemyHandoffGameplayTests.LocalSimulatorSmoothsRenderingButReplicaAndFrozenDoNotDoubleInterpolate",
+        "message": "  A rendered local simulator must smooth its 50 Hz physics steps.\n  Expected: Interpolate\n  But was:  None\n"
+      }
+    ]
+  },
+  "movement": {
+    "total": "23",
+    "passed": "22",
+    "failed": "1",
+    "duration": "31.368054",
+    "start-time": "2026-09-21 12:47:06Z",
+    "end-time": "2026-09-21 12:47:38Z",
+    "failures": [
+      {
+        "name": "MonsterSupergroup.Gameplay.Tests.EnemyHandoffGameplayTests.DashCheckpointRestoresMotionOnlyInsideRemainingActiveWindow",
+        "message": "  Restoring state must not jump back to the dash origin.\n  Expected: (6.00, 0.00)\n  But was:  (6.00, 0.00)\n"
+      }
+    ]
+  },
+  "dash-diagnose": {
+    "total": "1",
+    "passed": "1",
+    "failed": "0",
+    "duration": "5.9333427",
+    "start-time": "2026-09-21 12:50:30Z",
+    "end-time": "2026-09-21 12:50:36Z",
+    "failures": []
+  },
+  "movement-integrated": {
+    "total": "24",
+    "passed": "24",
+    "failed": "0",
+    "duration": "34.657414",
+    "start-time": "2026-09-21 12:53:42Z",
+    "end-time": "2026-09-21 12:54:17Z",
+    "failures": []
+  },
+  "effects-edit": {
+    "total": "75",
+    "passed": "56",
+    "failed": "19",
+    "duration": "4.1222556",
+    "start-time": "2026-09-21 13:10:33Z",
+    "end-time": "2026-09-21 13:10:37Z",
+    "failures": [
+      {
+        "name": "MonsterSupergroup.HellMaidenMigration.Tests.DanteBeamNativeGasMigrationTests.SourceHierarchyParticlesAudioAndRenderableDependenciesSurvive(False,18,30)",
+        "message": "  Expected: String starting with \"AllIn1\"\n  But was:  \"MonsterSupergroup/PlanarSprite\"\n"
+      },
+      {
+        "name": "MonsterSupergroup.HellMaidenMigration.Tests.DanteBeamNativeGasMigrationTests.SourceHierarchyParticlesAudioAndRenderableDependenciesSurvive(True,19,31)",
+        "message": "  Expected: String starting with \"AllIn1\"\n  But was:  \"MonsterSupergroup/PlanarSprite\"\n"
+      },
+      {
+        "name": "MonsterSupergroup.HellMaidenMigration.Tests.DanteCirclingNativeGasMigrationTests.OpaqueBlackSparkAtlasUsesExplicitOpacityFallbackWithoutChangingItsTexture",
+        "message": "  Expected string length 28 but was 27. Strings differ at index 0.\n  Expected: \"AllIn1Vfx/AllIn1VfxURPCompat\"\n  But was:  \"MonsterSupergroup/PlanarVfx\"\n  -----------^\n"
+      },
+      {
+        "name": "MonsterSupergroup.HellMaidenMigration.Tests.DanteCirclingNativeGasMigrationTests.OriginalHierarchyParticlesAndAudioRemainWithoutInventingAudioTriggers",
+        "message": "  Expected: String starting with \"AllIn1\"\n  But was:  \"MonsterSupergroup/PlanarSprite\"\n"
+      },
+      {
+        "name": "MonsterSupergroup.HellMaidenMigration.Tests.DanteDashNativeGasMigrationTests.AttachedParticlesHierarchyAndSourceAudioEventArePreserved(False)",
+        "message": "  Fire_Trail_Small/Ground_02  (1) material slot 0\n  Expected: String starting with \"AllIn1\"\n  But was:  \"MonsterSupergroup/PlanarSprite\"\n"
+      },
+      {
+        "name": "MonsterSupergroup.HellMaidenMigration.Tests.DanteDashNativeGasMigrationTests.AttachedParticlesHierarchyAndSourceAudioEventArePreserved(True)",
+        "message": "  Fire_Trail_Small/Ground_02  (1) material slot 0\n  Expected: String starting with \"AllIn1\"\n  But was:  \"MonsterSupergroup/PlanarSprite\"\n"
+      },
+      {
+        "name": "MonsterSupergroup.HellMaidenMigration.Tests.DanteDashNativeGasMigrationTests.OriginalSegmentParticlesKeepLoopingEmissionAndFiniteVisualTail(False)",
+        "message": "  Fire_Trail1 material slot 0\n  Expected: String starting with \"AllIn1\"\n  But was:  \"MonsterSupergroup/PlanarVfx\"\n"
+      },
+      {
+        "name": "MonsterSupergroup.HellMaidenMigration.Tests.DanteDashNativeGasMigrationTests.OriginalSegmentParticlesKeepLoopingEmissionAndFiniteVisualTail(True)",
+        "message": "  Fire_Trail1 material slot 0\n  Expected: String starting with \"AllIn1\"\n  But was:  \"MonsterSupergroup/PlanarVfx\"\n"
+      },
+      {
+        "name": "MonsterSupergroup.HellMaidenMigration.Tests.OvidSummonNativeGasMigrationTests.BeamVariantsKeepTheirDistinctTexturesAndOriginalUvScroll(\"Assets/_Project/Content/HellMaiden/NativeGAS/Ovid/Summon/GameObject/Ovid_Summon_ButterflyAI.prefab\",\"fa6ae21672f404249ae45ab41be660e0\")",
+        "message": "  Expected string length 28 but was 27. Strings differ at index 0.\n  Expected: \"AllIn1Vfx/AllIn1VfxURPCompat\"\n  But was:  \"MonsterSupergroup/PlanarVfx\"\n  -----------^\n"
+      },
+      {
+        "name": "MonsterSupergroup.HellMaidenMigration.Tests.OvidSummonNativeGasMigrationTests.BeamVariantsKeepTheirDistinctTexturesAndOriginalUvScroll(\"Assets/_Project/Content/HellMaiden/NativeGAS/Ovid/Summon/GameObject/Ovid_Summon_ButterflyAIFire.prefab\",\"38607dcfdf75a2c4685f154c316505cc\")",
+        "message": "  Expected string length 28 but was 27. Strings differ at index 0.\n  Expected: \"AllIn1Vfx/AllIn1VfxURPCompat\"\n  But was:  \"MonsterSupergroup/PlanarVfx\"\n  -----------^\n"
+      },
+      {
+        "name": "MonsterSupergroup.HellMaidenMigration.Tests.OvidSummonNativeGasMigrationTests.BeamVariantsKeepTheirDistinctTexturesAndOriginalUvScroll(\"Assets/_Project/Content/HellMaiden/NativeGAS/Ovid/Summon/GameObject/Ovid_Summon_ButterflyAIPoison.prefab\",\"9b127916ab03f2d499da3a19d842df1e\")",
+        "message": "  Expected string length 28 but was 27. Strings differ at index 0.\n  Expected: \"AllIn1Vfx/AllIn1VfxURPCompat\"\n  But was:  \"MonsterSupergroup/PlanarVfx\"\n  -----------^\n"
+      },
+      {
+        "name": "MonsterSupergroup.HellMaidenMigration.Tests.OvidSummonNativeGasMigrationTests.OriginalHierarchyAndVisualDependenciesRetainOnlyTheTwoAuthoredNullContainers(\"Assets/_Project/Content/HellMaiden/NativeGAS/Ovid/Summon/GameObject/Ovid_Summon_ButterflyAI.prefab\")",
+        "message": "  Iso Rotation/Self Rotation/Power_Burst_V3/Glow\n  Expected: String starting with \"AllIn1\"\n  But was:  \"MonsterSupergroup/PlanarSprite\"\n"
+      },
+      {
+        "name": "MonsterSupergroup.HellMaidenMigration.Tests.OvidSummonNativeGasMigrationTests.OriginalHierarchyAndVisualDependenciesRetainOnlyTheTwoAuthoredNullContainers(\"Assets/_Project/Content/HellMaiden/NativeGAS/Ovid/Summon/GameObject/Ovid_Summon_ButterflyAIFire.prefab\")",
+        "message": "  Iso Rotation/Self Rotation/Power_Burst_V3/Glow\n  Expected: String starting with \"AllIn1\"\n  But was:  \"MonsterSupergroup/PlanarSprite\"\n"
+      },
+      {
+        "name": "MonsterSupergroup.HellMaidenMigration.Tests.OvidSummonNativeGasMigrationTests.OriginalHierarchyAndVisualDependenciesRetainOnlyTheTwoAuthoredNullContainers(\"Assets/_Project/Content/HellMaiden/NativeGAS/Ovid/Summon/GameObject/Ovid_Summon_ButterflyAIPoison.prefab\")",
+        "message": "  Iso Rotation/Self Rotation/Power_Burst_V3/Glow\n  Expected: String starting with \"AllIn1\"\n  But was:  \"MonsterSupergroup/PlanarSprite\"\n"
+      },
+      {
+        "name": "MonsterSupergroup.HellMaidenMigration.Tests.OvidSummonNativeGasMigrationTests.ShadowRetainsSourceGeometryTextureAndParametersWithAnExplicitFadeApproximation(\"Assets/_Project/Content/HellMaiden/NativeGAS/Ovid/Summon/GameObject/Ovid_Summon_ButterflyAI.prefab\")",
+        "message": "  String lengths are both 32. Strings differ at index 0.\n  Expected: \"ef5dd6be7c703534bb52398357fa94ed\"\n  But was:  \"fe90a040f8c68674b8ff9210fc113f3e\"\n  -----------^\n"
+      },
+      {
+        "name": "MonsterSupergroup.HellMaidenMigration.Tests.OvidSummonNativeGasMigrationTests.ShadowRetainsSourceGeometryTextureAndParametersWithAnExplicitFadeApproximation(\"Assets/_Project/Content/HellMaiden/NativeGAS/Ovid/Summon/GameObject/Ovid_Summon_ButterflyAIFire.prefab\")",
+        "message": "  String lengths are both 32. Strings differ at index 0.\n  Expected: \"ef5dd6be7c703534bb52398357fa94ed\"\n  But was:  \"fe90a040f8c68674b8ff9210fc113f3e\"\n  -----------^\n"
+      },
+      {
+        "name": "MonsterSupergroup.HellMaidenMigration.Tests.OvidSummonNativeGasMigrationTests.ShadowRetainsSourceGeometryTextureAndParametersWithAnExplicitFadeApproximation(\"Assets/_Project/Content/HellMaiden/NativeGAS/Ovid/Summon/GameObject/Ovid_Summon_ButterflyAIPoison.prefab\")",
+        "message": "  String lengths are both 32. Strings differ at index 0.\n  Expected: \"ef5dd6be7c703534bb52398357fa94ed\"\n  But was:  \"fe90a040f8c68674b8ff9210fc113f3e\"\n  -----------^\n"
+      },
+      {
+        "name": "MonsterSupergroup.HellMaidenMigration.Tests.WeaponPlanarCoverageTests.ProductionWeaponDependenciesUseFaithfulCopiesAndKeepSummonBodies",
+        "message": "  Assets/_Project/Content/HellMaiden/NativeGAS/Dante/Beam/GameObject/PlayerAttack_Dante_DragonsBreath_Fire.prefab\n  Expected: not null\n  But was:  null\n"
+      },
+      {
+        "name": "MonsterSupergroup.HellMaidenMigration.Tests.WeaponPlanarCoverageTests.ReapplyingMigrationKeepsPrefabsAndReviewedMaterialValues",
+        "message": "  Expected: RGBA(0.230, 0.510, 0.790, 0.810)\n  But was:  RGBA(0.230, 0.510, 0.790, 0.810)\n"
+      }
+    ]
+  },
+  "effects-edit02": {
+    "total": "75",
+    "passed": "73",
+    "failed": "2",
+    "duration": "25.5633505",
+    "start-time": "2026-09-21 13:11:57Z",
+    "end-time": "2026-09-21 13:12:23Z",
+    "failures": [
+      {
+        "name": "MonsterSupergroup.HellMaidenMigration.Tests.DanteDashNativeGasMigrationTests.AttachedParticlesHierarchyAndSourceAudioEventArePreserved(False)",
+        "message": "  Assets/_Project/Content/Rendering/Planar/Materials/dfdbab4d81fa8c84585669fd5e63053e.mat\n  Expected: True\n  But was:  False\n"
+      },
+      {
+        "name": "MonsterSupergroup.HellMaidenMigration.Tests.DanteDashNativeGasMigrationTests.AttachedParticlesHierarchyAndSourceAudioEventArePreserved(True)",
+        "message": "  Assets/_Project/Content/Rendering/Planar/Materials/dfdbab4d81fa8c84585669fd5e63053e.mat\n  Expected: True\n  But was:  False\n"
+      }
+    ]
+  },
+  "effects-edit-final": {
+    "total": "14",
+    "passed": "14",
+    "failed": "0",
+    "duration": "0.5570652",
+    "start-time": "2026-09-21 13:14:08Z",
+    "end-time": "2026-09-21 13:14:09Z",
+    "failures": []
+  },
+  "effects-play": {
+    "total": "101",
+    "passed": "101",
+    "failed": "0",
+    "duration": "6.0198494",
+    "start-time": "2026-09-21 13:13:11Z",
+    "end-time": "2026-09-21 13:13:17Z",
+    "failures": []
+  }
+}

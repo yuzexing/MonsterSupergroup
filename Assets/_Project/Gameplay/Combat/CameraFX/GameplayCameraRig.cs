@@ -174,7 +174,9 @@ namespace AstralShift.HellMaiden.CameraFX
             {
                 var anchor = new GameObject("Local gameplay audio listener");
                 anchor.SetActive(false);
-                anchor.transform.SetParent(transform, false);
+                // A camera child inherits shake and boundary motion between listener updates.
+                // Keep the existing listener in the gameplay scene, owned by this rig's lifetime.
+                UnityEngine.SceneManagement.SceneManager.MoveGameObjectToScene(anchor, gameObject.scene);
                 audioListener = anchor.AddComponent<FMODUnity.StudioListener>();
                 UpdateAudioListener();
                 anchor.SetActive(true);
@@ -186,10 +188,10 @@ namespace AstralShift.HellMaiden.CameraFX
         private void UpdateAudioListener()
         {
             if (audioListener == null || owner == null) return;
-            var camera = GameCamera.transform;
+            var position = owner.transform.position;
             audioListener.transform.SetPositionAndRotation(
-                new Vector3(camera.position.x, camera.position.y, owner.transform.position.z - audioListenerDepth),
-                camera.rotation);
+                new Vector3(position.x, position.y, position.z - audioListenerDepth),
+                Quaternion.identity);
         }
         private void ConstrainView()
         {
@@ -222,6 +224,11 @@ namespace AstralShift.HellMaiden.CameraFX
         {
             GameOptionsService.Changed -= ApplyShakePreference;
             ReleaseOwner(owner);
+        }
+
+        private void OnDestroy()
+        {
+            if (audioListener != null) Destroy(audioListener.gameObject);
         }
     }
 }

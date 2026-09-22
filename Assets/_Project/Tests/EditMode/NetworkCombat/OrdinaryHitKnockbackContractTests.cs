@@ -59,7 +59,7 @@ namespace MonsterSupergroup.NetworkCombat.Tests
             Assert.That(health.Health, Is.EqualTo(64));
             gateway.Attacks.Retire(7, Id(1));
             gateway.ProcessBatch(7, new CombatSubmissionBatch { BatchSequence = 2, Results = new[] { Hit(9) } }, 10);
-            Assert.That(accepted.Count, Is.EqualTo(3));
+            Assert.That(accepted.Count, Is.EqualTo(4), "Retiring attack metadata cannot reject an in-flight enemy outcome.");
         }
 
         [Test]

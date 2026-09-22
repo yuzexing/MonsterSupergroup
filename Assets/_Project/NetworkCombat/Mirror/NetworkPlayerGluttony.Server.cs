@@ -15,17 +15,18 @@ namespace MonsterSupergroup.NetworkCombat
             uint sequence = new CombatEventId(id).Sequence;
             if (sequence <= lastRequestSequence || !world.Gateway.ClientIdentities.Validate(netId, id, sequence)) return false;
             lastRequestSequence = sequence;
-            return isActiveAndEnabled && baseline && parameters.Enabled && revision == configRevision &&
+            return isActiveAndEnabled && baseline && parameters.Enabled && IsPrototypeEnabled && revision == configRevision &&
                 selection != null && selection.isActiveAndEnabled && buildRevision != 0 && buildRevision == selection.BuildRevision &&
                 player != null && player.IsRuntimeInitialized && !player.IsRunLoadingLocked && build != null && build.IsBuildActive &&
                 !BootGameplayNetworkManager.CombatHasEnded && !world.Gateway.CombatStopped &&
                 world.Gateway.Ledger.IsAlive(netId) && !world.Gateway.Ledger.IsPlayerSelectingUpgrade(netId);
         }
         [Command(channel = Channels.Reliable)]
-        private void CmdMark(ulong id, uint revision, uint buildRevision, Vector2 origin, Vector2 direction,
+        private void CmdMark(ulong id, uint revision, uint buildRevision, uint abilityRevision, Vector2 origin, Vector2 direction,
             uint[] targets, NetworkConnectionToClient sender = null)
         {
-            bool valid = ValidateRequest(sender,id,revision,buildRevision) && runtime.CanCast(parameters,NetworkTime.time) &&
+            bool valid = ValidateRequest(sender,id,revision,buildRevision) && abilities.ServerCanBegin(AbilityId, abilityRevision) &&
+                runtime.CanCast(parameters,NetworkTime.time) &&
                 targets != null && targets.Length <= parameters.MaximumTargets && GluttonyGeometry.Finite(origin) &&
                 GluttonyGeometry.Finite(direction) && Mathf.Abs(direction.sqrMagnitude-1) < .01f &&
                 Vector2.Distance(origin,transform.position) <= 2f;
@@ -45,11 +46,12 @@ namespace MonsterSupergroup.NetworkCombat
             TargetMarkResult(sender,id,true,wireState); LogSummary("empty-cast");
         }
         [Command(channel = Channels.Reliable)]
-        private void CmdDevour(ulong id, uint revision, uint buildRevision, uint target, bool marked,
+        private void CmdDevour(ulong id, uint revision, uint buildRevision, uint abilityRevision, uint target, bool marked,
             ulong cast, NetworkConnectionToClient sender = null)
         {
             double now = NetworkTime.time;
-            bool valid = ValidateRequest(sender,id,revision,buildRevision) && runtime.CanConsume(target,marked,cast,parameters,now);
+            bool valid = ValidateRequest(sender,id,revision,buildRevision) && (marked || abilities.ServerCanBegin(AbilityId, abilityRevision)) &&
+                runtime.CanConsume(target,marked,cast,parameters,now);
             string reason = "Not ready / cooldown / expired mark";
             Vector2 position = default;
             if (valid)

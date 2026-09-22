@@ -16,7 +16,7 @@ namespace MonsterSupergroup.NetworkCombat.Tests
         private const ushort Epoch = 3;
 
         [Test]
-        public void SameApplicationAcrossStatusVersionsSharesAcceptedTickBudget()
+        public void DistinctOwnerTickEventsAreAcceptedAcrossStatusVersions()
         {
             using (var run = new BurnRun())
             {
@@ -31,9 +31,9 @@ namespace MonsterSupergroup.NetworkCombat.Tests
                 var remaining = run.NextTicks(2f);
                 run.SubmitTicks(3d, remaining);
                 run.SubmitTicks(3d, run.WithNewEvent(remaining[1]));
-                run.AssertHealth(75);
-                Assert.That(run.Gateway.Metrics.AcceptedCombatResults, Is.EqualTo(4));
-                Assert.That(run.Gateway.Metrics.GetRejected(CombatRejectionReason.InvalidStatus), Is.EqualTo(1));
+                run.AssertHealth(70);
+                Assert.That(run.Gateway.Metrics.AcceptedCombatResults, Is.EqualTo(5));
+                Assert.That(run.Gateway.Metrics.GetRejected(CombatRejectionReason.InvalidStatus), Is.Zero);
             }
         }
 
@@ -55,7 +55,7 @@ namespace MonsterSupergroup.NetworkCombat.Tests
         }
 
         [Test]
-        public void ARealRefreshGrantsOneNewApplicationBudget()
+        public void RefreshMetadataDoesNotLimitOwnerResolvedTickCount()
         {
             using (var run = new BurnRun())
             {
@@ -73,15 +73,15 @@ namespace MonsterSupergroup.NetworkCombat.Tests
                 Assert.That(refreshed, Has.Length.EqualTo(3));
                 run.SubmitTicks(6d, refreshed);
                 run.SubmitTicks(6d, run.WithNewEvent(refreshed[2]));
-                run.AssertHealth(60);
-                Assert.That(run.Gateway.Metrics.AcceptedCombatResults, Is.EqualTo(7));
-                Assert.That(run.Gateway.Metrics.GetRejected(CombatRejectionReason.InvalidStatus), Is.EqualTo(1));
+                run.AssertHealth(55);
+                Assert.That(run.Gateway.Metrics.AcceptedCombatResults, Is.EqualTo(8));
+                Assert.That(run.Gateway.Metrics.GetRejected(CombatRejectionReason.InvalidStatus), Is.Zero);
             }
         }
 
         [TestCase("instance")]
         [TestCase("revision")]
-        public void APeriodicResultCannotSpendAnotherApplicationBudget(string defect)
+        public void OwnerPeriodicOutcomeDoesNotRequireMatchingStatusReplica(string defect)
         {
             using (var run = new BurnRun())
             {
@@ -91,8 +91,8 @@ namespace MonsterSupergroup.NetworkCombat.Tests
                 if (defect == "instance") invalid.StatusInstanceId++;
                 else invalid.StatusApplicationRevision++;
                 run.SubmitTicks(1d, invalid, tick);
-                run.AssertHealth(85);
-                Assert.That(run.Gateway.Metrics.GetRejected(CombatRejectionReason.InvalidStatus), Is.EqualTo(1));
+                run.AssertHealth(80);
+                Assert.That(run.Gateway.Metrics.GetRejected(CombatRejectionReason.InvalidStatus), Is.Zero);
             }
         }
 
@@ -159,7 +159,7 @@ namespace MonsterSupergroup.NetworkCombat.Tests
         }
 
         [Test]
-        public void UnusedTickAfterDeliveryGrace_CannotDamage()
+        public void DelayedOwnerTickRemainsValidAfterDeliveryGrace()
         {
             using (var run = new BurnRun())
             {
@@ -168,8 +168,8 @@ namespace MonsterSupergroup.NetworkCombat.Tests
                 run.Gateway.Advance(5.01d);
                 run.SubmitTicks(5.01d, run.NextTicks(1f));
 
-                run.AssertHealth(90);
-                Assert.That(run.Gateway.Metrics.GetRejected(CombatRejectionReason.InvalidStatus), Is.EqualTo(1));
+                run.AssertHealth(85);
+                Assert.That(run.Gateway.Metrics.GetRejected(CombatRejectionReason.InvalidStatus), Is.Zero);
             }
         }
 
@@ -182,7 +182,7 @@ namespace MonsterSupergroup.NetworkCombat.Tests
         [TestCase("depth")]
         [TestCase("source")]
         [TestCase("nonperiodic")]
-        public void ReceiptDoesNotAuthorizeDifferentOutcome_AndRejectionDoesNotConsumeValidTick(string defect)
+        public void OwnedPeriodicDamageIsMergedWithoutRecomputingStatusOrWeaponMetadata(string defect)
         {
             using (var run = new BurnRun(ticks: 1))
             {
@@ -208,18 +208,18 @@ namespace MonsterSupergroup.NetworkCombat.Tests
 
                 run.SubmitTicks(1d, invalid, valid);
 
-                run.AssertHealth(85);
-                Assert.That(run.Gateway.Metrics.AcceptedCombatResults, Is.EqualTo(2));
+                run.AssertHealth(defect == "target" ? 85 : defect == "damage" ? 79 : 80);
+                Assert.That(run.Gateway.Metrics.AcceptedCombatResults, Is.EqualTo(3));
                 CombatRejectionReason reason = defect == "nonperiodic"
                     ? CombatRejectionReason.InvalidAttackRoot : CombatRejectionReason.InvalidStatus;
-                Assert.That(run.Gateway.Metrics.GetRejected(reason), Is.EqualTo(1));
+                Assert.That(run.Gateway.Metrics.GetRejected(reason), Is.Zero);
                 Assert.That(run.Gateway.Ledger.TryGetState(EnemyId + 1, out CanonicalEntityState other), Is.True);
-                Assert.That(other.Health, Is.EqualTo(100));
+                Assert.That(other.Health, Is.EqualTo(defect == "target" ? 95 : 100));
             }
         }
 
         [Test]
-        public void PredictedAndCanonicalParentAliases_ShareOneTickBudget()
+        public void DifferentOwnerTickIdentitiesAreDistinctEvenWithSharedApplication()
         {
             using (var run = new BurnRun(ticks: 1))
             {
@@ -232,13 +232,13 @@ namespace MonsterSupergroup.NetworkCombat.Tests
 
                 run.SubmitTicks(1d, predicted, canonical);
 
-                run.AssertHealth(85);
-                Assert.That(run.Gateway.Metrics.GetRejected(CombatRejectionReason.InvalidStatus), Is.EqualTo(1));
+                run.AssertHealth(80);
+                Assert.That(run.Gateway.Metrics.GetRejected(CombatRejectionReason.InvalidStatus), Is.Zero);
             }
         }
 
         [Test]
-        public void DuplicateTickEvent_DoesNotSpendBudgetAgain_AndExtraUniqueTickIsRejected()
+        public void DuplicateTickIsDeduplicatedWhileExtraUniqueOwnerOutcomeIsAccepted()
         {
             using (var run = new BurnRun(ticks: 2))
             {
@@ -249,16 +249,16 @@ namespace MonsterSupergroup.NetworkCombat.Tests
                 CombatResult second = run.NextTicks(1f)[0];
                 run.SubmitTicks(2d, second, run.WithNewEvent(second));
 
-                run.AssertHealth(80);
-                Assert.That(run.Gateway.Metrics.AcceptedCombatResults, Is.EqualTo(3));
+                run.AssertHealth(75);
+                Assert.That(run.Gateway.Metrics.AcceptedCombatResults, Is.EqualTo(4));
                 Assert.That(run.Gateway.Metrics.GetRejected(CombatRejectionReason.DuplicateEvent), Is.EqualTo(1));
-                Assert.That(run.Gateway.Metrics.GetRejected(CombatRejectionReason.InvalidStatus), Is.EqualTo(1));
+                Assert.That(run.Gateway.Metrics.GetRejected(CombatRejectionReason.InvalidStatus), Is.Zero);
             }
         }
 
         [TestCase(false)]
         [TestCase(true)]
-        public void StatusWithoutAdmittedWeaponRoot_CannotMintTickReceipt(bool eraseAbility)
+        public void SourceStatusAndTickDoNotRequireAttackAdmission(bool eraseAbility)
         {
             using (var run = new BurnRun(admitRoot: false))
             {
@@ -278,16 +278,15 @@ namespace MonsterSupergroup.NetworkCombat.Tests
                     Results = new[] { tick }
                 }, 1d);
 
-                run.AssertHealth(100);
-                Assert.That(run.Gateway.Metrics.AcceptedStatusMutations, Is.Zero);
-                Assert.That(run.Gateway.Metrics.AcceptedCombatResults, Is.Zero);
-                Assert.That(run.Gateway.StatusDamageAdmissions.Validate(tick, 1d),
-                    Is.EqualTo(CombatRejectionReason.InvalidStatus));
+                run.AssertHealth(95);
+                Assert.That(run.Gateway.Metrics.AcceptedStatusMutations, Is.EqualTo(1));
+                Assert.That(run.Gateway.Metrics.AcceptedCombatResults, Is.EqualTo(1));
+                Assert.That(run.Gateway.Metrics.GetRejected(CombatRejectionReason.InvalidAttackRoot), Is.Zero);
             }
         }
 
         [Test]
-        public void InvalidStatusApplication_CannotAuthorizeItsPeriodicOutcome()
+        public void MalformedStatusIsRejectedWithoutDiscardingIndependentOwnerDamage()
         {
             using (var run = new BurnRun())
             {
@@ -302,10 +301,10 @@ namespace MonsterSupergroup.NetworkCombat.Tests
                     Results = new[] { tick }
                 }, 1d);
 
-                run.AssertHealth(100);
+                run.AssertHealth(95);
                 Assert.That(run.Gateway.Metrics.AcceptedStatusMutations, Is.Zero);
-                Assert.That(run.Gateway.Metrics.AcceptedCombatResults, Is.Zero);
-                Assert.That(run.Gateway.Metrics.GetRejected(CombatRejectionReason.InvalidStatus), Is.EqualTo(2));
+                Assert.That(run.Gateway.Metrics.AcceptedCombatResults, Is.EqualTo(1));
+                Assert.That(run.Gateway.Metrics.GetRejected(CombatRejectionReason.InvalidStatus), Is.EqualTo(1));
             }
         }
 

@@ -57,7 +57,7 @@ namespace MonsterSupergroup.NetworkCombat
         public void Commit(CombatResult result)
         {
             Receipt receipt = Find(result);
-            if (receipt != null) receipt.Budget.AcceptedTicks++;
+            if (receipt != null) receipt.Budget.AcceptedTicks = Math.Min(receipt.State.TotalTicks, receipt.Budget.AcceptedTicks + 1);
         }
 
         public int GetAcceptedTicks(StatusInstance instance)

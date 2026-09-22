@@ -109,6 +109,9 @@ namespace MonsterSupergroup.Gameplay.Tests
             var block = new MaterialPropertyBlock();
             int blend = Shader.PropertyToID("_HitEffectBlend"), color = Shader.PropertyToID("_HitEffectColor");
             var bridge = owner.GetComponent<MirrorNetworkCombatBridge>();
+            // This fixture injects presentation events without applying local damage.
+            // Suppress automatic submission so the now-valid outcome cannot change HP.
+            bridge.enabled = false;
             ulong id = bridge.EventIds.Next().Value;
             int hp = enemy.CurrentHealth;
             // Collector publication exercises the same synchronous bridge used by direct and status GAS damage.

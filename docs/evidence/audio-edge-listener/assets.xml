@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="2" result="Passed" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-09-21 11:59:06Z" end-time="2026-09-21 11:59:06Z" duration="0.0784419">
+  <test-suite type="TestSuite" id="1000" name="Monster Supergroup" fullname="Monster Supergroup" runstate="Runnable" testcasecount="863" result="Passed" start-time="2026-09-21 11:59:06Z" end-time="2026-09-21 11:59:06Z" duration="0.078442" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="EditMode" />
+    </properties>
+    <test-suite type="Assembly" id="1245" name="MonsterSupergroup.HellMaidenMigration.Tests.EditMode.dll" fullname="F:/UnityStore/MonsterSupergroup/Library/ScriptAssemblies/MonsterSupergroup.HellMaidenMigration.Tests.EditMode.dll" runstate="Runnable" testcasecount="107" result="Passed" start-time="2026-09-21 11:59:06Z" end-time="2026-09-21 11:59:06Z" duration="0.063221" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="37136" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="EditMode" />
+        <property name="EditorOnly" value="True" />
+      </properties>
+      <test-suite type="TestSuite" id="1246" name="MonsterSupergroup" fullname="MonsterSupergroup" runstate="Runnable" testcasecount="107" result="Passed" start-time="2026-09-21 11:59:06Z" end-time="2026-09-21 11:59:06Z" duration="0.061468" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-suite type="TestSuite" id="1247" name="HellMaidenMigration" fullname="MonsterSupergroup.HellMaidenMigration" runstate="Runnable" testcasecount="107" result="Passed" start-time="2026-09-21 11:59:06Z" end-time="2026-09-21 11:59:06Z" duration="0.059996" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <test-suite type="TestSuite" id="1248" name="Tests" fullname="MonsterSupergroup.HellMaidenMigration.Tests" runstate="Runnable" testcasecount="107" result="Passed" start-time="2026-09-21 11:59:06Z" end-time="2026-09-21 11:59:06Z" duration="0.058504" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-suite type="TestFixture" id="1242" name="WeaponAudioMigrationTests" fullname="MonsterSupergroup.HellMaidenMigration.Tests.WeaponAudioMigrationTests" classname="MonsterSupergroup.HellMaidenMigration.Tests.WeaponAudioMigrationTests" runstate="Runnable" testcasecount="2" result="Passed" start-time="2026-09-21 11:59:06Z" end-time="2026-09-21 11:59:06Z" duration="0.055992" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1244" name="BreathHasOneStagedEntryAndNoStaleEmitterOrEndParameter" fullname="MonsterSupergroup.HellMaidenMigration.Tests.WeaponAudioMigrationTests.BreathHasOneStagedEntryAndNoStaleEmitterOrEndParameter" methodname="BreathHasOneStagedEntryAndNoStaleEmitterOrEndParameter" classname="MonsterSupergroup.HellMaidenMigration.Tests.WeaponAudioMigrationTests" runstate="Runnable" seed="1118576136" result="Passed" start-time="2026-09-21 11:59:06Z" end-time="2026-09-21 11:59:06Z" duration="0.031185" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1243" name="WispSourceSoundsAndManualAdaptationSurviveRepeatedRepair" fullname="MonsterSupergroup.HellMaidenMigration.Tests.WeaponAudioMigrationTests.WispSourceSoundsAndManualAdaptationSurviveRepeatedRepair" methodname="WispSourceSoundsAndManualAdaptationSurviveRepeatedRepair" classname="MonsterSupergroup.HellMaidenMigration.Tests.WeaponAudioMigrationTests" runstate="Runnable" seed="1171508227" result="Passed" start-time="2026-09-21 11:59:06Z" end-time="2026-09-21 11:59:06Z" duration="0.014705" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[Saving results to: C:/Users/ADMIN/AppData/LocalLow/DefaultCompany/Monster Supergroup\TestResults.xml
+]]></output>
+              </test-case>
+            </test-suite>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

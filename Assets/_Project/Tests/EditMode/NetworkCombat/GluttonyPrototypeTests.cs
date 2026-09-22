@@ -10,8 +10,8 @@ namespace MonsterSupergroup.NetworkCombat.Tests
     {
         private static GluttonyParameters Enabled()
         { var p = GluttonyParameters.Defaults; p.Enabled = true; return p; }
-        [Test] public void DefaultsAreValidAndOptIn()
-        { Assert.That(GluttonyParameters.Defaults.IsValid); Assert.That(GluttonyParameters.Defaults.Enabled, Is.False); }
+        [Test] public void DefaultsAreValidAndEnabledForNormalGameplay()
+        { Assert.That(GluttonyParameters.Defaults.IsValid); Assert.That(GluttonyParameters.Defaults.Enabled, Is.True); }
         [Test] public void PassiveStartsReadyAndCommitsOnlyOnSuccess()
         {
             var r = new GluttonyPrototypeRuntime(); var p = Enabled();

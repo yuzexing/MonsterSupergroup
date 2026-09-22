@@ -2,6 +2,7 @@ using System;
 using AstralShift.Control.Controllers;
 using Rewired;
 using UnityEngine;
+using MonsterSupergroup.Gameplay.Combat;
 
 namespace AstralShift.Control
 {
@@ -150,6 +151,20 @@ namespace AstralShift.Control
 				InputActionEventType.ButtonJustPressed);
 			SubscribeAction(DebugAction3Pressed, 60,
 				InputActionEventType.ButtonJustPressed);
+            SubscribeAction(data => NumberedSelection(data, 1), RewiredConsts.Action.PrototypeSelectGluttony,
+                InputActionEventType.ButtonJustPressed);
+            SubscribeAction(data => NumberedSelection(data, 2), RewiredConsts.Action.PrototypeSelectMusic,
+                InputActionEventType.ButtonJustPressed);
+            SubscribeAction(data => NumberedSelection(data, 3), RewiredConsts.Action.PrototypeSelectAllure,
+                InputActionEventType.ButtonJustPressed);
+            SubscribeAction(data => NumberedSelection(data, 4), RewiredConsts.Action.UpgradeSelectFourth,
+                InputActionEventType.ButtonJustPressed);
+            SubscribeAction(data => PrototypeAction(data, PrototypeAbilityAction.Secondary), RewiredConsts.Action.PrototypeSecondary,
+                InputActionEventType.ButtonJustPressed);
+            SubscribeAction(data => PrototypeAction(data, PrototypeAbilityAction.Decoy), RewiredConsts.Action.PrototypeDecoy,
+                InputActionEventType.ButtonJustPressed);
+            SubscribeAction(data => PrototypeAction(data, PrototypeAbilityAction.Rhythm), RewiredConsts.Action.PrototypeRhythm,
+                InputActionEventType.ButtonJustPressed);
 		}
 
 		private static readonly InputActionEventType[] ButtonEvents =
@@ -216,6 +231,18 @@ namespace AstralShift.Control
 		{
 			CurrentController?.Button4(data);
 		}
+
+        private void NumberedSelection(InputActionEventData data, int number)
+        {
+            if (Application.isFocused && data.eventType == InputActionEventType.ButtonJustPressed)
+                CurrentController?.NumberedSelection(data, number);
+        }
+
+        private void PrototypeAction(InputActionEventData data, PrototypeAbilityAction action)
+        {
+            if (Application.isFocused && data.eventType == InputActionEventType.ButtonJustPressed)
+                CurrentController?.PrototypeAction(data, action);
+        }
 
 		private void LeftStickHorizontal(InputActionEventData data)
 		{

@@ -117,6 +117,7 @@ namespace Mirror.FizzySteam
 
         public override void ClientSend(ArraySegment<byte> segment, int channelId)
         {
+            if (client is NextClient next) { next.Send(segment, channelId); return; }
             byte[] data = new byte[segment.Count];
             Array.Copy(segment.Array, segment.Offset, data, 0, segment.Count);
             client.Send(data, channelId);
@@ -202,6 +203,7 @@ namespace Mirror.FizzySteam
         {
             if (ServerActive())
             {
+                if (server is NextServer next) { next.Send(connectionId, segment, channelId); return; }
                 byte[] data = new byte[segment.Count];
                 Array.Copy(segment.Array, segment.Offset, data, 0, segment.Count);
                 server.Send(connectionId, data, channelId);
@@ -245,7 +247,7 @@ namespace Mirror.FizzySteam
         {
             if (UseNextGenSteamNetworking)
             {
-                return Constants.k_cbMaxSteamNetworkingSocketsMessageSizeSend;
+                return Constants.k_cbMaxSteamNetworkingSocketsMessageSizeSend - 1;
             }
             else
             {
@@ -284,6 +286,16 @@ namespace Mirror.FizzySteam
             {
                 return false;
             }
+        }
+
+        public override int GetBatchThreshold(int channelId = Mirror.Channels.Reliable) =>
+            Math.Min(1200, GetMaxPacketSize(channelId));
+
+        public void ReadConnectionDiagnostics(System.Collections.Generic.List<SteamConnectionSample> samples)
+        {
+            samples.Clear();
+            if (client is NextClient nextClient) nextClient.ReadConnectionDiagnostics(samples);
+            if (server is NextServer nextServer) nextServer.ReadConnectionDiagnostics(samples);
         }
 
         private void InitRelayNetworkAccess()

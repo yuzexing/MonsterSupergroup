@@ -12,6 +12,7 @@ namespace MonsterSupergroup.NetworkCombat
         private readonly ProcessedEventCache ordinaryHitHistory = new ProcessedEventCache(4096, 120);
         private readonly EnemyPredictedKnockbackHistory predictedKnockbacks = new EnemyPredictedKnockbackHistory();
         private KnockbackSettings activeKnockbackPreset;
+        private EnemyKnockbackSettings activeKnockbackSettings;
         private uint activeKnockbackEpoch;
         private ulong activeKnockbackCommandId, activeKnockbackDamageEventId;
         public int AppliedUltimateKnockbackCount { get; private set; }
@@ -45,7 +46,7 @@ namespace MonsterSupergroup.NetworkCombat
             }
             // The original Enemy rejects overlapping knockbacks. Consuming its command identity
             // preserves that decision; a duplicate must not apply later after recovery.
-            if (!IsCanonicalAlive || HasActiveNetworkKnockback) return false;
+            if (!IsLocallyAlive || !IsCanonicalAlive || HasActiveNetworkKnockback) return false;
             // Timed attacks always identify the action at admission, including zero (no action).
             // A delayed idle hit must not cancel a new attack which began in transit.
             if ((enemyController.attackScript?.SupportsSharedTimeline == true || command.InterruptedActionId != 0) &&
@@ -54,7 +55,7 @@ namespace MonsterSupergroup.NetworkCombat
             var preset = command.Settings.CreateRuntimePreset();
             try
             {
-                bool applied = command.Kind == EnemyKnockbackKind.OrdinaryHit
+                bool applied = command.Kind == EnemyKnockbackKind.OrdinaryHit || command.Kind == EnemyKnockbackKind.Music
                     ? enemyController.TryApplyNetworkHitKnockback(command.Origin, preset, command.MultiplierSum)
                     : enemyController.TryApplyNetworkKnockback(command.Origin, preset);
 #if MONSTER_ENEMY_HANDOFF_VALIDATION
@@ -66,6 +67,7 @@ namespace MonsterSupergroup.NetworkCombat
                     return false;
                 }
                 activeKnockbackPreset = preset;
+                activeKnockbackSettings = command.Settings;
                 activeKnockbackEpoch = command.AssignmentEpoch;
                 activeKnockbackCommandId = command.CommandId;
                 activeKnockbackDamageEventId = command.DamageEventId;
@@ -78,7 +80,7 @@ namespace MonsterSupergroup.NetworkCombat
 
         private void UpdateNetworkKnockbackState()
         {
-            if (!IsCanonicalAlive || authority == null || !authority.RunsNavigation)
+            if (!IsLocallyAlive || !IsCanonicalAlive || authority == null || !authority.RunsNavigation)
             {
                 CancelNetworkKnockbackState();
                 return;
@@ -96,6 +98,7 @@ namespace MonsterSupergroup.NetworkCombat
         private void ReleaseNetworkKnockbackPreset()
         {
             activeKnockbackEpoch = 0;
+            activeKnockbackSettings = default;
             activeKnockbackCommandId = activeKnockbackDamageEventId = 0;
             if (activeKnockbackPreset == null) return;
             if (Application.isPlaying) Destroy(activeKnockbackPreset);
@@ -152,6 +155,7 @@ namespace MonsterSupergroup.NetworkCombat
             if (!enemyController.TryApplyNetworkHitKnockback(hit.AttackPosition, predictedPreset, report.MultiplierSum))
             { Destroy(predictedPreset); return; }
             activeKnockbackPreset = predictedPreset;
+            activeKnockbackSettings = EnemyKnockbackSettings.From(predictedPreset);
             activeKnockbackEpoch = assignment.Epoch;
             activeKnockbackDamageEventId = context.EventId.Value;
             AppliedOrdinaryKnockbackCount++;

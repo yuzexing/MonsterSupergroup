@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="2" result="Passed" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-09-21 11:46:35Z" end-time="2026-09-21 11:46:42Z" duration="6.80565">
+  <test-suite type="TestSuite" id="1670" name="Monster Supergroup" fullname="Monster Supergroup" runstate="Runnable" testcasecount="559" result="Passed" start-time="2026-09-21 11:46:35Z" end-time="2026-09-21 11:46:42Z" duration="6.805650" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="PlayMode" />
+    </properties>
+    <test-suite type="Assembly" id="1654" name="MonsterSupergroup.Gameplay.Tests.PlayMode.dll" fullname="F:/UnityStore/MonsterSupergroup/Library/ScriptAssemblies/MonsterSupergroup.Gameplay.Tests.PlayMode.dll" runstate="Runnable" testcasecount="555" result="Passed" start-time="2026-09-21 11:46:35Z" end-time="2026-09-21 11:46:42Z" duration="6.794161" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="35072" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="PlayMode" />
+        <property name="EditorOnly" value="False" />
+      </properties>
+      <test-suite type="TestSuite" id="1655" name="MonsterSupergroup" fullname="MonsterSupergroup" runstate="Runnable" testcasecount="555" result="Passed" start-time="2026-09-21 11:46:35Z" end-time="2026-09-21 11:46:42Z" duration="6.787620" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-suite type="TestSuite" id="1656" name="Gameplay" fullname="MonsterSupergroup.Gameplay" runstate="Runnable" testcasecount="555" result="Passed" start-time="2026-09-21 11:46:35Z" end-time="2026-09-21 11:46:42Z" duration="6.772251" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <test-suite type="TestSuite" id="1657" name="Tests" fullname="MonsterSupergroup.Gameplay.Tests" runstate="Runnable" testcasecount="555" result="Passed" start-time="2026-09-21 11:46:35Z" end-time="2026-09-21 11:46:42Z" duration="6.766115" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-suite type="TestFixture" id="1220" name="GameplayCameraTests" fullname="MonsterSupergroup.Gameplay.Tests.GameplayCameraTests" classname="MonsterSupergroup.Gameplay.Tests.GameplayCameraTests" runstate="Runnable" testcasecount="9" result="Passed" start-time="2026-09-21 11:46:35Z" end-time="2026-09-21 11:46:42Z" duration="6.737829" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1222" name="AudioListenerAtMapEdges_PreservesOwnerRelativeDistance" fullname="MonsterSupergroup.Gameplay.Tests.GameplayCameraTests.AudioListenerAtMapEdges_PreservesOwnerRelativeDistance" methodname="AudioListenerAtMapEdges_PreservesOwnerRelativeDistance" classname="MonsterSupergroup.Gameplay.Tests.GameplayCameraTests" runstate="Runnable" seed="1352853806" result="Passed" start-time="2026-09-21 11:46:35Z" end-time="2026-09-21 11:46:40Z" duration="5.068136" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[[Localization] Applied locale=zh-CN revision=2
+[NetworkBackend] backend=Kcp purpose=Test source=test-runner transport=KcpTransport.
+--- Hardware Info ---
+CPU Model: 13th Gen Intel(R) Core(TM) i7-13700KF
+GPU Model: Null Device
+RAM: 65375 MB
+Install Disk Model: JZ-SSD4T-XW
+Main Monitor Model: Unknown Monitor
+---------------------
+Normal : True
+UI : False
+AstralShift.HellMaiden.Controllers.PlayerController_HMD
+<color=yellow><b>► Controllers: </b></color>Controller type AstralShift.Control.Controllers.NoInputGameController not available
+Server listening on port 7904
+[BootGameplay] Server starting; loading 'Assets/_Project/Scenes/Gameplay.unity'.
+[BootGameplay] Server connection 0 is ready.
+[BootGameplay] Queued Player for connection 0.
+[BootGameplay] Gameplay scene ready: 'Assets/_Project/Scenes/Gameplay.unity'.
+[BootGameplay] Spawned Player NetworkPlayer [connId=0] in 'Assets/_Project/Scenes/Gameplay.unity'.
+<color=yellow><b>► Controllers: </b></color>Overrode <color=yellow><b></b></color> with <color=yellow><b>PlayerController_HMD</b></color>.
+Normal : True
+UI : False
+AUDIO-EDGE owner=(0.00, 0.99, 0.00) camera=(0.00, 0.99, -10.00) listener=(0.00, 0.99, -10.00) distance=10.049880
+AUDIO-EDGE owner=(58.67, 0.99, 0.00) camera=(48.48, 0.99, -10.00) listener=(58.67, 0.99, -10.00) distance=10.049880
+AUDIO-EDGE owner=(-58.67, 0.99, 0.00) camera=(-48.48, 0.99, -10.00) listener=(-58.67, 0.99, -10.00) distance=10.049880
+AUDIO-EDGE owner=(0.00, 33.55, 0.00) camera=(0.00, 26.16, -10.00) listener=(0.00, 33.55, -10.00) distance=10.049880
+AUDIO-EDGE owner=(0.00, -31.57, 0.00) camera=(0.00, -24.18, -10.00) listener=(0.00, -31.57, -10.00) distance=10.049880
+AUDIO-EDGE owner=(58.67, 33.55, 0.00) camera=(48.48, 26.16, -10.00) listener=(58.67, 33.55, -10.00) distance=10.049880
+AUDIO-EDGE owner=(-58.67, 33.55, 0.00) camera=(-48.48, 26.16, -10.00) listener=(-58.67, 33.55, -10.00) distance=10.049880
+AUDIO-EDGE owner=(58.67, -31.57, 0.00) camera=(48.48, -24.18, -10.00) listener=(58.67, -31.57, -10.00) distance=10.049880
+AUDIO-EDGE owner=(-58.67, -31.57, 0.00) camera=(-48.48, -24.18, -10.00) listener=(-58.67, -31.57, -10.00) distance=10.049880
+[BootGameplay] Client stopping; serverActive=True.
+[BootGameplay] Server stopping.
+[BootGameplay] Gameplay unload requested.
+There are 2 audio listeners in the scene. Please ensure there is always exactly one audio listener in the scene.
+[SteamInvite] stage=cleanup lobby=0 host=0 phase=Disabled reason=
+]]></output>
+              </test-case>
+              <test-case id="1223" name="AudioListenerTracksOwner_IndependentOfBarrierAndCameraShake" fullname="MonsterSupergroup.Gameplay.Tests.GameplayCameraTests.AudioListenerTracksOwner_IndependentOfBarrierAndCameraShake" methodname="AudioListenerTracksOwner_IndependentOfBarrierAndCameraShake" classname="MonsterSupergroup.Gameplay.Tests.GameplayCameraTests" runstate="Runnable" seed="801318337" result="Passed" start-time="2026-09-21 11:46:40Z" end-time="2026-09-21 11:46:42Z" duration="1.657580" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[[NetworkBackend] backend=Kcp purpose=Test source=test-runner transport=KcpTransport.
+--- Hardware Info ---
+CPU Model: 13th Gen Intel(R) Core(TM) i7-13700KF
+GPU Model: Null Device
+RAM: 65375 MB
+Install Disk Model: JZ-SSD4T-XW
+Main Monitor Model: Unknown Monitor
+---------------------
+Normal : True
+UI : False
+AstralShift.HellMaiden.Controllers.PlayerController_HMD
+<color=yellow><b>► Controllers: </b></color>Controller type AstralShift.Control.Controllers.NoInputGameController not available
+Server listening on port 7904
+[BootGameplay] Server starting; loading 'Assets/_Project/Scenes/Gameplay.unity'.
+[BootGameplay] Server connection 0 is ready.
+[BootGameplay] Queued Player for connection 0.
+[BootGameplay] Gameplay scene ready: 'Assets/_Project/Scenes/Gameplay.unity'.
+[BootGameplay] Spawned Player NetworkPlayer [connId=0] in 'Assets/_Project/Scenes/Gameplay.unity'.
+<color=yellow><b>► Controllers: </b></color>Overrode <color=yellow><b></b></color> with <color=yellow><b>PlayerController_HMD</b></color>.
+Normal : True
+UI : False
+[BootGameplay] Client stopping; serverActive=True.
+[BootGameplay] Server stopping.
+[BootGameplay] Gameplay unload requested.
+There are 2 audio listeners in the scene. Please ensure there is always exactly one audio listener in the scene.
+[SteamInvite] stage=cleanup lobby=0 host=0 phase=Disabled reason=
+Saving results to: C:/Users/ADMIN/AppData/LocalLow/DefaultCompany/Monster Supergroup\TestResults.xml
+]]></output>
+              </test-case>
+            </test-suite>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

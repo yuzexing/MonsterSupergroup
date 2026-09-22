@@ -97,39 +97,39 @@ namespace MonsterSupergroup.Gameplay.Tests
             // Invoke the woven Command wrapper, not its generated server body. Mirror must
             // supply the authenticated sender and preserve reliable command ordering.
             CombatEventId wrongWeapon = bridge.EventIds.Next();
-            SendAttackCommand(adapter, 0, uint.MaxValue, wrongWeapon,
+            SendAttackCommand(adapter, -1, uint.MaxValue, wrongWeapon,
                 selection.OwnerBuildRevision);
             yield return WaitUntil(() => adapter.RejectedAttackCount == 1,
-                "A root for a weapon outside the server Build must be rejected.");
-            Assert.That(adapter.LastAttackRejection, Is.EqualTo(CombatRejectionReason.SourceNotOwned));
+                "An invalid slot is malformed metadata.");
+            Assert.That(adapter.LastAttackRejection, Is.EqualTo(CombatRejectionReason.InvalidSequence));
             Assert.That(world.Gateway.Attacks.ActiveCount(player.netId), Is.Zero);
 
             CombatEventId staleBuild = bridge.EventIds.Next();
             SendAttackCommand(adapter, 0, weapon.ID, staleBuild,
                 selection.OwnerBuildRevision + 1);
-            yield return WaitUntil(() => adapter.RejectedAttackCount == 2,
-                "A root claiming a different Build revision must be rejected.");
-            Assert.That(adapter.LastAttackRejection, Is.EqualTo(CombatRejectionReason.StaleAttackBuild));
-            Assert.That(world.Gateway.Attacks.ActiveCount(player.netId), Is.Zero);
+            yield return WaitUntil(() => adapter.AcceptedCooldownReportCount == 1,
+                "An in-flight owner attack survives a different server Build revision.");
+            typeof(NetworkWeaponCombatAdapter).GetMethod("CmdCompleteWeaponAttack", BindingFlags.Instance | BindingFlags.NonPublic)
+                .Invoke(adapter, new object[] { staleBuild.Value, null });
+            yield return WaitUntil(() => world.Gateway.Attacks.ActiveCount(player.netId) == 0, "Retire fixture metadata.");
 
             AttackSnapshot attack = BeginNativeAttack(weapon);
-            yield return WaitUntil(() => adapter.AcceptedCooldownReportCount == 1,
+            yield return WaitUntil(() => adapter.AcceptedCooldownReportCount == 2,
                 "The native begin event must reach the server admission Command.");
             Assert.That(world.Gateway.Attacks.Contains(player.netId,
                 attack.Context.EventId.Value, weapon.ID), Is.True);
             Assert.That(world.Gateway.Attacks.ActiveCount(player.netId), Is.EqualTo(1));
 
             AttackSnapshot rapidAttack = BeginNativeAttack(weapon);
-            yield return WaitUntil(() => adapter.RejectedAttackCount == 3,
-                "A fresh event identity must not bypass the existing weapon's cooldown.");
-            Assert.That(adapter.LastAttackRejection, Is.EqualTo(CombatRejectionReason.InvalidAttackRate));
+            yield return WaitUntil(() => adapter.AcceptedCooldownReportCount == 3,
+                "The owner has already resolved its local cooldown.");
             Assert.That(world.Gateway.Attacks.Contains(player.netId,
-                rapidAttack.Context.EventId.Value, weapon.ID), Is.False);
+                rapidAttack.Context.EventId.Value, weapon.ID), Is.True);
             rapidAttack.Dispose();
             yield return null;
             yield return null;
             Assert.That(world.Gateway.Attacks.ActiveCount(player.netId), Is.EqualTo(1),
-                "Completing a rejected root must not release the admitted attack.");
+                "Completing one root must not release another attack.");
 
             long acceptedBefore = world.Gateway.Metrics.AcceptedCombatResults;
             CombatResolution first = weapon.NativeRuntime.ResolveHitDetailed(attack, target);
@@ -164,16 +164,16 @@ namespace MonsterSupergroup.Gameplay.Tests
             {
                 Assert.That(world.Gateway.Attacks.Contains(player.netId,
                     bypass.Context.EventId.Value, weapon.ID), Is.False);
-                weapon.NativeRuntime.ResolveHitDetailed(bypass, target);
+                expectedHealth -= weapon.NativeRuntime.ResolveHitDetailed(bypass, target).ResolvedDamage.Value;
             }
             Assert.That(bridge.Collector.PendingResultCount, Is.EqualTo(1));
             bridge.Flush();
-            yield return WaitUntil(() => world.Gateway.Metrics.GetRejected(
-                    CombatRejectionReason.InvalidAttackRoot) == invalidRootsBefore + 1,
-                "Calling GAS BeginAttack directly must not bypass native root admission.");
+            yield return WaitUntil(() => world.Gateway.Metrics.AcceptedCombatResults == acceptedBefore + outcomeCount + 1,
+                "Owned damage does not require presentation metadata.");
+            Assert.That(world.Gateway.Metrics.GetRejected(CombatRejectionReason.InvalidAttackRoot), Is.EqualTo(invalidRootsBefore));
             AssertCanonicalHealth(world, expectedHealth);
-            Assert.That(world.Gateway.Metrics.AcceptedCombatResults, Is.EqualTo(acceptedBefore + outcomeCount));
-            Assert.That(adapter.AcceptedCooldownReportCount, Is.EqualTo(1));
+            Assert.That(world.Gateway.Metrics.AcceptedCombatResults, Is.EqualTo(acceptedBefore + outcomeCount + 1));
+            Assert.That(adapter.AcceptedCooldownReportCount, Is.EqualTo(3));
 
             uint playerId = player.netId;
             manager.StopHost();

@@ -21,11 +21,13 @@ namespace MonsterSupergroup.Gameplay.Tests
     internal sealed class EnemyDefinitionRuntimeFixture : IDisposable
     {
         private readonly BootGameplayNetworkManager manager;
+        private readonly bool resetOnReposition;
         private readonly List<UnityEngine.Object> assets = new();
         public readonly EnemyDefinition[] Definitions;
-        public EnemyDefinitionRuntimeFixture(BootGameplayNetworkManager manager)
+        public EnemyDefinitionRuntimeFixture(BootGameplayNetworkManager manager, bool resetOnReposition = true)
         {
             this.manager = manager;
+            this.resetOnReposition = resetOnReposition;
             Definitions = manager.EnemyCatalog.Definitions.Where(d => d.Prefab.name == "ReferenceBrotchi")
                 .OrderBy(d => d.Stats.Capture().Health).ToArray();
             Require(Definitions.Length == 2 && Definitions[0].Prefab == Definitions[1].Prefab, "Expected two definitions sharing the Brotchi Prefab.");
@@ -44,7 +46,7 @@ namespace MonsterSupergroup.Gameplay.Tests
                 Set(spawn, "enemy", Definitions[i]); Set(spawn, "authoringVersion", 1);
                 spawn.referenceMode = ReferenceSpawnMode.CurveBudget; spawn.count = 1;
                 spawn.spawnCurve = AnimationCurve.Constant(0, 1, 1); spawn.speedMultipliers = Vector2.one;
-                spawn.contactRadius = 0; spawn.expiresOffscreen = false; spawn.resetOnReposition = true;
+                spawn.contactRadius = 0; spawn.expiresOffscreen = false; spawn.resetOnReposition = resetOnReposition;
             }
             var rules = ScriptableObject.CreateInstance<GameplayWaveRules>(); assets.Add(rules);
             Set(rules, "timeline", timeline); Set(rules, "referenceStage", true);

@@ -1,0 +1,94 @@
+{
+  "version": "MP-20260921-02",
+  "status": "technical checks passed; manual visual acceptance pending",
+  "scope": [
+    "local enemy simulation render interpolation",
+    "all integrated weapon VFX planar projection; summon bodies preserved"
+  ],
+  "tests": {
+    "movementPlayMode": {
+      "passed": 24,
+      "total": 24
+    },
+    "effectsPlayMode": {
+      "passed": 101,
+      "total": 101
+    },
+    "editModeUniqueFinalAcrossGroups": {
+      "passed": 87,
+      "total": 87
+    },
+    "fullProjectRegression": false,
+    "portableLaunchScript": "passed"
+  },
+  "processes": {
+    "movementCandidate": "MP-20260921-01",
+    "movementSolo": "8 cases passed",
+    "movementHostClient": "8 cases per endpoint passed; client simulator / host replica",
+    "effectsCandidate": "MP-20260921-02",
+    "effectsHostClient": "13 supported forms per endpoint; complete logs and exit 0; 0 Unity errors; final renderer/particle count 0"
+  },
+  "candidateDelta": "Only Assets/_Project/NetworkCombat/Mirror/WeaponEffectsObservation.cs changed from MP-01 to MP-02; movement production code and all VFX assets unchanged, so unaffected long/repeated checks were not rerun.",
+  "renderChecks": {
+    "perspectiveFov": 80,
+    "cameraZ": -10,
+    "comparedWorldDepths": [
+      -7,
+      7
+    ],
+    "spritePixelWidths": [
+      30,
+      30
+    ],
+    "vfxPixelWidths": [
+      30,
+      30
+    ],
+    "summonShadowPixelWidths": [
+      23,
+      23
+    ]
+  },
+  "movementSampling": {
+    "soloRenderSize": [
+      1280,
+      720
+    ],
+    "physicsHz": 50,
+    "oldModeRenderMotionBetweenSteps60": [
+      0,
+      74
+    ],
+    "newMode60": [
+      95,
+      95
+    ],
+    "oldMode144": [
+      0,
+      720
+    ],
+    "newMode144": [
+      866,
+      866
+    ]
+  },
+  "coverage": {
+    "adaptedSlots": 568,
+    "existingPlanarSlots": 70,
+    "preservedBodyRenderers": 9,
+    "newMaterials": 75,
+    "unsupportedShaderSlots": 0
+  },
+  "assistance": "Explicit fixture spawns, fixed speed multiplier, heal and suppressed weapons; movement smoke uses ordinary movement and first legal card. Effects fixture is presentation-only. Not pressure evidence.",
+  "knownLimits": [
+    "Human sprite clarity and VFX appearance pending; texture filtering unchanged",
+    "Replica snapshot cadence unchanged; no extra Rigidbody interpolation",
+    "Existing missing source Shader effects still approximate",
+    "Effects startup inherited stored 4K display preferences; actual sizes included 1280x720, 1920x1080 and 3840x2160. Not a fixed-resolution performance comparison.",
+    "Startup warnings: FMOD listener not yet bound, additive EventSystem overlap and exclusive fullscreen fallback. No recurring combat error; unrelated lifecycle paths not modified."
+  ],
+  "noComputerUse": true,
+  "noAutomaticScreenshots": true,
+  "noFull720SecondRerun": true,
+  "evidenceRoot": "F:\\UnityStore\\MonsterSupergroup\\Logs\\MovementPlanar"
+}

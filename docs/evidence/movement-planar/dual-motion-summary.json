@@ -1,0 +1,336 @@
+[
+  {
+    "source": "Logs\\MovementPlanar\\final-dual-motion\\host\\enemy-motion.jsonl",
+    "cases": [
+      {
+        "fps": 60,
+        "legacy": true,
+        "playerMoving": false,
+        "role": "Replica",
+        "frames": 161,
+        "movingFrames": 34,
+        "framesBetweenPhysicsSteps": 0,
+        "renderMovedBetweenPhysicsSteps": 0,
+        "interpolationModes": {
+          "None": 161
+        },
+        "renderSizes": [
+          [
+            1280,
+            720
+          ]
+        ],
+        "observedFps": 58.28
+      },
+      {
+        "fps": 60,
+        "legacy": true,
+        "playerMoving": true,
+        "role": "Replica",
+        "frames": 300,
+        "movingFrames": 189,
+        "framesBetweenPhysicsSteps": 0,
+        "renderMovedBetweenPhysicsSteps": 0,
+        "interpolationModes": {
+          "None": 300
+        },
+        "renderSizes": [
+          [
+            1280,
+            720
+          ]
+        ],
+        "observedFps": 59.8
+      },
+      {
+        "fps": 60,
+        "legacy": false,
+        "playerMoving": false,
+        "role": "Replica",
+        "frames": 299,
+        "movingFrames": 193,
+        "framesBetweenPhysicsSteps": 0,
+        "renderMovedBetweenPhysicsSteps": 0,
+        "interpolationModes": {
+          "None": 299
+        },
+        "renderSizes": [
+          [
+            1280,
+            720
+          ]
+        ],
+        "observedFps": 59.78
+      },
+      {
+        "fps": 60,
+        "legacy": false,
+        "playerMoving": true,
+        "role": "Replica",
+        "frames": 300,
+        "movingFrames": 244,
+        "framesBetweenPhysicsSteps": 0,
+        "renderMovedBetweenPhysicsSteps": 0,
+        "interpolationModes": {
+          "None": 300
+        },
+        "renderSizes": [
+          [
+            1280,
+            720
+          ]
+        ],
+        "observedFps": 59.81
+      },
+      {
+        "fps": 144,
+        "legacy": true,
+        "playerMoving": false,
+        "role": "Replica",
+        "frames": 515,
+        "movingFrames": 117,
+        "framesBetweenPhysicsSteps": 0,
+        "renderMovedBetweenPhysicsSteps": 0,
+        "interpolationModes": {
+          "None": 515
+        },
+        "renderSizes": [
+          [
+            1280,
+            720
+          ]
+        ],
+        "observedFps": 142.3
+      },
+      {
+        "fps": 144,
+        "legacy": true,
+        "playerMoving": true,
+        "role": "Replica",
+        "frames": 711,
+        "movingFrames": 244,
+        "framesBetweenPhysicsSteps": 0,
+        "renderMovedBetweenPhysicsSteps": 0,
+        "interpolationModes": {
+          "None": 711
+        },
+        "renderSizes": [
+          [
+            1280,
+            720
+          ]
+        ],
+        "observedFps": 142.14
+      },
+      {
+        "fps": 144,
+        "legacy": false,
+        "playerMoving": false,
+        "role": "Replica",
+        "frames": 370,
+        "movingFrames": 64,
+        "framesBetweenPhysicsSteps": 0,
+        "renderMovedBetweenPhysicsSteps": 0,
+        "interpolationModes": {
+          "None": 370
+        },
+        "renderSizes": [
+          [
+            1280,
+            720
+          ]
+        ],
+        "observedFps": 142.44
+      },
+      {
+        "fps": 144,
+        "legacy": false,
+        "playerMoving": true,
+        "role": "Replica",
+        "frames": 705,
+        "movingFrames": 244,
+        "framesBetweenPhysicsSteps": 0,
+        "renderMovedBetweenPhysicsSteps": 0,
+        "interpolationModes": {
+          "None": 705
+        },
+        "renderSizes": [
+          [
+            1280,
+            720
+          ]
+        ],
+        "observedFps": 140.92
+      }
+    ]
+  },
+  {
+    "source": "Logs\\MovementPlanar\\final-dual-motion\\client\\enemy-motion.jsonl",
+    "cases": [
+      {
+        "fps": 60,
+        "legacy": true,
+        "playerMoving": false,
+        "role": "ClientOwner",
+        "frames": 159,
+        "movingFrames": 86,
+        "framesBetweenPhysicsSteps": 14,
+        "renderMovedBetweenPhysicsSteps": 0,
+        "interpolationModes": {
+          "Interpolate": 1,
+          "None": 158
+        },
+        "renderSizes": [
+          [
+            1280,
+            720
+          ]
+        ],
+        "observedFps": 47.12
+      },
+      {
+        "fps": 60,
+        "legacy": true,
+        "playerMoving": true,
+        "role": "ClientOwner",
+        "frames": 299,
+        "movingFrames": 233,
+        "framesBetweenPhysicsSteps": 38,
+        "renderMovedBetweenPhysicsSteps": 0,
+        "interpolationModes": {
+          "None": 299
+        },
+        "renderSizes": [
+          [
+            1280,
+            720
+          ]
+        ],
+        "observedFps": 59.63
+      },
+      {
+        "fps": 60,
+        "legacy": false,
+        "playerMoving": false,
+        "role": "ClientOwner",
+        "frames": 299,
+        "movingFrames": 236,
+        "framesBetweenPhysicsSteps": 39,
+        "renderMovedBetweenPhysicsSteps": 39,
+        "interpolationModes": {
+          "None": 62,
+          "Interpolate": 237
+        },
+        "renderSizes": [
+          [
+            1280,
+            720
+          ]
+        ],
+        "observedFps": 59.78
+      },
+      {
+        "fps": 60,
+        "legacy": false,
+        "playerMoving": true,
+        "role": "ClientOwner",
+        "frames": 300,
+        "movingFrames": 298,
+        "framesBetweenPhysicsSteps": 49,
+        "renderMovedBetweenPhysicsSteps": 49,
+        "interpolationModes": {
+          "Interpolate": 300
+        },
+        "renderSizes": [
+          [
+            1280,
+            720
+          ]
+        ],
+        "observedFps": 59.83
+      },
+      {
+        "fps": 144,
+        "legacy": true,
+        "playerMoving": false,
+        "role": "ClientOwner",
+        "frames": 517,
+        "movingFrames": 346,
+        "framesBetweenPhysicsSteps": 225,
+        "renderMovedBetweenPhysicsSteps": 1,
+        "interpolationModes": {
+          "Interpolate": 1,
+          "None": 516
+        },
+        "renderSizes": [
+          [
+            1280,
+            720
+          ]
+        ],
+        "observedFps": 142.71
+      },
+      {
+        "fps": 144,
+        "legacy": true,
+        "playerMoving": true,
+        "role": "ClientOwner",
+        "frames": 717,
+        "movingFrames": 715,
+        "framesBetweenPhysicsSteps": 466,
+        "renderMovedBetweenPhysicsSteps": 0,
+        "interpolationModes": {
+          "None": 717
+        },
+        "renderSizes": [
+          [
+            1280,
+            720
+          ]
+        ],
+        "observedFps": 143.2
+      },
+      {
+        "fps": 144,
+        "legacy": false,
+        "playerMoving": false,
+        "role": "ClientOwner",
+        "frames": 341,
+        "movingFrames": 168,
+        "framesBetweenPhysicsSteps": 109,
+        "renderMovedBetweenPhysicsSteps": 107,
+        "interpolationModes": {
+          "None": 171,
+          "Interpolate": 170
+        },
+        "renderSizes": [
+          [
+            1280,
+            720
+          ]
+        ],
+        "observedFps": 143.26
+      },
+      {
+        "fps": 144,
+        "legacy": false,
+        "playerMoving": true,
+        "role": "ClientOwner",
+        "frames": 715,
+        "movingFrames": 714,
+        "framesBetweenPhysicsSteps": 465,
+        "renderMovedBetweenPhysicsSteps": 465,
+        "interpolationModes": {
+          "Interpolate": 715
+        },
+        "renderSizes": [
+          [
+            1280,
+            720
+          ]
+        ],
+        "observedFps": 142.83
+      }
+    ]
+  }
+]

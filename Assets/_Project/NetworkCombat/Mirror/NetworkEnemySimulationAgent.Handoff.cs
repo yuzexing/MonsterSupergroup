@@ -35,7 +35,8 @@ namespace MonsterSupergroup.NetworkCombat
             bool keepServerAction = current.Reason != EnemyTargetChangeReason.ReferenceReposition && isServer && appliedHandoffEpoch != 0 &&
                 assignment.Host == EnemySimulationHost.ServerAuthoritative && current.Assignment.Host == EnemySimulationHost.ServerAuthoritative;
             assignment = current.Assignment;
-            resolvedTarget = ResolvePlayerTarget(assignment.AggroTargetPlayerId);
+            if (targetState.Revision != 0) assignment.AggroTargetPlayerId = targetState.AggroPlayerId;
+            resolvedTarget = ResolveSimulationTarget();
             restoringHandoff = true;
             if (!keepServerAction)
             {
@@ -54,14 +55,13 @@ namespace MonsterSupergroup.NetworkCombat
             if (!keepServerAction)
             {
                 LastHandoffCorrection = Vector2.Distance(transform.position, pose.Position);
-                transform.position = new Vector3(pose.Position.x, pose.Position.y, transform.position.z);
-                body.position = pose.Position;
+                interpolator.ResetRenderPose(pose.Position);
             }
             appliedHandoffEpoch = assignment.Epoch;
             ApplyAssignment(assignment);
             if (authority.RunsNavigation && !keepServerAction)
             {
-                body.position = pose.Position;
+                interpolator.ResetRenderPose(pose.Position);
                 body.linearVelocity = pose.Velocity;
                 if (pose.Facing.sqrMagnitude > .0001f) enemyController?.Movement?.SetFacingDirection(pose.Facing);
                 var restoredAction = pose.Runtime.Action;
@@ -108,7 +108,7 @@ namespace MonsterSupergroup.NetworkCombat
             {
                 Action = enemyController != null ? enemyController.CaptureSimulationAction(EnemySimulationClock.CombatNow) : default,
                 Knockback = motion,
-                KnockbackSettings = motion.Active && activeKnockbackPreset != null ? EnemyKnockbackSettings.From(activeKnockbackPreset) : default,
+                KnockbackSettings = motion.Active ? activeKnockbackSettings : default,
                 KnockbackCommandId = activeKnockbackCommandId, KnockbackDamageEventId = activeKnockbackDamageEventId,
                 LastHandledKnockbackId = knockbackHistory.LastCommandId,
                 PredictedKnockbacks = predictedKnockbacks.Capture(now)
@@ -139,6 +139,7 @@ namespace MonsterSupergroup.NetworkCombat
             if (!enemyController.RestoreSimulationKnockback(state.Knockback, preset, (float)(EnemySimulationClock.Now - sampleTime)))
             { Destroy(preset); return; }
             activeKnockbackPreset = preset; activeKnockbackEpoch = assignment.Epoch;
+            activeKnockbackSettings = state.KnockbackSettings;
             activeKnockbackCommandId = state.KnockbackCommandId; activeKnockbackDamageEventId = state.KnockbackDamageEventId;
         }
     }

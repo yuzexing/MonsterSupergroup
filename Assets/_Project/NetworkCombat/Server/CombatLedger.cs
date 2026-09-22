@@ -424,12 +424,14 @@ namespace MonsterSupergroup.NetworkCombat
                 return CombatRejectionReason.SourceNotOwned;
             }
 
-            if (IsPlayerSelectingUpgrade(senderPlayerId))
+            bool clientFinalEnemy = entities.TryGetValue(result.TargetEntityId, out var knownTarget) &&
+                knownTarget.Kind == CombatEntityKind.Enemy;
+            if (!clientFinalEnemy && IsPlayerSelectingUpgrade(senderPlayerId))
             {
                 return CombatRejectionReason.SourceSelectingUpgrade;
             }
 
-            if (result.Damage < 0 || result.Damage > MaximumDamagePerResult)
+            if (result.Damage < 0 || (!clientFinalEnemy && result.Damage > MaximumDamagePerResult))
             {
                 return CombatRejectionReason.InvalidDamage;
             }
@@ -449,9 +451,23 @@ namespace MonsterSupergroup.NetworkCombat
                 return CombatRejectionReason.TargetCanonicalDead;
             }
 
-            return target.IsInvulnerable
+            return !clientFinalEnemy && target.IsInvulnerable
                 ? CombatRejectionReason.AbsoluteInvulnerable
                 : CombatRejectionReason.None;
+        }
+
+        public CombatApplyResult ApplyEnemyDeath(uint senderPlayerId, EnemyDeathReport report)
+        {
+            if (!entities.TryGetValue(report.TargetEntityId, out var target))
+                return CombatApplyResult.Reject(CombatRejectionReason.TargetNotFound);
+            if (target.Kind != CombatEntityKind.Enemy)
+                return CombatApplyResult.Reject(CombatRejectionReason.WrongAuthority);
+            return Apply(senderPlayerId, new CombatResult
+            {
+                EventId = report.CauseEventId, Sequence = new MonsterSupergroup.GAS.CombatEventId(report.CauseEventId).Sequence,
+                SourcePlayerId = report.SourcePlayerId, SourceEntityId = report.SourceEntityId,
+                TargetEntityId = report.TargetEntityId, Damage = int.MaxValue
+            });
         }
 
         private static CombatApplyResult ApplyDamage(

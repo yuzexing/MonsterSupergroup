@@ -125,7 +125,14 @@ namespace MonsterSupergroup.Gameplay.Tests
             Assert.That(NetworkEnemySimulationWorld.Instance.RoutedOrdinaryKnockbackCount, Is.EqualTo(hits.Length));
             Assert.That(Vector2.Distance(before, body.position), Is.GreaterThan(.1f), "Ordinary hits must leave the old-FSM early return and move only the assigned simulator.");
             Assert.That(enemy.StateMachine, Is.Null);
-            yield return VerifyCommandReplayAndHandoff(agent, circling, bridge, hits[0].RootEventId.Value);
+            var simulationWorld = NetworkEnemySimulationWorld.Instance;
+            var endpoint = owner.GetComponent<NetworkEnemySimulationEndpoint>();
+            // The next phase drives leases explicitly. Automatic ready reports can otherwise
+            // reclaim the fallback lease mid-stagger and make a server-local assertion race.
+            simulationWorld.enabled = false;
+            endpoint.enabled = false;
+            try { yield return VerifyCommandReplayAndHandoff(agent, circling, bridge, hits[0].RootEventId.Value); }
+            finally { simulationWorld.enabled = true; endpoint.enabled = true; }
 
             void KeepOrbInContact()
             {
@@ -210,7 +217,8 @@ namespace MonsterSupergroup.Gameplay.Tests
             Assert.That(EnemySimulationClock.Now, Is.EqualTo(expectedEnd).Within(.1), "Handoff must not restart the full stagger.");
             var replay = inFlight; replay.AssignmentEpoch = agent.Assignment.Epoch; replay.CommandId = ++serial;
             Assert.That(Apply(replay, true), Is.False, "A handled damage event cannot replay under the new epoch.");
-            Assert.That(Apply(Command(), true), Is.True);
+            Assert.That(Apply(Command(), true), Is.True,
+                $"post-handoff host={agent.Assignment.Host} role={agent.Authority.Role} epoch={agent.Assignment.Epoch} localAlive={controller.IsAlive} canonicalAlive={agent.IsCanonicalAlive} active={agent.HasActiveNetworkKnockback}");
             Handoff(world.Registry.Freeze(agent.netId));
             Assert.That(agent.HasActiveNetworkKnockback, Is.False);
             Assert.That(body.linearVelocity, Is.EqualTo(Vector2.zero));

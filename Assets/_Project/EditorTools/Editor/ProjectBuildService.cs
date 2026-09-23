@@ -1,93 +1,159 @@
 using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using UnityEditor;
+using UnityEditor.Build;
+using UnityEditor.Build.Profile;
 using UnityEditor.Build.Reporting;
 using UnityEngine;
 using MonsterSupergroup.Builds;
+using Debug = UnityEngine.Debug;
 
 namespace MonsterSupergroup.EditorTools
 {
     public static class ProjectBuildService
     {
-        public static string ActiveProfile { get; private set; }
-
+        public static string ActiveProfile => ActivePlan?.Purpose;
+        public static ResolvedProjectBuild ActivePlan { get; private set; }
+        public static string LastLaunchError { get; private set; }
         public static void ValidateProfile(ProjectBuildProfile profile)
         {
-            if (profile.scenes == null || profile.scenes.Length == 0) throw new InvalidDataException("构建未配置场景: " + profile.id);
+            if (profile.scenes == null || profile.scenes.Length == 0) throw new InvalidDataException("构建未配置场景：" + profile.id);
             foreach (string scene in profile.scenes)
-                if (AssetDatabase.LoadAssetAtPath<SceneAsset>(scene) == null)
-                    throw new FileNotFoundException("场景缺失，请先显式运行对应维护工具: " + scene);
-            if (string.IsNullOrWhiteSpace(profile.output) || !profile.output.EndsWith(".exe", StringComparison.OrdinalIgnoreCase))
-                throw new InvalidDataException("Windows 构建输出无效: " + profile.id);
+                if (AssetDatabase.LoadAssetAtPath<SceneAsset>(scene) == null) throw new FileNotFoundException("场景缺失：" + scene);
         }
-
-        public static string Build(string profileId, string output = null, bool scriptsOnly = false,
-            string buildKind = null, string development = null, bool uniqueOutput = false,
-            string network = null, string distribution = null, string diagnostics = null)
+        public static void AssertReady(BuildProfile profile)
         {
-            if (EditorApplication.isPlayingOrWillChangePlaymode || BuildPipeline.isBuildingPlayer)
-                throw new InvalidOperationException("请先停止 Play Mode 或当前构建。");
-            // Invalidate before parameter validation, so a rejected attempt cannot select an older success.
-            var catalog = ProjectToolCatalog.Load();
-            string canonical = catalog.buildAliases.FirstOrDefault(a => a.id == profileId)?.recipe ?? profileId;
-            ProjectBuildResults.Invalidate(profileId, canonical);
-            ProjectBuildIdentity.ResetLastInfo();
-            var resolved = ProjectBuildResolver.Resolve(profileId, buildKind, development, network, distribution, diagnostics);
-            var profile = resolved.Recipe;
-            if (scriptsOnly) throw new InvalidOperationException("ScriptsOnly 无法保证资源与版本一致，请执行完整构建。");
-            BuildKind kind = resolved.Kind;
-            bool dev = resolved.Development;
-            string[] projectDefines = PlayerSettings.GetScriptingDefineSymbols(UnityEditor.Build.NamedBuildTarget.Standalone).Split(';');
-            ProjectBuildResolver.ValidateProjectDefines(resolved, projectDefines);
-            ValidateProfile(profile);
-            var assetsBefore = ProjectToolRunner.CaptureAssets();
-            var info = ProjectBuildIdentity.Capture(profile, kind, dev);
-            info.SetConfiguration(profile.id, resolved.Network.ToString(), resolved.Distribution.ToString(), resolved.Diagnostics.ToString(),
-                profile.testAssemblies, resolved.Tools, resolved.Evidence);
-            if (resolved.IsAlias) Debug.LogWarning($"[ProjectTools] 旧配置 {profileId} → {profile.id}（{kind}/{resolved.Network}/{resolved.Distribution}）。请改用新配方；具体测试在启动时选择。");
-            Debug.Log("[ProjectTools] " + info.Display + "\n" + resolved.Summary);
-            foreach (string validation in profile.validations ?? Array.Empty<string>()) ProjectToolRunner.InvokeReadOnly(validation);
-            string path = string.IsNullOrWhiteSpace(output) ? profile.output : output;
-            if (!path.EndsWith(".exe", StringComparison.OrdinalIgnoreCase)) throw new ArgumentException("输出必须是 .exe 文件。");
-            // Even legacy callers may not overwrite a previously frozen package.
-            path = Path.Combine(Path.GetDirectoryName(path), info.ArtifactName, Path.GetFileName(path));
-            if (Directory.Exists(Path.GetDirectoryName(Path.GetFullPath(path)))) throw new IOException("构建目录已存在，拒绝覆盖：" + path);
-            Directory.CreateDirectory(Path.GetDirectoryName(Path.GetFullPath(path)));
+            if (ActivePlan != null || EditorApplication.isPlayingOrWillChangePlaymode || EditorApplication.isCompiling || EditorApplication.isUpdating || BuildPipeline.isBuildingPlayer)
+                throw new BuildFailedException("请停止 Play Mode／当前构建，等待编译和导入完成。");
+            if (BuildProfile.GetActiveBuildProfile() != profile) throw new BuildFailedException("请先显式激活所选 Profile，并等待编译完成；构建不会自动切换配置。");
+            if (AssetDatabase.LoadAllAssetsAtPath(AssetDatabase.GetAssetPath(profile)).Any(EditorUtility.IsDirty)) throw new BuildFailedException("请先保存 Profile 和业务配置。");
+            for (int i = 0; i < UnityEngine.SceneManagement.SceneManager.sceneCount; i++)
+                if (UnityEngine.SceneManagement.SceneManager.GetSceneAt(i).isDirty) throw new BuildFailedException("请先保存或关闭未保存的场景。");
+        }
+        public static string Build(BuildProfile profile, BuildExecutionRequest request = null)
+        {
+            request ??= new BuildExecutionRequest();
+            LastLaunchError = null; ProjectBuildIdentity.ResetLastInfo();
+            string guid = profile == null ? null : AssetDatabase.AssetPathToGUID(AssetDatabase.GetAssetPath(profile));
+            using var evidence = ProjectBuildInputEvidence.Start(ProjectToolCatalog.ProjectRoot, guid,
+                profile == null ? null : AssetDatabase.GetAssetPath(profile), message => Debug.LogWarning("[BuildInputEvidence] " + message));
+            return Build(profile, request, guid, evidence);
+        }
+        private static string Build(BuildProfile profile, BuildExecutionRequest request, string guid, ProjectBuildInputEvidence evidence)
+        {
+            if (!string.IsNullOrEmpty(guid)) ProjectBuildResults.Invalidate(guid);
+            AssertReady(profile);
+            var plan = ProjectBuildResolver.Resolve(profile, true, evidence, ProjectBuildInputEvidence.InitialPlan);
+            ProjectBuildResolver.ValidateDefines(plan);
+            ProjectBuildResolver.ValidateExecution(plan, request);
+            string requested = string.IsNullOrWhiteSpace(request.output) ? "Builds/" + profile.name + "/MonsterSupergroup.exe" : request.output;
+            if (!requested.EndsWith(".exe", StringComparison.OrdinalIgnoreCase)) throw new ArgumentException("输出必须是 .exe 文件。");
+            var info = ProjectBuildIdentity.Capture(plan.Recipe, plan.Kind, plan.Development);
+            evidence?.BindBuildId(info.BuildId);
+            info.SetConfiguration(plan.Purpose, plan.Network.ToString(), plan.Distribution.ToString(), plan.Diagnostics.ToString(), plan.Recipe.testAssemblies, plan.Tools, plan.Evidence);
+            info.SetProfile(plan.ProfileGuid, plan.ProfilePath, plan.ContentHash, plan.InputHash);
+            string parent = Path.GetDirectoryName(Path.GetFullPath(requested));
+            string finalDirectory = Path.Combine(parent, info.ArtifactName);
+            string stage = Path.Combine(parent, ".staging", info.ArtifactName);
+            string path = Path.Combine(stage, Path.GetFileName(requested));
+            string finalPath = Path.Combine(finalDirectory, Path.GetFileName(requested));
+            if (Directory.Exists(stage) || Directory.Exists(finalDirectory)) throw new IOException("唯一构建目录已存在，拒绝覆盖。");
+            var before = ProjectToolRunner.CaptureAssets();
+            ProjectBuildTransaction transaction = null;
+            BuildReport report = null;
+            var errors = new List<Exception>();
+            bool published = false;
             try
             {
-                ActiveProfile = profile.id;
+                transaction = new ProjectBuildTransaction();
+                foreach (string validation in plan.Recipe.validations) ProjectToolRunner.InvokeReadOnly(validation);
+                Directory.CreateDirectory(stage);
+                File.WriteAllText(Path.Combine(stage, "build-plan.json"), plan.ToJson());
+                File.WriteAllText(Path.Combine(stage, "build-request.json"), JsonUtility.ToJson(request, true));
+                ActivePlan = plan;
                 ProjectBuildIdentity.Begin(info, path);
-                var options = (dev ? BuildOptions.Development : BuildOptions.None) |
-                    (profile.testAssemblies ? BuildOptions.IncludeTestAssemblies : BuildOptions.None);
-                var report = BuildPipeline.BuildPlayer(new BuildPlayerOptions {
-                    scenes = profile.scenes, locationPathName = path, target = BuildTarget.StandaloneWindows64,
-                    options = options, extraScriptingDefines = resolved.Defines
-                });
-                if (report.summary.result != BuildResult.Succeeded)
-                    throw new InvalidOperationException($"构建 {profileId} 失败: {report.summary.result} ({report.summary.totalErrors} errors)");
-                ProjectToolRunner.AssertAssetsUnchanged(assetsBefore);
-                ProjectBuildIdentity.Complete(report);
+                Debug.Log("[ProjectBuild] " + info.Display + "\n" + plan.Summary);
+                evidence?.CaptureFile(ProjectBuildInputEvidence.BeforeUnity);
+                try
+                {
+                    report = BuildPipeline.BuildPlayer(new BuildPlayerWithProfileOptions {
+                        buildProfile = profile, locationPathName = path,
+                        options = (plan.Recipe.testAssemblies ? BuildOptions.IncludeTestAssemblies : 0) |
+                            (request.cleanBuildCache ? BuildOptions.CleanBuildCache : 0) | BuildOptions.StrictMode
+                    });
+                }
+                finally { evidence?.CaptureFile(ProjectBuildInputEvidence.AfterUnity); }
+                if (report == null || report.summary.result != BuildResult.Succeeded) throw new BuildFailedException("Unity 构建未成功：" + report?.summary.result);
             }
-            finally { try { ProjectBuildIdentity.End(); } finally { ActiveProfile = null; } }
-            try { ProjectBuildResults.Save(resolved, path, info); }
-            catch { ProjectBuildIdentity.InvalidateOutput(path); throw; }
-            Debug.Log($"[ProjectTools] Build {profileId}: {Path.GetFullPath(path)}");
-            return Path.GetFullPath(path);
+            catch (Exception e) { errors.Add(e); }
+            finally
+            {
+                // Run every cleanup, even when Unity skipped its post-build callbacks.
+                Try(() => ProjectBuildIdentity.Cleanup(), errors);
+                evidence?.CaptureFile(ProjectBuildInputEvidence.AfterIdentityCleanup);
+                if (transaction != null)
+                {
+                    Try(transaction.Dispose, errors);
+                    evidence?.CaptureFile(ProjectBuildInputEvidence.AfterTmpRestore);
+                }
+                Try(() => ProjectToolRunner.AssertAssetsUnchanged(before), errors);
+            }
+            try
+            {
+                if (errors.Count != 0) throw new AggregateException("构建或恢复失败。", errors);
+                var after = ProjectBuildResolver.Resolve(profile, true, evidence, ProjectBuildInputEvidence.FinalPlan);
+                if (after.ContentHash != plan.ContentHash || after.InputHash != plan.InputHash)
+                {
+                    File.WriteAllText(Path.Combine(stage, "build-plan-after.json"), after.ToJson());
+                    throw new BuildFailedException($"构建期间配置或工程输入改变，本次不发布。Content={plan.ContentHash == after.ContentHash}, Input={plan.InputHash == after.InputHash}；差异快照已写入失败目录。");
+                }
+                ProjectBuildIdentity.Complete(report);
+                ProjectBuildPackage.Validate(path, plan, info);
+                Directory.Move(stage, finalDirectory);
+                ProjectBuildResults.Save(plan, finalPath, info);
+                ProjectBuildIdentity.SetLastInfoPath(finalPath);
+                published = true;
+            }
+            finally
+            {
+                try
+                {
+                    if (!published)
+                    {
+                        ProjectBuildResults.Invalidate(guid);
+                        ProjectBuildIdentity.InvalidateOutput(path);
+                        ProjectBuildIdentity.InvalidateOutput(finalPath);
+                        string failed = Directory.Exists(finalDirectory) ? finalDirectory : stage;
+                        if (Directory.Exists(failed))
+                        {
+                            string quarantine = Path.Combine(parent, ".failed", info.ArtifactName);
+                            Directory.CreateDirectory(Path.GetDirectoryName(quarantine));
+                            Directory.Move(failed, quarantine);
+                        }
+                    }
+                }
+                finally { ProjectBuildIdentity.ResetContext(); ActivePlan = null; }
+            }
+            if (request.runAfterBuild)
+            {
+                try { Process.Start(new ProcessStartInfo(finalPath) { WorkingDirectory = finalDirectory, UseShellExecute = true }); }
+                catch (Exception e) { LastLaunchError = e.Message; Debug.LogWarning("构建成功，但 Player 启动失败：" + e.Message); }
+            }
+            Debug.Log("[ProjectBuild] Success: " + finalPath);
+            return finalPath;
         }
-
-        public static void Legacy(string profile, string output = null, bool scriptsOnly = false)
-        {
-            Debug.LogWarning($"[ProjectTools] 旧构建入口兼容一版，请改用 build.player -Profile {profile}。");
-            var result = ProjectToolRunner.Run("build.player", new ProjectToolRequest { profile = profile, output = output, scriptsOnly = scriptsOnly });
-            if (!result.success) throw new InvalidOperationException(result.error);
-        }
+        private static void Try(Action action, List<Exception> errors) { try { action(); } catch (Exception e) { errors.Add(e); } }
+        public static string Build(string profileId, string output = null, bool scriptsOnly = false, string buildKind = null,
+            string development = null, bool uniqueOutput = false, string network = null, string distribution = null, string diagnostics = null) =>
+            throw new BuildFailedException(ProjectBuildResolver.MigrationMessage);
+        public static void Legacy(string profile, string output = null, bool scriptsOnly = false) => throw new BuildFailedException(ProjectBuildResolver.MigrationMessage);
         public static void LegacyBatch(string profile)
         {
-            int code = 0;
             try { Legacy(profile); }
-            catch (Exception error) { Debug.LogException(error); code = 1; if (!Application.isBatchMode) throw; }
-            finally { if (Application.isBatchMode) EditorApplication.Exit(code); }
+            catch (Exception e) { Debug.LogException(e); if (Application.isBatchMode) EditorApplication.Exit(1); else throw; }
         }
     }
 
@@ -95,44 +161,32 @@ namespace MonsterSupergroup.EditorTools
     public sealed class ProjectBuildResultPointer
     {
         public bool success;
-        public string requestedProfile, recipe, executable, buildInfoPath, buildId;
+        public string profileGuid, profilePath, recipe, executable, buildInfoPath, buildId, contentHash, inputHash;
     }
-
     public static class ProjectBuildResults
     {
-        public static string PathFor(string id)
+        public static string PathFor(string guid)
         {
-            if (string.IsNullOrEmpty(id) || id.Any(c => !(char.IsLetterOrDigit(c) || c == '-')))
-                throw new ArgumentException("非法构建 ID。");
-            return Path.Combine(ProjectToolCatalog.ProjectRoot, "Library/ProjectTools/BuildResults", id + ".json");
+            if (guid == null || guid.Length != 32 || !guid.All(Uri.IsHexDigit)) throw new ArgumentException("构建结果需要原生 Profile GUID；旧配方指针已停用。");
+            return Path.Combine(ProjectToolCatalog.ProjectRoot, "Library/ProjectTools/BuildResults", guid + ".json");
         }
-        public static void Invalidate(params string[] ids)
+        public static void Invalidate(params string[] guids)
         {
-            foreach (string id in ids.Distinct()) { string path = PathFor(id); if (File.Exists(path)) File.Delete(path); }
+            foreach (string guid in guids.Distinct()) { string path = PathFor(guid); if (File.Exists(path)) File.Delete(path); }
         }
-        public static void Save(ResolvedProjectBuild build, string executable, BuildInfo info)
+        public static void Save(ResolvedProjectBuild plan, string executable, BuildInfo info)
         {
-            var result = new ProjectBuildResultPointer { success = true, requestedProfile = build.RequestedId, recipe = build.Recipe.id,
-                executable = Path.GetFullPath(executable), buildInfoPath = ProjectBuildIdentity.InfoPath(executable), buildId = info.BuildId };
-            string[] ids = new[] { build.RequestedId, build.Recipe.id }.Distinct().ToArray();
+            var result = new ProjectBuildResultPointer { success = true, profileGuid = plan.ProfileGuid, profilePath = plan.ProfilePath, recipe = plan.Purpose,
+                executable = Path.GetFullPath(executable), buildInfoPath = ProjectBuildIdentity.InfoPath(executable), buildId = info.BuildId, contentHash = plan.ContentHash, inputHash = plan.InputHash };
+            string path = PathFor(plan.ProfileGuid);
             try
             {
-                foreach (string id in ids)
-                {
-                    string path = PathFor(id); Directory.CreateDirectory(Path.GetDirectoryName(path));
-                    File.WriteAllText(path + ".tmp", JsonUtility.ToJson(result, true), new System.Text.UTF8Encoding(false));
-                }
-                foreach (string id in ids)
-                {
-                    string path = PathFor(id);
-                    if (File.Exists(path)) File.Replace(path + ".tmp", path, null); else File.Move(path + ".tmp", path);
-                }
+                Directory.CreateDirectory(Path.GetDirectoryName(path));
+                File.WriteAllText(path + ".tmp", JsonUtility.ToJson(result, true), new System.Text.UTF8Encoding(false));
+                if (File.Exists(path)) File.Replace(path + ".tmp", path, null); else File.Move(path + ".tmp", path);
             }
-            catch { Invalidate(ids); throw; }
-            finally
-            {
-                foreach (string id in ids) if (File.Exists(PathFor(id) + ".tmp")) File.Delete(PathFor(id) + ".tmp");
-            }
+            catch { Invalidate(plan.ProfileGuid); throw; }
+            finally { if (File.Exists(path + ".tmp")) File.Delete(path + ".tmp"); }
         }
     }
 }

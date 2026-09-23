@@ -1,0 +1,91 @@
+{
+  "schemaVersion": 1,
+  "auditedUtc": "2026-09-23T04:55:20Z",
+  "provenance": "F:\\UnityStore\\MonsterSupergroup\\Logs\\CombatEvidenceV2Validation\\fixtures\\provenance.json",
+  "provenanceSha256": "274ff2f7f5449632794134d10551a7ee1f2846f6f5a90973ec2606cedacce82f",
+  "buildManifest": "F:\\UnityStore\\MonsterSupergroup\\Logs\\CombatEvidenceBuilds\\20260922-073148-873\\combat-build.json",
+  "buildManifestSha256": "6649a2dc061b1fd838e3ba255b9fbce777e5ada403a07182e858fd32b799a739",
+  "fixtures": [
+    {
+      "file": "F:\\UnityStore\\MonsterSupergroup\\Logs\\CombatEvidenceV2Validation\\fixtures\\incident-20260922-gateway-1.json",
+      "sha256": "cfefe6956f935997bcf381657c86c67decab6f2a112daa499c2cb02b8a5eb527",
+      "expectedSha256": "cfefe6956f935997bcf381657c86c67decab6f2a112daa499c2cb02b8a5eb527",
+      "provenanceVerified": true,
+      "capture": "aa5c4f89bca840658bda6f8ab69897f6",
+      "engine": "gateway-1",
+      "sourceBuild": "27fcaf967626475aa37d7d29dcc599f2",
+      "sourceRun": "35e6b2255cc74acfa5a229fd8b84d5bc",
+      "sourceLogFormat": 1,
+      "fixtureFormat": 2,
+      "firstCheckpoint": "16349",
+      "lastSequence": "19660",
+      "firstKnownCaptureGap": "316881",
+      "steps": 260,
+      "declaredComplete": true,
+      "originalReferences": [
+        {
+          "path": "F:\\UnityStore\\MonsterSupergroup\\Logs\\SteamIncident-20260922\\Client\\CombatDiagnostics\\35e6b2255cc74acfa5a229fd8b84d5bc\\1\\sources\\aa5c4f89bca840658bda6f8ab69897f6\\events-00000000000000016349.jsonl",
+          "line": 1,
+          "fileSha256": "74417990f12c80c3316dcd1ca0ad325f7f6da5c66d9cbf901849b64e54c20d67",
+          "physicalLineExists": true,
+          "captureMatches": true,
+          "recordSequence": "16349"
+        },
+        {
+          "path": "F:\\UnityStore\\MonsterSupergroup\\Logs\\SteamIncident-20260922\\Client\\CombatDiagnostics\\35e6b2255cc74acfa5a229fd8b84d5bc\\1\\sources\\aa5c4f89bca840658bda6f8ab69897f6\\events-00000000000000016349.jsonl",
+          "line": 3312,
+          "fileSha256": "74417990f12c80c3316dcd1ca0ad325f7f6da5c66d9cbf901849b64e54c20d67",
+          "physicalLineExists": true,
+          "captureMatches": true,
+          "recordSequence": "19660"
+        }
+      ],
+      "originalContext": "Real local KCP run, not the old installed Steam multiplayer package. Earlier than the first recorded overload gap. Actual replay not yet run.",
+      "verdict": "VerifiedInputProvenanceOnly",
+      "businessFaultReproduced": false,
+      "businessFaultFixed": false,
+      "limitation": "This audit executes no business replay. A complete pre-gap KCP input is not a reproduced Steam incident or business defect."
+    },
+    {
+      "file": "F:\\UnityStore\\MonsterSupergroup\\Logs\\CombatEvidenceV2Validation\\fixtures\\incident-20260922-replica-3.json",
+      "sha256": "c91b49ae15dbd4188e7eadb8cebb4d65318594b7f37916fa48deaf12adb0c951",
+      "expectedSha256": "c91b49ae15dbd4188e7eadb8cebb4d65318594b7f37916fa48deaf12adb0c951",
+      "provenanceVerified": true,
+      "capture": "aa5c4f89bca840658bda6f8ab69897f6",
+      "engine": "replica-3",
+      "sourceBuild": "27fcaf967626475aa37d7d29dcc599f2",
+      "sourceRun": "35e6b2255cc74acfa5a229fd8b84d5bc",
+      "sourceLogFormat": 1,
+      "fixtureFormat": 2,
+      "firstCheckpoint": "16349",
+      "lastSequence": "19700",
+      "firstKnownCaptureGap": "316881",
+      "steps": 1217,
+      "declaredComplete": true,
+      "originalReferences": [
+        {
+          "path": "F:\\UnityStore\\MonsterSupergroup\\Logs\\SteamIncident-20260922\\Client\\CombatDiagnostics\\35e6b2255cc74acfa5a229fd8b84d5bc\\1\\sources\\aa5c4f89bca840658bda6f8ab69897f6\\events-00000000000000016349.jsonl",
+          "line": 1,
+          "fileSha256": "74417990f12c80c3316dcd1ca0ad325f7f6da5c66d9cbf901849b64e54c20d67",
+          "physicalLineExists": true,
+          "captureMatches": true,
+          "recordSequence": "16349"
+        },
+        {
+          "path": "F:\\UnityStore\\MonsterSupergroup\\Logs\\SteamIncident-20260922\\Client\\CombatDiagnostics\\35e6b2255cc74acfa5a229fd8b84d5bc\\1\\sources\\aa5c4f89bca840658bda6f8ab69897f6\\events-00000000000000016349.jsonl",
+          "line": 3352,
+          "fileSha256": "74417990f12c80c3316dcd1ca0ad325f7f6da5c66d9cbf901849b64e54c20d67",
+          "physicalLineExists": true,
+          "captureMatches": true,
+          "recordSequence": "19700"
+        }
+      ],
+      "originalContext": "Real local KCP run, not the old installed Steam multiplayer package. Earlier than the first recorded overload gap. Actual replay not yet run.",
+      "verdict": "VerifiedInputProvenanceOnly",
+      "businessFaultReproduced": false,
+      "businessFaultFixed": false,
+      "limitation": "This audit executes no business replay. A complete pre-gap KCP input is not a reproduced Steam incident or business defect."
+    }
+  ],
+  "allProvenanceVerified": true
+}

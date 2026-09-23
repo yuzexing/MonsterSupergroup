@@ -1218,17 +1218,7 @@
       "impact": "只读；不修改玩法资产",
       "output": "构建完成报告中的唯一 Builds 子目录",
       "condition": "edit",
-      "parameters": [
-        "Profile",
-        "Output",
-        "ScriptsOnly",
-        "BuildKind",
-        "Development",
-        "UniqueOutput",
-        "Network",
-        "Distribution",
-        "Diagnostics"
-      ]
+      "parameters": ["BuildProfile", "Output", "CleanBuildCache", "RunAfterBuild"]
     },
     {
       "id": "preview.attack",

@@ -24,7 +24,7 @@ namespace MonsterSupergroup.NetworkCombat
 
         internal bool TryApplyKnockback(EnemyKnockbackCommand command, uint receiverPlayerId, bool serverLocal)
         {
-#if MONSTER_ENEMY_HANDOFF_VALIDATION
+#if MONSTER_ENEMY_HANDOFF_VALIDATION && !UNITY_EDITOR
             Debug.Log($"[EnemyHandoffImpulse] apply enemy={netId} role={authority?.Role} product={productEnemyInitialized} epoch={assignment.Epoch}/{command.AssignmentEpoch} last={knockbackHistory.LastCommandId} command={command.CommandId} alive={IsCanonicalAlive}/{enemyController?.IsAlive} immune={enemyController?.IsImmune} active={HasActiveNetworkKnockback}");
 #endif
             bool localSimulator = serverLocal ? isServer : isClient && NetworkClient.localPlayer != null &&
@@ -58,7 +58,7 @@ namespace MonsterSupergroup.NetworkCombat
                 bool applied = command.Kind == EnemyKnockbackKind.OrdinaryHit || command.Kind == EnemyKnockbackKind.Music
                     ? enemyController.TryApplyNetworkHitKnockback(command.Origin, preset, command.MultiplierSum)
                     : enemyController.TryApplyNetworkKnockback(command.Origin, preset);
-#if MONSTER_ENEMY_HANDOFF_VALIDATION
+#if MONSTER_ENEMY_HANDOFF_VALIDATION && !UNITY_EDITOR
                 Debug.Log($"[EnemyHandoffImpulse] native result={applied} active={HasActiveNetworkKnockback} movement={enemyController.Movement != null} inKnockback={enemyController.IsInKnockbackState} override={enemyController.attackScript?.OverrideKnockback}");
 #endif
                 if (!applied)

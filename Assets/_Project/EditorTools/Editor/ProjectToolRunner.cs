@@ -17,6 +17,8 @@ namespace MonsterSupergroup.EditorTools
     {
         public string profile, assetPath, source, output, resultPath, buildKind, development, network, distribution, diagnostics;
         public bool apply, scriptsOnly, uniqueOutput;
+        public string buildProfile;
+        public bool cleanBuildCache, runAfterBuild;
     }
     [Serializable] public sealed class ProjectToolResult
     {
@@ -109,7 +111,15 @@ namespace MonsterSupergroup.EditorTools
         {
             if (!string.IsNullOrEmpty(tool.script)) throw new InvalidOperationException("进程验收请使用 Tools/Invoke-ProjectTool.ps1；可在工具中心复制命令。");
             if (tool.id == "build.player" || !string.IsNullOrEmpty(tool.profile))
-            { result.artifacts = new[] { ProjectBuildService.Build(request.profile ?? tool.profile ?? "product", request.output, request.scriptsOnly, request.buildKind, request.development, request.uniqueOutput, request.network, request.distribution, request.diagnostics), ProjectBuildIdentity.LastInfoPath }; return; }
+            {
+                if (request.profile != null || tool.profile != null || request.buildKind != null || request.development != null || request.network != null ||
+                    request.distribution != null || request.diagnostics != null || request.scriptsOnly || request.uniqueOutput)
+                    throw new InvalidOperationException(ProjectBuildResolver.MigrationMessage);
+                result.artifacts = new[] { ProjectBuildService.Build(ProjectBuildResolver.Load(request.buildProfile), new BuildExecutionRequest {
+                    output = request.output, cleanBuildCache = request.cleanBuildCache, runAfterBuild = request.runAfterBuild
+                }), ProjectBuildIdentity.LastInfoPath };
+                return;
+            }
             if (tool.id == "preview.attack")
             {
                 string profile = request.profile ?? "projectile";
@@ -173,7 +183,7 @@ namespace MonsterSupergroup.EditorTools
         }
         internal static AssetDigests CaptureAssets()
         {
-            string[] roots = { "Assets/_Project/Content", "Assets/_Project/Localization", "Assets/_Project/Scenes", "Assets/_Project/UI", "Assets/Resources", "Assets/MonoBehaviour" };
+            string[] roots = { "Assets/_Project/Content", "Assets/_Project/Localization", "Assets/_Project/Scenes", "Assets/_Project/UI", "Assets/Resources", "Assets/MonoBehaviour", "Assets/Settings", "Assets/TextMesh Pro" };
             using var hash = SHA256.Create();
             return new AssetDigests { files = roots.Where(Directory.Exists).SelectMany(r => Directory.GetFiles(r, "*", SearchOption.AllDirectories))
                 .OrderBy(p => p, StringComparer.Ordinal).Select(p => new AssetDigest { path = p, hash = Convert.ToBase64String(hash.ComputeHash(File.ReadAllBytes(p))) }).ToArray() };
@@ -205,6 +215,7 @@ namespace MonsterSupergroup.EditorTools
                 resultPath = Value("-toolResult"), apply = args.Contains("-toolApply"), scriptsOnly = args.Contains("-toolScriptsOnly"),
                 buildKind = Value("-toolBuildKind"), development = Value("-toolDevelopment"), uniqueOutput = args.Contains("-toolUniqueOutput"),
                 network = Value("-toolNetwork"), distribution = Value("-toolDistribution"), diagnostics = Value("-toolDiagnostics")
+                , buildProfile = Value("-activeBuildProfile"), cleanBuildCache = args.Contains("-toolCleanBuildCache"), runAfterBuild = args.Contains("-toolRunAfterBuild")
             });
             if (!result.pending) EditorApplication.Exit(result.success ? 0 : 1);
         }

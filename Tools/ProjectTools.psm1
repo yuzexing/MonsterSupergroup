@@ -4,7 +4,7 @@ $script:OwnedProcesses = [System.Collections.Generic.List[object]]::new()
 function Resolve-ProjectBuildExecutable {
     [CmdletBinding()]
     param([Parameter(Mandatory)][string]$ProjectRoot,
-        [Parameter(Mandatory)][ValidatePattern('^[a-z0-9-]+$')][string]$Recipe,
+        [ValidatePattern('^[a-z0-9-]+$')][string]$Recipe, [string]$BuildProfile,
         [string]$Executable, [string]$BuildDirectory,
         [switch]$RequireDevelopmentTools,
         [ValidateSet('Steam','Kcp')][string]$Network,
@@ -27,11 +27,12 @@ function Resolve-ProjectBuildExecutable {
         return (Resolve-Path -LiteralPath $Executable).Path
     }
 
-    $resultPath = Join-Path $ProjectRoot "Library/ProjectTools/BuildResults/$Recipe.json"
-    $instruction = "Build '$Recipe' using MonsterSupergroup > 构建与验收 > 构建配置 or Invoke-ProjectTool.ps1 -ToolId build.player -Profile $Recipe. Use -Executable only to select a specific frozen package."
+    $profileGuid = Get-ProjectBuildProfileGuid -ProjectRoot $ProjectRoot -BuildProfile $BuildProfile
+    $resultPath = Join-Path $ProjectRoot "Library/ProjectTools/BuildResults/$profileGuid.json"
+    $instruction = "Build the explicit native Profile using -ToolId build.player -BuildProfile $BuildProfile. Legacy recipe selection is disabled."
     if (-not (Test-Path -LiteralPath $resultPath -PathType Leaf)) { throw "No successful current build result. $instruction" }
     $result = Get-Content -LiteralPath $resultPath -Raw -Encoding UTF8 | ConvertFrom-Json
-    if ($result.success -isnot [bool] -or -not $result.success -or $result.recipe -cne $Recipe -or -not $result.buildId) {
+    if ($result.success -isnot [bool] -or -not $result.success -or $result.profileGuid -cne $profileGuid -or -not $result.buildId) {
         throw "Invalid or failed build result: $resultPath. $instruction"
     }
     $executablePath = [IO.Path]::GetFullPath([string]$result.executable)
@@ -46,7 +47,15 @@ function Resolve-ProjectBuildExecutable {
         throw "BuildInfo does not match the successful package: $resultPath"
     }
     $info = Get-Content -LiteralPath $embedded -Raw -Encoding UTF8 | ConvertFrom-Json
-    if ($info.buildId -cne $result.buildId -or $info.profile -cne $Recipe) { throw 'Build identity or recipe differs from the selected result.' }
+    if (($info.schema -isnot [int] -and $info.schema -isnot [long]) -or $info.schema -ne 3) {
+        throw 'Automatic Profile selection requires BuildInfo schema 3. Select historical packages explicitly with -Executable/-BuildDirectory.'
+    }
+    foreach ($field in @('contentHash','inputHash')) {
+        if ($info.$field -isnot [string] -or $info.$field -cnotmatch '\A[a-fA-F0-9]{64}\z') {
+            throw "BuildInfo has a missing or invalid $field. $instruction"
+        }
+    }
+    if ($info.buildId -cne $result.buildId -or $info.profileGuid -cne $profileGuid -or $info.contentHash -cne $result.contentHash -or $info.inputHash -cne $result.inputHash) { throw 'Build identity or recipe differs from the selected result.' }
     if ($RequireDevelopmentTools -and ($info.developmentTools -isnot [bool] -or -not $info.developmentTools)) {
         throw "The selected package has no mechanism/development capability. $instruction"
     }
@@ -54,6 +63,20 @@ function Resolve-ProjectBuildExecutable {
     if ($Diagnostics -and $info.diagnostics -cne $Diagnostics) { throw "This scenario requires $Diagnostics diagnostics. $instruction" }
     Write-Host "Using $Recipe $($info.buildId): $executablePath"
     return $executablePath
+}
+
+
+function Get-ProjectBuildProfileGuid {
+    param([string]$ProjectRoot, [string]$BuildProfile)
+    if (-not $BuildProfile) { throw 'Legacy recipe result selection is disabled. Specify -BuildProfile or an explicit -Executable/-BuildDirectory.' }
+    if ($BuildProfile.Replace('\','/') -notmatch '^Assets/.+\.asset$') { throw 'BuildProfile must be a project-relative Assets/*.asset path.' }
+    $assetRoot = [IO.Path]::GetFullPath((Join-Path $ProjectRoot 'Assets')) + [IO.Path]::DirectorySeparatorChar
+    $full = [IO.Path]::GetFullPath((Join-Path $ProjectRoot $BuildProfile))
+    if (-not $full.StartsWith($assetRoot, [StringComparison]::OrdinalIgnoreCase)) { throw 'BuildProfile escapes Assets.' }
+    if (-not (Test-Path -LiteralPath $full -PathType Leaf)) { throw "Missing BuildProfile: $BuildProfile" }
+    $meta = Get-Content -LiteralPath ($full + '.meta') -Raw
+    if ($meta -notmatch '(?m)^guid: ([a-f0-9]{32})\r?$') { throw 'BuildProfile meta GUID is invalid.' }
+    return $Matches[1]
 }
 
 function Resolve-ProjectUnity {
@@ -153,12 +176,18 @@ function Clear-ProjectProcesses {
 
 function Convert-ProjectToolParameters {
     param($Tool, [hashtable]$Values)
+    if ($Tool.id -eq 'build.player') {
+        foreach ($legacy in @('Profile','BuildKind','Development','Network','Distribution','Diagnostics','ScriptsOnly','UniqueOutput')) {
+            if ($Values.ContainsKey($legacy)) { throw "Legacy build parameter '$legacy' is disabled; use -BuildProfile and edit its MonsterBuildSettings." }
+        }
+        if (-not $Values.BuildProfile) { throw 'Build requires an explicit -BuildProfile asset path; legacy recipes are disabled.' }
+    }
     $allowed = @($Tool.parameters) + @('Unity', 'Apply')
     $converted = @{}
     foreach ($key in $Values.Keys) {
         if ($allowed -notcontains $key) { throw "Unsupported tool parameter: $key. Query -Help for this tool." }
         $value = $Values[$key]
-        if ($key -in @('Apply','ScriptsOnly','UniqueOutput')) {
+        if ($key -in @('Apply','ScriptsOnly','UniqueOutput','CleanBuildCache','RunAfterBuild')) {
             if ($value -is [string]) { $value = [bool]::Parse($value) }
             $converted[$key] = [bool]$value
         } else { $converted[$key] = [string]$value }

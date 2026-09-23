@@ -21,7 +21,7 @@ namespace MonsterSupergroup.NetworkCombat.Diagnostics
     [Serializable] public sealed class ReplayCheckpointSet { public int version = 1; public ReplayCheckpoint[] engines; }
 
     [DefaultExecutionOrder(-32000)]
-    public sealed partial class CombatEvidenceRuntime : MonoBehaviour, IDiagnosticSink, IDiagnosticAdvanceSink
+    public sealed partial class CombatEvidenceRuntime : MonoBehaviour, IDiagnosticSink, IDiagnosticAdvanceSink, IDiagnosticIntegritySink, IDiagnosticSharedPayloadSink
     {
         private sealed class Engine
         {
@@ -42,17 +42,18 @@ namespace MonsterSupergroup.NetworkCombat.Diagnostics
         private DiagnosticReplicator replicator;
         private long sequence, sinkTicks, sinkCalls;
         private int nextEngine, mainThread, fixedStep;
-        private double nextSnapshot, nextCheckpoint, captureTicks;
+        private double nextSnapshot, nextCheckpoint, nextRecoveryAttempt, captureTicks;
         private string run = "boot", context = "boot/0";
         private string contextRun = "boot";
         private uint contextRound;
         private uint round;
-        private bool shuttingDown;
+        private bool shuttingDown, engineRegistryIncomplete;
         private string capture;
         private const int RuntimeCacheBytes = 16 << 20;
         private bool runtimeBudgetHeld;
         public static CombatEvidenceRuntime Instance { get; private set; }
         public CombatEvidenceStore Store => store;
+        public DiagnosticMemoryBudget Memory => store?.Memory;
         public string CaptureId => capture;
         public string RunId => run;
         public uint Round => round;
@@ -63,7 +64,7 @@ namespace MonsterSupergroup.NetworkCombat.Diagnostics
         {
             if (!MonsterSupergroup.Builds.BuildFeatures.EvidenceAllowed) return;
             bool enabledByDefault = false;
-#if MONSTER_BUILD_EVIDENCE
+#if MONSTER_BUILD_EVIDENCE && !UNITY_EDITOR
             enabledByDefault = true;
 #endif
             var args = Environment.GetCommandLineArgs();
@@ -84,8 +85,16 @@ namespace MonsterSupergroup.NetworkCombat.Diagnostics
             if (ReplicationEnabled) { transport = new SteamDiagnosticTransport(); replicator = new DiagnosticReplicator(store, transport, capture); }
             CombatEvidence.Sink = this;
             Application.logMessageReceivedThreaded += CaptureException;
+            string executablePath = null; int processId = 0;
+            try
+            {
+                using var process = System.Diagnostics.Process.GetCurrentProcess();
+                processId = process.Id; executablePath = process.MainModule?.FileName;
+            }
+            catch { /* Missing process identity is explicit in metadata and cannot verify a delivered package. */ }
             buildMetadata = new {
                 captureId = capture, buildGuid = Application.buildGUID, version = Application.version, buildInfo = MonsterSupergroup.Builds.RuntimeBuildInfo.Current?.ToJson(), unity = Application.unityVersion,
+                executablePath, processId, executablePathVerified = !string.IsNullOrEmpty(executablePath),
                 protocol = SteamLobbyMetadata.ProtocolValue, development = Debug.isDebugBuild,
                 mode = ReplicationEnabled ? "replicated" : "local", width = Screen.width, height = Screen.height,
                 quality = QualitySettings.names[QualitySettings.GetQualityLevel()], gpu = SystemInfo.graphicsDeviceName,
@@ -113,6 +122,11 @@ namespace MonsterSupergroup.NetworkCombat.Diagnostics
                 CaptureCheckpointSet();
                 nextCheckpoint = Time.unscaledTimeAsDouble + 10;
             }
+            else if (Time.unscaledTimeAsDouble >= nextRecoveryAttempt && store.RecoveryCheckpointRequested(capture, run, round))
+            {
+                nextRecoveryAttempt = Time.unscaledTimeAsDouble + 1;
+                CaptureCheckpointSet();
+            }
         }
         private void RefreshContext()
         {
@@ -136,6 +150,18 @@ namespace MonsterSupergroup.NetworkCombat.Diagnostics
         private bool WriteCore(DiagnosticRecord record, Func<object> captureInput = null)
         {
             if (store == null || shuttingDown) return false;
+            Stamp(record);
+            record.estimatedBytes = (int)Math.Min(int.MaxValue, Math.Max(record.estimatedBytes, 512L + RetainedBytes(record.input) + RetainedBytes(record.before) + RetainedBytes(record.after)));
+            return store.TryWrite(record, captureInput == null, captureInput);
+        }
+        public void ReportCaptureFailure(DiagnosticRecord record)
+        {
+            if (store == null || shuttingDown) return;
+            if (record.captureId != capture || string.IsNullOrEmpty(record.recordSequence)) Stamp(record);
+            store.ReportCaptureFailure(record);
+        }
+        private void Stamp(DiagnosticRecord record)
+        {
             if (Thread.CurrentThread.ManagedThreadId == mainThread) RefreshContext();
             record.captureId = capture; record.runId = run; record.round = round;
             record.recordSequence = Interlocked.Increment(ref sequence).ToString();
@@ -153,8 +179,6 @@ namespace MonsterSupergroup.NetworkCombat.Diagnostics
             record.monotonicTime = System.Diagnostics.Stopwatch.GetTimestamp() / (double)System.Diagnostics.Stopwatch.Frequency;
             if (Thread.CurrentThread.ManagedThreadId == mainThread)
             { record.networkTime = NetworkTime.time; record.frame = Time.frameCount; record.fixedStep = fixedStep; }
-            record.estimatedBytes = (int)Math.Min(int.MaxValue, Math.Max(record.estimatedBytes, 512L + RetainedBytes(record.input) + RetainedBytes(record.before) + RetainedBytes(record.after)));
-            return store.TryWrite(record, captureInput == null, captureInput);
         }
         public string RegisterEngine(object target, string domain, Func<object, object> snapshot)
         {
@@ -162,7 +186,11 @@ namespace MonsterSupergroup.NetworkCombat.Diagnostics
             if (!engineLookup.TryGetValue(target, out var engine))
             {
                 if (engines.Count >= 16384)
-                { TryWrite(new DiagnosticRecord { role = "Process", stage = "evidence.gap", reason = "EngineRegistryLimit", critical = true }); return null; }
+                {
+                    engineRegistryIncomplete = true;
+                    ReportCaptureFailure(new DiagnosticRecord { role = "Process", stage = "replay.engine_checkpoint",
+                        reason = "EngineRegistryLimit", critical = true }); return null;
+                }
                 engine = new Engine { target = new WeakReference(target), capture = snapshot,
                     id = domain + "-" + (++nextEngine), domain = domain };
                 engineLookup.Add(target, engine); engines.Add(engine);
@@ -176,16 +204,15 @@ namespace MonsterSupergroup.NetworkCombat.Diagnostics
             long start = System.Diagnostics.Stopwatch.GetTimestamp();
             try
             {
-                object snapshot;
-                using (CombatEvidence.Suppress()) snapshot = engine.capture(target);
-                TryWrite(new DiagnosticRecord { role = engine.domain, stage = "replay.engine_checkpoint", engine = engine.id,
-                    input = new ReplayCheckpoint { engine = engine.id, domain = engine.domain, state = snapshot },
-                    critical = true, estimatedBytes = RetainedBytes(snapshot) });
+                WriteCore(new DiagnosticRecord { role = engine.domain, stage = "replay.engine_checkpoint", engine = engine.id,
+                    critical = true, estimatedBytes = 8 << 20 }, () => {
+                        using (CombatEvidence.Suppress()) return new ReplayCheckpoint { engine = engine.id, domain = engine.domain, state = engine.capture(target) };
+                    });
             }
             catch (Exception error)
             {
-                TryWrite(new DiagnosticRecord { role = engine.domain, engine = engine.id, stage = "evidence.gap",
-                    reason = "CheckpointFailed", input = error.Message, critical = true });
+                ReportCaptureFailure(new DiagnosticRecord { role = engine.domain, engine = engine.id, stage = "evidence.gap",
+                    reason = "CheckpointFailed:" + error.GetType().Name, critical = true });
             }
             captureTicks += System.Diagnostics.Stopwatch.GetTimestamp() - start;
         }
@@ -195,6 +222,7 @@ namespace MonsterSupergroup.NetworkCombat.Diagnostics
             try
             {
                 WriteCore(new DiagnosticRecord { role = "Process", stage = "replay.checkpoint", engine = "*", critical = true, estimatedBytes = 8 << 20 }, () => {
+                if (engineRegistryIncomplete) throw new InvalidOperationException("EngineRegistryIncomplete");
                 var snapshots = new List<ReplayCheckpoint>();
                 using (CombatEvidence.Suppress())
                     for (int i = engines.Count - 1; i >= 0; i--)
@@ -207,7 +235,7 @@ namespace MonsterSupergroup.NetworkCombat.Diagnostics
                 return new ReplayCheckpointSet { engines = snapshots.ToArray() };
                 });
             }
-            catch (Exception error) { TryWrite(new DiagnosticRecord { role = "Process", stage = "evidence.gap", reason = "CheckpointSetFailed", input = error.Message, critical = true }); }
+            catch (Exception error) { ReportCaptureFailure(new DiagnosticRecord { role = "Process", stage = "evidence.gap", reason = "CheckpointSetFailed:" + error.GetType().Name, critical = true }); }
             captureTicks += System.Diagnostics.Stopwatch.GetTimestamp() - start;
         }
         public static int RetainedBytes(object payload)
@@ -217,6 +245,8 @@ namespace MonsterSupergroup.NetworkCombat.Diagnostics
             long size = 128;
             switch (payload)
             {
+                case SharedEvidencePayload _: size = 128; break; // The detached value has its own reservation and lease lifetime.
+                case CanonicalReceiveEvidence received: size += RetainedBytes(received.batch); break;
                 case ReplayCheckpointSet set: foreach (var item in set.engines) size += RetainedBytes(item); break;
                 case ReplayCheckpoint checkpoint: size += RetainedBytes(checkpoint.state); break;
                 case object[] array: size = 32 + array.Length * 8L; foreach (var item in array) size += RetainedBytes(item); break;
@@ -253,6 +283,12 @@ namespace MonsterSupergroup.NetworkCombat.Diagnostics
         }
         private void CaptureObservation()
         {
+            int actors = NetworkServer.active ? NetworkServer.spawned.Count : NetworkClient.spawned.Count;
+            WriteCore(new DiagnosticRecord { role = NetworkServer.active ? "Host" : "Client", stage = "observation.snapshot",
+                estimatedBytes = (int)Math.Min(8L << 20, 16384L + actors * 4096L) }, CaptureObservationPayload);
+        }
+        private object CaptureObservationPayload()
+        {
             var actors = new List<object>();
             var world = NetworkCombatWorld.Instance;
             var collector = NetworkClient.localPlayer != null ? NetworkClient.localPlayer.GetComponent<MirrorNetworkCombatBridge>()?.Collector : null;
@@ -284,7 +320,7 @@ namespace MonsterSupergroup.NetworkCombat.Diagnostics
                     renderers = controller?.enemyAnimator?.Renderers?.Where(r => r != null).Select(r => new {
                         name = r.name, r.enabled, r.forceRenderingOff, alpha = r.color.a }).ToArray() });
             }
-            TryWrite(new DiagnosticRecord { role = NetworkServer.active ? "Host" : "Client", stage = "observation.snapshot", input = new {
+            return new {
                 actors = actors.ToArray(), collector = collector == null ? null : new { collector.PendingResultCount, collector.PendingStatusMutationCount,
                     collector.PendingPlayerHealthReportCount, collector.PendingEnemyDeathCount, collector.DeathReceiptsReceived,
                     collector.LastDeathConfirmationSeconds, collector.MaximumDeathConfirmationSeconds,
@@ -293,8 +329,9 @@ namespace MonsterSupergroup.NetworkCombat.Diagnostics
                 replicationTransport = transport?.CaptureDiagnosticState(),
                 sinkFailures = CombatEvidence.Failures, sinkCalls = Interlocked.Read(ref sinkCalls), sinkMs = Interlocked.Read(ref sinkTicks) * 1000d / System.Diagnostics.Stopwatch.Frequency,
                 retainedBytes = store.Memory.Used, peakRetainedBytes = store.Memory.Peak, peakQueueBytes = store.PeakPendingBytes,
+                evidenceStages = store.Metrics.Snapshot(),
                 replicationMainMs = replicator?.MainMilliseconds ?? 0, replicationWorkerMs = replicator?.WorkerMilliseconds ?? 0, dropped = store.Dropped, writerFailure = store.LastFailure, writerMs = store.WriteMilliseconds,
-                checkpointMs = captureTicks * 1000d / System.Diagnostics.Stopwatch.Frequency }, estimatedBytes = 4096 + actors.Count * 2048 });
+                checkpointMs = captureTicks * 1000d / System.Diagnostics.Stopwatch.Frequency };
         }
         private void CaptureException(string message, string stack, LogType type)
         {

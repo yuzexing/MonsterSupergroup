@@ -16,40 +16,53 @@ namespace MonsterSupergroup.Gameplay.Tests
     {
         private Scene scene;
         private Sink sink;
+        private IDiagnosticSink previousSink;
 
         [SetUp] public void SetUp()
         {
             scene = SceneManager.CreateScene("combat-contact-evidence-" + Guid.NewGuid().ToString("N"), new CreateSceneParameters(LocalPhysicsMode.Physics2D));
+            previousSink = CombatEvidence.Sink;
             sink = new Sink(); CombatEvidence.Sink = sink;
         }
         [UnityTearDown] public IEnumerator TearDown()
         {
-            CombatEvidence.Sink = null;
-            if (scene.IsValid() && scene.isLoaded) yield return SceneManager.UnloadSceneAsync(scene);
+            try
+            {
+                if (scene.IsValid() && scene.isLoaded) yield return SceneManager.UnloadSceneAsync(scene);
+            }
+            finally { CombatEvidence.Sink = previousSink; }
         }
 
-        [UnityTest] public IEnumerator PhysicalReentryIsRecordedAsDuplicateAndOnlyInvokesDamageOnce()
+        [UnityTest] public IEnumerator PhysicalReentryIsDeduplicatedUntilExplicitRearm()
         {
             int hits = 0;
             var box = CreateBox(_ => hits++);
+            int emptyWindowRecords = sink.records.Count;
+            box.Toggle(true); box.Toggle(true);
+            Assert.That(sink.records.Count, Is.EqualTo(emptyWindowRecords), "Rearming an empty window must not create repeated no-op records.");
             var target = CreateTarget();
             var physics = scene.GetPhysicsScene2D();
-            Physics2D.SyncTransforms(); physics.Simulate(.02f);
+            Physics2D.SyncTransforms(); Assert.That(physics.Simulate(.02f), Is.True, "The local physics scene must actually execute the step.");
             Assert.That(hits, Is.EqualTo(1));
-            target.position = Vector2.right * 10; physics.Simulate(.02f);
-            target.position = Vector2.zero; physics.Simulate(.02f);
+            target.position = Vector2.right * 10; Assert.That(physics.Simulate(.02f), Is.True);
+            target.position = Vector2.zero; Assert.That(physics.Simulate(.02f), Is.True);
             Assert.That(hits, Is.EqualTo(1));
             var contacts = sink.records.Where(r => r.stage == "owner.contact").ToArray();
             Assert.That(contacts.Any(r => r.reason == "FirstContact" && r.rootEventId == "1"), Is.True);
             Assert.That(contacts.Any(r => r.reason == "DuplicateContact" && r.rootEventId == "1"), Is.True);
             Assert.That(box.collider.enabled, Is.True);
+            box.Toggle(true);
+            Assert.That(sink.records.Any(r => r.reason == "HitboxRearmed" && r.rootEventId == "1" && r.before != null), Is.True);
+            target.position = Vector2.right * 10; Assert.That(physics.Simulate(.02f), Is.True);
+            target.position = Vector2.zero; Assert.That(physics.Simulate(.02f), Is.True);
+            Assert.That(hits, Is.EqualTo(2), "The reset changes contact eligibility without toggling the collider off.");
             yield return null;
         }
 
         [UnityTest] public IEnumerator ClosedColliderLeavesWindowEvidenceWithoutInventingAContact()
         {
             int hits = 0; var box = CreateBox(_ => hits++); box.Toggle(false);
-            CreateTarget(); Physics2D.SyncTransforms(); scene.GetPhysicsScene2D().Simulate(.02f);
+            CreateTarget(); Physics2D.SyncTransforms(); Assert.That(scene.GetPhysicsScene2D().Simulate(.02f), Is.True);
             Assert.That(hits, Is.Zero);
             Assert.That(sink.records.Any(r => r.stage == "owner.attack_window" && r.reason == "AttackWindowBound"), Is.True);
             Assert.That(sink.records.Any(r => r.outcome == "Closed" && r.reason == "HitboxToggle"), Is.True);

@@ -67,7 +67,7 @@ namespace MonsterSupergroup.NetworkCombat
         [Client]
         internal void ReceiveKnockback(EnemyKnockbackCommand command, uint receivingPlayerId)
         {
-#if MONSTER_ENEMY_HANDOFF_VALIDATION
+#if MONSTER_ENEMY_HANDOFF_VALIDATION && !UNITY_EDITOR
             Debug.Log($"[EnemyHandoffImpulse] enemy={command.EnemyEntityId} valid={command.IsValid} timely={command.IsTimely(EnemySimulationClock.Now)} issued={command.IssuedAt:0.000} now={EnemySimulationClock.Now:0.000} render={NetworkTime.time:0.000}");
 #endif
             if (!command.IsValid || !command.IsTimely(EnemySimulationClock.Now) || NetworkClient.localPlayer == null ||

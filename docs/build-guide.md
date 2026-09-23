@@ -1,109 +1,77 @@
-# 如何打包 MonsterSupergroup
+# 使用原生 Build Profiles 构建 MonsterSupergroup
 
-2026-09-22：打包配置已收敛为一个产品配方和六个专项配方。**平时给朋友测试，打开「MonsterSupergroup → 构建与验收 → 构建配置」，使用「日常打包」默认的 Test / Steam / Steam 分发 / 普通日志。** 不需要选择敌人、武器或历史 Phase 名称。
+构建配置保存在 Unity 原生 Build Profile 及其 `MonsterBuildSettings` 子资产中。原生 Build、自定义窗口与命令行读取同一份配置。Unity 版本固定为 **6000.3.21f1**。
 
-## 我该选什么
+## 日常操作
 
-| 目的 | 页面／配方 | 类型 | 网络／分发 | 说明 |
-|---|---|---|---|---|
-| 上传 Steam 测试分支，正常游玩 | 日常打包／产品 | Test | Steam／Steam 分发 | 默认；无作弊、调试面板和机制验证入口 |
-| 收集 Steam 联机故障 | 日常打包／产品，开启故障取证 | Test | Steam／Steam 分发 | 增加战斗证据，不开放作弊；不是普通试玩默认项 |
-| 开发调试 | 日常打包／产品 | Dev | Steam 或 KCP／按需求选择 | 开发入口；Development 默认开启 |
-| 本机直接运行 Steam 开发包 | 日常打包／产品 | Dev 或 Test | Steam／本地直接分发 | 包含经过校验的 steam_appid.txt；仍需要登录 Steam |
-| 正式发行 | 日常打包／产品 | Shipping | Steam／Steam 分发 | 提交版本、代码和资源改动后构建；禁止专项配方、KCP、取证及脏工作区 |
-| 执行程序机制用例 | 专项验收／对应配方 | Dev 或 Test | 通常 KCP／本地直接分发 | 包含明确测试能力；不能用于正式发行 |
+1. 打开「MonsterSupergroup → 构建与验收 → 构建配置」，选择原生 Profile 资产。
+2. 查看项目用途、网络、分发、诊断、场景和能力摘要。原生选项在 Unity「File → Build Profiles」编辑；业务配置在项目窗口编辑。
+3. 修改配置后保存，查看符号差异并点击「应用受管理符号并保存」。该操作保留插件及无关符号，移除旧用途的受管理符号。
+4. 首次使用时显式激活 Profile，等待编译和资源导入完成。查看模板不会自动激活，也不会自动接着构建。
+5. 刷新只读计划，点击构建；也可以使用原生窗口的 Build。只使用成功结果返回的实际目录。
 
-构建类型、Unity 的 Development Build、网络和分发方式分别管理。Test 即使在高级选项打开 Development，也不会因此获得普通产品包不允许的作弊能力。Shipping 强制关闭 Development。
+原生 Build and Run 与自定义窗口的「完成后运行」只支持 **Direct** 分发。Steam 分发需要通过现有 Steam 上传和启动流程，工具不自动上传，也不替换为其他 Profile。Direct 包完成资源恢复、身份和包校验后才启动实际 EXE；启动失败单独报告。
 
-产品配方的 KCP 只允许 Dev；普通产品 Test 使用 Steam。专项 Dev／Test 仍可使用 KCP。故障取证只允许产品 Test，拒绝 Dev＋取证，避免把开发辅助混入故障记录。
+## 初始模板
 
-Steam 分发包不携带 `steam_appid.txt`，应上传 Steam 后从 Steam 启动。KCP 包也不携带该文件。不能再用“是否 Development”猜测应该怎样启动。
+模板位于 `Assets/Settings/Build Profiles`。全部为 Windows x64 Player，显式保存场景，默认继承项目的 Player／Graphics／Quality 设置。
 
-## 一次正常打包
+| 模板 | 用途／类型 | 网络／分发／诊断 | Development |
+|---|---|---|---|
+| Windows-Dev-Kcp | 产品 Dev | Kcp／Direct／Normal | 开 |
+| Windows-Test-Steam | 产品 Test | Steam／Steam／Normal | 关 |
+| Windows-Test-Evidence | 产品 Test | Steam／Steam／Evidence | 关 |
+| Windows-Test-Profiler | 产品 Test | Steam／Steam／Normal | 开，连接 Profiler |
+| Windows-Shipping | 产品 Shipping | Steam／Steam／Normal | 关 |
+| Windows-Dev-Gameplay | 通用 Gameplay 专项 Dev | Kcp／Direct／Normal | 开 |
+| Windows-Dev-Wisp | 鬼火专项 Dev | Kcp／Direct／Normal | 开 |
+| Windows-Dev-Options | 设置专项 Dev | Kcp／Direct／Normal | 开 |
+| Windows-Dev-Handoff | 交接专项 Dev | Kcp／Direct／Normal | 开 |
+| Windows-Dev-Sandbox | 网络沙盒 Dev | Kcp／Direct／Normal | 开 |
+| Windows-Dev-Nordic | Nordic 静态样例 Dev | Kcp／Direct／Normal | 开 |
 
-1. 如需升级游戏版本，在版本区域选择普通小更新／重大更新／大版本更新，检查预览，再点击「应用版本更新」。无需改版本则跳过。
-2. 在「日常打包」选择 Test，保持 Steam、Steam 分发和普通日志。
-3. 检查构建摘要中的版本、类型、网络、分发、Development、场景及调试／取证能力。
-4. 点击构建，只使用成功结果给出的目录。每次构建都会新建唯一目录，不覆盖上一次包。
-5. 将该目录交给现有 Steam 上传流程；工具不会自动上传。两端从 Steam 更新，核对右下角版本和 BuildId。
+Dev 和 Profiler 使用 LZ4，其余产品模板使用 LZ4HC。深度分析、等待调试器和生成解决方案默认关闭。模板可以复制为自定义 Profile，例如专项 Test 或 Steam Direct；它们仍须满足同一套用途规则，不通过命令行覆盖业务选项。
 
-游戏版本只来自 `PlayerSettings.bundleVersion`；普通构建不递增。`1.2.3` 的三个更新选项分别得到 `1.2.4`、`1.3.0`、`2.0.0`。同版本连续构建，版本不变、BuildId 不同。
+产品 Test 无开发辅助和测试程序集，打开 Development 也不会获得这些能力。专项 Test 保留专项能力；Sandbox／Nordic 不包含测试程序集。Wisp 只在对应构建场景副本中注入探针。产品 KCP 只允许 Dev；Evidence 只允许产品 Test。Shipping 要求产品、Steam 网络、Steam 分发、Normal、非 Development 及干净 Git 工作区。
 
-右下角显示 `v0.0.0-test · <BuildId>`。包内 BuildInfo、启动日志、成功标记和归档使用同一标识。修改编辑器配置不会改变已有包。联机版本检查不比较 BuildId／后缀，但协议与资源指纹仍必须兼容。
+## 版本与配置来源
 
-## 专项验收和资产维护
+游戏版本只来自全局 Player Settings 的 `bundleVersion`。保留独立的版本更新按钮，普通构建不递增。存在 Player Settings 覆盖时，其版本必须与全局一致，否则拒绝。
 
-| 配方 ID | 用途 | 必须保留的区别 |
-|---|---|---|
-| `gameplay-validation` | 通用 Gameplay 验收 | Boot → MainMenu → Gameplay；敌人、武器、波次等在运行时选择用例，包含 Nordic 地图校验 |
-| `wisp-validation` | 鬼火表现验收 | 独立构建时场景注入；不能用普通包替代 |
-| `options-validation` | 设置验收 | 专用设置验证能力 |
-| `handoff-validation` | 模拟权交接验收 | 专用交接验证能力 |
-| `sandbox` | 网络战斗沙盒 | 独立 Sandbox 场景；不是正式关卡 |
-| `nordic` | Nordic 静态样例 | 独立静态样例场景；不是产品的 Nordic Gameplay |
+平台、场景、Development、调试、分析、压缩和设置覆盖由原生 Profile 管理；业务子资产只保存 SchemaVersion、BuildKind、Network、Distribution、Diagnostics、PurposeId。测试程序集与编译符号由用途规则派生。
 
-专项配方只能用 Dev／Test；其 Test 是**有测试能力的验收包**，与日常产品 Test 分开。Sandbox／Nordic 不需要测试程序集的差异仍保留。Wisp 的注入仅发生在对应构建场景副本。
+构建前必须保存场景、Profile 和有未保存状态的动态字体。预览只读；配置或输入在预览后变化时须刷新。Profile 符号与 Player Settings 符号叠加；Player Settings 不得残留本工具的构建专用符号。
 
-「创建／迁移／修复」是维护操作，可能修改资源；「构建」只校验并打包已有资源。缺包时不要重新执行 CreateAndBuild 来尝试修复。若资源校验失败，先阅读失败原因，再选择明确的维护操作，不让打包自动覆盖 Prefab 或场景。
+## 命令行
 
-Limbo 的 `opening`、`full`、`fixture` 是运行用例，不是 Dev／Test／Shipping 构建类型。程序机制脚本默认使用通用 Gameplay 验收包；如需不含测试程序集的便携 Limbo 参考包，显式构建 **产品 Dev／KCP／本地直接分发**，再调用现有便携包装工具。普通 Test／Shipping 不通过启动参数解锁 Limbo 机制入口。
-
-## 命令行与成功结果
-
-在工程根目录执行；首次指定 `-Unity`，或设置 `UNITY_EDITOR_PATH` 指向项目匹配版本的 Unity。
+在项目根目录执行，显式指定 Unity 或设置 `UNITY_EDITOR_PATH`：
 
 ```powershell
-# 普通 Steam 试玩包；不需要历史 Profile 名称
-./Tools/Invoke-ProjectTool.ps1 -ToolId build.player -Profile product
+./Tools/Invoke-ProjectTool.ps1 -ToolId build.player `
+  -BuildProfile 'Assets/Settings/Build Profiles/Windows-Test-Steam.asset' `
+  -Unity 'D:/RealSoftware/6000.3.21f1/Editor/Unity.exe'
 
-# 故障取证：只有取证用途增加战斗证据与本地源码回放归档
-./Tools/Invoke-ProjectTool.ps1 -ToolId build.player -Profile product -BuildKind Test -Network Steam -Distribution Steam -Diagnostics Evidence
-
-# 本地开发，使用 KCP
-./Tools/Invoke-ProjectTool.ps1 -ToolId build.player -Profile product -BuildKind Dev -Network Kcp -Distribution Direct
-
-# 构建一次通用验收包，再分别选择测试用例
-./Tools/Invoke-ProjectTool.ps1 -ToolId build.player -Profile gameplay-validation
-./Tools/Invoke-ProjectTool.ps1 -ToolId test.beam
-./Tools/Invoke-ProjectTool.ps1 -ToolId test.local-room -Profile party
-
-# Shipping：失败时按列出的原因处理，不会自动提交改动
-./Tools/Invoke-ProjectTool.ps1 -ToolId build.player -Profile product -BuildKind Shipping
-
-# 用完整成功目录归档，身份取自包内快照
-./Tools/Export-ProjectBuild.ps1 -BuildDirectory '构建成功结果给出的目录'
+./Tools/Invoke-ProjectTool.ps1 -ToolId build.player `
+  -BuildProfile 'Assets/Settings/Build Profiles/Windows-Dev-Kcp.asset' `
+  -Output 'Builds/MyTest/Custom Player.exe' -CleanBuildCache -RunAfterBuild
 ```
 
-运行脚本不再猜测 `Builds/Phase02` 或历史日期目录。默认读取 `Library/ProjectTools/BuildResults/<配方>.json`，核对成功状态、实际 EXE、BuildInfo、成功标记及用例需要的能力／网络。构建开始即清除该配方旧指针，失败不会偷偷运行上次包；旧包本身仍保留。显式 `-Executable` 或 `-BuildDirectory` 可以选择冻结的历史包，责任与默认选择分开。
+底层启动参数为 `-activeBuildProfile <路径> -executeMethod MonsterSupergroup.EditorTools.NativeBuildEntry.Batch`；批处理方法不会临时切换 Profile。构建参数只有 Profile 路径、输出、清理缓存和完成后运行。`-Output` 是基础目录和文件名，仍会添加唯一构建目录，不能用它猜测最终 EXE；读取结果的 `artifacts[0]`。
 
-构建工具的结果 `artifacts[0]` 是本次实际 EXE，不能由 `-Output` 推测最终目录。`-Output` 指定文件名和基础位置，工具仍添加唯一构建目录。旧 `-UniqueOutput` 参数保留兼容，所有构建始终唯一。拒绝 ScriptsOnly 和绕过统一服务的构建。
+旧 `-Profile product`、BuildKind／Development／Network／Distribution／Diagnostics、ScriptsOnly、UniqueOutput 均明确拒绝。非构建工具中的 Profile／Scenario 参数保持原义。
 
-## 旧配置去哪里了
+## 成功结果、失败恢复与历史包
 
-原 36 个 ID 继续有明确去向；其中 `sandbox`、`nordic` 仍是正式配方，其余 34 个是兼容别名。调用旧别名会提示新配方。以下默认值用于保持旧调用用途；日常 UI 不再列出旧名称。
+构建先写入输出基础目录下的 `.staging`。外层流程执行所有清理，恢复 TMP 字体及图集，再检查正式资源、构建输入、BuildInfo、程序集能力和分发文件。成功后发布唯一目录及按 Profile GUID 保存的结果指针；异常或取消的产物隔离到 `.failed`，不发布成功结果。
 
-| 旧 ID | 新配方 | 默认类型／网络／分发／诊断 |
-|---|---|---|
-| `player-development`、`boot-process` | `product` | Dev／Steam／Direct／Normal |
-| `player-release` | `product` | Shipping／Steam／Steam／Normal |
-| `kcp-development` | `product` | Dev／Kcp／Direct／Normal |
-| `steam-evidence` | `product` | Test／Steam／Steam／Evidence |
-| `menu-development` | `gameplay-validation` | Dev／Steam／Direct／Normal |
-| `menu-release` | `gameplay-validation` | Test／Steam／Direct／Normal |
-| `player-debug-release`、`rewired-release` | `gameplay-validation` | Test／Kcp／Direct／Normal |
-| `enemy-variants`、`imp`、`lust-sinner`、`enemy-hit-flash`、`camera`、`experience`、`waves`、`health-hud`、`modifier-selection`、`knockback`、`timeline-waves`、`player-debug-development`、`rewired-development`、`beam`、`circling`、`dash`、`melee`、`summon`、`ultimate`、`runtime-boundary` | `gameplay-validation` | Dev／Kcp／Direct／Normal |
-| `nordic-gameplay` | `gameplay-validation` | Dev／Kcp／Direct／Normal，保留地图校验 |
-| `wisp` | `wisp-validation` | Dev／Kcp／Direct／Normal，保留场景注入 |
-| `options` | `options-validation` | Dev／Kcp／Direct／Normal |
-| `enemy-handoff-development` | `handoff-validation` | Dev／Kcp／Direct／Normal |
-| `enemy-handoff-release` | `handoff-validation` | Test／Kcp／Direct／Normal |
-| `sandbox` | `sandbox` | Dev／Kcp／Direct／Normal |
-| `nordic` | `nordic` | Dev／Kcp／Direct／Normal |
+包中包含 `build-plan.json`、`build-request.json`、`build-complete.json` 以及 StreamingAssets 中的 BuildInfo。新身份 schema 记录 Profile GUID／路径和配置／工程输入摘要。BuildId 每次生成，产品版本独立。
 
-历史名称中的 `release` 不一定代表 Shipping，例如 `menu-release` 一直是程序验收用途。判断包用途以构建摘要和 BuildInfo 为准。
+自动结果选择通过 `Tools/ProjectTools.psm1` 的 `Resolve-ProjectBuildExecutable -BuildProfile <路径>`，核对身份、成功标记及所需能力。旧 Recipe 指针不能继续自动选择；旧脚本需要显式历史 EXE／BuildDirectory，或等后续审查迁移。显式历史包仍可用 `Tools/Export-ProjectBuild.ps1 -BuildDirectory <目录>` 归档，不为旧包补写新身份。
 
-## 当前验证边界
+当前产物编译能力检查读取 Mono Player 实际程序集；无法取得编译能力证明的包拒绝发布。Unity 升级后必须先验证原生序列化适配层。
 
-本次只需检查受影响工具、能力矩阵和代表性真实包，不为 36 个旧 ID 分别构建。脚本默认路径的失败／身份／能力检查与便携 Limbo 文件名兼容测试已独立保存；实际 Player 和 Unity 测试结果由本轮交付报告记录。Steam 测试分支的双账号体验与最终画面由人工确认，不能以 KCP 或静态检查替代。
+## 迁移与验证记录
 
-本轮实际构建、测试与待人工确认项见 [统一构建验收记录](build-unification-validation.md)。
+`Window-dev` 和 `Window-test` 已移除。旧 JSON 配方和脚本保留用于审查，已退出构建配置来源；旧方法保留报错外壳，不做静默映射。详见 [旧入口审查清单](build-profiles-migration.md)。
+
+本次验证结果见 [原生 Profile 验收记录](build-profiles-validation.md)。历史 [统一构建验收记录](build-unification-validation.md) 保留原日期，不代表本轮重新通过。Shipping 成功构建需包含改造的干净提交；Steam 双账号体验保留人工验收。

@@ -36,7 +36,7 @@ namespace AstralShift.HellMaiden.Player.Attacks
 			RecordContactEvidence(null, "Bound", "AttackWindowBound");
 		}
 
-		protected void RecordContactEvidence(IDamageable candidate, string outcome, string reason, float? plannedTime = null)
+		protected void RecordContactEvidence(IDamageable candidate, string outcome, string reason, float? plannedTime = null, object before = null)
 		{
 			if (!CombatEvidence.Enabled) return;
 			var component = candidate as Component;
@@ -47,7 +47,7 @@ namespace AstralShift.HellMaiden.Player.Attacks
 				new { hitboxLocalId = GetInstanceID(), candidateLocalId = component != null ? component.GetInstanceID() : 0,
 					callbackPresent = _onHit != null, colliderEnabled = collider != null && collider.enabled,
 					plannedTime, actualTime = Time.time, association = diagnosticAttack.IsValid ? "AttackRoot" : "MissingAttackContext" },
-				root: diagnosticAttack.RootEventId.Value, bytes: 768);
+				before: before, root: diagnosticAttack.RootEventId.Value, bytes: 768);
 		}
 
 		protected virtual void Awake()
@@ -108,6 +108,8 @@ namespace AstralShift.HellMaiden.Player.Attacks
 				return;
 			}
 			bool changed = collider.enabled != state;
+			bool rearmed = state && (_hitEntries.Count != 0 || _removalCTS.Count != 0);
+			object beforeReset = rearmed && CombatEvidence.Enabled ? new { hitEntries = _hitEntries.Count, pendingRemovals = _removalCTS.Count } : null;
 			if (state)
 			{
 				_hitEntries.Clear();
@@ -122,7 +124,7 @@ namespace AstralShift.HellMaiden.Player.Attacks
 					array[i].enabled = state;
 				}
 			}
-			if (changed) RecordContactEvidence(null, state ? "Opened" : "Closed", "HitboxToggle");
+			if (changed || rearmed) RecordContactEvidence(null, state ? "Opened" : "Closed", changed ? "HitboxToggle" : "HitboxRearmed", before: beforeReset);
 		}
 
 		protected virtual async UniTaskVoid StartTimeoutAsync(CancellationToken token)

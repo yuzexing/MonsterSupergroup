@@ -58,6 +58,15 @@ namespace MonsterSupergroup.NetworkCombat.Editor
                 unity = UnityEngine.Application.unityVersion, buildUtc = DateTime.UtcNow.ToString("o"), files = entries,
                 gameplayDependencyHash = AssetDatabase.GetAssetDependencyHash("Assets/_Project/Scenes/Gameplay.unity").ToString(),
                 bootDependencyHash = AssetDatabase.GetAssetDependencyHash("Assets/_Project/Scenes/Boot.unity").ToString() });
+            // The native Profile is outside Assets/_Project. Keep its actual configuration with the replay sources.
+            using (var archive = ZipFile.Open(archivePath, ZipArchiveMode.Update))
+            {
+                var plan = ProjectBuildService.ActivePlan;
+                archive.CreateEntryFromFile(plan.ProfilePath, plan.ProfilePath, CompressionLevel.Fastest);
+                archive.CreateEntryFromFile(plan.ProfilePath + ".meta", plan.ProfilePath + ".meta", CompressionLevel.Fastest);
+                using var writer = new StreamWriter(archive.CreateEntry("build-plan.json").Open(), new UTF8Encoding(false));
+                writer.Write(plan.ToJson());
+            }
             Directory.CreateDirectory(Path.GetDirectoryName(ResourcePath)); File.WriteAllText(ResourcePath, pendingManifest, new UTF8Encoding(false));
             AssetDatabase.ImportAsset(ResourcePath, ImportAssetOptions.ForceSynchronousImport);
         }

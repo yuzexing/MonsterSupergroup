@@ -13,6 +13,7 @@ import math
 import re
 import sqlite3
 import struct
+import sys
 from datetime import datetime, timedelta
 from pathlib import Path
 
@@ -199,6 +200,7 @@ def compact(value):
 def import_roots(db, roots):
     count = 0
     for root in map(Path, roots):
+        root = root.resolve()
         if not root.is_dir():
             raise ValueError(f"Missing evidence directory: {root}")
         for path in root.rglob("*.json.gz"):
@@ -227,11 +229,12 @@ def import_roots(db, roots):
                 while raw := stream.readline(MAX_BLOB + 1):
                     number += 1
                     try:
-                        if not raw.endswith(b"\n"): raise ValueError("Truncated cleanup audit")
+                        if len(raw) > MAX_BLOB: raise ValueError("Oversized cleanup audit")
                         db.execute("INSERT OR REPLACE INTO metadata VALUES(?,?,?)", (str(path) + ":" + str(number), "retention.jsonl", compact(json.loads(raw))))
+                        if not raw.endswith(b"\n"): raise ValueError("Parsed cleanup audit missing newline")
                     except ValueError as error:
                         db.execute("INSERT INTO issues VALUES(?,?,'InvalidMetadata',?)", (str(path), number, str(error)))
-                        break
+                        if not raw.endswith(b"\n"): break
         for path in root.rglob("events-*.jsonl"):
             with path.open("rb") as stream:
                 number = 0
@@ -387,11 +390,439 @@ def index_facets(db, record):
                    ((record["captureId"], str(record["recordSequence"]), kind, value) for kind, value in facets))
 
 
-def coverage(db):
+def sequence_number(value):
+    """Do not round, truncate, or accept negative/corrupt sequence watermarks."""
+    if isinstance(value, bool) or not re.fullmatch(r"[0-9]+", str(value)):
+        raise ValueError("InvalidSequence:" + str(value))
+    return int(value)
+
+
+def selected_coverage(db, capture, run=None, round=None):
+    candidates = []
+    for row in db.execute("SELECT path,body FROM metadata WHERE kind='coverage.json'"):
+        state = json.loads(row["body"])
+        if not isinstance(state, dict) or state.get("captureId") != capture: continue
+        if run is not None and state.get("runId") != run: continue
+        if round is not None and str(state.get("round", 0)) != str(round): continue
+        try:
+            if "coverageRevision" in state:
+                rank = (1, sequence_number(state["coverageRevision"]))
+            else:
+                rank = (0, sequence_number(state.get("produced")), sequence_number(state.get("flushed")), sequence_number(state.get("written")))
+        except ValueError:
+            rank = (-1,)
+        candidates.append(dict(path=row["path"], body=state, rank=rank))
+    if not candidates: return None, []
+    rank = max(c["rank"] for c in candidates)
+    newest = [c for c in candidates if c["rank"] == rank]
+    chosen = min(newest, key=lambda c: c["path"])
+    conflicts = [c["path"] for c in newest if c["body"] != chosen["body"]]
+    return {"path": chosen["path"], "body": chosen["body"]}, conflicts
+
+
+def issue_interval(db, issue, capture):
+    """Locate damage by validated neighboring records, never by wall-clock order."""
+    path = issue["path"]
+    refs = list(db.execute("SELECT seq,line FROM copies WHERE capture=? AND path=? ORDER BY line,length(seq),seq", (capture, path)))
+    path_capture = re.search(r"(?:^|/)sources/([^/]+)(?:/|$)", path.replace("\\", "/"))
+    if not refs and (path_capture is None or path_capture[1] != capture): return None
+    if issue["reason"] == "ConflictingCopy":
+        prefix = capture + ":"
+        if issue["details"].startswith(prefix):
+            try:
+                seq = sequence_number(issue["details"][len(prefix):])
+                return seq, seq
+            except ValueError: pass
+    previous = [int(r["seq"]) for r in refs if r["line"] < issue["line"]]
+    following = [int(r["seq"]) for r in refs if r["line"] > issue["line"]]
+    first = max(previous) + 1 if previous else None
+    last = min(following) - 1 if following else None
+    if first is not None and last is not None and last < first: last = first
+    return first, last
+
+
+def checkpoint_engines(record, data):
+    if not isinstance(data, dict): raise ValueError("InvalidCheckpointPayload")
+    engines = data.get("engines") if record.get("stage") == "replay.checkpoint" else [data]
+    if not isinstance(engines, list) or not engines: raise ValueError("InvalidCheckpointEngines")
+    if any(not isinstance(item, dict) or not item.get("engine") or not item.get("domain") or item.get("state") is None for item in engines):
+        raise ValueError("InvalidCheckpointEngineState")
+    return engines
+
+
+def assess_replay_calls(db, where, values, first, last, add):
+    """Check replay dependencies and call pairing even when sequence numbers are continuous."""
+    checkpoints, pending, tainted = {}, {}, {}
+    semantic = ("owner.damage_calculation", "owner.attack_stats", "stats.damage")
+    stages = ("replay.checkpoint", "replay.engine_checkpoint", "replay.input", "replay.output") + semantic
+    marks = ",".join("?" for _ in stages)
+    rows = db.execute("SELECT seq,body FROM records WHERE " + where + " AND stage IN (" + marks + ") ORDER BY length(seq),seq", values + list(stages))
+
+    def report(reason, record, start=None):
+        seq = int(record["recordSequence"])
+        if seq < first and (start is None or start < first): return
+        references = [dict(r) for r in db.execute("SELECT path,line FROM copies WHERE capture=? AND seq=?", (record["captureId"], str(seq)))]
+        add(reason, start if start is not None else seq, seq, references)
+
+    for row in rows:
+        seq = int(row["seq"])
+        if seq > last: break
+        record = json.loads(row["body"])
+        stage, engine = record.get("stage"), record.get("engine")
+        if stage in ("replay.checkpoint", "replay.engine_checkpoint"):
+            try: states = checkpoint_engines(record, payload(db, record))
+            except (ValueError, TypeError, AttributeError) as error:
+                if stage == "replay.checkpoint": checkpoints.clear()
+                else: checkpoints.pop(engine, None)
+                report(str(error), record); continue
+            if stage == "replay.checkpoint": checkpoints.clear()
+            for state in states:
+                key = state["engine"]
+                if key in pending:
+                    prior = pending.pop(key)
+                    prior_seq = int(prior["record"]["recordSequence"])
+                    if prior_seq >= first or seq > first:
+                        report("MissingOutput:" + str(prior_seq), record, prior_seq)
+                checkpoints[key] = seq
+                tainted.pop(key, None)
+            continue
+        if stage == "replay.input" or stage in semantic:
+            errors = []
+            if not engine or not record.get("operation"): errors.append("MissingReplayIdentity")
+            if engine not in checkpoints: errors.append("MissingCheckpoint:" + str(engine))
+            if engine in tainted: errors.append("PriorIncompleteReplay:" + str(tainted[engine]))
+            try:
+                arguments = payload(db, record)
+                if (stage == "replay.input" and not isinstance(arguments, list)) or (stage in semantic and arguments is None):
+                    errors.append("MissingReplayInput" if stage == "replay.input" else "IncompleteSemanticInput")
+            except (ValueError, TypeError, AttributeError) as error: errors.append(str(error))
+            for error in errors: report(error, record)
+            if errors: tainted[engine] = seq
+            if stage == "replay.input":
+                if engine in pending:
+                    report("MissingOutput:" + pending[engine]["record"]["recordSequence"], record, int(pending[engine]["record"]["recordSequence"]))
+                    tainted[engine] = seq
+                pending[engine] = dict(record=record, errors=errors)
+        elif stage == "replay.output":
+            prior = pending.pop(engine, None)
+            if prior is None:
+                report("MissingInput:" + str(seq), record); tainted[engine] = seq
+            else:
+                for error in prior["errors"]: report(error, record)
+                if record.get("operation") != prior["record"].get("operation") or record.get("outcome") != "Completed":
+                    report("AbortedOrUnpairedOperation:" + str(seq), record); tainted[engine] = seq
+    for prior in pending.values():
+        record = prior["record"]
+        start = int(record["recordSequence"])
+        add("MissingOutput:" + record["recordSequence"], start, last,
+            [dict(r) for r in db.execute("SELECT path,line FROM copies WHERE capture=? AND seq=?", (record["captureId"], str(start)))])
+
+
+def integrity_history(state):
+    """Validate the writer's complete, bounded history before it supersedes legacy hulls."""
+    if state.get("integrityHistoryVersion") != 1 or isinstance(state.get("integrityHistoryVersion"), bool):
+        raise ValueError("UnsupportedVersion")
+    entries = state.get("integrityHistory")
+    if not isinstance(entries, list) or len(entries) > 128: raise ValueError("InvalidEpisodeList")
+    epoch = sequence_number(state.get("failureEpoch"))
+    flushed, produced = sequence_number(state.get("flushed")), sequence_number(state.get("produced"))
+    result, previous_epoch, previous_recovery = [], 0, None
+    for index, entry in enumerate(entries):
+        if not isinstance(entry, dict): raise ValueError("InvalidEpisode")
+        start = sequence_number(entry["first"]) if entry.get("first") is not None else None
+        end = sequence_number(entry["last"]) if entry.get("last") is not None else None
+        recovered = sequence_number(entry["reliableFromSequence"]) if entry.get("reliableFromSequence") is not None else None
+        current_epoch = sequence_number(entry.get("epoch"))
+        tail_marker = entry.get("tailMarker", False)
+        if not isinstance(tail_marker, bool): raise ValueError("InvalidTailMarker")
+        if tail_marker and end is None: raise ValueError("UnboundedTailMarker")
+        maximum = produced + 1 if tail_marker and flushed == produced else produced
+        if current_epoch <= previous_epoch: raise ValueError("UnorderedEpochs")
+        if start is not None and (start < 1 or start > maximum): raise ValueError("InvalidEpisodeStart")
+        if end is not None and (end < 1 or end > maximum or (start is not None and end < start)):
+            raise ValueError("InvalidEpisodeEnd")
+        if index and (previous_recovery is None or (start is not None and start < previous_recovery)):
+            raise ValueError("OverlappingOrUnrecoveredEpisodes")
+        if recovered is not None and (recovered < 1 or recovered > flushed or
+                                      (start is not None and (recovered < start or (recovered == start and not tail_marker))) or
+                                      (end is not None and (recovered < end or (recovered == end and not tail_marker)))):
+            raise ValueError("UnconfirmedRecoveryCheckpoint")
+        if entry.get("conservative", False) not in (True, False): raise ValueError("InvalidConservativeFlag")
+        result.append(dict(first=start, last=end, epoch=current_epoch, recovered=recovered,
+                           conservative=entry.get("conservative", False), tailMarker=tail_marker))
+        previous_epoch, previous_recovery = current_epoch, recovered
+    if previous_epoch != epoch: raise ValueError("MissingLatestFailureEpoch")
+    if state.get("recoveryPending", False) != bool(result and result[-1]["recovered"] is None):
+        raise ValueError("PendingStateMismatch")
+    known_recoveries = [entry["recovered"] for entry in result if entry["recovered"] is not None]
+    latest_recovery = sequence_number(state["reliableFromSequence"]) if state.get("reliableFromSequence") is not None else None
+    if latest_recovery != (known_recoveries[-1] if known_recoveries else None): raise ValueError("LatestRecoveryMismatch")
+    if not result and (state.get("failure") or state.get("gaps")): raise ValueError("UnrepresentedFailure")
+
+    def contains(entry, start, end):
+        last_record = entry["last"] - 1 if entry["tailMarker"] else entry["last"]
+        return (entry["first"] is None or entry["first"] <= start) and (last_record is None or last_record >= end)
+
+    for gap in state.get("gaps", []):
+        if not isinstance(gap, dict): raise ValueError("InvalidGap")
+        start, end = sequence_number(gap.get("first")), sequence_number(gap.get("last"))
+        if end < start: raise ValueError("ReversedGap")
+        if gap.get("conservative"):
+            # Legacy bounded gap storage may merge across reliable windows; the versioned
+            # epoch history preserves their recovery proofs. Check its endpoints only.
+            represented = all(any(contains(entry, point, point) for entry in result) for point in (start, end))
+        else:
+            represented = any(contains(entry, start, end) for entry in result)
+        if not represented: raise ValueError("UnrepresentedCaptureGap")
+    return result
+
+
+def retention_scope_gaps(db, capture=None, first=None, last=None, run=None):
+    """Root cleanup audits describe lost source inventory, not record sequence gaps."""
+    if capture is not None and first is not None and last is not None: return []
+    issues = [dict(row) for row in db.execute("SELECT path,line,details FROM issues WHERE reason='InvalidMetadata'")
+              if Path(row["path"]).name == "retention.jsonl"]
+    invalid_locations = {(row["path"], row["line"]) for row in issues}
+    unknown_locations = {(row["path"], row["line"]) for row in issues if row["details"] != "Parsed cleanup audit missing newline"}
+    seen = set(); groups = {}
+
+    def add(reason, run_id, path, line):
+        if run is not None and run_id is not None and run_id != run: return
+        key = (reason, run_id)
+        if key not in groups:
+            groups[key] = dict(reason=reason, references=[])
+            if run_id is not None: groups[key]["runId"] = run_id
+        reference = dict(path=path, line=line)
+        if reference not in groups[key]["references"]: groups[key]["references"].append(reference)
+
+    for row in db.execute("SELECT path,body FROM metadata WHERE kind='retention.jsonl' ORDER BY path"):
+        path, separator, number = row["path"].rpartition(":")
+        if not separator or not number.isdecimal(): path, number = row["path"], "0"
+        location = (path, int(number)); seen.add(location)
+        state = json.loads(row["body"])
+        run_id = state.get("runId") if isinstance(state, dict) else None
+        if not isinstance(run_id, str) or not run_id.strip(): run_id = None
+        # A failed re-import may leave an older parsed row at this location. Only
+        # the fully parsed, newline-missing case can still identify the damaged run.
+        if location in unknown_locations: run_id = None
+        valid = run_id is not None and state.get("reason") == "GlobalCapacityRetention" and location not in invalid_locations
+        add("RunPruned" if valid else "InvalidRetentionAudit", run_id, *location)
+    for row in issues:
+        if (row["path"], row["line"]) not in seen:
+            add("InvalidRetentionAudit", None, row["path"], row["line"])
+    result = sorted(groups.values(), key=lambda gap: (gap.get("runId", ""), gap["reason"]))
+    for gap in result: gap["references"].sort(key=lambda ref: (ref["path"], ref["line"]))
+    return result
+
+
+def assess_interval(db, capture, first=None, last=None, run=None, round=None):
+    """One conservative completeness decision for extraction, histories and coverage.
+
+    Explicit bounds describe a finite source sequence interval. An omitted end asks
+    for the known source tail and cannot prove completeness while that tail is open.
+    It does not claim that uninstrumented gameplay or Unity physics is replayable.
+    """
+    open_ended = last is None
+    implicit_first = first is None
+    scope_gaps = retention_scope_gaps(db, capture, first, last, run)
+    source, conflicts = selected_coverage(db, capture, run, round)
+    state = source["body"] if source else {}
+    clauses, values = ["capture=?"], [capture]
+    if run is not None: clauses.append("run=?"); values.append(run)
+    if round is not None: clauses.append("round=?"); values.append(round)
+    where = " AND ".join(clauses)
+    earliest = db.execute("SELECT seq FROM records WHERE " + where + " ORDER BY length(seq),seq LIMIT 1", values).fetchone()
+    latest = db.execute("SELECT seq FROM records WHERE " + where + " ORDER BY length(seq) DESC,seq DESC LIMIT 1", values).fetchone()
+    gaps = []
+
+    def add(reason, start=None, end=None, references=None):
+        gap = dict(reason=reason, captureId=capture, runId=run, round=round)
+        if start is not None: gap["first"] = str(start)
+        if end is not None: gap["last"] = str(end)
+        if references: gap["references"] = references
+        gaps.append(gap)
+
+    def intersects(start, end):
+        return (end is None or end >= first) and (start is None or start <= last)
+
+    try:
+        first = sequence_number(first) if first is not None else (int(earliest[0]) if earliest else 1)
+        observed_last = int(latest[0]) if latest else 0
+        last = sequence_number(last) if last is not None else max(observed_last, sequence_number(state.get("produced", observed_last)))
+    except ValueError as error:
+        add(str(error)); first, last = 1, 0
+    if first < 1 or last < first: add("EmptyOrInvalidInterval", first, last)
+    for row in db.execute("SELECT path,body FROM metadata WHERE kind IN ('retention.json','retention.local.json')"):
+        directory = Path(row["path"]).parent
+        if directory.name != capture or directory.parent.name != "sources": continue
+        if run is not None and directory.parent.parent.parent.name != str(run): continue
+        if round is not None and directory.parent.parent.name != str(round): continue
+        references = [{"path": row["path"]}]
+        try:
+            retained = json.loads(row["body"])
+            if not isinstance(retained, dict): raise ValueError("InvalidRetentionObject")
+            boundary = sequence_number(retained.get("beforeSequence"))
+            if boundary < 1: raise ValueError("InvalidRetentionBoundary")
+            filename = retained.get("firstRetainedFile")
+            if filename is not None and (not isinstance(filename, str) or
+                    not re.fullmatch(r"events-[0-9]+\.jsonl", filename) or int(filename[7:-6]) != boundary):
+                raise ValueError("ConflictingRetentionBoundary")
+        except ValueError as error:
+            add("InvalidRetention:" + str(error), references=references)
+            continue
+        # Sequence numbers span rounds. A surviving checkpoint does not establish
+        # the original source start; callers must explicitly select a retained range.
+        # Explicit ranges still use merged copies below, which may restore pruned data.
+        if implicit_first and boundary > 1:
+            add("SourcePrefixPruned", end=boundary - 1, references=references)
+    reference = [{"path": source["path"]}] if source else []
+    if source is None: add("MissingCoverage")
+    else:
+        if conflicts: add("ConflictingCoverageRevision", references=reference + [{"path": p} for p in conflicts])
+        if state.get("schemaVersion", 1) not in (1, 2): add("UnsupportedCoverageVersion", references=reference)
+        try:
+            flushed = sequence_number(state.get("flushed"))
+            produced = sequence_number(state.get("produced"))
+            written = sequence_number(state.get("written"))
+            if not flushed <= written <= produced: add("InvalidCoverageWatermarks", references=reference)
+            if last > flushed: add("BeyondFlushedWatermark:" + str(flushed), max(first, flushed + 1), last, reference)
+            if last > produced: add("BeyondProducedWatermark:" + str(produced), max(first, produced + 1), last, reference)
+        except ValueError as error: add("InvalidCoverage:" + str(error), references=reference)
+        if open_ended and state.get("tailUnknown", True): add("SourceTailUnknown", references=reference)
+        if open_ended and state.get("recoveryPending"): add("RecoveryCheckpointPending", references=reference)
+        declared_gaps = state.get("gaps", [])
+        recovery_start = None
+        if not isinstance(declared_gaps, list):
+            add("InvalidCoverageGapList", references=reference); declared_gaps = []
+        episodes = None
+        if state.get("integrityHistoryVersion") not in (None, 0):
+            try: episodes = integrity_history(state)
+            except (ValueError, TypeError) as error: add("InvalidIntegrityHistory:" + str(error), references=reference)
+        for gap in declared_gaps:
+            try:
+                start, end = sequence_number(gap.get("first")), sequence_number(gap.get("last"))
+                if end < start: raise ValueError("ReversedGapRange")
+                recovery_start = min(start, recovery_start) if recovery_start is not None else start
+                if episodes is None and intersects(start, end): add("CaptureGap:" + str(gap.get("reason", "Unknown")), start, end, reference)
+            except (ValueError, AttributeError) as error: add("InvalidCoverageGap:" + str(error), references=reference)
+        if episodes is not None:
+            for episode in episodes:
+                end = episode["recovered"] - 1 if episode["recovered"] is not None else None
+                if intersects(episode["first"], end):
+                    reason = "ConservativeIntegrityHistory" if episode["conservative"] else "IntegrityHistoryFailure"
+                    add(reason + ":epoch=" + str(episode["epoch"]), episode["first"], end, reference)
+        elif state.get("failure"):
+            try:
+                start = sequence_number(state["failureFirstSequence"])
+                end = sequence_number(state["failureLastSequence"]) if state.get("failureLastSequence") is not None else None
+                if end is not None and end < start: raise ValueError("ReversedFailureRange")
+                recovery_start = min(start, recovery_start) if recovery_start is not None else start
+                if intersects(start, end): add("SourceFailure:" + str(state["failure"]), start, end, reference)
+            except (KeyError, ValueError):
+                # Unrelated old gaps cannot explain a later failure of unknown extent.
+                add("SourceFailureUnknownRange:" + str(state["failure"]), references=reference)
+        if episodes is None and state.get("recoveryPending") and (recovery_start is None or last >= recovery_start):
+            add("RecoveryCheckpointPending" if recovery_start is not None else "RecoveryCheckpointPendingUnknownRange", recovery_start, None, reference)
+        if episodes is None and state.get("reliableFromSequence") is not None:
+            try:
+                recovered = sequence_number(state["reliableFromSequence"])
+                if recovery_start is not None and recovered > recovery_start and intersects(recovery_start, recovered - 1):
+                    add("BeforeRecoveryCheckpoint", recovery_start, recovered - 1, reference)
+            except ValueError: add("InvalidRecoveryCheckpointSequence", references=reference)
+
+    expected = first
+    for row in db.execute("SELECT seq,body FROM records WHERE " + where + " ORDER BY length(seq),seq", values):
+        seq = int(row["seq"])
+        if seq < first: continue
+        if seq > last: break
+        if seq > expected: add(f"MissingRecordRange:{expected}-{seq - 1}", expected, seq - 1)
+        expected = seq + 1
+        record = json.loads(row["body"])
+        def references():
+            return [dict(r) for r in db.execute("SELECT path,line FROM copies WHERE capture=? AND seq=?", (capture, str(seq)))]
+        if record.get("stage") == "evidence.gap" or record.get("outcome") == "CaptureFailed":
+            add(("CaptureFailed:" if record.get("outcome") == "CaptureFailed" else "RecordedGap:") + str(record.get("reason", seq)), seq, seq, references())
+        for field in ("input", "before", "after"):
+            try:
+                data = payload(db, record, field)
+                if field == "input" and record.get("stage") in ("replay.engine_checkpoint", "replay.checkpoint"):
+                    checkpoint_engines(record, data)
+            except (ValueError, TypeError, AttributeError) as error: add(str(error), seq, seq, references())
+    if expected <= last: add(f"MissingRecordRange:{expected}-{last}", expected, last)
+    assess_replay_calls(db, where, values, first, last, add)
+    for row in db.execute("SELECT path,line,reason,details FROM issues WHERE reason IN ('ConflictingCopy','InvalidRecord','TruncatedOrOversizedLine','InvalidMetadata')"):
+        extent = issue_interval(db, row, capture)
+        if extent is None: continue
+        start, end = extent
+        if intersects(start, end) or (open_ended and end is None):
+            add(row["reason"] + ":" + row["details"], start, end, [{"path": row["path"], "line": row["line"]}])
+    for row in db.execute("SELECT path,body FROM metadata WHERE kind='recovery.json'"):
+        recovered = json.loads(row["body"])
+        if not isinstance(recovered, dict) or not recovered.get("tailUnknown"): continue
+        filename = recovered.get("file", "")
+        if not isinstance(filename, str) or not re.fullmatch(r"events-[0-9]+\.jsonl", filename): continue
+        event_path = str(Path(row["path"]).parent / filename)
+        extent = issue_interval(db, dict(path=event_path, line=2**63 - 1, reason="RecoveredTruncatedTail", details=""), capture)
+        if extent is None: continue
+        start, end = extent
+        if intersects(start, end) or open_ended:
+            add("SourceRecoveryTailUnknown", start, end, [{"path": row["path"]}])
+    return dict(captureId=capture, runId=run, round=round, first=str(first), last=str(last),
+                scope="SourceTail" if open_ended else "FiniteInterval", complete=not gaps and not scope_gaps,
+                reliable=not gaps and not scope_gaps, gaps=gaps, scopeGaps=scope_gaps, selectedCoverage=source)
+
+
+def coverage(db, intervals=None, request=None):
+    sources = [dict(row) | {"body": json.loads(row["body"])} for row in db.execute("SELECT * FROM metadata WHERE kind IN ('coverage.json','recovery.json','retention.json','retention.local.json','retention.jsonl','replication.json','manifest.json')")]
+    capture, run, round, first, last = (getattr(request, key, None) for key in ("capture", "run", "round", "first", "last"))
+    if request is None and intervals is not None:
+        scope_gaps = []
+        for interval in intervals:
+            for gap in interval.get("scopeGaps", []):
+                if gap not in scope_gaps: scope_gaps.append(gap)
+    else:
+        scope_gaps = retention_scope_gaps(db, capture, first, last, run)
+    invalid_selection = (getattr(request, "command", None) == "coverage" and capture is None and
+                         (first is not None or last is not None))
+    if invalid_selection:
+        scope_gaps.append(dict(reason="InvalidCoverageSelection", details="Sequence bounds require --capture", references=[]))
+        intervals = []
+    elif intervals is None:
+        contexts = {(row["capture"], row["run"], row["round"]) for row in db.execute("SELECT DISTINCT capture,run,round FROM records")}
+        contexts.update((r["body"].get("captureId"), r["body"].get("runId"), r["body"].get("round", 0))
+                        for r in sources if r["kind"] == "coverage.json" and isinstance(r["body"], dict) and r["body"].get("captureId"))
+        known_captures = {context[0] for context in contexts}
+        for row in db.execute("SELECT path FROM issues WHERE reason IN ('InvalidMetadata','InvalidRecord','TruncatedOrOversizedLine')"):
+            match = re.search(r"(?:^|/)sources/([^/]+)(?:/|$)", row["path"].replace("\\", "/"))
+            if match and match[1] not in known_captures:
+                directory = Path(row["path"]).parent
+                contexts.add((match[1], directory.parent.parent.parent.name, directory.parent.parent.name))
+                known_captures.add(match[1])
+        contexts = [context for context in contexts if
+                    (capture is None or context[0] == capture) and (run is None or context[1] == run) and
+                    (round is None or str(context[2]) == str(round))]
+        intervals = [assess_interval(db, c, first, last, r, n) for c, r, n in sorted(contexts, key=str)]
     return {"interpretation": "Missing records never prove non-execution. Copies retain original identity; UTC is not causal order.",
-            "sources": [dict(row) | {"body": json.loads(row["body"])} for row in db.execute("SELECT * FROM metadata WHERE kind IN ('coverage.json','recovery.json','retention.json','retention.local.json','retention.jsonl','replication.json','manifest.json')")],
+            "complete": bool(intervals) and all(a["complete"] for a in intervals) and not scope_gaps,
+            "intervals": intervals, "sources": sources, "scopeGaps": scope_gaps, "invalidSelection": invalid_selection,
             "issues": [dict(row) for row in db.execute("SELECT * FROM issues LIMIT 1000")],
             "issueCount": db.execute("SELECT count(*) FROM issues").fetchone()[0]}
+
+
+def query_intervals(db, args, records):
+    contexts = {}
+    for record in records:
+        key = (record["captureId"], record.get("runId"), record.get("round", 0))
+        contexts[key] = min(contexts.get(key, int(record["recordSequence"])), int(record["recordSequence"]))
+    if not contexts and getattr(args, "capture", None):
+        for row in db.execute("SELECT DISTINCT run,round FROM records WHERE capture=?", (args.capture,)):
+            if getattr(args, "run", None) is not None and args.run != row["run"]: continue
+            if getattr(args, "round", None) is not None and str(args.round) != str(row["round"]): continue
+            contexts[(args.capture, row["run"], row["round"])] = None
+        if not contexts: contexts[(args.capture, getattr(args, "run", None), getattr(args, "round", None))] = None
+    return [assess_interval(db, capture, first=getattr(args, "first", None) if getattr(args, "first", None) is not None else earliest,
+                            last=getattr(args, "last", None), run=run, round=round)
+            for (capture, run, round), earliest in sorted(contexts.items(), key=str)]
 
 
 def query(db, args):
@@ -410,6 +841,13 @@ def query(db, args):
         clauses.append("utc>=?"); values.append(args.after)
     if getattr(args, "before", None):
         clauses.append("utc<=?"); values.append(args.before)
+    for bound, operator in (("first", ">="), ("last", "<=")):
+        value = getattr(args, bound, None)
+        if value is not None:
+            value = str(value)
+            # Sequence IDs can exceed SQLite's signed 64-bit INTEGER range.
+            clauses.append(f"(length(seq),seq) {operator} (?,?)")
+            values += [len(value), value]
     if getattr(args, "build", None):
         captures = set()
         for row in db.execute("SELECT capture,body FROM records WHERE stage IN ('source.start','process.start')"):
@@ -456,9 +894,11 @@ def query(db, args):
         records.append(item)
     stages = {r["stage"] for r in records}
     expected = ("owner.hit", "collector.enqueue", "network.submit", "gateway.decision", "ledger.apply", "gateway.canonical_link", "replica.entity")
+    assessed = coverage(db, query_intervals(db, args, records[:limit]), request=args)
     return {"records": records[:limit], "truncated": len(records) > limit,
+            "complete": assessed["complete"] and len(records) <= limit, "scopeGaps": assessed["scopeGaps"],
             "missingPayloads": [dict(evidence_pointer(r), **failure) for r in records[:limit] for failure in r.get("missingPayloads", [])],
-            "missingStages": [s for s in expected if s not in stages] if event else [], "coverage": coverage(db)}
+            "missingStages": [s for s in expected if s not in stages] if event else [], "coverage": assessed}
 
 
 def evidence_pointer(record):
@@ -475,26 +915,14 @@ def history(db, args):
     result["limitations"] = ["MissingRecordsNeverProveNonExecution"]
     result["evidenceGaps"] = [dict(evidence_pointer(r), reason=reason) for r in result["records"]
                               for reason in r.get("evidenceGaps", [])]
-    for metadata in result["coverage"]["sources"]:
-        if metadata["kind"] != "coverage.json": continue
-        state = metadata["body"]
-        if any(getattr(args, arg, None) is not None and str(getattr(args, arg)) != str(state.get(field))
-               for arg, field in (("capture", "captureId"), ("run", "runId"), ("round", "round"))): continue
-        for gap in state.get("gaps", []):
-            result["evidenceGaps"].append(dict(gap, captureId=state.get("captureId"), runId=state.get("runId"),
-                                             round=state.get("round"), references=[{"path": metadata["path"]}]))
-        if state.get("tailUnknown"):
-            result["evidenceGaps"].append({"reason": "SourceTailUnknown", "captureId": state.get("captureId"),
-                                          "flushed": state.get("flushed"), "references": [{"path": metadata["path"]}]})
-        if state.get("failure") and not state.get("gaps"):
-            result["evidenceGaps"].append({"reason": "SourceFailureUnknownRange:" + state["failure"],
-                                          "references": [{"path": metadata["path"]}]})
+    result["evidenceGaps"].extend(gap for interval in result["coverage"]["intervals"] for gap in interval["gaps"])
+    result["evidenceGaps"].extend(result["scopeGaps"])
     if result["truncated"]: result["evidenceGaps"].append({"reason": "QueryLimitReached"})
     result["flow"] = [dict(evidence_pointer(r), stage=r.get("stage"), source=r.get("source"), target=r.get("target"),
                            input=r.get("input"), before=r.get("before"),
                            decision={"outcome": r.get("outcome"), "reason": r.get("reason")}, after=r.get("after"))
                       for r in result["records"]]
-    failures = [r for r in result["records"] if r.get("outcome") in ("Failed", "Rejected", "Aborted")]
+    failures = [r for r in result["records"] if r.get("outcome") in ("Failed", "Rejected", "Aborted", "CaptureFailed")]
     result["firstObservedFailure"] = failures[0] if failures else None
     result["firstDivergence"] = None
     result["divergenceStatus"] = "RequiresMatchingReplayOrCanonicalStateEvidence"
@@ -555,7 +983,7 @@ def compare(db, args):
             differences.append({"state": key, "expected": expected, "actual": record})
     return {"comparison": "Canonical states matched by run, round, entity and state version; predicted/display states are separate evidence.",
             "firstDivergence": differences[0] if differences else None, "differences": differences,
-            "unmatched": unmatched, "truncated": result["truncated"], "coverage": result["coverage"]}
+            "unmatched": unmatched, "truncated": result["truncated"], "coverage": result["coverage"], "scopeGaps": result["scopeGaps"]}
 
 
 def locate(db, args):
@@ -570,26 +998,20 @@ def locate(db, args):
             if key not in found:
                 found[key] = dict(capture=key[0], run=key[1], round=key[2], entity=str(key[3]), name=actor["name"], first=record.get("utc"))
             found[key].update(last=record.get("utc"), lastSnapshot=actor, references=record["references"])
-    return {"entities": list(found.values()), "truncated": result["truncated"], "coverage": result["coverage"]}
+    return {"entities": list(found.values()), "truncated": result["truncated"], "coverage": result["coverage"], "scopeGaps": result["scopeGaps"]}
 
 
 def extract(db, capture, engine, first=None, last=None):
-    if last is None:
-        latest = db.execute("SELECT seq FROM records WHERE capture=? AND engine=? ORDER BY length(seq) DESC,seq DESC LIMIT 1", (capture, engine)).fetchone()
-        if latest is not None: last = int(latest[0])
     rows = db.execute("SELECT seq,stage,engine,body FROM records WHERE capture=? ORDER BY length(seq),seq", (capture,))
-    baseline = None; steps = []; pending = None; gaps = []; domain = None; last_checkpoint = None; previous_sequence = None; contexts = set()
+    baseline = None; steps = []; pending = None; gaps = []; domain = None; last_checkpoint = None; contexts = set(); last_seen = 0
     for row in rows:
         seq = int(row["seq"])
         if last is not None and seq > last: break
+        last_seen = seq
         record = json.loads(row["body"])
-        if baseline is not None and previous_sequence is not None and seq != previous_sequence + 1:
-            gaps.append(f"MissingRecordRange:{previous_sequence + 1}-{seq - 1}")
-        previous_sequence = seq
         if row["stage"] in ("replay.checkpoint", "replay.engine_checkpoint"):
-            try: data = payload(db, record)
+            try: checkpoints = checkpoint_engines(record, payload(db, record))
             except ValueError as error: gaps.append(str(error)); continue
-            checkpoints = data.get("engines", []) if row["engine"] == "*" else [data]
             match = next((c for c in checkpoints if c["engine"] == engine), None)
             if match:
                 if baseline is None or (first is not None and seq <= first):
@@ -598,9 +1020,8 @@ def extract(db, capture, engine, first=None, last=None):
                 elif steps:
                     steps[-1]["expectedState"] = match["state"]
         elif baseline is not None:
-            if row["stage"] == "evidence.gap": gaps.append("RecordedGap:" + str(seq))
-            if row["engine"] != engine: continue
             contexts.add((record.get("runId"), record.get("round", 0)))
+            if row["engine"] != engine: continue
             if row["stage"] in ("owner.damage_calculation", "owner.attack_stats", "stats.damage"):
                 if pending: gaps.append("MissingOutput:" + pending["record"])
                 pending = None
@@ -632,19 +1053,17 @@ def extract(db, capture, engine, first=None, last=None):
                 steps.append(pending); pending = None
     if baseline is None: gaps.append("MissingCheckpoint")
     if pending: gaps.append("MissingOutput:" + pending["record"])
-    # Any explicit capture failure touching this replay interval invalidates completeness.
-    for row in db.execute("SELECT body FROM metadata WHERE kind='coverage.json'"):
-        state = json.loads(row[0])
-        if state.get("captureId") != capture: continue
-        if (state.get("runId"), state.get("round", 0)) not in contexts: continue
-        if state.get("failure") and not state.get("gaps"): gaps.append("SourceFailureUnknownRange:" + state["failure"])
-        for gap in state.get("gaps", []):
-            if int(gap.get("last", 0)) >= (last_checkpoint or 0) and (last is None or int(gap.get("first", 0)) <= last):
-                gaps.append("CaptureGap:" + compact(gap))
-    for row in db.execute("SELECT path,reason,details FROM issues WHERE reason IN ('ConflictingCopy','InvalidRecord')"):
-        if capture in row["path"] or capture in row["details"]: gaps.append(row["reason"] + ":" + row["path"])
+    if first is not None and (first < 1 or first > last_seen): gaps.append("RequestedFirstOutsideAvailableEvidence:" + str(first))
+    if len(contexts) > 1: gaps.append("ReplayContextChanged")
+    if not contexts: contexts.add((None, None))
+    assessment_first = min(first, last_checkpoint) if first is not None and last_checkpoint is not None else last_checkpoint
+    assessments = [assess_interval(db, capture, assessment_first, last, run, round) for run, round in sorted(contexts, key=str)]
+    scope_gaps = retention_scope_gaps(db, capture, assessment_first, last)
+    gaps.extend(g["reason"] for assessed in assessments for g in assessed["gaps"])
+    gaps.extend(g["reason"] for g in scope_gaps)
     return {"version": 2, "source": capture, "engine": engine, "domain": domain,
-            "complete": not gaps, "gaps": gaps, "checkpoint": baseline, "steps": steps}
+            "complete": not gaps, "gaps": list(dict.fromkeys(gaps)), "checkpoint": baseline, "steps": steps,
+            "integrity": assessments, "scopeGaps": scope_gaps}
 
 
 def describe_record(record):
@@ -694,7 +1113,11 @@ def main():
     parser.add_argument("--db", default="combat-evidence.sqlite")
     subs = parser.add_subparsers(dest="command", required=True)
     imp = subs.add_parser("import"); imp.add_argument("roots", nargs="+")
-    subs.add_parser("coverage")
+    cov = subs.add_parser("coverage")
+    cov.add_argument("--strict", action="store_true", help="Exit 3 after reporting incomplete evidence")
+    cov.add_argument("--capture"); cov.add_argument("--run"); cov.add_argument("--round")
+    cov.add_argument("--first", type=int); cov.add_argument("--last", type=int)
+    cov.add_argument("--output")
     perf = subs.add_parser("performance")
     perf.add_argument("--capture", required=True); perf.add_argument("--output", required=True)
     for name in ("query", "view", "compare", "locate", "player-output", "dot", "connection"):
@@ -702,6 +1125,8 @@ def main():
         for field in ("event", "entity", "reason", "capture", "run", "round", "engine", "after", "before", "build"):
             cmd.add_argument("--" + field)
         cmd.add_argument("--limit", type=int, default=2000)
+        cmd.add_argument("--first", type=int); cmd.add_argument("--last", type=int)
+        cmd.add_argument("--strict", action="store_true", help="Exit 3 after reporting incomplete evidence")
         cmd.add_argument("--resolve-inputs", action="store_true")
         cmd.add_argument("--output")
         cmd.add_argument("--html", action="store_true", help="Render the same evidence as an offline HTML timeline")
@@ -726,7 +1151,8 @@ def main():
                     stream.write(value if isinstance(value, str) else compact(value)); stream.write("\n")
             return
         if args.command == "import": result = import_roots(db, args.roots)
-        elif args.command == "coverage": result = coverage(db)
+        elif args.command == "coverage":
+            result = coverage(db, request=args)
         elif args.command == "extract": result = extract(db, args.capture, args.engine, args.first, args.last)
         elif args.command == "compare": result = compare(db, args)
         elif args.command == "locate": result = locate(db, args)
@@ -735,7 +1161,12 @@ def main():
         content = viewer(result) if args.command == "view" or getattr(args, "html", False) else json.dumps(result, ensure_ascii=False, indent=2)
         if getattr(args, "output", None): Path(args.output).write_text(content, encoding="utf-8")
         else: print(content)
+        if result.get("invalidSelection"): return 3
+        if args.command == "extract" or getattr(args, "strict", False):
+            complete = result.get("complete", result.get("coverage", {}).get("complete", False))
+            return 0 if complete and not result.get("truncated", False) else 3
+    return 0
 
 
 if __name__ == "__main__":
-    main()
+    sys.exit(main())

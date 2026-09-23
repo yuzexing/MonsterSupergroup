@@ -124,17 +124,17 @@ namespace MonsterSupergroup.GAS
     public static class CombatCalculationEvidence
     {
         private static readonly object DamageEngine = new(), StatsEngine = new();
-        public static int? Health(ICombatTarget target)
+        public static int? Health(ICombatTarget target, CombatContext context = default)
         {
             if (!CombatEvidence.Enabled) return null;
             try { return (target as ICombatHealthEvidence)?.DiagnosticHealth; }
-            catch { CombatEvidence.Event("Owner", "evidence.gap", "CaptureFailed", "HealthEvidenceReadFailed"); return null; }
+            catch (Exception error) { CombatEvidence.ReportCaptureFailure("Owner", "owner.health", error, context); return null; }
         }
-        public static bool? Invulnerable(ICombatTarget target)
+        public static bool? Invulnerable(ICombatTarget target, CombatContext context = default)
         {
             if (!CombatEvidence.Enabled) return null;
             try { return (target as ICombatHealthEvidence)?.DiagnosticInvulnerable; }
-            catch { CombatEvidence.Event("Owner", "evidence.gap", "CaptureFailed", "PermissionEvidenceReadFailed"); return null; }
+            catch (Exception error) { CombatEvidence.ReportCaptureFailure("Owner", "owner.permission", error, context); return null; }
         }
         public static void Record(string domain, string stage, string operation, CombatContext context, object input, object output)
         {

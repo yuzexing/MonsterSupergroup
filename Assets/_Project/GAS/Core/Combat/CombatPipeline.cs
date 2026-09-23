@@ -98,8 +98,7 @@ namespace MonsterSupergroup.GAS
                         staticModifiers = CaptureModifiers(modifiers.StaticModifiers), dynamicModifiers = CaptureModifiers(modifiers.DynamicModifiers) };
                     CombatCalculationEvidence.Record("weapon_stats", "owner.attack_stats", "Rebuild", context, statInput, stats);
                 }
-                catch (Exception error) { CombatEvidence.Event("Owner", "owner.attack_stats", "CaptureFailed", error.GetType().Name,
-                    context.EventId.Value, context.SourcePlayerId, root: context.RootEventId.Value); }
+                catch (Exception error) { CombatEvidence.ReportCaptureFailure("Owner", "owner.attack_stats", error, context); }
             }
             try
             {
@@ -276,8 +275,7 @@ namespace MonsterSupergroup.GAS
             {
                 try { calculationInput = new DamageCalculationInput { stats = attack.Stats, targetMultipliers = targetMultipliers.Clone(),
                     criticalRoll = criticalRoll, modifiers = CaptureModifiers(onDamageModifiers) }; }
-                catch (Exception error) { CombatEvidence.Event("Owner", "owner.damage_calculation", "CaptureFailed", error.GetType().Name,
-                    attack.Context.EventId.Value, attack.Context.SourcePlayerId, root: attack.Context.RootEventId.Value); }
+                catch (Exception error) { CombatEvidence.ReportCaptureFailure("Owner", "owner.damage_calculation", error, attack.Context); }
             }
 
             var resolvedDamage = new DamageInfo(
@@ -361,16 +359,16 @@ namespace MonsterSupergroup.GAS
                     targetStateVersion);
                 if (calculationInput != null) CombatCalculationEvidence.Record("damage", "owner.damage_calculation", "Calculate",
                     damageContext, calculationInput, calculation);
-                int? previousHealth = CombatCalculationEvidence.Health(target);
+                int? previousHealth = CombatCalculationEvidence.Health(target, damageContext);
                 if (CombatEvidence.Enabled) CombatEvidence.Event("Owner", "owner.hit", "Applying", null,
                     damageContext.EventId.Value, damageContext.SourcePlayerId, targetEntityId, resolvedDamage,
                     new { alive = wasAlive, health = previousHealth, version = targetStateVersion,
-                        invulnerable = CombatCalculationEvidence.Invulnerable(target) }, root: damageContext.RootEventId.Value, parent: damageContext.ParentEventId.Value);
+                        invulnerable = CombatCalculationEvidence.Invulnerable(target, damageContext) }, root: damageContext.RootEventId.Value, parent: damageContext.ParentEventId.Value);
                 DamageInfo predictedAppliedDamage = target.ReceiveDamage(resolvedDamage);
                 if (CombatEvidence.Enabled) CombatEvidence.Event("Owner", "owner.hit", "Applied", null,
                     damageContext.EventId.Value, damageContext.SourcePlayerId, targetEntityId, resolvedDamage,
                     new { alive = wasAlive, health = previousHealth, version = targetStateVersion },
-                    new { alive = target.IsAlive, health = CombatCalculationEvidence.Health(target), applied = predictedAppliedDamage,
+                    new { alive = target.IsAlive, health = CombatCalculationEvidence.Health(target, damageContext), applied = predictedAppliedDamage,
                         version = (target as ICombatStateIdentity)?.StateVersion },
                     damageContext.RootEventId.Value, damageContext.ParentEventId.Value);
                 eventSink.Publish(new CombatEvent(
@@ -481,6 +479,7 @@ namespace MonsterSupergroup.GAS
 
         private static ModifierEvidence[] CaptureModifiers<T>(System.Collections.Generic.IReadOnlyList<T> values) where T : RuntimeEquipmentModifier
         {
+            if (values.Count == 0) return Array.Empty<ModifierEvidence>();
             var result = new ModifierEvidence[values.Count];
             for (int i = 0; i < result.Length; i++) result[i] = ModifierEvidence.Capture(values[i]);
             return result;

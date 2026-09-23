@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -12,6 +13,8 @@ namespace MonsterSupergroup.NetworkCombat.Diagnostics
     public static class EvidenceBlocks
     {
         public const int Format = 2, TargetBytes = 64 << 10, MaximumDecodedBytes = 1 << 20;
+        // Raw <= 1 MiB, gzip capacity <= 2 MiB, header chars <= 2 MiB, plus bounded dictionaries/indices.
+        internal const int MaximumRetainedWorkspaceBytes = 8 << 20;
         [Serializable] private sealed class Block
         {
             public int schemaVersion = Format, count;
@@ -19,36 +22,83 @@ namespace MonsterSupergroup.NetworkCombat.Diagnostics
             public string captureId, runId;
             public uint round;
         }
-        public static string EncodeAdvances(string capture, string run, uint round, DiagnosticAdvance[] entries, int count)
+        // One bounded scratch workspace per storage worker, covered by the store's codec reservation.
+        // Dictionaries are rebuilt and cleared for every block; no decoding dependency crosses a block boundary.
+        private sealed class EncoderWorkspace
         {
-            var engines = new List<string[]>(); var engineIndex = new Dictionary<(string role, string engine, string operation), int>();
-            var boundaries = new List<StatusReplayBoundary>();
-            var boundaryIndex = new Dictionary<(ushort slot, ushort epoch, uint next, int flags, uint player, uint owner), int>();
-            if (count < 1 || count > 128 || count > entries.Length) throw new InvalidDataException("Invalid advance count.");
-            var engineRows = new int[count]; var boundaryRows = new int[count];
+            public readonly List<byte[][]> engines = new List<byte[][]>(128);
+            public readonly Dictionary<(string role, string engine, string operation), int> engineIndex = new Dictionary<(string, string, string), int>(128);
+            public readonly List<StatusReplayBoundary> boundaries = new List<StatusReplayBoundary>(128);
+            public readonly Dictionary<(ushort slot, ushort epoch, uint next, int flags, uint player, uint owner), int> boundaryIndex = new Dictionary<(ushort, ushort, uint, int, uint, uint), int>(128);
+            public readonly ushort[] engineRows = new ushort[128];
+            public readonly short[] boundaryRows = new short[128];
+            public readonly MemoryStream raw = new MemoryStream(TargetBytes), compressed = new MemoryStream(TargetBytes);
+            public readonly BinaryWriter writer;
+            public readonly StringBuilder header = new StringBuilder(4096);
+            public bool busy;
+            public EncoderWorkspace() { writer = new BinaryWriter(raw, Encoding.UTF8, true); }
+            public void Clear()
+            {
+                engines.Clear(); engineIndex.Clear(); boundaries.Clear(); boundaryIndex.Clear();
+                raw.SetLength(0); raw.Position = 0; compressed.SetLength(0); compressed.Position = 0; header.Clear();
+                if (raw.Capacity > MaximumDecodedBytes) raw.Capacity = TargetBytes;
+                if (compressed.Capacity > MaximumDecodedBytes * 2) compressed.Capacity = TargetBytes;
+                if (header.Capacity > MaximumDecodedBytes * 2) header.Capacity = 4096;
+                busy = false;
+            }
+        }
+        [ThreadStatic] private static EncoderWorkspace cachedWorkspace;
+        private static EncoderWorkspace RentWorkspace()
+        {
+            var value = cachedWorkspace ?? (cachedWorkspace = new EncoderWorkspace());
+            if (value.busy) value = new EncoderWorkspace();
+            value.busy = true; return value;
+        }
+        public static string EncodeAdvances(string capture, string run, uint round, DiagnosticAdvance[] entries, int count, EvidenceStageMetrics metrics = null)
+        {
+            long started = EvidenceStageMetrics.Now, compressedBefore = metrics?.CompressionTicks ?? 0;
+            if (entries == null || count < 1 || count > 128 || count > entries.Length) throw new InvalidDataException("Invalid advance count.");
+            var workspace = RentWorkspace();
+            try
+            {
+            var engines = workspace.engines; var engineIndex = workspace.engineIndex;
+            var boundaries = workspace.boundaries; var boundaryIndex = workspace.boundaryIndex;
+            var engineRows = workspace.engineRows; var boundaryRows = workspace.boundaryRows;
+            int rawLength = 10 + count * 49;
             for (int i = 0; i < count; i++)
             {
                 var e = entries[i]; var key = (e.role, e.engine, e.operation);
                 if ((e.role?.Length ?? 0) > 256 || (e.engine?.Length ?? 0) > 256 || (e.operation?.Length ?? 0) > 256) throw new InvalidDataException("AdvanceIdentityLimit");
-                if (!engineIndex.TryGetValue(key, out int engine)) { engineIndex[key] = engine = engines.Count; engines.Add(new[] { e.role, e.engine, e.operation }); }
+                if (!engineIndex.TryGetValue(key, out int engine))
+                {
+                    engineIndex[key] = engine = engines.Count;
+                    var identity = new[] { e.role == null ? null : Encoding.UTF8.GetBytes(e.role),
+                        e.engine == null ? null : Encoding.UTF8.GetBytes(e.engine), e.operation == null ? null : Encoding.UTF8.GetBytes(e.operation) };
+                    engines.Add(identity);
+                    foreach (var text in identity) rawLength += 2 + (text?.Length ?? 0);
+                }
                 int boundary = -1;
                 if (e.boundary != null)
                 {
                     var b = e.boundary;
                     int flags = (b.eventIds ? 1 : 0) | (b.supported ? 2 : 0) | (b.executeAll ? 4 : 0) | (b.offline ? 8 : 0) | (b.server ? 16 : 0) | (b.ids != null ? 32 : 0);
                     var state = (b.ids?.slot ?? 0, b.ids?.epoch ?? 0, b.ids?.next ?? 0, flags, b.localPlayer, b.targetOwner);
-                    if (!boundaryIndex.TryGetValue(state, out boundary)) { boundaryIndex[state] = boundary = boundaries.Count; boundaries.Add(e.boundary); }
+                    if (!boundaryIndex.TryGetValue(state, out boundary))
+                    {
+                        boundaryIndex[state] = boundary = boundaries.Count; boundaries.Add(e.boundary);
+                        rawLength += b.ids == null ? 9 : 17;
+                    }
                 }
-                engineRows[i] = engine; boundaryRows[i] = boundary;
+                engineRows[i] = (ushort)engine; boundaryRows[i] = (short)boundary;
             }
-            using var output = new MemoryStream();
-            using (var writer = new BinaryWriter(output, Encoding.UTF8, true))
+            if (rawLength > MaximumDecodedBytes) throw new InvalidDataException("AdvanceBinarySizeLimit");
+            var output = workspace.raw; var writer = workspace.writer;
             {
                 writer.Write(0x32445641u); writer.Write((ushort)count); writer.Write((ushort)engines.Count); writer.Write((ushort)boundaries.Count);
-                foreach (var engine in engines) foreach (string value in engine)
+                foreach (var engine in engines) foreach (var text in engine)
                 {
-                    if (value == null) { writer.Write(ushort.MaxValue); continue; }
-                    byte[] text = Encoding.UTF8.GetBytes(value); writer.Write((ushort)text.Length); writer.Write(text);
+                    if (text == null) writer.Write(ushort.MaxValue);
+                    else { writer.Write((ushort)text.Length); writer.Write(text); }
                 }
                 foreach (var b in boundaries)
                 {
@@ -60,16 +110,62 @@ namespace MonsterSupergroup.NetworkCombat.Diagnostics
                 {
                     var e = entries[i]; writer.Write(e.sequence); writer.Write(e.utcTicks); writer.Write(e.monotonic); writer.Write(e.network);
                     writer.Write(e.frame); writer.Write(e.fixedStep); writer.Write((byte)e.phase); writer.Write(e.delta);
-                    writer.Write((ushort)engineRows[i]); writer.Write((short)boundaryRows[i]);
+                    writer.Write(engineRows[i]); writer.Write(boundaryRows[i]);
                 }
             }
-            byte[] raw = output.ToArray();
-            return EvidenceJson.Encode(new Block { encoding = "advance-binary-v1", captureId = capture, runId = run, round = round,
-                first = entries[0].sequence.ToString(), last = entries[count - 1].sequence.ToString(), count = count,
-                hash = EvidenceJson.Hash(raw), data = Convert.ToBase64String(EvidenceJson.Compress(raw)) });
+            if (output.Position != rawLength) throw new InvalidDataException("AdvanceBinarySizeMismatch");
+            metrics?.BinaryBuild(started);
+            string encoded = EncodeBlock(output.GetBuffer(), rawLength, "advance-binary-v1", entries[0].sequence.ToString(CultureInfo.InvariantCulture),
+                entries[count - 1].sequence.ToString(CultureInfo.InvariantCulture), count, capture, run, round, workspace, metrics);
+            metrics?.Encoding(started, compressedBefore);
+            return encoded;
+            }
+            finally { workspace.Clear(); }
         }
-        public static string Encode(byte[] utf8, string first, string last, int count) => EvidenceJson.Encode(new Block {
-            first = first, last = last, count = count, hash = EvidenceJson.Hash(utf8), data = Convert.ToBase64String(EvidenceJson.Compress(utf8)) });
+        private static string EncodeBlock(byte[] raw, int rawLength, string encoding, string first, string last, int count,
+            string capture, string run, uint round, EncoderWorkspace workspace, EvidenceStageMetrics metrics)
+        {
+            if ((first?.Length ?? 0) > 4096 || (last?.Length ?? 0) > 4096 ||
+                (capture?.Length ?? 0) > 4096 || (run?.Length ?? 0) > 4096) throw new InvalidDataException("EvidenceBlockIdentityLimit");
+            long hashStarted = EvidenceStageMetrics.Now;
+            string hash = EvidenceJson.Hash(raw, rawLength);
+            metrics?.BlockHash(hashStarted);
+            var compressed = workspace.compressed;
+            EvidenceJson.CompressInto(raw, rawLength, compressed, metrics);
+            long headerStarted = EvidenceStageMetrics.Now;
+            // The fixed envelope has no arbitrary payloads or converters. Keep its v2 field order without per-block reflection/DTOs.
+            using var text = new StringWriter(workspace.header, CultureInfo.InvariantCulture);
+            using (var writer = new JsonTextWriter(text))
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("schemaVersion"); writer.WriteValue(Format);
+                writer.WritePropertyName("count"); writer.WriteValue(count);
+                writer.WritePropertyName("encoding"); writer.WriteValue(encoding);
+                if (first != null) { writer.WritePropertyName("first"); writer.WriteValue(first); }
+                if (last != null) { writer.WritePropertyName("last"); writer.WriteValue(last); }
+                writer.WritePropertyName("hash"); writer.WriteValue(hash);
+                writer.WritePropertyName("data"); writer.WriteValue(Convert.ToBase64String(compressed.GetBuffer(), 0, (int)compressed.Length));
+                if (capture != null) { writer.WritePropertyName("captureId"); writer.WriteValue(capture); }
+                if (run != null) { writer.WritePropertyName("runId"); writer.WriteValue(run); }
+                writer.WritePropertyName("round"); writer.WriteValue(round); writer.WriteEndObject();
+            }
+            string encoded = text.ToString();
+            metrics?.BlockHeader(headerStarted);
+            return encoded;
+        }
+        public static string Encode(byte[] utf8, string first, string last, int count, EvidenceStageMetrics metrics = null)
+        {
+            long started = EvidenceStageMetrics.Now, compressedBefore = metrics?.CompressionTicks ?? 0;
+            if (utf8 == null || utf8.Length > MaximumDecodedBytes) throw new InvalidDataException("EvidenceBlockSizeLimit");
+            var workspace = RentWorkspace();
+            try
+            {
+            string encoded = EncodeBlock(utf8, utf8.Length, "gzip-jsonl-v1", first, last, count, null, null, 0, workspace, metrics);
+            metrics?.Encoding(started, compressedBefore);
+            return encoded;
+            }
+            finally { workspace.Clear(); }
+        }
 
         public static IEnumerable<DiagnosticRecord> Decode(string line)
         {

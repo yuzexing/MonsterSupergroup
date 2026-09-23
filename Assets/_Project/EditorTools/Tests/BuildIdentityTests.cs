@@ -71,7 +71,7 @@ namespace MonsterSupergroup.EditorTools.Tests
         [TestCase(BuildKind.Dev)] [TestCase(BuildKind.Test)] [TestCase(BuildKind.Shipping)]
         public void ExternalBuildKindDefinesCannotOverrideTheSelectedKind(BuildKind kind) =>
             Assert.Throws<BuildFailedException>(() => ProjectBuildIdentity.ValidateOptions(kind, false, false, new[] { "MONSTER_BUILD_SHIPPING" }));
-        [Test] public void ScriptsOnlyFailsBeforeAnyBuildOutput() => Assert.Throws<InvalidOperationException>(() => ProjectBuildService.Build("player-development", scriptsOnly: true));
+        [Test] public void ScriptsOnlyFailsBeforeAnyBuildOutput() => Assert.Throws<BuildFailedException>(() => ProjectBuildService.Build("player-development", scriptsOnly: true));
         [Test] public void FailedOverwriteCannotRetainSuccessfulMetadata()
         {
             string dir = Path.Combine("Temp", "BuildIdentity-" + Guid.NewGuid().ToString("N"));

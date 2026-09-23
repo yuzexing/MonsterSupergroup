@@ -2,6 +2,8 @@
 
 本次继续使用自动落盘与在线复制，不增加测试者的保存步骤。日志目录仍是 `%USERPROFILE%\AppData\LocalLow\DefaultCompany\Monster Supergroup\CombatDiagnostics`。原始日志不要改写；分析数据库和报告另存到 `Logs`。
 
+本页描述格式与查询能力，不声明本阶段全面验收通过。当前快照、真实夹具来源、严格两端 CPU 基准与双机采证入口见 [续作验证合同](combat-evidence-next-validation.md)。`--manifest` 是真实运行观察窗口分析，`--benchmark-root` 是受控逐帧基准 gate，两者的通过口径不同。
+
 ## 格式与原始身份
 
 日志格式和回放夹具为 2，离线工具同时读取旧版 1。游戏协议仍为 6；诊断复制协议为 2，版本不兼容时本地采集继续，复制失败必须出现在完整性信息中。
@@ -37,6 +39,16 @@ python Tools/CombatEvidence.py --db Logs/incident-v2.sqlite view --event EVENT -
 ```
 
 如果 Host 只有 `Player.log`，不要把它冒充结构化日志目录。先只导入实际存在的目录；旧包从未采集的业务证据无法补回。
+
+来源目录中的 `retention.json` / `retention.local.json` 通过 `beforeSequence` 声明前缀可能已清理。默认 `coverage --strict` 未指定起点时返回 `SourcePrefixPruned` 和退出码 3，不能用最早剩余检查点代表完整来源；仅指定末尾也不会补足起点证明。要验证保留区间，明确提供 `--capture CAPTURE --first FIRST --last LAST --strict`，按需指定 run/round。有限区间仍检查连续记录、刷新水位、检查点及依赖；其他副本可补齐被本机清理的记录。损坏或矛盾的清理边界返回 `InvalidRetention`。提取入口不会把请求的缺失前缀悄悄缩到后续检查点。
+
+根目录 `retention.jsonl` 描述整局清理，仅提供 runId，不能证明被删来源、轮次或序号的全集。覆盖、查询、历史及提取结果新增兼容字段 `scopeGaps`：`RunPruned` 表示整体范围包含已清理局，`InvalidRetentionAudit` 表示清理审计损坏或不支持。每项保留实际路径、物理行号及可确认的 runId，不填造 capture/round/序号。同一 run、同类原因合并引用；历史查询同时将这些项放入 `evidenceGaps`。来源记录齐全但请求范围仍有这些缺口时，`complete=false`，严格检查退出 3；普通浏览仍输出结果并退出 0。
+
+`coverage --run RUN --round ROUND` 的过滤实际作用于来源区间；没有剩余来源的已清理 run 仍报告范围缺口。根审计不能排除某个轮次曾经存在，仅指定 round 不能绕过它。明确选择另一 run 可以排除已知不相关的清理；只指定 capture 且没有有限起止序号时，不能据剩余记录推断该 capture 从未属于已清理局。未知 run 的损坏审计保守影响所有整体请求。
+
+明确指定 capture、first、last 的有限区间仍按实际合并证据判断；另一副本补齐区间可通过，但不等于整局来源全集恢复。提取指定 last 且存在真实检查点时，可由检查点确定有限起点，不强制再传 first。`coverage` 传 first/last 却不传 capture 时，输出 `InvalidCoverageSelection`、`invalidSelection=true`，无论是否 strict 均退出 3，不再静默忽略序号参数。
+
+新版导入器完整解析 JSON 后发现缺换行时，使用 `Parsed cleanup audit missing newline` 标记，可保留其中已确认的 runId，但仍报告审计损坏。旧数据库的 `Truncated cleanup audit` 不证明曾成功解析 JSON，按未知范围处理；解析失败的重复导入也不能借用旧数据库行的 runId 排除当前请求。坏行后的合法清理行继续导入，原始引用保留。本契约只覆盖已导入审计，C# 删除之后才写审计的崩溃窗口仍待核查。
 
 同一事件的相关阶段、实际批次成员、权威状态输出以及传输包成员会关联起来。包关联使用对局、来源、业务批次和消息内容身份；不会只凭相近时间或同一个批次数字判定是同一条消息。
 
@@ -122,7 +134,7 @@ python Tools/CompareCombatEvidence.py --manifest Logs/performance-matrix.json --
 ## 工具回归
 
 ```powershell
-python -m unittest discover -s Tools -p "test_*combat_evidence.py" -v
+python -m unittest discover -s Tools -p "test_*combat_evidence*.py" -v
 ```
 
 用例覆盖 v1/v2、精确时间推进、异常完成、损坏块、64 位 DOT ID、多机副本去重、跨目录共享输入、批次/包关联、单条语义记录提取、回放分歧溯源，以及累计性能计数的正确差分。实际测试结果以本次运行输出为准；工具通过不等同于 Steam 双机或 GPU 性能通过。

@@ -233,6 +233,7 @@ namespace MonsterSupergroup.NetworkCombat.Tests
             store = new CombatEvidenceStore(directory); store.Dispose(); store.WaitForClose();
             Assert.That(File.ReadAllLines(file), Has.Length.EqualTo(1));
             Assert.That(Directory.GetFiles(directory, "recovery.json", SearchOption.AllDirectories), Has.Length.EqualTo(1));
+            Assert.That(File.ReadAllText(Directory.GetFiles(directory, "*.tail", SearchOption.AllDirectories).Single()), Is.EqualTo("{\"truncated\":"));
         }
         [Test] public void SerializationFailureDoesNotStopFollowingRecords()
         {
@@ -269,7 +270,8 @@ namespace MonsterSupergroup.NetworkCombat.Tests
             for (int i = 1; i <= 40; i++)
             {
                 var record = Record(i); record.input = new string('x', 2500); record.estimatedBytes = 3000;
-                if (i == 20) { record.stage = "replay.checkpoint"; record.input = new ReplayCheckpointSet { engines = Array.Empty<ReplayCheckpoint>() }; }
+                if (i == 20) { record.stage = "replay.checkpoint"; record.input = new ReplayCheckpointSet { engines = new[] {
+                    new ReplayCheckpoint { engine = "gateway-1", domain = "gateway", state = new GatewayReplayState() } } }; }
                 store.TryWrite(record);
             }
             store.Dispose(); store.WaitForClose();

@@ -57,16 +57,19 @@ namespace MonsterSupergroup.NetworkCombat.Diagnostics
         private AdvanceBlock activeAdvances;
         public bool TryWriteAdvance(string capture, string run, uint round, DiagnosticAdvance entry)
         {
+            bool signal = false;
+            long lockStarted = EvidenceStageMetrics.Now;
             lock (gate)
             {
+                Metrics.LockWait(lockStarted);
                 string key = activeAdvances != null && activeAdvances.capture == capture && activeAdvances.run == run && activeAdvances.round == round
                     ? activeAdvances.key : SourceKey(run, round, capture);
                 if (!health.TryGetValue(key, out var state)) health.Add(key, state = new EvidenceCoverage { captureId = capture, runId = run, round = round });
-                state.produced = entry.sequence.ToString();
+                state.Produced = entry.sequence;
                 if (activeAdvances == null || activeAdvances.key != key || activeAdvances.count == AdvanceBlock.Capacity)
                 {
                     if (stopping || pendingBytes + AdvanceBlock.Charge > options.QueueBytes - options.ReservedBytes || !Memory.TryReserve(AdvanceBlock.Charge))
-                    { state.dropped++; Interlocked.Increment(ref dropped); Gap(state, state.produced, "QueueOverload"); return false; }
+                    { CountDropped(state); Gap(state, state.produced, "QueueOverload"); return false; }
                     var block = new AdvanceBlock { key = key, capture = capture, run = run, round = round };
                     activeAdvances = block; pendingBytes += AdvanceBlock.Charge; peakPendingBytes = Math.Max(peakPendingBytes, pendingBytes);
                     queue.Enqueue((AdvanceBlock.Charge, () => {
@@ -76,11 +79,13 @@ namespace MonsterSupergroup.NetworkCombat.Diagnostics
                             record.stage = "replay.advance_block"; record.input = block; record.before = null;
                             Append(block.key, record);
                         }
-                    }, block));
+                    }, block, EvidenceStageMetrics.Now));
+                    signal = true;
                 }
                 activeAdvances.entries[activeAdvances.count++] = entry;
+                signal |= activeAdvances.count == AdvanceBlock.Capacity;
             }
-            wake.Set(); return true;
+            if (signal) wake.Set(); return true;
         }
     }
 }

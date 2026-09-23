@@ -158,7 +158,8 @@ namespace MonsterSupergroup.NetworkCombat.Tests
             using var attack = pipeline.BeginAttack(new Weapon());
             var result = pipeline.ResolveHitDetailed(attack, new FailingHealthTarget());
             Assert.That(result.PredictedAppliedDamage.Value, Is.EqualTo(10));
-            Assert.That(sink.records.Any(r => r.reason == "HealthEvidenceReadFailed"), Is.True);
+            Assert.That(sink.records.Any(r => r.stage == "evidence.gap" && r.reason == "owner.health:InvalidOperationException"
+                && r.eventId == result.DamageContext.EventId.Value.ToString()), Is.True);
         }
 
         private static object RunCombat(bool enabled)

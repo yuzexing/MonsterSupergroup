@@ -2,7 +2,8 @@
   "name": "MonsterSupergroup.EditorTools",
   "rootNamespace": "MonsterSupergroup.EditorTools",
   "references": [
-    "MonsterSupergroup.Build"
+    "MonsterSupergroup.Build",
+    "Unity.TextMeshPro"
   ],
   "includePlatforms": [
     "Editor"

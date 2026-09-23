@@ -42,13 +42,13 @@ namespace MonsterSupergroup.EditorTools.Tests
 
         [Test] public void PlayerDeliveryProfilesDoNotContainValidationCode()
         {
-            foreach (string id in new[] { "player-development", "player-release" })
+            foreach (string id in new[] { "Windows-Dev-Kcp", "Windows-Shipping" })
             {
-                var build = ProjectBuildResolver.Resolve(id);
+                var build = ProjectBuildResolver.Resolve(ProjectBuildResolver.Load(ProjectBuildTemplates.Root + "/" + id + ".asset"));
                 Assert.That(build.Recipe.id, Is.EqualTo("product"), id);
                 Assert.That(build.Recipe.testAssemblies, Is.False, id);
                 Assert.That(build.Recipe.defines, Is.Empty, id);
-                Assert.That(build.Development, Is.EqualTo(id == "player-development"));
+                Assert.That(build.Development, Is.EqualTo(id == "Windows-Dev-Kcp"));
             }
         }
 

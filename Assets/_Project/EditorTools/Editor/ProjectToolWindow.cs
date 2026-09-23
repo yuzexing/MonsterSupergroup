@@ -119,7 +119,7 @@ namespace MonsterSupergroup.EditorTools
             foreach (string p in tool.parameters ?? Array.Empty<string>())
             {
                 if (p == "Apply" || string.IsNullOrWhiteSpace(Value(p))) continue;
-                if (p == "ScriptsOnly" || p == "UniqueOutput")
+                if (p == "ScriptsOnly" || p == "UniqueOutput" || p == "CleanBuildCache" || p == "RunAfterBuild")
                 {
                     if (string.Equals(Value(p), "true", StringComparison.OrdinalIgnoreCase)) command += " -" + p;
                 }
@@ -144,6 +144,7 @@ namespace MonsterSupergroup.EditorTools
             }
             ProjectToolRunner.Run(tool.id, new ProjectToolRequest {
                 apply = tool.writesAssets, profile = Empty(Value("Profile")), source = Empty(Value("Source")), assetPath = Empty(Value("AssetPath")),
+                buildProfile = Empty(Value("BuildProfile")), cleanBuildCache = string.Equals(Value("CleanBuildCache"), "true", StringComparison.OrdinalIgnoreCase), runAfterBuild = string.Equals(Value("RunAfterBuild"), "true", StringComparison.OrdinalIgnoreCase),
                 output = Empty(Value("Output")), scriptsOnly = string.Equals(Value("ScriptsOnly"), "true", StringComparison.OrdinalIgnoreCase),
                 buildKind = Empty(Value("BuildKind")), development = Empty(Value("Development")), uniqueOutput = string.Equals(Value("UniqueOutput"), "true", StringComparison.OrdinalIgnoreCase)
             });

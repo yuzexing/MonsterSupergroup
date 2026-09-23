@@ -3,142 +3,99 @@ using System.IO;
 using System.Linq;
 using MonsterSupergroup.Builds;
 using NUnit.Framework;
+using UnityEditor;
 using UnityEditor.Build;
+using UnityEditor.Build.Profile;
 using UnityEngine;
 
 namespace MonsterSupergroup.EditorTools.Tests
 {
     public sealed class BuildRecipeTests
     {
-        [Test] public void DailyDefaultIsAnUnaidedSteamTestProduct()
+        private MonsterBuildSettings settings;
+        [SetUp] public void SetUp() => settings = ScriptableObject.CreateInstance<MonsterBuildSettings>();
+        [TearDown] public void TearDown() => UnityEngine.Object.DestroyImmediate(settings);
+        private void Validate(bool development = false) => ProjectBuildResolver.ValidateBusiness(settings, development, ProjectBuildPurposes.Get(settings.PurposeId).scenes);
+        [Test] public void ProductTestHasNoToolsOrTestAssemblies()
         {
-            var b = ProjectBuildResolver.Resolve();
-            Assert.That(b.Kind, Is.EqualTo(BuildKind.Test));
-            Assert.That(b.Recipe.id, Is.EqualTo("product"));
-            Assert.That(b.Network, Is.EqualTo(BuildNetwork.Steam));
-            Assert.That(b.Distribution, Is.EqualTo(BuildDistribution.Steam));
-            Assert.That(b.Development || b.Tools || b.Evidence || b.Recipe.testAssemblies, Is.False);
-            Assert.That(b.Defines, Is.EqualTo(new[] { "MONSTER_BUILD_TEST" }));
+            Validate(); Assert.That(ProjectBuildDefines.Expected(settings), Is.EqualTo(new[] { "MONSTER_BUILD_TEST" }));
+            Assert.That(ProjectBuildPurposes.Get(settings.PurposeId).testAssemblies, Is.False);
+            Validate(true); Assert.That(ProjectBuildDefines.Expected(settings), Does.Not.Contain("MONSTER_BUILD_TOOLS"));
         }
-
-        [Test] public void All36LegacyIdsResolveWithoutDuplicateRecipeDefinitions()
+        [Test] public void EvidenceIsOnlyProductTest()
         {
-            var catalog = ProjectToolCatalog.Load();
-            Assert.That(catalog.builds.Length, Is.EqualTo(7));
-            Assert.That(catalog.buildAliases.Length, Is.EqualTo(34));
-            foreach (string id in catalog.buildAliases.Select(a => a.id).Concat(new[] { "sandbox", "nordic" }))
-            {
-                var b = ProjectBuildResolver.Resolve(id);
-                Assert.That(b.Recipe.scenes, Is.Not.Empty, id);
-                if (id.EndsWith("release") && id != "player-release") Assert.That(b.Kind, Is.EqualTo(BuildKind.Test), id);
-            }
-        }
-        [TestCase("menu-development", "gameplay-validation", BuildNetwork.Steam)]
-        [TestCase("imp", "gameplay-validation", BuildNetwork.Kcp)]
-        [TestCase("boot-process", "product", BuildNetwork.Steam)]
-        [TestCase("wisp", "wisp-validation", BuildNetwork.Kcp)]
-        [TestCase("options", "options-validation", BuildNetwork.Kcp)]
-        [TestCase("enemy-handoff-release", "handoff-validation", BuildNetwork.Kcp)]
-        public void LegacyAliasesRetainNecessaryNetworkAndHooks(string id, string recipe, BuildNetwork network)
-        {
-            var b = ProjectBuildResolver.Resolve(id);
-            Assert.That(b.Recipe.id, Is.EqualTo(recipe)); Assert.That(b.Network, Is.EqualTo(network));
-        }
-        [Test] public void GenericValidationRetainsNordicCheckAndSpecialRecipesRetainSymbols()
-        {
-            Assert.That(ProjectBuildResolver.Resolve("gameplay-validation").Recipe.validations, Does.Contain("validate.nordic-gameplay"));
-            Assert.That(ProjectBuildResolver.Resolve("options-validation").Defines, Does.Contain("MONSTER_OPTIONS_VALIDATION"));
-            Assert.That(ProjectBuildResolver.Resolve("handoff-validation").Defines, Does.Contain("MONSTER_ENEMY_HANDOFF_VALIDATION"));
-        }
-        [TestCase("true")][TestCase("false")]
-        public void DevelopmentOverrideNeverGrantsProductTestTools(string development)
-        {
-            var b = ProjectBuildResolver.Resolve("product", "Test", development);
-            Assert.That(b.Tools, Is.False); Assert.That(b.Defines, Does.Not.Contain("MONSTER_BUILD_TOOLS"));
-            Assert.That(b.Development, Is.EqualTo(bool.Parse(development)));
-        }
-        [Test] public void EvidenceHasIndependentCompiledCapabilityAndNoTestAssembly()
-        {
-            var b = ProjectBuildResolver.Resolve("steam-evidence");
-            Assert.That(b.Evidence, Is.True); Assert.That(b.Tools || b.Recipe.testAssemblies, Is.False);
-            Assert.That(b.Defines, Does.Contain("MONSTER_BUILD_EVIDENCE"));
-            Assert.That(b.Defines, Does.Contain("MONSTER_COMBAT_EVIDENCE"));
-            Assert.Throws<BuildFailedException>(() => ProjectBuildResolver.Resolve("product", "Dev", diagnostics: "Evidence"));
+            settings.Diagnostics = BuildDiagnostics.Evidence; Validate();
+            Assert.That(ProjectBuildDefines.Expected(settings), Does.Contain("MONSTER_COMBAT_EVIDENCE"));
+            settings.BuildKind = BuildKind.Dev; Assert.Throws<BuildFailedException>(() => Validate(true));
+            settings.BuildKind = BuildKind.Test; settings.PurposeId = "wisp-validation"; Assert.Throws<BuildFailedException>(() => Validate());
         }
         [TestCase("gameplay-validation")][TestCase("wisp-validation")][TestCase("options-validation")]
         [TestCase("handoff-validation")][TestCase("sandbox")][TestCase("nordic")]
-        public void ShippingRejectsEverySpecialRecipe(string id) =>
-            Assert.Throws<BuildFailedException>(() => ProjectBuildResolver.Resolve(id, "Shipping"));
-        [Test] public void ShippingRejectsUnsafeProductCombinations()
+        public void SpecialTestRetainsToolsAndCannotShip(string purpose)
         {
-            Assert.Throws<BuildFailedException>(() => ProjectBuildResolver.Resolve("product", "Shipping", "true"));
-            Assert.Throws<BuildFailedException>(() => ProjectBuildResolver.Resolve("product", "Shipping", network: "Kcp"));
-            Assert.Throws<BuildFailedException>(() => ProjectBuildResolver.Resolve("product", "Shipping", distribution: "Direct"));
-            Assert.Throws<BuildFailedException>(() => ProjectBuildResolver.Resolve("product", "Shipping", diagnostics: "Evidence"));
-            var b = ProjectBuildResolver.Resolve("player-release");
-            Assert.That(b.Kind, Is.EqualTo(BuildKind.Shipping)); Assert.That(b.Tools || b.Evidence || b.Development, Is.False);
+            settings.PurposeId = purpose; settings.Network = BuildNetwork.Kcp; settings.Distribution = BuildDistribution.Direct;
+            Validate(); Assert.That(ProjectBuildDefines.Expected(settings), Does.Contain("MONSTER_BUILD_TOOLS"));
+            Assert.That(ProjectBuildPurposes.Get(purpose).testAssemblies, Is.EqualTo(purpose != "sandbox" && purpose != "nordic"));
+            settings.BuildKind = BuildKind.Shipping; Assert.Throws<BuildFailedException>(() => Validate());
         }
-        [Test] public void ShippingDoesNotTrustAProductLabelOnASandbox()
+        [Test] public void ShippingAndKcpRejectUnsafeCombinations()
         {
-            var catalog = ProjectToolCatalog.Load();
-            catalog.builds.Single(b => b.id == "product").scenes = new[] { "Assets/_Project/Scenes/Development/NetworkCombatSandbox.unity" };
-            Assert.Throws<BuildFailedException>(() => ProjectBuildResolver.Resolve("product", "Shipping", catalog: catalog));
+            settings.BuildKind = BuildKind.Shipping; Validate(); Assert.Throws<BuildFailedException>(() => Validate(true));
+            settings.Distribution = BuildDistribution.Direct; Assert.Throws<BuildFailedException>(() => Validate());
+            settings.Network = BuildNetwork.Kcp; settings.BuildKind = BuildKind.Test; Assert.Throws<BuildFailedException>(() => Validate());
+            settings.BuildKind = BuildKind.Dev; Validate(true);
+            settings.Distribution = BuildDistribution.Steam; Assert.Throws<BuildFailedException>(() => Validate(true));
         }
-        [TestCase("MONSTER_MENU_VALIDATION")][TestCase("MONSTER_COMBAT_EVIDENCE")]
-        [TestCase("MONSTER_BUILD_TOOLS")][TestCase("MONSTER_KCP_DEVELOPMENT_BUILD")]
-        public void GlobalSymbolsCannotLeakIntoNormalProduct(string define) =>
-            Assert.Throws<BuildFailedException>(() => ProjectBuildResolver.ValidateProjectDefines(ProjectBuildResolver.Resolve(), new[] { define }));
-        [Test] public void KcpDistributionCannotPretendToBeASteamDepot()
+        [Test] public void WrongScenesOrSchemaCannotBypassPurposeRules()
         {
-            Assert.Throws<BuildFailedException>(() => ProjectBuildResolver.Resolve("product", "Dev", network: "Kcp", distribution: "Steam"));
-            Assert.That(ProjectBuildResolver.Resolve("kcp-development").Distribution, Is.EqualTo(BuildDistribution.Direct));
-            Assert.Throws<BuildFailedException>(() => ProjectBuildResolver.Resolve("product", "Test", network: "Kcp"));
+            Assert.Throws<BuildFailedException>(() => ProjectBuildResolver.ValidateBusiness(settings, false, new[] { "Assets/Other.unity" }));
+            settings.SchemaVersion = 99; Assert.Throws<BuildFailedException>(() => Validate());
         }
-        [Test] public void LegacyNonDevelopmentValidationRetainsTools()
+        [Test] public void ApplyingSymbolsRemovesOldGrantsAndPreservesUnrelatedSymbols()
         {
-            var b = ProjectBuildResolver.Resolve("enemy-handoff-release");
-            Assert.That(b.Development, Is.False); Assert.That(b.Tools && b.Recipe.testAssemblies, Is.True);
+            string[] current = { "MONSTER_BUILD_DEV", "MONSTER_BUILD_TOOLS", "MONSTER_MENU_VALIDATION", "ODIN_INSPECTOR", "MY_VALIDATION" };
+            string[] result = ProjectBuildDefines.Applied(current, ProjectBuildDefines.Expected(settings));
+            Assert.That(result, Is.EquivalentTo(new[] { "MONSTER_BUILD_TEST", "ODIN_INSPECTOR", "MY_VALIDATION" }));
+            Assert.That(ProjectBuildDefines.Difference(result, ProjectBuildDefines.Expected(settings)), Is.Empty);
+            Assert.That(ProjectBuildDefines.Difference(current, ProjectBuildDefines.Expected(settings)), Does.Contain("MONSTER_BUILD_TEST"));
+            Assert.That(ProjectBuildDefines.Difference(new[] { "MONSTER_BUILD_TEST", "UNITY_INCLUDE_TESTS" }, ProjectBuildDefines.Expected(settings)), Does.Contain("UNITY_INCLUDE_TESTS"));
         }
-        [Test] public void PointerInvalidationDoesNotDeleteOldFrozenPackage()
+        [Test] public void AllTemplatesPersistBusinessSettingsAndReadWithoutMutation()
         {
-            string id = "test-" + Guid.NewGuid().ToString("N"), path = ProjectBuildResults.PathFor(id);
-            Directory.CreateDirectory(Path.GetDirectoryName(path)); File.WriteAllText(path, "old pointer");
+            var profiles = AssetDatabase.FindAssets("t:BuildProfile", new[] { ProjectBuildTemplates.Root });
+            Assert.That(profiles.Length, Is.EqualTo(11));
+            var active = BuildProfile.GetActiveBuildProfile();
+            foreach (string guid in profiles)
+            {
+                string path = AssetDatabase.GUIDToAssetPath(guid); var bytes = File.ReadAllBytes(path);
+                var profile = AssetDatabase.LoadAssetAtPath<BuildProfile>(path);
+                Assert.That(profile.GetComponent<MonsterBuildSettings>(), Is.Not.Null);
+                var plan = ProjectBuildResolver.Resolve(profile); ProjectBuildResolver.ValidateDefines(plan);
+                Assert.That(plan.ProfileGuid, Is.EqualTo(guid));
+                Assert.That(File.ReadAllBytes(path), Is.EqualTo(bytes));
+                Assert.That(BuildProfile.GetActiveBuildProfile(), Is.EqualTo(active));
+            }
+        }
+        [Test] public void NativeOptionsAndExecutionAreValidatedIndependently()
+        {
+            var plan = ProjectBuildResolver.Resolve(ProjectBuildResolver.Load(ProjectBuildTemplates.Root + "/Windows-Test-Steam.asset"));
+            Assert.Throws<BuildFailedException>(() => ProjectBuildResolver.ValidateExecution(plan, new BuildExecutionRequest { runAfterBuild = true }));
+            Assert.Throws<BuildFailedException>(() => ProjectBuildResolver.ValidateExecution(plan, new BuildExecutionRequest { expectedContentHash = "stale" }));
+            Assert.DoesNotThrow(() => ProjectBuildResolver.ValidateExecution(plan, new BuildExecutionRequest { output = "Builds/Custom.exe", cleanBuildCache = true }));
+            Assert.Throws<BuildFailedException>(() => NativeBuildEntry.ValidateOptions(plan.ExpectedOptions | BuildOptions.Development, plan, false));
+        }
+        [Test] public void LegacyCallsCannotBuildOrReadOldPointers()
+        {
+            foreach (string id in ProjectToolCatalog.Load().buildAliases.Select(a => a.id)) Assert.Throws<BuildFailedException>(() => ProjectBuildResolver.Resolve(id));
+            Assert.Throws<BuildFailedException>(() => ProjectBuildService.Build("product"));
+            Assert.Throws<ArgumentException>(() => ProjectBuildResults.PathFor("product"));
+        }
+        [Test] public void PointerInvalidationIsProfileSpecific()
+        {
+            string id = Guid.NewGuid().ToString("N"), path = ProjectBuildResults.PathFor(id);
+            Directory.CreateDirectory(Path.GetDirectoryName(path)); File.WriteAllText(path, "old success");
             try { ProjectBuildResults.Invalidate(id); Assert.That(File.Exists(path), Is.False); }
             finally { if (File.Exists(path)) File.Delete(path); }
-            Assert.Throws<ArgumentException>(() => ProjectBuildResults.PathFor("../outside"));
-        }
-        [Test] public void RejectedBuildAttemptInvalidatesItsEarlierSuccess()
-        {
-            string[] paths = { ProjectBuildResults.PathFor("sandbox") };
-            string backup = File.Exists(paths[0]) ? File.ReadAllText(paths[0]) : null;
-            Directory.CreateDirectory(Path.GetDirectoryName(paths[0])); File.WriteAllText(paths[0], "previous success");
-            try
-            {
-                Assert.Throws<BuildFailedException>(() => ProjectBuildService.Build("sandbox", buildKind: "Shipping"));
-                Assert.That(File.Exists(paths[0]), Is.False);
-                Assert.That(ProjectBuildIdentity.LastInfoPath, Is.Null);
-            }
-            finally { if (backup != null) File.WriteAllText(paths[0], backup); else if (File.Exists(paths[0])) File.Delete(paths[0]); }
-        }
-        [Test] public void FailedPointerPublicationDoesNotLeavePartialSuccess()
-        {
-            var catalog = ProjectToolCatalog.Load();
-            var alias = catalog.buildAliases.First(a => a.id == "imp");
-            string aliasId = "test-" + Guid.NewGuid().ToString("N"), recipeId = "test-" + Guid.NewGuid().ToString("N");
-            alias.id = aliasId; alias.recipe = recipeId;
-            catalog.builds.Single(b => b.id == "gameplay-validation").id = recipeId;
-            var build = ProjectBuildResolver.Resolve(aliasId, catalog: catalog);
-            string blocked = ProjectBuildResults.PathFor(recipeId);
-            Directory.CreateDirectory(blocked);
-            try
-            {
-                var info = new BuildInfo("0.0.0", BuildKind.Dev, "id", "", false, true, DateTime.UtcNow.ToString("O"), "Unity", "Windows", "x64", true, recipeId);
-                Assert.Throws<IOException>(() => ProjectBuildResults.Save(build, "Temp/unused.exe", info));
-                Assert.That(File.Exists(ProjectBuildResults.PathFor(aliasId)), Is.False);
-                Assert.That(File.Exists(ProjectBuildResults.PathFor(aliasId) + ".tmp"), Is.False);
-                Assert.That(File.Exists(blocked + ".tmp"), Is.False);
-            }
-            finally { Directory.Delete(blocked); ProjectBuildResults.Invalidate(aliasId, recipeId); }
         }
     }
 }

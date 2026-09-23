@@ -1,6 +1,6 @@
 # 项目编辑器工具使用指南
 
-2026-09-22：打包只使用「构建配置」中的日常／专项页面。当前七个配方、旧 36 个 ID 去向及操作速查见 [统一打包指南](../build-guide.md)。本文中的历史验收报告保持原日期，不代表当前构建重新通过。
+2026-09-23：构建统一使用原生 Build Profile 与业务子资产。旧构建配方／覆盖参数已停用，旧脚本保留待审查；操作速查见 [统一打包指南](../build-guide.md)。本文中的历史验收报告保持原日期，不代表当前构建重新通过。
 
 项目菜单统一为 **MonsterSupergroup**。日常入口集中在“制作、校验、构建与验收、联机诊断”；历史导入、覆盖默认配置、初始化场景和样例工具进入“维护与样例”。
 
@@ -21,14 +21,14 @@
 | 为新内容绑定翻译 | 工具中心 → 创建内容本地化条目；选中目标资产 | `create.localization-entries -AssetPath ... -Apply` |
 | 新增 GAS Modifier 类型 | 工具中心 → 生成 GAS 注册表 | `generate.gas-registry -Apply`，然后 `validate.gas` |
 | 本机多人验收 | Development 包中的“创建本地主机 / 加入本地主机” | `build.player`，然后 `test.local-room` |
-| Steam 自动战斗日志与回放 | 日常打包 → Test → 故障取证；见 [使用说明](../combat-evidence.md) | `build.player -Profile product -Diagnostics Evidence`；`Tools/CombatEvidence.py` 离线查询 |
+| Steam 自动战斗日志与回放 | 选择 Windows-Test-Evidence Profile；见 [使用说明](../combat-evidence.md) | `build.player -BuildProfile <Windows-Test-Evidence.asset 路径>`；`Tools/CombatEvidence.py` 离线查询 |
 | 无测试代码的 Player 与退出检查 | 日常打包 → 产品；按目的选 Dev／Test／Shipping | `test.player-exit`，见 [退出验证说明](../player-exit-validation.md) |
 | 高频仇恨交接 | Play Mode Host → 联机诊断 → 仇恨交接控制 | `test.enemy-handoff -Profile normal` 或 `impaired` |
 | 查看武器表现 | 工具中心 → 表现预览 | `preview.attack -Profile beam` 等，要求图形设备 |
 | 查看大招表现 | 在空场景进入 Play Mode 后运行 `preview.ultimate` | 单独调用 `preview.ultimate`；执行器会等待 Play Mode 采集完成 |
 | 重新导入参考资源 | 维护与样例中选择明确的内容导入 | 提供 `-Source` 与 `-Apply` |
 | 修复 Prefab 绑定 | 先校验，再使用相应维护工具并确认 | `repair.player-prefab -Apply` 或对应怪物迁移 ID |
-| 制作 Nordic / GAS 样例 | 维护与样例 | 独立样例工具与 `build.player -Profile nordic` |
+| 制作 Nordic / GAS 样例 | 维护与样例 | 独立样例工具与 `build.player -BuildProfile <Windows-Dev-Nordic.asset 路径>` |
 
 “AI 可调用”意味着参数和结果明确，不代表可以省略视觉核验。截图产出后仍需检查画面。Steam 状态、叠加层和运行中 Host 交接控制依赖当前 Editor 会话，批处理不会新建一场游戏冒充诊断成功。
 
@@ -40,8 +40,8 @@
 ./Tools/Invoke-ProjectTool.ps1 -List
 ./Tools/Invoke-ProjectTool.ps1 -ToolId build.player -Help
 ./Tools/Invoke-ProjectTool.ps1 -ToolId validate.localization -Unity '<Unity目录>/Editor/Unity.exe'
-./Tools/Invoke-ProjectTool.ps1 -ToolId build.player -Profile product
-./Tools/Invoke-ProjectTool.ps1 -ToolId build.player -Profile gameplay-validation
+./Tools/Invoke-ProjectTool.ps1 -ToolId build.player -BuildProfile 'Assets/Settings/Build Profiles/Windows-Test-Steam.asset'
+./Tools/Invoke-ProjectTool.ps1 -ToolId build.player -BuildProfile 'Assets/Settings/Build Profiles/Windows-Dev-Gameplay.asset'
 ./Tools/Invoke-ProjectTool.ps1 -ToolId test.local-room -Profile party -Port 7777
 ./Tools/Invoke-ProjectTool.ps1 -ToolId test.preparation-menu -Profile local-party -Port 7778 -Headless -MixedLanguages
 ./Tools/Invoke-ProjectTool.ps1 -ToolId test.enemy-handoff -Profile impaired -Duration 120
@@ -61,7 +61,7 @@ Unity 路径可通过 `-Unity` 或当前进程的 `UNITY_EDITOR_PATH` 环境变�
 
 - **只读校验 / 预览 / 构建：**不执行导入、迁移或创建默认资源。正式 Content、Localization、Scenes、UI、Resources、MonoBehaviour 文件会进行前后哈希对比；发现变化则报告失败，不自动覆盖或回滚用户修改。
 - **维护：**统一入口要求 `-Apply`；人工界面确认后执行。影响包括 Prefab 组件、数据库默认值、经验曲线、场景注册或生成代码，具体看该工具的说明。不要把恢复默认配置当成一般校验。
-- **构建：**场景、宏、Development、测试程序集由 Profile 指定。常规验收使用 Boot → MainMenu → Gameplay。Sandbox / Nordic 使用独立场景。Wisp 测试的构建场景探针仍保留，资源导入已拆出。
+- **构建：**场景和 Development 由原生 Profile 保存，宏和测试程序集由业务用途派生。常规验收使用 Boot → MainMenu → Gameplay。Sandbox / Nordic 使用独立场景。Wisp 测试的构建场景探针仍保留，资源导入已拆出。
 - **资源缺失：**明确失败；需要先单独运行对应维护操作，不会通过构建重新生成并覆盖已有内容。
 - **预览：**要求图形设备时不加 `-nographics`。大招预览会跨 Play Mode 等待，未完成状态不算成功。
 - **报告：**每次调用写入 `Logs/ProjectTools/<时间>-<ID>/`，包含日志、结果 JSON、耗时、错误和产物位置；各测试保留原来的详细日志目录。`Logs/ProjectTools/<ID>.json` 是该工具最近结果。

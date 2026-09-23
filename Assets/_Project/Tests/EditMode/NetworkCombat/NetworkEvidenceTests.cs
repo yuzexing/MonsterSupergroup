@@ -24,18 +24,39 @@ namespace MonsterSupergroup.NetworkCombat.Tests
         private IDiagnosticSink previous;
         private Sink sink;
         private Scene originalScene, testScene;
+        private bool originalSceneWasDirty;
         [SetUp] public void SetUp()
         {
             previous = CombatEvidence.Sink; CombatEvidence.Sink = sink = new Sink();
             originalScene = SceneManager.GetActiveScene();
-            testScene = EditorSceneManager.NewScene(NewSceneSetup.EmptyScene, NewSceneMode.Additive);
-            SceneManager.SetActiveScene(testScene);
+            originalSceneWasDirty = originalScene.IsValid() && originalScene.isDirty;
+            // A preview scene works in EditMode without replacing or saving an untitled scene.
+            try
+            {
+                testScene = EditorSceneManager.NewPreviewScene();
+            }
+            catch
+            {
+                CombatEvidence.Sink = previous;
+                if (originalScene.IsValid() && originalScene.isLoaded) SceneManager.SetActiveScene(originalScene);
+                if (testScene.IsValid() && testScene.isLoaded) EditorSceneManager.ClosePreviewScene(testScene);
+                throw;
+            }
         }
         [TearDown] public void TearDown()
         {
             CombatEvidence.Sink = previous;
             if (originalScene.IsValid() && originalScene.isLoaded) SceneManager.SetActiveScene(originalScene);
-            if (testScene.IsValid() && testScene.isLoaded) EditorSceneManager.CloseScene(testScene, true);
+            if (testScene.IsValid() && testScene.isLoaded) EditorSceneManager.ClosePreviewScene(testScene);
+            if (originalScene.IsValid() && originalScene.isLoaded)
+                Assert.That(originalScene.isDirty, Is.EqualTo(originalSceneWasDirty), "Evidence tests must not alter the original scene's unsaved state.");
+        }
+
+        private GameObject CreateActorObject(string name)
+        {
+            var obj = new GameObject(name) { hideFlags = HideFlags.HideAndDontSave };
+            SceneManager.MoveGameObjectToScene(obj, testScene);
+            return obj;
         }
 
         [Test] public void BatchedMessagesRetainPayloadIdentityWithoutKeepingPayloads()
@@ -102,7 +123,7 @@ namespace MonsterSupergroup.NetworkCombat.Tests
 
         [Test] public void PositiveHealthAfterPredictedDeathExplainsRetainedLocalState()
         {
-            var obj = new GameObject("Canonical health evidence");
+            var obj = CreateActorObject("Canonical health evidence");
             try
             {
                 var actor = obj.AddComponent<CombatantBehaviour>(); actor.Initialize(100); actor.ConfigureEntityId(100);
@@ -119,7 +140,7 @@ namespace MonsterSupergroup.NetworkCombat.Tests
 
         [Test] public void PermissionEvidenceDistinguishesIndependentInvulnerabilitySources()
         {
-            var obj = new GameObject("Independent permission evidence");
+            var obj = CreateActorObject("Independent permission evidence");
             try
             {
                 var actor = obj.AddComponent<CombatantBehaviour>(); actor.ConfigureEntityId(12);

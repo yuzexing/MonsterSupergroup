@@ -1,13 +1,13 @@
 # 自动战斗证据与回放
 
-从正常 Boot 启动后自动记录；没有 F8、现场保存按钮、问题标记广播或云端上传。使用 `steam-evidence` 构建配置时，非 Development 包也默认开启。Steam 房间协议为 **6**，参与联机的所有玩家必须更新。
+从正常 Boot 启动后自动记录；没有 F8、现场保存按钮、问题标记广播或云端上传。使用 `product / Test / Steam / Direct / Evidence` 完整构建时，非 Development 包也默认开启。Steam 房间协议为 **6**，参与联机的所有玩家必须更新。本文描述当前设计；本阶段执行入口、快照身份与未完成验收见 [续作验证合同](combat-evidence-next-validation.md)，历史测试数量不能代表当前源码已验收。
 
 ## 给测试者
 
 制作测试包：
 
 ```powershell
-./Tools/Invoke-ProjectTool.ps1 -ToolId build.player -Profile steam-evidence
+./Tools/Invoke-CombatEvidenceValidation.ps1 -Unity 'D:\RealSoftware\6000.3.21f1\Editor\Unity.exe' -Mode Build
 ```
 
 照常通过 Steam 创建、加入房间。日志默认在：
@@ -97,7 +97,7 @@ Host 的 Server、Owner、Replica 分开标记。实体的本机出生记录引�
 
 传输流程为来源写盘 → Host 接收保存 → Host 向其他在线客户端转发。每个方向最多四个文件传输，32 KiB 数据块，gzip 压缩、SHA-256 校验、落盘后确认、丢失确认后恢复偏移。文件复制先写 `.partial`，完成已声明区间后再替换可读文件。复制本身只输出汇总与故障，避免递归记录每个诊断包。
 
-日志格式、复制协议、回放格式目前均为 1，与房间协议 6 分开版本化。传输适配器是 `IDiagnosticReplicationTransport`，业务入口是 `IDiagnosticSink.TryWrite`。
+日志格式、复制协议、回放格式目前均为 2，与房间协议 6 分开版本化。离线工具继续读取旧 v1 日志；`gzip-jsonl-v1` 等块编码名称有自己的版本号，不表示外层日志仍是 v1。传输适配器是 `IDiagnosticReplicationTransport`，业务入口是 `IDiagnosticSink.TryWrite`。
 
 ## 离线查询
 
@@ -148,7 +148,7 @@ python Tools/CombatEvidence.py --db combat.sqlite extract --capture CAPTURE_ID -
 
 自动化覆盖：精确状态序列化、重复事件与批次水位、DOT 恢复、旧 Owner、Replica 乱序、日志开关不改变结果、三端转发/断线/确认丢失、队列过载、序列化失败、截断尾行、容量清理、后台写盘前的数组隔离、离线副本去重与输入提取。原始运行证据和样例位于 `Logs/CombatEvidenceValidation/`。
 
-本次验证结果（2026-09-22）：
+历史验证记录（2026-09-22，保留用于追溯，不作为 2026-09-23 工作区的通过声明）：
 
 - 新增故障与回放测试 17 项通过（16 项整组及新增磁盘故障恢复测试），包含旧对局复制积压时切换新对局；Python 离线工具测试 6/6 通过。
 - 开启本地详细采集的 PlayMode 测试 35/35 通过，37 个来源正常结束，无已记录采集缺口。
@@ -158,12 +158,12 @@ python Tools/CombatEvidence.py --db combat.sqlite extract --capture CAPTURE_ID -
 
 回放检查曾定位到日志共用数组被后续命中特效位置更新的问题；已在入队时复制相关数组，并添加回归测试。原始失败证据仍保留，便于比较修复前后的采集行为。
 
-真实 Steam 验收仍需要两台机器运行同一 `steam-evidence` 包，分别做三组：
+真实 Steam 验收仍需要两台机器运行同一个成功的 `product / Test / Steam / Direct / Evidence` 包，分别做三组：
 
 1. `--no-combat-evidence --network-diagnostics`：业务基线。
-2. `--combat-evidence-local-only`：本地采集开销。
-3. 不加参数：全端采集与复制。
+2. `--combat-evidence-local-only --network-diagnostics`：本地采集开销。
+3. `--combat-evidence --network-diagnostics`：全端采集与复制。
 
 维持相同画质、分辨率和测试路线，覆盖第一波、50/200/500 只怪、高输出清场、Owner 交接、Client 断线重连、Host 不可达。每组记录两端帧耗时分布、GC、Steam 队列、待确认死亡和诊断队列。主线程 P95 增量 ≤1 ms、P99 ≤3 ms 是待实测的目标，不能由无界面单元测试推导达标。
 
-目前的真实输入回放验证来自 Unity 自动运行日志。要完成“此次 Steam 故障的同一输入在旧代码失败、修复后通过”的验收，还需要更新后的 Steam 包产生该故障日志；现有旧包未采集这类证据，不能追溯补造。
+现有可追溯输入包括 Unity 自动运行日志，以及事故目录内另一场 KCP 单人运行提取的两份夹具；后者的来源审计与实际回放结果分开保存。它们都不能替代旧 Steam 对局缺失的结构化现场。要完成“此次 Steam 业务故障的同一输入在旧代码失败、修复后通过”，还需要新同包双机日志、明确业务断言和对应红绿结果，不能追溯补造。

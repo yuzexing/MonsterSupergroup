@@ -1,0 +1,59 @@
+{
+  "schemaVersion": 1,
+  "kind": "UnfilledManualSteamCaptureTemplate",
+  "readyToRun": false,
+  "identityCollector": "Tools/Scenarios/Export-SteamEvidence.ps1",
+  "buildConfiguration": {
+    "recipe": "product",
+    "buildKind": "Test",
+    "network": "Steam",
+    "distribution": "Direct",
+    "diagnostics": "Evidence",
+    "development": false
+  },
+  "package": {
+    "successfulExecutable": null,
+    "buildId": null,
+    "buildGuid": null,
+    "protocol": null,
+    "buildInfoSha256": null,
+    "combatBuildManifestSha256": null,
+    "replaySourceArchiveSha256": null,
+    "hostMachineProof": null,
+    "clientMachineProof": null,
+    "hostRuntimeMachineProof": null,
+    "clientRuntimeMachineProof": null
+  },
+  "modes": {
+    "off": ["--no-combat-evidence", "--network-diagnostics"],
+    "local": ["--combat-evidence-local-only", "--network-diagnostics"],
+    "replicated": ["--combat-evidence", "--network-diagnostics"]
+  },
+  "case": {
+    "mode": null,
+    "plannedEnemyCount": null,
+    "repeat": null,
+    "minimumSeconds": 180,
+    "targetHz": 144,
+    "displaySettings": null,
+    "scene": null,
+    "scenario": null,
+    "startedUtc": null,
+    "finishedUtc": null,
+    "actualAliveDistribution": null,
+    "runId": null
+  },
+  "endpoints": [
+    {"role": "Host", "actualExecutable": null, "captureId": null, "hardware": null, "artifactDirectory": null},
+    {"role": "Client", "actualExecutable": null, "captureId": null, "hardware": null, "artifactDirectory": null}
+  ],
+  "requiredArtifactsPerEndpoint": [
+    "Player.log", "Player-prev.log", "CombatDiagnostics (whole directory, except off mode)",
+    "NetworkDiagnostics performance files", "exact command line", "package identity and hashes", "hardware and display settings"
+  ],
+  "observedIncident": null,
+  "coverageVerdict": "NotMeasured",
+  "replayVerdict": "NotExecuted",
+  "businessFaultReproduced": false,
+  "businessFaultFixed": false
+}

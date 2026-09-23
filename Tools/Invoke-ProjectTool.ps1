@@ -1,6 +1,7 @@
 [CmdletBinding()]
 param(
     [switch]$List, [switch]$Help, [string]$ToolId,
+    [string]$BuildProfile, [switch]$CleanBuildCache, [switch]$RunAfterBuild,
     [string]$Profile, [ValidateSet("Dev","Test","Shipping")][string]$BuildKind, [ValidateSet("true","false")][string]$Development, [switch]$UniqueOutput, [int]$Port, [string]$AssetPath, [string]$Source, [string]$Output,
     [ValidateSet('Steam','Kcp')][string]$Network, [ValidateSet('Steam','Direct')][string]$Distribution, [ValidateSet('Normal','Evidence')][string]$Diagnostics,
     [string]$Unity, [string]$Executable, [switch]$Apply, [switch]$ScriptsOnly,
@@ -18,9 +19,8 @@ if (-not $tool) { throw "Unknown ToolId '$ToolId'. Use -List." }
 if ($Help) {
     $tool | ConvertTo-Json -Depth 10
     if ($ToolId -eq 'build.player') {
-        $catalog.builds | Format-Table id,name,development,testAssemblies -AutoSize
-        Write-Output 'Daily default: product / Test / Steam / Steam distribution / Normal. Build does not change the game version.'
-        if ($catalog.buildAliases) { $catalog.buildAliases | Format-Table id,recipe,kind,network,diagnostics -AutoSize }
+        Get-ChildItem -LiteralPath (Join-Path $projectRoot 'Assets/Settings/Build Profiles') -Filter '*.asset' | Select-Object Name
+        Write-Output 'Specify -BuildProfile Assets/Settings/Build Profiles/<name>.asset. Legacy recipes and business overrides are disabled.'
     }
     if ($tool.script) {
         $definition = Get-Command (Join-Path $PSScriptRoot ('Scenarios/' + [IO.Path]::GetFileName($tool.script)))
@@ -65,10 +65,11 @@ try {
     if (-not $tool.script) {
         $values = @{}
         foreach ($key in $Parameters.Keys) { $values[$key] = $Parameters[$key] }
-        foreach ($key in @('Profile','Port','AssetPath','Source','Output','Unity','Executable','Apply','ScriptsOnly','BuildKind','Development','UniqueOutput','Network','Distribution','Diagnostics')) {
+        foreach ($key in @('Profile','Port','AssetPath','Source','Output','Unity','Executable','Apply','ScriptsOnly','BuildKind','Development','UniqueOutput','Network','Distribution','Diagnostics','BuildProfile','CleanBuildCache','RunAfterBuild')) {
             if ($PSBoundParameters.ContainsKey($key)) { $values[$key] = $PSBoundParameters[$key] }
         }
         $values = Convert-ProjectToolParameters -Tool $tool -Values $values
+        $BuildProfile = $values.BuildProfile; $CleanBuildCache = [bool]$values.CleanBuildCache; $RunAfterBuild = [bool]$values.RunAfterBuild
         $Profile = $values.Profile; $AssetPath = $values.AssetPath; $Source = $values.Source
         $Output = $values.Output; $Unity = $values.Unity
         $Apply = [bool]$values.Apply; $ScriptsOnly = [bool]$values.ScriptsOnly
@@ -97,8 +98,15 @@ try {
         $unityResult = Join-Path $folder 'unity-result.json'
         $unityLog = Join-Path $folder 'unity.log'
         $arguments = @('-batchmode','-projectPath',('"' + $projectRoot + '"'),'-logFile',('"' + $unityLog + '"'),
-            '-executeMethod','MonsterSupergroup.EditorTools.ProjectToolRunner.Batch','-toolId',$ToolId,'-toolResult',('"' + $unityResult + '"'))
+            '-executeMethod',$(if ($ToolId -eq 'build.player') { 'MonsterSupergroup.EditorTools.NativeBuildEntry.Batch' } else { 'MonsterSupergroup.EditorTools.ProjectToolRunner.Batch' }),'-toolId',$ToolId,'-toolResult',('"' + $unityResult + '"'))
         if (-not $tool.graphics) { $arguments += '-nographics' }
+        if ($ToolId -eq 'build.player') {
+            $null = Get-ProjectBuildProfileGuid -ProjectRoot $projectRoot -BuildProfile $BuildProfile
+            if ($BuildProfile.Contains('"')) { throw 'Profile path cannot contain quotes.' }
+            $arguments += @('-activeBuildProfile', ('"' + $BuildProfile.Replace('\','/') + '"'))
+            if ($CleanBuildCache) { $arguments += '-toolCleanBuildCache' }
+            if ($RunAfterBuild) { $arguments += '-toolRunAfterBuild' }
+        }
         foreach ($pair in @(@('-toolProfile',$Profile),@('-toolAsset',$AssetPath),@('-toolSource',$Source),@('-toolOutput',$Output),@('-toolBuildKind',$toolBuildKind),@('-toolDevelopment',$toolDevelopment),@('-toolNetwork',$toolNetwork),@('-toolDistribution',$toolDistribution),@('-toolDiagnostics',$toolDiagnostics))) {
             if ($pair[1]) {
                 if ($pair[1].Contains('"')) { throw 'A quoted path/value is not supported; pass the unquoted value as one PowerShell argument.' }

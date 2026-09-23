@@ -14,6 +14,11 @@ namespace MonsterSupergroup.Builds
         [SerializeField] private bool gitValid, dirty, development;
         [SerializeField] private string network = "Steam", distribution = "Steam", diagnostics = "Normal";
         [SerializeField] private bool testAssemblies, developmentTools, evidence;
+        [SerializeField] private string profileGuid, profilePath, contentHash, inputHash;
+        public string ProfileGuid => profileGuid;
+        public string ProfilePath => profilePath;
+        public string ContentHash => contentHash;
+        public string InputHash => inputHash;
         public string GameVersion => gameVersion;
         public string Kind => kind;
         public string BuildId => buildId;
@@ -45,12 +50,18 @@ namespace MonsterSupergroup.Builds
             testAssemblies = tests; developmentTools = tools; this.evidence = evidence;
         }
         public string ToJson() => JsonUtility.ToJson(this, true);
+        public void SetProfile(string guid, string path, string configurationHash, string sourceHash)
+        {
+            schema = 3; profileGuid = guid; profilePath = path; contentHash = configurationHash; inputHash = sourceHash;
+        }
         public static BuildInfo FromJson(string json) => JsonUtility.FromJson<BuildInfo>(json);
         public string Validate(string actualVersion, bool actualDevelopment, BuildKind compiledKind)
         {
-            if (schema != 2 || !global::MonsterSupergroup.Builds.GameVersion.TryParse(gameVersion, out _) || string.IsNullOrWhiteSpace(buildId) ||
+            if ((schema != 2 && schema != 3) || !global::MonsterSupergroup.Builds.GameVersion.TryParse(gameVersion, out _) || string.IsNullOrWhiteSpace(buildId) ||
                 !DateTimeOffset.TryParse(builtUtc, out _) || string.IsNullOrEmpty(unityVersion) ||
                 string.IsNullOrEmpty(platform) || string.IsNullOrEmpty(architecture) || string.IsNullOrEmpty(profile)) return "构建信息缺失或格式无效。";
+            if (schema == 3 && (profileGuid?.Length != 32 || contentHash?.Length != 64 || inputHash?.Length != 64 ||
+                string.IsNullOrEmpty(profilePath) || !profilePath.StartsWith("Assets/", StringComparison.Ordinal))) return "原生 Profile 身份或计划摘要缺失。";
             if ((network != "Steam" && network != "Kcp") || (distribution != "Steam" && distribution != "Direct") ||
                 (diagnostics != "Normal" && diagnostics != "Evidence") || evidence != (diagnostics == "Evidence"))
                 return "构建用途或诊断配置缺失或无效。";
@@ -76,13 +87,13 @@ namespace MonsterSupergroup.Builds
 #else
             BuildKind.Dev;
 #endif
-        private static bool ToolsCompiled =>
+        public static bool ToolsCompiled =>
 #if MONSTER_BUILD_TOOLS
             true;
 #else
             false;
 #endif
-        private static bool EvidenceCompiled =>
+        public static bool EvidenceCompiled =>
 #if MONSTER_BUILD_EVIDENCE
             true;
 #else
@@ -90,6 +101,12 @@ namespace MonsterSupergroup.Builds
 #endif
         public static bool DevelopmentToolsAllowed => CapabilityAllowed(CompiledKind, ToolsCompiled, Application.isEditor);
         public static bool EvidenceAllowed => CapabilityAllowed(CompiledKind, EvidenceCompiled, Application.isEditor);
+        public static string CompiledNetwork =>
+#if MONSTER_KCP_DEVELOPMENT_BUILD && !UNITY_EDITOR
+            "Kcp";
+#else
+            "Steam";
+#endif
         public static bool CapabilityAllowed(BuildKind kind, bool capabilityCompiled, bool isEditor) =>
             isEditor || (kind != BuildKind.Shipping && capabilityCompiled);
     }
@@ -112,6 +129,7 @@ namespace MonsterSupergroup.Builds
         {
             EnsureLoaded();
             Debug.Log("[BuildInfo] " + (Application.isEditor ? Display : current?.ToJson() ?? "missing") + (error == null ? "" : "\n" + error));
+            if (!Application.isEditor) Debug.Log($"[CompiledBuild] kind={BuildFeatures.CompiledKind} tools={BuildFeatures.ToolsCompiled} evidence={BuildFeatures.EvidenceCompiled} network={BuildFeatures.CompiledNetwork} development={Debug.isDebugBuild} version={Application.version} buildId={current?.BuildId} valid={error == null}");
         }
         private static void EnsureLoaded()
         {
@@ -123,6 +141,7 @@ namespace MonsterSupergroup.Builds
                 current = BuildInfo.FromJson(File.ReadAllText(Path.Combine(Application.streamingAssetsPath, "BuildInfo.json")));
                 error = current == null ? "包内 BuildInfo 缺失。" : current.Validate(Application.version, Debug.isDebugBuild, BuildFeatures.CompiledKind);
                 if (error == null) error = current.ValidateCapabilities(BuildFeatures.DevelopmentToolsAllowed, BuildFeatures.EvidenceAllowed);
+                if (error == null && current.Network != BuildFeatures.CompiledNetwork) error = "包内网络信息与实际编译配置不一致。";
             }
             catch (Exception exception) when (exception is IOException || exception is UnauthorizedAccessException || exception is ArgumentException)
             { error = "无法读取包内构建信息：" + exception.Message; }

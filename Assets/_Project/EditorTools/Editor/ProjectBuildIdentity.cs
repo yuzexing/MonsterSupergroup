@@ -38,7 +38,7 @@ namespace MonsterSupergroup.EditorTools
         public static string NewId() => DateTime.UtcNow.ToString("yyyyMMdd'T'HHmmssfff'Z'", CultureInfo.InvariantCulture) + "-" + Guid.NewGuid().ToString("N").Substring(0, 8);
         public static BuildInfo Capture(ProjectBuildProfile profile, BuildKind kind, bool development)
         {
-            string version = GameVersion.Parse(PlayerSettings.bundleVersion).ToString();
+            string version = GameVersion.Parse(NativeBuildProfileSettings.GlobalVersion).ToString();
             string commit = null, status = null, gitError = null;
             try
             {
@@ -81,7 +81,7 @@ namespace MonsterSupergroup.EditorTools
             ValidateShippingSource(Active);
             string path = InfoPath(ActiveOutput); Directory.CreateDirectory(Path.GetDirectoryName(path));
             File.WriteAllText(path, Active.ToJson(), new System.Text.UTF8Encoding(false));
-            string error = BuildInfo.FromJson(File.ReadAllText(path)).Validate(PlayerSettings.bundleVersion,
+            string error = BuildInfo.FromJson(File.ReadAllText(path)).Validate(NativeBuildProfileSettings.GlobalVersion,
                 (report.summary.options & BuildOptions.Development) != 0, Enum.Parse<BuildKind>(Active.Kind, true));
             if (error != null) { File.Delete(path); throw new BuildFailedException(error); }
             File.WriteAllText(Path.Combine(Path.GetDirectoryName(ActiveOutput), "build-complete.json"), Active.ToJson(), new System.Text.UTF8Encoding(false));
@@ -115,12 +115,27 @@ namespace MonsterSupergroup.EditorTools
                 (report.summary.options & BuildOptions.BuildScriptsOnly) != 0 ||
                 ((report.summary.options & BuildOptions.Development) != 0) != Active.Development)
                 throw new BuildFailedException("实际构建参数与已确认配置不一致。");
+            var plan = ProjectBuildService.ActivePlan;
+            if (plan == null) throw new BuildFailedException("缺少原生 Profile 构建计划，禁止绕过统一服务。");
+            NativeBuildEntry.ValidateOptions(report.summary.options, plan, false);
         }
+        public static void SetLastInfoPath(string output) => LastInfoPath = InfoPath(output);
+        public static void Cleanup()
+        {
+            var handlers = BuildFinished;
+            BuildFinished = null;
+            var errors = new System.Collections.Generic.List<Exception>();
+            if (handlers != null)
+                foreach (Action handler in handlers.GetInvocationList())
+                    try { handler(); } catch (Exception e) { errors.Add(e); }
+            if (errors.Count != 0) throw new AggregateException("构建清理失败。", errors);
+        }
+        public static void ResetContext() { Active = null; ActiveOutput = null; }
         public static void End()
         {
-            try { BuildFinished?.Invoke(); }
+            try { Cleanup(); }
             catch { InvalidateOutput(); throw; }
-            finally { Active = null; ActiveOutput = null; }
+            finally { ResetContext(); }
         }
     }
     public sealed class ProjectBuildGuard : IPreprocessBuildWithReport

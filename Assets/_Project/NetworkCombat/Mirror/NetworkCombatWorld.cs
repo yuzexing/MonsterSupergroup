@@ -234,16 +234,49 @@ namespace MonsterSupergroup.NetworkCombat
 
         private void ApplyCanonicalForRound(CanonicalWorldBatch batch, uint round)
         {
-            if (CombatEvidence.Enabled) CombatEvidence.Event("Replica", "network.canonical", round == CurrentRound ? "Received" : "Ignored",
-                round == CurrentRound ? null : "WrongRound", input: new { incomingRound = round, batch = Diagnostics.DiagnosticPayload.Freeze(batch) }, server: batch.ServerSequence);
-            if (round == CurrentRound) ApplyCanonical(batch);
+            Diagnostics.SharedEvidencePayload shared = null;
+            if (CombatEvidence.Enabled && round == CurrentRound &&
+                (batch.EnemyHitPresentations == null || batch.EnemyHitPresentations.Length == 0) &&
+                CombatEvidence.Sink is Diagnostics.IDiagnosticSharedPayloadSink sharedSink)
+            {
+                // Hit presentation invokes external callbacks before Replica.Apply. Those batches need independent versions.
+                try { Diagnostics.SharedEvidencePayload.TryCapture(batch, sharedSink.Memory, out shared); }
+                catch (Exception error)
+                {
+                    CombatEvidence.ReportCaptureFailure(new DiagnosticRecord { role = "Replica", stage = "network.canonical",
+                        serverSequence = batch.ServerSequence, round = round }, error);
+                }
+            }
+            using (shared)
+            {
+                if (CombatEvidence.Enabled)
+                {
+                    try
+                    {
+                        // A supporting sink freezes ordinary payloads after its budget reservation; legacy sinks need a detached value now.
+                        object payload = shared ?? (CombatEvidence.Sink is Diagnostics.IDiagnosticSharedPayloadSink
+                            ? (object)batch : Diagnostics.DiagnosticPayload.Freeze(batch));
+                        CombatEvidence.Event("Replica", "network.canonical", round == CurrentRound ? "Received" : "Ignored",
+                            round == CurrentRound ? null : "WrongRound", input: new Diagnostics.CanonicalReceiveEvidence { incomingRound = round, batch = payload },
+                            server: batch.ServerSequence);
+                    }
+                    catch (Exception error)
+                    {
+                        CombatEvidence.ReportCaptureFailure(new DiagnosticRecord { role = "Replica", stage = "network.canonical",
+                            serverSequence = batch.ServerSequence, round = round }, error);
+                    }
+                }
+                if (round == CurrentRound) ApplyCanonicalWithEvidence(batch, shared);
+            }
         }
 
-        private void ApplyCanonical(CanonicalWorldBatch batch)
+        private void ApplyCanonical(CanonicalWorldBatch batch) => ApplyCanonicalWithEvidence(batch, null);
+
+        private void ApplyCanonicalWithEvidence(CanonicalWorldBatch batch, Diagnostics.SharedEvidencePayload shared)
         {
             // Present live damage before applying a lethal state can disable the actor.
             PresentConfirmedEnemyHits(batch.EnemyHitPresentations);
-            Replica.Apply(batch);
+            Replica.ApplyWithEvidence(batch, shared);
             CanonicalBatchReceived?.Invoke(batch);
             // Host may already have despawned these Enemies before this queued RPC.
             // Notify first: Debug owns its short-lived death rows independently.

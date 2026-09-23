@@ -45,12 +45,15 @@ namespace MonsterSupergroup.NetworkCombat.Tests
                 var expected = new Workload(controllers, duration);
                 for (int frame = 0; frame < frames; frame++) expected.Step(frame);
                 string expectedHash = expected.Digest();
+                var failures = new List<string>();
                 for (int repeat = 1; repeat <= repeats; repeat++)
                 {
                     string directory = Path.Combine(root, controllers + "-" + mode[0] + "-" + repeat + "-" + Guid.NewGuid().ToString("N").Substring(0, 8));
                     Directory.CreateDirectory(directory);
-                    RunOne(directory, controllers, mode, duration, frames, catchup, expectedHash, repeat);
+                    try { RunOne(directory, controllers, mode, duration, frames, catchup, expectedHash, repeat); }
+                    catch (AssertionException error) { failures.Add("Repeat " + repeat + ": " + error.Message); }
                 }
+                Assert.That(failures, Is.Empty, string.Join(Environment.NewLine, failures));
             }
             finally { CombatEvidence.Sink = saved; }
         }
@@ -70,6 +73,8 @@ namespace MonsterSupergroup.NetworkCombat.Tests
             bool allocationMeasurementAvailable = ProbeAllocationCounter(out string allocationMeasurementReason);
             int[] collections = new int[3];
             double elapsed = 0, catchupElapsed = 0;
+            long drainTicks = 0, drainCoverageChecks = 0;
+            double drainTickSpan = 0;
             bool matched = false, caughtUp = mode != "replicated";
             object missing = Array.Empty<object>();
             string actualHash = null, failure = null;
@@ -124,15 +129,29 @@ namespace MonsterSupergroup.NetworkCombat.Tests
                 if (stores.Count > 0)
                 {
                     var drain = Stopwatch.StartNew();
-                    do
+                    double firstTick = 0, nextCoverageCheck = 0;
+                    string requestedLast = produced.ToString(CultureInfo.InvariantCulture);
+                    caughtUp = false;
+                    while (drain.Elapsed.TotalSeconds < catchupSeconds)
                     {
+                        // Keep the runtime Update cadence: a 50 ms Tick interval
+                        // artificially limits each stop-and-wait file transfer.
+                        Pace(drain, Math.Min(catchupSeconds, drainTicks / (double)Frequency));
+                        double tickTime = drain.Elapsed.TotalSeconds;
+                        if (tickTime >= catchupSeconds) break;
+                        if (drainTicks == 0) firstTick = tickTime;
+                        drainTickSpan = tickTime - firstTick;
+                        drainTicks++;
                         foreach (var replication in replicators) replication.Tick(clock.Elapsed.TotalSeconds, Run);
-                        bool flushed = ReadCoverage(stores[0].Root, Capture)?.flushed == produced.ToString(CultureInfo.InvariantCulture);
+                        if (tickTime < nextCoverageCheck) continue;
+                        nextCoverageCheck = tickTime + .05;
+                        drainCoverageChecks++;
+                        bool flushed = ReadCoverage(stores[0].Root, Capture)?.flushed == requestedLast;
+                        if (mode == "replicated") flushed &= ReadCoverage(stores[1].Root, Capture)?.flushed == requestedLast;
                         missing = mode == "replicated" ? MissingFiles(stores[0], stores[1]) : Array.Empty<object>();
-                        caughtUp = flushed && (mode != "replicated" || ((object[])missing).Length == 0);
-                        if (caughtUp || drain.Elapsed.TotalSeconds >= catchupSeconds) break;
-                        Thread.Sleep(50);
-                    } while (true);
+                        caughtUp = flushed && (mode != "replicated" || ((object[])missing).Length == 0) && drain.Elapsed.TotalSeconds <= catchupSeconds;
+                        if (caughtUp) break;
+                    }
                     catchupElapsed = drain.Elapsed.TotalSeconds;
                 }
             }
@@ -145,8 +164,10 @@ namespace MonsterSupergroup.NetworkCombat.Tests
             }
             var report = new {
                 schemaVersion = 2, kind = "status-dominated-paced-cpu-probe", controllers = count, mode, repeat, targetSeconds, frames,
+                endpointCount = stores.Count,
                 targetHz = Frequency, elapsedSeconds = elapsed, achievedHz = elapsed > 0 ? frames / elapsed : 0, deadlineMisses,
                 scope = "EditMode CPU/status/Gateway/Replica/storage probe; synthetic two-endpoint transport in one process; not Unity total frame/GPU/physics/Steam performance",
+                mainFrameSamplesPath = "frames.csv",
                 mainFrame = Distribution(frameMs), businessAndCapture = Distribution(localFrameMs), captureOnly = Distribution(captureMs),
                 checkpoint = Distribution(checkpointMs.Where(v => v > 0).ToArray()),
                 mainThreadAllocatedBytes = allocationMeasurementAvailable ? (long?)allocations : null,
@@ -157,14 +178,28 @@ namespace MonsterSupergroup.NetworkCombat.Tests
                 replicationMainMilliseconds = replicators.Select(r => r.MainMilliseconds).ToArray(), replicationWorkerMilliseconds = replicators.Select(r => r.WorkerMilliseconds).ToArray(),
                 replicationSentBytes = replicators.Select(r => r.SentBytes).ToArray(), replicationFailures = replicators.Select(r => r.LastFailure).ToArray(),
                 producedRecords = produced, dropped = stores.Select(s => s.Dropped).ToArray(), writerFailures = stores.Select(s => s.LastFailure).ToArray(),
+                criticalDropped = stores.Select(s => ReadCoverage(s.Root, Capture)?.criticalDropped ?? 0).ToArray(),
+                observationDropped = stores.Select(s => ReadCoverage(s.Root, Capture)?.observationDropped ?? 0).ToArray(),
+                evidenceStages = stores.Select(s => s.Metrics.Snapshot()).ToArray(),
+                hashImplementation = EvidenceJson.HashImplementation,
                 eventBytes = EventBytes(Path.Combine(directory, "primary"), Capture), allEndpointDiskBytes = DiskBytes(directory),
                 businessMatches = matched, expectedHash, actualHash, catchupSeconds = catchupElapsed, catchupComplete = caughtUp, missing,
+                drainCadence = new { targetHz = Frequency, tickCount = drainTicks, measuredTickSpanSeconds = drainTickSpan,
+                    achievedHz = drainTicks > 1 && drainTickSpan > 0 ? (double?)((drainTicks - 1) / drainTickSpan) : null,
+                    coverageChecks = drainCoverageChecks, coverageCheckIntervalSeconds = .05 },
                 statusControllerBinding = Environment.GetEnvironmentVariable("COMBAT_EVIDENCE_BENCHMARK_INDEPENDENT_ENGINES") == "1" ? "independent-cold-start-stress" : "shared-replica-root",
                 replayEngineCount = sink?.EngineCount ?? 0,
                 coverage = stores.Select(s => ReadCoverage(s.Root, Capture)).ToArray(), failure,
                 limitation = "GC collection counts/heap are process-wide and include the synthetic peer; managed allocations are the measured driver thread only. Timing is not a GPU or game-frame claim."
             };
             string output = Path.Combine(directory, "benchmark.json"); File.WriteAllText(output, EvidenceJson.Encode(report), new UTF8Encoding(false));
+            using (var samples = new StreamWriter(Path.Combine(directory, "frames.csv"), false, new UTF8Encoding(false)))
+            {
+                samples.WriteLine("frame,mainMs,businessAndCaptureMs,captureMs,checkpointMs");
+                for (int frame = 0; frame < frames; frame++) samples.WriteLine(string.Join(",", frame.ToString(CultureInfo.InvariantCulture),
+                    frameMs[frame].ToString("R", CultureInfo.InvariantCulture), localFrameMs[frame].ToString("R", CultureInfo.InvariantCulture),
+                    captureMs[frame].ToString("R", CultureInfo.InvariantCulture), checkpointMs[frame].ToString("R", CultureInfo.InvariantCulture)));
+            }
             TestContext.WriteLine(output);
             Assert.That(failure, Is.Null, output); Assert.That(matched, Is.True, output);
             Assert.That(memory.Peak, Is.LessThanOrEqualTo(128L << 20), output);
@@ -235,7 +270,7 @@ namespace MonsterSupergroup.NetworkCombat.Tests
         }
         private static long DiskBytes(string root) => Directory.EnumerateFiles(root, "*", SearchOption.AllDirectories).Sum(p => new FileInfo(p).Length);
 
-        private sealed class ProbeSink : IDiagnosticSink, IDiagnosticAdvanceSink
+        private sealed class ProbeSink : IDiagnosticSink, IDiagnosticAdvanceSink, IDiagnosticIntegritySink
         {
             private readonly CombatEvidenceStore store;
             private readonly Dictionary<object, (string id, string domain, Func<object, object> capture)> engines = new();
@@ -248,7 +283,8 @@ namespace MonsterSupergroup.NetworkCombat.Tests
                 string id = domain + "." + (engines.Count + 1); engines.Add(engine, (id, domain, capture));
                 Checkpoint(engine, id, domain, capture); return id;
             }
-            public bool TryWrite(DiagnosticRecord record)
+            public bool TryWrite(DiagnosticRecord record) => Write(record, null);
+            private bool Write(DiagnosticRecord record, Func<object> capture)
             {
                 long start = Stopwatch.GetTimestamp();
                 try
@@ -256,9 +292,16 @@ namespace MonsterSupergroup.NetworkCombat.Tests
                     record.captureId = Capture; record.runId = Run; record.round = 1; record.recordSequence = (++Sequence).ToString();
                     record.frame = Frame; record.fixedStep = Frame * 50 / Frequency; record.networkTime = NetworkTime;
                     record.monotonicTime = Seconds(start); record.utc = DateTime.UtcNow.ToString("o");
-                    return store.TryWrite(record);
+                    record.estimatedBytes = (int)Math.Min(int.MaxValue, Math.Max(record.estimatedBytes,
+                        512L + CombatEvidenceRuntime.RetainedBytes(record.input) + CombatEvidenceRuntime.RetainedBytes(record.before) + CombatEvidenceRuntime.RetainedBytes(record.after)));
+                    return store.TryWrite(record, capture == null, capture);
                 }
                 finally { CaptureTicks += Stopwatch.GetTimestamp() - start; }
+            }
+            public void ReportCaptureFailure(DiagnosticRecord record)
+            {
+                record.captureId = Capture; record.runId = Run; record.round = 1; record.recordSequence = (++Sequence).ToString();
+                store.ReportCaptureFailure(record);
             }
             public bool TryWriteAdvance(string role, string engine, string operation, float delta, StatusReplayBoundary boundary, int phase)
             {
@@ -270,20 +313,22 @@ namespace MonsterSupergroup.NetworkCombat.Tests
             }
             public void Checkpoint()
             {
-                using (CombatEvidence.Suppress())
-                {
+                Write(new DiagnosticRecord { role = "Process", stage = "replay.checkpoint", engine = "*", outcome = "Captured",
+                    critical = true, estimatedBytes = 8 << 20 }, () => {
+                    using var suppressed = CombatEvidence.Suppress();
                     var states = new ReplayCheckpoint[engines.Count]; int index = 0;
                     foreach (var entry in engines) states[index++] = new ReplayCheckpoint { engine = entry.Value.id,
                         domain = entry.Value.domain, state = entry.Value.capture(entry.Key) };
-                    TryWrite(new DiagnosticRecord { role = "Process", stage = "replay.checkpoint", engine = "*", outcome = "Captured",
-                        input = new ReplayCheckpointSet { engines = states }, critical = true, estimatedBytes = Math.Min(24 << 20, 512 * 1024 + engines.Count * 8192) });
-                }
+                    return new ReplayCheckpointSet { engines = states };
+                });
             }
             private void Checkpoint(object engine, string id, string domain, Func<object, object> capture)
             {
-                using (CombatEvidence.Suppress()) TryWrite(new DiagnosticRecord { role = domain, engine = id, stage = "replay.engine_checkpoint",
-                    outcome = "Captured", input = new ReplayCheckpoint { domain = domain, engine = id, state = capture(engine) },
-                    critical = true, estimatedBytes = domain == "status" ? 8192 : 256 << 10 });
+                Write(new DiagnosticRecord { role = domain, engine = id, stage = "replay.engine_checkpoint",
+                    outcome = "Captured", critical = true, estimatedBytes = 8 << 20 }, () => {
+                        using var suppressed = CombatEvidence.Suppress();
+                        return new ReplayCheckpoint { domain = domain, engine = id, state = capture(engine) };
+                    });
             }
         }
 

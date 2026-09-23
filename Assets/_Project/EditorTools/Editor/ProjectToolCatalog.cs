@@ -85,7 +85,11 @@ namespace MonsterSupergroup.EditorTools
                 if (!string.IsNullOrEmpty(tool.method)) Resolve(tool.method);
                 if (!string.IsNullOrEmpty(tool.script) && !File.Exists(tool.script)) throw new FileNotFoundException(tool.script);
             }
-            foreach (var build in manifest.builds) ProjectBuildService.ValidateProfile(build);
+            foreach (string guid in UnityEditor.AssetDatabase.FindAssets("t:BuildProfile", new[] { ProjectBuildTemplates.Root }))
+            {
+                var profile = UnityEditor.AssetDatabase.LoadAssetAtPath<UnityEditor.Build.Profile.BuildProfile>(UnityEditor.AssetDatabase.GUIDToAssetPath(guid));
+                if (profile.GetComponent<MonsterBuildSettings>() != null) ProjectBuildResolver.Resolve(profile);
+            }
             Debug.Log($"[ProjectTools] {manifest.tools.Length} tools / {manifest.builds.Length} build profiles validated.");
         }
     }

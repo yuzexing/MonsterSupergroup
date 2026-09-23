@@ -14,10 +14,12 @@ namespace MonsterSupergroup.NetworkCombat
             evidence.Complete();
 
         }
-        public void Apply(CanonicalWorldBatch batch)
+        public void Apply(CanonicalWorldBatch batch) => ApplyWithEvidence(batch, null);
+
+        internal void ApplyWithEvidence(CanonicalWorldBatch batch, Diagnostics.SharedEvidencePayload shared)
         {
             if (!MonsterSupergroup.GAS.CombatEvidence.Enabled) { EvidenceCore_Apply(batch); return; }
-            using var evidence = MonsterSupergroup.GAS.CombatEvidence.Begin(this, "replica", "Apply", new object[] { batch }, o => ((CanonicalWorldReplica)o).CaptureReplayState());
+            using var evidence = MonsterSupergroup.GAS.CombatEvidence.Begin(this, "replica", "Apply", new object[] { (object)shared ?? batch }, o => ((CanonicalWorldReplica)o).CaptureReplayState());
             EvidenceCore_Apply(batch);
             evidence.Complete();
 

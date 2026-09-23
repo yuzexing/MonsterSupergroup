@@ -9,6 +9,7 @@ using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Serialization;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.InteropServices;
 
 namespace MonsterSupergroup.NetworkCombat.Diagnostics
 {
@@ -37,16 +38,57 @@ namespace MonsterSupergroup.NetworkCombat.Diagnostics
         }
         public static T Decode<T>(string value) => JsonConvert.DeserializeObject<T>(value, Settings);
         public static T Convert<T>(JToken value) => value.ToObject<T>(JsonSerializer.Create(Settings));
-        public static string Hash(byte[] bytes)
+        public static string Hash(byte[] bytes) => Hash(bytes, bytes.Length);
+        internal static string Hash(byte[] bytes, int count)
         {
-            using var hash = SHA256.Create();
-            return BitConverter.ToString(hash.ComputeHash(bytes)).Replace("-", "").ToLowerInvariant();
+            if (bytes == null) throw new ArgumentNullException(nameof(bytes));
+            if (count < 0 || count > bytes.Length) throw new ArgumentOutOfRangeException(nameof(count));
+            byte[] digest = HashBytes(bytes, count);
+            const string hex = "0123456789abcdef";
+            var text = new char[digest.Length * 2];
+            for (int i = 0; i < digest.Length; i++) { text[i * 2] = hex[digest[i] >> 4]; text[i * 2 + 1] = hex[digest[i] & 15]; }
+            return new string(text);
         }
-        public static byte[] Compress(byte[] bytes)
+        // Unity Mono's SHA256 providers all use its managed implementation on Windows.
+        // BCryptHash computes the same SHA-256 with the OS provider; its pseudo-handle
+        // owns no resource and is safe for concurrent disk/replication workers.
+        // https://learn.microsoft.com/windows/win32/api/bcrypt/nf-bcrypt-bcrypthash
+        private static volatile bool nativeHashAvailable = Environment.OSVersion.Platform == PlatformID.Win32NT;
+        public static string HashImplementation => nativeHashAvailable ? "WindowsBCryptSHA256" : "FrameworkSHA256";
+        [DllImport("bcrypt.dll", ExactSpelling = true)]
+        private static extern int BCryptHash(IntPtr algorithm, IntPtr secret, uint secretBytes,
+            [In] byte[] input, uint inputBytes, [Out] byte[] output, uint outputBytes);
+        private static byte[] HashBytes(byte[] bytes, int count)
         {
+            if (nativeHashAvailable)
+            {
+                try
+                {
+                    var digest = new byte[32];
+                    // BCRYPT_SHA256_ALG_HANDLE, available on Windows 10 and later.
+                    if (BCryptHash(new IntPtr(0x41), IntPtr.Zero, 0, bytes, (uint)count, digest, 32) == 0) return digest;
+                    nativeHashAvailable = false;
+                }
+                catch (DllNotFoundException) { nativeHashAvailable = false; }
+                catch (EntryPointNotFoundException) { nativeHashAvailable = false; }
+            }
+            using var hash = SHA256.Create();
+            return hash.ComputeHash(bytes, 0, count);
+        }
+        internal static void CompressInto(byte[] bytes, Stream output, EvidenceStageMetrics metrics = null)
+            => CompressInto(bytes, bytes.Length, output, metrics);
+        internal static void CompressInto(byte[] bytes, int count, Stream output, EvidenceStageMetrics metrics = null)
+        {
+            long started = EvidenceStageMetrics.Now;
+            using (var gzip = new GZipStream(output, CompressionLevel.Fastest, true)) gzip.Write(bytes, 0, count);
+            metrics?.Compression(started);
+        }
+        public static byte[] Compress(byte[] bytes, EvidenceStageMetrics metrics = null)
+        {
+            long started = EvidenceStageMetrics.Now;
             using var output = new MemoryStream();
             using (var gzip = new GZipStream(output, CompressionLevel.Fastest, true)) gzip.Write(bytes, 0, bytes.Length);
-            return output.ToArray();
+            byte[] result = output.ToArray(); metrics?.Compression(started); return result;
         }
         public static byte[] Decompress(byte[] bytes, int maximumBytes)
         {

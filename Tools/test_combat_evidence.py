@@ -51,6 +51,9 @@ class EvidenceTests(unittest.TestCase):
         with (path / "events-00001.jsonl").open("w", encoding="utf-8") as f:
             for i, record in enumerate(records, 1):
                 f.write(json.dumps(dict(schemaVersion=1, captureId="capture", recordSequence=str(i), runId="run", round=1, **record)) + "\n")
+        (path / "coverage.json").write_text(json.dumps(dict(schemaVersion=1, captureId="capture", runId="run", round=1,
+            produced=str(len(records)), written=str(len(records)), flushed=str(len(records)), complete=True, tailUnknown=False,
+            gaps=[], failure=None)), encoding="utf-8")
         return path
 
     def test_duplicate_copies_are_not_duplicate_executions(self):

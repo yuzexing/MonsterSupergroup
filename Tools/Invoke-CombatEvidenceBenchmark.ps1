@@ -11,7 +11,8 @@ param(
     [switch]$Smoke,
     [switch]$IndependentEngines,
     [switch]$PrepareOnly,
-    [switch]$RequireCompleteMeasurements
+    [switch]$RequireCompleteMeasurements,
+    [switch]$ObserveQueue
 )
 $ErrorActionPreference = 'Stop'
 $workspace = Split-Path -Parent $PSScriptRoot
@@ -27,6 +28,7 @@ $settings = @{
     COMBAT_EVIDENCE_BENCHMARK_CATCHUP_SECONDS = $CatchupSeconds.ToString([Globalization.CultureInfo]::InvariantCulture)
     COMBAT_EVIDENCE_BENCHMARK_OUTPUT = Join-Path $Output 'cases'
     COMBAT_EVIDENCE_BENCHMARK_INDEPENDENT_ENGINES = if ($IndependentEngines) { '1' } else { '0' }
+    COMBAT_EVIDENCE_OBSERVE_QUEUE = if ($ObserveQueue) { '1' } else { '0' }
 }
 $failure = $null
 try {

@@ -17,6 +17,7 @@ namespace MonsterSupergroup.EditorTools
         private ResolvedProjectBuild preview;
         private Editor settingsEditor;
         private string feedback;
+        private EditorApplication.CallbackFunction pendingBuild;
         [MenuItem("MonsterSupergroup/构建与验收/构建配置…", priority = 29)]
         public static void Open() { var window = GetWindow<ProjectBuildWindow>("构建配置"); window.minSize = new Vector2(610, 650); }
         public static void OpenValidation(BuildKind kind = BuildKind.Dev)
@@ -28,12 +29,41 @@ namespace MonsterSupergroup.EditorTools
         }
         public static string PreviewVersion(string current, VersionUpdate update) => GameVersion.Parse(current).Increment(update).ToString();
         public static void ApplyVersion(string expectedCurrent, VersionUpdate update) => NativeBuildProfileSettings.UpdateVersion(expectedCurrent, PreviewVersion(expectedCurrent, update));
-        private void OnDisable() { if (settingsEditor != null) DestroyImmediate(settingsEditor); }
+        private void OnDisable()
+        {
+            EditorApplication.delayCall -= pendingBuild;
+            pendingBuild = null;
+            if (settingsEditor != null) DestroyImmediate(settingsEditor);
+        }
         private void Action(Action action) { try { action(); } catch (Exception e) { feedback = e.Message; Debug.LogException(e); } }
         private void Refresh() { preview = ProjectBuildResolver.Resolve(profile, true); feedback = "已刷新只读计划。"; }
+        private void QueueBuild()
+        {
+            if (pendingBuild != null) return;
+            var selectedProfile = profile;
+            var request = new BuildExecutionRequest { output = output, cleanBuildCache = cleanBuildCache,
+                runAfterBuild = runAfterBuild, expectedContentHash = preview.ContentHash, expectedInputHash = preview.InputHash };
+            EditorApplication.CallbackFunction callback = null;
+            callback = () => {
+                if (this == null || pendingBuild != callback) return;
+                try
+                {
+                    Action(() => {
+                        string result = ProjectBuildService.Build(selectedProfile, request);
+                        feedback = "成功：" + result + (ProjectBuildService.LastLaunchError == null ? "" : "\n启动失败：" + ProjectBuildService.LastLaunchError);
+                    });
+                }
+                finally { pendingBuild = null; if (this != null) Repaint(); }
+            };
+            pendingBuild = callback;
+            feedback = "准备构建…";
+            // Building inside OnGUI can invalidate Unity's active layout groups.
+            EditorApplication.delayCall += callback;
+        }
         private void OnGUI()
         {
             using var view = new EditorGUILayout.ScrollViewScope(scroll); scroll = view.scrollPosition;
+            using var pendingScope = new EditorGUI.DisabledScope(pendingBuild != null);
             try { DrawVersion(); } catch (Exception e) { EditorGUILayout.HelpBox(e.Message, MessageType.Error); }
             var selected = (BuildProfile)EditorGUILayout.ObjectField("原生 Build Profile", profile, typeof(BuildProfile), false);
             if (selected != profile) { profile = selected; preview = null; if (settingsEditor != null) DestroyImmediate(settingsEditor); }
@@ -75,11 +105,7 @@ namespace MonsterSupergroup.EditorTools
                         // Display-only placeholders must never be passed to Windows Path APIs.
                         EditorGUILayout.LabelField("交付目录", "Builds/" + profile.name + "/MonsterSupergroup-v…-<BuildId>/", EditorStyles.wordWrappedLabel);
                         using (new EditorGUI.DisabledScope(busy || BuildProfile.GetActiveBuildProfile() != profile))
-                            if (GUILayout.Button("按此计划构建")) Action(() => {
-                                string result = ProjectBuildService.Build(profile, new BuildExecutionRequest { output = output, cleanBuildCache = cleanBuildCache,
-                                    runAfterBuild = runAfterBuild, expectedContentHash = preview.ContentHash, expectedInputHash = preview.InputHash });
-                                feedback = "成功：" + result + (ProjectBuildService.LastLaunchError == null ? "" : "\n启动失败：" + ProjectBuildService.LastLaunchError);
-                            });
+                            if (GUILayout.Button("按此计划构建")) Action(QueueBuild);
                     }
                 }
             }

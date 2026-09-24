@@ -37,10 +37,11 @@ namespace MonsterSupergroup.NetworkCombat.Diagnostics
             }
         }
         private static void ReleaseSharedLeases(List<IDisposable> leases)
-        { if (leases != null) foreach (var lease in leases) lease.Dispose(); }
+        { using var releasing = EvidenceServiceTiming.Measure(EvidenceServiceStage.LeaseRelease); if (leases != null) foreach (var lease in leases) lease.Dispose(); }
 
         private void MaterializeSharedPayloads(Source source, MonsterSupergroup.GAS.DiagnosticRecord record)
         {
+            using var materializing = EvidenceServiceTiming.Measure(EvidenceServiceStage.SharedInputs);
             using var resolution = SharedEvidencePayloadReferenceConverter.BeginResolution(shared => {
                 if (!shared.TryGetReference(source.Directory, out string reference) ||
                     !durableFiles.ContainsKey(Path.Combine(source.Directory, reference).Substring(Root.Length + 1).Replace('\\', '/')))
@@ -59,19 +60,28 @@ namespace MonsterSupergroup.NetworkCombat.Diagnostics
 
         private string SavePayload(Source source, string folder, string payload)
         {
-            byte[] raw = Encoding.UTF8.GetBytes(payload);
-            string relative = folder + "/" + EvidenceJson.Hash(raw) + ".json.gz";
+            using var saving = EvidenceServiceTiming.Measure(EvidenceServiceStage.Payload);
+            byte[] raw;
+            using (EvidenceServiceTiming.Measure(EvidenceServiceStage.PayloadUtf8)) raw = Encoding.UTF8.GetBytes(payload);
+            string relative;
+            using (EvidenceServiceTiming.Measure(EvidenceServiceStage.PayloadHash)) relative = folder + "/" + EvidenceJson.Hash(raw) + ".json.gz";
             string path = Path.Combine(source.Directory, relative);
             string key = path.Substring(Root.Length + 1).Replace('\\', '/');
             if (durableFiles.ContainsKey(key)) { source.HeldReferences.Add(relative); return relative; }
-            Directory.CreateDirectory(Path.Combine(source.Directory, folder));
+            using (EvidenceServiceTiming.Measure(EvidenceServiceStage.DirectoryCreate)) Directory.CreateDirectory(Path.Combine(source.Directory, folder));
             if (!File.Exists(path))
             {
-                byte[] compressed = EvidenceJson.Compress(raw, Metrics); Reserve(source.Directory, compressed.Length);
-                using var blob = new FileStream(path, FileMode.CreateNew, FileAccess.Write, FileShare.Read);
-                blob.Write(compressed, 0, compressed.Length); blob.Flush(true);
+                byte[] compressed;
+                using (EvidenceServiceTiming.Measure(EvidenceServiceStage.PayloadCompress)) compressed = EvidenceJson.Compress(raw, Metrics);
+                using (EvidenceServiceTiming.Measure(EvidenceServiceStage.PayloadReserve)) Reserve(source.Directory, compressed.Length);
+                FileStream opened;
+                using (EvidenceServiceTiming.Measure(EvidenceServiceStage.PayloadOpen)) opened = new FileStream(path, FileMode.CreateNew, FileAccess.Write, FileShare.Read);
+                using var blob = opened;
+                using (EvidenceServiceTiming.Measure(EvidenceServiceStage.PayloadWrite)) blob.Write(compressed, 0, compressed.Length);
+                using (EvidenceServiceTiming.Measure(EvidenceServiceStage.PayloadFlush)) blob.Flush(true);
             }
-            IndexFile(path); source.HeldReferences.Add(relative); return relative;
+            using (EvidenceServiceTiming.Measure(EvidenceServiceStage.PayloadIndex)) IndexFile(path);
+            source.HeldReferences.Add(relative); return relative;
         }
 
         private void ShareKnockbackSettings(Source source, JToken value)

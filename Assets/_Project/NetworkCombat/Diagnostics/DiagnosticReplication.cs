@@ -64,7 +64,7 @@ namespace MonsterSupergroup.NetworkCombat.Diagnostics
         public DiagnosticReplicator(CombatEvidenceStore store, IDiagnosticReplicationTransport transport, string capture)
         {
             this.store = store; this.transport = transport; this.capture = capture;
-            work = new DiagnosticWorkQueue(store.Memory, error => LastFailure = error);
+            work = new DiagnosticWorkQueue(store.Memory, error => LastFailure = error, profilingIdentity: store.Root);
             transport.Received += Receive;
         }
 

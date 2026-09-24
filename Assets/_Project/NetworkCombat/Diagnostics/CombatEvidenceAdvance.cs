@@ -55,37 +55,79 @@ namespace MonsterSupergroup.NetworkCombat.Diagnostics
             public readonly double created = Seconds;
         }
         private AdvanceBlock activeAdvances;
+        private void BindAdvanceService(AdvanceBlock block)
+        {
+            if (QueueObservation == null || block.count == 0) return;
+            var first = block.entries[0]; var last = block.entries[block.count - 1];
+            string engine = first.engine, operation = first.operation;
+            bool mixedPhases = false;
+            for (int i = 1; i < block.count; i++)
+            {
+                var entry = block.entries[i];
+                mixedPhases |= entry.phase != first.phase;
+                if (entry.engine != engine) engine = null;
+                if (entry.operation != operation) operation = null;
+            }
+            QueueObservation.BindServiceIdentity(new EvidenceServiceIdentity {
+                kind = EvidenceServiceWorkKind.Advance, runId = block.run, captureId = block.capture, round = block.round,
+                firstSequence = first.sequence, lastSequence = last.sequence, logicalCount = block.count,
+                engine = engine, operation = operation, stage = "replay.advance_block", phase = mixedPhases ? -1 : first.phase, mixedPhases = mixedPhases });
+        }
         public bool TryWriteAdvance(string capture, string run, uint round, DiagnosticAdvance entry)
         {
             bool signal = false;
             long lockStarted = EvidenceStageMetrics.Now;
-            lock (gate)
+            var producerWaiting = DiagnosticMainTiming.Measure(DiagnosticMainStage.ProducerGateWait);
+            bool waitEnded = false;
+            try
             {
-                Metrics.LockWait(lockStarted);
-                string key = activeAdvances != null && activeAdvances.capture == capture && activeAdvances.run == run && activeAdvances.round == round
-                    ? activeAdvances.key : SourceKey(run, round, capture);
-                if (!health.TryGetValue(key, out var state)) health.Add(key, state = new EvidenceCoverage { captureId = capture, runId = run, round = round });
-                state.Produced = entry.sequence;
-                if (activeAdvances == null || activeAdvances.key != key || activeAdvances.count == AdvanceBlock.Capacity)
+                lock (gate)
                 {
-                    if (stopping || pendingBytes + AdvanceBlock.Charge > options.QueueBytes - options.ReservedBytes || !Memory.TryReserve(AdvanceBlock.Charge))
-                    { CountDropped(state); Gap(state, state.produced, "QueueOverload"); return false; }
-                    var block = new AdvanceBlock { key = key, capture = capture, run = run, round = round };
-                    activeAdvances = block; pendingBytes += AdvanceBlock.Charge; peakPendingBytes = Math.Max(peakPendingBytes, pendingBytes);
-                    queue.Enqueue((AdvanceBlock.Charge, () => {
-                        lock (filesGate)
-                        {
-                            var record = block.entries[0].Expand(block.capture, block.run, block.round);
-                            record.stage = "replay.advance_block"; record.input = block; record.before = null;
-                            Append(block.key, record);
-                        }
-                    }, block, EvidenceStageMetrics.Now));
-                    signal = true;
+                    producerWaiting.Dispose(); waitEnded = true;
+                    using var gateWork = DiagnosticMainTiming.Measure(DiagnosticMainStage.ProducerGateWork);
+                    Metrics.LockWait(lockStarted);
+                    QueueObservation?.Attempt(EvidenceQueueEntry.TryWriteAdvance, EvidenceStageMetrics.Now);
+                    string key;
+                    using (DiagnosticMainTiming.Measure(DiagnosticMainStage.SinkMetadata))
+                        key = activeAdvances != null && activeAdvances.capture == capture && activeAdvances.run == run && activeAdvances.round == round
+                            ? activeAdvances.key : SourceKey(run, round, capture);
+                    if (!health.TryGetValue(key, out var state)) health.Add(key, state = new EvidenceCoverage { captureId = capture, runId = run, round = round });
+                    state.Produced = entry.sequence;
+                    if (activeAdvances == null || activeAdvances.key != key || activeAdvances.count == AdvanceBlock.Capacity)
+                    {
+                        if (!Admit(EvidenceQueueEntry.TryWriteAdvance, AdvanceBlock.Charge, options.QueueBytes - options.ReservedBytes, false,
+                            state, entry.sequence, entry.phase, entry.phase == 0 ? "replay.input" : "replay.output"))
+                        { CountDropped(state); Gap(state, state.produced, "QueueOverload"); return false; }
+                        using var constructing = DiagnosticMainTiming.Measure(DiagnosticMainStage.AdvanceBlock);
+                        var block = new AdvanceBlock { key = key, capture = capture, run = run, round = round };
+                        activeAdvances = block; pendingBytes += AdvanceBlock.Charge; peakPendingBytes = Math.Max(peakPendingBytes, pendingBytes);
+                        queue.Enqueue((AdvanceBlock.Charge, () => {
+                            long waitStarted = QueueObservation == null ? 0 : EvidenceStageMetrics.Now;
+                            var waiting = EvidenceServiceTiming.Measure(EvidenceServiceStage.FilesGateWait);
+                            lock (filesGate)
+                            {
+                                waiting.Dispose();
+                                QueueObservation?.Span(EvidenceQueueStage.FilesGateWait, waitStarted, EvidenceStageMetrics.Now);
+                                var record = block.entries[0].Expand(block.capture, block.run, block.round);
+                                record.stage = "replay.advance_block"; record.input = block; record.before = null;
+                                Append(block.key, record);
+                            }
+                        }, block, EvidenceStageMetrics.Now));
+                        QueueObservation?.Enqueued(AdvanceBlock.Charge, pendingBytes, EvidenceStageMetrics.Now);
+                        signal = true;
+                    }
+                    using (DiagnosticMainTiming.Measure(DiagnosticMainStage.AdvanceBlock))
+                    {
+                        activeAdvances.entries[activeAdvances.count++] = entry;
+                        QueueObservation?.Accepted(EvidenceQueueEntry.TryWriteAdvance, EvidenceStageMetrics.Now);
+                        QueueObservation?.Pending(pendingBytes, EvidenceStageMetrics.Now);
+                        signal |= activeAdvances.count == AdvanceBlock.Capacity;
+                    }
                 }
-                activeAdvances.entries[activeAdvances.count++] = entry;
-                signal |= activeAdvances.count == AdvanceBlock.Capacity;
             }
-            if (signal) wake.Set(); return true;
+            finally { if (!waitEnded) producerWaiting.Dispose(); }
+            if (signal) { using (DiagnosticMainTiming.Measure(DiagnosticMainStage.Wake)) wake.Set(); }
+            return true;
         }
     }
 }

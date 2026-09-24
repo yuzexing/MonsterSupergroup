@@ -16,6 +16,8 @@ namespace MonsterSupergroup.NetworkCombat.Diagnostics
         public double SegmentSeconds = 60;
         public IEvidenceStorage Storage = new FileEvidenceStorage();
         public DiagnosticMemoryBudget Memory = new();
+        public bool ObserveQueue;
+        public long ObservationOriginTicks;
     }
 
     [Serializable]
@@ -93,6 +95,9 @@ namespace MonsterSupergroup.NetworkCombat.Diagnostics
         public bool Closed => Volatile.Read(ref closed);
         public DiagnosticMemoryBudget Memory => options.Memory;
         public long PeakPendingBytes { get { lock (gate) return peakPendingBytes; } }
+        public EvidenceQueueObservation QueueObservation { get; }
+        public bool ObservationRequested => options.ObserveQueue;
+        public string ObservationUnavailableReason { get; }
 
         public CombatEvidenceStore(string root, EvidenceStoreOptions options = null)
         {
@@ -101,66 +106,101 @@ namespace MonsterSupergroup.NetworkCombat.Diagnostics
                 Root = Root.StartsWith(@"\\", StringComparison.Ordinal) ? @"\\?\UNC\" + Root.Substring(2) : @"\\?\" + Root;
             this.options = options ?? new EvidenceStoreOptions();
             if (!Memory.TryReserve(CodecWorkspaceBytes)) throw new InvalidOperationException("Insufficient diagnostic codec budget.");
-            worker = new Thread(Consume) { IsBackground = true, Name = "Combat evidence disk" };
-            worker.Start();
+            try
+            {
+                if (this.options.ObserveQueue)
+                {
+                    if (EvidenceQueueObservation.TryCreate(Memory, true, out var observation, this.options.ObservationOriginTicks)) QueueObservation = observation;
+                    else ObservationUnavailableReason = "QueueObservationBudgetUnavailable";
+                }
+                worker = new Thread(Consume) { IsBackground = true, Name = "Combat evidence disk" };
+                worker.Start();
+            }
+            catch { QueueObservation?.ReleaseAfterStop(true, true); Memory.Release(CodecWorkspaceBytes); throw; }
         }
 
         public bool TryWrite(DiagnosticRecord record) => TryWrite(record, true);
         public bool TryWrite(DiagnosticRecord record, bool freezePayload, Func<object> capture = null)
         {
-            string key = SourceKey(record.runId, record.round, record.captureId);
+            string key;
+            using (DiagnosticMainTiming.Measure(DiagnosticMainStage.SinkMetadata))
+                key = SourceKey(record.runId, record.round, record.captureId);
             long lockStarted = EvidenceStageMetrics.Now;
-            lock (gate)
+            var producerWaiting = DiagnosticMainTiming.Measure(DiagnosticMainStage.ProducerGateWait);
+            bool waitEnded = false;
+            try
             {
-                Metrics.LockWait(lockStarted);
-                activeAdvances = null;
-                if (!health.TryGetValue(key, out var state)) health.Add(key, state = new EvidenceCoverage {
-                    captureId = record.captureId, runId = record.runId, round = record.round });
-                state.produced = record.recordSequence;
-                int bytes = Math.Max(512, record.estimatedBytes);
-                if (stopping || bytes > options.QueueBytes || pendingBytes + bytes > options.QueueBytes - (record.critical ? 0 : options.ReservedBytes) || !Memory.TryReserve(bytes))
+                lock (gate)
                 {
-                    CountDropped(state, record.stage == "observation.snapshot" || record.stage == "performance.snapshot");
-                    Gap(state, record.recordSequence, "QueueOverload"); return false;
-                }
-                List<IDisposable> leases = null;
-                try
-                {
-                    record = record.Copy();
-                    if (capture != null)
+                    producerWaiting.Dispose(); waitEnded = true;
+                    using var gateWork = DiagnosticMainTiming.Measure(DiagnosticMainStage.ProducerGateWork);
+                    Metrics.LockWait(lockStarted);
+                    QueueObservation?.Attempt(EvidenceQueueEntry.TryWrite, EvidenceStageMetrics.Now);
+                    activeAdvances = null;
+                    if (!health.TryGetValue(key, out var state)) health.Add(key, state = new EvidenceCoverage {
+                        captureId = record.captureId, runId = record.runId, round = record.round });
+                    state.produced = record.recordSequence;
+                    int bytes = Math.Max(512, record.estimatedBytes);
+                    if (!Admit(EvidenceQueueEntry.TryWrite, bytes, options.QueueBytes - (record.critical ? 0 : options.ReservedBytes), true,
+                        state, state.Produced, QueueObservation == null ? (int?)null : record.stage == "replay.input" ? 0 : record.stage == "replay.output" ? (record.outcome == "Completed" ? 1 : 2) : (int?)null, record.stage))
                     {
-                        long captureStarted = EvidenceStageMetrics.Now;
-                        try { record.input = capture(); } finally { Metrics.Capture(captureStarted); }
-                        int retained = record.stage == "observation.snapshot" ? bytes :
-                            (int)Math.Min(int.MaxValue, 512L + CombatEvidenceRuntime.RetainedBytes(record.input));
-                        if (retained > bytes) throw new InvalidDataException("CaptureExceededReservedMemory");
-                        Memory.Release(bytes - retained); bytes = retained; record.estimatedBytes = retained;
+                        CountDropped(state, record.stage == "observation.snapshot" || record.stage == "performance.snapshot");
+                        Gap(state, record.recordSequence, "QueueOverload"); return false;
                     }
-                    if (freezePayload)
+                    List<IDisposable> leases = null;
+                    try
                     {
-                        long freezeStarted = EvidenceStageMetrics.Now;
-                        try { record.input = DiagnosticPayload.Freeze(record.input); record.before = DiagnosticPayload.Freeze(record.before); record.after = DiagnosticPayload.Freeze(record.after); }
-                        finally { Metrics.Freeze(freezeStarted); }
+                        using (DiagnosticMainTiming.Measure(DiagnosticMainStage.SinkMetadata)) record = record.Copy();
+                        if (capture != null)
+                        {
+                            long captureStarted = EvidenceStageMetrics.Now;
+                            try { using (DiagnosticMainTiming.Measure(DiagnosticMainStage.Capture)) record.input = capture(); }
+                            finally { Metrics.Capture(captureStarted); }
+                            int retained;
+                            using (DiagnosticMainTiming.Measure(DiagnosticMainStage.RetainedSize))
+                                retained = record.stage == "observation.snapshot" ? bytes :
+                                    (int)Math.Min(int.MaxValue, 512L + CombatEvidenceRuntime.RetainedBytes(record.input));
+                            if (retained > bytes) throw new InvalidDataException("CaptureExceededReservedMemory");
+                            Memory.Release(bytes - retained); bytes = retained; record.estimatedBytes = retained;
+                        }
+                        if (freezePayload)
+                        {
+                            long freezeStarted = EvidenceStageMetrics.Now;
+                            try
+                            {
+                                using var freezing = DiagnosticMainTiming.Measure(DiagnosticMainStage.Freeze);
+                                record.input = DiagnosticPayload.Freeze(record.input); record.before = DiagnosticPayload.Freeze(record.before); record.after = DiagnosticPayload.Freeze(record.after);
+                            }
+                            finally { Metrics.Freeze(freezeStarted); }
+                        }
+                        using (DiagnosticMainTiming.Measure(DiagnosticMainStage.SharedLeases)) leases = AcquireSharedLeases(record);
+                        pendingBytes += bytes; peakPendingBytes = Math.Max(peakPendingBytes, pendingBytes);
+                        // The checkpoint describes the main-thread capture moment, not its later disk append.
+                        long checkpointEpoch = IsRecoveryCheckpoint(record) ? state.failureEpoch : -1;
+                        queue.Enqueue((bytes, () => {
+                            BindRecordService(record);
+                            long waitStarted = QueueObservation == null ? 0 : EvidenceStageMetrics.Now;
+                            var waiting = EvidenceServiceTiming.Measure(EvidenceServiceStage.FilesGateWait);
+                            try { lock (filesGate) { waiting.Dispose(); QueueObservation?.Span(EvidenceQueueStage.FilesGateWait, waitStarted, EvidenceStageMetrics.Now); Append(key, record, checkpointEpoch, leases != null); } }
+                            finally { ReleaseSharedLeases(leases); }
+                        }, null, EvidenceStageMetrics.Now));
+                        QueueObservation?.Enqueued(bytes, pendingBytes, EvidenceStageMetrics.Now);
+                        QueueObservation?.Accepted(EvidenceQueueEntry.TryWrite, EvidenceStageMetrics.Now);
                     }
-                    leases = AcquireSharedLeases(record);
-                    pendingBytes += bytes; peakPendingBytes = Math.Max(peakPendingBytes, pendingBytes);
-                    // The checkpoint describes the main-thread capture moment, not its later disk append.
-                    long checkpointEpoch = IsRecoveryCheckpoint(record) ? state.failureEpoch : -1;
-                    queue.Enqueue((bytes, () => {
-                        try { lock (filesGate) Append(key, record, checkpointEpoch, leases != null); }
-                        finally { ReleaseSharedLeases(leases); }
-                    }, null, EvidenceStageMetrics.Now));
-                }
-                catch (Exception error)
-                {
-                    ReleaseSharedLeases(leases);
-                    Memory.Release(bytes);
-                    record.reason = record.stage + ":" + error.GetType().Name;
-                    ReportCaptureFailure(record);
-                    return false;
+                    catch (Exception error)
+                    {
+                        ReleaseSharedLeases(leases);
+                        Memory.Release(bytes);
+                        QueueObservation?.CaptureFailed(EvidenceQueueEntry.TryWrite, EvidenceStageMetrics.Now);
+                        record.reason = record.stage + ":" + error.GetType().Name;
+                        ReportCaptureFailure(record);
+                        return false;
+                    }
                 }
             }
-            wake.Set(); return true;
+            finally { if (!waitEnded) producerWaiting.Dispose(); }
+            using (DiagnosticMainTiming.Measure(DiagnosticMainStage.Wake)) wake.Set();
+            return true;
         }
 
         public bool Schedule(int retainedBytes, Action action)
@@ -168,10 +208,52 @@ namespace MonsterSupergroup.NetworkCombat.Diagnostics
             lock (gate)
             {
                 activeAdvances = null;
-                if (stopping || pendingBytes + retainedBytes > options.QueueBytes - options.ReservedBytes || !Memory.TryReserve(retainedBytes)) return false;
+                QueueObservation?.Attempt(EvidenceQueueEntry.Schedule, EvidenceStageMetrics.Now);
+                if (!Admit(EvidenceQueueEntry.Schedule, retainedBytes, options.QueueBytes - options.ReservedBytes, false)) return false;
                 pendingBytes += retainedBytes; peakPendingBytes = Math.Max(peakPendingBytes, pendingBytes); queue.Enqueue((retainedBytes, action, null, EvidenceStageMetrics.Now));
+                QueueObservation?.Enqueued(retainedBytes, pendingBytes, EvidenceStageMetrics.Now);
+                QueueObservation?.Accepted(EvidenceQueueEntry.Schedule, EvidenceStageMetrics.Now);
             }
             wake.Set(); return true;
+        }
+
+        // Called under gate; guard order and the single reservation match the original admission path.
+        private bool Admit(EvidenceQueueEntry entry, int bytes, long queueLimit, bool checkOversized,
+            EvidenceCoverage state = null, ulong? sequence = null, int? phase = null, string stage = null)
+        {
+            using var admission = DiagnosticMainTiming.Measure(DiagnosticMainStage.Admission);
+            EvidenceQueueGuard guard;
+            long budgetBefore = 0;
+            if (stopping) guard = EvidenceQueueGuard.Stopping;
+            else if (checkOversized && bytes > options.QueueBytes) guard = EvidenceQueueGuard.OversizedRecord;
+            else if (pendingBytes + bytes > queueLimit) guard = EvidenceQueueGuard.QueueLimit;
+            else if (!Memory.TryReserve(bytes, out budgetBefore)) guard = EvidenceQueueGuard.BudgetReservation;
+            else return true;
+            if (QueueObservation != null)
+            {
+                QueueObservation.Pending(pendingBytes, EvidenceStageMetrics.Now);
+                EvidenceQueueRejection rejection = default;
+                if (QueueObservation.ShouldCaptureFirst(entry, guard))
+                {
+                    if (guard != EvidenceQueueGuard.BudgetReservation) budgetBefore = Memory.Used;
+                    ulong.TryParse(state?.written, out ulong written); ulong.TryParse(state?.flushed, out ulong flushed);
+                    rejection = new EvidenceQueueRejection { runId = state?.runId, captureId = state?.captureId, round = state?.round,
+                        sequence = sequence, phase = phase, stage = stage, requestedBytes = bytes, pendingBytes = pendingBytes,
+                        effectiveQueueLimit = queueLimit, budgetUsed = budgetBefore, budgetLimit = Memory.Limit,
+                        produced = state?.Produced, written = state == null ? (ulong?)null : written, flushed = state == null ? (ulong?)null : flushed };
+                }
+                QueueObservation.Rejected(entry, guard, in rejection, EvidenceStageMetrics.Now);
+            }
+            return false;
+        }
+
+        public bool ExportQueueObservation(string path)
+        {
+            lock (gate)
+            {
+                if (!stopping || worker.IsAlive) return false;
+                return QueueObservation != null && QueueObservation.StopAndExport(path, true, true);
+            }
         }
 
         private static string SourceKey(string run, uint round, string capture) =>
@@ -195,20 +277,35 @@ namespace MonsterSupergroup.NetworkCombat.Diagnostics
             record.input is ReplayCheckpointSet set && set.engines != null && set.engines.Length > 0 &&
             set.engines.All(engine => engine != null && engine.state != null && !string.IsNullOrEmpty(engine.engine));
 
+        private void BindRecordService(DiagnosticRecord record)
+        {
+            if (QueueObservation == null) return;
+            ulong.TryParse(record.recordSequence, out ulong sequence);
+            QueueObservation.BindServiceIdentity(new EvidenceServiceIdentity {
+                kind = EvidenceServiceWorkKind.Record, runId = record.runId, captureId = record.captureId, round = record.round,
+                firstSequence = sequence, lastSequence = sequence, logicalCount = 1, engine = record.engine,
+                operation = record.operation, stage = record.stage,
+                phase = record.stage == "replay.input" ? 0 : record.stage == "replay.output" ? (record.outcome == "Completed" ? 1 : 2) : -1 });
+        }
+
         private void Append(string key, DiagnosticRecord record, long checkpointEpoch = -1, bool hasSharedPayloads = false)
         {
+            using var appending = EvidenceServiceTiming.Measure(EvidenceServiceStage.Append);
             EvidenceCoverage state; lock (gate) state = health[key];
             try
             {
                 if (!sources.TryGetValue(key, out var source))
                 {
-                    string directory = Resolve(key); Directory.CreateDirectory(directory);
+                    using var opening = EvidenceServiceTiming.Measure(EvidenceServiceStage.SourceOpen);
+                    string directory = Resolve(key);
+                    using (EvidenceServiceTiming.Measure(EvidenceServiceStage.DirectoryCreate)) Directory.CreateDirectory(directory);
                     Recover(directory);
                     // Closing a previous context frees its handles and makes the ended round eligible for retention.
                     foreach (var previous in sources.Where(p => p.Key.EndsWith("/sources/" + record.captureId, StringComparison.Ordinal) && p.Key != key).ToArray())
                     {
                         try
                         {
+                            using var closing = EvidenceServiceTiming.Measure(EvidenceServiceStage.PreviousSourceClose);
                             previous.Value.Flush(true); IndexFile(previous.Value.Path); previous.Value.Dispose();
                             string closedCoverage;
                             lock (gate)
@@ -224,8 +321,9 @@ namespace MonsterSupergroup.NetworkCombat.Diagnostics
                         catch (Exception error) { FailSource(previous.Key, error); }
                         sources.Remove(previous.Key);
                     }
-                    sources.Add(key, source = new Source(directory, options.Storage, bytes => Reserve(directory, bytes), Metrics));
+                    sources.Add(key, source = new Source(directory, options.Storage, bytes => Reserve(directory, bytes), Metrics, QueueObservation));
                     string session = Directory.GetParent(Directory.GetParent(directory).FullName).FullName;
+                    using var manifest = EvidenceServiceTiming.Measure(EvidenceServiceStage.Manifest);
                     if (!File.Exists(Path.Combine(session, "manifest.json"))) EvidenceJson.AtomicWrite(Path.Combine(session, "manifest.json"),
                         EvidenceJson.Encode(new { schemaVersion = 2, runId = record.runId, round = record.round, capacityBytes = options.SessionBytes,
                             completeness = "Read each source coverage and this machine's replication watermarks; absent records are not proof of non-execution." }));
@@ -235,6 +333,7 @@ namespace MonsterSupergroup.NetworkCombat.Diagnostics
                 // Begin a retained interval at its checkpoint. Old intervals may then be removed independently.
                 if (source.Writer == null || source.Bytes >= options.SegmentBytes || now - source.Opened >= options.SegmentSeconds || checkpoint)
                 {
+                    using var rotating = EvidenceServiceTiming.Measure(EvidenceServiceStage.Rotation);
                     if (source.Path != null) { source.Flush(true); IndexFile(source.Path); }
                     source.Rotate(now, record.recordSequence);
                 }
@@ -249,7 +348,7 @@ namespace MonsterSupergroup.NetworkCombat.Diagnostics
                 {
                     long encodeStarted = EvidenceStageMetrics.Now;
                     string payload;
-                    try { payload = EvidenceJson.EncodeBounded(record.input); } finally { Metrics.Encoding(encodeStarted); }
+                    try { using (EvidenceServiceTiming.Measure(EvidenceServiceStage.InputJson)) payload = EvidenceJson.EncodeBounded(record.input); } finally { Metrics.Encoding(encodeStarted); }
                     if (record.schemaVersion >= 2 && payload.Contains("\"KnockbackSettings\""))
                     {
                         var shared = Newtonsoft.Json.Linq.JToken.Parse(payload); ShareKnockbackSettings(source, shared);
@@ -303,53 +402,129 @@ namespace MonsterSupergroup.NetworkCombat.Diagnostics
 
         private void Consume()
         {
-            try { lock (filesGate) { Directory.CreateDirectory(Root); RecoverExisting(); } } catch (Exception error) { LastFailure = error.Message; }
             try
             {
+            EvidenceWorkerProfiling.Start("writer", Root);
+            QueueObservation?.BeginBackground(EvidenceServiceContext.Startup, EvidenceStageMetrics.Now);
+            try { using (EvidenceServiceTiming.Measure(EvidenceServiceStage.Startup)) { lock (filesGate) { Directory.CreateDirectory(Root); RecoverExisting(); } } }
+            catch (Exception error) { LastFailure = error.Message; }
+            finally { QueueObservation?.EndBackground(EvidenceStageMetrics.Now); }
             while (true)
             {
                 (int bytes, Action action, AdvanceBlock advances, long queuedAt) work = default;
+                bool collecting;
                 lock (gate)
                 {
-                    bool collecting = !stopping && queue.Count == 1 && activeAdvances != null &&
+                    collecting = !stopping && queue.Count == 1 && activeAdvances != null &&
                         activeAdvances.count < AdvanceBlock.Capacity && Seconds - activeAdvances.created < .1;
                     if (queue.Count != 0 && !collecting)
-                    { work = queue.Dequeue(); if (ReferenceEquals(work.advances, activeAdvances)) activeAdvances = null; }
+                    {
+                        work = queue.Dequeue();
+                        QueueObservation?.PublishDequeuedWork(work.queuedAt, work.bytes);
+                        QueueObservation?.ConsumerPending(pendingBytes, EvidenceStageMetrics.Now);
+                        if (ReferenceEquals(work.advances, activeAdvances)) activeAdvances = null;
+                    }
                     else if (queue.Count == 0 && stopping) break;
                 }
                 if (work.action != null)
                 {
                     long started = System.Diagnostics.Stopwatch.GetTimestamp();
+                    QueueObservation?.BeginService(started);
+                    if (work.advances != null) BindAdvanceService(work.advances);
                     Metrics.QueueWait(work.queuedAt);
-                    try { work.action(); } catch (Exception error) { LastFailure = error.GetType().Name + ": " + error.Message; }
-                    finally { lock (gate) pendingBytes -= work.bytes; Memory.Release(work.bytes); Interlocked.Add(ref writeTicks, System.Diagnostics.Stopwatch.GetTimestamp() - started); }
+                    QueueObservation?.Dequeued(started);
+                    QueueObservation?.Span(EvidenceQueueStage.QueueResidence, work.queuedAt, started);
+                    try { EvidenceWorkerProfiling.BeginWork(); work.action(); } catch (Exception error) { LastFailure = error.GetType().Name + ": " + error.Message; }
+                    finally
+                    {
+                        var terminalWait = EvidenceServiceTiming.Measure(EvidenceServiceStage.TerminalGateWait);
+                        lock (gate) {
+                            terminalWait.Dispose();
+                            using var terminalGate = EvidenceServiceTiming.Measure(EvidenceServiceStage.TerminalGate);
+                            pendingBytes -= work.bytes; QueueObservation?.Pending(pendingBytes, EvidenceStageMetrics.Now); QueueObservation?.ConsumerPending(pendingBytes, EvidenceStageMetrics.Now);
+                        }
+                        using (EvidenceServiceTiming.Measure(EvidenceServiceStage.MemoryRelease)) Memory.Release(work.bytes);
+                        long ended = System.Diagnostics.Stopwatch.GetTimestamp();
+                        QueueObservation?.EndService(ended);
+                        Interlocked.Add(ref writeTicks, ended - started);
+                        QueueObservation?.Span(EvidenceQueueStage.Service, started, ended);
+                        QueueObservation?.Completed(work.bytes, ended);
+                        EvidenceWorkerProfiling.EndWork();
+                    }
                 }
-                else wake.WaitOne(50);
-                lock (filesGate) foreach (var pair in sources.ToArray()) if (pair.Value.BlockAge >= 0.1)
+                else
                 {
-                    try { pair.Value.FlushBlock(); }
-                    catch (Exception error) { FailSource(pair.Key, error); }
+                    long idle = QueueObservation == null ? 0 : EvidenceStageMetrics.Now;
+                    wake.WaitOne(50);
+                    QueueObservation?.Span(collecting ? EvidenceQueueStage.IdleCollecting : EvidenceQueueStage.IdleEmpty, idle, EvidenceStageMetrics.Now);
                 }
-                if (Seconds >= nextFlush) { FlushSources(false); nextFlush = Seconds + 1; }
-                if (Seconds >= nextPrune) { try { Prune(); } catch (Exception error) { LastFailure = error.Message; } nextPrune = Seconds + 5; }
+                QueueObservation?.BeginBackground(EvidenceServiceContext.Maintenance, EvidenceStageMetrics.Now);
+                EvidenceWorkerProfiling.BeginWork();
+                try
+                {
+                    using var maintenance = EvidenceServiceTiming.Measure(EvidenceServiceStage.Maintenance);
+                    long waiting = QueueObservation == null ? 0 : EvidenceStageMetrics.Now;
+                    var filesWaiting = EvidenceServiceTiming.Measure(EvidenceServiceStage.FilesGateWait);
+                    lock (filesGate)
+                    {
+                        filesWaiting.Dispose();
+                        QueueObservation?.Span(EvidenceQueueStage.FilesGateWait, waiting, EvidenceStageMetrics.Now);
+                        long aged = QueueObservation == null ? 0 : EvidenceStageMetrics.Now;
+                        try { foreach (var pair in sources.ToArray()) if (pair.Value.BlockAge >= 0.1)
+                        {
+                            try { pair.Value.FlushBlock(); }
+                            catch (Exception error) { FailSource(pair.Key, error); }
+                        } }
+                        finally { QueueObservation?.Span(EvidenceQueueStage.AgedBlockFlush, aged, EvidenceStageMetrics.Now); }
+                    }
+                    if (Seconds >= nextFlush) { FlushSources(false); nextFlush = Seconds + 1; }
+                    if (Seconds >= nextPrune)
+                    {
+                        long pruning = QueueObservation == null ? 0 : EvidenceStageMetrics.Now;
+                        try { Prune(); } catch (Exception error) { LastFailure = error.Message; }
+                        finally { QueueObservation?.Span(EvidenceQueueStage.Prune, pruning, EvidenceStageMetrics.Now); }
+                        nextPrune = Seconds + 5;
+                    }
+                }
+                finally { EvidenceWorkerProfiling.EndWork(); QueueObservation?.EndBackground(EvidenceStageMetrics.Now); }
             }
-            FlushSources(true);
+            QueueObservation?.BeginBackground(EvidenceServiceContext.Close, EvidenceStageMetrics.Now);
+            try { FlushSources(true); }
+            finally { QueueObservation?.EndBackground(EvidenceStageMetrics.Now); }
             }
             finally
             {
+                QueueObservation?.BeginBackground(EvidenceServiceContext.Close, EvidenceStageMetrics.Now);
+                try
+                {
                 lock (filesGate)
                 {
                     foreach (var source in sources.Values) source.Abort();
                     sources.Clear(); Memory.Release(catalogBytes); durableFiles.Clear(); catalogBytes = 0;
                 }
                 Memory.Release(CodecWorkspaceBytes); Volatile.Write(ref closed, true);
+                EvidenceWorkerProfiling.Stop();
+                }
+                finally { QueueObservation?.EndBackground(EvidenceStageMetrics.Now); }
             }
         }
 
         private void FlushSources(bool complete)
-        { lock (filesGate) FlushSourcesCore(complete); }
+        {
+            long started = QueueObservation == null ? 0 : EvidenceStageMetrics.Now;
+            var waiting = EvidenceServiceTiming.Measure(EvidenceServiceStage.FilesGateWait);
+            lock (filesGate)
+            {
+                waiting.Dispose();
+                QueueObservation?.Span(EvidenceQueueStage.FilesGateWait, started, EvidenceStageMetrics.Now);
+                long flushing = QueueObservation == null ? 0 : EvidenceStageMetrics.Now;
+                try { FlushSourcesCore(complete); }
+                finally { QueueObservation?.Span(EvidenceQueueStage.MaintenanceFlush, flushing, EvidenceStageMetrics.Now); }
+            }
+        }
         private void FlushSourcesCore(bool complete)
         {
+            using var coverage = EvidenceServiceTiming.Measure(EvidenceServiceStage.SourceCoverage);
             string[] keys; lock (gate) keys = health.Keys.ToArray();
             foreach (string key in keys)
             {
@@ -440,6 +615,7 @@ namespace MonsterSupergroup.NetworkCombat.Diagnostics
         }
         private void IndexFile(string path)
         {
+            using var indexing = EvidenceServiceTiming.Measure(EvidenceServiceStage.SourceIndex);
             string relative = path.Substring(Root.Length + 1).Replace('\\', '/');
             if (!relative.Contains("/sources/") || path.EndsWith(".tmp") || path.EndsWith(".partial") || path.EndsWith(".local.json")) return;
             if (!durableFiles.ContainsKey(relative))
@@ -532,6 +708,7 @@ namespace MonsterSupergroup.NetworkCombat.Diagnostics
         }
         private static void Recover(string directory)
         {
+            using var recovering = EvidenceServiceTiming.Measure(EvidenceServiceStage.SourceRecover);
             foreach (string path in Directory.EnumerateFiles(directory, "events-*.jsonl"))
             {
                 using var stream = new FileStream(path, FileMode.Open, FileAccess.ReadWrite, FileShare.Read);
@@ -558,6 +735,7 @@ namespace MonsterSupergroup.NetworkCombat.Diagnostics
         }
         private void Reserve(string path, long bytes)
         {
+            using var reserving = EvidenceServiceTiming.Measure(EvidenceServiceStage.StorageReserve);
             string run = RunDirectory(path);
             if (!usage.TryGetValue(run, out long used)) usage[run] = used = Size(run);
             if (totalUsage < 0) totalUsage = Size(Root);
@@ -570,7 +748,7 @@ namespace MonsterSupergroup.NetworkCombat.Diagnostics
             usage[run] = used + bytes; totalUsage += bytes;
         }
         private void Prune(long needed = 0)
-        { lock (filesGate) PruneCore(needed); }
+        { using var pruning = EvidenceServiceTiming.Measure(EvidenceServiceStage.Prune); lock (filesGate) PruneCore(needed); }
         private void PruneCore(long needed)
         {
             if (!Directory.Exists(Root)) return;
@@ -677,26 +855,37 @@ namespace MonsterSupergroup.NetworkCombat.Diagnostics
             private readonly IEvidenceStorage storage;
             private readonly Action<int> reserve;
             private readonly EvidenceStageMetrics metrics;
+            private readonly EvidenceQueueObservation observation;
             private readonly StringBuilder block = new();
             private DiagnosticRecord pending;
             private string first, last;
             private int blockBytes, count;
             private double blockStarted;
             public double BlockAge => blockBytes == 0 && pending == null ? 0 : Seconds - blockStarted;
-            public Source(string directory, IEvidenceStorage storage, Action<int> reserve, EvidenceStageMetrics metrics) { Directory = directory; this.storage = storage; this.reserve = reserve; this.metrics = metrics; }
+            public Source(string directory, IEvidenceStorage storage, Action<int> reserve, EvidenceStageMetrics metrics, EvidenceQueueObservation observation) { Directory = directory; this.storage = storage; this.reserve = reserve; this.metrics = metrics; this.observation = observation; }
             public void Rotate(double now, string sequence)
             {
                 Dispose(); string name = "events-" + ulong.Parse(sequence).ToString("D20") + ".jsonl";
-                Path = System.IO.Path.Combine(Directory, name); Stream = storage.OpenAppend(Path);
+                Path = System.IO.Path.Combine(Directory, name);
+                using (EvidenceServiceTiming.Measure(EvidenceServiceStage.EventOpen)) Stream = storage.OpenAppend(Path);
                 Writer = new StreamWriter(Stream, new UTF8Encoding(false), 16 * 1024, true);
                 Writer.NewLine = "\n";
                 Bytes = Stream.Length; Opened = now;
             }
             public void Append(DiagnosticRecord record, double now)
             {
+                using var appending = EvidenceServiceTiming.Measure(EvidenceServiceStage.EventAppend);
                 if (blockBytes == 0 && pending == null) blockStarted = now;
                 if (record.schemaVersion == 1 || record.stage == "replay.checkpoint" || record.stage == "replay.engine_checkpoint")
-                { FlushBlock(); WriteLine(EvidenceJson.EncodeBounded(record)); LastSequence = record.recordSequence; return; }
+                {
+                    FlushBlock();
+                    string line;
+                    using (EvidenceServiceTiming.Measure(EvidenceServiceStage.RecordJson)) line = EvidenceJson.EncodeBounded(record);
+                    WriteLine(line); LastSequence = record.recordSequence;
+                    if (observation != null && ulong.TryParse(record.recordSequence, out ulong sequence))
+                        EvidenceServiceTiming.RecordFlushedBlockFromDirectory(Directory, sequence, sequence, 1, EvidenceServiceBlockKind.JsonLine);
+                    return;
+                }
                 if (pending != null)
                 {
                     if (CanFold(pending, record))
@@ -716,6 +905,8 @@ namespace MonsterSupergroup.NetworkCombat.Diagnostics
                 FlushBlock();
                 WriteLine(EvidenceBlocks.EncodeAdvances(value.capture, value.run, value.round, value.entries, value.count, metrics));
                 LastSequence = value.entries[value.count - 1].sequence.ToString();
+                EvidenceServiceTiming.RecordFlushedBlockFromDirectory(Directory, value.entries[0].sequence,
+                    value.entries[value.count - 1].sequence, value.count, EvidenceServiceBlockKind.Advance);
             }
             private static bool CanFold(DiagnosticRecord begin, DiagnosticRecord end) =>
                 end.stage == "replay.output" && end.outcome == "Completed" && end.after == null && end.before == null && end.input == null && end.reason == null &&
@@ -731,30 +922,51 @@ namespace MonsterSupergroup.NetworkCombat.Diagnostics
             {
                 long started = EvidenceStageMetrics.Now;
                 string line;
-                try { line = EvidenceJson.EncodeBounded(record, EvidenceBlocks.MaximumDecodedBytes - 4096); } finally { metrics.Encoding(started); }
+                try { using (EvidenceServiceTiming.Measure(EvidenceServiceStage.RecordJson)) line = EvidenceJson.EncodeBounded(record, EvidenceBlocks.MaximumDecodedBytes - 4096); } finally { metrics.Encoding(started); }
                 int bytes = Encoding.UTF8.GetByteCount(line) + 1;
                 if (blockBytes != 0 && blockBytes + bytes > EvidenceBlocks.TargetBytes) FlushBlock();
                 if (blockBytes == 0) { first = record.recordSequence; blockStarted = Seconds; }
-                block.Append(line).Append('\n'); blockBytes += bytes; last = end; count += records;
+                using (EvidenceServiceTiming.Measure(EvidenceServiceStage.BlockBuild))
+                { block.Append(line).Append('\n'); blockBytes += bytes; last = end; count += records; }
                 if (blockBytes >= EvidenceBlocks.TargetBytes) FlushBlock();
             }
             public void FlushBlock()
             {
                 if (pending != null) { var value = pending; pending = null; Add(value, 1, value.recordSequence); }
                 if (blockBytes == 0) return;
-                WriteLine(EvidenceBlocks.Encode(Encoding.UTF8.GetBytes(block.ToString()), first, last, count, metrics));
+                byte[] raw;
+                using (EvidenceServiceTiming.Measure(EvidenceServiceStage.BlockBuild)) raw = Encoding.UTF8.GetBytes(block.ToString());
+                WriteLine(EvidenceBlocks.Encode(raw, first, last, count, metrics));
+                if (observation != null && ulong.TryParse(first, out ulong firstSequence) && ulong.TryParse(last, out ulong lastSequence))
+                    EvidenceServiceTiming.RecordFlushedBlockFromDirectory(Directory, firstSequence, lastSequence, count, EvidenceServiceBlockKind.JsonLine);
                 LastSequence = last; block.Clear(); blockBytes = 0; count = 0;
             }
             private void WriteLine(string line)
             {
                 int bytes = Encoding.UTF8.GetByteCount(line) + 1; long started = EvidenceStageMetrics.Now;
-                try { reserve(bytes); Writer.WriteLine(line); Bytes += bytes; } finally { metrics.Storage(started); }
+                try
+                {
+                    reserve(bytes);
+                    long writing = observation == null ? 0 : EvidenceStageMetrics.Now;
+                    try { using (EvidenceServiceTiming.Measure(EvidenceServiceStage.StreamWrite)) { Writer.WriteLine(line); Bytes += bytes; } }
+                    finally { observation?.Span(EvidenceQueueStage.Write, writing, EvidenceStageMetrics.Now); }
+                }
+                finally { metrics.Storage(started); }
             }
             public void Flush(bool durable)
             {
                 if (Writer == null) return;
                 FlushBlock(); long started = EvidenceStageMetrics.Now;
-                try { Writer.Flush(); storage.Flush(Stream, durable); HeldReferences.Clear(); } finally { metrics.Storage(started); }
+                try
+                {
+                    try { using (EvidenceServiceTiming.Measure(EvidenceServiceStage.StreamFlush)) Writer.Flush(); }
+                    finally { observation?.Span(EvidenceQueueStage.StreamFlush, started, EvidenceStageMetrics.Now); }
+                    long flushing = observation == null ? 0 : EvidenceStageMetrics.Now;
+                    try { using (EvidenceServiceTiming.Measure(EvidenceServiceStage.DurableFlush)) storage.Flush(Stream, durable); }
+                    finally { observation?.Span(EvidenceQueueStage.DurableFlush, flushing, EvidenceStageMetrics.Now); }
+                    HeldReferences.Clear();
+                }
+                finally { metrics.Storage(started); }
             }
             public void Abort()
             {

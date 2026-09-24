@@ -13,11 +13,12 @@ namespace MonsterSupergroup.NetworkCombat.Diagnostics
         private readonly Action<string> failure;
         private readonly Thread worker;
         private readonly int workspace;
+        private readonly string profilingIdentity;
         private long pending;
         private bool stopping;
-        public DiagnosticWorkQueue(DiagnosticMemoryBudget memory, Action<string> failure, int workspace = 16 << 20)
+        public DiagnosticWorkQueue(DiagnosticMemoryBudget memory, Action<string> failure, int workspace = 16 << 20, string profilingIdentity = null)
         {
-            this.memory = memory; this.failure = failure; this.workspace = workspace;
+            this.memory = memory; this.failure = failure; this.workspace = workspace; this.profilingIdentity = profilingIdentity;
             if (!memory.TryReserve(workspace)) throw new InvalidOperationException("DiagnosticReplicationBudgetUnavailable");
             worker = new Thread(Run) { IsBackground = true, Name = "Combat evidence replication" }; worker.Start();
         }
@@ -36,16 +37,17 @@ namespace MonsterSupergroup.NetworkCombat.Diagnostics
         {
             try
             {
+                EvidenceWorkerProfiling.Start("replication", profilingIdentity);
                 while (true)
                 {
                     (int bytes, Action work) item = default;
                     lock (gate) { if (queue.Count != 0) item = queue.Dequeue(); else if (stopping) break; }
                     if (item.work == null) { wake.WaitOne(50); continue; }
-                    try { item.work(); } catch (Exception error) { failure(error.GetType().Name + ": " + error.Message); }
-                    finally { lock (gate) pending -= item.bytes; memory.Release(item.bytes); }
+                    try { EvidenceWorkerProfiling.BeginWork(); item.work(); } catch (Exception error) { failure(error.GetType().Name + ": " + error.Message); }
+                    finally { lock (gate) pending -= item.bytes; memory.Release(item.bytes); EvidenceWorkerProfiling.EndWork(); }
                 }
             }
-            finally { memory.Release(workspace); }
+            finally { memory.Release(workspace); EvidenceWorkerProfiling.Stop(); }
         }
         public void Dispose() { lock (gate) stopping = true; wake.Set(); worker.Join(100); }
         public bool WaitForClose(int milliseconds = 5000) => worker.Join(milliseconds);

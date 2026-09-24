@@ -39,6 +39,7 @@ namespace MonsterSupergroup.NetworkCombat.Diagnostics
             public EncoderWorkspace() { writer = new BinaryWriter(raw, Encoding.UTF8, true); }
             public void Clear()
             {
+                using var clearing = EvidenceServiceTiming.Measure(EvidenceServiceStage.BlockWorkspace);
                 engines.Clear(); engineIndex.Clear(); boundaries.Clear(); boundaryIndex.Clear();
                 raw.SetLength(0); raw.Position = 0; compressed.SetLength(0); compressed.Position = 0; header.Clear();
                 if (raw.Capacity > MaximumDecodedBytes) raw.Capacity = TargetBytes;
@@ -50,21 +51,27 @@ namespace MonsterSupergroup.NetworkCombat.Diagnostics
         [ThreadStatic] private static EncoderWorkspace cachedWorkspace;
         private static EncoderWorkspace RentWorkspace()
         {
+            using var renting = EvidenceServiceTiming.Measure(EvidenceServiceStage.BlockWorkspace);
             var value = cachedWorkspace ?? (cachedWorkspace = new EncoderWorkspace());
             if (value.busy) value = new EncoderWorkspace();
             value.busy = true; return value;
         }
         public static string EncodeAdvances(string capture, string run, uint round, DiagnosticAdvance[] entries, int count, EvidenceStageMetrics metrics = null)
         {
+            using var encoding = EvidenceServiceTiming.Measure(EvidenceServiceStage.BlockEncode);
             long started = EvidenceStageMetrics.Now, compressedBefore = metrics?.CompressionTicks ?? 0;
             if (entries == null || count < 1 || count > 128 || count > entries.Length) throw new InvalidDataException("Invalid advance count.");
             var workspace = RentWorkspace();
             try
             {
+            int rawLength;
+            MemoryStream output;
+            using (EvidenceServiceTiming.Measure(EvidenceServiceStage.BlockBuild))
+            {
             var engines = workspace.engines; var engineIndex = workspace.engineIndex;
             var boundaries = workspace.boundaries; var boundaryIndex = workspace.boundaryIndex;
             var engineRows = workspace.engineRows; var boundaryRows = workspace.boundaryRows;
-            int rawLength = 10 + count * 49;
+            rawLength = 10 + count * 49;
             for (int i = 0; i < count; i++)
             {
                 var e = entries[i]; var key = (e.role, e.engine, e.operation);
@@ -92,7 +99,7 @@ namespace MonsterSupergroup.NetworkCombat.Diagnostics
                 engineRows[i] = (ushort)engine; boundaryRows[i] = (short)boundary;
             }
             if (rawLength > MaximumDecodedBytes) throw new InvalidDataException("AdvanceBinarySizeLimit");
-            var output = workspace.raw; var writer = workspace.writer;
+            output = workspace.raw; var writer = workspace.writer;
             {
                 writer.Write(0x32445641u); writer.Write((ushort)count); writer.Write((ushort)engines.Count); writer.Write((ushort)boundaries.Count);
                 foreach (var engine in engines) foreach (var text in engine)
@@ -115,6 +122,7 @@ namespace MonsterSupergroup.NetworkCombat.Diagnostics
             }
             if (output.Position != rawLength) throw new InvalidDataException("AdvanceBinarySizeMismatch");
             metrics?.BinaryBuild(started);
+            }
             string encoded = EncodeBlock(output.GetBuffer(), rawLength, "advance-binary-v1", entries[0].sequence.ToString(CultureInfo.InvariantCulture),
                 entries[count - 1].sequence.ToString(CultureInfo.InvariantCulture), count, capture, run, round, workspace, metrics);
             metrics?.Encoding(started, compressedBefore);
@@ -128,11 +136,13 @@ namespace MonsterSupergroup.NetworkCombat.Diagnostics
             if ((first?.Length ?? 0) > 4096 || (last?.Length ?? 0) > 4096 ||
                 (capture?.Length ?? 0) > 4096 || (run?.Length ?? 0) > 4096) throw new InvalidDataException("EvidenceBlockIdentityLimit");
             long hashStarted = EvidenceStageMetrics.Now;
-            string hash = EvidenceJson.Hash(raw, rawLength);
+            string hash;
+            using (EvidenceServiceTiming.Measure(EvidenceServiceStage.BlockHash)) hash = EvidenceJson.Hash(raw, rawLength);
             metrics?.BlockHash(hashStarted);
             var compressed = workspace.compressed;
-            EvidenceJson.CompressInto(raw, rawLength, compressed, metrics);
+            using (EvidenceServiceTiming.Measure(EvidenceServiceStage.BlockCompress)) EvidenceJson.CompressInto(raw, rawLength, compressed, metrics);
             long headerStarted = EvidenceStageMetrics.Now;
+            using var header = EvidenceServiceTiming.Measure(EvidenceServiceStage.BlockHeader);
             // The fixed envelope has no arbitrary payloads or converters. Keep its v2 field order without per-block reflection/DTOs.
             using var text = new StringWriter(workspace.header, CultureInfo.InvariantCulture);
             using (var writer = new JsonTextWriter(text))
@@ -155,6 +165,7 @@ namespace MonsterSupergroup.NetworkCombat.Diagnostics
         }
         public static string Encode(byte[] utf8, string first, string last, int count, EvidenceStageMetrics metrics = null)
         {
+            using var encoding = EvidenceServiceTiming.Measure(EvidenceServiceStage.BlockEncode);
             long started = EvidenceStageMetrics.Now, compressedBefore = metrics?.CompressionTicks ?? 0;
             if (utf8 == null || utf8.Length > MaximumDecodedBytes) throw new InvalidDataException("EvidenceBlockSizeLimit");
             var workspace = RentWorkspace();
@@ -284,9 +295,11 @@ namespace MonsterSupergroup.NetworkCombat.Diagnostics
         public long Used { get { lock (gate) return used; } }
         public long Peak { get { lock (gate) return peak; } }
         public DiagnosticMemoryBudget(long limit = 128L << 20) { Limit = limit; }
-        public bool TryReserve(long bytes)
+        public bool TryReserve(long bytes) => TryReserve(bytes, out _);
+        // Capture the admission watermark under the same lock as the decision.
+        public bool TryReserve(long bytes, out long usedBefore)
         {
-            lock (gate) { if (bytes < 0 || bytes > Limit - used) return false; used += bytes; peak = Math.Max(peak, used); return true; }
+            lock (gate) { usedBefore = used; if (bytes < 0 || bytes > Limit - used) return false; used += bytes; peak = Math.Max(peak, used); return true; }
         }
         public void Release(long bytes) { lock (gate) { if (bytes < 0 || bytes > used) throw new InvalidOperationException("Unbalanced diagnostic budget."); used -= bytes; } }
     }

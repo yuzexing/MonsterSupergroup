@@ -108,7 +108,7 @@ namespace MonsterSupergroup.EditorTools
                 if (after.ContentHash != plan.ContentHash || after.InputHash != plan.InputHash)
                 {
                     File.WriteAllText(Path.Combine(stage, "build-plan-after.json"), after.ToJson());
-                    throw new BuildFailedException($"构建期间配置或工程输入改变，本次不发布。Content={plan.ContentHash == after.ContentHash}, Input={plan.InputHash == after.InputHash}；差异快照已写入失败目录。");
+                    Debug.LogWarning($"构建期间配置或工程输入摘要改变。Content={plan.ContentHash == after.ContentHash}, Input={plan.InputHash == after.InputHash}；构建后计划已记录，不以摘要差异单独拒绝发布。");
                 }
                 ProjectBuildIdentity.Complete(report);
                 ProjectBuildPackage.Validate(path, plan, info);

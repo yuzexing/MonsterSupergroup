@@ -3,6 +3,7 @@ param(
     [string]$Executable = '',
     [ValidateSet('D3D12','D3D11','Default')][string]$Graphics = 'D3D12',
     [ValidateSet('host','client','solo')][string]$ExpectedRole = 'client',
+    [ValidateSet('Default','off','local','replicated')][string]$EvidenceMode = 'Default',
     [string]$Scenario = 'R1',
     [string]$ArtifactDirectory,
     [int]$AttachProcessId = 0,
@@ -10,6 +11,7 @@ param(
     [switch]$PrepareOnly
 )
 $ErrorActionPreference = 'Stop'
+if ($AttachProcessId -and $EvidenceMode -ne 'Default') { throw 'AttachProcessId cannot apply EvidenceMode to an existing process. Use Default to inspect its original configuration.' }
 $projectRoot = Split-Path -Parent (Split-Path -Parent $PSScriptRoot)
 Import-Module (Join-Path (Split-Path -Parent $PSScriptRoot) 'ProjectTools.psm1')
 if (-not $AttachProcessId) { $Executable = Resolve-ProjectBuildExecutable -ProjectRoot $projectRoot -Recipe 'product' -Executable $Executable -Network Steam }
@@ -50,10 +52,23 @@ try {
     $hardware.displayAdapters=@(Get-CimInstance Win32_VideoController | Select-Object Name,PNPDeviceID,DriverVersion,DriverDate,CurrentHorizontalResolution,CurrentVerticalResolution,CurrentRefreshRate)
 } catch { $hardware.errors += $_.Exception.Message }
 Save-Json $hardware 'hardware.json'
-$arguments = @('-timestamps','-logFile',('"' + (Join-Path $ArtifactDirectory 'Player.log') + '"'),'--network-diagnostics',('"--network-diagnostics-output=' + (Join-Path $ArtifactDirectory 'metrics') + '"'))
+$playerLog = Join-Path $ArtifactDirectory 'Player.log'
+$networkOutput = Join-Path $ArtifactDirectory 'metrics'
+$evidenceOutput = $null
+$arguments = @('-timestamps','-logFile',('"' + $playerLog + '"'),'--network-diagnostics',('"--network-diagnostics-output=' + $networkOutput + '"'))
+switch ($EvidenceMode) {
+    'off' { $arguments += '--no-combat-evidence' }
+    'local' { $arguments += '--combat-evidence-local-only' }
+    'replicated' { $arguments += '--combat-evidence' }
+}
+if ($EvidenceMode -in @('local','replicated')) {
+    $evidenceOutput = Join-Path $ArtifactDirectory 'CombatDiagnostics'
+    $arguments += '"--combat-evidence-output=' + $evidenceOutput + '"'
+}
 if ($Graphics -ne 'Default') { $arguments += '-force-' + $Graphics.ToLowerInvariant() }
 if ($ProfileSeconds) { $arguments += "--network-profiler-seconds=$ProfileSeconds" }
-$record = [ordered]@{schemaVersion=1; scenario=$Scenario; expectedRole=$ExpectedRole; executable=$Executable; arguments=$arguments; requestedGraphics=$Graphics; attached=[bool]$AttachProcessId; startedUtc=$null; processId=$null; complete=$false; exitCode=$null; errors=@(); notes=@(); crashEvents=@(); dumps=@()}
+$record = [ordered]@{schemaVersion=1; scenario=$Scenario; expectedRole=$ExpectedRole; executable=$Executable; arguments=$arguments; requestedGraphics=$Graphics; requestedEvidenceMode=$EvidenceMode; requestedPlayerLog=$playerLog; requestedNetworkOutput=$networkOutput; requestedEvidenceOutput=$evidenceOutput; launcherArgumentsApplied=$false; attached=[bool]$AttachProcessId; startedUtc=$null; processId=$null; complete=$false; exitCode=$null; errors=@(); notes=@(); crashEvents=@(); dumps=@()}
+if ($AttachProcessId) { $record.notes += 'Attach mode: requested launcher arguments and output paths are not applied to the existing process.' }
 Save-Json $record 'capture.json'
 Write-Output "Artifacts: $ArtifactDirectory"
 Write-Output 'Use ordinary Steam rooms. Keep both machines on the same package. Close the game normally after the round.'
@@ -62,6 +77,7 @@ if ($PrepareOnly) { Write-Output ('Prepared arguments: ' + ($arguments -join ' '
 if (-not $AttachProcessId) {
     # This user-invoked launcher deliberately opens an interactive game window.
     $player = Start-Process -FilePath $Executable -WorkingDirectory $package -ArgumentList $arguments -WindowStyle Normal -PassThru
+    $record.launcherArgumentsApplied=$true
 }
 $null = $player.Handle
 $record.processId=$player.Id
@@ -154,7 +170,13 @@ try {
     }
     $metricFiles=@(Get-ChildItem -LiteralPath $metrics -Filter '*.jsonl' -ErrorAction SilentlyContinue)
     $record.metricFiles=@($metricFiles | ForEach-Object {$_.FullName})
-    if(-not $metricFiles.Count){$record.errors += 'No diagnostic samples found; cannot infer FPS/GC/queue values from absence.'}
+    if(-not $metricFiles.Count){
+        if($EvidenceMode -in @('local','replicated')) {
+            $record.notes += 'No standalone metrics found. Trends may be embedded in CombatDiagnostics; presence and completeness remain unknown until offline evidence audit.'
+        } else {
+            $record.errors += 'No diagnostic samples found; cannot infer FPS/GC/queue values from absence.'
+        }
+    }
     $record.normalExit=($record.exitCode -eq 0 -and $record.crashEvents.Count -eq 0)
     # Complete means collection finished, not that the game or each metrics stream passed.
     $record.complete=$true

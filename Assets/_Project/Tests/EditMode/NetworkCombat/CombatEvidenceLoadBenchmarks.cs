@@ -16,6 +16,7 @@ namespace MonsterSupergroup.NetworkCombat.Tests
     public sealed class CombatEvidenceLoadBenchmarks
     {
         private const int Frequency = 144;
+        private static bool serviceCpuProbeCompleted;
         private const string Run = "load";
         private static readonly string Capture = new string('a', 32), RemoteCapture = new string('b', 32);
         private static double Seconds(long ticks) => ticks / (double)Stopwatch.Frequency;
@@ -31,6 +32,13 @@ namespace MonsterSupergroup.NetworkCombat.Tests
         {
             if (Environment.GetEnvironmentVariable("COMBAT_EVIDENCE_BENCHMARK") != "1")
                 Assert.Ignore("Opt in with COMBAT_EVIDENCE_BENCHMARK=1; full default matrix is 81 minutes plus drain time.");
+            // Calibrate only the OS counter, on its own thread, before any measured Store exists.
+            // Never calibrate on the writer whose startup service we are trying to observe.
+            if (!serviceCpuProbeCompleted && Environment.GetEnvironmentVariable("COMBAT_EVIDENCE_OBSERVE_QUEUE") == "1")
+            {
+                EvidenceServiceCpuCounter.Probe();
+                serviceCpuProbeCompleted = true;
+            }
             double duration = Option("COMBAT_EVIDENCE_BENCHMARK_SECONDS", 180, .25, 3600);
             int repeats = (int)Option("COMBAT_EVIDENCE_BENCHMARK_REPEATS", 3, 1, 20);
             double catchup = Option("COMBAT_EVIDENCE_BENCHMARK_CATCHUP_SECONDS", 45, 0, 600);
@@ -60,6 +68,8 @@ namespace MonsterSupergroup.NetworkCombat.Tests
 
         private static void RunOne(string directory, int count, string mode, double targetSeconds, int frames, double catchupSeconds, string expectedHash, int repeat)
         {
+            bool observeQueue = Environment.GetEnvironmentVariable("COMBAT_EVIDENCE_OBSERVE_QUEUE") == "1";
+            long observationOrigin = observeQueue ? Stopwatch.GetTimestamp() : 0;
             var stores = new List<CombatEvidenceStore>();
             var replicators = new List<DiagnosticReplicator>();
             var memory = new DiagnosticMemoryBudget();
@@ -76,6 +86,7 @@ namespace MonsterSupergroup.NetworkCombat.Tests
             long drainTicks = 0, drainCoverageChecks = 0;
             double drainTickSpan = 0;
             bool matched = false, caughtUp = mode != "replicated";
+            bool allConsumersJoined = true;
             object missing = Array.Empty<object>();
             string actualHash = null, failure = null;
             long produced = 0;
@@ -83,12 +94,14 @@ namespace MonsterSupergroup.NetworkCombat.Tests
             {
                 if (mode != "off")
                 {
-                    var store = new CombatEvidenceStore(Path.Combine(directory, "primary"), new EvidenceStoreOptions { Memory = memory });
+                    var store = new CombatEvidenceStore(Path.Combine(directory, "primary"), new EvidenceStoreOptions {
+                        Memory = memory, ObserveQueue = observeQueue, ObservationOriginTicks = observationOrigin });
                     stores.Add(store); sink = new ProbeSink(store);
                     CombatEvidence.Sink = sink;
                     if (mode == "replicated")
                     {
-                        stores.Add(new CombatEvidenceStore(Path.Combine(directory, "remote"), new EvidenceStoreOptions { Memory = memory }));
+                        stores.Add(new CombatEvidenceStore(Path.Combine(directory, "remote"), new EvidenceStoreOptions {
+                            Memory = memory, ObserveQueue = observeQueue, ObservationOriginTicks = observationOrigin }));
                         replicators.Add(new DiagnosticReplicator(stores[0], new Endpoint(hub, 0), Capture));
                         replicators.Add(new DiagnosticReplicator(stores[1], new Endpoint(hub, 1), RemoteCapture));
                         stores[1].TryWrite(new DiagnosticRecord { captureId = RemoteCapture, runId = Run, round = 1, recordSequence = "1",
@@ -97,6 +110,8 @@ namespace MonsterSupergroup.NetworkCombat.Tests
                 }
                 else CombatEvidence.Sink = null;
                 var workload = new Workload(count, targetSeconds);
+                var mainObservation = observeQueue && stores.Count > 0 ? stores[0].QueueObservation : null;
+                if (observeQueue) MarkQueuePhase(stores, EvidenceQueuePhase.Load);
                 var clock = Stopwatch.StartNew();
                 long allocatedStart = allocationMeasurementAvailable ? GC.GetAllocatedBytesForCurrentThread() : 0;
                 collections = new[] { GC.CollectionCount(0), GC.CollectionCount(1), GC.CollectionCount(2) };
@@ -105,22 +120,31 @@ namespace MonsterSupergroup.NetworkCombat.Tests
                     Pace(clock, frame / (double)Frequency);
                     if (sink != null) { sink.Frame = frame; sink.NetworkTime = frame / (double)Frequency; }
                     long started = Stopwatch.GetTimestamp(), previousCapture = sink?.CaptureTicks ?? 0;
-                    workload.Step(frame);
-                    localFrameMs[frame] = Seconds(Stopwatch.GetTimestamp() - started) * 1000;
-                    if (sink != null && frame > 0 && frame % (10 * Frequency) == 0)
+                    long ended = 0;
+                    mainObservation?.BeginMainFrame(frame, started, (ulong)(sink?.Sequence ?? 0));
+                    try
                     {
-                        long checkpointStarted = Stopwatch.GetTimestamp(); sink.Checkpoint();
-                        checkpointMs[frame] = Seconds(Stopwatch.GetTimestamp() - checkpointStarted) * 1000;
+                        using (DiagnosticMainTiming.Measure(DiagnosticMainStage.WorkloadStep)) workload.Step(frame);
+                        localFrameMs[frame] = Seconds(Stopwatch.GetTimestamp() - started) * 1000;
+                        if (sink != null && frame > 0 && frame % (10 * Frequency) == 0)
+                        {
+                            long checkpointStarted = Stopwatch.GetTimestamp(); sink.Checkpoint();
+                            checkpointMs[frame] = Seconds(Stopwatch.GetTimestamp() - checkpointStarted) * 1000;
+                        }
+                        using (DiagnosticMainTiming.Measure(DiagnosticMainStage.ReplicationTick))
+                            foreach (var replication in replicators) replication.Tick(clock.Elapsed.TotalSeconds, Run);
+                        ended = Stopwatch.GetTimestamp();
+                        frameMs[frame] = Seconds(ended - started) * 1000;
+                        captureMs[frame] = Seconds((sink?.CaptureTicks ?? 0) - previousCapture) * 1000;
                     }
-                    foreach (var replication in replicators) replication.Tick(clock.Elapsed.TotalSeconds, Run);
-                    frameMs[frame] = Seconds(Stopwatch.GetTimestamp() - started) * 1000;
-                    captureMs[frame] = Seconds((sink?.CaptureTicks ?? 0) - previousCapture) * 1000;
+                    finally { mainObservation?.EndMainFrame(ended == 0 ? Stopwatch.GetTimestamp() : ended, (ulong)(sink?.Sequence ?? 0)); }
                     if (clock.Elapsed.TotalSeconds > (frame + 1d) / Frequency) deadlineMisses++;
                     maximumRetained = Math.Max(maximumRetained, GC.GetTotalMemory(false));
                 }
                 elapsed = clock.Elapsed.TotalSeconds;
                 allocations = allocationMeasurementAvailable ? GC.GetAllocatedBytesForCurrentThread() - allocatedStart : 0;
                 collections = new[] { GC.CollectionCount(0) - collections[0], GC.CollectionCount(1) - collections[1], GC.CollectionCount(2) - collections[2] };
+                if (observeQueue) MarkQueuePhase(stores, EvidenceQueuePhase.Catchup);
                 using (CombatEvidence.Suppress()) actualHash = workload.Digest();
                 matched = actualHash == expectedHash;
                 sink?.Checkpoint();
@@ -159,8 +183,45 @@ namespace MonsterSupergroup.NetworkCombat.Tests
             finally
             {
                 CombatEvidence.Sink = null;
+                if (observeQueue) MarkQueuePhase(stores, EvidenceQueuePhase.Close);
                 foreach (var replication in replicators) replication.Dispose();
-                foreach (var store in stores) { store.Dispose(); if (!store.WaitForClose(30000)) failure = (failure ?? "") + " WriterDrainTimeout"; }
+                if (observeQueue)
+                    foreach (var replication in replicators)
+                        if (!replication.WaitForClose(30000)) allConsumersJoined = false;
+                foreach (var store in stores)
+                {
+                    store.Dispose();
+                    if (!store.WaitForClose(30000)) { allConsumersJoined = false; failure = (failure ?? "") + " WriterDrainTimeout"; }
+                }
+            }
+            if (observeQueue)
+            {
+                var endpoints = new List<object>();
+                bool allExported = allConsumersJoined;
+                for (int index = 0; index < stores.Count; index++)
+                {
+                    var store = stores[index];
+                    string endpoint = index == 0 ? "primary" : "remote";
+                    string relative = endpoint + "-queue-observation.json";
+                    bool exported = false;
+                    string exportError = null;
+                    if (allConsumersJoined)
+                        try { exported = store.ExportQueueObservation(Path.Combine(directory, relative)); }
+                        catch (Exception error) { exportError = error.ToString(); }
+                    allExported &= exported;
+                    endpoints.Add(new { endpoint, observationRequested = store.ObservationRequested,
+                        observerAvailable = store.QueueObservation != null, exported, path = exported ? relative : null,
+                        status = exported ? "ExportedAfterAllConsumersJoined" : !allConsumersJoined ? "ConsumersNotJoined" :
+                            store.QueueObservation == null ? "ObservationUnavailable" : "ExportFailed",
+                        reason = store.ObservationUnavailableReason, exportError });
+                }
+                File.WriteAllText(Path.Combine(directory, "queue-observation.json"), EvidenceJson.Encode(new {
+                    schemaVersion = 1, kind = "bounded-queue-observation", controllers = count, mode, repeat,
+                    observationOriginTicks = observationOrigin, stopwatchFrequency = Stopwatch.Frequency, allConsumersJoined, allExported,
+                    status = stores.Count == 0 ? "NoDiagnosticStores" : allConsumersJoined ? "ConsumersJoined" : "ConsumersNotJoined",
+                    endpoints,
+                    limitation = "Opt-in queue observation has bounded observer overhead; it does not change acceptance thresholds or extend load/catch-up windows."
+                }), new UTF8Encoding(false));
             }
             var report = new {
                 schemaVersion = 2, kind = "status-dominated-paced-cpu-probe", controllers = count, mode, repeat, targetSeconds, frames,
@@ -168,6 +229,7 @@ namespace MonsterSupergroup.NetworkCombat.Tests
                 targetHz = Frequency, elapsedSeconds = elapsed, achievedHz = elapsed > 0 ? frames / elapsed : 0, deadlineMisses,
                 scope = "EditMode CPU/status/Gateway/Replica/storage probe; synthetic two-endpoint transport in one process; not Unity total frame/GPU/physics/Steam performance",
                 mainFrameSamplesPath = "frames.csv",
+                queueObservationPath = observeQueue ? "queue-observation.json" : null,
                 mainFrame = Distribution(frameMs), businessAndCapture = Distribution(localFrameMs), captureOnly = Distribution(captureMs),
                 checkpoint = Distribution(checkpointMs.Where(v => v > 0).ToArray()),
                 mainThreadAllocatedBytes = allocationMeasurementAvailable ? (long?)allocations : null,
@@ -206,6 +268,12 @@ namespace MonsterSupergroup.NetworkCombat.Tests
             Assert.That(stores.All(s => s.PeakPendingBytes <= 32L << 20), Is.True, output);
             Assert.That(stores.Sum(s => s.Dropped), Is.Zero, output);
             // A slow link is an explicit result, not a fabricated failure or a claim of full replication.
+        }
+
+        private static void MarkQueuePhase(IEnumerable<CombatEvidenceStore> stores, EvidenceQueuePhase phase)
+        {
+            long now = Stopwatch.GetTimestamp();
+            foreach (var store in stores) store.QueueObservation?.MarkPhase(phase, now);
         }
 
         private static bool ProbeAllocationCounter(out string reason)
@@ -276,9 +344,11 @@ namespace MonsterSupergroup.NetworkCombat.Tests
             private readonly Dictionary<object, (string id, string domain, Func<object, object> capture)> engines = new();
             public int Frame; public double NetworkTime; public long Sequence, CaptureTicks;
             public int EngineCount => engines.Count;
+            public ulong ProducedSequence() => (ulong)Sequence;
             public ProbeSink(CombatEvidenceStore store) { this.store = store; }
             public string RegisterEngine(object engine, string domain, Func<object, object> capture)
             {
+                using var timing = DiagnosticMainTiming.Measure(DiagnosticMainStage.Registry);
                 if (engines.TryGetValue(engine, out var known)) return known.id;
                 string id = domain + "." + (engines.Count + 1); engines.Add(engine, (id, domain, capture));
                 Checkpoint(engine, id, domain, capture); return id;
@@ -289,11 +359,15 @@ namespace MonsterSupergroup.NetworkCombat.Tests
                 long start = Stopwatch.GetTimestamp();
                 try
                 {
-                    record.captureId = Capture; record.runId = Run; record.round = 1; record.recordSequence = (++Sequence).ToString();
-                    record.frame = Frame; record.fixedStep = Frame * 50 / Frequency; record.networkTime = NetworkTime;
-                    record.monotonicTime = Seconds(start); record.utc = DateTime.UtcNow.ToString("o");
-                    record.estimatedBytes = (int)Math.Min(int.MaxValue, Math.Max(record.estimatedBytes,
-                        512L + CombatEvidenceRuntime.RetainedBytes(record.input) + CombatEvidenceRuntime.RetainedBytes(record.before) + CombatEvidenceRuntime.RetainedBytes(record.after)));
+                    using (DiagnosticMainTiming.Measure(DiagnosticMainStage.SinkMetadata))
+                    {
+                        record.captureId = Capture; record.runId = Run; record.round = 1; record.recordSequence = (++Sequence).ToString();
+                        record.frame = Frame; record.fixedStep = Frame * 50 / Frequency; record.networkTime = NetworkTime;
+                        record.monotonicTime = Seconds(start); record.utc = DateTime.UtcNow.ToString("o");
+                    }
+                    using (DiagnosticMainTiming.Measure(DiagnosticMainStage.RetainedSize))
+                        record.estimatedBytes = (int)Math.Min(int.MaxValue, Math.Max(record.estimatedBytes,
+                            512L + CombatEvidenceRuntime.RetainedBytes(record.input) + CombatEvidenceRuntime.RetainedBytes(record.before) + CombatEvidenceRuntime.RetainedBytes(record.after)));
                     return store.TryWrite(record, capture == null, capture);
                 }
                 finally { CaptureTicks += Stopwatch.GetTimestamp() - start; }
@@ -306,13 +380,20 @@ namespace MonsterSupergroup.NetworkCombat.Tests
             public bool TryWriteAdvance(string role, string engine, string operation, float delta, StatusReplayBoundary boundary, int phase)
             {
                 long start = Stopwatch.GetTimestamp();
-                try { return store.TryWriteAdvance(Capture, Run, 1, new DiagnosticAdvance { role = role, engine = engine, operation = operation,
-                    delta = delta, boundary = boundary, phase = phase, sequence = (ulong)++Sequence, utcTicks = DateTime.UtcNow.Ticks,
-                    monotonic = Seconds(start), network = NetworkTime, frame = Frame, fixedStep = Frame * 50 / Frequency }); }
+                try
+                {
+                    DiagnosticAdvance entry;
+                    using (DiagnosticMainTiming.Measure(DiagnosticMainStage.SinkMetadata))
+                        entry = new DiagnosticAdvance { role = role, engine = engine, operation = operation,
+                            delta = delta, boundary = boundary, phase = phase, sequence = (ulong)++Sequence, utcTicks = DateTime.UtcNow.Ticks,
+                            monotonic = Seconds(start), network = NetworkTime, frame = Frame, fixedStep = Frame * 50 / Frequency };
+                    return store.TryWriteAdvance(Capture, Run, 1, entry);
+                }
                 finally { CaptureTicks += Stopwatch.GetTimestamp() - start; }
             }
             public void Checkpoint()
             {
+                using var timing = DiagnosticMainTiming.Measure(DiagnosticMainStage.Checkpoint);
                 Write(new DiagnosticRecord { role = "Process", stage = "replay.checkpoint", engine = "*", outcome = "Captured",
                     critical = true, estimatedBytes = 8 << 20 }, () => {
                     using var suppressed = CombatEvidence.Suppress();
@@ -324,6 +405,7 @@ namespace MonsterSupergroup.NetworkCombat.Tests
             }
             private void Checkpoint(object engine, string id, string domain, Func<object, object> capture)
             {
+                using var timing = DiagnosticMainTiming.Measure(DiagnosticMainStage.Checkpoint);
                 Write(new DiagnosticRecord { role = domain, engine = id, stage = "replay.engine_checkpoint",
                     outcome = "Captured", critical = true, estimatedBytes = 8 << 20 }, () => {
                         using var suppressed = CombatEvidence.Suppress();

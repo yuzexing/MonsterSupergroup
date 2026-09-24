@@ -20,9 +20,11 @@ namespace MonsterSupergroup.NetworkCombat.Diagnostics
             ContractResolver = new EvidenceResolver(),
             FloatFormatHandling = FloatFormatHandling.String, ReferenceLoopHandling = ReferenceLoopHandling.Error,
             NullValueHandling = NullValueHandling.Ignore, Converters = { new UnsignedIdConverter(), new CombatContextConverter() } };
-        public static string Encode(object value) => JsonConvert.SerializeObject(value, Settings);
+        public static string Encode(object value)
+        { using var encoding = EvidenceServiceTiming.Measure(EvidenceServiceStage.JsonEncode); return JsonConvert.SerializeObject(value, Settings); }
         public static string EncodeBounded(object value, int maximumBytes = 16 << 20)
         {
+            using var encoding = EvidenceServiceTiming.Measure(EvidenceServiceStage.JsonEncode);
             using var writer = new BoundedWriter(maximumBytes);
             using var json = new JsonTextWriter(writer);
             JsonSerializer.Create(Settings).Serialize(json, value); json.Flush(); return writer.ToString();
@@ -105,24 +107,32 @@ namespace MonsterSupergroup.NetworkCombat.Diagnostics
         }
         public static void AtomicWrite(string path, string text)
         {
+            using var atomic = EvidenceServiceTiming.Measure(EvidenceServiceStage.AtomicWrite);
             string temporary = path + ".tmp";
-            using (var stream = new FileStream(temporary, FileMode.Create, FileAccess.Write, FileShare.None))
+            FileStream opened;
+            using (EvidenceServiceTiming.Measure(EvidenceServiceStage.AtomicOpen)) opened = new FileStream(temporary, FileMode.Create, FileAccess.Write, FileShare.None);
+            using (var stream = opened)
             {
-                byte[] bytes = Encoding.UTF8.GetBytes(text); stream.Write(bytes, 0, bytes.Length); stream.Flush(true);
+                byte[] bytes;
+                using (EvidenceServiceTiming.Measure(EvidenceServiceStage.AtomicUtf8)) bytes = Encoding.UTF8.GetBytes(text);
+                using (EvidenceServiceTiming.Measure(EvidenceServiceStage.AtomicWriteBytes)) stream.Write(bytes, 0, bytes.Length);
+                using (EvidenceServiceTiming.Measure(EvidenceServiceStage.AtomicFlush)) stream.Flush(true);
             }
             // Windows scanners can briefly hold the destination without delete sharing. Retry only on the disk worker.
             for (int attempt = 0; ; attempt++)
             {
                 try
                 {
+                    using var replacing = EvidenceServiceTiming.Measure(EvidenceServiceStage.AtomicReplace);
                     if (File.Exists(path)) File.Replace(temporary, path, null);
                     else File.Move(temporary, path);
                     break;
                 }
                 catch (IOException error)
                 {
+                    EvidenceServiceTiming.RecordIoRetry(error.HResult, attempt, attempt < 3);
                     if (attempt == 3) throw new IOException("EvidenceMetadataWriteFailed " + path + " (" + error.HResult + ")", error);
-                    System.Threading.Thread.Sleep(10 << attempt);
+                    using (EvidenceServiceTiming.Measure(EvidenceServiceStage.AtomicRetryWait)) System.Threading.Thread.Sleep(10 << attempt);
                 }
             }
         }

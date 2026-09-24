@@ -29,7 +29,8 @@ if ($Output.StartsWith($ProjectPath.TrimEnd('\','/') + [IO.Path]::DirectorySepar
 $active = @(Get-CimInstance Win32_Process -Filter "Name = 'Unity.exe'" | Where-Object { $_.CommandLine -and $_.CommandLine.Replace('/','\').IndexOf($ProjectPath.Replace('/','\'), [StringComparison]::OrdinalIgnoreCase) -ge 0 })
 if ($active.Count) { throw 'The independent validation project is already open in Unity; do not synchronize a running project.' }
 $helper = Join-Path $PSScriptRoot 'CombatEvidenceValidation.py'
-$preparation = @($helper,'prepare','--source',$workspace,'--project',$ProjectPath,'--output',$Output,'--unity',$Unity)
+$inputPolicy = if ($Mode -eq 'Build') { 'full-v1' } else { 'editor-generated-v1' }
+$preparation = @($helper,'prepare','--source',$workspace,'--project',$ProjectPath,'--output',$Output,'--unity',$Unity,'--input-policy',$inputPolicy,'--mode',$Mode)
 if ($OverlayDirectory) { $preparation += @('--overlay',[IO.Path]::GetFullPath($OverlayDirectory)) }
 & $Python @preparation
 if ($LASTEXITCODE -ne 0) { throw "Snapshot preparation failed; inspect $Output" }
@@ -39,6 +40,7 @@ $helper = Join-Path $Output 'tool-sources/Tools/CombatEvidenceValidation.py'
 if (-not (Test-Path -LiteralPath $helper -PathType Leaf)) { throw 'Preparation did not archive its validation helper.' }
 $results = Join-Path $Output 'results.xml'
 $log = Join-Path $Output 'unity.log'
+$fixtureInputs = @()
 $arguments = @('-batchmode','-nographics','-projectPath',$ProjectPath,'-logFile',$log)
 if ($Mode -eq 'Tests') {
     if ($ExecuteMethod -or $FixturePath.Count) { throw 'ExecuteMethod and FixturePath require Replay or Build mode.' }
@@ -66,6 +68,11 @@ elseif ($Mode -eq 'Replay') {
     }
     [ordered]@{fixtures=$fixtureFiles} | ConvertTo-Json -Depth 4 | Set-Content -LiteralPath (Join-Path $fixtureDirectory 'manifest.json') -Encoding UTF8
     $fixtureSources | ConvertTo-Json -Depth 4 | Set-Content -LiteralPath (Join-Path $Output 'fixture-sources.json') -Encoding UTF8
+    $fixtureInputs = @(foreach ($name in @($fixtureFiles) + @('manifest.json')) {
+        $path = Join-Path $fixtureDirectory $name
+        [ordered]@{path=$path;bytes=(Get-Item -LiteralPath $path).Length;sha256=(Get-FileHash -LiteralPath $path -Algorithm SHA256).Hash}
+    })
+    ConvertTo-Json -InputObject $fixtureInputs -Depth 4 | Set-Content -LiteralPath (Join-Path $Output 'fixture-inputs-before.json') -Encoding UTF8
     $arguments += @('-executeMethod',$expectedMethod,('--combat-fixture-manifest=' + (Join-Path $fixtureDirectory 'manifest.json')))
 }
 else {
@@ -76,7 +83,7 @@ else {
         '-toolBuildKind','Test','-toolDevelopment','false','-toolNetwork','Steam','-toolDistribution','Direct','-toolDiagnostics','Evidence',
         '-toolOutput',(Join-Path $Output 'package/MonsterSupergroup.exe'),'-toolResult',$buildResult)
 }
-$invocation = [ordered]@{mode=$Mode;executable=$Unity;executableVersion=$actualVersion;expectedUnityVersion=$expectedVersion;arguments=$arguments;environment=$Environment;project=$ProjectPath;preparedOnly=[bool]$PrepareOnly;startedUtc=[DateTime]::UtcNow.ToString('o')}
+$invocation = [ordered]@{mode=$Mode;inputPolicy=$inputPolicy;executable=$Unity;executableVersion=$actualVersion;expectedUnityVersion=$expectedVersion;arguments=$arguments;environment=$Environment;project=$ProjectPath;preparedOnly=[bool]$PrepareOnly;startedUtc=[DateTime]::UtcNow.ToString('o')}
 $invocation | ConvertTo-Json -Depth 6 | Set-Content -LiteralPath (Join-Path $Output 'invocation.json') -Encoding UTF8
 if ($PrepareOnly) { Write-Output "Independent snapshot prepared: $ProjectPath; evidence: $Output"; return }
 $previous = @{}
@@ -129,10 +136,21 @@ try {
 catch { $failure = $_.Exception.Message }
 finally {
     foreach ($key in $previous.Keys) { [Environment]::SetEnvironmentVariable($key, $previous[$key], 'Process') }
+    if ($fixtureInputs.Count) {
+        $fixtureAudit = @(foreach ($inputFile in $fixtureInputs) {
+            $exists = Test-Path -LiteralPath $inputFile.path -PathType Leaf
+            $hash = if ($exists) { (Get-FileHash -LiteralPath $inputFile.path -Algorithm SHA256).Hash } else { $null }
+            $bytes = if ($exists) { (Get-Item -LiteralPath $inputFile.path).Length } else { $null }
+            [ordered]@{path=$inputFile.path;bytes=$bytes;sha256=$hash;unchanged=($hash -eq $inputFile.sha256 -and $bytes -eq $inputFile.bytes)}
+        })
+        ConvertTo-Json -InputObject $fixtureAudit -Depth 4 | Set-Content -LiteralPath (Join-Path $Output 'fixture-inputs-after.json') -Encoding UTF8
+        if (@($fixtureAudit | Where-Object { -not $_.unchanged }).Count) { $failure = ($failure + ' Frozen replay fixture inputs changed.').Trim() }
+    }
+    # finish folds the input audit into this execution result before sealing the artifact manifest.
     [ordered]@{mode=$Mode;exitCode=$exitCode;success=($null -eq $failure);error=$failure;finishedUtc=[DateTime]::UtcNow.ToString('o')} |
         ConvertTo-Json | Set-Content -LiteralPath (Join-Path $Output 'execution.json') -Encoding UTF8
     & $Python $helper finish --output $Output
-    if ($LASTEXITCODE -ne 0) { $failure = ($failure + ' Frozen validation input hashes changed or final audit failed.').Trim() }
+    if ($LASTEXITCODE -ne 0) { $failure = ($failure + ' Prepared acceptance input policy or frozen project/tool audit failed.').Trim() }
 }
 if ($failure) { throw "$failure Artifacts: $Output" }
-Write-Output "Unity validation passed with unchanged snapshot hashes; integrity.json also states whether the workspace still matches: $Output"
+Write-Output "Unity validation passed under prepared input policy $inputPolicy; integrity.json preserves full and stable snapshot comparisons: $Output"

@@ -6,7 +6,25 @@
 
 > 2026-09-23 后续进度：整局 `retention.jsonl` 误报修复已完成本轮验证，最终 Python 回归 130/130（含清理专项 32 项）；初始、重复导入和旧数据库兼容红测均已保留。仅新增范围缺口判定、请求过滤及配套测试/文档，未启动 Unity 或性能矩阵。下一项是补齐验证归档清单与当前工作区 Unity 基线；具体证据与限制见验证合同末尾“整局清理执行记录”。三个总门槛仍未满足。
 
+> 2026-09-23 当前基线执行：归档工具修复后，从归档副本实际通过 Python 141/141；Unity EditMode 100/100、PlayMode 2/2，真实 Gateway/Replica 回放分别执行 260/1,217 步并匹配。但三次 Unity 启动都删除了验证副本中的 Addressables 临时 link.xml 及 meta，输入稳定性审计全部拒绝通过；不能宣称当前版本基线完成。原文件仍保留，未修改 C# 或运行性能矩阵。下一项先单独处理这两个已定位的忽略生成物，再封存新版本重跑基线。证据及限制见验证合同末尾“归档修复与当前版本基线执行记录”。
+
+> 2026-09-23 最新基线：确认身份并备份后，仅将主工程忽略的 Addressables link.xml 及 meta 定点移入隔离区，保留恢复映射；未修改验证工具、测试、包、配置或 C#。新档案 `baseline-clean-20260923-182031` 实际通过 Python 141/141、EditMode 100/100、PlayMode 2/2，以及 Gateway 260/Replica 1,217 步可靠回放。三次源、受测项目和工具指纹一致且前后稳定，工作区受测输入保持匹配，现可交付所列测试覆盖的稳定正确性基线。上轮输入漂移失败档案不变。详细证据见验证合同末尾“生成物隔离与稳定正确性基线执行记录”；本项停止，下一项是 `-Seconds 5 -Repeats 3`，本轮未运行性能矩阵。阶段一整体门槛、高负载、真实业务故障复现和 Steam 双机验收仍未完成。
+
+> 2026-09-23 五秒负载执行：`short5s-20260923-192051` 已完整运行 27 组并核对 19,440 帧，输入稳定、数据可追溯，但性能未通过。NUnit 7/9；200 local 首次丢失 16,446 条关键记录，500 replicated 首次丢失 17,788 条，缺口均明确保留。200/500 控制器有 CPU 尾延迟超标，27 次分配探针均不可用；频率、预算账及 45 秒补传窗口满足本轮门槛。未修改实现或测试，正确性稳定基线仍匹配当前输入。下一项先补队列短时触顶/消费停顿的有界观测并复验同负载，再据证据单点修复；不进入三十秒或长测。详细结果见验证合同末尾“当前版本五秒三次负载基线”。
+
+> 2026-09-23 有界观测复验：默认关闭的队列拒绝/消费分窗观测已实现。最终冻结版本实际通过 Python 141、EditMode 126、PlayMode 9 和两份可靠回放；相同五秒三次对照及观测矩阵均完整归档。最终观测组 500/local/第 1 次丢失 17,253 条，首拒绝确定为推进块 QueueLimit；此前存在 231.8921 ms 服务停顿，其内部支配因素仍待定位。有效分配 27/27、GC 计数 27/27、目标线程 GC 区间 18/27，未知时长保持 null。CPU/严格测量门槛仍未全部通过，历史缺口未关闭；未做性能优化或三十秒测试。详细结果与限制见 [本次报告](../Logs/CombatEvidenceNextValidation/queue-observation-20260923-210717/analysis/report.md)。
+
 真实业务缺陷必须来自实际发生的对局，交付原始证据、独立业务不变量、最小夹具及连续三次相同事件/状态失败；保持“已复现、待业务修复”，不修改伤害、死亡或同步实现使其通过。故障注入与合成错误仅验证诊断能力，不能代替这项验收。
+
+### 五秒基准的有界观测（默认关闭）
+
+`Invoke-CombatEvidenceBenchmark.ps1 -ObserveQueue` 仅开启旁路观测。每个 Store 先从原有总诊断预算预留 512 KiB，再创建生产/消费各 1,024 个 100 ms 窗口；失败时明确报告不可用，不扩大预算。普通 v2 证据内容、关键输入、队列限制和时间步不变。基准结束并确认全部消费者退出后，输出 `queue-observation.json` 及每端 `primary/remote-queue-observation.json`；这些是测量 sidecar，不是回放输入。
+
+sidecar 保存公共 Stopwatch 原点、频率、Init/Load/Catchup/Close 边界；每入口 attempts/accepted/rejected/captureFailed 与入队/出队/完成工作项分开。首个总体和各入口/guard 的拒绝包含已知来源、序号、阶段、水位、请求字节、实际队列限额和预算；Schedule 的未知来源保持 null。guard 区分 Stopping、OversizedRecord、QueueLimit、BudgetReservation，保留原判断顺序。窗口不循环覆盖，溢出或计数不平衡使 observationComplete=false；未退出消费者不能触发导出或提前释放观测缓冲。
+
+队列驻留、服务、filesGate 等待、写入、StreamWriter 刷新、持久刷新和维护计时归入完成窗口，并保留最长服务/锁/刷新跨度的起止时刻。嵌套累计值不能相加作为墙钟或主线程分位数。稀疏窗口的队列字段只表示实际采样值，不能将无事件窗口解释为队列为空。Store 消费线程的计时不覆盖另一条复制工作线程的 ImportBlock/复制元数据 I/O；对应细分项保持未测量，不能从远端 Store 的零值推断没有 I/O。
+
+分配补测复用原工作负载，共 27 组、每组完整 720 步和五秒目标；Profiler 单独运行，不参与常规 CPU 门槛。原始记录上限为每组 64 帧、1 GiB Profiler 缓冲、每线程/帧 1,048,576 样本；关闭 Deep Profiling 和分配调用栈，并对实际主线程、写入及复制线程校准 GC.Alloc 字节元数据。每帧最多扫描 128 个候选线程，找到注册的 1/2/5 个目标后停止；保留实际 Unity 线程总数与扫描明细，不因无关线程多而误报目标样本饱和。负载帧缺目标、身份变化、重复视图、溢出、校准/元数据/保存错误仍不能通过，原始 `.raw` 始终保留。GC 次数为进程级，所测目标线程的 GC 标记区间取并集；两个时钟的相关结论必须附带锚点误差。这些标记不能穷尽所有 GC 暂停或其他线程的等待。业务失败和证据缺口不会抹除有效测量；无法测量仍为 null。补传阶段分配未测量，原有 Mono 计数器的 null 和比较器失败结果不得被改写。整组测试设置四小时外层超时，单组负载仍为五秒、补传仍限 45 秒。
 
 验证工程必须是 Unity 6000.3.21f1 的独立物理副本，禁止使用指向主工程 Assets/Packages 的目录联接。每次结果绑定源码/配置哈希、Git HEAD、未提交差异、完整命令、环境、XML 与原始日志，测试前后快照变化则不能作为该版本验收。自动主性能矩阵固定两个端点；三端 Host 转发单列正确性与故障验证。
 
@@ -109,3 +127,94 @@
 执行顺序为：压力与错误夹具 → 记录压缩和内存修复 → 四类证据补全 → 查询及回放兼容 → 自动化与性能验证 → 同包 Steam 双机测试。
 
 保留工作区已有修改和现有构建门禁。测试前核对实际运行路径及 Build GUID，避免 Steam 自动启动旧包。全程不用 computer-use，真实双机操作由用户完成。
+
+
+## 2026-09-24 有界服务观测旁路契约
+
+`-ObserveQueue` 仍默认关闭，v2证据/回放/复制格式及业务协议不变。队列侧车新增 `serviceDetails`（schemaVersion=1），与原窗口共享Stopwatch原点和频率；旧侧车缺这些字段时，不能补判已直接观测。工作编号是同Store FIFO成功出队序数，不扩展队列元素；绑定现有run/capture/round/engine/operation/stage/序号。推进块在封口后记录首末序号、条数和混合phase；未知字段保持null。
+
+固定布局包括原1,024窗口、最初8项、最慢16项、首次拒绝最多2项关联及有限暂存槽、49阶段和深度16的嵌套栈。源码及Unity布局检查合计501,768 B，位于原524,288 B预留内。普通未进入保留集合的工作计 `unretainedWorkItems`，不冒充逐项跟踪；身份/来源/阶段/块范围容量不足通过complete标志和溢出计数保留未知。导出仍在所有生产/消费线程退出后进行并释放观测预算。
+
+`workItems[].stages` 分别记录inclusiveTicks、exclusiveTicks及最长起止点；包含时长不能相加为墙钟。`wallResidualTicks` 是未覆盖残差；只有独占总和与残差可核对服务墙钟。背景Startup/Maintenance/Close独立聚合，不归给邻近工作。`firstRejectionWork` 关联发布中的工作及此前工作；发布边界可能位于服务墙钟之外，判断当时是否实际执行须核对起止时间。`flushedBlocks` 是实际追加的块范围，触发工作的序号不能替代它；持久化保证仍以原覆盖记录及刷新水位为准。
+
+CPU测量仅在独立预检后启用，实际writer启动时不忙等/休眠。分别保存GetThreadTimes用户态和内核态差值；读取失败、未预检或低于观察粒度时保持null。量化误差和采样边界偏移是经验估计，非系统保证；墙钟减线程CPU只称未分类残差，不能直接标为磁盘、GC或调度。
+
+Profiler在Store创建前、工作负载构造前、负载开始和结束分别保存锚点。startup/workloadInit/load独立核对时钟、线程生命周期和逐帧分配；人工校准区域单列排除。进程GC次数与目标线程标记并集分开，缺区间、锚点不确定及范围外工作保持未知。同case才能关联时间线，不用其他运行的GC解释普通组或旧事件。保留原64帧/1 GiB/样本和线程上限、720步及5秒窗口。
+
+本轮实际验证为Python141、EditMode152、PlayMode15及260/1,217步KCP兼容回放；三组五秒三次均完成，输入稳定。首Gateway长服务未再现，未实施性能修复。普通组P95/P99和普通分配计数门槛仍失败；Profiler初始化证据27/27有效，负载GC区间18/27有效。详细状态、原始引用、旧事件重建边界及停止结论见 [本轮报告](../Logs/CombatEvidenceNextValidation/gateway-service-20260924-101722/analysis-final/report.md)。不宣称完整诊断系统、高负载或真实业务缺陷验收通过。
+
+
+### 2026-09-24：编辑器生成物分类与版本判定
+
+本次为验证档案增加封存的验收策略，保留完整快照与旧字段的原义。没有移动主工程生成物、修改 Addressables 包或改变产品构建实现。
+
+证据目录：[main-tail-20260924-134215](../Logs/CombatEvidenceNextValidation/main-tail-20260924-134215/)。
+
+| 字段或清单 | 含义与判定 |
+| --- | --- |
+| `source-before/after.json`、`validation-before/after.json` | 完整输入清单及 SHA256，仍包含两个生成物。 |
+| `sourceUnchanged`、`validationInputsUnchanged` | 分别比较工作区和受测工程的完整前后清单；生成物发生变化仍返回 `false`，不掩盖实际变化。 |
+| `sourceChanges`、`validationInputChanges` | 保留完整变化列表。 |
+| `source-stable-before/after.json`、`validation-stable-before/after.json` | 按准备时封存策略投影出的稳定输入清单及指纹。 |
+| `sourceStableInputsUnchanged`、`validationStableInputsUnchanged` | 稳定输入前后比较；缺少必要旧证据时为 `null`，不能补判通过。 |
+| `sourceStableInputChanges`、`validationStableInputChanges` | 分别列出工作区和受测工程的稳定输入变化。 |
+| `toolInputsUnchanged` | 冻结工具、测试及 golden 夹具仍全部严格检查，无生成物例外。 |
+| `inputAuditPassed` | 完整受测快照及冻结工具稳定、且审计无错误的结果，保留完整快照审计含义。 |
+| `acceptanceInputAuditPassed` | 按封存策略检查受测工程稳定输入及全部冻结工具，并要求策略、前清单与审计有效；最终 `execution.success` 是既有执行成功与该项同时为真，不能将失败测试改成成功。 |
+
+策略有两个明确版本：
+
+- `full-v1`：无例外。Python `prepare` 直接调用默认使用此策略，PowerShell `Build` 模式也明确使用它。
+- `editor-generated-v1`：仅 PowerShell `Tests`／`Replay` 使用；Benchmark 和 Profiler 通过 `Tests` 模式沿用相同策略。只有 `Assets/AddressableAssetsData/link.xml` 和 `Assets/AddressableAssetsData/link.xml.meta` 这两个精确路径退出稳定输入比较。其他 `link.xml`、`.meta`、源码、配置、工具和目录仍严格检查。直接调用 Python 若显式选择该策略，还必须指定 `Tests` 或 `Replay`，不能用于 `Build`。
+
+`acceptance-policy.json` 保存策略版本与精确路径清单，`identity.json` 同时记录该策略、模式和策略文件 SHA256。结束审计校验封存内容及调用模式；未知策略、策略变化、模式不一致或缺少必要前清单不通过。工作区并行编辑与受测副本漂移分别报告：工作区变化不自动推翻稳定冻结版本的结果，但不能把该结果宣称为变化后工作区的验证。
+
+两个生成物仍完整复制并核对。`generated-inputs-before/after.json` 分别记录源工程和受测工程的存在状态、长度、SHA256 及归档内容路径；内容保存在 `generated-inputs/{before|after}/{source|project}/`。准备时的源清单和复制结果不一致仍会停止。受测源码压缩包精确补收上述 `link.xml`，没有扩大到其他 XML 或增加目录排除。
+
+旧档案没有封存策略时，新稳定性结论保持未知，不能追认历史失败。复核输出到新的独立目录，保留原有 `execution.json`、完整性结果和工件清单；旧结果继续按当时规则解释。
+
+实际验证：归档工具测试由 15 项增至 25 项，新增 **10 项**。红测实际执行 25 项，原 15 项通过、新增契约失败；原始 unittest 汇总为 1 个 failure 与 22 个 error，包含子用例，不能当作独立测试数量。修复后专门绿测 **25/25 通过**；本轮从冻结工具副本执行完整 Python 回归 **151/151 通过**。红绿阶段保存源码／测试副本、命令、原始输出、退出码及前后 SHA；历史通过数量不作为本次执行证据。
+
+这项结论仅证明新验收契约及所列 Python 回归。本轮 Unity、回放及性能实际结果见同日进度记录与交付报告，分别判定。
+
+
+## 2026-09-24 主线程尾帧观测契约
+
+`ObserveQueue` 默认关闭。开启后仍使用每个 Store 原有的 512 KiB 观测保留额度，原有 1,024 个生产窗口、1,024 个消费窗口及服务明细容量不变。主线程明细增加固定 19,792 B；本轮 Unity 布局测试实际核对总账为 **521,560 B / 524,288 B**，剩余 2,728 B。顶层 `windowStorageBytes`、`existingAllowanceBytes`、`serviceStorageBytes`、`mainStorageBytes`、`accountedStorageBytes` 保留各项计算结果。这个账包含保守额度，不等于进程堆大小或独立测得的实际持有内存。
+
+观测结果仍写入现有队列 sidecar，新增 `mainFrames`。本基准仅由主端 observer 捕获负载帧；远端没有主线程帧时明确输出 `NotCaptured`。GAS 通过自身程序集内的接口和线程局部值类型 scope 接入，不增加 NetworkCombat 或 Unity 依赖。未启用活动帧时，scope 不读取时钟、不分配对象。工作线程不会写入主线程阶段栈。
+
+| 字段 | 含义 |
+| --- | --- |
+| `status`、`complete` | `NotCaptured` / `Captured` / `Incomplete`；complete 只证明已调用观测边界的计时结构有效，不证明证据输入完整、全部代码已细分或性能通过。 |
+| `capacity`、`frames` | 最长的 36 个已结束帧，等长时保留帧号较小者；第 37 个槽位只供当前帧使用，不导出。 |
+| `frameCount`、`unretainedFrames` | 已结束的观测帧数量及未保留明细数量。普通落选不算溢出。720 帧和连续帧号是否满足，由完整基准记录另行检查。 |
+| `stageCallCount` | 所有帧中有效阶段枚举的 Begin 调用总次数，包括未保留帧；不能根据这个计数直接扣除观测耗时。 |
+| `overflowEvents`、`invalidFrames`、`lifecycleErrors`、`threadViolations` | 容量、时间/序号、生命周期或跨线程调用问题；发生时不得把主线程明细判为完整。 |
+| 每帧 `frame`、`startTicks`、`endTicks`、`wallTicks` | 原始帧号和 Stopwatch 边界，使用顶层 `stopwatchFrequency` 换算。无效墙钟为 null。 |
+| `sequenceBefore`、`sequenceAfter` | 本来源生产序号边界，不是成功入队数，也不是跨端全局序号。`sequenceComplete` 和 `identityComplete` 单独报告。 |
+| `stagesComplete`、`wallResidualTicks` | 阶段栈结构有效且时长可收支时，残余为帧墙钟减去所有阶段 exclusive 总和；无法确认则为 null。 |
+| 每阶段 `inclusiveTicks`、`exclusiveTicks`、`maxTicks`、`callCount` | 含子阶段总耗时、扣除子阶段后的总耗时、单次 inclusive 最大耗时及实际 Begin 次数。执行过的零耗时阶段仍保留；缺少阶段不证明对应工作不存在。 |
+
+阶段固定为 16 项：`WorkloadStep`、`GasWrapper`、`ReplayBoundary`、`SinkMetadata`、`RetainedSize`、`ProducerGateWait`、`ProducerGateWork`、`Capture`、`Freeze`、`AdvanceBlock`、`Wake`、`ReplicationTick`、`Checkpoint`、`SharedLeases`、`Admission`、`Registry`。嵌套深度上限为 16；溢出、错序关闭或未关闭 scope 会留下不完整标记。诊断计时异常不会替换业务异常；帧结束在 finally 中解绑线程上下文。生产停止、消费线程退出且无活动主线程帧后才允许导出或释放，释放后调用安全忽略。
+
+分析必须遵循以下边界：
+
+- 只有 exclusive 可相加。`WorkloadStep` 的 exclusive 标为 `NonDiagnosticResidual`，包含业务和未覆盖包装，不能放入诊断覆盖率分子。`GasWrapper`、`ProducerGateWork`、`Checkpoint`、`ReplicationTick` 等宽泛范围也不能仅凭名称认定具体支配因素。
+- 当前 `ReplicationTick` 包含整个复制调用循环；本地模式即使循环为空也会记录其开销。后台复制 ImportBlock I/O 不在此范围内。Advance 的消费端封口仍属于写线程观测。
+- 包装调用之前已求值的参数、部分失败路径及未细分操作保留为范围残余，不用零值补测。阶段时长包含部分观测开销；新增调用计数只提供观测密度。
+- 普通基准的 sidecar 结束时间复用原 `frameMs` 止点；筛选和保留发生在止点之后。Profiler 原始 `Step` marker 还包住结尾的观测维护，因此不要求原始 Step 时长等于 sidecar 帧时长。吞吐和实际频率仍按完整运行记录核对。
+- P95/P99 从完整逐帧数据计算。720 帧的 nearest-rank P95 是第 684 位，top36 是第 685–720 位，不能声称已保存准确 P95 边界帧。
+- 24 B 阶段值只保存 `maxTicks`，不保存该最大操作起止时间。GC 相关分析可使用同一 case 的整帧时间范围及已验证时钟误差，不能声称精确内部阶段重叠，不能跨运行拼接时间线，也不能把重叠升级为因果。
+
+本轮验证事实须分开记录：3 项 API 合约测试已实际先失败；另外 16 项行为测试在实现后首次执行通过，不能写成“19 项先红后绿”。主任务已实际执行 EditMode 171 项、PlayMode 20 项通过，并核对上述预算。三个五秒三次矩阵与离线归因已经完成；200／500尾延迟、普通分配探针及部分GC完整门槛仍失败，具体支配操作未确定，未实施条件修复。正确性结果不构成性能通过或旧231.8921ms事件归因，详见同日进度记录及交付报告。
+
+## 探索性 Steam 采证入口（2026-09-24）
+
+`Tools/Scenarios/Start-SteamDiagnostics.ps1` 新增可选 `-EvidenceMode Default|off|local|replicated`。Default保留原参数；off传入 `--no-combat-evidence`；local传入 `--combat-evidence-local-only`；replicated传入 `--combat-evidence`。local和replicated把 `--combat-evidence-output` 指向本场全新采集目录的 `CombatDiagnostics`，网络趋势仍使用原有输出参数。使用显式EXE路径，不猜测历史包或停用的配方选择。
+
+`capture.json`保留原字段，并新增请求模式、请求日志／网络／战斗输出路径和 `launcherArgumentsApplied`。PrepareOnly不启动游戏，后者保持false；成功启动新进程后才置true。AttachProcessId与显式EvidenceMode组合在创建输出前拒绝，不能向已运行游戏补加参数。人工角色／模式标签不能代替包及运行身份核对。
+
+记录模式的 `performance.header/snapshot` 可嵌入战斗证据；没有独立metrics文件仅标记待离线核查，不声明通过或直接判定漏采。off仍要求独立趋势记录。产品Runtime默认不启用高频队列／主线程旁路；本次配置固定ProfileSeconds=0。每秒分位数不能合并为整场精确分位数；分配／GC仅为未校准趋势，不补成零；预算账也不代表实际持有内存。
+
+本轮启动工具11项及原身份导出8项在冻结副本中实际通过；战斗Python回归151项、归档内离线分析13项合成测试实际通过。没有启动Unity构建、Player或真实Steam回放；源快照准备因并行输入变化失败。详见 [本轮记录](combat-evidence-next-validation.md#2026-09-24-探索性-steam-采证准备与封存阻塞)。协议、v2证据格式、业务实现和预算均未改变。

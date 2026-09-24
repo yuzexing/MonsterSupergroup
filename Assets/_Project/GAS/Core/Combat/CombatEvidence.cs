@@ -58,6 +58,7 @@ namespace MonsterSupergroup.GAS
         public static bool Write(DiagnosticRecord record)
         {
             if (!Enabled) return false;
+            using var timing = DiagnosticMainTiming.Measure(DiagnosticMainStage.GasWrapper);
             try { return Sink.TryWrite(record); }
             catch (Exception error) { ReportCaptureFailure(record, error); return false; } // Diagnostics must never change a combat outcome.
         }
@@ -65,6 +66,7 @@ namespace MonsterSupergroup.GAS
         public static string Register(object engine, string domain, Func<object, object> capture)
         {
             if (!Enabled) return null;
+            using var timing = DiagnosticMainTiming.Measure(DiagnosticMainStage.GasWrapper);
             try { return Sink.RegisterEngine(engine, domain, capture); }
             catch (Exception error)
             {
@@ -76,6 +78,7 @@ namespace MonsterSupergroup.GAS
         public static void ReportCaptureFailure(DiagnosticRecord original, Exception error)
         {
             if (!Enabled || reportingCaptureFailure) return;
+            using var timing = DiagnosticMainTiming.Measure(DiagnosticMainStage.GasWrapper);
             reportingCaptureFailure = true;
             try
             {
@@ -132,6 +135,7 @@ namespace MonsterSupergroup.GAS
         private static DiagnosticOperation BeginCore(object target, string domain, string method, object[] arguments, Func<object, object> capture, bool advance, float delta)
         {
             if (!Enabled) return default;
+            using var timing = DiagnosticMainTiming.Measure(DiagnosticMainStage.GasWrapper);
             object root = target;
             bool acquired = false, pushed = false;
             string id = null;
@@ -146,7 +150,9 @@ namespace MonsterSupergroup.GAS
                 if (id == null) { operating.Remove(root); return default; }
                 (operationIds ??= new Stack<string>()).Push(id);
                 pushed = true;
-                var boundary = target is StatusController status ? status.CaptureReplayBoundary() : null;
+                StatusReplayBoundary boundary;
+                using (DiagnosticMainTiming.Measure(DiagnosticMainStage.ReplayBoundary))
+                    boundary = target is StatusController status ? status.CaptureReplayBoundary() : null;
                 bool compact = advance && Sink is IDiagnosticAdvanceSink;
                 if (compact)
                 { try { ((IDiagnosticAdvanceSink)Sink).TryWriteAdvance(domain, id, method, delta, boundary, 0); }
@@ -166,10 +172,15 @@ namespace MonsterSupergroup.GAS
         }
         private static int Estimate(object value)
         {
+            using var timing = DiagnosticMainTiming.Measure(DiagnosticMainStage.RetainedSize);
+            return EstimateCore(value);
+        }
+        private static int EstimateCore(object value)
+        {
             if (value is Array array)
             {
                 long size = 64;
-                foreach (object item in array) { size += item is Array ? Estimate(item) : item is string s ? s.Length * 2L + 64 : 64; if (size > 24 << 20) return 32 << 20; }
+                foreach (object item in array) { size += item is Array ? EstimateCore(item) : item is string s ? s.Length * 2L + 64 : 64; if (size > 24 << 20) return 32 << 20; }
                 return (int)size + 512;
             }
             return 512;
@@ -185,6 +196,7 @@ namespace MonsterSupergroup.GAS
             public void Complete(object result = null)
             {
                 if (root == null) return;
+                using var timing = DiagnosticMainTiming.Measure(DiagnosticMainStage.GasWrapper);
                 complete = true;
                 if (compact && Sink is IDiagnosticAdvanceSink sink)
                 { try { sink.TryWriteAdvance(domain, id, method, 0, null, 1); }
@@ -195,6 +207,7 @@ namespace MonsterSupergroup.GAS
             public void Dispose()
             {
                 if (root == null) return;
+                using var timing = DiagnosticMainTiming.Measure(DiagnosticMainStage.GasWrapper);
                 if (!complete)
                 {
                     if (compact && Sink is IDiagnosticAdvanceSink sink)
@@ -213,6 +226,7 @@ namespace MonsterSupergroup.GAS
             uint batch = 0, uint server = 0, int bytes = 2048)
         {
             if (!Enabled) return;
+            using var timing = DiagnosticMainTiming.Measure(DiagnosticMainStage.GasWrapper);
             Write(new DiagnosticRecord { role = role, engine = CurrentEngine, stage = stage, outcome = outcome, reason = reason,
                 eventId = eventId == 0 ? null : eventId.ToString(), rootEventId = root == 0 ? null : root.ToString(),
                 parentEventId = parent == 0 ? null : parent.ToString(), source = source, target = target,

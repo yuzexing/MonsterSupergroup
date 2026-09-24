@@ -24,14 +24,18 @@
 |---|---|
 | `identity.json`、`source-before.json` | Unity 可执行文件 SHA、工程 Unity 版本、Git HEAD、全部输入及工具 SHA |
 | `git-status.txt`、`dirty.patch`、`tool-sources/` | 未提交状态、跟踪文件的完整二进制 diff、执行工具的实际副本；未跟踪项目输入保存在物理快照并列入 manifest |
+| `tool-before.json`、`tool-after.json` | 五个固定工具、自动发现的 `test_*combat_evidence*.py` 及完整 golden 夹具目录的路径/长度/SHA；复制后核对，执行后再次核对，保留相对目录以便从归档重跑 Python 回归 |
 | `sync.json`、`validation-before.json` | 实際受测快照的 SHA、同步记录及红测覆盖信息 |
 | `tested-code-and-config.zip` | 当次受测代码、场景/Prefab/序列化资源、meta及Packages/ProjectSettings；包含未跟踪源码及红测旧文件，复用工程下次同步后仍保留。大型二进制媒体由完整manifest标识，不能把此源码归档当完整游戏包 |
 | `invocation.json` | 精确程序路径、参数数组、环境变量和启动时间 |
 | `results.xml`、`unity.log`、`execution.json` | 实际测试与退出结果；空测试或没有任何通过项目不能当成功 |
-| `source-after.json`、`validation-after.json`、`integrity.json` | 前后 SHA 与具体变化；工作区并行编辑与受测快照变化分别报告 |
+| `source-after.json`、`validation-after.json`、`integrity.json` | 前后 SHA 与具体变化；工作区、受测 Unity 工程和归档工具分别报告，审计失败不能保留成功结论 |
+| `fixture-inputs-before.json`、`fixture-inputs-after.json` | Replay 模式额外记录实际执行的冻结夹具与清单前后 SHA，不以来源文件复制时的一次核对替代 |
 | `artifact-manifest.json` | 本次全部证据文件的长度和 SHA |
 
-`sourceUnchanged=false` 表示结果对应冻结快照，不能冒充后来修改的工作区；`validationInputsUnchanged=false` 表示测试过程中受测输入变化，本次结果不能成为稳定验收。主工程的版本、资源、既有修改不会由同步入口更改。
+`sourceUnchanged=false` 表示结果对应冻结快照，不能冒充后来修改的工作区；`validationInputsUnchanged=false` 表示受测 Unity 工程变化，`toolInputsUnchanged=false` 表示归档工具、测试或 golden 夹具变化，均不能作为稳定验收。无法完成审计时对应状态为 null/未知，并保留原因；最终成功要求受测工程与工具都明确稳定、审计完成。辅助工具在封存工件清单前将审计结论合入 `execution.json`，不把原测试失败改成通过。主工程的版本、资源、既有修改不会由同步入口更改。
+
+历史目录没有 `tool-before.json` 时，不能追认工具稳定；新工具复查返回未知和非零退出码，另存 `*-recheck.json`，不改历史 execution、integrity、manifest 或前后清单。旧结果仍应优先使用自己的归档工具解释。
 
 完成审计和基准比较使用本次 `tool-sources/Tools/` 内的归档脚本。它们与准备快照时的代码一致，避免工作区工具后续增加新的输入种类，使一次运行的前后 SHA 失去可比性。手工重算旧结果也应使用它自己的归档版本；使用新工具重算时另存结果并记录工具 SHA。
 
@@ -106,7 +110,9 @@ python Tools/CombatEvidenceValidation.py audit-fixtures `
 
 ## 同包 Steam 双机操作清单
 
-先通过自动化和性能门槛，再交用户进行真实两台机器、两个账号测试；不使用 computer-use。主工程已打开时，从物理验证工程调用统一构建服务，不在主工程启动第二个 Unity：
+最终 Steam 验收仍须满足自动化和性能门槛。2026-09-24 用户另行确认：允许先进行探索性双机业务采证，暂缓200／500控制器尾延迟及分配／GC缺口，但不改判这些门槛；游戏操作由用户完成，不使用 computer-use。主工程已打开时，只能在独立物理工程准备构建，源输入并行变化必须记录并重新封存。
+
+下面的 `-Mode Build` 命令是历史入口示例：当前构建工具已迁移到原生 Build Profile，该入口仍传入已停用业务参数，不能直接作为本轮可执行命令。当前入口为 `NativeBuildEntry.Batch`，显式选择符合要求的 Profile，并沿用 `full-v1` 的 prepare／finish 完整审计；本轮封存阻塞及下一步见文末探索性采证记录。不能因为原生构建返回成功而略过外层审计。
 
 ```powershell
 # 固定为完整 product / Test / Steam / Direct / Evidence，Development=false
@@ -288,3 +294,246 @@ $buildResult.artifacts
 最终范围核对见 [workspace-after.json](../Logs/CombatEvidenceNextValidation/run-retention-20260923-165615/workspace-after.json)：本任务写入两个 Python 文件和三个文档；核对期间还检测到范围外并行变化，包括 `docs/BuildProfiles.md` 内容更新、新文件 `docs/build-profiles-validation.md` 及 EditorTools 构建输入记录源码。详细清单及数量以带时间戳的快照为准。本任务未写入这些范围外文件，原样保留并归档观察到的副本，不能声称工作区所有其他文件均未变化。开始时 136 个既有变动文件均未缺失，暂存区保持为空。受测 Python 源码和工具依赖仍与最终回归的前后哈希完全一致。前两次保护核对发现变化的结果保存在 `protection-first-pass` 和 `protection-second-pass`；`this-turn.patch` 仅保存相对本轮开始时的五文件增量，`artifact-manifest.json` 保存工件哈希。范围内 `git diff --check` 及新增行空白检查通过。
 
 本项到此停止。下一步先补齐验证归档清单，再从当前工作区生成独立物理快照并运行 Unity 基线；基线有效后才执行 `-Seconds 5 -Repeats 3`，保留失败结果。C# 审计崩溃窗口另列待核查；真实业务故障仍待采集/待复现。**诊断完整性未整体验收、高负载未通过、真实业务故障未复现**，本轮通过只适用于以上 Python 判定与回归范围。
+
+## 2026-09-23 归档修复与当前版本基线执行记录
+
+本轮按阶段二小交付执行，证据目录为 [baseline-20260923-174123](../Logs/CombatEvidenceNextValidation/baseline-20260923-174123/baseline-summary.json)。没有运行五秒性能矩阵，没有修改 C# 诊断、伤害、死亡、同步实现或 Unity 配置。
+
+接手时仍为原主 checkout `F:\UnityStore\MonsterSupergroup`、`master`，HEAD 为 `cb276527a3be1e3789fae05bf5a714d641a7aa0d`，记录了 141 个既有变动文件的哈希及完整差异。随后外部提交将 HEAD 推进到 `4e473e28f483105426a3df532a560aa13c622ad6`，本任务没有提交、切换分支或覆盖该提交；过程见 `workspace-before.json` 与 `external-head-change.json`。三次 Unity 调用都从新 HEAD 加本轮工具修改封存，源、受测项目和工具的准备前指纹分别相同，没有混合不同版本的结果。
+
+### 本轮实现与测试
+
+归档工具保留五个固定生产输入，自动发现当前全部六个 Python 测试/helper，并纳入三个 golden 目录文件，共 14 份工具输入。复制后校验和执行后校验共用输入发现规则；Git 差异另外使用相同范围的 pathspec，保留准备前已删除的跟踪输入。新增工具稳定性与审计错误状态，审计异常也会让最终 execution 失败；工件清单记录最终 execution 的实际哈希。旧档案缺少工具前清单时只另存复查结果，保留原文件。Replay 入口补充实际执行的两个冻结夹具及清单的前后哈希。
+
+| 实际执行 | 原始结果 | 本轮验收结论 |
+|---|---|---|
+| `archive-red`：归档专项，修复前 | 13 个测试方法，含子用例为 7 failures、6 errors，退出 1；输入稳定 | 归档遗漏、复制变化、工具变更及旧档案未知状态的红测已保留。 |
+| `archive-green`：首轮修复后 | 13/13，退出 0；输入稳定 | 中间结果，最终以下面全量回归为准。 |
+| `archive-review-red`：补准备前删除与审计异常 | 15 项中 1 failure、1 error，退出 1；输入稳定 | 两项复核发现均先失败后修复。 |
+| `python-regression`：从归档目录执行完整 discover 命令 | **141/141**，退出 0，18.114 秒；源码、工具和夹具前后哈希一致 | 归档修复实际通过；包含原有 130 项及新增 11 项，归档专项 15 项是其中子集。 |
+| `editmode`：15 个指定类 | **100/100**，39.069 秒，Unity 退出 0，无缺类/跳过/失败 | 受测工程输入改变，最终 execution 失败，不能作为稳定基线通过。 |
+| `playmode`：CombatContactEvidenceTests | **2/2**，0.240 秒，Unity 退出 0 | 同一输入改变，不能作为稳定基线通过。 |
+| `replay`：明确列出的两份真实 JSON | Gateway **260** 步、Replica **1,217** 步；均 reliable/passed，summary 为 Matched，Unity 退出 0；夹具与清单哈希稳定 | 同一工程输入改变，最终 execution 失败；不能交付稳定版本回放基线，也不属于真实业务缺陷复现。 |
+
+三个 Unity 入口最终 launcher 均退出 1，`execution.json.success=false`、`inputAuditPassed=false`，没有因 XML 或 Replay Passed 忽略输入变化。每次 `sourceUnchanged=true`、`toolInputsUnchanged=true`，而 `validationInputsUnchanged=false`。详细结果、逐类清单和相同版本指纹见 [baseline-summary.json](../Logs/CombatEvidenceNextValidation/baseline-20260923-174123/baseline-summary.json)。来源审计实际执行成功，原日志、物理行号、构建关联和夹具哈希均匹配；审计输入副本与前后哈希保存在 `provenance-inputs` 和 `fixture-audit-execution.json`。
+
+### 当前阻塞与下一项最小工作
+
+三次受测工程都删除了 `Assets/AddressableAssetsData/link.xml` 及其 `.meta`。已安装 Addressables 2.9.1 的启动清理代码会删除这类 Player 构建临时文件；主工程 XML 与 Library 构建副本的 SHA 完全一致，两个 Assets 文件均未跟踪并匹配 Git 忽略规则。此定位由包源码、哈希和启动阶段日志支持，没有逐文件删除调用栈。详见 [阻塞定位报告](../Logs/CombatEvidenceNextValidation/baseline-20260923-174123/blocker-report.md)；两个源文件、Library 副本、包源码及忽略规则已另行归档，主工程原文件仍保留。
+
+| 状态 | 结论 |
+|---|---|
+| 已实现并实际验证 | 归档输入补全、工具稳定性审计、异常保守失败、旧结果保护；141 项 Python 回归通过。 |
+| 已实际执行但未通过版本验收 | 当前快照的 EditMode、PlayMode、两份真实输入回放；原始执行匹配，但三次输入漂移都使基线无效。历史编译阻塞本轮没有重现。 |
+| 尚未完成 | 无输入漂移的当前版本基线、五秒三次及后续性能矩阵、真实业务故障夹具、Steam 双机验收。 |
+| 无法确认 | 生成物处理后的新快照能否稳定通过；清理审计的 C# 崩溃窗口仍未核查。 |
+
+下一项只处理上述两个已确认的忽略生成物：确认无活跃 Unity/构建进程，先归档并核对身份，再将其移出 Assets 并保留恢复路径；重新封存新源身份，重跑同一套正确性基线。不能屏蔽这两个路径的哈希检查，也不能追认本轮结果有效。本轮没有实施该清理。
+
+本轮只写入归档辅助工具、PowerShell 入口、配套 Python 测试和两个进度/操作文档。最终逐文件核对、暂存区状态及工具与受测副本的一致性见 `workspace-after.json`、`delivery-checks.json`；`this-turn.patch` 保存相对接手版本的增量，`artifact-manifest.json` 保存全部本轮证据哈希。**本项到此停止：归档修复通过，当前版本正确性基线未通过；诊断完整性、高负载、真实业务故障三个总门槛仍未完成。**
+
+## 2026-09-23 生成物隔离与稳定正确性基线执行记录
+
+本轮完成阶段二的“移出已确认生成物，重建稳定正确性基线”交付。新证据目录为 [baseline-clean-20260923-182031](../Logs/CombatEvidenceNextValidation/baseline-clean-20260923-182031/baseline-summary.json)。实际目录仍是原主 checkout `F:\UnityStore\MonsterSupergroup`，分支 `master`，HEAD `4e473e28f483105426a3df532a560aa13c622ad6`。开始时五处未提交改动、完整未暂存/暂存差异、worktree 列表及逐文件哈希均已封存；暂存区为空。
+
+### 生成物处理与恢复
+
+执行前重新检查主工程、独立验证工程和相关 Unity/构建进程，没有活跃进程；未自动结束进程。两个目标均为普通、单一硬链接文件，未被 Git 跟踪，命中现有 `.gitignore:91`。其 SHA 与上轮阻塞报告相同，XML 也与主工程 Library 的构建副本一致。独立验证工程及 Assets、Packages、ProjectSettings、Library 均为物理目录，未使用旧 Steam junction 工程。
+
+仅处理 `Assets/AddressableAssetsData/link.xml`（4,051 字节）和 `link.xml.meta`（158 字节）：先复制到 `cleanup/backup` 并校验长度/SHA，再通过 PowerShell `Move-Item -LiteralPath` 移入 `cleanup/quarantine`。移动前目标路径不存在，移动后原路径不存在，隔离文件哈希正确。源输入清单从 21,538 项变为 21,536 项，差异恰好是这两条删除；没有其他输入变化，见 [清理核对](../Logs/CombatEvidenceNextValidation/baseline-clean-20260923-182031/cleanup/verification.json)。
+
+[恢复映射](../Logs/CombatEvidenceNextValidation/baseline-clean-20260923-182031/cleanup/recovery-map.json) 保存原路径、备份、隔离位置、长度及 SHA。移动成功后未自动放回。若将来需要恢复，只能写入仍不存在的原路径；若原位置已有新文件，保留双方，禁止覆盖。没有修改忽略规则，也没有处理整个目录或清理 Library。
+
+### 本轮实际验证
+
+复用现有验证入口、独立物理验证工程及 Library，使用 Unity `6000.3.21f1_c02631ffc030`、Python `3.14.7`，不启用 overlay。所有输出指向新目录；三个 Unity 调用严格串行。生产验证工具、测试集合、Addressables 包、Unity 配置和 C# 均未改动。
+
+| 实际执行 | 本轮结果 | 原始证据 |
+|---|---|---|
+| 从新归档副本执行 `python -B -m unittest discover -s Tools -p 'test_*combat_evidence*.py' -v` | **141/141**，17.904 秒，退出 0；cwd 为冻结工具目录，未导入工作区副本，冻结及工作区工具输入稳定 | [Python execution](../Logs/CombatEvidenceNextValidation/baseline-clean-20260923-182031/python-regression/execution.json) 与同目录 stdout/stderr、前后 SHA |
+| EditMode 原定 15 类 | **100/100**，38.9524255 秒，Unity 和入口均退出 0；逐类、逐用例核对无漏跑、失败、跳过或无法判定 | [EditMode XML](../Logs/CombatEvidenceNextValidation/baseline-clean-20260923-182031/editmode/results.xml) |
+| PlayMode `CombatContactEvidenceTests` | **2/2**，0.2283423 秒，Unity 和入口均退出 0 | [PlayMode XML](../Logs/CombatEvidenceNextValidation/baseline-clean-20260923-182031/playmode/results.xml) |
+| 重新审计来源并用显式清单回放两份 JSON | 恰好两份：Gateway **260** 步、Replica **1,217** 步；均 `reliable=true`、`passed=true`、`Matched`，分歧/不可验证均为 0，Unity 和入口均退出 0 | [来源审计](../Logs/CombatEvidenceNextValidation/baseline-clean-20260923-182031/real-fixture-source-audit.json)、[回放结果](../Logs/CombatEvidenceNextValidation/baseline-clean-20260923-182031/replay/fixtures/replay-results.json) |
+
+Python 和 Unity 的实际用例全名集合与上轮相同，以上数量来自本轮原始输出及 XML，没有沿用历史 Passed。EditMode 15 类的数量依次为：NetworkEvidence 6、StatusBoundaryCache 5、CombatDamageEvidence 11、CombatEvidence 17、CombatEvidenceIntegrity 5、CombatReplayBatch 7、CombatEvidenceRecovery 4、CombatEvidenceRecoveryHistory 7、CombatEvidenceReplicationV2 1、CombatEvidenceReplicationFault 3、SharedEvidencePayload 8、CanonicalSharedEvidence 5、CombatEvidenceSharedStorage 1、EvidenceBlockEncoding 8、CombatEvidenceOverload 12。未选择负载基准或分配压力专项。
+
+三次 `execution.json` 均为 `success=true`、`inputAuditPassed=true`；每次 `sourceUnchanged`、`validationInputsUnchanged`、`toolInputsUnchanged` 都为 true，变化列表和 `auditErrors` 为空。准备前指纹跨三轮完全一致：
+
+| 清单 | 项数 | SHA256 |
+|---|---:|---|
+| 主工程源码/配置及工具 | 21,536 | `5c3f1c246f01fde5a5c00eb04ad5e5d461005ff221f8cd50602b561d9103a1ec` |
+| Unity 受测项目输入 | 21,522 | `9a7940982db153df2f7d63211a2b69173f087db92edaa67ae693be93bc1bc5e9` |
+| 工具、测试/helper、golden 夹具 | 14 | `92675aae6ef9b8c33404ab875803afe8f4c19240dfb40cb41848651a84c57eea` |
+
+两个生成物在三轮源及受测清单的前后版本中均不存在。实际回放的冻结夹具与来源审计 SHA 相符，夹具及显式清单前后不变。`baseline-summary.json` 的 `sameFrozenVersion`、`frozenBaselinePassed`、`workspaceMatchedAtEveryFinish`、`strictBaselinePassed` 均为 true；检查包含精确用例集合、执行步数、可靠性和输入稳定性。此次通过只证明所列测试覆盖的冻结版本；上轮因输入漂移失败的结果保持失败，不追认有效。
+
+### 改动保护、剩余事项与停止
+
+本轮在五处既有未提交改动上，只追加本记录与 `docs/diagnostic.md` 的进度说明；三个已修改的工具/测试文件保持开始时的 SHA，14 份受测工具输入也保持一致。完整当前输入清单再次与清理后封存清单比较，工作区受测源码/配置/工具仍匹配该版本。改动保护见 [delivery-checks.json](../Logs/CombatEvidenceNextValidation/baseline-clean-20260923-182031/delivery-checks.json)、`workspace-after.json` 和 `this-turn-docs.patch`；暂存区保持为空，没有提交或切换分支。新子档案与上轮已列工件逐文件复算长度/SHA，最终根 `artifact-manifest.json` 在 execution、摘要和文档副本落盘后生成；历史失败档案原样保留。
+
+| 状态 | 本轮结束时的结论 |
+|---|---|
+| 已完成的处理 | 两个已确认生成物完成备份、定点隔离和恢复映射；没有新增实现或修改完整性契约。 |
+| 本轮实际验证 | Python 141 项、EditMode 100 项、PlayMode 2 项及两份真实 KCP 输入回放全部成功，输入与工件稳定；可交付当前受测版本的**稳定正确性基线**。 |
+| 尚未完成 | 五秒三次短测、三十秒检查点覆盖、完整性能阵列、真实业务失败夹具及 Steam 双机验收；阶段一整体门槛仍需单独核对。 |
+| 无法确认 | C# 先删除后写清理审计的崩溃窗口仍未核查；现有 KCP 兼容夹具不能证明旧 Steam 事故或任何真实业务缺陷已复现。 |
+
+本项到此停止。下一项使用既有入口执行 `-Seconds 5 -Repeats 3`，保留实际失败结果，再据证据决定性能修复与三十秒测试；本轮没有运行性能矩阵。**稳定正确性基线通过；诊断完整性未整体验收、高负载未通过、真实业务故障未复现，Steam 双机未完成。**
+
+## 2026-09-23 当前版本五秒三次负载基线
+
+按已批准的下一项计划执行，证据目录为 [short5s-20260923-192051](../Logs/CombatEvidenceNextValidation/short5s-20260923-192051/analysis/report.md)。本轮交付**完整、稳定、可追溯的失败基线**，没有优化实现、修改验证工具/C#/负载/阈值，也没有进入三十秒测试。
+
+执行前重新确认原主 checkout、`master`、HEAD `4e473e28f483105426a3df532a560aa13c622ad6`；五处既有修改、完整差异、暂存区及逐文件哈希已经归档。无活跃 Unity/构建进程；物理验证工程和 Library 保留，两个隔离生成物未重新出现。当前 21,536 项输入与稳定正确性基线相同，源指纹仍为 `5c3f1c246f01fde5a5c00eb04ad5e5d461005ff221f8cd50602b561d9103a1ec`。
+
+### 实际执行与联合验收
+
+复用 Unity 6000.3.21f1 和原 Benchmark 入口，显式参数为 `-Seconds 5 -Repeats 3 -CatchupSeconds 45 -TimeoutSeconds 14400 -RequireCompleteMeasurements`；输出在新目录 `benchmark`，分析位于同级 `analysis`。没有使用 Smoke、IndependentEngines 或 overlay。
+
+| 项目 | 本轮实际结果 |
+|---|---|
+| 执行覆盖 | NUnit 9 项实际执行，7 通过、2 失败、无跳过/无法判定；每项内部三次，共 27 个唯一组合，无缺报告。 |
+| 原始逐帧数据 | 27 份 CSV，每份连续 720 帧，共 19,440 帧；独立重算均值/最大值/P95/P99及对应 off 增量，与 JSON 一致。 |
+| 退出码与门槛 | 外层实际进程退出 1，Unity 退出 2；冻结比较器独立复算退出 2，与原 comparison 完全一致。CPU/存储门槛 false，分配门槛 false。分析脚本退出 0 只表示失败基线核对成功。 |
+| 输入及工件稳定性 | 源、受测项目、工具前后均稳定，auditErrors 为空；准备指纹与稳定正确性基线一致。分析输入前后 SHA 相同。 |
+| 时长及频率 | XML 测试区间 208.4216222 秒；外层含准备/审计 370.589245 秒。27 段实际主循环累计 134.9735967 秒，单段 4.9932199–5.0059544 秒；实际 143.8287–144.1955 Hz，全部满足 142.56 Hz 门槛。 |
+| 业务及预算 | 27 组业务/DOT 摘要均与独立关闭采集执行一致。总预算账峰 108.0198 MiB，每端队列最大约 28.0068 MiB，未越过 128/32 MiB；这不是实际持有对象内存验收。 |
+| 复制/排空 | 全部在 45 秒窗口内完成，最长 14.6031 秒，缺失文件清单为空；已丢事件仍使两个来源区间不完整。 |
+| CPU | 200/500 的 local/replicated 共 12 组 P95 增量超 1 ms，其中 11 组 P99 增量超 3 ms；最大增量分别 4.3687、5.8113 ms。50 控制器三模式本轮 CPU/存储门槛通过。 |
+| 分配 | 27 次探针均为 `CounterDidNotObserveProbeAllocation`，实际分配保留 null，未使用零值或历史 Profiler 数据补足。 |
+
+[联合摘要](../Logs/CombatEvidenceNextValidation/short5s-20260923-192051/analysis/summary.json)、[逐组合表](../Logs/CombatEvidenceNextValidation/short5s-20260923-192051/analysis/case-table.csv)、[XML 审计](../Logs/CombatEvidenceNextValidation/short5s-20260923-192051/analysis/xml-audit.json) 和 [CSV 审计](../Logs/CombatEvidenceNextValidation/short5s-20260923-192051/analysis/csv-audit.json) 保存全部实际结果。现有 Benchmark 的比较失败不一定改写 `execution.success`，本轮联合使用外层、Unity、比较器退出码及稳定性判定，没有仅凭某一字段通过。
+
+### 已定位的关键丢失与下一项
+
+200 local 第 1 次丢失 16,446 条关键记录，9 段 QueueOverload，首缺口 44556..52818；队列峰恰为 28 MiB，总预算约 52.005 MiB。500 replicated 第 1 次丢失 17,788 条关键记录，51 段 QueueOverload，首缺口 330587..347106；主队列峰 28 MiB + 7,168 字节，总预算约 108.020 MiB。两端是同一来源副本，不重复累计丢失数；两个独立 case 合计缺失 34,234 条。
+
+当前推进块每次预留 64 KiB，在 32 MiB 队列中为其他关键记录保留 4 MiB。队列达到推进块的 28 MiB 准入边界、总预算未满且无 writer failure，是队列短时触顶的直接证据；共享 QueueOverload 原因未记录每次具体拒绝分支，因此不能精确归因全部拒绝。结束检查点分别建立 290460、726060 的恢复起点，但之前缺口仍在，`complete=false` 正确保留，严格比较拒绝完整性通过。
+
+累计编码、压缩及写盘/刷新数据还不能确定磁盘、GC、调度或块处理中的哪项造成瞬时峰值。500 复制第 2 次零丢失，存储/刷新累计却高于失败次，不能据累计值直接宣称磁盘根因。完整事实、推断边界及原始引用见 [定位报告](../Logs/CombatEvidenceNextValidation/short5s-20260923-192051/analysis/report.md)。
+
+下一项建议限定为队列拒绝和消费停顿的有界观测：补首次拒绝 guard/序号/水位，固定容量分窗生产消费、队列峰及服务/flush 停顿，取得有效分配/GC 证据，再以相同五秒三次负载复验。确定支配因素后才做单点修复；不扩大预算、不丢关键、不拉长负载时间，不推进三十秒。
+
+### 保护核对与未完成项
+
+本轮对跟踪文件只追加本记录和 `docs/diagnostic.md`；三个既有工具/测试文件与全部受测输入保持原样。最终核对见 `workspace-after.json`、`delivery-checks.json`、`historical-integrity.json`；`this-turn-docs.patch` 保存本轮文档增量。新运行及分析的原始输出、准确命令、退出码、前后哈希和文档副本封存后，最后生成根工件清单；暂存区保持为空，历史档案未覆盖。
+
+本项到此停止。已执行：全部 27 组及独立核验。已通过：执行覆盖、输入稳定、CSV一致性、业务摘要、达成频率、预算账及补传窗口。失败：关键零丢失、CPU尾延迟及严格分配门槛。未测量：有效实际分配、诊断实际持有内存、十秒周期检查点性能。未运行：三十秒及长测、真实业务故障复现、Steam 双机。之前稳定正确性基线保持有效，但本轮没有重跑其 141/100/2 项或两份回放。**诊断完整性未整体验收，高负载未通过，真实业务故障未复现。**
+
+## 2026-09-23 有界队列观测与同负载归因
+
+本项经用户批准，交付默认关闭的有界观测、同版本五秒三次复验及定位报告；没有实施性能优化，预算、关键输入保留要求及逐次时间步保持原样，没有进入三十秒测试。实际关键丢失如下列明。独立档案为 [queue-observation-20260923-210717](../Logs/CombatEvidenceNextValidation/queue-observation-20260923-210717/analysis/report.md)。仍在原 `master` 主 checkout，HEAD `4e473e28f483105426a3df532a560aa13c622ad6`。开始时 21,536 项输入匹配上一稳定基线；除原五处修改外发现两份已有构建文档修改，七处均已归档保护。两个隔离生成物保持缺席。
+
+已实现 `-ObserveQueue`：每个 Store 先从原 128 MiB 预算预留 512 KiB，生产/消费各 1,024 个 100 ms 固定窗口；分别记录首次总体及各入口/guard 拒绝、来源/序号/阶段/水位、限额、逻辑记录/工作项/计费字节、队列峰、服务和刷新跨度。保留原准入顺序及 32/4 MiB 队列设置，不写普通证据队列；所有消费者退出后才导出。溢出、未排空或计数不平衡不能宣称观测完整。
+
+### 实际执行与稳定性
+
+最终 `revision3` 的正确性与三个矩阵采用同一源/工程/工具指纹，前后审计均稳定；精确用例集合、回放来源及冻结夹具已独立核对。原始命令、环境、源码/工具副本、XML、日志、外层及 Unity 退出码、前后清单均独立归档，详细指纹见 [最终摘要](../Logs/CombatEvidenceNextValidation/queue-observation-20260923-210717/analysis/summary.json)。
+
+| 项目 | 本次实际结果 |
+|---|---|
+| Python | 从归档工具副本执行 141/141；前后稳定，与最终三组矩阵工具指纹一致。没有沿用旧任务的通过数。 |
+| 最终正确性 | EditMode 126/126（原 100 + 观测 26）；PlayMode 9/9（接触 2 + 测量契约 7）；Gateway/Replica 260/1,217 步可靠匹配。 |
+| 观测关闭对照 | 27 份报告、CSV 帧数集合 [720]；NUnit {'Passed': 9}；外层/Unity/比较器退出 1/0/2。 |
+| 观测开启 | 27 份报告、CSV 帧数集合 [720]；NUnit {'Passed': 8, 'Failed': 1}；外层/Unity/比较器退出 1/2/2。 |
+| 分配/GC | Profiler 实际 27 组，执行步数集合 [720]；独立有效分配 27/27、GC 计数 27/27、目标线程 GC 区间 18/27、时钟锚点 27/27。未知暂停时长仍为 null。 |
+| 关键与总丢失 | 主来源只计一次：对照 0/0，观测 17253/17253。实际首拒绝侧车 1 个；不以本次未出现拒绝关闭旧失败。 |
+| 严格门槛 | 对照 CPU/存储=False、分配=False；观测 CPU/存储=False、分配=False。Profiler 证据不会改写普通计数器 null 或比较器失败。 |
+
+初始观测接口红测按预期失败并保留原 XML/日志。首次编译缺少测试命名空间的失败、首版 Profiler 的 139 线程枚举误判与默认整组超时、revision2 的实时 coverage 文件替换竞争全部保留。读取器修正保持固定容量；实时轮询修正只影响新增测量脚本，在原 45 秒截止内等待真实水位。空值不确认刷新、语法破损 JSON 不被 IO 重试吞掉。红测外层退出 1 的记录属于事后工具会话转录，未伪装为当时自动生成的 execution，详见档案 note。
+
+### 归因、剩余项与停止
+
+逐组合原始数据及分析见 [完整报告](../Logs/CombatEvidenceNextValidation/queue-observation-20260923-210717/analysis/report.md)、[队列分窗审计](../Logs/CombatEvidenceNextValidation/queue-observation-20260923-210717/revision3/analysis-queues/queue-audit.json)、[分配/GC 审计](../Logs/CombatEvidenceNextValidation/queue-observation-20260923-210717/revision3/analysis-allocations/allocation-audit.json)、[配对开销与同 case 相关性](../Logs/CombatEvidenceNextValidation/queue-observation-20260923-210717/revision3/analysis-correlation/observation-correlation.json)。阶段累计和嵌套时长不能相加为墙钟，也不能替代逐帧 P95/P99。工作项大小不同，不能仅凭完成项数断言消费快于生产。
+
+| 状态 | 结论 |
+|---|---|
+| 已实现 | 有界拒绝/分窗/队列/服务与刷新观测，实际线程分配校准与原始 Profiler 保存，严格独立分析；不改业务或 v2 证据协议。 |
+| 实际验证 | 上列全部正确性、矩阵、回放和组件核验；三个最终矩阵来自同一冻结版本，各重复均保留。 |
+| 失败/尚未通过 | 最终观测组 500/local/第 1 次关键丢失 17,253；常规 CPU 尾延迟及严格分配计数器门槛；Profiler 仍因部分 GC 暂停时长无法确认而不全通过。历史关键丢失仍保持未关闭。 |
+| 无法确认/未测量 | 未捕获拒绝时不能确定其支配原因；GC 进程计数与目标线程 marker 范围/边界不同，已有 marker 并集不是全进程暂停；复制导入 I/O 细分、实际持有内存、补传分配及周期检查点性能未测。 |
+| 未运行 | 三十秒、长测、真实业务失败夹具及 Steam 双机；C# 清理审计崩溃窗口仍未处理。 |
+
+本轮首拒绝已定位：500/local/第 1 次在原点后 380.3608 ms，`TryWriteAdvance / QueueLimit` 拒绝序号 52,972 的完成记录；produced/written/flushed 为 52,972/1,539/1。pending 29,344,192 B 加申请 65,536 B 超过 28 MiB 准入线 49,600 B，当时全局预算仅使用 55,039,000 B。此前 0.8657–232.7578 ms 有一次 231.8921 ms 服务停顿；后续窗口消费字节落后，最终触发准入限制。总队列峰约 28.092 MiB，仍在原 32 MiB 上限内。对应 Profiler 运行无拒绝，不能跨运行拼接 GC 时间线或据此认定磁盘/GC/编码根因。
+
+下一项优先定位这次长服务对应的具体工作项，继续以固定容量区分初始检查点/元数据/文件创建、编码/构块及等待，再用相同五秒三次负载复验；现存 raw 的 GC 标记及窗口边界可只读补证。确认支配因素后才提出单点修复，不增加预算、不丢关键、不拉长负载。当前没有实施性能优化。本项到此停止：**诊断完整性整体未验收、高负载未通过、真实业务故障未复现。**
+
+本项之外的既有工具、测试以初始 SHA 核对保持不变。最终核对发现 `docs/BuildProfiles.md`、`docs/build-profiles-validation.md` 在任务期间发生额外并行修改；保留当前文件并归档差异，不回退或覆盖，也不宣称七处既有文件全部未变。两份本任务进度文档的原有正文保留，受测输入仅含预期变更且仍匹配最终封存。历史档案逐项复核，初次保护检查的 false 原样保留，最终清单在 execution、摘要、最终文档副本及并行变更说明落盘后生成，见 [最终交付核对](../Logs/CombatEvidenceNextValidation/queue-observation-20260923-210717/delivery-final/checks.json)。暂存区保持为空，没有提交或切换分支。
+
+
+## 2026-09-24 首个 Gateway 检查点服务拆分与同负载复验
+
+本项交付默认关闭的有界服务观测及三个同版本五秒三次测量组。**旧 231.8921 ms 长服务未再现，支配因素未确认，未实施条件性能修复；本项到此停止。** 完整证据见 [归因报告](../Logs/CombatEvidenceNextValidation/gateway-service-20260924-101722/analysis-final/report.md) 和 [机器摘要](../Logs/CombatEvidenceNextValidation/gateway-service-20260924-101722/analysis-final/summary.json)。
+
+仍为原主 checkout、`master`、HEAD `4e473e28f483105426a3df532a560aa13c622ad6`。初始23处已有修改/未跟踪输入均先行保存；构建脚本及两份构建文档的并行变化另列保护，不覆盖。使用 Unity 6000.3.21f1、原独立物理验证工程及 Library，两个隔离生成物保持缺席。六次最终 Unity 调用的源/项目/工具指纹一致，全部前后稳定，无审计错误；源指纹 `3703242b01a8108e70198d6d0dbc5caff0a6117775c2d3c7a44886204ce13bec`。
+
+| 状态 | 本次实际结果 |
+|---|---|
+| 已实现 | FIFO工作编号和原记录身份、推进块封口范围、拒绝关联、49个内部阶段、独占/包含/最长跨度、队列外上下文；线程CPU独立预检和边界差值；启动/初始化/负载的分配与GC分相。固定布局501,768 B，沿用512 KiB预留。 |
+| 红测 | EditMode新增观测契约3项先失败；PlayMode新增锚点契约先失败、其他9项通过。原始XML、日志、退出码及哈希保留。 |
+| 正确性实际通过 | 冻结Python141/141；EditMode152/152（原126+服务观测21+集成5）；PlayMode15/15（接触2+测量契约13）；KCP两份输入260/1,217步可靠匹配。数量均来自本轮实际执行。 |
+| 普通关闭/开启组 | 各27报告、27 CSV，每份连续720帧；NUnit各9通过，逐帧分位数独立复算一致。各组Unity/外层/比较器退出0/1/2，严格性能门槛仍失败。 |
+| 本轮负载通过项 | 两组关键及总丢失均0，业务/DOT摘要一致；频率均≥142.56 Hz，预算账≤128 MiB、队列≤32 MiB，补传均在45秒内完成且缺失清单为空。 |
+| 仍失败 | 关闭/开启组最大P95增量5.4484/5.0766 ms、P99增量7.3966/6.2507 ms；普通分配计数器各27次均无效，继续为null。Profiler负载用例因部分GC不可确认而失败。 |
+| 分配/GC证据 | Profiler27组合、720步均实际执行；启动和初始化各27组分配/时钟/GC区间有效，负载27组分配/时钟/进程GC计数有效、18组目标线程GC区间有效。9个off组合发生GC但无对应原始区间，保留未知。 |
+| 无法确认 | 旧长服务内部支配操作；精细CPU/等待分解；全部保留工作GC关联（405/459完整覆盖，其余有边界或负载后缺口）；观测无干扰及真实持有内存。 |
+| 未运行 | 条件性能修复后的第二版本、三十秒/长测、真实业务失败夹具和Steam双机；C#清理审计崩溃窗口未处理。 |
+
+旧事件已通过FIFO源码和原始序号重建为首个 `gateway.1 / replay.engine_checkpoint / seq=1` 写入；旧侧车无直接workId和内部阶段，重建边界见 [证据链](../Logs/CombatEvidenceNextValidation/gateway-service-20260924-101722/old-service-reconstruction.json)。新普通观测及Profiler各直接捕获18次同身份工作，分别为6.7173–24.3427 ms和6.0995–27.0073 ms，均无自然拒绝/重试。两组各17/18次首服务CPU低于有效粒度；15.625 ms观察粒度及约31.25 ms经验误差不能支持精细等待归因。Profiler这18次首工作均在有效锚点覆盖内，没有与目标线程GC标记重叠；这不能解释另一运行的旧事件。
+
+两组全局最长53.2905/58.8393 ms属于负载结束时seq726060、engine=*的完整检查点，身份不同于原首Gateway工作，单列后续候选。未把该序列化耗时替代原问题，也未因本轮零丢失关闭历史拒绝。原顺序、预算、持久化水位和逐次时间步保持不变，未增加预热或拉长负载。
+
+全部逐组合结果、分阶段分配、内部耗时和观察开关统计差值在归因报告中索引。离线服务审计的文件匹配错误、初始化审计的LoadEnd计数边界错误均保存失败版本；后者有独立红/绿分析测试。修正只涉及本次分析脚本，未改受测C#或重跑负载。最终 [保护核对](../Logs/CombatEvidenceNextValidation/gateway-service-20260924-101722/delivery-checks.json) 与 [工件清单](../Logs/CombatEvidenceNextValidation/gateway-service-20260924-101722/artifact-manifest.json) 在文档及执行状态落盘后完成。
+
+**诊断完整性整体未验收；高负载未通过；真实业务故障未复现。** 旧长服务保持待自然再次捕获、待归因；CPU尾延迟另列后续问题，不在本项追加优化或三十秒测试。
+
+
+## 2026-09-24 生成物分类修正与主线程尾延迟定位
+
+本项完成验证策略修正、有界主线程观测、当前冻结版本正确性和三个五秒三次矩阵。**具体操作未满足归因门槛，未实施性能优化；本项到此停止。** 完整证据见 [交付报告](../Logs/CombatEvidenceNextValidation/main-tail-20260924-134215/analysis-final/report.md) 和 [机器摘要](../Logs/CombatEvidenceNextValidation/main-tail-20260924-134215/analysis-final/summary.json)。
+
+仍在原 master 主 checkout，HEAD `4e473e28f483105426a3df532a560aa13c622ad6`。开始时32处已有修改／未跟踪输入归档保护。原物理验证工程与 Library、Unity6000.3.21f1、无overlay。用户确认关闭主工程后，三个负载组启动前均重新核对无活跃 Unity／构建进程。
+
+| 状态 | 本轮事实 |
+|---|---|
+| 已实现：工具 | 封存 full-v1／editor-generated-v1 策略。仅 Tests／Replay 的稳定版本判断精确排除 Addressables/link.xml 及其 .meta；完整哈希／变化列表、内容仍保存，Build／Python默认严格。旧档案保持原结果。没有移动或删除生成物。 |
+| 已实现：观测 | 默认关闭，固定top36及当前帧、16阶段和调用数。原1,024分窗不变，实际布局521,560 B在512 KiB内。业务执行、准入顺序、持久化水位及时间步保持原样。 |
+| 红绿与正确性 | 工具新增10项先失败，专门25/25与冻结Python151/151通过；工具契约阶段EditMode152、PlayMode20通过。新增观测3项API先红，另16项行为首次绿；最终EditMode171/171、PlayMode20/20，两份KCP输入260／1,217步可靠匹配。后者仅兼容基线。 |
+| 稳定版本 | 最终正确性、两个普通矩阵、Profiler及本轮raw离线读取共7次Unity调用，源／项目／工具指纹一致；完整及稳定输入、工具均前后不变，无审计错误。稳定源SHA `cf64676305ca6c83b278cc8b35596af594f60cea03ceddc679570dbffcfe7d9f`。 |
+| 实际负载 | 普通关闭／开启各9项实际执行并通过、27报告与27份连续720帧CSV；独立重算分布一致。两组Unity／外层／比较器退出均0／1／2，不能以NUnit通过代替严格门槛。Profiler27组合均实际执行，Unity／外层2／1。 |
+| 通过项 | 两普通组关键与总丢失均0，业务及DOT摘要一致，有限前缀完整刷新，频率≥142.56Hz，预算账／队列及45秒补传通过。历史拒绝不因本次未再现而关闭。 |
+| 失败项 | 200／500的local／replicated共12次记录组合，两组均P95/P99失败；最大增量关闭5.5253／6.4639ms、开启7.8312／8.9437ms。普通分配探针各27次无效并保持null。 |
+| 分配与GC | Profiler有效分配27/27；启动／初始化分配、时钟、GC各27/27；负载GC区间18/27，9个off未知。旧版和本版各27×720 Step已独立导出，不拼接时间线。 |
+| 未知／未测 | 具体支配操作、观测自身净成本、细分CPU／等待、诊断实际持有内存与10秒周期检查点性能。完整收支不等于具体操作覆盖。 |
+| 未运行 | 条件优化及其第二冻结版本、三十秒与长测、真实业务失败夹具、Steam双机；清理审计崩溃窗口未处理。 |
+
+GasWrapper 是普通与Profiler各18个case的top36累计最大独占阶段；普通保留墙钟占比30.68%–61.50%，但它仍包含多种操作及观测开销，不能直接认定一个生产热点。两组各自减同组off后，开启观测的P95增量差+0.0927～+3.0691ms；500控制器约+2.28～+3.07ms，干扰不能排除。Profiler648个保留主帧都有同case GC区间覆盖，257帧可能重叠，只能说明整帧相关，不能归因到内部操作。具体操作未产生两次重复的数值候选。
+
+旧231.8921ms首Gateway服务仍未再现：本轮普通18次6.9495–23.3577ms、Profiler18次6.4717–27.2108ms。当前最长服务属于结束全检查点，身份不同。旧事件仍未归因、未修复。
+
+下一项最小工作应先在现有预算内约束观测成本／误差，再进一步拆分GasWrapper宽泛剩余；先完成容量核算，取得具体操作重复占优且观测干扰可解释的证据，才讨论一次修复。本次不追加调参或新负载轮次。
+
+本轮分析脚本对checkpoint分布计数的初次误判保留，实际schema回归7项先红后绿，修正结果另存v2，未改原始测量。最终 [保护核对](../Logs/CombatEvidenceNextValidation/main-tail-20260924-134215/delivery-checks.json) 和 [工件清单](../Logs/CombatEvidenceNextValidation/main-tail-20260924-134215/artifact-manifest.json) 在状态、文档及副本落盘后生成；现有其他修改保留，暂存区未改，无提交或切换分支。
+
+**诊断完整性整体未验收；高负载未通过；真实业务故障未复现。**
+
+## 2026-09-24 探索性 Steam 采证准备与封存阻塞
+
+本项按用户新顺序优先准备真实双机现场，不作为阶段五最终验收。档案为 [steam-exploratory-20260924-164917](../Logs/CombatEvidenceNextValidation/steam-exploratory-20260924-164917/report.md)。执行开始仍是原 `master` 主 checkout，HEAD `4e473e28f483105426a3df532a560aa13c622ad6`，暂存区为空；已保存41处既有修改／未跟踪输入的字节副本、完整差异、源码清单、路径属性及环境。没有重置、清理、提交或切换工作树。
+
+| 状态 | 本轮实际结果 |
+|---|---|
+| 已实现 | 启动脚本增加显式off／local／replicated模式及独立输出、附加进程限制、请求／应用状态区分；保留Default。六份双端配置与操作说明已生成，但均标记readyToRun=false。归档内离线分析复用冻结解析器，分别导入两端及合并副本，核查有限区间、v2物理引用与依赖并重新提取。 |
+| 实际验证通过 | 冻结完整Python回归151项、Steam工具19项（启动11＋身份导出8）、离线分析13项合成测试，均退出0、无跳过且输入前后稳定。同一最终启动测试对原脚本失败，对新脚本通过；早期环境／测试桩失败全部保留。离线分析首次绿测不冒称先红。 |
+| 封存失败 | 准备源码物理副本时，主工程新增Unity进程65012，两个Addressables生成物在清单捕获后消失，随后ProjectSettings也变化。相对执行初始清单，另有其他任务对ProjectBuildWindow.cs的修改；已保存差异，未覆盖。 |
+| 审计结论 | 副本本身 `validationInputsUnchanged=true`、工具稳定，但准备未完成 `generated-inputs-before.json`，`sourceUnchanged=false`，`inputAuditPassed=false`、`acceptanceInputAuditPassed=false`。不能因副本之后未变而补判准备成功。 |
+| 未执行 | 本次Unity构建、Direct配置派生、包交付、双端运行身份、Player落盘、真实日志导入／有限提取／Unity回放和场景对照。只有工具合成测试，没有Steam现场结果。 |
+| 独立保留 | 200／500控制器尾延迟失败、普通分配探针无效、部分GC未知；阶段一整体门槛及清理审计崩溃窗口、真实业务缺陷复现和最终Steam验收未完成。未运行性能矩阵或三十秒测试。 |
+
+构建路径还存在历史接口不匹配：旧 `Invoke-CombatEvidenceValidation.ps1 -Mode Build` 仍传 `-toolProfile/-toolBuildKind/...`，当前原生入口明确拒绝。下一次应复用现有 `NativeBuildEntry.Batch`，在完整物理源码副本封存前将所选Evidence Profile的Distribution从Steam派生为Direct，保留精确差异；主工程Profile不变，C#不变，已有full-v1完整审计不变。本次准备先失败，该派生及原生构建均未执行，不能宣称已得到包。
+
+静止窗口确认后使用全新目录重新封存，不修补或复用失败档案。构建返回成功只是第一项：还须完整输入及工具审计通过、包内容／BuildId／GUID／源码清单与派生Profile一致，才交付用户。源码ZIP不覆盖完整资源或全部Profile身份，必须保留完整物理来源供同版回放。
+
+用户及另一端操作者按 [操作说明](../Logs/CombatEvidenceNextValidation/steam-exploratory-20260924-164917/operator-instructions.md) 完成本地链路、复制链路，再进行off→local→replicated场景对照；当前须先解决封存阻塞。先审计各端，再合并，固定有限水位；正常退出不是刷盘或复制追平证明。没有复现故障可如实报告，只有独立业务断言连续三次稳定失败才能称为已复现。
+
+工具测试子进程清除了继承的PowerShell 7 `PSMODULEPATH`，避免Windows PowerShell加载不兼容模块；同时清除 `PYTHONPATH`，显式使用冻结副本，未修改系统环境。测试命令、原始输出、实际退出码及前后哈希均在独立档案。最终保护核对及工件清单在本次状态和文档落盘后生成。

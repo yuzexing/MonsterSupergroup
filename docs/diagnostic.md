@@ -152,7 +152,7 @@ Profiler在Store创建前、工作负载构造前、负载开始和结束分别�
 
 | 字段或清单 | 含义与判定 |
 | --- | --- |
-| `source-before/after.json`、`validation-before/after.json` | 完整输入清单及 SHA256，仍包含两个生成物。 |
+| `source-before/after.json`、`validation-before/after.json` | 完整输入清单及 SHA256，仍包含所有生成物。 |
 | `sourceUnchanged`、`validationInputsUnchanged` | 分别比较工作区和受测工程的完整前后清单；生成物发生变化仍返回 `false`，不掩盖实际变化。 |
 | `sourceChanges`、`validationInputChanges` | 保留完整变化列表。 |
 | `source-stable-before/after.json`、`validation-stable-before/after.json` | 按准备时封存策略投影出的稳定输入清单及指纹。 |
@@ -162,14 +162,15 @@ Profiler在Store创建前、工作负载构造前、负载开始和结束分别�
 | `inputAuditPassed` | 完整受测快照及冻结工具稳定、且审计无错误的结果，保留完整快照审计含义。 |
 | `acceptanceInputAuditPassed` | 按封存策略检查受测工程稳定输入及全部冻结工具，并要求策略、前清单与审计有效；最终 `execution.success` 是既有执行成功与该项同时为真，不能将失败测试改成成功。 |
 
-策略有两个明确版本：
+策略有三个明确版本（2026-09-24 新增 Build 三文件排除）：
 
-- `full-v1`：无例外。Python `prepare` 直接调用默认使用此策略，PowerShell `Build` 模式也明确使用它。
+- `full-v1`：无例外。Python `prepare` 直接调用仍默认使用此策略；历史 Build 档案仍按此策略解释。
 - `editor-generated-v1`：仅 PowerShell `Tests`／`Replay` 使用；Benchmark 和 Profiler 通过 `Tests` 模式沿用相同策略。只有 `Assets/AddressableAssetsData/link.xml` 和 `Assets/AddressableAssetsData/link.xml.meta` 这两个精确路径退出稳定输入比较。其他 `link.xml`、`.meta`、源码、配置、工具和目录仍严格检查。直接调用 Python 若显式选择该策略，还必须指定 `Tests` 或 `Replay`，不能用于 `Build`。
+- `build-generated-v1`：PowerShell `Build` 使用；直接调用 Python 必须显式指定该策略及 `--mode Build`。按用户要求，只排除上述两个路径与 `Assets/AddressableAssetsData/Windows/addressables_content_state.bin`；其他平台的同名文件、该 `.bin.meta` 和其余输入继续严格检查。构建通过原生 Build Profile 的完整 Player 构建入口执行。用法与验收记录见 [构建输入 Hash 校验](build-input-hash-validation.md)。
 
 `acceptance-policy.json` 保存策略版本与精确路径清单，`identity.json` 同时记录该策略、模式和策略文件 SHA256。结束审计校验封存内容及调用模式；未知策略、策略变化、模式不一致或缺少必要前清单不通过。工作区并行编辑与受测副本漂移分别报告：工作区变化不自动推翻稳定冻结版本的结果，但不能把该结果宣称为变化后工作区的验证。
 
-两个生成物仍完整复制并核对。`generated-inputs-before/after.json` 分别记录源工程和受测工程的存在状态、长度、SHA256 及归档内容路径；内容保存在 `generated-inputs/{before|after}/{source|project}/`。准备时的源清单和复制结果不一致仍会停止。受测源码压缩包精确补收上述 `link.xml`，没有扩大到其他 XML 或增加目录排除。
+生成物仍完整复制并核对。旧策略保持两个文件的归档格式，新 Build 策略归档三个文件。`generated-inputs-before/after.json` 分别记录源工程和受测工程的存在状态、长度、SHA256 及归档内容路径；内容保存在 `generated-inputs/{before|after}/{source|project}/`。准备时的源清单和复制结果不一致仍会停止。受测源码压缩包精确补收上述 `link.xml`，新 Build 策略还补收指定的 `.bin`，没有扩大到其他 XML、二进制文件或增加目录排除。
 
 旧档案没有封存策略时，新稳定性结论保持未知，不能追认历史失败。复核输出到新的独立目录，保留原有 `execution.json`、完整性结果和工件清单；旧结果继续按当时规则解释。
 
@@ -218,3 +219,51 @@ Profiler在Store创建前、工作负载构造前、负载开始和结束分别�
 记录模式的 `performance.header/snapshot` 可嵌入战斗证据；没有独立metrics文件仅标记待离线核查，不声明通过或直接判定漏采。off仍要求独立趋势记录。产品Runtime默认不启用高频队列／主线程旁路；本次配置固定ProfileSeconds=0。每秒分位数不能合并为整场精确分位数；分配／GC仅为未校准趋势，不补成零；预算账也不代表实际持有内存。
 
 本轮启动工具11项及原身份导出8项在冻结副本中实际通过；战斗Python回归151项、归档内离线分析13项合成测试实际通过。没有启动Unity构建、Player或真实Steam回放；源快照准备因并行输入变化失败。详见 [本轮记录](combat-evidence-next-validation.md#2026-09-24-探索性-steam-采证准备与封存阻塞)。协议、v2证据格式、业务实现和预算均未改变。
+
+
+### 2026-09-24 Steam 操作包续接状态：尚未放行
+
+新档案 [steam-exploratory-20260924-173004](../Logs/CombatEvidenceNextValidation/steam-exploratory-20260924-173004/report.md) 实际重跑冻结战斗 Python 151 项、Steam 工具 19 项并通过，生成完整物理出包来源。原生构建得到 Test／Steam／Direct／Evidence 非 Development 包，独立包身份、manifest/源码ZIP/物理来源及 Profile 校验通过；**full-v1 构建输入审计失败，所以不能将包交付采集**。变化为受测副本 Addressables/link.xml、其.meta 新增及 Windows/addressables_content_state.bin 改写。主工程和冻结工具未变；完整变化、前后实体文件与失败结果全部保留。
+
+本轮 operator-kit 已提供 Host/Client × off/local/replicated 六份配置、Start-Case／Verify-Running／Export-Case 辅助入口；14项合成组合及语法测试通过。所有 readyToRun 保持 false。不要手工放行或启动本轮包；原操作说明中的 local60秒→replicated60秒→三模式场景流程，必须等后续新构建完整审计通过后才执行。当前不是等待用户提供游戏日志的阶段。
+
+后续有效版本开始采集时，包目录和 operator-kit 分别复制到双端；输出必须位于两者之外，显式模式、Graphics=Default、ProfileSeconds=0。到达菜单后另开终端核对实时 PID/启动时间/EXE 和采集参数，再交战。正常退出并等待采集器收尾之后，导出完整场次目录；角色标签及包身份不代替运行身份证据，退出不代表完整刷新。每轮两端先分别审计、再合并，确认有限区间和依赖后才提取及同版回放，不能跨随机现场拼接时序。
+
+本轮没有启动 Player、没有 Steam 原始现场、没有实际 Steam 夹具或回放。没有改写历史性能结果、未知 GC/分配或最终验收门槛。当前最小后续项是构建验证生成物契约，详见续接报告及其中代码定位链接。
+
+
+### 2026-09-24 Steam Direct 操作包已放行：先 local 约60秒
+
+本轮 [采证准备报告](../Logs/CombatEvidenceNextValidation/steam-capture-ready-20260924-185642/report.md) 已确认新Direct包构建、build-generated-v1验收与独立包身份通过；旧full-v1失败仍保留。BuildId `20260924T110544656Z-e3d2f028`，工具与完整物理来源固定在该档案。下载同一个 [产品及操作包ZIP](../Logs/CombatEvidenceNextValidation/steam-capture-ready-20260924-185642/delivery/SteamEvidence-20260924T110544656Z-e3d2f028.zip)，两端按 [首场说明](../Logs/CombatEvidenceNextValidation/steam-capture-ready-20260924-185642/delivery/README.md) 执行；现在可以开始第一轮local，不沿用前一档案的未放行操作包。
+
+解压后的product和operator-kit分开，输出目录放在二者之外。Start-Case显式指定Host/Client、local、chain；菜单时在第二个终端Verify-Running核对PID/开始时间/实际EXE与包。双方成功后正常交战约60秒，保持角色装备、关卡、画质、分辨率及144FPS目标，记录场景/实际敌人数/异常实体。正常退出、采集器收尾后Export-Case导出整个场次。高频细分旁路关闭，ProfileSeconds=0；off模式独立metrics和记录模式嵌入趋势位置不同，不据此误报漏采。
+
+收到两端日志后先分别审计，再合并有限区间；真实新日志按v2块物理引用及依赖解析，使用该包完整封存版本提取/重提取比对与实际Gateway/Replica回放，步数来自本次现场且非零。第一轮结果合格后才进入replicated链路，再逐轮三模式对照；正常退出不是完整刷盘或补传证明。两端UTC只辅助定位。当前实际运行身份、落盘完整性和业务故障均仍待采集/验证。
+
+
+最终补充：封存后检测到 `docs/BuildProfiles.md` 与 `docs/build-profiles-validation.md` 的并行编辑，已保存初始及当前字节和差异，没有覆盖。两文件不属于受测输入清单；主工程源码、配置及工具最终核对仍与本轮封存身份一致。首次收尾检查因文档变化停止的记录保持原样，未重建或重跑测试。保护结论不是“所有19项既有文件字节未变”。
+
+
+交付时版本边界更新：最终收尾又检测到主工程删除五个临时Inspector验证输入（Assets/BuildProfileInspectorValidation-460e4ef4.meta及其目录内两份.asset和.meta）。完整封存来源中仍保留这些文件，本轮测试和包保持同一冻结版本；不恢复或覆盖该并行删除。上文主工程一致的结论只对应构建后保护核对时点，最终交付应以封存版本为准，不能宣称删除后的当前工作区已通过。最终变化清单单独归档，未重建、未选择重跑结果。
+
+
+### 2026-09-24 首轮 local 已分析：暂停扩大记录场景
+
+本轮两端原始日志已收到并完成 [分析](../Logs/CombatEvidenceNextValidation/steam-local-analysis-20260924-203100/report.md)。包与实际Steam身份成立；已保存的两个有限前缀实际Unity可靠匹配1114/3857步。但Client丢失161473条关键记录、Host有检查点生命周期/空集合契约阻塞，整份与合并严格检查均不完整。**目前不要直接执行replicated或三模式对照，也不用为重新导出而重开本轮游戏。** 原日志和正常退出结果保留，不清理或重跑挑选通过场次。
+
+Windows PowerShell5.1还触发回放外层结果数组计数误拒绝；底层两份匹配与原入口失败分别保存。后续先处理验证入口和诊断证据阻塞，再放行新的场景。正常结束和Send this complete export directory只表示导出步骤完成，不代表完整证据或业务正确。
+
+场景配置必须看实际Player记录：本轮两端性能头targetFps=60，并非case中记录的144意图；分辨率也不一致。下一场在菜单按正常设置确认实际帧率上限、画质和分辨率，再记录关卡/角色/装备及现场差异。local/replicated趋势可能嵌入CombatDiagnostics，off使用独立metrics；不凭文件夹位置推断漏采。无需开启高频细分观测作为日常业务采证默认值。
+
+操作者本轮未观察明显业务异常；这不能抵消记录缺失，也不表示目标死亡缺陷不存在。后续Client消费定位需要有界直接证据，不能由QueueOverload名称、整进程内存或累计writer时间单独断言某个guard/磁盘/GC根因。
+
+
+### Steam 检查点与可选 writer 旁路（2026-09-24）
+
+完整检查点的空engines数组表示当前无根引擎，清空旧根边界；不能据此提取虚构引擎/零步骤的可靠夹具，也不能充当已知失败后的空恢复起点。绑定/解绑修订变化后，首次独立操作前沿用预算及缺口契约记录当前检查点；只覆盖当前主线程生命周期，旧现场缺失不可补判通过。
+
+`Start-SteamDiagnostics.ps1 -ObserveEvidenceQueue` 只在显式local/replicated启动时可用，默认关闭，不适用于附加旧进程。对应Player精确参数`--combat-evidence-observe-queue`。观測沿用512KiB预留，无高频主线程测量或CPU预检；总账521592B。新窗口字段`windowSchemaVersion=2`、`windowTimeOrigin=windowOriginTicks`须用于计算100ms窗时间，不能从旧originTicks推断延迟开启窗口。固定1024窗从首次非boot上下文开始，不滚动、不按回合重置；之前总量/首拒绝保留、窗外事件单列，超窗不算完整。
+
+writer确认结束后才以CreateNew导出`writer-observation-<capture>.json`及状态侧车；原2秒关闭等待不变。WriterNotJoined、Unavailable、ExportFailed和缺文件均不能证明完整采集；Exported只证明侧车写出，不证明证据完整/队列零丢失。关闭开关时不产该侧车。通用脚本支持local/replicated，但本轮交付包装只允许Client/local/chain显式开启，尚不进入复制场次。
+
+PS5.1回放结果先反序列化再枚举，避免JSON数组嵌套误计。仍须核查实际报告数量、非零步骤、可靠性、完整性审计及内外退出码；本轮独立审计另核对summary状态和精确报告路径。详见[修复档案](../Logs/CombatEvidenceNextValidation/steam-repairs-20260924-211115/report.md)，不可把新规则追认旧失败。

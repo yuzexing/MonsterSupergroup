@@ -71,7 +71,7 @@ namespace MonsterSupergroup.NetworkCombat.Tests
             Assert.That(Marshal.SizeOf(type.GetNestedType("MainStageValue", BindingFlags.NonPublic)), Is.EqualTo(24));
             Assert.That(Marshal.SizeOf(type.GetNestedType("MainStackEntry", BindingFlags.NonPublic)), Is.EqualTo(24));
             Assert.That(EvidenceQueueObservation.MainStorageBytes, Is.EqualTo(19792));
-            long total = windows + (64 << 10) + EvidenceQueueObservation.ServiceStorageBytes + EvidenceQueueObservation.MainStorageBytes;
+            long total = windows + (64 << 10) + EvidenceQueueObservation.ServiceStorageBytes + EvidenceQueueObservation.MainStorageBytes + EvidenceQueueObservation.DeferredWindowMetadataBytes;
             Assert.That(total, Is.LessThanOrEqualTo(EvidenceQueueObservation.ReservedBytes));
             Assert.That(EvidenceQueueObservation.AccountedStorageBytes, Is.EqualTo(total));
             TestContext.WriteLine("Actual main layout={0}; existing and new total={1}; reservation={2}",

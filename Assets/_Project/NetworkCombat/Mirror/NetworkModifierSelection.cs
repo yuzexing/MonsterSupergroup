@@ -8,6 +8,7 @@ using AstralShift.HellMaiden.Player.Attacks;
 using Mirror;
 using MonsterSupergroup.GAS;
 using MonsterSupergroup.Gameplay.Combat;
+using MonsterSupergroup.NetworkCombat.Diagnostics;
 using UnityEngine;
 
 namespace MonsterSupergroup.NetworkCombat
@@ -27,7 +28,7 @@ namespace MonsterSupergroup.NetworkCombat
     /// <summary>Per-player authoritative offers. Only identifiers cross Mirror; Build owns all effects.</summary>
     [DisallowMultipleComponent]
     [RequireComponent(typeof(PlayerBuildRuntime), typeof(ModifierSelectionController))]
-    public sealed class NetworkModifierSelection : NetworkBehaviour
+    public sealed partial class NetworkModifierSelection : NetworkBehaviour
     {
         private PlayerBuildRuntime build;
         private ModifierSelectionController presentation;
@@ -56,9 +57,9 @@ namespace MonsterSupergroup.NetworkCombat
 
         [SyncVar(hook = nameof(OnSelectingChanged))] private bool selecting;
         [SyncVar] private ulong offerDeferralToken;
-        [SyncVar] private int level = 1;
-        [SyncVar] private float experience;
-        [SyncVar] private int experiencePerLevel;
+        [SyncVar(hook = nameof(OnLevelApplied))] private int level = 1;
+        [SyncVar(hook = nameof(OnExperienceApplied))] private float experience;
+        [SyncVar(hook = nameof(OnExperienceThresholdApplied))] private int experiencePerLevel;
         [SerializeField] private UpgradeSelectionRules selectionRules;
 
         public bool IsSelecting => selecting;
@@ -192,6 +193,7 @@ namespace MonsterSupergroup.NetworkCombat
             PendingEventId = 0;
             serverOffers = Array.Empty<ModifierOffer>();
             SetSelecting(false);
+            TraceProgression("RestoreProgression");
             // Do not draw or send TargetRpc before Mirror has sent the spawn and the Owner is ready.
         }
 
@@ -240,6 +242,7 @@ namespace MonsterSupergroup.NetworkCombat
             player = GetComponent<PlayerMovement>();
             presentation.CancelRequested += CancelLocalOffer;
             presentation.PresentationReady += ResumeLocalOffers;
+            AttachInvestigation();
         }
 
         private void CancelLocalOffer()
@@ -255,6 +258,7 @@ namespace MonsterSupergroup.NetworkCombat
 
         private void OnDestroy()
         {
+            DetachInvestigation();
             if (presentation != null)
             {
                 presentation.CancelRequested -= CancelLocalOffer;
@@ -264,17 +268,23 @@ namespace MonsterSupergroup.NetworkCombat
 
         public override void OnStartServer()
         {
+            if (CombatInvestigationEvidence.Enabled) GetComponent<NetworkRunParticipant>()?.BeginInvestigationSpawn();
+            AttachInvestigation();
             offerDeferralToken = 0;
             provider = new UpgradeOfferProvider(new ServerRandom());
             EnsureServerBuild();
             world = NetworkCombatWorld.Instance;
             experiencePerLevel = ExperienceRequiredAtLevel(level);
             if (world != null) world.Gateway.ConfirmedKillProduced += OnConfirmedKill;
+            TraceBuild("ServerSpawn", "Baseline", "Server");
+            TraceProgression("ServerSpawn", "Baseline");
         }
 
         [Server]
         public void EnsureServerBuild()
         {
+            try
+            {
             player.EnsureRuntimeInitialized();
             build.SetWeaponExecutionEnabled(isOwned);
             if (preparedBuild != null)
@@ -293,10 +303,14 @@ namespace MonsterSupergroup.NetworkCombat
             }
             serverWeapon = build.InitialWeapon;
             GetComponent<NetworkWeaponCombatAdapter>()?.CaptureSummonMaturities();
+
+            }
+            catch (Exception investigationError) { TraceBuild("EnsureServerBuild", "Failed", "Server", investigationError.GetType().Name); throw; }
         }
 
         public override void OnStartAuthority()
         {
+            AttachInvestigation();
             ownerReady = true;
             build.SetWeaponExecutionEnabled(isServer || HasOwnerBaseline);
             presentation.Bind(build);
@@ -380,6 +394,7 @@ namespace MonsterSupergroup.NetworkCombat
             level = nextLevel;
             experience = remainder;
             experiencePerLevel = xpWorld.Parameters.Threshold(level);
+            TraceProgression("ExperienceGranted");
             // XP is committed even if a presentation transport callback fails. The retained queue can recover.
             try { TryOpenNextOffer(); }
             catch (Exception exception) { Debug.LogException(exception, this); }
@@ -393,6 +408,7 @@ namespace MonsterSupergroup.NetworkCombat
             if (world != null && !world.Gateway.Ledger.IsAlive(netId)) return;
             for (int i = 0; i < count; i++)
                 rewards.Add(new PendingUpgradeReward { EarnedLevel = level, Kind = UpgradeRewardKind.Equipment });
+            TraceProgression("RewardsQueued");
             TryOpenNextOffer();
         }
 
@@ -405,6 +421,7 @@ namespace MonsterSupergroup.NetworkCombat
                 connectionToClient == null || connectionToClient.identity != netIdentity ||
                 (world != null && !world.Gateway.Ledger.IsAlive(netId))) return false;
             offerDeferralToken = token;
+            TraceSelection("OffersDeferred", "Committed", perspective: "Server");
             return true;
         }
 
@@ -414,6 +431,7 @@ namespace MonsterSupergroup.NetworkCombat
         {
             if (token == 0 || token != offerDeferralToken) return;
             offerDeferralToken = 0;
+            TraceSelection("OffersResumed", "Committed", perspective: "Server");
             TryOpenNextOffer();
         }
 
@@ -439,6 +457,7 @@ namespace MonsterSupergroup.NetworkCombat
             {
                 if (!diagnosedUnavailable)
                     Debug.LogError($"[UpgradeSelection] player={netId}: {exception.Message}", this);
+                if (!diagnosedUnavailable) { TraceProgression("OfferGeneration", "Failed", exception.GetType().Name); TraceSelection("OfferGeneration", "Failed", error: exception.GetType().Name, perspective: "Server"); }
                 diagnosedUnavailable = true;
                 return;
             }
@@ -446,6 +465,7 @@ namespace MonsterSupergroup.NetworkCombat
             {
                 if (!diagnosedUnavailable)
                     Debug.LogWarning($"[UpgradeSelection] player={netId} level={OfferedLevel} kind={rewards[0].Kind}: no legal candidates; reward retained and player unlocked.", this);
+                if (!diagnosedUnavailable) { TraceProgression("NoEligibleOffer", "Retained"); TraceSelection("NoEligibleOffer", "Retained", perspective: "Server"); }
                 diagnosedUnavailable = true;
                 return;
             }
@@ -467,6 +487,8 @@ namespace MonsterSupergroup.NetworkCombat
                 offers[i] = candidate.WithId(optionId);
             }
             serverOffers = Array.AsReadOnly(offers);
+            TraceSelection("PublishOffers", "Published", PendingEventId, perspective: "Server");
+            TraceProgression("PublishOffers");
             SetSelecting(true);
             SendOwnerState();
         }
@@ -502,6 +524,7 @@ namespace MonsterSupergroup.NetworkCombat
             for (int i = 0; i < presentation.Offers.Count; i++)
                 if (presentation.Offers[i].OfferId == optionId) index = i;
             if (index < 0) return false;
+            TraceSelectionRequest("Select", localEventId, index, optionId);
             CmdSelect(localEventId, index);
             return true;
         }
@@ -516,6 +539,7 @@ namespace MonsterSupergroup.NetworkCombat
         private bool SubmitLocalBack()
         {
             if (!isOwned || !ownerReady || !NetworkClient.active || localEventId == 0) return false;
+            TraceSelectionRequest("Back", localEventId, -1);
             CmdBack(localEventId);
             return true;
         }
@@ -529,6 +553,10 @@ namespace MonsterSupergroup.NetworkCombat
         [Server]
         public bool ServerBack(NetworkConnectionToClient sender, ulong eventId, out string error)
         {
+            error = null;
+            Exception investigationError = null;
+            try
+            {
             error = null;
             if (!ValidRequest(sender, eventId) || stage != UpgradeSelectionStage.EquipmentTarget)
             {
@@ -545,6 +573,15 @@ namespace MonsterSupergroup.NetworkCombat
                 return true;
             }
             catch (Exception exception) { error = exception.Message; return false; }
+
+            }
+            catch (Exception failure) { investigationError = failure; throw; }
+            finally
+            {
+                string failure = error ?? investigationError?.GetType().Name;
+                TraceSelection("ServerBack", failure == null ? "Completed" : "Rejected", eventId, failure, "Server");
+                if (failure != null) TraceBuild("ServerBack", "Rejected", "Server", failure);
+            }
         }
 
         private bool ValidRequest(NetworkConnectionToClient sender, ulong eventId) =>
@@ -556,6 +593,10 @@ namespace MonsterSupergroup.NetworkCombat
         [Server]
         public bool ServerSelect(NetworkConnectionToClient sender, ulong eventId, int index, out string error)
         {
+            error = null;
+            Exception investigationError = null;
+            try
+            {
             error = null;
             if (!ValidRequest(sender, eventId) || (uint)index >= serverOffers.Count)
             {
@@ -612,16 +653,28 @@ namespace MonsterSupergroup.NetworkCombat
             stage = UpgradeSelectionStage.Reward;
             rewards.RemoveAt(0);
             buildRevision++;
+            TraceBuild("SelectionCommitted", "Committed", "Server");
+            TraceProgression("SelectionCommitted");
+            TraceSelection("SelectionCommitted", "Applied", eventId, perspective: "Server");
             SetSelecting(false);
             SendOwnerState();
             TryOpenNextOffer();
             return true;
+
+            }
+            catch (Exception failure) { investigationError = failure; throw; }
+            finally
+            {
+                string failure = error ?? investigationError?.GetType().Name;
+                TraceSelection("ServerSelect", failure == null ? "Completed" : "Rejected", eventId, failure, "Server");
+                if (failure != null) TraceBuild("ServerSelect", "Rejected", "Server", failure);
+            }
         }
 
         [TargetRpc]
         private void TargetSelectionRejected(NetworkConnectionToClient target, ulong eventId, string error)
         {
-            if (isOwned && localEventId == eventId) presentation.CompleteRequest(error);
+            if (isOwned && localEventId == eventId) { presentation.CompleteRequest(error); TraceSelection("SelectionResponse", "Rejected", eventId, error, "Owner"); }
         }
 
         [Server]
@@ -653,6 +706,11 @@ namespace MonsterSupergroup.NetworkCombat
             int earnedLevel, UpgradeOptionMessage[] options)
         {
             if (!isOwned || !ownerReady) return;
+            if (Diagnostics.CombatInvestigationEvidence.Enabled)
+            {
+                Diagnostics.CombatInvestigationEvidence.Capture("selection.received", "Received", () => new { identity = InvestigationIdentity(),
+                    revision, eventId = eventId.ToString(), stage = offerStage.ToString(), earnedLevel, options }, source: netId, target: netId, perspective: "Owner");
+            }
             try
             {
                 RuntimeDB database = GetComponent<NetworkPlayerBootstrap>().ResolveSharedRuntimeDatabase();
@@ -667,12 +725,14 @@ namespace MonsterSupergroup.NetworkCombat
                 ownerAttackBuildRevision = revision;
                 build.SetWeaponExecutionEnabled(true);
                 receivedRevision = revision;
+                TraceBuild("OwnerStateApplied", "Applied", "Owner");
                 presentation.Bind(build);
                 localEventId = eventId;
                 if (eventId == 0)
                 {
                     presentation.ClearOffers();
                     player.SetUpgradeSelectionLocked(false);
+                    TraceSelection("OwnerStateApplied", "Applied", eventId, perspective: "Owner");
                     return;
                 }
                 if (options.Length < 1 || options.Length > (offerStage == UpgradeSelectionStage.EquipmentTarget ? 4 : 3))
@@ -683,6 +743,7 @@ namespace MonsterSupergroup.NetworkCombat
                 player.SetUpgradeSelectionLocked(true);
                 presentation.ReceiveOffers(localOffers, SubmitLocalSelection, offerStage, earnedLevel,
                     offerStage == UpgradeSelectionStage.EquipmentTarget ? SubmitLocalBack : null);
+                TraceSelection("OwnerStateApplied", "Applied", eventId, perspective: "Owner");
             }
             catch (Exception exception)
             {
@@ -691,6 +752,8 @@ namespace MonsterSupergroup.NetworkCombat
                 presentation.ClearOffers();
                 player.SetUpgradeSelectionLocked(false);
                 build.SetWeaponExecutionEnabled(false);
+                TraceBuild("OwnerStateApply", "Failed", "Owner", exception.GetType().Name);
+                TraceSelection("OwnerStateApply", "Failed", eventId, exception.GetType().Name, "Owner");
                 if (eventId != 0) CmdAbortUnresolvableOffer(eventId);
             }
         }
@@ -728,6 +791,7 @@ namespace MonsterSupergroup.NetworkCombat
         private void CmdAbortUnresolvableOffer(ulong eventId)
         {
             // A configuration failure may cancel a choice but can never award an upgrade.
+            TraceSelection("OwnerAbortUnresolvable", "Requested", eventId, perspective: "Server");
             if (eventId != 0 && eventId == PendingEventId) ServerCancelPending();
         }
 
@@ -737,6 +801,7 @@ namespace MonsterSupergroup.NetworkCombat
             if (!isOwned) return;
             localEventId = 0;
             presentation.ClearOffers();
+            TraceSelection("OwnerSelectionCleared", "Applied", perspective: "Owner");
             player.SetUpgradeSelectionLocked(false);
         }
 
@@ -752,6 +817,8 @@ namespace MonsterSupergroup.NetworkCombat
             serverOffers = Array.Empty<ModifierOffer>();
             restoredOffers = Array.Empty<PlayerUpgradeOfferSnapshot>();
             SetSelecting(false);
+            TraceProgression("ServerCancelPending");
+            TraceSelection("ServerCancelPending", "Cancelled", perspective: "Server");
             SendOwnerState();
         }
 
@@ -765,18 +832,26 @@ namespace MonsterSupergroup.NetworkCombat
             PendingEventId = 0;
             serverOffers = Array.Empty<ModifierOffer>();
             SetSelecting(false);
+            TraceProgression("ServerSuspendOffers");
+            TraceSelection("ServerSuspendOffers", "Suspended", perspective: "Server");
             SendOwnerState();
         }
 
         [Server]
         private void SetSelecting(bool value)
         {
+            bool changed = selecting != value;
             selecting = value;
             player.SetUpgradeSelectionLocked(value);
             NetworkCombatWorld.Instance?.SetPlayerUpgradeSelectionState(netId, value);
+            if (changed) TraceSelection("SelectionLockChanged", "Applied", perspective: "Server");
         }
 
-        private void OnSelectingChanged(bool previous, bool current) => player?.SetUpgradeSelectionLocked(current);
+        private void OnSelectingChanged(bool previous, bool current)
+        {
+            player?.SetUpgradeSelectionLocked(current);
+            TraceSelection("SelectingSyncVarApplied", "Applied", perspective: isOwned ? "Owner" : "Replica");
+        }
 
         private void Update()
         {
@@ -850,6 +925,8 @@ namespace MonsterSupergroup.NetworkCombat
             PendingEventId = 0;
             serverOffers = Array.Empty<ModifierOffer>();
             SetSelecting(false);
+            TraceProgression("RefreshInvalidOffer");
+            TraceSelection("RefreshInvalidOffer", "Invalidated", perspective: "Server");
             SendOwnerState();
             TryOpenNextOffer();
         }
@@ -897,6 +974,8 @@ namespace MonsterSupergroup.NetworkCombat
             selecting = false;
             player?.SetUpgradeSelectionLocked(false);
             build?.ClearBuild();
+            TraceProgression("ServerStopped", "Stopped");
+            TraceSelection("ServerStopped", "Stopped", perspective: "Server");
         }
 
         private sealed class ServerRandom : IRandomSource

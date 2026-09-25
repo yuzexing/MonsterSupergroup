@@ -13,6 +13,17 @@ namespace Mirror.FizzySteam
         public double queueMilliseconds;
     }
 
+    [Serializable]
+    public struct SteamConnectionInvestigationSample
+    {
+        public string steamConnection, readStatus, queueMicrosecondsRaw, queueValidity;
+        public bool readSucceeded, queueValid, pendingValid, localQualityValid, remoteQualityValid;
+        public int connectionId, pingMs, sendRateBytesPerSecond;
+        public int pendingReliableBytes, pendingUnreliableBytes, unacknowledgedBytes;
+        public float sentBytesPerSecond, receivedBytesPerSecond, localQuality, remoteQuality;
+        public double queueMilliseconds;
+    }
+
     // Enabled only by the opt-in gameplay observer; counts include the channel byte.
     public static class SteamTransportDiagnostics
     {
@@ -65,7 +76,8 @@ namespace Mirror.FizzySteam
             if (!Enabled || (uint)channel >= 2) return;
             ReceivedBytes[channel] += bytes; ReceivedMessages[channel]++;
         }
-        internal static bool TrySample(HSteamNetConnection connection, int id, out SteamConnectionSample sample)
+        internal static bool TrySample(HSteamNetConnection connection, int id, out SteamConnectionSample sample,
+            System.Collections.Generic.List<SteamConnectionInvestigationSample> investigation = null)
         {
             sample = default;
             var status = new SteamNetConnectionRealTimeStatus_t();
@@ -75,17 +87,46 @@ namespace Mirror.FizzySteam
 #else
             var result = SteamNetworkingSockets.GetConnectionRealTimeStatus(connection, ref status, 0, ref lanes);
 #endif
+            // The optional caller-owned list selects expanded observations without a dependency
+            // from Mirror back into the game's diagnostic profile. Legacy reads allocate no strings.
+            if (investigation != null) investigation.Add(DescribeSample(connection.m_HSteamNetConnection, id, result, status));
+            return TryDescribeLegacySample(id, result, status, out sample);
+        }
+        public static bool TryDescribeLegacySample(int id, EResult result, SteamNetConnectionRealTimeStatus_t status, out SteamConnectionSample sample)
+        {
+            sample = default;
             if (result != EResult.k_EResultOK) return false;
-            sample = new SteamConnectionSample
-            {
+            sample = new SteamConnectionSample {
                 connectionId = id, pingMs = status.m_nPing, sendRateBytesPerSecond = status.m_nSendRateBytesPerSecond,
                 pendingReliableBytes = status.m_cbPendingReliable, pendingUnreliableBytes = status.m_cbPendingUnreliable,
                 unacknowledgedBytes = status.m_cbSentUnackedReliable,
                 sentBytesPerSecond = status.m_flOutBytesPerSec, receivedBytesPerSecond = status.m_flInBytesPerSec,
                 localQuality = status.m_flConnectionQualityLocal, remoteQuality = status.m_flConnectionQualityRemote,
-                queueMilliseconds = status.m_usecQueueTime.m_SteamNetworkingMicroseconds / 1000d
-            };
+                queueMilliseconds = status.m_usecQueueTime.m_SteamNetworkingMicroseconds / 1000d };
             return true;
+        }
+        public static SteamConnectionInvestigationSample DescribeSample(uint connection, int id, EResult result, SteamNetConnectionRealTimeStatus_t status)
+        {
+            bool read = result == EResult.k_EResultOK;
+            long raw = status.m_usecQueueTime.m_SteamNetworkingMicroseconds;
+            // A plausibility bound, not an SDK sentinel interpretation. Preserve exact raw data.
+            string validity = !read ? "ReadFailed" : raw < 0 ? "Negative" : raw > 3600000000L ? "AboveOneHourUnverified" : "Valid";
+            return new SteamConnectionInvestigationSample
+            {
+                steamConnection = connection.ToString(System.Globalization.CultureInfo.InvariantCulture),
+                connectionId = id, readStatus = result.ToString(), readSucceeded = read,
+                pendingValid = read && status.m_cbPendingReliable >= 0 && status.m_cbPendingUnreliable >= 0 && status.m_cbSentUnackedReliable >= 0,
+                localQualityValid = read && status.m_flConnectionQualityLocal >= 0 && status.m_flConnectionQualityLocal <= 1,
+                remoteQualityValid = read && status.m_flConnectionQualityRemote >= 0 && status.m_flConnectionQualityRemote <= 1,
+                queueMicrosecondsRaw = read ? raw.ToString(System.Globalization.CultureInfo.InvariantCulture) : null,
+                queueValidity = validity, queueValid = validity == "Valid",
+                pingMs = read ? status.m_nPing : -1, sendRateBytesPerSecond = read ? status.m_nSendRateBytesPerSecond : -1,
+                pendingReliableBytes = read ? status.m_cbPendingReliable : -1, pendingUnreliableBytes = read ? status.m_cbPendingUnreliable : -1,
+                unacknowledgedBytes = read ? status.m_cbSentUnackedReliable : -1,
+                sentBytesPerSecond = read ? status.m_flOutBytesPerSec : -1, receivedBytesPerSecond = read ? status.m_flInBytesPerSec : -1,
+                localQuality = read ? status.m_flConnectionQualityLocal : -1, remoteQuality = read ? status.m_flConnectionQualityRemote : -1,
+                queueMilliseconds = validity == "Valid" ? raw / 1000d : -1
+            };
         }
     }
 }

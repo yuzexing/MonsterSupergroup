@@ -4,11 +4,15 @@
 
 ## 日常操作
 
-1. 打开「MonsterSupergroup → 构建与验收 → 构建配置」，选择原生 Profile 资产。
-2. 查看项目用途、网络、分发、诊断、场景和能力摘要。原生选项在 Unity「File → Build Profiles」编辑；业务配置在项目窗口编辑。
-3. 修改配置后保存，查看符号差异并点击「应用受管理符号并保存」。该操作保留插件及无关符号，移除旧用途的受管理符号。
+1. 在 Project 窗口单击 `Assets/Settings/Build Profiles` 中的 Profile。普通 Inspector 标题下的「项目业务配置」可编辑用途、构建类型、网络、分发和诊断；SchemaVersion 只读，Unity 原生设置继续显示在下方。
+2. 字段编辑支持 Undo／Redo；点击「保存 Profile」保存该 Profile 文件及其业务子资产。此按钮在绘制结束后保存，不执行全项目保存，也不应用符号或激活 Profile。多选、缺少业务组件或不支持的 schema 会显示提示；编辑器忙碌时禁用编辑和保存。
+3. 打开「MonsterSupergroup → 构建与验收 → 构建配置」，选择同一个 Profile，查看场景、能力和符号差异，点击「应用受管理符号并保存」。该窗口与 Inspector 使用同一业务子资产；该操作保留插件及无关符号，移除旧用途的受管理符号。
 4. 首次使用时显式激活 Profile，等待编译和资源导入完成。查看模板不会自动激活，也不会自动接着构建。
 5. 刷新只读计划，点击构建；也可以使用原生窗口的 Build。只使用成功结果返回的实际目录。
+
+这里的业务区域位于 **Profile 资产的普通 Inspector**，不在「File → Build Profiles」窗口右侧内置面板中。原生构建窗口的业务区域未接入；业务字段也仍可在项目「构建配置」窗口编辑。查看或编辑业务字段不会自动启动构建。
+
+本功能的编译、真实编辑／撤销／保存及重开检查结果和退出限制，见 [Inspector 验收记录](build-profiles-validation.md#2026-09-24-profile-资产-inspector-业务参数接入)。
 
 原生 Build and Run 与自定义窗口的「完成后运行」只支持 **Direct** 分发。Steam 分发需要通过现有 Steam 上传和启动流程，工具不自动上传，也不替换为其他 Profile。Direct 包完成资源恢复、身份和包校验后才启动实际 EXE；启动失败单独报告。
 
@@ -70,8 +74,10 @@ Dev 和 Profiler 使用 LZ4，其余产品模板使用 LZ4HC。深度分析、�
 
 当前产物编译能力检查读取 Mono Player 实际程序集；无法取得编译能力证明的包拒绝发布。Unity 升级后必须先验证原生序列化适配层。
 
+Player 启动时还会将 BuildInfo 的版本、开发构建标记、构建类型及能力与实际 Player／编译配置比较；不一致时显示无效包并禁止联机，程序可以继续显示菜单。这里不重算整个安装包的 `contentHash`／`inputHash`，这两个字段用于构建计划与结果记录的一致性核对，不能视为运行时整包防篡改或数字签名。已有 KCP 单字段版本修改的[实际验收记录](build-profiles-validation.md#2026-09-24-kcp-player-身份与单字段修改拒绝)。
+
 ## 迁移与验证记录
 
 `Window-dev` 和 `Window-test` 已移除。旧 JSON 配方和脚本保留用于审查，已退出构建配置来源；旧方法保留报错外壳，不做静默映射。详见 [旧入口审查清单](build-profiles-migration.md)。
 
-本次验证结果见 [原生 Profile 验收记录](build-profiles-validation.md)。历史 [统一构建验收记录](build-unification-validation.md) 保留原日期，不代表本轮重新通过。Shipping 成功构建需包含改造的干净提交；Steam 双账号体验保留人工验收。
+本次验证结果见 [原生 Profile 验收记录](build-profiles-validation.md)。历史 [统一构建验收记录](build-unification-validation.md) 保留原日期，不代表本轮重新通过。Windows-Test-Steam 已完成构建／包检查及用户确认的双账号人工验收，具体包与证据范围见 [Steam 人工验收记录](build-profiles-validation.md#2026-09-24-windows-test-steam-双账号人工验收)；不将结果泛化为所有 Steam 包或后续源码均已验证。Shipping 成功构建仍需包含改造的干净提交。

@@ -82,17 +82,22 @@ namespace MonsterSupergroup.EditorTools
     [CustomEditor(typeof(MonsterBuildSettings))]
     public sealed class MonsterBuildSettingsEditor : Editor
     {
+        internal const string PreparationHint = "业务配置保存后，请在构建配置窗口应用受管理符号并保存，再激活 Profile，等待编译完成。查看和编辑不会自动切换 Profile 或应用符号。";
         public override void OnInspectorGUI()
         {
-            serializedObject.Update();
-            using (new EditorGUI.DisabledScope(true)) EditorGUILayout.PropertyField(serializedObject.FindProperty("SchemaVersion"));
-            var purpose = serializedObject.FindProperty("PurposeId");
+            DrawFields(serializedObject);
+            EditorGUILayout.HelpBox(PreparationHint, MessageType.Info);
+        }
+        internal static void DrawFields(SerializedObject settings)
+        {
+            settings.Update();
+            using (new EditorGUI.DisabledScope(true)) EditorGUILayout.PropertyField(settings.FindProperty("SchemaVersion"));
+            var purpose = settings.FindProperty("PurposeId");
             int index = Array.IndexOf(ProjectBuildPurposes.Ids, purpose.stringValue);
             if (index < 0) EditorGUILayout.PropertyField(purpose);
             else purpose.stringValue = ProjectBuildPurposes.Ids[EditorGUILayout.Popup("用途", index, ProjectBuildPurposes.Ids)];
-            foreach (string field in new[] { "BuildKind", "Network", "Distribution", "Diagnostics" }) EditorGUILayout.PropertyField(serializedObject.FindProperty(field));
-            serializedObject.ApplyModifiedProperties();
-            EditorGUILayout.HelpBox("编辑后请在构建配置窗口应用受管理符号并保存，再激活 Profile，等待编译完成。Unity 原生选项在 Build Profiles 窗口编辑。", MessageType.Info);
+            foreach (string field in new[] { "BuildKind", "Network", "Distribution", "Diagnostics" }) EditorGUILayout.PropertyField(settings.FindProperty(field));
+            settings.ApplyModifiedProperties();
         }
     }
 }

@@ -6,6 +6,7 @@ param(
     [string]$Output,
     [string]$OverlayDirectory,
     [ValidateSet('Tests','Replay','Build')][string]$Mode = 'Tests',
+    [string]$BuildProfile,
     [string[]]$FixturePath = @(),
     [string]$ExecuteMethod,
     [ValidateSet('EditMode','PlayMode')][string]$TestPlatform = 'EditMode',
@@ -16,6 +17,21 @@ param(
 )
 $ErrorActionPreference = 'Stop'
 $workspace = Split-Path -Parent $PSScriptRoot
+if ($Mode -eq 'Build') {
+    $expectedMethod = 'MonsterSupergroup.EditorTools.NativeBuildEntry.Batch'
+    if ($ExecuteMethod -and $ExecuteMethod -ne $expectedMethod) { throw 'Build mode requires the native Build Profile entry NativeBuildEntry.Batch.' }
+    if (-not $BuildProfile) { throw 'Build mode requires -BuildProfile Assets/Settings/Build Profiles/<name>.asset (product Test / Steam / Evidence).' }
+    $BuildProfile = $BuildProfile.Replace('\','/')
+    $profileFile = [IO.Path]::GetFullPath((Join-Path $workspace $BuildProfile))
+    $assetsRoot = [IO.Path]::GetFullPath((Join-Path $workspace 'Assets')) + [IO.Path]::DirectorySeparatorChar
+    if (-not $BuildProfile.StartsWith('Assets/', [StringComparison]::Ordinal) -or
+        -not $profileFile.StartsWith($assetsRoot, [StringComparison]::OrdinalIgnoreCase) -or
+        [IO.Path]::GetExtension($profileFile) -ne '.asset' -or -not (Test-Path -LiteralPath $profileFile -PathType Leaf)) {
+        throw 'BuildProfile must identify an existing .asset inside Assets.'
+    }
+    if ($FixturePath.Count) { throw 'FixturePath requires Replay mode.' }
+}
+elseif ($BuildProfile) { throw 'BuildProfile requires Build mode.' }
 if (-not $Unity -or -not (Test-Path -LiteralPath $Unity -PathType Leaf)) { throw 'Specify the Unity Editor matching ProjectSettings/ProjectVersion.txt.' }
 $expectedVersion = ((Get-Content -LiteralPath (Join-Path $workspace 'ProjectSettings/ProjectVersion.txt') | Where-Object { $_ -match '^m_EditorVersion:' }) -split ':',2)[1].Trim()
 $actualVersion = [Diagnostics.FileVersionInfo]::GetVersionInfo($Unity).ProductVersion
@@ -29,7 +45,7 @@ if ($Output.StartsWith($ProjectPath.TrimEnd('\','/') + [IO.Path]::DirectorySepar
 $active = @(Get-CimInstance Win32_Process -Filter "Name = 'Unity.exe'" | Where-Object { $_.CommandLine -and $_.CommandLine.Replace('/','\').IndexOf($ProjectPath.Replace('/','\'), [StringComparison]::OrdinalIgnoreCase) -ge 0 })
 if ($active.Count) { throw 'The independent validation project is already open in Unity; do not synchronize a running project.' }
 $helper = Join-Path $PSScriptRoot 'CombatEvidenceValidation.py'
-$inputPolicy = if ($Mode -eq 'Build') { 'full-v1' } else { 'editor-generated-v1' }
+$inputPolicy = if ($Mode -eq 'Build') { 'build-generated-v1' } else { 'editor-generated-v1' }
 $preparation = @($helper,'prepare','--source',$workspace,'--project',$ProjectPath,'--output',$Output,'--unity',$Unity,'--input-policy',$inputPolicy,'--mode',$Mode)
 if ($OverlayDirectory) { $preparation += @('--overlay',[IO.Path]::GetFullPath($OverlayDirectory)) }
 & $Python @preparation
@@ -76,14 +92,11 @@ elseif ($Mode -eq 'Replay') {
     $arguments += @('-executeMethod',$expectedMethod,('--combat-fixture-manifest=' + (Join-Path $fixtureDirectory 'manifest.json')))
 }
 else {
-    $expectedMethod = 'MonsterSupergroup.EditorTools.ProjectToolRunner.Batch'
-    if ($ExecuteMethod -and $ExecuteMethod -ne $expectedMethod) { throw 'Build mode requires the unified ProjectToolRunner.Batch entry.' }
     $buildResult = Join-Path $Output 'build-result.json'
-    $arguments += @('-executeMethod',$expectedMethod,'-toolId','build.player','-toolProfile','product',
-        '-toolBuildKind','Test','-toolDevelopment','false','-toolNetwork','Steam','-toolDistribution','Direct','-toolDiagnostics','Evidence',
+    $arguments += @('-activeBuildProfile',$BuildProfile,'-executeMethod',$expectedMethod,'-toolId','build.player',
         '-toolOutput',(Join-Path $Output 'package/MonsterSupergroup.exe'),'-toolResult',$buildResult)
 }
-$invocation = [ordered]@{mode=$Mode;inputPolicy=$inputPolicy;executable=$Unity;executableVersion=$actualVersion;expectedUnityVersion=$expectedVersion;arguments=$arguments;environment=$Environment;project=$ProjectPath;preparedOnly=[bool]$PrepareOnly;startedUtc=[DateTime]::UtcNow.ToString('o')}
+$invocation = [ordered]@{mode=$Mode;inputPolicy=$inputPolicy;buildProfile=$BuildProfile;executable=$Unity;executableVersion=$actualVersion;expectedUnityVersion=$expectedVersion;arguments=$arguments;environment=$Environment;project=$ProjectPath;preparedOnly=[bool]$PrepareOnly;startedUtc=[DateTime]::UtcNow.ToString('o')}
 $invocation | ConvertTo-Json -Depth 6 | Set-Content -LiteralPath (Join-Path $Output 'invocation.json') -Encoding UTF8
 if ($PrepareOnly) { Write-Output "Independent snapshot prepared: $ProjectPath; evidence: $Output"; return }
 $previous = @{}
@@ -109,11 +122,22 @@ try {
         $replayPath = Join-Path $fixtureDirectory 'replay-results.json'
         if (-not (Test-Path -LiteralPath $summaryPath) -or -not (Test-Path -LiteralPath $replayPath)) { throw 'Replay did not produce summary and detailed results.' }
         $summary = Get-Content -LiteralPath $summaryPath -Raw | ConvertFrom-Json
-        $reports = @(Get-Content -LiteralPath $replayPath -Raw | ConvertFrom-Json)
-        if ($exitCode -ne 0 -or $summary.total -ne $FixturePath.Count -or $reports.Count -ne $FixturePath.Count -or
+        # Windows PowerShell 5.1 emits a JSON array as one pipeline object. Assign
+        # first, then enumerate the value so both supported shells count reports.
+        $parsedReports = Get-Content -LiteralPath $replayPath -Raw | ConvertFrom-Json
+        $reports = @($parsedReports)
+        $invalidSummary = @('total','passed','unreliable','diverged' | Where-Object {
+            $summary.$_ -isnot [int] -and $summary.$_ -isnot [long]
+        })
+        $invalidReports = @($reports | Where-Object {
+            $_.report.reliable -isnot [bool] -or -not $_.report.reliable -or
+            $_.report.passed -isnot [bool] -or -not $_.report.passed -or
+            ($_.report.executed -isnot [int] -and $_.report.executed -isnot [long]) -or $_.report.executed -le 0
+        })
+        if ($FixturePath.Count -eq 0 -or $exitCode -ne 0 -or $summary.total -ne $FixturePath.Count -or $reports.Count -ne $FixturePath.Count -or
             $summary.passed -ne $FixturePath.Count -or $summary.unreliable -ne 0 -or $summary.diverged -ne 0 -or
-            @($reports | Where-Object { -not $_.report.reliable -or -not $_.report.passed -or $_.report.executed -le 0 }).Count -ne 0) {
-            throw "Replay not verified: exit=$exitCode outcome=$($summary.outcome) total=$($summary.total) passed=$($summary.passed) diverged=$($summary.diverged) unreliable=$($summary.unreliable)"
+            $invalidSummary.Count -ne 0 -or $invalidReports.Count -ne 0) {
+            throw "Replay not verified: exit=$exitCode outcome=$($summary.outcome) expected=$($FixturePath.Count) reports=$($reports.Count) total=$($summary.total) passed=$($summary.passed) diverged=$($summary.diverged) unreliable=$($summary.unreliable) invalidSummary=$($invalidSummary.Count) invalidReports=$($invalidReports.Count)"
         }
     }
     else {
@@ -123,14 +147,22 @@ try {
         $executable = [IO.Path]::GetFullPath($built.artifacts[0])
         $package = Split-Path -Parent $executable
         $buildInfo = Join-Path $package ([IO.Path]::GetFileNameWithoutExtension($executable) + '_Data/StreamingAssets/BuildInfo.json')
-        foreach ($artifact in @($executable,$buildInfo,(Join-Path $package 'build-complete.json'),(Join-Path $package 'combat-build.json'),(Join-Path $package 'steam_appid.txt'))) {
+        foreach ($artifact in @($executable,$buildInfo,(Join-Path $package 'build-complete.json'),(Join-Path $package 'combat-build.json'))) {
             if (-not (Test-Path -LiteralPath $artifact -PathType Leaf)) { throw "Successful build missing required artifact: $artifact" }
+        }
+        $info = Get-Content -LiteralPath $buildInfo -Raw | ConvertFrom-Json
+        if ($info.profilePath -ne $BuildProfile -or $info.profile -ne 'product' -or $info.kind -ne 'test' -or
+            $info.network -ne 'Steam' -or $info.diagnostics -ne 'Evidence' -or -not $info.evidence -or $info.development -or
+            $info.distribution -notin @('Direct','Steam')) { throw 'Build Profile must produce product Test / Steam / Evidence without Development Build.' }
+        $appId = Join-Path $package 'steam_appid.txt'
+        if (($info.distribution -eq 'Direct') -ne (Test-Path -LiteralPath $appId -PathType Leaf)) {
+            throw 'steam_appid.txt presence does not match the selected distribution.'
         }
         $combatBuild = Get-Content -LiteralPath (Join-Path $package 'combat-build.json') -Raw | ConvertFrom-Json
         $archive = Join-Path $ProjectPath $combatBuild.replaySources
         if (-not (Test-Path -LiteralPath $archive -PathType Leaf)) { throw 'Build did not preserve its replay source archive.' }
         Copy-Item -LiteralPath $archive -Destination (Join-Path $Output 'combat-replay-sources.zip')
-        Write-Output "Built product Test / Steam / Direct / Evidence: $executable"
+        Write-Output "Built product Test / Steam / $($info.distribution) / Evidence: $executable"
     }
 }
 catch { $failure = $_.Exception.Message }

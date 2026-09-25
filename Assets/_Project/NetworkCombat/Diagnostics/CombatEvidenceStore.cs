@@ -9,15 +9,47 @@ using MonsterSupergroup.GAS;
 
 namespace MonsterSupergroup.NetworkCombat.Diagnostics
 {
+    public enum EvidenceProfile { Standard, Diagnostic }
+
     public sealed class EvidenceStoreOptions
     {
+        public EvidenceProfile Profile;
         public long SessionBytes = 8L << 30, TotalBytes = 32L << 30;
         public int QueueBytes = 32 << 20, ReservedBytes = 4 << 20, SegmentBytes = 32 << 20;
         public double SegmentSeconds = 60;
         public IEvidenceStorage Storage = new FileEvidenceStorage();
         public DiagnosticMemoryBudget Memory = new();
         public bool ObserveQueue;
+        public bool DeferObservationWindows;
         public long ObservationOriginTicks;
+        public int ObservationWindowMilliseconds = EvidenceQueueObservation.WindowMilliseconds;
+
+        public static EvidenceStoreOptions ForProfile(EvidenceProfile profile, bool observeQueue = false)
+        {
+            if (profile != EvidenceProfile.Standard && profile != EvidenceProfile.Diagnostic)
+                throw new ArgumentOutOfRangeException(nameof(profile));
+            bool diagnostic = profile == EvidenceProfile.Diagnostic;
+            return new EvidenceStoreOptions {
+                Profile = profile, QueueBytes = diagnostic ? 512 << 20 : 32 << 20,
+                Memory = new DiagnosticMemoryBudget(diagnostic ? 768L << 20 : 128L << 20),
+                ObserveQueue = observeQueue, DeferObservationWindows = observeQueue,
+                ObservationWindowMilliseconds = diagnostic ? 1000 : EvidenceQueueObservation.WindowMilliseconds };
+        }
+    }
+
+    [Serializable]
+    public sealed class EvidenceConfiguration
+    {
+        public string profile, drainPolicy;
+        public long queueBytes, reservedBytes, memoryBudgetBytes;
+        public int windowMilliseconds;
+        internal EvidenceConfiguration(EvidenceStoreOptions options)
+        {
+            profile = options.Profile == EvidenceProfile.Diagnostic ? "diagnostic" : "standard";
+            drainPolicy = options.Profile == EvidenceProfile.Diagnostic ? "WaitForCompletion" : "Bounded30Seconds";
+            queueBytes = options.QueueBytes; reservedBytes = options.ReservedBytes;
+            memoryBudgetBytes = options.Memory.Limit; windowMilliseconds = options.ObservationWindowMilliseconds;
+        }
     }
 
     [Serializable]
@@ -94,7 +126,9 @@ namespace MonsterSupergroup.NetworkCombat.Diagnostics
         public double WriteMilliseconds => Interlocked.Read(ref writeTicks) * 1000d / System.Diagnostics.Stopwatch.Frequency;
         public bool Closed => Volatile.Read(ref closed);
         public DiagnosticMemoryBudget Memory => options.Memory;
-        public long PeakPendingBytes { get { lock (gate) return peakPendingBytes; } }
+        public EvidenceProfile Profile => options.Profile;
+        public EvidenceConfiguration Configuration => new(options);
+        public long PeakPendingBytes => Interlocked.Read(ref peakPendingBytes);
         public EvidenceQueueObservation QueueObservation { get; }
         public bool ObservationRequested => options.ObserveQueue;
         public string ObservationUnavailableReason { get; }
@@ -110,7 +144,7 @@ namespace MonsterSupergroup.NetworkCombat.Diagnostics
             {
                 if (this.options.ObserveQueue)
                 {
-                    if (EvidenceQueueObservation.TryCreate(Memory, true, out var observation, this.options.ObservationOriginTicks)) QueueObservation = observation;
+                    if (EvidenceQueueObservation.TryCreate(Memory, true, out var observation, this.options.ObservationOriginTicks, this.options.DeferObservationWindows, this.options.ObservationWindowMilliseconds)) QueueObservation = observation;
                     else ObservationUnavailableReason = "QueueObservationBudgetUnavailable";
                 }
                 worker = new Thread(Consume) { IsBackground = true, Name = "Combat evidence disk" };
@@ -141,8 +175,14 @@ namespace MonsterSupergroup.NetworkCombat.Diagnostics
                         captureId = record.captureId, runId = record.runId, round = record.round });
                     state.produced = record.recordSequence;
                     int bytes = Math.Max(512, record.estimatedBytes);
-                    if (!Admit(EvidenceQueueEntry.TryWrite, bytes, options.QueueBytes - (record.critical ? 0 : options.ReservedBytes), true,
-                        state, state.Produced, QueueObservation == null ? (int?)null : record.stage == "replay.input" ? 0 : record.stage == "replay.output" ? (record.outcome == "Completed" ? 1 : 2) : (int?)null, record.stage))
+                    long queueLimit = options.QueueBytes - (record.critical ? 0 : options.ReservedBytes);
+                    bool capturedCheckpoint = capture != null &&
+                        (record.stage == "replay.checkpoint" || record.stage == "replay.engine_checkpoint");
+                    // Reserve the bounded capture workspace in Memory, then charge only the captured value
+                    // to the queue. A small recovery checkpoint must not need 8 MiB of free queue space.
+                    if (!Admit(EvidenceQueueEntry.TryWrite, bytes, queueLimit, true,
+                        state, state.Produced, QueueObservation == null ? (int?)null : record.stage == "replay.input" ? 0 : record.stage == "replay.output" ? (record.outcome == "Completed" ? 1 : 2) : (int?)null, record.stage,
+                        capturedCheckpoint ? 512 : -1))
                     {
                         CountDropped(state, record.stage == "observation.snapshot" || record.stage == "performance.snapshot");
                         Gap(state, record.recordSequence, "QueueOverload"); return false;
@@ -162,6 +202,19 @@ namespace MonsterSupergroup.NetworkCombat.Diagnostics
                                     (int)Math.Min(int.MaxValue, 512L + CombatEvidenceRuntime.RetainedBytes(record.input));
                             if (retained > bytes) throw new InvalidDataException("CaptureExceededReservedMemory");
                             Memory.Release(bytes - retained); bytes = retained; record.estimatedBytes = retained;
+                            if (capturedCheckpoint)
+                            {
+                                EvidenceQueueGuard? guard = stopping ? EvidenceQueueGuard.Stopping :
+                                    bytes > options.QueueBytes ? EvidenceQueueGuard.OversizedRecord :
+                                    pendingBytes + bytes > queueLimit ? EvidenceQueueGuard.QueueLimit : (EvidenceQueueGuard?)null;
+                                if (guard.HasValue)
+                                {
+                                    int requested = bytes; Memory.Release(bytes); bytes = 0;
+                                    ObserveAdmissionRejection(EvidenceQueueEntry.TryWrite, guard.Value, requested, queueLimit,
+                                        state, state.Produced, null, record.stage);
+                                    CountDropped(state); Gap(state, record.recordSequence, "QueueOverload"); return false;
+                                }
+                            }
                         }
                         if (freezePayload)
                         {
@@ -217,18 +270,27 @@ namespace MonsterSupergroup.NetworkCombat.Diagnostics
             wake.Set(); return true;
         }
 
-        // Called under gate; guard order and the single reservation match the original admission path.
+        // Called under gate. Capture workspace can exceed the minimum queue entry without exceeding Memory.
         private bool Admit(EvidenceQueueEntry entry, int bytes, long queueLimit, bool checkOversized,
-            EvidenceCoverage state = null, ulong? sequence = null, int? phase = null, string stage = null)
+            EvidenceCoverage state = null, ulong? sequence = null, int? phase = null, string stage = null, int queueChargeBytes = -1)
         {
             using var admission = DiagnosticMainTiming.Measure(DiagnosticMainStage.Admission);
             EvidenceQueueGuard guard;
             long budgetBefore = 0;
+            int queueCharge = queueChargeBytes < 0 ? bytes : queueChargeBytes;
             if (stopping) guard = EvidenceQueueGuard.Stopping;
-            else if (checkOversized && bytes > options.QueueBytes) guard = EvidenceQueueGuard.OversizedRecord;
-            else if (pendingBytes + bytes > queueLimit) guard = EvidenceQueueGuard.QueueLimit;
+            else if (checkOversized && queueCharge > options.QueueBytes) guard = EvidenceQueueGuard.OversizedRecord;
+            else if (pendingBytes + queueCharge > queueLimit) guard = EvidenceQueueGuard.QueueLimit;
             else if (!Memory.TryReserve(bytes, out budgetBefore)) guard = EvidenceQueueGuard.BudgetReservation;
             else return true;
+            ObserveAdmissionRejection(entry, guard, guard == EvidenceQueueGuard.BudgetReservation ? bytes : queueCharge,
+                queueLimit, state, sequence, phase, stage, budgetBefore);
+            return false;
+        }
+
+        private void ObserveAdmissionRejection(EvidenceQueueEntry entry, EvidenceQueueGuard guard, int requestedBytes,
+            long queueLimit, EvidenceCoverage state, ulong? sequence, int? phase, string stage, long budgetBefore = 0)
+        {
             if (QueueObservation != null)
             {
                 QueueObservation.Pending(pendingBytes, EvidenceStageMetrics.Now);
@@ -238,13 +300,12 @@ namespace MonsterSupergroup.NetworkCombat.Diagnostics
                     if (guard != EvidenceQueueGuard.BudgetReservation) budgetBefore = Memory.Used;
                     ulong.TryParse(state?.written, out ulong written); ulong.TryParse(state?.flushed, out ulong flushed);
                     rejection = new EvidenceQueueRejection { runId = state?.runId, captureId = state?.captureId, round = state?.round,
-                        sequence = sequence, phase = phase, stage = stage, requestedBytes = bytes, pendingBytes = pendingBytes,
+                        sequence = sequence, phase = phase, stage = stage, requestedBytes = requestedBytes, pendingBytes = pendingBytes,
                         effectiveQueueLimit = queueLimit, budgetUsed = budgetBefore, budgetLimit = Memory.Limit,
                         produced = state?.Produced, written = state == null ? (ulong?)null : written, flushed = state == null ? (ulong?)null : flushed };
                 }
                 QueueObservation.Rejected(entry, guard, in rejection, EvidenceStageMetrics.Now);
             }
-            return false;
         }
 
         public bool ExportQueueObservation(string path)
@@ -255,6 +316,10 @@ namespace MonsterSupergroup.NetworkCombat.Diagnostics
                 return QueueObservation != null && QueueObservation.StopAndExport(path, true, true);
             }
         }
+
+        // The observer's live mirror is independent of writer-owned arrays. Never hold gate during I/O.
+        public bool ExportPartialQueueObservation(string path) =>
+            QueueObservation != null && QueueObservation.ExportPartial(path, Volatile.Read(ref stopping));
 
         private static string SourceKey(string run, uint round, string capture) =>
             SafePart(run ?? "boot") + "/" + round + "/sources/" + SafePart(capture);
@@ -354,7 +419,7 @@ namespace MonsterSupergroup.NetworkCombat.Diagnostics
                         var shared = Newtonsoft.Json.Linq.JToken.Parse(payload); ShareKnockbackSettings(source, shared);
                         record.input = shared; payload = EvidenceJson.EncodeBounded(shared);
                     }
-                    if (checkpoint || record.stage == "replay.engine_checkpoint" || record.stage == "owner.attack_stats" || Encoding.UTF8.GetByteCount(payload) > 4096)
+                    if (ShouldExternalizePayload(record, Encoding.UTF8.GetByteCount(payload)))
                     {
                         bool checkpointPayload = checkpoint || record.stage == "replay.engine_checkpoint";
                         string folder = checkpointPayload ? "checkpoints" : "inputs";
@@ -407,7 +472,7 @@ namespace MonsterSupergroup.NetworkCombat.Diagnostics
             EvidenceWorkerProfiling.Start("writer", Root);
             QueueObservation?.BeginBackground(EvidenceServiceContext.Startup, EvidenceStageMetrics.Now);
             try { using (EvidenceServiceTiming.Measure(EvidenceServiceStage.Startup)) { lock (filesGate) { Directory.CreateDirectory(Root); RecoverExisting(); } } }
-            catch (Exception error) { LastFailure = error.Message; }
+            catch (Exception error) { LastFailure = error.Message; RecordShutdownWorkerFailure(error); }
             finally { QueueObservation?.EndBackground(EvidenceStageMetrics.Now); }
             while (true)
             {
@@ -434,7 +499,8 @@ namespace MonsterSupergroup.NetworkCombat.Diagnostics
                     Metrics.QueueWait(work.queuedAt);
                     QueueObservation?.Dequeued(started);
                     QueueObservation?.Span(EvidenceQueueStage.QueueResidence, work.queuedAt, started);
-                    try { EvidenceWorkerProfiling.BeginWork(); work.action(); } catch (Exception error) { LastFailure = error.GetType().Name + ": " + error.Message; }
+                    try { EvidenceWorkerProfiling.BeginWork(); work.action(); }
+                    catch (Exception error) { LastFailure = error.GetType().Name + ": " + error.Message; RecordShutdownWorkerFailure(error); }
                     finally
                     {
                         var terminalWait = EvidenceServiceTiming.Measure(EvidenceServiceStage.TerminalGateWait);
@@ -492,6 +558,7 @@ namespace MonsterSupergroup.NetworkCombat.Diagnostics
             try { FlushSources(true); }
             finally { QueueObservation?.EndBackground(EvidenceStageMetrics.Now); }
             }
+            catch (Exception error) { LastFailure = error.GetType().Name + ": " + error.Message; RecordShutdownWorkerFailure(error); }
             finally
             {
                 QueueObservation?.BeginBackground(EvidenceServiceContext.Close, EvidenceStageMetrics.Now);
@@ -788,11 +855,16 @@ namespace MonsterSupergroup.NetworkCombat.Diagnostics
                         foreach (var active in sources.Values.Where(s => s.Directory == source)) referenced.UnionWith(active.HeldReferences);
                         try { ExpandReferences(source, referenced); }
                         catch (Exception error) { LastFailure = "RetentionDeferred:" + error.Message; continue; }
-                        bool local; lock (gate) local = health.ContainsKey(source.Substring(Root.Length + 1).Replace('\\', '/'));
-                        if (removed.Length > 0) EvidenceJson.AtomicWrite(Path.Combine(source, local ? "retention.json" : "retention.local.json"), EvidenceJson.Encode(new {
-                            reason = "CapacityRetention", firstRetainedFile = Path.GetFileName(files[boundary]),
-                            beforeSequence = Path.GetFileNameWithoutExtension(files[boundary]).Substring(7),
-                            interpretation = "All earlier records and unreferenced blobs may have been removed; do not infer non-execution." }));
+                        string sourceKey = source.Substring(Root.Length + 1).Replace('\\', '/');
+                        bool local; lock (gate) local = health.ContainsKey(sourceKey);
+                        if (removed.Length > 0)
+                        {
+                            EvidenceJson.AtomicWrite(Path.Combine(source, local ? "retention.json" : "retention.local.json"), EvidenceJson.Encode(new {
+                                reason = "CapacityRetention", firstRetainedFile = Path.GetFileName(files[boundary]),
+                                beforeSequence = Path.GetFileNameWithoutExtension(files[boundary]).Substring(7),
+                                interpretation = "All earlier records and unreferenced blobs may have been removed; do not infer non-execution." }));
+                            if (local) RecordLocalRetention("CapacityRetention:" + sourceKey);
+                        }
                         foreach (string file in removed) File.Delete(file);
                         foreach (string folder in new[] { "inputs", "checkpoints" })
                             if (Directory.Exists(Path.Combine(source, folder)))
@@ -807,7 +879,13 @@ namespace MonsterSupergroup.NetworkCombat.Diagnostics
                 if (sources.Values.Any(s => s.Directory.StartsWith(run + Path.DirectorySeparatorChar, StringComparison.OrdinalIgnoreCase))) continue;
                 long bytes = Size(run);
                 if (!Path.GetFullPath(run).StartsWith(Root + Path.DirectorySeparatorChar, StringComparison.OrdinalIgnoreCase)) continue;
-                string id = Path.GetFileName(run); Directory.Delete(run, true); total -= bytes;
+                string id = Path.GetFileName(run);
+                // Recursive deletion can fail after removing some files. Mark locally produced
+                // contexts before starting it, while ownership still exists in health.
+                lock (gate)
+                    if (health.Keys.Any(key => key.StartsWith(id + "/", StringComparison.Ordinal)))
+                        RecordLocalRetention("GlobalCapacityRetention:" + id);
+                Directory.Delete(run, true); total -= bytes;
                 lock (gate)
                     foreach (string key in health.Keys.Where(k => k.StartsWith(id + "/", StringComparison.Ordinal)).ToArray()) health.Remove(key);
                 File.AppendAllText(Path.Combine(Root, "retention.jsonl"), EvidenceJson.Encode(new { runId = id, reason = "GlobalCapacityRetention", utc = DateTime.UtcNow.ToString("o") }) + "\n");
@@ -842,7 +920,8 @@ namespace MonsterSupergroup.NetworkCombat.Diagnostics
             string line; while ((line = reader.ReadLine()) != null) yield return line;
         }
         private static long Size(string directory) => Directory.EnumerateFiles(directory, "*", SearchOption.AllDirectories).Sum(p => new FileInfo(p).Length);
-        public void Dispose() { lock (gate) stopping = true; wake.Set(); worker.Join(100); }
+        public void RequestClose() { lock (gate) stopping = true; wake.Set(); }
+        public void Dispose() { RequestClose(); worker.Join(100); }
         public bool WaitForClose(int milliseconds = 5000) => worker.Join(milliseconds);
 
         private sealed class Source : IDisposable

@@ -38,7 +38,7 @@ namespace MonsterSupergroup.NetworkCombat.Diagnostics
             (long)sizeof(int) * MainSlots * MainStageCount + 32;
         private static long ObservationWindowStorageBytes =>
             (long)(Marshal.SizeOf<ProducerWindow>() + Marshal.SizeOf<ConsumerWindow>()) * WindowCount;
-        public static long AccountedStorageBytes => ObservationWindowStorageBytes + (64 << 10) + ServiceStorageBytes + MainStorageBytes;
+        public static long AccountedStorageBytes => ObservationWindowStorageBytes + (64 << 10) + ServiceStorageBytes + MainStorageBytes + DeferredWindowMetadataBytes;
 
         private void InitializeMainObservation()
         {

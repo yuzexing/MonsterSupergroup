@@ -28,6 +28,7 @@ namespace MonsterSupergroup.NetworkCombat.Diagnostics
             public WeakReference target;
             public Func<object, object> capture;
             public string id, domain, context;
+            public long bindingRevision;
         }
         private sealed class ErrorCount { public string message, stack, type; public long count, reported, first, last; }
         private readonly ConditionalWeakTable<object, Engine> engineLookup = new();
@@ -78,13 +79,15 @@ namespace MonsterSupergroup.NetworkCombat.Diagnostics
             Instance = this; mainThread = Thread.CurrentThread.ManagedThreadId; capture = Guid.NewGuid().ToString("N");
             var args = Environment.GetCommandLineArgs();
             string path = args.FirstOrDefault(a => a.StartsWith("--combat-evidence-output=", StringComparison.Ordinal))?.Substring("--combat-evidence-output=".Length);
-            store = new CombatEvidenceStore(path ?? Path.Combine(Application.persistentDataPath, "CombatDiagnostics"));
+            store = new CombatEvidenceStore(path ?? Path.Combine(Application.persistentDataPath, "CombatDiagnostics"), CreateStoreOptions(args));
             runtimeBudgetHeld = store.Memory.TryReserve(RuntimeCacheBytes);
             if (!runtimeBudgetHeld) { store.Dispose(); enabled = false; return; }
             ReplicationEnabled = Array.IndexOf(args, "--combat-evidence-local-only") < 0;
             if (ReplicationEnabled) { transport = new SteamDiagnosticTransport(); replicator = new DiagnosticReplicator(store, transport, capture); }
             CombatEvidence.Sink = this;
+            CombatInvestigationEvidence.Configure(store.Profile, args);
             Application.logMessageReceivedThreaded += CaptureException;
+            Application.wantsToQuit += WantsToQuit;
             string executablePath = null; int processId = 0;
             try
             {
@@ -92,6 +95,7 @@ namespace MonsterSupergroup.NetworkCombat.Diagnostics
                 processId = process.Id; executablePath = process.MainModule?.FileName;
             }
             catch { /* Missing process identity is explicit in metadata and cannot verify a delivered package. */ }
+            string investigationCatalog = CombatInvestigationEvidence.Enabled ? Resources.Load<TextAsset>("CombatInvestigationCatalog")?.text : null;
             buildMetadata = new {
                 captureId = capture, buildGuid = Application.buildGUID, version = Application.version, buildInfo = MonsterSupergroup.Builds.RuntimeBuildInfo.Current?.ToJson(), unity = Application.unityVersion,
                 executablePath, processId, executablePathVerified = !string.IsNullOrEmpty(executablePath),
@@ -99,18 +103,36 @@ namespace MonsterSupergroup.NetworkCombat.Diagnostics
                 mode = ReplicationEnabled ? "replicated" : "local", width = Screen.width, height = Screen.height,
                 quality = QualitySettings.names[QualitySettings.GetQualityLevel()], gpu = SystemInfo.graphicsDeviceName,
                 cpu = SystemInfo.processorType, platform = Application.platform.ToString(),
+                evidenceConfiguration = store.Configuration,
+                investigation = CombatInvestigationEvidence.Configuration,
+                investigationCatalog, investigationCatalogAvailable = investigationCatalog != null,
                 buildManifest = Resources.Load<TextAsset>("CombatEvidenceBuild")?.text };
             CombatEvidence.Event("Process", "process.start", "Started", null, input: buildMetadata);
             Debug.Log("[CombatEvidence] Automatic logs: " + store.Root);
         }
+        private static EvidenceStoreOptions CreateStoreOptions(string[] args)
+        {
+            bool observe = args != null && Array.IndexOf(args, "--combat-evidence-observe-queue") >= 0;
+            const string prefix = "--combat-evidence-profile=";
+            var profiles = args?.Where(a => a.StartsWith(prefix, StringComparison.Ordinal)).ToArray() ?? Array.Empty<string>();
+            if (profiles.Length > 1) throw new ArgumentException("Specify combat evidence profile only once.");
+            string name = profiles.Length == 0 ? "standard" : profiles[0].Substring(prefix.Length);
+            EvidenceProfile profile = name == "standard" ? EvidenceProfile.Standard : name == "diagnostic"
+                ? EvidenceProfile.Diagnostic : throw new ArgumentException("Unknown combat evidence profile: " + name);
+            // Player windows begin with the first run, so menu waiting does not consume them.
+            // This opt-in does not install main-thread timing or run a CPU calibration probe.
+            return EvidenceStoreOptions.ForProfile(profile, observe);
+        }
         private void Start()
         {
+            if (shuttingDown) return;
             if (FindFirstObjectByType<NetworkDiagnosticsObservation>() == null)
                 gameObject.AddComponent<NetworkDiagnosticsObservation>();
         }
         private void FixedUpdate() => fixedStep++;
         private void Update()
         {
+            if (shuttingDown) { UpdateShutdown(); return; }
             RefreshContext();
             replicator?.Tick(Time.unscaledTimeAsDouble, run);
             if (Time.unscaledTimeAsDouble >= nextSnapshot)
@@ -138,6 +160,7 @@ namespace MonsterSupergroup.NetworkCombat.Diagnostics
             if (run != contextRun || round != contextRound)
             {
                 contextRun = run; contextRound = round; context = run + "/" + round; generations.Clear(); generationRoles.Clear(); nextCheckpoint = 0;
+                if (run != "boot") store?.QueueObservation?.MarkPhase(EvidenceQueuePhase.Load, EvidenceQueueObservation.Now);
                 TryWrite(new DiagnosticRecord { role = "Process", stage = "source.start", input = buildMetadata, critical = true, estimatedBytes = 1 << 20 });
             }
         }
@@ -195,7 +218,12 @@ namespace MonsterSupergroup.NetworkCombat.Diagnostics
                     id = domain + "-" + (++nextEngine), domain = domain };
                 engineLookup.Add(target, engine); engines.Add(engine);
             }
-            if (engine.context != context) { engine.context = context; Checkpoint(engine); }
+            long bindingRevision = CombatEvidence.BindingRevision(target);
+            if (engine.context != context || engine.bindingRevision != bindingRevision)
+            {
+                engine.context = context; engine.bindingRevision = bindingRevision;
+                Checkpoint(engine);
+            }
             return engine.id;
         }
         private void Checkpoint(Engine engine)
@@ -324,7 +352,7 @@ namespace MonsterSupergroup.NetworkCombat.Diagnostics
                 actors = actors.ToArray(), collector = collector == null ? null : new { collector.PendingResultCount, collector.PendingStatusMutationCount,
                     collector.PendingPlayerHealthReportCount, collector.PendingEnemyDeathCount, collector.DeathReceiptsReceived,
                     collector.LastDeathConfirmationSeconds, collector.MaximumDeathConfirmationSeconds,
-                    oldestPendingDeathSeconds = collector.OldestPendingDeathAge(NetworkTime.time) }, frameMs = Time.unscaledDeltaTime * 1000, pendingBytes = store.PendingBytes,
+                    oldestPendingDeathSeconds = collector.OldestPendingDeathAge(Time.unscaledTimeAsDouble) }, frameMs = Time.unscaledDeltaTime * 1000, pendingBytes = store.PendingBytes,
                 replicatedBytes = replicator?.SentBytes ?? 0, replicationFailure = replicator?.LastFailure, rejectedReplicationPackets = replicator?.RejectedPackets ?? 0,
                 replicationTransport = transport?.CaptureDiagnosticState(),
                 sinkFailures = CombatEvidence.Failures, sinkCalls = Interlocked.Read(ref sinkCalls), sinkMs = Interlocked.Read(ref sinkTicks) * 1000d / System.Diagnostics.Stopwatch.Frequency,
@@ -364,18 +392,6 @@ namespace MonsterSupergroup.NetworkCombat.Diagnostics
             }
             foreach (var error in snapshot) TryWrite(new DiagnosticRecord { role = "Process", stage = "unity.exception", reason = error.type,
                 input = error.input, critical = true, estimatedBytes = 64 * 1024 });
-        }
-        private void OnApplicationQuit() => Shutdown();
-        private void OnDestroy() => Shutdown();
-        private void Shutdown()
-        {
-            if (shuttingDown) return;
-            FlushExceptions(); CombatEvidence.Event("Process", "process.stop", "Stopped", null);
-            shuttingDown = true; Application.logMessageReceivedThreaded -= CaptureException;
-            if (ReferenceEquals(CombatEvidence.Sink, this)) CombatEvidence.Sink = null;
-            replicator?.Dispose(); transport?.Dispose();
-            if (runtimeBudgetHeld) { store.Memory.Release(RuntimeCacheBytes); runtimeBudgetHeld = false; }
-            store?.Dispose(); store?.WaitForClose(2000); if (Instance == this) Instance = null;
         }
     }
 }

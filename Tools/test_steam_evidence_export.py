@@ -1,6 +1,7 @@
 """PowerShell collector contract tests, using synthetic files, never a Player."""
 import json
 import base64
+import os
 from pathlib import Path
 import shutil
 import subprocess
@@ -9,7 +10,11 @@ import unittest
 
 
 SCRIPT = Path(__file__).parent / "Scenarios/Export-SteamEvidence.ps1"
-POWERSHELL = shutil.which("powershell") or shutil.which("pwsh")
+POWERSHELL = os.environ.get("PWSH_EXE") or shutil.which("powershell") or shutil.which("pwsh")
+
+
+def shell_environment():
+    return {key: value for key, value in os.environ.items() if key.lower() not in ("psmodulepath", "pythonpath", "pythonhome")}
 
 
 @unittest.skipUnless(POWERSHELL, "PowerShell is required")
@@ -35,7 +40,7 @@ class ExportTests(unittest.TestCase):
     def run_export(self, package, output, *extra, shell=POWERSHELL):
         result = subprocess.run([shell, "-NoProfile", "-NonInteractive", "-ExecutionPolicy", "Bypass", "-File", str(SCRIPT),
                                  "-PackageDirectory", str(package), "-ArtifactDirectory", str(output), "-Role", "Host", "-Mode", "local", *map(str, extra)],
-                                stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True, errors="replace")
+                                stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True, errors="replace", env=shell_environment())
         proof = output / "machine-proof.json"
         return result, json.loads(proof.read_text(encoding="utf-8-sig")) if proof.exists() else None
 
@@ -79,7 +84,7 @@ catch {{ [Console]::Error.WriteLine($_.Exception.Message); exit 1 }}
 """
         encoded = base64.b64encode(code.encode("utf-16-le")).decode("ascii")
         return subprocess.run([POWERSHELL, "-NoProfile", "-NonInteractive", "-EncodedCommand", encoded],
-                              stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, errors="replace")
+                              stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, errors="replace", env=shell_environment())
 
     def test_explicit_process_identity_accepts_only_matching_executable_and_creation(self):
         result = self.process_identity(dict(ProcessId=321, ExecutablePath="C:/fixture/Player.exe", CreationDate="2026-09-23T05:00:00Z"))

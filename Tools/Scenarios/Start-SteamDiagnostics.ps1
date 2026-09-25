@@ -4,16 +4,23 @@ param(
     [ValidateSet('D3D12','D3D11','Default')][string]$Graphics = 'D3D12',
     [ValidateSet('host','client','solo')][string]$ExpectedRole = 'client',
     [ValidateSet('Default','off','local','replicated')][string]$EvidenceMode = 'Default',
+    [ValidateSet('Standard','Diagnostic')][string]$EvidenceProfile = 'Standard',
     [string]$Scenario = 'R1',
     [string]$ArtifactDirectory,
     [int]$AttachProcessId = 0,
     [ValidateRange(0,60)][int]$ProfileSeconds = 0,
+    [switch]$ObserveEvidenceQueue,
     [switch]$PrepareOnly
 )
 $ErrorActionPreference = 'Stop'
+if ($AttachProcessId -and $ObserveEvidenceQueue) { throw 'AttachProcessId cannot apply ObserveEvidenceQueue to an existing process.' }
+if ($ObserveEvidenceQueue -and $EvidenceMode -notin @('local','replicated')) { throw 'ObserveEvidenceQueue requires explicit local or replicated EvidenceMode.' }
 if ($AttachProcessId -and $EvidenceMode -ne 'Default') { throw 'AttachProcessId cannot apply EvidenceMode to an existing process. Use Default to inspect its original configuration.' }
+if ($AttachProcessId -and $PSBoundParameters.ContainsKey('EvidenceProfile')) { throw 'AttachProcessId cannot apply EvidenceProfile to an existing process.' }
+if ($EvidenceProfile -eq 'Diagnostic' -and $EvidenceMode -notin @('local','replicated')) { throw 'Diagnostic EvidenceProfile requires explicit local or replicated EvidenceMode.' }
 $projectRoot = Split-Path -Parent (Split-Path -Parent $PSScriptRoot)
 Import-Module (Join-Path (Split-Path -Parent $PSScriptRoot) 'ProjectTools.psm1')
+Import-Module (Join-Path (Split-Path -Parent $PSScriptRoot) 'SteamEvidenceIdentity.psm1')
 if (-not $AttachProcessId) { $Executable = Resolve-ProjectBuildExecutable -ProjectRoot $projectRoot -Recipe 'product' -Executable $Executable -Network Steam }
 if ($AttachProcessId) {
     $player = Get-Process -Id $AttachProcessId
@@ -64,10 +71,22 @@ switch ($EvidenceMode) {
 if ($EvidenceMode -in @('local','replicated')) {
     $evidenceOutput = Join-Path $ArtifactDirectory 'CombatDiagnostics'
     $arguments += '"--combat-evidence-output=' + $evidenceOutput + '"'
+    $arguments += '--combat-evidence-profile=' + $EvidenceProfile.ToLowerInvariant()
 }
+if ($ObserveEvidenceQueue) { $arguments += '--combat-evidence-observe-queue' }
 if ($Graphics -ne 'Default') { $arguments += '-force-' + $Graphics.ToLowerInvariant() }
 if ($ProfileSeconds) { $arguments += "--network-profiler-seconds=$ProfileSeconds" }
 $record = [ordered]@{schemaVersion=1; scenario=$Scenario; expectedRole=$ExpectedRole; executable=$Executable; arguments=$arguments; requestedGraphics=$Graphics; requestedEvidenceMode=$EvidenceMode; requestedPlayerLog=$playerLog; requestedNetworkOutput=$networkOutput; requestedEvidenceOutput=$evidenceOutput; launcherArgumentsApplied=$false; attached=[bool]$AttachProcessId; startedUtc=$null; processId=$null; complete=$false; exitCode=$null; errors=@(); notes=@(); crashEvents=@(); dumps=@()}
+$record.requestedQueueObservation=[bool]$ObserveEvidenceQueue
+$record.queueObservationArgumentsApplied=$false
+$record.requestedEvidenceProfile=$EvidenceProfile.ToLowerInvariant()
+$record.requestedEvidenceConfiguration=Get-SteamEvidenceProfileConfiguration $EvidenceProfile
+$record.evidenceProfileArgumentsApplied=$false
+$record.appliedEvidenceConfiguration=$null
+$record.evidenceConfigurationVerified=$false
+$record.evidenceConfigurationError=$null
+$record.requestedQueueObservationDirectory=if($ObserveEvidenceQueue){$evidenceOutput}else{$null}
+if ($ObserveEvidenceQueue) { $record.notes += 'Writer observation requested; export status, capacity and timing validity remain unknown until offline audit.' }
 if ($AttachProcessId) { $record.notes += 'Attach mode: requested launcher arguments and output paths are not applied to the existing process.' }
 Save-Json $record 'capture.json'
 Write-Output "Artifacts: $ArtifactDirectory"
@@ -78,6 +97,8 @@ if (-not $AttachProcessId) {
     # This user-invoked launcher deliberately opens an interactive game window.
     $player = Start-Process -FilePath $Executable -WorkingDirectory $package -ArgumentList $arguments -WindowStyle Normal -PassThru
     $record.launcherArgumentsApplied=$true
+    $record.queueObservationArgumentsApplied=[bool]$ObserveEvidenceQueue
+    $record.evidenceProfileArgumentsApplied=$EvidenceMode -in @('local','replicated')
 }
 $null = $player.Handle
 $record.processId=$player.Id
@@ -87,12 +108,29 @@ Save-Json $record 'capture.json'
 try {
     $reminded=$false
     while (-not $player.WaitForExit(1000)) {
+        if ($record.evidenceProfileArgumentsApplied -and -not $record.evidenceConfigurationVerified) {
+            try {
+                $configuration = Get-SteamEvidenceConfiguration -Capture $record -ExpectedProfile $EvidenceProfile
+                $record.appliedEvidenceConfiguration=$configuration.applied
+                $record.evidenceConfigurationVerified=$true
+                $record.evidenceConfigurationError=$null
+                Save-Json $record 'capture.json'
+            } catch { $record.evidenceConfigurationError=$_.Exception.Message }
+        }
         if (-not $reminded -and ([DateTime]::UtcNow-$started).TotalMinutes -ge 20) {
             Write-Output '20 minutes since process start. Finish this round and exit when ready; the collector will not terminate the game.'
             $reminded=$true
         }
     }
     $player.WaitForExit(); $record.exitCode=$player.ExitCode; $record.exitedUtc=$player.ExitTime.ToUniversalTime().ToString('o')
+    if ($record.evidenceProfileArgumentsApplied -and -not $record.evidenceConfigurationVerified) {
+        try {
+            $configuration = Get-SteamEvidenceConfiguration -Capture $record -ExpectedProfile $EvidenceProfile
+            $record.appliedEvidenceConfiguration=$configuration.applied
+            $record.evidenceConfigurationVerified=$true
+            $record.evidenceConfigurationError=$null
+        } catch { $record.evidenceConfigurationError=$_.Exception.Message }
+    }
     # WER can publish after the game exits. Observe for 15 seconds, without restarting the game.
     Start-Sleep -Seconds 15
     $eventErrors=@()

@@ -1,6 +1,7 @@
 import json
 import os
 from pathlib import Path
+import shutil
 import subprocess
 import sys
 import tempfile
@@ -327,8 +328,7 @@ class SnapshotTests(unittest.TestCase):
             self.assertEqual(1, execution["unityExitCode"])
             self.assertIn("original test failed", execution["errors"])
 
-    def generated_files(self, root, content="generated"):
-        paths = ("Assets/AddressableAssetsData/link.xml", "Assets/AddressableAssetsData/link.xml.meta")
+    def generated_files(self, root, content="generated", paths=validation.GENERATED_PATHS):
         for name in paths:
             path = root / name; path.parent.mkdir(parents=True, exist_ok=True)
             path.write_text(content + name, encoding="utf-8")
@@ -337,6 +337,114 @@ class SnapshotTests(unittest.TestCase):
     def editor_prepare(self, source, project, output, unity):
         return validation.prepare(source, project, output, unity,
                                   input_policy="editor-generated-v1", mode="Tests")
+
+    def build_prepare(self, source, project, output, unity):
+        return validation.prepare(source, project, output, unity,
+                                  input_policy="build-generated-v1", mode="Build")
+
+    def test_build_policy_excludes_exact_three_paths_and_requires_build_mode(self):
+        expected = ["Assets/AddressableAssetsData/link.xml", "Assets/AddressableAssetsData/link.xml.meta",
+                    "Assets/AddressableAssetsData/Windows/addressables_content_state.bin"]
+        self.assertEqual(expected, validation.acceptance_policy("build-generated-v1", "Build")["excludedPaths"])
+        self.assertEqual(expected[:2], validation.acceptance_policy("editor-generated-v1", "Tests")["excludedPaths"])
+        self.assertEqual([], validation.acceptance_policy("full-v1", "Build")["excludedPaths"])
+        for mode in (None, "Tests", "Replay"):
+            with self.assertRaises(ValueError): validation.acceptance_policy("build-generated-v1", mode)
+
+    def test_build_generated_add_delete_modify_keep_stable_hash_and_complete_evidence(self):
+        for name in validation.BUILD_GENERATED_PATHS:
+            for action in ("add", "delete", "modify"):
+                with self.subTest(path=name, action=action), tempfile.TemporaryDirectory() as folder:
+                    source, project, output, unity = self.fixture(Path(folder))
+                    self.tool_fixture(source)
+                    if action != "add": self.generated_files(source, paths=(name,))
+                    prepared = self.build_prepare(source, project, output, unity)
+                    if action != "add":
+                        with zipfile.ZipFile(output / "tested-code-and-config.zip") as archive:
+                            self.assertEqual((source / name).read_bytes(), archive.read(name))
+                    if action == "delete": (project / name).unlink()
+                    else: self.generated_files(project, "changed", paths=(name,))
+                    validation.save(output / "execution.json", {"success": True, "mode": "Build", "exitCode": 0})
+                    result = validation.finish(output)
+                    self.assertFalse(result["inputAuditPassed"])
+                    self.assertTrue(result["acceptanceInputAuditPassed"])
+                    self.assertEqual([name], [row["path"] for row in result["validationInputChanges"]])
+                    after = json.loads((output / "validation-stable-after.json").read_text())
+                    self.assertEqual(prepared["projectStableHash"], after["sha256"])
+                    self.assertTrue(json.loads((output / "execution.json").read_text())["success"])
+                    for phase in ("before", "after"):
+                        saved = json.loads((output / f"generated-inputs-{phase}.json").read_text())
+                        for label in ("source", "project"):
+                            self.assertEqual(list(validation.BUILD_GENERATED_PATHS), [r["path"] for r in saved[label]])
+                            for row in saved[label]:
+                                if row["exists"]:
+                                    content = output / row["contentPath"]
+                                    self.assertEqual(row["sha256"], validation.digest(content))
+                                    self.assertEqual(row["bytes"], content.stat().st_size)
+                                else: self.assertIsNone(row["contentPath"])
+                    self.assertEqual(0, self.finish_cli(output).returncode)
+
+    def test_build_policy_still_rejects_other_inputs_alongside_generated_changes(self):
+        for name in ("Assets/Test.cs", "Assets/Other/link.xml", "Assets/Other/link.xml.meta",
+                     "Assets/AddressableAssetsData/Windows/addressables_content_state.bin.meta",
+                     "Assets/AddressableAssetsData/Linux/addressables_content_state.bin",
+                     "Assets/AddressableAssetsData/AddressableAssetSettings.asset",
+                     "ProjectSettings/ProjectVersion.txt", "Tools/CombatEvidence.py"):
+            with self.subTest(path=name), tempfile.TemporaryDirectory() as folder:
+                source, project, output, unity = self.fixture(Path(folder))
+                self.tool_fixture(source)
+                self.build_prepare(source, project, output, unity)
+                self.generated_files(project, paths=validation.BUILD_GENERATED_PATHS)
+                target = (output / "tool-sources" if name.startswith("Tools/") else project) / name
+                target.parent.mkdir(parents=True, exist_ok=True); target.write_text("unexpected edit")
+                validation.save(output / "execution.json", {"success": True, "mode": "Build"})
+                result = validation.finish(output)
+                self.assertFalse(result["acceptanceInputAuditPassed"])
+                self.assertFalse(json.loads((output / "execution.json").read_text())["success"])
+                self.assertEqual(2, self.finish_cli(output).returncode)
+
+    def test_build_policy_rejects_tampering_and_preserves_original_build_failure(self):
+        for mutation in ("policy", "missing stable", "mode", "archived bin", "build failure"):
+            with self.subTest(mutation=mutation), tempfile.TemporaryDirectory() as folder:
+                source, project, output, unity = self.fixture(Path(folder))
+                self.tool_fixture(source)
+                self.generated_files(source, paths=validation.BUILD_GENERATED_PATHS)
+                self.build_prepare(source, project, output, unity)
+                self.generated_files(project, "changed", paths=validation.BUILD_GENERATED_PATHS)
+                validation.save(output / "execution.json", {"success": False, "mode": "Build", "error": "original build failure"})
+                if mutation == "policy":
+                    policy_path = output / "acceptance-policy.json"
+                    policy = json.loads(policy_path.read_text()); policy["excludedPaths"].append("Assets/Test.cs")
+                    validation.save(policy_path, policy)
+                elif mutation == "missing stable": (output / "validation-stable-before.json").unlink()
+                elif mutation == "mode": validation.save(output / "invocation.json", {"mode": "Tests"})
+                elif mutation == "archived bin":
+                    (output / "generated-inputs/before/project" / validation.BUILD_GENERATED_PATHS[-1]).write_bytes(b"corrupt")
+                result = validation.finish(output)
+                self.assertEqual(mutation == "build failure", result["acceptanceInputAuditPassed"])
+                execution = json.loads((output / "execution.json").read_text())
+                self.assertFalse(execution["success"])
+                self.assertIn("original build failure", execution["error"])
+
+    def test_build_generated_copy_is_checked_and_old_policies_still_hash_bin(self):
+        name = validation.BUILD_GENERATED_PATHS[-1]
+        for policy, mode in (("full-v1", "Build"), ("editor-generated-v1", "Tests")):
+            with self.subTest(policy=policy), tempfile.TemporaryDirectory() as folder:
+                source, project, output, unity = self.fixture(Path(folder))
+                self.generated_files(source, paths=(name,))
+                validation.prepare(source, project, output, unity, input_policy=policy, mode=mode)
+                self.generated_files(project, "changed", paths=(name,))
+                self.assertFalse(validation.finish(output)["acceptanceInputAuditPassed"])
+        with tempfile.TemporaryDirectory() as folder:
+            source, project, output, unity = self.fixture(Path(folder))
+            self.generated_files(source, paths=(name,))
+            original_copy = validation.shutil.copy2
+            def corrupting_copy(original, destination, *args, **kwargs):
+                result = original_copy(original, destination, *args, **kwargs)
+                if Path(destination) == project / name: Path(destination).write_bytes(b"bad copy")
+                return result
+            with mock.patch.object(validation.shutil, "copy2", side_effect=corrupting_copy):
+                with self.assertRaises(ValueError): self.build_prepare(source, project, output, unity)
 
     def test_editor_generated_add_delete_modify_keep_stable_but_not_full_identity(self):
         for action in ("add", "delete", "modify"):
@@ -495,8 +603,114 @@ class SnapshotTests(unittest.TestCase):
     def test_launcher_explicitly_routes_editor_and_build_policy(self):
         path = Path(validation.__file__).with_name("Invoke-CombatEvidenceValidation.ps1")
         text = path.read_text(encoding="utf-8")
-        self.assertIn("if ($Mode -eq 'Build') { 'full-v1' } else { 'editor-generated-v1' }", text)
+        self.assertIn("if ($Mode -eq 'Build') { 'build-generated-v1' } else { 'editor-generated-v1' }", text)
         self.assertIn("'--input-policy',$inputPolicy,'--mode',$Mode", text)
+        self.assertIn("'-activeBuildProfile',$BuildProfile", text)
+        self.assertIn("MonsterSupergroup.EditorTools.NativeBuildEntry.Batch", text)
+        self.assertNotIn("'-toolProfile'", text)
+
+
+class ReplayEntryTests(unittest.TestCase):
+    # Execute the real launcher's acceptance block in each installed shell. Unity
+    # is deliberately not involved: these tests exercise result-file acceptance.
+    def check_gate(self, reports, *, count=1, summary=None, exit_code=0, accepted=False,
+                   raw_reports=None, missing=None):
+        shells = [shutil.which(name) for name in ("powershell", "pwsh")]
+        shells = list(dict.fromkeys(shell for shell in shells if shell))
+        if not shells: self.skipTest("PowerShell is unavailable; replay entry was not executed")
+        if summary is None:
+            summary = dict(total=count, passed=count, diverged=0, unreliable=0, exitCode=0, outcome="Matched")
+        harness = r'''
+param([string]$Entry, [string]$FixtureDirectory, [int]$Count, [int]$ExitCode)
+$ErrorActionPreference = 'Stop'
+$tokens = $null; $errors = $null
+$ast = [System.Management.Automation.Language.Parser]::ParseFile($Entry, [ref]$tokens, [ref]$errors)
+if ($errors.Count) { throw 'Launcher has parse errors.' }
+$blocks = @($ast.FindAll({param($node)
+    $node -is [System.Management.Automation.Language.StatementBlockAst] -and
+    $node.Extent.Text -match '^\{\s*\$summaryPath = Join-Path \$fixtureDirectory'
+}, $true))
+if ($blocks.Count -ne 1) { throw 'Expected exactly one real Replay result gate.' }
+$body = $blocks[0].Extent.Text
+$gate = [scriptblock]::Create($body.Substring(1, $body.Length - 2))
+$FixturePath = @(for ($i = 0; $i -lt $Count; $i++) { "fixture-$i.json" })
+try {
+    & $gate
+    @{accepted=$true; version=$PSVersionTable.PSVersion.ToString()} | ConvertTo-Json -Compress
+    exit 0
+} catch {
+    @{accepted=$false; version=$PSVersionTable.PSVersion.ToString(); error=$_.Exception.Message} | ConvertTo-Json -Compress
+    exit 1
+}
+'''
+        with tempfile.TemporaryDirectory(prefix="replay gate ") as directory:
+            root = Path(directory)
+            (root / "gate.ps1").write_text(harness, encoding="utf-8")
+            (root / "replay-summary.json").write_text(json.dumps(summary), encoding="utf-8")
+            (root / "replay-results.json").write_text(
+                json.dumps(reports) if raw_reports is None else raw_reports, encoding="utf-8")
+            if missing: (root / missing).unlink()
+            entry = Path(validation.__file__).with_name("Invoke-CombatEvidenceValidation.ps1")
+            env = dict(os.environ); env.pop("PSModulePath", None)
+            for shell in shells:
+                with self.subTest(shell=shell, reports=reports, count=count, summary=summary):
+                    result = subprocess.run([shell, "-NoProfile", "-NonInteractive", "-ExecutionPolicy", "Bypass",
+                                             "-File", str(root / "gate.ps1"), "-Entry", str(entry),
+                                             "-FixtureDirectory", str(root), "-Count", str(count),
+                                             "-ExitCode", str(exit_code)],
+                                            env=env, capture_output=True, text=True, timeout=30)
+                    self.assertEqual(0 if accepted else 1, result.returncode, result.stdout + result.stderr)
+                    payload = json.loads(result.stdout)
+                    self.assertEqual(accepted, payload["accepted"])
+                    self.assertIn("version", payload)
+
+    @staticmethod
+    def report(**values):
+        report = dict(reliable=True, passed=True, executed=7)
+        report.update(values)
+        return dict(path="fixture.json", report=report)
+
+    def test_replay_entry_accepts_single_and_multiple_reliable_results(self):
+        for count in (1, 2, 3):
+            self.check_gate([self.report() for _ in range(count)], count=count, accepted=True)
+
+    def test_replay_entry_rejects_empty_selection_and_results(self):
+        self.check_gate([], count=0)
+        self.check_gate([])
+
+    def test_replay_entry_rejects_invalid_or_missing_results(self):
+        for raw in ("{", "null", "[null]", "[[{}]]"):
+            self.check_gate(None, raw_reports=raw)
+        for missing in ("replay-summary.json", "replay-results.json"):
+            self.check_gate([self.report()], missing=missing)
+
+    def test_replay_entry_rejects_unreliable_and_diverged_results(self):
+        for values in (dict(reliable=False), dict(passed=False), dict(reliable=False, passed=False)):
+            self.check_gate([self.report(**values)])
+
+    def test_replay_entry_rejects_exit_count_and_summary_mismatches(self):
+        self.check_gate([self.report()], exit_code=2)
+        self.check_gate([self.report()], count=2)
+        for name, value in (("total", 2), ("passed", 0), ("diverged", 1), ("unreliable", 1)):
+            summary = dict(total=1, passed=1, diverged=0, unreliable=0, exitCode=0, outcome="Matched")
+            summary[name] = value
+            self.check_gate([self.report()], summary=summary)
+
+    def test_replay_entry_requires_positive_integer_executed_steps(self):
+        for value in (0, -1, None, "1", 1.5, True):
+            self.check_gate([self.report(executed=value)])
+
+    def test_replay_entry_requires_boolean_reliability_and_passed_fields(self):
+        for name in ("reliable", "passed"):
+            for value in ("false", "true", 1, None):
+                self.check_gate([self.report(**{name: value})])
+
+    def test_replay_entry_requires_integer_summary_counts(self):
+        for name in ("total", "passed", "diverged", "unreliable"):
+            for value in (("1", True, 1.0, None) if name in ("total", "passed") else ("0", False, 0.0, None)):
+                summary = dict(total=1, passed=1, diverged=0, unreliable=0, exitCode=0, outcome="Matched")
+                summary[name] = value
+                self.check_gate([self.report()], summary=summary)
 
 
 if __name__ == "__main__": unittest.main()

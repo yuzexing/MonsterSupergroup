@@ -21,7 +21,7 @@ namespace MonsterSupergroup.Gameplay.Combat
 {
     [DisallowMultipleComponent]
     [RequireComponent(typeof(CombatRuntimeServiceProvider))]
-    public sealed class PlayerBuildRuntime : MonoBehaviour
+    public sealed partial class PlayerBuildRuntime : MonoBehaviour
     {
         public const int HandSlotCount = 4;
         public const int MaxEquipmentPerSlot = 3;
@@ -124,6 +124,10 @@ namespace MonsterSupergroup.Gameplay.Combat
         /// <summary>Restore a detached participant through the same equip/add APIs as a live build.</summary>
         public void RestoreState(RuntimeDB database, PlayerBuildSnapshot snapshot)
         {
+            bool investigationObserved = BeginObservedBuildMutation("RestoreState");
+            Exception investigationError = null;
+            try
+            {
             ValidateSnapshot(database, snapshot);
             EnsureInitialized();
             ClearBuild();
@@ -133,11 +137,19 @@ namespace MonsterSupergroup.Gameplay.Combat
                 ClearBuild();
                 throw;
             }
+
+            }
+            catch (Exception investigationFailure) { investigationError = investigationFailure; throw; }
+            finally { EndObservedBuildMutation(investigationObserved, "RestoreState", investigationError); }
         }
 
         /// <summary>Apply an owner baseline without restarting unchanged weapons or their active attacks.</summary>
         public void ReconcileState(RuntimeDB database, PlayerBuildSnapshot snapshot)
         {
+            bool investigationObserved = BeginObservedBuildMutation("ReconcileState");
+            Exception investigationError = null;
+            try
+            {
             ValidateSnapshot(database, snapshot);
             EnsureInitialized();
             BuildDatabase = database;
@@ -189,6 +201,10 @@ namespace MonsterSupergroup.Gameplay.Combat
             }
             for (int i = 0; i < snapshot.Perks.Length; i++)
                 if (!retainedPerks[i]) AddPerk(ResolvePerk(database, snapshot.Perks[i].PerkId), snapshot.Perks[i].Rarity);
+
+            }
+            catch (Exception investigationFailure) { investigationError = investigationFailure; throw; }
+            finally { EndObservedBuildMutation(investigationObserved, "ReconcileState", investigationError); }
         }
 
         private static void ValidateSnapshot(RuntimeDB database, PlayerBuildSnapshot snapshot)
@@ -307,7 +323,15 @@ namespace MonsterSupergroup.Gameplay.Combat
 
         public WeaponBehaviour EquipWeapon(WeaponData weaponData, Transform parent = null)
         {
+            bool investigationObserved = BeginObservedBuildMutation("EquipWeapon");
+            Exception investigationError = null;
+            try
+            {
             return EquipWeaponAtSlot(FindFirstAvailableWeaponSlot(), weaponData, parent);
+
+            }
+            catch (Exception investigationFailure) { investigationError = investigationFailure; throw; }
+            finally { EndObservedBuildMutation(investigationObserved, "EquipWeapon", investigationError); }
         }
 
         public WeaponBehaviour EquipWeaponAtSlot(
@@ -315,6 +339,10 @@ namespace MonsterSupergroup.Gameplay.Combat
             WeaponData weaponData,
             Transform parent = null)
         {
+            bool investigationObserved = BeginObservedBuildMutation("EquipWeaponAtSlot");
+            Exception investigationError = null;
+            try
+            {
             EnsureInitialized();
             ValidateSlotIndex(slotIndex);
             if (weaponSlots[slotIndex] != null)
@@ -401,10 +429,18 @@ namespace MonsterSupergroup.Gameplay.Combat
 
                 throw;
             }
+
+            }
+            catch (Exception investigationFailure) { investigationError = investigationFailure; throw; }
+            finally { EndObservedBuildMutation(investigationObserved, "EquipWeaponAtSlot", investigationError); }
         }
 
         public WeaponBehaviour EquipWeapon(uint weaponId, Transform parent = null)
         {
+            bool investigationObserved = BeginObservedBuildMutation("EquipWeapon");
+            Exception investigationError = null;
+            try
+            {
             if (BuildDatabase == null)
             {
                 throw new InvalidOperationException(
@@ -412,6 +448,10 @@ namespace MonsterSupergroup.Gameplay.Combat
             }
 
             return EquipWeapon(BuildDatabase.GetWeaponData(weaponId), parent);
+
+            }
+            catch (Exception investigationFailure) { investigationError = investigationFailure; throw; }
+            finally { EndObservedBuildMutation(investigationObserved, "EquipWeapon", investigationError); }
         }
 
         public WeaponBehaviour EquipWeaponAtSlot(
@@ -419,6 +459,10 @@ namespace MonsterSupergroup.Gameplay.Combat
             uint weaponId,
             Transform parent = null)
         {
+            bool investigationObserved = BeginObservedBuildMutation("EquipWeaponAtSlot");
+            Exception investigationError = null;
+            try
+            {
             if (BuildDatabase == null)
             {
                 throw new InvalidOperationException(
@@ -429,10 +473,18 @@ namespace MonsterSupergroup.Gameplay.Combat
                 slotIndex,
                 BuildDatabase.GetWeaponData(weaponId),
                 parent);
+
+            }
+            catch (Exception investigationFailure) { investigationError = investigationFailure; throw; }
+            finally { EndObservedBuildMutation(investigationObserved, "EquipWeaponAtSlot", investigationError); }
         }
 
         public bool UnequipWeapon(WeaponBehaviour weapon)
         {
+            bool investigationObserved = BeginObservedBuildMutation("UnequipWeapon");
+            Exception investigationError = null;
+            try
+            {
             EnsureInitialized();
             if (weapon == null || !weapons.TryGetValue(weapon, out WeaponEntry entry))
             {
@@ -458,10 +510,18 @@ namespace MonsterSupergroup.Gameplay.Combat
             Destroy(entry.Behaviour.gameObject);
             PollNativeAttackCompletions();
             return true;
+
+            }
+            catch (Exception investigationFailure) { investigationError = investigationFailure; throw; }
+            finally { EndObservedBuildMutation(investigationObserved, "UnequipWeapon", investigationError); }
         }
 
         public void ConfigureInitialWeapon(uint weaponId)
         {
+            bool investigationObserved = BeginObservedBuildMutation("ConfigureInitialWeapon");
+            Exception investigationError = null;
+            try
+            {
             if (IsBuildActive)
             {
                 throw new InvalidOperationException(
@@ -469,10 +529,18 @@ namespace MonsterSupergroup.Gameplay.Combat
             }
 
             initialWeaponId = weaponId;
+
+            }
+            catch (Exception investigationFailure) { investigationError = investigationFailure; throw; }
+            finally { EndObservedBuildMutation(investigationObserved, "ConfigureInitialWeapon", investigationError); }
         }
 
         public WeaponBehaviour StartInitialBuild(RuntimeDB database)
         {
+            bool investigationObserved = BeginObservedBuildMutation("StartInitialBuild");
+            Exception investigationError = null;
+            try
+            {
             EnsureInitialized();
             if (database == null)
             {
@@ -492,10 +560,18 @@ namespace MonsterSupergroup.Gameplay.Combat
                 InitialWeapon = null;
                 throw;
             }
+
+            }
+            catch (Exception investigationFailure) { investigationError = investigationFailure; throw; }
+            finally { EndObservedBuildMutation(investigationObserved, "StartInitialBuild", investigationError); }
         }
 
         public void ClearBuild()
         {
+            bool investigationObserved = BeginObservedBuildMutation("ClearBuild");
+            Exception investigationError = null;
+            try
+            {
             if (!initialized)
             {
                 BuildDatabase = null;
@@ -519,6 +595,10 @@ namespace MonsterSupergroup.Gameplay.Combat
             perkMultipliers.Reset();
             BuildDatabase = null;
             InitialWeapon = null;
+
+            }
+            catch (Exception investigationFailure) { investigationError = investigationFailure; throw; }
+            finally { EndObservedBuildMutation(investigationObserved, "ClearBuild", investigationError); }
         }
 
         public PlayerBuildEquipmentHandle AddEquipment(
@@ -526,6 +606,10 @@ namespace MonsterSupergroup.Gameplay.Combat
             EquipmentData equipment,
             int levelIndex)
         {
+            bool investigationObserved = BeginObservedBuildMutation("AddEquipment");
+            Exception investigationError = null;
+            try
+            {
             EnsureInitialized();
             if (weapon == null || !weapons.TryGetValue(weapon, out WeaponEntry entry))
             {
@@ -535,6 +619,10 @@ namespace MonsterSupergroup.Gameplay.Combat
             }
 
             return AddEquipment(entry.SlotIndex, equipment, levelIndex);
+
+            }
+            catch (Exception investigationFailure) { investigationError = investigationFailure; throw; }
+            finally { EndObservedBuildMutation(investigationObserved, "AddEquipment", investigationError); }
         }
 
         public PlayerBuildEquipmentHandle AddEquipment(
@@ -542,6 +630,10 @@ namespace MonsterSupergroup.Gameplay.Combat
             EquipmentData equipment,
             int levelIndex)
         {
+            bool investigationObserved = BeginObservedBuildMutation("AddEquipment");
+            Exception investigationError = null;
+            try
+            {
             EnsureInitialized();
             ValidateSlotIndex(sourceSlotIndex);
             if (equipment == null)
@@ -582,10 +674,18 @@ namespace MonsterSupergroup.Gameplay.Combat
                 DetachEquipment(group);
                 throw;
             }
+
+            }
+            catch (Exception investigationFailure) { investigationError = investigationFailure; throw; }
+            finally { EndObservedBuildMutation(investigationObserved, "AddEquipment", investigationError); }
         }
 
         public bool RemoveEquipment(PlayerBuildEquipmentHandle handle)
         {
+            bool investigationObserved = BeginObservedBuildMutation("RemoveEquipment");
+            Exception investigationError = null;
+            try
+            {
             EnsureInitialized();
             if (!handle.IsValid ||
                 !equipmentByHandle.TryGetValue(handle.Value, out EquippedEquipment group))
@@ -598,11 +698,19 @@ namespace MonsterSupergroup.Gameplay.Combat
             DetachEquipment(group);
 
             return true;
+
+            }
+            catch (Exception investigationFailure) { investigationError = investigationFailure; throw; }
+            finally { EndObservedBuildMutation(investigationObserved, "RemoveEquipment", investigationError); }
         }
 
         public PlayerBuildEquipmentHandle UpgradeEquipment(
             PlayerBuildEquipmentHandle handle, int nextLevel)
         {
+            bool investigationObserved = BeginObservedBuildMutation("UpgradeEquipment");
+            Exception investigationError = null;
+            try
+            {
             EnsureInitialized();
             if (!handle.IsValid ||
                 !equipmentByHandle.TryGetValue(handle.Value, out EquippedEquipment previous))
@@ -630,12 +738,20 @@ namespace MonsterSupergroup.Gameplay.Combat
             var newHandle = new PlayerBuildEquipmentHandle(nextEquipmentHandle++);
             equipmentByHandle.Add(newHandle.Value, replacement);
             return newHandle;
+
+            }
+            catch (Exception investigationFailure) { investigationError = investigationFailure; throw; }
+            finally { EndObservedBuildMutation(investigationObserved, "UpgradeEquipment", investigationError); }
         }
 
         public PlayerBuildPerkHandle AddPerk(
             PerkData perk,
             PerkRarity rarity)
         {
+            bool investigationObserved = BeginObservedBuildMutation("AddPerk");
+            Exception investigationError = null;
+            try
+            {
             EnsureInitialized();
             if (perk == null)
             {
@@ -662,10 +778,18 @@ namespace MonsterSupergroup.Gameplay.Combat
                 RebuildPerks();
                 throw;
             }
+
+            }
+            catch (Exception investigationFailure) { investigationError = investigationFailure; throw; }
+            finally { EndObservedBuildMutation(investigationObserved, "AddPerk", investigationError); }
         }
 
         public bool RemovePerk(PlayerBuildPerkHandle handle)
         {
+            bool investigationObserved = BeginObservedBuildMutation("RemovePerk");
+            Exception investigationError = null;
+            try
+            {
             EnsureInitialized();
             if (!handle.IsValid || !perksByHandle.Remove(handle.Value))
             {
@@ -674,6 +798,10 @@ namespace MonsterSupergroup.Gameplay.Combat
 
             RebuildPerks();
             return true;
+
+            }
+            catch (Exception investigationFailure) { investigationError = investigationFailure; throw; }
+            finally { EndObservedBuildMutation(investigationObserved, "RemovePerk", investigationError); }
         }
 
         public void ConfigureCombatRuntimeServices(CombatRuntimeServices services)

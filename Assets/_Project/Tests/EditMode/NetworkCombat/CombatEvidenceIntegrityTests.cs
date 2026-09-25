@@ -1,7 +1,13 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.IO.Compression;
 using System.Linq;
+using System.Reflection;
+using System.Threading;
 using MonsterSupergroup.GAS;
+using MonsterSupergroup.NetworkCombat.Diagnostics;
+using Newtonsoft.Json.Linq;
 using NUnit.Framework;
 
 namespace MonsterSupergroup.NetworkCombat.Tests
@@ -75,6 +81,118 @@ namespace MonsterSupergroup.NetworkCombat.Tests
             Assert.That(gap.source, Is.EqualTo(2)); Assert.That(gap.target, Is.EqualTo(19)); Assert.That(gap.engine, Is.EqualTo("damage-1"));
             using (CombatEvidence.Suppress()) CombatEvidence.ReportCaptureFailure("Owner", "owner.damage_calculation", new Exception(), context);
             Assert.That(sink.failures, Has.Count.EqualTo(1));
+        }
+
+        [TestCase(false)]
+        [TestCase(true)]
+        public void DetachedStatusPublishesCurrentBoundaryBeforeItsFirstIndependentCall(bool periodicCheckpoint)
+        {
+            using var capture = new RuntimeCapture();
+            var status = new StatusController(_ => { });
+            status.Advance(.25f);
+            var replica = new CanonicalWorldReplica();
+            replica.RegisterStatusController(4, status);
+            status.Advance(.5f);
+            if (periodicCheckpoint) capture.CheckpointSet();
+            Assert.That(replica.UnregisterStatusController(4, status), Is.True);
+            status.Clear();
+            status.Clear();
+            var records = capture.Close();
+            var checkpoints = records.Where(r => r.stage == "replay.engine_checkpoint" && r.engine.StartsWith("status-", StringComparison.Ordinal)).ToArray();
+            Assert.That(checkpoints, Has.Length.EqualTo(2), "A changed parent lifecycle needs a new boundary, while subsequent independent calls reuse it.");
+            var checkpoint = checkpoints[1];
+            Assert.That((double)capture.Payload(checkpoint)["state"]["time"], Is.EqualTo(.75d));
+            var firstClear = records.First(r => r.engine == checkpoint.engine && r.operation == "Clear" && r.stage == "replay.input");
+            Assert.That(ulong.Parse(checkpoint.recordSequence), Is.LessThan(ulong.Parse(firstClear.recordSequence)));
+            if (periodicCheckpoint)
+                Assert.That(capture.Payload(records.Single(r => r.stage == "replay.checkpoint"))["engines"].Any(e => (string)e["engine"] == checkpoint.engine), Is.False);
+            Assert.That((bool)capture.Coverage()["complete"], Is.True);
+        }
+
+        [TestCase(false)]
+        [TestCase(true)]
+        public void DetachedBoundaryFailureLeavesAGapWithoutThrowingIntoTheOperation(bool exhaustBudget)
+        {
+            using var capture = new RuntimeCapture();
+            var target = new object(); var parent = new object(); bool fail = false;
+            Func<object, object> snapshot = _ => fail ? throw new InvalidOperationException("InjectedDetachedCaptureFailure") : new { value = 1 };
+            string engine = capture.runtime.RegisterEngine(target, "status", snapshot);
+            CombatEvidence.Bind(target, parent, "child.", "replica", _ => new { value = 2 });
+            CombatEvidence.Unbind(target);
+            Assert.That(SpinWait.SpinUntil(() => capture.store.PendingBytes == 0, 5000), Is.True);
+            using var entered = new ManualResetEventSlim(); using var release = new ManualResetEventSlim();
+            Assert.That(capture.store.Schedule(512, () => { entered.Set(); release.Wait(5000); }), Is.True);
+            Assert.That(entered.Wait(5000), Is.True);
+            long reserved = 0;
+            try
+            {
+                if (exhaustBudget)
+                {
+                    reserved = capture.store.Memory.Limit - capture.store.Memory.Used - (1 << 20);
+                    Assert.That(capture.store.Memory.TryReserve(reserved), Is.True);
+                }
+                else fail = true;
+                Assert.DoesNotThrow(() => { using var operation = CombatEvidence.Begin(target, "status", "AfterUnbind", Array.Empty<object>(), snapshot); operation.Complete(); });
+            }
+            finally { if (reserved != 0) capture.store.Memory.Release(reserved); release.Set(); }
+            var records = capture.Close();
+            Assert.That(records.Count(r => r.stage == "replay.engine_checkpoint" && r.engine == engine), Is.EqualTo(1));
+            var coverage = capture.Coverage();
+            Assert.That((bool)coverage["complete"], Is.False, "An absent detached boundary cannot leave an apparently complete source.");
+            Assert.That((long)coverage["criticalDropped"], Is.GreaterThan(0));
+            Assert.That(coverage["gaps"], Is.Not.Empty);
+            Assert.That(records.Any(r => r.operation == "AfterUnbind" && r.stage == "replay.output" && r.outcome == "Completed"), Is.True);
+        }
+
+        [Test] public void UnchangedIndependentEngineDoesNotCaptureOnEveryCall()
+        {
+            using var capture = new RuntimeCapture();
+            var target = new object(); int snapshots = 0;
+            for (int i = 0; i != 3; ++i)
+                using (var operation = CombatEvidence.Begin(target, "gateway", "Advance", Array.Empty<object>(), _ => { snapshots++; return new { value = 1 }; })) operation.Complete();
+            var records = capture.Close();
+            Assert.That(snapshots, Is.EqualTo(1));
+            Assert.That(records.Count(r => r.stage == "replay.engine_checkpoint"), Is.EqualTo(1));
+            Assert.That(records.Count(r => r.stage == "replay.input"), Is.EqualTo(3));
+        }
+
+        // An inactive component uses the production registration and store paths without booting networking or a Player.
+        private sealed class RuntimeCapture : IDisposable
+        {
+            public readonly CombatEvidenceRuntime runtime;
+            public readonly CombatEvidenceStore store;
+            private readonly UnityEngine.GameObject root;
+            private readonly string directory = Path.Combine(Path.GetTempPath(), "evidence-binding-" + Guid.NewGuid().ToString("N"));
+            private readonly string source;
+            public RuntimeCapture()
+            {
+                root = new UnityEngine.GameObject("evidence-binding-test"); root.SetActive(false);
+                runtime = root.AddComponent<CombatEvidenceRuntime>();
+                store = new CombatEvidenceStore(directory);
+                Set("store", store); Set("capture", "capture"); Set("mainThread", Thread.CurrentThread.ManagedThreadId);
+                source = Path.Combine(directory, "boot", "0", "sources", "capture");
+                CombatEvidence.Sink = runtime;
+            }
+            private void Set(string name, object value) => typeof(CombatEvidenceRuntime).GetField(name, BindingFlags.Instance | BindingFlags.NonPublic).SetValue(runtime, value);
+            public void CheckpointSet() => typeof(CombatEvidenceRuntime).GetMethod("CaptureCheckpointSet", BindingFlags.Instance | BindingFlags.NonPublic).Invoke(runtime, null);
+            public DiagnosticRecord[] Close()
+            {
+                store.Dispose(); Assert.That(store.WaitForClose(), Is.True);
+                return Directory.GetFiles(source, "events-*.jsonl").OrderBy(p => p, StringComparer.Ordinal).SelectMany(File.ReadLines).SelectMany(EvidenceBlocks.Decode).ToArray();
+            }
+            public JObject Coverage() => JObject.Parse(File.ReadAllText(Path.Combine(source, "coverage.json")));
+            public JObject Payload(DiagnosticRecord record)
+            {
+                using var file = File.OpenRead(Path.Combine(source, record.checkpointRef));
+                using var gzip = new GZipStream(file, CompressionMode.Decompress); using var reader = new StreamReader(gzip);
+                return JObject.Parse(reader.ReadToEnd());
+            }
+            public void Dispose()
+            {
+                CombatEvidence.Sink = null; Set("shuttingDown", true);
+                store.Dispose(); store.WaitForClose(); UnityEngine.Object.DestroyImmediate(root);
+                if (Directory.Exists(directory)) Directory.Delete(directory, true);
+            }
         }
 
         private sealed class LegacySink : IDiagnosticSink

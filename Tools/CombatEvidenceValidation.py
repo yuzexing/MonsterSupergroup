@@ -18,13 +18,17 @@ TOOL_FILES = ("Tools/CombatEvidenceValidation.py", "Tools/Invoke-CombatEvidenceV
 TOOL_TEST_PATTERN = "test_*combat_evidence*.py"
 TOOL_FIXTURES = "Tools/fixtures/combat-evidence-v2"
 GENERATED_PATHS = ("Assets/AddressableAssetsData/link.xml", "Assets/AddressableAssetsData/link.xml.meta")
+BUILD_GENERATED_PATHS = GENERATED_PATHS + ("Assets/AddressableAssetsData/Windows/addressables_content_state.bin",)
 
 
 def acceptance_policy(name="full-v1", mode=None):
-    if name not in ("full-v1", "editor-generated-v1"):
+    if name not in ("full-v1", "editor-generated-v1", "build-generated-v1"):
         raise ValueError(f"Unknown acceptance input policy: {name}")
     if name == "editor-generated-v1" and mode not in ("Tests", "Replay"):
         raise ValueError("The generated-input exception is restricted to editor Tests/Replay.")
+    if name == "build-generated-v1":
+        if mode != "Build": raise ValueError("The build-generated input exception requires Build mode.")
+        return {"id": name, "excludedPaths": list(BUILD_GENERATED_PATHS)}
     return {"id": name, "excludedPaths": list(GENERATED_PATHS) if name == "editor-generated-v1" else []}
 
 
@@ -74,13 +78,13 @@ def stable_inventory(full, policy):
     return manifest(row for row in full["files"] if row["path"] not in policy["excludedPaths"])
 
 
-def archive_generated(output, phase, roots):
-    """Keep generated content as evidence even when it is not an editor input gate."""
+def archive_generated(output, phase, roots, paths=GENERATED_PATHS):
+    """Keep generated content as evidence even when excluded from the input gate."""
     result = {}
     for label, (root, expected) in roots.items():
         rows = []
         expected_files = {row["path"]: row for row in expected["files"]} if expected is not None else None
-        for relative in GENERATED_PATHS:
+        for relative in paths:
             path = root / relative
             ensure_physical_parents(path)
             exists = path.exists()
@@ -140,6 +144,7 @@ def ensure_physical_parents(path):
 
 def prepare(source, project, output, unity, overlay=None, input_policy="full-v1", mode=None):
     policy = acceptance_policy(input_policy, mode)
+    generated_paths = BUILD_GENERATED_PATHS if input_policy == "build-generated-v1" else GENERATED_PATHS
     ensure_physical_parents(Path(project).absolute())
     source, project, output, unity = (Path(p).resolve() for p in (source, project, output, unity))
     if source == project or source.is_relative_to(project) or any(project.is_relative_to(source / name) for name in PROJECT_ROOTS):
@@ -238,7 +243,7 @@ def prepare(source, project, output, unity, overlay=None, input_policy="full-v1"
     if actual["files"] != expected_files: raise ValueError("Validation snapshot differs from source manifest.")
     save(output / "validation-before.json", actual)
     save(output / "validation-stable-before.json", stable_inventory(actual, policy))
-    archive_generated(output, "before", {"source": (source, before), "project": (project, actual)})
+    archive_generated(output, "before", {"source": (source, before), "project": (project, actual)}, generated_paths)
     # Keep the tested implementation even when the reusable project is synchronized
     # for a later run. This includes untracked C# and the explicit red-test overlay.
     source_extensions = {".cs", ".asmdef", ".asmref", ".json", ".asset", ".unity", ".prefab", ".meta", ".shader", ".compute", ".hlsl", ".cginc", ".uxml", ".uss"}
@@ -246,7 +251,7 @@ def prepare(source, project, output, unity, overlay=None, input_policy="full-v1"
     with zipfile.ZipFile(archive_path, "w", zipfile.ZIP_DEFLATED, compresslevel=1) as archive:
         for row in actual["files"]:
             relative = row["path"]
-            if not relative.startswith("Assets/") or Path(relative).suffix.lower() in source_extensions or relative in GENERATED_PATHS:
+            if not relative.startswith("Assets/") or Path(relative).suffix.lower() in source_extensions or relative in generated_paths:
                 archive.write(project / relative, relative)
     save(output / "sync.json", {"copied": copied, "unchanged": unchanged, "archivedStaleFiles": moved,
          "projectSha256": actual["sha256"], "sourceOverrides": overrides, "complete": True,
@@ -319,13 +324,14 @@ def finish(output, recheck_output=None):
             validation_stable_after = stable_inventory(validation, policy) if validation is not None else None
     save(audit_output / f"source-stable-after{suffix}.json", source_stable_after)
     save(audit_output / f"validation-stable-after{suffix}.json", validation_stable_after)
+    generated_paths = BUILD_GENERATED_PATHS if policy and policy["id"] == "build-generated-v1" else GENERATED_PATHS
     if not legacy:
         # Verify that the preparation archive still proves the generated inputs it saw.
         def check_generated_before():
             saved = json.loads((output / "generated-inputs-before.json").read_text(encoding="utf-8"))
             for label, full in (("source", before), ("project", frozen)):
                 expected = {r["path"]: r for r in full["files"]}
-                if [r["path"] for r in saved[label]] != list(GENERATED_PATHS):
+                if [r["path"] for r in saved[label]] != list(generated_paths):
                     raise ValueError("Generated pre-run manifest has an unexpected path list.")
                 for row in saved[label]:
                     present = expected.get(row["path"])
@@ -341,7 +347,7 @@ def finish(output, recheck_output=None):
             return saved
         audit("generatedBefore", check_generated_before)
     audit("generatedAfter", lambda: archive_generated(audit_output, "after", {
-        "source": (Path(identity["source"]), source), "project": (Path(identity["project"]), validation)}))
+        "source": (Path(identity["source"]), source), "project": (Path(identity["project"]), validation)}, generated_paths))
     def changed(first, last):
         if first is None or last is None: return []
         a = {row["path"]: row["sha256"] for row in first["files"]}
@@ -437,7 +443,7 @@ def main():
     prep = subs.add_parser("prepare")
     for name in ("source", "project", "output", "unity"): prep.add_argument("--" + name, required=True)
     prep.add_argument("--overlay", help="Explicit old C# files for red tests; basename must identify one source input")
-    prep.add_argument("--input-policy", default="full-v1", choices=("full-v1", "editor-generated-v1"))
+    prep.add_argument("--input-policy", default="full-v1", choices=("full-v1", "editor-generated-v1", "build-generated-v1"))
     prep.add_argument("--mode", choices=("Tests", "Replay", "Build"))
     final = subs.add_parser("finish"); final.add_argument("--output", required=True)
     final.add_argument("--recheck-output", help="New independent output directory for a legacy policyless archive")

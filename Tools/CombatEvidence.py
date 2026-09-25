@@ -37,6 +37,18 @@ CREATE INDEX IF NOT EXISTS by_facet ON facets(kind,value,capture,seq);
 CREATE TABLE IF NOT EXISTS pending_indexes(capture TEXT,seq TEXT,PRIMARY KEY(capture,seq));
 """
 MAX_BLOB = 32 << 20
+VIEW_CATEGORIES = {
+    "movement": ("movement.submit", "movement.receive", "movement.correction", "authority.movement", "authority.handoff"),
+    "attack": ("owner.attack_started", "owner.AttackStarted", "owner.attack_window", "owner.attack_gate",
+               "owner.attack_stats", "owner.contact", "owner.hit", "owner.HitResolved",
+               "replica.attack_window", "replica.contact"),
+    "damage": ("owner.damage_calculation", "owner.damage", "owner.DamageResolved", "owner.dot_damage",
+               "owner.PredictedLethalHit", "ledger.apply", "entity.canonical_health", "death.report",
+               "death.receipt", "status.tick"),
+    "sync": ("collector.enqueue", "collector.drain", "network.submit", "gateway.batch",
+             "gateway.decision", "gateway.canonical_link", "network.canonical", "replica.entity",
+             "entity.canonical_health", "network.send", "network.disconnected"),
+}
 
 
 def expand_records(raw):
@@ -444,7 +456,9 @@ def issue_interval(db, issue, capture):
 def checkpoint_engines(record, data):
     if not isinstance(data, dict): raise ValueError("InvalidCheckpointPayload")
     engines = data.get("engines") if record.get("stage") == "replay.checkpoint" else [data]
-    if not isinstance(engines, list) or not engines: raise ValueError("InvalidCheckpointEngines")
+    # A full snapshot may have no root engines during startup or between contexts.
+    # It still replaces the prior root set; it cannot establish an engine baseline.
+    if not isinstance(engines, list): raise ValueError("InvalidCheckpointEngines")
     if any(not isinstance(item, dict) or not item.get("engine") or not item.get("domain") or item.get("state") is None for item in engines):
         raise ValueError("InvalidCheckpointEngineState")
     return engines
@@ -645,6 +659,18 @@ def assess_interval(db, capture, first=None, last=None, run=None, round=None):
     def intersects(start, end):
         return (end is None or end >= first) and (start is None or start <= last)
 
+    def reject_empty_recovery(recovered, end=None):
+        if recovered is None or not intersects(recovered, end): return
+        row = db.execute("SELECT body FROM records WHERE " + where + " AND seq=?", values + [str(recovered)]).fetchone()
+        if row is None: return  # Retain the existing rules for historical/pruned recovery records.
+        record = json.loads(row["body"])
+        if record.get("stage") != "replay.checkpoint": return
+        try: engines = checkpoint_engines(record, payload(db, record))
+        except (ValueError, TypeError, AttributeError): return
+        if not engines:
+            references = [dict(r) for r in db.execute("SELECT path,line FROM copies WHERE capture=? AND seq=?", (capture, str(recovered)))]
+            add("InvalidRecoveryCheckpoint:EmptyEngineSet", recovered, end, references)
+
     try:
         first = sequence_number(first) if first is not None else (int(earliest[0]) if earliest else 1)
         observed_last = int(latest[0]) if latest else 0
@@ -706,11 +732,13 @@ def assess_interval(db, capture, first=None, last=None, run=None, round=None):
                 if episodes is None and intersects(start, end): add("CaptureGap:" + str(gap.get("reason", "Unknown")), start, end, reference)
             except (ValueError, AttributeError) as error: add("InvalidCoverageGap:" + str(error), references=reference)
         if episodes is not None:
-            for episode in episodes:
+            for index, episode in enumerate(episodes):
                 end = episode["recovered"] - 1 if episode["recovered"] is not None else None
                 if intersects(episode["first"], end):
                     reason = "ConservativeIntegrityHistory" if episode["conservative"] else "IntegrityHistoryFailure"
                     add(reason + ":epoch=" + str(episode["epoch"]), episode["first"], end, reference)
+                next_recovery = next((later["recovered"] for later in episodes[index + 1:] if later["recovered"] is not None), None)
+                reject_empty_recovery(episode["recovered"], next_recovery - 1 if next_recovery is not None else None)
         elif state.get("failure"):
             try:
                 start = sequence_number(state["failureFirstSequence"])
@@ -728,6 +756,7 @@ def assess_interval(db, capture, first=None, last=None, run=None, round=None):
                 recovered = sequence_number(state["reliableFromSequence"])
                 if recovery_start is not None and recovered > recovery_start and intersects(recovery_start, recovered - 1):
                     add("BeforeRecoveryCheckpoint", recovery_start, recovered - 1, reference)
+                reject_empty_recovery(recovered)
             except ValueError: add("InvalidRecoveryCheckpointSequence", references=reference)
 
     expected = first
@@ -832,6 +861,11 @@ def query(db, args):
         if value is not None:
             clauses.append(column + "=?")
             values.append(value)
+    category = getattr(args, "category", None)
+    if category:
+        stages = VIEW_CATEGORIES[category]
+        clauses.append("stage IN (" + ",".join("?" for _ in stages) + ")")
+        values.extend(stages)
     for attr, kind in (("player", "player"), ("status", "status"), ("connection", "connection"), ("steam_connection", "steam_connection")):
         value = getattr(args, attr, None)
         if value is not None:
@@ -898,7 +932,8 @@ def query(db, args):
     return {"records": records[:limit], "truncated": len(records) > limit,
             "complete": assessed["complete"] and len(records) <= limit, "scopeGaps": assessed["scopeGaps"],
             "missingPayloads": [dict(evidence_pointer(r), **failure) for r in records[:limit] for failure in r.get("missingPayloads", [])],
-            "missingStages": [s for s in expected if s not in stages] if event else [], "coverage": assessed}
+            "missingStages": [s for s in expected if s not in stages] if event else [], "coverage": assessed,
+            "selection": {key: getattr(args, key, None) for key in ("category", "capture", "run", "round", "entity", "event", "first", "last")}}
 
 
 def evidence_pointer(record):
@@ -1074,7 +1109,15 @@ def describe_record(record):
               "death.receipt": "死亡确认", "entity.spawn": "实体出生", "entity.destroy": "实体销毁",
               "owner.attack_stats": "攻击属性构建", "owner.dot_damage": "持续伤害结算", "status.tick": "持续状态 Tick",
               "stats.damage": "输出统计入账", "statistics.damage": "输出统计入账", "network.send": "网络发送",
-              "network.metrics": "网络观测", "network.disconnected": "连接断开"}
+              "network.metrics": "网络观测", "network.disconnected": "连接断开",
+              "movement.submit": "提交移动快照", "movement.receive": "接收移动快照",
+              "movement.correction": "位置校正", "authority.handoff": "移动权限交接",
+              "owner.attack_started": "开始攻击", "owner.AttackStarted": "攻击开始标记",
+              "owner.attack_gate": "攻击许可", "owner.attack_window": "攻击窗口",
+              "owner.contact": "攻击接触", "owner.HitResolved": "命中处理结果",
+              "owner.DamageResolved": "本地伤害处理结果", "owner.PredictedLethalHit": "本地预测致命命中",
+              "entity.canonical_health": "权威生命更新", "replica.attack_window": "远端攻击窗口",
+              "replica.contact": "远端攻击接触"}
     outcomes = {"Accepted": "接受", "Rejected": "拒绝", "Ignored": "忽略", "Deferred": "延后", "Applied": "已应用",
                 "Applying": "开始应用", "Sent": "已发送", "Received": "已接收", "Produced": "已输出", "Confirmed": "已确认"}
     reasons = {"DuplicateEvent": "事件重复，未再次结算", "WrongOwner": "发送者已无模拟权限", "WrongEpoch": "权限版本不匹配",
@@ -1089,23 +1132,79 @@ def describe_record(record):
     if reason and reason != "None": result += "；" + reasons.get(reason, reason)
     before, after = record.get("before"), record.get("after")
     if isinstance(before, dict) and isinstance(after, dict):
-        for key, label in (("Health", "生命"), ("StateVersion", "状态版本")):
+        for key, label in (("Health", "生命"), ("health", "本地生命"), ("localHealth", "本地生命"),
+                           ("StateVersion", "状态版本")):
             if key in before and key in after: result += f"；{label} {before[key]} → {after[key]}"
     return result
 
 
 def viewer(result):
+    def brief(r):
+        stage, before, after, data = r.get("stage"), r.get("before") or {}, r.get("after") or {}, r.get("input") or {}
+        if not isinstance(before, dict): before = {}
+        if not isinstance(after, dict): after = {}
+        if not isinstance(data, dict): data = {}
+        if stage == "owner.attack_started": return f"开始攻击；武器 {data.get('weaponId', '未知')}；{r.get('outcome', '已记录')}"
+        if stage == "owner.damage_calculation": return f"计算伤害 {after.get('requestedDamage', '未知')}；尚非最终扣血"
+        if stage == "owner.hit":
+            if "health" in before and "health" in after:
+                return f"本地命中 {r.get('outcome', '已记录')}；生命 {before['health']} → {after['health']}"
+            return f"本地命中处理中；请求伤害 {data.get('Value', '未知')}"
+        if stage == "movement.submit": return f"提交 {len(data.get('Snapshots', []))} 个移动快照；批次 {r.get('batchSequence', '未知')}；{r.get('outcome', '已记录')}"
+        if stage == "movement.receive":
+            position = after.get("position") or data.get("Position")
+            if isinstance(position, dict): return f"移动快照 {r.get('outcome', '已记录')}；位置 ({position.get('x', '?')}, {position.get('y', '?')})；{r.get('reason') or '无附加原因'}"
+        if stage == "movement.correction": return f"位置校正；距离 {after.get('distance', '未知')}"
+        if stage == "network.canonical": return f"收到权威更新；服务端序号 {r.get('serverSequence', '未知')}；尚需看 Replica 是否应用"
+        if stage == "replica.entity":
+            return f"权威实体状态 {r.get('outcome', '已记录')}；生命 {before.get('Health', '?')} → {after.get('Health', '?')}；存活 {after.get('Alive', '?')}；版本 {after.get('StateVersion', '?')}"
+        if stage == "entity.canonical_health":
+            return f"更新本地权威生命；服务端 {data.get('canonicalHealth', '?')}；本地 {after.get('localHealth', '?')}"
+        for key in ("Health", "health", "localHealth"):
+            if key in before and key in after: return f"生命 {before[key]} → {after[key]}；{describe_record(r)}"
+        return describe_record(r)
+
+    selection = result.get("selection", {})
+    category_names = {"movement": "移动", "attack": "攻击", "damage": "受伤与生命", "sync": "同步"}
+    category = category_names.get(selection.get("category"), "全部")
+    intervals = result.get("coverage", {}).get("intervals", [])
+    source_cards = []
+    for interval in intervals:
+        state = (interval.get("selectedCoverage") or {}).get("body") or {}
+        gaps = interval.get("gaps", [])
+        status = "该范围完整" if interval.get("complete") else "该范围有缺口"
+        reasons = "、".join(dict.fromkeys(str(g.get("reason", "未知")) for g in gaps[:3]))
+        source_cards.append("<div class='card'><strong>" + html.escape(interval.get("captureId", "")[:8]) +
+            " · " + status + "</strong><span>已写 " + html.escape(str(state.get("written", "未知"))) +
+            " / 已产生 " + html.escape(str(state.get("produced", "未知"))) +
+            "；丢弃 " + html.escape(str(state.get("dropped", "未知"))) +
+            "；缺口 " + str(len(gaps)) + " 处</span>" +
+            ("<small>例如：" + html.escape(reasons) + "</small>" if reasons else "") + "</div>")
     rows = []
     for r in result["records"]:
-        who = r.get("captureId", "")[:8] + " / " + r.get("role", "")
-        text = r.get("description") or describe_record(r)
-        details = html.escape(json.dumps(r, ensure_ascii=False, indent=2))
-        rows.append(f"<tr><td>{html.escape(who)}</td><td>{html.escape(str(r.get('recordSequence', '')))}</td><td>{html.escape(str(r.get('eventId', '')))}</td><td>{html.escape(str(r.get('target', '')))}</td><td>{html.escape(text)}<details><summary>输入、前后状态及原始文件</summary><pre>{details}</pre></details></td></tr>")
-    evidence = html.escape(json.dumps({k:v for k,v in result.items() if k != 'records'}, ensure_ascii=False, indent=2))
-    return """<!doctype html><meta charset="utf-8"><title>战斗证据时间线</title>
-<style>body{font:15px system-ui;margin:32px;background:#111827;color:#e5e7eb}input{padding:12px;width:60%}table{border-collapse:collapse;width:100%;margin-top:20px}td,th{padding:10px;text-align:left;border-bottom:1px solid #374151}pre{white-space:pre-wrap;overflow-wrap:anywhere}summary{cursor:pointer;color:#93c5fd}</style>
-<h1>战斗证据时间线</h1><p>按原始来源与执行序号排列。跨端联系以事件和收发编号为准；缺少记录不能证明没有执行。</p>
-<input id="filter" placeholder="筛选实体、事件、原因、来源或状态"><details><summary>覆盖范围与证据缺口</summary><pre>""" + evidence + "</pre></details><table><thead><tr><th>来源 / 角色</th><th>序号</th><th>事件</th><th>实体</th><th>处理结果</th></tr></thead><tbody>" + "".join(rows) + "</tbody></table><script>document.querySelector('#filter').oninput=e=>{const q=e.target.value.toLowerCase();document.querySelectorAll('tbody tr').forEach(r=>r.hidden=!r.textContent.toLowerCase().includes(q));};</script>"
+        details = {key: r.get(key) for key in ("captureId", "recordSequence", "runId", "round", "stage", "role",
+                   "eventId", "source", "target", "outcome", "reason", "before", "after", "references") if key in r}
+        for field in ("input", "before", "after"):
+            if field in r:
+                value = json.dumps(r[field], ensure_ascii=False)
+                details[field] = r[field] if len(value) <= 1200 else "内容较长；完整内容请按事件 ID 使用 query 查询，或查看原始文件"
+        moment = str(r.get("utc") or "")
+        moment = moment[11:23] + " UTC" if len(moment) >= 23 else moment
+        actor = f"{r.get('source') or '—'} → {r.get('target') or '—'}"
+        reference = html.escape(json.dumps(details, ensure_ascii=False, indent=2))
+        rows.append("<tr><td>" + html.escape(moment) + "<small>#" + html.escape(str(r.get("recordSequence", ""))) +
+                    "</small></td><td>" + html.escape(str(r.get("stage", ""))) + "<small>" +
+                    html.escape(str(r.get("role", ""))) + "</small></td><td>" + html.escape(actor) +
+                    "</td><td>" + html.escape(brief(r)) + "<small>事件 " +
+                    html.escape(str(r.get("eventId") or "—")) + "</small><details><summary>证据详情与原始文件</summary><pre>" +
+                    reference + "</pre></details></td></tr>")
+    limit_note = "已达到本次查询上限；页面搜索只查当前这些记录。请用 --first/--last 或 --entity/--event 缩小范围。" if result.get("truncated") else "页面搜索仅筛选本次查出的记录。"
+    scope_note = "证据有缺口，缺少的记录不能解释为事件没有发生。" if not result.get("coverage", {}).get("complete") else "所选证据范围完整。"
+    return """<!doctype html><html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>战斗证据查看</title>
+<style>body{font:15px/1.6 system-ui;margin:0 auto;padding:28px;max-width:1440px;background:#101827;color:#e5e7eb}h1{margin:0}p{margin:8px 0 20px}.muted,small{color:#aab7c9}small{display:block;font-size:12px}.cards{display:flex;gap:12px;flex-wrap:wrap}.card{background:#1e293b;border:1px solid #334155;border-radius:8px;padding:12px;min-width:240px}.card span{display:block}input{box-sizing:border-box;width:100%;padding:12px;margin:18px 0;background:#1e293b;color:#fff;border:1px solid #64748b;border-radius:6px}table{border-collapse:collapse;width:100%}td,th{padding:10px;text-align:left;vertical-align:top;border-bottom:1px solid #374151}th{position:sticky;top:0;background:#172338}td:nth-child(4){width:48%}pre{white-space:pre-wrap;overflow-wrap:anywhere;max-height:320px;overflow:auto;background:#0b1220;padding:12px}summary{cursor:pointer;color:#93c5fd}tr[hidden]{display:none}</style>
+<h1>战斗证据 · """ + html.escape(category) + """</h1><p>先看“发生了什么”，展开单条记录再看证据。按每个来源的序号排列；两端 UTC 不能直接当作因果顺序。</p>
+<div class="cards">""" + "".join(source_cards) + """</div><p><strong>""" + html.escape(scope_note) + "</strong> 本页 " + str(len(rows)) + " 条。" + html.escape(limit_note) + """</p>
+<input id="filter" aria-label="筛选当前页面记录" placeholder="筛选当前页面：实体编号、事件 ID、阶段、原因"><table><thead><tr><th>时间 / 序号</th><th>阶段 / 角色</th><th>发起 → 目标</th><th>发生了什么</th></tr></thead><tbody>""" + "".join(rows) + """</tbody></table><script>document.querySelector('#filter').oninput=e=>{const q=e.target.value.toLowerCase();document.querySelectorAll('tbody tr').forEach(r=>r.hidden=!r.textContent.toLowerCase().includes(q));};</script></html>"""
 
 
 def main():
@@ -1120,11 +1219,20 @@ def main():
     cov.add_argument("--output")
     perf = subs.add_parser("performance")
     perf.add_argument("--capture", required=True); perf.add_argument("--output", required=True)
+    serve = subs.add_parser("serve", help="Open the local match investigation timeline")
+    source = serve.add_mutually_exclusive_group()
+    source.add_argument("--source-db", help="Read an existing database and derive a NEW analysis database")
+    source.add_argument("--roots", nargs="+", help="Read raw export directories or an investigation issue package")
+    serve.add_argument("--output", help="New analysis/output directory; never an original evidence directory")
+    serve.add_argument("--port", type=int, default=0)
+    serve.add_argument("--open", action="store_true")
+    serve.add_argument("--prepare-only", action="store_true")
     for name in ("query", "view", "compare", "locate", "player-output", "dot", "connection"):
         cmd = subs.add_parser(name)
         for field in ("event", "entity", "reason", "capture", "run", "round", "engine", "after", "before", "build"):
             cmd.add_argument("--" + field)
         cmd.add_argument("--limit", type=int, default=2000)
+        cmd.add_argument("--category", choices=tuple(VIEW_CATEGORIES), help="Show movement, attack, damage or sync business records")
         cmd.add_argument("--first", type=int); cmd.add_argument("--last", type=int)
         cmd.add_argument("--strict", action="store_true", help="Exit 3 after reporting incomplete evidence")
         cmd.add_argument("--resolve-inputs", action="store_true")
@@ -1143,6 +1251,16 @@ def main():
     cmd.add_argument("--capture", required=True); cmd.add_argument("--engine", required=True)
     cmd.add_argument("--first", type=int); cmd.add_argument("--last", type=int); cmd.add_argument("--output", required=True)
     args = parser.parse_args()
+    if args.command == "serve":
+        from CombatInvestigation import main as investigate
+        options = ["--port", str(args.port)]
+        if args.source_db: options += ["--source-db", args.source_db]
+        elif args.roots: options += ["--roots", *args.roots]
+        else: options += ["--db", args.db]
+        if args.output: options += ["--output", args.output]
+        if args.open: options.append("--open")
+        if args.prepare_only: options.append("--prepare-only")
+        return investigate(options)
     with connect(args.db) as db:
         if args.command == "performance":
             with Path(args.output).open("w", encoding="utf-8") as stream:

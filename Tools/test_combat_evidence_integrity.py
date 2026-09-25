@@ -208,6 +208,118 @@ class IntervalIntegrityTests(unittest.TestCase):
         self.assertFalse(fixture["complete"])
         self.assertTrue(any("Checkpoint" in reason for reason in fixture["gaps"]))
 
+    def test_empty_full_checkpoint_describes_no_roots_but_cannot_create_a_fixture(self):
+        self.source(records=[dict(stage="replay.checkpoint", engine="*", input=dict(version=1, engines=[]))])
+        self.ingest()
+        report = evidence.coverage(self.db)
+        self.assertTrue(report["complete"], report)
+        fixture = self.fixture(last=1)
+        self.assertFalse(fixture["complete"])
+        self.assertIsNone(fixture["checkpoint"])
+        self.assertEqual([], fixture["steps"])
+        self.assertIn("MissingCheckpoint", fixture["gaps"])
+
+    def test_empty_full_checkpoint_before_independent_engine_does_not_poison_source(self):
+        rows = [dict(stage="replay.checkpoint", engine="*", input=dict(version=1, engines=[])),
+                self.records()[0],
+                dict(stage="replay.input", engine="damage-1", operation="Calculate", input=[]),
+                dict(stage="replay.output", engine="damage-1", operation="Calculate", outcome="Completed", after=None)]
+        self.source(records=rows); self.ingest()
+        report = evidence.coverage(self.db)
+        self.assertTrue(report["complete"], report)
+        fixture = self.fixture(first=1, last=4)
+        self.assertTrue(fixture["complete"], fixture["gaps"])
+        self.assertEqual(1, len(fixture["steps"]))
+
+    def test_empty_full_checkpoint_after_completed_calls_keeps_earlier_steps_reliable(self):
+        rows = self.records() + [dict(stage="replay.checkpoint", engine="*", input=dict(version=1, engines=[]))]
+        self.source(records=rows); self.ingest()
+        fixture = self.fixture(last=4)
+        self.assertTrue(fixture["complete"], fixture["gaps"])
+        self.assertEqual(2, len(fixture["steps"]))
+
+    def test_empty_full_checkpoint_revokes_the_prior_independent_state_boundary(self):
+        rows = [self.records()[0], dict(stage="replay.checkpoint", engine="*", input=dict(version=1, engines=[])),
+                dict(stage="replay.input", engine="damage-1", operation="Clear", input=[]),
+                dict(stage="replay.output", engine="damage-1", operation="Clear", outcome="Completed", after=None)]
+        self.source(records=rows); self.ingest()
+        fixture = self.fixture(last=4)
+        self.assertFalse(fixture["complete"])
+        self.assertIn("MissingCheckpoint:damage-1", fixture["gaps"])
+
+    def test_empty_full_checkpoint_does_not_hide_an_uncompleted_call(self):
+        rows = [self.records()[0], dict(stage="replay.input", engine="damage-1", operation="Calculate", input=[]),
+                dict(stage="replay.checkpoint", engine="*", input=dict(version=1, engines=[]))]
+        self.source(records=rows); self.ingest()
+        fixture = self.fixture(last=3)
+        self.assertFalse(fixture["complete"])
+        self.assertTrue(any("MissingOutput" in gap for gap in fixture["gaps"]), fixture["gaps"])
+
+    def test_empty_checkpoint_contract_still_rejects_malformed_engine_arrays(self):
+        for data in (None, {}, {"engines": None}, {"engines": {}}, {"engines": "[]"},
+                     {"engines": [None]}, {"engines": [{}]},
+                     {"engines": [dict(engine="damage-1", domain="damage", state=None)]}):
+            with self.subTest(data=data):
+                with self.assertRaises(ValueError):
+                    evidence.checkpoint_engines(dict(stage="replay.checkpoint"), data)
+        with self.assertRaises(ValueError):
+            evidence.checkpoint_engines(dict(stage="replay.engine_checkpoint"), dict(engines=[]))
+
+    def test_strict_cli_accepts_empty_source_but_rejects_its_empty_fixture(self):
+        self.source(records=[dict(stage="replay.checkpoint", engine="*", input=dict(version=1, engines=[]))])
+        self.ingest(); self.db.commit()
+        prefix = [sys.executable, "-B", str(Path(evidence.__file__)), "--db", str(self.db_path)]
+        coverage = subprocess.run(prefix + ["coverage", "--capture", "capture", "--strict"], text=True, capture_output=True)
+        self.assertEqual(0, coverage.returncode, coverage.stderr + coverage.stdout)
+        output = self.root / "empty-fixture.json"
+        fixture = subprocess.run(prefix + ["extract", "--capture", "capture", "--engine", "damage-1",
+                                          "--last", "1", "--output", str(output)], text=True, capture_output=True)
+        self.assertEqual(3, fixture.returncode, fixture.stderr + fixture.stdout)
+        self.assertFalse(json.loads(output.read_text())["complete"])
+
+    def test_empty_full_checkpoint_cannot_satisfy_a_declared_recovery_boundary(self):
+        rows = self.records() + [dict(stage="replay.checkpoint", engine="*", input=dict(version=1, engines=[]))] + self.records()
+        self.source(records=rows, failure="Prior write failure", failureFirstSequence="3", failureLastSequence="3",
+                    recoveryPending=False, reliableFromSequence="4", gaps=[dict(first="3", last="3", reason="WriteFailure")])
+        self.ingest()
+        original = json.loads(self.db.execute("SELECT body FROM metadata WHERE kind='coverage.json'").fetchone()[0])
+        for versioned in (False, True):
+            with self.subTest(versioned=versioned):
+                state = dict(original)
+                if versioned:
+                    state.update(integrityHistoryVersion=1, failureEpoch=1, integrityHistory=[
+                        dict(first="3", last="3", epoch=1, reliableFromSequence="4")])
+                self.db.execute("UPDATE metadata SET body=? WHERE kind='coverage.json'", (json.dumps(state),))
+                self.assertTrue(self.fixture(last=2)["complete"])
+                for first in (4, 5):
+                    fixture = self.fixture(first=first, last=7)
+                    self.assertFalse(fixture["complete"], fixture)
+                    self.assertTrue(any("RecoveryCheckpoint" in gap for gap in fixture["gaps"]), fixture["gaps"])
+
+    def test_empty_full_checkpoint_keeps_pending_recovery_unreliable(self):
+        rows = self.records() + [dict(stage="replay.checkpoint", engine="*", input=dict(version=1, engines=[]))] + self.records()
+        self.source(records=rows, failure="Prior write failure", failureFirstSequence="3", failureLastSequence="3",
+                    recoveryPending=True, complete=False, tailUnknown=True, gaps=[dict(first="3", last="3", reason="WriteFailure")])
+        self.ingest()
+        fixture = self.fixture(first=5, last=7)
+        self.assertFalse(fixture["complete"])
+        self.assertIn("RecoveryCheckpointPending", fixture["gaps"])
+
+    def test_empty_historical_recovery_does_not_revoke_a_later_real_recovery(self):
+        rows = self.records() + [dict(stage="replay.checkpoint", engine="*", input=dict(version=1, engines=[]))] + self.records() * 2
+        rows[7] = dict(stage="replay.checkpoint", engine="*", input=dict(engines=[rows[0]["input"]]))
+        self.source(records=rows, failure="Prior write failures", failureFirstSequence="3", failureLastSequence="7",
+                    recoveryPending=False, reliableFromSequence="8", failureEpoch=2,
+                    gaps=[dict(first="3", last="3", reason="WriteFailure"), dict(first="7", last="7", reason="WriteFailure")],
+                    integrityHistoryVersion=1, integrityHistory=[
+                        dict(first="3", last="3", epoch=1, reliableFromSequence="4"),
+                        dict(first="7", last="7", epoch=2, reliableFromSequence="8")])
+        self.ingest()
+        self.assertTrue(self.fixture(last=2)["complete"])
+        self.assertFalse(self.fixture(first=5, last=6)["complete"])
+        fixture = self.fixture(first=8, last=10)
+        self.assertTrue(fixture["complete"], fixture["gaps"])
+
     def test_queue_gap_recovery_pending_keeps_the_pre_gap_prefix_reliable(self):
         rows = self.records(); rows.extend(self.records())
         self.source(records=rows, failure=None, failureEpoch=1, recoveryPending=True, complete=False, tailUnknown=True,

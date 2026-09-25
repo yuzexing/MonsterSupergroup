@@ -95,6 +95,25 @@ class EvidenceTests(unittest.TestCase):
         self.assertEqual("InvalidBlob", result["coverage"]["issues"][0]["reason"])
         self.assertNotIn("<script>evil()", evidence.viewer(result))
 
+    def test_business_view_filters_before_limit_and_keeps_coverage_brief(self):
+        self.source("host", [
+            {"stage": "replay.input", "engine": "gateway-1"},
+            {"stage": "movement.receive", "source": 2, "target": 4, "after": {"position": {"x": 1, "y": 2}}},
+            {"stage": "owner.attack_started", "source": 2, "eventId": "42", "outcome": "Created", "input": {"weaponId": 7}},
+            {"stage": "owner.damage_calculation", "source": 2, "target": 4, "eventId": "43", "after": {"requestedDamage": 19}}])
+        evidence.import_roots(self.db, [self.root / "host"])
+        attack = evidence.query(self.db, argparse.Namespace(category="attack", capture="capture", run="run", round=1, limit=1))
+        self.assertEqual(["owner.attack_started"], [r["stage"] for r in attack["records"]])
+        self.assertFalse(attack["truncated"])
+        attack["coverage"]["intervals"][0]["gaps"] = [{"reason": "QueueOverload", "first": i} for i in range(2000)]
+        page = evidence.viewer(attack)
+        self.assertIn("战斗证据 · 攻击", page)
+        self.assertIn("开始攻击；武器 7", page)
+        self.assertIn("缺口 2000 处", page)
+        self.assertLess(len(page), 20000)
+        damage = evidence.query(self.db, argparse.Namespace(category="damage", capture="capture", run="run", round=1, limit=1))
+        self.assertEqual(["owner.damage_calculation"], [r["stage"] for r in damage["records"]])
+
     def test_removed_runs_remain_visible_in_coverage(self):
         (self.root / "retention.jsonl").write_text(json.dumps({"runId": "old-run", "reason": "GlobalCapacityRetention"}) + "\n", encoding="utf-8")
         evidence.import_roots(self.db, [self.root])

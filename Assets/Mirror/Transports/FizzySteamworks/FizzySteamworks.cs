@@ -291,11 +291,13 @@ namespace Mirror.FizzySteam
         public override int GetBatchThreshold(int channelId = Mirror.Channels.Reliable) =>
             Math.Min(1200, GetMaxPacketSize(channelId));
 
-        public void ReadConnectionDiagnostics(System.Collections.Generic.List<SteamConnectionSample> samples)
+        public void ReadConnectionDiagnostics(System.Collections.Generic.List<SteamConnectionSample> samples,
+            System.Collections.Generic.List<SteamConnectionInvestigationSample> investigation = null)
         {
             samples.Clear();
-            if (client is NextClient nextClient) nextClient.ReadConnectionDiagnostics(samples);
-            if (server is NextServer nextServer) nextServer.ReadConnectionDiagnostics(samples);
+            investigation?.Clear();
+            if (client is NextClient nextClient) nextClient.ReadConnectionDiagnostics(samples, investigation);
+            if (server is NextServer nextServer) nextServer.ReadConnectionDiagnostics(samples, investigation);
         }
 
         private void InitRelayNetworkAccess()

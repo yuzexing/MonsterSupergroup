@@ -10,7 +10,7 @@ import unittest
 
 
 SCRIPT = Path(__file__).parent / "Scenarios/Start-SteamDiagnostics.ps1"
-POWERSHELL = shutil.which("powershell") or shutil.which("pwsh")
+POWERSHELL = os.environ.get("PWSH_EXE") or shutil.which("powershell") or shutil.which("pwsh")
 
 
 @unittest.skipUnless(POWERSHELL, "PowerShell is required")
@@ -26,13 +26,17 @@ class LauncherTests(unittest.TestCase):
         (self.package / "UnityPlayer.dll").write_bytes(b"synthetic runtime")
         (self.package / "Player_Data/Managed/MonsterSupergroup.dll").write_bytes(b"synthetic code")
 
-    def run_launcher(self, output, mode=None, attach=False, prepare=True):
+    def run_launcher(self, output, mode=None, attach=False, prepare=True, observe=False, profile=None):
         values = dict(Executable=str(self.package / "Player.exe"), ArtifactDirectory=str(output),
                       Graphics="Default", PrepareOnly=prepare)
         if mode is not None:
             values["EvidenceMode"] = mode
+        if profile is not None:
+            values["EvidenceProfile"] = profile
         if attach:
             values["AttachProcessId"] = 321
+        if observe:
+            values["ObserveEvidenceQueue"] = True
         payload = base64.b64encode(json.dumps(values).encode("utf-8")).decode("ascii")
         script = str(SCRIPT.resolve()).replace("'", "''")
         # Stub every process-start path. The file on disk is intentionally not executable.
@@ -61,7 +65,7 @@ Write-Output ('STUB_LAUNCHES=' + $global:launcherTestLaunches)
 """
         encoded = base64.b64encode(code.encode("utf-16-le")).decode("ascii")
         # A Python child bypasses PowerShell's cross-version PSModulePath normalization.
-        environment = {key: value for key, value in os.environ.items() if key.lower() != "psmodulepath"}
+        environment = {key: value for key, value in os.environ.items() if key.lower() not in ("psmodulepath", "pythonpath", "pythonhome")}
         result = subprocess.run([POWERSHELL, "-NoProfile", "-NonInteractive", "-EncodedCommand", encoded],
                                 stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, errors="replace", timeout=30,
                                 env=environment)
@@ -173,6 +177,87 @@ Write-Output ('STUB_LAUNCHES=' + $global:launcherTestLaunches)
         self.assertEqual(0, result.returncode, result.stderr)
         self.assertTrue(capture["complete"])
         self.assertTrue(any("No diagnostic samples" in error for error in capture["errors"]))
+
+    def test_explicit_writer_observation_is_prepared_without_starting_a_game(self):
+        for mode in ("local", "replicated"):
+            with self.subTest(mode=mode):
+                output = self.root / ("writer trace " + mode)
+                result, capture = self.run_launcher(output, mode, observe=True)
+                self.assert_prepared(result, capture)
+                self.assertIn("--combat-evidence-observe-queue", capture["arguments"])
+                self.assertTrue(capture["requestedQueueObservation"])
+                self.assertFalse(capture["queueObservationArgumentsApplied"])
+                self.assertEqual(str(output / "CombatDiagnostics"), capture["requestedQueueObservationDirectory"])
+                self.assertNotIn("profiler", " ".join(capture["arguments"]))
+
+    def test_writer_observation_rejects_off_or_ambiguous_default_before_output(self):
+        for mode in ("off", "Default"):
+            with self.subTest(mode=mode):
+                output = self.root / ("reject writer " + mode)
+                result, capture = self.run_launcher(output, mode, observe=True)
+                self.assertNotEqual(0, result.returncode)
+                self.assertIn("ObserveEvidenceQueue requires", result.stderr)
+                self.assertFalse(output.exists())
+                self.assertIsNone(capture)
+
+    def test_writer_observation_cannot_be_applied_to_an_attached_process(self):
+        output = self.root / "attached writer"
+        result, capture = self.run_launcher(output, attach=True, observe=True)
+        self.assertNotEqual(0, result.returncode)
+        self.assertIn("AttachProcessId cannot apply ObserveEvidenceQueue", result.stderr)
+        self.assertFalse(output.exists())
+        self.assertIsNone(capture)
+
+    def test_writer_arguments_applied_does_not_claim_an_observation_was_exported(self):
+        result, capture = self.run_launcher(self.root / "stub writer run", "local", prepare=False, observe=True)
+        self.assertEqual(0, result.returncode, result.stderr)
+        self.assertTrue(capture["queueObservationArgumentsApplied"])
+        self.assertTrue(capture["complete"])
+        self.assertTrue(any("writer" in note.lower() and "unknown" in note.lower() for note in capture["notes"]))
+
+    def test_existing_writer_observation_output_is_preserved(self):
+        output = self.root / "previous trace"
+        output.mkdir()
+        (output / "writer-observation.json").write_text("preserve original")
+        result, capture = self.run_launcher(output, "local", observe=True)
+        self.assertNotEqual(0, result.returncode)
+        self.assertIn("new artifact directory", result.stderr)
+        self.assertEqual("preserve original", (output / "writer-observation.json").read_text())
+
+    def test_diagnostic_profile_requests_exact_configuration_without_claiming_application(self):
+        result, capture = self.run_launcher(self.root / "diagnostic", "local", profile="Diagnostic")
+        self.assert_prepared(result, capture)
+        self.assertIn("--combat-evidence-profile=diagnostic", capture["arguments"])
+        self.assertEqual(dict(profile="diagnostic", queueBytes=512 << 20, reservedBytes=4 << 20,
+                              memoryBudgetBytes=768 << 20, windowMilliseconds=1000, drainPolicy="WaitForCompletion"),
+                         capture["requestedEvidenceConfiguration"])
+        self.assertFalse(capture["evidenceProfileArgumentsApplied"])
+        self.assertFalse(capture["evidenceConfigurationVerified"])
+        self.assertIsNone(capture["appliedEvidenceConfiguration"])
+
+    def test_standard_is_default_for_explicit_evidence_modes(self):
+        result, capture = self.run_launcher(self.root / "standard", "local")
+        self.assert_prepared(result, capture)
+        self.assertIn("--combat-evidence-profile=standard", capture["arguments"])
+        self.assertEqual(32 << 20, capture["requestedEvidenceConfiguration"]["queueBytes"])
+        self.assertEqual("Bounded30Seconds", capture["requestedEvidenceConfiguration"]["drainPolicy"])
+
+    def test_diagnostic_rejects_disabled_ambiguous_or_attached_capture(self):
+        for mode, attach in (("off", False), ("Default", False), (None, True)):
+            with self.subTest(mode=mode, attach=attach):
+                output = self.root / (str(mode) + str(attach))
+                result, capture = self.run_launcher(output, mode, attach=attach, profile="Diagnostic")
+                self.assertNotEqual(0, result.returncode)
+                self.assertIsNone(capture)
+                self.assertFalse(output.exists())
+
+    def test_applied_arguments_without_startup_record_remain_unverified(self):
+        result, capture = self.run_launcher(self.root / "no actual configuration", "local", prepare=False, profile="Diagnostic")
+        self.assertEqual(0, result.returncode, result.stderr)
+        self.assertTrue(capture["evidenceProfileArgumentsApplied"])
+        self.assertFalse(capture["evidenceConfigurationVerified"])
+        self.assertIsNone(capture["appliedEvidenceConfiguration"])
+        self.assertTrue(capture["evidenceConfigurationError"])
 
 
 if __name__ == "__main__":

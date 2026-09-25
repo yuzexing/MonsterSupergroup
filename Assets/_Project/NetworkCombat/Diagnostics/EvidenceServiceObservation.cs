@@ -111,7 +111,7 @@ namespace MonsterSupergroup.NetworkCombat.Diagnostics
             (long)Marshal.SizeOf<ServiceStackEntry>() * ServiceStackDepth +
             (long)Marshal.SizeOf<ServiceBackground>() * 3 +
             (long)Marshal.SizeOf<ServiceBackgroundStage>() * 3 * ServiceStageCount +
-            (long)ServiceDetailCapacity * (2 * BoundedStringBytes(ServiceIdentityLength) + BoundedStringBytes(ServiceRecordStageLength)) + 1536;
+            (long)ServiceDetailCapacity * (2 * BoundedStringBytes(ServiceIdentityLength) + BoundedStringBytes(ServiceRecordStageLength)) + 1536 + PartialStorageBytes;
         private static int BoundedStringBytes(int characters) => (24 + (characters + 1) * 2 + 7) & ~7;
 
         private void InitializeServiceObservation()
@@ -147,6 +147,7 @@ namespace MonsterSupergroup.NetworkCombat.Diagnostics
         {
             if (!Active) return;
             StartServiceContext(-1, startTicks);
+            BeginPartialContext(-1, startTicks, serviceOrdinal, pendingServiceQueuedAt, pendingServiceBytes);
             ref var record = ref serviceRecords[0];
             record.id = serviceOrdinal; record.queuedAt = pendingServiceQueuedAt; record.bytes = pendingServiceBytes;
             record.kind = (int)EvidenceServiceWorkKind.Schedule;
@@ -190,6 +191,7 @@ namespace MonsterSupergroup.NetworkCombat.Diagnostics
             if (identity.kind != EvidenceServiceWorkKind.Schedule &&
                 (record.source < 0 || identity.firstSequence == 0 || identity.lastSequence < identity.firstSequence || identity.logicalCount <= 0)) unknown = true;
             if (unknown) { record.flags |= IdentityUnknown; serviceOverflowEvents++; }
+            BindPartialIdentity(identity);
         }
 
         public void BeginStage(EvidenceServiceStage stage, long ticks)
@@ -198,24 +200,33 @@ namespace MonsterSupergroup.NetworkCombat.Diagnostics
             ref var record = ref serviceRecords[0];
             int index = (int)stage;
             if (index < 0 || index >= ServiceStageCount || serviceStackCount == ServiceStackDepth || suppressedServiceDepth != 0)
-            { suppressedServiceDepth++; record.flags |= StagesUnknown; serviceOverflowEvents++; return; }
+            { suppressedServiceDepth++; record.flags |= StagesUnknown; serviceOverflowEvents++; Volatile.Write(ref partialCurrentStage, -1); return; }
             record.seenStages |= 1UL << index;
             serviceStack[serviceStackCount++] = new ServiceStackEntry { stage = index, start = ticks };
+            Volatile.Write(ref partialCurrentStage, index);
         }
 
         public void EndStage(EvidenceServiceStage stage, long ticks)
         {
             if (!HasServiceContext) return;
-            if (suppressedServiceDepth != 0) { suppressedServiceDepth--; return; }
+            if (suppressedServiceDepth != 0)
+            {
+                suppressedServiceDepth--;
+                Volatile.Write(ref partialCurrentStage, suppressedServiceDepth != 0 || serviceStackCount == 0 ? -1 : serviceStack[serviceStackCount - 1].stage);
+                return;
+            }
             ref var record = ref serviceRecords[0];
             if (serviceStackCount == 0 || serviceStack[serviceStackCount - 1].stage != (int)stage)
-            { record.flags |= StagesUnknown; serviceLifecycleErrors++; serviceStackCount = 0; return; }
+            { record.flags |= StagesUnknown; serviceLifecycleErrors++; serviceStackCount = 0; Volatile.Write(ref partialCurrentStage, -1); return; }
             var frame = serviceStack[--serviceStackCount];
+            Volatile.Write(ref partialCurrentStage, serviceStackCount == 0 ? -1 : serviceStack[serviceStackCount - 1].stage);
             long duration = ticks - frame.start;
             if (duration < 0 || frame.childTicks > duration)
             { record.flags |= StagesUnknown; serviceLifecycleErrors++; return; }
             ref var value = ref serviceStages[frame.stage];
             value.inclusive += duration; value.exclusive += duration - frame.childTicks;
+            Interlocked.Add(ref partialServiceInclusive[frame.stage], duration);
+            Interlocked.Add(ref partialServiceExclusive[frame.stage], duration - frame.childTicks);
             if (duration > value.maxEnd - value.maxStart || value.maxStart == 0)
             { value.maxStart = frame.start; value.maxEnd = ticks; }
             if (serviceStackCount != 0) serviceStack[serviceStackCount - 1].childTicks += duration;
@@ -350,6 +361,7 @@ namespace MonsterSupergroup.NetworkCombat.Diagnostics
             Volatile.Write(ref publishedWorkState, -record.id);
             LinkFirstServiceRejection();
             serviceRecords[0] = default;
+            EndPartialContext(endTicks);
             ClearServiceContext();
         }
 
@@ -401,6 +413,7 @@ namespace MonsterSupergroup.NetworkCombat.Diagnostics
             if (!Active) return;
             if (serviceContextActive || (int)context < 0 || (int)context >= 3) { serviceLifecycleErrors++; return; }
             StartServiceContext((int)context, startTicks);
+            BeginPartialContext((int)context, startTicks, 0, 0, 0);
         }
         public void EndBackground(long endTicks)
         {
@@ -416,7 +429,7 @@ namespace MonsterSupergroup.NetworkCombat.Diagnostics
                 ref var target = ref serviceBackgroundStages[serviceContext * ServiceStageCount + i];
                 target.inclusive += serviceStages[i].inclusive; target.exclusive += serviceStages[i].exclusive;
             }
-            serviceRecords[0] = default; ClearServiceContext();
+            serviceRecords[0] = default; EndPartialContext(endTicks); ClearServiceContext();
         }
 
         private object ExportServiceSource(int index)

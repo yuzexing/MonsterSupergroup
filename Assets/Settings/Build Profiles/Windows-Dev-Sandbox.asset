@@ -40,7 +40,7 @@ MonoBehaviour:
   m_Scenes:
   - m_enabled: 1
     m_path: Assets/_Project/Scenes/Development/NetworkCombatSandbox.unity
-  m_HasScriptingDefines: 0
+  m_HasScriptingDefines: 1
   m_ScriptingDefines:
   - MONSTER_BUILD_DEV
   - MONSTER_BUILD_TOOLS

@@ -26,6 +26,7 @@ namespace MonsterSupergroup.NetworkCombat
         private readonly List<ProfilerRecorderSample> gcSamples = new(1);
         private readonly FrameTiming[] timing = new FrameTiming[1];
         private readonly List<SteamConnectionSample> connections = new(4);
+        private List<SteamConnectionInvestigationSample> investigationConnections;
         private readonly NetworkDiagnosticsWindow window = new();
         private readonly List<LongFrame> longFrames = new(8);
         private System.Diagnostics.Process process;
@@ -125,6 +126,18 @@ namespace MonsterSupergroup.NetworkCombat
         private void Emit(double now)
         {
             if (window.Count == 0) return;
+            bool investigation = Diagnostics.CombatInvestigationEvidence.Enabled;
+            long clockReadStarted = 0, clockReadEnded = 0;
+            double clockRealtime = 0, clockUnscaled = 0, clockNetwork = 0;
+            if (investigation)
+            {
+                clockReadStarted = System.Diagnostics.Stopwatch.GetTimestamp();
+                clockRealtime = Time.realtimeSinceStartupAsDouble;
+                clockUnscaled = Time.unscaledTimeAsDouble;
+                clockNetwork = NetworkTime.time;
+                clockReadEnded = System.Diagnostics.Stopwatch.GetTimestamp();
+                (investigationConnections ??= new List<SteamConnectionInvestigationSample>(4)).Clear();
+            }
             window.Sort();
             var world = NetworkCombatWorld.Instance;
             var metrics = world?.Gateway?.Metrics;
@@ -134,51 +147,100 @@ namespace MonsterSupergroup.NetworkCombat
             var progress = world != null ? world.GetComponent<NetworkWaveProgress>() : null;
             var manager = NetworkManager.singleton as BootGameplayNetworkManager;
             connections.Clear();
-            if (Transport.active is FizzySteamworks steam) steam.ReadConnectionDiagnostics(connections);
+            if (Transport.active is FizzySteamworks steam) steam.ReadConnectionDiagnostics(connections, investigation ? investigationConnections : null);
             uint timingCount = FrameTimingManager.GetLatestTimings(1, timing);
             long working = -1, privateBytes = -1;
             ReadProcessMemory(out working, out privateBytes);
-            var row = new Row {
-                captureId = captureId, processId = processId, utc = DateTime.UtcNow.ToString("o"), time = now,
-                windowSeconds = now - windowStart, networkTime = NetworkTime.time, rttMs = NetworkTime.rtt * 1000,
-                round = NetworkCombatWorld.CurrentRound,
-                role = NetworkServer.active ? "host" : NetworkClient.active ? "client" : "offline",
-                transport = Transport.active != null ? Transport.active.GetType().Name : "none",
-                run = progress != null ? progress.Snapshot.RunId : "", alive = progress != null ? progress.Snapshot.Alive : 0,
-                phase = progress != null ? progress.Snapshot.Phase.ToString() : "none",
-                playerCount = NetworkServer.active ? manager?.Session?.Participants.Count ?? 0 : manager?.RoomSnapshot.Members?.Length ?? 0,
-                localHealth = binding != null ? binding.CurrentHealth : -1, localAlive = binding != null && binding.IsAlive,
-                frameCount = window.Count, frameOverflow = window.Overflow, frameMeanMs = window.Mean, frameMaxMs = window.Maximum,
-                frameP95Ms = window.Percentile(.95), frameP99Ms = window.Percentile(.99), frameHistogram = window.Histogram,
-                longFrames = longFrames.ToArray(), longFrameCount = window.LongFrames, omittedLongFrames = window.LongFrames - window.LongDetails,
-                mainMaxMs = main.Valid ? maximumMainMs : -1,
-                gpuMs = timingCount > 0 && timing[0].gpuFrameTime > 0 ? timing[0].gpuFrameTime : -1,
-                renderMs = timingCount > 0 ? timing[0].cpuRenderThreadFrameTime : -1,
-                mainWorkMs = timingCount > 0 ? timing[0].cpuMainThreadFrameTime : -1,
-                presentWaitMs = timingCount > 0 ? timing[0].cpuMainThreadPresentWaitTime : -1,
-                timingTimestamp = timingCount > 0 ? timing[0].frameStartTimestamp : 0,
-                allocatedBytes = allocations.Valid ? allocatedBytes : -1, gcMs = gc.Valid ? gcMilliseconds : -1,
-                managedBytes = GC.GetTotalMemory(false), unityAllocatedBytes = Profiler.GetTotalAllocatedMemoryLong(),
-                workingSetBytes = working, privateBytes = privateBytes,
-                gen0 = GC.CollectionCount(0), gen1 = GC.CollectionCount(1), gen2 = GC.CollectionCount(2),
-                warnings = Volatile.Read(ref warnings), errors = Volatile.Read(ref errors), deadWarnings = Volatile.Read(ref deadWarnings),
-                focused = Application.isFocused, fullScreenMode = Screen.fullScreenMode.ToString(), width = Screen.width, height = Screen.height,
-                focusChanges = focusChanges, pauseChanges = pauseChanges, displayChanges = displayChanges,
-                overlayState = overlayState, overlayChanges = overlayChanges,
-                areas = CombatPerformanceCounters.ReadAndReset(),
-                enemyMotion = NetworkEnemySimulationWorld.Instance?.CaptureMotionDiagnostics(),
-                sentBytes = SteamTransportDiagnostics.SentBytes, receivedBytes = SteamTransportDiagnostics.ReceivedBytes,
-                sentMessages = SteamTransportDiagnostics.SentMessages, receivedMessages = SteamTransportDiagnostics.ReceivedMessages,
-                maxSentMessage = SteamTransportDiagnostics.MaximumSentMessage, sendFailures = SteamTransportDiagnostics.SendFailures,
-                connections = connections.ToArray(), snapshots = SnapshotCount, snapshotBytes = SnapshotBytes,
-                reliableSnapshotPackets = ReliableSnapshotPackets,
-                acceptedDamage = metrics?.AcceptedCombatResults ?? 0, receivedDamage = metrics?.ReceivedCombatResults ?? 0,
-                deathReports = metrics?.ReceivedEnemyDeathReports ?? 0, deathReceipts = metrics?.ConfirmedEnemyDeathReports ?? 0,
-                confirmedKills = metrics?.ConfirmedKills ?? 0, pendingDeaths = collector?.PendingEnemyDeathCount ?? 0,
-                oldestPendingDeathSeconds = collector?.OldestPendingDeathAge(Time.unscaledTimeAsDouble) ?? 0,
-                lastDeathConfirmationSeconds = collector?.LastDeathConfirmationSeconds ?? 0,
-                maximumDeathConfirmationSeconds = collector?.MaximumDeathConfirmationSeconds ?? 0,
-                logFailures = LimboObservationLog.FailureCount, logQueuedBytes = LimboObservationLog.PendingBytes };
+            var evidenceStore = MonsterSupergroup.NetworkCombat.Diagnostics.CombatEvidenceRuntime.Instance?.Store;
+            // Use separate concrete rows so Standard/off retains its original JSON fields.
+            Row row = investigation ? new InvestigationRow {
+                clockDomain = "Stopwatch/UnityRealtime/UnityUnscaled/MirrorNetworkTime",
+                clockReadStartedTicks = clockReadStarted, clockReadEndedTicks = clockReadEnded,
+                stopwatchFrequency = System.Diagnostics.Stopwatch.Frequency,
+                clockRealtimeSeconds = clockRealtime, clockUnscaledSeconds = clockUnscaled, clockNetworkSeconds = clockNetwork,
+                pendingDeathAgeClock = "Unity.UnscaledTime", pendingDeathAgeClockVersion = 1,
+                connections = investigationConnections.ToArray()
+            } : new StandardRow { connections = connections.ToArray() };
+            row.captureId = captureId;
+            row.processId = processId;
+            row.utc = DateTime.UtcNow.ToString("o");
+            row.time = now;
+            row.windowSeconds = now - windowStart;
+            row.networkTime = NetworkTime.time;
+            row.rttMs = NetworkTime.rtt * 1000;
+            row.round = NetworkCombatWorld.CurrentRound;
+            row.role = NetworkServer.active ? "host" : NetworkClient.active ? "client" : "offline";
+            row.transport = Transport.active != null ? Transport.active.GetType().Name : "none";
+            row.run = progress != null ? progress.Snapshot.RunId : "";
+            row.alive = progress != null ? progress.Snapshot.Alive : 0;
+            row.phase = progress != null ? progress.Snapshot.Phase.ToString() : "none";
+            row.playerCount = NetworkServer.active ? manager?.Session?.Participants.Count ?? 0 : manager?.RoomSnapshot.Members?.Length ?? 0;
+            row.localHealth = binding != null ? binding.CurrentHealth : -1;
+            row.localAlive = binding != null && binding.IsAlive;
+            row.frameCount = window.Count;
+            row.frameOverflow = window.Overflow;
+            row.frameMeanMs = window.Mean;
+            row.frameMaxMs = window.Maximum;
+            row.frameP95Ms = window.Percentile(.95);
+            row.frameP99Ms = window.Percentile(.99);
+            row.frameHistogram = window.Histogram;
+            row.longFrames = longFrames.ToArray();
+            row.longFrameCount = window.LongFrames;
+            row.omittedLongFrames = window.LongFrames - window.LongDetails;
+            row.mainMaxMs = main.Valid ? maximumMainMs : -1;
+            row.gpuMs = timingCount > 0 && timing[0].gpuFrameTime > 0 ? timing[0].gpuFrameTime : -1;
+            row.renderMs = timingCount > 0 ? timing[0].cpuRenderThreadFrameTime : -1;
+            row.mainWorkMs = timingCount > 0 ? timing[0].cpuMainThreadFrameTime : -1;
+            row.presentWaitMs = timingCount > 0 ? timing[0].cpuMainThreadPresentWaitTime : -1;
+            row.timingTimestamp = timingCount > 0 ? timing[0].frameStartTimestamp : 0;
+            row.allocatedBytes = allocations.Valid ? allocatedBytes : -1;
+            row.gcMs = gc.Valid ? gcMilliseconds : -1;
+            row.managedBytes = GC.GetTotalMemory(false);
+            row.unityAllocatedBytes = Profiler.GetTotalAllocatedMemoryLong();
+            row.workingSetBytes = working;
+            row.privateBytes = privateBytes;
+            row.systemAvailableMemoryBytes = ReadSystemAvailableMemory();
+            row.evidenceQueuedBytes = evidenceStore?.ReadShutdownProgress().pendingBytes ?? -1;
+            row.evidencePeakQueuedBytes = evidenceStore?.PeakPendingBytes ?? -1;
+            row.evidenceBudgetBytes = evidenceStore?.Memory.Used ?? -1;
+            row.evidencePeakBudgetBytes = evidenceStore?.Memory.Peak ?? -1;
+            row.gen0 = GC.CollectionCount(0);
+            row.gen1 = GC.CollectionCount(1);
+            row.gen2 = GC.CollectionCount(2);
+            row.warnings = Volatile.Read(ref warnings);
+            row.errors = Volatile.Read(ref errors);
+            row.deadWarnings = Volatile.Read(ref deadWarnings);
+            row.focused = Application.isFocused;
+            row.fullScreenMode = Screen.fullScreenMode.ToString();
+            row.width = Screen.width;
+            row.height = Screen.height;
+            row.focusChanges = focusChanges;
+            row.pauseChanges = pauseChanges;
+            row.displayChanges = displayChanges;
+            row.overlayState = overlayState;
+            row.overlayChanges = overlayChanges;
+            row.areas = CombatPerformanceCounters.ReadAndReset();
+            row.enemyMotion = NetworkEnemySimulationWorld.Instance?.CaptureMotionDiagnostics();
+            row.sentBytes = SteamTransportDiagnostics.SentBytes;
+            row.receivedBytes = SteamTransportDiagnostics.ReceivedBytes;
+            row.sentMessages = SteamTransportDiagnostics.SentMessages;
+            row.receivedMessages = SteamTransportDiagnostics.ReceivedMessages;
+            row.maxSentMessage = SteamTransportDiagnostics.MaximumSentMessage;
+            row.sendFailures = SteamTransportDiagnostics.SendFailures;
+            row.snapshots = SnapshotCount;
+            row.snapshotBytes = SnapshotBytes;
+            row.reliableSnapshotPackets = ReliableSnapshotPackets;
+            row.acceptedDamage = metrics?.AcceptedCombatResults ?? 0;
+            row.receivedDamage = metrics?.ReceivedCombatResults ?? 0;
+            row.deathReports = metrics?.ReceivedEnemyDeathReports ?? 0;
+            row.deathReceipts = metrics?.ConfirmedEnemyDeathReports ?? 0;
+            row.confirmedKills = metrics?.ConfirmedKills ?? 0;
+            row.pendingDeaths = collector?.PendingEnemyDeathCount ?? 0;
+            row.oldestPendingDeathSeconds = collector?.OldestPendingDeathAge(Time.unscaledTimeAsDouble) ?? 0;
+            row.lastDeathConfirmationSeconds = collector?.LastDeathConfirmationSeconds ?? 0;
+            row.maximumDeathConfirmationSeconds = collector?.MaximumDeathConfirmationSeconds ?? 0;
+            row.logFailures = LimboObservationLog.FailureCount;
+            row.logQueuedBytes = LimboObservationLog.PendingBytes;
             row.rejections = new long[(int)CombatRejectionReason.RunLoading + 1];
             for (int i = 0; i < row.rejections.Length; i++) row.rejections[i] = metrics?.GetRejected((CombatRejectionReason)i) ?? 0;
             string serializedRow = JsonUtility.ToJson(row); // Detach mutable window arrays before resetting.
@@ -209,7 +271,24 @@ namespace MonsterSupergroup.NetworkCombat
             if (working <= 0) working = -1;
             if (privateBytes <= 0) privateBytes = -1;
         }
+        private static long ReadSystemAvailableMemory()
+        {
 #if UNITY_STANDALONE_WIN || UNITY_EDITOR_WIN
+            var status = new SystemMemory { size = (uint)Marshal.SizeOf<SystemMemory>() };
+            if (GlobalMemoryStatusEx(ref status) && status.availablePhysical <= long.MaxValue)
+                return (long)status.availablePhysical;
+#endif
+            return -1;
+        }
+#if UNITY_STANDALONE_WIN || UNITY_EDITOR_WIN
+        [StructLayout(LayoutKind.Sequential)]
+        private struct SystemMemory
+        {
+            public uint size, load;
+            public ulong totalPhysical, availablePhysical, totalPageFile, availablePageFile, totalVirtual, availableVirtual, availableExtendedVirtual;
+        }
+        [DllImport("kernel32.dll")][return: MarshalAs(UnmanagedType.Bool)]
+        private static extern bool GlobalMemoryStatusEx(ref SystemMemory status);
         [StructLayout(LayoutKind.Sequential)]
         private struct ProcessMemory
         {
@@ -243,7 +322,19 @@ namespace MonsterSupergroup.NetworkCombat
         {
             public int frame; public string utc; public double time, networkTime, frameMs, mainMs; public long allocatedBytes;
         }
-        [Serializable] private sealed class Row
+        [Serializable] private sealed class StandardRow : Row
+        {
+            public SteamConnectionSample[] connections;
+        }
+        [Serializable] private sealed class InvestigationRow : Row
+        {
+            public SteamConnectionInvestigationSample[] connections;
+            public string clockDomain, pendingDeathAgeClock;
+            public int pendingDeathAgeClockVersion;
+            public long clockReadStartedTicks, clockReadEndedTicks, stopwatchFrequency;
+            public double clockRealtimeSeconds, clockUnscaledSeconds, clockNetworkSeconds;
+        }
+        [Serializable] private class Row
         {
             public string kind = "sample", captureId, utc, role, transport, run, phase, fullScreenMode;
             public uint round;
@@ -254,12 +345,12 @@ namespace MonsterSupergroup.NetworkCombat
             public ulong timingTimestamp;
             public double oldestPendingDeathSeconds, lastDeathConfirmationSeconds, maximumDeathConfirmationSeconds;
             public long managedBytes, unityAllocatedBytes, workingSetBytes, privateBytes, logQueuedBytes;
+            public long systemAvailableMemoryBytes, evidenceQueuedBytes, evidencePeakQueuedBytes, evidenceBudgetBytes, evidencePeakBudgetBytes;
             public long[] sentBytes, receivedBytes, sentMessages, receivedMessages, rejections;
             public int[] maxSentMessage, frameHistogram;
             public LongFrame[] longFrames;
             public CombatPerformanceCounters.Sample areas;
             public EnemyMotionDiagnosticSample enemyMotion;
-            public SteamConnectionSample[] connections;
             public long sendFailures, snapshots, snapshotBytes, reliableSnapshotPackets, acceptedDamage, receivedDamage, deathReports, deathReceipts, confirmedKills;
         }
     }

@@ -230,18 +230,23 @@ namespace MonsterSupergroup.NetworkCombat.Tests
             finally { observer.ReleaseAfterStop(true, true); if (File.Exists(path)) File.Delete(path); }
         }
 
-        [Test] public void ExportFailureReleasesExactlyOnceWithoutOverwritingExistingEvidence()
+        [Test] public void ExportFailurePreservesObservationForRetryWithoutOverwritingExistingEvidence()
         {
             var memory = new DiagnosticMemoryBudget(EvidenceQueueObservation.ReservedBytes);
             EvidenceQueueObservation.TryCreate(memory, true, out var observer, Origin);
             string path = Path.GetTempFileName(); File.WriteAllText(path, "original");
+            string retry = path + ".retry.json";
             try
             {
                 Assert.Throws<IOException>(() => observer.StopAndExport(path, true, true));
-                Assert.That(File.ReadAllText(path), Is.EqualTo("original")); Assert.That(memory.Used, Is.Zero);
+                Assert.That(File.ReadAllText(path), Is.EqualTo("original"));
+                Assert.That(memory.Used, Is.EqualTo(EvidenceQueueObservation.ReservedBytes));
+                Assert.That(observer.StopAndExport(retry, true, true), Is.True);
+                Assert.That(JObject.Parse(File.ReadAllText(retry))["producerTotals"], Is.Not.Null);
+                Assert.That(memory.Used, Is.Zero);
                 Assert.That(observer.ReleaseAfterStop(true, true), Is.False);
             }
-            finally { observer.ReleaseAfterStop(true, true); File.Delete(path); }
+            finally { observer.ReleaseAfterStop(true, true); File.Delete(path); if (File.Exists(retry)) File.Delete(retry); }
         }
 
         [Test] public void PhasesUseCommonOriginAndCannotOverwriteTheFirstBoundary()
@@ -265,6 +270,161 @@ namespace MonsterSupergroup.NetworkCombat.Tests
             Assert.That((bool)result["countsBalanced"], Is.False);
             Assert.That((bool)result["observationComplete"], Is.False);
             Assert.That((long)result["unfinishedWorkItems"], Is.EqualTo(1));
+        }
+
+        [Test] public void PlayerQueueObservationRequiresExactOptInAndKeepsProductionLimitsAndCpuProbe()
+        {
+            var method = RuntimeObservationMethod("CreateStoreOptions");
+            var defer = typeof(EvidenceStoreOptions).GetField("DeferObservationWindows");
+            Assert.That(defer, Is.Not.Null);
+            var cpuBefore = EvidenceServiceCpuCounter.Snapshot;
+            foreach (var args in new[] { Array.Empty<string>(), new[] { "--combat-evidence-observe-queue=false" }, new[] { "--combat-evidence-observe-queue" } })
+            {
+                var options = (EvidenceStoreOptions)method.Invoke(null, new object[] { args });
+                bool requested = args.Contains("--combat-evidence-observe-queue");
+                Assert.That(options.ObserveQueue, Is.EqualTo(requested));
+                Assert.That((bool)defer.GetValue(options), Is.EqualTo(requested));
+                Assert.That(options.QueueBytes, Is.EqualTo(32 << 20));
+                Assert.That(options.ReservedBytes, Is.EqualTo(4 << 20));
+                Assert.That(options.Memory.Limit, Is.EqualTo(128 << 20));
+            }
+            Assert.That(EvidenceServiceCpuCounter.Snapshot, Is.SameAs(cpuBefore), "Player opt-in must not run a busy/sleep CPU probe.");
+        }
+
+        [Test] public void DeferredPlayerWindowsKeepPreLoadTotalsAndFirstRejectionWithoutUsingTheWindowCapacity()
+        {
+            var observer = CreateDeferred(); long load = Origin + Stopwatch.Frequency * 200;
+            observer.Attempt(EvidenceQueueEntry.TryWrite, Origin);
+            observer.Rejected(EvidenceQueueEntry.TryWrite, EvidenceQueueGuard.QueueLimit,
+                new EvidenceQueueRejection { captureId = "player-capture", runId = "boot", sequence = 17, flushed = 11 }, Origin);
+            observer.Dequeued(Origin); observer.Completed(0, Origin + 1);
+            observer.MarkPhase(EvidenceQueuePhase.Load, load);
+            observer.Attempt(EvidenceQueueEntry.TryWrite, load); observer.Accepted(EvidenceQueueEntry.TryWrite, load);
+            observer.MarkPhase(EvidenceQueuePhase.Load, load + Stopwatch.Frequency);
+            observer.Dequeued(load); observer.Completed(0, load + 1);
+            var result = Export(observer);
+            Assert.That((long)result["originTicks"], Is.EqualTo(Origin));
+            Assert.That((long)result["windowOriginTicks"], Is.EqualTo(load));
+            Assert.That((bool)result["deferredWindows"], Is.True);
+            Assert.That((long)result["producerBeforeWindowEvents"], Is.EqualTo(2));
+            Assert.That((long)result["consumerBeforeWindowEvents"], Is.EqualTo(2));
+            Assert.That((long)result["producerOverflowEvents"], Is.Zero);
+            Assert.That((long)result["consumerOverflowEvents"], Is.Zero);
+            Assert.That(result["producerWindows"].Count(), Is.EqualTo(1));
+            Assert.That((int)result["producerWindows"][0]["index"], Is.Zero);
+            Assert.That((long)result["logicalRecords"]["attempts"], Is.EqualTo(2));
+            Assert.That((long)result["consumerTotals"]["workCompleted"], Is.EqualTo(2));
+            Assert.That((string)result["firstRejection"]["context"]["captureId"], Is.EqualTo("player-capture"));
+            Assert.That((long)result["firstRejection"]["context"]["sequence"], Is.EqualTo(17));
+            Assert.That((long)result["mainFrames"]["frameCount"], Is.Zero);
+        }
+
+        [Test] public void DeferredPlayerWindowsWithoutLoadRemainExplicitlyUnmeasured()
+        {
+            var observer = CreateDeferred();
+            observer.Attempt(EvidenceQueueEntry.TryWrite, Origin); observer.Accepted(EvidenceQueueEntry.TryWrite, Origin);
+            var result = Export(observer);
+            Assert.That(result["windowOriginTicks"].Type, Is.EqualTo(JTokenType.Null));
+            Assert.That((bool)result["windowCoverageStarted"], Is.False);
+            Assert.That((bool)result["observationComplete"], Is.False);
+            Assert.That(result["producerWindows"].Count(), Is.Zero);
+            Assert.That((long)result["logicalRecords"]["accepted"], Is.EqualTo(1));
+            Assert.That((long)result["deferredWindowMetadataBytes"], Is.EqualTo(EvidenceQueueObservation.DeferredWindowMetadataBytes));
+            Assert.That((long)result["accountedStorageBytes"], Is.LessThanOrEqualTo(EvidenceQueueObservation.ReservedBytes));
+            Assert.That((int)result["reservedBytes"], Is.EqualTo(512 << 10));
+        }
+
+        [Test] public void DeferredPlayerWindowOverflowDoesNotResetForLaterRounds()
+        {
+            var observer = CreateDeferred(); long load = Origin + Stopwatch.Frequency * 200;
+            observer.MarkPhase(EvidenceQueuePhase.Load, load);
+            observer.Attempt(EvidenceQueueEntry.TryWrite, load);
+            long beyond = load + (Stopwatch.Frequency / 10) * EvidenceQueueObservation.WindowCount;
+            observer.MarkPhase(EvidenceQueuePhase.Load, beyond);
+            observer.Attempt(EvidenceQueueEntry.TryWrite, beyond);
+            var result = Export(observer);
+            Assert.That((long)result["windowOriginTicks"], Is.EqualTo(load));
+            Assert.That(result["producerWindows"].Count(), Is.EqualTo(1));
+            Assert.That((long)result["producerOverflowEvents"], Is.EqualTo(1));
+            Assert.That((bool)result["observationComplete"], Is.False);
+        }
+
+        [Test] public void PlayerWriterExportUsesJoinedStoreAndDoesNotOverwriteItsStatusOrObservation()
+        {
+            var method = RuntimeObservationMethod("ExportWriterObservation");
+            string root = Path.Combine(Path.GetTempPath(), "player-writer-" + Guid.NewGuid().ToString("N")); Directory.CreateDirectory(root);
+            var store = new CombatEvidenceStore(root, new EvidenceStoreOptions { ObserveQueue = true });
+            try
+            {
+                store.Dispose(); Assert.That(store.WaitForClose(5000), Is.True);
+                Assert.That(method.Invoke(null, new object[] { store, "joined", true }), Is.EqualTo("Exported"));
+                string observation = Path.Combine(root, "writer-observation-joined.json"), status = Path.Combine(root, "writer-observation-status-joined.json");
+                byte[] original = File.ReadAllBytes(observation), originalStatus = File.ReadAllBytes(status);
+                Assert.That((bool)JObject.Parse(File.ReadAllText(status))["exported"], Is.True);
+                Assert.That(method.Invoke(null, new object[] { store, "joined", true }), Is.EqualTo("StatusAlreadyExists"));
+                Assert.That(File.ReadAllBytes(observation), Is.EqualTo(original));
+                Assert.That(File.ReadAllBytes(status), Is.EqualTo(originalStatus));
+                Assert.That(store.Memory.Used, Is.Zero);
+            }
+            finally { store.Dispose(); store.WaitForClose(5000); store.QueueObservation?.ReleaseAfterStop(true, true); Directory.Delete(root, true); }
+        }
+
+        [Test] public void PlayerWriterExportCannotTreatAnActiveWriterAsJoinedOrDelayItsRelease()
+        {
+            var method = RuntimeObservationMethod("ExportWriterObservation");
+            string root = Path.Combine(Path.GetTempPath(), "player-writer-" + Guid.NewGuid().ToString("N")); Directory.CreateDirectory(root);
+            using var entered = new ManualResetEventSlim(); using var release = new ManualResetEventSlim();
+            var store = new CombatEvidenceStore(root, new EvidenceStoreOptions { ObserveQueue = true });
+            try
+            {
+                Assert.That(store.Schedule(1, () => { entered.Set(); release.Wait(); }), Is.True);
+                Assert.That(entered.Wait(5000), Is.True); store.Dispose();
+                Assert.That(method.Invoke(null, new object[] { store, "active", true }), Is.EqualTo("WriterNotJoined"));
+                Assert.That(File.Exists(Path.Combine(root, "writer-observation-active.json")), Is.False);
+                var status = JObject.Parse(File.ReadAllText(Path.Combine(root, "writer-observation-status-active.json")));
+                Assert.That((bool)status["writerJoined"], Is.False); Assert.That((bool)status["exported"], Is.False);
+                Assert.That(store.WaitForClose(0), Is.False, "Export must not wait for or alter the blocked worker.");
+            }
+            finally { release.Set(); store.Dispose(); store.WaitForClose(5000); store.QueueObservation?.ReleaseAfterStop(true, true); Directory.Delete(root, true); }
+        }
+
+        [Test] public void PlayerWriterDisabledUnavailableAndExportFailureRemainDistinct()
+        {
+            var method = RuntimeObservationMethod("ExportWriterObservation");
+            foreach (string scenario in new[] { "disabled", "unfunded", "existing-output" })
+            {
+                string root = Path.Combine(Path.GetTempPath(), "player-writer-" + Guid.NewGuid().ToString("N")); Directory.CreateDirectory(root);
+                var options = new EvidenceStoreOptions { ObserveQueue = scenario != "disabled" };
+                if (scenario == "unfunded") options.Memory = new DiagnosticMemoryBudget(24 << 20);
+                var store = new CombatEvidenceStore(root, options);
+                try
+                {
+                    store.Dispose(); Assert.That(store.WaitForClose(5000), Is.True);
+                    string output = Path.Combine(root, "writer-observation-test.json"), status = Path.Combine(root, "writer-observation-status-test.json");
+                    if (scenario == "existing-output") File.WriteAllText(output, "original");
+                    string expected = scenario == "disabled" ? "Disabled" : scenario == "unfunded" ? "Unavailable" : "ExportFailed";
+                    Assert.That(method.Invoke(null, new object[] { store, "test", true }), Is.EqualTo(expected));
+                    if (scenario == "disabled") Assert.That(File.Exists(status), Is.False);
+                    else Assert.That((bool)JObject.Parse(File.ReadAllText(status))["exported"], Is.False);
+                    if (scenario == "existing-output") Assert.That(File.ReadAllText(output), Is.EqualTo("original"));
+                }
+                finally { store.Dispose(); store.WaitForClose(5000); store.QueueObservation?.ReleaseAfterStop(true, true); Directory.Delete(root, true); }
+            }
+        }
+
+        private static MethodInfo RuntimeObservationMethod(string name)
+        {
+            var method = typeof(CombatEvidenceRuntime).GetMethod(name, BindingFlags.Static | BindingFlags.NonPublic);
+            Assert.That(method, Is.Not.Null, "Player writer observation bridge is not implemented: " + name);
+            return method;
+        }
+        private static EvidenceQueueObservation CreateDeferred()
+        {
+            var method = typeof(EvidenceQueueObservation).GetMethod("TryCreate");
+            Assert.That(method.GetParameters().Any(p => p.Name == "deferWindows"), Is.True, "Menu waiting currently consumes all 1024 queue windows.");
+            var args = new object[] { new DiagnosticMemoryBudget(), true, null, Origin, true, 100 };
+            Assert.That((bool)method.Invoke(null, args), Is.True);
+            return (EvidenceQueueObservation)args[2];
         }
 
         private const long Origin = 1000;

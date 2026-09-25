@@ -33,6 +33,7 @@ namespace MonsterSupergroup.NetworkCombat
         public bool Claimed => claimed;
         public PickupEffect Effect => effect == PickupEffect.None ? PickupEffect.Experience : effect;
         public uint ClaimVersion => claimVersion;
+        public uint CollectorId => collectorId;
         public float FlightElapsed => flightElapsed;
         public Transform Visual => visual;
         internal NetworkExperienceGem PoolPrefab { get; private set; }
@@ -121,7 +122,12 @@ namespace MonsterSupergroup.NetworkCombat
                 visual.position = Vector3.LerpUnclamped(back, player.transform.position, t) + Vector3.up * Mathf.Sin(t * Mathf.PI) * definition.JumpHeight;
             }
         }
-        public override void OnStopClient() => clientGems.Remove(this);
+        public override void OnStopClient()
+        {
+            if (PickupInvestigation.Enabled) PickupInvestigation.Capture("disappearance", "Observed", runId, dropId, claimVersion, netId, collectorId,
+                () => new { claimed, effect = Effect.ToString(), benefitConfirmed = false }, "OnStopClient");
+            clientGems.Remove(this);
+        }
         private void OnDestroy() => clientGems.Remove(this);
     }
 

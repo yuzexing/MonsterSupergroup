@@ -232,9 +232,9 @@ namespace Mirror.FizzySteam
             finally { ReturnMessage(data); }
         }
 
-        public void ReadConnectionDiagnostics(List<SteamConnectionSample> samples)
+        public void ReadConnectionDiagnostics(List<SteamConnectionSample> samples, List<SteamConnectionInvestigationSample> investigation = null)
         {
-            if (Connected && SteamTransportDiagnostics.TrySample(HostConnection, 0, out var sample)) samples.Add(sample);
+            if (Connected && SteamTransportDiagnostics.TrySample(HostConnection, 0, out var sample, investigation)) samples.Add(sample);
         }
 
         public void Send(ArraySegment<byte> data, int channelId)

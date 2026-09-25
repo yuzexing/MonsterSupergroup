@@ -116,6 +116,7 @@ namespace MonsterSupergroup.GAS
             public WeakReference root;
             public string prefix, domain, advanceMethod;
             public Func<object, object> capture;
+            public long revision;
         }
         private static readonly ConditionalWeakTable<object, Binding> bindings = new();
         [ThreadStatic] private static HashSet<object> operating;
@@ -123,11 +124,20 @@ namespace MonsterSupergroup.GAS
         public static string CurrentEngine => operationIds?.Count > 0 ? operationIds.Peek() : null;
         public static void Bind(object child, object root, string prefix, string domain, Func<object, object> capture)
         {
-            bindings.Remove(child);
-            bindings.Add(child, new Binding { root = new WeakReference(root), prefix = prefix, domain = domain, capture = capture, advanceMethod = prefix + "Advance" });
+            var binding = bindings.GetValue(child, _ => new Binding());
+            binding.revision++;
+            binding.root = new WeakReference(root); binding.prefix = prefix; binding.domain = domain;
+            binding.capture = capture; binding.advanceMethod = prefix + "Advance";
         }
-        public static bool HasParent(object target) => target != null && bindings.TryGetValue(target, out var binding) && binding.root.IsAlive;
-        public static void Unbind(object child) { if (child != null) bindings.Remove(child); }
+        public static bool HasParent(object target) => target != null && bindings.TryGetValue(target, out var binding) && binding.root?.IsAlive == true;
+        public static long BindingRevision(object target) => target != null && bindings.TryGetValue(target, out var binding) ? binding.revision : 0;
+        public static void Unbind(object child)
+        {
+            if (child == null || !bindings.TryGetValue(child, out var binding) || binding.root == null) return;
+            // Keep only the weak-key lifecycle marker: the independent state may have changed under its former parent.
+            binding.revision++; binding.root = null; binding.prefix = null; binding.domain = null;
+            binding.capture = null; binding.advanceMethod = null;
+        }
         public static DiagnosticOperation Begin(object target, string domain, string method, object[] arguments, Func<object, object> capture)
             => BeginCore(target, domain, method, arguments, capture, false, 0);
         public static DiagnosticOperation BeginAdvance(StatusController target, float delta)
@@ -141,7 +151,7 @@ namespace MonsterSupergroup.GAS
             string id = null;
             try
             {
-                if (bindings.TryGetValue(target, out var binding) && binding.root.Target is object owner)
+                if (bindings.TryGetValue(target, out var binding) && binding.root?.Target is object owner)
                 { root = owner; method = advance ? binding.advanceMethod : binding.prefix + method; domain = binding.domain; capture = binding.capture; }
                 operating ??= new HashSet<object>();
                 if (!operating.Add(root)) return default;

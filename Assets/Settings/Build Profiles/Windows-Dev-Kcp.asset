@@ -26,7 +26,7 @@ MonoBehaviour:
     m_path: Assets/_Project/Scenes/MainMenu.unity
   - m_enabled: 1
     m_path: Assets/_Project/Scenes/Gameplay.unity
-  m_HasScriptingDefines: 0
+  m_HasScriptingDefines: 1
   m_ScriptingDefines:
   - MONSTER_BUILD_DEV
   - MONSTER_BUILD_TOOLS

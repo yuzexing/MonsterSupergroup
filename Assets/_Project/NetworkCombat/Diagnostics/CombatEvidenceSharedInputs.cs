@@ -9,6 +9,13 @@ namespace MonsterSupergroup.NetworkCombat.Diagnostics
 {
     public sealed partial class CombatEvidenceStore
     {
+        // Movement snapshots fit within one bounded event block without a separate durable blob.
+        // Checkpoints and explicitly shared inputs retain their existing persistence paths.
+        private const int MovementInlinePayloadBytes = 16 << 10;
+        private static bool ShouldExternalizePayload(MonsterSupergroup.GAS.DiagnosticRecord record, int utf8Bytes) =>
+            record.stage == "replay.checkpoint" || record.stage == "replay.engine_checkpoint" || record.stage == "owner.attack_stats" ||
+            utf8Bytes > (record.stage == "movement.submit" ? MovementInlinePayloadBytes : 4096);
+
         private static List<IDisposable> AcquireSharedLeases(MonsterSupergroup.GAS.DiagnosticRecord record)
         {
             if (!ContainsShared(record.input) && !ContainsShared(record.before) && !ContainsShared(record.after)) return null;

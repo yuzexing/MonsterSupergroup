@@ -217,10 +217,10 @@ namespace Mirror.FizzySteam
         public void Send(int connectionId, byte[] data, int channelId)
             => Send(connectionId, new ArraySegment<byte>(data), channelId);
 
-        public void ReadConnectionDiagnostics(List<SteamConnectionSample> samples)
+        public void ReadConnectionDiagnostics(List<SteamConnectionSample> samples, List<SteamConnectionInvestigationSample> investigation = null)
         {
             foreach (var conn in connToMirrorID.FirstTypes)
-                if (connToMirrorID.TryGetValue(conn, out int id) && SteamTransportDiagnostics.TrySample(conn, id, out var sample))
+                if (connToMirrorID.TryGetValue(conn, out int id) && SteamTransportDiagnostics.TrySample(conn, id, out var sample, investigation))
                     samples.Add(sample);
         }
 

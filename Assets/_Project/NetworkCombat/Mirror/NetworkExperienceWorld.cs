@@ -71,10 +71,12 @@ namespace MonsterSupergroup.NetworkCombat
 
         private void OnConfirmedKill(ConfirmedKill kill)
         {
-            if (BootGameplayNetworkManager.CombatHasEnded || !CanGrant(out _) || !NetworkServer.spawned.TryGetValue(kill.TargetEntityId, out var identity)) return;
+            if (BootGameplayNetworkManager.CombatHasEnded) { TraceDropSkip(kill, "RunEnded"); return; }
+            if (!CanGrant(out string grantError)) { TraceDropSkip(kill, grantError); return; }
+            if (!NetworkServer.spawned.TryGetValue(kill.TargetEntityId, out var identity)) { TraceDropSkip(kill, "EnemyUnavailable"); return; }
             var enemy = identity.GetComponent<EnemyController>();
             var agent = identity.GetComponent<NetworkEnemySimulationAgent>();
-            if (enemy == null || agent == null) return;
+            if (enemy == null || agent == null) { TraceDropSkip(kill, "MissingEnemyOrSimulation"); return; }
             float amount = enemy.stats.XP;
             Vector2 position = agent.ServerSpawnPosition;
             if (agent.Assignment.Host == EnemySimulationHost.ServerAuthoritative ||
@@ -89,19 +91,44 @@ namespace MonsterSupergroup.NetworkCombat
                 fraction = (float)health.Health / health.MaxHealth;
             var decision = schedule.Consume(kill.TargetEntityId, kill.TargetStateVersion, amount, fraction,
                 HealthCount, healthDefinition?.WorldLimit ?? 0, () => (float)dropRandom.NextDouble());
+            if (PickupInvestigation.Enabled) PickupInvestigation.Capture("drop_decision", decision.Effect == PickupEffect.None ? "NoDrop" : "Selected",
+                runId, 0, 0, kill.TargetEntityId, kill.KillerPlayerId, () => new {
+                    deathStateVersion = kill.TargetStateVersion, rawExperience = amount, healthFraction = fraction,
+                    effect = decision.Effect.ToString(), probability = decision.Probability, roll = decision.Roll,
+                    position, decisionReason = decision.Reason.ToString()
+                }, decision.Reason.ToString());
             PickupAudit.Emit("drop-decision", runId, 0, $"enemy={kill.TargetEntityId};death={kill.TargetStateVersion};killer={kill.KillerPlayerId};health={fraction};reason={decision.Reason};p={decision.Probability};roll={decision.Roll}");
             if (decision.Effect == PickupEffect.None)
             {
                 return;
             }
-            SpawnPickup(decision.Effect, amount, position, identity.gameObject.scene);
+            var spawned = SpawnPickup(decision.Effect, amount, position, identity.gameObject.scene);
+            if (PickupInvestigation.Enabled) PickupInvestigation.Capture("drop_result", spawned != null ? "Spawned" : "Rejected", runId,
+                spawned != null ? spawned.DropId : 0, spawned != null ? spawned.ClaimVersion : 0, spawned != null ? spawned.netId : 0, kill.KillerPlayerId,
+                () => new { sourceEnemy = kill.TargetEntityId, deathStateVersion = kill.TargetStateVersion,
+                    effect = decision.Effect.ToString(), probability = decision.Probability, roll = decision.Roll });
+        }
+        private void TraceDropSkip(ConfirmedKill kill, string reason)
+        {
+            if (PickupInvestigation.Enabled) PickupInvestigation.Capture("drop_decision", "Skipped", runId, 0, 0, kill.TargetEntityId, kill.KillerPlayerId,
+                () => new { deathStateVersion = kill.TargetStateVersion }, reason);
         }
 
         private NetworkExperienceGem SpawnPickup(PickupEffect effect, float amount, Vector2 position, Scene scene)
         {
             var definition = effect == PickupEffect.RestoreHealth ? healthDefinition : xpDefinition;
-            if (definition == null && effect != PickupEffect.Experience) return null;
-            if (definition != null && definition.WorldLimit > 0 && CountEffect(effect) >= definition.WorldLimit) return null;
+            if (definition == null && effect != PickupEffect.Experience)
+            {
+                if (PickupInvestigation.Enabled) PickupInvestigation.Capture("spawn", "Rejected", runId, 0, 0, 0, 0,
+                    () => new { effect = effect.ToString(), amount }, "MissingDefinition");
+                return null;
+            }
+            if (definition != null && definition.WorldLimit > 0 && CountEffect(effect) >= definition.WorldLimit)
+            {
+                if (PickupInvestigation.Enabled) PickupInvestigation.Capture("spawn", "Rejected", runId, 0, 0, 0, 0,
+                    () => new { effect = effect.ToString(), amount, worldLimit = definition.WorldLimit }, "WorldLimit");
+                return null;
+            }
             var prefab = definition?.Prefab ?? gemPrefab;
             var gem = RentEntity(prefab, position, definition?.IdleCapacity ?? 500);
             SceneManager.MoveGameObjectToScene(gem.gameObject, scene);
@@ -109,11 +136,26 @@ namespace MonsterSupergroup.NetworkCombat
                 effect, definition?.Id ?? 1);
             drops.Add(sequence, gem);
             NetworkServer.Spawn(gem.gameObject);
+            if (PickupInvestigation.Enabled) PickupInvestigation.Capture("spawn", "Spawned", runId, sequence, gem.ClaimVersion, gem.netId, 0,
+                () => new { effect = gem.Effect.ToString(), amount = gem.RawExperience, definitionId = definition?.Id ?? 1, position, unclaimedCount = drops.Count });
             PickupAudit.Emit("spawn", runId, sequence, $"effect={effect};amount={gem.RawExperience};count={drops.Count}");
             return gem;
         }
 
         public bool TryCollect(NetworkConnectionToClient sender, NetworkIdentity avatar, string requestedRun,
+            ulong dropId, out string reason)
+        {
+            if (!PickupInvestigation.Enabled) return TryCollectCore(sender, avatar, requestedRun, dropId, out reason);
+            drops.TryGetValue(dropId, out var observed);
+            uint entity = observed != null ? observed.netId : 0, claim = observed != null ? observed.ClaimVersion : 0;
+            bool result = TryCollectCore(sender, avatar, requestedRun, dropId, out reason);
+            string decisionReason = reason;
+            PickupInvestigation.Capture("decision", result ? "Accepted" : "Rejected", requestedRun, dropId,
+                observed != null ? observed.ClaimVersion : claim, entity, avatar != null ? avatar.netId : 0,
+                () => new { expectedRun = runId, connectionId = sender?.connectionId, decisionReason, benefitConfirmed = result && decisionReason == "collected" }, decisionReason);
+            return result;
+        }
+        private bool TryCollectCore(NetworkConnectionToClient sender, NetworkIdentity avatar, string requestedRun,
             ulong dropId, out string reason)
         {
             if (BootGameplayNetworkManager.CombatHasEnded) { reason = "run-ended"; return false; }
@@ -144,9 +186,18 @@ namespace MonsterSupergroup.NetworkCombat
                 ((Vector2)avatar.transform.position - (Vector2)gem.transform.position).sqrMagnitude > radius * radius)
             { reason = "distance-or-stats"; return false; }
             // Reserve before grant: a Host offer callback cannot re-enter and collect the same drop.
+            object beforeProgress = PickupInvestigation.Enabled ? PickupInvestigation.Progress(progression) : null;
             gem.SetClaimed(true);
             if (!progression.TryGrantExperience(amount))
-            { gem.SetClaimed(false); reason = "grant-rejected"; return false; }
+            {
+                gem.SetClaimed(false); reason = "grant-rejected";
+                if (PickupInvestigation.Enabled) PickupInvestigation.Capture("xp_grant", "Rejected", runId, dropId, gem.ClaimVersion, gem.netId, avatar.netId,
+                    () => new { requestedAmount = amount, actualAwarded = 0f, before = beforeProgress, after = PickupInvestigation.Progress(progression) }, reason, member.Id);
+                return false;
+            }
+            if (PickupInvestigation.Enabled) PickupInvestigation.Capture("xp_grant", "Committed", runId, dropId, gem.ClaimVersion, gem.netId, avatar.netId,
+                () => new { rawExperience = gem.RawExperience, multiplier, actualAwarded = amount, before = beforeProgress,
+                    after = PickupInvestigation.Progress(progression), benefitConfirmed = true }, participant: member.Id);
             PickupAudit.Emit("xp-collected", runId, dropId, $"collector={avatar.netId};raw={gem.RawExperience};awarded={amount}");
             drops.Remove(dropId);
             gem.ServerPresentCollection(avatar.netId);
@@ -167,7 +218,12 @@ namespace MonsterSupergroup.NetworkCombat
             }
             claims.Clear(); committedClaims.Clear();
             foreach (var gem in new List<NetworkExperienceGem>(drops.Values))
-                if (gem != null && NetworkServer.active) RecycleEntity(gem);
+                if (gem != null && NetworkServer.active)
+                {
+                    if (PickupInvestigation.Enabled) PickupInvestigation.Capture("return", "Removed", runId, gem.DropId, gem.ClaimVersion, gem.netId, 0,
+                        () => new { benefitConfirmed = false, effect = gem.Effect.ToString() }, "WorldCleared");
+                    RecycleEntity(gem);
+                }
             drops.Clear(); schedule = null; Parameters = null; sequence = 0; runId = null; round = 0;
         }
         public void ResetForNextRun() { ClearServer(); InitializeRun(); }

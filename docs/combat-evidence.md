@@ -114,7 +114,21 @@ python Tools/CombatEvidence.py --db combat.sqlite locate --monster-type Imp --af
 python Tools/CombatEvidence.py --db combat.sqlite compare --entity 100 --run RUN_ID --output comparison.json
 ```
 
-`view` 生成可离线打开、可筛选的 HTML；原始 JSON 与文件/行号在每条记录内。`compare` 按同一 Run、Round、实体和状态版本比较服务端与 Replica 的 Canonical 值，给出首个分歧和缺少服务端证据的条目；不把预测状态与显示插值当成 Canonical 不一致。`--build` 可用 Build GUID 或源码/配置哈希筛选。查询有数量上限，达到时明确返回 `truncated`，可继续缩小时间段或实体范围。
+`view` 生成可离线打开、可筛选的 HTML；每条摘要带来源文件/行号，较长载荷在页面中省略，可用 `query` 取完整 JSON。`compare` 按同一 Run、Round、实体和状态版本比较服务端与 Replica 的 Canonical 值，给出首个分歧和缺少服务端证据的条目；不把预测状态与显示插值当成 Canonical 不一致。`--build` 可用 Build GUID 或源码/配置哈希筛选。查询有数量上限，达到时明确返回 `truncated`，可继续缩小时间段或实体范围。
+
+日常排查先用 `coverage` 看各端是否完整，再按业务类别生成小范围页面。下面的 `RUN`、`CAPTURE` 和目录换成实际日志中的值；`view` 页面搜索只筛选本次查出的记录，达到上限时要用 `--first/--last`、`--entity` 或 `--event` 缩小范围：
+
+```powershell
+python Tools/CombatEvidence.py --db combat.sqlite import D:/Host/CombatDiagnostics D:/Client/CombatDiagnostics
+python Tools/CombatEvidence.py --db combat.sqlite coverage --run RUN --round 1 --output coverage.json
+python Tools/CombatEvidence.py --db combat.sqlite view --run RUN --round 1 --capture CAPTURE --category movement --limit 250 --output movement.html
+python Tools/CombatEvidence.py --db combat.sqlite view --run RUN --round 1 --capture CAPTURE --category attack --limit 250 --output attack.html
+python Tools/CombatEvidence.py --db combat.sqlite view --run RUN --round 1 --capture CAPTURE --category damage --limit 250 --output damage.html
+python Tools/CombatEvidence.py --db combat.sqlite view --run RUN --round 1 --capture CAPTURE --category sync --limit 250 --output sync.html
+python Tools/CombatEvidence.py --db combat.sqlite view --run RUN --round 1 --event EVENT_ID --limit 500 --output event.html
+```
+
+四类页面分别查看移动快照/校正/权限交接、攻击开始/接触/命中、本地伤害与权威生命、提交/服务端判断/权威更新/客户端应用。一次攻击的阅读顺序是 Owner 开始与接触 → 本地伤害计算 → Host `gateway.decision`/`ledger.apply` → Client `network.canonical`/`replica.entity`；同一个 `eventId` 可追踪相关记录。本地命中和预测致命不等于 Host 已扣血；收到权威更新也不等于 Replica 已应用。每条摘要可展开原始文件与行号，再用 `query --event EVENT_ID --resolve-inputs --output event.json` 取完整载荷。跨端因果关系靠事件、批次和权威序号判断，不靠两台电脑的 UTC 排序。证据有缺口时，缺失记录不能证明某动作未发生。
 
 统一目录中的原有性能数据可以导出，继续使用已有分析脚本：
 

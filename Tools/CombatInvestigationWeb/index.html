@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="zh-CN">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>对局调查 · CombatEvidence</title><link rel="stylesheet" href="/style.css"><script src="/app.js" defer></script></head>
+<body>
+<header><div><span class="eyebrow">COMBAT EVIDENCE / 本地调查</span><h1>对局调查时间线</h1><p>从发生的事情出发，沿证据查看输入、判断与实际变化。</p></div><span class="local">● 仅本机访问</span></header>
+<main>
+<section class="panel filters" aria-label="调查条件">
+<label class="match">对局<select id="match"></select></label>
+<label>端 / 观察来源<select id="capture"><option value="">全部已导入端</option></select></label>
+<label>玩家 / 敌人<select id="entity"><option value="">全部对象</option></select></label>
+<label>对象关系<select id="direction"><option value="any">全部相关</option><option value="source">作为发起者</option><option value="target">作为目标</option></select></label>
+<label>事件类别<select id="category"><option value="business">攻击、拾取与选卡</option><option value="attack">攻击</option><option value="pickup">拾取</option><option value="selection">选卡</option><option value="damage">受伤与生命</option><option value="movement">移动</option><option value="sync">网络与同步</option><option value="state">状态记录</option><option value="all">全部原始阶段</option></select></label>
+<label>起点（秒）<input id="after" type="number" min="0" step="0.1" placeholder="不限"></label><label>终点（秒）<input id="before" type="number" min="0" step="0.1" placeholder="不限"></label>
+<button id="query" class="primary">查询完整归档</button>
+<p class="hint wide" id="time-note">秒数表示各端本轮第一条记录后的本地经过时间。两端起点不保证同步；不据此计算单向网络延迟。</p>
+</section>
+<div id="message" role="status" aria-live="polite"></div>
+<section class="panel provenance"><div><h2>证据范围</h2><p id="coverage">正在读取归档…</p></div><details><summary>来源与限制</summary><div id="sources"></div></details></section>
+<section class="tracks" id="tracks" aria-label="四类等待与积压"></section>
+<div class="workspace">
+<section class="panel timeline"><div class="section-head"><div><h2>发生了什么</h2><p id="count">—</p></div><button id="export-open">导出问题</button></div>
+<div id="events" aria-live="polite"></div><div class="pagination"><button id="more" hidden>继续加载</button><span id="page-note"></span></div>
+</section>
+<aside><nav class="inspector-tabs" aria-label="调查详情"><button id="view-process" class="primary" aria-pressed="true">过程与证据</button><button id="view-state" aria-pressed="false">时刻状态</button></nav><section class="panel" id="detail-panel"><h2>操作过程</h2><p class="empty">点击一条事件，展开输入、判断、实际变化及依据。</p><div id="detail"></div></section>
+<section class="panel" id="state-panel" hidden><div class="section-head"><h2>指定时刻的状态</h2></div><p class="hint">按字段区分可靠恢复、最近观测和未知；服务端与本地视角分别保留。</p>
+<div class="state-query"><input id="state-time" type="number" min="0" step="0.001" placeholder="本端相对秒数" aria-label="状态时刻"><button id="state-query">查看状态</button></div><p id="state-object" class="hint">请在筛选器选择对象，或点击相关事件。</p><div id="state"></div></section></aside>
+</div>
+<footer><span id="database"></span><span>未采集的数据保持未知 · 原始证据不会被修改</span></footer>
+</main>
+<dialog id="export-dialog"><form method="dialog"><div class="section-head"><h2>导出必要证据</h2><button aria-label="关闭">关闭</button></div></form><p>包含问题、状态基准、关联过程及必要原文件；范围外上下文会单独标记。</p><label>导出范围<select id="export-scope"><option value="event">当前选中操作及关联上下文</option><option value="range">当前筛选的全部结果及关联上下文</option></select></label><label>问题描述<textarea id="description" rows="3" placeholder="例如：这个回血道具为什么迟迟没有生效？"></textarea></label><button id="preview-export">计算必要上下文</button><div id="export-preview"></div><button id="confirm-export" class="primary" hidden>保存问题包</button><p id="export-result" role="status"></p></dialog>
+</body></html>

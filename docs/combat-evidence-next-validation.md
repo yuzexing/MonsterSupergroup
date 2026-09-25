@@ -537,3 +537,83 @@ GasWrapper 是普通与Profiler各18个case的top36累计最大独占阶段；�
 用户及另一端操作者按 [操作说明](../Logs/CombatEvidenceNextValidation/steam-exploratory-20260924-164917/operator-instructions.md) 完成本地链路、复制链路，再进行off→local→replicated场景对照；当前须先解决封存阻塞。先审计各端，再合并，固定有限水位；正常退出不是刷盘或复制追平证明。没有复现故障可如实报告，只有独立业务断言连续三次稳定失败才能称为已复现。
 
 工具测试子进程清除了继承的PowerShell 7 `PSMODULEPATH`，避免Windows PowerShell加载不兼容模块；同时清除 `PYTHONPATH`，显式使用冻结副本，未修改系统环境。测试命令、原始输出、实际退出码及前后哈希均在独立档案。最终保护核对及工件清单在本次状态和文档落盘后生成。
+
+
+## 2026-09-24 探索性 Steam 续接：构建完成但严格输入审计阻塞
+
+用户确认停止其他任务覆盖后，重新封存并执行本轮工作。仍为原主 checkout、master；当前 HEAD `fb28b76e9588e01006debe0e4f8277f94634fa2d`，开始时工作区和暂存区均为空，之前的修改已包含在该提交中。没有覆盖或回退已有实现。完整记录见 [续接报告](../Logs/CombatEvidenceNextValidation/steam-exploratory-20260924-173004/report.md)。旧 `steam-exploratory-20260924-164917` 档案保持原结果。
+
+本轮实际通过冻结战斗 Python **151 项**、Steam 工具 **19 项**，没有跳过；归档内离线分析 **13 项**、操作包辅助脚本 **14 项**、独立包审计最终 **18 项**合成测试通过，各自保留输入副本、原始输出、退出码及前后哈希。独立包审计工件列表新增用例先失败后通过；辅助脚本的编码及清单比较错误也保留初次失败。没有将合成测试计为真实 Steam 或业务复现。
+
+完整物理来源保存在新档案 `sealed-source/`，包含源码、资源、配置及完整 Tools。主工程 21,558 项输入 SHA `627e882465ca5ad1f2695fe5fc4c4468fb660cba634b6f3afb8dd7a3b1f61756`；只在副本封存前将原 Evidence Profile 的 Distribution 由 Steam 派生为 Direct，精确差异已保存，主工程 Profile 未改。封存来源 SHA `1b077fa6b075752562e5b4c836a1c7d26e5527fa7790bdbb9889746fd82ca882`。
+
+使用 Unity 6000.3.21f1、原物理验证工程及 Library，无 overlay、无清缓存；调用现有 NativeBuildEntry.Batch，复用原 prepare/finish 完整审计。原生构建实际退出 **0**、BuildResult.success=true，产品为 **Test／Steam／Direct／Evidence、非 Development**。BuildId `20260924T094032627Z-cb3f9a5f`；GUID `bec9a6cda81d47349da3b347856e85d0`。独立包核查及现有身份导出工具实际退出 0，4,501 项 manifest 源码、ZIP、封存源码、Profile/meta 和 build-plan 一致；这是包身份，未取得运行身份。
+
+**包没有放行。** 结束审计显示 sourceUnchanged=true、toolInputsUnchanged=true，但 validationInputsUnchanged=false、acceptanceInputAuditPassed=false，最终 execution.success=false、外层控制器退出 **3**。构建期间受测副本新增 `Assets/AddressableAssetsData/link.xml` 及 `.meta`，并改写 `Assets/AddressableAssetsData/Windows/addressables_content_state.bin`；前后内容与 SHA 已保存。不是本轮主工程并行编辑造成，不能沿用 Tests/Replay 两文件排除规则，也没有清理后重判或再构建。见 [严格审计](../Logs/CombatEvidenceNextValidation/steam-exploratory-20260924-173004/build-v2/integrity.json)、[生成路径定位](../Logs/CombatEvidenceNextValidation/steam-exploratory-20260924-173004/build-drift-diagnosis.md)。
+
+| 状态 | 本轮结论 |
+|---|---|
+| 已实现、实际验证 | 当前工具回归、完整物理来源、原生包构建、包身份及源码关系、六份双端模式配置和操作辅助流程。 |
+| 失败／阻塞 | Build full-v1 完整输入稳定门槛；六份配置 readyToRun=false，产品包不交付采集。 |
+| 未运行 | Player、Steam 双机、真实日志落盘／导入／有限提取及 Gateway/Replica 回放。本轮未重跑 Unity 正确性或旧 KCP 夹具。 |
+| 无法确认 | 实际现场完整性、复制追平、业务异常及真实回放结果。 |
+| 独立保留 | 200/500 尾延迟失败、分配探针无效、部分 GC 未知、阶段一整体门槛及清理审计崩溃窗口、真实故障复现、完整阵列及最终 Steam 验收。 |
+
+下一项限定处理 Build 完整输入稳定契约与正常 Addressables 构建写入的冲突：先核清三文件生成／消费和生命周期，保留失败与阶段证据，再设计不掩盖源码、资源或配置变化的最小构建验证修正。此项未修改产品构建、审计策略、C#、预算或性能门槛。解决后使用新目录构建，通过全部门槛才进入用户 local 约60秒双端采集。
+
+主工程受测输入和全部工具保持一致；旧档案 21,976 项及本轮构建清单 340 项复核未变，见 [保护结果](../Logs/CombatEvidenceNextValidation/steam-exploratory-20260924-173004/preservation-final-checks.json)。本轮仅追加这两份进度/操作文档；最终工件清单在状态和文档副本落盘后生成。**当前状态是构建审计阻塞，尚未进入“待用户采集”。**
+
+
+## 2026-09-24 Steam Direct 采证包就绪：待用户 local 首场
+
+用户确认构建审计问题已修复后，本轮从当前工作区重新封存、实际测试并出包。记录为 [steam-capture-ready-20260924-185642](../Logs/CombatEvidenceNextValidation/steam-capture-ready-20260924-185642/report.md)。仍为原master主checkout、HEAD `fb28b76e9588e01006debe0e4f8277f94634fa2d`，19项既有修改/未跟踪文件完整保护。只在物理来源副本中将Evidence Profile派生为Direct，主工程Profile及C#未改；完整源码/资源/配置/Tools保存于本轮sealed-source，供同版回放。
+
+本轮实际通过冻结战斗Python **156项**、Steam工具 **19项**、归档内分析合成 **13项**、操作包合成 **14项**、独立包审计合成 **18项**，均保存原始输出、退出码和稳定输入。Unity6000.3.21f1及现有修复入口实际构建 **product/Test/Steam/Direct/Evidence、非Development**，Unity与外层均退出0。`build-generated-v1`封存验收通过：acceptanceInputAuditPassed=true、validationStableInputsUnchanged=true、toolInputsUnchanged=true，无审计错误。完整哈希仍为false，且只记录三个已约定Addressables生成路径变化，前后内容保留。旧full-v1失败未改判。
+
+BuildId `20260924T110544656Z-e3d2f028`，GUID `fa6bb8505ad4483f860593fae7ddcaf9`，协议6、证据/复制/回放v2。独立包身份、4502项manifest/ZIP/物理来源、Profile/meta/计划全部对应；包证明只确认包，实际运行身份仍未知。源码配置SHA `2fafa27f976e34742431c6857e26e84b8d4aae45ea42ba7da48249583bfeefc6`，完整封存来源SHA `8a5b8d945b68b65ac07dd6d6b0f3e198896e557aceaae256c84650cc59696d59`。
+
+当前主工程21,565项受测输入及完整工具与开始时相同；静态封存来源和工具稳定，旧档案22,567项逐项复核保持原样。封存后主工程Unity被重新打开，首次控制器在启动前暂停；核实独立工程未被占用后从静态副本构建，没有结束用户进程、没有进行性能测量。原暂停记录保留。
+
+交付 [同包ZIP](../Logs/CombatEvidenceNextValidation/steam-capture-ready-20260924-185642/delivery/SteamEvidence-20260924T110544656Z-e3d2f028.zip) 与 [首场说明](../Logs/CombatEvidenceNextValidation/steam-capture-ready-20260924-185642/delivery/README.md)。ZIP共315项逐项校验、打包输入稳定；SHA `28fb1f059e6d4951244950ed38c33220bac29e553df84733744111978e2196a8`。六份配置与release已按本轮联合结果放行，脚本代码与受测副本一致。**当前状态为待用户两端local约60秒采集**：菜单核对实时身份后交战，退出并导出完整场次；先返回两端日志做完整性、有限提取及同版非零Gateway/Replica回放，不直接开始replicated或三模式对照。
+
+尚未运行Player/Steam实战、真实日志链路、真实异常回放；本轮未重跑Unity正确性和旧KCP夹具。200/500尾延迟、普通分配探针、部分GC未知、阶段一整体门槛及清理审计崩溃窗口、真实业务故障复现、完整阵列和最终Steam验收继续开放。没有扩大预算、丢关键输入、运行性能矩阵或三十秒测试。实战体验正常也不能改判旧性能失败。
+
+
+最终补充：封存后检测到 `docs/BuildProfiles.md` 与 `docs/build-profiles-validation.md` 的并行编辑，已保存初始及当前字节和差异，没有覆盖。两文件不属于受测输入清单；主工程源码、配置及工具最终核对仍与本轮封存身份一致。首次收尾检查因文档变化停止的记录保持原样，未重建或重跑测试。保护结论不是“所有19项既有文件字节未变”。
+
+
+交付时版本边界更新：最终收尾又检测到主工程删除五个临时Inspector验证输入（Assets/BuildProfileInspectorValidation-460e4ef4.meta及其目录内两份.asset和.meta）。完整封存来源中仍保留这些文件，本轮测试和包保持同一冻结版本；不恢复或覆盖该并行删除。上文主工程一致的结论只对应构建后保护核对时点，最终交付应以封存版本为准，不能宣称删除后的当前工作区已通过。最终变化清单单独归档，未重建、未选择重跑结果。
+
+
+## 2026-09-24 首轮 Steam local 原始现场：整场不完整，暂停扩大测试
+
+收到用户提供的两端导出后，本轮已实际完成同包/运行身份、全部导出引用SHA、Host/Client分别导入及合并、有限提取/物理引用审计和Unity6000.3.21f1同版回放。完整报告见 [steam-local-analysis-20260924-203100](../Logs/CombatEvidenceNextValidation/steam-local-analysis-20260924-203100/report.md)。仍为原master主checkout、HEAD fb28b76e9588e01006debe0e4f8277f94634fa2d；14项已有改动初始保护。没有修改生产工具/C#或运行新负载。
+
+| 状态 | 本轮实际结果 |
+|---|---|
+| 已验证 | 两端同BuildId 20260924T110544656Z-e3d2f028、实际路径/PID与Steam同Lobby/Run；Host2486、Client2384导出引用文件长度/SHA全匹配。操作者未观察明显业务异常。 |
+| 已执行 | Host377459条、Client81456条、合并458915条；块/文件导入issueCount=0，但三份整体严格检查均退出3，不能将浏览退出0当完整通过。 |
+| 有限链路通过 | Host Gateway7132–17027、Client Replica6232–16101，在本地与重新独立导入的合并库均完整；重提取全文一致，9896/9870条原始引用及66/115依赖已核验。Unity实际可靠匹配1114/3857步，显式清单恰好两份，Unity退出0。 |
+| 入口失败 | Windows PowerShell5.1解析JSON产生外层1项/内层2项，原验证入口误判数量，外层退出1、execution.success=false保留。独立原条件探针5.1退出1、pwsh7退出0，非重跑Unity；不得覆盖原失败。 |
+| Client失败 | dropped161549，其中critical161473/observation76；序号38582至242836发生持续缺失，约20:14:52–20:16:20。最终队列排空不修复缺口。本轮不启用高频观测，具体guard和支配服务操作仍未知。 |
+| Host语义阻塞 | 零物理丢失的metadata不能代替严格语义判断。空全检查点生产/解析不一致；146个status引擎绑定/全检查点/解绑后缺少重新独立的状态边界，292项成对报错。最小原始证据已保存，未删除规则放行。 |
+| 稳定性 | 出包完整封存来源SHA8a5b8d945b68b65ac07dd6d6b0f3e198896e557aceaae256c84650cc59696d59与本轮回放一致；源、受测项目、工具、夹具及清单稳定，无审计错误。只证明这一封存版本。 |
+| 场景限制 | 仅local首场；两端性能头targetFps=60、分辨率不同，未覆盖约定144FPS同设置。Client102个保留Running窗口约58.717Hz，非逐帧/正式性能验收；分配-1、GC聚合未知继续保留。 |
+| 未运行/未完成 | replicated、off/local/replicated对照、新性能矩阵、三十秒、真实业务不变量失败夹具、最终Steam验收。本轮未重跑全量Python/EditMode/PlayMode或历史KCP夹具。 |
+
+下一项最小交付建议先修复回放入口的PowerShell5.1数组解析兼容，保留空/无效/不可靠/分歧的严格失败语义，红测后修复并另行归档；之后分别补检查点契约最小红测/修复，以及Client消费积压的有界直接证据，达到归因门槛才单点优化。当前不进入replicated，不扩大预算或减少关键输入。原始导出、失败入口和旧档案保留；保护核对及工件清单在本轮档案中。
+
+**诊断完整性整体未验收；高负载未通过；真实业务故障未复现。** 实战体验正常不改判已有尾延迟失败；清理审计崩溃窗口、普通分配/部分GC和最终验收仍开放。
+
+
+## 2026-09-24 首轮 Steam 暴露问题：入口/检查点修复，Client待定位
+
+本轮完整证据见 [steam-repairs-20260924-211115](../Logs/CombatEvidenceNextValidation/steam-repairs-20260924-211115/report.md)。仍为原master主checkout、HEAD fb28b76e9588e01006debe0e4f8277f94634fa2d，保留既有修改。已修复PS5.1回放数组计数、空全检查点契约和解绑后独立检查点；相应误报/缺边界用例先红后绿。业务伤害/死亡/同步未改。
+
+实际通过冻结Python战斗174项+Steam24项、Unity EditMode20类183项+PlayMode3类20项。原始Steam压缩块与依赖重新审计/提取，修复版实际可靠回放Gateway1114、Replica3857步，Windows PowerShell5.1外层及Unity均0。这是修复版对旧现场输入的兼容回放，旧包失败档案未改判。源/工具稳定；Tests/Replay完整快照的两项生成物变化按已封存策略单列保留。
+
+Client积压支配操作仍未知、旧161549条丢失未修复。已增加默认关闭Player writer/queue桥接，512KiB内、1024窗口不减；首次非boot起固定102.4秒，首次拒绝与长服务直接关联。无额外主线程观测/CPU预热，不改消费/flush/重试；超时和缺侧车仍未知。
+
+新包 BuildId `20260924T141901494Z-10530813`，GUID `7741f3707a4b48de9b94f981f9ad0f03`；product/Test/Steam/Direct/Evidence、非Development。构建及包/源码身份审计已通过，协议/证据格式未改变。 下一步只以新同包完成一次Client显式观测的约60秒local，再按自然证据选择单点修复；尚未执行真实新版Player。并行变化的三份Build文档原样保留。完整归档中的封存/环境失败保留，未选择删除失败结果。
+
+不进入replicated扩展、性能矩阵或30秒。诊断完整性整体、高负载、真实业务故障、清理审计崩溃窗口及最终Steam验收继续开放。

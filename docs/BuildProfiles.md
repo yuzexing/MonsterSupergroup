@@ -300,3 +300,56 @@ Shipping 成功验收必须基于包含本次改造的干净提交；当前脏�
 **最终收尾**：用户正常关闭 Editor，PID 65012 于 **09:16:44.5880766 UTC（北京时间 17:16:44）退出 0**。退出后设置恢复为 A，当前正式文件与退出快照相同；六阶段加退出快照完整记录 A → B → A。最终日志布局错误仍为 **0**，受测窗口源码未变，成功指针仍指向本次包。相对测试后冻结的 108 项相关文件，退出后仅两份进度文档发生变化。最终日志、退出码、哈希和独立差异在本轮档案 `button-regression/`，退出前报告已保留。
 
 本次调度修复已完成 **46/46 测试、一次真实按钮构建、16/16 包核验、六阶段及正常退出核验**，在本次场景中未再复现布局错误；没有扩大为所有 GUI 分支均已验证。原生 Inspector 展示仍未实现，TMP／Addressables 导入问题单列。无需继续重试或追查历史替换拒绝；下一项可单独处理原生 Inspector 业务字段展示，其余 Player／代表 Profile／事务恢复／迁移收尾维持原计划。本次不再启动 Unity、构建或 Player，没有提交、reset 或 clean。
+
+## 16. Profile 资产 Inspector 业务参数接入（2026-09-24，功能验收与收尾完成）
+
+用户确认展示位置是 **Project 窗口选中 Profile 后的普通 Inspector**，并允许直接编辑。Unity 6000.3.21f1 的公开 `Editor.finishedDefaultHeaderGUI` 回调已在本机程序集及官方源码核对；原生 Build Profiles 窗口的右侧内置面板没有公开设置注册接口，本项不替换或注入该面板。
+
+实施基线已更新为原主工作区 `master / fb28b76e9588e01006debe0e4f8277f94634fa2d`，暂存区为空；另外两份诊断文档的既有改动保留。档案 `Logs/BuildProfilesResume/profile-inspector-20260924-180837-627-460e4ef4` 留存继承差异、输入副本及哈希。
+
+- **已实现**：新增普通 Inspector 业务区，直接编辑原有 MonsterBuildSettings 子资产；复用既有字段绘制，SchemaVersion 只读。保存 Profile 延后至绘制结束，仅保存当前资产；执行前重新校验目标和忙碌状态。多选、缺组件、schema 不支持均提示，忙碌时禁用编辑；不自动应用宏、激活或构建。不修改公共 API、数据 schema 或构建服务。
+- **本轮实际验证**：修改后 Unity 编译及完整 EditorTools **46/46，0 跳过，退出 0**；BuildIdentity 23、BuildRecipe 15、ProjectTool 8。PID 51008，10:10:23.0533522–10:11:04.5945642 UTC；正式设置和模板未变。这是编译及规则回归，不能代替真实 Inspector 验收。
+- **等待用户界面验收**：可见 Editor PID 59360 已打开，没有强制活动 Profile 参数。先完成 KCP → Test-Steam → KCP 的只读查看，再用模板目录外的 `Assets/BuildProfileInspectorValidation-460e4ef4/Kcp-Inspector-Edit.asset` 检查 Network 修改、Undo／Redo、保存及重开恢复。另一个临时 Profile 仅用于缺组件提示；两份均不会用于构建。
+- **停止边界**：不打包、不运行 Player、不追加故障矩阵；界面由用户操作。真实显示、编辑、撤销、持久化及临时副本清理完成前，本项标记部分完成。Build Profiles 内置面板仍未接入，不能与普通 Inspector 混为一项。
+
+**界面显示已确认，查看流程需重新核对**：用户报告显示正常，随后确认曾在正式 KCP 上修改用途、点击“保存 Profile”、改回用途并再次保存。文件独立比较显示用途／业务字段和宏列表均已恢复，仅 `m_HasScriptingDefines` 从 0 变成 1。Unity 6000.3.21f1 的 ValidateDataConsistency 会在非空符号列表存在时补齐此标记，与本次显式保存结果一致；不修改代码、不自动还原用户保存。此次不能作为“仅查看不写入”的验收，原证据保留，并以用户保存后的 49 项文件新建 `preview-recheck-before.json`。接下来仅浏览复核，再在临时副本上完成 Undo／Redo、保存及重开检查。
+
+**只读复核与编辑保存已完成**：用户确认补做的 1–4 项均正常：只读浏览与 KCP Active、多选／缺组件提示、临时副本 Network 的 Undo／Redo／保存，以及自定义窗口读取相同值。10:31:44 UTC 独立核对确认 49 项正式文件相对用户保存后基线没有变化，受测源码没有变化；临时副本业务字段仅 Network 从 Kcp 改 Steam，原有符号数组不变。副本显式保存同时将原生 `m_HasScriptingDefines` 从 0 持久化为 1；其他临时文件均未变。完整日志布局／编译／保存错误均为 0，证据在本轮档案 `edit-check/`。尚待正常关闭并重开核对持久化、区域无重复和 KCP Active，之后清理本轮临时副本，不执行构建。
+
+**关闭等待状态**：用户报告已关闭窗口，但本轮 Editor PID 59360 仍存活，退出码尚未取得。日志最后更新于 10:34:16 UTC，已出现 Input System Shutdown；不能将其当作进程正常退出。临时副本保存值和正式 ProjectSettings 均保持不变；期间 Sandbox Profile 的 `m_HasScriptingDefines` 另从 0 变为 1，其余内容未变，保存触发原因未独立确认，已归档并保留。当前不启动第二个同项目 Editor、不强制终止、不清理临时副本，等待确认是否存在退出提示及取得真实退出结果；重开持久化仍未完成。
+
+**已授权异常恢复并重开，界面待确认**：等待另一构建测试任务结束后，用户明确授权结束本轮残留进程并继续重开。已核对 PID、创建时间及父子关系，仅结束 Editor 59360 和导入 worker 46252／25180；Editor 于 10:49:55.9277440 UTC 退出 **-1**，本次正常退出未通过，不推断关闭停滞原因。11:00:23 UTC 核对：46 项受测源码未变，已保存临时副本和正式设置与退出快照一致，49 项正式文件相对上次基线仅保留已知 Sandbox 原生标记变化。证据为 `inspector-manual/forced-recovery.json`、`execution.json`、`post-force-audit.json`。
+
+已于 11:00:28.5779007 UTC 使用 `open-editor.ps1 -Label inspector-restart` 重开可见 Editor **PID 55716**，未指定活动 Profile；新日志及进程记录位于 `inspector-restart/`。下一步仅由用户确认临时副本仍为 Dev／Steam／Direct／Normal、业务区域仅一处且原生设置可见、KCP 仍 Active。随后核对文件并正常关闭、清理本轮临时资产；本项在这些检查结束前仍为部分完成，不追加构建或测试矩阵。
+
+**重开后的功能检查通过**：用户确认保存值仍为 Dev／Steam／Direct／Normal，业务区域仅一处、原生设置可见，正式 KCP 仍 Active。11:09:01 UTC 独立复核：49 项正式文件相对重开前基线不变，46 项受测源码不变，临时副本及 meta 均与预期保存版本一致；重开日志布局错误和 C# 编译错误均为 0。证据在 `inspector-restart/confirmed/`。本项已完成显示、只读浏览、编辑、Undo／Redo、保存及异常恢复后的持久化验证；首次异常退出仍保留为未正常退出，不能改写。当前仅待用户正常关闭 PID 55716、核对退出结果并清理已归档的本轮临时副本。
+
+**最终收尾完成**：用户正常关闭重开后的 Editor；PID 55716 于 **11:13:31.6227111 UTC 退出 0**。退出后正式设置与重开前相同，49 项正式配置及 46 项受测源码均无新增变化；完整重开日志的布局错误、C# 编译错误均为 0。两份临时 Profile、各自 meta 及目录 meta 已逐项核对归档，并于 11:20:33 UTC 仅删除本轮临时目录内的四个文件、空目录和对应目录 meta，未清理其他输入。证据与结果汇总为本轮档案 `final/exit-audit.json`、`final/cleanup.json`、`RESULTS.md`。
+
+Inspector 展示、编辑、Undo／Redo、保存和重开恢复功能已通过；使用指南已区分普通资产 Inspector 与未接入的 Build Profiles 内置面板。**保留限制**：第一次 Editor 关闭停滞原因未确认，实际恢复经过用户授权的强制结束；后一次正常退出 0 不补写为“首次正常关闭再重开”通过。正式 KCP 与 Sandbox 各自仅保留 `m_HasScriptingDefines: 0 → 1` 的已归档变化，业务参数及宏数组没有变化；前者来自用户明确保存，后者保存触发未独立确定。
+
+本项到此停止，不追加重开、构建或 Player。原计划的后续顺序仍为成功包的真实 Player 身份／篡改拒绝、代表 Profile、非空 TMP／必要事务恢复对照、旧入口迁移收尾；这些不是本轮已完成的验收，不自动执行。未提交、reset 或 clean，其他任务改动保留。
+
+## 17. KCP Player 身份与单字段修改拒绝（2026-09-24，最小对照通过）
+
+复用已成功的 KCP 包 **BuildId `20260924T090326117Z-7d442108`**。用户提供正常／修改副本的运行日志，实施者只做事后文件与日志核对，没有重新构建、启动 Player 或改动运行时实现。当前仍为原主工作区 `master / fb28b76e`，暂存区为空。档案为 `Logs/BuildProfilesResume/player-identity-20260924-204742-160-98fa4781`。
+
+- **正常身份通过**：日志实际报告 Dev／Kcp、tools=True、evidence=False、development=True、version=0.0.1、同一 BuildId、`valid=True`；对应包路径和 BuildInfo 均匹配。日志含本地房间 ready 记录，但部分栈行交错，不将其扩展为完整多进程联机验收。
+- **版本不一致拒绝通过**：独立副本 `KcpIdentity-Tampered` 的 BuildInfo 仅将 gameVersion 从 0.0.1 改为 0.0.2。日志报告实际 Player 仍为 0.0.1、`valid=False`、版本／构建配置不一致及无效身份显示。用户明确确认点击“创建本地主机”后出现无效包提示、未进入房间；本地拒绝分支不单独写日志，界面确认独立保存。
+- **文件证据通过**：两份包各 482 个文件，全部 SHA 对比仅 BuildInfo 不同，并精确匹配一次版本字符串替换。原包 7 项历史归档关键文件均未变化，Profile 成功指针仍指向原包；测试副本没有发布为新成功结果。运行时相关 5 份源码与该包初始计划中的哈希一致。
+- **边界明确**：手动运行未由观察器取得 PID、准确命令、起止时间或退出码，不从 Shutdown 日志推定退出 0。当前 Player 比较的是元数据与实际版本／编译能力，不重算安装包的 contentHash／inputHash；本次通过不等同于任意文件或哈希字段篡改均可被检测。
+
+本项最小身份对照验收完成，原包和修改副本均保留，详细结果见 [Player 验收记录](build-profiles-validation.md#2026-09-24-kcp-player-身份与单字段修改拒绝)。下一项转到代表 Profile 的分批实测：先产品 Test，再 Profiler／Evidence，随后 Wisp／专项 Test，并核对相应宏切换与 Editor 行为。非空 TMP／必要事务恢复、旧入口迁移收尾、Shipping 干净提交及 Steam 双账号继续单列；不追加通用防篡改机制或故障矩阵。
+
+## 18. Windows-Test-Steam 代表包（2026-09-24，构建与包核验通过，保留输入基线限制）
+
+用户要求推进 Windows-Test-Steam，本轮仅通过现有 CLI 入口执行一次真实构建。原主工作区 `master / fb28b76e`，暂存区为空；档案 `Logs/BuildProfilesResume/test-steam-20260924-211326-666-7a238c6b` 冻结启动前 4171 项输入、Profile／设置和相关源码副本。构建工具相关 46 项源码与上次 Inspector 测试归档一致，**没有重复完整测试或将历史 46/46 计为本轮重跑**。
+
+- **编译与交付通过**：Unity 6000.3.21f1、PID 60792，13:14:20.4286306–13:17:41.3199838 UTC，真实退出 **0**，未超时或强制结束。BuildId **`20260924T131532148Z-d824d3a7`**，实际包位于 `Builds/ProfileValidation/TestSteam-20260924-211326-666-7a238c6b/MonsterSupergroup-v0.0.1-test-20260924T131532148Z-d824d3a7/`。
+- **19 项包核对通过**：Test／Steam／Steam／Normal、版本 0.0.1、Development 关闭、LZ4HC、Boot→MainMenu→Gameplay；实际 DLL 为 Test／Steam，工具和取证能力均为 false，无测试程序集。Steam 原生库存在，steam_appid.txt 和取证清单不存在；EXE、BuildInfo、初始计划、完成标记及 Profile 指针一致。KCP 原指针未变化。
+- **宏与生命周期证据通过**：Editor 缓存从 KCP Dev 宏切至 MONSTER_BUILD_TEST；实际 Editor／Player 编译响应均确认该业务宏，Player 没有 DEVELOPMENT_BUILD／UNITY_INCLUDE_TESTS。六阶段完整，长度、SHA、时间顺序及初始／最终计划对应关系核对通过；仍仅出现已知 preloadedAssets 条目，退出后恢复，不以摘要前后相等作为发布条件。
+- **输入基线限制**：启动期间 `CombatEvidenceIntegrityTests.cs` 在 13:15:25 UTC 变化，初始计划（13:15:31 UTC）与最终计划均记录修改后的同一 SHA；它属于 Editor 测试程序集，未进入 Player。构建退出后的 13:20:53 UTC，另有 CombatEvidence.cs／CombatEvidenceRuntime.cs 并发改动，当前工作区已不同于包内计划。原样保留，不把这次结果当作启动前全输入冻结验收或后续源码已经验证，不自动追加构建。
+
+日志 C# 编译错误及布局错误均为 0；保留两条已知 TMP Fallback 导入不一致、启动许可握手／访问令牌更新错误，不泛称所有日志无错误。实际成功及退出 0 与这些记录分开报告。本轮未启动 Player、上传 Steam、改为 Direct 或添加本地 AppID 文件；Steam 启动／双账号体验及交互式 Editor 运行行为仍待相应实测。后续先在并发改动稳定后重新建立输入基线，再分批推进 Profiler／Evidence，不借用本包验证尚未纳入的代码。详细命令和结果见 [本轮验收记录](build-profiles-validation.md#2026-09-24-windows-test-steam-代表包构建)。
+
+**人工运行验收补充（2026-09-24）**：用户随后确认前述 Steam 双账号验收“已完成验收”，本项记为**人工验收通过（用户确认）**。本机 Player 日志独立确认相同 BuildId `20260924T131532148Z-d824d3a7`、Test／Steam、有效身份、Steam AppID 4886160 初始化成功及建房记录。双端入房、游戏同步、退出重入的结果来自用户确认；未取得对端日志、双端完整时序或真实进程退出码，不将人工通过写成双端日志独立核验通过。档案为 `Logs/BuildProfilesResume/test-steam-manual-20260924-214701-c6b9ddf9`，包含用户确认、原始本机日志及 SHA。本轮没有追加构建、启动 Player 或修改产品源码；原有并发输入限制仍适用。Windows-Test-Steam 的构建／包核对／生命周期与本次人工运行验收到此完成；后续先为当前源码建立新基线，再推进 Windows-Test-Profiler，其后 Windows-Test-Evidence，不自动开始下一次构建。

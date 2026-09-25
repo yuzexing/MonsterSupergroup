@@ -746,3 +746,247 @@ python .\Logs\BuildProfilesResume\layout-dispatch-20260924-165242-984-2128ffae\b
 | 剩余范围 | 原生 Inspector 业务字段展示、其他导入记录及原计划后续验收分别保留；取消／重复点击分支未单独实测 |
 
 本项到此完成，不追加构建或修复。下一项可独立推进原生 Inspector 业务参数展示；Player 身份、代表 Profile、非空 TMP／必要事务失败对照及迁移收尾仍分批安排。不提交、reset、clean，保留既有和并发改动。
+
+## 2026-09-24 Profile 资产 Inspector 业务参数接入
+
+用户已选择“Profile 资产普通 Inspector，允许直接编辑”。本项追加到资产 Inspector 标题区域，保留 Unity 原生编辑器；不是原生 Build Profiles 窗口右侧内置面板的接入。使用公开 `Editor.finishedDefaultHeaderGUI`，不反射或调用 Unity 内部界面。官方依据：[Inspector 回调](https://docs.unity3d.com/6000.3/Documentation/ScriptReference/Editor-finishedDefaultHeaderGUI.html)、[原生窗口实现](https://github.com/Unity-Technologies/UnityCsReference/blob/6000.3/Modules/BuildProfileEditor/BuildProfileWindow.cs)。
+
+### 基线与实现
+
+原主工作区 `master / fb28b76e9588e01006debe0e4f8277f94634fa2d`，暂存区为空；`docs/combat-evidence-next-validation.md`、`docs/diagnostic.md` 的继承改动未覆盖。档案为 `Logs/BuildProfilesResume/profile-inspector-20260924-180837-627-460e4ef4`；`baseline.json`、`inherited.patch`、`source-before.json` 及 before 副本保存本轮基线，清单覆盖 5689 项所选源码、Packages、ProjectSettings、Profile 和文档文件。
+
+产品代码仅新增 `BuildProfileBusinessInspector.cs` 及 meta，并在 `MonsterBuildSettings.cs` 抽取内部字段绘制和提示文字。新增回调直接取得原 Profile 的业务子资产，使用 SerializedObject 编辑，沿用 Undo／Redo；没有额外配置存储。保存按钮通过 delayCall 延后执行，捕获点击目标，重新检查资产存在、schema 和编辑器状态，只调用当前 Profile／业务子资产的 SaveAssetIfDirty；异常显示并记录 Console。多选、缺组件、schema 不支持不自动修改资产。普通查看不创建组件、保存、应用宏、激活、计算完整输入摘要或构建。新增类型和辅助方法均为内部接口。
+
+### 本轮实际编译与规则回归
+
+实际命令：
+
+```powershell
+& .\Logs\BuildProfilesResume\profile-inspector-20260924-180837-627-460e4ef4\run-tests.ps1 `
+  -Label editor-tools -NoGraphics -TestFilter 'MonsterSupergroup.EditorTools.Tests'
+```
+
+直接运行 Unity 6000.3.21f1，Windows-Dev-Kcp 活动参数，`-batchmode -nographics -runTests -testPlatform EditMode`，没有 `-quit`；隐藏窗口，超时 1800 秒，仅管理本轮进程。PID **51008**，10:10:23.0533522–10:11:04.5945642 UTC，真实退出 **0**、未超时。
+
+XML 实际 **46/46 通过、0 失败、0 跳过**：BuildIdentityTests 23、BuildRecipeTests 15、ProjectToolTests 8。没有新增测试或借用历史通过数。正式设置启动前／退出后均为 A（22323 字节、SHA `3c2d8d83…bd59`）；与基线比较，原清单仅 MonsterBuildSettings.cs 变化，新增 Inspector 源码／meta 单独留存。`test-audit.json`、`tested-source-hashes.json`、受测源码副本及 `editor-tools/` 中的 XML／日志／执行参数构成实际证据。
+
+上述测试确认编译与既有业务规则，**不宣称 Inspector 回调已在实际界面显示、Undo／Redo 或保存持久化已通过**。
+
+### 真实 Inspector 验收待执行
+
+完整测试通过后准备两个临时资产，均位于正式模板根目录之外的 `Assets/BuildProfileInspectorValidation-460e4ef4/`：`Kcp-Inspector-Edit.asset` 用于编辑、撤销、保存；`No-Business-Settings.asset` 用于缺组件提示。文件 GUID 独立，正式 KCP 模板未改变；初始副本／哈希在 `fixtures-before/` 和 `fixtures.json`。49 项正式 Profile／项目设置的查看前清单为 `preview-before.json`。
+
+已通过 `open-editor.ps1 -Label inspector-manual` 启动可见 Editor **PID 59360**，不传 activeBuildProfile／executeMethod；准确命令、日志和最终退出结果由 `inspector-manual/` 记录，exec session 65436 等待正常关闭。窗口操作继续由用户执行。当前依次待完成：只读浏览与原生设置可见、多选／缺组件提示、临时副本 Network 从 Kcp 改 Steam 的 Undo／Redo／保存、自定义窗口读取相同值，以及正常关闭重开后的持久化与单次注册。
+
+完成后才清理本轮临时资产并归档最终输入、日志及文档增量；不打包或启动 Player。不将本次界面验收转成宏切换、构建或故障注入矩阵。完整手动步骤在档案 `MANUAL-CHECK.md`，当前状态为实现及编译回归完成、真实界面待验收。
+
+### 显示确认与显式保存澄清
+
+用户报告“显示正常，继续任务”。10:19:45 UTC 独立检查时，49 项正式 Profile／项目设置中只有 Windows-Dev-Kcp.asset 变化；新增扩展与共享绘制源码均与受测版本一致，两份临时资产尚未变化。日志布局错误 0、C# 编译错误 0。Unity PID 46252／25180 是本轮 Editor PID 59360 的 AssetImportWorker 子进程，没有据此误判为并行 Editor。记录在 `preview-audit.json`、`inspector-manual/preview-log-audit.json` 和脱敏日志。
+
+用户随后明确操作为：**修改用途 → 保存 Profile → 改回用途 → 再保存 Profile**。文件唯一差异是 `m_HasScriptingDefines: 0 → 1`，用途已回到 product，其余业务参数及符号数组不变。本机 UnityEditor.CoreModule.dll 的 BuildProfile.ValidateDataConsistency 中存在“符号列表非空且标记为 false 时置 true”的逻辑，OnEnable 调用该方法；与 [Unity 6000.3 官方源码](https://github.com/Unity-Technologies/UnityCsReference/blob/6000.3/Editor/Mono/BuildProfile/BuildProfile.cs) 一致。反编译片段、原始保存后资产与独立差异在 `inspector-manual/unity-validate-data-consistency.il.txt`、`kcp-after-user-save.asset`、`kcp-user-save.patch`。
+
+结论：**显示正常由用户确认；本次包含显式编辑／保存，不计为只读浏览通过，也不能把标记落盘认定为新增回调自动应用宏。** 用户保存结果保留，不修改产品代码、不覆盖正式 Profile；后续正式文件比较以 `preview-recheck-before.json` 的 49 项用户保存后快照为起点，原始基线和第一次变化仍保留。活动 Profile 状态、纯浏览、Undo／Redo、临时副本保存和重开持久化继续按原计划核对。正式 KCP 相对任务初始基线的这一项用户保存变更，在最终交付中单独报告。
+
+### 只读复核与临时副本编辑保存通过，重开待验
+
+用户确认后续 **“1–4 显示正常”**，对应补做的正式 Profile 只读浏览、KCP 仍 Active、多选提示、缺组件提示、临时副本 Kcp → Steam 的 Undo／Redo／明确保存，以及自定义窗口显示 Dev／Steam／Direct／Normal。Undo／Redo 的中间状态和活动状态来自用户界面确认，不冒称由磁盘快照独立重建。
+
+10:31:44 UTC 的独立核验结果归档在 `edit-check/audit.json`、`fixture-diff.patch`、副本资产及 meta：
+
+- 49 项正式 Profile／项目设置相对 `preview-recheck-before.json` **数量和 SHA 全部一致**，本轮受测 EditorTools 源码未变化。最初正式 KCP 那一项用户显式保存的标记变更仍保留，没有回滚或悄悄忽略。
+- 临时 Kcp-Inspector-Edit.asset 实际 **2508 字节**，SHA `503009f74192618c57c1e57ef41900f26e082e83708491c773ca3b99148fdb7b`。业务字段仅 Network 从 1（Kcp）改为 0（Steam）；宏列表完全未变。额外一个原生字段是保存时将已由 Unity 加载一致性逻辑置位的 `m_HasScriptingDefines` 从 0 持久化为 1。独立逐字节比较准确匹配这两项变化，其他字段不变。
+- 缺业务组件的临时资产及两份 meta 与创建时相同，未自动添加组件或重写 GUID。
+- 采样日志 58621 字节，原始 SHA `8a7cbc3b386d7949f720971aaa158f77c5bbf1d702a028a86595f2bc8e571498`；布局错误 0、C# 编译错误 0、扩展保存失败消息 0。脱敏副本和原始采样摘要在 `edit-check/unity.redacted.log`、`log-audit.json`。
+
+本轮 Editor PID 59360 仍运行，退出观察脚本仍存活。PID 46252／25180 是其导入 worker；另发现 PID 51512 为其他任务在 `Logs/BuildHashValidation/20260924-182544-407/project` 启动的独立 batchmode 项目，不是本轮 Editor 或受测项目根目录，不接管、不终止，也不使用其结果。
+
+目前已完成编译回归、真实显示、只读复核、提示以及编辑撤销／保存检查；剩余正常关闭、重开后的持久化和区域不重复检查，以及本轮临时副本清理。没有新增产品改动、重复测试、构建或运行 Player。
+
+### 关闭请求后的等待状态
+
+用户报告“已关闭”后，执行记录仍为 endedUtc／exitCode=null，Editor **PID 59360** 和本轮导入 worker 仍存活；观察脚本仍在等待真实进程结束。日志最后写入时间为 **10:34:16 UTC**，末尾包含 Input System ShutdownInProgress／Shutdown，但这不等同于 Editor 退出。持续观察期间未取得进程退出结果，未启动第二个同项目 Editor、未强制结束进程，也未移除本轮临时资产。已向用户询问是否还存在保存或退出提示窗口；不据此推断 Inspector 扩展导致关闭停滞。
+
+关闭请求后的文件检查归档在 `inspector-manual/close-request-audit.json`：已保存临时副本与 edit-check 快照完全一致，ProjectSettings 与启动前一致；相对编辑检查，正式 Sandbox Profile 新出现 `m_HasScriptingDefines: 0 → 1`，其余业务参数、符号和场景未变。该标记变化与此前核查的 Unity 数据一致性行为相符，但本次 Sandbox 的具体保存触发没有独立证据，故只记录事实并保留变化，不自动恢复。原始副本和差异为 `sandbox-during-close.asset`、`sandbox-during-close.patch`。
+
+`settings-after-close-request.asset` 仅表示关闭请求后的采样，**不是已退出快照**。正常退出和重开后的持久化／单次业务区验证仍未完成；已有显示、编辑保存与测试结果继续有效，不能用它们替代退出证据。下一步先取得真实退出结果，再恢复原定重开检查，不扩大为通用退出故障诊断。
+
+用户随后要求等待另一个构建测试任务结束。已等待任务“制定Hash校验排除方案”完成；其构建结果仅作为等待条件，不计入本项验证。**10:48:30 UTC** 本轮 PID 59360 及其导入子进程 46252／25180 仍未退出，日志仍为 60524 字节、SHA `419223c32f3525d623a68e2ceb3b859c02a4704d3d7afae43c4b831a2209b559`，布局错误 0。确切进程身份、创建时间和日志已留存在 `inspector-manual/shutdown-pending.json` 及脱敏日志。已请求用户选择是否仅结束本轮残留进程并重开；选择未到达前不执行。即使之后恢复成功，也不能将本次强制结束记为正常退出通过。
+
+### 用户授权结束残留进程并重开
+
+用户明确选择“结束本轮残留进程并继续重开检查”。执行前核对程序名、项目路径、创建时间及导入 worker 的父子关系，打开进程句柄以避免 PID 重用；仅处理本轮 59360／46252／25180。操作时间 **10:49:55.6343889–10:49:56.1643981 UTC**，记录在 `inspector-manual/forced-recovery.json`。原观察脚本取得 Editor 真实退出时间 **10:49:55.9277440 UTC**、退出码 **-1**；导入 worker 记录退出 0，不能据此将本轮 Editor 认定为正常退出。本次关闭停滞原因未确认，不归因于 Inspector 改动或另一任务。
+
+**11:00:23 UTC** 重新核对并保存 `post-force-audit.json`：46 项受测源码 SHA 均一致；正式 ProjectSettings 与退出快照均为 22323 字节、SHA `3c2d8d83b25bb5bb93e96437ca2ae1ca4bc20ad792e14cf00a35cd64e912bd59`；临时编辑副本仍为已保存的 2508 字节、SHA `503009f74192618c57c1e57ef41900f26e082e83708491c773ca3b99148fdb7b`。49 项正式文件相对 `preview-recheck-before.json` 仅已知 Sandbox 标记变化，精确匹配关闭等待时归档；正式 KCP 的用户保存结果继续保留。当时没有 Unity 进程残留，未覆盖资产。当前正式文件另存为 `restart-before.json`，用于这次重开比较。
+
+重开实际命令：
+
+```powershell
+& .\Logs\BuildProfilesResume\profile-inspector-20260924-180837-627-460e4ef4\open-editor.ps1 -Label inspector-restart
+```
+
+Unity 6000.3.21f1 可见 Editor **PID 55716**，开始时间 **11:00:28.5779007 UTC**；仅传项目路径及独立日志路径，不传 `-activeBuildProfile`、构建或测试参数。记录在 `inspector-restart/execution.json` 和 `unity.log`，观察会话 25604 等待用户最后正常关闭。本次重开后的配置显示、单次业务区域及 KCP Active 正在等待用户核对；尚不能宣称持久化验收已完成。既有编译及 46/46 回归不重复运行，其他任务的新改动保留且不计入本项结果。
+
+### 重开后的持久化与界面确认通过
+
+用户报告“已确认无误，窗口以打开”，确认三项：临时 Kcp-Inspector-Edit 仍显示 **Dev／Steam／Direct／Normal**；项目业务配置只出现一次，原生设置仍可见；正式 Windows-Dev-Kcp 仍为 Active。界面结果来源于用户确认，没有使用磁盘文件冒充界面证据。
+
+**11:09:01.8246934 UTC** 独立检查记录在 `inspector-restart/confirmed/audit.json`：49 项正式 Profile／设置与 `restart-before.json` 一致，46 项受测源码与测试归档一致；临时编辑副本仍为 SHA `503009f74192618c57c1e57ef41900f26e082e83708491c773ca3b99148fdb7b`，其 meta、缺组件副本及 meta 也均与预期一致。四个临时文件、正式设置和脱敏日志已另存。重开日志采样 37482 字节、原始 SHA `65570db742bc7fa617cf468a1f4851611b74d122b5233843b090a3c0517c3d41`；EndLayoutGroup 错误 0、C# 编译错误 0。正式 KCP／Sandbox 的既有原生标记变化仍保留，没有新增业务配置变化或自动应用符号。
+
+至此，真实显示、只读浏览、多选／缺组件提示、Undo／Redo、显式保存、共享配置读取及重开后的保存值和单次业务区检查均通过。本次持久化恢复发生在首次 Editor 异常结束之后，不能代替“首次正常关闭并重开”的原始验收条件。已请用户正常关闭当前 PID 55716，尚待取得其真实退出结果及清理本轮临时副本；不追加测试、构建或启动 Player。
+
+### 最终退出与临时副本清理完成
+
+用户报告“已关闭”。观察脚本取得重开 Editor **PID 55716** 的真实结束时间 **11:13:31.6227111 UTC**、退出码 **0**；未强制结束该进程。11:19:54 UTC 独立核验时无 Unity 进程，保存结果在 `final/exit-audit.json`：
+
+- 正式设置、重开启动前和退出后原始快照均为 **22323 字节**、SHA `3c2d8d83b25bb5bb93e96437ca2ae1ca4bc20ad792e14cf00a35cd64e912bd59`。
+- 49 项正式 Profile／设置与重开前基线一致；46 项受测源码与实际测试归档一致，清单分别为 `final/formal-after.json`、`final/source-after.json`。这不表示全仓库没有其他任务改动。
+- 临时编辑副本及其余三个文件均与用户确认时的预期保存版本一致。最终原始副本保存于 `final/fixtures/`，目录 meta 也独立归档。
+- 完整重开日志 **42475 字节**，原始 SHA `5b2d1c59c954f86cb8c5ee1f9f7a68af23ddfa99171fb63b8740704214537aa8`；EndLayoutGroup 错误 **0**、C# 编译错误 **0**。原始日志保留在 `inspector-restart/unity.log`，脱敏副本为 `final/unity-after-exit.redacted.log`，没有将这两个定向检查扩大为所有日志无错误。
+
+清理前重新确认没有 Unity 进程，解析并核对目标绝对路径恰为 `F:\UnityStore\MonsterSupergroup\Assets\BuildProfileInspectorValidation-460e4ef4`，排除目录／文件重解析点及额外文件，并复算每个源文件与归档副本的 SHA。**11:20:33.1283685–11:20:33.1565730 UTC** 使用 `Remove-Item -LiteralPath` 逐项删除四个已归档文件、空目录及对应目录 meta，没有递归清理；目标均已不存在。确切路径、归档位置及哈希在 `final/cleanup.json`。正式模板、源码及其他任务文件均保留。
+
+| 验收维度 | 本轮最终结果 |
+|---|---|
+| 编译与完整 EditorTools | 修改后实际 46/46、0 跳过、Unity 退出 0；收尾没有重复运行或借用其他任务结果 |
+| 普通 Profile Inspector | 用户确认业务字段正确、原生设置可见、多选和缺组件提示正常；未接入 Build Profiles 内置面板 |
+| 只读、编辑与保存 | 只读复核文件不变；Undo／Redo、显式保存与自定义窗口共享配置通过；不自动应用符号或激活 |
+| 重开与持久化 | 保存的 Dev／Steam／Direct／Normal 保留，业务区一处，正式 KCP Active；来源为用户确认及独立文件核对 |
+| 退出与清理 | 重开 Editor 正常退出 0，临时副本完成归档和清理；首次 Editor 仍记录为异常退出 -1 |
+| 保留限制 | 首次正常关闭再重开的原始链路没有按原条件通过，关闭停滞原因未确认；不据恢复成功宣称原因已修复 |
+
+正式 KCP 和 Sandbox 相对任务初始基线各保留一项原生 `m_HasScriptingDefines: 0 → 1` 变化，业务值、宏数组及场景未变。KCP 来自用户明确的编辑／恢复／保存操作；Sandbox 的具体保存触发未独立确认。这两项均没有自动覆盖或迁移。其余并发诊断源码、工具和文档改动原样保留。
+
+产品实现、使用指南、功能验收及清理到此完成，结果汇总在档案 `RESULTS.md`；本次未打包、启动 Player、扩大故障矩阵或提交代码。下一项仍可按原计划单独安排成功包的 Player 身份与篡改拒绝验证，其他 Profile、TMP／必要恢复对照和迁移收尾继续分批推进。
+
+## 2026-09-24 KCP Player 身份与单字段修改拒绝
+
+### 已有包、用户操作与证据来源
+
+复用布局修复回归成功包 `20260924T090326117Z-7d442108`，Profile GUID `b441d96b1c4f7a3469a6a2f3fc2fb88e`，配置为 product／Dev／Kcp／Direct／Normal、版本 0.0.1。原包位于 `Builds/ProfileValidation/KcpLayoutFix-20260924-165242-984-2128ffae/MonsterSupergroup-v0.0.1-dev-20260924T090326117Z-7d442108/`，同级 `KcpIdentity-Tampered/` 是用户实际运行的独立修改副本。收到日志时副本已经存在，没有重建、重复修改或追认由本次自动化创建。
+
+用户保存并提供 `C:\Users\ADMIN\AppData\LocalLow\YStarGaming\MonsterSupergroup\normal-player.log` 和 `tampered-player.log`。本次接续只核对并归档，不启动 Unity／Player、不重新打包、不重复 EditorTools 测试。仓库仍为原主工作区 `master / fb28b76e9588e01006debe0e4f8277f94634fa2d`，既有及并发改动保留，暂存区为空。
+
+档案：`Logs/BuildProfilesResume/player-identity-20260924-204742-160-98fa4781`。原始日志、事后清单、实际受测包记录、源码副本、差异、用户确认和核验脚本均已保存。日志原始哈希如下：
+
+| 日志 | 字节数 | SHA-256 |
+|---|---:|---|
+| normal-player.log | 56636 | `bcf825552cce9cd8d6f661c9e1426ed156688853a5699237800a5d7994f0e4c3` |
+| tampered-player.log | 28347 | `79a420a451fa84f79ec24e09b80f451fa01f9971151cbc3554b3566074b83120` |
+
+### 实际核验与最小对照结果
+
+执行命令（退出 **0**）：
+
+```powershell
+python .\Logs\BuildProfilesResume\player-identity-20260924-204742-160-98fa4781\audit.py
+```
+
+结果在 `audit.json`、`log-events.json`、`original-files.json`、`tampered-files.json`、`BuildInfo.diff`。脚本实际比较每份包 **482 个文件**的路径、长度及 SHA，文件集合相同，唯一差异为 `MonsterSupergroup_Data/StreamingAssets/BuildInfo.json`。原始字节精确等于将唯一的 `"gameVersion": "0.0.1"` 替换为 `"gameVersion": "0.0.2"`；不存在换行归一化或其他字段变更，其他 481 个文件相同。两个包中 contentHash／inputHash 也相同，拒绝并非由重算这两个摘要触发。
+
+原包 EXE、BuildInfo、MonsterSupergroup.Build.dll、UnityPlayer.dll、初始／最终计划和完成标记共 **7 项**，重新计算的长度及 SHA 全部匹配成功构建时的归档。没有测试前全包 482 项清单，故只对上述历史覆盖范围宣称原包未变；本次全包清单是事后采样。Profile 指针与历史退出归档逐字节一致，仍指向原成功包，没有把修改副本发布为新结果；见 `pointer-audit.json`。
+
+| 验收项 | 正常包 | 修改副本 |
+|---|---|---|
+| 日志中的实际加载路径 | 原成功包目录 | KcpIdentity-Tampered 目录 |
+| BuildInfo.gameVersion | 0.0.1 | 0.0.2 |
+| 实际 Player 版本 | 0.0.1 | 0.0.1 |
+| 编译能力日志 | Dev／Kcp／tools=True／evidence=False／development=True | 与正常包相同 |
+| 身份结果 | `valid=True`（第 96 行） | `valid=False`（第 94 行），第 83 行记录版本或构建配置不一致 |
+| 界面身份日志 | v0.0.1-dev 与原 BuildId（第 244 行） | BuildInfo invalid · 请重新安装完整游戏包（第 242 行） |
+| 本地联机证据 | 第 388 行出现本地房间 ready | 用户确认点击“创建本地主机”后出现无效包提示，未进入房间 |
+
+两份日志的 BuildId、Profile 身份及 JSON 内容均与各自磁盘文件一致。用户明确回复 **“已点击，出现提示且未进入房间”**，保存在 `ui-confirmation.json`。当前本地入口在 `StartLocalRoom` 中先执行 `RuntimeBuildAvailable`，失败后返回给菜单显示提示，不会进入 KCP 准备与 StartHost／StartClient；该拒绝分支没有独立 Debug.Log。因此界面拒绝以用户确认作为直接证据，不用“日志里没有 ready”替代点击及拒绝事实。
+
+### 校验原理与证据限制
+
+当前运行时实际执行的是 **BuildInfo 元数据与 Player 实际信息的一致性检查**：gameVersion 对比 Application.version，development 对比 Debug.isDebugBuild，kind／工具／取证／网络与编译后的能力比较。错误保存在 RuntimeBuildInfo.Error，非 Editor 的 CanConnect 随之为 false；菜单与联机入口拒绝继续。不会因为身份无效而要求进程自动退出。
+
+contentHash 来自构建时的有效配置，inputHash 来自工程输入与依赖摘要。运行时对此只检查 schema 所要求的摘要长度等结构条件，**没有重算整个安装包或验证两个摘要值对应的实际文件，也没有数字签名认证**。构建／结果读取阶段使用它们做计划与工件记录的一致性核对；本次离线 SHA 则用于证明对照包只改了一个文件。三者用途分开，本次验收不宣称任意篡改均可被发现。
+
+`source-hashes.json` 保存当前源码与包内初始计划的对应关系：BuildInfo、联机校验、本地房间流程及菜单等 5 份运行时源码全部匹配；Resolver 亦匹配，PowerShell 结果读取源码另存当前 SHA，其路径不在该包初始输入清单中。未修改上述实现。
+
+手动运行未同步记录准确启动命令、PID、进程起止时间及真实退出码，统一记为未知；日志中的 Shutdown 与文件修改时间不代替退出 0。正常日志存在栈行交错／截断，保留原文，仅据完整身份行及房间 ready 行记录实际信息，不宣称完整双进程／双账号联机时序已验证。核查时无 Unity 或 MonsterSupergroup 进程，未终止任何进程。
+
+**最终结论**：正常 Player 身份检查、独立副本单字段版本不一致拒绝，以及用户实际点击后的本地联机拒绝均通过。该最小对照完成，两个包保留，不修复或发布修改副本。下一项按原计划推进代表 Profile：产品 Test → Profiler／Evidence → Wisp／专项 Test；非空 TMP／必要事务恢复和迁移收尾仍未完成。本次仅新增证据与文档，没有源码修复、构建、提交、reset 或 clean。
+
+## 2026-09-24 Windows-Test-Steam 代表包构建
+
+### 范围、基线与实际执行
+
+按用户要求推进产品 Test 代表包，以现有 CLI 入口执行一次 Windows-Test-Steam；不清缓存、不安装模板、不自动运行 Player 或上传 Steam，不修改产品源码及发布条件。当前为原主工作区 `master / fb28b76e9588e01006debe0e4f8277f94634fa2d`，暂存区为空；旧 KCP 包、指针及全部既有改动保留。
+
+档案：`Logs/BuildProfilesResume/test-steam-20260924-211326-666-7a238c6b`。启动前清单覆盖与服务输入算法相同类别的源码／程序集定义／响应文件／DLL、Packages、ProjectSettings，再加入正式 Profile 与执行工具，共 **4171 项**；新增／删除也参与前后比较。`before/` 保存正式设置、Profile、EditorTools、Build 运行时及执行工具副本。46 项构建工具相关源码与上次已执行的 Inspector 回归版本一致；本次只做新 Profile 编译及构建，**没有重跑完整 EditorTools 测试**。
+
+准确构建命令在 `run-build.ps1`：
+
+```powershell
+& .\Tools\Invoke-ProjectTool.ps1 `
+  -ToolId build.player `
+  -BuildProfile 'Assets/Settings/Build Profiles/Windows-Test-Steam.asset' `
+  -Unity 'D:\RealSoftware\6000.3.21f1\Editor\Unity.exe' `
+  -Output 'Builds/ProfileValidation/TestSteam-20260924-211326-666-7a238c6b/MonsterSupergroup.exe' `
+  -ResultPath 'Logs/BuildProfilesResume/test-steam-20260924-211326-666-7a238c6b/result.json' `
+  -TimeoutSeconds 1800
+```
+
+工具实际使用 `-batchmode -nographics -activeBuildProfile ... -executeMethod MonsterSupergroup.EditorTools.NativeBuildEntry.Batch`，隐藏窗口，无 RunAfterBuild／清缓存参数。Unity **PID 60792**，开始 **13:14:20.4286306 UTC**、结束记录 **13:17:41.3199838 UTC**，真实退出 **0**、CleanupRequested=false；工具报告耗时 **201.213 秒**。日志、原始参数及进程记录均复制到 `tool-logs/`，汇总为 `execution-audit.json`。本轮只启动该 Unity，没有启动 Player。
+
+### 实际产物与编译能力
+
+BuildId **`20260924T131532148Z-d824d3a7`**，Profile GUID **`4fecdf51023441945ba7a87276c9a4c5`**。实际 EXE：
+
+```text
+F:\UnityStore\MonsterSupergroup\Builds\ProfileValidation\TestSteam-20260924-211326-666-7a238c6b\MonsterSupergroup-v0.0.1-test-20260924T131532148Z-d824d3a7\MonsterSupergroup.exe
+```
+
+执行 `verify-package.ps1`，退出 0，**19 项包核对全部为 true**，这是产物检查数，不是 Unity 单元测试数：
+
+| 维度 | 本轮实际结果 |
+|---|---|
+| 业务身份 | product／Test／Steam／Steam／Normal，版本 0.0.1，schema 3 |
+| 原生计划 | Windows x86_64，Development／调试／Profiler／深度分析／等待调试均关闭，压缩值 3（LZ4HC） |
+| 场景顺序 | Boot → MainMenu → Gameplay |
+| 实际 BuildFeatures DLL | CompiledKind=Test、CompiledNetwork=Steam、ToolsCompiled=false、EvidenceCompiled=false |
+| 程序集／分发文件 | 无 MonsterSupergroup.*Tests*.dll；steam_api64.dll 存在；无 steam_appid.txt、combat-build.json |
+| 发布一致性 | EXE、BuildInfo、初始计划、完成标记及本次 Profile 指针一致；暂存目录已移除，没有本次失败隔离目录 |
+| 请求 | cleanBuildCache=false、runAfterBuild=false |
+
+`package-audit.json` 保存实际 DLL 的 Cecil 指令、文件长度及 SHA；`package-records/` 保存包内计划、请求、身份与标记。不是仅依赖 JSON 自证。现有 `Resolve-ProjectBuildExecutable` 能按 Test-Steam／Steam／Normal 选中本包，附加 RequireDevelopmentTools 时正确拒绝；结果在 `result-selection-audit.json`。没有重跑两种 PowerShell 的完整 44 项回归，因为正式执行／结果逻辑未修改。
+
+`compilation-audit.json` 与两个 `.rsp` 副本确认：Editor 和 Player 编译均仅含业务宏 `MONSTER_BUILD_TEST`，没有旧 Dev／Tools／KCP 宏；Player 没有 DEVELOPMENT_BUILD、UNITY_INCLUDE_TESTS，Editor 的 UNITY_INCLUDE_TESTS 只用于 Editor 测试环境，不属于随包测试程序集。实际裁剪后 Build DLL 与交付 DLL 的 SHA 相同。Library/BuildProfileContext 缓存也从三个 KCP Dev 宏切换为 MONSTER_BUILD_TEST。这里只验证批处理编译与宏，不扩大为交互式 Editor PlayMode、所有插件行为或 GUI 重开后的活动 Profile 持久化均已通过。
+
+### 六阶段与设置恢复
+
+内部采集目录由本次 BuildId／Profile GUID 唯一匹配为 `input-20260924T131525785Z-f0cb581268734399921190b341de2691`，完整副本在档案 `input-evidence/`。执行 `analyze-lifecycle.py`，退出 0，六阶段全部 Captured、最终 Complete，无采集错误；长度、SHA、时间顺序及初始／最终计划输入条目均独立核对通过。
+
+- 初始计划与调用 Unity 前：22323 字节，SHA `3c2d8d83b25bb5bb93e96437ca2ae1ca4bc20ad792e14cf00a35cd64e912bd59`。
+- Unity 返回至最终计划：22395 字节，SHA `64027d29de779234b5c861a3b70a415605c9e87b6759d7a09c7e7d69c92629af`。
+- 独立文本差异仅为 preloadedAssets 增加 GUID `99f9c9493070a9d4c979a8fec7c5a8d3`；首次变化区间为调用 Unity 前→Unity 返回。身份清理、当前字体状态下的 TMP 恢复阶段没有额外设置差异。不能据阶段区间直接归因具体回调。
+- 进程退出后恢复到启动前原始字节，完整过程 A→B→A。所有正式 Profile 与设置均无本轮新增磁盘变化；已有 KCP／Sandbox 原生标记变化保留。
+
+contentHash 首尾同为 `a2303516fa63979b791952eb823b7a563cd754b28068ebee209cfaa39b7e394a`；inputHash 从 `f90d7c914b85d9fa5467f0738ea19b21b6bf1393dc63d8023f70a0551fb63c92` 变为 `0a6c061f09ba60fd989f00b183331c6b12594aab2bb7551d7d18552ccffd7858`，服务报告警告并保存构建后计划，未以不相等拒绝发布。完整比较在 `lifecycle-audit.json`、`independent-diff.txt`。
+
+### 并发输入变化、日志保留项与结论
+
+输入前后比较发现：`Assets/_Project/Tests/EditMode/NetworkCombat/CombatEvidenceIntegrityTests.cs` 在 **13:15:25.6969093 UTC** 发生并发变化，早于初始计划快照 **13:15:31.8250001 UTC**。启动前 SHA 为 `caa90d178fde7159494ec261ff55d93add0c1f4ef8548e06d51397bfc80cb7ce`，初始／最终计划及退出后均为 `dad2f5a5b642766ee2351969f73b3d73be11b4070bddbab66dac2c11f41410ce`。其 asmdef 限定 Editor，该测试程序集未进入 Player；源码及 asmdef 副本已留存，未覆盖该改动。
+
+13:18:06 UTC 的退出后全输入采样中，除该测试源码外，其余 4170 项与启动前一致。收尾期间又观察到 **13:20:53 UTC** 的 CombatEvidence.cs／CombatEvidenceRuntime.cs 改动，均晚于 Unity 退出；它们已与本包输入清单不同，证据为 `concurrent-source-observation.json`。因此，**本包的交付和实际能力通过，不等同于严格启动前冻结输入的完整回归，也不能作为后续并发源码已验证的基线**。下一次构建必须重新冻结输入；本轮不自动重复构建追赶其他任务。
+
+完整 Unity 日志 **1792085 字节**，SHA `e37bab43353c2a932f93dc180b3f9e547a6ed1c4dde2fbd9dd996deb17bdbf0d`。C# 编译错误 0、布局错误 0、服务成功发布一次；保留两条 TMP Fallback 导入不一致，以及启动时许可握手／访问令牌更新错误，后续构建正常完成。原始和脱敏日志分开归档，不把退出 0 写成日志无任何错误，也不扩展到授权或字体问题修复。
+
+**本轮交付结论**：一次 Test-Steam 构建成功、19 项包核对通过、六阶段证据完整、进程退出 0、设置恢复及 KCP 旧指针保留。**尚未验证**：Steam 渠道启动与真实 Player、双账号体验、交互式 Editor 运行、非空 TMP／必要失败恢复，以及后续并发源码；这些没有借用 KCP 或历史测试结果补齐。本轮未提交、reset、clean 或修改产品接口。下一批待并发改动稳定后建立新基线，再推进 Profiler／Evidence，避免直接沿用本包覆盖当前变化。
+
+## 2026-09-24 Windows-Test-Steam 双账号人工验收
+
+用户在收到双账号验收步骤后回复 **“已完成验收”**。前述步骤包括两端有效身份及 Steam 初始化、A 建房与 B 加入同一局、实际交互同步、退出房间及重新加入；按用户整体确认记为 **人工验收通过**，不虚构逐项截图或双端日志。证据目录：`Logs/BuildProfilesResume/test-steam-manual-20260924-214701-c6b9ddf9`。
+
+实施者随后只读取、归档本机 `C:\Users\ADMIN\AppData\LocalLow\YStarGaming\MonsterSupergroup\Player.log`，没有启动客户端、追加构建或上传 Steam。原始日志 54746 字节，SHA-256 `368b3c12059086af9224f646dbc218ce5b9e73a0343900566db7dc6bb0c72284`，文件最后修改时间为 2026-09-24 13:45:29 UTC。`manual-acceptance.json` 保存用户原话、采样时间、日志哈希与独立核对的记录：
+
+- BuildId `20260924T131532148Z-d824d3a7` 与本次成功 Test-Steam 包一致；版本 0.0.1，kind=Test、network=Steam、tools=False、evidence=False、development=False、valid=True。
+- 运行后端为 Steam，transport=FizzySteamworks；Steam AppID 4886160 初始化成功，并有 Hosting Lobby 记录。
+- 双端入房、同步与退出重入的结论来源于用户人工确认。没有取得对端日志及 BuildId、完整双端时序、准确启动命令／PID／进程起止时间／退出码，也没有核对 Steam 上传或分支发布记录；不以 Shutdown 字样推定退出 0。
+
+原始日志另有磁盘／分区信息查询错误，按原文保留，不扩大为“所有日志无错误”，也不在本轮追查。当前仓库仍为主工作区 `master / fb28b76e`，暂存区为空，其他任务的并发改动原样保留。本项仅验收上述已归档成功包，不覆盖构建后源码变化；先前六阶段和 19 项包检查引用其已执行记录，没有重新执行或重复计数。
+
+**当前结论**：Windows-Test-Steam 构建与包核对通过，生命周期证据完整，真实 Steam 双账号人工验收由用户确认通过。后续先为稳定后的当前源码重新建立基线，再依次推进 Windows-Test-Profiler、Windows-Test-Evidence；交互式 Editor 行为、非空 TMP／必要事务恢复、迁移收尾和 Shipping 干净提交仍分项保留。本轮到此停止，没有产品代码修改、提交、reset 或 clean。

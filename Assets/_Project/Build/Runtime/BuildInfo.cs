@@ -63,17 +63,19 @@ namespace MonsterSupergroup.Builds
             if (schema == 3 && (profileGuid?.Length != 32 || contentHash?.Length != 64 || inputHash?.Length != 64 ||
                 string.IsNullOrEmpty(profilePath) || !profilePath.StartsWith("Assets/", StringComparison.Ordinal))) return "原生 Profile 身份或计划摘要缺失。";
             if ((network != "Steam" && network != "Kcp") || (distribution != "Steam" && distribution != "Direct") ||
-                (diagnostics != "Normal" && diagnostics != "Evidence") || evidence != (diagnostics == "Evidence"))
+                (diagnostics != "Normal" && diagnostics != "Evidence" && diagnostics != "Network") || evidence != (diagnostics == "Evidence"))
                 return "构建用途或诊断配置缺失或无效。";
             if (gameVersion != actualVersion || development != actualDevelopment || kind != compiledKind.ToString().ToLowerInvariant())
                 return "构建信息与 Player 的版本或构建配置不一致。";
             if (compiledKind == BuildKind.Shipping && (development || !gitValid || dirty || string.IsNullOrEmpty(gitCommit) ||
-                testAssemblies || developmentTools || evidence || network != "Steam" || distribution != "Steam"))
+                testAssemblies || developmentTools || diagnostics != "Normal" || evidence || network != "Steam" || distribution != "Steam"))
                 return "发行构建信息未通过校验。";
             return null;
         }
-        public string ValidateCapabilities(bool compiledTools, bool compiledEvidence) =>
-            developmentTools == compiledTools && evidence == compiledEvidence ? null : "包内能力信息与实际编译配置不一致。";
+        public string ValidateCapabilities(bool compiledTools, bool compiledEvidence, bool compiledNetworkDiagnostics = false) =>
+            developmentTools == compiledTools && evidence == compiledEvidence && !(compiledEvidence && compiledNetworkDiagnostics) &&
+            diagnostics == (compiledEvidence ? "Evidence" : compiledNetworkDiagnostics ? "Network" : "Normal")
+                ? null : "包内能力信息与实际编译配置不一致。";
     }
 
     /// <summary>Compile-time restrictions cannot be enabled by changing BuildInfo or command-line arguments.</summary>
@@ -99,6 +101,22 @@ namespace MonsterSupergroup.Builds
 #else
             false;
 #endif
+        public static bool NetworkDiagnosticsCompiled =>
+#if MONSTER_BUILD_NETWORK_DIAGNOSTICS
+            true;
+#else
+            false;
+#endif
+        public static string CompiledDiagnostics =>
+#if MONSTER_BUILD_EVIDENCE
+            "Evidence";
+#elif MONSTER_BUILD_NETWORK_DIAGNOSTICS
+            "Network";
+#else
+            "Normal";
+#endif
+        public static bool AutoNetworkDiagnostics => !Application.isEditor && CompiledKind != BuildKind.Shipping &&
+            (NetworkDiagnosticsCompiled || EvidenceCompiled);
         public static bool DevelopmentToolsAllowed => CapabilityAllowed(CompiledKind, ToolsCompiled, Application.isEditor);
         public static bool EvidenceAllowed => CapabilityAllowed(CompiledKind, EvidenceCompiled, Application.isEditor);
         public static string CompiledNetwork =>
@@ -129,7 +147,7 @@ namespace MonsterSupergroup.Builds
         {
             EnsureLoaded();
             Debug.Log("[BuildInfo] " + (Application.isEditor ? Display : current?.ToJson() ?? "missing") + (error == null ? "" : "\n" + error));
-            if (!Application.isEditor) Debug.Log($"[CompiledBuild] kind={BuildFeatures.CompiledKind} tools={BuildFeatures.ToolsCompiled} evidence={BuildFeatures.EvidenceCompiled} network={BuildFeatures.CompiledNetwork} development={Debug.isDebugBuild} version={Application.version} buildId={current?.BuildId} valid={error == null}");
+            if (!Application.isEditor) Debug.Log($"[CompiledBuild] kind={BuildFeatures.CompiledKind} tools={BuildFeatures.ToolsCompiled} evidence={BuildFeatures.EvidenceCompiled} diagnostics={BuildFeatures.CompiledDiagnostics} network={BuildFeatures.CompiledNetwork} development={Debug.isDebugBuild} version={Application.version} buildId={current?.BuildId} valid={error == null}");
         }
         private static void EnsureLoaded()
         {
@@ -140,7 +158,7 @@ namespace MonsterSupergroup.Builds
             {
                 current = BuildInfo.FromJson(File.ReadAllText(Path.Combine(Application.streamingAssetsPath, "BuildInfo.json")));
                 error = current == null ? "包内 BuildInfo 缺失。" : current.Validate(Application.version, Debug.isDebugBuild, BuildFeatures.CompiledKind);
-                if (error == null) error = current.ValidateCapabilities(BuildFeatures.DevelopmentToolsAllowed, BuildFeatures.EvidenceAllowed);
+                if (error == null) error = current.ValidateCapabilities(BuildFeatures.ToolsCompiled, BuildFeatures.EvidenceCompiled, BuildFeatures.NetworkDiagnosticsCompiled);
                 if (error == null && current.Network != BuildFeatures.CompiledNetwork) error = "包内网络信息与实际编译配置不一致。";
             }
             catch (Exception exception) when (exception is IOException || exception is UnauthorizedAccessException || exception is ArgumentException)

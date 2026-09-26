@@ -132,6 +132,7 @@ namespace MonsterSupergroup.NetworkCombat
 
         public override void OnStartServer()
         {
+            NetworkLightEvidence.Lifecycle(netId, 1, true, "Server", name, "Enemy");
             if (MonsterSupergroup.GAS.CombatEvidence.Enabled) MonsterSupergroup.GAS.CombatEvidence.Event("Server", "entity.spawn", "Observed", null, target: netId, input: new { name, assignment, position = transform.position, localAlive = IsLocallyAlive, canonicalAlive = IsCanonicalAlive });
             base.OnStartServer();
             networkStartCallbacksReady = true;
@@ -152,6 +153,7 @@ namespace MonsterSupergroup.NetworkCombat
 
         public override void OnStartClient()
         {
+            NetworkLightEvidence.Lifecycle(netId, 2, true, "Replica", name, "Enemy");
             if (MonsterSupergroup.GAS.CombatEvidence.Enabled) MonsterSupergroup.GAS.CombatEvidence.Event("Replica", "entity.spawn", "Observed", null, target: netId, input: new { name, assignment, position = transform.position, localAlive = IsLocallyAlive, canonicalAlive = IsCanonicalAlive });
             base.OnStartClient();
             networkStartCallbacksReady = true;
@@ -203,6 +205,7 @@ namespace MonsterSupergroup.NetworkCombat
 
         public override void OnStopClient()
         {
+            NetworkLightEvidence.Lifecycle(netId, 2, false, "Replica", name, "Enemy");
             if (MonsterSupergroup.GAS.CombatEvidence.Enabled) MonsterSupergroup.GAS.CombatEvidence.Event("Replica", "entity.destroy", "Observed", null, target: netId, input: new { name, assignment, position = transform.position, localAlive = IsLocallyAlive, canonicalAlive = IsCanonicalAlive });
             ReleaseDecoyTargetAnchor();
             NetworkCombatWorld.Instance?.ForgetEnemyHitPresentation(netId);
@@ -218,6 +221,7 @@ namespace MonsterSupergroup.NetworkCombat
 
         public override void OnStopServer()
         {
+            NetworkLightEvidence.Lifecycle(netId, 1, false, "Server", name, "Enemy");
             if (MonsterSupergroup.GAS.CombatEvidence.Enabled) MonsterSupergroup.GAS.CombatEvidence.Event("Server", "entity.destroy", "Observed", null, target: netId, input: new { name, assignment, position = transform.position, localAlive = IsLocallyAlive, canonicalAlive = IsCanonicalAlive });
             CancelNetworkKnockbackState(true);
             NetworkEnemySimulationWorld.Instance?.UnregisterEnemy(this);
@@ -338,6 +342,7 @@ namespace MonsterSupergroup.NetworkCombat
 
         private void TraceReceivedMovement(EnemySimulationSnapshot snapshot, string outcome, string reason)
         {
+            NetworkLightEvidence.MovementDecision(snapshot, outcome, reason);
             if (MonsterSupergroup.GAS.CombatEvidence.Enabled) MonsterSupergroup.GAS.CombatEvidence.Write(new MonsterSupergroup.GAS.DiagnosticRecord {
                 role = authority.Role.ToString(), stage = "movement.receive", outcome = outcome, reason = reason, target = netId,
                 assignmentEpoch = assignment.Epoch, input = snapshot, after = new { position = transform.position, assignment, localAlive = IsLocallyAlive, canonicalAlive = IsCanonicalAlive } });

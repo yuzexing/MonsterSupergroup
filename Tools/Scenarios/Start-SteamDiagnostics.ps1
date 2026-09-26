@@ -20,7 +20,7 @@ if ($AttachProcessId -and $PSBoundParameters.ContainsKey('EvidenceProfile')) { t
 if ($EvidenceProfile -eq 'Diagnostic' -and $EvidenceMode -notin @('local','replicated')) { throw 'Diagnostic EvidenceProfile requires explicit local or replicated EvidenceMode.' }
 $projectRoot = Split-Path -Parent (Split-Path -Parent $PSScriptRoot)
 Import-Module (Join-Path (Split-Path -Parent $PSScriptRoot) 'ProjectTools.psm1')
-Import-Module (Join-Path (Split-Path -Parent $PSScriptRoot) 'SteamEvidenceIdentity.psm1')
+Import-Module (Join-Path (Split-Path -Parent $PSScriptRoot) 'SteamEvidenceIdentity.psm1') -Force
 if (-not $AttachProcessId) { $Executable = Resolve-ProjectBuildExecutable -ProjectRoot $projectRoot -Recipe 'product' -Executable $Executable -Network Steam }
 if ($AttachProcessId) {
     $player = Get-Process -Id $AttachProcessId
@@ -29,6 +29,7 @@ if ($AttachProcessId) {
 $Executable = (Resolve-Path -LiteralPath $Executable).Path
 if (-not $ArtifactDirectory) { $ArtifactDirectory = Join-Path $projectRoot ('Logs/SteamSessions/' + (Get-Date -Format 'yyyyMMdd-HHmmss-fff') + '-' + $ExpectedRole) }
 $ArtifactDirectory = [IO.Path]::GetFullPath($ArtifactDirectory)
+if ($Scenario -eq 'steam-network-light-8-minute') { Assert-SteamNetworkOutputPath -Directory (Join-Path $ArtifactDirectory 'metrics') }
 if (Test-Path -LiteralPath $ArtifactDirectory) { throw 'Use a new artifact directory for each capture.' }
 New-Item -ItemType Directory -Path $ArtifactDirectory | Out-Null
 function Save-Json($value, $name) { $value | ConvertTo-Json -Depth 12 | Set-Content -LiteralPath (Join-Path $ArtifactDirectory $name) -Encoding UTF8 }
@@ -85,6 +86,14 @@ $record.evidenceProfileArgumentsApplied=$false
 $record.appliedEvidenceConfiguration=$null
 $record.evidenceConfigurationVerified=$false
 $record.evidenceConfigurationError=$null
+$networkCase = $Scenario -eq 'steam-network-light-8-minute'
+if ($networkCase -and $EvidenceMode -ne 'off') { throw 'The lightweight network case requires full combat evidence off.' }
+if ($networkCase) {
+    $record.requestedNetworkCapabilities=[ordered]@{version=1;lightweightNetworkEnabled=$true;fullCombatEvidenceEnabled=$false;injectionEnabled=$false;samplingIntervalSeconds=1}
+    $record.networkConfigurationVerified=$false
+    $record.appliedNetworkConfiguration=$null
+    $record.networkConfigurationError=$null
+}
 $record.requestedQueueObservationDirectory=if($ObserveEvidenceQueue){$evidenceOutput}else{$null}
 if ($ObserveEvidenceQueue) { $record.notes += 'Writer observation requested; export status, capacity and timing validity remain unknown until offline audit.' }
 if ($AttachProcessId) { $record.notes += 'Attach mode: requested launcher arguments and output paths are not applied to the existing process.' }
@@ -108,6 +117,15 @@ Save-Json $record 'capture.json'
 try {
     $reminded=$false
     while (-not $player.WaitForExit(1000)) {
+        if ($networkCase -and -not $record.networkConfigurationVerified) {
+            try {
+                $configuration = Get-SteamNetworkConfiguration -Capture $record
+                $record.appliedNetworkConfiguration=$configuration.applied
+                $record.networkConfigurationVerified=$true
+                $record.networkConfigurationError=$null
+                Save-Json $record 'capture.json'
+            } catch { $record.networkConfigurationError=$_.Exception.Message }
+        }
         if ($record.evidenceProfileArgumentsApplied -and -not $record.evidenceConfigurationVerified) {
             try {
                 $configuration = Get-SteamEvidenceConfiguration -Capture $record -ExpectedProfile $EvidenceProfile
@@ -117,12 +135,21 @@ try {
                 Save-Json $record 'capture.json'
             } catch { $record.evidenceConfigurationError=$_.Exception.Message }
         }
-        if (-not $reminded -and ([DateTime]::UtcNow-$started).TotalMinutes -ge 20) {
-            Write-Output '20 minutes since process start. Finish this round and exit when ready; the collector will not terminate the game.'
+        $reminderMinutes = if ($networkCase) { 8 } else { 20 }
+        if (-not $reminded -and ([DateTime]::UtcNow-$started).TotalMinutes -ge $reminderMinutes) {
+            Write-Output "$reminderMinutes minutes since process start. Finish this round and exit when ready; the collector will not terminate the game."
             $reminded=$true
         }
     }
     $player.WaitForExit(); $record.exitCode=$player.ExitCode; $record.exitedUtc=$player.ExitTime.ToUniversalTime().ToString('o')
+    if ($networkCase -and -not $record.networkConfigurationVerified) {
+        try {
+            $configuration = Get-SteamNetworkConfiguration -Capture $record
+            $record.appliedNetworkConfiguration=$configuration.applied
+            $record.networkConfigurationVerified=$true
+            $record.networkConfigurationError=$null
+        } catch { $record.networkConfigurationError=$_.Exception.Message }
+    }
     if ($record.evidenceProfileArgumentsApplied -and -not $record.evidenceConfigurationVerified) {
         try {
             $configuration = Get-SteamEvidenceConfiguration -Capture $record -ExpectedProfile $EvidenceProfile

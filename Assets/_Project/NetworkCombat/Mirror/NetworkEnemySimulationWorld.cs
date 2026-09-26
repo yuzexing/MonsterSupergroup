@@ -371,6 +371,7 @@ namespace MonsterSupergroup.NetworkCombat
             }
 
             TraceMovementBatch(endpoint, batch, "Received", "PerEntityValidation");
+            using var lightMovement = NetworkLightEvidence.BeginMovement("Server", endpoint.PlayerEntityId, batch);
             snapshotBuffer.Clear();
             for (int i = 0; i < batch.Snapshots.Length; i++)
             {
@@ -387,6 +388,7 @@ namespace MonsterSupergroup.NetworkCombat
                 if (!enemy.ValidateSequenceAction(snapshot.Runtime.Action) || !enemy.ValidateDashAction(snapshot.Runtime.Action) || !enemy.ValidateExplosionAction(snapshot.Runtime.Action, snapshot.Position))
                 { TraceSkippedMovement(endpoint.PlayerEntityId, batch.BatchSequence, snapshot, "RuntimeActionRejected"); continue; }
                 var rejection = Registry.TryAcceptClientSnapshot(endpoint.PlayerEntityId, snapshot);
+                NetworkLightEvidence.MovementDecision(snapshot, rejection == EnemySnapshotRejectionReason.None ? "Accepted" : "Rejected", rejection.ToString());
                 var progress = GetHandoff(snapshot.EnemyEntityId);
                 if (rejection == EnemySnapshotRejectionReason.WrongOwner) progress.Diagnostics.WrongOwner++;
                 if (rejection == EnemySnapshotRejectionReason.WrongEpoch) progress.Diagnostics.WrongEpoch++;
@@ -398,17 +400,20 @@ namespace MonsterSupergroup.NetworkCombat
                 }
             }
 
+            lightMovement?.Complete();
             BroadcastSnapshots(snapshotBuffer, endpoint.connectionToClient);
         }
 
         private static void TraceMovementBatch(NetworkEnemySimulationEndpoint endpoint, EnemySimulationSnapshotBatch batch, string outcome, string reason)
         {
+            NetworkLightEvidence.Record("Server", "EnemyMovement", outcome, reason, () => new { batch.Round, count = batch.Snapshots?.Length ?? 0 }, source: endpoint != null ? endpoint.PlayerEntityId : 0, batch: batch.BatchSequence);
             if (!MonsterSupergroup.GAS.CombatEvidence.Enabled) return;
             MonsterSupergroup.GAS.CombatEvidence.Event("Server", "movement.batch", outcome, reason, source: endpoint != null ? endpoint.PlayerEntityId : 0,
                 batch: batch.BatchSequence, input: new { batch.Round, count = batch.Snapshots?.Length ?? 0 }, bytes: 512);
         }
         private static void TraceSkippedMovement(uint sender, uint batch, EnemySimulationSnapshot snapshot, string reason)
         {
+            NetworkLightEvidence.MovementDecision(snapshot, "Rejected", reason);
             if (!MonsterSupergroup.GAS.CombatEvidence.Enabled) return;
             MonsterSupergroup.GAS.CombatEvidence.Write(new MonsterSupergroup.GAS.DiagnosticRecord {
                 role = "Server", stage = "authority.movement", outcome = "Rejected", reason = reason, source = sender,
@@ -608,13 +613,14 @@ namespace MonsterSupergroup.NetworkCombat
         private void ApplyMovementSnapshots(EnemySimulationSnapshotBatch batch)
         {
             using var diagnosticScope = AstralShift.DebugTools.CombatPerformanceCounters.Measure(AstralShift.DebugTools.CombatPerformanceCounters.Area.SnapshotReceive);
-            if (batch.Round != CurrentRound) return;
-            if (BootGameplayNetworkManager.CombatHasEnded) return;
+            if (batch.Round != CurrentRound) { NetworkLightEvidence.Record("Replica", "EnemyMovement", "Ignored", "WrongRound", () => new { batch.Round }, batch: batch.BatchSequence); return; }
+            if (BootGameplayNetworkManager.CombatHasEnded) { NetworkLightEvidence.Record("Replica", "EnemyMovement", "Ignored", "CombatEnded", batch: batch.BatchSequence); return; }
             if (batch.Snapshots == null)
             {
                 return;
             }
 
+            using var lightMovement = NetworkLightEvidence.BeginMovement("Replica", 0, batch);
             for (int i = 0; i < batch.Snapshots.Length; i++)
             {
                 EnemySimulationSnapshot snapshot = batch.Snapshots[i];
@@ -625,7 +631,9 @@ namespace MonsterSupergroup.NetworkCombat
                 {
                     enemy.ReceiveRemoteSnapshot(snapshot);
                 }
+                else NetworkLightEvidence.MovementDecision(snapshot, "Ignored", "EntityUnavailable");
             }
+            lightMovement?.Complete();
         }
 
         [ClientRpc(channel = Channels.Reliable)]

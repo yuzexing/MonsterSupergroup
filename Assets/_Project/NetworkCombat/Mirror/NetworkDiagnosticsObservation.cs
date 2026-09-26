@@ -14,9 +14,9 @@ using UnityEngine.Profiling;
 namespace MonsterSupergroup.NetworkCombat
 {
     // Opt-in observer of ordinary Boot/Steam play. No backend, gameplay or graphics overrides.
-    public sealed class NetworkDiagnosticsObservation : MonoBehaviour
+    public sealed partial class NetworkDiagnosticsObservation : MonoBehaviour
     {
-        public const int SchemaVersion = 2;
+        public const int SchemaVersion = 3;
         private static bool enabledForRun;
         public static bool Enabled => enabledForRun;
         public static long SnapshotCount, SnapshotBytes, ReliableSnapshotPackets;
@@ -35,18 +35,24 @@ namespace MonsterSupergroup.NetworkCombat
         private int lastWidth, lastHeight, lastMode;
         private double nextSample, windowStart, allocatedBytes, gcMilliseconds, maximumMainMs;
         private bool closed, unifiedEvidence;
+        private bool automaticCapture, readyReported, failureReported, closeReportStarted, quitRequested, quitReissued;
+        private volatile bool closeReported;
         public string OutputPath { get; private set; }
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
         private static void Install()
         {
-            enabledForRun = Array.IndexOf(Environment.GetCommandLineArgs(), "--network-diagnostics") >= 0;
+            enabledForRun = MonsterSupergroup.Builds.BuildFeatures.CompiledKind != MonsterSupergroup.Builds.BuildKind.Shipping &&
+                (MonsterSupergroup.Builds.BuildFeatures.AutoNetworkDiagnostics ||
+                 Array.IndexOf(Environment.GetCommandLineArgs(), "--network-diagnostics") >= 0);
             SteamTransportDiagnostics.Enabled = CombatPerformanceCounters.Enabled = enabledForRun;
             SnapshotCount = SnapshotBytes = ReliableSnapshotPackets = 0;
             overlayState = -1; overlayChanges = 0;
             CombatPerformanceCounters.Reset();
             if (!enabledForRun) return;
             SteamTransportDiagnostics.Reset();
+            // The combat runtime owns its unified observer; never create a second lightweight sink.
+            if (Diagnostics.CombatEvidenceRuntime.Instance != null || FindFirstObjectByType<NetworkDiagnosticsObservation>() != null) return;
             var root = new GameObject("Network diagnostics");
             DontDestroyOnLoad(root);
             root.AddComponent<NetworkDiagnosticsObservation>();
@@ -61,20 +67,38 @@ namespace MonsterSupergroup.NetworkCombat
         }
         private void Start()
         {
+            if (MonsterSupergroup.Builds.BuildFeatures.CompiledKind == MonsterSupergroup.Builds.BuildKind.Shipping) { enabled = false; return; }
+            automaticCapture = Diagnostics.AutomaticCaptureSession.Enabled;
+            unifiedEvidence = MonsterSupergroup.GAS.CombatEvidence.Enabled;
+            if (automaticCapture && !unifiedEvidence) Application.wantsToQuit += WantsToQuit;
+            try { StartCapture(); }
+            catch (Exception error)
+            {
+                captureFailures++;
+                if (automaticCapture) Diagnostics.AutomaticCaptureSession.ReportFailure("network", error.GetType().Name + ": " + error.Message);
+                Debug.LogError("[NetworkDiagnostics] Capture could not start: " + error.Message);
+            }
+        }
+        private void StartCapture()
+        {
             Diagnostics.NetworkMessageEvidence.Install();
             // Also supports an explicitly added observer in diagnostics tests.
             enabledForRun = SteamTransportDiagnostics.Enabled = CombatPerformanceCounters.Enabled = true;
-            string directory = Argument("--network-diagnostics-output=") ?? Path.Combine(Application.persistentDataPath, "NetworkDiagnostics");
-            unifiedEvidence = MonsterSupergroup.GAS.CombatEvidence.Enabled;
+            string directory = Argument("--network-diagnostics-output=") ?? (automaticCapture
+                ? Diagnostics.AutomaticCaptureSession.NetworkDirectory : Path.Combine(Application.persistentDataPath, "NetworkDiagnostics"));
             if (!unifiedEvidence) Directory.CreateDirectory(directory);
-            captureId = Guid.NewGuid().ToString("N"); utcStart = DateTime.UtcNow.ToString("o");
+            captureId = unifiedEvidence ? Diagnostics.CombatEvidenceRuntime.Instance?.CaptureId : Guid.NewGuid().ToString("N"); utcStart = DateTime.UtcNow.ToString("o");
             process = System.Diagnostics.Process.GetCurrentProcess(); processId = process.Id;
-            OutputPath = Path.Combine(directory, DateTime.UtcNow.ToString("yyyyMMdd-HHmmss") + "-" + processId + "-" + captureId + ".jsonl");
+            OutputPath = Path.Combine(directory, automaticCapture ? "network.jsonl" : DateTime.UtcNow.ToString("yyyyMMdd-HHmmss") + "-" + processId + "-" + captureId + ".jsonl");
             if (!unifiedEvidence) log = new LimboObservationLog(OutputPath);
             else OutputPath = Diagnostics.CombatEvidenceRuntime.Instance?.Store.Root;
             lastWidth = Screen.width; lastHeight = Screen.height; lastMode = (int)Screen.fullScreenMode;
             string header = JsonUtility.ToJson(new Header {
                 captureId = captureId, utcStart = utcStart, processId = processId,
+                executablePath = ReadExecutablePath(), networkCapabilities = new Capabilities { lightweightNetworkEnabled = !unifiedEvidence,
+                    fullCombatEvidenceEnabled = unifiedEvidence }, config = new Configuration { evidenceMode = !unifiedEvidence ? "off" : Diagnostics.CombatEvidenceRuntime.Instance?.ReplicationEnabled == true ? "replicated" : "local", lightweightNetworkEnabled = !unifiedEvidence,
+                    automaticCapture = automaticCapture, appliedCaptureMode = unifiedEvidence ? "combat" : "network" },
+                localSteamIdentity = ReadLocalSteamIdentity(),
                 buildGuid = Application.buildGUID, version = Application.version, buildInfo = MonsterSupergroup.Builds.RuntimeBuildInfo.Current?.ToJson(), unity = Application.unityVersion,
                 development = Debug.isDebugBuild, protocol = SteamLobbyMetadata.ProtocolValue,
                 width = Screen.width, height = Screen.height, targetFps = Application.targetFrameRate,
@@ -85,6 +109,8 @@ namespace MonsterSupergroup.NetworkCombat
                 cpu = SystemInfo.processorType, systemMemoryMb = SystemInfo.systemMemorySize,
                 commandLine = Environment.CommandLine, monotonicStart = Time.realtimeSinceStartupAsDouble });
             log?.WriteLine(header);
+            log?.RequestReadyCheck();
+            if (!unifiedEvidence) BeginLightweightCapture();
             if (unifiedEvidence) MonsterSupergroup.GAS.CombatEvidence.Event("Process", "performance.header", "Started", null, input: header, bytes: header.Length * 2 + 2048);
             main = ProfilerRecorder.StartNew(ProfilerCategory.Internal, "Main Thread", 1);
             allocations = ProfilerRecorder.StartNew(ProfilerCategory.Memory, "GC Allocated In Frame", 1);
@@ -103,6 +129,7 @@ namespace MonsterSupergroup.NetworkCombat
         private void OnApplicationPause(bool paused) { pauseChanges++; }
         private void LateUpdate()
         {
+            PollAutomaticCapture();
             if ((log == null && !unifiedEvidence) || closed) return;
             FrameTimingManager.CaptureFrameTimings();
             double now = Time.realtimeSinceStartupAsDouble;
@@ -126,7 +153,7 @@ namespace MonsterSupergroup.NetworkCombat
         private void Emit(double now)
         {
             if (window.Count == 0) return;
-            bool investigation = Diagnostics.CombatInvestigationEvidence.Enabled;
+            bool investigation = !unifiedEvidence || Diagnostics.CombatInvestigationEvidence.Enabled;
             long clockReadStarted = 0, clockReadEnded = 0;
             double clockRealtime = 0, clockUnscaled = 0, clockNetwork = 0;
             if (investigation)
@@ -162,6 +189,7 @@ namespace MonsterSupergroup.NetworkCombat
                 connections = investigationConnections.ToArray()
             } : new StandardRow { connections = connections.ToArray() };
             row.captureId = captureId;
+            row.recordSequence = NextNetworkSequence();
             row.processId = processId;
             row.utc = DateTime.UtcNow.ToString("o");
             row.time = now;
@@ -171,7 +199,7 @@ namespace MonsterSupergroup.NetworkCombat
             row.round = NetworkCombatWorld.CurrentRound;
             row.role = NetworkServer.active ? "host" : NetworkClient.active ? "client" : "offline";
             row.transport = Transport.active != null ? Transport.active.GetType().Name : "none";
-            row.run = progress != null ? progress.Snapshot.RunId : "";
+            row.run = string.IsNullOrEmpty(progress?.Snapshot.RunId) ? "boot" : progress.Snapshot.RunId;
             row.alive = progress != null ? progress.Snapshot.Alive : 0;
             row.phase = progress != null ? progress.Snapshot.Phase.ToString() : "none";
             row.playerCount = NetworkServer.active ? manager?.Session?.Participants.Count ?? 0 : manager?.RoomSnapshot.Members?.Length ?? 0;
@@ -241,6 +269,9 @@ namespace MonsterSupergroup.NetworkCombat
             row.maximumDeathConfirmationSeconds = collector?.MaximumDeathConfirmationSeconds ?? 0;
             row.logFailures = LimboObservationLog.FailureCount;
             row.logQueuedBytes = LimboObservationLog.PendingBytes;
+            row.captureFailures = captureFailures;
+            row.parseFailures = parseFailures;
+            row.networkInterval = SteamTransportDiagnostics.DrainInterval();
             row.rejections = new long[(int)CombatRejectionReason.RunLoading + 1];
             for (int i = 0; i < row.rejections.Length; i++) row.rejections[i] = metrics?.GetRejected((CombatRejectionReason)i) ?? 0;
             string serializedRow = JsonUtility.ToJson(row); // Detach mutable window arrays before resetting.
@@ -250,8 +281,50 @@ namespace MonsterSupergroup.NetworkCombat
             window.Reset(); longFrames.Clear(); windowStart = now;
             allocatedBytes = gcMilliseconds = maximumMainMs = 0;
         }
-        private void OnApplicationQuit() => Close();
+        private bool normalCloseRequested;
+        private void OnApplicationQuit() { normalCloseRequested = true; Close(); }
         private void OnDestroy() => Close();
+        private bool WantsToQuit()
+        {
+            if (quitReissued || Diagnostics.AutomaticCaptureSession.AllowIncompleteExit) return true;
+            quitRequested = normalCloseRequested = true;
+            StopCollection();
+            log?.BeginClose();
+            if (!closeReported) Diagnostics.AutomaticCaptureSession.ReportSaving("network", LimboObservationLog.PendingBytes);
+            return false;
+        }
+        private void PollAutomaticCapture()
+        {
+            if (!automaticCapture || unifiedEvidence) return;
+            if (!failureReported && (captureFailures != 0 || log?.Failure != null))
+            {
+                failureReported = true;
+                Diagnostics.AutomaticCaptureSession.ReportFailure("network", log?.Failure ?? $"Capture failed {captureFailures} time(s).");
+            }
+            if (!closed && !readyReported && log?.IsReady == true && captureFailures == 0)
+            {
+                readyReported = true;
+                Diagnostics.AutomaticCaptureSession.ReportReady("network");
+            }
+            if (!quitRequested || quitReissued) return;
+            if (!closeReportStarted) Diagnostics.AutomaticCaptureSession.ReportSaving("network", LimboObservationLog.PendingBytes);
+            if (!closeReportStarted && (log == null || log.CloseCompleted))
+            {
+                closeReportStarted = true;
+                bool saved = log?.IsComplete == true && normalCloseRequested && captureFailures == 0;
+                string reason = saved ? null : log?.Failure ?? "Network capture is incomplete.";
+                new Thread(() => {
+                    try { Diagnostics.AutomaticCaptureSession.ReportClosed("network", saved, reason); }
+                    catch (Exception error) { Diagnostics.AutomaticCaptureSession.ReportFailure("network", "Final status: " + error.Message); }
+                    finally { closeReported = true; }
+                }) { IsBackground = true, Name = "Network capture finalization" }.Start();
+            }
+            if ((closeReported && log?.IsComplete == true && captureFailures == 0 && !Diagnostics.AutomaticCaptureSession.HasFailure) || Diagnostics.AutomaticCaptureSession.AllowIncompleteExit)
+            {
+                quitReissued = true;
+                Application.Quit(Environment.ExitCode);
+            }
+        }
         private void ReadProcessMemory(out long working, out long privateBytes)
         {
             working = privateBytes = -1;
@@ -301,11 +374,21 @@ namespace MonsterSupergroup.NetworkCombat
 #endif
         private void Close()
         {
+            Application.wantsToQuit -= WantsToQuit;
+            StopCollection();
+            // Normal automatic shutdown is already draining in the background. Forced
+            // destruction must not turn into another blocking wait on the main thread.
+            if (automaticCapture && !unifiedEvidence) log?.BeginClose();
+            else { log?.Dispose(); log = null; }
+        }
+        private void StopCollection()
+        {
             if (closed) return;
             closed = true;
             Application.logMessageReceivedThreaded -= CountLog;
             if (log != null || unifiedEvidence) Emit(Time.realtimeSinceStartupAsDouble);
-            main.Dispose(); allocations.Dispose(); gc.Dispose(); log?.Dispose(); log = null; process?.Dispose();
+            EndLightweightCapture();
+            main.Dispose(); allocations.Dispose(); gc.Dispose(); process?.Dispose();
             SteamTransportDiagnostics.Enabled = CombatPerformanceCounters.Enabled = enabledForRun = false;
         }
         [Serializable] private sealed class Header
@@ -313,6 +396,9 @@ namespace MonsterSupergroup.NetworkCombat
             public string kind = "header";
             public int schemaVersion = SchemaVersion;
             public string captureId, utcStart, buildInfo, buildGuid, version, unity, protocol, graphics, quality, gpu, driver, cpu, commandLine;
+            public string recordSequence = "0", monotonicDomain = "Unity.RealtimeSinceStartup", executablePath, localSteamIdentity;
+            public Capabilities networkCapabilities;
+            public Configuration config;
             public string[] rejectionReasons, areas;
             public bool development;
             public int processId, width, height, targetFps, vSync, systemMemoryMb;
@@ -336,7 +422,9 @@ namespace MonsterSupergroup.NetworkCombat
         }
         [Serializable] private class Row
         {
-            public string kind = "sample", captureId, utc, role, transport, run, phase, fullScreenMode;
+            public string kind = "sample", captureId, utc, role, transport, run, phase, fullScreenMode, recordSequence;
+            public int captureFailures, parseFailures;
+            public SteamDiagnosticInterval networkInterval;
             public uint round;
             public int processId, playerCount, localHealth, alive, frameCount, frameOverflow, gen0, gen1, gen2, pendingDeaths, logFailures;
             public int warnings, errors, deadWarnings, longFrameCount, omittedLongFrames, width, height, focusChanges, pauseChanges, displayChanges, overlayState, overlayChanges;

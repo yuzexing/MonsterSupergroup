@@ -23,19 +23,22 @@ namespace Mirror.FizzySteam
                 pinnedArray = GCHandle.Alloc(data, GCHandleType.Pinned);
                 IntPtr pData = pinnedArray.AddrOfPinnedObject();
                 int sendFlag = channelId == Channels.Unreliable ? Constants.k_nSteamNetworkingSend_Unreliable : Constants.k_nSteamNetworkingSend_Reliable;
-#if UNITY_SERVER
-                EResult res = SteamGameServerNetworkingSockets.SendMessageToConnection(conn, pData, (uint)(segment.Count + 1), sendFlag, out long _);
-#else
-                EResult res = SteamNetworkingSockets.SendMessageToConnection(conn, pData, (uint)(segment.Count + 1), sendFlag, out long _);
-#endif
-                SteamTransportDiagnostics.RecordSendResult(conn.m_HSteamNetConnection, segment, channelId, res);
-                return res;
+                return SteamTransportDiagnostics.SendObserved(conn, segment, channelId, pData, sendFlag, NativeSend);
             }
             finally
             {
                 if (pinnedArray.IsAllocated) pinnedArray.Free();
                 ArrayPool<byte>.Shared.Return(data);
             }
+        }
+
+        private static EResult NativeSend(HSteamNetConnection connection, IntPtr data, uint bytes, int flags, out long messageNumber)
+        {
+#if UNITY_SERVER
+            return SteamGameServerNetworkingSockets.SendMessageToConnection(connection, data, bytes, flags, out messageNumber);
+#else
+            return SteamNetworkingSockets.SendMessageToConnection(connection, data, bytes, flags, out messageNumber);
+#endif
         }
 
         protected (ArraySegment<byte>, int) ProcessMessage(IntPtr pointer)
@@ -54,6 +57,7 @@ namespace Mirror.FizzySteam
                 int channel = buffer[data.m_cbSize - 1];
                 if (channel != Channels.Reliable && channel != Channels.Unreliable) return (default, 0);
                 var result = new ArraySegment<byte>(buffer, 0, data.m_cbSize - 1);
+                SteamTransportDiagnostics.ObserveReceive(data, result, channel);
                 buffer = null; // The receiver returns this after the callback or deferred delivery.
                 SteamTransportDiagnostics.RecordReceive(data.m_cbSize, channel);
                 return (result, channel);

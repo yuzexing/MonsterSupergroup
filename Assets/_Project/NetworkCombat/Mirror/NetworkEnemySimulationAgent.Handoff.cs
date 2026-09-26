@@ -22,6 +22,7 @@ namespace MonsterSupergroup.NetworkCombat
         [Server]
         public void SetServerHandoff(EnemySimulationHandoff value)
         {
+            NetworkLightEvidence.Record("Server", "EnemyHandoff", "Committed", value.Reason.ToString(), () => new { value.CommittedAt, value.Assignment }, source: value.Assignment.SimulationOwnerPlayerId, target: netId, epoch: value.Assignment.Epoch);
             handoff = value;
             ApplyHandoff(value);
         }
@@ -42,6 +43,7 @@ namespace MonsterSupergroup.NetworkCombat
                 target = netId, assignmentEpoch = current.Assignment.Epoch, source = current.Assignment.SimulationOwnerPlayerId,
                 input = current, before = new { assignment, position = transform.position, appliedHandoffEpoch }, critical = true, estimatedBytes = 4096 });
             Vector2 previousPosition = transform.position;
+            NetworkLightEvidence.Record(isServer ? "Server" : "Replica", "EnemyHandoff", "Applying", current.Reason.ToString(), () => new { current.CommittedAt, current.Assignment }, source: current.Assignment.SimulationOwnerPlayerId, target: netId, epoch: current.Assignment.Epoch);
             bool previouslyLocal = authority != null && authority.RunsNavigation;
             bool keepServerAction = current.Reason != EnemyTargetChangeReason.ReferenceReposition && isServer && appliedHandoffEpoch != 0 &&
                 assignment.Host == EnemySimulationHost.ServerAuthoritative && current.Assignment.Host == EnemySimulationHost.ServerAuthoritative;
@@ -87,6 +89,7 @@ namespace MonsterSupergroup.NetworkCombat
             }
             restoringHandoff = false;
             NetworkEnemySimulationWorld.Instance?.RecordMotionCorrection(this, current, previouslyLocal, previousPosition);
+            NetworkLightEvidence.Record(isServer ? "Server" : "Replica", "EnemyHandoff", "Applied", current.Reason.ToString(), () => new { current.CommittedAt, appliedHandoffEpoch, LastHandoffCorrection }, source: current.Assignment.SimulationOwnerPlayerId, target: netId, epoch: current.Assignment.Epoch);
             if (authority.ConsumesSnapshots)
             {
                 // A handoff baseline is not a producer's first movement packet.
@@ -124,6 +127,7 @@ namespace MonsterSupergroup.NetworkCombat
 
         private void TraceHandoffDecision(EnemySimulationHandoff value, string outcome, string reason)
         {
+            NetworkLightEvidence.Record(isServer ? "Server" : "Replica", "EnemyHandoff", outcome, reason, () => new { value.CommittedAt, appliedHandoffEpoch }, source: value.Assignment.SimulationOwnerPlayerId, target: netId, epoch: value.Assignment.Epoch);
             if (!MonsterSupergroup.GAS.CombatEvidence.Enabled) return;
             MonsterSupergroup.GAS.CombatEvidence.Write(new MonsterSupergroup.GAS.DiagnosticRecord {
                 role = isServer ? "Server" : "Replica", stage = "authority.handoff", outcome = outcome, reason = reason,

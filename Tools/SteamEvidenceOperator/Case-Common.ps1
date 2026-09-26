@@ -22,7 +22,7 @@ function Write-CurrentCase([string]$CaseDirectory, [string]$PackageDirectory) {
 function Resolve-CaseArguments([string]$CaseDirectory, [string]$PackageDirectory) {
     if (-not $CaseDirectory) {
         $path = Join-Path (Split-Path -Parent $PSScriptRoot) 'current-case.json'
-        if (-not (Test-Path -LiteralPath $path -PathType Leaf)) { throw 'No current case. Start Host-Local.ps1 or Client-Local.ps1 first, or specify -CaseDirectory and -PackageDirectory for an older case.' }
+        if (-not (Test-Path -LiteralPath $path -PathType Leaf)) { throw 'No current case. Start a Host/Client Local or Network shortcut first, or specify -CaseDirectory and -PackageDirectory for an older case.' }
         $current = Read-CaseJson $path
         if ($current.schemaVersion -ne 1 -or $current.caseDirectory -isnot [string] -or
             [string]::IsNullOrWhiteSpace($current.caseDirectory) -or $current.packageDirectory -isnot [string] -or

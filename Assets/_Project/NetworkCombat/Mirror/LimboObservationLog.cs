@@ -20,7 +20,7 @@ namespace MonsterSupergroup.NetworkCombat
         private static Thread worker;
         private static long pendingBytes, writtenTicks, flushTicks, lines;
         private static int failures;
-        private enum Operation { Line, Flush, Close, Status }
+        private enum Operation { Line, Flush, Close, Status, ReadyFlush }
         private readonly struct Work
         {
             public readonly LimboObservationLog Log;
@@ -37,9 +37,15 @@ namespace MonsterSupergroup.NetworkCombat
         private readonly string statusPath;
         private double nextFlush;
         private bool disposed, flushQueued;
+        private int ready, closeCompleted;
+        private readonly ManualResetEventSlim closeCompletion = new();
+        private long closeStartedTicks, closeCompletedTicks, globalPendingBytesAtClose;
+        private string closeStartedUtc, closeCompletedUtc;
         private string failure;
         public string Failure { get { lock (Gate) return failure; } }
-        public bool IsComplete => disposed && Failure == null;
+        public bool IsReady => Volatile.Read(ref ready) != 0 && Failure == null;
+        public bool CloseCompleted => Volatile.Read(ref closeCompleted) != 0;
+        public bool IsComplete => CloseCompleted && Failure == null;
         public static double WriteMilliseconds => Interlocked.Read(ref writtenTicks) * 1000d / Stopwatch.Frequency;
         public static double FlushMilliseconds => Interlocked.Read(ref flushTicks) * 1000d / Stopwatch.Frequency;
         public static long Lines => Interlocked.Read(ref lines);
@@ -97,6 +103,14 @@ namespace MonsterSupergroup.NetworkCombat
             }
             Wake.Set();
         }
+        // Readiness is acknowledged only after preceding records and the initial status
+        // have reached their streams. The caller never waits on Unity's main thread.
+        public void RequestReadyCheck()
+        {
+            if (disposed) throw new ObjectDisposedException(nameof(LimboObservationLog));
+            lock (Gate) Queue.Enqueue(new Work(this, Operation.ReadyFlush));
+            Wake.Set();
+        }
         // Explicit lifecycle boundaries/tests only. Per-frame pumping uses FlushIfDue.
         public void Flush() { if (!disposed) WaitFor(Operation.Flush); }
         private void WaitFor(Operation operation)
@@ -110,12 +124,22 @@ namespace MonsterSupergroup.NetworkCombat
         }
         public static void FlushDue() { foreach (var log in Open) log.FlushIfDue(); }
         public static void FlushAll() { foreach (var log in Open) log.Flush(); }
-        public void Dispose()
+        public void BeginClose()
         {
             if (disposed) return;
+            closeStartedUtc = DateTime.UtcNow.ToString("o");
+            Interlocked.Exchange(ref closeStartedTicks, Stopwatch.GetTimestamp());
+            Interlocked.Exchange(ref globalPendingBytesAtClose, PendingBytes);
             disposed = true;
-            WaitFor(Operation.Close);
             Open.Remove(this);
+            lock (Gate) Queue.Enqueue(new Work(this, Operation.Close, completion: closeCompletion));
+            Wake.Set();
+        }
+        public void Dispose()
+        {
+            BeginClose();
+            if (!closeCompletion.Wait(TimeSpan.FromSeconds(5)))
+                lock (Gate) FailLocked("Timed out draining observation files; evidence is incomplete.");
         }
 
         private void FailLocked(string reason)
@@ -148,9 +172,17 @@ namespace MonsterSupergroup.NetworkCombat
                             Interlocked.Add(ref flushTicks, Stopwatch.GetTimestamp() - start);
                             lock (Gate) log.flushQueued = false;
                             break;
+                        case Operation.ReadyFlush:
+                            log.writer.Flush();
+                            Interlocked.Add(ref flushTicks, Stopwatch.GetTimestamp() - start);
+                            log.WriteStatus(false);
+                            if (log.Failure == null) Volatile.Write(ref log.ready, 1);
+                            break;
                         case Operation.Close:
                             log.writer.Dispose();
                             Interlocked.Add(ref flushTicks, Stopwatch.GetTimestamp() - start);
+                            log.closeCompletedUtc = DateTime.UtcNow.ToString("o");
+                            Interlocked.Exchange(ref log.closeCompletedTicks, Stopwatch.GetTimestamp());
                             log.WriteStatus(true);
                             break;
                         case Operation.Status: log.WriteStatus(false); break;
@@ -164,6 +196,7 @@ namespace MonsterSupergroup.NetworkCombat
                 finally
                 {
                     Interlocked.Add(ref pendingBytes, -work.Bytes);
+                    if (work.Op == Operation.Close) Volatile.Write(ref log.closeCompleted, 1);
                     work.Completion?.Set();
                 }
             }
@@ -174,7 +207,13 @@ namespace MonsterSupergroup.NetworkCombat
             if (statusPath == null) return;
             string reason = Failure;
             string escaped = (reason ?? "").Replace("\\", "\\\\").Replace("\"", "\\\"").Replace("\r", "\\r").Replace("\n", "\\n").Replace("\t", "\\t");
-            File.WriteAllText(statusPath, "{\"complete\":" + (closed && reason == null ? "true" : "false") + ",\"failure\":\"" + escaped + "\"}", new UTF8Encoding(false));
+            long started = Interlocked.Read(ref closeStartedTicks), completed = Interlocked.Read(ref closeCompletedTicks);
+            double duration = started > 0 && completed >= started ? (completed - started) * 1000d / Stopwatch.Frequency : -1;
+            File.WriteAllText(statusPath, "{\"complete\":" + (closed && reason == null ? "true" : "false") + ",\"failure\":\"" + escaped +
+                "\",\"closeStartedUtc\":\"" + (closeStartedUtc ?? "") + "\",\"closeCompletedUtc\":\"" + (closeCompletedUtc ?? "") +
+                "\",\"closeDrainMilliseconds\":" + duration.ToString("R", System.Globalization.CultureInfo.InvariantCulture) +
+                ",\"globalPendingBytesAtClose\":" + Interlocked.Read(ref globalPendingBytesAtClose).ToString(System.Globalization.CultureInfo.InvariantCulture) +
+                ",\"queueScope\":\"AllLimboObservationLogs\"}", new UTF8Encoding(false));
         }
     }
 }

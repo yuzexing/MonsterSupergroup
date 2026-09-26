@@ -8,7 +8,7 @@ function Resolve-ProjectBuildExecutable {
         [string]$Executable, [string]$BuildDirectory,
         [switch]$RequireDevelopmentTools,
         [ValidateSet('Steam','Kcp')][string]$Network,
-        [ValidateSet('Normal','Evidence')][string]$Diagnostics)
+        [ValidateSet('Normal','Evidence','Network')][string]$Diagnostics)
 
     if ($Executable -and $BuildDirectory) { throw 'Choose either Executable or BuildDirectory.' }
     if ($BuildDirectory) {

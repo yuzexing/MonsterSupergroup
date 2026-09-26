@@ -13,7 +13,7 @@ param(
 # launch, process attachment, gameplay control, registry changes or deletion.
 $ErrorActionPreference = 'Stop'
 Import-Module (Join-Path (Split-Path -Parent $PSScriptRoot) 'ProjectTools.psm1')
-Import-Module (Join-Path (Split-Path -Parent $PSScriptRoot) 'SteamEvidenceIdentity.psm1')
+Import-Module (Join-Path (Split-Path -Parent $PSScriptRoot) 'SteamEvidenceIdentity.psm1') -Force
 $package = (Resolve-Path -LiteralPath $PackageDirectory).Path.TrimEnd('\','/')
 $output = [IO.Path]::GetFullPath($ArtifactDirectory).TrimEnd('\','/')
 function Within([string]$path, [string]$root) {

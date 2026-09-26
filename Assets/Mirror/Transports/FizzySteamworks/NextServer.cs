@@ -79,7 +79,7 @@ namespace Mirror.FizzySteam
         {
             SteamTransportDiagnostics.RecordConnection(param.m_hConn.m_HSteamNetConnection,
                 connToMirrorID.TryGetValue(param.m_hConn, out int knownConnection) ? knownConnection : -1,
-                "Server", param.m_eOldState.ToString(), param.m_info.m_eState.ToString(), param.m_info.m_eEndReason);
+                "Server", param.m_eOldState.ToString(), param.m_info.m_eState.ToString(), param.m_info.m_eEndReason, param.m_info.m_identityRemote.GetSteamID64().ToString());
             ulong clientSteamID = param.m_info.m_identityRemote.GetSteamID64();
             if (param.m_info.m_eState == ESteamNetworkingConnectionState.k_ESteamNetworkingConnectionState_Connecting)
             {
@@ -134,6 +134,7 @@ namespace Mirror.FizzySteam
 
         private void InternalDisconnect(int connId, HSteamNetConnection socket)
         {
+            SteamTransportDiagnostics.RecordConnection(socket.m_HSteamNetConnection, connId, "Server", "Active", "ClosedLocally", 0);
             SteamEvidenceLane.Disconnect(connId);
             OnDisconnected?.Invoke(connId);
 #if UNITY_SERVER
@@ -150,6 +151,7 @@ namespace Mirror.FizzySteam
         {
             if (connToMirrorID.TryGetValue(connectionId, out HSteamNetConnection conn))
             {
+                SteamTransportDiagnostics.RecordConnection(conn.m_HSteamNetConnection, connectionId, "Server", "Active", "ClosedLocally", 0);
                 Debug.Log($"Connection id {connectionId} disconnected.");
 #if UNITY_SERVER
                 SteamGameServerNetworkingSockets.CloseConnection(conn, 0, "Disconnected by server", false);
@@ -188,7 +190,10 @@ namespace Mirror.FizzySteam
                 if (connToMirrorID.TryGetValue(conn, out int connId))
                 {
                     IntPtr[] ptrs = messagePointers;
-                    int messageCount;
+                    int messageCount = 0;
+                    long pollStart = SteamTransportDiagnostics.BeginReceivePoll();
+                    try
+                    {
 
 #if UNITY_SERVER
                     if ((messageCount = SteamGameServerNetworkingSockets.ReceiveMessagesOnConnection(conn, ptrs, MAX_MESSAGES)) > 0)
@@ -210,6 +215,8 @@ namespace Mirror.FizzySteam
                         }
                         finally { ReleasePendingMessages(messageCount); }
                     }
+                    }
+                    finally { SteamTransportDiagnostics.EndReceivePoll(conn.m_HSteamNetConnection, messageCount, MAX_MESSAGES, pollStart); }
                 }
             }
         }
@@ -259,7 +266,11 @@ namespace Mirror.FizzySteam
 
         public void Shutdown()
         {
-            foreach (var connection in connToMirrorID.FirstTypes) if (connToMirrorID.TryGetValue(connection, out int id)) SteamEvidenceLane.Disconnect(id);
+            foreach (var connection in connToMirrorID.FirstTypes) if (connToMirrorID.TryGetValue(connection, out int id))
+            {
+                SteamTransportDiagnostics.RecordConnection(connection.m_HSteamNetConnection, id, "Server", "Active", "Shutdown", 0);
+                SteamEvidenceLane.Disconnect(id);
+            }
 #if UNITY_SERVER
             SteamGameServerNetworkingSockets.CloseListenSocket(listenSocket);
 #else

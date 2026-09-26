@@ -54,6 +54,9 @@ def evidence_root(path):
             return parent
     if len(path.parents) >= 5 and path.parent.parent.name == "sources":
         return path.parents[4]
+    if path.name == "network.jsonl" and path.parent.name == "network":
+        # Automatic capture status and abandonment override live beside this directory.
+        return path.parent.parent
     return path.parent
 
 
@@ -215,6 +218,14 @@ class IssueExporter:
         if not selected:
             raise ValueError("没有符合条件的记录可以导出。")
         required = {pointer(x): x for x in inv.context_records(selection, [dict(capture=c, sequence=s) for c, s in sorted(selected)])}
+        failure_windows = inv.failure_windows(selection, seeds) if any(item.get("category") == "network_rejection" for item in seed_items) else []
+        for window in failure_windows:
+            # Samples and stream facts are local to this capture. The other machine's
+            # numeric clock is never used as an exact corresponding window.
+            for row in db.execute("""SELECT o.body FROM investigation_records r JOIN records o USING(capture,seq)
+                WHERE r.capture=? AND r.run=? AND r.round=? AND r.elapsed BETWEEN ? AND ?""",
+                (window["capture"], selection["run"], selection["round"], window["after"], window["before"])):
+                record = json.loads(row[0]); required[pointer(record)] = record
         track_scopes, track_records, scoped_tracks = self._track_context(selection, required, selected if seeds else set())
         states = []
         state_targets = set()
@@ -278,12 +289,13 @@ class IssueExporter:
                     required[pointer(record)] = record
         paths = set()
         warnings = []
+        network_paths = {Path(row[0]).resolve() for row in db.execute("SELECT path FROM metadata WHERE kind='network-diagnostics-source'")}
         for capture, seq in required:
             copies = list(db.execute("SELECT path FROM copies WHERE capture=? AND seq=?", (capture, seq)))
             found = False
             for copy in copies:
                 p = Path(copy[0])
-                if p.name.startswith("events-") and p.suffix == ".jsonl" and p.is_file():
+                if ((p.name.startswith("events-") and p.suffix == ".jsonl") or p.resolve() in network_paths) and p.is_file():
                     paths.add(p.resolve()); found = True
             if not found:
                 warnings.append("原文件不可用：" + capture + ":" + seq)
@@ -307,7 +319,17 @@ class IssueExporter:
         blob_refs = set()
         incidental = set()
         for p in sorted(paths):
-            if p.name.startswith("events-") and p.suffix == ".jsonl":
+            if p.resolve() in network_paths:
+                from CombatNetworkEvidence import rows
+                try:
+                    for number, record, _ in rows(p):
+                        key = pointer(record); incidental.add(key)
+                        imported = db.execute("SELECT body FROM records WHERE capture=? AND seq=?", key).fetchone()
+                        if imported is None or imported[0] != decoder.compact(record):
+                            warnings.append("原文件与已导入记录不符：" + ":".join(key))
+                except (ValueError, KeyError, TypeError, OSError) as error:
+                    warnings.append("原轻量日志解析问题：" + str(p) + ":" + str(error))
+            elif p.name.startswith("events-") and p.suffix == ".jsonl":
                 with p.open("rb") as stream:
                     for number, line in enumerate(stream, 1):
                         try:
@@ -361,6 +383,7 @@ class IssueExporter:
                 "required": sorted(required), "incidental": sorted(incidental - set(required)),
                 "files": files, "warnings": list(dict.fromkeys(warnings)), "originalCoverage": coverage,
                 "states": states, "tracks": scoped_tracks, "trackScopes": track_scopes, "seedItems": seed_items,
+                "failureWindows": failure_windows,
                 "complete": coverage.get("complete", False) and not warnings}
 
     def _manifest(self, plan):
@@ -371,6 +394,7 @@ class IssueExporter:
                 "incidental": [dict(capture=c, sequence=s) for c, s in plan["incidental"]],
                 "omissions": "Unselected evidence was intentionally not exported; omissions do not prove capture loss.",
                 "trackScopes": plan["trackScopes"], "originalCoverage": plan["originalCoverage"],
+                "failureWindows": plan.get("failureWindows", []),
                 "warnings": list(plan["warnings"]), "complete": False, "files": [],
                 "contexts": [dict(capture=cap["capture"], run=match["run"], round=match["round"], timeOrigin=cap.get("timeOrigin"))
                     for match in self.investigation.matches().get("matches", []) for cap in match.get("captures", [])
@@ -379,6 +403,7 @@ class IssueExporter:
     def _report_data(self, plan):
         detail = self.investigation.detail(plan["selection"], *plan["selected"][0]) if len(plan["selected"]) == 1 else None
         return report_projection({"selection": plan["selection"], "description": plan["description"], "states": plan["states"],
+            "failureWindows": plan.get("failureWindows", []),
             "tracks": plan["tracks"], "detail": detail, "items": plan["seedItems"], "warnings": plan["warnings"],
             "recordTimes": [dict(row) for c, s in plan["required"] for row in self.investigation.db.execute(
                 "SELECT capture,seq AS sequence,run,round,elapsed FROM investigation_records WHERE capture=? AND seq=?", (c, s))]})
@@ -481,6 +506,8 @@ class IssueExporter:
                          html.escape(str(item.get("capture", ""))) + ' / #' + html.escape(str(item.get("sequence", ""))) +
                          ' · 本端 ' + str(item.get("elapsed", "未知")) + ' 秒</small></p>')
         if report["detail"]:
+            if report["detail"].get("networkFacts"):
+                parts.extend(['<h2>网络拒绝与后续事实</h2><p>接受不等于送达；后续连接事实不是同一消息的送达证明。本报告不自动推断恢复。</p>', readable(report["detail"]["networkFacts"])])
             for step in report["detail"].get("steps", []):
                 parts.append('<h3>' + html.escape(step.get("title", step.get("kind", "过程"))) + '</h3>')
                 parts.append(outside_text(step, "为关联事件保留的补充证据"))

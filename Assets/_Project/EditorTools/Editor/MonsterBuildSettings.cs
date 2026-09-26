@@ -10,7 +10,7 @@ namespace MonsterSupergroup.EditorTools
 {
     public enum BuildNetwork { Steam, Kcp }
     public enum BuildDistribution { Steam, Direct }
-    public enum BuildDiagnostics { Normal, Evidence }
+    public enum BuildDiagnostics { Normal = 0, Evidence = 1, Network = 2 }
 
     // Only business intent lives here. Unity settings belong to the containing BuildProfile.
     public sealed class MonsterBuildSettings : ScriptableObject
@@ -46,7 +46,7 @@ namespace MonsterSupergroup.EditorTools
     public static class ProjectBuildDefines
     {
         private static readonly string[] Managed = {
-            "MONSTER_BUILD_DEV", "MONSTER_BUILD_TEST", "MONSTER_BUILD_SHIPPING", "MONSTER_BUILD_TOOLS", "MONSTER_BUILD_EVIDENCE",
+            "MONSTER_BUILD_DEV", "MONSTER_BUILD_TEST", "MONSTER_BUILD_SHIPPING", "MONSTER_BUILD_TOOLS", "MONSTER_BUILD_EVIDENCE", "MONSTER_BUILD_NETWORK_DIAGNOSTICS",
             "MONSTER_KCP_DEVELOPMENT_BUILD", "MONSTER_COMBAT_EVIDENCE", "MONSTER_MENU_VALIDATION", "MONSTER_OPTIONS_VALIDATION", "MONSTER_ENEMY_HANDOFF_VALIDATION"
         };
         public static bool IsManaged(string symbol) => Managed.Contains(symbol);
@@ -58,6 +58,7 @@ namespace MonsterSupergroup.EditorTools
                 .Concat(settings.BuildKind == BuildKind.Dev || !purpose.product ? new[] { "MONSTER_BUILD_TOOLS" } : Array.Empty<string>())
                 .Concat(settings.Network == BuildNetwork.Kcp ? new[] { "MONSTER_KCP_DEVELOPMENT_BUILD" } : Array.Empty<string>())
                 .Concat(settings.Diagnostics == BuildDiagnostics.Evidence ? new[] { "MONSTER_BUILD_EVIDENCE", "MONSTER_COMBAT_EVIDENCE" } : Array.Empty<string>())
+                .Concat(settings.Diagnostics == BuildDiagnostics.Network ? new[] { "MONSTER_BUILD_NETWORK_DIAGNOSTICS" } : Array.Empty<string>())
                 .OrderBy(s => s, StringComparer.Ordinal).ToArray();
         }
         public static string[] Applied(string[] current, string[] expected) => (current ?? Array.Empty<string>()).Where(s => !IsManaged(s))
@@ -96,7 +97,10 @@ namespace MonsterSupergroup.EditorTools
             int index = Array.IndexOf(ProjectBuildPurposes.Ids, purpose.stringValue);
             if (index < 0) EditorGUILayout.PropertyField(purpose);
             else purpose.stringValue = ProjectBuildPurposes.Ids[EditorGUILayout.Popup("用途", index, ProjectBuildPurposes.Ids)];
-            foreach (string field in new[] { "BuildKind", "Network", "Distribution", "Diagnostics" }) EditorGUILayout.PropertyField(settings.FindProperty(field));
+            foreach (string field in new[] { "BuildKind", "Network", "Distribution" }) EditorGUILayout.PropertyField(settings.FindProperty(field));
+            var diagnostics = settings.FindProperty("Diagnostics");
+            diagnostics.intValue = EditorGUILayout.IntPopup("自动采证", diagnostics.intValue,
+                new[] { "关闭", "战斗取证", "网络专项" }, new[] { 0, 1, 2 });
             settings.ApplyModifiedProperties();
         }
     }

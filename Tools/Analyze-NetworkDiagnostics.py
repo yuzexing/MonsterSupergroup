@@ -4,10 +4,12 @@ import csv
 import json
 from collections import defaultdict
 from pathlib import Path
+from CombatNetworkEvidence import valid_metric, rejected, capture_integrity_failures, automatic_session
 
 
 def read(path):
-    header, rows, malformed = {}, [], 0
+    header, rows, malformed, end, refusals = {}, [], 0, None, []
+    sequences, captures = [], set()
     with path.open(encoding='utf-8-sig') as stream:
         for line in stream:
             try:
@@ -15,20 +17,41 @@ def read(path):
             except json.JSONDecodeError:
                 malformed += 1
                 continue
+            record = row.get('record', {}) if row.get('kind') == 'network_event' else row
+            if row.get('kind') in ('header', 'sample', 'network_event', 'end'):
+                if str(record.get('recordSequence', '')).isdecimal():
+                    sequences.append(int(record['recordSequence']))
+                elif header.get('schemaVersion', row.get('schemaVersion', 1)) >= 3:
+                    malformed += 1
+                if record.get('captureId'): captures.add(str(record['captureId']))
             if row.get('kind') == 'header':
                 header = row
             elif row.get('kind') == 'sample':
                 rows.append(row)
+            elif row.get('kind') == 'end':
+                end = row
+            elif row.get('kind') == 'network_event' and rejected(row.get('record', {})):
+                refusals.append(row['record'])
     status_path = Path(str(path) + '.status.json')
     try:
         status = json.loads(status_path.read_text(encoding='utf-8-sig')) if status_path.exists() else None
     except json.JSONDecodeError:
         status = {'complete': False, 'failure': 'Malformed status file'}
+    if header.get('schemaVersion', 1) >= 3:
+        original = status
+        failures = capture_integrity_failures(header, end, status, sequences, captures)
+        session, session_failures = automatic_session(path, header)
+        failures.extend(session_failures)
+        status = dict(status or {}, rawWriterStatus=original, sendRejections=refusals, captureEnd=end,
+            captureIntegrityFailures=failures, automaticSession=session, complete=not failures and not malformed)
     return header, rows, malformed, status
 
 
 def maximum(rows, key):
-    values = [r[key] for r in rows if isinstance(r.get(key), (float, int)) and r[key] >= 0]
+    network_fields = ('queueMilliseconds', 'pendingReliableBytes', 'pendingUnreliableBytes', 'unacknowledgedBytes')
+    values = ([valid_metric(r, key) for r in rows] if key in network_fields else
+              [r[key] for r in rows if isinstance(r.get(key), (float, int)) and r[key] >= 0])
+    values = [value for value in values if value is not None]
     return max(values) if values else None
 
 
@@ -107,7 +130,9 @@ def summarize(path):
             'reliableSnapshotPacketsDelta': delta(samples[-1], samples[0], 'reliableSnapshotPackets'),
             'slowWindows': slow, **rates})
     return {'file': str(path), 'header': header, 'writerStatus': status, 'malformedLines': malformed,
-            'evidenceComplete': bool(status and status.get('complete') and not malformed), 'runs': runs}
+            'evidenceComplete': bool(status and status.get('complete') and not malformed),
+            'sendRejections': status.get('sendRejections', []) if status else [],
+            'recovery': 'not-inferred', 'runs': runs}
 
 
 def align(paths):

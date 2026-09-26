@@ -120,6 +120,7 @@ namespace MonsterSupergroup.NetworkCombat
             }
 
             var batch = Gateway.CreateSnapshot();
+            NetworkLightEvidence.Record("Server", "CanonicalSnapshot", "Enqueued", "TargetSnapshot", () => NetworkLightEvidence.Canonical(batch), server: batch.ServerSequence);
             if (CombatEvidence.Enabled) CombatEvidence.Event("Server", "network.canonical", "Enqueued", "TargetSnapshot", input: batch, server: batch.ServerSequence);
             using var evidenceSend = Diagnostics.NetworkMessageEvidence.Begin("Server", "CanonicalSnapshot", server: batch.ServerSequence);
             TargetApplyCanonical(connection, batch, CurrentRound);
@@ -212,6 +213,7 @@ namespace MonsterSupergroup.NetworkCombat
             }
 
             CaptureEnemyHitPositions(batch.EnemyHitPresentations);
+            NetworkLightEvidence.Record("Server", "CanonicalBatch", "Enqueued", "Broadcast", () => NetworkLightEvidence.Canonical(batch), server: batch.ServerSequence);
             if (CombatEvidence.Enabled) CombatEvidence.Event("Server", "network.canonical", "Enqueued", "Broadcast", input: batch, server: batch.ServerSequence);
             using var evidenceSend = Diagnostics.NetworkMessageEvidence.Begin("Server", "CanonicalBatch", server: batch.ServerSequence);
             RpcApplyCanonical(batch, CurrentRound);
@@ -234,6 +236,8 @@ namespace MonsterSupergroup.NetworkCombat
 
         private void ApplyCanonicalForRound(CanonicalWorldBatch batch, uint round)
         {
+            NetworkLightEvidence.Record("Replica", "CanonicalBatch", round == CurrentRound ? "Decoded" : "Ignored", round == CurrentRound ? "AwaitingReplicaApplication" : "WrongRound",
+                () => new { incomingRound = round, batch = NetworkLightEvidence.Canonical(batch) }, server: batch.ServerSequence);
             Diagnostics.SharedEvidencePayload shared = null;
             if (CombatEvidence.Enabled && round == CurrentRound &&
                 (batch.EnemyHitPresentations == null || batch.EnemyHitPresentations.Length == 0) &&
@@ -277,6 +281,7 @@ namespace MonsterSupergroup.NetworkCombat
             // Present live damage before applying a lethal state can disable the actor.
             PresentConfirmedEnemyHits(batch.EnemyHitPresentations);
             Replica.ApplyWithEvidence(batch, shared);
+            NetworkLightEvidence.Record("Replica", "CanonicalBatch", "Processed", "ReplicaApplyReturned", () => NetworkLightEvidence.CanonicalResult(batch, Replica), server: batch.ServerSequence);
             CanonicalBatchReceived?.Invoke(batch);
             // Host may already have despawned these Enemies before this queued RPC.
             // Notify first: Debug owns its short-lived death rows independently.

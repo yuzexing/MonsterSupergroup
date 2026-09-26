@@ -16,7 +16,7 @@ namespace Mirror.FizzySteam
     [Serializable]
     public struct SteamConnectionInvestigationSample
     {
-        public string steamConnection, readStatus, queueMicrosecondsRaw, queueValidity;
+        public string steamConnection, connectionInstance, readStatus, queueMicrosecondsRaw, queueValidity;
         public bool readSucceeded, queueValid, pendingValid, localQualityValid, remoteQualityValid;
         public int connectionId, pingMs, sendRateBytesPerSecond;
         public int pendingReliableBytes, pendingUnreliableBytes, unacknowledgedBytes;
@@ -25,7 +25,7 @@ namespace Mirror.FizzySteam
     }
 
     // Enabled only by the opt-in gameplay observer; counts include the channel byte.
-    public static class SteamTransportDiagnostics
+    public static partial class SteamTransportDiagnostics
     {
         public static bool Enabled;
         public static readonly long[] SentBytes = new long[2], ReceivedBytes = new long[2];
@@ -35,8 +35,9 @@ namespace Mirror.FizzySteam
         // Observers must consume this borrowed segment synchronously. No payload is retained.
         public static event Action<uint, ArraySegment<byte>, int, EResult> SendResult;
         public static event Action<uint, int, string, string, string, int> ConnectionState;
-        internal static void RecordConnection(uint connection, int connectionId, string role, string previous, string current, int endReason)
+        internal static void RecordConnection(uint connection, int connectionId, string role, string previous, string current, int endReason, string remoteIdentity = null)
         {
+            ObserveConnection(connection, connectionId, role, previous, current, endReason, remoteIdentity);
             try { ConnectionState?.Invoke(connection, connectionId, role, previous, current, endReason); }
             catch { /* An observer may not change connection lifecycle. */ }
         }
@@ -114,6 +115,7 @@ namespace Mirror.FizzySteam
             return new SteamConnectionInvestigationSample
             {
                 steamConnection = connection.ToString(System.Globalization.CultureInfo.InvariantCulture),
+                connectionInstance = GetConnectionInstance(connection),
                 connectionId = id, readStatus = result.ToString(), readSucceeded = read,
                 pendingValid = read && status.m_cbPendingReliable >= 0 && status.m_cbPendingUnreliable >= 0 && status.m_cbSentUnackedReliable >= 0,
                 localQualityValid = read && status.m_flConnectionQualityLocal >= 0 && status.m_flConnectionQualityLocal <= 1,

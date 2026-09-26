@@ -41,6 +41,7 @@ namespace MonsterSupergroup.EditorTools
         public bool Development => native.development;
         public bool Tools => kind == BuildKind.Dev || purpose != "product";
         public bool Evidence => diagnostics == BuildDiagnostics.Evidence;
+        public bool NetworkDiagnostics => diagnostics == BuildDiagnostics.Network;
         public ProjectBuildProfile Recipe => ProjectBuildPurposes.Get(purpose);
         public NativeBuildSnapshot Native => JsonUtility.FromJson<NativeBuildSnapshot>(JsonUtility.ToJson(native));
         public string[] Defines => (string[])defines.Clone();
@@ -48,7 +49,7 @@ namespace MonsterSupergroup.EditorTools
         public string Summary => $"{purpose} · {kind} · {network} / {distribution} / {diagnostics}\n" +
             $"v{gameVersion} · {native.platform}/{native.architecture} · Development={Development}\n" +
             $"Deep Profiling={native.deepProfiling} · Debugging={native.allowDebugging} · Profiler={native.connectProfiler} · Compression={native.compression}\n" +
-            $"测试程序集={Recipe.testAssemblies} · 开发工具={Tools} · 取证={Evidence}\n" +
+            $"测试程序集={Recipe.testAssemblies} · 开发工具={Tools} · 战斗取证={Evidence} · 网络专项={NetworkDiagnostics}\n" +
             "场景：" + string.Join(", ", native.scenes.Select(Path.GetFileNameWithoutExtension)) + "\n" +
             $"Player：{native.playerSource}\nGraphics：{native.graphicsSource}\nQuality：{native.qualitySource}\n" +
             "编译符号：" + string.Join(";", defines);
@@ -101,6 +102,7 @@ namespace MonsterSupergroup.EditorTools
             if (s.Network == BuildNetwork.Kcp && s.Distribution != BuildDistribution.Direct) throw new BuildFailedException("KCP 必须使用 Direct 分发。");
             if (purpose.product && s.Network == BuildNetwork.Kcp && s.BuildKind != BuildKind.Dev) throw new BuildFailedException("产品 KCP 只允许 Dev。");
             if (s.Diagnostics == BuildDiagnostics.Evidence && (!purpose.product || s.BuildKind != BuildKind.Test)) throw new BuildFailedException("取证只允许产品 Test。");
+            if (s.Diagnostics == BuildDiagnostics.Network && (!purpose.product || s.BuildKind == BuildKind.Shipping)) throw new BuildFailedException("网络专项只允许产品 Dev／Test。");
             if (s.BuildKind == BuildKind.Shipping && (!purpose.product || development || purpose.testAssemblies || s.Network != BuildNetwork.Steam ||
                 s.Distribution != BuildDistribution.Steam || s.Diagnostics != BuildDiagnostics.Normal)) throw new BuildFailedException("Shipping 仅允许产品／Steam／Steam 分发／Normal，必须关闭 Development 和测试能力。");
         }

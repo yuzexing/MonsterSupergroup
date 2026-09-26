@@ -125,6 +125,8 @@ namespace MonsterSupergroup.NetworkCombat.Diagnostics
         public long Dropped => Interlocked.Read(ref dropped);
         public double WriteMilliseconds => Interlocked.Read(ref writeTicks) * 1000d / System.Diagnostics.Stopwatch.Frequency;
         public bool Closed => Volatile.Read(ref closed);
+        private int persistedRecord;
+        public bool HasPersistedRecords => Volatile.Read(ref persistedRecord) != 0;
         public DiagnosticMemoryBudget Memory => options.Memory;
         public EvidenceProfile Profile => options.Profile;
         public EvidenceConfiguration Configuration => new(options);
@@ -617,6 +619,8 @@ namespace MonsterSupergroup.NetworkCombat.Diagnostics
                     string directory = Resolve(key); Directory.CreateDirectory(directory);
                     string coveragePath = Path.Combine(directory, "coverage.json");
                     EvidenceJson.AtomicWrite(coveragePath, EvidenceJson.Encode(snapshot)); IndexFile(coveragePath);
+                    if (snapshot.failure == null && ulong.TryParse(snapshot.flushed, out ulong persisted) && persisted > 0)
+                        Volatile.Write(ref persistedRecord, 1);
                 }
                 catch (Exception error)
                 {

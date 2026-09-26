@@ -15,8 +15,9 @@ from contextlib import closing
 from pathlib import Path
 
 import CombatEvidence as evidence
+from CombatNetworkEvidence import rejected, valid_metric
 
-VERSION = 2
+VERSION = 3
 CLOCK = {"basis": "capture-round-first-record", "crossCaptureExact": False,
          "description": "Seconds since each capture's first record in this run/round; not a shared causal clock."}
 BUSINESS_CATEGORIES = ("attack", "damage", "pickup", "selection")
@@ -49,6 +50,10 @@ CREATE INDEX investigation_link_lookup ON investigation_links(kind,value,capture
 CREATE TABLE investigation_samples(capture TEXT,seq TEXT,run TEXT,round INTEGER,track TEXT,elapsed REAL,
  validity TEXT,body TEXT,PRIMARY KEY(capture,seq,track));
 CREATE INDEX investigation_sample_time ON investigation_samples(run,round,track,elapsed,capture);
+CREATE TABLE investigation_network(capture TEXT,seq TEXT,instance TEXT,direction TEXT,channel TEXT,result TEXT,attempt TEXT,message_number TEXT,lane TEXT,PRIMARY KEY(capture,seq));
+CREATE INDEX investigation_network_filter ON investigation_network(instance,direction,channel,result,capture,seq);
+CREATE INDEX investigation_network_attempt ON investigation_network(capture,instance,direction,attempt);
+CREATE INDEX investigation_network_message ON investigation_network(message_number,lane,direction,capture,seq);
 CREATE TABLE investigation_catalog(capture TEXT,seq TEXT,run TEXT,round INTEGER,body TEXT,
  PRIMARY KEY(capture,seq));
 CREATE INDEX investigation_original_sequence ON records(capture,length(seq),seq);
@@ -120,6 +125,8 @@ def _category(stage):
 
 
 def _record_category(record, data):
+    if rejected(record):
+        return "network_rejection"
     if record.get("reason") == "PickupReceiptFact" or any(_id(v.get("PickupDropId")) for v in _walk(data)):
         return "pickup"
     return _category(record.get("stage", ""))
@@ -195,10 +202,9 @@ def _steam_connection(value):
     for flag, fields in (("queueValid", ("queueMilliseconds",)),
                          ("pendingValid", ("pendingReliableBytes", "pendingUnreliableBytes", "unacknowledgedBytes")),
                          ("localQualityValid", ("localQuality",)), ("remoteQualityValid", ("remoteQuality",))):
-        if value.get(flag) is not True:
-            for field in fields:
-                if field in normalized:
-                    normalized[field] = None
+        for field in fields:
+            if field in normalized:
+                normalized[field] = valid_metric(value, field) if flag in ("queueValid", "pendingValid") else value[field] if value.get(flag) is True else None
     return normalized
 
 
@@ -216,6 +222,8 @@ def _measurements(values):
 
 def _summary(record, data):
     stage = record.get("stage", "")
+    if rejected(record):
+        return "Steam 发送拒绝 · 连接 " + str(data.get("connectionInstance", data.get("connectionId", "未知"))) + " · 频道 " + str(data.get("channel", "未知")) + " · " + str(data.get("result", record.get("reason", "未知")))
     labels = {"owner.attack_started": "发起攻击", "owner.attack_window": "攻击窗口",
               "owner.attack_stats": "攻击属性", "owner.hit": "命中判断", "ledger.apply": "权威结算",
               "replica.entity": "应用权威状态", "entity.spawn": "观察到实体出生",
@@ -309,6 +317,23 @@ def _explain_record(record, pointer, catalog, aggregate=False):
         if after is None and "afterHealth" in nested:
             after = {"health": nested["afterHealth"]}
     stage = record.get("stage", "")
+    if stage in ("network.transport", "network.receive", "network.batch", "network.application", "network.connection") and isinstance(data, dict):
+        label = {"network.transport": "Steam 接受／拒绝发送", "network.receive": "对端取出消息（尚不证明业务应用）",
+                 "network.batch": "只读批次解码与真实业务对象", "network.application": "业务应用／拒绝事实", "network.connection": "连接生命周期"}[stage]
+        kind = "input" if stage in ("network.batch", "network.connection") else "change" if stage == "network.application" else "decision"
+        shown = dict(data)
+        if record.get("associationReason") == "ConnectionLifetimeIdentityOnly":
+            shown["contextScope"] = record.get("contextScope")
+            shown["contextPurpose"] = "仅证明当时的连接身份，不关联其他轮次的业务或后续生命周期"
+        if stage == "network.batch" and isinstance(data.get("members"), list):
+            shown["members"] = []
+            for member in data["members"]:
+                member = dict(member)
+                if "entity" in member: member["routeEntity"] = member.pop("entity")
+                shown["members"].append(member)
+        return [dict(capture=record["captureId"], role=record.get("role"), stage=stage, evidence=pointer,
+                     outsideSelection=record.get("outsideSelection", False), kind=kind, title=label,
+                     fields=dict(shown, outcome=record.get("outcome"), reason=record.get("reason")), status="observed")], []
     if stage == "investigation.state" and isinstance(data, dict):
         after = data.get("state")
     caption = _display_summary(record, _record_category(record, data))
@@ -417,6 +442,15 @@ def build_index(database_path):
                 active[context_key + (_id(data.get("entity")),)] = str(identity["birth"])
             generation = str(explicit_generation or active.get(life_key) or "unknown")
             category = _record_category(record, data)
+            if stage.startswith("network.") and isinstance(data, dict):
+                instance = str(data.get("connectionInstance") or "unknown")
+                direction = str(data.get("direction") or "")
+                attempt = data.get("attempt") if direction == "Send" else data.get("receiveSequence")
+                db.execute("INSERT INTO investigation_network VALUES(?,?,?,?,?,?,?,?,?)", (capture, seq, instance, direction,
+                    str(data.get("channel", "")), str(data.get("result", "")), str(attempt) if attempt is not None else None,
+                    str(data.get("messageNumber")) if data.get("messageNumber") is not None else None, str(data.get("lane", "0"))))
+                if instance != "unknown" and attempt is not None and direction in ("Send", "Receive"):
+                    db.execute("INSERT OR IGNORE INTO investigation_links VALUES(?,?,?,?)", (capture, seq, "network-attempt", _json([capture, run, round_id, instance, direction, str(attempt)])))
             db.execute("INSERT INTO investigation_records VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)",
                 (capture, seq, run, round_id, elapsed, elapsed if elapsed is not None else 1e308,
                  stage, category, source, target, generation, role, _summary(record, data)))
@@ -443,6 +477,13 @@ def build_index(database_path):
             member(target, "target", generation, data.get("name") if isinstance(data, dict) else None,
                    "enemy" if stage.startswith("entity.") else "player" if stage == "network.identity" else None)
             for value in _walk(data):
+                if stage == "network.batch":
+                    for entity in value.get("entities") or []:
+                        member(entity.get("entityId", entity.get("entity")) if isinstance(entity, dict) else entity, "target")
+                        if isinstance(entity, dict): member(entity.get("source"), "source")
+                if stage == "network.application":
+                    member(value.get("target"), "target")
+                    member(value.get("source"), "source")
                 for key, candidate in value.items():
                     normalized = key.replace("_", "").lower()
                     if normalized in ("sourceentityid", "sourceplayerid", "playerid", "ownerplayerid"):
@@ -516,6 +557,7 @@ def build_index(database_path):
                     invalid = any(c.get("queueValidity") in ("ReadFailed", "Negative", "AboveOneHourUnverified") for c in connections if isinstance(c, dict))
                     samples.append(("steam", "observed" if valid else "invalid" if invalid else "unknown",
                                     {"connections": [_steam_connection(c) for c in connections if isinstance(c, dict)], "transport": data.get("transport"), "sendFailures": data.get("sendFailures"),
+                                     "networkInterval": data.get("networkInterval"), "reliableSnapshotPackets": data.get("reliableSnapshotPackets"),
                                      "metricValidityIsPerField": True, "zeroWithoutValidFlagIsNotAnObservation": True}))
             if stage in ("network.transport", "network.connection"):
                 samples.append(("steam", "observed", {"stage": stage, "outcome": record.get("outcome"), "reason": record.get("reason"), "input": data}))
@@ -537,6 +579,13 @@ def build_index(database_path):
                 if linked["server"]:
                     for output in db.execute("SELECT capture,seq FROM records WHERE run=? AND round=? AND server=?", (run, round_id, linked["server"])):
                         db.execute("UPDATE investigation_records SET category='pickup' WHERE capture=? AND seq=?", tuple(output))
+        # A failed-send header and its decoded batch share an exact local attempt key.
+        # Route objects are excluded; only actual typed business members are inherited.
+        db.execute("""INSERT OR IGNORE INTO investigation_members
+            SELECT header.capture,header.seq,m.entity,m.generation,m.direction
+            FROM investigation_links header JOIN investigation_links batch ON batch.kind=header.kind AND batch.value=header.value
+            JOIN investigation_members m ON m.capture=batch.capture AND m.seq=batch.seq
+            WHERE header.kind='network-attempt'""")
         for context in contexts.values():
             context.update(builds.get(context["capture"], {}))
             context["contentCatalog"] = catalogs.get(context["capture"], {"status": "unknown", "reason": "ContentCatalogNotCaptured", "entries": []})
@@ -617,8 +666,12 @@ class Investigation:
             raise ValueError("after must not exceed before")
         if s.get("direction", "any") not in ("any", "source", "target"):
             raise ValueError("Unknown entity direction")
-        if s.get("category") not in (None, "all", "business", "attack", "damage", "movement", "pickup", "selection", "state", "sync", "performance", "replay"):
+        if s.get("category") not in (None, "all", "business", "attack", "damage", "movement", "pickup", "selection", "state", "sync", "performance", "replay", "network_rejection"):
             raise ValueError("Unknown investigation category")
+        for field in ("connectionInstance", "connectionCapture", "networkDirection", "channel", "returnCode"):
+            if s.get(field) is not None:
+                s[field] = str(s[field])
+                if len(s[field]) > 256: raise ValueError("Network filter too long")
         if s.get("entity") is not None:
             s["entity"] = str(s["entity"])
         return s
@@ -632,6 +685,12 @@ class Investigation:
                 if s.get(bound) is not None:
                     clauses.append(p + "elapsed" + op + "?"); values.append(s[bound])
         if filters:
+            if s.get("connectionCapture"):
+                clauses.append(p + "capture=?"); values.append(s["connectionCapture"])
+            for key, column in (("connectionInstance", "instance"), ("networkDirection", "direction"), ("channel", "channel"), ("returnCode", "result")):
+                if s.get(key) is not None:
+                    clauses.append("EXISTS(SELECT 1 FROM investigation_network n WHERE n.capture=" + p + "capture AND n.seq=" + p + "seq AND n." + column + "=?)")
+                    values.append(s[key])
             category = s.get("category")
             if category == "business":
                 clauses.append("(" + p + "category IN (" + ",".join("?" for _ in BUSINESS_CATEGORIES) + ") OR " +
@@ -668,6 +727,7 @@ class Investigation:
             item["actualRoles"] = actual
             item["actualRole"] = active_roles[0] if len(active_roles) == 1 else "offline" if actual == ["offline"] else "unknown"
             item["actualRoleSource"] = "performance.role" if actual else "not-recorded"
+            item["lightweightNetwork"] = self.db.execute("SELECT 1 FROM metadata WHERE kind='network-diagnostics-source' AND body LIKE ?", ('%"' + item["capture"] + '"%',)).fetchone() is not None
             grouped.setdefault(key, {"run": key[0], "round": key[1], "captures": []})["captures"].append(item)
         return {"matches": list(grouped.values()), "clock": CLOCK, "revision": self.meta["revision"]}
 
@@ -713,7 +773,7 @@ class Investigation:
 
     def _item(self, row):
         raw = self.db.execute("SELECT body FROM records WHERE capture=? AND seq=?", (row["capture"], row["seq"])).fetchone()
-        summary = _display_summary(json.loads(raw[0]), row["category"]) if raw else row["summary"]
+        summary = row["summary"] if row["category"] == "network_rejection" else _display_summary(json.loads(raw[0]), row["category"]) if raw else row["summary"]
         return {"capture": row["capture"], "sequence": row["seq"], "elapsed": row["elapsed"],
                 "stage": row["stage"], "category": row["category"], "source": row["source"], "target": row["target"],
                 "entityGeneration": row["generation"], "role": row["role"], "summary": summary,
@@ -807,13 +867,14 @@ class Investigation:
         """Full scoped closure, with no report-size cap; returns resolved original records."""
         s = self._selection(selection)
         pending, seen, candidates = [], set(), {}
-        context_keys = set()
+        context_keys, connection_context_keys, seed_keys = set(), set(), set()
         for seed in seeds:
             capture = seed.get("capture", seed.get("captureId")); seq = seed.get("sequence", seed.get("recordSequence"))
             row = self.db.execute("SELECT run,round FROM records WHERE capture=? AND seq=?", (capture, str(seq))).fetchone()
             if not row or capture not in s["captures"] or row["run"] != s["run"] or row["round"] != s["round"]:
                 raise ValueError("Seed lies outside the selected match/captures")
             pending.append((capture, str(seq)))
+            seed_keys.add((capture, str(seq)))
         # Keep matched source/build/catalog context, even outside the requested time window.
         for r in self.db.execute("SELECT capture,seq FROM investigation_catalog WHERE run=? AND round=?", (s["run"], s["round"])):
             if r["capture"] in s["captures"]:
@@ -831,6 +892,18 @@ class Investigation:
                 continue
             seen.add((capture, seq))
             record = self._record(capture, seq)
+            if (capture, seq) in context_keys and (capture, seq) not in seed_keys and record.get("stage", "").startswith("network."):
+                # A time-origin record or an earlier connection binding is retained
+                # for provenance only, not recursively used to expand another session.
+                continue
+            # A connection binding is context, never a key that recursively joins every
+            # packet in a session. Attempts are joined only within this capture/lifetime.
+            net = self.db.execute("SELECT instance FROM investigation_network WHERE capture=? AND seq=?", (capture, seq)).fetchone()
+            if net and net[0] != "unknown":
+                for binding in self.db.execute("""SELECT n.capture,n.seq FROM investigation_network n JOIN records r USING(capture,seq)
+                    WHERE n.capture=? AND n.instance=? AND r.stage='network.connection'
+                    AND (length(n.seq),n.seq)<=(?,?) ORDER BY length(n.seq) DESC,n.seq DESC LIMIT 1""", (capture, net[0], len(seq), seq)):
+                    context_keys.add(tuple(binding)); connection_context_keys.add(tuple(binding)); pending.append(tuple(binding))
             events = {str(record[k]) for k in ("eventId", "rootEventId", "parentEventId") if _id(record.get(k))}
             events.update(r[0] for r in self.db.execute("SELECT value FROM investigation_links WHERE capture=? AND seq=? AND kind='event'", (capture, seq)))
             for event_id in events - expanded_events:
@@ -868,12 +941,49 @@ class Investigation:
                         pending.append((linked[0], linked[1]))
         combat_chain = any(self.db.execute("SELECT category FROM investigation_records WHERE capture=? AND seq=?", key).fetchone()[0]
                            in BUSINESS_CATEGORIES for key in seen)
+        # SDK numbers are scoped to a directional connection. Reciprocal Steam IDs
+        # narrow peer candidates, but local lifetime serials are not a shared nonce.
+        # Never upgrade a reused message number to a confirmed delivery by hash/time.
+        headers = {}
+        for source in self.db.execute("SELECT body FROM metadata WHERE kind='network-diagnostics-source'"):
+            body = json.loads(source[0]); header = body.get("header") or {}
+            if header.get("captureId") in s["captures"]: headers[header["captureId"]] = header
+        for capture, seq in list(seen):
+            net = self.db.execute("SELECT * FROM investigation_network WHERE capture=? AND seq=?", (capture, seq)).fetchone()
+            if not net or net["direction"] not in ("Send", "Receive") or not str(net["message_number"] or "").isdigit() or int(net["message_number"]) <= 0:
+                continue
+            local = headers.get(capture, {}).get("localSteamIdentity")
+            if not local: continue
+            remote_ids = set()
+            for body in self.db.execute("""SELECT r.body FROM investigation_network n JOIN records r USING(capture,seq)
+                WHERE n.capture=? AND n.instance=? AND r.stage='network.connection'""", (capture, net["instance"])):
+                data = _payload(self.db, json.loads(body[0]))
+                if isinstance(data, dict) and data.get("remoteIdentity"): remote_ids.add(str(data["remoteIdentity"]))
+            if len(remote_ids) != 1: continue
+            remote = next(iter(remote_ids))
+            direction = "Receive" if net["direction"] == "Send" else "Send"
+            for peer in self.db.execute("""SELECT n.capture,n.seq,n.instance FROM investigation_network n JOIN records r USING(capture,seq)
+                WHERE n.message_number=? AND n.lane=? AND n.direction=? AND r.run=? AND r.round=? AND r.stage IN ('network.transport','network.receive')""",
+                (net["message_number"], net["lane"], direction, s["run"], s["round"])):
+                if peer["capture"] == capture or peer["capture"] not in s["captures"] or str(headers.get(peer["capture"], {}).get("localSteamIdentity")) != remote:
+                    continue
+                peer_remote = set()
+                for body in self.db.execute("""SELECT r.body FROM investigation_network n JOIN records r USING(capture,seq)
+                    WHERE n.capture=? AND n.instance=? AND r.stage='network.connection'""", (peer["capture"], peer["instance"])):
+                    data = _payload(self.db, json.loads(body[0]))
+                    if isinstance(data, dict) and data.get("remoteIdentity"): peer_remote.add(str(data["remoteIdentity"]))
+                if peer_remote == {str(local)}:
+                    candidates[(peer["capture"], peer["seq"])] = "ReciprocalSteamIdentityAndMessageNumberLifetimeUnverified"
         for capture, seq in sorted(seen | set(candidates), key=lambda k: (k[0], len(k[1]), k[1])):
             record = self._record(capture, seq)
             record["outsideSelection"] = not self._selected_record(s, capture, seq)
             if (capture, seq) in seen:
-                record["associationStatus"] = "context" if (capture, seq) in context_keys else "confirmed"
-                record["associationReason"] = "CaptureBuildOrTimeOrigin" if (capture, seq) in context_keys else "RecordedEventOrDomainIdentity"
+                contextual = (capture, seq) in context_keys and (capture, seq) not in seed_keys
+                record["associationStatus"] = "context" if contextual else "confirmed"
+                record["associationReason"] = ("ConnectionLifetimeIdentityOnly" if (capture, seq) in connection_context_keys else "CaptureBuildOrTimeOrigin") if contextual else "RecordedEventOrDomainIdentity"
+                if (capture, seq) in connection_context_keys:
+                    record["contextScope"] = dict(capture=capture, run=record.get("runId"), round=record.get("round"), identityOnly=True,
+                        outsideSelectedMatch=record.get("runId") != s["run"] or record.get("round") != s["round"])
             else:
                 data = record.get("input")
                 business = str(data.get("business") or "") if isinstance(data, dict) else ""
@@ -905,6 +1015,9 @@ class Investigation:
                 unknowns.append("MissingBlob:" + reference)
         for record in rows:
             unknowns.extend(p["reason"] for p in record.get("missingPayloads", []))
+            if record.get("stage") == "network.batch" and isinstance(record.get("input"), dict):
+                if record["input"].get("complete") is False or any(v.get("parseFailure") for v in _walk(record["input"])):
+                    unknowns.append("BatchParseIncompleteObjectsMayBeUnknown")
         steps, canonical_events = [], defaultdict(set)
         for record in rows:
             if record.get("associationStatus") in ("confirmed", "context") and record.get("stage") == "gateway.canonical_link" and _id(record.get("serverSequence")):
@@ -913,6 +1026,8 @@ class Investigation:
             if record.get("associationStatus") in ("candidate", "not-established"):
                 continue
             stage = record.get("stage", "")
+            if stage == "network.connection" and record.get("associationReason") == "CaptureBuildOrTimeOrigin":
+                continue
             if record is not selected and (_record_category(record, record.get("input")) in ("replay", "performance") or stage == "observation.snapshot"):
                 continue
             aggregate = record.get("reason") == "Coalesced" or (
@@ -926,12 +1041,82 @@ class Investigation:
         if selected.get("before") is None and selected.get("after") is None and not any(
                 step["kind"] == "change" and step["status"] == "observed" for step in steps):
             unknowns.append("NoRecordedBeforeAfterState")
-        return {"record": self._item(row), "records": rows, "steps": steps,
+        network_facts = None
+        if selected.get("stage") == "network.transport":
+            net = self.db.execute("SELECT * FROM investigation_network WHERE capture=? AND seq=?", (capture, str(sequence))).fetchone()
+            if net and net["instance"] != "unknown":
+                later = []
+                for other in self.db.execute("""SELECT r.* FROM investigation_records r JOIN investigation_network n USING(capture,seq)
+                    WHERE r.capture=? AND n.instance=? AND r.run=? AND r.round=? AND r.elapsed>=?
+                    AND r.stage IN ('network.transport','network.receive','network.application')
+                    ORDER BY r.sort_time,length(r.seq),r.seq LIMIT 21""", (capture, net["instance"], s["run"], s["round"], row["elapsed"] if row["elapsed"] is not None else 1e308)):
+                    if other["seq"] != str(sequence): later.append(self._item(other))
+                network_facts = {"connectionInstance": net["instance"], "recovery": "not-inferred",
+                    "followingConnectionFacts": later[:20], "followingFactsAreNotSameMessage": True,
+                    "followingFactsLimit": 20, "fullFactsRemainQueryable": True,
+                    "failureWindows": self.failure_windows(s, [{"capture": capture, "sequence": str(sequence)}])}
+                windows = network_facts["failureWindows"]
+                if windows:
+                    network_facts["load"] = self.network_load(dict(s, captures=[capture], after=windows[0]["after"], before=windows[0]["before"], connectionInstance=net["instance"]))
+        return {"record": self._item(row), "records": rows, "steps": steps, "networkFacts": network_facts,
                 "candidates": [{"capture": r["captureId"], "sequence": str(r["recordSequence"]), "status": r["associationStatus"],
                     "reason": r["associationReason"], "evidence": self._pointer(r["captureId"], r["recordSequence"])}
                     for r in rows if r.get("associationStatus") in ("candidate", "not-established")],
                 "summary": "沿已记录关联展开的各端输入、判断和变化；端间排序不表示精确同时或因果延迟。",
                 "unknowns": sorted(set(unknowns)), "dependencies": list(dependencies.values()), "catalog": self._content_catalog(capture, s)}
+
+    def network_connections(self, selection):
+        s = self._selection(selection)
+        where, values = self._where(s, filters=False, time=False)
+        rows = self.db.execute("""SELECT DISTINCT n.capture,n.instance,n.direction,n.channel,n.result
+            FROM investigation_records r JOIN investigation_network n USING(capture,seq) WHERE """ + where + " ORDER BY n.capture,n.instance,n.direction,n.channel,n.result", values)
+        return {"items": [dict(row) for row in rows]}
+
+    def network_load(self, selection):
+        s = self._selection(selection)
+        traffic, polls, pointers, alive_samples = {}, {}, [], []
+        for row, data in self._performance_rows(s):
+            if _finite(data.get("alive")) and data["alive"] >= 0:
+                alive_samples.append(dict(capture=row["capture"], elapsed=row["elapsed"], alive=data["alive"], evidence=self._pointer(row["capture"], row["seq"])))
+            interval = data.get("networkInterval")
+            if not isinstance(interval, dict): continue
+            pointers.append(self._pointer(row["capture"], row["seq"]))
+            for value in interval.get("traffic") or []:
+                if s.get("connectionInstance") and str(value.get("connectionInstance")) != s["connectionInstance"]: continue
+                key = (row["capture"], *(str(value.get(k, "unknown")) for k in ("connectionInstance", "direction", "channel", "business", "result", "bytesScope")))
+                item = traffic.setdefault(key, dict(zip(("capture", "connectionInstance", "direction", "channel", "business", "result", "bytesScope"), key)))
+                for field in ("attempts", "accepted", "rejected", "bytes", "acceptedBytes", "rejectedBytes", "reliableFallbacks", "received", "receivedBytes"):
+                    if _finite(value.get(field)) and value[field] >= 0: item[field] = item.get(field, 0) + value[field]
+            for value in interval.get("receivePolls") or []:
+                if s.get("connectionInstance") and str(value.get("connectionInstance")) != s["connectionInstance"]: continue
+                key = (row["capture"], str(value.get("connectionInstance")))
+                item = polls.setdefault(key, dict(capture=key[0], connectionInstance=key[1]))
+                for field in ("calls", "messages", "limitHits", "failedReads", "totalProcessingSeconds"):
+                    if _finite(value.get(field)) and value[field] >= 0: item[field] = item.get(field, 0) + value[field]
+                for field in ("maximumGapSeconds", "maximumProcessingSeconds"):
+                    if _finite(value.get(field)) and value[field] >= 0: item[field] = max(item.get(field, 0), value[field])
+        return dict(traffic=sorted(traffic.values(), key=lambda v: v.get("bytes", 0), reverse=True), receivePolls=list(polls.values()),
+                    evidence=pointers, intervalAggregatesNotCumulative=True, transportAndBusinessBytesMustNotBeAdded=True,
+                    maxObservedAlive=max((v["alive"] for v in alive_samples), default=None), aliveSamples=alive_samples,
+                    status="observed" if pointers else "unknown", recovery="not-inferred")
+
+    def failure_windows(self, selection, seeds=None):
+        """Per-capture/per-lifetime windows, not cross-PC clock subtraction or a recovery claim."""
+        s = self._selection(dict(selection, category="network_rejection"))
+        where, values = self._where(s)
+        rows = list(self.db.execute("""SELECT r.capture,r.seq,r.elapsed,n.instance FROM investigation_records r
+            JOIN investigation_network n USING(capture,seq) WHERE """ + where + " ORDER BY r.sort_time", values))
+        if seeds:
+            chosen = {(p.get("capture", p.get("captureId")), str(p.get("sequence", p.get("recordSequence")))) for p in seeds}
+            connections = {(r["capture"], r["instance"]) for r in rows if (r["capture"], r["seq"]) in chosen}
+            rows = [r for r in rows if (r["capture"], r["instance"]) in connections]
+        grouped = {}
+        for row in rows:
+            if row["elapsed"] is not None:
+                grouped.setdefault((row["capture"], row["instance"]), []).append(row)
+        return [dict(capture=cap, connectionInstance=instance, after=max(0, min(r["elapsed"] for r in values)-10),
+                     before=max(r["elapsed"] for r in values)+20, recovery="not-inferred",
+                     reason="FirstObservedRejectionMinus10sToLastObservedRejectionPlus20s") for (cap, instance), values in grouped.items()]
 
     def _content_catalog(self, capture, s):
         row = self.db.execute("SELECT body FROM investigation_catalog WHERE capture=? AND run=? AND round=? ORDER BY length(seq),seq LIMIT 1", (capture, s["run"], s["round"])).fetchone()
@@ -1154,7 +1339,8 @@ class Investigation:
                 elif name == "writer":
                     # logQueuedBytes belongs to the separate observation-log writer. Its
                     # empty queue cannot establish that the combat evidence writer is empty.
-                    measures = [data[k] for k in ("evidenceQueuedBytes", "pendingBytes")
+                    measure_fields = ("evidenceQueuedBytes", "pendingBytes", "logQueuedBytes") if performance.get((sample["capture"], sample["sequence"]), {}).get("lightweightNetwork") else ("evidenceQueuedBytes", "pendingBytes")
+                    measures = [data[k] for k in measure_fields
                                 if _finite(data.get(k)) and data[k] >= 0]
                     sample_complete = bool(measures)
                     hit = any(value > 0 for value in measures)
@@ -1188,9 +1374,9 @@ class Investigation:
                     for connection in connections or []:
                         raw = connection.get("raw", connection)
                         queue = raw.get("queueMilliseconds")
-                        queue_valid = raw.get("queueValid") is True and _finite(queue) and 0 <= queue <= 3600000
+                        queue_valid = valid_metric(raw, "queueMilliseconds") is not None
                         pending_fields = ("pendingReliableBytes", "pendingUnreliableBytes", "unacknowledgedBytes")
-                        pending_valid = raw.get("pendingValid") is True and all(_finite(raw.get(k)) and raw[k] >= 0 for k in pending_fields)
+                        pending_valid = all(valid_metric(raw, k) is not None for k in pending_fields)
                         normalized = _steam_connection(raw)
                         if not queue_valid:
                             normalized["queueMilliseconds"] = None
@@ -1207,6 +1393,10 @@ class Investigation:
                             "ReadFailed", "Negative", "AboveOneHourUnverified") or (_finite(queue) and (queue < 0 or queue > 3600000))
                     sample_complete = bool(complete_connections) and all(complete_connections)
                     hit = any(value > 0 for value in measures)
+                    if data.get("stage") == "network.transport" and rejected({"stage": "network.transport", "input": data.get("input"), "outcome": data.get("outcome")}):
+                        measures.append(1); hit = True
+                        sample["sendRejected"] = True
+                        sample["acceptedIsNotDelivered"] = True
                 valid += bool(measures)
                 invalid += sample_invalid
                 negative += sample_complete and not hit
@@ -1226,7 +1416,7 @@ class Investigation:
                 "not-observed" if valid and valid == negative and not invalid and assessed.get("complete") else "invalid" if invalid else "unknown")
             reasons = {
                 "business": {"observed": "已记录待确认业务或领取等待；等待不等同 Steam 发送拥堵。", "not-observed": "完整记录中的有效等待样本未出现待确认积压；采样间事件仍以原始记录为准。"},
-                "steam": {"observed": "有效 Steam 指标记录到待发送字节或发送等待；无效字段单独保留，不参与判定。",
+                "steam": {"observed": "已记录 Steam 发送拒绝，或有效指标中的待发送字节／发送等待；展开查看具体依据。接受不等于送达，后续成功不代表恢复。无效字段不参与积压判定。",
                           "not-observed": "完整记录中的有效 Steam 指标未显示发送积压。", "not-applicable": "所选样本均无远端连接，且为本地 Host／离线会话；这些样本不适用 Steam 发送积压判断。"},
                 "frames": {"observed": "已记录超过 100 毫秒的本地帧；不能仅凭时间重叠归因于网络或写盘。", "not-observed": "完整记录中的有效帧样本未超过 100 毫秒。"},
                 "writer": {"observed": "已记录本地日志待处理字节；队列非零本身不能证明持续写入瓶颈。", "not-observed": "完整记录中的有效日志队列样本均为零。"}}

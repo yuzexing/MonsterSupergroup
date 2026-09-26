@@ -15,7 +15,13 @@ namespace MonsterSupergroup.NetworkCombat
         public CanonicalWorldBatch ProcessBatch(uint senderPlayerId, CombatSubmissionBatch batch,
             double serverTime, out EnemyDeathReceipt[] deathReceipts)
         {
-            if (!CombatEvidence.Enabled) return EvidenceCore_ProcessBatch(senderPlayerId, batch, serverTime, out deathReceipts);
+            if (!CombatEvidence.Enabled)
+            {
+                using var lightDecisions = GatewayEvidenceDecision.Begin(this, senderPlayerId, batch);
+                var lightResult = EvidenceCore_ProcessBatch(senderPlayerId, batch, serverTime, out deathReceipts);
+                lightDecisions?.Link(lightResult);
+                return lightResult;
+            }
             using var evidence = CombatEvidence.Begin(this, "gateway", "ProcessBatch", new object[] { senderPlayerId, batch, serverTime }, o => ((ServerCombatGateway)o).CaptureReplayState());
             using var decisions = GatewayEvidenceDecision.Begin(this, senderPlayerId, batch);
             var result = EvidenceCore_ProcessBatch(senderPlayerId, batch, serverTime, out deathReceipts);

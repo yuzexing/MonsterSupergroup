@@ -110,11 +110,15 @@ def make_server(database, export_root, port=0):
                     raise ValueError("无效选择。")
                 if url.path == "/api/session":
                     result = {"token": token, "database": str(Path(database).resolve()),
-                              "exports": str(Path(export_root).resolve()), "version": 1}
+                              "exports": str(Path(export_root).resolve()), "version": 1, "networkDiagnostics": True}
                 elif url.path == "/api/matches":
                     result = investigation.matches()
                 elif url.path == "/api/entities":
                     result = investigation.entities(selection)
+                elif url.path == "/api/connections":
+                    result = investigation.network_connections(selection)
+                elif url.path == "/api/network-load":
+                    result = investigation.network_load(selection)
                 elif url.path == "/api/timeline":
                     result = investigation.timeline(selection, request.get("cursor"), int(request.get("limit", 200)))
                 elif url.path == "/api/state":

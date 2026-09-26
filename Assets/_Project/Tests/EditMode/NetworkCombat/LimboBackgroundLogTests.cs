@@ -58,5 +58,43 @@ namespace MonsterSupergroup.NetworkCombat.Tests
             Assert.That(log.Failure, Does.Contain("simulated disk failure"));
             Assert.That(log.IsComplete, Is.False);
         }
+        [Test]
+        public void AsyncReadinessAndCloseWaitForActualFlushWithoutBlockingCaller()
+        {
+            var stream = new BlockedStream();
+            var log = new LimboObservationLog(stream, () => 0);
+            try
+            {
+                log.WriteLine("header");
+                log.RequestReadyCheck();
+                Assert.That(stream.Entered.Wait(2000), Is.True);
+                Assert.That(log.IsReady, Is.False, "An enqueued header is not a persisted header.");
+                log.BeginClose();
+                Assert.That(log.CloseCompleted, Is.False);
+                Assert.That(log.IsComplete, Is.False, "Requesting close is not successful completion.");
+                stream.Release.Set();
+                Assert.That(SpinWait.SpinUntil(() => log.CloseCompleted, 2000), Is.True);
+                Assert.That(log.IsReady, Is.True);
+                Assert.That(log.IsComplete, Is.True);
+                Assert.That(Encoding.UTF8.GetString(stream.ToArray()).Trim(), Is.EqualTo("header"));
+            }
+            finally { stream.Release.Set(); log.Dispose(); }
+        }
+        [Test]
+        public void HeaderFlushAndCloseCannotHideAnUnwritableStatusFile()
+        {
+            string path = Path.Combine(Path.GetTempPath(), "limbo-status-failure-" + Guid.NewGuid() + ".jsonl");
+            Directory.CreateDirectory(path + ".status.json");
+            try
+            {
+                using var log = new LimboObservationLog(path);
+                log.WriteLine("header"); log.RequestReadyCheck(); log.BeginClose();
+                Assert.That(SpinWait.SpinUntil(() => log.CloseCompleted, 2000), Is.True);
+                Assert.That(log.Failure, Is.Not.Null);
+                Assert.That(log.IsReady, Is.False);
+                Assert.That(log.IsComplete, Is.False);
+            }
+            finally { File.Delete(path); Directory.Delete(path + ".status.json"); }
+        }
     }
 }

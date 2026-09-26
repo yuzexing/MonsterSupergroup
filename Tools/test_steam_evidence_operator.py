@@ -13,6 +13,7 @@ import unittest
 TOOLS = Path(__file__).parent
 KIT = TOOLS / 'SteamEvidenceOperator'
 PWSH = Path(os.environ.get('PWSH_EXE', r'C:\Users\ADMIN\.cache\codex-runtimes\codex-primary-runtime\dependencies\native\powershell\pwsh.EXE'))
+WINDOWS_POWERSHELL = Path(os.environ.get('SystemRoot', r'C:\Windows')) / 'System32/WindowsPowerShell/v1.0/powershell.exe'
 
 def write(path, value):
     path.parent.mkdir(parents=True, exist_ok=True)
@@ -36,6 +37,15 @@ param($Executable,$ArtifactDirectory,$ExpectedRole,$EvidenceMode,$EvidenceProfil
 New-Item -ItemType Directory -Path $ArtifactDirectory | Out-Null
 @{executable=$Executable;graphics=$Graphics;profileSeconds=$ProfileSeconds;mode=$EvidenceMode;evidenceProfile=$EvidenceProfile;role=$ExpectedRole;scenario=$Scenario;observeEvidenceQueue=[bool]$ObserveEvidenceQueue} | ConvertTo-Json | Set-Content -LiteralPath (Join-Path $ArtifactDirectory 'mock-launch.json')
 $configuration=Get-SteamEvidenceProfileConfiguration $EvidenceProfile
+if ($Scenario -eq 'steam-network-light-8-minute') {
+    $metrics=Join-Path $ArtifactDirectory 'metrics'
+    New-Item -ItemType Directory -Path $metrics -Force | Out-Null
+    @{processId=987654;startedUtc='2026-09-24T10:00:00Z';executable=$Executable;launcherArgumentsApplied=$true;attached=$false;requestedEvidenceMode=$EvidenceMode;expectedRole=$ExpectedRole;complete=$true;normalExit=$true;actualCommandLine='synthetic only';requestedEvidenceProfile=$EvidenceProfile.ToLowerInvariant();requestedNetworkOutput=$metrics} | ConvertTo-Json -Depth 10 | Set-Content -LiteralPath (Join-Path $ArtifactDirectory 'capture.json')
+    $header=@{kind='header';schemaVersion=3;captureId='network-capture';processId=987654;utcStart='2026-09-24T10:00:01Z';executablePath=$Executable;buildGuid=('1' * 32);networkCapabilities=@{version=1;lightweightNetworkEnabled=$true;fullCombatEvidenceEnabled=$false;injectionEnabled=$false;samplingIntervalSeconds=1}} | ConvertTo-Json -Depth 10 -Compress
+    # Match Unity's actual JSON numeric representation, even on PowerShell 5.1.
+    $header -replace '"samplingIntervalSeconds":1(?=[,}])','"samplingIntervalSeconds":1.0' | Set-Content -LiteralPath (Join-Path $metrics 'network.jsonl')
+    return
+}
 $evidence=Join-Path $ArtifactDirectory 'CombatDiagnostics'
 @{processId=987654;startedUtc='2026-09-24T10:00:00Z';executable=$Executable;launcherArgumentsApplied=$true;attached=$false;requestedEvidenceMode=$EvidenceMode;expectedRole=$ExpectedRole;complete=$true;normalExit=$false;actualCommandLine='synthetic only';requestedEvidenceProfile=$EvidenceProfile.ToLowerInvariant();requestedEvidenceConfiguration=$configuration;evidenceProfileArgumentsApplied=$true;requestedEvidenceOutput=$evidence} | ConvertTo-Json -Depth 10 | Set-Content -LiteralPath (Join-Path $ArtifactDirectory 'capture.json')
 $source=Join-Path $evidence 'boot/0/sources/test-capture'
@@ -72,9 +82,9 @@ class OperatorKitTests(unittest.TestCase):
             data['readyToRun'] = True
             write(path, data)
 
-    def run_ps(self, command, success=True):
+    def run_ps(self, command, success=True, shell=None):
         environment = {key: value for key, value in os.environ.items() if key.lower() not in ('psmodulepath', 'pythonpath', 'pythonhome')}
-        result = subprocess.run([str(PWSH), '-NoLogo', '-NoProfile', '-Command', "$ErrorActionPreference='Stop'; " + command], capture_output=True, text=True, encoding='utf-8', errors='replace', env=environment)
+        result = subprocess.run([str(shell or PWSH), '-NoLogo', '-NoProfile', '-Command', "$ErrorActionPreference='Stop'; " + command], capture_output=True, text=True, encoding='utf-8', errors='replace', env=environment)
         if success:
             self.assertEqual(0, result.returncode, result.stdout + result.stderr)
         else:
@@ -140,6 +150,160 @@ class OperatorKitTests(unittest.TestCase):
     def test_chain_off_is_rejected(self):
         self.start(mode='off', success=False)
         self.assertFalse(self.output.exists())
+
+    def test_network_shortcuts_are_path_free_lightweight_and_verify_actual_header(self):
+        package = self.root / 'product'
+        package.mkdir()
+        (package / 'Fake Game.exe').write_bytes(b'never executed')
+        for role in ('Host', 'Client'):
+            with self.subTest(role=role):
+                self.run_ps('& ' + quote(self.kit / f'{role}-Network.ps1'))
+                current = json.loads((self.root / 'current-case.json').read_text(encoding='utf-8-sig'))
+                case = Path(current['caseDirectory'])
+                launch = json.loads((case / 'capture/mock-launch.json').read_text(encoding='utf-8-sig'))
+                self.assertEqual('off', launch['mode'])
+                self.assertEqual('steam-network-light-8-minute', launch['scenario'])
+                self.assertFalse(launch['observeEvidenceQueue'])
+                self.assertEqual(0, launch['profileSeconds'])
+                self.run_ps('& ' + quote(self.kit / 'Verify-Running.ps1'))
+                proof = json.loads(next(case.glob('runtime-check-*/network-configuration.json')).read_text(encoding='utf-8-sig'))
+                self.assertTrue(proof['verified'])
+                self.assertFalse(proof['applied']['fullCombatEvidenceEnabled'])
+
+    def test_network_stage_rejects_full_evidence(self):
+        self.start(stage='network', mode='local', success=False)
+        self.assertFalse(self.output.exists())
+
+    def test_network_start_rejects_long_status_path_before_launch(self):
+        output = self.root / ('x' * 120)
+        result = self.start(stage='network', mode='off', output=output, success=False)
+        self.assertIn('status path may reach', result.stdout + result.stderr)
+        self.assertFalse(output.exists())
+        current = json.loads((self.root / 'current-case.json').read_text(encoding='utf-8-sig'))
+        self.assertIsNone(current['caseDirectory'])
+
+    def test_network_path_boundary_counts_status_suffix_and_maximum_pid(self):
+        module = self.kit / 'Tools/SteamEvidenceIdentity.psm1'
+        for shell in (PWSH, WINDOWS_POWERSHELL):
+            with self.subTest(shell=shell):
+                command = 'Import-Module ' + quote(module) + '; '
+                self.run_ps(command + "Assert-SteamNetworkOutputPath -Directory ('C:\\' + ('x' * 178))", shell=shell)
+                result = self.run_ps(command + "Assert-SteamNetworkOutputPath -Directory ('C:\\' + ('x' * 179))", success=False, shell=shell)
+                self.assertIn('260 characters', result.stdout + result.stderr)
+
+    def test_network_export_uses_short_parent_and_preserves_case_source(self):
+        self.start(stage='network', mode='off')
+        case = next(self.output.iterdir())
+        self.run_ps('function Get-CimInstance { }; ' + self.context_command('Export-Case.ps1', case))
+        exported = next(self.output.glob('network-export-*'))
+        call = json.loads((exported / 'mock-call.json').read_text(encoding='utf-8-sig'))
+        self.assertEqual([str(case)], call['logs'])
+        self.assertNotIn(case.name, exported.name)
+
+    def test_network_numeric_configuration_matches_unity_json_on_both_powershell_versions(self):
+        self.start(stage='network', mode='off')
+        case = next(self.output.iterdir())
+        header = case / 'capture/metrics/network.jsonl'
+        self.assertIn('"samplingIntervalSeconds":1.0', header.read_text(encoding='utf-8-sig'))
+        value = json.loads(header.read_text(encoding='utf-8-sig'))
+        for shell in (PWSH, WINDOWS_POWERSHELL):
+            self.assertTrue(shell.is_file(), f'Regression requires both PowerShell versions: {shell}')
+            for interval in (1, 1.0):
+                with self.subTest(shell=shell, interval=repr(interval)):
+                    value['networkCapabilities']['samplingIntervalSeconds'] = interval
+                    write(header, value)
+                    self.run_ps(self.context_command('Verify-Running.ps1', case), shell=shell)
+
+    def test_network_numeric_configuration_rejects_wrong_value_and_type_on_both_powershell_versions(self):
+        self.start(stage='network', mode='off')
+        case = next(self.output.iterdir())
+        header = case / 'capture/metrics/network.jsonl'
+        value = json.loads(header.read_text(encoding='utf-8-sig'))
+        for shell in (PWSH, WINDOWS_POWERSHELL):
+            self.assertTrue(shell.is_file(), f'Regression requires both PowerShell versions: {shell}')
+            for interval in (0.5, 2, '1', '1.0', True, None, [1]):
+                with self.subTest(shell=shell, interval=repr(interval)):
+                    value['networkCapabilities']['samplingIntervalSeconds'] = interval
+                    write(header, value)
+                    result = self.run_ps(self.context_command('Verify-Running.ps1', case), success=False, shell=shell)
+                    self.assertIn('samplingIntervalSeconds', result.stdout + result.stderr)
+
+    def test_network_verifier_reloads_module_replaced_in_the_same_shell(self):
+        self.start(stage='network', mode='off')
+        case = next(self.output.iterdir())
+        module = self.kit / 'Tools/SteamEvidenceIdentity.psm1'
+        replacement = self.root / 'patched-identity.psm1'
+        shutil.copy2(module, replacement)
+        stale = self.root / 'stale-identity.psm1'
+        stale.write_text("function Get-SteamNetworkConfiguration { throw 'stale-module-in-memory' }; Export-ModuleMember -Function Get-SteamNetworkConfiguration", encoding='utf-8')
+        for shell in (PWSH, WINDOWS_POWERSHELL):
+            with self.subTest(shell=shell):
+                command = ('Copy-Item -LiteralPath ' + quote(stale) + ' -Destination ' + quote(module) + '; '
+                    'Import-Module ' + quote(module) + '; '
+                    'if (-not (Get-Command Get-SteamNetworkConfiguration).Definition.Contains("stale-module-in-memory")) { throw "Probe did not cache old module" }; '
+                    'Copy-Item -LiteralPath ' + quote(replacement) + ' -Destination ' + quote(module) + '; ' +
+                    self.context_command('Verify-Running.ps1', case))
+                result = self.run_ps(command, shell=shell)
+                self.assertIn('network-verify-3', result.stdout)
+                self.assertIn('Lightweight network capture verified', result.stdout)
+
+    def test_missing_ambiguous_and_unreadable_headers_fail_with_startup_diagnosis(self):
+        for condition in ('missing-directory', 'no-files', 'empty', 'not-header', 'invalid-json', 'duplicate'):
+            with self.subTest(condition=condition):
+                self.start(stage='network', mode='off')
+                current = json.loads((self.root / 'current-case.json').read_text(encoding='utf-8-sig'))
+                case = Path(current['caseDirectory'])
+                header = case / 'capture/metrics/network.jsonl'
+                if condition == 'missing-directory':
+                    header.unlink()
+                    header.parent.rmdir()
+                elif condition == 'no-files':
+                    header.unlink()
+                elif condition == 'empty':
+                    header.write_bytes(b'')
+                elif condition == 'not-header':
+                    write(header, {'kind': 'sample'})
+                elif condition == 'invalid-json':
+                    header.write_bytes(b'{broken')
+                else:
+                    shutil.copy2(header, header.parent / 'duplicate.jsonl')
+                result = self.run_ps(self.context_command('Verify-Running.ps1', case), success=False, shell=WINDOWS_POWERSHELL)
+                self.assertIn('Network startup diagnosis:', result.stdout)
+                diagnostics_path = next(case.glob('runtime-check-*/network-startup-diagnostics.json'))
+                diagnostics = json.loads(diagnostics_path.read_text(encoding='utf-8-sig'))
+                self.assertEqual('network-verify-3', diagnostics['verifierRevision'])
+                self.assertEqual(str(header.parent), diagnostics['directory'])
+                self.assertEqual(condition != 'missing-directory', diagnostics['directoryExists'])
+                self.assertEqual(2 if condition == 'duplicate' else 0 if condition in ('missing-directory', 'no-files') else 1, len(diagnostics['files']))
+                if condition == 'invalid-json':
+                    self.assertTrue(diagnostics['files'][0]['readError'])
+                proof = json.loads(next(case.glob('runtime-check-*/network-configuration.json')).read_text(encoding='utf-8-sig'))
+                self.assertFalse(proof['verified'])
+
+    def test_network_verification_rejects_injection_or_full_evidence_in_actual_header(self):
+        for key in ('injectionEnabled', 'fullCombatEvidenceEnabled'):
+            with self.subTest(key=key):
+                self.start(stage='network', mode='off')
+                current = json.loads((self.root / 'current-case.json').read_text(encoding='utf-8-sig'))
+                case = Path(current['caseDirectory'])
+                header = case / 'capture/metrics/network.jsonl'
+                value = json.loads(header.read_text(encoding='utf-8-sig'))
+                value['networkCapabilities'][key] = True
+                write(header, value)
+                self.run_ps(self.context_command('Verify-Running.ps1', case), success=False)
+
+    def test_network_verification_rejects_stale_header_and_exports_failed_capture(self):
+        self.start(stage='network', mode='off')
+        current = json.loads((self.root / 'current-case.json').read_text(encoding='utf-8-sig'))
+        case = Path(current['caseDirectory'])
+        header = case / 'capture/metrics/network.jsonl'
+        value = json.loads(header.read_text(encoding='utf-8-sig'))
+        value['utcStart'] = '2026-09-23T10:00:01Z'
+        write(header, value)
+        self.run_ps(self.context_command('Verify-Running.ps1', case), success=False)
+        write(Path(str(header) + '.status.json'), {'complete': False, 'failure': 'synthetic writer failure'})
+        self.run_ps('function Get-CimInstance { }; ' + self.context_command('Export-Case.ps1', case))
+        self.assertEqual(1, len(list(self.output.glob('*-export-*'))))
 
     def test_package_preflight_failure_does_not_launch(self):
         (self.package / 'reject-package').touch()

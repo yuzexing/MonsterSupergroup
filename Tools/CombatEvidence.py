@@ -215,6 +215,10 @@ def import_roots(db, roots):
         root = root.resolve()
         if not root.is_dir():
             raise ValueError(f"Missing evidence directory: {root}")
+        from CombatNetworkEvidence import network_file, import_file
+        for network_path in root.rglob("*.jsonl"):
+            if network_file(network_path):
+                count += import_file(db, network_path)
         for path in root.rglob("*.json.gz"):
             try:
                 with gzip.open(path, "rb") as stream:
@@ -831,11 +835,13 @@ def coverage(db, intervals=None, request=None):
                     (capture is None or context[0] == capture) and (run is None or context[1] == run) and
                     (round is None or str(context[2]) == str(round))]
         intervals = [assess_interval(db, c, first, last, r, n) for c, r, n in sorted(contexts, key=str)]
-    return {"interpretation": "Missing records never prove non-execution. Copies retain original identity; UTC is not causal order.",
+    result = {"interpretation": "Missing records never prove non-execution. Copies retain original identity; UTC is not causal order.",
             "complete": bool(intervals) and all(a["complete"] for a in intervals) and not scope_gaps,
             "intervals": intervals, "sources": sources, "scopeGaps": scope_gaps, "invalidSelection": invalid_selection,
             "issues": [dict(row) for row in db.execute("SELECT * FROM issues LIMIT 1000")],
             "issueCount": db.execute("SELECT count(*) FROM issues").fetchone()[0]}
+    from CombatNetworkEvidence import apply_coverage
+    return apply_coverage(db, result)
 
 
 def query_intervals(db, args, records):

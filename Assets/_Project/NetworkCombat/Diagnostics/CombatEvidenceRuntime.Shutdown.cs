@@ -222,6 +222,8 @@ namespace MonsterSupergroup.NetworkCombat.Diagnostics
                 result.complete = false; result.status = abandoned ? "UserAborted" : "Incomplete";
                 result.error = (result.error == null ? "" : result.error + ";") + "StatusWriteFailed:" + failure.GetType().Name + ":" + failure.Message;
             }
+            if (automaticCapture) AutomaticCaptureSession.ReportClosed("combat", result.complete, result.error ?? string.Join(";", result.assessment?.failures ?? Array.Empty<string>()));
+            if (automaticCapture && AutomaticCaptureSession.HasFailure) { result.complete = false; result.status = "Incomplete"; }
             diagnosticResult = result;
         }
 
@@ -242,6 +244,7 @@ namespace MonsterSupergroup.NetworkCombat.Diagnostics
             abandonmentWriter = new Thread(() => {
                 try
                 {
+                    if (automaticCapture) AutomaticCaptureSession.ReportClosed("combat", false, reason);
                     EvidenceJson.AtomicWrite(Path.Combine(store.Root, "shutdown-aborted-" + capture + ".json"), JsonConvert.SerializeObject(new {
                         schemaVersion = 1, captureId = capture, profile = "diagnostic", status = reason, complete = false,
                         pendingBytes = progress.pendingBytes, writerJoined = progress.writerJoined,

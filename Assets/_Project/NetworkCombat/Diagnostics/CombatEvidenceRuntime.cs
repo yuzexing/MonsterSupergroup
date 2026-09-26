@@ -49,6 +49,7 @@ namespace MonsterSupergroup.NetworkCombat.Diagnostics
         private uint contextRound;
         private uint round;
         private bool shuttingDown, engineRegistryIncomplete;
+        private bool automaticCapture, automaticReady;
         private string capture;
         private const int RuntimeCacheBytes = 16 << 20;
         private bool runtimeBudgetHeld;
@@ -78,11 +79,18 @@ namespace MonsterSupergroup.NetworkCombat.Diagnostics
             if (Instance != null && Instance != this) { Destroy(gameObject); return; }
             Instance = this; mainThread = Thread.CurrentThread.ManagedThreadId; capture = Guid.NewGuid().ToString("N");
             var args = Environment.GetCommandLineArgs();
+            automaticCapture = AutomaticCaptureSession.Enabled;
             string path = args.FirstOrDefault(a => a.StartsWith("--combat-evidence-output=", StringComparison.Ordinal))?.Substring("--combat-evidence-output=".Length);
-            store = new CombatEvidenceStore(path ?? Path.Combine(Application.persistentDataPath, "CombatDiagnostics"), CreateStoreOptions(args));
+            try { store = new CombatEvidenceStore(path ?? (automaticCapture ? AutomaticCaptureSession.CombatDirectory : Path.Combine(Application.persistentDataPath, "CombatDiagnostics")), CreateStoreOptions(args)); }
+            catch (Exception error)
+            {
+                if (!automaticCapture) throw;
+                AutomaticCaptureSession.ReportFailure("combat", error.GetType().Name + ": " + error.Message);
+                Instance = null; enabled = false; return;
+            }
             runtimeBudgetHeld = store.Memory.TryReserve(RuntimeCacheBytes);
-            if (!runtimeBudgetHeld) { store.Dispose(); enabled = false; return; }
-            ReplicationEnabled = Array.IndexOf(args, "--combat-evidence-local-only") < 0;
+            if (!runtimeBudgetHeld) { AutomaticCaptureSession.ReportFailure("combat", "运行时内存预算不足。"); store.Dispose(); enabled = false; return; }
+            ReplicationEnabled = !automaticCapture && Array.IndexOf(args, "--combat-evidence-local-only") < 0;
             if (ReplicationEnabled) { transport = new SteamDiagnosticTransport(); replicator = new DiagnosticReplicator(store, transport, capture); }
             CombatEvidence.Sink = this;
             CombatInvestigationEvidence.Configure(store.Profile, args);
@@ -112,11 +120,11 @@ namespace MonsterSupergroup.NetworkCombat.Diagnostics
         }
         private static EvidenceStoreOptions CreateStoreOptions(string[] args)
         {
-            bool observe = args != null && Array.IndexOf(args, "--combat-evidence-observe-queue") >= 0;
+            bool observe = AutomaticCaptureSession.Enabled || args != null && Array.IndexOf(args, "--combat-evidence-observe-queue") >= 0;
             const string prefix = "--combat-evidence-profile=";
             var profiles = args?.Where(a => a.StartsWith(prefix, StringComparison.Ordinal)).ToArray() ?? Array.Empty<string>();
             if (profiles.Length > 1) throw new ArgumentException("Specify combat evidence profile only once.");
-            string name = profiles.Length == 0 ? "standard" : profiles[0].Substring(prefix.Length);
+            string name = profiles.Length == 0 ? (AutomaticCaptureSession.Enabled ? "diagnostic" : "standard") : profiles[0].Substring(prefix.Length);
             EvidenceProfile profile = name == "standard" ? EvidenceProfile.Standard : name == "diagnostic"
                 ? EvidenceProfile.Diagnostic : throw new ArgumentException("Unknown combat evidence profile: " + name);
             // Player windows begin with the first run, so menu waiting does not consume them.
@@ -133,6 +141,11 @@ namespace MonsterSupergroup.NetworkCombat.Diagnostics
         private void Update()
         {
             if (shuttingDown) { UpdateShutdown(); return; }
+            if (automaticCapture)
+            {
+                if (store.LastFailure != null || store.Dropped != 0) AutomaticCaptureSession.ReportFailure("combat", store.LastFailure ?? "存在被拒绝的记录。");
+                if (!automaticReady && store.HasPersistedRecords) { automaticReady = true; AutomaticCaptureSession.ReportReady("combat"); }
+            }
             RefreshContext();
             replicator?.Tick(Time.unscaledTimeAsDouble, run);
             if (Time.unscaledTimeAsDouble >= nextSnapshot)

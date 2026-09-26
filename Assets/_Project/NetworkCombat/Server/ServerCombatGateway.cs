@@ -29,7 +29,7 @@ namespace MonsterSupergroup.NetworkCombat
 
         internal void Reject(CombatRejectionReason reason, string diagnosticReason = null)
         {
-            if (CombatEvidence.Enabled) GatewayEvidenceDecision.Reject(diagnosticReason ?? reason.ToString());
+            if (GatewayEvidenceDecision.Enabled) GatewayEvidenceDecision.Reject(diagnosticReason ?? reason.ToString());
             rejections.TryGetValue(reason, out long count);
             rejections[reason] = count + 1;
         }

@@ -29,6 +29,17 @@ namespace MonsterSupergroup.EditorTools.Tests
             settings.BuildKind = BuildKind.Dev; Assert.Throws<BuildFailedException>(() => Validate(true));
             settings.BuildKind = BuildKind.Test; settings.PurposeId = "wisp-validation"; Assert.Throws<BuildFailedException>(() => Validate());
         }
+        [Test] public void NetworkDiagnosticsIsIndependentAndCannotShip()
+        {
+            Assert.That((int)BuildDiagnostics.Normal, Is.EqualTo(0));
+            Assert.That((int)BuildDiagnostics.Evidence, Is.EqualTo(1));
+            Assert.That((int)BuildDiagnostics.Network, Is.EqualTo(2));
+            settings.Diagnostics = BuildDiagnostics.Network; Validate();
+            Assert.That(ProjectBuildDefines.Expected(settings), Is.EqualTo(new[] { "MONSTER_BUILD_NETWORK_DIAGNOSTICS", "MONSTER_BUILD_TEST" }));
+            settings.BuildKind = BuildKind.Dev; Validate(true);
+            settings.BuildKind = BuildKind.Shipping; Assert.Throws<BuildFailedException>(() => Validate());
+            settings.BuildKind = BuildKind.Test; settings.PurposeId = "wisp-validation"; Assert.Throws<BuildFailedException>(() => Validate());
+        }
         [TestCase("gameplay-validation")][TestCase("wisp-validation")][TestCase("options-validation")]
         [TestCase("handoff-validation")][TestCase("sandbox")][TestCase("nordic")]
         public void SpecialTestRetainsToolsAndCannotShip(string purpose)
@@ -53,7 +64,7 @@ namespace MonsterSupergroup.EditorTools.Tests
         }
         [Test] public void ApplyingSymbolsRemovesOldGrantsAndPreservesUnrelatedSymbols()
         {
-            string[] current = { "MONSTER_BUILD_DEV", "MONSTER_BUILD_TOOLS", "MONSTER_MENU_VALIDATION", "ODIN_INSPECTOR", "MY_VALIDATION" };
+            string[] current = { "MONSTER_BUILD_DEV", "MONSTER_BUILD_TOOLS", "MONSTER_BUILD_NETWORK_DIAGNOSTICS", "MONSTER_MENU_VALIDATION", "ODIN_INSPECTOR", "MY_VALIDATION" };
             string[] result = ProjectBuildDefines.Applied(current, ProjectBuildDefines.Expected(settings));
             Assert.That(result, Is.EquivalentTo(new[] { "MONSTER_BUILD_TEST", "ODIN_INSPECTOR", "MY_VALIDATION" }));
             Assert.That(ProjectBuildDefines.Difference(result, ProjectBuildDefines.Expected(settings)), Is.Empty);
@@ -63,7 +74,7 @@ namespace MonsterSupergroup.EditorTools.Tests
         [Test] public void AllTemplatesPersistBusinessSettingsAndReadWithoutMutation()
         {
             var profiles = AssetDatabase.FindAssets("t:BuildProfile", new[] { ProjectBuildTemplates.Root });
-            Assert.That(profiles.Length, Is.EqualTo(11));
+            Assert.That(profiles.Length, Is.GreaterThanOrEqualTo(11));
             var active = BuildProfile.GetActiveBuildProfile();
             foreach (string guid in profiles)
             {

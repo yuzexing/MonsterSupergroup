@@ -80,6 +80,7 @@ namespace Mirror.FizzySteam
 
                 SteamNetworkingConfigValue_t[] options = new SteamNetworkingConfigValue_t[] { };
                 HostConnection = SteamNetworkingSockets.ConnectP2P(ref smi, 0, options.Length, options);
+                SteamTransportDiagnostics.RecordConnection(HostConnection.m_HSteamNetConnection, 0, "Client", "None", "ConnectRequested", 0, hostSteamID.ToString());
 
                 Task connectedCompleteTask = connectedComplete.Task;
                 Task timeOutTask = Task.Delay(ConnectionTimeout, cancelToken.Token);
@@ -125,7 +126,7 @@ namespace Mirror.FizzySteam
 
         private void OnConnectionStatusChanged(SteamNetConnectionStatusChangedCallback_t param)
         {
-            SteamTransportDiagnostics.RecordConnection(param.m_hConn.m_HSteamNetConnection, 0, "Client", param.m_eOldState.ToString(), param.m_info.m_eState.ToString(), param.m_info.m_eEndReason);
+            SteamTransportDiagnostics.RecordConnection(param.m_hConn.m_HSteamNetConnection, 0, "Client", param.m_eOldState.ToString(), param.m_info.m_eState.ToString(), param.m_info.m_eEndReason, param.m_info.m_identityRemote.GetSteamID64().ToString());
             ulong clientSteamID = param.m_info.m_identityRemote.GetSteamID64();
             if (param.m_info.m_eState == ESteamNetworkingConnectionState.k_ESteamNetworkingConnectionState_Connected)
             {
@@ -168,6 +169,7 @@ namespace Mirror.FizzySteam
 
             if (HostConnection.m_HSteamNetConnection != 0)
             {
+                SteamTransportDiagnostics.RecordConnection(HostConnection.m_HSteamNetConnection, 0, "Client", "Active", "ClosedLocally", 0);
                 Debug.Log("Sending Disconnect message");
                 SteamNetworkingSockets.CloseConnection(HostConnection, 0, "Graceful disconnect", false);
                 HostConnection.m_HSteamNetConnection = 0;
@@ -196,7 +198,11 @@ namespace Mirror.FizzySteam
         {
             if (HostConnection.m_HSteamNetConnection == 0) return;
             IntPtr[] ptrs = messagePointers;
-            int messageCount;
+            int messageCount = 0;
+            uint observedConnection = HostConnection.m_HSteamNetConnection;
+            long pollStart = SteamTransportDiagnostics.BeginReceivePoll();
+            try
+            {
 
             if ((messageCount = SteamNetworkingSockets.ReceiveMessagesOnConnection(HostConnection, ptrs, MAX_MESSAGES)) > 0)
             {
@@ -221,6 +227,8 @@ namespace Mirror.FizzySteam
                 }
                 finally { ReleasePendingMessages(messageCount); }
             }
+            }
+            finally { SteamTransportDiagnostics.EndReceivePoll(observedConnection, messageCount, MAX_MESSAGES, pollStart); }
         }
 
         public void Send(byte[] data, int channelId)

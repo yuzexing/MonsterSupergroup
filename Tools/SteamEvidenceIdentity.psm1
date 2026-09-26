@@ -118,4 +118,101 @@ function Get-SteamEvidenceConfiguration {
     if ($startupMatches.Count -ne 1) { throw 'Exactly one matching process.start record is required; wait at the menu for its initial flush and retry.' }
     return $startupMatches[0]
 }
-Export-ModuleMember -Function Get-SteamEvidenceRuntimeIdentity,Get-SteamEvidenceProfileConfiguration,Get-SteamEvidenceConfiguration
+function Assert-SteamNetworkCapabilities {
+    [CmdletBinding()]
+    param([Parameter(Mandatory)]$Actual,[Parameter(Mandatory)]$Expected)
+    foreach ($name in @('version','lightweightNetworkEnabled','fullCombatEvidenceEnabled','injectionEnabled','samplingIntervalSeconds')) {
+        $actualValue = $Actual.$name
+        $expectedValue = $Expected.$name
+        if ($name -in @('version','samplingIntervalSeconds')) {
+            # Windows PowerShell reads JSON 1.0 as Decimal; PowerShell 7 reads Double.
+            # Compare numeric values while rejecting strings, booleans and missing fields.
+            $actualNumber = $actualValue -is [int] -or $actualValue -is [long] -or $actualValue -is [double] -or $actualValue -is [decimal]
+            $expectedNumber = $expectedValue -is [int] -or $expectedValue -is [long] -or $expectedValue -is [double] -or $expectedValue -is [decimal]
+            $matches = $actualNumber -and $expectedNumber -and ($actualValue -eq $expectedValue)
+        } else {
+            $matches = $actualValue -is [bool] -and $expectedValue -is [bool] -and ($actualValue -eq $expectedValue)
+        }
+        if (-not $matches) { throw "Applied network configuration differs: $name" }
+    }
+}
+function Assert-SteamNetworkOutputPath {
+    [CmdletBinding()]
+    param([Parameter(Mandatory)][string]$Directory)
+    # Include the ten-digit PID, capture ID and status suffix, not just the JSONL.
+    # The shipped Mono writer can create a 256-character JSONL but fail its 268-character status file.
+    $longestStatus = Join-Path ([IO.Path]::GetFullPath($Directory)) ('99991231-235959-2147483647-' + ('f' * 32) + '.jsonl.status.json')
+    if ($longestStatus.Length -ge 260) {
+        throw "Network log path is too long: status path may reach $($longestStatus.Length) characters (must be below 260). Copy product and operator-kit into a short folder such as C:\SteamNet, then start a new case. No game was launched. Directory: $Directory"
+    }
+}
+function Get-SteamNetworkConfiguration {
+    [CmdletBinding()]
+    param([Parameter(Mandatory)]$Capture,[string]$ExpectedBuildGuid)
+    if (-not $Capture.launcherArgumentsApplied -or $Capture.attached -or -not $Capture.processId -or
+        -not $Capture.startedUtc -or -not $Capture.executable -or -not $Capture.requestedNetworkOutput -or
+        $Capture.requestedEvidenceMode -cne 'off') {
+        throw 'Lightweight verification requires a launched process, isolated network output and full evidence off.'
+    }
+    $expected = [ordered]@{version=1;lightweightNetworkEnabled=$true;fullCombatEvidenceEnabled=$false;injectionEnabled=$false;samplingIntervalSeconds=1}
+    $matchesFound = @()
+    if (-not (Test-Path -LiteralPath $Capture.requestedNetworkOutput -PathType Container)) {
+        throw "Network output directory is missing: $($Capture.requestedNetworkOutput). The requested lightweight capture is not verified."
+    }
+    $files = @(Get-ChildItem -LiteralPath $Capture.requestedNetworkOutput -Filter '*.jsonl' -File -ErrorAction Stop)
+    $emptyFiles = 0; $nonHeaderFiles = 0
+    foreach ($file in $files) {
+        if ($file.Attributes -band [IO.FileAttributes]::ReparsePoint) { throw 'Linked network startup files are not accepted.' }
+        $line = Get-Content -LiteralPath $file.FullName -TotalCount 1 -Encoding UTF8
+        if (-not $line) { $emptyFiles++; continue }
+        $header = $line | ConvertFrom-Json
+        if ($header.kind -cne 'header') { $nonHeaderFiles++; continue }
+        if ($header.schemaVersion -lt 3 -or -not $header.captureId -or $header.processId -ne $Capture.processId -or
+            -not $header.executablePath -or -not [IO.Path]::GetFullPath([string]$header.executablePath).Equals([IO.Path]::GetFullPath([string]$Capture.executable),[StringComparison]::OrdinalIgnoreCase)) {
+            throw 'Network header does not prove the requested process, executable and lightweight capability version.'
+        }
+        if (-not $header.utcStart -or ([DateTime]$header.utcStart).ToUniversalTime() -lt ([DateTime]$Capture.startedUtc).ToUniversalTime().AddSeconds(-1)) { throw 'Network header predates the launched process.' }
+        if ($ExpectedBuildGuid -and ([Guid]$header.buildGuid) -ne ([Guid]$ExpectedBuildGuid)) { throw 'Network header Build GUID differs from the released package.' }
+        Assert-SteamNetworkCapabilities -Actual $header.networkCapabilities -Expected $expected
+        $matchesFound += [ordered]@{verified=$true;verifierRevision='network-verify-3';applied=$header.networkCapabilities;captureId=$header.captureId;
+            processId=$header.processId;buildGuid=$header.buildGuid;startupRecordFile=$file.FullName;
+            observedUtc=[DateTime]::UtcNow.ToString('o');limitation='Startup identity and capability verification only; not completeness, actual game role or Steam congestion acceptance.'}
+    }
+    if ($matchesFound.Count -ne 1) {
+        throw "Expected one lightweight network header; found $($matchesFound.Count). JSONL files=$($files.Count), empty=$emptyFiles, nonHeader=$nonHeaderFiles. Directory: $($Capture.requestedNetworkOutput). Inspect network-startup-diagnostics.json; capture is not verified."
+    }
+    return $matchesFound[0]
+}
+function Get-SteamNetworkStartupDiagnostics {
+    [CmdletBinding()]
+    param([Parameter(Mandatory)]$Capture)
+    $report = [ordered]@{verifierRevision='network-verify-3';powershellVersion=$PSVersionTable.PSVersion.ToString();
+        modulePath=$PSCommandPath;moduleSha256=(Get-FileHash -LiteralPath $PSCommandPath -Algorithm SHA256).Hash;
+        processId=$Capture.processId;executable=$Capture.executable;startedUtc=$Capture.startedUtc;
+        requestedEvidenceMode=$Capture.requestedEvidenceMode;actualCommandLine=$Capture.actualCommandLine;
+        directory=$Capture.requestedNetworkOutput;directoryCharacters=([string]$Capture.requestedNetworkOutput).Length;directoryExists=$false;files=@();playerLog=$Capture.requestedPlayerLog;playerLogHints=@()}
+    $report.directoryExists = Test-Path -LiteralPath $Capture.requestedNetworkOutput -PathType Container
+    if ($report.directoryExists) {
+        foreach ($file in @(Get-ChildItem -LiteralPath $Capture.requestedNetworkOutput -Filter '*.jsonl' -File -ErrorAction Stop)) {
+            $entry = [ordered]@{path=$file.FullName;bytes=$file.Length;pathCharacters=$file.FullName.Length;statusPathCharacters=($file.FullName.Length+12);firstKind=$null;processId=$null;captureId=$null;networkCapabilities=$null;readError=$null;writerStatus=$null}
+            try {
+                if ($file.Attributes -band [IO.FileAttributes]::ReparsePoint) { throw 'Linked startup file' }
+                $line = Get-Content -LiteralPath $file.FullName -TotalCount 1 -Encoding UTF8
+                if ($line) {
+                    $header = $line | ConvertFrom-Json
+                    $entry.firstKind=$header.kind; $entry.processId=$header.processId; $entry.captureId=$header.captureId
+                    $entry.networkCapabilities=$header.networkCapabilities
+                }
+                $status = $file.FullName + '.status.json'
+                if (Test-Path -LiteralPath $status -PathType Leaf) { $entry.writerStatus=Get-Content -LiteralPath $status -Raw -Encoding UTF8 | ConvertFrom-Json }
+            } catch { $entry.readError=$_.Exception.Message }
+            $report.files += $entry
+        }
+    }
+    if ($Capture.requestedPlayerLog -and (Test-Path -LiteralPath $Capture.requestedPlayerLog -PathType Leaf)) {
+        $report.playerLogHints = @(Get-Content -LiteralPath $Capture.requestedPlayerLog -Tail 300 -Encoding UTF8 |
+            Select-String -Pattern 'NetworkDiagnostics|Exception|Error|CombatEvidence|Unauthorized|denied' | Select-Object -Last 30 | ForEach-Object { $_.Line })
+    }
+    return $report
+}
+Export-ModuleMember -Function Get-SteamEvidenceRuntimeIdentity,Get-SteamEvidenceProfileConfiguration,Get-SteamEvidenceConfiguration,Get-SteamNetworkConfiguration,Assert-SteamNetworkCapabilities,Get-SteamNetworkStartupDiagnostics,Assert-SteamNetworkOutputPath
